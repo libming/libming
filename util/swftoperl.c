@@ -19,6 +19,7 @@ const float PI = 3.14159265358979;
 void skipBytes(FILE *f, int length);
 void silentSkipBytes(FILE *f, int length);
 char *blockName(int);
+void printSoundInstance(FILE *f, int id, int soundid);
 
 void readMatrix(FILE *f, struct Matrix *s)
 {
@@ -968,6 +969,66 @@ int printButtonRecord(FILE *f, int recordType, int id)
   return 1;
 }
 
+
+void printDefineButtonSound(FILE *f, int length){
+	int i;
+	int id = readUInt16(f);
+
+	for(i=0;i<4;i++){
+		int soundid = readUInt16(f);
+		if (soundid != 0){
+			printf("\t$si%i_%i = $s%i->addSound($snd%i,",id,i,id,soundid);
+			switch(i){
+				case 0:	 printf("SWFBUTTON_UP);\n"); break;
+				case 1:	 printf("SWFBUTTON_OVER);\n"); break;
+				case 2:	 printf("SWFBUTTON_DOWN);\n"); break;
+				default: printf("SWFBUTTON_HIT);\n");
+			}	
+			printSoundInstance(f,id,soundid);		
+		}
+	}
+}
+
+#define SWFSOUNDINFO_SYNCSTOPSOUND  (1<<5)
+#define SWFSOUNDINFO_SYNCNOMULTIPLE (1<<4)
+#define SWFSOUNDINFO_HASENVELOPE    (1<<3)
+#define SWFSOUNDINFO_HASLOOPS       (1<<2)
+#define SWFSOUNDINFO_HASOUTPOINT    (1<<1)
+#define SWFSOUNDINFO_HASINPOINT     (1<<0)
+
+void printSoundInstance(FILE *f, int id, int soundid){
+  int e,point,left,right;
+	int flags = readUInt8(f);
+
+	if (flags & SWFSOUNDINFO_SYNCSTOPSOUND){
+		printf("\t# stopsound??");
+	}
+	if (flags & SWFSOUNDINFO_SYNCNOMULTIPLE){
+		printf("\t$si->setNoMultiple();\n");
+	}
+	if(flags & SWFSOUNDINFO_HASINPOINT){
+		int inpoint = readUInt32(f);
+		printf("\t$si->setInPoint(%i);\n", inpoint);
+	}
+	if(flags & SWFSOUNDINFO_HASOUTPOINT){
+		int outpoint = readUInt32(f);
+		printf("\t$si->setOutPoint(%i);\n", outpoint);               
+	}
+	if(flags & SWFSOUNDINFO_HASLOOPS){
+		int loopcount = readUInt16(f);
+		printf("\t$si->setLoops(%i);\n", loopcount);
+	}
+	if(flags & SWFSOUNDINFO_HASENVELOPE) {
+		int envpoints = readUInt8(f);
+		for (e=0; e<envpoints;e++){
+			point = readUInt32(f);
+			left  = readUInt16(f);
+			left  = readUInt16(f);
+			printf("\t$si->addEnvelopePoint(%i,%i,%i);\n", point,left,right);
+		}
+	}
+} 
+
 void printDefineButton(FILE *f, int length)
 {
   int offset = fileOffset;
@@ -1706,15 +1767,16 @@ int main(int argc, char *argv[])
       case DEFINESPRITE:      printMovieClip(f, length); break;
       case DEFINEBUTTON:      printDefineButton(f, length); break;
       case DEFINEBUTTON2:     printDefineButton2(f, length); break;
+      case DEFINEBUTTONSOUND: printDefineButtonSound(f, length); break;
       case FRAMELABEL:        printFrameLabel(f); break;
       case DEFINETEXT:
       case DEFINETEXT2:       printDefineText(f, type); break;
       case TEXTFIELD:         printTextField(f, length); break;
-      case DEFINEMORPHSHAPE:   printMorphShape(f, length); break;
+      case DEFINEMORPHSHAPE:  printMorphShape(f, length); break;
       case PLACEOBJECT:       printPlaceObject(f, length); break;
       case REMOVEOBJECT:      printRemoveObject(f); break;
 
-      //case DEFINEFONT:       printDefineFont(f, length); break;
+      //case DEFINEFONT:        printDefineFont(f, length); break;
       case DEFINEFONT2:       printDefineFont2(f, length); break;
       /*case DEFINEFONTINFO:   printFontInfo(f, length); break;
       case DEFINESOUND:        printDefineSound(f, length); break;
@@ -1726,7 +1788,7 @@ int main(int argc, char *argv[])
       case DEFINEBITSJPEG2:    printDefineBitsJpeg(f,length);  break;
 
       case DEFINEBITSJPEG3:
-	*/
+      */
       default:
 	printf("\t# %s, %i bytes \n", blockName(type), length);
 	silentSkipBytes(f, length);
