@@ -107,7 +107,7 @@ void swf5ParseInit(const char *script, int debug)
 HEXDIGIT [0-9a-fA-F]
 OCTDIGIT [0-7]
 DIGIT    [0-9]
-ID       [a-zA-Z_][a-zA-Z0-9_]*
+ID       [$a-zA-Z_][$a-zA-Z0-9_]*
 
 %%
   if(SWF_versionNum >= 6)
