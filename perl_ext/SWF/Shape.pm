@@ -119,7 +119,7 @@ The default value of FLAG is SWFFILL_LINEAR_GRADIENT.
 
 Sets the fill on the left side of the edge. $fill is an SWF::Fill object returned from L<"addFill"> method.
 
-=item $shpae->setLeftFill($r, $g, $b [,$a]);
+=item $shape->setLeftFill($r, $g, $b [,$a]);
 
 This is another way of saying:
 
@@ -131,7 +131,7 @@ This is another way of saying:
 
 Sets the fill on the right side of the edge. $fill is an SWF::Fill object returned from L<"addFill"> method.
 
-=item $shpae->setRightFill($r, $g, $b [,$a]);
+=item $shape->setRightFill($r, $g, $b [,$a]);
 
 This is another way of saying:
 
