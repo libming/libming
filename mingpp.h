@@ -599,7 +599,7 @@ class SWFFont : public SWFBlock
        strcmp(name + strlen(name) - 4, ".fdb") == 0)
       this->font = loadSWFFontFromFile(fopen(name, "rb"));
     else
-      this->font = 0 ; // wogl needs to be fixed - but how ???? newSWFBrowserFont(name);
+      this->font = (c_SWFFont)newSWFBrowserFont(name); // minguts fix
   }
 
   virtual ~SWFFont()
