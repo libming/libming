@@ -109,7 +109,7 @@
 %type <action> anon_function_decl, function_decl, function_decls
 %type <action> void_function_call, function_call, method_call
 %type <action> assign_stmt, assign_stmts, assign_stmts_opt
-%type <action> expr, objexpr, expr_opt, pf_expr, obj_ref
+%type <action> expr, objexpr, expr_opt, pf_expr, obj_ref, incdecop_expr
 %type <action> emptybraces, level, init_vars, init_var
 
 %type <exprlist> expr_list, objexpr_list, formals_list
@@ -426,9 +426,14 @@ iter_stmt
                   bufferWriteS16($5, 2);
                   bufferWriteS16($5, -(bufferLength($5)+2));
                   bufferResolveJumps($5);
-                  $$ = $3;
-                  if(!$$) $$ = newBuffer();
-                  bufferConcat($$, $5);
+
+		  if($3)
+		  {
+		    $$ = $3;
+		    bufferConcat($$, $5);
+		  }
+		  else
+		    $$ = $5;
                 }
 
 	| FOR '(' identifier IN obj_ref ')' stmt
@@ -644,7 +649,7 @@ function_call
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_STRINGCONCAT); }
 
-	| SUBSTR '(' expr ',' expr ',' expr ')'
+	| SUBSTRING '(' expr ',' expr ',' expr ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $7);
@@ -774,6 +779,49 @@ incdecop
 	: "++"	{ $$ = SWFACTION_INCREMENT; }
 	| "--"	{ $$ = SWFACTION_DECREMENT; }
 	;
+
+incdecop_expr
+	: incdecop expr '.' identifier
+		{ $$ = $2;				    /* a */
+		  bufferWriteU8($$, SWFACTION_DUP);	    /* a, a */
+		  bufferWriteString($$, $4, strlen($4)+1);  /* a, a, i */
+		  bufferWriteU8($$, SWFACTION_SWAP);	    /* a, i, a */
+		  bufferWriteString($$, $4, strlen($4)+1);  /* a, i, a, i */
+		  bufferWriteU8($$, SWFACTION_GETMEMBER);
+		  bufferWriteU8($$, $1);
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SETMEMBER);   /* a.i = a.i+1 */
+		  bufferWriteRegister($$, 0);	    /* a.i+1 */
+		  free($4); }
+
+	| incdecop expr '[' expr ']'
+		{ $$ = $4;				/* i */
+		  bufferConcat($$, $2);			/* i, a */
+		  bufferWriteSetRegister($$, 0);	/* ($4 can use reg0) */
+		  bufferWriteU8($$, SWFACTION_SWAP);	/* a, i */
+		  bufferWriteU8($$, SWFACTION_DUP);	/* a, i, i */
+		  bufferWriteRegister($$, 0);		/* a, i, i, a */
+		  bufferWriteU8($$, SWFACTION_SWAP);	/* a, i, a, i */
+		  bufferWriteU8($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
+		  bufferWriteU8($$, $1);		/* a, i, a[i]+1 */
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+1 */
+		  bufferWriteRegister($$, 0);		/* a[i]+1 */ }
+
+	| incdecop identifier
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $2, strlen($2)+1);
+		  bufferWriteU8($$, SWFACTION_GETVARIABLE);
+		  bufferWriteU8($$, $1);
+		  bufferWriteU8($$, SWFACTION_DUP);
+		  bufferWriteString($$, $2, strlen($2)+1);
+		  bufferWriteU8($$, SWFACTION_SWAP);
+		  bufferWriteU8($$, SWFACTION_SETVARIABLE);
+		  free($2); }
+
+	| pf_expr
+	;
+
 /*
 integer
 	: '-' INTEGER %prec UMINUS	{ $$ = -$2; }
@@ -794,6 +842,8 @@ expr
 
 	| method_call
 
+	| incdecop_expr
+
 	| NEW identifier
 		{ $$ = newBuffer();
 		  bufferWriteInt($$, 0);
@@ -806,7 +856,7 @@ expr
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  bufferWriteU8($$, SWFACTION_NEW); }
 
-	| expr "&&" expr
+	| expr "||" expr
 		{ $$ = $1;
 		  bufferWriteU8($$, SWFACTION_DUP);
 		  bufferWriteU8($$, SWFACTION_BRANCHIFTRUE);
@@ -815,7 +865,7 @@ expr
 		  bufferWriteU8($$, SWFACTION_POP);
 		  bufferConcat($$, $3); }
 
-	| expr "||" expr
+	| expr "&&" expr
 		{ $$ = $1;
 		  bufferWriteU8($$, SWFACTION_DUP);
 		  bufferWriteU8($$, SWFACTION_LOGICALNOT);
@@ -889,46 +939,6 @@ expr
 		  bufferConcat($$, $3);
 		  bufferWriteU8($$, SWFACTION_GETMEMBER); }
 
-	| incdecop expr '.' identifier
-		{ $$ = $2;				    /* a */
-		  bufferWriteU8($$, SWFACTION_DUP);	    /* a, a */
-		  bufferWriteString($$, $4, strlen($4)+1);  /* a, a, i */
-		  bufferWriteU8($$, SWFACTION_SWAP);	    /* a, i, a */
-		  bufferWriteString($$, $4, strlen($4)+1);  /* a, i, a, i */
-		  bufferWriteU8($$, SWFACTION_GETMEMBER);
-		  bufferWriteU8($$, $1);
-		  bufferWriteSetRegister($$, 0);
-		  bufferWriteU8($$, SWFACTION_SETMEMBER);   /* a.i = a.i+1 */
-		  bufferWriteRegister($$, 0);	    /* a.i+1 */
-		  free($4); }
-
-	| incdecop expr '[' expr ']'
-		{ $$ = $4;				/* i */
-		  bufferConcat($$, $2);			/* i, a */
-		  bufferWriteSetRegister($$, 0);	/* ($4 can use reg0) */
-		  bufferWriteU8($$, SWFACTION_SWAP);	/* a, i */
-		  bufferWriteU8($$, SWFACTION_DUP);	/* a, i, i */
-		  bufferWriteRegister($$, 0);		/* a, i, i, a */
-		  bufferWriteU8($$, SWFACTION_SWAP);	/* a, i, a, i */
-		  bufferWriteU8($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
-		  bufferWriteU8($$, $1);		/* a, i, a[i]+1 */
-		  bufferWriteSetRegister($$, 0);
-		  bufferWriteU8($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+1 */
-		  bufferWriteRegister($$, 0);		/* a[i]+1 */ }
-
-	| incdecop identifier
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteU8($$, SWFACTION_GETVARIABLE);
-		  bufferWriteU8($$, $1);
-		  bufferWriteU8($$, SWFACTION_DUP);
-		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteU8($$, SWFACTION_SWAP);
-		  bufferWriteU8($$, SWFACTION_SETVARIABLE);
-		  free($2); }
-
-	| pf_expr
-
 	| '-' expr
 		{ $$ = $2;
 		  bufferWriteString($2, "-1", 3);
@@ -939,13 +949,29 @@ expr
 		  bufferWriteU8($2, SWFACTION_LOGICALNOT); }
 
 	| identifier '=' expr
-		{ $$ = newBuffer();
-		  bufferConcat($$, $3);
+		{ $$ = $3;
 		  bufferWriteU8($$, SWFACTION_DUP);
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  bufferWriteU8($$, SWFACTION_SWAP);
 		  bufferWriteU8($$, SWFACTION_SETVARIABLE);
 		  free($1); }
+
+	| expr '.' identifier '=' expr
+                { $$ = $1;
+		  bufferWriteString($$, $3, strlen($3)+1);
+		  bufferConcat($$, $5);
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SETMEMBER);
+		  bufferWriteRegister($$, 0);
+		  free($3); }
+
+	| expr '[' expr ']' '=' expr
+                { $$ = $1;
+		  bufferConcat($$, $3);
+		  bufferConcat($$, $6);
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SETMEMBER);
+		  bufferWriteRegister($$, 0); }
 
 	| expr '*' expr
 		{ $$ = $1;
