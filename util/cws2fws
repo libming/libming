@@ -1,0 +1,40 @@
+#!/usr/bin/perl -w
+# ====================================================================
+# Copyright (c) 2003 by Peter Liscovius. All rights reserved.
+# This program is free software; you can redistribute it and/or modify
+# it under the same terms as Perl itself.
+# ====================================================================
+
+use strict;
+use Compress::Zlib;
+
+if (!$ARGV[1]) {die("Flash decompression tool\nConverts compressed flashfiles to uncompressed flashfiles.\nusage: cws2fws infile.swf outfile.swf\n\n");} 
+
+my $filein  = $ARGV[0];
+my $fileout = $ARGV[1];
+
+open(CWS,"<$filein") or die("Couldn't open $filein .\n");
+
+#Turn off lineseparator character. We read binary data.
+$/=undef;
+my $header;
+read(CWS,$header,8);
+my $cwsfile=<CWS>;
+my $unzip = uncompress($cwsfile) or die("Uncompression failed. Maybe not a compressed SWF or corrupt data?\n");
+close CWS;
+
+open (FWS,">$fileout") or die("Couldn't open $fileout .\n");
+$header =~ s/^C/F/;
+print FWS $header.$unzip;
+close FWS;
+
+my @header=unpack("C*",$header);
+my $filesize=$header[4]+$header[5]*256+$header[6]*65536+$header[7]*16777216;
+if ($filesize == -s $fileout){
+  print "Decompression of compressed SWF-file seems to be successful.\n";
+}
+else {
+  print "\nreal filesize: ".(-s $fileout);
+  print "\nsize in swfheader: ".$filesize;
+  print "\n\nFilesize of decompressed file is not equal with size number in the header the SWF!\nMaybe it wasn't a compressed SWF or the file is corrupt or modified.\n";
+}
