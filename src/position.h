@@ -26,8 +26,8 @@
 
 struct _swfPosition
 {
-  int x;
-  int y;
+  float x;
+  float y;
   float xScale;
   float yScale;
   float xSkew;
@@ -54,11 +54,11 @@ void SWFPosition_scaleYTo(SWFPosition position, float y);
 void SWFPosition_scaleXY(SWFPosition position, float x, float y);
 void SWFPosition_scaleXYTo(SWFPosition position, float x, float y);
 void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
-			   int x, int y);
+			   float x, float y);
 
 void SWFPosition_rotate(SWFPosition position, float degrees);
 void SWFPosition_rotateTo(SWFPosition position, float degrees);
-void SWFPosition_move(SWFPosition position, int x, int y);
-void SWFPosition_moveTo(SWFPosition position, int x, int y);
+void SWFPosition_move(SWFPosition position, float x, float y);
+void SWFPosition_moveTo(SWFPosition position, float x, float y);
 
 #endif /* MING_POSITION_H_INCLUDED */

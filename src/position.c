@@ -32,14 +32,16 @@ void destroySWFPosition(SWFPosition position)
 /* position wraps a matrix */
 SWFPosition newSWFPosition(SWFMatrix matrix)
 {
-  SWFPosition p = (SWFPosition)malloc(SWFPOSITION_SIZE);
-  memset(p, 0, SWFPOSITION_SIZE);
+  SWFPosition p = calloc(1, SWFPOSITION_SIZE);
+
   p->xScale = 1.0;
   p->yScale = 1.0;
   p->matrix = matrix;
 
   return p;
 }
+
+extern float Ming_scale;
 
 /* x-skew, then y-skew, then rot and scale, then xlate */
 static inline void updateMatrix(SWFPosition p)
@@ -48,12 +50,12 @@ static inline void updateMatrix(SWFPosition p)
   float xS = p->xSkew, yS = p->ySkew;
   SWFMatrix m = p->matrix;
 
-  SWFMatrix_set(m,
-		p->xScale * (cRot - xS*sRot),
+  SWFMatrix_set(m, p->xScale * (cRot - xS*sRot),
 		p->xScale * (yS*cRot - (xS*yS+1)*sRot),
 		p->yScale * (sRot + xS*cRot),
 		p->yScale * (yS*sRot + (xS*yS+1)*cRot),
-		p->x, p->y);
+		(int)rint(Ming_scale*p->x),
+		(int)rint(Ming_scale*p->y));
 }
 
 void SWFPosition_skewX(SWFPosition p, float x)
@@ -106,13 +108,13 @@ void SWFPosition_rotateTo(SWFPosition p, float degrees)
   p->rot = degrees;
   updateMatrix(p);
 }
-void SWFPosition_move(SWFPosition p, int x, int y)
+void SWFPosition_move(SWFPosition p, float x, float y)
 {
   p->x += x;
   p->y += y;
   updateMatrix(p);
 }
-void SWFPosition_moveTo(SWFPosition p, int x, int y)
+void SWFPosition_moveTo(SWFPosition p, float x, float y)
 {
   p->x = x;
   p->y = y;
@@ -131,10 +133,11 @@ void SWFPosition_scaleXYTo(SWFPosition p, float x, float y)
   updateMatrix(p);
 }
 void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
-			   int x, int y)
+			   float x, float y)
 {
   /* set the transform matrix, but don't touch the position properties-
      you won't want to use the two in conjunction, anyway */
 
-  SWFMatrix_set(p->matrix, a, b, c, d, x, y);
+  SWFMatrix_set(p->matrix, a, b, c, d,
+		(int)rint(Ming_scale*x), (int)rint(Ming_scale*y));
 }

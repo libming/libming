@@ -108,15 +108,16 @@ static inline void SWFFill_rotateTo(SWFFill fill, float degrees)
 {
   SWFPosition_rotateTo(fill->position, degrees);
 }
-static inline void SWFFill_move(SWFFill fill, int x, int y)
+static inline void SWFFill_move(SWFFill fill, float x, float y)
 {
   SWFPosition_move(fill->position, x, y);
 }
-static inline void SWFFill_moveTo(SWFFill fill, int x, int y)
+static inline void SWFFill_moveTo(SWFFill fill, float x, float y)
 {
   SWFPosition_moveTo(fill->position, x, y);
 }
-static inline void SWFFill_setMatrix(SWFFill fill, float a, float b, float c, float d, int x, int y)
+static inline void SWFFill_setMatrix(SWFFill fill, float a, float b,
+				     float c, float d, float x, float y)
 {
   SWFPosition_setMatrix(fill->position, a, b, c, d, x, y);
 }
