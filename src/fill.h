@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -36,90 +36,29 @@ typedef struct _swfFill *SWFFill;
 
 #define SWFFILL_SIZE (sizeof(struct _swfFill))
 
-static inline SWFFill newSWFFill(SWFFillStyle fillstyle)
-{
-  SWFFill fill = (SWFFill)malloc(SWFFILL_SIZE);
-  fill->fillstyle = fillstyle;
-  fill->position = newSWFPosition(SWFFillStyle_getMatrix(fill->fillstyle));
-  return fill;
-}
-static inline void destroySWFFill(SWFFill fill)
-{
-  destroySWFPosition(fill->position);
-  free(fill);
-}
+SWFFill newSWFFill(SWFFillStyle fillstyle);
+void destroySWFFill(SWFFill fill);
 
-static inline void SWFFill_skewX(SWFFill fill, float x)
-{
-  SWFPosition_skewX(fill->position, x);
-}
-static inline void SWFFill_skewXTo(SWFFill fill, float x)
-{
-  SWFPosition_skewXTo(fill->position, x);
-}
-static inline void SWFFill_skewY(SWFFill fill, float y)
-{
-  SWFPosition_skewY(fill->position, y);
-}
-static inline void SWFFill_skewYTo(SWFFill fill, float y)
-{
-  SWFPosition_skewYTo(fill->position, y);
-}
-static inline void SWFFill_scaleX(SWFFill fill, float x)
-{
-  SWFPosition_scaleX(fill->position, x);
-}
-static inline void SWFFill_scaleXTo(SWFFill fill, float x)
-{
-  SWFPosition_scaleXTo(fill->position, x);
-}
-static inline void SWFFill_scaleY(SWFFill fill, float y)
-{
-  SWFPosition_scaleY(fill->position, y);
-}
-static inline void SWFFill_scaleYTo(SWFFill fill, float y)
-{
-  SWFPosition_scaleYTo(fill->position, y);
-}
+void SWFFill_skewX(SWFFill fill, float x);
+void SWFFill_skewXTo(SWFFill fill, float x);
+void SWFFill_skewY(SWFFill fill, float y);
+void SWFFill_skewYTo(SWFFill fill, float y);
+void SWFFill_scaleX(SWFFill fill, float x);
+void SWFFill_scaleXTo(SWFFill fill, float x);
+void SWFFill_scaleY(SWFFill fill, float y);
+void SWFFill_scaleYTo(SWFFill fill, float y);
 
 /* deprecated: */
-static inline void SWFFill_scaleXY(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXY(fill->position, x, y);
-}
-static inline void SWFFill_scaleXYTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXYTo(fill->position, x, y);
-}
+void SWFFill_scaleXY(SWFFill fill, float x, float y);
+void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
 
-static inline void SWFFill_scale(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXY(fill->position, x, y);
-}
-static inline void SWFFill_scaleTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXYTo(fill->position, x, y);
-}
-static inline void SWFFill_rotate(SWFFill fill, float degrees)
-{
-  SWFPosition_rotate(fill->position, degrees);
-}
-static inline void SWFFill_rotateTo(SWFFill fill, float degrees)
-{
-  SWFPosition_rotateTo(fill->position, degrees);
-}
-static inline void SWFFill_move(SWFFill fill, float x, float y)
-{
-  SWFPosition_move(fill->position, x, y);
-}
-static inline void SWFFill_moveTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_moveTo(fill->position, x, y);
-}
-static inline void SWFFill_setMatrix(SWFFill fill, float a, float b,
-				     float c, float d, float x, float y)
-{
-  SWFPosition_setMatrix(fill->position, a, b, c, d, x, y);
-}
+void SWFFill_scale(SWFFill fill, float x, float y);
+void SWFFill_scaleTo(SWFFill fill, float x, float y);
+void SWFFill_rotate(SWFFill fill, float degrees);
+void SWFFill_rotateTo(SWFFill fill, float degrees);
+void SWFFill_move(SWFFill fill, float x, float y);
+void SWFFill_moveTo(SWFFill fill, float x, float y);
+void SWFFill_setMatrix(SWFFill fill, float a, float b,
+		       float c, float d, float x, float y);
 
 #endif /* MING_FILL_H_INCLUDED */
