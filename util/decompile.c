@@ -381,7 +381,11 @@ static Stack readActionRecord(FILE *f)
       return newTree(NULL, type, (Stack)readSInt16(f));
 
     case SWFACTION_WAITFORFRAME:
-      return newTree((Stack)readUInt16(f), type, (Stack)readUInt8(f));
+	{
+	  Stack left = (Stack)readUInt16(f);
+	  Stack right = (Stack)readUInt8(f);
+      return newTree(left, type, right);
+	}
 
     case SWFACTION_END:
       return NULL;
@@ -720,6 +724,9 @@ static void listItem(Stack s, Action parent)
 
     switch(t->action)
       {
+      case SWFACTION_POP: /* ignore */
+	break;
+
 	/* two args */
       case SWFACTION_ADD:
       case SWFACTION_SUBTRACT:
@@ -1027,27 +1034,11 @@ static int isStatement(Stack s)
     case SWFACTION_BRANCHIFTRUE:
     case SWFACTION_CALLFRAME:
     case SWFACTION_GOTOEXPRESSION:
+	case SWFACTION_POP:
       return 1;
     default:
       return 0;
   }
-}
-
-static int isIgnorable(Stack s)
-{
-  Tree t;
-
-  if(s->type != 't')
-    return 0;
-
-  t = s->data.tree;
-
-  if (t->action == SWFACTION_POP) {
-	printf("/* POP */\n");
-	return 1;
-  }
-
-  return 0;
 }
 
 static Stack readStatement(FILE *f)
@@ -1065,7 +1056,7 @@ static Stack readStatement(FILE *f)
     if(stack == NULL && isStatement(s))
       /* supposedly, we've got a complete statement. */
       return s;
-    else if (! isIgnorable(s))
+    else
       push(s);
   }
 }
