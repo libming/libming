@@ -1,318 +1,24 @@
 /* ====================================================================
- * Copyright (c) 2000 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
+ *
+ * $Author$
+ * $Id$
  */
+
 
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
 #include "SWF.h"
-
-//XXX Temporary solution. I hate this!!
-void stdoutByteOutputMethod(byte b, void *data){
-	fprintf(stdout, "%c", b);	
-}
-void fileByteOutputMethod(byte b, void *data)
-{
-  fprintf((FILE *)data, "%c", b);
-}
+#include "swf_util.c"
 
 
 MODULE = SWF		PACKAGE = SWF		
 PROTOTYPES: ENABLE
-
-void
-import(pclass, ...)
-    SV *pclass
-
-    PREINIT:
-    I32 i = 0;
-    SV *caller = perl_eval_pv("scalar caller", TRUE);
-
-    CODE:
-    for(i=1; i<items; i++) {
-        my_import(pclass, caller, ST(i));
-    }
-
-int
-SWFBUTTON_KEYPRESS(c)
-    char c
-
-int
-SWFBUTTON_ONKEYPRESS(c)
-    char c
-
-byte
-SWFFILL_SOLID()
-    CODE:
-    RETVAL = SWFFILL_SOLID;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFFILL_GRADIENT()
-    CODE:
-    RETVAL = SWFFILL_GRADIENT;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFFILL_LINEAR_GRADIENT()
-   CODE:
-   RETVAL = SWFFILL_LINEAR_GRADIENT;
-   OUTPUT:
-   RETVAL
-
-byte
-SWFFILL_RADIAL_GRADIENT()
-   CODE:
-   RETVAL = SWFFILL_RADIAL_GRADIENT;
-   OUTPUT:
-   RETVAL
-
-
-byte
-SWFFILL_BITMAP()
-    CODE:
-    RETVAL = SWFFILL_BITMAP;
-    OUTPUT:
-    RETVAL
-
-
-byte
-SWFFILL_TILED_BITMAP()
-    CODE:
-    RETVAL = SWFFILL_TILED_BITMAP;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFFILL_CLIPPED_BITMAP()
-    CODE:
-    RETVAL = SWFFILL_CLIPPED_BITMAP;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_HIT()
-    CODE:
-    RETVAL = SWFBUTTON_HIT;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_DOWN()
-    CODE:
-    RETVAL = SWFBUTTON_DOWN;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_OVER()
-    CODE:
-    RETVAL = SWFBUTTON_OVER;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_UP()
-    CODE:
-    RETVAL = SWFBUTTON_UP;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_MOUSEOVER()
-    CODE:
-    RETVAL = SWFBUTTON_MOUSEOVER;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_MOUSEOUT()
-    CODE:
-    RETVAL = SWFBUTTON_MOUSEOUT;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_MOUSEDOWN()
-    CODE:
-    RETVAL = SWFBUTTON_MOUSEDOWN;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_MOUSEUP()
-    CODE:
-    RETVAL = SWFBUTTON_MOUSEUP;
-    OUTPUT:
-    RETVAL
-
-double
-SWFBUTTON_DRAGOUT()
-    CODE:
-    RETVAL = SWFBUTTON_DRAGOUT;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_DRAGOVER()
-    CODE:
-    RETVAL = SWFBUTTON_DRAGOVER;
-    OUTPUT:
-    RETVAL
-
-byte
-SWFBUTTON_MOUSEUPOUTSIDE()
-    CODE:
-    RETVAL = SWFBUTTON_MOUSEUPOUTSIDE;
-    OUTPUT:
-    RETVAL
-
-int
-SWFTEXTFIELD_NOEDIT()
-   CODE:
-   RETVAL= SWFTEXTFIELD_NOEDIT;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_PASSWORD()
-   CODE:
-   RETVAL= SWFTEXTFIELD_PASSWORD;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_DRAWBOX()
-   CODE:
-   RETVAL= SWFTEXTFIELD_DRAWBOX;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_MULTILINE()
-   CODE:
-   RETVAL= SWFTEXTFIELD_MULTILINE;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_WORDWRAP()
-   CODE:
-   RETVAL= SWFTEXTFIELD_WORDWRAP;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_NOSELECT()
-   CODE:
-   RETVAL= SWFTEXTFIELD_NOSELECT;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_HTML()
-   CODE:
-   RETVAL= SWFTEXTFIELD_HTML;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_ALIGN_LEFT()
-   CODE:
-   RETVAL= SWFTEXTFIELD_ALIGN_LEFT;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_ALIGN_RIGHT()
-   CODE:
-   RETVAL= SWFTEXTFIELD_ALIGN_RIGHT;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_ALIGN_CENTER()
-   CODE:
-   RETVAL= SWFTEXTFIELD_ALIGN_CENTER;
-   OUTPUT:
-   RETVAL
-
-int
-SWFTEXTFIELD_ALIGN_JUSTIFY()
-   CODE:
-   RETVAL= SWFTEXTFIELD_ALIGN_JUSTIFY;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_ONLOAD()
-   CODE:
-   RETVAL=SWF_PLACEACTION_ONLOAD;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_ENTERFRAME()
-   CODE:
-   RETVAL=SWF_PLACEACTION_ENTERFRAME;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_UNLOAD()
-   CODE:
-   RETVAL=SWF_PLACEACTION_UNLOAD;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_MOUSEMOVE()
-   CODE:
-   RETVAL=SWF_PLACEACTION_MOUSEMOVE;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_MOUSEDOWN()
-   CODE:
-   RETVAL=SWF_PLACEACTION_MOUSEDOWN;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_MOUSEUP()
-   CODE:
-   RETVAL=SWF_PLACEACTION_MOUSEUP;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_KEYDOWN()
-   CODE:
-   RETVAL=SWF_PLACEACTION_KEYDOWN;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_KEYUP()
-   CODE:
-   RETVAL=SWF_PLACEACTION_KEYUP;
-   OUTPUT:
-   RETVAL
-
-int
-SWFCLIPEVENT_DATA()
-   CODE:
-   RETVAL=SWF_PLACEACTION_DATA;
-   OUTPUT:
-   RETVAL
-
 
 void
 fileOutputMethod(b, data)
@@ -320,13 +26,19 @@ fileOutputMethod(b, data)
 	void *	data
 
 
+void 
+Ming_setScale(scale)
+    float scale
+    ALIAS:
+        SWF::setScale = 1
+
 MODULE = SWF		PACKAGE = SWF::Bitmap		PREFIX = SWFBitmap_
 
 SWF::Bitmap
-SWFBitmap_new(package="SWF::Bitmap", filename, mask=NULL)
+SWFBitmap_new(package="SWF::Bitmap", filename, alpha=NULL)
 	char    *package
 	char    *filename = NO_INIT
-        char    *mask
+        char    *alpha
         PREINIT:
         CV      *cv;
         STRLEN  len;
@@ -335,11 +47,11 @@ SWFBitmap_new(package="SWF::Bitmap", filename, mask=NULL)
         filename = (char *) SvPV(ST(1), len);
         if( strncasecmp(filename+len-4, ".jpg", 4) == 0 ||
             strncasecmp(filename+len-5, ".jpeg", 5) == 0)
-            my_sub = mask ? "SWF::Bitmap::newSWFJpegWithAlpha" : "SWF::Bitmap::newSWFJpegBitmap";
+            my_sub = alpha ? "SWF::Bitmap::newSWFJpegWithAlpha" : "SWF::Bitmap::newSWFJpegBitmap";
         else if(strncasecmp(filename+len-4, ".dbl", 4) == 0)
-            my_sub = "SWF::Bitmap::newSWFDBLBitmapFile";
+            my_sub = "SWF::Bitmap::newSWFDBLBitmap";
         else
-            croak("argument to SWF::Bitmap::New must be a JPEG or dbl filename");
+            croak("argument to SWF::Bitmap::New must be a JPG or dbl filename");
 
         PUSHMARK(mark);
         cv = GvCV(gv_fetchpv(my_sub, FALSE, SVt_PVCV));
@@ -351,7 +63,7 @@ SWFBitmap_new(package="SWF::Bitmap", filename, mask=NULL)
 
 
 SWF::Bitmap
-newSWFDBLBitmapFile(package="SWF::Bitmap", filename)
+newSWFDBLBitmap(package="SWF::Bitmap", filename)
          char    *package
          char    *filename
          PREINIT: 
@@ -391,8 +103,6 @@ newSWFJpegWithAlpha(package="SWF::Bitmap", filename, mask)
            }
         }
 
-
-
 SWF::Bitmap
 newSWFJpegBitmap(package="SWF::Bitmap", filename)
         char    *package
@@ -407,9 +117,7 @@ newSWFJpegBitmap(package="SWF::Bitmap", filename)
         	RETVAL = newSWFJpegBitmap(f);
 	        ST(0) = sv_newmortal();
         	sv_setref_pv(ST(0), package, (void*)RETVAL);
-	} 
-
-
+	}
 
 int
 SWFBitmap_getWidth(b)
@@ -419,7 +127,50 @@ int
 SWFBitmap_getHeight(b)
 	SWF::Bitmap	b
 
+void
+destroySWFBitmap(bitmap)
+        SWF::Bitmap     bitmap 
+        ALIAS:
+        SWF::Bitmap::DESTROY = 1
+	PREINIT:
+	SWF__Block 	block;
+        CODE:
+	S_DEBUG(2, fprintf(stderr, "Bitmap DESTROY CALLED\n"));
+	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        destroySWFBitmap(block);
+
+
 MODULE = SWF		PACKAGE = SWF::Fill		PREFIX = SWFFill_
+
+void
+SWFFill_import(pclass, ...)
+    SV *pclass
+
+    PREINIT:
+    I32 i = 0;
+    SV *caller = perl_eval_pv("scalar caller", TRUE);
+
+    CODE:
+    for(i=1; i<items; i++) {
+        my_import(pclass, caller, ST(i));
+    }
+
+I32
+constant()
+    ALIAS:
+	SWFFILL_SOLID = SWFFILL_SOLID
+	SWFFILL_GRADIENT = SWFFILL_GRADIENT
+	SWFFILL_LINEAR_GRADIENT = SWFFILL_LINEAR_GRADIENT
+	SWFFILL_RADIAL_GRADIENT = SWFFILL_RADIAL_GRADIENT
+	SWFFILL_BITMAP = SWFFILL_BITMAP
+	SWFFILL_TILED_BITMAP = SWFFILL_TILED_BITMAP
+	SWFFILL_CLIPPED_BITMAP = SWFFILL_CLIPPED_BITMAP
+    CODE:
+    RETVAL = ix;
+    OUTPUT:
+    RETVAL
+
+
 
 void 
 SWFFill_moveTo(fill, x, y)
@@ -452,6 +203,12 @@ SWFFill_skewYTo(fill, y)
         float           y
 
 
+void
+SWFFill_DESTROY(fill)
+	SWF::Fill	fill
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "Fill DESTROY CALLED\n"));
+
 MODULE = SWF		PACKAGE = SWF::Gradient		PREFIX = SWFGradient_
 
 SWF::Gradient
@@ -473,20 +230,15 @@ SWFGradient_addEntry(gradient, ratio, r, g, b, a=0xff)
 	byte		b
 	byte		a
 
-
-MODULE = SWF            PACKAGE = SWF::Ming             PREFIX = SWFMing_
-
 void
-SWFMing_setScale(scale)
-        float scale
+destroySWFGradient(gradient)
+	SWF::Gradient	gradient
+	ALIAS:
+        SWF::Gradient::DESTROY = 1
         CODE:
-                Ming_setScale(scale);
+        S_DEBUG(2, fprintf(stderr, "Gradient DESTROY CALLED\n"));
+        destroySWFGradient(gradient);
 
-void
-SWFMing_useSWFVersion(num)
-        int num
-        CODE:
-                Ming_useSWFVersion(num);
 
 
 MODULE = SWF		PACKAGE = SWF::Movie		PREFIX = SWFMovie_
@@ -496,6 +248,10 @@ destroySWFMovie(movie)
 	SWF::Movie	movie
         ALIAS:
 	SWF::Movie::DESTROY = 1
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "Movie DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
+        destroySWFMovie(movie);
 
 SWF::Movie
 SWFMovie_new(package="SWF::Movie")
@@ -525,6 +281,8 @@ void
 SWFMovie_setNumberOfFrames(movie, frames)
 	SWF::Movie	movie
 	int	frames
+	ALIAS:
+	SWF::Movie::setFrames = 1
 
 void
 SWFMovie_setBackground(movie, r, g, b)
@@ -546,7 +304,7 @@ int
 SWFMovie_output(movie)
 	SWF::Movie movie
 	CODE:
-	RETVAL = SWFMovie_output(movie, &stdoutByteOutputMethod, NULL);
+	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout);
 
 int 
 SWFMovie_save(movie, filename)
@@ -559,35 +317,67 @@ SWFMovie_save(movie, filename)
 		fprintf(stderr, "Unable to open %s\n", filename);
 		ST(0) = &sv_undef;
 	}else{
-                RETVAL = SWFMovie_output(movie, &fileByteOutputMethod, (void *)f);
+                RETVAL = SWFMovie_output(movie, fileOutputMethod, f);
                 fclose(f);
 	}
         OUTPUT:
         RETVAL
 
 
-void
-SWFMovie_addExport(movie, block, name)
-	SWF::Movie movie
-	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
-	char *name
-
-void
-SWFMovie_export(movie)
-	SWF::Movie movie
-
 SWF::DisplayItem
 SWFMovie_add(movie, block)
 	SWF::Movie movie
 	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
-
-MODULE = SWF		PACKAGE = SWF::DisplayItem	PREFIX = SWFDisplayItem_
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFMovie_add(movie, block);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::DisplayItem", (void*)RETVAL);
 
 void
-SWFDisplayItem_addAction(item, action, flags)
-	SWF::DisplayItem item
-	SWF::Action	action
-	int             flags
+SWFMovie_remove(movie, item)
+        SWF::Movie movie
+        SWF::DisplayItem item
+
+void
+SWFMovie_setSoundStream(movie, sound)
+	SWF::Movie movie
+	SWF::Sound sound
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	SWFMovie_setSoundStream(movie, sound);
+
+MODULE = SWF           PACKAGE = SWF::Sound            PREFIX = SWFSound_
+
+SWF::Sound
+SWFSound_new(package="SWF::Sound", filename)
+       char *package
+       char *filename
+       PREINIT:
+       FILE    *f;
+       CODE:
+       if (items < 1)
+           fprintf(stderr, "SWF::Sound called with one argument\n\n");
+       if (!(f = fopen(filename, "rb"))) {
+               fprintf(stderr, "Unable to open %s\n", filename);
+               ST(0) = &sv_undef;
+       } else {
+               RETVAL = newSWFSound(f);
+               ST(0) = sv_newmortal();
+               sv_setref_pv(ST(0), package, (void*)RETVAL);
+       }
+
+void
+destroySWFSound(sound)
+	SWF::Sound	sound
+        ALIAS:
+        SWF::Sound::DESTROY = 1
+        CODE:
+        S_DEBUG(2, fprintf(stderr, "Sound DESTROY CALLED\n"));
+        destroySWFSound(sound);
+
+
+MODULE = SWF		PACKAGE = SWF::DisplayItem	PREFIX = SWFDisplayItem_
 
 void
 SWFDisplayItem_moveTo(item, x, y)
@@ -688,6 +478,18 @@ SWFDisplayItem_setName(item, name)
        char *name
 
 
+void 
+SWFDisplayItem_remove(item)
+	SWF::DisplayItem item
+
+void
+SWFDisplayItem_DESTROY(item)
+	SWF::DisplayItem	item
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "DisplayItem DESTROY CALLED\n"));
+	
+
+
 MODULE = SWF		PACKAGE = SWF::Shape		PREFIX = SWFShape_
 
 SWF::Shape
@@ -698,14 +500,15 @@ SWFShape_new(package="SWF::Shape")
         ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
-#void
-#destroySWFShape(block)
-#	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-#        ALIAS:
-#        SWF::Shape::DESTROY = 1
-#        CODE:
-#        fprintf(stderr, "Shape DESTROY CALLED\n");
-#        destroySWFShape(block);
+void
+destroySWFShape(block)
+	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::Shape::DESTROY = 1
+        CODE:
+        S_DEBUG(2, fprintf(stderr, "Shape DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
+        destroySWFShape(block);
 
 void
 SWFShape_moveTo(shape, x, y)
@@ -722,14 +525,6 @@ SWFShape_moveToRelative(shape, x, y)
         int y
         ALIAS:
         SWF::Shape::movePen = 1
-
-int
-SWFShape_getPenX(shape)
-	SWF::Shape	shape
-
-int
-SWFShape_getPenY(shape)
-	SWF::Shape	shape
 
 void
 SWFShape_lineTo(shape, x, y)
@@ -769,9 +564,9 @@ SWFShape_curveToRelative(shape, controldx, controldy, anchordx, anchordy)
         ALIAS:
         SWF::Shape::drawCurve = 1
 
-#void
-#SWFShape_end(shape)
-#	SWFShape	shape
+void
+SWFShape_end(shape)
+	SWF::Shape	shape
 
 int
 SWFShape_setLineStyle(shape, width, r, g, b, a=0xff)
@@ -781,8 +576,6 @@ SWFShape_setLineStyle(shape, width, r, g, b, a=0xff)
 	byte	g
 	byte	b
 	byte	a
-	ALIAS:
-	SWF::Shape::setLine = 1
 
 SWF::Fill
 SWFShape_addFill(shape, ...)
@@ -791,6 +584,7 @@ SWFShape_addFill(shape, ...)
        CV        *cv;
        char      *my_sub;
        CODE:
+       
        PUSHMARK(mark);
        if (sv_derived_from(ST(1), "SWF::Gradient"))
            my_sub = "SWF::Shape::addGradientFill";
@@ -813,37 +607,58 @@ SWFShape_addSolidFill(shape, r, g, b, a=0xff)
         byte            g
         byte            b
         byte            a
+        PREINIT:
+	SV *sv;
+	CODE:
+        sv = (SV*)SvRV(ST(0));
+	RETVAL = SWFShape_addSolidFill(shape, r, g, b, a);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Fill", (void*)RETVAL);
+	swf_stash_refcnt_inc(sv, (SV*)SvRV(ST(0)));	
 
 SWF::Fill
 SWFShape_addGradientFill(shape, gradient, flags=SWFFILL_LINEAR_GRADIENT)
 	SWF::Shape      shape
 	SWF::Gradient   gradient
 	byte		flags
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFShape_addGradientFill(shape, gradient, flags);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Fill", (void*)RETVAL);
 
 SWF::Fill
 SWFShape_addBitmapFill(shape, bitmap, flags=SWFFILL_TILED_BITMAP)
 	SWF::Shape	shape
 	SWF::Bitmap	bitmap
 	byte	        flags
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFShape_addBitmapFill(shape, bitmap, flags);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Fill", (void*)RETVAL);
 
 void
-SWFShape_setLeftFill(shape, fill)
+SWFShape_xs_setLeftFill(shape, fill=NULL)
 	SWF::Shape	shape
 	SWF::Fill	fill
+	CODE:
+	SWFShape_setLeftFill(shape, fill);
 
 void
-SWFShape_setRightFill(shape, fill)
+SWFShape_xs_setRightFill(shape, fill=NULL)
 	SWF::Shape	shape
 	SWF::Fill	fill
+	CODE:
+	SWFShape_setRightFill(shape, fill);
 
-void
-SWFShape_drawFontGlyph(shape, font, c, size=0)
-        SWF::Shape shape
-        SWF::Font font
-        int c
-        int size
-        ALIAS:
-        SWF::Shape::drawSizedGlyph = 1
+#void
+#SWFShape_drawFontGlyph(shape, font, c)
+#        SWF::Shape shape
+#        SWF::Font font
+#        int c
+#        ALIAS:
+#        SWF::Shape::drawGlyph = 1
 
 void
 SWFShape_drawArc(shape, r, startAngle, endAngle)
@@ -868,14 +683,14 @@ SWFMorph_new(package="SWF::Morph")
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
 
-#void
-#destroySWFMorph(block)
-#	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-#        ALIAS:
-#        SWF::Morph::DESTROY = 1
-#        CODE:
-#        fprintf(stderr, "Morph DESTROY CALLED\n");
-#        destroySWFMorph(block);
+void
+destroySWFMorph(block)
+	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::Morph::DESTROY = 1
+        CODE:
+        S_DEBUG(2, fprintf(stderr, "Morph DESTROY CALLED\n"));
+        destroySWFMorph(block);
 
 
 SWF::Shape
@@ -907,14 +722,14 @@ SWFFont_new(package="SWF::Font", filename)
 	}
 
 
-#void
-#destroySWFFont(block)
-#        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-#        ALIAS:
-#        SWF::Font::DESTROY = 1
-#        CODE:
-#        fprintf(stderr, "FONT DESTROY CALLED\n");
-#        destroySWFFont(block);
+void
+destroySWFFont(block)
+        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::Font::DESTROY = 1
+        CODE:
+        S_DEBUG(2, fprintf(stderr, "FONT DESTROY CALLED\n"));
+        destroySWFFont(block);
 
 
 int
@@ -947,20 +762,24 @@ SWFText_new(package="SWF::Text")
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
 
-#void
-#destroySWFText(block)
-#        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-#        ALIAS:
-#        SWF::Text::DESTROY = 1
-#	CODE:
-#        fprintf(stderr, "Text DESTROY CALLED\n");
-#        destroySWFText(block);
+void
+destroySWFText(block)
+        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::Text::DESTROY = 1
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "Text DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
+        destroySWFText(block);
 
 
 void
 SWFText_setFont(text, font)
 	SWF::Text	text
 	SWF::Font	font
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	SWFText_setFont(text, font);
 
 void
 SWFText_setHeight(text, height)
@@ -1014,6 +833,40 @@ SWFText_getLeading(text)
 
 MODULE = SWF		PACKAGE = SWF::TextField	PREFIX = SWFTextField_
 
+void
+SWFTextField_import(pclass, ...)
+    SV *pclass
+
+    PREINIT:
+    I32 i = 0;
+    SV *caller = perl_eval_pv("scalar caller", TRUE);
+
+    CODE:
+    for(i=1; i<items; i++) {
+        my_import(pclass, caller, ST(i));
+    }
+
+I32
+constant()
+    ALIAS:
+	SWFTEXTFIELD_NOEDIT = SWFTEXTFIELD_NOEDIT
+	SWFTEXTFIELD_PASSWORD = SWFTEXTFIELD_PASSWORD
+	SWFTEXTFIELD_DRAWBOX = SWFTEXTFIELD_DRAWBOX
+	SWFTEXTFIELD_MULTILINE = SWFTEXTFIELD_MULTILINE
+	SWFTEXTFIELD_WORDWRAP = SWFTEXTFIELD_WORDWRAP
+	SWFTEXTFIELD_NOSELECT = SWFTEXTFIELD_NOSELECT
+	SWFTEXTFIELD_ALIGN_LEFT = SWFTEXTFIELD_ALIGN_LEFT
+	SWFTEXTFIELD_ALIGN_RIGHT = SWFTEXTFIELD_ALIGN_RIGHT
+	SWFTEXTFIELD_ALIGN_CENTER = SWFTEXTFIELD_ALIGN_CENTER
+	SWFTEXTFIELD_ALIGN_JUSTIFY = SWFTEXTFIELD_ALIGN_JUSTIFY
+    CODE:
+    RETVAL = ix;
+    OUTPUT:
+    RETVAL
+
+
+
+
 SWF::TextField
 SWFTextField_new(package="SWF::TextField", ...)
 	char *package
@@ -1028,16 +881,24 @@ SWFTextField_new(package="SWF::TextField", ...)
             SWFTextField_setFlags(RETVAL, flags);
         }
 
-#void
-#destroySWFTextField(block)
-#        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-#        ALIAS:
-#        SWF::TextField::DESTROY = 1
+void
+destroySWFTextField(block)
+        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::TextField::DESTROY = 1
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "TextField DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
+        destroySWFTextField(block);
 
 void
 SWFTextField_setFont(field, font)
 	SWF::TextField	field
 	SWF::Block	font = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	SWFTextField_setFont(field, font);
+
 
 void
 SWFTextField_setBounds(field, width, height)
@@ -1124,8 +985,53 @@ SWFAction_new(package="SWF::Action", script=NULL)
         ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
+void
+SWFAction_DESTROY(action)
+	SWF::Action	action
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "Action DESTROY CALLED\n"));
 
 MODULE = SWF		PACKAGE = SWF::Button		PREFIX = SWFButton_
+
+void
+SWFButton_import(pclass, ...)
+    SV *pclass
+
+    PREINIT:
+    I32 i = 0;
+    SV *caller = perl_eval_pv("scalar caller", TRUE);
+
+    CODE:
+    for(i=1; i<items; i++) {
+        my_import(pclass, caller, ST(i));
+    }
+
+I32
+constant()
+    ALIAS:
+        SWFBUTTON_MOUSEUP = SWFBUTTON_MOUSEUP
+	SWFBUTTON_HIT = SWFBUTTON_HIT
+	SWFBUTTON_DOWN = SWFBUTTON_DOWN
+	SWFBUTTON_OVER = SWFBUTTON_OVER
+	SWFBUTTON_UP = SWFBUTTON_UP
+	SWFBUTTON_MOUSEOVER = SWFBUTTON_MOUSEOVER
+	SWFBUTTON_MOUSEOUT = SWFBUTTON_MOUSEOUT
+	SWFBUTTON_MOUSEDOWN = SWFBUTTON_MOUSEDOWN
+	SWFBUTTON_DRAGOUT = SWFBUTTON_DRAGOUT
+	SWFBUTTON_DRAGOVER = SWFBUTTON_DRAGOVER
+	SWFBUTTON_MOUSEUPOUTSIDE = SWFBUTTON_MOUSEUPOUTSIDE
+    CODE:
+    RETVAL = ix;
+    OUTPUT:
+    RETVAL
+
+int
+SWFBUTTON_KEYPRESS(c)
+    char c
+
+int
+SWFBUTTON_ONKEYPRESS(c)
+    char c
 
 SWF::Button
 SWFButton_new(package="SWF::Button")
@@ -1137,14 +1043,15 @@ SWFButton_new(package="SWF::Button")
 
 
 
-#void
-#destroySWFButton(block)
-#        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-#        ALIAS:
-#        SWF::Button::DESTROY = 1
-#        CODE:
-#        fprintf(stderr, "Button DESTROY CALLED\n");
-#        destroySWFButton(block);
+void
+destroySWFButton(block)
+        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::Button::DESTROY = 1
+        CODE:
+        S_DEBUG(2, fprintf(stderr, "Button DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
+        destroySWFButton(block);
 
 void
 SWFButton_addShape(button, character, flags=0)
@@ -1158,27 +1065,28 @@ SWFButton_addShape(button, character, flags=0)
         SWF::Button::setDown   = 4
         CODE:
         character = (SWF__Character) SvIV((SV*)SvRV(ST(1)));
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
         switch((ix = XSANY.any_i32)) {
             case 0:
                SWFButton_addShape(button, character, flags);
                break;
             case 1:
-               SWFButton_addShape(button, character, SWFBUTTONRECORD_OVERSTATE);
+               SWFButton_addShape(button, character, SWFBUTTON_OVER);
                break;
             case 2:
-               SWFButton_addShape(button, character, SWFBUTTONRECORD_HITSTATE);
+               SWFButton_addShape(button, character, SWFBUTTON_HIT);
                break;
             case 3:
-               SWFButton_addShape(button, character, SWFBUTTONRECORD_UPSTATE);
+               SWFButton_addShape(button, character, SWFBUTTON_UP);
                break;
             case 4:
-               SWFButton_addShape(button, character, SWFBUTTONRECORD_DOWNSTATE);
+               SWFButton_addShape(button, character, SWFBUTTON_DOWN);
                break;
        }
 
 
 void
-SWFButton_addAction(button, action, flags=SWFBUTTON_OVERDOWNTOOVERUP)
+SWFButton_addAction(button, action, flags=SWFBUTTON_MOUSEUP)
 	SWF::Button	button
 	SWF::Action	action
         int             flags
@@ -1201,6 +1109,11 @@ SWF::DisplayItem
 SWFMovieClip_add(clip, block)
         SWF::MovieClip clip
         SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFMovieClip_add(clip, block);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::DisplayItem", (void*)RETVAL);
 	
 void
 SWFMovieClip_remove(clip, item)
@@ -1221,13 +1134,18 @@ void
 SWFMovieClip_setNumberOfFrames(clip, frames)
         SWF::MovieClip clip
         int frames
+	ALIAS:
+	SWF::MovieClip::setFrames   = 1
 
-#void
-#destroySWFMovieClip(clip)
-#	SWF::MovieClip clip
-#        ALIAS:
-#        SWF::MovieClip::DESTROY = 1
-
+void
+destroySWFMovieClip(clip)
+	SWF::MovieClip clip
+        ALIAS:
+        SWF::MovieClip::DESTROY = 1
+	CODE:
+        S_DEBUG(2, fprintf(stderr, "MovieClip DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
+        destroySWFMovieClip(clip);
 
 
 
