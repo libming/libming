@@ -69,6 +69,10 @@ SWFMovie_setBackground(movie, r, g, b)
 	int	b
 
 void
+SWFMovie_protect(movie)
+	SWF::Movie	movie
+
+void
 SWFMovie_nextFrame(movie)
 	SWF::Movie	movie
 
@@ -78,10 +82,11 @@ SWFMovie_labelFrame(movie, label)
 	char *	label
 
 int 
-SWFMovie_output(movie)
+SWFMovie_output(movie, compresslevel=-1)
 	SWF::Movie movie
+	int compresslevel
 	CODE:
-	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout);
+	RETVAL = SWFMovie_outputC(movie, fileOutputMethod, stdout, compresslevel);
 
 int 
 SWFMovie_save(movie, filename, compresslevel=-1)
@@ -133,3 +138,10 @@ SWFMovie_setSoundStream(movie, sound)
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
 	SWFMovie_setSoundStream(movie, sound);
+/*
+*void
+*SWFMovie_startSound(movie) 
+*
+*void
+*SWFMovie_stopSound(movie)
+*/
