@@ -1228,7 +1228,7 @@ int printTextRecord(FILE *f, int glyphBits, int advanceBits, int type)
 
     if(flags & TEXTRECORD_HASCOLOR)
     {
-      if(type == 2)
+      if(type == DEFINETEXT2)
 	readRGBA(f, &rgba);
       else
 	readRGB(f, &rgba);
@@ -1522,7 +1522,7 @@ int main(int argc, char *argv[])
     {
       case DEFINESHAPE3:
       case DEFINESHAPE2:
-      case DEFINESHAPE:		printShape(f, length);	        break;
+      case DEFINESHAPE:		printShape(f, length);          break;
       case SETBACKGROUNDCOLOR:	printSetBackgroundColor(f);	break;
       case SHOWFRAME:           printf("\t$m->nextFrame();  /* (end of frame %i) */\n\n", frame++); break;
       case PLACEOBJECT2:	printPlaceObject2(f);		break;
