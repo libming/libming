@@ -16,4 +16,8 @@
   #define M_PI 3.14159265358979f
 #endif
 
+#ifndef WIN32
+  #include <unistd.h>
+#endif
+
 #endif MING_LIBMING_INCLUDED
