@@ -28,7 +28,7 @@ extern "C" {
  * Signature: (Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_SWFSound_nNew
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *, jobject, jstring, jbyte);
 
 #ifdef __cplusplus
 }

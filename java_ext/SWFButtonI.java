@@ -16,8 +16,6 @@
 
 
 
-import SWFObjectI;
-import SWFFontI;
 
 
 

@@ -27,7 +27,7 @@
 //
 public class SWFSound extends SWFObject implements SWFSoundI {
     
-    public SWFSound (String file)
+    public SWFSound (String file, byte flags)
 	throws SWFException
     { 
 	setHandle (nNew (file)); 

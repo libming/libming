@@ -16,11 +16,6 @@
 
 
 
-import SWFMovieClip;
-import SWFMovie;
-
-
-
 
 //
 //  SWFColor Interface

@@ -14,24 +14,6 @@
 //
 
 
-import SWFAction;
-import SWFBitmap;
-import SWFButton;
-import SWFDisplayItem;
-import SWFFill;
-import SWFFont;
-import SWFGradient;
-import SWFMorph;
-import SWFMovie;
-import SWFMovieClip;
-import SWFObject;
-import SWFShape;
-import SWFSound;
-import SWFText;
-import SWFTextField;
-
-
-
 //
 //  SlideShow Test
 //      flip between two slides, first slide alpha transitioned

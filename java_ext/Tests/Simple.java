@@ -14,24 +14,6 @@
 //
 
 
-import SWFAction;
-import SWFBitmap;
-import SWFButton;
-import SWFDisplayItem;
-import SWFFill;
-import SWFFont;
-import SWFGradient;
-import SWFMorph;
-import SWFMovie;
-import SWFMovieClip;
-import SWFObject;
-import SWFShape;
-import SWFSound;
-import SWFText;
-import SWFTextField;
-
-
-
 //
 //  Simple SWF Test
 //      
@@ -81,12 +63,12 @@ public class Simple {
 	Citem.setName("box");
 
 	// actions
-	movie.add(new SWFAction ("/box.x += 3;"));
+	movie.add(new SWFAction ("box.x += 3;"));
 	movie.nextFrame();
 	movie.add(new SWFAction ("gotoFrame(0); play();"));
 	movie.nextFrame();
 
 	// save to file
-	movie.save ("simple.swf");
+	movie.save ("simple.swf", -1);
     }
 };

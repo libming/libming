@@ -16,8 +16,6 @@
 
 
 
-import SWFShapeI;
-import SWFColor;
 
 
 

@@ -17,10 +17,6 @@
 
 
 
-import SWFObjectI;
-import SWFObject;
-import SWFBitmapI;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 

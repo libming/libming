@@ -17,9 +17,6 @@
 
 
 
-import SWFSoundI;
-import SWFDisplayItemI;
-import SWFObjectI;
 
 
 
@@ -44,7 +41,7 @@ public interface SWFMovieI extends SWFObjectI {
     public void			setFrames (int nframes);
 
     public void			setBackground (int r, int g, int b);
-    public void			setSoundStream (SWFSoundI sound)	throws SWFException;
+    public void			setSoundStream (SWFSoundStream sound_stream);
 
     public SWFDisplayItemI	add (SWFObjectI object)			throws SWFException;
     public SWFDisplayItemI	add (SWFObjectI object, int depth)	throws SWFException;
@@ -53,6 +50,7 @@ public interface SWFMovieI extends SWFObjectI {
     public void			nextFrame();
     public void			labelFrame (String label);
 
+    public int 			setCompression(int level);
     public void			save (String file);
     public byte[]		output ();
 };

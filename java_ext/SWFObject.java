@@ -16,9 +16,6 @@
 
 
 
-import SWFException;
-import SWFObjectI;
-import SWFMatrix;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -146,6 +143,7 @@ public class SWFObject implements SWFObjectI {
 
 	catch (UnsatisfiedLinkError e)
 	{
+	    System.out.println(e.toString());
 	    String msg = e.getMessage();
 	    if (msg.indexOf ("already loaded") < 0)
 		throw new SWFException ("native loading: " + msg);

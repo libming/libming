@@ -16,12 +16,6 @@
 
 
 
-import SWFMovieClip;
-import SWFMovie;
-
-
-
-
 //
 //  SWFMatrix Interface
 //      a rotation, translation matrix

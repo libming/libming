@@ -1,8 +1,8 @@
 
-JAVADIR=/usr/java
+JAVADIR=/usr/java/sdk
 MINGDIR=..
 
-COMPILE = $(JAVADIR)/bin/javac
+COMPILE = $(JAVADIR)/bin/javac -sourcepath .
 JAR = $(JAVADIR)/bin/jar
 
 
@@ -39,7 +39,8 @@ SRCS = \
 	SWFText.java \
 	SWFTextField.java \
 	SWFTextFieldI.java \
-	SWFTextI.java
+	SWFTextI.java\
+	SWFSoundStream.java
 
 
 all: jswf.jar

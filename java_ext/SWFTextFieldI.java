@@ -16,10 +16,6 @@
 
 
 
-import SWFObjectI;
-import SWFFontI;
-
-
 
 //
 //  SWFText Interface

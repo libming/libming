@@ -28,6 +28,7 @@
 #include <SWFText.h>
 #include <SWFTextField.h>
 #include <SWFSound.h>
+#include <SWFSoundStream.h>
 #include <SWFGradient.h>
 #include <SWFButton.h>
 #include <SWFAction.h>
@@ -419,7 +420,7 @@ JNIEXPORT void JNICALL Java_SWFMovie_nSetDimension (JNIEnv *, jobject, jint hand
 
 JNIEXPORT void JNICALL Java_SWFMovie_nSetFrames (JNIEnv *, jobject, jint handle, jint n)
 {
-    SWFMovie_setFrames ((SWFMovie)handle, n);
+    SWFMovie_setNumberOfFrames ((SWFMovie)handle, n);
 }
 
 
@@ -429,9 +430,9 @@ JNIEXPORT void JNICALL Java_SWFMovie_nSetBackground (JNIEnv *, jobject, jint han
 }
 
 
-JNIEXPORT void JNICALL Java_SWFMovie_nSetSoundStream (JNIEnv *, jobject, jint handle, jint Hsound)
+JNIEXPORT void JNICALL Java_SWFMovie_nSetSoundStream (JNIEnv *, jobject, jint handle, jint Hsound_stream)
 {
-    SWFMovie_setSoundStream ((SWFMovie)handle, (SWFSound)Hsound);
+    SWFMovie_setSoundStream ((SWFMovie)handle, (SWFSoundStream)Hsound_stream);
 }
 
 
@@ -458,6 +459,12 @@ JNIEXPORT void JNICALL Java_SWFMovie_nLabelFrame (JNIEnv* env, jobject, jint han
     const char* slabel = env->GetStringUTFChars (label, NULL);
     SWFMovie_labelFrame ((SWFMovie)handle, (char*)slabel);
     env->ReleaseStringUTFChars (label, slabel);
+}
+
+
+JNIEXPORT jint JNICALL Java_SWFMovie_nSetCompression(JNIEnv *, jobject, jint handle, jint level)
+{
+	return Ming_setSWFCompression(level);
 }
 
 
@@ -514,7 +521,7 @@ JNIEXPORT jint JNICALL Java_SWFMovieClip_nAdd (JNIEnv *, jobject, jint handle, j
 
 JNIEXPORT void JNICALL Java_SWFMovieClip_nRemove (JNIEnv *, jobject, jint handle, jint Hobject)
 {
-    SWFMovieClip_remove ((SWFMovieClip)handle, (SWFBlock)Hobject);
+    SWFMovieClip_remove ((SWFMovieClip)handle, (SWFDisplayItem)Hobject);
 }
 
 
@@ -601,14 +608,14 @@ JNIEXPORT void JNICALL Java_SWFFont_nDestroyFileFont (JNIEnv *, jobject, jint ha
 
 JNIEXPORT void JNICALL Java_SWFFont_nDestroyBrowserFont (JNIEnv *, jobject, jint handle)
 {
-    destroySWFBrowserFont ((SWFFont)handle);
+    destroySWFBrowserFont ((SWFBrowserFont)handle);
 }
 
 
 JNIEXPORT jfloat JNICALL Java_SWFFont_nGetStringWidth (JNIEnv* env, jobject, jint handle, jstring str)
 {
     const char* sstr = env->GetStringUTFChars (str, NULL);
-    jfloat w = SWFFont_getStringWidth ((SWFFont)handle, sstr);
+    jfloat w = SWFFont_getStringWidth ((SWFFont)handle, (const unsigned char*) sstr);
     env->ReleaseStringUTFChars (str, sstr);
 
     return w;
@@ -813,7 +820,7 @@ JNIEXPORT void JNICALL Java_SWFTextField_nDestroy (JNIEnv *, jobject, jint handl
 
 JNIEXPORT void JNICALL Java_SWFTextField_nSetFont (JNIEnv *, jobject, jint handle, jint Hfont)
 {
-    SWFTextField_setFont ((SWFTextField)handle, (SWFFont)Hfont);
+    SWFTextField_setFont ((SWFTextField)handle, (SWFBlock)Hfont);
 }
 
 
@@ -895,20 +902,60 @@ JNIEXPORT void JNICALL Java_SWFTextField_nSetLength (JNIEnv *, jobject, jint han
 //
 
 
-JNIEXPORT jint JNICALL Java_SWFSound_nNew (JNIEnv* env, jobject, jstring filename)
+JNIEXPORT jint JNICALL Java_SWFSound_nNew (JNIEnv* env, jobject, jstring filename, jbyte flags)
 {
     const char* sfilename = env->GetStringUTFChars (filename, NULL);
     FILE* file = fopen (sfilename, "rb");
 
-    jint obj = (jint)newSWFSound (file);
+    jint obj = (jint)newSWFSound (file, flags);
 
     env->ReleaseStringUTFChars (filename, sfilename);
 
     return obj;
 }
 
+//
+// SWFSoundStream
+//
+JNIEXPORT jint JNICALL Java_SWFSoundStream_nNew (JNIEnv* env, jobject, jstring filename)
+	
+{
+    const char* sfilename = env->GetStringUTFChars (filename, NULL);
+    FILE* file = fopen (sfilename, "rb");
+    jint obj = (jint)newSWFSoundStream (file);
+    env->ReleaseStringUTFChars (filename, sfilename);                                                                                                                                                                                          
+    return obj;
+}
 
 
+//                                                                                                                                                  
+// SWFSoundStream                                                                                                                                            //
+JNIEXPORT jint JNICALL Java_SWFVideoStream_nNewFile (JNIEnv* env, jobject, jstring filename)                                                                                                                                                                                       
+{                                                                                                                                                                                             
+    const char* sfilename = env->GetStringUTFChars (filename, NULL);
+    FILE* file = fopen (sfilename, "rb"); 
+    jint obj = (jint)newSWFVideoStream_fromFile (file);
+    env->ReleaseStringUTFChars (filename, sfilename);                                                                                                                                                                                          
+    return obj;
+}
+
+JNIEXPORT jint JNICALL Java_SWFVideoStream_nNew (JNIEnv * , jobject, jstring filename)
+	
+{ 
+	jint obj = (jint)newSWFVideoStream ();
+	return obj;
+}
+
+
+JNIEXPORT void JNICALL Java_SWFVideoStream_nSetDimension(JNIEnv *, jobject, jint handle, jint width, jint height)
+{
+	SWFVideoStream_setDimension((SWFVideoStream)handle, width, height);
+}
+
+JNIEXPORT jint JNICALL Java_SWFVideoStream_nGetNumFrames(JNIEnv *, jobject, jint handle) 
+{
+	return SWFVideoStream_getNumFrames((SWFVideoStream)handle);
+}
 //
 //  SWFGradient Methods
 //
@@ -952,7 +999,7 @@ JNIEXPORT void JNICALL Java_SWFButton_nDestroy (JNIEnv *, jobject, jint handle)
 
 JNIEXPORT void JNICALL Java_SWFButton_nAddShape (JNIEnv *, jobject, jint handle, jint Hshape, jint flags)
 {
-    SWFButton_addShape ((SWFButton)handle, (SWFBlock)Hshape, flags);
+    SWFButton_addShape ((SWFButton)handle, (SWFCharacter)Hshape, flags);
 }
 
 

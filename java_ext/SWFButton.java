@@ -16,9 +16,6 @@
 
 
 
-import SWFObjectI;
-import SWFFontI;
-import SWFButtonI;
 
 
 

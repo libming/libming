@@ -16,8 +16,6 @@
 
 
 
-import SWFSoundI;
-import SWFDisplayItem;
 
 
 
@@ -54,9 +52,9 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
 
     public void	setBackground (int r, int g, int b)
         { nSetBackground (handle, r,g,b); }
-    public void	setSoundStream (SWFSoundI sound)
-	throws SWFException
-        { sound.eval(); nSetSoundStream (handle, sound.getHandle()); }
+    public void	setSoundStream (SWFSoundStream sound_stream)
+	
+        { nSetSoundStream (handle, sound_stream.getHandle()); }
 
 
     public SWFDisplayItemI add (SWFObjectI object)
@@ -88,6 +86,11 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
     public void	labelFrame (String label)
         { nLabelFrame (handle, label); }
 
+    public int setCompression(int level) 
+    {
+	   return nSetCompression(handle, level);
+    }
+	    
     public void	save (String file)
         { nSave (handle, file); }
     public byte[] output ()
@@ -117,7 +120,7 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
     protected native void	nSetFrames (int handle, int nframes);
 
     protected native void	nSetBackground (int handle, int r, int g, int b);
-    protected native void	nSetSoundStream (int handle, int Hsound);
+    protected native void	nSetSoundStream (int handle, int HsoundStream);
 
     protected native int	nAdd (int handle, int Hobject);
     protected native void	nRemove (int handle, int Hitem);
@@ -125,6 +128,7 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
     protected native void	nNextFrame(int handle);
     protected native void	nLabelFrame (int handle, String label);
 
+    protected native int 	nSetCompression(int handle, int level);
     protected native void	nSave (int handle, String file);
     protected native byte[]	nOutput (int handle);
 

@@ -137,6 +137,14 @@ JNIEXPORT void JNICALL Java_SWFMovie_nLabelFrame
 
 /*
  * Class:     SWFMovie
+ * Method:    nSetCompression
+ */
+
+JNIEXPORT jint JNICALL Java_SWFMovie_nSetCompression
+  (JNIEnv *, jobject, jint handle, jint level);
+
+/*
+ * Class:     SWFMovie
  * Method:    nSave
  * Signature: (ILjava/lang/String;)V
  */

@@ -30,8 +30,11 @@ class StringStream {
     public:
 
 	StringStream ()
-	    : buffer (NULL), len (0), blen (0)
 	{
+		buffer = NULL;
+		len = 0;
+		blen = 0;
+		
 	}
 
 	~StringStream ()
