@@ -34,6 +34,9 @@ void Ming_setCubicThreshold(int num);
 void Ming_setScale(float scale);
 float Ming_getScale();
 
+/* set the version number to use */
+void Ming_useSWFVersion(int version);
+
 /* change the error/warn behavior.  Default prints message and exits. */
 void Ming_setWarnFunction(void (*warn)(char *msg, ...));
 void Ming_setErrorFunction(void (*error)(char *msg, ...));
@@ -448,6 +451,7 @@ int SWFDisplayItem_getDepth(SWFDisplayItem item);
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
 void SWFDisplayItem_remove(SWFDisplayItem item);
 void SWFDisplayItem_setName(SWFDisplayItem item, const char *name);
+void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel);
 void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio);
 void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform);
 void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
