@@ -1,3 +1,180 @@
+2005-03-03 20:07  whamann
+
+	* src/blocks/fromswf.c: 
+	wrong call parameter in previous fix -- oops
+
+2005-02-16 14:06  whamann
+
+	* src/blocks/: font.c, fromswf.c: 
+	better morph parsing destroyfont erratically was called with no
+	font
+
+2005-02-14 15:45  strk
+
+	* src/actioncompiler/swf5compiler.flex: Applied patch from Uwe
+	Traum handling exponential notation and fixing a bug in the
+	unescape function.
+
+2005-02-13 18:50  whamann
+
+	* src/blocks/fromswf.c: 
+	fix two bugs in prebuiltclip handling, one incorrect freeing if the
+	input is compressed the other one: do not consider the special
+	character id -1 (which occasionally occurs with bitmap fills) while
+	scanning the clip
+
+2005-01-02 20:03  whamann
+
+	* src/blocks/fromswf.c, src/blocks/gifdbl.c, util/gif2dbl.c: 
+	fixed crash on swfprebuiltclip - thanks F. Kromann gif import
+	problem - lib_gif.h declares a byte as a char which should rather
+	be unsigned, so I added masking This will occasionally turn
+	transparent gif into non-transparent BTW: neither the inline code
+	nor the util de-interlace progressive images
+
+2004-12-29 13:35  krechert
+
+	* src/blocks/videostream.c: fixed compiler warning
+
+2004-12-29 13:31  krechert
+
+	* perl_ext/Makefile.PL: add #include src/libming.h to SWF.h
+
+2004-12-18 19:02  krechert
+
+	* src/blocks/soundstream.c: [no log message]
+
+2004-12-09 23:39  whamann
+
+	* src/blocks/input.c: 
+	even memory buffers want there offset updated by reading :)
+
+2004-12-07 18:19  krechert
+
+	* src/blocks/soundstream.c: skip additional data before real mp3
+	header
+
+2004-11-10 21:04  whamann
+
+	* ch/: README, dummy.h: 
+	new subproject - see README
+
+2004-11-10 15:00  strk
+
+	* util/makeswf.c: Added support for specifying output compression
+	level
+
+2004-11-10 13:12  strk
+
+	* src/actioncompiler/: Makefile, swf4compiler.flex,
+	swf5compiler.flex: Parser made case-sensitive, changed few lagacy
+	function token definitions to allow for some case-mIxIng
+
+2004-11-10 13:11  strk
+
+	* src/actioncompiler/swf5compiler.y: More debugging calls.
+
+2004-11-09 13:48  strk
+
+	* util/makeswf.c: Added -v flag in usage string (already supported
+	but not documented)
+
+2004-11-05 14:57  whamann
+
+	* src/actioncompiler/swf5compiler.y: 
+	added support for geturl(url) as needed for javascript calls etc. 
+	note: this is exactly the same as geturl(url,'')
+
+2004-11-03 08:52  strk
+
+	* util/: makeswf.c, makeswf.h: Introduced a default include path to
+	easy code sharing.
+
+2004-11-02 18:53  strk
+
+	* util/makeswf.c: Fixed a bug in -I and -D handling.
+
+2004-11-02 18:48  strk
+
+	* util/Makefile: Fixed makeswf build rule
+
+2004-10-27 14:54  strk
+
+	* util/listswf.c: Changed Push record display to take less space.
+
+2004-10-27 14:32  strk
+
+	* src/actioncompiler/swf5compiler.y: Commented in DEBUG define
+	(left from previous tests)
+
+2004-10-27 14:30  strk
+
+	* src/actioncompiler/swf5compiler.y: Fixed bug in: new obj; new
+	nmsp.obj; new obj(..); new nsp.obj(..); Added support for: new
+	nsp['obj']; new nsp['obj](..);
+
+2004-10-22 10:59  strk
+
+	* src/actioncompiler/listaction.c: Moved variable declarations
+	before block body, for older compilers support.
+
+2004-10-22 10:56  strk
+
+	* util/: action.h, listswf.c: Added listing support for
+	ActionNewMethod (listed as NewMethod)
+
+2004-10-22 10:55  strk
+
+	* src/actioncompiler/swf5compiler.y: Added support for 'new
+	this.that;' syntax (ActionNewMethod: 0x53).  Fixed expr_or_obj rule
+	to use IDENTIFIER instead of identifier.
+
+2004-10-19 07:46  whamann
+
+	* win32/libming.dsp: 
+	new version contributed by Frank Kromann <frank at kromann dot
+	info> Comments: the user MUST specify the path to flex and bison in
+	visual studio under tools|options -> directoriesn and executable
+	files
+
+2004-10-15 09:41  strk
+
+	* mingpp.h: Applyed minguts fix for SWFFont constructor
+
+2004-10-07 14:50  strk
+
+	* util/: Makefile, swftoscript.c, swftoscript.h: Added unified
+	swf2script by Stuart Anderson <anderson@netsweng.com>.
+
+2004-10-06 18:16  strk
+
+	* src/blocktypes.h: Removed. Use blocks/blocktypes.h instead
+
+2004-10-06 17:41  strk
+
+	* util/: Makefile, README, TIPS, listfdb.c, listmp3.c, png2swf.c,
+	raw2adpcm.c, swftoperl.c, swftophp.c: Big cleanup. make
+	all_binaries work.  Some of the tools got removed from the list. 
+	Readme made more readable. Tips moved to TIPS.
+
+2004-10-06 16:56  strk
+
+	* src/: libming.h, ming.h: fileOutputMethod moved from ming.h to
+	libming.h.  Waiting for contestors to raise their hands ;)
+
+2004-10-06 16:34  strk
+
+	* util/Makefile: Modified all: rule to use a pager
+
+2004-10-06 16:31  strk
+
+	* src/actioncompiler/listaction.c: omitted unused variable, for
+	compiler happyness
+
+2004-10-06 10:00  strk
+
+	* ChangeLog: updated
+
 2004-10-05 16:56  strk
 
 	* src/actioncompiler/swf5compiler.flex,

@@ -2,6 +2,7 @@ AC_INIT(ming.i)
 
 AC_PROG_CC
 AC_PROG_CXX
+AC_PATH_PROG(PYTHON, python)
 
 AC_CHECK_LIB(gif, PrintGifError,
 	GIFLIB="-lgif", [

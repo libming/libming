@@ -5,8 +5,9 @@ MING_VER = $(MAJOR_VERSION).$(MINOR_VERSION).$(MICRO_VERSION)
 
 OS             = $(shell uname -s)
 
-CC             = @CC@
-CXX	       = @CXX@
+CC	= @CC@
+CXX	= @CXX@
+PYTHON	= @PYTHON@
 
 INCLUDES       += -I. 
 LDLIBS         = $(LIBS)
