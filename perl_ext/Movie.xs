@@ -87,7 +87,7 @@ SWFMovie_xs_output(movie, compresslevel=-1)
 	int compresslevel
 	CODE:
 	if(compresslevel >= -1)
-		Ming_setCompression(compresslevel);
+		Ming_setSWFCompression(compresslevel);
 	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout);
 
 int 
@@ -103,7 +103,7 @@ SWFMovie_save(movie, filename, compresslevel=-1)
 		ST(0) = &sv_undef;
 	}else{
 		if(compresslevel >= -1)
-			Ming_setCompression(compresslevel);
+			Ming_setSWFCompression(compresslevel);
                 RETVAL = SWFMovie_output(movie, fileOutputMethod, f);
                 fclose(f);
 	}
