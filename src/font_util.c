@@ -37,12 +37,12 @@ Ming_loadFont(const char* path, const char* name)
   if ( font == NULL )
     return NULL;
 
-  ++Ming_numFonts;
   Ming_fontList = (Ming_fontListStruct*)realloc(Ming_fontList,
-			  Ming_numFonts * sizeof(*Ming_fontList));
+			  (Ming_numFonts + 1) * sizeof(*Ming_fontList));
 
   Ming_fontList[Ming_numFonts].name = strdup(name);
   Ming_fontList[Ming_numFonts].font = font;
+  ++Ming_numFonts;
 
   return font;
 }
