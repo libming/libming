@@ -823,7 +823,9 @@ SWFShape_drawScaledGlyph(SWFShape shape,
 	/* now we get to parse the shape commands.	Oh boy.
 		 the first one will be a non-edge block- grab the moveto loc */
 
-	readBitsP(f, 6); /* type 0, etc. */
+	readBitsP(f, 2); /* type 0, newstyles */
+	style = readBitsP(f, 3);
+	readBitsP(f, 1);
 
 	moveBits = readBitsP(f, 5);
 	x = startX + readSBitsP(f, moveBits);

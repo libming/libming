@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "\php\src\zlib-1.1.4" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /c
 # ADD BASE RSC /l 0x407 /d "NDEBUG" /l 0.907
 # ADD RSC /l 0x407 /d "NDEBUG" /l 0.907
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "\php\src\zlib-1.1.4" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x407 /d "_DEBUG" /l 0.907
 # ADD RSC /l 0x407 /d "_DEBUG" /l 0.907
 BSC32=bscmake.exe
@@ -250,6 +250,10 @@ SOURCE="..\src\shape_util.c"
 # Begin Source File
 
 SOURCE="..\src\blocks\sound.c"
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\blocks\soundinstance.c
 # End Source File
 # Begin Source File
 

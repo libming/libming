@@ -844,14 +844,18 @@ SWFFont_getCharacterKern(SWFFont font,
 static int
 readUInt16(FILE *f)
 {
-	return fgetc(f) + (fgetc(f)<<8);
+	int low = fgetc(f);
+	int high = fgetc(f);
+	return low + (high<<8);
 }
 
 
 static int
 readSInt16(FILE *f)
 {
-	return fgetc(f) + fgetc(f)*256;
+	int low = fgetc(f);
+	int high = fgetc(f);
+	return low + high*256;
 }
 
 

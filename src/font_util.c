@@ -51,7 +51,7 @@ Ming_cleanupFonts()
   for ( i = 0; i < Ming_numFonts; ++i )
   {
     free(Ming_fontList[i].name);
-    destroySWFFont(Ming_fontList[i].font);
+    destroySWFFont(BLOCK(Ming_fontList[i].font));
   }
 
   if ( Ming_fontList != NULL )
