@@ -28,6 +28,7 @@ typedef SWFCharacter       SWF__Character;
 typedef SWFAction          SWF__Action;
 typedef SWFMorph           SWF__Morph;
 typedef SWFTextField       SWF__TextField;
+typedef SWFSound           SWF__Sound;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef
@@ -40,6 +41,10 @@ typedef SWFTextField       SWF__TextField;
 #ifndef pTHX_
 #define aTHXo_
 #endif
+
+
+int swf_debug = 0;   /* Should we get this from, say, $SWF::debug? */
+#define S_DEBUG(level,code)  if (swf_debug >= level) { code; }
 
 #endif /* PERL_SWF_H_INCLUDED */
 
