@@ -73,13 +73,35 @@ static inline void SWFShape_drawCircle(SWFShape shape, int r)
   SWFShape_drawArc(shape, r, 0, 360);
 }
 
+
 /* draw character c from font font into shape shape */
 void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
 
+
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */
-int SWFShape_drawCubic(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy);
-int SWFShape_drawCubicTo(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy);
+int SWFShape_drawCubic(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
+int SWFShape_drawCubicTo(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
+
+/* x,y relative to shape origin */
+void SWFShape_drawLineTo(SWFShape shape, float x, float y);
+void SWFShape_drawLine(SWFShape shape, float dx, float dy);
+
+/*  */
+void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
+			  float anchorx, float anchory);
+
+void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
+			float anchordx, float anchordy);
+
+void SWFShape_movePenTo(SWFShape shape, float x, float y);
+void SWFShape_movePen(SWFShape shape, float dx, float dy);
+
+
+/* Change the scale, the scale, change it, yeah.  default is 20. */
+
+void Ming_setScale(float scale);
+
 
 /* sets the threshold error for drawing cubic beziers.  Lower is more
    accurate, hence larger file size. */
@@ -90,7 +112,6 @@ void Ming_setCubicThreshold(int num);
 /* deprecated: */
 
 #define SWFShape_drawFontGlyph SWFShape_drawGlyph
-
 
 
 #endif /* MING_SHAPE_H_INCLUDED */

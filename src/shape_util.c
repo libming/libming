@@ -22,6 +22,9 @@
 #include "libming.h"
 #include "shape_util.h"
 
+extern float Ming_scale;
+extern int Ming_cubicThreshold;
+
 /* draw an arc of radius r, centered at (x,y), from angle startAngle to angle
    endAngle (measured in degrees clockwise from due north) */
 
@@ -38,8 +41,8 @@ void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle)
 
   float angle = M_PI*startAngle/180;
 
-  x = floor(r*sin(angle)+0.5);
-  y = -floor(r*cos(angle)+0.5);
+  x = rint(r*sin(angle));
+  y = -rint(r*cos(angle));
 
   SWFShape_movePen(shape, x, y);
 
@@ -53,110 +56,15 @@ void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle)
     anchory = -r*cos(angle);
 
     SWFShape_drawCurve(shape,
-		       floor(controlx+0.5)-x, floor(controly+0.5)-y,
-		       floor(anchorx-controlx+0.5), floor(anchory-controly+0.5));
+		       rint(controlx)-x, rint(controly)-y,
+		       rint(anchorx-controlx), rint(anchory-controly));
     x = anchorx;
     y = anchory;
   }
 }
 
-#include "read.c"
 #include <assert.h>
 #define error(x) { printf("ERROR: %s\n",(x)); assert(0); }
-
-/* yes, this is a total hack. */
-
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c)
-{
-  byte *p = SWFFont_findCharacterGlyph(font, c);
-  byte **f = &p;
-
-  int moveBits, x, y;
-  int straight, numBits;
-
-  /* moveTos in the record are absolute, but we want to draw from the current
-     location. grr. */
-
-  int startX = SWFShape_getPenX(shape);
-  int startY = SWFShape_getPenY(shape);
-
-  byteAlign();
-
-  if(readBits(f, 4) != 1) /* fill bits */
-    error("SWFShape_drawCharacter: was expecting fill bits = 1");
-
-  if(readBits(f, 4) != 0) /* line bits */
-    error("SWFShape_drawCharacter: was expecting line bits = 0");
-
-  /* now we get to parse the shape commands.  Oh boy. */
-
-  /* the first one will be a non-edge block- grab the moveto loc */
-
-  readBits(f, 6); /* type 0, etc. */
-
-  moveBits = readBits(f, 5);
-  x = readSBits(f, moveBits);
-  y = readSBits(f, moveBits);
-
-  SWFShape_movePenTo(shape, x+startX, y+startY);
-
-  if(readBits(f, 1) != 1) /* fill1 = 1 */
-    error("SWFShape_drawCharacter says: oops.  Was expecting fill1 = 1.");
-
-  /* we could just dump the rest if we had access to the shape's output buffer,
-     but this isn't that hard.. */
-
-  /* oh, and we aren't storing compiled shape bytes any more, anyway.. */
-
-  for(;;)
-  {
-    if(readBits(f, 1) == 0)
-    {
-      /* it's a moveTo or a shape end */
-
-      if(readBits(f, 5) == 0)
-	break;
-
-      moveBits = readBits(f, 5);
-      x = readSBits(f, moveBits);
-      y = readSBits(f, moveBits);
-
-      SWFShape_movePenTo(shape, x+startX, y+startY);
-      continue;
-    }
-
-    straight = readBits(f, 1);
-    numBits = readBits(f, 4)+2;
-
-    if(straight==1)
-    {
-      if(readBits(f, 1)) /* general line */
-      {
-	x = readSBits(f, numBits);
-	y = readSBits(f, numBits);
-
-	SWFShape_drawLine(shape, x, y);
-      }
-      else
-	if(readBits(f, 1)) /* vert = 1 */
-	  SWFShape_drawLine(shape, 0, readSBits(f, numBits));
-	else
-	  SWFShape_drawLine(shape, readSBits(f, numBits), 0);
-    }
-    else
-    {
-      int controlX = readSBits(f, numBits);
-      int controlY = readSBits(f, numBits);
-      int anchorX = readSBits(f, numBits);
-      int anchorY = readSBits(f, numBits);
-
-      SWFShape_drawCurve(shape, controlX, controlY, anchorX, anchorY);
-    }
-  }
-
-  /* no idea where the pen was left */
-  SWFShape_movePenTo(shape, startX, startY);
-}
 
 
 struct control
@@ -219,12 +127,53 @@ static void subdivideRight(Control new, Control old, float t)
   new->ay = t*new->ay + (1-t)*new->by;
 }
 
-int Ming_cubicThreshold = 10000;
 
-void Ming_setCubicThreshold(int num)
+/* x,y relative to shape origin */
+
+void SWFShape_movePenTo(SWFShape shape, float x, float y)
 {
-  Ming_cubicThreshold = num;
+  SWFShape_moveScaledPenTo(shape, (int)rint(x*Ming_scale),
+			   (int)rint(y*Ming_scale));
 }
+
+void SWFShape_movePen(SWFShape shape, float dx, float dy)
+{
+  SWFShape_moveScaledPen(shape, (int)rint(dx*Ming_scale),
+			 (int)rint(dy*Ming_scale));
+}
+
+void SWFShape_drawLineTo(SWFShape shape, float x, float y)
+{
+  SWFShape_drawScaledLineTo(shape, (int)rint(x*Ming_scale),
+			    (int)rint(y*Ming_scale));
+}
+
+void SWFShape_drawLine(SWFShape shape, float dx, float dy)
+{
+  SWFShape_drawScaledLine(shape, (int)rint(dx*Ming_scale),
+			  (int)rint(dy*Ming_scale));
+}
+
+void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
+			  float anchorx, float anchory)
+{
+  SWFShape_drawScaledCurveTo(shape,
+			     (int)rint(controlx*Ming_scale),
+			     (int)rint(controly*Ming_scale),
+			     (int)rint(anchorx*Ming_scale),
+			     (int)rint(anchory*Ming_scale));
+}
+
+void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
+			float anchordx, float anchordy)
+{
+  SWFShape_drawScaledCurve(shape,
+			   (int)rint(controldx*Ming_scale),
+			   (int)rint(controldy*Ming_scale),
+			   (int)rint(anchordx*Ming_scale),
+			   (int)rint(anchordy*Ming_scale));
+}
+
 
 static int SWFShape_approxCubic(SWFShape shape, Control pts)
 {
@@ -268,32 +217,18 @@ static int SWFShape_approxCubic(SWFShape shape, Control pts)
   {
     /* draw quadratic w/ control point at intersection of outside edges */
 
-    SWFShape_drawCurveTo(shape, (int)floor(ex), (int)floor(ey),
-			 (int)floor(pts->dx), (int)floor(pts->dy));
+    SWFShape_drawCurveTo(shape, (int)rint(ex), (int)rint(ey),
+			 (int)rint(pts->dx), (int)rint(pts->dy));
     return 1;
   }
 }
 
-int SWFShape_drawCubic(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy)
+
+int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
+			       int cx, int cy, int dx, int dy)
 {
-  int ax = SWFShape_getPenX(shape);
-  int ay = SWFShape_getPenY(shape);
-
-  bx += ax;
-  by += ay;
-  cx += bx;
-  cy += by;
-  dx += cx;
-  dy += cy;
-
-  return SWFShape_drawCubicTo(shape, bx, by, cx, cy, dx, dy);
-}
-
-/* returns number of splines used */
-int SWFShape_drawCubicTo(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy)
-{
-  int ax = SWFShape_getPenX(shape);
-  int ay = SWFShape_getPenY(shape);
+  int ax = SWFShape_getScaledPenX(shape);
+  int ay = SWFShape_getScaledPenY(shape);
 
   /* compute coefficients */
   int a1x = -ax + 3*bx - 3*cx + dx;
@@ -359,4 +294,34 @@ int SWFShape_drawCubicTo(SWFShape shape, int bx, int by, int cx, int cy, int dx,
   nCurves += SWFShape_approxCubic(shape, &pts);
 
   return nCurves;
+}
+
+
+/* returns number of splines used */
+
+int SWFShape_drawCubic(SWFShape shape, float bx, float by,
+		       float cx, float cy, float dx, float dy)
+{
+  int sax = SWFShape_getScaledPenX(shape);
+  int say = SWFShape_getScaledPenY(shape);
+  int sbx = (int)rint(bx*Ming_scale) + sax;
+  int sby = (int)rint(by*Ming_scale) + say;
+  int scx = (int)rint(cx*Ming_scale) + sbx;
+  int scy = (int)rint(cy*Ming_scale) + sby;
+  int sdx = (int)rint(dx*Ming_scale) + scx;
+  int sdy = (int)rint(dy*Ming_scale) + scy;
+
+  return SWFShape_drawScaledCubicTo(shape, sbx, sby, scx, scy, sdx, sdy);
+}
+
+int SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
+			 float cx, float cy, float dx, float dy)
+{
+  return SWFShape_drawScaledCubicTo(shape,
+				    (int)rint(bx*Ming_scale),
+				    (int)rint(by*Ming_scale),
+				    (int)rint(cx*Ming_scale),
+				    (int)rint(cy*Ming_scale),
+				    (int)rint(dx*Ming_scale),
+				    (int)rint(dy*Ming_scale));
 }
