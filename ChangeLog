@@ -1,13 +1,285 @@
-2002-09-21 00:00  peterdd
+2002-12-21 15:20  whamann
 
-	* util/: swftoperl.h, swftoperl.c, swftoperl.html, Makefile, 
-	TODO,README 
-	added swftoperl (based on swftophp) 
+	* win32/libming.dsp: 
+	changes by Frank Kromann: debug build passes debug options to flex
+	and bison file removed and added again - should retain windows line
+	endings now
+
+2002-12-16 12:23  whamann
+
+	* src/actioncompiler/action.h, src/actioncompiler/compile.c,
+	src/actioncompiler/compile.h, src/actioncompiler/listaction.c,
+	src/actioncompiler/swf5compiler.flex,
+	src/actioncompiler/swf5compiler.y, src/blocks/placeobject.c,
+	win32/libming.dsp: 
+	compiler changes: added switch() added x instanceof y returning out
+	of a switch pops stack popping stack when breaking / returning out
+	of for/in does not work yet support for more than 256 constants in
+	the pool
 	
-2002-09-05 01:37  erich
+	placeobject - different format of placeobject record for MX does
+	not include the keycode so far nor any methods to set those bits
+	
+	libming.dsp provided by Frank Kromann - calls up flex and bison
 
-	* perl_ext/Makefile.PL: added "-lz" so it links the zlib as well
-	my perl scripts now work again, with perl 5.8.0
+2002-12-10 22:10  whamann
+
+	* src/blocks/font.c, src/blocks/shape.c, src/font_util.c,
+	win32/libming.dsp: 
+	added Frank Kromann's changes - optimizing compile could swap bytes
+	on windows added a change to drawglyph to allow styles in the fonts
+	- some fonts use 1 linestyle
+
+2002-12-01 08:52  whamann
+
+	* perl_ext/Font.xs: 
+	removed SWFFont_addChars
+
+2002-11-26 16:11  sspickle
+
+	* py_ext/: .cvsignore, Makefile, Setup, build.py, setup.py: This
+	seems to work with the 'fink' ming installer..
+
+2002-11-26 16:11  sspickle
+
+	* py_ext/setup.py: file setup.py was initially added on branch
+	new-py_ext-makefile.
+
+2002-11-25 20:14  whamann
+
+	* mingpp.h: 
+	checking in mingpp.h again - contributions from Fabiano Weimar dos
+	Santos and John Blanco
+
+2002-11-22 13:58  whamann
+
+	* src/actioncompiler/swf4compiler.y: 
+	c++ support for compressed movies removed duplicate declaration in
+	swf4compile.y contributed by Fabiano Weimar dos Santos
+
+2002-11-20 17:15  raff
+
+	* src/font_util.h: 
+	This definition is also in text_util.h
+	
+	I don't know why there are two, but they should at least be the
+	same.
+	
+	(as in text_util.h, I am adding the extra "len" argument, since
+	that's how the function is implemented).
+
+2002-11-19 17:26  peterdd
+
+	* perl_ext/Shape.xs: added drawCubic and drawCubicTo
+
+2002-11-19 08:01  whamann
+
+	* src/blocks/textfield.c: 
+	another take at textfields with/without embedding
+
+2002-11-15 20:36  whamann
+
+	* ming.h: 
+	header changes for - text field handling - codepage / utf8 fonts -
+	save compressed
+
+2002-11-15 17:43  raff
+
+	* src/text_util.h: If I trust the implementation, this function
+	needs an additional parameter (at least to make Ming compile).
+
+2002-11-14 09:31  whamann
+
+	* src/.cvsignore, src/movie.c, src/movie.h, src/text_util.h,
+	src/blocks/font.c, src/blocks/font.h, php_ext/ming.c,
+	src/blocks/text.c, src/blocks/textfield.c, src/blocks/textfield.h: 
+	another take at dynamic textfields with embedded font, this time
+	they seem to work also removed one source of segfaults from the
+	font handling code
+
+2002-11-13 23:18  whamann
+
+	* src/blocks/font.c: 
+	avoid compiler warnings with a pointer union
+
+2002-11-13 18:21  whamann
+
+	* src/movie.c: 
+	
+	2002-22-13 17:00  peterdd
+	
+	* perl_ext/Movie.xs perl_ext/Shape.xs src/shape_util.h
+	src/shape_util.c getPen, getPenX and getPenY added for the
+	interfaces (Movie.c)
+	
+	2002-11-07 13:50  peterdd
+	
+		*
+	perl_ext/Movie.xs,perl_ext/SWF/Movie.pm,perl_ext/SWF/TextField.pm
+	documentation for SWF::Movie and SWF::TextField save/output- method
+	of the perl-ming extension now supports flash6 compression protect
+	for perl_ext added
+
+2002-11-13 15:21  peterdd
+
+	* perl_ext/Movie.xs: changed save and output back because normal
+	output routine handles compression too
+
+2002-11-13 15:18  peterdd
+
+	* perl_ext/Shape.xs: added getPen getPenX getPenY
+
+2002-11-13 15:16  peterdd
+
+	* src/: shape_util.c, shape_util.h: added getPen getPenX and
+	getPenY
+
+2002-11-12 23:15  zebulon75018
+
+	* tcl_ext/: Makefile, README, test.tcl: First commit for the tcl
+	extension After making the mingc.so try tclsh test.tcl , it's the
+	shape example.
+
+2002-11-12 09:52  whamann
+
+	* src/displaylist.c, src/displaylist.h, src/font_util.h,
+	src/ming.c, src/movie.h, src/text_util.c, src/text_util.h,
+	src/actioncompiler/compile.c, src/actioncompiler/listaction.c,
+	src/actioncompiler/swf5compiler.y, src/blocks/character.c,
+	src/blocks/font.c, src/blocks/font.h, src/blocks/read.c,
+	src/blocks/shape.c, perl_ext/Constants.xs, perl_ext/DisplayItem.xs,
+	perl_ext/Exports.c, perl_ext/Font.xs, perl_ext/Movie.xs,
+	perl_ext/SWF.xs, perl_ext/Text.xs, perl_ext/TextField.xs,
+	php_ext/ming.c, php_ext/php_ming.h, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
+	src/blocks/textfield.h: 
+	changed: - use addString() and getWidth() for codepage text again
+	use addUTF8String() and getUTF8Width() for unicode text
+	
+	- modified the drawshape function to handle some existing fonts
+	that specify 1 bit (rather than 0 bits) for the number of line
+	styles
+	
+	added: - endMask() for mask operations use:	$mask_instance =
+	$movie->add($shape); // mask shape     // add more characters on
+	top of the mask       $mask_instance->endMask();
+	
+	- font embedding for text fields use:	$tf = new SWFTextField(....
+	| SWFTEXTFIELD_USEFONT);    $tf->setFont($font);   
+	$tf->addChars("0123456789"); will create a text field that uses
+	font embedding only for numbers.  Note a) adding chars actually
+	adds to a font instance rather than the text field, so if one text
+	field is set up for digits and the other for alphabet, both will
+	have all alphanumerics available Note b) with html text fields, it
+	is possible to mix fonts. With FP5, both browser and embedded fonts
+	could be mixed. FP6 now requires all fonts to be embedded
+	
+	- Ming_useConstants(flag) function to disable the use of constant
+	pool in actionscripts ... would make sense to disable if you create
+	100 buttons with simple script
+	
+	- added a few existing functions to the php and perl interfaces:   
+	    $textfield->setPadding()	    $movie->addExport()    
+	$movie->writeExports()
+	
+	- new function $font->getShape(code) returns the character shape as
+	a multiline text. It is meant to be split into lines, where every
+	line represents a line or curve segment. For a possible use see
+	http://www.neuralust.com/~mingdocs/code/knifeexample.swf
+
+2002-11-07 12:39  peterdd
+
+	* perl_ext/SWF/TextField.pm: typofixes
+
+2002-11-07 12:37  peterdd
+
+	* perl_ext/SWF/Movie.pm: added documentation for SWF::Movie
+
+2002-11-07 12:32  peterdd
+
+	* perl_ext/Movie.xs: added protect and compressed output
+
+2002-11-07 06:25  peterdd
+
+	* perl_ext/Movie.xs: save method now supports compression.
+
+2002-10-22 02:50  peterdd
+
+	* util/swftoperl.c: fixed Content-type:
+
+2002-10-07 05:43  peterdd
+
+	* perl_ext/examples/morph.cgi: fix: added an extra frame at end of
+	morph.
+
+2002-10-07 05:31  peterdd
+
+	* perl_ext/SWF/TextField.pm: added some documentation
+
+2002-10-07 05:22  peterdd
+
+	* util/ming.css: deleted unused stuff
+
+2002-09-24 03:11  soheil
+
+	* perl_ext/TODO: Updated
+
+2002-09-24 03:10  soheil
+
+	* perl_ext/README: Fixed my email address
+
+2002-09-24 03:10  soheil
+
+	* perl_ext/.cvsignore: - Added BOOT.xsh - Added generated .c files
+
+2002-09-24 02:57  soheil
+
+	* perl_ext/: DisplayItem.xs, SWF/DisplayItem.pm: Added
+	$displayItem->getDepth()
+
+2002-09-20 22:45  peterdd
+
+	* util/ming.css: added a stylesheet for swftoperl.html
+
+2002-09-20 22:00  peterdd
+
+	* ChangeLog: added swftoperl
+
+2002-09-20 21:49  peterdd
+
+	* util/TODO: a new TODO for util/ :-)
+
+2002-09-20 21:45  peterdd
+
+	* util/README: more structure for the README
+
+2002-09-20 21:41  peterdd
+
+	* util/swftoperl.html: instructions for swftoperl
+
+2002-09-20 21:39  peterdd
+
+	* util/Makefile: added make swftoperl
+
+2002-09-20 21:38  peterdd
+
+	* util/swftoperl.c: initial import
+
+2002-09-20 21:36  peterdd
+
+	* util/swftoperl.h: for swftoperl
+
+2002-09-04 23:38  erich
+
+	* ChangeLog: fixed perl_ext
+
+2002-09-04 23:36  erich
+
+	* CREDITS: added myself ;)
+
+2002-09-04 23:31  erich
+
+	* perl_ext/Makefile.PL: fix perl extension
 
 2002-09-03 20:25  opaque_ndst
 
