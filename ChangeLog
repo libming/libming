@@ -1,3 +1,7 @@
+2002-07-03 03:30  staybyte
+
+	* ChangeLog: [no log message]
+
 2002-02-02 04:35  erich
 
 	* java_ext/native/SWFNative.cc: fixed rotateTo, thanks to Tod E.
