@@ -56,41 +56,49 @@ SWFInput_getChar(SWFInput input)
 int
 SWFInput_getUInt16(SWFInput input)
 {
-	return SWFInput_getChar(input) + (SWFInput_getChar(input)<<8);
+	int num = SWFInput_getChar(input);
+	num += SWFInput_getChar(input) << 8;
+	return num;
 }
 
 
 int
 SWFInput_getUInt16_BE(SWFInput input)
 {
-	return (SWFInput_getChar(input)<<8) + SWFInput_getChar(input);
+	int num = SWFInput_getChar(input) << 8;
+	num += SWFInput_getChar(input);
+	return num;
 }
 
 
 int
 SWFInput_getSInt16(SWFInput input)
 {
-	return SWFInput_getChar(input) + SWFInput_getChar(input)*256;
+	int num = SWFInput_getChar(input);
+	num += SWFInput_getChar(input) * 256;
+	return num;
 }
 
 
 unsigned long
 SWFInput_getUInt32(SWFInput input)
 {
-	return (unsigned long)(SWFInput_getChar(input) +
-			 (SWFInput_getChar(input)<<8) +
-			 (SWFInput_getChar(input)<<16) +
-			 (SWFInput_getChar(input)<<24));
+	unsigned long num = SWFInput_getChar(input);
+	num += SWFInput_getChar(input) << 8;
+	num += SWFInput_getChar(input) << 16;
+	num += SWFInput_getChar(input) << 24;
+	return num;
 }
 
 
 unsigned long
 SWFInput_getUInt32_BE(SWFInput input)
 {
-	return (unsigned long)((SWFInput_getChar(input)<<24) +
-			 (SWFInput_getChar(input)<<16) +
-			 (SWFInput_getChar(input)<<8) +
-			 SWFInput_getChar(input));
+	unsigned long num = SWFInput_getChar(input) << 24;
+	num += SWFInput_getChar(input) << 16;
+	num += SWFInput_getChar(input) << 8;
+	num += SWFInput_getChar(input);
+	return num;
 }
 
 
