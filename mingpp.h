@@ -211,7 +211,7 @@ class SWFDisplayItem
   void multColor(float r, float g, float b, float a=1.0)
     { SWFDisplayItem_setColorMult(this->item, r, g, b, a); }
 
-  void addAction(SWFAction action, int flags)
+  void addAction(SWFAction *action, int flags)
     { SWFDisplayItem_addAction(this->item, action->action, flags); }
 };
 
