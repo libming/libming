@@ -35,7 +35,6 @@
  * - Change command line to:
  *	makeswf [-o <outputfile>] [-p] <input> ...
  * 
- * - Accept output version as parameter.
  * - Accept compression level as parameter.
  * - Accept -v for versioning and credits.
  *
@@ -86,6 +85,7 @@ usage (char *me, int ex)
 	fprintf(stderr, "Options:\n");
 	fprintf(stderr, " -s <width>x<height>\n");
 	fprintf(stderr, " -r <frame_rate>\n");
+	fprintf(stderr, " -v <output_version>\n");
 	fprintf(stderr, " -I <includedir>\n");
 	fprintf(stderr, " -D <macro>[=<def>]>\n");
 	fprintf(stderr, " -i <library.swf>:<sym>[,<sym>]>\n");
@@ -447,6 +447,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.13  2004/11/09 12:48:12  strk
+ * Added -v flag in usage string (already supported but not documented)
+ *
  * Revision 1.12  2004/11/03 07:52:08  strk
  * Introduced a default include path to easy code sharing.
  *
