@@ -76,6 +76,7 @@ void swf4ParseInit(char *script, int debug)
 
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
+LEVEL	 \.\.?
 
 %%
 
@@ -141,6 +142,12 @@ this			{ count();      return THIS;	}
 
 {ID}			{ count();	swf4lval.str = strdup(yytext);
 					return IDENTIFIER;	}
+
+{LEVEL}?("/"({ID}|{LEVEL}))+ { count();	swf4lval.str = strdup(yytext);
+					return PATH;    }
+                    
+{ID}("/"({ID}|{LEVEL}))+ { count();	swf4lval.str = strdup(yytext);
+					return PATH;    }
 
 \"(\\.|[^\\"])*\"	{ count();	swf4lval.str = strdup(yytext+1);
 					swf4lval.str[strlen(swf4lval.str)-1]=0;

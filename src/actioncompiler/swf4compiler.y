@@ -65,6 +65,7 @@
 %token <str> STRING
 %token <str> NUMBER
 %token <str> IDENTIFIER
+%token <str> PATH
 
 %token <getURLMethod> GETURL_METHOD
 
@@ -123,7 +124,6 @@
 %type <action> program
 
 /* make sure to free these, too! */
-%type <str>    sprite_path
 %type <str>    sprite
 %type <str>    variable
 
@@ -753,23 +753,6 @@ rhs_expr
 		  bufferConcat($1, $3); }
 	;
 
-sprite_path
-	: '/'
-		{ $$ = strdup("/"); }
-
-	| ".." '/'
-		{ $$ = strdup("../"); }
-
-	| sprite_path ".." '/'
-		{ $$ = $1;
-		  $$ = stringConcat($$, strdup("../")); }
-
-	| sprite_path IDENTIFIER '/'
-		{ $$ = $1;
-		  $$ = stringConcat($$, $2); /* frees $2 */
-		  $$ = stringConcat($$, strdup("/")); }
-	;
-
 variable
 	: IDENTIFIER
 
@@ -783,22 +766,20 @@ sprite
 	: THIS
 		{ $$ = strdup(""); }
 
+	| '.'
+		{ $$ = strdup(""); }
+
 	| '/'
 		{ $$ = strdup("/"); }
 
-	| ".."
+	| PARENT
 		{ $$ = strdup(".."); }
 
-	| sprite_path ".."
-		{ $$ = $1;
-		  $$ = stringConcat($$, strdup("..")); }
+	| IDENTIFIER
+		{ $$ = $1; }
 
-	| '.' '/' IDENTIFIER
-		{ $$ = $3; }
-
-	| sprite_path IDENTIFIER
-		{ $$ = $1;
-		  $$ = stringConcat($$, $2); }
+	| PATH
+		{ $$ = $1; }
 	;
 
 lhs_expr
