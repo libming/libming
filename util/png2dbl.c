@@ -112,6 +112,9 @@ struct pngdata readPNG(FILE *fp)
   if(png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
     png_set_gray_to_rgb(png_ptr);
 
+  if(png.color_type == PNG_COLOR_TYPE_RGB)
+    png_set_filler(png_ptr, 0xff, PNG_FILLER_BEFORE);
+
 
   /* update info w/ the set transformations */
   png_read_update_info(png_ptr, info_ptr);
@@ -151,7 +154,6 @@ struct pngdata readPNG(FILE *fp)
     row_pointers[i] = png.data + rowbytes*i;
 
   png_read_image(png_ptr, row_pointers);
-
 
   if(png.color_type == PNG_COLOR_TYPE_RGB_ALPHA)
   {
