@@ -9,10 +9,11 @@ INCLUDEDIR = ${PREFIX}/include
 all: dynamic
 
 install: dynamic
-	cp libming.so ${LIBDIR}/libming.so.0.1
-	ln -sf ${LIBDIR}/libming.so.0.1 ${LIBDIR}/libming.so.0
-	ln -sf ${LIBDIR}/libming.so.0 ${LIBDIR}/libming.so
-	cp ming.h ${INCLUDEDIR}
+	install -d ${LIBDIR}
+	install -d ${INCLUDEDIR}
+	install libming.so ${LIBDIR}/libming.so.0.1
+	(cd ${LIBDIR} && ln -s libming.so.0.1 libming.so.0 && ln -s libming.so.0 libming.so)
+	install ming.h ${INCLUDEDIR}
 
 dynamic:
 	cd src && make dynamic
