@@ -37,7 +37,6 @@ extern "C"
   #define SWFMorph        c_SWFMorph
   #define SWFText         c_SWFText
   #define SWFFont         c_SWFFont
-  #define SWFBrowserFont  c_SWFBrowserFont
   #define SWFTextField    c_SWFTextField
   #define SWFAction       c_SWFAction
   #define SWFButton       c_SWFButton
@@ -59,7 +58,6 @@ extern "C"
   #undef SWFMorph
   #undef SWFFont
   #undef SWFText
-  #undef SWFBrowserFont
   #undef SWFTextField
   #undef SWFAction
   #undef SWFButton
@@ -651,25 +649,6 @@ class SWFText : public SWFCharacter
   float getWidth(const char *string)
     { return SWFText_getStringWidth(this->text, string); }
 };
-
-
-/*  SWFBrowserFont  */
-
-class SWFBrowserFont : public SWFBlock
-{
- public:
-  c_SWFBrowserFont browserFont;
-
-  SWFBrowserFont(char *name)
-    { this->browserFont = newSWFBrowserFont(name); }
-
-  virtual ~SWFBrowserFont()
-    { destroySWFBrowserFont(this->browserFont); }
-
-  c_SWFBlock getBlock()
-    { return (c_SWFBlock)this->browserFont; }
-};
-
 
 /*  SWFTextField  */
 

@@ -52,7 +52,7 @@ void Ming_useSWFVersion(int version);
 typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
 	     *SWFShape, *SWFAction, *SWFGradient, *SWFButton, *SWFButtonRecord,
 	     *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
-	     *SWFFont, *SWFText, *SWFBrowserFont, *SWFTextField;
+	     *SWFFont, *SWFText, *SWFTextField;
 
 void destroySWFMovie(SWFMovie movie);
 SWFMovie newSWFMovie();
@@ -280,7 +280,7 @@ void SWFText_setFont(SWFText text, SWFFont font);
 void SWFText_setHeight(SWFText text, float height);
 void SWFText_moveTo(SWFText text, float x, float y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-void SWFText_addString(SWFText text, char *string, float *advance);
+void SWFText_addString(SWFText text, char *string, int *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
 float SWFText_getStringWidth(SWFText text, char *string);
 
@@ -291,8 +291,8 @@ float SWFText_getLeading(SWFText text);
 
   /* SWFBrowserFont */
 
-SWFBrowserFont newSWFBrowserFont(char *name);
-void destroySWFBrowserFont(SWFBrowserFont b);
+SWFFont newSWFBrowserFont(char *name);
+void destroySWFBrowserFont(SWFFont b);
 
 
   /* SWFTextField */
