@@ -1,4 +1,6 @@
 .AppleDouble
 ming_wrap.c
 ming_wrap.doc
-ming.pyc
+*.pyc
+*.swf
+
