@@ -50,3 +50,6 @@ all: jswf.jar
 jswf.jar: $(patsubst %.java,%.class,${SRCS})
 	$(JAR) cvf jswf.jar $+
 
+clean:
+	rm *.class
+
