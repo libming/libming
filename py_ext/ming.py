@@ -116,6 +116,9 @@ class SWFShape(SWFBase):
     def drawGlyph(self, font, char):
         mingc.SWFShape_drawGlyph(self.this, font.this, ord(char[0]))
 
+    def drawCharacterBounds(self, char):
+        mingc.SWFShape_drawCharacterBounds(self.this, char.this)
+
     def end(self):
         mingc.SWFShape_end(self.this)
 
