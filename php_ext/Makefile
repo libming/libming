@@ -4,9 +4,10 @@ prefix=`php-config --prefix`
 
 # If you don't want to modify this file you can use
 # the environmental variable PHPSRC instead.
-ifeq (${PHPSRC},)
-        PHPSRC=/usr/src/php-4.3.0
-endif
+#ifeq (${PHPSRC},)
+#        PHPSRC=/usr/src/php-4.3.0
+#endif
+PHPSRC ?= /usr/src/php-4.3.0
 
 DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
 CFLAGS = -I../src
