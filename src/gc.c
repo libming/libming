@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "gc.h"
 
 #define DEBUG 0
 
-typedef struct mem_node_t
+
+struct mem_node_t
 {
 	struct mem_node_t *next;
 	struct mem_node_t *prev;
 	void *ptr;
-	void (*dtor)();
-}
-mem_node;
+	dtorfunctype dtor; /* void (*dtor)(); */
+};
 
 static mem_node *firstnode = NULL;
 static mem_node *lastnode = NULL;
@@ -19,9 +20,9 @@ static mem_node *lastnode = NULL;
 #if DEBUG
 static void dumpNodeList();
 #endif
-mem_node *ming_gc_add_node(void *ptr, void *dtor)
+mem_node *ming_gc_add_node(void *ptr, dtorfunctype dtor)
 {
-	mem_node *node = calloc(1, sizeof(mem_node));
+	mem_node *node = (mem_node*) calloc(1, sizeof(mem_node));
 	node->ptr = ptr;
 	node->dtor = dtor;
 	if ( ! firstnode ) firstnode = node;

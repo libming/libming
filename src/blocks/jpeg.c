@@ -389,7 +389,7 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 	free(info);
 
 #if TRACK_ALLOCS
-	jpeg->gcnode = ming_gc_add_node(jpeg, destroySWFBitmap);
+	jpeg->gcnode = ming_gc_add_node(jpeg, (dtorfunctype) destroySWFBitmap);
 #endif
 
 	return jpeg;

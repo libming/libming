@@ -284,7 +284,7 @@ void testLoadSWF(SWFMovie movie)
   d = SWFMovie_add(movie, (SWFCharacter)t);
   SWFDisplayItem_move(d, 10, 100);
 
-  clip = SWFPrebuiltClip_fromFile("import.swf");
+  clip = newSWFPrebuiltClip_fromFile("import.swf");
   d = SWFMovie_add(movie, (SWFCharacter)clip);
   SWFDisplayItem_move(d, 10, 100);
 }

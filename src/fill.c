@@ -41,7 +41,7 @@ newSWFFill(SWFFillStyle fillstyle)
 	fill->position = newSWFPosition(SWFFillStyle_getMatrix(fill->fillstyle));
 
 #if TRACK_ALLOCS
-	fill->gcnode = ming_gc_add_node(fill, destroySWFFill);
+	fill->gcnode = ming_gc_add_node(fill, (dtorfunctype) destroySWFFill);
 #endif
 
 	return fill;

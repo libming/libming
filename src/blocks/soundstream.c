@@ -204,7 +204,7 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD);
 	SWFInput input = stream->input;
 	
-	int rate, channels, flags, start = 0;
+	int rate=0, channels, flags, start = 0;
 
 	/* 
 	 * skip stream until first MP3 header which starts with 0xffe 

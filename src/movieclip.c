@@ -70,7 +70,7 @@ newSWFMovieClip()
 	clip->displayList = newSWFSpriteDisplayList();
 
 #if TRACK_ALLOCS
-	clip->gcnode = ming_gc_add_node(clip, destroySWFMovieClip);
+	clip->gcnode = ming_gc_add_node(clip, (dtorfunctype) destroySWFMovieClip);
 #endif
 
 	return clip;

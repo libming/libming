@@ -79,7 +79,7 @@ int nextMP3Frame(SWFInput input)
 {
 	unsigned long flags;
 	int frameLen;
-	int bitrate, bitrate_idx, samplerate, samplerate_idx;
+	int bitrate = 0, bitrate_idx, samplerate, samplerate_idx;
 	int version, layer, padding;
 
 	/* get 4-byte header, bigendian */

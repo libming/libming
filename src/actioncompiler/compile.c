@@ -196,7 +196,7 @@ void bufferCheckSize(Buffer out, int bytes)
 
 		if(newbuf != out->buffer)
 		{
-			int pushd;
+			int pushd = 0;
 
 			if(out->pushloc)
 	pushd = out->pos - out->pushloc;
@@ -240,7 +240,7 @@ int bufferWriteBuffer(Buffer a, Buffer b)
 
 int bufferWriteDataAndPush(Buffer a, Buffer b)
 {
-	int i, pushd;
+	int i, pushd = 0;
 
 	byte *data = b->buffer;
 	int length = b->pos - b->buffer;
@@ -274,7 +274,7 @@ int bufferWriteDataAndPush(Buffer a, Buffer b)
 
 int bufferConcat(Buffer a, Buffer b)
 {
-	int len;
+	int len = 0;
 
 	if(!a)
 		return 0;

@@ -55,7 +55,7 @@ struct SWFVideoStream_s
 	int flags;
 	unsigned long start;
 	unsigned int numFrames;	
-	int frame;
+	unsigned int frame;
 	int width;
 	int height;
 	int embeded;

@@ -157,7 +157,7 @@ newSWFMovieWithVersion(int version)
 	movie->b = 0xff;
 
 #if TRACK_ALLOCS
-	movie->gcnode = ming_gc_add_node(movie, destroySWFMovie);
+	movie->gcnode = ming_gc_add_node(movie, (dtorfunctype) destroySWFMovie);
 #endif
 
 	return movie;
@@ -533,7 +533,7 @@ SWFOutput
 SWFMovie_toOutput(SWFMovie movie, int level)
 {
 	int swflength, status;
-	SWFOutput header, tempbuffer, buffer, swfbuffer;
+	SWFOutput header, tempbuffer=0, buffer, swfbuffer;
 	SWFBlock backgroundBlock;
 	unsigned long compresslength;
 

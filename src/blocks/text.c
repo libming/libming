@@ -186,7 +186,7 @@ newSWFText()
 	text->nAdvanceBits = 0;
 
 #if TRACK_ALLOCS
-	text->gcnode = ming_gc_add_node(text, destroySWFBitmap);
+	text->gcnode = ming_gc_add_node(text, (dtorfunctype) destroySWFBitmap);
 #endif
 
 	return text;
@@ -557,13 +557,12 @@ void
 SWFText_addString(SWFText text, const char* string, int* advance)
 {
 	int len = strlen(string);
-	unsigned short widestring[len];
 	int i;
-	
+	unsigned short* widestring = (unsigned short*) malloc(len * sizeof(unsigned short) );
 	for ( i = 0; i < len; ++i )
 		widestring[i] = string[i] & 0xff;
-
 	SWFText_addWideString(text, widestring, len, advance);
+	free(widestring);
 }
 
 

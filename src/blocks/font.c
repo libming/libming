@@ -1207,7 +1207,7 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 	byte *p = SWFFont_findGlyph(font, c);
 	byte **f = &p;
 	struct out o;
-	int moveBits, x, y;
+	int moveBits, x = 0, y = 0;
 	int straight, numBits;
 	int numFillBits, numLineBits;
 	int startX = 0;

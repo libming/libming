@@ -117,7 +117,7 @@ static int verbose = {0};
 struct bitstream
 {	char lastch;
 	char bitoff;
-	int (*readc)(void *);
+	unsigned char (*readc)(void *);
 };
 typedef struct bitstream *BITS;
 
@@ -227,23 +227,24 @@ static void putint4(unsigned char *p, int val)
 struct swfile
 {	char lastch;
 	char bitoff;
-	int (*readc)();
+	unsigned char (*readc)();
 
 	char *name;	
 	char vers[4];
 	int fsize;
 	
-	char rect[9], rectlen;
+	char rect[9];
+	unsigned short rectlen;
 	SWFInput input;
 	short frames, rate;
 
 	short compressed;
 	unsigned char *zbuf, *zptr, *zend;
 };
-static freadc(struct swfile *sp)
+static unsigned char freadc(struct swfile *sp)
 {	return SWFInput_getChar(sp->input);
 }
-static r_readc(struct swfile *sp)
+static unsigned char r_readc(struct swfile *sp)
 {	return sp->rect[sp->rectlen++] = freadc(sp);
 }
 static void swfseek(struct swfile *sp, int delta)
@@ -288,7 +289,7 @@ static struct swfile *openswf(SWFInput input)
 struct swftag
 {	char lastch;
 	char bitoff;
-	int (*readc)();
+	unsigned char (*readc)();
 
 	short type; int size;
 	unsigned char hdr[6]; short hdrlen;
@@ -655,7 +656,7 @@ static void shaperecord(TAG tp, int nfillbits, int nlinebits, int lev)
 }
 
 static void gradient(TAG tp, int alpha)
-{	int n, ngrad, r1, r2;
+{	int n, ngrad, r1;
 	
 	alignbits(tp);
 	ngrad = tp->readc(tp);
@@ -757,7 +758,7 @@ static void morphfillstyle(TAG tp)
 
 static void fillandlinestyles(TAG tp, int lev)
 {	int n, nfill, nline;
-	unsigned short w1;
+
 	alignbits(tp);
 	nfill = tp->readc(tp);
 	if(nfill == 0xff)
@@ -794,8 +795,8 @@ static void morphlinestyle(TAG tp)
 }
 
 static void defineshape(TAG tp, int lev)
-{	int n, cod, nfill, nline;
-	unsigned short id, w1, w2;
+{	unsigned short id;
+
 	id = change_id(tp);
 	if(verbose)
 		printf("shape %d\n", id);
@@ -898,7 +899,9 @@ static void definetext(TAG tp, int lev)
 			if(hasfont)
 				font = change_id(tp);
 			if(hascolor)
-				if(lev == 2) rgba((BITS) tp); else rgb((BITS) tp);
+			{	if(lev == 2) rgba((BITS) tp);
+				else rgb((BITS) tp);
+			}
 			if(hasxoffset)
 			{	xoffs = readint2((BITS) tp);
 				if(verbose) printf("dx %d\n", xoffs);
@@ -918,9 +921,7 @@ static void definetext(TAG tp, int lev)
 
 static void placeobject2(TAG tp)
 {	int hasname, hasratio, hascxform, hasmatrix, haschar, hasmove, hasactions, hasmask;
-	short depth, charid, flags, act;
-	int base, len;
-	char ch;
+	short depth, charid;
 	hasactions = getbits((BITS)tp, 1);
 	hasmask = getbits((BITS)tp, 1);
 	hasname = getbits((BITS)tp, 1);
@@ -938,8 +939,8 @@ static void placeobject2(TAG tp)
 
 static void definebutton(TAG tp)
 {	short butid, charid, layer;
-	unsigned char bstate, act;
-	long base;
+	unsigned char bstate;
+
 	butid = change_id(tp);
 	if(verbose)
 		printf("char %d:\n", butid);
@@ -990,7 +991,7 @@ static void cxform(TAG tp, int alpha)
 static void definebutton2(TAG tp)
 {	short id, charid, offs, layer;
 	unsigned char ch, bstate;
-	long base;
+
 	id = change_id(tp);
 	ch = tp->readc(tp);
 	offs = readint2((BITS) tp);
@@ -1017,10 +1018,9 @@ static void definebutton2(TAG tp)
 }
 
 static void definetextfield(TAG tp)
-{	short textid, fontid, maxc, ht, lmarg, rmarg, indent, lspace, align;
+{	short textid, fontid;
 	int haslength, noedit, password, multiline, wordwrap, drawbox, noselect, html, usefont;
 	int hascolor, haslayout, hastext, hasfont;
-	char ch;
 	
 	textid = change_id(tp);
 	if(verbose) printf("textfield %d\n", textid);
@@ -1068,7 +1068,7 @@ static void exportassets(TAG tp)
 		while(ch = tp->readc(tp))
 			if(verbose) putchar(ch);
 		if(verbose)
-			if(n < nobj-1) putchar(' '); else putchar('\n');
+			putchar((n < nobj-1) ? ' ' : '\n');
 	}
 }
 

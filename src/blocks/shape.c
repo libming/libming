@@ -30,6 +30,8 @@
 #include "libming.h"
 
 
+
+
 struct stateChangeRecord
 {
 	int flags;
@@ -199,7 +201,7 @@ newSWFShape()
 	SWFOutput_writeUInt8(shape->out, 0); /* space for nFillBits, nLineBits */
 
 #if TRACK_ALLOCS
-	shape->gcnode = ming_gc_add_node(shape, destroySWFShape);
+	shape->gcnode = ming_gc_add_node(shape, (dtorfunctype) destroySWFShape);
 #endif
 
 	return shape;
@@ -848,7 +850,7 @@ SWFShape_drawScaledGlyph(SWFShape shape,
 	byte *p = SWFFont_findGlyph(font, c);
 	byte **f = &p;
 
-	int moveBits, x, y;
+	int moveBits, x=0, y=0;
 	int straight, numBits;
 	int numFillBits, numLineBits;
 
