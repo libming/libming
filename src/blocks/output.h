@@ -17,15 +17,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* output.h */
+/* output.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_OUTPUT_H_INCLUDED
 #define SWF_OUTPUT_H_INCLUDED
 
-typedef struct SWFOutput_s *SWFOutput;
+#include "ming.h"
 
-#include "libswf.h"
-#include "method.h"
+typedef struct SWFOutput_s *SWFOutput;
 
 #define OUTPUT_BUFFER_INCREMENT 1024
 

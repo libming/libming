@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "../../config.h"
+
 #if USE_PNG
 #include <png.h>
 #include <zlib.h>
@@ -9,6 +10,7 @@
 #include "bitmap.h"
 #include "dbl.h"
 #include "input.h"
+
 
 struct pngdata
 {
@@ -285,8 +287,7 @@ int readPNG(png_structp png_ptr, dblData result)
 }
 
 
-SWFDBLBitmapData
-newSWFDBLBitmap_fromPngFile(char *fileName)
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(char *fileName)
 {
 	SWFDBLBitmapData ret;
 	FILE *fp;

@@ -1,5 +1,8 @@
-
+#include <string.h>
+#include <stdlib.h>
 #include "font_util.h"
+#include "blocks/block.h"
+
 
 typedef struct
 {
@@ -52,7 +55,7 @@ Ming_cleanupFonts()
   for ( i = 0; i < Ming_numFonts; ++i )
   {
     free(Ming_fontList[i].name);
-    destroySWFFont(BLOCK(Ming_fontList[i].font));
+    destroySWFFont(Ming_fontList[i].font);
   }
 
   if ( Ming_fontList != NULL )

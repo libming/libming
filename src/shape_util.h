@@ -17,11 +17,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_SHAPE_H_INCLUDED
-#define MING_SHAPE_H_INCLUDED
+/* shape_util.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#include "fill.h"
-#include "blocks/shape.h"
+#ifndef SWF_SHAPE_UTIL_H_INCLUDED
+#define SWF_SHAPE_UTIL_H_INCLUDED
+
+#include "ming.h"
 
 float SWFCharacter_getWidth(SWFCharacter character);
 float SWFCharacter_getHeight(SWFCharacter character);
@@ -75,15 +83,4 @@ float SWFShape_getPenY(SWFShape shape);
 
 void SWFShape_getPen(SWFShape shape, float* penX, float* penY);
 
-
-void SWFShape_drawSizedGlyph(SWFShape shape,
-			     SWFFont font, unsigned short c, int size);
-
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned short c);
-
-/* deprecated: */
-
-#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c)
-
-
-#endif /* MING_SHAPE_H_INCLUDED */
+#endif /* SWF_SHAPE_UTIL_H_INCLUDED */

@@ -22,7 +22,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "libming.h"
 #include "cxform.h"
+#include "error.h"
+
 
 struct SWFCXform_s
 {

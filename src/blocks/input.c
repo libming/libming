@@ -21,16 +21,19 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
-
 #include <sys/stat.h>
 
 #ifndef WIN32
 	#include <unistd.h>
 #endif
 
+#include "libming.h"
 #include "input.h"
 #include "method.h"
+#include "error.h"
+
 
 struct SWFInput_s
 {
@@ -209,6 +212,11 @@ SWFInput_file_getChar(SWFInput input)
 	return c;
 }
 
+static int SWFInput_file_read(SWFInput input, unsigned char *buffer, int count)
+{	int len = fread(buffer, 1, count, (FILE *)input->data);
+	input->offset += len;
+	return len;
+}
 
 SWFInput
 newSWFInput_file(FILE *f)
@@ -230,6 +238,7 @@ newSWFInput_file(FILE *f)
 	input->destroy = SWFInput_dtor;
 	input->eof = SWFInput_file_eof;
 	input->seek = SWFInput_file_seek;
+	input->read = SWFInput_file_read;
 	input->data = f;
 
 	input->offset = 0;

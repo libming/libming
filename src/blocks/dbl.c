@@ -23,6 +23,10 @@
 #include "../../config.h"
 #include "dbl.h"
 #include "block.h"
+#include "method.h"
+#include "error.h"
+#include "input.h"
+
 
 struct SWFDBLBitmap_s
 {
@@ -69,7 +73,7 @@ newSWFDBLBitmap_fromInput(SWFInput input)
 
 	BLOCK(dbl)->writeBlock = writeSWFDBLBitmapToMethod;
 	BLOCK(dbl)->complete = completeSWFDBLBitmap;
-	BLOCK(dbl)->dtor = destroySWFCharacter;
+	BLOCK(dbl)->dtor = (destroySWFBlockMethod) destroySWFCharacter;
 
 	dbl->input = input;
 
@@ -124,8 +128,7 @@ newSWFDBLBitmap_fromInput(SWFInput input)
 
 #if (USE_GIF + USE_PNG)
 static void
-writeSWFDBLBitmapDataToMethod(SWFBlock block,
-													SWFByteOutputMethod method, void *data)
+writeSWFDBLBitmapDataToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFDBLBitmapData dbl = (SWFDBLBitmapData)block;
 	int i;
@@ -146,10 +149,8 @@ writeSWFDBLBitmapDataToMethod(SWFBlock block,
 }
 
 static void
-destroySWFDBLBitmapData(SWFBlock block)
+destroySWFDBLBitmapData(SWFDBLBitmapData bitmap)
 {
-	SWFDBLBitmapData bitmap = (SWFDBLBitmapData)block;
-
 	if ( bitmap->data != NULL )
 		free(bitmap->data);
 
@@ -159,7 +160,7 @@ destroySWFDBLBitmapData(SWFBlock block)
 	if ( CHARACTER(bitmap)->bounds != NULL )
 		destroySWFRect(CHARACTER(bitmap)->bounds);
 
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) bitmap);
 }
 
 SWFDBLBitmapData
@@ -175,7 +176,7 @@ newSWFDBLBitmapData_fromData(dblData data)
 
 	BLOCK(dbl)->writeBlock = writeSWFDBLBitmapDataToMethod;
 	BLOCK(dbl)->complete = completeSWFDBLBitmap;
-	BLOCK(dbl)->dtor = destroySWFDBLBitmapData;
+	BLOCK(dbl)->dtor = (destroySWFBlockMethod) destroySWFDBLBitmapData;
 
 	dbl->width = data->width;
 	dbl->height = data->height;
@@ -200,17 +201,15 @@ newSWFDBLBitmapData_fromData(dblData data)
 #endif
 
 static void
-destroySWFDBLBitmap_andInputs(SWFBlock block)
+destroySWFDBLBitmap_andInputs(SWFDBLBitmap bitmap)
 {
-	SWFDBLBitmap bitmap = (SWFDBLBitmap)block;
-
 	if ( bitmap->input != NULL )
 		destroySWFInput(bitmap->input);
 
 	if ( CHARACTER(bitmap)->bounds != NULL )
 		destroySWFRect(CHARACTER(bitmap)->bounds);
 
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) bitmap);
 }
 
 
@@ -218,7 +217,7 @@ SWFDBLBitmap
 newSWFDBLBitmap(FILE* f)
 {
 	SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput(newSWFInput_file(f));
-	BLOCK(dbl)->dtor = destroySWFDBLBitmap_andInputs;
+	BLOCK(dbl)->dtor = (destroySWFBlockMethod) destroySWFDBLBitmap_andInputs;
 	return dbl;
 }
 

@@ -19,8 +19,9 @@
 
 /* $Id$ */
 
-#include "libswf.h"
+#include "libming.h"
 #include "input.h"
+
 
 #define MP3_FRAME_SYNC			 0xFFE00000
 

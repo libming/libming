@@ -19,12 +19,14 @@
 
 
 #include <math.h>
+#include <string.h>
 
 #include "ming.h"
+#include "libming.h"
 #include "shape_util.h"
+#include "blocks/error.h"
+#include "blocks/shape.h"
 
-extern int Ming_cubicThreshold;
-extern float Ming_scale;
 
 typedef struct
 {

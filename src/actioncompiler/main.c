@@ -1,11 +1,9 @@
-
 #include <stdio.h>
 #include <stdarg.h>
 
 #include "compile.h"
 
-/* extern FILE *yyin;
-extern Buffer out; */
+
 #define print(x)	{fputs(x,stdout);}
 
 static char *buffer;
@@ -21,6 +19,7 @@ void (*SWF_error)(const char *msg, ...);
 void (*SWF_warn)(const char *msg, ...);
 
 static int SWF_versionNumber = 5;
+int SWF_versionNum = {5};
 
 void print_error(const char *msg, ...)
 {

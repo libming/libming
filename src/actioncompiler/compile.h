@@ -1,13 +1,18 @@
+/* compile.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#ifndef COMPILE_H_INCLUDED
-#define COMPILE_H_INCLUDED
+#ifndef SWF_COMPILE_H_INCLUDED
+#define SWF_COMPILE_H_INCLUDED
+
+#include "ming.h"
 
 typedef struct _buffer *Buffer;
-
-#include <stdio.h>
-#include "../blocks/output.h"
-#include "../blocks/action.h"
-#include "action.h"
 
 /* shut up bison.simple */
 void yyerror(char *msg);
@@ -157,4 +162,4 @@ void swf5ParseInit(const char *string, int debug);
 int swf4parse(void *b);
 int swf5parse(void *b);
 
-#endif /* COMPILE_H_INCLUDED */
+#endif /* SWF_COMPILE_H_INCLUDED */

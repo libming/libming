@@ -17,25 +17,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* dbl.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_DBL_H_INCLUDED
 #define SWF_DBL_H_INCLUDED
 
-typedef struct SWFDBLBitmap_s *SWFDBLBitmap;
-
-#include <stdio.h>
-
-#include "bitmap.h"
-#include "input.h"
-
-
-/* create a new DBL (define bits lossless) bitmap from the given file */
-
-SWFDBLBitmap newSWFDBLBitmap(FILE *f);
-
-
-/* create a new DBL bitmap from the given input object */
-
-SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
+#include "ming.h"
+#include "character.h"
 
 #if (USE_GIF + USE_PNG)
 struct dbl_data
@@ -54,7 +49,6 @@ struct SWFDBLBitmapData_s
 	unsigned char *data;
 	// SWFInput input;
 };
-typedef struct SWFDBLBitmapData_s *SWFDBLBitmapData;
 
 SWFDBLBitmapData newSWFDBLBitmapData_fromData(dblData data);
 #endif

@@ -19,8 +19,14 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
 
 #include "shape.h"
+#include "character.h"
+#include "matrix.h"
+#include "fillstyle.h"
+#include "linestyle.h"
+#include "font.h"
 
 
 struct stateChangeRecord
@@ -120,9 +126,8 @@ completeSWFShapeBlock(SWFBlock block)
 
 
 void
-destroySWFShape(SWFBlock block)
+destroySWFShape(SWFShape shape)
 {
-	SWFShape shape = (SWFShape)block;
 	int i;
 
 	for ( i=0; i<shape->nFills; ++i )
@@ -148,7 +153,7 @@ destroySWFShape(SWFBlock block)
 
 	destroySWFOutput(shape->out);
 
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) shape);
 }
 
 
@@ -161,7 +166,7 @@ newSWFShape()
 
 	BLOCK(shape)->writeBlock = writeSWFShapeBlockToMethod;
 	BLOCK(shape)->complete = completeSWFShapeBlock;
-	BLOCK(shape)->dtor = destroySWFShape;
+	BLOCK(shape)->dtor = (destroySWFBlockMethod) destroySWFShape;
 	BLOCK(shape)->type = SWF_DEFINESHAPE3;
 
 	CHARACTERID(shape) = ++SWF_gNumCharacters;

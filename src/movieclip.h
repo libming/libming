@@ -17,51 +17,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* movieclip.h */
+/* movieclip.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#ifndef MING_MOVIECLIP_H_INCLUDED
-#define MING_MOVIECLIP_H_INCLUDED
+#ifndef SWF_MOVIECLIP_H_INCLUDED
+#define SWF_MOVIECLIP_H_INCLUDED
 
-typedef struct SWFMovieClip_s *SWFMovieClip;
+#include "ming.h"
+#include "libming.h"
 
-#include "displaylist.h"
-#include "blocks/soundinstance.h"
 
-SWFMovieClip
-newSWFMovieClip();
+int SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);
 
-void
-destroySWFMovieClip(SWFMovieClip clip);
+BOOL SWFMovieClip_getDependencies(SWFMovieClip clip, SWFCharacter** deps, int* nDeps);
 
-void
-SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int frames);
-
-SWFDisplayItem
-SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
-
-void
-SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
-
-void
-SWFMovieClip_nextFrame(SWFMovieClip clip);
-
-void
-SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label);
-
-void
-SWFMovie_setSoundStream(SWFMovieClip movie, SWFSound sound, float rate);
-
-SWFSoundInstance
-SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
-
-void
-SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
-
-int
-SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);
-
-BOOL
-SWFMovieClip_getDependencies(SWFMovieClip clip,
-			     SWFCharacter** deps, int* nDeps);
-
-#endif /* MING_MOVIECLIP_H_INCLUDED */
+#endif /* SWF_MOVIECLIP_H_INCLUDED */

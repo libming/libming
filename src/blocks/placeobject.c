@@ -19,10 +19,19 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "placeobject.h"
 #include "method.h"
+#include "block.h"
+#include "output.h"
+#include "browserfont.h"
+#include "outputblock.h"
+#include "character.h"
+#include "matrix.h"
+#include "cxform.h"
 
-extern int SWF_versionNum;
 
 struct SWFPlaceObject2Block_s
 {
@@ -151,10 +160,8 @@ completeSWFPlaceObject2Block(SWFBlock block)
 
 
 void
-destroySWFPlaceObject2Block(SWFBlock block)
+destroySWFPlaceObject2Block(SWFPlaceObject2Block place)
 {
-	SWFPlaceObject2Block place = (SWFPlaceObject2Block)block;
-
 	if ( place->actions != NULL )
 		free(place->actions);
 
@@ -189,7 +196,7 @@ newSWFPlaceObject2Block(int depth)
 	BLOCK(place)->type = SWF_PLACEOBJECT2;
 	BLOCK(place)->writeBlock = writeSWFPlaceObject2BlockToStream;
 	BLOCK(place)->complete = completeSWFPlaceObject2Block;
-	BLOCK(place)->dtor = destroySWFPlaceObject2Block;
+	BLOCK(place)->dtor = (destroySWFBlockMethod) destroySWFPlaceObject2Block;
 
 	place->out = NULL;
 	place->name = NULL;

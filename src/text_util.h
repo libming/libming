@@ -17,56 +17,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_TEXT_UTIL_H_INCLUDED
-#define MING_TEXT_UTIL_H_INCLUDED
+/* text_util.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#include "blocks/text.h"
-#include "blocks/textfield.h"
+#ifndef SWF_TEXT_UTIL_H_INCLUDED
+#define SWF_TEXT_UTIL_H_INCLUDED
 
-void SWFText_setHeight(SWFText text, float height);
+#include "ming.h"
 
-void SWFText_setSpacing(SWFText text, float spacing);
+/* Currently, there are no internal functions or types */
 
-void SWFText_moveTo(SWFText text, float x, float y);
-
-float SWFText_getStringWidth(SWFText text, const unsigned char *string);
-
-float SWFText_getUTF8StringWidth(SWFText text, const unsigned char *string);
-
-float SWFText_getWideStringWidth(SWFText text, const unsigned short *string);
-
-float SWFText_getAscent(SWFText text);
-
-float SWFText_getDescent(SWFText text);
-
-float SWFText_getLeading(SWFText text);
-
-float SWFFont_getStringWidth(SWFFont font, const unsigned char *string);
-
-float SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string);
-
-float SWFFont_getWideStringWidth(SWFFont font, const unsigned short *string, int len);
-
-float SWFFont_getAscent(SWFFont font);
-
-float SWFFont_getDescent(SWFFont font);
-
-float SWFFont_getLeading(SWFFont font);
-
-void SWFTextField_setBounds(SWFTextField field, float width, float height);
-
-void SWFTextField_setHeight(SWFTextField field, float height);
-
-void SWFTextField_setFieldHeight(SWFTextField field, float height);
-
-void SWFTextField_setLeftMargin(SWFTextField field, float leftMargin);
-
-void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
-
-void SWFTextField_setIndentation(SWFTextField field, float indentation);
-
-void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
-
-void SWFTextField_setPadding(SWFTextField field, float padding);
-
-#endif /* MING_TEXT_UTIL_H_INCLUDED */
+#endif /* SWF_TEXT_UTIL_H_INCLUDED */

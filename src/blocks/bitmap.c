@@ -23,11 +23,12 @@
 #include "rect.h"
 #include "jpeg.h"
 #include "dbl.h"
+#include "error.h"
+#include "input.h"
 
-
-void destroySWFBitmap(SWFBlock block)
+void destroySWFBitmap(SWFBitmap bitmap)
 {
-	destroySWFBlock(block);
+	destroySWFBlock((SWFBlock) bitmap);
 }
 
 
@@ -58,22 +59,21 @@ SWFBitmap newSWFBitmap_fromInput(SWFInput input)
 		return (SWFBitmap)newSWFJpegBitmap_fromInput(input);
 
 	if(c1 == 'D' && c2 == 'B')
-		return (SWFBitmap)newSWFDBLBitmap_fromInput(input);
+		return (SWFBitmap) newSWFDBLBitmap_fromInput(input);
 
 	if(c1 == 'G' && c2 == 'I')
 #if 1
-		return (SWFBitmap)newSWFDBLBitmap_fromGifInput(input);
+		return (SWFBitmap) newSWFDBLBitmap_fromGifInput(input);
 #else
 		SWF_error("GIF images must be translated into DBL files for now");
 #endif
 
 	if(c2 == 'P' && c3 == 'N')
 #if 1
-		return (SWFBitmap)newSWFDBLBitmap_fromPngInput(input);
+		return (SWFBitmap) newSWFDBLBitmap_fromPngInput(input);
 #else
 		SWF_error("PNG images must be translated into DBL files for now");
 #endif
-
 
 	SWF_error("Unrecognised file type");
 

@@ -1,8 +1,12 @@
+/* $Id$ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+
 #include "../../config.h"
+
 #if USE_GIF
 #include <gif_lib.h>
 #include <zlib.h>
@@ -203,7 +207,7 @@ readGif(GifFileType *file, dblData result)
  */
 
 SWFDBLBitmapData
-newSWFDBLBitmap_fromGifFile(char *fileName)
+newSWFDBLBitmapData_fromGifFile(char *fileName)
 {	GifFileType *file;
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;
@@ -222,8 +226,7 @@ static int gifReadFunc(GifFileType *gif, char *buf, int len)
 	return SWFInput_read(input, buf, len);
 }
 
-SWFDBLBitmapData
-newSWFDBLBitmap_fromGifInput(SWFInput input)
+SWFDBLBitmapData newSWFDBLBitmap_fromGifInput(SWFInput input)
 {	GifFileType *file;
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;

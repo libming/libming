@@ -24,11 +24,12 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "../blocks/output.h"
-#include "../blocks/action.h"
+#include "libming.h"
+#include "blocks/output.h"
+#include "blocks/action.h"
 #include "compile.h"
+#include "action.h"
 
-extern int SWF_versionNum;
 
 SWFAction compileSWFActionCode(const char *script)
 {

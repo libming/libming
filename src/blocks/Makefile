@@ -1,6 +1,6 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
-CC = gcc -g -Wall #-fPIC -ggdb
+CC = gcc -g -Wall -I.. -I. #-fPIC -ggdb
 
 include ../../config.make
 

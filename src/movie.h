@@ -17,85 +17,32 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* movie.h */
+/* movie.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-/* $Id$ */
+#ifndef SWF_MOVIE_H_INCLUDED
+#define SWF_MOVIE_H_INCLUDED
 
-#ifndef MING_MOVIE_H_INCLUDED
-#define MING_MOVIE_H_INCLUDED
+#include "ming.h"
 
-typedef struct SWFMovie_s *SWFMovie;
+void SWFMovie_protect(SWFMovie movie);
 
-#include "displaylist.h"
-#include "blocks/soundinstance.h"
+void SWFMovie_addBlock(SWFMovie movie, SWFBlock block);
 
-
-SWFMovie
-newSWFMovie();
-
-SWFMovie
-newSWFMovieWithVersion(int version);
-
-void
-destroySWFMovie(SWFMovie movie);
-
-void
-SWFMovie_setRate(SWFMovie movie, float rate);
-
-void
-SWFMovie_setDimension(SWFMovie movie, float x, float y);
-
-void
-SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
-
-void
-SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b);
-
-void
-SWFMovie_protect(SWFMovie movie);
-
-void
-SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
-
-void
-SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream sound, float skip);
-
-SWFSoundInstance
-SWFMovie_startSound(SWFMovie movie, SWFSound sound);
-
-void
-SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
-
-void
-SWFMovie_addBlock(SWFMovie movie, SWFBlock block);
-
-SWFDisplayItem
-SWFMovie_add(SWFMovie movie, SWFBlock block);
-
-void
-SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
-
-void
-SWFMovie_nextFrame(SWFMovie movie);
-
-void
-SWFMovie_labelFrame(SWFMovie movie, const char *label);
-
-void
-SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name);
-
-void
-SWFMovie_writeExports(SWFMovie movie);
-
-int
-SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
+void SWFMovie_writeExports(SWFMovie movie);
 
 /*int
 SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
 
-int
-SWFMovie_save(SWFMovie movie, const char *filename, int level);
+SWFCharacter SWFMovie_importChar(SWFMovie movie, const char *filename, const char *name);
 
-SWFCharacter
-SWFMovie_importChar(SWFMovie movie, const char *filename, const char *name);
-#endif /* MING_MOVIE_H_INCLUDED */
+#warning FIXME: This function should go somewhere else
+int completeSWFImportCharacter(SWFBlock block);
+
+#endif /* SWF_MOVIE_H_INCLUDED */

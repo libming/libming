@@ -17,16 +17,25 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_BLOCKLIST_H_INCLUDED
-#define MING_BLOCKLIST_H_INCLUDED
+/* blocklist.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
+#ifndef SWF_BLOCKLIST_H_INCLUDED
+#define SWF_BLOCKLIST_H_INCLUDED
+
+#include "ming.h"
+
 
 typedef struct SWFBlockList_s *SWFBlockList;
 
-#include "blocks/block.h"
-#include "blocks/sprite.h"
-
-
 SWFBlockList newSWFBlockList();
+void destroySWFBlockList(SWFBlockList list);
 
 void SWFBlockList_addBlock(SWFBlockList blocklist, SWFBlock block);
 
@@ -37,10 +46,7 @@ int SWFBlockList_completeBlocks(SWFBlockList list);
 int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
 				     SWFByteOutputMethod method, void *data);
 
-void destroySWFBlockList(SWFBlockList list);
+void SWFBlockList_resolveCharacterDependencies(SWFBlockList list,
+					       SWFCharacter character);
 
-void
-SWFBlockList_resolveCharacterDependencies(SWFBlockList list,
-					  SWFCharacter character);
-
-#endif /* MING_BLOCKLIST_H_INCLUDED */
+#endif /* SWF_BLOCKLIST_H_INCLUDED */

@@ -20,9 +20,14 @@
 /* $Id$ */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "outputblock.h"
 #include "sound.h"
+#include "character.h"
+#include "method.h"
+#include "input.h"
+
 
 struct SWFSound_s
 {
@@ -138,9 +143,9 @@ completeDefineSWFSoundBlock(SWFBlock block)
 
 
 void
-destroySWFSound(SWFBlock sound)
+destroySWFSound(SWFSound sound)
 {
-	destroySWFCharacter(sound);
+	destroySWFCharacter((SWFCharacter) sound);
 }
 
 
@@ -175,7 +180,7 @@ newSWFSound_fromInput(SWFInput input, byte flags)
 
 	block->writeBlock = writeSWFSoundToStream;
 	block->complete = completeDefineSWFSoundBlock;
-	block->dtor = destroySWFSound;
+	block->dtor = (destroySWFBlockMethod) destroySWFSound;
 
 	sound->input = input;
 	sound->flags = flags;

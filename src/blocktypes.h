@@ -1,6 +1,16 @@
+/* blocktypes.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_BLOCKTYPES_H_INCLUDED
 #define SWF_BLOCKTYPES_H_INCLUDED
+
+#include "ming.h"
 
 typedef enum
 {
@@ -40,7 +50,8 @@ typedef enum
   SWF_STARTSOUND		= 15,
   SWF_END			=  0,
   SWF_DOACTION		        = 12,
-  SWF_EXPORTASSETS              = 56
+  SWF_EXPORTASSETS              = 56,
+  SWF_IMPORTASSETS              = 57
 } SWFBlocktype;
 
 #endif /* SWF_BLOCKTYPES_H_INCLUDED */

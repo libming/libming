@@ -23,6 +23,10 @@
 
 #include "jpeg.h"
 #include "character.h"
+#include "input.h"
+#include "error.h"
+#include "method.h"
+
 
 struct SWFJpegBitmap_s
 {
@@ -230,10 +234,10 @@ writeSWFJpegWithAlphaToMethod(SWFBlock block,
 
 
 void
-destroySWFJpegBitmap(SWFBlock block)
+destroySWFJpegBitmap(SWFJpegBitmap jpegBitmap)
 {
-	free(CHARACTER(block)->bounds);
-	free(block);
+	free(CHARACTER(jpegBitmap)->bounds);
+	free(jpegBitmap);
 }
 
 
@@ -362,7 +366,7 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 
 	BLOCK(jpeg)->writeBlock = writeSWFJpegBitmapToMethod;
 	BLOCK(jpeg)->complete = completeSWFJpegBitmap;
-	BLOCK(jpeg)->dtor = destroySWFJpegBitmap;
+	BLOCK(jpeg)->dtor = (destroySWFBlockMethod) destroySWFJpegBitmap;
 	BLOCK(jpeg)->type = SWF_DEFINEBITSJPEG2;
 
 	jpeg->input = input;
@@ -380,10 +384,10 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 
 
 static void
-destroySWFJpegBitmap_andInputs(SWFBlock block)
+destroySWFJpegBitmap_andInputs(SWFJpegBitmap jpegBitmap)
 {
-	destroySWFInput(((SWFJpegBitmap)block)->input);
-	destroySWFJpegBitmap(block);
+	destroySWFInput(jpegBitmap->input);
+	destroySWFJpegBitmap(jpegBitmap);
 }
 
 
@@ -391,7 +395,7 @@ SWFJpegBitmap
 newSWFJpegBitmap(FILE *f)
 {
 	SWFJpegBitmap jpeg = newSWFJpegBitmap_fromInput(newSWFInput_file(f));
-	BLOCK(jpeg)->dtor = destroySWFJpegBitmap_andInputs;
+	BLOCK(jpeg)->dtor = (destroySWFBlockMethod) destroySWFJpegBitmap_andInputs;
 	return jpeg;
 }
 
@@ -413,7 +417,7 @@ newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 
 	BLOCK(jpeg)->writeBlock = writeSWFJpegWithAlphaToMethod;
 	BLOCK(jpeg)->complete = completeSWFJpegBitmap; // can use same complete
-	BLOCK(jpeg)->dtor = destroySWFJpegBitmap;			 // ditto here
+	BLOCK(jpeg)->dtor = (destroySWFBlockMethod) destroySWFJpegBitmap;			 // ditto here
 	BLOCK(jpeg)->type = SWF_DEFINEBITSJPEG3;
 
 	jpeg->input = input;
@@ -437,11 +441,11 @@ newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 
 
 void
-destroySWFJpegAlpha_andInputs(SWFBlock block)
+destroySWFJpegAlpha_andInputs(SWFJpegWithAlpha jpegWithAlpha)
 {
-	destroySWFInput(((SWFJpegWithAlpha)block)->input);
-	destroySWFInput(((SWFJpegWithAlpha)block)->alpha);
-	destroySWFJpegBitmap(block);
+	destroySWFInput(jpegWithAlpha->input);
+	destroySWFInput(jpegWithAlpha->alpha);
+	destroySWFJpegBitmap((SWFJpegBitmap) jpegWithAlpha);
 }
 
 
@@ -452,7 +456,7 @@ newSWFJpegWithAlpha(FILE *f, FILE *alpha)
 		newSWFJpegWithAlpha_fromInput(newSWFInput_file(f),
 																	newSWFInput_file(alpha));
 
-	BLOCK(jpeg)->dtor = destroySWFJpegAlpha_andInputs;
+	BLOCK(jpeg)->dtor = (destroySWFBlockMethod) destroySWFJpegAlpha_andInputs;
 	return jpeg;
 }
 

@@ -17,19 +17,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* outputblock.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_OUTPUTBLOCK_H_INCLUDED
 #define SWF_OUTPUTBLOCK_H_INCLUDED
 
-typedef struct SWFOutputBlock_s *SWFOutputBlock;
-
-#include "libswf.h"
-#include "block.h"
+#include "ming.h"
 #include "output.h"
-#include "character.h"
-#include "matrix.h"
-#include "cxform.h"
+#include "blocktypes.h"
 #include "exports.h"
 
+typedef struct SWFOutputBlock_s *SWFOutputBlock;
 
 SWFOutput SWFOutputBlock_getOutput(SWFOutputBlock block);
 
@@ -50,6 +55,6 @@ SWFOutputBlock newSWFFrameLabelBlock(const char *string);
 
 SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
 
-void destroySWFOutputBlock(SWFBlock block);
+void destroySWFOutputBlock(SWFOutputBlock outputBlock);
 
 #endif /* SWF_OUTPUTBLOCK_H_INCLUDED */

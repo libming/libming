@@ -17,36 +17,27 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_FONT_UTIL_H_INCLUDED
-#define MING_FONT_UTIL_H_INCLUDED
+/* fontutil.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#include "blocks/font.h"
+#ifndef SWF_FONT_UTIL_H_INCLUDED
+#define SWF_FONT_UTIL_H_INCLUDED
 
-SWFFont
-Ming_getFont(const char* name);
+#include "ming.h"
 
-SWFFont
-Ming_loadFont(const char* path, const char* name);
+SWFFont Ming_getFont(const char* name);
 
-void
-Ming_cleanupFonts();
+SWFFont Ming_loadFont(const char* path, const char* name);
 
-float
-SWFFont_getStringWidth(SWFFont font, const unsigned char* string);
+void Ming_cleanupFonts();
 
-float
-SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char* string);
+float SWFFont_getWideStringWidth(SWFFont font, const unsigned short* string, 
+                                 int len);
 
-float
-SWFFont_getWideStringWidth(SWFFont font, const unsigned short* string, int len);
-
-float
-SWFFont_getAscent(SWFFont font);
-
-float
-SWFFont_getDescent(SWFFont font);
-
-float
-SWFFont_getLeading(SWFFont font);
-
-#endif /* MING_FONT_UTIL_H_INCLUDED */
+#endif /* SWF_FONT_UTIL_H_INCLUDED */

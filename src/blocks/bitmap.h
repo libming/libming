@@ -17,24 +17,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* bitmap.h */
+/* bitmap.h
+ *
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_BITMAP_H_INCLUDED
 #define SWF_BITMAP_H_INCLUDED
 
-#include "character.h"
-#include "input.h"
+#include "ming.h"
 
-
-typedef SWFCharacter SWFBitmap;
-
-
-void destroySWFBitmap(SWFBlock block);
-
-int SWFBitmap_getWidth(SWFBitmap b);
-
-int SWFBitmap_getHeight(SWFBitmap b);
-
-SWFBitmap newSWFBitmap_fromInput(SWFInput input);
+/* Currently, there are no internal functions or types */
 
 #endif /* SWF_BITMAP_H_INCLUDED */

@@ -20,6 +20,7 @@
 /* $Id$ */
 
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <zlib.h>
 
@@ -27,10 +28,22 @@
 
 #include "movie.h"
 #include "shape_util.h"
+#include "blocklist.h"
+#include "displaylist.h"
 
+#include "blocks/block.h"
+#include "blocks/method.h"
+#include "blocks/browserfont.h"
+#include "blocks/character.h"
+#include "blocks/outputblock.h"
+#include "blocks/soundstream.h"
 #include "blocks/exports.h"
 #include "blocks/imports.h"
 #include "blocks/rect.h"
+#include "blocks/font.h"
+#include "blocks/textfield.h"
+#include "blocks/shape.h"
+#include "blocks/soundinstance.h"
 
 
 struct SWFMovie_s
@@ -386,12 +399,6 @@ SWFMovie_remove(SWFMovie movie , SWFDisplayItem item)
 }
 
 void
-SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream stream)
-{
-	SWFMovie_setSoundStreamAt(movie, stream, 0);
-}
-
-void
 SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip)
 {
 	SWFBlock block = SWFSoundStream_getStreamHead(stream, movie->rate, skip);
@@ -401,6 +408,12 @@ SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip)
 		SWFMovie_addBlock(movie, block);
 		SWFDisplayList_setSoundStream(movie->displayList, stream);
 	}
+}
+
+void
+SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream stream)
+{
+	SWFMovie_setSoundStreamAt(movie, stream, 0);
 }
 
 
@@ -507,8 +520,7 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	int swflength, status;
 	SWFOutput header, tempbuffer, buffer, swfbuffer;
 	SWFBlock backgroundBlock;
-	unsigned long compresslength, i;
-	char *compress;
+	unsigned long compresslength;
 
 	if ( movie->nExports > 0 )
 		SWFMovie_writeExports(movie);
@@ -658,7 +670,7 @@ SWFMovie_importCharacter(SWFMovie movie, const char *filename, const char *name)
 	BLOCK(res)->type = SWF_DEFINESPRITE;
 	BLOCK(res)->writeBlock = NULL;
 	BLOCK(res)->complete = completeSWFImportCharacter;
-	BLOCK(res)->dtor = destroySWFCharacter;
+	BLOCK(res)->dtor = (destroySWFBlockMethod) destroySWFCharacter;
 	importer = SWFMovie_addImport(movie, filename, name, id);
 	SWFCharacter_addDependency(res, (SWFCharacter) importer);
 	return res;

@@ -20,7 +20,9 @@
 /* $Id$ */
 
 #include <stdlib.h>
+
 #include "rect.h"
+
 
 int
 SWFRect_numBits(SWFRect rect)

@@ -31,7 +31,7 @@ SWFAction newSWFAction()
 
 void destroySWFAction(SWFAction action)
 {
-	destroySWFOutputBlock((SWFBlock)action);
+	destroySWFOutputBlock(action);
 }
 
 

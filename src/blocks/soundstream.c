@@ -19,14 +19,17 @@
 
 /* $Id$ */
 
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
+#include "block.h"
 #include "soundstream.h"
 #include "output.h"
 #include "outputblock.h"
 #include "sound.h"
+#include "method.h"
+#include "input.h"
 
 
 struct SWFSoundStream_s

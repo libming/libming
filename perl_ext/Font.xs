@@ -65,11 +65,6 @@ SWFFont_getUTF8StringWidth(font, string)
 	SWF::Font	font
 	char *	string
 
-int
-SWFFont_getWideStringWidth(font, string)
-	SWF::Font	font
-	char *	string
-
 short
 SWFFont_getAscent(font)
 	SWF::Font	font

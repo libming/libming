@@ -6,7 +6,9 @@
 
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
 #include "compile.h"
+#include "action.h"
 #include "assembler.h"
 
 #define YYPARSE_PARAM buffer
@@ -80,6 +82,7 @@ Buffer bf, bc;
 %token DEQ "/="
 %token MEQ "*="
 %token SEQ "-="
+%token REQ "%="
 %token AEQ "&="
 %token OEQ "|="
 
@@ -96,7 +99,7 @@ Buffer bf, bc;
 %nonassoc NOELSE
 %nonassoc ELSE
 %left ','
-%right '=' "*=" "/=" "+=" "-=" "&=" "|=" "^=" ">>=" ">>>=" "<<="
+%right '=' "*=" "/=" "%=" "+=" "-=" "&=" "|=" "^=" ">>=" ">>>=" "<<="
 %left '?' ':'
 %left "&&" "||"
 %left "==" "!="
@@ -956,6 +959,7 @@ assignop
 	| "-="		{ $$ = SWFACTION_SUBTRACT; }
 	| "*="		{ $$ = SWFACTION_MULTIPLY; }
 	| "/="		{ $$ = SWFACTION_DIVIDE; }
+	| "%="		{ $$ = SWFACTION_MODULO; }
 	| "&="		{ $$ = SWFACTION_BITWISEAND; }
 	| "|="		{ $$ = SWFACTION_BITWISEOR; }
 	| "^="		{ $$ = SWFACTION_BITWISEXOR; }

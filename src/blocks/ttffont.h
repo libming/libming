@@ -17,19 +17,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* ttffont.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_TTFFONT_H_INCLUDED
 #define SWF_TTFFONT_H_INCLUDED
 
 #include <truetype.h>
 
-#include "libswf.h"
-
-#include "blocktypes.h"
-#include "block.h"
-#include "output.h"
-#include "shape.h"
-#include "rect.h"
-#include "character.h"
+#include "ming.h"
 
 #define SWF_FONT_UNICODE    (1<<5)
 #define SWF_FONT_SHIFTJIS   (1<<4)
@@ -96,7 +98,7 @@ SWFTextRecord newSWFTextRecord();
 void destroySWFTextRecord(SWFTextRecord record);
 
 SWFFont newSWFFont();
-void destroySWFFont(SWFBlock block);
+void destroySWFFont(SWFFont font);
 SWFFont loadSWFFontFromTTF(char *file);
 
 void SWFFont_addTextToList(SWFFont font, struct _textRecord *text);

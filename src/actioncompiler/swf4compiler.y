@@ -6,7 +6,9 @@
 
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
 #include "compile.h"
+#include "action.h"
 
 #define YYPARSE_PARAM buffer
 

@@ -20,9 +20,16 @@
 /* $Id$ */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "outputblock.h"
 #include "method.h"
+#include "block.h"
+#include "character.h"
+#include "matrix.h"
+#include "cxform.h"
+
 
 struct SWFOutputBlock_s
 {
@@ -65,14 +72,12 @@ getSWFOutputBlockLength(SWFBlock block)
 
 
 void
-destroySWFOutputBlock(SWFBlock block)
+destroySWFOutputBlock(SWFOutputBlock outputBlock)
 {
-	SWFOutputBlock b = (SWFOutputBlock)block;
+	if ( outputBlock->output != NULL )
+		destroySWFOutput(outputBlock->output);
 
-	if ( b->output != NULL )
-		destroySWFOutput(b->output);
-
-	free(block);
+	free(outputBlock);
 }
 
 
@@ -86,7 +91,7 @@ newSWFOutputBlock(SWFOutput out, SWFBlocktype type)
 	BLOCK(block)->type = type;
 	BLOCK(block)->writeBlock = writeSWFOutputBlockToStream;
 	BLOCK(block)->complete = getSWFOutputBlockLength;
-	BLOCK(block)->dtor = destroySWFOutputBlock;
+	BLOCK(block)->dtor = (destroySWFBlockMethod) destroySWFOutputBlock;
 
 	block->output = out;
 

@@ -17,16 +17,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* soundstream.h */
+/* soundstream.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_SOUNDSTREAM_H_INCLUDED
 #define SWF_SOUNDSTREAM_H_INCLUDED
 
-typedef struct SWFSoundStream_s *SWFSoundStream;
-typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
+#include "ming.h"
 
-#include "block.h"
-#include "input.h"
+typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
 
 #define SWF_SOUNDSTREAM_COMPRESSION      0xf0
 #define SWF_SOUNDSTREAM_NOT_COMPRESSED   (0<<4)
@@ -46,14 +51,6 @@ typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
 #define SWF_SOUNDSTREAM_CHANNELS         0x01
 #define SWF_SOUNDSTREAM_MONO             (0<<0)
 #define SWF_SOUNDSTREAM_STEREO           (1<<0)
-
-
-SWFSoundStream newSWFSoundStream(FILE *file);
-SWFSoundStream newSWFSoundStreamFromFileno(int fd); /* added by David McNab <david@rebirthing.co.nz> */
-
-SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
-
-void destroySWFSoundStream(SWFSoundStream sound);
 
 SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream sound, float frameRate, float skip);
 

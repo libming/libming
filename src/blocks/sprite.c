@@ -19,10 +19,11 @@
 
 /* $Id$ */
 
-#include "libswf.h"
+#include <stdlib.h>
 
+#include "libming.h"
 #include "sprite.h"
-#include "character.h"
+#include "method.h"
 
 
 static void
@@ -62,9 +63,8 @@ completeSWFSprite(SWFBlock block)
 
 
 void
-destroySWFSprite(SWFBlock block)
+destroySWFSprite(SWFSprite sprite)
 {
-	SWFSprite sprite = (SWFSprite)block;
 	int i;
 
 	for ( i=0; i<sprite->nBlocks; ++i )
@@ -78,7 +78,7 @@ destroySWFSprite(SWFBlock block)
 	if ( sprite->blocks != NULL )
 		free(sprite->blocks);
 
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) sprite);
 }
 
 
@@ -93,7 +93,7 @@ newSWFSprite()
 	BLOCK(sprite)->type = SWF_DEFINESPRITE;
 	BLOCK(sprite)->writeBlock = writeSWFSpriteToMethod;
 	BLOCK(sprite)->complete = completeSWFSprite;
-	BLOCK(sprite)->dtor = destroySWFSprite;
+	BLOCK(sprite)->dtor = (destroySWFBlockMethod) destroySWFSprite;
 
 	sprite->nBlocks = 0;
 	sprite->blocks = NULL;

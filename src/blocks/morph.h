@@ -17,22 +17,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* morph.h */
+/* morph.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_MORPH_H_INCLUDED
 #define SWF_MORPH_H_INCLUDED
 
-typedef struct SWFMorph_s *SWFMorph;
+#include "ming.h"
 
-#include "character.h"
-#include "output.h"
-#include "shape.h"
-
-
-SWFShape SWFMorph_getShape1(SWFMorph morph);
-
-SWFShape SWFMorph_getShape2(SWFMorph morph);
-
-SWFMorph newSWFMorphShape();
+/* Currently, there are no internal functions or types */
 
 #endif /* SWF_MORPH_H_INCLUDED */

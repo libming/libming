@@ -17,19 +17,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_DISPLAYLIST_H_INCLUDED
-#define MING_DISPLAYLIST_H_INCLUDED
+/* displaylist.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#include "blocks/placeobject.h"
-#include "blocks/character.h"
-#include "blocks/matrix.h"
+#ifndef SWF_DISPLAYLIST_H_INCLUDED
+#define SWF_DISPLAYLIST_H_INCLUDED
 
+#include "ming.h"
 #include "blocklist.h"
-#include "position.h"
+#include "blocks/placeobject.h"
 
-typedef struct SWFDisplayItem_s *SWFDisplayItem;
+
 typedef struct SWFDisplayList_s *SWFDisplayList;
-
 
 struct SWFDisplayItem_s
 {
@@ -46,76 +51,11 @@ struct SWFDisplayItem_s
 };
 
 
-#include "blocks/cxform.h"
-#include "blocks/action.h"
-#include "blocks/character.h"
-#include "blocks/sound.h"
-#include "blocks/soundstream.h"
-
-
 /* display item */
-
-void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees);
-
-void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees);
-
-void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
-
-void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
-
-void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale);
-
-void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale);
-
-void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
-
-void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
-
-void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
-
-void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
-
-void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
-			      float c, float d, float x, float y);
 
 SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item);
 
-int SWFDisplayItem_getDepth(SWFDisplayItem item);
-
-void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
-
-void SWFDisplayItem_remove(SWFDisplayItem item);
-
-void SWFDisplayItem_setName(SWFDisplayItem item, const char *name);
-
-void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel);
-
 void SWFDisplayItem_endMask(SWFDisplayItem item);
-
-void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio);
-
-void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform);
-
-void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
-				int r, int g, int b, int a);
-
-void SWFDisplayItem_setColorMult(SWFDisplayItem item,
-				 float r, float g, float b, float a);
-
-void SWFDisplayItem_addAction(SWFDisplayItem item,
-			      SWFAction action, int flags);
-
-void SWFDisplayItem_getPosition(SWFDisplayItem item, float * x, 
-                                float * y);
-
-void SWFDisplayItem_getRotation(SWFDisplayItem item, 
-                                float * degrees);
-
-void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, 
-                             float * yScale);
-
-void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, 
-                            float * ySkew);
 
 /*
  * Methods for reading position data
@@ -133,7 +73,7 @@ float SWFDisplayItem_get_rot(SWFDisplayItem item);
 
 /* display list */
 
-void destroySWFDisplayList(SWFDisplayList list);
+void destroySWFDisplayList(SWFDisplayList displayList);
 
 SWFDisplayList newSWFDisplayList();
 
@@ -149,4 +89,4 @@ void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream);
 
 void SWFDisplayList_rewindSoundStream(SWFDisplayList list);
 
-#endif /* MING_DISPLAYLIST_H_INCLUDED */
+#endif /* SWF_DISPLAYLIST_H_INCLUDED */

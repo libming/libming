@@ -17,51 +17,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_FILL_H_INCLUDED
-#define MING_FILL_H_INCLUDED
+/* fill.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-typedef struct SWFFill_s *SWFFill;
+#ifndef SWF_FILL_H_INCLUDED
+#define SWF_FILL_H_INCLUDED
 
 #include <stdlib.h>
-#include "blocks/fillstyle.h"
 
-/* SWFFill adds a position object to manipulate SWFFillStyle's matrix. */
+#include "ming.h"
 
-SWFFill newSWFFill(SWFFillStyle fillstyle);
 
 SWFFillStyle SWFFill_getFillStyle(SWFFill fill);
 
-void destroySWFFill(SWFFill fill);
-
-void SWFFill_skewX(SWFFill fill, float x);
-
-void SWFFill_skewXTo(SWFFill fill, float x);
-
-void SWFFill_skewY(SWFFill fill, float y);
-
-void SWFFill_skewYTo(SWFFill fill, float y);
-
-void SWFFill_scaleX(SWFFill fill, float x);
-
-void SWFFill_scaleXTo(SWFFill fill, float x);
-
-void SWFFill_scaleY(SWFFill fill, float y);
-
-void SWFFill_scaleYTo(SWFFill fill, float y);
-
-void SWFFill_scaleXY(SWFFill fill, float x, float y);
-
-void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
-
-void SWFFill_rotate(SWFFill fill, float degrees);
-
-void SWFFill_rotateTo(SWFFill fill, float degrees);
-
-void SWFFill_move(SWFFill fill, float x, float y);
-
-void SWFFill_moveTo(SWFFill fill, float x, float y);
-
-void SWFFill_setMatrix(SWFFill fill, float a, float b,
-		       float c, float d, float x, float y);
-
-#endif /* MING_FILL_H_INCLUDED */
+#endif /* SWF_FILL_H_INCLUDED */

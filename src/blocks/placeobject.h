@@ -1,14 +1,18 @@
+/* placeobject.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_PLACEOBJECT_H_INCLUDED
 #define SWF_PLACEOBJECT_H_INCLUDED
 
-typedef struct SWFPlaceObject2Block_s *SWFPlaceObject2Block;
+#include "ming.h"
 
-#include "libswf.h"
-#include "character.h"
-#include "matrix.h"
-#include "cxform.h"
-#include "action.h"
+typedef struct SWFPlaceObject2Block_s *SWFPlaceObject2Block;
 
 #define SWF_PLACE_HAS_ACTIONS     (1<<7)
 #define SWF_PLACE_HAS_MASK        (1<<6)

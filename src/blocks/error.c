@@ -22,8 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h> // for exit()
 #include <stdarg.h>
-
 #include "error.h"
+
 
 void
 warn_default(const char *msg, ...)

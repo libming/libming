@@ -17,13 +17,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* sprite.h */
+/* sprite.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_SPRITE_H_INCLUDED
 #define SWF_SPRITE_H_INCLUDED
 
-typedef struct SWFSprite_s *SWFSprite;
-
+#include "ming.h"
 #include "character.h"
 
 
@@ -40,23 +46,10 @@ struct SWFSprite_s
   SWFBlock *blocks;
 };
 
+void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);
 
-SWFSprite
-newSWFSprite();
+void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
 
-void
-destroySWFSprite(SWFBlock block);
-
-void
-SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);
-
-void
-SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
-
-void
-SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
-
-void
-SWFSprite_getDependencies(SWFSprite sprite, SWFCharacter** deps, int* nDeps);
+void SWFSprite_getDependencies(SWFSprite sprite, SWFCharacter** deps, int* nDeps);
 
 #endif /* SWF_SPRITE_H_INCLUDED */

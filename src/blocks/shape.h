@@ -17,23 +17,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* shape.h */
+/* shape.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_SHAPE_H_INCLUDED
 #define SWF_SHAPE_H_INCLUDED
 
-typedef struct SWFShape_s *SWFShape;
-
-#include "libswf.h"
-
-#include "blocktypes.h"
-#include "block.h"
-#include "character.h"
+#include "ming.h"
 #include "output.h"
-#include "fillstyle.h"
-#include "linestyle.h"
-#include "rect.h"
-#include "font.h"
+
 
 #define SWF_SHAPE_NEWSTYLEFLAG	 (1<<4)
 #define SWF_SHAPE_LINESTYLEFLAG	 (1<<3)
@@ -44,76 +42,35 @@ typedef struct SWFShape_s *SWFShape;
 #define NOFILL NULL
 
 
-/* returns new shape object */
-SWFShape
-newSWFShape();
-
 /* returns a shape containing the bitmap in a filled rect */
-SWFShape
-newSWFShapeFromBitmap(SWFBitmap bitmap);
+SWFShape newSWFShapeFromBitmap(SWFBitmap bitmap);
 
-void
-destroySWFShape(SWFBlock block);
+void SWFShape_addStyleHeader(SWFShape shape);
 
-void
-SWFShape_addStyleHeader(SWFShape shape);
+int SWFShape_getScaledPenX(SWFShape shape);
 
-int
-SWFShape_getScaledPenX(SWFShape shape);
+int SWFShape_getScaledPenY(SWFShape shape);
 
-int
-SWFShape_getScaledPenY(SWFShape shape);
+void SWFShape_getScaledPenXY(SWFShape shape, int* outX, int* outY);
 
-void
-SWFShape_getScaledPenXY(SWFShape shape, int* outX, int* outY);
+void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
 
-void
-SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
+void SWFShape_moveScaledPen(SWFShape shape, int x, int y);
 
-void
-SWFShape_moveScaledPen(SWFShape shape, int x, int y);
+void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
 
-void
-SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
+void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
 
-void
-SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
+void SWFShape_drawScaledCurveTo(SWFShape shape,
+			        int controlx, int controly,
+			        int anchorx, int anchory);
 
-void
-SWFShape_drawScaledCurveTo(SWFShape shape,
-			   int controlx, int controly,
-			   int anchorx, int anchory);
+void SWFShape_drawScaledCurve(SWFShape shape,
+			      int controldx, int controldy,
+			      int anchordx, int anchordy);
 
-void
-SWFShape_drawScaledCurve(SWFShape shape,
-			 int controldx, int controldy,
-			 int anchordx, int anchordy);
-
-void
-SWFShape_drawScaledGlyph(SWFShape shape,
-			 SWFFont font, unsigned short c, int size);
-
-void
-SWFShape_setLineStyle(SWFShape shape, unsigned short width,
-		      byte r, byte g, byte b, byte a);
-
-SWFFillStyle
-SWFShape_addSolidFillStyle(SWFShape shape, byte r, byte g, byte b, byte a);
-
-SWFFillStyle
-SWFShape_addGradientFillStyle(SWFShape shape, SWFGradient gradient, byte flags);
-
-SWFFillStyle
-SWFShape_addBitmapFillStyle(SWFShape shape, SWFBitmap bitmap, byte flags);
-
-void
-SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill);
-
-void
-SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill);
-
-void
-SWFShape_end(SWFShape shape);
+void SWFShape_drawScaledGlyph(SWFShape shape,
+	    		      SWFFont font, unsigned short c, int size);
 
 void
 SWFShape_flushStateChange(SWFShape shape);

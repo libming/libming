@@ -19,8 +19,12 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
+#include <string.h>
 #include "browserfont.h"
 #include "font.h"
+#include "character.h"
+
 
 struct SWFBrowserFont_s
 {
@@ -52,11 +56,10 @@ completeSWFBrowserFont(SWFBlock block)
 
 
 void
-destroySWFBrowserFont(SWFBlock block)
+destroySWFBrowserFont(SWFBrowserFont font)
 {
-	SWFBrowserFont f = (SWFBrowserFont)block;
-	destroySWFOutput(f->out);
-	free(block);
+	destroySWFOutput(font->out);
+	free(font);
 }
 
 
@@ -71,7 +74,7 @@ newSWFBrowserFont(const char *name)
 
 	BLOCK(font)->writeBlock = writeSWFBrowserFontToMethod;
 	BLOCK(font)->complete = completeSWFBrowserFont;
-	BLOCK(font)->dtor = destroySWFBrowserFont;
+	BLOCK(font)->dtor = (destroySWFBlockMethod) destroySWFBrowserFont;
 
 	/* XXX - hack here: we change type to defineFont2 on completion
 		 so that we can tell the difference in setFont: */

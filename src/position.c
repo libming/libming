@@ -21,7 +21,10 @@
 #include <math.h>
 
 #include "ming.h"
+#include "libming.h"
 #include "position.h"
+#include "blocks/matrix.h"
+#include "movie.h"
 
 
 void destroySWFPosition(SWFPosition position)

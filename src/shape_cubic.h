@@ -17,10 +17,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef MING_SHAPE_CUBIC_H_INCLUDED
-#define MING_SHAPE_CUBIC_H_INCLUDED
+/* shape_cubic.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#include "blocks/swf.h"
+#ifndef SWF_SHAPE_CUBIC_H_INCLUDED
+#define SWF_SHAPE_CUBIC_H_INCLUDED
+
+#include <string.h>
+
+#include "ming.h"
+#include "blocks/error.h"
+
 
 /* approximate a cubic bezier with quadratic segments,
    returns the number of segments used */
@@ -33,4 +46,4 @@ int SWFShape_drawCubicTo(SWFShape shape,
 			 float bx, float by, float cx, float cy,
 			 float dx, float dy);
 
-#endif /* MING_SHAPE_CUBIC_H_INCLUDED */
+#endif /* SWF_SHAPE_CUBIC_H_INCLUDED */

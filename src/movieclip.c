@@ -20,6 +20,11 @@
 #include <stdlib.h>
 
 #include "movieclip.h"
+#include "blocklist.h"
+#include "displaylist.h"
+#include "blocks/soundstream.h"
+#include "blocks/soundinstance.h"
+#include "blocks/outputblock.h"
 #include "blocks/sprite.h"
 #include "blocks/shape.h"
 #include "blocks/morph.h"
@@ -37,11 +42,11 @@ struct SWFMovieClip_s
 
 
 void
-destroySWFMovieClip(SWFMovieClip clip)
+destroySWFMovieClip(SWFMovieClip movieClip)
 {
-	destroySWFBlockList(clip->blockList);
-	destroySWFDisplayList(clip->displayList);
-	destroySWFSprite((SWFBlock)clip);
+	destroySWFBlockList(movieClip->blockList);
+	destroySWFDisplayList(movieClip->displayList);
+	destroySWFSprite((SWFSprite)movieClip);
 }
 
 

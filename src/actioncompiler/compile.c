@@ -26,12 +26,14 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "libming.h"
 #include "compile.h"
+#include "action.h"
+#include "blocks/error.h"
+
 
 static int nConstants = {0}, maxConstants = {0}, sizeConstants = {0};
 static char **constants;
-
-extern int SWF_versionNum;
 
 /* XXX - temp hack until we check at compile time */
 

@@ -3,11 +3,14 @@
   author: goto <harpy@lily.freemail.ne.jp>
 */
 
+/* $Id */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "utf8.h"
+
 
 int UTF8Length(const char *string)
 {

@@ -17,21 +17,22 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* font.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_FONT_H_INCLUDED
 #define SWF_FONT_H_INCLUDED
 
-typedef struct SWFFont_s *SWFFont;
-typedef struct SWFFontCharacter_s *SWFFontCharacter;
-
-#include "libswf.h"
-
-#include "blocktypes.h"
-#include "block.h"
-#include "output.h"
+#include "ming.h"
 #include "rect.h"
-#include "character.h"
-#include "browserfont.h"
 #include "text.h"
+#include "block.h"
 
 #define SWF_FONT_HASLAYOUT    (1<<7)
 #define SWF_FONT_UNICODE      (1<<6)
@@ -42,88 +43,103 @@ typedef struct SWFFontCharacter_s *SWFFontCharacter;
 #define SWF_FONT_ISBOLD       (1<<1)
 #define SWF_FONT_ISITALIC     (1<<0)
 
+struct SWFFont_s
+{
+	// even though SWFFont isn't represented in the SWF file,
+	// this lets us call destroySWFBlock(font)
+	struct SWFBlock_s block;
 
-SWFFont
-newSWFFont();
+	byte *name;
+	byte flags;
 
-void
-destroySWFFont(SWFBlock block);
+	int nGlyphs;
 
-SWFFont
-loadSWFFontFromFile(FILE *file);
+	// map from glyphs to char codes, loaded from fdb file
+	unsigned short* glyphToCode; 
 
-byte*
-SWFFont_findGlyph(SWFFont font, unsigned short c);
+	// list of pointers to glyph shapes
+	byte** glyphOffset;
 
-const char*
-SWFFont_getName(SWFFont font);
+	// shape table, mapped in from file
+	byte* shapes;
 
-byte
-SWFFont_getFlags(SWFFont font);
+	// glyph metrics
+	short* advances;
+	struct SWFRect_s* bounds;
 
-int
-SWFFont_getScaledWideStringWidth(SWFFont font,
-			     const unsigned short* string, int len);
+	// map from char codes to glyphs, constructed from glyphToCode map
+	// XXX - would be nice if this was in the fdb..
+	union
+	{
+		byte* charMap;
+		unsigned short** wideMap; // array of 256 arrays of 256 shorts
+	} codeToGlyph;
 
-int
-SWFFont_getScaledUTF8StringWidth(SWFFont font, const char* string);
+	// font metrics
+	short ascent;
+	short descent;
+	short leading;
 
-int
-SWFFont_getScaledStringWidth(SWFFont font, const char* string);
+	// font's kern table, if one is defined
+	// XXX - should be sorted for faster lookups
+	unsigned short kernCount;
+	union
+	{	struct kernInfo* k;
+		struct kernInfo16* w;
+	} kernTable;
+};
 
-short
-SWFFont_getScaledAscent(SWFFont font);
 
-short
-SWFFont_getScaledDescent(SWFFont font);
+byte* SWFFont_findGlyph(SWFFont font, unsigned short c);
 
-short
-SWFFont_getScaledLeading(SWFFont font);
+const char* SWFFont_getName(SWFFont font);
 
-SWFRect
-SWFFont_getGlyphBounds(SWFFont font, unsigned short c);
+byte SWFFont_getFlags(SWFFont font);
 
-int
-SWFFont_getCharacterAdvance(SWFFont font, unsigned short c);
+int SWFFont_getScaledWideStringWidth(SWFFont font,
+	              		     const unsigned short* string, int len);
 
-int
-SWFFont_getCharacterKern(SWFFont font, unsigned short c1, unsigned short c2);
+int SWFFont_getScaledUTF8StringWidth(SWFFont font, const char* string);
+
+int SWFFont_getScaledStringWidth(SWFFont font, const char* string);
+
+short SWFFont_getScaledAscent(SWFFont font);
+
+short SWFFont_getScaledDescent(SWFFont font);
+
+short SWFFont_getScaledLeading(SWFFont font);
+
+SWFRect SWFFont_getGlyphBounds(SWFFont font, unsigned short c);
+
+int SWFFont_getCharacterAdvance(SWFFont font, unsigned short c);
+
+int SWFFont_getCharacterKern(SWFFont font, unsigned short c1, unsigned short c2);
 
 
 /* SWFFontCharacter is a movie's instance of a font */
 
-SWFFontCharacter
-newSWFFontCharacter(SWFFont font);
+SWFFontCharacter newSWFFontCharacter(SWFFont font);
 
-SWFFontCharacter
-newSWFDummyFontCharacter();
+SWFFontCharacter newSWFDummyFontCharacter();
 
-void
-destroySWFFontCharacter(SWFBlock block);
+void destroySWFFontCharacter(SWFFontCharacter fontCharacter);
 
-void
-SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
+void SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
 			     unsigned short start, unsigned short end);
 
-void
-SWFFontCharacter_addWideChars(SWFFontCharacter font, unsigned short *string, int len);
+void SWFFontCharacter_addWideChars(SWFFontCharacter font, unsigned short *string, int len);
 
-void
-SWFFontCharacter_addChars(SWFFontCharacter font, const char *string);
+void SWFFontCharacter_addChars(SWFFontCharacter font, const char *string);
 
-void
-SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string);
+void SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string);
 
-SWFFont
-SWFFontCharacter_getFont(SWFFontCharacter font);
+SWFFont SWFFontCharacter_getFont(SWFFontCharacter font);
 
-int
-SWFFontCharacter_getNGlyphs(SWFFontCharacter font);
+int SWFFontCharacter_getNGlyphs(SWFFontCharacter font);
 
-void
-SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text);
+void SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text);
 
-unsigned short
-SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short c);
+unsigned short SWFFontCharacter_getGlyphCode(SWFFontCharacter font, 
+					     unsigned short c);
 
 #endif /* SWF_FONT_H_INCLUDED */

@@ -17,55 +17,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* cxform.h
+ *
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_CXFORM_H_INCLUDED
 #define SWF_CXFORM_H_INCLUDED
 
-typedef struct SWFCXform_s *SWFCXform;
-
+#include "ming.h"
 #include "output.h"
 #include "blocktypes.h"
 
-
-/* create a new color transform with the given parameters */
-
-SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
-		       float rMult, float gMult, float bMult, float aMult);
-
-
-/* create a new color transform with the given additive parameters and
-   default multiplicative */
-
-SWFCXform newSWFAddCXform(int rAdd, int gAdd, int bAdd, int aAdd);
-
-
-/* create a new color transform with the given multiplicative parameters
-   and default additive */
-
-SWFCXform newSWFMultCXform(float rMult, float gMult, float bMult, float aMult);
-
-
-/* set the additive part of the color transform to the given parameters */
-
-void SWFCXform_setColorAdd(SWFCXform cXform,
-			   int rAdd, int gAdd, int bAdd, int aAdd);
-
-
-/* set the multiplicative part of the color transform to the given
-   parameters */
-
-void SWFCXform_setColorMult(SWFCXform cXform,
-			    float rMult, float gMult, float bMult, float aMult);
-
-
-/* destroy this color transform */
-
-void destroySWFCXform(SWFCXform cXform);
-
-
 /* write this color transform to the given output object-
    shapetype indicates whether we include the alpha components */
-
 void SWFOutput_writeCXform(SWFOutput out, SWFCXform cXform, SWFBlocktype shapetype);
-
 
 #endif /* SWF_CXFORM_H_INCLUDED */

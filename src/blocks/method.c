@@ -22,6 +22,7 @@
 #include "method.h"
 #include "output.h"
 
+
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
 {
 	method((unsigned char)(i&0xff), data);

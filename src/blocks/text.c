@@ -19,12 +19,16 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 #include "text.h"
 #include "rect.h"
 #include "utf8.h"
+#include "character.h"
+#include "matrix.h"
+#include "font.h"
 
 
 struct SWFText_s
@@ -130,9 +134,8 @@ completeSWFText(SWFBlock block)
 
 
 void
-destroySWFText(SWFBlock block)
+destroySWFText(SWFText text)
 {
-	SWFText text = (SWFText)block;
 	SWFTextRecord record = text->initialRecord, next;
 
 	destroySWFOutput(text->out);
@@ -147,7 +150,7 @@ destroySWFText(SWFBlock block)
 		record = next;
 	}
 
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) text);
 }
 
 
@@ -163,7 +166,7 @@ newSWFText()
 	BLOCK(text)->type = SWF_DEFINETEXT;
 	BLOCK(text)->writeBlock = writeSWFTextToMethod;
 	BLOCK(text)->complete = completeSWFText;
-	BLOCK(text)->dtor = destroySWFText;
+	BLOCK(text)->dtor = (destroySWFBlockMethod) destroySWFText;
 
 	CHARACTER(text)->bounds = newSWFRect(0,0,0,0);
 

@@ -21,6 +21,11 @@
 
 #include "ming.h"
 #include "shape_util.h"
+#include "blocks/character.h"
+#include "blocks/shape.h"
+#include "blocks/matrix.h"
+#include "movie.h"
+#include "fill.h"
 
 
 float

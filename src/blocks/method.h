@@ -17,12 +17,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* method.h
+ * 
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_METHOD_H_INCLUDED
 #define SWF_METHOD_H_INCLUDED
 
-#include "libswf.h"
+#include "ming.h"
 
 /*
   this should be a real object:
@@ -41,13 +48,9 @@ struct _byteOutput
 ..or something like that, something that actually works.
 */
 
-typedef void (*SWFByteOutputMethod)(byte b, void *data);
-
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data);
 
 void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data);
-
-void fileOutputMethod(byte b, void *data);
 
 void SWFOutputMethod(byte i, void *data);
 

@@ -20,9 +20,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "compile.h"
 #include "assembler.h"
+#include "compile.h"
+#include "action.h"
 
 
 int len;

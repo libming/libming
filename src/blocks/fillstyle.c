@@ -21,11 +21,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "blocktypes.h"
 #include "output.h"
 #include "matrix.h"
 #include "fillstyle.h"
+#include "error.h"
+#include "gradient.h"
+#include "character.h"
 
 
 struct SWFFillStyle_s
@@ -56,7 +58,7 @@ newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 {
 	SWFFillStyle fill = (SWFFillStyle)malloc(sizeof(struct SWFFillStyle_s));
 
-	fill->type = SWF_FILL_SOLID;
+	fill->type = SWFFILL_SOLID;
 	fill->data.solid.r = r;
 	fill->data.solid.g = g;
 	fill->data.solid.b = b;
@@ -68,14 +70,14 @@ newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 
 
 SWFFillStyle
-newSWFGradientFillStyle(SWFGradient gradient, int flags)
+newSWFGradientFillStyle(SWFGradient gradient, byte flags)
 {
 	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
 
-	if ( flags == SWF_FILL_RADIAL_GRADIENT )
-		fill->type = SWF_FILL_RADIAL_GRADIENT;
+	if ( flags == SWFFILL_RADIAL_GRADIENT )
+		fill->type = SWFFILL_RADIAL_GRADIENT;
 	else
-		fill->type = SWF_FILL_LINEAR_GRADIENT;
+		fill->type = SWFFILL_LINEAR_GRADIENT;
 
 	fill->data.gradient = gradient;
 	fill->matrix = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
@@ -85,14 +87,14 @@ newSWFGradientFillStyle(SWFGradient gradient, int flags)
 
 
 SWFFillStyle
-newSWFBitmapFillStyle(SWFBitmap bitmap, int flags)
+newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 {
 	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
 
-	if ( flags == SWF_FILL_CLIPPED_BITMAP )
-		fill->type = SWF_FILL_CLIPPED_BITMAP;
+	if ( flags == SWFFILL_CLIPPED_BITMAP )
+		fill->type = SWFFILL_CLIPPED_BITMAP;
 	else
-		fill->type = SWF_FILL_TILED_BITMAP;
+		fill->type = SWFFILL_TILED_BITMAP;
 
 	fill->data.bitmap = bitmap;
 	fill->matrix = newSWFMatrix(20.0, 0, 0, 20.0, 0, 0);
@@ -130,18 +132,18 @@ SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2)
 
 	switch ( fill1->type )
 	{
-		case SWF_FILL_SOLID:
+		case SWFFILL_SOLID:
 			return (fill1->data.solid.r == fill2->data.solid.r &&
 							fill1->data.solid.g == fill2->data.solid.g &&
 							fill1->data.solid.b == fill2->data.solid.b &&
 							fill1->data.solid.a == fill2->data.solid.a);
 
-		case SWF_FILL_LINEAR_GRADIENT:
-		case SWF_FILL_RADIAL_GRADIENT:
+		case SWFFILL_LINEAR_GRADIENT:
+		case SWFFILL_RADIAL_GRADIENT:
 			return (fill1->data.gradient == fill2->data.gradient);
 
-		case SWF_FILL_TILED_BITMAP:
-		case SWF_FILL_CLIPPED_BITMAP:
+		case SWFFILL_TILED_BITMAP:
+		case SWFFILL_CLIPPED_BITMAP:
 			return (fill1->data.bitmap == fill2->data.bitmap);
 
 		default:
@@ -177,7 +179,7 @@ SWFOutput_writeFillStyles(SWFOutput out,
 
 		SWFOutput_writeUInt8(out, type);
 
-		if ( type == SWF_FILL_SOLID )
+		if ( type == SWFFILL_SOLID )
 		{
 			SWFOutput_writeUInt8(out, fill->data.solid.r);
 			SWFOutput_writeUInt8(out, fill->data.solid.g);
@@ -186,12 +188,12 @@ SWFOutput_writeFillStyles(SWFOutput out,
 			if ( shapeType == SWF_DEFINESHAPE3 )
 				SWFOutput_writeUInt8(out, fill->data.solid.a);
 		}
-		else if ( type & SWF_FILL_GRADIENT )
+		else if ( type & SWFFILL_GRADIENT )
 		{
 			SWFOutput_writeMatrix(out, fill->matrix);
 			SWFOutput_writeGradient(out, fill->data.gradient, shapeType);
 		}
-		else if ( type & SWF_FILL_BITMAP )
+		else if ( type & SWFFILL_BITMAP )
 		{
 			SWFOutput_writeUInt16(out, CHARACTERID(fill->data.bitmap));
 			SWFOutput_writeMatrix(out, fill->matrix);
@@ -233,7 +235,7 @@ SWFOutput_writeMorphFillStyles(SWFOutput out,
 
 		SWFOutput_writeUInt8(out, type);
 
-		if ( type == SWF_FILL_SOLID )
+		if ( type == SWFFILL_SOLID )
 		{
 			SWFOutput_writeUInt8(out, fill1->data.solid.r);
 			SWFOutput_writeUInt8(out, fill1->data.solid.g);
@@ -244,13 +246,13 @@ SWFOutput_writeMorphFillStyles(SWFOutput out,
 			SWFOutput_writeUInt8(out, fill2->data.solid.b);
 			SWFOutput_writeUInt8(out, fill2->data.solid.a);
 		}
-		else if ( type & SWF_FILL_GRADIENT )
+		else if ( type & SWFFILL_GRADIENT )
 		{
 			SWFOutput_writeMatrix(out, fill1->matrix);
 			SWFOutput_writeMatrix(out, fill2->matrix);
 			SWFOutput_writeMorphGradient(out, fill1->data.gradient, fill2->data.gradient);
 		}
-		else if ( type & SWF_FILL_BITMAP )
+		else if ( type & SWFFILL_BITMAP )
 		{
 			SWF_assert(CHARACTERID(fill1->data.bitmap) ==
 								 CHARACTERID(fill2->data.bitmap));

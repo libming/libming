@@ -17,36 +17,27 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* soundinstance.h */
+/* soundinstance.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_SOUNDINSTANCE_H_INCLUDED
 #define SWF_SOUNDINSTANCE_H_INCLUDED
 
-typedef struct SWFSoundInstance_s *SWFSoundInstance;
-
-#include "sound.h"
+#include "ming.h"
 
 SWFSoundInstance newSWFSoundInstance(SWFSound sound);
-
 SWFSoundInstance newSWFSoundInstance_stop(SWFSound sound);
-
 SWFSoundInstance newSWFSoundInstance_startNoMultiple(SWFSound sound);
 
-void SWFSoundInstance_setNoMultiple(SWFSoundInstance instance);
-
-void SWFSoundInstance_setLoopInPoint(SWFSoundInstance instance, unsigned int point);
-
-void SWFSoundInstance_setLoopOutPoint(SWFSoundInstance instance, unsigned int point);
-
-void SWFSoundInstance_setLoopCount(SWFSoundInstance instance, int count);
-
-void SWFSoundInstance_setNoMultiple(SWFSoundInstance instance);
-
 // button.c calls these, so they're exposed:
-
 void writeSWFSoundInstanceToMethod(SWFBlock block,
 				SWFByteOutputMethod method, void *data);
-
 int completeSWFSoundInstance(SWFBlock block);
 
 #endif /* SWF_SOUNDINSTANCE_H_INCLUDED */

@@ -17,58 +17,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef SWF_DEFINEEDITTEXT_H_INCLUDED
-#define SWF_DEFINEEDITTEXT_H_INCLUDED
+/* textfield.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-typedef struct SWFTextField_s *SWFTextField;
+#ifndef SWF_TEXTFIELD_H_INCLUDED
+#define SWF_TEXTFIELD_H_INCLUDED
 
-#include "output.h"
-#include "block.h"
-#include "character.h"
-#include "matrix.h"
-#include "rect.h"
-#include "font.h"
-#include "browserfont.h"
-
-#define SWFTEXTFIELD_ONMASK  0x2005 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x7BFF /* off bits */
-
-#define SWFTEXTFIELD_HASFONT   (1<<0)   /* font and size given */
-#define SWFTEXTFIELD_HASLENGTH (1<<1)
-#define SWFTEXTFIELD_HASCOLOR  (1<<2)
-#define SWFTEXTFIELD_NOEDIT    (1<<3)
-#define SWFTEXTFIELD_PASSWORD  (1<<4)
-#define SWFTEXTFIELD_MULTILINE (1<<5)
-#define SWFTEXTFIELD_WORDWRAP  (1<<6)
-#define SWFTEXTFIELD_HASTEXT   (1<<7)   /* initial text present */
-#define SWFTEXTFIELD_USEFONT   (1<<8)
-#define SWFTEXTFIELD_HTML      (1<<9)
-#define SWFTEXTFIELD_DRAWBOX   (1<<11)
-#define SWFTEXTFIELD_NOSELECT  (1<<12)
-#define SWFTEXTFIELD_HASLAYOUT (1<<13)  /* align, margin, lspace, indent */
-#define SWFTEXTFIELD_AUTOSIZE  (1<<14)	/* SWF6 */
-
-typedef enum
-{
-  SWFTEXTFIELD_ALIGN_LEFT    = 0,
-  SWFTEXTFIELD_ALIGN_RIGHT   = 1,
-  SWFTEXTFIELD_ALIGN_CENTER  = 2,
-  SWFTEXTFIELD_ALIGN_JUSTIFY = 3
-} SWFTextFieldAlignment;
+#include "ming.h"
 
 #define SWFTEXTFIELD_SIZE sizeof(struct _textField)
 
-SWFTextField newSWFTextField();
-SWFBrowserFont newSWFBrowserFont(const char *name);
-
-void SWFTextField_setFont(SWFTextField field, SWFBlock font);
 void SWFTextField_setScaledBounds(SWFTextField field, int width, int height);
-void SWFTextField_setFlags(SWFTextField field, int flags);
-void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
-void SWFTextField_setVariableName(SWFTextField field, const char *name);
-void SWFTextField_addString(SWFTextField field, const char *string);
-void SWFTextField_addUTF8String(SWFTextField field, const char *string);
-
 void SWFTextField_setScaledFontHeight(SWFTextField field, int height);
 void SWFTextField_setScaledFieldHeight(SWFTextField field, int height);
 void SWFTextField_setScaledWidth(SWFTextField field, int width);
@@ -77,12 +42,8 @@ void SWFTextField_setScaledRightMargin(SWFTextField field, int rightMargin);
 void SWFTextField_setScaledIndentation(SWFTextField field, int indentation);
 void SWFTextField_setScaledLineSpacing(SWFTextField field, int lineSpacing);
 void SWFTextField_setScaledPadding(SWFTextField field, int padding);
-void SWFTextField_setAlignment(SWFTextField field,
-			       SWFTextFieldAlignment alignment);
-void SWFTextField_setLength(SWFTextField field, int length);
 
 void SWFTextField_setFontCharacter(SWFTextField field, SWFFontCharacter fontchar);
-void SWFTextField_addChars(SWFTextField field, const char *string);
 SWFFont SWFTextField_getUnresolvedFont(SWFTextField field);
 
-#endif /* SWF_DEFINEEDITTEXT_H_INCLUDED */
+#endif /* SWF_TEXTFIELD_H_INCLUDED */

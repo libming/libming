@@ -19,9 +19,14 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
+
 #include "character.h"
 #include "blocktypes.h"
 #include "morph.h"
+
+
+int SWF_gNumCharacters;
 
 
 void
@@ -40,10 +45,8 @@ SWFCharacterInit(SWFCharacter character)
 
 
 void
-destroySWFCharacter(SWFBlock block)
+destroySWFCharacter(SWFCharacter character)
 {
-	SWFCharacter character = (SWFCharacter)block;
-
 	if ( character->dependencies != NULL )
 		free(character->dependencies);
 

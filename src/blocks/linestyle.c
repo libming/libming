@@ -21,7 +21,10 @@
 
 #include <stdlib.h>
 
+#include "libming.h"
 #include "linestyle.h"
+#include "error.h"
+
 
 struct SWFLineStyle_s
 {

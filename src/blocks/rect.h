@@ -17,8 +17,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* rect.h
+ *
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_RECT_H_INCLUDED
 #define SWF_RECT_H_INCLUDED
+
+#include "ming.h"
+#include "libming.h"
+#include "output.h"
+#include "error.h"
+
 
 typedef struct SWFRect_s *SWFRect;
 
@@ -29,11 +44,6 @@ struct SWFRect_s
   int minY;
   int maxY;
 };
-
-
-#include "libswf.h"
-#include "output.h"
-
 
 SWFRect newSWFRect(int minX, int maxX, int minY, int maxY);
 

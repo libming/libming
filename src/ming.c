@@ -20,14 +20,17 @@
 /* $Id$ */
 
 #include "ming.h"
+#include "blocks/character.h"
 #include "font_util.h"
+#include "shape_cubic.h"
+#include "blocks/error.h"
 
-extern int SWF_gNumCharacters;
 
 int SWF_versionNum = 5;
 
 float Ming_scale = 20.0;
 int Ming_cubicThreshold = 10000;
+
 
 /* module-wide initialization.	return non-zero if error. */
 

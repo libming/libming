@@ -22,10 +22,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "libswf.h"
-
+#include "libming.h"
 #include "textfield.h"
 #include "utf8.h"
+#include "character.h"
+#include "browserfont.h"
+#include "font.h"
+
 
 struct SWFTextField_s
 {
@@ -176,22 +179,20 @@ completeSWFTextField(SWFBlock block)
 
 
 void
-destroySWFTextField(SWFBlock block)
+destroySWFTextField(SWFTextField field)
 {
-	SWFTextField f = (SWFTextField)block;
+	destroySWFOutput(field->out);
 
-	destroySWFOutput(f->out);
+	if ( field->varName != NULL )
+		free(field->varName);
 
-	if ( f->varName != NULL )
-		free(f->varName);
+	if ( field->string != NULL )
+		free(field->string);
 
-	if ( f->string != NULL )
-		free(f->string);
+	if ( field->embeds != NULL )
+		free(field->embeds);
 
-	if ( f->embeds != NULL )
-		free(f->embeds);
-
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) field);
 }
 
 
@@ -204,7 +205,7 @@ newSWFTextField()
 
 	BLOCK(field)->writeBlock = writeSWFTextFieldToMethod;
 	BLOCK(field)->complete = completeSWFTextField;
-	BLOCK(field)->dtor = destroySWFTextField;
+	BLOCK(field)->dtor = (destroySWFBlockMethod) destroySWFTextField;
 	BLOCK(field)->type = SWF_DEFINEEDITTEXT;
 
 	CHARACTERID(field) = ++SWF_gNumCharacters;

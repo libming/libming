@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "libming.h"
 #include "gradient.h"
 
 

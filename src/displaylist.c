@@ -25,9 +25,11 @@
 #include "blocks/placeobject.h"
 #include "blocks/character.h"
 #include "blocks/matrix.h"
-
 #include "displaylist.h"
 #include "position.h"
+#include "blocks/soundstream.h"
+#include "blocks/outputblock.h"
+#include "blocks/button.h"
 
 
 #define ITEM_NEW						(1<<0)
@@ -49,24 +51,24 @@ struct SWFDisplayList_s
 
 
 void
-destroySWFDisplayItem(SWFDisplayItem item)
+destroySWFDisplayItem(SWFDisplayItem displayItem)
 {
-	if ( item->position )
-		destroySWFPosition(item->position);
+	if ( displayItem->position )
+		destroySWFPosition(displayItem->position);
 
-	if ( item->matrix )
-		destroySWFMatrix(item->matrix);
+	if ( displayItem->matrix )
+		destroySWFMatrix(displayItem->matrix);
 
 	/* character is freed in blocklist */
 
-	free(item);
+	free(displayItem);
 }
 
 
 void
-destroySWFDisplayList(SWFDisplayList list)
+destroySWFDisplayList(SWFDisplayList displayList)
 {
-	SWFDisplayItem item = list->head, next;
+	SWFDisplayItem item = displayList->head, next;
 
 	while ( item != NULL )
 	{
@@ -75,7 +77,7 @@ destroySWFDisplayList(SWFDisplayList list)
 		item = next;
 	}
 
-	free(list);
+	free(displayList);
 }
 
 
@@ -532,7 +534,7 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 		if ( item->block != NULL )
 			SWFBlockList_addBlock(blocklist, (SWFBlock)item->block);
 		if(((SWFBlock)character)->type == SWF_DEFINEBUTTON2)
-		{	SWFCharacter buttonsound = getButtonSound(character);
+		{	SWFButtonSound buttonsound = getButtonSound((SWFButton) character);
 			if(buttonsound)
 				SWFBlockList_addBlock(blocklist, (SWFBlock)buttonsound);
 		}

@@ -122,10 +122,8 @@ void writeSWFFontToMethod(SWFBlock block,
 }
 
 
-void destroySWFFont(SWFBlock block)
+void destroySWFFont(SWFFont font)
 {
-  SWFFont font = (SWFFont)block;
-
   free(font->shapes);
   free(font->name);
   free(font->kernTable);

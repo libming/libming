@@ -21,8 +21,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "output.h"
+#include "error.h"
+
 
 struct SWFOutput_s
 {

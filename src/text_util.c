@@ -21,6 +21,10 @@
 
 #include "ming.h"
 #include "text_util.h"
+#include "movie.h"
+#include "blocks/text.h"
+#include "blocks/font.h"
+#include "blocks/textfield.h"
 
 
 void

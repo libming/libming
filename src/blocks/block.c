@@ -20,12 +20,10 @@
 /* $Id$ */
 
 #include <math.h>
+#include <stdlib.h>
 
 #include "block.h"
 #include "method.h"
-
-
-int SWF_gNumCharacters;
 
 
 void

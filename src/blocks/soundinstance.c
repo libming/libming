@@ -17,7 +17,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <stdlib.h>
+
 #include "soundinstance.h"
+#include "sound.h"
+#include "block.h"
+#include "method.h"
+#include "character.h"
+
 
 typedef struct
 {
@@ -135,9 +142,9 @@ SWFSoundInstance newSWFSoundInstance(SWFSound sound)
 }
 
 void
-destroySWFSoundInstance(SWFBlock inst)
+destroySWFSoundInstance(SWFSoundInstance soundInstance)
 {
-	destroySWFBlock(inst);
+	destroySWFBlock((SWFBlock) soundInstance);
 }
 
 

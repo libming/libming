@@ -17,41 +17,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* sound.h */
+/* sound.h
+ *
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
 #ifndef SWF_SOUND_H_INCLUDED
 #define SWF_SOUND_H_INCLUDED
 
-typedef struct SWFSound_s *SWFSound;
-
-#include "block.h"
-#include "method.h"
-#include "character.h"
-#include "output.h"
-#include "input.h"
+#include "ming.h"
 
 #define SWFSOUND_INITIAL_DELAY 1663
-
-#define SWF_SOUND_COMPRESSION      0xf0
-#define SWF_SOUND_NOT_COMPRESSED   (0<<4)
-#define SWF_SOUND_ADPCM_COMPRESSED (1<<4)
-#define SWF_SOUND_MP3_COMPRESSED   (2<<4)
-#define SWF_SOUND_NOT_COMPRESSED_LE (3<<4)
-#define SWF_SOUND_NELLY_COMPRESSED (6<<4)
-
-#define SWF_SOUND_RATE             0x0c
-#define SWF_SOUND_5KHZ             (0<<2)
-#define SWF_SOUND_11KHZ            (1<<2)
-#define SWF_SOUND_22KHZ            (2<<2)
-#define SWF_SOUND_44KHZ            (3<<2)
-
-#define SWF_SOUND_BITS             0x02
-#define SWF_SOUND_8BITS            (0<<1)
-#define SWF_SOUND_16BITS           (1<<1)
-
-#define SWF_SOUND_CHANNELS         0x01
-#define SWF_SOUND_MONO             (0<<0)
-#define SWF_SOUND_STEREO           (1<<0)
 
 #define SWF_SOUNDINFO_SYNCSTOPSOUND  (1<<5)
 #define SWF_SOUNDINFO_SYNCNOMULTIPLE (1<<4)
@@ -60,18 +40,7 @@ typedef struct SWFSound_s *SWFSound;
 #define SWF_SOUNDINFO_HASOUTPOINT    (1<<1)
 #define SWF_SOUNDINFO_HASINPOINT     (1<<0)
 
-
 SWFBlock newDefineSWFSoundBlock(SWFSound sound);
-
-SWFSound newSWFSound(FILE *f, byte flags);
-
-/* added by David McNab to facilitate Python access */
-SWFSound newSWFSoundFromFileno(int fd, byte flags);
-
-
-SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
-
-void destroySWFSound(SWFBlock sound);
 
 void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data);
 

@@ -17,12 +17,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* character.h
+ *
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_CHARACTER_H_INCLUDED
 #define SWF_CHARACTER_H_INCLUDED
 
-typedef struct SWFCharacter_s *SWFCharacter;
-
-#include "libswf.h"
+#include "ming.h"
 #include "block.h"
 #include "rect.h"
 
@@ -60,14 +67,12 @@ struct SWFCharacter_s
 
 /* initialize character values to something sane */
 
-void
-SWFCharacterInit(SWFCharacter character);
+void SWFCharacterInit(SWFCharacter character);
 
 
 /* destroy this character */
 
-void
-destroySWFCharacter(SWFBlock block);
+void destroySWFCharacter(SWFCharacter character);
 
 
 /* marks the given block as a dependency of the character- that is,

@@ -18,7 +18,11 @@
 */
 
 #include <stdlib.h>
+
+#include "libming.h"
 #include "blocklist.h"
+#include "blocks/block.h"
+#include "blocks/character.h"
 
 
 /*
@@ -40,8 +44,7 @@ struct SWFBlockList_s
 };
 
 
-void
-destroySWFBlockList(SWFBlockList list)
+void destroySWFBlockList(SWFBlockList list)
 {
 	int i;
 

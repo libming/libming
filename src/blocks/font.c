@@ -21,10 +21,15 @@
 
 #include <math.h>
 #include <stdio.h>
-
+#include <string.h>
+#include <stdlib.h>
 #include "font.h"
 #include "method.h"
 #include "utf8.h"
+#include "character.h"
+#include "error.h"
+#include "movie.h"
+
 
 // #define HAS_MMAP 1
 
@@ -53,53 +58,6 @@ struct textList
 	struct textList* next;
 	SWFTextRecord text;
 };
-
-struct SWFFont_s
-{
-	// even though SWFFont isn't represented in the SWF file,
-	// this lets us call destroySWFBlock(font)
-	struct SWFBlock_s block;
-
-	byte *name;
-	byte flags;
-
-	int nGlyphs;
-
-	// map from glyphs to char codes, loaded from fdb file
-	unsigned short* glyphToCode; 
-
-	// list of pointers to glyph shapes
-	byte** glyphOffset;
-
-	// shape table, mapped in from file
-	byte* shapes;
-
-	// glyph metrics
-	short* advances;
-	struct SWFRect_s* bounds;
-
-	// map from char codes to glyphs, constructed from glyphToCode map
-	// XXX - would be nice if this was in the fdb..
-	union
-	{
-		byte* charMap;
-		unsigned short** wideMap; // array of 256 arrays of 256 shorts
-	} codeToGlyph;
-
-	// font metrics
-	short ascent;
-	short descent;
-	short leading;
-
-	// font's kern table, if one is defined
-	// XXX - should be sorted for faster lookups
-	unsigned short kernCount;
-	union
-	{	struct kernInfo* k;
-		struct kernInfo16* w;
-	} kernTable;
-};
-
 
 struct SWFFontCharacter_s
 {
@@ -258,10 +216,8 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 
 void
-destroySWFFont(SWFBlock block)
+destroySWFFont(SWFFont font)
 {
-	SWFFont font = (SWFFont)block;
-
 	if ( font->shapes != NULL )
 	{
 #if HAS_MMAP
@@ -317,9 +273,8 @@ destroySWFFont(SWFBlock block)
 
 
 void
-destroySWFFontCharacter(SWFBlock block)
+destroySWFFontCharacter(SWFFontCharacter font)
 {
-	SWFFontCharacter font = (SWFFontCharacter)block;
 	struct textList* text = font->textList;
 
 	while ( text != NULL )
@@ -346,7 +301,7 @@ newSWFFont()
 	BLOCK(font)->type = SWF_UNUSEDBLOCK;
 	BLOCK(font)->writeBlock = NULL;
 	BLOCK(font)->complete = NULL;
-	BLOCK(font)->dtor = destroySWFFont;
+	BLOCK(font)->dtor = (destroySWFBlockMethod) destroySWFFont;
 
 	font->name = NULL;
 	font->flags = 0;
@@ -381,7 +336,7 @@ newSWFFontCharacter(SWFFont font)
 	BLOCK(inst)->type = SWF_DEFINEFONT2;
 	BLOCK(inst)->writeBlock = writeSWFFontCharacterToMethod;
 	BLOCK(inst)->complete = completeSWFFontCharacter;
-	BLOCK(inst)->dtor = destroySWFFontCharacter;
+	BLOCK(inst)->dtor = (destroySWFBlockMethod) destroySWFFontCharacter;
 
 	CHARACTERID(inst) = ++SWF_gNumCharacters;
 
@@ -396,8 +351,6 @@ newSWFFontCharacter(SWFFont font)
 
 	return inst;
 }
-
-extern completeSWFImportCharacter(SWFBlock block);
 
 SWFFontCharacter
 newSWFDummyFontCharacter()

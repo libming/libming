@@ -17,22 +17,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* text.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_TEXT_H_INCLUDED
 #define SWF_TEXT_H_INCLUDED
 
-typedef struct SWFText_s *SWFText;
-typedef struct SWFTextRecord_s *SWFTextRecord;
-
-#include "libswf.h"
-
+#include "ming.h"
 #include "output.h"
-#include "block.h"
-#include "matrix.h"
-#include "shape.h"
-#include "font.h"
-#include "rect.h"
-#include "character.h"
 
+
+typedef struct SWFTextRecord_s *SWFTextRecord;
 
 #define SWF_TEXT_STATE_CHANGE (1<<7)
 #define SWF_TEXT_HAS_FONT     (1<<3)
@@ -40,88 +41,42 @@ typedef struct SWFTextRecord_s *SWFTextRecord;
 #define SWF_TEXT_HAS_Y        (1<<1)
 #define SWF_TEXT_HAS_X        (1<<0)
 
+void SWFOutput_writeText(SWFOutput out, SWFText text);
 
-SWFText
-newSWFText();
+void SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);
 
-SWFText
-newSWFText2();
+void SWFText_setScaledHeight(SWFText text, int height);
 
-void
-destroySWFText(SWFBlock block);
+void SWFText_scaledMoveTo(SWFText text, int x, int y);
 
-void
-SWFOutput_writeText(SWFOutput out, SWFText text);
+void SWFText_setScaledSpacing(SWFText text, int spacing);
 
-void
-SWFText_setFont(SWFText text, void* font);
+int SWFText_getScaledStringWidth(SWFText text, const char *string);
 
-void
-SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);
+int SWFText_getScaledUTF8StringWidth(SWFText text, const char *string);
 
-void
-SWFText_setScaledHeight(SWFText text, int height);
+int SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string);
 
-void
-SWFText_scaledMoveTo(SWFText text, int x, int y);
+short SWFText_getScaledAscent(SWFText text);
 
-void
-SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
+short SWFText_getScaledDescent(SWFText text);
 
-void
-SWFText_addString(SWFText text, const char* string, int* advance);
+short SWFText_getScaledLeading(SWFText text);
 
-void
-SWFText_addUTF8String(SWFText text, const char* string, int* advance);
+void SWFText_resolveCodes(SWFText text);
 
-void
-SWFText_addWideString(SWFText text, const unsigned short* string,
-		      int strlen, int* advance);
+SWFTextRecord newSWFTextRecord();
 
-void
-SWFText_setScaledSpacing(SWFText text, int spacing);
+void destroySWFTextRecord(SWFTextRecord record);
 
-int
-SWFText_getScaledStringWidth(SWFText text, const char *string);
+int SWFTextRecord_getString(SWFTextRecord record, unsigned short** outStr);
 
-int
-SWFText_getScaledUTF8StringWidth(SWFText text, const char *string);
+SWFTextRecord SWFText_getInitialRecord(SWFText text);
 
-int
-SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string);
+SWFTextRecord SWFTextRecord_getNextRecord(SWFTextRecord record);
 
-short
-SWFText_getScaledAscent(SWFText text);
+SWFFont SWFTextRecord_getUnresolvedFont(SWFTextRecord record);
 
-short
-SWFText_getScaledDescent(SWFText text);
-
-short
-SWFText_getScaledLeading(SWFText text);
-
-void
-SWFText_resolveCodes(SWFText text);
-
-
-SWFTextRecord
-newSWFTextRecord();
-
-void
-destroySWFTextRecord(SWFTextRecord record);
-
-int
-SWFTextRecord_getString(SWFTextRecord record, unsigned short** outStr);
-
-SWFTextRecord
-SWFText_getInitialRecord(SWFText text);
-
-SWFTextRecord
-SWFTextRecord_getNextRecord(SWFTextRecord record);
-
-SWFFont
-SWFTextRecord_getUnresolvedFont(SWFTextRecord record);
-
-void
-SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);
+void SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);
 
 #endif /* SWF_TEXT_H_INCLUDED */

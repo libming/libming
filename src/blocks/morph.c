@@ -19,7 +19,14 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
+
 #include "morph.h"
+#include "character.h"
+#include "shape.h"
+#include "fillstyle.h"
+#include "linestyle.h"
+
 
 struct SWFMorph_s
 {
@@ -111,10 +118,8 @@ writeSWFMorphBlockToStream(SWFBlock block,
 
 
 void
-destroySWFMorph(SWFBlock block)
+destroySWFMorph(SWFMorph morph)
 {
-	SWFMorph morph = (SWFMorph)block;
-
 	destroySWFOutput(morph->out);
 
 	/* these must be destroyed by hand, since script wrappers can't
@@ -152,7 +157,7 @@ newSWFMorphShape()
 	BLOCK(morph)->type = SWF_DEFINEMORPHSHAPE;
 	BLOCK(morph)->writeBlock = writeSWFMorphBlockToStream;
 	BLOCK(morph)->complete = completeSWFMorphBlock;
-	BLOCK(morph)->dtor = destroySWFMorph;
+	BLOCK(morph)->dtor = (destroySWFBlockMethod) destroySWFMorph;
 
 	CHARACTERID(morph) = ++SWF_gNumCharacters;
 

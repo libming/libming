@@ -22,9 +22,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <string.h>
 
-#include "output.h"
+#include "libming.h"
 #include "matrix.h"
+
 
 struct SWFMatrix_s
 {

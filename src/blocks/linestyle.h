@@ -17,19 +17,21 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* line.h */
+/* linestyle.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#ifndef SWF_LINE_H_INCLUDED
-#define SWF_LINE_H_INCLUDED
+#ifndef SWF_LINESTYLE_H_INCLUDED
+#define SWF_LINESTYLE_H_INCLUDED
 
-typedef struct SWFLineStyle_s *SWFLineStyle;
-
+#include "ming.h"
 #include "output.h"
 #include "blocktypes.h"
-
-
-SWFLineStyle newSWFLineStyle(unsigned short width,
-			     byte r, byte g, byte b, byte a);
 
 
 /* okay, this is kinda lame.. */
@@ -42,9 +44,8 @@ void SWFOutput_writeLineStyles(SWFOutput out,
 			       SWFLineStyle *lines, int nLines,
 			       SWFBlocktype shapeType);
 
-
 void SWFOutput_writeMorphLineStyles(SWFOutput out,
 				    SWFLineStyle *lines1, int nLines1,
 				    SWFLineStyle *lines2, int nLines2);
 
-#endif /* SWF_LINE_H_INCLUDED */
+#endif /* SWF_LINESTYLE_H_INCLUDED */

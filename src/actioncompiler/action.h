@@ -1,7 +1,16 @@
-/* action.h */
+/* action.h
+ *
+ * $Id$
+ * 
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#ifndef ACTION_H_INCLUDED
-#define ACTION_H_INCLUDED
+#ifndef SWF_COMPILER_ACTION_H_INCLUDED
+#define SWF_COMPILER_ACTION_H_INCLUDED
+
+#include "ming.h"
 
 enum
 {
@@ -107,4 +116,4 @@ enum
   SWFACTION_SETREGISTER             = 0x87
 };
 
-#endif /* ACTION_H_INCLUDED */
+#endif /* SWF_COMPILER_ACTION_H_INCLUDED */

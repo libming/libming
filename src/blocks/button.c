@@ -19,7 +19,15 @@
 
 /* $Id$ */
 
+#include <stdlib.h>
 #include "button.h"
+#include "character.h"
+#include "error.h"
+#include "matrix.h"
+#include "outputblock.h"
+#include "method.h"
+#include "soundinstance.h"
+#include "browserfont.h"
 
 
 struct buttonRecord
@@ -171,7 +179,6 @@ int completeSWFButton(SWFBlock block)
 	SWFOutput out = newSWFOutput();
 	int i, length = 0, layer;
 	byte *offset;
-	extern int SWF_versionNum;
 
 	SWFOutput_writeUInt16(out, CHARACTERID(button));
 	SWFOutput_writeUInt8(out, button->menuflag);
@@ -213,9 +220,8 @@ int completeSWFButton(SWFBlock block)
 }
 
 
-void destroySWFButton(SWFBlock block)
+void destroySWFButton(SWFButton button)
 {
-	SWFButton button = (SWFButton)block;
 	int i;
 
 	for ( i=0; i<button->nRecords; ++i )
@@ -237,7 +243,7 @@ void destroySWFButton(SWFBlock block)
 
 	destroySWFOutput(button->out);
 
-	destroySWFCharacter(block);
+	destroySWFCharacter((SWFCharacter) button);
 }
 
 
@@ -252,7 +258,7 @@ newSWFButton()
 	BLOCK(button)->type = SWF_DEFINEBUTTON2;
 	BLOCK(button)->writeBlock = writeSWFButtonToMethod;
 	BLOCK(button)->complete = completeSWFButton;
-	BLOCK(button)->dtor = destroySWFButton;
+	BLOCK(button)->dtor = (destroySWFBlockMethod) destroySWFButton;
 
 	button->menuflag = 0;
 	button->nRecords = 0;
@@ -291,7 +297,7 @@ SWFButton_addSound(SWFButton button, SWFSound sound, byte flag)
 
 
 void
-destroySWFButtonSound(SWFBlock buttonSound)
+destroySWFButtonSound(SWFButtonSound buttonSound)
 {
 	free(buttonSound);
 }
@@ -353,7 +359,7 @@ newSWFButtonSound(SWFButton button)
 
 	block->writeBlock = writeSWFButtonSoundToMethod;
 	block->complete = completeSWFButtonSound;
-	block->dtor = destroySWFButtonSound;
+	block->dtor = (destroySWFBlockMethod) destroySWFButtonSound;
 
 	buttonSound->button = button;
 

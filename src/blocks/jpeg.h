@@ -17,22 +17,20 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* jpeg.h
+ * 
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
+
 #ifndef SWF_JPEG_H_INCLUDED
 #define SWF_JPEG_H_INCLUDED
 
-typedef struct SWFJpegBitmap_s *SWFJpegBitmap;
-typedef struct SWFJpegWithAlpha_s *SWFJpegWithAlpha;
+#include "ming.h"
 
-#include <stdio.h>
-#include "input.h"
-
-
-SWFJpegBitmap newSWFJpegBitmap(FILE *f);
-
-SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input);
-
-SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha);
-
-SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
+/* Currently, there are no internal functions or types */
 
 #endif /* SWF_JPEG_H_INCLUDED */

@@ -17,40 +17,22 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* fill.h */
+/* fillstyle.h
+ *
+ * $Id$
+ *
+ * Notice: This header file contains declarations of functions and types that
+ * are just used internally. All library functions and types that are supposed
+ * to be publicly accessable are defined in ./src/ming.h.
+ */
 
-#ifndef SWF_FILL_H_INCLUDED
-#define SWF_FILL_H_INCLUDED
+#ifndef SWF_FILLSTYLE_H_INCLUDED
+#define SWF_FILLSTYLE_H_INCLUDED
 
-typedef struct SWFFillStyle_s *SWFFillStyle;
-
-#include "output.h"
-#include "matrix.h"
-#include "bitmap.h"
-#include "gradient.h"
-#include "blocktypes.h"
-
-#define SWF_FILL_SOLID		 0x00
-#define SWF_FILL_GRADIENT	 0x10
-#define SWF_FILL_LINEAR_GRADIENT 0x10
-#define SWF_FILL_RADIAL_GRADIENT 0x12
-#define SWF_FILL_BITMAP		 0x40
-#define SWF_FILL_TILED_BITMAP	 0x40
-#define SWF_FILL_CLIPPED_BITMAP	 0x41
-
-/* fillstyle is a fill instance on a shape */
-
-SWFFillStyle newSWFSolidFillStyle(byte r, byte g, byte b, byte a);
-
-SWFFillStyle newSWFGradientFillStyle(SWFGradient gradient, int flags);
-
-SWFFillStyle newSWFBitmapFillStyle(SWFBitmap, int flags);
+#include "ming.h"
 
 void SWFFill_setIdx(SWFFillStyle fill, int idx);
-
 int SWFFill_getIdx(SWFFillStyle fill);
-
-SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 
 int SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2);
 
@@ -62,4 +44,4 @@ void SWFOutput_writeMorphFillStyles(SWFOutput out,
 				    SWFFillStyle *fills1, int nFills1,
 				    SWFFillStyle *fills2, int nFills2);
 
-#endif /* FILL_H_INCLUDED */
+#endif /* SWF_FILLSTYLE_H_INCLUDED */
