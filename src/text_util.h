@@ -25,6 +25,8 @@
 
 void SWFText_setHeight(SWFText text, float height);
 
+void SWFText_setSpacing(SWFText text, float spacing);
+
 void SWFText_moveTo(SWFText text, float x, float y);
 
 float SWFText_getStringWidth(SWFText text, const unsigned char *string);
