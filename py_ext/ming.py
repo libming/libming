@@ -481,6 +481,7 @@ class SWFTextField(SWFBase):
         mingc.destroySWFTextField(self.this)
 
     def setFont(self, font):
+	self.font = font
         mingc.SWFTextField_setFont(self.this, font)
 
     def setBounds(self, width, height):
