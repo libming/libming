@@ -35,7 +35,7 @@ clean:
 	cd util && make clean
 	cd py_ext && make clean
 	cd php_ext && make clean
-	rm -f test.o test test.exe *.core
+	rm -f test.o test test.exe *.core *~
 	rm -f libming.a libming.so
 
 #.c.o: .c .h

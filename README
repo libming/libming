@@ -35,6 +35,9 @@ BUILDING and INSTALLING:
 no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
 
   unpack the tarfile (which you've obviously already done)
+* select whether you want to include gif or png image formats
+* and edit config.h resp. config.make accordingly
+* (currently only the library and the php module use it)
   make
 
   for the PHP module:

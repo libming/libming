@@ -83,3 +83,5 @@ Stuff what to do (not in order):
 * Allow buffer-at-a-time output
 
   fput'ing each byte is probably slowing us down a lot..?
+
+* propagate new features to all language bindings
