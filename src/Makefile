@@ -1,7 +1,7 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
 CC = gcc -g -Wall #-fPIC -ggdb
-LDFLAGS = -lm # -ldmalloc
+LDFLAGS = -lm -lz # -ldmalloc
 
 LIBDIR = /usr/local/lib
 

@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <zlib.h>
 
 #include "ming.h"
 
@@ -407,9 +408,64 @@ SWFMovie_labelFrame(SWFMovie movie, char *label)
 int
 SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 {
-	int length;
-	SWFOutput header;
+        int length;
+        SWFOutput header;
+        SWFBlock backgroundBlock;
+
+        if ( movie->nExports > 0 )
+                SWFMovie_writeExports(movie);
+
+        while ( movie->nFrames < movie->totalFrames )
+                SWFMovie_nextFrame(movie);
+
+        SWFMovie_addBlock(movie, newSWFEndBlock());
+
+        // add five for the setbackground block..
+        length = SWFBlockList_completeBlocks(movie->blockList) + 5;
+
+        /* XXX - hack */
+        SWFDisplayList_rewindSoundStream(movie->displayList);
+
+        header = newSizedSWFOutput(20);
+
+        /* figure size, write header */
+
+        SWFOutput_writeRect(header, movie->bounds);
+        SWFOutput_writeUInt16(header, (int)floor(movie->rate*256));
+        SWFOutput_writeUInt16(header, movie->nFrames);
+
+        SWFOutput_byteAlign(header);
+        length += 8 + SWFOutput_getLength(header);
+
+        method('F', data);
+        method('W', data);
+        method('S', data);
+        method(movie->version, data);
+        methodWriteUInt32(length, method, data);
+        SWFOutput_writeToMethod(header, method, data);
+
+        destroySWFOutput(header);
+
+        backgroundBlock =
+                (SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
+
+        writeSWFBlockToMethod(backgroundBlock, method, data);
+        SWFBlockList_writeBlocksToMethod(movie->blockList, method, data);
+
+        destroySWFBlock(backgroundBlock);
+
+        return length;
+}
+
+
+int
+SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
+{
+	int swflength, status, i;
+	SWFOutput header, headerbuffer, swfbuffer;
 	SWFBlock backgroundBlock;
+	unsigned long compresslength;
+	char *compress;
 
 	if ( movie->nExports > 0 )
 		SWFMovie_writeExports(movie);
@@ -420,40 +476,71 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 	SWFMovie_addBlock(movie, newSWFEndBlock());
 
 	// add five for the setbackground block..
-	length = SWFBlockList_completeBlocks(movie->blockList) + 5;
+	swflength = SWFBlockList_completeBlocks(movie->blockList);
 
 	/* XXX - hack */
 	SWFDisplayList_rewindSoundStream(movie->displayList);
 
-	header = newSizedSWFOutput(20);
-
-	/* figure size, write header */
+	header = newSizedSWFOutput(23);
 
 	SWFOutput_writeRect(header, movie->bounds);
 	SWFOutput_writeUInt16(header, (int)floor(movie->rate*256));
 	SWFOutput_writeUInt16(header, movie->nFrames);
 
+	backgroundBlock = (SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
+        writeSWFBlockToMethod(backgroundBlock, SWFOutputMethod, header);
+	destroySWFBlock(backgroundBlock);
+	
 	SWFOutput_byteAlign(header);
-	length += 8 + SWFOutput_getLength(header);
+	swflength += 8 + SWFOutput_getLength(header);
 
-	method('F', data);
-	method('W', data);
-	method('S', data);
-	method(movie->version, data);
-	methodWriteUInt32(length, method, data);
-	SWFOutput_writeToMethod(header, method, data);
+	// compression level check
+	if (level < -1) level = -1;
+	if (level >  9) level = 9;
+
+	// reserve output buffer
+	headerbuffer = newSizedSWFOutput(8);
+	swfbuffer    = newSizedSWFOutput( swflength - 8 );
+
+	if (level >= 0) SWFOutput_writeUInt8 (headerbuffer, 'C');
+	else SWFOutput_writeUInt8 (headerbuffer, 'F');
+	SWFOutput_writeUInt8 (headerbuffer, 'W');
+	SWFOutput_writeUInt8 (headerbuffer, 'S');
+	// if compression = flash version 6
+	if (level >= 0 && movie->version < 6) SWFOutput_writeUInt8 (headerbuffer, 6);
+	else SWFOutput_writeUInt8 (headerbuffer, movie->version);
+	// Movie length
+	SWFOutput_writeUInt32(headerbuffer, swflength);
+
+	SWFOutput_writeToMethod(header, SWFOutputMethod, swfbuffer);
 
 	destroySWFOutput(header);
 
-	backgroundBlock =
-		(SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
+	// fill swfbuffer with blocklist
+	SWFBlockList_writeBlocksToMethod(movie->blockList, SWFOutputMethod, swfbuffer);
 
-	writeSWFBlockToMethod(backgroundBlock, method, data);
-	SWFBlockList_writeBlocksToMethod(movie->blockList, method, data);
-
-	destroySWFBlock(backgroundBlock);
-
-	return length;
+	// Output
+	SWFOutput_writeToMethod(headerbuffer, method, data);
+	if (level >= 0)
+	{
+		// a little bit more than the uncompressed data
+		compresslength = swflength + (swflength/1000) + 15 + 1;
+        	compress = (char *) malloc(compresslength);
+		if(compress) {
+			status = compress2 (compress, &compresslength, SWFOutput_getBuffer(swfbuffer), SWFOutput_getLength(swfbuffer), level);
+			if (status == Z_OK) {
+				for (i=0; i < compresslength; i++){
+					method (compress[i], data);
+				}
+				swflength = compresslength;
+			}
+	
+			free (compress);
+		}
+	}
+	else SWFOutput_writeToMethod(swfbuffer, method, data);
+	
+	return swflength;
 }
 
 

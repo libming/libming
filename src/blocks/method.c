@@ -20,6 +20,7 @@
 /* $Id$ */
 
 #include "method.h"
+#include "output.h"
 
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
 {
@@ -48,6 +49,10 @@ void fileOutputMethod(byte b, void *data)
 }
 
 
+void SWFOutputMethod(byte i, void *data)
+{
+	SWFOutput_writeUInt8(data, i);
+}
 /*
  * Local variables:
  * tab-width: 2

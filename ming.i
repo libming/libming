@@ -72,7 +72,7 @@ void SWFMovie_labelFrame(SWFMovie movie, char *label);
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 
 int SWFMovie_simpleOutput(SWFMovie movie);
-int SWFMovie_save(SWFMovie movie, const char* filename);
+int SWFMovie_save(SWFMovie movie, const char* filename, int level);
 void SWFMovie_saveToFileNo(SWFMovie movie, int fd);
 
 %{

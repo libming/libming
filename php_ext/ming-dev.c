@@ -1428,10 +1428,26 @@ static void phpByteOutputMethod(byte b, void *data)
 
 PHP_FUNCTION(swfmovie_output)
 {
-  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+	zval **zlimit = NULL;
+	int limit = -1;
+	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
-  RETURN_LONG(SWFMovie_output(movie, &phpByteOutputMethod, NULL));
+	switch (ZEND_NUM_ARGS()) {
+	case 1:
+		if (zend_get_parameters_ex(1, &zlimit) == FAILURE)
+			WRONG_PARAM_COUNT;
+		convert_to_long_ex(zlimit);
+		limit = Z_LVAL_PP(zlimit);
+		if((limit<0)||(limit>9)) {
+			php_error(E_WARNING,"compression level must be within 0..9");
+			RETURN_FALSE;
+		}
+		break;
+	}
+
+	RETURN_LONG(SWFMovie_outputC(movie, &phpByteOutputMethod, NULL, limit));
 }
+
 /* }}} */
 
 /* {{{ swfmovie_saveToFile
@@ -1455,23 +1471,41 @@ PHP_FUNCTION(swfmovie_saveToFile)
 	ZEND_FETCH_RESOURCE(what, php_stream *, x, -1,"File-Handle",php_file_le_stream());
 	RETURN_LONG(SWFMovie_output(movie, &phpStreamOutputMethod, what));
 }
+
+
 /* }}} */
 
 /* {{{ swfmovie_save
 */
 PHP_FUNCTION(swfmovie_save)
 {
-	zval **x;
+	zval **x, **zlimit = NULL;
+	int limit = -1;
 	long retval;
 	php_stream *stream;
 
-	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &x) == FAILURE) {
+	switch (ZEND_NUM_ARGS()) {
+	case 1:
+		if (zend_get_parameters_ex(1, &x) == FAILURE)
+			WRONG_PARAM_COUNT;
+		break;
+	case 2:
+		if (zend_get_parameters_ex(2, &x, &zlimit) == FAILURE)
+			WRONG_PARAM_COUNT;
+		convert_to_long_ex(zlimit);
+		limit = Z_LVAL_PP(zlimit);
+		if((limit<0)||(limit>9)) {
+			php_error(E_WARNING,"compression level must be within 0..9");
+			RETURN_FALSE;
+		}
+		break;
+	default:
 		WRONG_PARAM_COUNT;
 	}
-
+		  
 	if (Z_TYPE_PP(x) == IS_RESOURCE) {
 		ZEND_FETCH_RESOURCE(stream, php_stream *, x, -1,"File-Handle",php_file_le_stream());
-		RETURN_LONG(SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpStreamOutputMethod, stream));
+		RETURN_LONG(SWFMovie_outputC(getMovie(getThis() TSRMLS_CC), &phpStreamOutputMethod, stream, limit));
 	}
 
 	convert_to_string_ex(x);
@@ -1481,7 +1515,7 @@ PHP_FUNCTION(swfmovie_save)
 		RETURN_FALSE;
 	}
 	
-	retval = SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpStreamOutputMethod, (void *)stream);
+	retval = SWFMovie_outputC(getMovie(getThis() TSRMLS_CC), &phpStreamOutputMethod, (void *)stream, limit);
 	php_stream_close(stream);
 	RETURN_LONG(retval);
 }
