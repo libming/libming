@@ -42,6 +42,10 @@ struct SWFText_s
 	byte nGlyphBits;
 	SWFTextRecord initialRecord;
 	SWFTextRecord currentRecord;
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 struct SWFTextRecord_s
@@ -151,6 +155,10 @@ destroySWFText(SWFText text)
 		record = next;
 	}
 
+#if TRACK_ALLOCS
+	ming_gc_remove_node(text->gcnode);
+#endif
+
 	destroySWFCharacter((SWFCharacter) text);
 }
 
@@ -176,6 +184,10 @@ newSWFText()
 	text->initialRecord = NULL;
 	text->matrix = NULL;
 	text->nAdvanceBits = 0;
+
+#if TRACK_ALLOCS
+	text->gcnode = ming_gc_add_node(text, destroySWFBitmap);
+#endif
 
 	return text;
 }
