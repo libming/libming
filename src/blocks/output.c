@@ -116,7 +116,7 @@ int SWFOutput_length(SWFOutput out)
 /* make sure there's enough space for bytes bytes */
 void SWFOutput_checkSize(SWFOutput out, int bytes)
 {
-  if(bytes > out->free)
+  if(bytes >= out->free)
   {
     int new = OUTPUT_BUFFER_INCREMENT *
               ((bytes-out->free-1)/OUTPUT_BUFFER_INCREMENT + 1);
