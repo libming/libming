@@ -168,13 +168,13 @@ PHP_FUNCTION(swfbutton_addAction);
 PHP_FUNCTION(swfbutton_keypress);
 
 PHP_FUNCTION(swfaction_init);
-PHP_FUNCTION(swfaction_add);
 
 PHP_FUNCTION(swfmorph_init);
 PHP_FUNCTION(swfmorph_getShape1);
 PHP_FUNCTION(swfmorph_getShape2);
 
 PHP_FUNCTION(ming_setCubicThreshold);
+PHP_FUNCTION(ming_setScale);
 
 #else
 #define ming_module_ptr NULL
