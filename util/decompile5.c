@@ -643,7 +643,11 @@ static Stack readActionRecord(FILE *f)
       return newTreeBase(NULL, type, (Stack)readSInt16(f));
 
     case SWFACTION_WAITFORFRAME:
-      return newTreeBase((Stack)readUInt16(f), type, (Stack)readUInt8(f));
+	{
+	  Stack left = (Stack)readUInt16(f);
+	  Stack right = (Stack)readUInt8(f);
+      return newTreeBase(left, type, right);
+	}
 
     case SWFACTION_END:
       return NULL;
