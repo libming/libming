@@ -35,14 +35,14 @@ SWFTextField_new(package="SWF::TextField", ...)
         }
 
 void
-destroySWFTextField(block)
-        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+destroySWFTextField(field)
+        SWF::TextField	field
         ALIAS:
         SWF::TextField::DESTROY = 1
 	CODE:
         S_DEBUG(2, fprintf(stderr, "TextField DESTROY CALLED\n"));
 	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
-        destroySWFTextField(block);
+        destroySWFTextField(field);
 
 void
 SWFTextField_setFont(field, font)
