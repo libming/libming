@@ -49,7 +49,7 @@ static: ${OFILES}
 clean:
 	cd blocks && $(MAKE) clean
 	cd actioncompiler && $(MAKE) clean
-	rm -f *.o libming.a libming.so test test.exe core *.core
+	rm -f *.o libming.a $(SHAREDLIB) libming.so test test.exe core *.core
 
 # breaks on bsd:
 #.c.o: .c .h
