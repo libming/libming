@@ -124,7 +124,7 @@ Buffer bf, bc;
 %type <action> anon_function_decl function_decl anycode
 %type <action> void_function_call function_call method_call
 %type <action> assign_stmt assign_stmts assign_stmts_opt
-%type <action> expr expr_or_obj objexpr expr_opt obj_ref
+%type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
 %type <lval> lvalue
 
@@ -432,25 +432,30 @@ function_decl
 		  free($2); }
 	;
 
+inpart
+	: IN obj_ref
+		{ $$ = $2; }
+	;
+
 obj_ref
-	: identifier
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $1, strlen($1)+1);
-		  free($1); }
+	: lvalue
+		{ if($1.obj)
+		  {
+		    $$ = $1.obj;
 
-	| expr '.' identifier
-		{ $$ = $1;
-		  bufferWriteString($$, $3, strlen($3)+1);
-		  bufferWriteOp($$, SWFACTION_GETMEMBER);
-		  free($3); }
+		    if($1.ident)
+		      bufferConcat($$, $1.ident);
+		    else
+		      bufferConcat($$, $1.memexpr);
 
-	| expr '[' expr ']'
-		{ $$ = $1;
-		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_GETMEMBER); }
-
+		    bufferWriteOp($$, SWFACTION_GETMEMBER);
+		  }
+		  else
+		  {
+		    $$ = $1.ident;
+		  }
+		}
 	| function_call
-
 	| method_call
 	;
 
@@ -536,11 +541,11 @@ iter_stmt
 				  delctx(CTX_LOOP);
                 }
 
-	| FOR '(' identifier IN obj_ref ')' for_in_init stmt
+	| FOR '(' identifier inpart ')' for_in_init stmt
 		{ Buffer b2, b3;
 		  int tmp;
 
-		  $$ = $5;
+		  $$ = $4;
 		  bufferWriteOp($$, SWFACTION_ENUMERATE);	
 
 		  b2 = newBuffer();
@@ -558,7 +563,7 @@ iter_stmt
 		  bufferWriteString(b3, $3, strlen($3)+1);
 		  bufferWriteRegister(b3, 0);
 		  bufferWriteOp(b3, SWFACTION_SETVARIABLE);
-		  bufferConcat(b3, $8);
+		  bufferConcat(b3, $7);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
 		  bufferConcat($$, b2);
@@ -570,11 +575,11 @@ iter_stmt
 		  delctx(CTX_FOR_IN);
 		  free($3); }
 
-	| FOR '(' VAR identifier IN obj_ref ')' for_in_init stmt
+	| FOR '(' VAR identifier inpart ')' for_in_init stmt
 		{ Buffer b2, b3;
 		  int tmp;
 
-		  $$ = $6;
+		  $$ = $5;
 		  bufferWriteOp($$, SWFACTION_ENUMERATE);	
 
 		  b2 = newBuffer();
@@ -591,7 +596,7 @@ iter_stmt
 		  bufferWriteString(b3, $4, strlen($4)+1);
 		  bufferWriteRegister(b3, 0);
 		  bufferWriteOp(b3, SWFACTION_VAREQUALS);
-		  bufferConcat(b3, $9);
+		  bufferConcat(b3, $8);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
 		  bufferConcat($$, b2);
