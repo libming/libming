@@ -388,7 +388,7 @@ add_imports()
 {
 	int i;
 	SWFMovieClip mc;
-	//SWFDisplayItem di;
+	SWFDisplayItem di;
 	SWFAction ac;
 	struct stat statbuf;
 
@@ -421,9 +421,10 @@ add_imports()
 		printf("\n");
 	}
 
-	ac = compileSWFActionCode("_visible=false;");
-	SWFMovieClip_add(mc, (SWFBlock)ac);
-	SWFMovie_add(mo, (SWFBlock)mc);
+	di = SWFMovie_add(mo, (SWFBlock)mc);
+	SWFDisplayItem_setName(di, "__shared_assets");
+	ac = compileSWFActionCode("__shared_assets._visible=false;");
+	SWFMovie_add(mo, (SWFBlock)ac);
 
 	return 1;
 }
@@ -431,6 +432,11 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.9  2004/09/28 14:39:50  strk
+ * Forced imported assets inclusion by mean of instantiation.
+ * Symbols are instantiated inside a __shared_assets clip, which in turn
+ * is made invisible.
+ *
  * Revision 1.8  2004/09/28 14:09:07  strk
  * Added assets import support.
  *
