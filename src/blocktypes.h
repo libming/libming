@@ -38,7 +38,8 @@ typedef enum
   SWF_PROTECT			= 24,
   SWF_STARTSOUND		= 15,
   SWF_END			=  0,
-  SWF_DOACTION		        = 12
+  SWF_DOACTION		        = 12,
+  SWF_EXPORTASSETS              = 56
 } SWFBlocktype;
 
 #endif /* SWF_BLOCKTYPES_H_INCLUDED */
