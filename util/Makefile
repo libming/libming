@@ -10,7 +10,7 @@ all:
 	cat README
 
 all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp png2dbl gif2dbl \
-	gif2mask listaction raw2adpcm
+	gif2mask listaction raw2adpcm png2swf
 
 clean:
 	rm -f *.o listswf listswf.exe \
@@ -65,6 +65,9 @@ gif2dbl: gif2dbl.c
 raw2adpcm: raw2adpcm.c
 	${CC} raw2adpcm.c -o raw2adpcm -lming -lm
 
+png2swf: png2swf.c
+	${CC} png2swf.c -o png2swf ../ming/libming.a -lm -lz -lpng
+
 install: all_binaries
 	install -d $(BINDIR)
 	install -m 0755 swftophp $(BINDIR)
@@ -77,3 +80,4 @@ install: all_binaries
 	install -m 0755 gif2dbl $(BINDIR)
 	install -m 0755 gif2mask $(BINDIR)
 	install -m 0755 raw2adpcm $(BINDIR)
+	install -m 0755 png2swf $(BINDIR)
