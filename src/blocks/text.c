@@ -378,41 +378,40 @@ void SWFText_resolveCodes(SWFText text)
 
     SWFOutput_byteAlign(out);
 
-    /* record type 1 */
-    if(textRecord->flags != 0)
+    /* Raff says the spec lies- there's always a change record, even if
+       it's empty, and the string record length is the full 8 bits. */
+
+    SWFOutput_writeUInt8(out, textRecord->flags | SWF_TEXT_STATE_CHANGE);
+
+    if(textRecord->flags & SWF_TEXT_HAS_FONT)
+      SWFOutput_writeUInt16(out, FONTID(textRecord));
+
+    if(textRecord->flags & SWF_TEXT_HAS_COLOR)
     {
-      SWFOutput_writeUInt8(out, textRecord->flags | SWF_TEXT_STATE_CHANGE);
+      SWFOutput_writeUInt8(out, textRecord->r);
+      SWFOutput_writeUInt8(out, textRecord->g);
+      SWFOutput_writeUInt8(out, textRecord->b);
 
-      if(textRecord->flags & SWF_TEXT_HAS_FONT)
-	SWFOutput_writeUInt16(out, FONTID(textRecord));
+      if(BLOCK(text)->type == SWF_DEFINETEXT2)
+	SWFOutput_writeUInt8(out, textRecord->a);
+    }
 
-      if(textRecord->flags & SWF_TEXT_HAS_COLOR)
-      {
-	SWFOutput_writeUInt8(out, textRecord->r);
-	SWFOutput_writeUInt8(out, textRecord->g);
-	SWFOutput_writeUInt8(out, textRecord->b);
+    if(textRecord->flags & SWF_TEXT_HAS_X)
+    {
+      SWFOutput_writeUInt16(out, textRecord->x);
+      curX = textRecord->x;
+    }
 
-	if(BLOCK(text)->type == SWF_DEFINETEXT2)
-	  SWFOutput_writeUInt8(out, textRecord->a);
-      }
+    if(textRecord->flags & SWF_TEXT_HAS_Y)
+    {
+      SWFOutput_writeUInt16(out, textRecord->y);
+      curY = textRecord->y;
+    }
 
-      if(textRecord->flags & SWF_TEXT_HAS_X)
-      {
-	SWFOutput_writeUInt16(out, textRecord->x);
-	curX = textRecord->x;
-      }
-
-      if(textRecord->flags & SWF_TEXT_HAS_Y)
-      {
-	SWFOutput_writeUInt16(out, textRecord->y);
-	curY = textRecord->y;
-      }
-
-      if(textRecord->flags & SWF_TEXT_HAS_FONT)
-      {
-	SWFOutput_writeUInt16(out, textRecord->height);
-	curH = textRecord->height;
-      }
+    if(textRecord->flags & SWF_TEXT_HAS_FONT)
+    {
+      SWFOutput_writeUInt16(out, textRecord->height);
+      curH = textRecord->height;
     }
 
     /* record type 0 */
@@ -421,10 +420,13 @@ void SWFText_resolveCodes(SWFText text)
     else
       l = 0;
 
-    assert(l<128);
+    assert(l<256);
 
     SWFOutput_writeUInt8(out, l);
 
+    /* XXX - er, browser fonts in text objects crash the player..
+       Maybe because there's no definefontinfo block? */
+    
     if(textRecord->isBrowserFont)
     {
       for(i=0; i<l; ++i)
