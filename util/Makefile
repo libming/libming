@@ -14,6 +14,7 @@ all_binaries: listswf listfdb makefdb listjpeg swftophp png2dbl gif2dbl \
 
 clean:
 	rm -f *.o listswf listswf.exe \
+		  listaction listaction.exe \
 		  bindump bindump.exe \
 		  hexdump hexdump.exe \
 		  listfdb listfdb.exe \
