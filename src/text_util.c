@@ -43,11 +43,11 @@ float SWFText_getAscent(SWFText text)
 }
 float SWFText_getDescent(SWFText text)
 {
-  return SWFText_getDescent(text)/Ming_scale;
+  return SWFText_getScaledDescent(text)/Ming_scale;
 }
 float SWFText_getLeading(SWFText text)
 {
-  return SWFText_getLeading(text)/Ming_scale;
+  return SWFText_getScaledLeading(text)/Ming_scale;
 }
 
 float SWFFont_getStringWidth(SWFFont font, const unsigned char *string)
@@ -60,11 +60,11 @@ float SWFFont_getAscent(SWFFont font)
 }
 float SWFFont_getDescent(SWFFont font)
 {
-  return SWFFont_getDescent(font)/Ming_scale;
+  return SWFFont_getScaledDescent(font)/Ming_scale;
 }
 float SWFFont_getLeading(SWFFont font)
 {
-  return SWFFont_getLeading(font)/Ming_scale;
+  return SWFFont_getScaledLeading(font)/Ming_scale;
 }
 
 void SWFTextField_setBounds(SWFTextField field, float width, float height)
