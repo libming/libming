@@ -1,7 +1,8 @@
 #!/bin/sh
 aclocal
 libtoolize --force
-automake -a
-autoconf
+autoheader -f
+automake -a -c
+autoconf -f
 ./configure --enable-maintainer-mode
 

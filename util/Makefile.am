@@ -1,5 +1,3 @@
-all:
-	cat README
 
 DEFS = @DEFS@ -DNODECOMPILE
 

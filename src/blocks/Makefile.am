@@ -11,29 +11,40 @@ libswf_la_SOURCES = \
 	character.c \
 	cxform.c \
 	dbl.c \
+	error.c \
 	fillstyle.c \
 	font.c \
 	fontinfo.c \
+	fromswf.c \
+	gifdbl.c \
 	gradient.c \
+	imports.c \
+	input.c \
 	jpeg.c \
 	linestyle.c \
-	loadfont.c \
 	matrix.c \
 	method.c \
 	morph.c \
 	mp3.c \
-	outputblock.c \
 	output.c \
+	outputblock.c \
+	placeobject.c \
+	pngdbl.c \
+	read.c \
 	rect.c \
 	shape.c \
+	sound.c \
+	soundinstance.c \
 	soundstream.c \
 	sprite.c \
 	text.c \
 	textfield.c \
+	ttffont.c \
 	utf8.c \
 	videostream.c
 
 libswf_la_LDFLAGS = $(MATHLIB)
+libswf_la_CFLAGS = -I$(top_srcdir)/src
 
 #EXTRA_PROGRAMS = test
 
@@ -51,31 +62,35 @@ noinst_HEADERS = \
 	character.h \
 	cxform.h \
 	dbl.h \
+	error.h \
+	exports.h \
 	fillstyle.h \
 	font.h \
 	fontinfo.h \
+	fromswf.h \
 	gradient.h \
+	imports.h \
+	input.h \
 	jpeg.h \
 	libswf.h \
 	linestyle.h \
 	matrix.h \
 	method.h \
 	morph.h \
-	outputblock.h \
 	output.h \
+	outputblock.h \
+	placeobject.h \
 	rect.h \
 	shape.h \
 	sound.h \
+	soundinstance.h \
 	soundstream.h \
 	sprite.h \
 	swf.h \
-	textfield.h \
 	text.h \
-	ttffont.h 
-
-EXTRA_DIST = \
-	read.c \
-	sound.c \
-	ttffont.c
+	textfield.h \
+	ttffont.h \
+	utf8.h \
+	videostream.h
 
 
