@@ -402,12 +402,14 @@ formals_list
 	| identifier
 		{ $$.buffer = newBuffer();
 		  bufferWriteHardString($$.buffer, (byte*)$1, strlen($1)+1);
-		  $$.count = 1; }
+		  $$.count = 1;
+		  free($1); }
 
 	| formals_list ',' identifier
 		{ $$ = $1;
 		  bufferWriteHardString($$.buffer, (byte*)$3, strlen($3)+1);
-		  ++$$.count; }
+		  ++$$.count;
+		  free($3); }
 	;
 
 function_init
@@ -426,7 +428,8 @@ function_decl
 		  bufferConcat($$, $4.buffer);
 		  bufferWriteS16($$, bufferLength($6));
 		  bufferConcat($$, $6);
-		  delctx(CTX_FUNCTION); }
+		  delctx(CTX_FUNCTION);
+		  free($2); }
 	;
 
 obj_ref
@@ -564,7 +567,8 @@ iter_stmt
 		  bufferWriteS16(b3, -tmp);
 		  bufferResolveJumps(b3);
 		  bufferConcat($$, b3);
-		  delctx(CTX_FOR_IN); }
+		  delctx(CTX_FOR_IN);
+		  free($3); }
 
 	| FOR '(' VAR identifier IN obj_ref ')' for_in_init stmt
 		{ Buffer b2, b3;
@@ -596,7 +600,8 @@ iter_stmt
 		  bufferWriteS16(b3, -tmp);
 		  bufferResolveJumps(b3);
 		  bufferConcat($$, b3);
-		  delctx(CTX_FOR_IN); }
+		  delctx(CTX_FOR_IN);
+		  free($4); }
 	;
 
 assign_stmts_opt
@@ -941,7 +946,8 @@ objexpr
 	: identifier ':' expr_or_obj
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferConcat($$, $3); }
+		  bufferConcat($$, $3);
+		  free($1); }
 	;
 
 objexpr_list
@@ -1023,6 +1029,7 @@ lvalue
 		{ $$.obj = $1;
 		  $$.ident = newBuffer();
 		  bufferWriteString($$.ident, $3, strlen($3)+1);
+		  free($3);
 		  $$.memexpr = 0; }
 
 	| lvalue_expr '[' expr ']' %prec '.'
@@ -1202,12 +1209,14 @@ expr_or_obj
 		{ $$ = newBuffer();
 		  bufferWriteInt($$, 0);
 		  bufferWriteString($$, $2, strlen($2)+1);
+		  free($2);
 		  bufferWriteOp($$, SWFACTION_NEW); }
 
 	| NEW identifier '(' expr_list ')'
 		{ $$ = $4.buffer;
 		  bufferWriteInt($$, $4.count);
 		  bufferWriteString($$, $2, strlen($2)+1);
+		  free($2);
 		  bufferWriteOp($$, SWFACTION_NEW); }
 
 	| '[' expr_list ']'
@@ -1371,12 +1380,14 @@ init_var
 	: identifier '=' expr_or_obj
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
+		  free($1);
 		  bufferConcat($$, $3);
 		  bufferWriteOp($$, SWFACTION_VAREQUALS); }
 
 	| identifier
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
+		  free($1);
 		  bufferWriteOp($$, SWFACTION_VAR); }
 	;
 
