@@ -76,7 +76,7 @@ void swf4ParseInit(const char *script, int debug)
 
 %{
  void do_unput4(const char *x) { unput(*x); }
-}%
+%}
 
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
