@@ -26,7 +26,6 @@
 
 typedef unsigned char byte;
 
-
 extern void (*SWF_warn)(char *msg, ...);
 extern void (*SWF_error)(char *msg, ...);
 
@@ -178,8 +177,6 @@ SWFMatrix SWFMatrix_set(SWFMatrix m,
 			float a, float b, float c, float d, int x, int y);
 void SWFMatrix_clearTranslate(SWFMatrix m);
 void SWFMatrix_clearTransform(SWFMatrix m);
-
-void SWFMatrix_copy(SWFMatrix src, SWFMatrix dest);
 
 
   /* SWFFont */
