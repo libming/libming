@@ -10,8 +10,7 @@ php_ming.so: ming.o
 
 ming.o: ${CFILES}
 	${CC} ${DEFINES} -c ming.c \
-	  -I. -I.. -I${prefix}/include/php -I${prefix}/include/php/main \
-	  -I${prefix}/include/php/Zend -I${prefix}/include/php/TSRM -lm
+	  -I. -I.. `php-config --includes` -lm
 
 clean:
 	rm -f php_ming.so
