@@ -40,45 +40,75 @@ typedef struct SWFTextRecord_s *SWFTextRecord;
 #define SWF_TEXT_HAS_Y        (1<<1)
 #define SWF_TEXT_HAS_X        (1<<0)
 
-#define FONTID(t) (((t)->isBrowserFont) ? CHARACTERID((t)->font.browserFont) : CHARACTERID((t)->font.font))
+
+SWFText
+newSWFText();
+
+SWFText
+newSWFText2();
+
+void
+destroySWFText(SWFBlock block);
+
+void
+SWFOutput_writeText(SWFOutput out, SWFText text);
+
+void
+SWFText_setFont(SWFText text, void* font);
+
+void
+SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);
+
+void
+SWFText_setScaledHeight(SWFText text, int height);
+
+void
+SWFText_scaledMoveTo(SWFText text, int x, int y);
+
+void
+SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
+
+void
+SWFText_addString(SWFText text, const char *string, int *advance);
+
+void
+SWFText_setScaledSpacing(SWFText text, int spacing);
+
+int
+SWFText_getScaledStringWidth(SWFText text, const char *string);
+
+short
+SWFText_getScaledAscent(SWFText text);
+
+short
+SWFText_getScaledDescent(SWFText text);
+
+short
+SWFText_getScaledLeading(SWFText text);
+
+void
+SWFText_resolveCodes(SWFText text);
 
 
-SWFText newSWFText();
+SWFTextRecord
+newSWFTextRecord();
 
-SWFText newSWFText2();
+void
+destroySWFTextRecord(SWFTextRecord record);
 
-void destroySWFText(SWFBlock block);
+int
+SWFTextRecord_getString(SWFTextRecord record, unsigned short** outStr);
 
-void SWFOutput_writeText(SWFOutput out, SWFText text);
+SWFTextRecord
+SWFText_getInitialRecord(SWFText text);
 
-void SWFText_setFont(SWFText text, SWFBlock font);
+SWFTextRecord
+SWFTextRecord_getNextRecord(SWFTextRecord record);
 
-void SWFText_setScaledHeight(SWFText text, int height);
+SWFFont
+SWFTextRecord_getFont(SWFTextRecord record);
 
-void SWFText_scaledMoveTo(SWFText text, int x, int y);
-
-void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-
-void SWFText_addString(SWFText text, const char *string, int *advance);
-
-void SWFText_setSpacing(SWFText text, float spacing);
-
-int SWFText_getScaledStringWidth(SWFText text, const char *string);
-
-short SWFText_getScaledAscent(SWFText text);
-
-short SWFText_getScaledDescent(SWFText text);
-
-short SWFText_getScaledLeading(SWFText text);
-
-void SWFText_resolveCodes(SWFText text);
-
-SWFTextRecord newSWFTextRecord();
-
-void destroySWFTextRecord(SWFTextRecord record);
-
-char *SWFTextRecord_getString(SWFTextRecord record);
-
-SWFTextRecord SWFTextRecord_getNext(SWFTextRecord record);
+void
+SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);
 
 #endif /* SWF_TEXT_H_INCLUDED */

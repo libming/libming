@@ -20,8 +20,8 @@
 #ifndef SWF_FONT_H_INCLUDED
 #define SWF_FONT_H_INCLUDED
 
-typedef struct SWFTextList_s *SWFTextList;
 typedef struct SWFFont_s *SWFFont;
+typedef struct SWFFontCharacter_s *SWFFontCharacter;
 
 #include "libswf.h"
 
@@ -42,38 +42,72 @@ typedef struct SWFFont_s *SWFFont;
 #define SWF_FONT_ISITALIC     (1<<0)
 
 
-SWFFont newSWFFont();
+SWFFont
+newSWFFont();
 
-void destroySWFFont(SWFBlock block);
+void
+destroySWFFont(SWFFont font);
 
-SWFFont loadSWFFontFromFile(FILE *file);
+SWFFont
+loadSWFFontFromFile(FILE *file);
 
-void SWFFont_addTextToList(SWFFont font, SWFTextRecord text);
+byte*
+SWFFont_findGlyph(SWFFont font, unsigned short c);
 
-void SWFFont_resolveTextList(SWFFont font);
+const char*
+SWFFont_getName(SWFFont font);
 
-byte *SWFFont_findCharacterGlyph(SWFFont font, unsigned char c);
+byte
+SWFFont_getFlags(SWFFont font);
 
-const char* SWFFont_getName(SWFFont font);
+int
+SWFFont_getScaledStringWidth(SWFFont font,
+			     const unsigned short* string, int len);
 
-byte SWFFont_getFlags(SWFFont font);
+int
+SWFFont_getScaledUTF8StringWidth(SWFFont font, const char* string);
 
-int SWFFont_getNGlyphs(SWFFont font);
+short
+SWFFont_getScaledAscent(SWFFont font);
 
-int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string);
+short
+SWFFont_getScaledDescent(SWFFont font);
 
-short SWFFont_getScaledAscent(SWFFont font);
+short
+SWFFont_getScaledLeading(SWFFont font);
 
-short SWFFont_getScaledDescent(SWFFont font);
+SWFRect
+SWFFont_getGlyphBounds(SWFFont font, unsigned short c);
 
-short SWFFont_getScaledLeading(SWFFont font);
+int
+SWFFont_getCharacterAdvance(SWFFont font, unsigned short c);
 
-int SWFFont_getGlyphCode(SWFFont font, byte c);
+int
+SWFFont_getCharacterKern(SWFFont font, unsigned short c1, unsigned short c2);
 
-SWFRect SWFFont_getGlyphBounds(SWFFont font, byte c);
 
-int SWFFont_getCharacterAdvance(SWFFont font, byte c);
+/* SWFFontCharacter is a movie's instance of a font */
 
-int SWFFont_getCharacterKern(SWFFont font, byte c1, byte c2);
+SWFFontCharacter
+newSWFFontCharacter(SWFFont font);
+
+void
+destroySWFFontCharacter(SWFBlock block);
+
+void
+SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
+			     unsigned short start, unsigned short end);
+
+SWFFont
+SWFFontCharacter_getFont(SWFFontCharacter font);
+
+int
+SWFFontCharacter_getNGlyphs(SWFFontCharacter font);
+
+void
+SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text);
+
+int
+SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short c);
 
 #endif /* SWF_FONT_H_INCLUDED */
