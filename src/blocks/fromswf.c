@@ -1127,7 +1127,7 @@ static void definebuttonsound(TAG tp)
 extern int SWF_gNumCharacters;
 
 SWFPrebuiltClip
-SWFPrebuiltClip_fromInput(SWFInput input)
+newSWFPrebuiltClip_fromInput(SWFInput input)
 {	SWFPrebuiltClip clip;
 	SWFOutput display, defines, out;
 	SWFPrebuilt deps;
@@ -1169,14 +1169,14 @@ SWFPrebuiltClip_fromInput(SWFInput input)
 }
 
 SWFPrebuiltClip
-SWFPrebuiltClip_fromFile(const char *filename)
+newSWFPrebuiltClip_fromFile(const char *filename)
 {	FILE *fp;
 	SWFPrebuiltClip clip;
 	SWFInput input;
 	if(!(fp = fopen(filename, "rb")))
 		return NULL;
 	input = newSWFInput_file(fp);
-	clip = SWFPrebuiltClip_fromInput(input);
+	clip = newSWFPrebuiltClip_fromInput(input);
 	destroySWFInput(input);
 	fclose(fp);
 	return clip;
