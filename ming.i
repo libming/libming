@@ -69,7 +69,7 @@ void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 void SWFMovie_nextFrame(SWFMovie movie);
 void SWFMovie_labelFrame(SWFMovie movie, char *label);
 
-int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
+int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
 
 int SWFMovie_simpleOutput(SWFMovie movie);
 int SWFMovie_save(SWFMovie movie, const char* filename, int level);
@@ -81,11 +81,11 @@ void my_fileno_write (unsigned char c, void * fd) {
 }
 
 int SWFMovie_simpleOutput(SWFMovie movie) {
-   return SWFMovie_output(movie, my_fileno_write, (void *)1);
+   return SWFMovie_output(movie, my_fileno_write, (void *)1, 0);
 }
 
 int SWFMovie_saveToFileNo(SWFMovie movie, int fd) {
-   return SWFMovie_output(movie, my_fileno_write, (void *)fd);
+   return SWFMovie_output(movie, my_fileno_write, (void *)fd, 0);
 }
 
 %}
@@ -343,6 +343,9 @@ void SWFTextField_setLength(SWFTextField field, int length);
 #define SWF_SOUND_COMPRESSION      0xf0
 #define SWF_SOUND_NOT_COMPRESSED   (0<<4)
 #define SWF_SOUND_ADPCM_COMPRESSED (1<<4)
+#define SWF_SOUND_MP3_COMPRESSED   (2<<4)
+#define SWF_SOUND_NOT_COMPRESSED_LE (3<<4)
+#define SWF_SOUND_NELLY_COMPRESSED (6<<4)
 
 #define SWF_SOUND_RATE             0x0c
 #define SWF_SOUND_5KHZ             (0<<2)
@@ -358,7 +361,7 @@ void SWFTextField_setLength(SWFTextField field, int length);
 #define SWF_SOUND_MONO             (0<<0)
 #define SWF_SOUND_STEREO           (1<<0)
 
-SWFSound newSWFSound(FILE *READ);
+SWFSound newSWFSound(FILE *READ, int flags);
 void destroySWFSound(SWFSound sound);
 
 
