@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -49,12 +49,21 @@ void fileOutputMethod(byte b, void *data);
 typedef void *SWFBlock, *SWFMatrix;
 
 
-  /* SWFRect */
+  /* SWFInput */
 
-typedef void *SWFRect;
+typedef void *SWFInput;
 
-int SWFRect_getWidth(SWFRect r);
-int SWFRect_getHeight(SWFRect r);
+int SWFInput_length(SWFInput input);
+void SWFInput_rewind(SWFInput input);
+int SWFInput_tell(SWFInput input);
+void SWFInput_seek(SWFInput input, long offset, int whence);
+int SWFInput_eof(SWFInput input);
+
+SWFInput newSWFInput_file(FILE *f);
+SWFInput newSWFInput_stream(FILE *f);
+SWFInput newSWFInput_buffer(unsigned char *buffer, int length);
+
+void destroySWFInput(SWFInput input);
 
 
   /* SWFCharacter */
@@ -63,7 +72,8 @@ int SWFRect_getHeight(SWFRect r);
 
 typedef void *SWFCharacter;
 
-SWFRect SWFCharacter_getBounds(SWFCharacter character);
+float SWFCharacter_getWidth(SWFCharacter character);
+float SWFCharacter_getHeight(SWFCharacter character);
 
 
   /* SWFBitmap */
@@ -80,6 +90,7 @@ int SWFBitmap_getHeight(SWFBitmap b);
 typedef void *SWFDBLBitmap;
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f);
+SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
 
   /* SWFJpegBitmap extends SWFBitmap */
@@ -87,7 +98,9 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 typedef void *SWFJpegBitmap, *SWFJpegWithAlpha;
 
 SWFJpegBitmap newSWFJpegBitmap(FILE *f);
+SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input);
 SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha);
+SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 
   /* SWFGradient */
@@ -143,7 +156,7 @@ void SWFShape_drawLineTo(SWFShape shape, float x, float y);
 void SWFShape_drawLine(SWFShape shape, float dx, float dy);
 void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
 			  float anchorx, float anchory);
-void SWFShape_drawCurve(SWFShape shape, float controldx, int controldy,
+void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
 			float anchordx, float anchordy);
 
 void SWFShape_end(SWFShape shape);
@@ -204,7 +217,7 @@ void SWFText_setFont(SWFText text, SWFFont font);
 void SWFText_setHeight(SWFText text, float height);
 void SWFText_moveTo(SWFText text, float x, float y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-void SWFText_addString(SWFText text, const char *string, int *advance);
+void SWFText_addString(SWFText text, const char *string, float *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
 
 float SWFText_getStringWidth(SWFText text, const char *string);
@@ -296,6 +309,7 @@ typedef void *SWFSound;
 #define SWF_SOUND_STEREO           (1<<0)
 
 SWFSound newSWFSound(FILE *file);
+SWFSound newSWFSound_fromInput(SWFInput input);
 void destroySWFSound(SWFSound sound);
 
 
@@ -456,156 +470,55 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 
 /* SWFFill adds a position object to manipulate SWFFillStyle's matrix. */
 
-struct _swfFill
-{
-  SWFFillStyle fillstyle;
-  SWFPosition position;
-};
-typedef struct _swfFill *SWFFill;
+typedef void *SWFFill;
 
-#define SWFFILL_SIZE (sizeof(struct _swfFill))
+SWFFill newSWFFill(SWFFillStyle fillstyle);
+void destroySWFFill(SWFFill fill);
 
-#include <stdlib.h>
-
-static inline SWFFill newSWFFill(SWFFillStyle fillstyle)
-{
-  SWFFill fill = (SWFFill)malloc(SWFFILL_SIZE);
-  fill->fillstyle = fillstyle;
-  fill->position = newSWFPosition(SWFFillStyle_getMatrix(fill->fillstyle));
-  return fill;
-}
-static inline void destroySWFFill(SWFFill fill)
-{
-  destroySWFPosition(fill->position);
-  free(fill);
-}
-
-static inline void SWFFill_skewX(SWFFill fill, float x)
-{
-  SWFPosition_skewX(fill->position, x);
-}
-static inline void SWFFill_skewXTo(SWFFill fill, float x)
-{
-  SWFPosition_skewXTo(fill->position, x);
-}
-static inline void SWFFill_skewY(SWFFill fill, float y)
-{
-  SWFPosition_skewY(fill->position, y);
-}
-static inline void SWFFill_skewYTo(SWFFill fill, float y)
-{
-  SWFPosition_skewYTo(fill->position, y);
-}
-static inline void SWFFill_scaleX(SWFFill fill, float x)
-{
-  SWFPosition_scaleX(fill->position, x);
-}
-static inline void SWFFill_scaleXTo(SWFFill fill, float x)
-{
-  SWFPosition_scaleXTo(fill->position, x);
-}
-static inline void SWFFill_scaleY(SWFFill fill, float y)
-{
-  SWFPosition_scaleY(fill->position, y);
-}
-static inline void SWFFill_scaleYTo(SWFFill fill, float y)
-{
-  SWFPosition_scaleYTo(fill->position, y);
-}
+void SWFFill_skewX(SWFFill fill, float x);
+void SWFFill_skewXTo(SWFFill fill, float x);
+void SWFFill_skewY(SWFFill fill, float y);
+void SWFFill_skewYTo(SWFFill fill, float y);
+void SWFFill_scaleX(SWFFill fill, float x);
+void SWFFill_scaleXTo(SWFFill fill, float x);
+void SWFFill_scaleY(SWFFill fill, float y);
+void SWFFill_scaleYTo(SWFFill fill, float y);
 
 /* deprecated: */
-static inline void SWFFill_scaleXY(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXY(fill->position, x, y);
-}
-static inline void SWFFill_scaleXYTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXYTo(fill->position, x, y);
-}
+void SWFFill_scaleXY(SWFFill fill, float x, float y);
+void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
 
-static inline void SWFFill_scale(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXY(fill->position, x, y);
-}
-static inline void SWFFill_scaleTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXYTo(fill->position, x, y);
-}
-static inline void SWFFill_rotate(SWFFill fill, float degrees)
-{
-  SWFPosition_rotate(fill->position, degrees);
-}
-static inline void SWFFill_rotateTo(SWFFill fill, float degrees)
-{
-  SWFPosition_rotateTo(fill->position, degrees);
-}
-static inline void SWFFill_move(SWFFill fill, float x, float y)
-{
-  SWFPosition_move(fill->position, x, y);
-}
-static inline void SWFFill_moveTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_moveTo(fill->position, x, y);
-}
-static inline void SWFFill_setMatrix(SWFFill fill, float a, float b,
-				     float c, float d, float x, float y)
-{
-  SWFPosition_setMatrix(fill->position, a, b, c, d, x, y);
-}
+void SWFFill_scale(SWFFill fill, float x, float y);
+void SWFFill_scaleTo(SWFFill fill, float x, float y);
+void SWFFill_rotate(SWFFill fill, float degrees);
+void SWFFill_rotateTo(SWFFill fill, float degrees);
+void SWFFill_move(SWFFill fill, float x, float y);
+void SWFFill_moveTo(SWFFill fill, float x, float y);
+void SWFFill_setMatrix(SWFFill fill, float a, float b,
+		       float c, float d, float x, float y);
 
 
 /* shape_util.h */
 
-static inline void SWFShape_setLine(SWFShape shape, unsigned short width,
-				    byte r, byte g, byte b, byte a)
-{
-  SWFShape_setLineStyle(shape, width, r, g, b, a);
-}
+void SWFShape_setLine(SWFShape shape, unsigned short width,
+		      byte r, byte g, byte b, byte a);
 
-static inline SWFFill SWFShape_addSolidFill(SWFShape shape,
-					    byte r, byte g, byte b, byte a)
-{
-  return newSWFFill(SWFShape_addSolidFillStyle(shape, r, g, b, a));
-}
-static inline SWFFill SWFShape_addGradientFill(SWFShape shape,
-					       SWFGradient gradient,
-					       byte flags)
-{
-  return newSWFFill(SWFShape_addGradientFillStyle(shape, gradient, flags));
-}
-static inline SWFFill SWFShape_addBitmapFill(SWFShape shape,
-					     SWFBitmap bitmap, byte flags)
-{
-  return newSWFFill(SWFShape_addBitmapFillStyle(shape, bitmap, flags));
-}
+SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
+SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
+				 byte flags);
+SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
 
-static inline void SWFShape_setLeftFill(SWFShape shape, SWFFill fill)
-{
-  SWFShape_setLeftFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
-}
-static inline void SWFShape_setRightFill(SWFShape shape, SWFFill fill)
-{
-  SWFShape_setRightFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
-}
-/*
-static inline void SWFShape_drawRect(SWFShape shape, SWFRect rect)
-{
-  SWFShape_drawLine(shape, SWFRect_getWidth(rect), 0);
-  SWFShape_drawLine(shape, 0, SWFRect_getHeight(rect));
-  SWFShape_drawLine(shape, -SWFRect_getWidth(rect), 0);
-  SWFShape_drawLine(shape, 0, -SWFRect_getHeight(rect));
-}
-*/
+void SWFShape_setLeftFill(SWFShape shape, SWFFill fill);
+void SWFShape_setRightFill(SWFShape shape, SWFFill fill);
 
 void SWFShape_setLine(SWFShape shape,
 		      unsigned short width, byte r, byte g, byte b, byte a);
 
-void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle);
+void SWFShape_drawArc(SWFShape shape, float r,
+		      float startAngle, float endAngle);
 
-static inline void SWFShape_drawCircle(SWFShape shape, int r)
-{
-  SWFShape_drawArc(shape, r, 0, 360);
-}
+void SWFShape_drawCircle(SWFShape shape, float r);
+
 
 /* draw character c from font font into shape shape */
 void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
@@ -616,6 +529,8 @@ int SWFShape_drawCubic(SWFShape shape, float bx, float by,
 		       float cx, float cy, float dx, float dy);
 int SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
 			 float cx, float cy, float dx, float dy);
+
+void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 
 /* deprecated: */
@@ -661,7 +576,7 @@ void SWFMovie_labelFrame(SWFMovie movie, char *label);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 
-static inline int SWFMovie_save(SWFMovie movie, char *filename)
+static inline int SWFMovie_save(SWFMovie movie, const char *filename)
 {
   FILE *f = fopen(filename, "wb");
   int count;
