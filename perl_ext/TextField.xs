@@ -1,10 +1,9 @@
 /* ====================================================================
- * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
  *
- * $Author$
  * $Id$
  */
 
@@ -95,7 +94,7 @@ SWFTextField_setPadding(field, padding)
 	int	padding
 
 void
-SWFTextField_setMargin(field, left, right)
+SWFTextField_setMargins(field, left, right)
 	SWF::TextField	field
 	int	left
         int     right
@@ -135,5 +134,4 @@ void
 SWFTextField_addChars(field, string)
 	SWF::TextField	field
 	char *	string
-
 
