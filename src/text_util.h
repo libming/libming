@@ -45,7 +45,7 @@ float SWFFont_getStringWidth(SWFFont font, const unsigned char *string);
 
 float SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string);
 
-float SWFFont_getWideStringWidth(SWFFont font, const unsigned short *string);
+float SWFFont_getWideStringWidth(SWFFont font, const unsigned short *string, int len);
 
 float SWFFont_getAscent(SWFFont font);
 
