@@ -128,11 +128,14 @@ completeSWFTextField(SWFBlock block)
 
 // fix flags here...
 	if(!field->isBrowserFont)
-		if(!field->font.fontchar)
+	{	if(!field->font.fontchar)
 			SWF_error("no font given for textfield\n");
 		else if((SWFFont_getFlags(SWFFontCharacter_getFont(field->font.fontchar)) & SWF_FONT_HASLAYOUT) == 0 ||
 				SWFFontCharacter_getNGlyphs(field->font.fontchar) == 0)
 			field->flags &= ~SWFTEXTFIELD_USEFONT;
+	}
+	else
+		field->flags &= ~SWFTEXTFIELD_USEFONT;
 	if(field->string && *field->string)
 		field->flags |= SWFTEXTFIELD_HASTEXT;
 
@@ -242,18 +245,16 @@ newSWFTextField()
 void
 SWFTextField_setFont(SWFTextField field, SWFBlock font)
 {	
-	if((SWFFont_getFlags((SWFFont)font) & SWF_FONT_HASLAYOUT) &&
-	  (field->flags & SWFTEXTFIELD_USEFONT))
-	{
-		field->isBrowserFont = FALSE;
-		field->font.font = (SWFFont)font;
-//		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
-	}
-	else
+	if ( BLOCK(font)->type == SWF_DEFINEEDITTEXT )
 	{
 		field->isBrowserFont = TRUE;
 		field->font.browserFont = (SWFBrowserFont)font;
 		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
+	}
+	else
+	{
+		field->isBrowserFont = FALSE;
+		field->font.font = (SWFFont)font;
 	}
 }
 
@@ -268,7 +269,8 @@ void
 SWFTextField_addChars(SWFTextField field, char *string)
 {
 	int n, len = strlen(string);
-	if((!field->isBrowserFont) && field->font.font)
+	if((!field->isBrowserFont) && field->font.font &&
+	 (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + len) * 2);
 		for(n = 0 ; n < len  ; n++)
