@@ -3,6 +3,13 @@ import mingc
 # should raise an exception if return is non-zero:
 mingc.Ming_init()
 
+def Ming_setCubicThreshold(t):
+    mingc.Ming_setCubicThreshold(t);
+
+def Ming_setScale(scale):
+    mingc.Ming_setScale(scale);
+
+
 class SWFBase:
 
     def __init__(self, o):
@@ -474,8 +481,11 @@ class SWFText2(SWFText):
 
 class SWFTextField(SWFBase):
 
-    def __init__(self):
+    def __init__(self, flags=None):
         self.this = mingc.newSWFTextField()
+
+        if flags is not None:
+            mingc.SWFTextField_setFlags(self.this, flags)
 
     def __del__(self):
         mingc.destroySWFTextField(self.this)
