@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.2c
-#define MING_VERSION_TEXT  "0.2c"
+#define MING_VERSION        0.3a
+#define MING_VERSION_TEXT  "0.3a"
 
 int Ming_init();
 
@@ -30,14 +30,20 @@ int Ming_init();
 
 void Ming_setCubicThreshold(int num);
 
+
 /* sets the overall scale, default is 20 */
+
 void Ming_setScale(float scale);
 float Ming_getScale();
 
+
 /* set the version number to use */
+
 void Ming_useSWFVersion(int version);
 
+
 /* change the error/warn behavior.  Default prints message and exits. */
+
 void Ming_setWarnFunction(void (*warn)(char *msg, ...));
 void Ming_setErrorFunction(void (*error)(char *msg, ...));
 
@@ -45,8 +51,8 @@ void Ming_setErrorFunction(void (*error)(char *msg, ...));
 typedef unsigned char byte;
 
 
-  /* a generic output method.  specific instances dump output to file,
-     send to stdout, etc. */
+/* a generic output method.  specific instances dump output to file,
+   send to stdout, etc. */
 
 typedef void (*SWFByteOutputMethod)(byte b, void *data);
 
@@ -77,7 +83,8 @@ void destroySWFInput(SWFInput input);
 
   /* SWFCharacter */
 
-/* everything with a character ID is an SWFCharacter */
+/* a character is any sort of asset that's referenced later-
+   SWFBitmap, SWFShape, SWFMorph, SWFSound, SWFSprite are all SWFCharacters */
 
 typedef struct SWFCharacter_s *SWFCharacter;
 
@@ -291,13 +298,34 @@ void SWFTextField_setAlignment(SWFTextField field,
 void SWFTextField_setLength(SWFTextField field, int length);
 
 
-  /* sound - only mp3 streaming implemented */
+  /* SWFSoundStream - only mp3 streaming implemented */
+
+typedef struct SWFSoundStream_s *SWFSoundStream;
+
+SWFSoundStream newSWFSoundStream(FILE *file);
+SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
+void destroySWFSoundStream(SWFSoundStream sound);
+
+
+  /* SWFSound - */
 
 typedef struct SWFSound_s *SWFSound;
 
 SWFSound newSWFSound(FILE *file);
 SWFSound newSWFSound_fromInput(SWFInput input);
 void destroySWFSound(SWFSound sound);
+
+
+  /* SWFSoundInstance - created from SWFMovie[Clip]_startSound,
+     lets you change the parameters of the sound event (loops, etc.) */
+
+typedef struct SWFSoundInstance_s *SWFSoundInstance;
+
+void SWFSoundInstance_setNoMultiple(SWFSoundInstance instance);
+void SWFSoundInstance_setLoopInPoint(SWFSoundInstance instance, unsigned int point);
+void SWFSoundInstance_setLoopOutPoint(SWFSoundInstance instance, unsigned int point);
+void SWFSoundInstance_setLoopCount(SWFSoundInstance instance, int count);
+void SWFSoundInstance_setNoMultiple(SWFSoundInstance instance);
 
 
   /* SWFCXform */
@@ -373,6 +401,7 @@ void destroySWFButton(SWFButton button);
 
 void SWFButton_addShape(SWFButton button, void *character, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
+void SWFButton_addSound(SWFButton button, SWFSound action, int flags);
 
 
   /* SWFSprite */
@@ -573,6 +602,10 @@ void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
 
 void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate);
 
+SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
+
+void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
+
 
 /* movie.h */
 
@@ -596,7 +629,11 @@ void SWFMovie_setBackground(SWFMovie movie, int r, int g, int b);
 
 void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound);
 
-SWFDisplayItem SWFMovie_add(SWFMovie movie, void *block);
+SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
+
+void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
+
+SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFCharacter block);
 
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
