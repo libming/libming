@@ -20,33 +20,32 @@
 #ifndef SWF_RECT_H_INCLUDED
 #define SWF_RECT_H_INCLUDED
 
+typedef struct SWFRect_s *SWFRect;
+
 #include "libswf.h"
 #include "output.h"
 
-struct _swfRect
-{
-  int minX;
-  int maxX;
-  int minY;
-  int maxY;
-};
-typedef struct _swfRect *SWFRect;
-
-#define SWFRECT_SIZE sizeof(struct _swfRect)
 
 SWFRect newSWFRect(int minX, int maxX, int minY, int maxY);
+
 void destroySWFRect(SWFRect rect);
 
 SWFRect SWFRect_copy(SWFRect rect);
 
 int SWFRect_numBits(SWFRect rect);
+
 void SWFOutput_writeRect(SWFOutput output, SWFRect rect);
 
 int SWFRect_getWidth(SWFRect r);
+
 int SWFRect_getHeight(SWFRect r);
 
-/* internal functions */
+void SWFRect_getBounds(SWFRect rect, int *minX, int *maxX, int *minY, int *maxY);
+
+void SWFRect_setBounds(SWFRect r, int minX, int maxX, int minY, int maxY);
+
 void SWFRect_includeRect(SWFRect a, SWFRect b);
+
 void SWFRect_includePoint(SWFRect a, int x, int y, int width);
 
 #endif /* SWF_RECT_H_INCLUDED */

@@ -19,8 +19,7 @@
 
 #include <stdio.h>
 
-#include "blocks/swf.h"
-
+#include "libming.h"
 #include "movie.h"
 #include "displaylist.h"
 #include "fill.h"

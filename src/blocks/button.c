@@ -19,11 +19,41 @@
 
 #include "button.h"
 
-static SWFButtonRecord newSWFButtonRecord(byte flags, SWFCharacter character,
-					  unsigned short layer,
-					  SWFMatrix matrix)
+struct buttonRecord
 {
-  SWFButtonRecord record = calloc(1, BUTTONRECORD_SIZE);
+  byte flags;
+  unsigned short layer;
+  SWFCharacter character;
+  SWFMatrix matrix;
+};
+typedef struct buttonRecord* ButtonRecord;
+
+struct actionRecord
+{
+  int flags;
+  SWFAction action;
+};
+typedef struct actionRecord* ActionRecord;
+
+struct SWFButton_s
+{
+  struct SWFCharacter_s character;
+
+  int nRecords;
+  ButtonRecord *records;
+
+  int nActions;
+  struct actionRecord *actions;
+
+  SWFOutput out;
+};
+
+
+static ButtonRecord newSWFButtonRecord(byte flags, SWFCharacter character,
+				       unsigned short layer,
+				       SWFMatrix matrix)
+{
+  ButtonRecord record = malloc(sizeof(struct buttonRecord));
 
   record->flags = flags;
   record->character = character;
@@ -33,32 +63,39 @@ static SWFButtonRecord newSWFButtonRecord(byte flags, SWFCharacter character,
   return record;
 }
 
+
 #define BUTTONRECORD_INCREMENT 8
 
-static void SWFButton_addRecord(SWFButton button, SWFButtonRecord record)
+static void SWFButton_addRecord(SWFButton button, ButtonRecord record)
 {
-  if(button->nRecords%BUTTONRECORD_INCREMENT == 0)
+  if(button->nRecords % BUTTONRECORD_INCREMENT == 0)
+  {
     button->records = realloc(button->records,
 			      (button->nRecords + BUTTONRECORD_INCREMENT) *
-			      sizeof(SWFButtonRecord));
+			      sizeof(ButtonRecord));
+  }
 
   button->records[button->nRecords++] = record;
 
   SWFCharacter_addDependency((SWFCharacter)button, (SWFBlock)record->character);
 }
 
+
 /* note: replaces action, doesn't append.. */
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags)
 {
-  if(button->nActions%BUTTONRECORD_INCREMENT == 0)
+  if(button->nActions % BUTTONRECORD_INCREMENT == 0)
+  {
     button->actions = realloc(button->actions,
 			      (button->nActions + BUTTONRECORD_INCREMENT) *
-			      sizeof(swfActionRecord));
+			      sizeof(struct actionRecord));
+  }
 
   button->actions[button->nActions].action = action;
   button->actions[button->nActions].flags = flags;
   ++button->nActions;
 }
+
 
 /* XXX - temp hack */
 void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags)
@@ -68,29 +105,34 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags)
   SWFButton_addRecord(button, newSWFButtonRecord(flags, character, 0, m));
 }
 
+
 void writeSWFButtonToMethod(SWFBlock block,
 			    SWFByteOutputMethod method, void *data)
 {
   int i;
   SWFButton button = (SWFButton)block;
+
   SWFOutput_writeToMethod(button->out, method, data);
 
   for(i=0; i<button->nActions; ++i)
   {
+    SWFOutput out = SWFOutputBlock_getOutput(button->actions[i].action);
+
     if(i == button->nActions-1)
       methodWriteUInt16(0, method, data);
     else
-      methodWriteUInt16(SWFOutput_length(button->actions[i].action->output)+4,
-			method, data);
+      methodWriteUInt16(SWFOutput_getLength(out)+4, method, data);
 
     methodWriteUInt16(button->actions[i].flags, method, data);
-    SWFOutput_writeToMethod(button->actions[i].action->output, method, data);
+    SWFOutput_writeToMethod(out, method, data);
   }
 }
+
+
 int completeSWFButton(SWFBlock block)
 {
   SWFButton button = (SWFButton)block;
-  SWFButtonRecord record;
+  ButtonRecord record;
   SWFOutput out = newSWFOutput();
   int i, length = 0;
   char *offset;
@@ -99,7 +141,7 @@ int completeSWFButton(SWFBlock block)
   SWFOutput_writeUInt8(out, 0); /* XXX - track as menu item. ??? */
 
   /* fill in offset later */
-  offset = out->pos;
+  offset = SWFOutput_getCurPos(out);
   SWFOutput_writeUInt16(out, 0);
 
   for(i=0; i<button->nRecords; ++i)
@@ -114,7 +156,7 @@ int completeSWFButton(SWFBlock block)
 
   SWFOutput_writeUInt8(out, 0); /* end buttons */
 
-  length = SWFOutput_length(out) - 3;
+  length = SWFOutput_getLength(out) - 3;
 
   if(button->nActions > 0)
   {
@@ -127,10 +169,12 @@ int completeSWFButton(SWFBlock block)
   length = 0;
 
   for(i=0; i<button->nActions; ++i)
-    length += SWFOutput_length(button->actions[i].action->output) + 4;
+    length += SWFOutputBlock_getLength(button->actions[i].action) + 4;
 
-  return SWFOutput_length(out) + length;
+  return SWFOutput_getLength(out) + length;
 }
+
+
 void destroySWFButton(SWFBlock block)
 {
   SWFButton button = (SWFButton)block;
@@ -158,9 +202,12 @@ void destroySWFButton(SWFBlock block)
   free(button);
 }
 
+
 SWFButton newSWFButton()
 {
-  SWFButton button = calloc(1, SWFBUTTON_SIZE);
+  SWFButton button = malloc(sizeof(struct SWFButton_s));
+
+  SWFCharacterInit((SWFCharacter)button);
 
   CHARACTERID(button) = ++SWF_gNumCharacters;
   BLOCK(button)->type = SWF_DEFINEBUTTON2;
@@ -168,7 +215,9 @@ SWFButton newSWFButton()
   BLOCK(button)->complete = completeSWFButton;
   BLOCK(button)->dtor = destroySWFButton;
 
+  button->nRecords = 0;
   button->records = NULL;
+  button->nActions = 0;
   button->actions = NULL;
   button->out = NULL;
 

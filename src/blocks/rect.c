@@ -20,6 +20,15 @@
 #include <stdlib.h>
 #include "rect.h"
 
+struct SWFRect_s
+{
+  int minX;
+  int maxX;
+  int minY;
+  int maxY;
+};
+
+
 int SWFRect_numBits(SWFRect rect)
 {
   return 5 + 4*max(max(SWFOutput_numSBits(rect->minX), 
@@ -27,6 +36,8 @@ int SWFRect_numBits(SWFRect rect)
 		   max(SWFOutput_numSBits(rect->minY),
 		       SWFOutput_numSBits(rect->maxY)));
 }
+
+
 void SWFOutput_writeRect(SWFOutput out, SWFRect rect)
 {
   int nBits = max(max(SWFOutput_numSBits(rect->minX),
@@ -34,7 +45,8 @@ void SWFOutput_writeRect(SWFOutput out, SWFRect rect)
 		  max(SWFOutput_numSBits(rect->minY),
 		      SWFOutput_numSBits(rect->maxY)));
 
-  SWF_assert(nBits<32);
+  if(nBits>=32)
+    SWF_error("SWFRect too large for file format");
 
   SWFOutput_writeBits(out, nBits, 5);
   SWFOutput_writeSBits(out, rect->minX, nBits);
@@ -43,34 +55,61 @@ void SWFOutput_writeRect(SWFOutput out, SWFRect rect)
   SWFOutput_writeSBits(out, rect->maxY, nBits);
 }
 
+
 void destroySWFRect(SWFRect rect)
 {
   free(rect);
 }
 
+
 SWFRect newSWFRect(int minX, int maxX, int minY, int maxY)
 {
-  SWFRect rect = malloc(SWFRECT_SIZE);
+  SWFRect rect = malloc(sizeof(struct SWFRect_s));
+
   rect->minX = min(minX, maxX);
   rect->maxX = max(minX, maxX);
   rect->minY = min(minY, maxY);
   rect->maxY = max(minY, maxY);
+
   return rect;
 }
+
 
 int SWFRect_getWidth(SWFRect r)
 {
   return r->maxX - r->minX;
 }
+
+
 int SWFRect_getHeight(SWFRect r)
 {
   return r->maxY - r->minY;
 }
 
+
+void SWFRect_getBounds(SWFRect rect, int *minX, int *maxX, int *minY, int *maxY)
+{
+  *minX = rect->minX;
+  *maxX = rect->maxX;
+  *minY = rect->minY;
+  *maxY = rect->maxY;
+}
+
+
+void SWFRect_setBounds(SWFRect rect, int minX, int maxX, int minY, int maxY)
+{
+  rect->minX = minX;
+  rect->maxX = maxX;
+  rect->minY = minY;
+  rect->maxY = maxY;
+}
+
+
 SWFRect SWFRect_copy(SWFRect rect)
 {
   return newSWFRect(rect->minX, rect->maxX, rect->minY, rect->maxY);
 }
+
 
 void SWFRect_includeRect(SWFRect a, SWFRect b)
 {
@@ -79,6 +118,7 @@ void SWFRect_includeRect(SWFRect a, SWFRect b)
   if(b->minX < a->minX) a->minX = b->minX;
   if(b->maxX > a->maxX) a->maxX = b->maxX;
 }
+
 
 /* make rect big enough to include (x,y) + width extra */
 void SWFRect_includePoint(SWFRect rect, int x, int y, int width)

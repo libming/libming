@@ -20,7 +20,7 @@
 #ifndef SWF_TEXTFIELD_H_INCLUDED
 #define SWF_TEXTFIELD_H_INCLUDED
 
-#include "libswf.h"
+typedef struct SWFTextField_s *SWFTextField;
 
 #include "output.h"
 #include "block.h"
@@ -49,38 +49,6 @@ typedef enum
   SWFTEXTFIELD_ALIGN_CENTER  = 2,
   SWFTEXTFIELD_ALIGN_JUSTIFY = 3
 } SWFTextFieldAlignment;
-
-struct _textField
-{
-  swfCharacter character;
-  SWFOutput out; /* cheap way out */
-  int flags;
-  byte isBrowserFont;
-  union
-  {
-    SWFFont font;
-    SWFBrowserFont browserFont;
-  } font;
-
-  int nLines;
-  int fontHeight;
-  int fieldHeight;
-  int width;
-  int padding;
-  byte r;
-  byte g;
-  byte b;
-  byte a;
-  short length;
-  byte alignment;
-  short leftMargin;
-  short rightMargin;
-  short indentation;
-  short lineSpacing;
-  char *varName;
-  char *string;
-};
-typedef struct _textField *SWFTextField;
 
 #define SWFTEXTFIELD_SIZE sizeof(struct _textField)
 

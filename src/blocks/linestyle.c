@@ -21,10 +21,20 @@
 
 #include "linestyle.h"
 
+struct SWFLineStyle_s
+{
+  unsigned short width;
+  byte r;
+  byte g;
+  byte b;
+  byte a;
+};
+
+
 SWFLineStyle newSWFLineStyle(unsigned short width,
 			     byte r, byte g, byte b, byte a)
 {
-  SWFLineStyle line = (SWFLineStyle)malloc(LINESTYLE_SIZE);
+  SWFLineStyle line = malloc(sizeof(struct SWFLineStyle_s));
 
   line->width = width;
   line->r = r;
@@ -34,6 +44,7 @@ SWFLineStyle newSWFLineStyle(unsigned short width,
 
   return line;
 }
+
 
 byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
 			 byte r, byte g, byte b, byte a)
@@ -46,10 +57,19 @@ byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
      line->g == g &&
      line->b == b &&
      line->a == a)
+  {
     return TRUE;
+  }
 
   return FALSE;
 }
+
+
+unsigned short SWFLineStyle_getWidth(SWFLineStyle line)
+{
+  return line->width;
+}
+
 
 void SWFOutput_writeLineStyles(SWFOutput out,
 			       SWFLineStyle *lines, int nLines,
@@ -81,6 +101,7 @@ void SWFOutput_writeLineStyles(SWFOutput out,
     ++line;
   }
 }
+
 
 void SWFOutput_writeMorphLineStyles(SWFOutput out,
 				    SWFLineStyle *lines1, int nLines1,

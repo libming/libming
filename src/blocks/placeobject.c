@@ -2,6 +2,28 @@
 #include "placeobject.h"
 #include "method.h"
 
+struct SWFPlaceObject2Block_s
+{
+  struct SWFBlock_s block;
+
+  SWFOutput out;
+
+  SWFCharacter character;
+  SWFMatrix matrix;
+  SWFCXform cXform;
+  int ratio;
+  int masklevel;
+  char *name;
+  int depth;
+  int move;
+
+  int nActions;
+  int actionORFlags;
+  SWFAction *actions;
+  int *actionFlags;
+};
+
+
 void writeSWFPlaceObject2BlockToStream(SWFBlock block,
 				       SWFByteOutputMethod method, void *data)
 {
@@ -20,13 +42,14 @@ void writeSWFPlaceObject2BlockToStream(SWFBlock block,
       SWFOutputBlock block = (SWFOutputBlock)place->actions[i];
 
       methodWriteUInt16(place->actionFlags[i], method, data);
-      methodWriteUInt32(SWFOutput_length(block->output), method, data);
-      SWFOutput_writeToMethod(block->output, method, data);
+      methodWriteUInt32(SWFOutputBlock_getLength(block), method, data);
+      SWFOutput_writeToMethod(SWFOutputBlock_getOutput(block), method, data);
     }
 
     methodWriteUInt16(0, method, data); /* trailing 0 for end of actions */
   }
 }
+
 
 int completeSWFPlaceObject2Block(SWFBlock block)
 {
@@ -49,7 +72,7 @@ int completeSWFPlaceObject2Block(SWFBlock block)
   SWFOutput_writeUInt16(out, place->depth);
 
   if(place->character != NULL)
-    SWFOutput_writeUInt16(out, place->character->number);
+    SWFOutput_writeUInt16(out, CHARACTERID(place->character));
 
   if(place->matrix != NULL)
     SWFOutput_writeMatrix(out, place->matrix);
@@ -74,7 +97,7 @@ int completeSWFPlaceObject2Block(SWFBlock block)
     for(i=0; i<place->nActions; ++i)
     {
       SWFOutputBlock block = (SWFOutputBlock)place->actions[i];
-      actionLen += 6 + SWFOutput_length(block->output);
+      actionLen += 6 + SWFOutputBlock_getLength(block);
     }
 
     actionLen += 2;
@@ -82,8 +105,9 @@ int completeSWFPlaceObject2Block(SWFBlock block)
 
   place->out = out;
 
-  return SWFOutput_length(out) + actionLen;
+  return SWFOutput_getLength(out) + actionLen;
 }
+
 
 void destroySWFPlaceObject2Block(SWFBlock block)
 {
@@ -113,12 +137,17 @@ void destroySWFPlaceObject2Block(SWFBlock block)
 
 SWFPlaceObject2Block newSWFPlaceObject2Block(int depth)
 {
-  SWFPlaceObject2Block place = calloc(1, sizeof(struct _placeObject2Block));
+  SWFPlaceObject2Block place = malloc(sizeof(struct SWFPlaceObject2Block_s));
+
+  SWFBlockInit((SWFBlock)place);
 
   BLOCK(place)->type = SWF_PLACEOBJECT2;
   BLOCK(place)->writeBlock = writeSWFPlaceObject2BlockToStream;
   BLOCK(place)->complete = completeSWFPlaceObject2Block;
   BLOCK(place)->dtor = destroySWFPlaceObject2Block;
+
+  place->out = NULL;
+  place->name = NULL;
 
   place->move = 0;
   place->matrix = NULL;

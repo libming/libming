@@ -22,37 +22,66 @@
 #include "outputblock.h"
 #include "method.h"
 
+struct SWFOutputBlock_s
+{
+  struct SWFBlock_s block;
+  SWFOutput output;
+};
+
+
+SWFOutput SWFOutputBlock_getOutput(SWFOutputBlock block)
+{
+  return block->output;
+}
+
+
+int SWFOutputBlock_getLength(SWFOutputBlock block)
+{
+  return SWFOutput_getLength(block->output);
+}
+
+
 void writeSWFOutputBlockToStream(SWFBlock block,
 				 SWFByteOutputMethod method, void *data)
 {
   SWFOutput out = ((SWFOutputBlock)block)->output;
   SWFOutput_writeToMethod(out, method, data);
 }
+
+
 int getSWFOutputBlockLength(SWFBlock block)
 {
   SWFOutput out = ((SWFOutputBlock)block)->output;
 
   SWFOutput_byteAlign(out);
-  return SWFOutput_length(out);
+  return SWFOutput_getLength(out);
 }
+
+
 void destroySWFOutputBlock(SWFBlock block)
 {
   SWFOutputBlock b = (SWFOutputBlock)block;
   destroySWFOutput(b->output);
   free(block);
 }
+
+
 SWFOutputBlock newSWFOutputBlock(SWFOutput out, SWFBlocktype type)
 {
-  SWFOutputBlock block = calloc(1, SWFOUTPUTBLOCK_SIZE);
+  SWFOutputBlock block = malloc(sizeof(struct SWFOutputBlock_s));
+
+  SWFBlockInit((SWFBlock)block);
 
   BLOCK(block)->type = type;
   BLOCK(block)->writeBlock = writeSWFOutputBlockToStream;
   BLOCK(block)->complete = getSWFOutputBlockLength;
   BLOCK(block)->dtor = destroySWFOutputBlock;
+
   block->output = out;
 
   return block;
 }
+
 
 /* placeObject2 block is in placeobject.c */
 
@@ -61,7 +90,7 @@ SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 {
   SWFOutput out = newSizedSWFOutput(40);
 
-  SWFOutput_writeUInt16(out, character->number);
+  SWFOutput_writeUInt16(out, CHARACTERID(character));
   SWFOutput_writeUInt16(out, depth);
   SWFOutput_writeMatrix(out, matrix); /* max length: 210 bits=27 bytes */
 
@@ -71,6 +100,7 @@ SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 
   return newSWFOutputBlock(out, SWF_PLACEOBJECT);
 }
+
 
 SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b)
 {
@@ -82,14 +112,16 @@ SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b)
   return newSWFOutputBlock(out, SWF_SETBACKGROUNDCOLOR);
 }
 
+
 SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth)
 {
   SWFOutput out = newSizedSWFOutput(5);
-  SWFOutput_writeUInt16(out, character->number);
+  SWFOutput_writeUInt16(out, CHARACTERID(character));
   SWFOutput_writeUInt16(out, depth);
 
   return newSWFOutputBlock(out, SWF_REMOVEOBJECT);
 }
+
 
 SWFOutputBlock newSWFRemoveObject2Block(int depth)
 {
@@ -99,6 +131,7 @@ SWFOutputBlock newSWFRemoveObject2Block(int depth)
   return newSWFOutputBlock(out, SWF_REMOVEOBJECT2);
 }
 
+
 SWFOutputBlock newSWFFrameLabelBlock(char *string)
 {
   SWFOutput out = newSizedSWFOutput(strlen(string)+2);
@@ -106,6 +139,7 @@ SWFOutputBlock newSWFFrameLabelBlock(char *string)
 
   return newSWFOutputBlock(out, SWF_FRAMELABEL);
 }
+
 
 SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports)
 {

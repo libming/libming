@@ -20,18 +20,11 @@
 #ifndef SWF_FONTINFO_H_INCLUDED
 #define SWF_FONTINFO_H_INCLUDED
 
+typedef struct SWFFontInfo_s *SWFFontInfo;
+
 #include "libswf.h"
 #include "block.h"
 #include "font.h"
-
-struct _swfFontInfo
-{
-  swfCharacter character;
-  SWFFont font;
-};
-typedef struct _swfFontInfo *SWFFontInfo;
-
-#define FONTINFO_SIZE sizeof(struct _swfFontInfo)
 
 SWFFontInfo newDefineSWFFontInfo(SWFFont font);
 

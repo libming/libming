@@ -20,32 +20,47 @@
 
 #include "browserfont.h"
 
+struct SWFBrowserFont_s
+{
+  struct SWFCharacter_s character;
+  SWFOutput out;
+};
+
+
 static void writeSWFBrowserFontToMethod(SWFBlock block,
 					SWFByteOutputMethod method, void *data)
 {
   SWFOutput out = ((SWFBrowserFont)block)->out;
   SWFOutput_writeToMethod(out, method, data);
 }
+
+
 static int completeSWFBrowserFont(SWFBlock block)
 {
   SWFBrowserFont font = (SWFBrowserFont)block;
   SWFOutput out = font->out;
   SWFOutput_byteAlign(out);
   BLOCK(font)->type = SWF_DEFINEFONT2; /* see below */
-  return SWFOutput_length(out);
+
+  return SWFOutput_getLength(out);
 }
+
+
 void destroySWFBrowserFont(SWFBlock block)
 {
   SWFBrowserFont f = (SWFBrowserFont)block;
   destroySWFOutput(f->out);
   free(f);
 }
+
+
 SWFBrowserFont newSWFBrowserFont(char *name)
 {
   unsigned int i;
-  SWFBrowserFont font = calloc(1, SWFBROWSERFONT_SIZE);
+  SWFBrowserFont font = malloc(sizeof(struct SWFBrowserFont_s));
   SWFOutput out = newSWFOutput();
-  memset(font, 0, SWFBROWSERFONT_SIZE);
+
+  SWFCharacterInit((SWFCharacter)font);
 
   BLOCK(font)->writeBlock = writeSWFBrowserFontToMethod;
   BLOCK(font)->complete = completeSWFBrowserFont;
@@ -71,4 +86,10 @@ SWFBrowserFont newSWFBrowserFont(char *name)
   font->out = out;
 
   return font;
+}
+
+
+SWFOutput SWFBrowserFont_getOutput(SWFBrowserFont font)
+{
+  return font->out;
 }

@@ -19,23 +19,95 @@
 
 #include "shape.h"
 
-#define STYLE_INCREMENT 4
 
-void writeSWFShapeBlockToMethod(SWFBlock block,
-				SWFByteOutputMethod method, void *data)
+struct stateChangeRecord
+{
+  int flags;
+  int moveToX;
+  int moveToY;
+  int leftFill;
+  int rightFill;
+  int line;
+  /* newstyle not used.. */
+};
+typedef struct stateChangeRecord *StateChangeRecord;
+
+struct lineToRecord
+{
+  int dx;
+  int dy;
+};
+typedef struct lineToRecord *LineToRecord;
+
+struct curveToRecord
+{
+  int controlx;
+  int controly;
+  int anchorx;
+  int anchory;
+};
+typedef struct curveToRecord *CurveToRecord;
+
+typedef enum
+{
+  SHAPERECORD_STATECHANGE,
+  SHAPERECORD_LINETO,
+  SHAPERECORD_CURVETO
+} shapeRecordType;
+
+struct shapeRecord
+{
+  shapeRecordType type;
+
+  union
+  {
+    StateChangeRecord stateChange;
+    LineToRecord lineTo;
+    CurveToRecord curveTo;
+  } record;
+};
+typedef struct shapeRecord ShapeRecord;
+
+struct SWFShape_s
+{
+  struct SWFCharacter_s character;
+
+  ShapeRecord *records;
+  int nRecords;
+  SWFOutput out;
+  int xpos;	/* cursor for using abs. coords in lineTo, curveTo */
+  int ypos;
+  SWFLineStyle *lines;
+  SWFFillStyle *fills;
+  byte nLines;
+  byte nFills;
+  short lineWidth;
+  byte isMorph;
+  byte isEnded;
+};
+
+
+static void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record);
+
+
+static void writeSWFShapeBlockToMethod(SWFBlock block,
+				       SWFByteOutputMethod method, void *data)
 {
   SWFOutput out = ((SWFShape)block)->out;
   SWFOutput_writeToMethod(out, method, data);
 }
-int completeSWFShapeBlock(SWFBlock block)
+
+
+static int completeSWFShapeBlock(SWFBlock block)
 {
   SWFShape shape = (SWFShape)block;
 
-  if(!shape->isEnded)
-    SWFShape_end(shape);
+  SWFShape_end(shape);
 
-  return SWFOutput_length(shape->out);
+  return SWFOutput_getLength(shape->out);
 }
+
+
 void destroySWFShape(SWFBlock block)
 {
   SWFShape shape = (SWFShape)block;
@@ -45,34 +117,46 @@ void destroySWFShape(SWFBlock block)
 
   for(i=0; i<shape->nFills; ++i)
   {
-    if(shape->fills[i]->matrix != NULL)
-      destroySWFMatrix(shape->fills[i]->matrix);
+    SWFMatrix matrix = SWFFillStyle_getMatrix(shape->fills[i]);
+
+    if(matrix != NULL)
+      destroySWFMatrix(matrix);
 
     /* gradients and bitmaps are destroyed separately */
 
     free(shape->fills[i]);
   }
 
-  free(shape->fills);
+  if(shape->fills != NULL)
+  {
+    free(shape->fills);
 
-  for(i=0; i<shape->nLines; ++i)
-    free(shape->lines[i]);
+    for(i=0; i<shape->nLines; ++i)
+      free(shape->lines[i]);
+  }
 
-  free(shape->lines);
+  if(shape->lines != NULL)
+    free(shape->lines);
 
   destroySWFRect(CHARACTER(shape)->bounds);
   destroySWFOutput(shape->out);
   free(shape);
 }
+
+
 SWFShape newSWFShape()
 {
-  SWFShape shape = calloc(1, SHAPE_SIZE);
+  SWFShape shape = malloc(sizeof(struct SWFShape_s));
+
+  SWFCharacterInit((SWFCharacter)shape);
 
   BLOCK(shape)->writeBlock = writeSWFShapeBlockToMethod;
   BLOCK(shape)->complete = completeSWFShapeBlock;
   BLOCK(shape)->dtor = destroySWFShape;
   BLOCK(shape)->type = SWF_DEFINESHAPE3;
+
   CHARACTERID(shape) = ++SWF_gNumCharacters;
+
   shape->out = newSWFOutput();
   CHARACTER(shape)->bounds = newSWFRect(0,0,0,0);
 
@@ -80,26 +164,43 @@ SWFShape newSWFShape()
   shape->lines = NULL;
   shape->fills = NULL;
 
+  shape->nRecords = 0;
+  shape->xpos = 0;
+  shape->ypos = 0;
+  shape->nLines = 0;
+  shape->nFills = 0;
+  shape->lineWidth = 0;
+  shape->isMorph = 0;
+  shape->isEnded = 0;
+
   SWFOutput_writeUInt8(shape->out, 0); /* space for nFillBits, nLineBits */
 
   return shape;
 }
 
-void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record);
 
 void SWFShape_end(SWFShape shape)
 {
   int i;
+  byte* buffer;
+
+  if(shape->isEnded)
+    return;
 
   shape->isEnded = TRUE;
 
-  shape->out->buffer[0] = (SWFOutput_numBits(shape->nFills)<<4) + SWFOutput_numBits(shape->nLines);
+  buffer = SWFOutput_getBuffer(shape->out);
+
+  buffer[0] =
+    (SWFOutput_numBits(shape->nFills)<<4) + SWFOutput_numBits(shape->nLines);
 
   for(i=0; i<shape->nRecords; ++i)
   {
-    if(!(i == shape->nRecords-1 &&
-	 shape->records[i].type == SHAPERECORD_STATECHANGE))
+    if(i < shape->nRecords-1 ||
+       shape->records[i].type != SHAPERECORD_STATECHANGE)
+    {
       SWFShape_writeShapeRecord(shape, shape->records[i]);
+    }
 
     free(shape->records[i].record.stateChange); /* all in union are pointers */
   }
@@ -118,17 +219,55 @@ void SWFShape_end(SWFShape shape)
   shape->nRecords = 0;
 }
 
+
+SWFOutput SWFShape_getOutput(SWFShape shape)
+{
+  return shape->out;
+}
+
+
+SWFFillStyle *SWFShape_getFills(SWFShape shape)
+{
+  return shape->fills;
+}
+
+
+int SWFShape_getNFills(SWFShape shape)
+{
+  return shape->nFills;
+}
+
+
+SWFLineStyle *SWFShape_getLines(SWFShape shape)
+{
+  return shape->lines;
+}
+
+
+int SWFShape_getNLines(SWFShape shape)
+{
+  return shape->nLines;
+}
+
+
+void SWFShape_setMorphFlag(SWFShape shape)
+{
+  shape->isMorph = 1;
+}
+
+
 void SWFShape_addStyleHeader(SWFShape shape)
 {
   SWFOutput out = newSWFOutput();
 
   SWFOutput_writeUInt16(out, CHARACTERID(shape));
-  SWFOutput_writeRect(out, CHARACTER(shape)->bounds);
+  SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
+
   SWFOutput_writeFillStyles(out, shape->fills, shape->nFills, BLOCK(shape)->type);
   SWFOutput_writeLineStyles(out, shape->lines, shape->nLines, BLOCK(shape)->type);
 
   /* prepend shape->out w/ shape header */
-  out->next = shape->out;
+  SWFOutput_setNext(out, shape->out);
   shape->out = out;
 }
 
@@ -140,30 +279,32 @@ void SWFShape_addStyleHeader(SWFShape shape)
 
 #define SHAPERECORD_INCREMENT 32
 
-inline ShapeRecord newShapeRecord(SWFShape shape, shapeRecordType type)
+static ShapeRecord newShapeRecord(SWFShape shape, shapeRecordType type)
 {
   if(shape->nRecords % SHAPERECORD_INCREMENT == 0)
+  {
     shape->records = realloc(shape->records,
 			     sizeof(ShapeRecord) *
 			     (shape->nRecords + SHAPERECORD_INCREMENT));
+  }
 
   switch(type)
   {
     case SHAPERECORD_STATECHANGE:
     {
-      StateChangeRecord change = calloc(1, sizeof(struct _stateChangeRecord));
+      StateChangeRecord change = malloc(sizeof(struct stateChangeRecord));
       shape->records[shape->nRecords].record.stateChange = change;
       break;
     }
     case SHAPERECORD_LINETO:
     {
-      LineToRecord lineTo = calloc(1, sizeof(struct _lineToRecord));
+      LineToRecord lineTo = malloc(sizeof(struct lineToRecord));
       shape->records[shape->nRecords].record.lineTo = lineTo;
       break;
     }
     case SHAPERECORD_CURVETO:
     {
-      CurveToRecord curveTo = calloc(1, sizeof(struct _curveToRecord));
+      CurveToRecord curveTo = malloc(sizeof(struct curveToRecord));
       shape->records[shape->nRecords].record.curveTo = curveTo;
       break;
     }
@@ -172,6 +313,7 @@ inline ShapeRecord newShapeRecord(SWFShape shape, shapeRecordType type)
   shape->records[shape->nRecords].type = type;
   return shape->records[shape->nRecords++];
 }
+
 
 void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
 {
@@ -201,16 +343,22 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
       }
 
       if(flags & SWF_SHAPE_FILLSTYLE0FLAG)
+      {
         SWFOutput_writeBits(out, record.record.stateChange->leftFill,
 			    SWFOutput_numBits(shape->nFills));
+      }
 
       if(flags & SWF_SHAPE_FILLSTYLE1FLAG)
+      {
         SWFOutput_writeBits(out, record.record.stateChange->rightFill,
 			    SWFOutput_numBits(shape->nFills));
+      }
 
       if(flags & SWF_SHAPE_LINESTYLEFLAG)
+      {
         SWFOutput_writeBits(out, record.record.stateChange->line,
 			    SWFOutput_numBits(shape->nLines));
+      }
 
       /* newstyle's never used.  But this is what it looks like:
 
@@ -218,8 +366,10 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
       {
         SWFOutput_writeFillStyles(shape->out, shape->fills, shape->nFills,
 				  BLOCK(shape)->type);
+
         SWFOutput_writeLineStyles(shape->out, shape->lines, shape->nLines,
 				  BLOCK(shape)->type);
+
 	SWFOutput_writeBits(shape->out, SWFOutput_numBits(shape->nFills), 4);
         SWFOutput_writeBits(shape->out, SWFOutput_numBits(shape->nLines), 4);
       }
@@ -304,6 +454,8 @@ void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y)
 {
   SWFShape_drawScaledLine(shape, x-shape->xpos, y-shape->ypos);
 }
+
+
 void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy)
 {
   ShapeRecord record;
@@ -316,15 +468,19 @@ void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy)
 
   record = newShapeRecord(shape, SHAPERECORD_LINETO);
 
+  SWF_assert(SWFOutput_numSBits(dx) < 18);
+  SWF_assert(SWFOutput_numSBits(dy) < 18);
+
   record.record.lineTo->dx = dx;
   record.record.lineTo->dy = dy;
 
   shape->xpos += dx;
   shape->ypos += dy;
 
-  SWFRect_includePoint(CHARACTER(shape)->bounds,
+  SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
 		       shape->xpos, shape->ypos, shape->lineWidth);
 }
+
 
 void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
 				int anchorx, int anchory)
@@ -332,6 +488,7 @@ void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
   SWFShape_drawScaledCurve(shape, controlx-shape->xpos, controly-shape->ypos,
 			   anchorx-controlx, anchory-controly);
 }
+
 
 void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
 			int anchordx, int anchordy)
@@ -341,8 +498,7 @@ void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
   if(shape->isEnded)
     return;
 
-  if(controldx == 0 && controldy == 0 &&
-     anchordx == 0 && anchordy == 0)
+  if(controldx == 0 && controldy == 0 && anchordx == 0 && anchordy == 0)
     return;
 
   record = newShapeRecord(shape, SHAPERECORD_CURVETO);
@@ -352,44 +508,58 @@ void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
   record.record.curveTo->anchorx = anchordx;
   record.record.curveTo->anchory = anchordy;
 
-  /* including the control point is sloppy, but safe -
-     figuring the real bounds requires a couple of sqrt ops.. */
+  if(SWFOutput_numSBits(controldx) >= 18 ||
+     SWFOutput_numSBits(controldy) >= 18 ||
+     SWFOutput_numSBits(anchordx) >= 18 ||
+     SWFOutput_numSBits(anchordy) >= 18)
+    SWF_error("Curve parameters too large");
+
+  /* including the control point is sloppy, but safe.. */
 
   shape->xpos += controldx;
   shape->ypos += controldy;
 
-  SWFRect_includePoint(CHARACTER(shape)->bounds,
+  SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
 		       shape->xpos, shape->ypos, shape->lineWidth);
 
   shape->xpos += anchordx;
   shape->ypos += anchordy;
 
-  SWFRect_includePoint(CHARACTER(shape)->bounds,
+  SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
 		       shape->xpos, shape->ypos, shape->lineWidth);
 }
+
+
+#define STYLE_INCREMENT 4
 
 static int SWFShape_addLineStyle(SWFShape shape, unsigned short width,
 				 byte r, byte g, byte b, byte a)
 {
-  if(shape->nLines%STYLE_INCREMENT == 0)
+  if(shape->nLines % STYLE_INCREMENT == 0)
+  {
     shape->lines = realloc(shape->lines,
 			   (shape->nLines+STYLE_INCREMENT) *
 			   sizeof(SWFLineStyle));
+  }
 
   shape->lines[shape->nLines] = newSWFLineStyle(width, r, g, b, a);
 
   return ++shape->nLines;
 }
 
+
 /* if the current shape record isn't a style change record, add one */
-static inline ShapeRecord addStyleRecord(SWFShape shape)
+static ShapeRecord addStyleRecord(SWFShape shape)
 {
   if(shape->nRecords > 0 &&
      shape->records[shape->nRecords-1].type == SHAPERECORD_STATECHANGE)
+  {
     return shape->records[shape->nRecords-1];
+  }
   else
     return newShapeRecord(shape, SHAPERECORD_STATECHANGE);
 }
+
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 			   byte r, byte g, byte b, byte a)
@@ -414,7 +584,7 @@ void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
   if(width == 0)
     shape->lineWidth = 0;
   else
-    shape->lineWidth = (shape->lines[line-1]->width+1)/2;
+    shape->lineWidth = (SWFLineStyle_getWidth(shape->lines[line-1])+1)/2;
 
   if(shape->isMorph)
     return;
@@ -424,6 +594,7 @@ void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
   record.record.stateChange->line = line;
   record.record.stateChange->flags |= SWF_SHAPE_LINESTYLEFLAG;
 }
+
 
 /* fill 0 is no fill, so set fill->idx to one more than the shape's fill index */
 static SWFFillStyle addFillStyle(SWFShape shape, SWFFillStyle fill)
@@ -441,70 +612,48 @@ static SWFFillStyle addFillStyle(SWFShape shape, SWFFillStyle fill)
 
   if(shape->isEnded)
   {
-    fill->idx = 0;
+    SWFFill_setIdx(fill, 0);
     return fill;
   }
 
   if(shape->nFills%STYLE_INCREMENT == 0)
+  {
     shape->fills = realloc(shape->fills,
 			   (shape->nFills+STYLE_INCREMENT) *
 			   sizeof(SWFFillStyle));
+  }
 
-  fill->idx = shape->nFills+1;
+  SWFFill_setIdx(fill, shape->nFills+1);
+
   shape->fills[shape->nFills] = fill;
   ++shape->nFills;
 
   return fill;
 }
 
+
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
 					byte r, byte g, byte b, byte a)
 {
-  SWFFillStyle fill = calloc(1, FILLSTYLE_SIZE);
-
-  fill->type = SWF_FILL_SOLID;
-  fill->data.solid.r = r;
-  fill->data.solid.g = g;
-  fill->data.solid.b = b;
-  fill->data.solid.a = a;
-  fill->matrix = NULL; /* make purify shut up */
-
-  return addFillStyle(shape, fill);
+  return addFillStyle(shape, newSWFSolidFillStyle(r, g, b, a));
 }
+
 
 SWFFillStyle SWFShape_addGradientFillStyle(SWFShape shape,
 					   SWFGradient gradient, byte flags)
 {
-  SWFFillStyle fill = calloc(1, FILLSTYLE_SIZE);
-
-  if(flags == SWF_FILL_RADIAL_GRADIENT)
-    fill->type = SWF_FILL_RADIAL_GRADIENT;
-  else
-    fill->type = SWF_FILL_LINEAR_GRADIENT;
-
-  fill->data.gradient = gradient;
-  fill->matrix = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
-
-  return addFillStyle(shape, fill);
+  return addFillStyle(shape, newSWFGradientFillStyle(gradient, flags));
 }
+
 
 SWFFillStyle SWFShape_addBitmapFillStyle(SWFShape shape,
 					 SWFBitmap bitmap, byte flags)
 {
-  SWFFillStyle fill = calloc(1, FILLSTYLE_SIZE);
-
-  if(flags == SWF_FILL_CLIPPED_BITMAP)
-    fill->type = SWF_FILL_CLIPPED_BITMAP;
-  else
-    fill->type = SWF_FILL_TILED_BITMAP;
-
-  fill->data.bitmap = bitmap;
-  fill->matrix = newSWFMatrix(20.0, 0, 0, 20.0, 0, 0);
-
   SWFCharacter_addDependency((SWFCharacter)shape, (SWFBlock)bitmap);
 
-  return addFillStyle(shape, fill);
+  return addFillStyle(shape, newSWFBitmapFillStyle(bitmap, flags));
 }
+
 
 void SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill)
 {
@@ -517,14 +666,17 @@ void SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill)
 
   if(fill != NOFILL)
   {
-    SWF_assert(fill->idx <= shape->nFills);
-    record.record.stateChange->leftFill = fill->idx;
+    if(SWFFill_getIdx(fill) > shape->nFills)
+      SWF_error("Invalid fill idx");
+
+    record.record.stateChange->leftFill = SWFFill_getIdx(fill);
   }
   else
     record.record.stateChange->leftFill = 0;
 
   record.record.stateChange->flags |= SWF_SHAPE_FILLSTYLE0FLAG;
 }
+
 
 void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 {
@@ -537,8 +689,10 @@ void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 
   if(fill != NOFILL)
   {
-    SWF_assert(fill->idx <= shape->nFills);
-    record.record.stateChange->rightFill = fill->idx;
+    if(SWFFill_getIdx(fill) > shape->nFills)
+      SWF_error("Invalid fill idx");
+
+    record.record.stateChange->rightFill = SWFFill_getIdx(fill);
   }
   else
     record.record.stateChange->rightFill = 0;
@@ -559,26 +713,29 @@ void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y)
 
   record.record.stateChange->moveToX = shape->xpos = x;
   record.record.stateChange->moveToY = shape->ypos = y;
+
   record.record.stateChange->flags |= SWF_SHAPE_MOVETOFLAG;
 
   if(shape->nRecords == 0 ||
      (shape->nRecords == 1 &&
       shape->records[0].type == SHAPERECORD_STATECHANGE))
   {
-    CHARACTER(shape)->bounds->minX = CHARACTER(shape)->bounds->maxX = x;
-    CHARACTER(shape)->bounds->minY = CHARACTER(shape)->bounds->maxY = y;
+    SWFRect_setBounds(SWFCharacter_getBounds(CHARACTER(shape)), x, x, y, y);
   }
 }
+
 
 void SWFShape_moveScaledPen(SWFShape shape, int x, int y)
 {
   SWFShape_moveScaledPenTo(shape, shape->xpos+x, shape->ypos+y);
 }
 
+
 int SWFShape_getScaledPenX(SWFShape shape)
 {
   return shape->xpos;
 }
+
 
 int SWFShape_getScaledPenY(SWFShape shape)
 {
@@ -608,10 +765,10 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
   byteAlign();
 
   if(readBits(f, 4) != 1) /* fill bits */
-    SWF_error("SWFShape_drawGlyph: was expecting fill bits = 1");
+    SWF_error("SWFShape_drawGlyph: bad file format (was expecting fill bits = 1)");
 
   if(readBits(f, 4) != 0) /* line bits */
-    SWF_error("SWFShape_drawGlyph: was expecting line bits = 0");
+    SWF_error("SWFShape_drawGlyph: bad file format (was expecting line bits = 0)");
 
   /* now we get to parse the shape commands.  Oh boy.
      the first one will be a non-edge block- grab the moveto loc */
@@ -625,7 +782,7 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
   SWFShape_moveScaledPenTo(shape, x*size/1024, y*size/1024);
 
   if(readBits(f, 1) != 1) /* fill1 = 1 */
-    SWF_error("SWFShape_drawGlyph: was expecting fill1 = 1.");
+    SWF_error("SWFShape_drawGlyph: bad file format (was expecting fill1 = 1)");
 
   /* translate the glyph's shape records into drawing commands */
 

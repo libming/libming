@@ -20,18 +20,23 @@
 #ifndef SWF_BLOCK_H_INCLUDED
 #define SWF_BLOCK_H_INCLUDED
 
+typedef struct SWFBlock_s *SWFBlock;
+#define BLOCK(b) ((SWFBlock)(b))
+
 #include "libswf.h"
 #include "method.h"
 #include "blocktypes.h"
 
-struct _block;
 
-typedef void (*writeSWFBlockMethod)(struct _block *block,
+typedef void (*writeSWFBlockMethod)(SWFBlock block,
 				    SWFByteOutputMethod method, void *data);
-typedef int (*completeSWFBlockMethod)(struct _block *block);
-typedef void (*destroySWFBlockMethod)(struct _block *block);
 
-struct _block
+typedef int (*completeSWFBlockMethod)(SWFBlock block);
+
+typedef void (*destroySWFBlockMethod)(SWFBlock block);
+
+
+struct SWFBlock_s
 {
   SWFBlocktype type;
 
@@ -43,26 +48,67 @@ struct _block
   byte isDefined;
   byte completed;
 };
-typedef struct _block swfBlock;
-typedef struct _block *SWFBlock;
 
-#define BLOCK_SIZE sizeof(struct _block)
+
+/* sets the defined flag in this block */
 
 void SWFBlock_setDefined(SWFBlock block);
+
+
+/* returns true if the block has been defined- i.e., written to the file */
+
 byte SWFBlock_isDefined(SWFBlock block);
 
+
+/* returns the byte length of this block */
+
+int SWFBlock_getLength(SWFBlock block);
+
+
+/* destroy this block by calling its destructor */
+
 void destroySWFBlock(SWFBlock block);
+
+
+/* calls the block's completion method and returns its byte length */
+
 int completeSWFBlock(SWFBlock block);
+
+
+/* writes this block to the given output method */
+
 int writeSWFBlockToMethod(SWFBlock block,
 			  SWFByteOutputMethod method, void *data);
 
-#define BLOCK(s) ((SWFBlock)(s))
+
+/* initialize character values to something sane */
+
+void SWFBlockInit(SWFBlock block);
+
+
+/* return a new ShowFrame block */
 
 SWFBlock newSWFShowFrameBlock();
+
+
+/* return a new End block */
+
 SWFBlock newSWFEndBlock();
+
+
+/* return a new Protect block */
+
 SWFBlock newSWFProtectBlock();
+
+
+/* return a new empty block */
+
 SWFBlock newEmptySWFBlock();
 
+
+/* return the block's type */
+
 SWFBlocktype SWFBlock_getType(SWFBlock block);
+
 
 #endif /* SWF_BLOCK_H_INCLUDED */

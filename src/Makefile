@@ -18,6 +18,9 @@ COMPILEROFILES = actioncompiler/compile.o \
 
 all: dynamic
 
+# saveFP and restFP on OS X can be retrieved as such:
+# ar -x /usr/lib/libcc_dynamic.a lib/macosx-fpsave.o
+
 dynamic: ${OFILES}
 	cd blocks && make
 	cd actioncompiler && make

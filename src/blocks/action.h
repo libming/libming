@@ -29,7 +29,9 @@
 typedef SWFOutputBlock SWFAction;
 
 SWFAction newSWFAction();
+
 SWFAction newSWFAction_fromOutput(SWFOutput out);
+
 void destroySWFAction(SWFAction action);
 
 #endif /* SWF_ACTION_H_INCLUDED */

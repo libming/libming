@@ -22,6 +22,8 @@
 #ifndef SWF_SHAPE_H_INCLUDED
 #define SWF_SHAPE_H_INCLUDED
 
+typedef struct SWFShape_s *SWFShape;
+
 #include "libswf.h"
 
 #include "blocktypes.h"
@@ -41,120 +43,67 @@
 
 #define NOFILL NULL
 
-struct _stateChangeRecord
-{
-  int flags;
-  int moveToX;
-  int moveToY;
-  int leftFill;
-  int rightFill;
-  int line;
-  /* newstyle not used.. */
-};
-typedef struct _stateChangeRecord *StateChangeRecord;
-
-struct _lineToRecord
-{
-  int dx;
-  int dy;
-};
-typedef struct _lineToRecord *LineToRecord;
-
-struct _curveToRecord
-{
-  int controlx;
-  int controly;
-  int anchorx;
-  int anchory;
-};
-typedef struct _curveToRecord *CurveToRecord;
-
-typedef enum
-{
-  SHAPERECORD_STATECHANGE,
-  SHAPERECORD_LINETO,
-  SHAPERECORD_CURVETO
-} shapeRecordType;
-
-struct _shapeRecord
-{
-  shapeRecordType type;
-
-  union
-  {
-    StateChangeRecord stateChange;
-    LineToRecord lineTo;
-    CurveToRecord curveTo;
-  } record;
-};
-typedef struct _shapeRecord ShapeRecord;
-
-struct _shape
-{
-  swfCharacter character;
-  ShapeRecord *records;
-  int nRecords;
-  SWFOutput out;
-  int xpos;	/* cursor for using abs. coords in lineTo, curveTo */
-  int ypos;
-  SWFLineStyle *lines;
-  SWFFillStyle *fills;
-  byte nLines;
-  byte nFills;
-  short lineWidth;
-  byte isMorph;
-  byte isEnded;
-};
-typedef struct _shape *SWFShape;
-
-#define SHAPE_SIZE sizeof(struct _shape)
 
 /* returns new shape object */
 SWFShape newSWFShape();
+
 void destroySWFShape(SWFBlock block);
+
 void SWFShape_addStyleHeader(SWFShape shape);
 
 int SWFShape_getScaledPenX(SWFShape shape);
+
 int SWFShape_getScaledPenY(SWFShape shape);
 
 void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
+
 void SWFShape_moveScaledPen(SWFShape shape, int x, int y);
 
 void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
+
 void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
-void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
+
+void SWFShape_drawScaledCurveTo(SWFShape shape,
+				int controlx, int controly,
 				int anchorx, int anchory);
-void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
+
+void SWFShape_drawScaledCurve(SWFShape shape,
+			      int controldx, int controldy,
 			      int anchordx, int anchordy);
 
 void SWFShape_drawScaledGlyph(SWFShape shape,
 			      SWFFont font, unsigned char c, int size);
-
-
-/* deprecated: */
-
-#define SWFShape_moveTo SWFShape_movePenTo
-#define SWFShape_moveToRelative SWFShape_movePen
-#define SWFShape_lineTo SWFShape_drawScaledLineTo
-#define SWFShape_lineToRelative SWFShape_drawScaledLine
-#define SWFShape_curveTo SWFShape_drawScaledCurveTo
-#define SWFShape_curveToRelative SWFShape_drawScaledCurve
-
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 			   byte r, byte g, byte b, byte a);
 
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
 					byte r, byte g, byte b, byte a);
+
 SWFFillStyle SWFShape_addGradientFillStyle(SWFShape shape,
 					   SWFGradient gradient, byte flags);
+
 SWFFillStyle SWFShape_addBitmapFillStyle(SWFShape shape,
 					 SWFBitmap bitmap, byte flags);
 
 void SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill);
+
 void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill);
 
 void SWFShape_end(SWFShape shape);
+
 void SWFShape_flushStateChange(SWFShape shape);
+
+SWFOutput SWFShape_getOutput(SWFShape shape);
+
+SWFFillStyle *SWFShape_getFills(SWFShape shape);
+
+int SWFShape_getNFills(SWFShape shape);
+
+SWFLineStyle *SWFShape_getLines(SWFShape shape);
+
+int SWFShape_getNLines(SWFShape shape);
+
+void SWFShape_setMorphFlag(SWFShape shape);
 
 #endif /* SWF_SHAPE_H_INCLUDED */

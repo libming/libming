@@ -19,9 +19,35 @@
 
 #include <stdlib.h>
 #include <math.h>
+
 #include "movie.h"
 #include "shape_util.h"
 #include "ming.h"
+
+#include "blocks/exports.h"
+#include "blocks/rect.h"
+
+
+struct SWFMovie_s
+{
+  SWFBlockList blockList;
+  SWFDisplayList displayList;
+  float rate;
+  SWFRect bounds;
+  unsigned short nFrames;
+  unsigned short totalFrames;
+  byte version;
+
+  /* export items */
+  short nExports;
+  struct SWFExport_s *exports;
+
+  /* background color */
+  byte r;
+  byte g;
+  byte b;
+};
+
 
 static void destroySWFExports(SWFMovie movie)
 {
@@ -36,6 +62,7 @@ static void destroySWFExports(SWFMovie movie)
   movie->nExports = 0;
 }
 
+
 void destroySWFMovie(SWFMovie movie)
 {
   destroySWFBlockList(movie->blockList);
@@ -48,11 +75,12 @@ void destroySWFMovie(SWFMovie movie)
   free(movie);
 }
 
+
 extern int SWF_gNumCharacters;
 
 SWFMovie newSWFMovieWithVersion(int version)
 {
-  SWFMovie movie = calloc(1, SWFMOVIE_SIZE);
+  SWFMovie movie = malloc(sizeof(struct SWFMovie_s));
 
   movie->version = version;
   movie->blockList = newSWFBlockList();
@@ -60,24 +88,30 @@ SWFMovie newSWFMovieWithVersion(int version)
   movie->bounds = newSWFRect(0, 320*20, 0, 240*20);
   movie->rate = 12.0;
   movie->totalFrames = 1;
+  movie->nFrames = 0;
 
   movie->nExports = 0;
   movie->exports = NULL;
 
-  SWFMovie_addBlock(movie, newSWFSetBackgroundBlock(0xff,0xff,0xff));
+  movie->r = 0xff;
+  movie->g = 0xff;
+  movie->b = 0xff;
 
   return movie;
 }
+
 
 SWFMovie newSWFMovie()
 {
   return newSWFMovieWithVersion(SWF_versionNum);
 }
 
+
 void SWFMovie_setRate(SWFMovie movie, float rate)
 {
   movie->rate = rate;
 }
+
 
 extern float Ming_scale;
 
@@ -90,16 +124,20 @@ void SWFMovie_setDimension(SWFMovie movie, float width, float height)
 			     0, (int)rint(Ming_scale*height));
 }
 
+
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int totalFrames)
 {
   movie->totalFrames = totalFrames;
 }
 
-void SWFMovie_setBackground(SWFMovie movie, int r, int g, int b)
+
+void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b)
 {
-  destroySWFBlock(movie->blockList->blocks[0].block);
-  movie->blockList->blocks[0].block = newSWFSetBackgroundBlock(r,g,b);
+  movie->r = r;
+  movie->g = g;
+  movie->b = b;
 }
+
 
 void SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
 {
@@ -109,12 +147,13 @@ void SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
   SWFBlockList_addBlock(movie->blockList, block);
 }
 
+
 void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name)
 {
   if(SWFBlock_getType(block) == SWF_DEFINESPRITE)
   {
     movie->exports = realloc(movie->exports,
-			     (movie->nExports+1) * sizeof(struct swfexport));
+			     (movie->nExports+1) * sizeof(struct SWFExport_s));
 
     movie->exports[movie->nExports].block = block;
     movie->exports[movie->nExports].name = strdup(name);
@@ -122,6 +161,7 @@ void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name)
     ++movie->nExports;
   }
 }
+
 
 /* from displaylist.c */
 void resolveDependencies(SWFCharacter character, SWFBlockList list);
@@ -133,23 +173,24 @@ void SWFMovie_writeExports(SWFMovie movie)
   if(movie->nExports == 0)
     return;
 
-  for(n=0 ; n<movie->nExports ; ++n)
+  for(n=0; n<movie->nExports; ++n)
   {
     SWFBlock b = movie->exports[n].block;
 
-    if(!SWFBlock_isDefined(b))
+    if(SWFBlock_isCharacter && !SWFBlock_isDefined(b))
     {
-      resolveDependencies(b, movie->blockList);
+      resolveDependencies((SWFCharacter)b, movie->blockList);
       completeSWFBlock(b);
       SWFMovie_addBlock(movie, b);
     }
   }
 
   SWFMovie_addBlock(movie,
-		    newSWFExportBlock(movie->exports, movie->nExports));
+		    (SWFBlock)newSWFExportBlock(movie->exports, movie->nExports));
 
   destroySWFExports(movie);
 }
+
 
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
 {
@@ -166,7 +207,9 @@ SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
      SWFBlock_getType(block) == SWF_DEFINELOSSLESS2)
   {
     SWFShape shape = newSWFShape();
-    SWFFill fill = SWFShape_addBitmapFill(shape, block, SWFFILL_TILED_BITMAP);
+
+    SWFFill fill =
+      SWFShape_addBitmapFill(shape, (SWFBitmap)block, SWF_FILL_TILED_BITMAP);
 
     float width = SWFCharacter_getWidth((SWFCharacter)block);
     float height = SWFCharacter_getHeight((SWFCharacter)block);
@@ -192,10 +235,12 @@ SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
   return NULL;
 }
 
+
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item)
 {
   SWFDisplayItem_remove(item);
 }
+
 
 void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound)
 {
@@ -215,15 +260,18 @@ void SWFMovie_nextFrame(SWFMovie movie)
   SWFMovie_addBlock(movie, newSWFShowFrameBlock());
 }
 
+
 void SWFMovie_labelFrame(SWFMovie movie, char *label)
 {
-  SWFMovie_addBlock(movie, newSWFFrameLabelBlock(label));
+  SWFMovie_addBlock(movie, (SWFBlock)newSWFFrameLabelBlock(label));
 }
+
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 {
   int length;
   SWFOutput header;
+  SWFBlock backgroundBlock;
 
   if(movie->nExports > 0)
     SWFMovie_writeExports(movie);
@@ -233,11 +281,11 @@ int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 
   SWFMovie_addBlock(movie, newSWFEndBlock());
 
-  length = SWFBlockList_completeBlocks(movie->blockList);
+  // add five for the setbackground block..
+  length = SWFBlockList_completeBlocks(movie->blockList) + 5;
 
   /* XXX - hack */
-  if(movie->displayList->soundStream)
-    SWFSound_rewind(movie->displayList->soundStream);
+  SWFDisplayList_rewindSoundStream(movie->displayList);
 
   header = newSizedSWFOutput(20);
 
@@ -248,7 +296,7 @@ int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
   SWFOutput_writeUInt16(header, movie->nFrames);
 
   SWFOutput_byteAlign(header);
-  length += 8 + SWFOutput_length(header);
+  length += 8 + SWFOutput_getLength(header);
 
   method('F', data);
   method('W', data);
@@ -259,7 +307,27 @@ int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 
   destroySWFOutput(header);
 
+  backgroundBlock =
+    (SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
+
+  writeSWFBlockToMethod(backgroundBlock, method, data);
   SWFBlockList_writeBlocksToMethod(movie->blockList, method, data);
 
+  destroySWFBlock(backgroundBlock);
+
   return length;
+}
+
+
+int SWFMovie_save(SWFMovie movie, char *filename)
+{
+  FILE *f = fopen(filename, "wb");
+  int count;
+
+  if(f == NULL)
+    return -1;
+
+  count = SWFMovie_output(movie, fileOutputMethod, f);
+  fclose(f);
+  return count;
 }

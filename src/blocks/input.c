@@ -11,25 +11,43 @@
 
 #include "input.h"
 
+
+struct SWFInput_s
+{
+  void (*destroy)(SWFInput this);
+  int (*getChar)(SWFInput this);
+  void (*seek)(SWFInput this, long offset, int whence);
+  int (*eof)(SWFInput this);
+
+  int offset;
+  int length;
+  void *data;
+};
+
+
 int SWFInput_getChar(SWFInput input)
 {
   return input->getChar(input);
 }
+
 
 int SWFInput_getUInt16(SWFInput input)
 {
   return SWFInput_getChar(input) + (SWFInput_getChar(input)<<8);
 }
 
+
 int SWFInput_getUInt16_BE(SWFInput input)
 {
   return (SWFInput_getChar(input)<<8) + SWFInput_getChar(input);
 }
 
+
 int SWFInput_getSInt16(SWFInput input)
 {
   return SWFInput_getChar(input) + SWFInput_getChar(input)*256;
 }
+
 
 unsigned long SWFInput_getUInt32(SWFInput input)
 {
@@ -39,6 +57,7 @@ unsigned long SWFInput_getUInt32(SWFInput input)
 			 (SWFInput_getChar(input)<<24));
 }
 
+
 unsigned long SWFInput_getUInt32_BE(SWFInput input)
 {
   return (unsigned long)((SWFInput_getChar(input)<<24) +
@@ -47,10 +66,12 @@ unsigned long SWFInput_getUInt32_BE(SWFInput input)
 			 SWFInput_getChar(input));
 }
 
+
 void SWFInput_seek(SWFInput input, long offset, int whence)
 {
   input->seek(input, offset, whence);
 }
+
 
 int SWFInput_length(SWFInput input)
 {
@@ -60,27 +81,31 @@ int SWFInput_length(SWFInput input)
   return input->length;
 }
 
+
 int SWFInput_eof(SWFInput input)
 {
   return input->eof(input);
 }
+
 
 int SWFInput_tell(SWFInput input)
 {
   return input->offset;
 }
 
+
 void SWFInput_rewind(SWFInput input)
 {
   SWFInput_seek(input, 0, SEEK_SET);
 }
+
 
 void destroySWFInput(SWFInput input)
 {
   input->destroy(input);
 }
 
-void SWFInput_dtor(SWFInput input)
+static void SWFInput_dtor(SWFInput input)
 {
   free(input);
 }
@@ -88,7 +113,7 @@ void SWFInput_dtor(SWFInput input)
 
 /* SWFInput_file */
 
-void SWFInput_file_seek(SWFInput input, long offset, int whence)
+static void SWFInput_file_seek(SWFInput input, long offset, int whence)
 {
   if(fseek((FILE *)input->data, offset, whence) == -1)
   {
@@ -110,12 +135,14 @@ void SWFInput_file_seek(SWFInput input, long offset, int whence)
     input->offset += offset;
 }
 
-int SWFInput_file_eof(SWFInput input)
+
+static int SWFInput_file_eof(SWFInput input)
 {
   return feof((FILE *)input->data);
 }
 
-int SWFInput_file_getChar(SWFInput input)
+
+static int SWFInput_file_getChar(SWFInput input)
 {
   int c = fgetc((FILE *)input->data);
 
@@ -126,6 +153,7 @@ int SWFInput_file_getChar(SWFInput input)
 
   return c;
 }
+
 
 SWFInput newSWFInput_file(FILE *f)
 {
@@ -140,13 +168,13 @@ SWFInput newSWFInput_file(FILE *f)
   if(fstat(fileno(f), &buf) == -1)
     SWF_error("Couldn't fstat filehandle in newSWFInput_file");;
 
-  input = calloc(1, sizeof(struct _swfInput));
+  input = malloc(sizeof(struct SWFInput_s));
 
   input->getChar = SWFInput_file_getChar;
   input->destroy = SWFInput_dtor;
   input->eof = SWFInput_file_eof;
   input->seek = SWFInput_file_seek;
-  input->data = (void *)f;
+  input->data = f;
 
   input->offset = 0;
   input->length = buf.st_size;
@@ -157,7 +185,7 @@ SWFInput newSWFInput_file(FILE *f)
 
 /* SWFInput_buffer */
 
-int SWFInput_buffer_getChar(SWFInput input)
+static int SWFInput_buffer_getChar(SWFInput input)
 {
   if(input->offset >= input->length)
     return EOF;
@@ -165,12 +193,14 @@ int SWFInput_buffer_getChar(SWFInput input)
     return ((unsigned char *)input->data)[input->offset++];
 }
 
-int SWFInput_buffer_eof(SWFInput input)
+
+static int SWFInput_buffer_eof(SWFInput input)
 {
   return input->offset >= input->length;
 }
 
-void SWFInput_buffer_seek(SWFInput input, long offset, int whence)
+
+static void SWFInput_buffer_seek(SWFInput input, long offset, int whence)
 {
   if(whence == SEEK_CUR)
   {
@@ -187,15 +217,16 @@ void SWFInput_buffer_seek(SWFInput input, long offset, int whence)
     input->offset = min(input->length, offset);
 }
 
+
 SWFInput newSWFInput_buffer(unsigned char *buffer, int length)
 {
-  SWFInput input = calloc(1, sizeof(struct _swfInput));
+  SWFInput input = malloc(sizeof(struct SWFInput_s));
 
   input->getChar = SWFInput_buffer_getChar;
   input->destroy = SWFInput_dtor;
   input->eof = SWFInput_buffer_eof;
   input->seek = SWFInput_buffer_seek;
-  input->data = (void *)buffer;
+  input->data = buffer;
 
   input->offset = 0;
   input->length = length;
@@ -203,11 +234,13 @@ SWFInput newSWFInput_buffer(unsigned char *buffer, int length)
   return input;
 }
 
-void SWFInput_buffer_dtor(SWFInput input)
+
+static void SWFInput_buffer_dtor(SWFInput input)
 {
   free(input->data);
   free(input);
 }
+
 
 /* same as above but needs to be freed */
 SWFInput newSWFInput_allocedBuffer(unsigned char *buffer, int length)
@@ -222,16 +255,17 @@ SWFInput newSWFInput_allocedBuffer(unsigned char *buffer, int length)
 
 #define INPUTSTREAM_INCREMENT 1024
 
-struct _inputStreamData
+struct SWFInputStreamData
 {
   FILE *file;
   unsigned char *buffer;
 };
 
-void SWFInput_stream_seek(SWFInput input, long offset, int whence)
+
+static void SWFInput_stream_seek(SWFInput input, long offset, int whence)
 {
   int len;
-  unsigned char *buffer;
+  struct SWFInputStreamData *data;
 
   if(whence == SEEK_CUR)
     input->offset = min(input->length, input->offset + offset);
@@ -257,40 +291,37 @@ void SWFInput_stream_seek(SWFInput input, long offset, int whence)
 
   len = ((input->offset/INPUTSTREAM_INCREMENT)+1) * INPUTSTREAM_INCREMENT;
 
-  buffer = ((struct _inputStreamData *)input->data)->buffer =
-    realloc(((struct _inputStreamData *)input->data)->buffer,
-	    sizeof(unsigned char) * len);
+  data = input->data;
+
+  data->buffer = realloc(data->buffer, sizeof(unsigned char) * len);
 
   while(len > 0)
-  {
-    len -= fread(buffer, sizeof(unsigned char), len,
-		 ((struct _inputStreamData *)input->data)->file);
-  }
+    len -= fread(data->buffer, sizeof(unsigned char), len, data->file);
 }
 
-int SWFInput_stream_getChar(SWFInput input)
+
+static int SWFInput_stream_getChar(SWFInput input)
 {
+  struct SWFInputStreamData *data = input->data;
+
   if(input->offset == input->length)
   {
     /* fetch from stream, save in buffer */
 
-    FILE *f = ((struct _inputStreamData *)input->data)->file;
+    FILE *f = data->file;
     int c = fgetc(f);
 
     ++input->offset;
 
     if(c != EOF)
     {
-      unsigned char *buffer = ((struct _inputStreamData *)input->data)->buffer;
-
       if(input->length % INPUTSTREAM_INCREMENT == 0)
       {
-	buffer = ((struct _inputStreamData *)input->data)->buffer =
-	  realloc(buffer, sizeof(unsigned char) *
-		  (input->length + INPUTSTREAM_INCREMENT));
+	data->buffer = realloc(data->buffer, sizeof(unsigned char) *
+			       (input->length + INPUTSTREAM_INCREMENT));
       }
 
-      buffer[input->length] = c;
+      data->buffer[input->length] = c;
       ++input->length;
     }
 
@@ -299,21 +330,24 @@ int SWFInput_stream_getChar(SWFInput input)
   else if(input->offset < input->length)
   {
     /* fetch from buffer */
-    return ((struct _inputStreamData *)input->data)->buffer[input->offset++];
+    return data->buffer[input->offset++];
   }
   else
     return EOF;
 }
 
-void SWFInput_stream_dtor(SWFInput input)
+
+static void SWFInput_stream_dtor(SWFInput input)
 {
   free(input->data);
 }
 
+
 SWFInput newSWFInput_stream(FILE *f)
 {
-  SWFInput input = calloc(1, sizeof(struct _swfInput));
-  struct _inputStreamData *data = calloc(1, sizeof(struct _inputStreamData));
+  SWFInput input = malloc(sizeof(struct SWFInput_s));
+
+  struct SWFInputStreamData *data = malloc(sizeof(struct SWFInputStreamData));
 
   input->getChar = SWFInput_stream_getChar;
   input->destroy = SWFInput_stream_dtor;

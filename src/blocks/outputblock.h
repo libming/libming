@@ -20,6 +20,8 @@
 #ifndef SWF_OUTPUTBLOCK_H_INCLUDED
 #define SWF_OUTPUTBLOCK_H_INCLUDED
 
+typedef struct SWFOutputBlock_s *SWFOutputBlock;
+
 #include "libswf.h"
 #include "block.h"
 #include "output.h"
@@ -28,16 +30,10 @@
 #include "cxform.h"
 #include "exports.h"
 
-struct _outputBlock
-{
-  swfBlock block;
-  SWFOutput output;
-};
-typedef struct _outputBlock *SWFOutputBlock;
 
-#define SWFOUTPUTBLOCK_SIZE sizeof(struct _outputBlock)
+SWFOutput SWFOutputBlock_getOutput(SWFOutputBlock block);
 
-void destroySWFOutputBlock(SWFBlock block);
+int SWFOutputBlock_getLength(SWFOutputBlock block);
 
 SWFOutputBlock newSWFOutputBlock(SWFOutput out, SWFBlocktype type);
 
@@ -45,9 +41,15 @@ SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 				      SWFMatrix matrix, SWFCXform cXform);
 
 SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
+
 SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
+
 SWFOutputBlock newSWFRemoveObject2Block(int depth);
+
 SWFOutputBlock newSWFFrameLabelBlock(char *string);
+
 SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
+
+void destroySWFOutputBlock(SWFBlock block);
 
 #endif /* SWF_OUTPUTBLOCK_H_INCLUDED */

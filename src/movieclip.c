@@ -21,6 +21,17 @@
 #include <math.h>
 
 #include "movieclip.h"
+#include "blocks/sprite.h"
+
+struct SWFMovieClip_s
+{
+  struct SWFSprite_s sprite;
+
+  SWFBlockList blockList;
+  SWFDisplayList displayList;
+  unsigned short nFrames;
+};
+
 
 void destroySWFMovieClip(SWFMovieClip clip)
 {
@@ -28,24 +39,30 @@ void destroySWFMovieClip(SWFMovieClip clip)
   destroySWFDisplayList(clip->displayList);
   destroySWFSprite((SWFBlock)clip);
 }
+
+
 SWFMovieClip newSWFMovieClip()
 {
   SWFMovieClip clip = (SWFMovieClip)newSWFSprite();
-  clip = realloc(clip, SWFMOVIECLIP_SIZE);
+  clip = realloc(clip, sizeof(struct SWFMovieClip_s));
 
   clip->blockList = newSWFBlockList();
   clip->displayList = newSWFSpriteDisplayList();
   return clip;
 }
+
+
 void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
 {
   SWFSprite_setNumberOfFrames((SWFSprite)clip, totalFrames);
 }
 
+
 void SWFMovieClip_addBlock(SWFMovieClip movie, SWFBlock block)
 {
   SWFBlockList_addBlock(movie->blockList, block);
 }
+
 
 void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate)
 {
@@ -87,26 +104,22 @@ SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
   return NULL;
 }
 
+
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item)
 {
   SWFDisplayItem_remove(item);
 }
+
 
 void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label)
 {
   SWFSprite_addBlock((SWFSprite)clip, (SWFBlock)newSWFFrameLabelBlock(label));
 }
 
+
 void SWFMovieClip_nextFrame(SWFMovieClip clip)
 {
-  int i;
-
   SWFDisplayList_writeBlocks(clip->displayList, clip->blockList);
-
-  for(i=0; i<clip->blockList->nBlocks; ++i)
-    SWFSprite_addBlock((SWFSprite)clip, clip->blockList->blocks[i].block);
-
+  SWFBlockList_addToSprite(clip->blockList, (SWFSprite)clip);
   SWFSprite_addBlock((SWFSprite)clip, newSWFShowFrameBlock());
-
-  clip->blockList->nBlocks = 0;
 }

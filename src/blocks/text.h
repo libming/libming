@@ -20,6 +20,9 @@
 #ifndef SWF_TEXT_H_INCLUDED
 #define SWF_TEXT_H_INCLUDED
 
+typedef struct SWFText_s *SWFText;
+typedef struct SWFTextRecord_s *SWFTextRecord;
+
 #include "libswf.h"
 
 #include "output.h"
@@ -30,19 +33,6 @@
 #include "rect.h"
 #include "character.h"
 
-struct _text
-{
-  swfCharacter character;
-  SWFOutput out;
-  SWFMatrix matrix;
-  byte nAdvanceBits;
-  byte nGlyphBits;
-  SWFTextRecord textRecord;
-  SWFTextRecord currentRecord;
-};
-typedef struct _text *SWFText;
-
-#define SWF_TEXT_SIZE sizeof(struct _text)
 
 #define SWF_TEXT_STATE_CHANGE (1<<7)
 #define SWF_TEXT_HAS_FONT     (1<<3)
@@ -50,27 +40,45 @@ typedef struct _text *SWFText;
 #define SWF_TEXT_HAS_Y        (1<<1)
 #define SWF_TEXT_HAS_X        (1<<0)
 
+#define FONTID(t) (((t)->isBrowserFont) ? CHARACTERID((t)->font.browserFont) : CHARACTERID((t)->font.font))
+
+
 SWFText newSWFText();
+
 SWFText newSWFText2();
+
 void destroySWFText(SWFBlock block);
+
 void SWFOutput_writeText(SWFOutput out, SWFText text);
 
 void SWFText_setFont(SWFText text, SWFBlock font);
+
 void SWFText_setScaledHeight(SWFText text, int height);
+
 void SWFText_scaledMoveTo(SWFText text, int x, int y);
+
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
+
 void SWFText_addString(SWFText text, const char *string, int *advance);
+
 void SWFText_setSpacing(SWFText text, float spacing);
 
 int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string);
 
 short SWFText_getScaledAscent(SWFText text);
+
 short SWFText_getScaledDescent(SWFText text);
+
 short SWFText_getScaledLeading(SWFText text);
 
 void SWFText_resolveCodes(SWFText text);
 
-/* deprecated: */
-#define SWFText_setXY(t,x,y) SWFText_scaledMoveTo((t),(x),(y))
+SWFTextRecord newSWFTextRecord();
+
+void destroySWFTextRecord(SWFTextRecord record);
+
+char *SWFTextRecord_getString(SWFTextRecord record);
+
+SWFTextRecord SWFTextRecord_getNext(SWFTextRecord record);
 
 #endif /* SWF_TEXT_H_INCLUDED */

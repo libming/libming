@@ -22,29 +22,14 @@
 #ifndef SWF_GRADIENT_H_INCLUDED
 #define SWF_GRADIENT_H_INCLUDED
 
+typedef struct SWFGradient_s *SWFGradient;
+
 #include "output.h"
 #include "matrix.h"
 #include "bitmap.h"
 
-struct _gradientEntry
-{
-  byte ratio;
-  byte r;
-  byte g;
-  byte b;
-  byte a;
-};
-
-struct _gradient
-{
-  struct _gradientEntry entries[8];
-  int nGrads;
-};
-typedef struct _gradient *SWFGradient;
-
-#define GRADIENT_SIZE sizeof(struct _gradient)
-
 SWFGradient newSWFGradient();
+
 void destroySWFGradient(SWFGradient gradient);
 
 void SWFGradient_addEntry(SWFGradient gradient,

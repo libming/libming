@@ -4,10 +4,10 @@ CC = gcc -g -Wall -fPIC
 
 OFILES = output.o character.o shape.o morph.o fillstyle.o matrix.o font.o \
 	 block.o cxform.o text.o action.o button.o placeobject.o \
-	 outputblock.o method.o sprite.o fontinfo.o loadfont.o \
+	 outputblock.o method.o sprite.o fontinfo.o \
 	 rect.o jpeg.o soundstream.o mp3.o textfield.o browserfont.o \
 	 dbl.o linestyle.o gradient.o bitmap.o error.o input.o \
-	 placeobject.o #sound.o
+	 #sound.o
 
 all: ${OFILES}
 

@@ -20,44 +20,47 @@
 #ifndef MING_FILL_H_INCLUDED
 #define MING_FILL_H_INCLUDED
 
-#include <stdlib.h>
+typedef struct SWFFill_s *SWFFill;
 
-#include "blocks/swf.h"
-#include "position.h"
+#include <stdlib.h>
+#include "blocks/fillstyle.h"
 
 /* SWFFill adds a position object to manipulate SWFFillStyle's matrix. */
 
-struct _swfFill
-{
-  SWFFillStyle fillstyle;
-  SWFPosition position;
-};
-typedef struct _swfFill *SWFFill;
-
-#define SWFFILL_SIZE (sizeof(struct _swfFill))
-
 SWFFill newSWFFill(SWFFillStyle fillstyle);
+
+SWFFillStyle SWFFill_getFillStyle(SWFFill fill);
+
 void destroySWFFill(SWFFill fill);
 
 void SWFFill_skewX(SWFFill fill, float x);
+
 void SWFFill_skewXTo(SWFFill fill, float x);
+
 void SWFFill_skewY(SWFFill fill, float y);
+
 void SWFFill_skewYTo(SWFFill fill, float y);
+
 void SWFFill_scaleX(SWFFill fill, float x);
+
 void SWFFill_scaleXTo(SWFFill fill, float x);
+
 void SWFFill_scaleY(SWFFill fill, float y);
+
 void SWFFill_scaleYTo(SWFFill fill, float y);
 
-/* deprecated: */
 void SWFFill_scaleXY(SWFFill fill, float x, float y);
+
 void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
 
-void SWFFill_scale(SWFFill fill, float x, float y);
-void SWFFill_scaleTo(SWFFill fill, float x, float y);
 void SWFFill_rotate(SWFFill fill, float degrees);
+
 void SWFFill_rotateTo(SWFFill fill, float degrees);
+
 void SWFFill_move(SWFFill fill, float x, float y);
+
 void SWFFill_moveTo(SWFFill fill, float x, float y);
+
 void SWFFill_setMatrix(SWFFill fill, float a, float b,
 		       float c, float d, float x, float y);
 

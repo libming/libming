@@ -20,6 +20,23 @@
 #include <stdlib.h>
 #include "blocklist.h"
 
+
+/* we have to note which blocks are characters b/c characters may be
+   destroyed before we have a chance to look at them */
+
+struct blockListEntry
+{
+  SWFBlock block;
+  byte isCharacter;
+};
+
+struct SWFBlockList_s
+{
+  struct blockListEntry *blocks;
+  int nBlocks;
+};
+
+
 void destroySWFBlockList(SWFBlockList list)
 {
   int i;
@@ -33,15 +50,25 @@ void destroySWFBlockList(SWFBlockList list)
       destroySWFBlock(list->blocks[i].block);
   }
 
-  free(list->blocks);
+  if(list->blocks != NULL)
+    free(list->blocks);
+
   free(list);
 }
 
+
 SWFBlockList newSWFBlockList()
 {
-  SWFBlockList blockList = calloc(1, SWFBLOCKLIST_SIZE);
+  SWFBlockList blockList = malloc(sizeof(struct SWFBlockList_s));
+
+  blockList->nBlocks = 0;
+  blockList->blocks = NULL;
+
   return blockList;
 }
+
+
+#define SWFBLOCKLIST_INCREMENT 16
 
 void SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
 {
@@ -49,15 +76,33 @@ void SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
     return;
 
   if(list->nBlocks%SWFBLOCKLIST_INCREMENT == 0)
+  {
     list->blocks = realloc(list->blocks,
 			   (list->nBlocks+SWFBLOCKLIST_INCREMENT) *
-			   sizeof(swfBlockEntry));
+			   sizeof(struct blockListEntry));
+  }
 
   list->blocks[list->nBlocks].block = block;
   list->blocks[list->nBlocks].isCharacter = SWFBlock_isCharacter(block);
-  list->nBlocks++;
+  ++list->nBlocks;
+
   SWFBlock_setDefined(block);
 }
+
+
+void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite)
+{
+  int i;
+
+  for(i=0; i<list->nBlocks; ++i)
+    SWFSprite_addBlock(sprite, list->blocks[i].block);
+
+  list->nBlocks = 0;
+
+  free(list->blocks);
+  list->blocks = NULL;
+}
+
 
 int SWFBlockList_completeBlocks(SWFBlockList list)
 {
@@ -68,6 +113,7 @@ int SWFBlockList_completeBlocks(SWFBlockList list)
 
   return total;
 }
+
 
 int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
 				     SWFByteOutputMethod method, void *data)

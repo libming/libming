@@ -20,6 +20,9 @@
 #ifndef SWF_FONT_H_INCLUDED
 #define SWF_FONT_H_INCLUDED
 
+typedef struct SWFTextList_s *SWFTextList;
+typedef struct SWFFont_s *SWFFont;
+
 #include "libswf.h"
 
 #include "blocktypes.h"
@@ -28,6 +31,7 @@
 #include "rect.h"
 #include "character.h"
 #include "browserfont.h"
+#include "text.h"
 
 #define SWF_FONT_UNICODE      (1<<6)
 #define SWF_FONT_SHIFTJIS     (1<<5)
@@ -37,92 +41,39 @@
 #define SWF_FONT_ISBOLD       (1<<1)
 #define SWF_FONT_ISITALIC     (1<<0)
 
-struct KernInfo
-{
-  byte code1;
-  byte code2;
-  short adjustment;
-};
-
-struct _textList
-{
-  struct _textList *next;
-  struct _textRecord *text;		/* hrm.  any way around this? */
-};
-typedef struct _textList *SWFTextList;
-
-#define TEXTLIST_SIZE sizeof(struct _textList)
-
-struct _font
-{
-  swfCharacter character;
-  byte flags;
-  byte nGlyphs;
-  byte *name;
-  byte codeToGlyph[256];
-  byte glyphToCode[256];
-  byte *glyphOffset[257];
-  byte codeTable[256];
-  short ascent;
-  short descent;
-  short leading;
-  unsigned short kernCount;
-  short advances[256];
-  SWFRect bounds; /* different from character bounds, this is an array */
-  struct KernInfo *kernTable;
-  SWFTextList textList;
-  SWFTextList currentList;
-  byte *shapes; /* loaded in from file */
-                /* note that that means we can't compute bounds */
-                /* w/out bounds table */
-};
-typedef struct _font *SWFFont;
-
-#define SWFFONT_SIZE sizeof(struct _font)
-
-struct _textRecord
-{
-  struct _textRecord *next;
-  byte flags;
-  byte isBrowserFont;
-  union
-  {
-    SWFFont font;
-    SWFBrowserFont browserFont;
-  } font;
-  byte r;
-  byte g;
-  byte b;
-  byte a;
-  int x;
-  int y;
-  int height;
-  float spacing;
-  byte *string;
-  int *advance;
-};
-typedef struct _textRecord *SWFTextRecord;
-
-#define TEXTRECORD_SIZE sizeof(struct _textRecord)
-
-SWFTextRecord newSWFTextRecord();
-void destroySWFTextRecord(SWFTextRecord record);
 
 SWFFont newSWFFont();
+
 void destroySWFFont();
+
 SWFFont loadSWFFontFromFile(FILE *file);
 
-void SWFFont_addTextToList(SWFFont font, struct _textRecord *text);
+void SWFFont_addTextToList(SWFFont font, SWFTextRecord text);
+
 void SWFFont_resolveTextList(SWFFont font);
 
 byte *SWFFont_findCharacterGlyph(SWFFont font, unsigned char c);
 
+const char* SWFFont_getName(SWFFont font);
+
+byte SWFFont_getFlags(SWFFont font);
+
+int SWFFont_getNGlyphs(SWFFont font);
+
 int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string);
+
 short SWFFont_getScaledAscent(SWFFont font);
+
 short SWFFont_getScaledDescent(SWFFont font);
+
 short SWFFont_getScaledLeading(SWFFont font);
 
-/* XXX */
-#define SWFFont_getWidth SWFFont_getStringWidth
+int SWFFont_getGlyphCode(SWFFont font, byte c);
+
+SWFRect SWFFont_getGlyphBounds(SWFFont font, byte c);
+
+int SWFFont_getCharacterAdvance(SWFFont font, byte c);
+
+int SWFFont_getCharacterKern(SWFFont font, byte c1, byte c2);
 
 #endif /* SWF_FONT_H_INCLUDED */

@@ -22,21 +22,22 @@
 #include "jpeg.h"
 #include "dbl.h"
 
+
 void destroySWFBitmap(SWFBlock block)
 {
   destroySWFBlock(block);
 }
 
+
 int SWFBitmap_getWidth(SWFBitmap b)
 {
-  SWFRect bounds = CHARACTER(b)->bounds;
-  return bounds->maxX - bounds->minX;
+  return SWFRect_getWidth(CHARACTER(b)->bounds);
 }
+
 
 int SWFBitmap_getHeight(SWFBitmap b)
 {
-  SWFRect bounds = CHARACTER(b)->bounds;
-  return bounds->maxY - bounds->minY;
+  return SWFRect_getHeight(CHARACTER(b)->bounds);
 }
 
 

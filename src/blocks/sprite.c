@@ -17,12 +17,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include "libswf.h"
+
 #include "sprite.h"
+#include "character.h"
 
-extern int SWF_gNumCharacters;
 
-void writeSWFSpriteToMethod(SWFBlock block,
-			    SWFByteOutputMethod method, void *data)
+static void writeSWFSpriteToMethod(SWFBlock block,
+				   SWFByteOutputMethod method, void *data)
 {
   int i;
   SWFSprite sprite = (SWFSprite)block;
@@ -33,7 +35,9 @@ void writeSWFSpriteToMethod(SWFBlock block,
   for(i=0; i<sprite->nBlocks; ++i)
     writeSWFBlockToMethod(sprite->blocks[i], method, data);
 }
-int completeSWFSprite(SWFBlock block)
+
+
+static int completeSWFSprite(SWFBlock block)
 {
   int i, length = 0;
   SWFSprite sprite = (SWFSprite)block;
@@ -52,6 +56,8 @@ int completeSWFSprite(SWFBlock block)
 
   return length+4;
 }
+
+
 void destroySWFSprite(SWFBlock block)
 {
   SWFSprite sprite = (SWFSprite)block;
@@ -71,9 +77,12 @@ void destroySWFSprite(SWFBlock block)
   free(sprite);
 }
 
+
 SWFSprite newSWFSprite()
 {
-  SWFSprite sprite = calloc(1, SWF_SPRITE_SIZE);
+  SWFSprite sprite = malloc(sizeof(struct SWFSprite_s));
+
+  SWFCharacterInit((SWFCharacter)sprite);
 
   CHARACTERID(sprite) = ++SWF_gNumCharacters;
   BLOCK(sprite)->type = SWF_DEFINESPRITE;
@@ -81,6 +90,7 @@ SWFSprite newSWFSprite()
   BLOCK(sprite)->complete = completeSWFSprite;
   BLOCK(sprite)->dtor = destroySWFSprite;
 
+  sprite->nBlocks = 0;
   sprite->blocks = NULL;
   sprite->frames = 0;
   sprite->totalFrames = 0;
@@ -88,10 +98,12 @@ SWFSprite newSWFSprite()
   return sprite;
 }
 
+
 void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames)
 {
   sprite->totalFrames = totalFrames;
 }
+
 
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 {

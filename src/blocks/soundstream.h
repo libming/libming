@@ -2,6 +2,9 @@
 #ifndef SWF_SOUNDSTREAM_H_INCLUDED
 #define SWF_SOUNDSTREAM_H_INCLUDED
 
+typedef struct SWFSound_s *SWFSound;
+typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
+
 #include "block.h"
 #include "input.h"
 
@@ -24,41 +27,17 @@
 #define SWF_SOUND_MONO             (0<<0)
 #define SWF_SOUND_STEREO           (1<<0)
 
-struct _sound
-{
-  byte flags;
-  byte isFinished;
-  int delay;
-  int start;
-  int samplesPerFrame;
-  int sampleRate;
-  SWFInput input;
-};
-typedef struct _sound *SWFSound;
-
-#define SWFSOUND_SIZE sizeof(struct _sound)
 
 SWFSound newSWFSound(FILE *file);
+
 SWFSound newSWFSound_fromInput(SWFInput input);
+
 void destroySWFSound(SWFSound sound);
 
-
-#define SWFSOUNDSTREAM_INITIAL_DELAY 1663
-
-struct _soundStreamBlock
-{
-  swfBlock block;
-  SWFSound sound;
-  int numFrames;
-  int delay;
-  int length;
-};
-typedef struct _soundStreamBlock *SWFSoundStreamBlock;
-
-#define SWFSOUNDSTREAMBLOCK_SIZE sizeof(struct _soundStreamBlock)
-
 SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate);
+
 SWFBlock SWFSound_getStreamBlock(SWFSound sound);
+
 void SWFSound_rewind(SWFSound sound);
 
 #endif /* SWF_SOUNDSTREAM_H_INCLUDED */

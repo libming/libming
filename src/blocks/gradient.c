@@ -22,15 +22,38 @@
 
 #include "gradient.h"
 
+
+struct gradientEntry
+{
+  byte ratio;
+  byte r;
+  byte g;
+  byte b;
+  byte a;
+};
+
+struct SWFGradient_s
+{
+  struct gradientEntry entries[8];
+  int nGrads;
+};
+
+
 SWFGradient newSWFGradient()
 {
-  SWFGradient gradient = calloc(1, GRADIENT_SIZE);
+  SWFGradient gradient = malloc(sizeof(struct SWFGradient_s));
+
+  gradient->nGrads = 0;
+
   return gradient;
 }
+
+
 void destroySWFGradient(SWFGradient gradient)
 {
   free(gradient);
 }
+
 
 void SWFGradient_addEntry(SWFGradient gradient,
 			  float ratio, byte r, byte g, byte b, byte a)
@@ -49,10 +72,12 @@ void SWFGradient_addEntry(SWFGradient gradient,
   ++gradient->nGrads;
 }
 
+
 void SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient,
 			     SWFBlocktype shapeType)
 {
-  int i, nGrads = min(gradient->nGrads, 8);
+  int i;
+  int nGrads = min(gradient->nGrads, 8);
 
   SWFOutput_writeUInt8(out, gradient->nGrads); /* only 1-8 allowed */
 
@@ -68,10 +93,12 @@ void SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient,
   }
 }
 
+
 void SWFOutput_writeMorphGradient(SWFOutput out,
 				  SWFGradient gradient1, SWFGradient gradient2)
 {
-  int i, nGrads = min(min(gradient1->nGrads, gradient2->nGrads), 8);
+  int i;
+  int nGrads = min(min(gradient1->nGrads, gradient2->nGrads), 8);
 
   SWFOutput_writeUInt8(out, nGrads); /* only 1-8 allowed */
 

@@ -19,15 +19,15 @@
 
 #include <math.h>
 
-#include "libming.h"
+#include "ming.h"
 #include "shape_util.h"
 
-extern float Ming_scale;
 
 float SWFCharacter_getWidth(SWFCharacter character)
 {
   return SWFCharacter_getScaledWidth(character) / Ming_scale;
 }
+
 
 float SWFCharacter_getHeight(SWFCharacter character)
 {
@@ -41,10 +41,12 @@ void SWFShape_setLine(SWFShape shape, unsigned short width,
   SWFShape_setLineStyle(shape, Ming_scale*width, r, g, b, a);
 }
 
+
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a)
 {
   return newSWFFill(SWFShape_addSolidFillStyle(shape, r, g, b, a));
 }
+
 
 SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
 				 byte flags)
@@ -52,22 +54,28 @@ SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
   return newSWFFill(SWFShape_addGradientFillStyle(shape, gradient, flags));
 }
 
+
 SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags)
 {
-  SWFFill fill = newSWFFill(SWFShape_addBitmapFillStyle(shape, bitmap, flags));
-  SWFFill_scaleTo(fill, Ming_scale, Ming_scale);
+  SWFFill fill =
+    newSWFFill(SWFShape_addBitmapFillStyle(shape, bitmap, flags));
+
+  SWFFill_scaleXYTo(fill, Ming_scale, Ming_scale);
   return fill;
 }
 
+
 void SWFShape_setLeftFill(SWFShape shape, SWFFill fill)
 {
-  SWFShape_setLeftFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
+  SWFShape_setLeftFillStyle(shape, fill==NULL ? NULL : SWFFill_getFillStyle(fill));
 }
+
 
 void SWFShape_setRightFill(SWFShape shape, SWFFill fill)
 {
-  SWFShape_setRightFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
+  SWFShape_setRightFillStyle(shape, fill==NULL ? NULL : SWFFill_getFillStyle(fill));
 }
+
 
 void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character)
 {
@@ -76,6 +84,7 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character)
   SWFShape_drawLine(shape, -SWFCharacter_getWidth(character), 0);
   SWFShape_drawLine(shape, 0, -SWFCharacter_getHeight(character));
 }
+
 
 void SWFShape_drawCircle(SWFShape shape, float r)
 {
@@ -130,11 +139,13 @@ void SWFShape_movePenTo(SWFShape shape, float x, float y)
 			   (int)rint(y*Ming_scale));
 }
 
+
 void SWFShape_movePen(SWFShape shape, float dx, float dy)
 {
   SWFShape_moveScaledPen(shape, (int)rint(dx*Ming_scale),
 			 (int)rint(dy*Ming_scale));
 }
+
 
 void SWFShape_drawLineTo(SWFShape shape, float x, float y)
 {
@@ -142,11 +153,13 @@ void SWFShape_drawLineTo(SWFShape shape, float x, float y)
 			    (int)rint(y*Ming_scale));
 }
 
+
 void SWFShape_drawLine(SWFShape shape, float dx, float dy)
 {
   SWFShape_drawScaledLine(shape, (int)rint(dx*Ming_scale),
 			  (int)rint(dy*Ming_scale));
 }
+
 
 void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
 			  float anchorx, float anchory)
@@ -158,6 +171,7 @@ void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
 			     (int)rint(anchory*Ming_scale));
 }
 
+
 void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
 			float anchordx, float anchordy)
 {
@@ -168,10 +182,12 @@ void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
 			   (int)rint(anchordy*Ming_scale));
 }
 
+
 void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
 {
   SWFShape_drawScaledGlyph(shape, font, c, 1024);
 }
+
 
 void SWFShape_drawSizedGlyph(SWFShape shape,
 			     SWFFont font, unsigned char c, int size)

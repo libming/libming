@@ -20,37 +20,19 @@
 #ifndef SWF_JPEG_H_INCLUDED
 #define SWF_JPEG_H_INCLUDED
 
-typedef struct _swfJpegBitmap *SWFJpegBitmap;
+typedef struct SWFJpegBitmap_s *SWFJpegBitmap;
+typedef struct SWFJpegWithAlpha_s *SWFJpegWithAlpha;
 
 #include <stdio.h>
-#include "bitmap.h"
 #include "input.h"
 
-struct _swfJpegBitmap
-{
-  struct _bitmap bitmap;
-  SWFInput input;
-  int length;
-};
-
-#define SWFJPEGBITMAP_SIZE sizeof(struct _swfJpegBitmap)
 
 SWFJpegBitmap newSWFJpegBitmap(FILE *f);
+
 SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input);
 
-struct _swfJpegWithAlpha
-{
-  struct _bitmap bitmap;
-  SWFInput input; /* leave these here so that we */
-  int length; /* can cast this to swfJpegBitmap */
-  SWFInput alpha;
-  int jpegLength;
-};
-typedef struct _swfJpegWithAlpha *SWFJpegWithAlpha;
-
-#define SWFJPEGWITHALPHA_SIZE sizeof(struct _swfJpegWithAlpha)
-
 SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha);
+
 SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 #endif /* SWF_JPEG_H_INCLUDED */

@@ -22,39 +22,25 @@
 #ifndef MING_MOVIECLIP_H_INCLUDED
 #define MING_MOVIECLIP_H_INCLUDED
 
-#define SWF_H_INCLUDED
-
-/* XXX - have to know about sprite object internals to extend it.  hrm. */
-#include "blocks/sprite.h"
-#include "blocks/block.h"
-#include "blocks/matrix.h"
-#include "blocks/cxform.h"
-#include "blocks/soundstream.h"
-#include "blocks/outputblock.h"
-#include "blocks/placeobject.h"
+typedef struct SWFMovieClip_s *SWFMovieClip;
 
 #include "libming.h"
 #include "displaylist.h"
 
-struct _swfMovieClip
-{
-  struct _sprite sprite;
-  SWFBlockList blockList;
-  SWFDisplayList displayList;
-  unsigned short nFrames;
-};
-typedef struct _swfMovieClip *SWFMovieClip;
-
-#define SWFMOVIECLIP_SIZE sizeof(struct _swfMovieClip)
-
 void destroySWFMovieClip(SWFMovieClip clip);
+
 SWFMovieClip newSWFMovieClip();
 
 void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int frames);
+
 SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
+
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
+
 void SWFMovieClip_nextFrame(SWFMovieClip clip);
+
 void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
+
 void SWFMovie_setSoundStream(SWFMovieClip movie, SWFSound sound, float rate);
 
 int SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);

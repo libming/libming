@@ -20,7 +20,26 @@
 #include <stdlib.h>
 
 #include "jpeg.h"
-#include "block.h"
+#include "character.h"
+
+struct SWFJpegBitmap_s
+{
+  struct SWFCharacter_s character;
+
+  SWFInput input;
+  int length;
+};
+
+struct SWFJpegWithAlpha_s
+{
+  struct SWFCharacter_s character;
+
+  SWFInput input;  /* leave these here so that we */
+  int length;      /* can cast this to swfJpegBitmap */
+
+  SWFInput alpha;
+  int jpegLength;
+};
 
 /* JPEG stream markers: */
 #define JPEG_MARKER 0xFF
@@ -45,10 +64,12 @@
 #define JPEG_EE   0xEE /* app14 */
 #define JPEG_DD   0xDD /* ??? */
 
-int completeSWFJpegBitmap(SWFBlock block)
+
+static int completeSWFJpegBitmap(SWFBlock block)
 {
   return ((SWFJpegBitmap)block)->length;
 }
+
 
 #define BUFFER_SIZE 1024
 
@@ -70,6 +91,7 @@ void dumpJpegBlock(byte type, SWFInput input,
     method(SWFInput_getChar(input), data);
 }
 
+
 int skipJpegBlock(SWFInput input)
 {
   int length = (SWFInput_getChar(input)<<8) + SWFInput_getChar(input);
@@ -78,6 +100,7 @@ int skipJpegBlock(SWFInput input)
 
   return length;
 }
+
 
 void methodWriteJpegFile(SWFInput input,
 			 SWFByteOutputMethod method, void *data)
@@ -172,6 +195,7 @@ void methodWriteJpegFile(SWFInput input,
     method(c, data);
 }
 
+
 void writeSWFJpegBitmapToMethod(SWFBlock block,
 				SWFByteOutputMethod method, void *data)
 {
@@ -180,6 +204,7 @@ void writeSWFJpegBitmapToMethod(SWFBlock block,
   methodWriteUInt16(CHARACTERID(jpeg), method, data);
   methodWriteJpegFile(jpeg->input, method, data);
 }
+
 
 void writeSWFJpegWithAlphaToMethod(SWFBlock block,
 				   SWFByteOutputMethod method, void *data)
@@ -199,11 +224,13 @@ void writeSWFJpegWithAlphaToMethod(SWFBlock block,
     method(c, data);
 }
 
+
 void destroySWFJpegBitmap(SWFBlock block)
 {
   free(CHARACTER(block)->bounds);
   free(block);
 }
+
 
 struct jpegInfo
 {
@@ -212,7 +239,7 @@ struct jpegInfo
   int length;
 };
 
-struct jpegInfo *scanJpegFile(SWFInput input)
+static struct jpegInfo *scanJpegFile(SWFInput input)
 {
   int length = 0, l, c;
   long pos, end;
@@ -313,26 +340,28 @@ struct jpegInfo *scanJpegFile(SWFInput input)
   return info;
 }
 
+
 SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input)
 {
   SWFJpegBitmap jpeg;
   struct jpegInfo *info;
 
-  jpeg = calloc(1, SWFJPEGBITMAP_SIZE);
+  jpeg = malloc(sizeof(struct SWFJpegBitmap_s));
+
+  SWFCharacterInit((SWFCharacter)jpeg);
 
   CHARACTERID(jpeg) = ++SWF_gNumCharacters;
+
   BLOCK(jpeg)->writeBlock = writeSWFJpegBitmapToMethod;
   BLOCK(jpeg)->complete = completeSWFJpegBitmap;
   BLOCK(jpeg)->dtor = destroySWFJpegBitmap;
   BLOCK(jpeg)->type = SWF_DEFINEBITSJPEG2;
-  CHARACTER(jpeg)->bounds = newSWFRect(0, 0, 0, 0);
 
   jpeg->input = input;
 
   info = scanJpegFile(input);
 
-  CHARACTER(jpeg)->bounds->maxX = info->width;
-  CHARACTER(jpeg)->bounds->maxY = info->height;
+  CHARACTER(jpeg)->bounds = newSWFRect(0, info->width, 0, info->height);
 
   jpeg->length = info->length + 4;
 
@@ -342,13 +371,12 @@ SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input)
 }
 
 
-/* anonymous functions sure would be nice.. */
-
-void destroySWFJpegBitmap_andInputs(SWFBlock block)
+static void destroySWFJpegBitmap_andInputs(SWFBlock block)
 {
   destroySWFInput(((SWFJpegBitmap)block)->input);
   destroySWFJpegBitmap(block);
 }
+
 
 SWFJpegBitmap newSWFJpegBitmap(FILE *f)
 {
@@ -366,22 +394,23 @@ SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
   struct jpegInfo *info;
   int alen;
 
-  jpeg = calloc(1, SWFJPEGWITHALPHA_SIZE);
+  jpeg = malloc(sizeof(struct SWFJpegWithAlpha_s));
+
+  SWFCharacterInit((SWFCharacter)jpeg);
 
   CHARACTERID(jpeg) = ++SWF_gNumCharacters;
+
   BLOCK(jpeg)->writeBlock = writeSWFJpegWithAlphaToMethod;
   BLOCK(jpeg)->complete = completeSWFJpegBitmap; /* can use same complete */
   BLOCK(jpeg)->dtor = destroySWFJpegBitmap;      /* ditto here */
   BLOCK(jpeg)->type = SWF_DEFINEBITSJPEG3;
-  CHARACTER(jpeg)->bounds = newSWFRect(0, 0, 0, 0);
 
   jpeg->input = input;
   jpeg->alpha = alpha;
 
   info = scanJpegFile(input);
 
-  CHARACTER(jpeg)->bounds->maxX = info->width;
-  CHARACTER(jpeg)->bounds->maxY = info->height;
+  CHARACTER(jpeg)->bounds = newSWFRect(0, info->width, 0, info->height);
 
   jpeg->jpegLength = info->length + 2; /* ?? */
 
@@ -404,8 +433,8 @@ void destroySWFJpegAlpha_andInputs(SWFBlock block)
 
 SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha)
 {
-  SWFJpegWithAlpha jpeg = newSWFJpegWithAlpha_fromInput(newSWFInput_file(f),
-							newSWFInput_file(alpha));
+  SWFJpegWithAlpha jpeg =
+    newSWFJpegWithAlpha_fromInput(newSWFInput_file(f), newSWFInput_file(alpha));
 
   BLOCK(jpeg)->dtor = destroySWFJpegAlpha_andInputs;
   return jpeg;

@@ -22,7 +22,7 @@ struct label
 
 struct label labels[256];
 
-int findLabel(char *label)
+static int findLabel(char *label)
 {
   int i;
 
@@ -35,7 +35,7 @@ int findLabel(char *label)
   return -1;
 }
 
-void addLabel(char *label)
+static void addLabel(char *label)
 {
   int i = findLabel(label);
 

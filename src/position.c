@@ -23,28 +23,48 @@
 #include "libming.h"
 #include "position.h"
 
+struct SWFPosition_s
+{
+  float x;
+  float y;
+  float xScale;
+  float yScale;
+  float xSkew;
+  float ySkew;
+  float rot;
+  SWFMatrix matrix;
+};
+
+
 void destroySWFPosition(SWFPosition position)
 {
   /* something else owns the matrix, so don't free it. */
   free(position);
 }
 
+
 /* position wraps a matrix */
 SWFPosition newSWFPosition(SWFMatrix matrix)
 {
-  SWFPosition p = calloc(1, SWFPOSITION_SIZE);
+  SWFPosition p = malloc(sizeof(struct SWFPosition_s));
 
+  p->x = 0;
+  p->y = 0;
   p->xScale = 1.0;
   p->yScale = 1.0;
+  p->xSkew = 0;
+  p->ySkew = 0;
+  p->rot = 0;
   p->matrix = matrix;
 
   return p;
 }
 
+
 extern float Ming_scale;
 
 /* x-skew, then y-skew, then rot and scale, then xlate */
-static inline void updateMatrix(SWFPosition p)
+static void updateMatrix(SWFPosition p)
 {
   float cRot = cos(p->rot*M_PI/180), sRot = sin(p->rot*M_PI/180);
   float xS = p->xSkew, yS = p->ySkew;
@@ -58,80 +78,109 @@ static inline void updateMatrix(SWFPosition p)
 		(int)rint(Ming_scale*p->y));
 }
 
+
 void SWFPosition_skewX(SWFPosition p, float x)
 {
   p->xSkew += x;
   updateMatrix(p);
 }
+
+
 void SWFPosition_skewXTo(SWFPosition p, float x)
 {
   p->xSkew = x;
   updateMatrix(p);
 }
+
+
 void SWFPosition_skewY(SWFPosition p, float y)
 {
   p->ySkew += y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_skewYTo(SWFPosition p, float y)
 {
   p->ySkew = y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_scaleX(SWFPosition p, float x)
 {
   p->xScale *= x;
   updateMatrix(p);
 }
+
+
 void SWFPosition_scaleXTo(SWFPosition p, float x)
 {
   p->xScale = x;
   updateMatrix(p);
 }
+
+
 void SWFPosition_scaleY(SWFPosition p, float y)
 {
   p->yScale *= y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_scaleYTo(SWFPosition p, float y)
 {
   p->yScale = y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_rotate(SWFPosition p, float degrees)
 {
   p->rot += degrees;
   updateMatrix(p);
 }
+
+
 void SWFPosition_rotateTo(SWFPosition p, float degrees)
 {
   p->rot = degrees;
   updateMatrix(p);
 }
+
+
 void SWFPosition_move(SWFPosition p, float x, float y)
 {
   p->x += x;
   p->y += y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_moveTo(SWFPosition p, float x, float y)
 {
   p->x = x;
   p->y = y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_scaleXY(SWFPosition p, float x, float y)
 {
   p->xScale *= x;
   p->yScale *= y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_scaleXYTo(SWFPosition p, float x, float y)
 {
   p->xScale = x;
   p->yScale = y;
   updateMatrix(p);
 }
+
+
 void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
 			   float x, float y)
 {
@@ -140,4 +189,40 @@ void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
 
   SWFMatrix_set(p->matrix, a, b, c, d,
 		(int)rint(Ming_scale*x), (int)rint(Ming_scale*y));
+}
+
+
+float SWFPosition_getRotation(SWFPosition position)
+{
+  return position->rot;
+}
+
+float SWFPosition_getX(SWFPosition position)
+{
+  return position->x;
+}
+
+float SWFPosition_getY(SWFPosition position)
+{
+  return position->y;
+}
+
+float SWFPosition_getXScale(SWFPosition position)
+{
+  return position->xScale;
+}
+
+float SWFPosition_getYScale(SWFPosition position)
+{
+  return position->yScale;
+}
+
+float SWFPosition_getXSkew(SWFPosition position)
+{
+  return position->xSkew;
+}
+
+float SWFPosition_getYSkew(SWFPosition position)
+{
+  return position->ySkew;
 }

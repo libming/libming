@@ -22,6 +22,8 @@
 #ifndef SWF_FILL_H_INCLUDED
 #define SWF_FILL_H_INCLUDED
 
+typedef struct SWFFillStyle_s *SWFFillStyle;
+
 #include "output.h"
 #include "matrix.h"
 #include "bitmap.h"
@@ -38,30 +40,15 @@
 
 /* fillstyle is a fill instance on a shape */
 
-struct _fillStyle
-{
-  byte type;
-  SWFMatrix matrix;
-  int idx;
+SWFFillStyle newSWFSolidFillStyle(byte r, byte g, byte b, byte a);
 
-  union
-  {
-    struct
-    {
-      byte r;
-      byte g;
-      byte b;
-      byte a;
-    } solid;
+SWFFillStyle newSWFGradientFillStyle(SWFGradient gradient, int flags);
 
-    SWFBitmap bitmap;
-    SWFGradient gradient;
+SWFFillStyle newSWFBitmapFillStyle(SWFBitmap, int flags);
 
-  } data;
-};
-typedef struct _fillStyle *SWFFillStyle;
+void SWFFill_setIdx(SWFFillStyle fill, int idx);
 
-#define FILLSTYLE_SIZE sizeof(struct _fillStyle)
+int SWFFill_getIdx(SWFFillStyle fill);
 
 SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 

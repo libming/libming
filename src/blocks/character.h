@@ -20,6 +20,8 @@
 #ifndef SWF_CHARACTER_H_INCLUDED
 #define SWF_CHARACTER_H_INCLUDED
 
+typedef struct SWFCharacter_s *SWFCharacter;
+
 #include "libswf.h"
 #include "block.h"
 #include "rect.h"
@@ -27,40 +29,85 @@
 extern int SWF_gNumCharacters;
 
 
-/* fudge superclass for character types (shape, text, sprite) */
-struct _character
+#define CHARACTER(c) ((SWFCharacter)(c))
+#define CHARACTERID(c) (((SWFCharacter)(c))->id)
+
+
+/* characters are things that can be placed on the stage-
+   shapes, text, sprites.. */
+
+struct SWFCharacter_s
 {
-  swfBlock block;
-  unsigned short number;
+  struct SWFBlock_s block;
+
+  int id;
   SWFRect bounds;
 
-  /* more bad hackery - allows objects to declare other characters as
-     dependencies; e.g., shape needs a jpeg or text needs a font.. */
+  /* some characters depend on others- e.g., a shape may need a jpeg for
+     a fill or some text needs a font..  we keep track of these dependencies
+     so that we write them in the right order, regardless of when/if the user
+     adds them to the movie */
 
   int nDependencies;
   SWFBlock *dependencies;
 
-  /* morph needs to acquire dependencies from its shapes.
+  /* a morph needs to acquire dependencies from its shapes.
      this is weird, but the easiest way I can think of to do this. */
 
-  SWFBlock *(*getDependencies)(struct _character *character);
-  int (*getNDependencies)(struct _character *character);
+  SWFBlock *(*getDependencies)(SWFCharacter character);
+  int (*getNDependencies)(SWFCharacter character);
 };
-typedef struct _character swfCharacter;
-typedef struct _character *SWFCharacter;
 
+
+/* initialize character values to something sane */
+
+void SWFCharacterInit(SWFCharacter character);
+
+
+/* destroy this character */
+
+void destroySWFCharacter(SWFBlock character);
+
+
+/* marks the given block as a dependency of the character- that is,
+   we should define the block before defining the character */
 
 void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency);
+
+
+/* returns the character's dependency list */
+
 SWFBlock *SWFCharacter_getDependencies(SWFCharacter character);
+
+
+/* returns the size of the character's dependency list */
+
 int SWFCharacter_getNDependencies(SWFCharacter character);
+
+
+/* clears the character's dependecy list */
+
 void SWFCharacter_clearDependencies(SWFCharacter character);
 
-#define CHARACTER(s) ((SWFCharacter)(s))
-#define CHARACTERID(s) (((SWFCharacter)(s))->number)
+
+/* returns the scaled (i.e., in twips) width of the character */
 
 int SWFCharacter_getScaledWidth(SWFCharacter character);
+
+
+/* returns the scaled (i.e., in twips) height of the character */
+
 int SWFCharacter_getScaledHeight(SWFCharacter character);
 
+
+/* returns the character's SWFRect bounds object */
+
+SWFRect SWFCharacter_getBounds(SWFCharacter character);
+
+
+/* returns non-zero if the given block is a character type */
+
 int SWFBlock_isCharacter(SWFBlock block);
+
 
 #endif /* SWF_CHARACTER_H_INCLUDED */

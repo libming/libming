@@ -22,10 +22,23 @@
 
 #include "cxform.h"
 
+struct SWFCXform_s
+{
+  int rMult;
+  int gMult;
+  int bMult;
+  int aMult;
+  int rAdd;
+  int gAdd;
+  int bAdd;
+  int aAdd;
+};
+
+
 SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
 		       float rMult, float gMult, float bMult, float aMult)
 {
-  SWFCXform cXform = malloc(CXFORM_SIZE);
+  SWFCXform cXform = malloc(sizeof(struct SWFCXform_s));
 
   cXform->rMult = floor(256*rMult);
   cXform->gMult = floor(256*gMult);
@@ -110,7 +123,9 @@ void SWFOutput_writeCXform(SWFOutput out, SWFCXform cXform, SWFBlocktype type)
       nBits = max(nBits, SWFOutput_numSBits(cXform->aMult));
   }
 
-  SWF_assert(nBits<16);
+  if(nBits>=16)
+    SWF_error("color transform data out of scale");
+
   SWFOutput_writeBits(out, nBits, 4);
 
   if(hasMult)

@@ -20,6 +20,34 @@
 #include "character.h"
 #include "blocktypes.h"
 
+
+void SWFCharacterInit(SWFCharacter character)
+{
+  SWFBlockInit((SWFBlock)character);
+
+  character->id = 0;
+  character->bounds = NULL;
+
+  character->dependencies = NULL;
+  character->nDependencies = 0;
+  character->getDependencies = NULL;
+  character->getNDependencies = NULL;
+}
+
+
+void destroySWFCharacter(SWFBlock block)
+{
+  SWFCharacter character = (SWFCharacter)block;
+
+  SWFCharacter_clearDependencies(character);
+
+  if(character->bounds != NULL)
+    destroySWFRect(character->bounds);
+
+  destroySWFBlock((SWFBlock)character);
+}
+
+
 void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency)
 {
   character->dependencies = realloc(character->dependencies,
@@ -30,6 +58,19 @@ void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency)
   ++character->nDependencies;
 }
 
+
+void SWFCharacter_setID(SWFCharacter character, int id)
+{
+  character->id = id;
+}
+
+
+int SWFCharacter_getID(SWFCharacter character)
+{
+  return character->id;
+}
+
+
 SWFBlock *SWFCharacter_getDependencies(SWFCharacter character)
 {
   if(character->getDependencies != NULL)
@@ -37,6 +78,8 @@ SWFBlock *SWFCharacter_getDependencies(SWFCharacter character)
   else
     return character->dependencies;
 }
+
+
 int SWFCharacter_getNDependencies(SWFCharacter character)
 {
   if(character->getNDependencies != NULL)
@@ -44,6 +87,8 @@ int SWFCharacter_getNDependencies(SWFCharacter character)
   else
     return character->nDependencies;
 }
+
+
 void SWFCharacter_clearDependencies(SWFCharacter character)
 {
   character->nDependencies = 0;
@@ -54,14 +99,22 @@ void SWFCharacter_clearDependencies(SWFCharacter character)
   character->dependencies = NULL;
 }
 
+
 int SWFCharacter_getScaledWidth(SWFCharacter character)
 {
-  return character->bounds->maxX - character->bounds->minX;
+  return SWFRect_getWidth(character->bounds);
 }
+
 
 int SWFCharacter_getScaledHeight(SWFCharacter character)
 {
-  return character->bounds->maxY - character->bounds->minY;
+  return SWFRect_getHeight(character->bounds);
+}
+
+
+SWFRect SWFCharacter_getBounds(SWFCharacter character)
+{
+  return character->bounds;
 }
 
 

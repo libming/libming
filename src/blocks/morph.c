@@ -19,20 +19,30 @@
 
 #include "morph.h"
 
+struct SWFMorph_s
+{
+  struct SWFCharacter_s character;
+
+  SWFOutput out;
+  SWFShape shape1;
+  SWFShape shape2;
+};
+
+
 /* morph stuff */
-int completeSWFMorphBlock(SWFBlock block)
+static int completeSWFMorphBlock(SWFBlock block)
 {
   SWFMorph morph = (SWFMorph)block;
+
   SWFOutput out = morph->out;
-  SWFShape shape1 = morph->shape1, shape2 = morph->shape2;
+  SWFShape shape1 = morph->shape1;
+  SWFShape shape2 = morph->shape2;
+
   byte *patch;
   int offset;
 
-  if(!shape1->isEnded)
-    SWFShape_end(shape1);
-
-  if(!shape2->isEnded)
-    SWFShape_end(shape2);
+  SWFShape_end(shape1);
+  SWFShape_end(shape2);
 
   /* build header */
   SWFOutput_writeUInt16(out, CHARACTERID(morph));
@@ -41,19 +51,26 @@ int completeSWFMorphBlock(SWFBlock block)
   SWFOutput_writeRect(out, CHARACTER(shape2)->bounds);
 
   SWFOutput_byteAlign(out);
-  patch = out->pos;
+  patch = SWFOutput_getCurPos(out);
   SWFOutput_writeUInt32(out, 0); /* shape2 offset, patched in below.. */
 
   SWFOutput_writeMorphFillStyles(out,
-				 shape1->fills, shape1->nFills,
-				 shape2->fills, shape2->nFills);
+				 SWFShape_getFills(shape1),
+				 SWFShape_getNFills(shape1),
+				 SWFShape_getFills(shape2),
+				 SWFShape_getNFills(shape2));
 
   SWFOutput_writeMorphLineStyles(out,
-				 shape1->lines, shape1->nLines,
-				 shape2->lines, shape2->nLines);
+				 SWFShape_getLines(shape1),
+				 SWFShape_getNLines(shape1),
+				 SWFShape_getLines(shape2),
+				 SWFShape_getNLines(shape2));
 
   SWFOutput_byteAlign(out);
-  offset = out->pos - patch + SWFOutput_length(shape1->out) - 4;
+
+  offset =
+    SWFOutput_getCurPos(out) - patch +
+    SWFOutput_getLength(SWFShape_getOutput(shape1)) - 4;
 
   *(patch++) = offset & 0xff;
   offset >>= 8;
@@ -63,19 +80,24 @@ int completeSWFMorphBlock(SWFBlock block)
   offset >>= 8;
   *patch = offset & 0xff;
 
-  /* also move shapes' dependencies to morph */
-
-  return SWFOutput_length(out) +
-         SWFOutput_length(shape1->out) + SWFOutput_length(shape2->out);
+  return
+    SWFOutput_getLength(out) +
+    SWFOutput_getLength(SWFShape_getOutput(shape1)) +
+    SWFOutput_getLength(SWFShape_getOutput(shape2));
 }
+
+
 void writeSWFMorphBlockToStream(SWFBlock block,
 				SWFByteOutputMethod method, void *data)
 {
   SWFMorph morph = (SWFMorph)block;
+
   SWFOutput_writeToMethod(morph->out, method, data);
-  SWFOutput_writeToMethod(morph->shape1->out, method, data);
-  SWFOutput_writeToMethod(morph->shape2->out, method, data);
+  SWFOutput_writeToMethod(SWFShape_getOutput(morph->shape1), method, data);
+  SWFOutput_writeToMethod(SWFShape_getOutput(morph->shape2), method, data);
 }
+
+
 void destroySWFMorph(SWFBlock block)
 {
   SWFMorph morph = (SWFMorph)block;
@@ -91,14 +113,19 @@ void destroySWFMorph(SWFBlock block)
 
   free(morph);
 }
+
+
 SWFShape SWFMorph_getShape1(SWFMorph morph)
 {
   return morph->shape1;
 }
+
+
 SWFShape SWFMorph_getShape2(SWFMorph morph)
 {
   return morph->shape2;
 }
+
 
 int SWFMorph_getNDependencies(SWFCharacter character)
 {
@@ -106,30 +133,39 @@ int SWFMorph_getNDependencies(SWFCharacter character)
 
   return SWFCharacter_getNDependencies(CHARACTER(morph->shape1));
 }
+
+
 SWFBlock *SWFMorph_getDependencies(SWFCharacter character)
 {
   SWFMorph morph = (SWFMorph)character;
   return SWFCharacter_getDependencies(CHARACTER(morph->shape1));
 }
 
+
 SWFMorph newSWFMorphShape()
 {
-  SWFMorph morph = calloc(1, MORPH_SIZE);
+  SWFMorph morph = malloc(sizeof(struct SWFMorph_s));
+
+  SWFCharacterInit((SWFCharacter)morph);
 
   BLOCK(morph)->type = SWF_DEFINEMORPHSHAPE;
   BLOCK(morph)->writeBlock = writeSWFMorphBlockToStream;
   BLOCK(morph)->complete = completeSWFMorphBlock;
   BLOCK(morph)->dtor = destroySWFMorph;
+
   CHARACTERID(morph) = ++SWF_gNumCharacters;
+
   morph->out = newSWFOutput();
+
   morph->shape1 = newSWFShape();
   BLOCK(morph->shape1)->type = 0;
+
   morph->shape2 = newSWFShape();
   BLOCK(morph->shape2)->type = 0;
-  morph->shape2->isMorph = 1;
+  SWFShape_setMorphFlag(morph->shape2);
 
-  CHARACTER(morph)->getDependencies = SWFMorph_getDependencies;
-  CHARACTER(morph)->getNDependencies = SWFMorph_getNDependencies;
+  morph->character.getDependencies = SWFMorph_getDependencies;
+  morph->character.getNDependencies = SWFMorph_getNDependencies;
 
   return morph;
 }

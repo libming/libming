@@ -22,27 +22,19 @@
 #ifndef SWF_OUTPUT_H_INCLUDED
 #define SWF_OUTPUT_H_INCLUDED
 
+typedef struct SWFOutput_s *SWFOutput;
+
 #include "libswf.h"
 #include "method.h"
 
 #define OUTPUT_BUFFER_INCREMENT 1024
 
-struct _output
-{
-  struct _output *next;
-  byte *buffer;
-  byte *pos;
-  int buffersize;
-  int free;
-  int bitpos;
-};
-typedef struct _output *SWFOutput;
-
-#define OUTPUT_SIZE sizeof(struct _output)
 
 /* create/destroy output object */
 SWFOutput newSWFOutput();
+
 SWFOutput newSizedSWFOutput(int size);
+
 void destroySWFOutput(SWFOutput out);
 
 /* write output's buffer to stream */
@@ -51,25 +43,46 @@ void SWFOutput_writeToMethod(SWFOutput out,
 
 /* utilities for writing */
 void SWFOutput_grow(SWFOutput out);
+
 void SWFOutput_checkSize(SWFOutput out, int bytes);
+
 void SWFOutput_byteAlign(SWFOutput out);
 
-int SWFOutput_length(SWFOutput out);
+int SWFOutput_getLength(SWFOutput out);
+
+void SWFOutput_setNext(SWFOutput out, SWFOutput next);
+
+SWFOutput SWFOutput_getNext(SWFOutput out);
+
+byte* SWFOutput_getBuffer(SWFOutput out);
+
+byte* SWFOutput_getCurPos(SWFOutput out);
 
 /* write data to output */
 void SWFOutput_writeBits(SWFOutput out, int data, int bits);
+
 void SWFOutput_writeSBits(SWFOutput out, int data, int bits);
+
 void SWFOutput_writeUInt8(SWFOutput out, int data);
+
 void SWFOutput_writeSInt8(SWFOutput out, int data);
+
 void SWFOutput_writeUInt16(SWFOutput out, int data);
+
 void SWFOutput_writeSInt16(SWFOutput out, int data);
+
 void SWFOutput_writeUInt32(SWFOutput out, long data);
+
 void SWFOutput_writeSInt32(SWFOutput out, long data);
+
 void SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes);
+
 
 /* number of bits required to store num */
 int SWFOutput_numBits(int num);
+
 int SWFOutput_numSBits(int num);
+
 
 void SWFOutput_writeString(SWFOutput out, const byte *string);
 

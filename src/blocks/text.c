@@ -19,11 +19,51 @@
 
 #include <string.h>
 #include <math.h>
+
 #include "text.h"
 #include "rect.h"
 
-void writeSWFTextToMethod(SWFBlock block,
-			  SWFByteOutputMethod method, void *data)
+
+struct SWFText_s
+{
+  struct SWFCharacter_s character;
+
+  SWFOutput out;
+  SWFMatrix matrix;
+  byte nAdvanceBits;
+  byte nGlyphBits;
+  SWFTextRecord textRecord;
+  SWFTextRecord currentRecord;
+};
+
+struct SWFTextRecord_s
+{
+  struct SWFTextRecord_s *next;
+
+  byte flags;
+  byte isBrowserFont;
+
+  union
+  {
+    SWFFont font;
+    SWFBrowserFont browserFont;
+  } font;
+
+  byte r;
+  byte g;
+  byte b;
+  byte a;
+  int x;
+  int y;
+  int height;
+  float spacing;
+  byte *string;
+  int *advance;
+};
+
+
+static void writeSWFTextToMethod(SWFBlock block,
+				 SWFByteOutputMethod method, void *data)
 {
   SWFText text = (SWFText)block;
   int length = 0;
@@ -50,13 +90,15 @@ void writeSWFTextToMethod(SWFBlock block,
   destroySWFOutput(out);
 }
 
-int completeSWFText(SWFBlock block)
+
+static int completeSWFText(SWFBlock block)
 {
   int length = 4;
 
   SWFText text = (SWFText)block;
   SWFText_resolveCodes(text);
-  length += SWFOutput_length(text->out);
+
+  length += SWFOutput_getLength(text->out);
 
   if(text->matrix)
     length += (SWFMatrix_numBits(text->matrix)+7)/8;
@@ -67,6 +109,7 @@ int completeSWFText(SWFBlock block)
 
   return length;
 }
+
 
 void destroySWFText(SWFBlock block)
 {
@@ -91,15 +134,20 @@ void destroySWFText(SWFBlock block)
   free(text);
 }
 
+
 SWFText newSWFText()
 {
-  SWFText text = calloc(1, SWF_TEXT_SIZE);
+  SWFText text = malloc(sizeof(struct SWFText_s));
+
+  SWFCharacterInit((SWFCharacter)text);
 
   CHARACTERID(text) = ++SWF_gNumCharacters;
+
   BLOCK(text)->type = SWF_DEFINETEXT;
   BLOCK(text)->writeBlock = writeSWFTextToMethod;
   BLOCK(text)->complete = completeSWFText;
   BLOCK(text)->dtor = destroySWFText;
+
   CHARACTER(text)->bounds = newSWFRect(0,0,0,0);
 
   text->out = newSWFOutput();
@@ -107,6 +155,7 @@ SWFText newSWFText()
 
   return text;
 }
+
 
 /* only dif is type 2 allows transparency.. */
 SWFText newSWFText2()
@@ -116,13 +165,17 @@ SWFText newSWFText2()
   return text;
 }
 
+
 SWFTextRecord newSWFTextRecord()
 {
-  SWFTextRecord textRecord = calloc(1, TEXTRECORD_SIZE);
+  SWFTextRecord textRecord = malloc(sizeof(struct SWFTextRecord_s));
+
   textRecord->spacing = 1.0;
   textRecord->height = 240;
+
   return textRecord;
 }
+
 
 void destroySWFTextRecord(SWFTextRecord record)
 {
@@ -135,6 +188,19 @@ void destroySWFTextRecord(SWFTextRecord record)
   free(record);
 }
 
+
+char *SWFTextRecord_getString(SWFTextRecord record)
+{
+  return record->string;
+}
+
+
+SWFTextRecord SWFTextRecord_getNext(SWFTextRecord record)
+{
+  return record->next;
+}
+
+
 int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string)
 {
   SWFFont font = text->currentRecord->font.font;
@@ -145,6 +211,7 @@ int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string)
   else
     return SWFFont_getScaledStringWidth(font, string)*height/1024;
 }
+
 
 short SWFText_getScaledAscent(SWFText text)
 {
@@ -157,6 +224,7 @@ short SWFText_getScaledAscent(SWFText text)
     return SWFFont_getScaledAscent(font)*height/1024;
 }
 
+
 short SWFText_getScaledDescent(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
@@ -168,6 +236,7 @@ short SWFText_getScaledDescent(SWFText text)
     return SWFFont_getScaledDescent(font)*height/1024;
 }
 
+
 short SWFText_getScaledLeading(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
@@ -178,6 +247,7 @@ short SWFText_getScaledLeading(SWFText text)
   else
     return SWFFont_getScaledLeading(font)*height/1024;
 }
+
 
 void SWFText_setFont(SWFText text, SWFBlock font)
 {
@@ -195,12 +265,14 @@ void SWFText_setFont(SWFText text, SWFBlock font)
 
   /* XXX */  
   if((textRecord->isBrowserFont = (BLOCK(font)->type == SWF_TEXTFIELD)))
+  {
     textRecord->font.browserFont = (SWFBrowserFont)font;
+  }
   else
   {
     textRecord->font.font = (SWFFont)font;
 
-    /* add pointer to this textrecord in specified font,
+    /* add pointer to this textrecord in specified font
        so that it can figure which letter glyphs it needs to define */
 
     SWFFont_addTextToList((SWFFont)font, textRecord);
@@ -208,6 +280,7 @@ void SWFText_setFont(SWFText text, SWFBlock font)
 
   SWFCharacter_addDependency((SWFCharacter)text, font);
 }
+
 
 void SWFText_setScaledHeight(SWFText text, int height)
 {
@@ -226,6 +299,7 @@ void SWFText_setScaledHeight(SWFText text, int height)
   textRecord->flags |= SWF_TEXT_HAS_FONT;
   textRecord->height = height;
 }
+
 
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a)
 {
@@ -248,6 +322,7 @@ void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a)
   textRecord->b = b;
   textRecord->a = a;
 }
+
 
 void SWFText_scaledMoveTo(SWFText text, int x, int y)
 {
@@ -277,10 +352,12 @@ void SWFText_scaledMoveTo(SWFText text, int x, int y)
   }
 }
 
+
 void SWFText_setSpacing(SWFText text, float spacing)
 {
   text->currentRecord->spacing = spacing;
 }
+
 
 /* adds textrecord type 0 to output */
 /* font defn is normalized to height 1024 */
@@ -291,7 +368,7 @@ void SWFText_addString(SWFText text, const char *string, int *advance)
 {
   SWFTextRecord textRecord = text->currentRecord;
   SWFFont font = textRecord->font.font;
-  int l, i, j, glyph, adv;
+  int l, i, adv;
 
   /* marginally sloppy, but I don't much want to deal with concats */
   if(textRecord->string != NULL)
@@ -322,30 +399,11 @@ void SWFText_addString(SWFText text, const char *string, int *advance)
 
   for(i=0; i<l; ++i)
   {
-    adv = 0;
-    glyph = font->codeTable[(byte)string[i]];
-
-    if(font->advances)
-      adv = font->advances[glyph];
+    adv = SWFFont_getCharacterAdvance(font, (byte)string[i]);
 
     /* looking in kernTable */
-    if (i<l-1 && font->kernTable)
-    {
-      int c1 = string[i];
-      int c2 = string[i+1];
-
-      j=font->kernCount;
-
-      while (--j >= 0)
-      {
-	if (c1 == font->kernTable[j].code1 &&
-	    c2 == font->kernTable[j].code2)
-	{
-	  adv += font->kernTable[j].adjustment;
-	  break;
-	}
-      }
-    }
+    if (i<l-1)
+      adv += SWFFont_getCharacterKern(font, (byte)string[i], (byte)string[i+1]);
 
     if(advance != NULL)
       adv += advance[i];
@@ -357,6 +415,7 @@ void SWFText_addString(SWFText text, const char *string, int *advance)
   }
 }
 
+
 /* turn textRecord list into output code */
 void SWFText_resolveCodes(SWFText text)
 {
@@ -364,7 +423,7 @@ void SWFText_resolveCodes(SWFText text)
   SWFOutput out = text->out;
   int nGlyphBits=0;
   int advance;
-  int l, i, curX=0, curY=0, curH=0, glyph;
+  int l, i, curX=0, curY=0, curH=0;
 
   textRecord = text->textRecord;
 
@@ -375,8 +434,10 @@ void SWFText_resolveCodes(SWFText text)
       if(textRecord->isBrowserFont)
 	nGlyphBits = max(nGlyphBits, 8); /* XXX - assume browser fonts have 8bit glyph table? */
       else
+      {
 	nGlyphBits = max(nGlyphBits,
-			 SWFOutput_numBits(textRecord->font.font->nGlyphs-1));
+			 SWFOutput_numBits(SWFFont_getNGlyphs(textRecord->font.font)-1));
+      }
     }
 
     textRecord = textRecord->next;
@@ -461,8 +522,10 @@ void SWFText_resolveCodes(SWFText text)
 			       curX + curH, curY + curH, 0);
 	}
 	else
+	{
 	  CHARACTER(text)->bounds =
 	    newSWFRect(curX, curX+curH, curY, curY+curH);
+	}
 
 	curX += curH;
       }
@@ -471,40 +534,43 @@ void SWFText_resolveCodes(SWFText text)
     {
       SWFFont font = textRecord->font.font;
 
-      SWF_assert(font != NULL);
+      if(font == NULL)
+	SWF_error("Couldn't find font");
 
       for(i=0; i<l; ++i)
       {
-	glyph = font->codeTable[(byte)textRecord->string[i]];
+	int minX, maxX, minY, maxY;
 
-	SWFOutput_writeBits(out, font->glyphToCode[textRecord->string[i]],
+	SWFRect glyphBounds =
+	  SWFFont_getGlyphBounds(font, (byte)textRecord->string[i]);
+
+	SWFRect_getBounds(glyphBounds, &minX, &maxX, &minY, &maxY);
+
+	SWFOutput_writeBits(out,
+			    SWFFont_getGlyphCode(font, textRecord->string[i]),
 			    nGlyphBits);
-
-	SWF_assert(textRecord != NULL);
 
 	advance = (int)floor(textRecord->advance[i]);
 	SWFOutput_writeBits(out, advance, text->nAdvanceBits);
 
-	SWF_assert(font->bounds != NULL);
-
 	if(CHARACTER(text)->bounds)
 	{
 	  SWFRect_includePoint(CHARACTER(text)->bounds,
-			       curX + font->bounds[glyph].minX * curH / 1024,
-			       curY + font->bounds[glyph].minY * curH / 1024,
+			       curX + minX * curH / 1024,
+			       curY + minY * curH / 1024,
 			       0);
 
 	  SWFRect_includePoint(CHARACTER(text)->bounds,
-			       curX + font->bounds[glyph].maxX * curH / 1024,
-			       curY + font->bounds[glyph].maxY * curH / 1024,
+			       curX + maxX * curH / 1024,
+			       curY + maxY * curH / 1024,
 			       0);
 	}
 	else
+	{
 	  CHARACTER(text)->bounds =
-	    newSWFRect(curX + font->bounds[glyph].minX * curH /1024,
-		       curX + font->bounds[glyph].maxX * curH /1024,
-		       curY + font->bounds[glyph].minY * curH /1024,
-		       curY + font->bounds[glyph].maxY * curH /1024);
+	    newSWFRect(curX + minX * curH /1024, curX + maxX * curH /1024,
+		       curY + minY * curH /1024, curY + maxY * curH /1024);
+	}
 
 	curX += advance;
       }

@@ -22,28 +22,33 @@
 #ifndef SWF_SPRITE_H_INCLUDED
 #define SWF_SPRITE_H_INCLUDED
 
-#include "libswf.h"
-#include "block.h"
+typedef struct SWFSprite_s *SWFSprite;
+
 #include "character.h"
 
-struct _sprite
+
+/* movie clip extends sprite, so we need a public definition */
+
+struct SWFSprite_s
 {
-  swfCharacter character;
+  struct SWFCharacter_s character;
+
   int frames;
   int totalFrames;
+
   int nBlocks;
   SWFBlock *blocks;
 };
-typedef struct _sprite *SWFSprite;
 
-#define SWF_SPRITE_SIZE sizeof(struct _sprite)
 
 SWFSprite newSWFSprite();
+
 void destroySWFSprite(SWFBlock block);
 
 void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);
 
 void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
+
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
 
 #endif /* SWF_SPRITE_H_INCLUDED */

@@ -20,10 +20,12 @@
 #include "action.h"
 #include "outputblock.h"
 
+
 SWFAction newSWFAction()
 {
   return newSWFOutputBlock(newSWFOutput(), SWF_DOACTION);
 }
+
 void destroySWFAction(SWFAction action)
 {
   destroySWFOutputBlock((SWFBlock)action);

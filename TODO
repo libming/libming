@@ -28,7 +28,7 @@ Stuff what to do (not in order):
 
 * Read fonts from TTF/PS
 
-* Make importable blocks
+* Make importable blocks/template format
 
   Seems kind of wasteful to run lots of code to define a shape that never
   changes.  It'd be better to dump the rendered shape definition out to a file

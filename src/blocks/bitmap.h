@@ -22,20 +22,17 @@
 #ifndef SWF_BITMAP_H_INCLUDED
 #define SWF_BITMAP_H_INCLUDED
 
-typedef struct _character *SWFBitmap;
-
 #include "character.h"
 #include "input.h"
 
-struct _bitmap
-{
-  struct _character character;
-};
 
-#define BITMAP(s) ((SWFBitmap)(s))
+typedef SWFCharacter SWFBitmap;
+
 
 void destroySWFBitmap(SWFBlock block);
+
 int SWFBitmap_getWidth(SWFBitmap b);
+
 int SWFBitmap_getHeight(SWFBitmap b);
 
 SWFBitmap newSWFBitmap_fromInput(SWFInput input);

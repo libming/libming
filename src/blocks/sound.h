@@ -22,6 +22,9 @@
 #ifndef SWF_SOUND_H_INCLUDED
 #define SWF_SOUND_H_INCLUDED
 
+typedef struct SWFSound_s *SWFSound;
+typedef struct SWFSoundInfo_s *SWFSoundInfo;
+
 #include "block.h"
 #include "method.h"
 #include "character.h"
@@ -46,9 +49,10 @@
 #define SWF_SOUND_MONO             (0<<0)
 #define SWF_SOUND_STEREO           (1<<0)
 
-struct _sound
+struct SWFSound_s
 {
-  swfCharacter character;
+  struct SWFCharacter_s character;
+
   byte flags;
   byte isFinished;
   int numSamples;
@@ -56,9 +60,6 @@ struct _sound
   int samplesPerFrame;
   FILE *file;
 };
-typedef struct _sound *SWFSound;
-
-#define SWFSOUND_SIZE sizeof(struct _sound)
 
 #define SWF_SOUNDINFO_SYNCSTOPSOUND  (1<<5)
 #define SWF_SOUNDINFO_SYNCNOMULTIPLE (1<<4)
@@ -74,9 +75,10 @@ typedef struct
   unsigned short level1;
 } envPoint;
 
-struct _soundInfo
+struct SWFSoundInfo_s
 {
-  swfBlock block;
+  struct SWFBlock_s block;
+
   SWFSound sound;
   unsigned int inPoint;
   unsigned int outPoint;
@@ -85,9 +87,6 @@ struct _soundInfo
   byte numEnvPoints;
   envPoint *envPoints;
 };
-typedef struct _soundInfo *SWFSoundInfo;
-
-#define SWF_SOUNDINFO_SIZE sizeof(struct _soundInfo)
 
 SWFBlock newDefineSWFSoundBlock(SWFSound sound);
 SWFBlock newDefineSWFSoundStreamBlock(SWFOutput output);

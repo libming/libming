@@ -20,11 +20,18 @@
 #ifndef MING_DISPLAYLIST_H_INCLUDED
 #define MING_DISPLAYLIST_H_INCLUDED
 
+typedef struct SWFDisplayItem_s *SWFDisplayItem;
+typedef struct SWFDisplayList_s *SWFDisplayList;
+
 #include "libming.h"
-#include "blocks/swf.h"
 
 #include "blocklist.h"
 #include "position.h"
+
+#include "blocks/cxform.h"
+#include "blocks/action.h"
+#include "blocks/character.h"
+#include "blocks/soundstream.h"
 
 #define ITEM_NEW            (1<<0)
 #define ITEM_REMOVED        (1<<1)
@@ -34,82 +41,84 @@
 
 #define ITEM_CHANGED  (ITEM_TRANSFORMED|ITEM_CXFORMCHANGED|ITEM_RATIOCHANGED|ITEM_NEW)
 
-struct _swfDisplayItem
-{
-  int flags;
-  struct _swfDisplayItem *next;
-  int depth;
-  SWFPlaceObject2Block block;
 
-  SWFCharacter character;
-  SWFPosition position;
-  SWFMatrix matrix;
-};
-typedef struct _swfDisplayItem *SWFDisplayItem;
-
-#define SWFDISPLAYITEM_SIZE sizeof(struct _swfDisplayItem)
+/* display item */
 
 void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees);
+
 void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees);
+
 void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
+
 void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
+
 void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale);
+
 void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale);
+
 void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
+
 void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
+
 void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
+
 void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
+
 void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
 			      float c, float d, float x, float y);
 
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
+
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
+
 void SWFDisplayItem_remove(SWFDisplayItem item);
+
 void SWFDisplayItem_setName(SWFDisplayItem item, const char *name);
+
 void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel);
+
 void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio);
+
 void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform);
+
 void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
 				int r, int g, int b, int a);
+
 void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 				 float r, float g, float b, float a);
 
 void SWFDisplayItem_addAction(SWFDisplayItem item,
 			      SWFAction action, int flags);
 
-#define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
-#define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
-
 void SWFDisplayItem_getPosition(SWFDisplayItem item, float * x, 
                                 float * y);
+
 void SWFDisplayItem_getRotation(SWFDisplayItem item, 
                                 float * degrees);
+
 void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, 
                              float * yScale);
+
 void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, 
                             float * ySkew);
 
 
-struct _swfDisplayList
-{
-  SWFSound soundStream;
-  SWFDisplayItem head;
-  SWFDisplayItem tail;
-  byte isSprite;
-  int depth;
-};
-typedef struct _swfDisplayList *SWFDisplayList;
-
-#define SWFDISPLAYLIST_SIZE sizeof(struct _swfDisplayList)
+/* display list */
 
 void destroySWFDisplayList(SWFDisplayList list);
+
 SWFDisplayList newSWFDisplayList();
+
 SWFDisplayList newSWFSpriteDisplayList();
+
 void SWFDisplayList_nextFrame(SWFDisplayList list);
 
 SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter shape);
+
 void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist);
 
 void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSound sound);
+
+void SWFDisplayList_rewindSoundStream(SWFDisplayList list);
 
 #endif /* MING_DISPLAYLIST_H_INCLUDED */

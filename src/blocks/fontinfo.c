@@ -20,42 +20,61 @@
 #include "fontinfo.h"
 #include "method.h"
 
-void writeDefineSWFFontInfoBlock(SWFBlock block,
-				 SWFByteOutputMethod method, void *data)
+struct SWFFontInfo_s
 {
-  int l, i;
+  struct SWFCharacter_s character;
+  SWFFont font;
+};
+
+
+static void writeDefineSWFFontInfoBlock(SWFBlock block,
+					SWFByteOutputMethod method, void *data)
+{
   SWFFontInfo info = (SWFFontInfo)block;
   SWFFont font = info->font;
+  const char* fontname = SWFFont_getName(font);
+
+  int l, i;
 
   methodWriteUInt16(CHARACTERID(font), method, data);
 
-  l = strlen(font->name);
+  l = strlen(fontname);
 
   SWF_assert(l<256);
   method(l, data);
 
   for(i=0; i<l; ++i)
-    method(font->name[i], data);
+    method(fontname[i], data);
 
-  method(font->flags, data);
+  method(SWFFont_getFlags(font), data);
 
   /* write glyph-to-code table */
   /* XXX - no support for wide codes */
-  for(i=0; i<font->nGlyphs; ++i)
-    method(font->codeToGlyph[i], data);
+
+  for(i=0; i<SWFFont_getNGlyphs(font); ++i)
+    method(SWFFont_getGlyphCode(font, i), data);
 }
-int completeDefineSWFFontInfoBlock(SWFBlock block)
+
+
+static int completeDefineSWFFontInfoBlock(SWFBlock block)
 {
   SWFFontInfo info = (SWFFontInfo)block;
-  return strlen(info->font->name) + 4 + info->font->nGlyphs;
+  SWFFont font = info->font;
+
+  return strlen(SWFFont_getName(font)) + 4 + SWFFont_getNGlyphs(font);
 }
+
+
 SWFFontInfo newDefineSWFFontInfo(SWFFont font)
 {
-  SWFFontInfo fontInfo = calloc(1, FONTINFO_SIZE);
+  SWFFontInfo fontInfo = malloc(sizeof(struct SWFFontInfo_s));
+
+  SWFCharacterInit((SWFCharacter)fontInfo);
 
   BLOCK(fontInfo)->type = SWF_DEFINEFONTINFO;
   BLOCK(fontInfo)->writeBlock = writeDefineSWFFontInfoBlock;
   BLOCK(fontInfo)->complete = completeDefineSWFFontInfoBlock;
   fontInfo->font = font;
+
   return fontInfo;
 }

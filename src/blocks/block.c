@@ -22,16 +22,25 @@
 #include "block.h"
 #include "method.h"
 
+
 int SWF_gNumCharacters;
+
 
 void SWFBlock_setDefined(SWFBlock block)
 {
   block->isDefined = TRUE;
 }
 
+
 byte SWFBlock_isDefined(SWFBlock block)
 {
   return block->isDefined;
+}
+
+
+int SWFBlock_getLength(SWFBlock block)
+{
+  return block->length;
 }
 
 
@@ -42,6 +51,7 @@ void destroySWFBlock(SWFBlock block)
   else
     free(block);
 }
+
 
 int completeSWFBlock(SWFBlock block)
 {
@@ -56,10 +66,13 @@ int completeSWFBlock(SWFBlock block)
   if(block->length>62 ||
      block->type == SWF_DEFINELOSSLESS ||
      block->type == SWF_DEFINELOSSLESS2)
+  {
     return block->length + 6;
+  }
   else
     return block->length + 2;
 }
+
 
 int writeSWFBlockToMethod(SWFBlock block,
 			  SWFByteOutputMethod method, void *data)
@@ -69,12 +82,12 @@ int writeSWFBlockToMethod(SWFBlock block,
 
   /* write header */
 
-  if(block->length>62 ||
+  if(block->length > 62 ||
      block->type == SWF_DEFINELOSSLESS ||
      block->type == SWF_DEFINELOSSLESS2)
   {
     /* yep, a definebitslossless block has to be long form, even if it's
-       under 63 bytes.  how stupid is that? */
+       under 63 bytes.. */
 
     method(((block->type&0x03)<<6) + 0x3f, data);
     method((block->type >> 2)&0xff, data);
@@ -89,30 +102,47 @@ int writeSWFBlockToMethod(SWFBlock block,
   return block->length + ((block->length>62)?6:2);
 }
 
-SWFBlock newEmptySWFBlock(SWFBlocktype type)
-{
-  SWFBlock block = calloc(1, BLOCK_SIZE);
-  block->type = type;
 
+void SWFBlockInit(SWFBlock block)
+{
+  block->type = SWF_END; // XXX - ???
   block->writeBlock = NULL;
   block->complete = NULL;
   block->dtor = NULL;
 
+  block->length = 0;
+  block->isDefined = FALSE;
+  block->completed = FALSE;
+}
+
+
+SWFBlock newEmptySWFBlock(SWFBlocktype type)
+{
+  SWFBlock block = malloc(sizeof(struct SWFBlock_s));
+  SWFBlockInit(block);
+  block->type = type;
+
   return block;
 }
+
 
 SWFBlock newSWFShowFrameBlock()
 {
   return newEmptySWFBlock(SWF_SHOWFRAME);
 }
+
+
 SWFBlock newSWFEndBlock()
 {
   return newEmptySWFBlock(SWF_END);
 }
+
+
 SWFBlock newSWFProtectBlock()
 {
   return newEmptySWFBlock(SWF_PROTECT);
 }
+
 
 SWFBlocktype SWFBlock_getType(SWFBlock block)
 {

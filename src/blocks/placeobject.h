@@ -2,32 +2,13 @@
 #ifndef SWF_PLACEOBJECT_H_INCLUDED
 #define SWF_PLACEOBJECT_H_INCLUDED
 
+typedef struct SWFPlaceObject2Block_s *SWFPlaceObject2Block;
+
 #include "libswf.h"
 #include "character.h"
 #include "matrix.h"
 #include "cxform.h"
 #include "action.h"
-
-struct _placeObject2Block
-{
-  swfBlock block;
-  SWFOutput out;
-
-  SWFCharacter character;
-  SWFMatrix matrix;
-  SWFCXform cXform;
-  int ratio;
-  int masklevel;
-  char *name;
-  int depth;
-  int move;
-
-  int nActions;
-  int actionORFlags;
-  SWFAction *actions;
-  int *actionFlags;
-};
-typedef struct _placeObject2Block *SWFPlaceObject2Block;
 
 #define SWF_PLACE_HAS_ACTIONS     (1<<7)
 #define SWF_PLACE_HAS_MASK        (1<<6)
@@ -42,18 +23,26 @@ SWFPlaceObject2Block newSWFPlaceObject2Block(int depth);
 
 void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block,
 				  const char *name);
+
 void SWFPlaceObject2Block_setRatio(SWFPlaceObject2Block block, int ratio);
+
 void SWFPlaceObject2Block_setDepth(SWFPlaceObject2Block block, int depth);
+
 void SWFPlaceObject2Block_setMaskLevel(SWFPlaceObject2Block block,
 				       int masklevel);
+
 void SWFPlaceObject2Block_setCXform(SWFPlaceObject2Block block,
 				    SWFCXform cXform);
+
 void SWFPlaceObject2Block_setColorAdd(SWFPlaceObject2Block block,
 				      int r, int g, int b, int a);
+
 void SWFPlaceObject2Block_setColorMult(SWFPlaceObject2Block block,
 				       float r, float g, float b, float a);
+
 void SWFPlaceObject2Block_setMatrix(SWFPlaceObject2Block block,
 				    SWFMatrix matrix);
+
 void SWFPlaceObject2Block_setCharacter(SWFPlaceObject2Block block,
 				       SWFCharacter character);
 

@@ -20,34 +20,21 @@
 #ifndef MING_BLOCKLIST_H_INCLUDED
 #define MING_BLOCKLIST_H_INCLUDED
 
+typedef struct SWFBlockList_s *SWFBlockList;
+
 #include "libming.h"
-#include "blocks/swf.h"
+#include "blocks/block.h"
+#include "blocks/sprite.h"
 
-/* we have to note which blocks are characters b/c characters may be destroyed
-   before we have a chance to look at them */
-
-struct _swfBlockListEntry
-{
-  SWFBlock block;
-  byte isCharacter;
-};
-typedef struct _swfBlockListEntry swfBlockEntry;
-
-struct _swfBlockList
-{
-  swfBlockEntry *blocks;
-  int nBlocks;
-};
-typedef struct _swfBlockList *SWFBlockList;
-
-#define SWFBLOCKLIST_SIZE sizeof(struct _swfBlockList)
-
-#define SWFBLOCKLIST_INCREMENT 16
 
 SWFBlockList newSWFBlockList();
+
 void SWFBlockList_addBlock(SWFBlockList blocklist, SWFBlock block);
 
+void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite);
+
 int SWFBlockList_completeBlocks(SWFBlockList list);
+
 int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
 				     SWFByteOutputMethod method, void *data);
 

@@ -1,6 +1,18 @@
 
 MING HISTORY
 
+11.9.01
+	General cleanup:
+	  moved structure definitions into .c files
+	  added accessor functions where necessary
+	  removed inline functions
+	  replaced void* typedefs in ming.h with struct pointers
+	  fixed some memory leaks (?)
+
+9.15.01
+	Added displayitem accessor functions patch from Uri Yanover
+	Added png2dbl data alignment fixes from Ingo Wilken
+
 7.9.01 - 8.17.01
 	Fixed MP3 streaming
 	Other stuff I didn't remember to write down

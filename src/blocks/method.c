@@ -26,6 +26,7 @@ void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
   method(i&0xff, data);
 }
 
+
 void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data)
 {
   method(i&0xff, data);
@@ -36,6 +37,7 @@ void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data)
   i>>=8;
   method(i&0xff, data);
 }
+
 
 void fileOutputMethod(byte b, void *data)
 {

@@ -18,89 +18,125 @@
 */
 
 #include "fill.h"
+#include "position.h"
+
+struct SWFFill_s
+{
+  SWFFillStyle fillstyle;
+  SWFPosition position;
+};
+
 
 SWFFill newSWFFill(SWFFillStyle fillstyle)
 {
-  SWFFill fill = (SWFFill)malloc(SWFFILL_SIZE);
+  SWFFill fill = (SWFFill)malloc(sizeof(struct SWFFill_s));
+
   fill->fillstyle = fillstyle;
   fill->position = newSWFPosition(SWFFillStyle_getMatrix(fill->fillstyle));
+
   return fill;
 }
+
+
+SWFFillStyle SWFFill_getFillStyle(SWFFill fill)
+{
+  return fill->fillstyle;
+}
+
+
 void destroySWFFill(SWFFill fill)
 {
   destroySWFPosition(fill->position);
   free(fill);
 }
 
+
 void SWFFill_skewX(SWFFill fill, float x)
 {
   SWFPosition_skewX(fill->position, x);
 }
+
+
 void SWFFill_skewXTo(SWFFill fill, float x)
 {
   SWFPosition_skewXTo(fill->position, x);
 }
+
+
 void SWFFill_skewY(SWFFill fill, float y)
 {
   SWFPosition_skewY(fill->position, y);
 }
+
+
 void SWFFill_skewYTo(SWFFill fill, float y)
 {
   SWFPosition_skewYTo(fill->position, y);
 }
+
+
 void SWFFill_scaleX(SWFFill fill, float x)
 {
   SWFPosition_scaleX(fill->position, x);
 }
+
+
 void SWFFill_scaleXTo(SWFFill fill, float x)
 {
   SWFPosition_scaleXTo(fill->position, x);
 }
+
+
 void SWFFill_scaleY(SWFFill fill, float y)
 {
   SWFPosition_scaleY(fill->position, y);
 }
+
+
 void SWFFill_scaleYTo(SWFFill fill, float y)
 {
   SWFPosition_scaleYTo(fill->position, y);
 }
 
-/* deprecated: */
+
 void SWFFill_scaleXY(SWFFill fill, float x, float y)
 {
   SWFPosition_scaleXY(fill->position, x, y);
 }
+
+
 void SWFFill_scaleXYTo(SWFFill fill, float x, float y)
 {
   SWFPosition_scaleXYTo(fill->position, x, y);
 }
 
-void SWFFill_scale(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXY(fill->position, x, y);
-}
-void SWFFill_scaleTo(SWFFill fill, float x, float y)
-{
-  SWFPosition_scaleXYTo(fill->position, x, y);
-}
+
 void SWFFill_rotate(SWFFill fill, float degrees)
 {
   SWFPosition_rotate(fill->position, degrees);
 }
+
+
 void SWFFill_rotateTo(SWFFill fill, float degrees)
 {
   SWFPosition_rotateTo(fill->position, degrees);
 }
+
+
 void SWFFill_move(SWFFill fill, float x, float y)
 {
   SWFPosition_move(fill->position, x, y);
 }
+
+
 void SWFFill_moveTo(SWFFill fill, float x, float y)
 {
   SWFPosition_moveTo(fill->position, x, y);
 }
+
+
 void SWFFill_setMatrix(SWFFill fill, float a, float b,
-				     float c, float d, float x, float y)
+		       float c, float d, float x, float y)
 {
   SWFPosition_setMatrix(fill->position, a, b, c, d, x, y);
 }

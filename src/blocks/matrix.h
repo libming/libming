@@ -22,23 +22,16 @@
 #ifndef SWF_MATRIX_H_INCLUDED
 #define SWF_MATRIX_H_INCLUDED
 
+typedef struct SWFMatrix_s *SWFMatrix;
+
 #include "output.h"
 
-struct _matrix
-{
-  /* these are the lame names given in the swf spec.  not my fault. */
-  float scaleX;
-  float rotate0;
-  float rotate1;
-  float scaleY;
-  int translateX;
-  int translateY;
-};
-typedef struct _matrix *SWFMatrix;
-
 SWFMatrix newSWFMatrix(float a, float b, float c, float d, int x, int y);
+
 SWFMatrix SWFMatrix_dup(SWFMatrix matrix);
+
 void destroySWFMatrix(SWFMatrix matrix);
+
 void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix);
 
 SWFMatrix newSWFRotateMatrix(float degrees);
@@ -46,17 +39,25 @@ SWFMatrix newSWFRotateMatrix(float degrees);
 int SWFMatrix_numBits(SWFMatrix matrix);
 
 void SWFMatrix_set(SWFMatrix m, float a, float b, float c, float d, int x, int y);
+
 void SWFMatrix_clearTranslate(SWFMatrix m);
+
 void SWFMatrix_clearTransform(SWFMatrix m);
 
 void SWFMatrix_apply(SWFMatrix m, double *x, double *y, int xlate);
 
 void SWFMatrix_scaleXY(SWFMatrix matrix, float xScale, float yScale);
+
 void SWFMatrix_leftMultiply(SWFMatrix ma, SWFMatrix mb);
+
 void SWFMatrix_multiply(SWFMatrix a, SWFMatrix b);
+
 void SWFMatrix_rotate(SWFMatrix matrix, float radians);
+
 void SWFMatrix_scale(SWFMatrix matrix, float factor);
+
 void SWFMatrix_translate(SWFMatrix matrix, int dx, int dy);
+
 void SWFMatrix_moveTo(SWFMatrix matrix, int x, int y);
 
 #endif /* SWF_MATRIX_H_INCLUDED */

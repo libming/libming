@@ -22,6 +22,8 @@
 #ifndef SWF_BUTTON_H_INCLUDED
 #define SWF_BUTTON_H_INCLUDED
 
+typedef struct SWFButton_s *SWFButton;
+
 #include "block.h"
 #include "matrix.h"
 #include "action.h"
@@ -46,49 +48,21 @@
 #define SWFBUTTON_OVERUPTOIDLE      (1<<1)
 #define SWFBUTTON_IDLETOOVERUP      (1<<0)
 
-
-struct _buttonRecord
-{
-  byte flags;
-  unsigned short layer;
-  SWFCharacter character;
-  SWFMatrix matrix;
-};
-typedef struct _buttonRecord *SWFButtonRecord;
-
-#define BUTTONRECORD_SIZE sizeof(struct _buttonRecord)
-
-struct _actionRecord
-{
-  int flags;
-  SWFAction action;
-};
-typedef struct _actionRecord swfActionRecord;
-
-#define ACTIONRECORD_SIZE sizeof(struct _actionRecord)
-
 #define SWF_BUTTON_TRACKASMENU  (1<<0)
-struct _button
-{
-  swfCharacter character;
-  int nRecords;
-  SWFButtonRecord *records;
-  int nActions;
-  swfActionRecord *actions;
-  SWFOutput out;
-};
-typedef struct _button *SWFButton;
 
-#define SWFBUTTON_SIZE sizeof(struct _button)
 
 SWFButton newSWFButton();
+
 void destroySWFButton(SWFBlock block);
 
 void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
+
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 
 SWFBlock newDefineSWFButtonBlock(SWFButton button);
+
 SWFBlock newDefineSWFButtonCXform(SWFButton button, SWFCXform *cXforms);
+
 SWFBlock newDefineSWFButtonSWFSound(SWFButton button, SWFSound sound);
 
 #endif /* SWF_BUTTON_H_INCLUDED */

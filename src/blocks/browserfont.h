@@ -20,21 +20,14 @@
 #ifndef SWF_BROWSERFONT_H_INCLUDED
 #define SWF_BROWSERFONT_H_INCLUDED
 
+typedef struct SWFBrowserFont_s *SWFBrowserFont;
+
 #include "libswf.h"
 #include "output.h"
 #include "character.h"
 
-struct _browserFont
-{
-  swfCharacter character;
-  SWFOutput out;
-};
-typedef struct _browserFont *SWFBrowserFont;
-
-#define FONTID(t) (((t)->isBrowserFont) ? CHARACTERID((t)->font.browserFont) : CHARACTERID((t)->font.font))
-
-#define SWFBROWSERFONT_SIZE sizeof(struct _browserFont)
-
 SWFBrowserFont newSWFBrowserFont(char *name);
+
+SWFOutput SWFBrowserFont_getOutput(SWFBrowserFont font);
 
 #endif /* SWF_BROWSERFONT_H_INCLUDED */

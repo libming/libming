@@ -22,24 +22,17 @@
 #ifndef SWF_MORPH_H_INCLUDED
 #define SWF_MORPH_H_INCLUDED
 
+typedef struct SWFMorph_s *SWFMorph;
+
 #include "character.h"
 #include "output.h"
 #include "shape.h"
 
-struct _morph
-{
-  swfCharacter character;
-  SWFOutput out;
-  SWFShape shape1;
-  SWFShape shape2;
-};
-typedef struct _morph *SWFMorph;
 
-#define MORPH_SIZE sizeof(struct _morph)
-
-/* morph stuff */
 SWFShape SWFMorph_getShape1(SWFMorph morph);
+
 SWFShape SWFMorph_getShape2(SWFMorph morph);
+
 SWFMorph newSWFMorphShape();
 
 #endif /* SWF_MORPH_H_INCLUDED */

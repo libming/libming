@@ -22,31 +22,26 @@
 #ifndef SWF_LINE_H_INCLUDED
 #define SWF_LINE_H_INCLUDED
 
+typedef struct SWFLineStyle_s *SWFLineStyle;
+
 #include "output.h"
 #include "blocktypes.h"
 
-struct _lineStyle
-{
-  unsigned short width;
-  byte r;
-  byte g;
-  byte b;
-  byte a;
-};
-typedef struct _lineStyle *SWFLineStyle;
-
-#define LINESTYLE_SIZE sizeof(struct _lineStyle)
 
 SWFLineStyle newSWFLineStyle(unsigned short width,
 			     byte r, byte g, byte b, byte a);
+
 
 /* okay, this is kinda lame.. */
 byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
 			 byte r, byte g, byte b, byte a);
 
+unsigned short SWFLineStyle_getWidth(SWFLineStyle line);
+
 void SWFOutput_writeLineStyles(SWFOutput out,
 			       SWFLineStyle *lines, int nLines,
 			       SWFBlocktype shapeType);
+
 
 void SWFOutput_writeMorphLineStyles(SWFOutput out,
 				    SWFLineStyle *lines1, int nLines1,

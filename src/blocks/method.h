@@ -42,6 +42,7 @@ struct _byteOutput
 typedef void (*SWFByteOutputMethod)(byte b, void *data);
 
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data);
+
 void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data);
 
 void fileOutputMethod(byte b, void *data);

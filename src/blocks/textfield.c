@@ -19,49 +19,94 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include "libswf.h"
+
 #include "textfield.h"
+
+
+struct SWFTextField_s
+{
+  struct SWFCharacter_s character;
+
+  SWFOutput out; /* cheap way out */
+  int flags;
+  byte isBrowserFont;
+
+  union
+  {
+    SWFFont font;
+    SWFBrowserFont browserFont;
+  } font;
+
+  int nLines;
+  int fontHeight;
+  int fieldHeight;
+  int width;
+  int padding;
+  byte r;
+  byte g;
+  byte b;
+  byte a;
+  short length;
+  byte alignment;
+  short leftMargin;
+  short rightMargin;
+  short indentation;
+  short lineSpacing;
+  char *varName;
+  char *string;
+};
+
 
 /* after every metric change, we update the bounds for the
    SWFCharacter_getBounds function */
 
 static void resetBounds(SWFTextField field)
 {
-  CHARACTER(field)->bounds->minX = -field->padding;
-  CHARACTER(field)->bounds->minY = -field->padding;
+  int minX, maxX, minY, maxY;
+
+  SWFRect_getBounds(CHARACTER(field)->bounds, &minX, &maxX, &minY, &maxY);
+
+  minX = -field->padding;
+  minY = -field->padding;
 
   if(field->width == 0)
   {
     int width = field->fontHeight*(field->string ? strlen(field->string) : 0);
-    CHARACTER(field)->bounds->maxX = field->padding + width;
+    maxX = field->padding + width;
   }
   else
-    CHARACTER(field)->bounds->maxX = field->padding + field->width;
+    maxX = field->padding + field->width;
 
   if(field->fieldHeight == 0)
   {
-    CHARACTER(field)->bounds->maxY =
-      field->padding + field->fontHeight*field->nLines +
+    maxY = field->padding + field->fontHeight*field->nLines +
       (field->nLines-1)*field->lineSpacing;
   }
   else
-    CHARACTER(field)->bounds->maxY = field->padding + field->fieldHeight;
+    maxY = field->padding + field->fieldHeight;
+
+  SWFRect_setBounds(CHARACTER(field)->bounds, minX, maxX, minY, maxY);
 }
 
 
 void writeSWFTextFieldToMethod(SWFBlock block,
 			       SWFByteOutputMethod method, void *data)
 {
-  SWFOutput out = ((SWFBrowserFont)block)->out;
+  SWFOutput out = SWFBrowserFont_getOutput((SWFBrowserFont)block);
   SWFOutput_writeToMethod(out, method, data);
 }
+
+
 int completeSWFTextField(SWFBlock block)
 {
   SWFTextField field = (SWFTextField)block;
 
   /* we're guessing how big the block's going to be.. */
-  SWFOutput out = newSizedSWFOutput(42 +
-				    ((field->varName)?strlen(field->varName):0)+
-				    ((field->string)?strlen(field->string):0));
+  SWFOutput out =
+    newSizedSWFOutput(42 + ((field->varName)?strlen(field->varName):0) +
+		      ((field->string)?strlen(field->string):0));
 
   field->out = out;
 
@@ -94,28 +139,44 @@ int completeSWFTextField(SWFBlock block)
   /* flash 4 just makes a browser font for (editable) textfields for all fonts */
 
   SWFOutput_byteAlign(out);
-  return SWFOutput_length(out);
+  return SWFOutput_getLength(out);
 }
+
+
 void destroySWFTextField(SWFBlock block)
 {
   SWFTextField f = (SWFTextField)block;
+
   SWFCharacter_clearDependencies(CHARACTER(block));
+
   destroySWFRect(CHARACTER(f)->bounds);
   destroySWFOutput(f->out);
-  free(f->varName);
-  free(f->string);
+
+  if(f->varName != NULL)
+    free(f->varName);
+
+  if(f->string != NULL)
+    free(f->string);
+
   free(f);
 }
+
+
 SWFTextField newSWFTextField()
 {
-  SWFTextField field = calloc(1, SWFTEXTFIELD_SIZE);
+  SWFTextField field = malloc(sizeof(struct SWFTextField_s));
+
+  SWFCharacterInit((SWFCharacter)field);
 
   BLOCK(field)->writeBlock = writeSWFTextFieldToMethod;
   BLOCK(field)->complete = completeSWFTextField;
   BLOCK(field)->dtor = destroySWFTextField;
   BLOCK(field)->type = SWF_TEXTFIELD;
+
   CHARACTERID(field) = ++SWF_gNumCharacters;
   CHARACTER(field)->bounds = newSWFRect(-40, 280, -40, 280);
+
+  field->out = NULL;
 
   field->lineSpacing = 40;
   field->padding = 40;
@@ -128,8 +189,20 @@ SWFTextField newSWFTextField()
   field->flags = 0x30ad;
 
   field->font.font = NULL;
+  field->isBrowserFont = FALSE;
   field->varName = NULL;
   field->string = NULL;
+
+  field->r = 0;
+  field->g = 0;
+  field->b = 0;
+  field->a = 0xff;
+
+  field->length = 0;
+  field->alignment = SWFTEXTFIELD_ALIGN_LEFT;
+  field->leftMargin = 0;
+  field->rightMargin = 0;
+  field->indentation = 0;
 
   return field;
 }

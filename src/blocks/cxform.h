@@ -20,39 +20,52 @@
 #ifndef SWF_CXFORM_H_INCLUDED
 #define SWF_CXFORM_H_INCLUDED
 
+typedef struct SWFCXform_s *SWFCXform;
+
 #include "output.h"
 #include "blocktypes.h"
 
-struct _cXform
-{
-  int rMult;
-  int gMult;
-  int bMult;
-  int aMult;
-  int rAdd;
-  int gAdd;
-  int bAdd;
-  int aAdd;
-};
-typedef struct _cXform *SWFCXform;
 
-#define CXFORM_SIZE sizeof(struct _cXform)
+/* create a new color transform with the given parameters */
 
 SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
 		       float rMult, float gMult, float bMult, float aMult);
 
+
+/* create a new color transform with the given additive parameters and
+   default multiplicative */
+
 SWFCXform newSWFAddCXform(int rAdd, int gAdd, int bAdd, int aAdd);
 
+
+/* create a new color transform with the given multiplicative parameters
+   and default additive */
+
 SWFCXform newSWFMultCXform(float rMult, float gMult, float bMult, float aMult);
+
+
+/* set the additive part of the color transform to the given parameters */
 
 void SWFCXform_setColorAdd(SWFCXform cXform,
 			   int rAdd, int gAdd, int bAdd, int aAdd);
 
+
+/* set the multiplicative part of the color transform to the given
+   parameters */
+
 void SWFCXform_setColorMult(SWFCXform cXform,
 			    float rMult, float gMult, float bMult, float aMult);
 
+
+/* destroy this color transform */
+
 void destroySWFCXform(SWFCXform cXform);
 
-void SWFOutput_writeCXform(SWFOutput out, SWFCXform cXform, SWFBlocktype type);
+
+/* write this color transform to the given output object-
+   shapetype indicates whether we include the alpha components */
+
+void SWFOutput_writeCXform(SWFOutput out, SWFCXform cXform, SWFBlocktype shapetype);
+
 
 #endif /* SWF_CXFORM_H_INCLUDED */

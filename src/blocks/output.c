@@ -22,10 +22,23 @@
 
 #include "output.h"
 
+struct SWFOutput_s
+{
+  SWFOutput next;
+
+  byte *buffer;
+  byte *pos;
+  int buffersize;
+  int free;
+  int bitpos;
+};
+
+
 SWFOutput newSWFOutput()
 {
-  SWFOutput out = calloc(1, OUTPUT_SIZE);
+  SWFOutput out = malloc(sizeof(struct SWFOutput_s));
 
+  out->next = NULL;
   out->buffer = malloc(OUTPUT_BUFFER_INCREMENT);
   out->pos = out->buffer;
   *(out->pos) = 0;
@@ -35,13 +48,15 @@ SWFOutput newSWFOutput()
   return out;
 }
 
+
 /* same as above but with specified buffer size,
    use if you have an upper limit to how big this'll get */
 
 SWFOutput newSizedSWFOutput(int size)
 {
-  SWFOutput out = calloc(1, OUTPUT_SIZE);
+  SWFOutput out = malloc(sizeof(struct SWFOutput_s));
 
+  out->next = NULL;
   out->buffer = malloc(size+1);
   out->pos = out->buffer;
   *(out->pos) = 0;
@@ -50,6 +65,7 @@ SWFOutput newSizedSWFOutput(int size)
 
   return out;
 }
+
 
 void SWFOutput_writeToMethod(SWFOutput out,
 			     SWFByteOutputMethod method, void *data)
@@ -72,6 +88,7 @@ void SWFOutput_writeToMethod(SWFOutput out,
   }
 }
 
+
 void destroySWFOutput(SWFOutput out)
 {
   SWFOutput o = out, next;
@@ -85,12 +102,13 @@ void destroySWFOutput(SWFOutput out)
   }
 }
 
+
 void SWFOutput_grow(SWFOutput out)
 {
   int num = out->pos - out->buffer; /* in case buffer gets displaced.. */
 
   unsigned char *newbuf = realloc(out->buffer,
-				  out->buffersize+OUTPUT_BUFFER_INCREMENT);
+				  out->buffersize + OUTPUT_BUFFER_INCREMENT);
 
   if(newbuf != out->buffer)
     out->pos = newbuf+num;
@@ -100,7 +118,8 @@ void SWFOutput_grow(SWFOutput out)
   out->free += OUTPUT_BUFFER_INCREMENT;
 }
 
-int SWFOutput_length(SWFOutput out)
+
+int SWFOutput_getLength(SWFOutput out)
 {
   int size = 0;
 
@@ -112,6 +131,7 @@ int SWFOutput_length(SWFOutput out)
 
   return size;
 }
+
 
 /* make sure there's enough space for bytes bytes */
 void SWFOutput_checkSize(SWFOutput out, int bytes)
@@ -134,6 +154,7 @@ void SWFOutput_checkSize(SWFOutput out, int bytes)
   }
 }
 
+
 void SWFOutput_byteAlign(SWFOutput out)
 {
   if(out->bitpos > 0)
@@ -144,6 +165,32 @@ void SWFOutput_byteAlign(SWFOutput out)
     out->bitpos = 0;
   }
 }
+
+
+void SWFOutput_setNext(SWFOutput out, SWFOutput next)
+{
+  out->next = next;
+}
+
+
+SWFOutput SWFOutput_getNext(SWFOutput out)
+{
+  return out->next;
+}
+
+
+byte* SWFOutput_getBuffer(SWFOutput out)
+{
+  return out->buffer;
+}
+
+
+byte* SWFOutput_getCurPos(SWFOutput out)
+{
+  return out->pos;
+}
+
+
 void SWFOutput_writeBits(SWFOutput out, int data, int bits)
 {
   int bitpos = out->bitpos;
@@ -175,6 +222,7 @@ void SWFOutput_writeBits(SWFOutput out, int data, int bits)
   out->bitpos = bitpos;
 }
 
+
 void SWFOutput_writeSBits(SWFOutput out, int data, int bits)
 {
   if(data < 0)
@@ -182,6 +230,7 @@ void SWFOutput_writeSBits(SWFOutput out, int data, int bits)
 
   SWFOutput_writeBits(out, data, bits);
 }
+
 
 void SWFOutput_writeUInt8(SWFOutput out, int data)
 {
@@ -194,6 +243,7 @@ void SWFOutput_writeUInt8(SWFOutput out, int data)
   --out->free;
 }
 
+
 void SWFOutput_writeSInt8(SWFOutput out, int data)
 {
   if(data < 0)
@@ -202,12 +252,14 @@ void SWFOutput_writeSInt8(SWFOutput out, int data)
   SWFOutput_writeUInt8(out, data);
 }
 
+
 void SWFOutput_writeUInt16(SWFOutput out, int data)
 {
   SWFOutput_writeUInt8(out, data&0xff);
   data >>= 8;
   SWFOutput_writeUInt8(out, data&0xff);
 }
+
 
 void SWFOutput_writeSInt16(SWFOutput out, int data)
 {
@@ -219,6 +271,7 @@ void SWFOutput_writeSInt16(SWFOutput out, int data)
   SWFOutput_writeUInt8(out, data%256);
 }
 
+
 void SWFOutput_writeUInt32(SWFOutput out, long data)
 {
   SWFOutput_writeUInt8(out, data&0xff);
@@ -229,6 +282,7 @@ void SWFOutput_writeUInt32(SWFOutput out, long data)
   data >>= 8;
   SWFOutput_writeUInt8(out, data&0xff);
 }
+
 
 void SWFOutput_writeSInt32(SWFOutput out, long data)
 {
@@ -244,6 +298,7 @@ void SWFOutput_writeSInt32(SWFOutput out, long data)
   SWFOutput_writeUInt8(out, data&0xff);
 }
 
+
 void SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes)
 {
   SWFOutput_checkSize(out, bytes);
@@ -251,6 +306,7 @@ void SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes)
   out->pos += bytes;
   out->free -= bytes;
 }
+
 
 int SWFOutput_numBits(int num)
 {
@@ -265,6 +321,7 @@ int SWFOutput_numBits(int num)
   return i;
 }
 
+
 int SWFOutput_numSBits(int num)
 {
   if(num<0)
@@ -272,6 +329,7 @@ int SWFOutput_numSBits(int num)
   else
     return SWFOutput_numBits(num)+1;
 }
+
 
 void SWFOutput_writeString(SWFOutput out, const unsigned char *string)
 {

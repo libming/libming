@@ -20,22 +20,22 @@
 #ifndef SWF_DBL_H_INCLUDED
 #define SWF_DBL_H_INCLUDED
 
-typedef struct _swfDBLBitmap *SWFDBLBitmap;
+typedef struct SWFDBLBitmap_s *SWFDBLBitmap;
 
 #include <stdio.h>
+
 #include "bitmap.h"
 #include "input.h"
 
-struct _swfDBLBitmap
-{
-  struct _bitmap bitmap;
-  SWFInput input;
-  int length;
-};
 
-#define SWFDBLBITMAP_SIZE sizeof(struct _swfDBLBitmap)
+/* create a new DBL (define bits lossless) bitmap from the given file */
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f);
+
+
+/* create a new DBL bitmap from the given input object */
+
 SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
+
 
 #endif /* SWF_DBL_H_INCLUDED */

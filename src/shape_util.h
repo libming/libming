@@ -20,8 +20,8 @@
 #ifndef MING_SHAPE_H_INCLUDED
 #define MING_SHAPE_H_INCLUDED
 
-#include "blocks/swf.h"
 #include "fill.h"
+#include "blocks/shape.h"
 
 float SWFCharacter_getWidth(SWFCharacter character);
 float SWFCharacter_getHeight(SWFCharacter character);
