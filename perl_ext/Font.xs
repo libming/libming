@@ -32,7 +32,7 @@ SWFFont_new(package="SWF::Font", filename)
 	if (strncasecmp(filename+len-4, ".fdb", 4) == 0){
 	    if (!(f = fopen(filename, "rb"))) {
 		fprintf(stderr, "Unable to open FDB file %s\n", filename);
-		RETVAL = &sv_undef;
+		XSRETURN_UNDEF;
 	    }else{
 		RETVAL = loadSWFFontFromFile(f);
 		fclose(f);
@@ -41,12 +41,8 @@ SWFFont_new(package="SWF::Font", filename)
 	else
 	    RETVAL = newSWFBrowserFont(filename);
 
-	if(RETVAL == &sv_undef)
-	    ST(0) = &sv_undef;
-	else{
-	   ST(0) = sv_newmortal();
-           sv_setref_pv(ST(0), package, (void*)RETVAL);
-        }
+	ST(0) = sv_newmortal();
+        sv_setref_pv(ST(0), package, (void*)RETVAL);
 
 void
 destroySWFFont(block)
