@@ -666,6 +666,9 @@ int printActionRecord(FILE *f)
     case SWFACTION_EQUAL:
       println("Equals");
       break;
+    case SWFACTION_STRICTEQ:
+      println("Strictly Equals");
+      break;
     case SWFACTION_LESSTHAN:
       println("Less Than");
       break;
