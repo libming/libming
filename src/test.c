@@ -4,11 +4,14 @@
   this is a shell for new functions so that I can easily load them into gdb
   and a quick way to check for linkage errors.
   I make no guarantee that this represents the latest incarnation of the ming
-  api..
+  api, even if it does compile..
 */
 
 #include <time.h>
-#include "ming.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "../ming.h"
 
 #define WIDTH 320
 #define HEIGHT 240
@@ -31,7 +34,7 @@ void testCubic(SWFMovie movie)
   SWFShape_movePenTo(shape, ax, ay);
   SWFShape_drawCubic(shape, bx, by, cx, cy, dx, dy);
 
-  SWFMovie_add(movie, shape);
+  SWFMovie_add(movie, (SWFCharacter)shape);
 
   SWFShape_movePenTo(outline, ax, ay);
   SWFShape_setLine(outline, 20, 0xff, 0, 0, 0x9f);
@@ -48,7 +51,7 @@ void testCubic(SWFMovie movie)
   SWFShape_movePenTo(outline, dx, dy);
   SWFShape_drawLine(outline, 1, 0);
 
-  SWFMovie_add(movie, outline);
+  SWFMovie_add(movie, (SWFCharacter)outline);
 }
 
 /* }}} */
@@ -72,19 +75,19 @@ void testDrawCharacter(SWFMovie movie)
   SWFShape_setRightFill(shape, f1);
   SWFShape_setLine(shape, 20, 0x7f, 0, 0, 0xff);
   SWFShape_drawFontGlyph(shape, f, '&');
-  SWFShape_moveToRelative(shape, SWFFont_getStringWidth(f, "&"), 0);
+  SWFShape_movePen(shape, SWFFont_getStringWidth(f, "&"), 0);
 
   f2 = SWFShape_addSolidFill(shape, 0xff, 0xff, 0, 0xff);
   SWFShape_setRightFill(shape, f2);
   SWFShape_setLine(shape, 20, 0x7f, 0x7f, 0, 0xff);
   SWFShape_drawFontGlyph(shape, f, 'a');
-  SWFShape_moveToRelative(shape, SWFFont_getStringWidth(f, "a"), 0);
+  SWFShape_movePen(shape, SWFFont_getStringWidth(f, "a"), 0);
 
   f3 = SWFShape_addSolidFill(shape, 0, 0xff, 0, 0xff);
   SWFShape_setRightFill(shape, f3);
   SWFShape_setLine(shape, 20, 0, 0x7f, 0, 0xff);
   SWFShape_drawFontGlyph(shape, f, 'b');
-  SWFShape_moveToRelative(shape, SWFFont_getStringWidth(f, "b"), 0);
+  SWFShape_movePen(shape, SWFFont_getStringWidth(f, "b"), 0);
 
   f4 = SWFShape_addSolidFill(shape, 0, 0, 0xff, 0xff);
   SWFShape_setRightFill(shape, f4);
@@ -93,7 +96,7 @@ void testDrawCharacter(SWFMovie movie)
 
   SWFShape_end(shape);
 
-  i = SWFMovie_add(movie, shape);
+  i = SWFMovie_add(movie, (SWFCharacter)shape);
 
   SWFDisplayItem_moveTo(i, 100, 1600);
 }
@@ -104,7 +107,7 @@ void testDrawCharacter(SWFMovie movie)
 void testDBL(SWFMovie movie)
 {
   SWFFill fill;
-  SWFDBLBitmap dbl;
+  SWFBitmap dbl;
   SWFShape shape;
   SWFDisplayItem i;
   FILE *file = fopen("test.dbl", "rb");
@@ -120,12 +123,12 @@ void testDBL(SWFMovie movie)
 
   fill = SWFShape_addBitmapFill(shape, dbl, SWFFILL_CLIPPED_BITMAP);
   SWFShape_setRightFill(shape, fill);
-  SWFShape_lineToRelative(shape, 640, 0);
-  SWFShape_lineToRelative(shape, 0, 640);
-  SWFShape_lineToRelative(shape, -640, 0);
-  SWFShape_lineToRelative(shape, 0, -640);
+  SWFShape_drawLine(shape, 640, 0);
+  SWFShape_drawLine(shape, 0, 640);
+  SWFShape_drawLine(shape, -640, 0);
+  SWFShape_drawLine(shape, 0, -640);
 
-  i = SWFMovie_add(movie, shape);
+  i = SWFMovie_add(movie, (SWFCharacter)shape);
 }
 
 /* }}} */
@@ -139,19 +142,19 @@ void testMorph(SWFMovie movie)
   SWFDisplayItem d;
   int i;
 
-  SWFShape_moveTo(shape1, 0, 0);
-  SWFShape_moveTo(shape2, 0, 0);
+  SWFShape_movePenTo(shape1, 0, 0);
+  SWFShape_movePenTo(shape2, 0, 0);
 
   SWFShape_setLineStyle(shape1, 20, 0, 0, 0, 0xff);
   SWFShape_setLineStyle(shape2, 20, 0, 0, 0, 0xff);
 
   for(i=0; i<20; ++i)
   {
-    SWFShape_lineTo(shape1, rand()%2000-1000, rand()%2000-1000);
-    SWFShape_lineTo(shape2, rand()%2000-1000, rand()%2000-1000);
+    SWFShape_drawLineTo(shape1, rand()%2000-1000, rand()%2000-1000);
+    SWFShape_drawLineTo(shape2, rand()%2000-1000, rand()%2000-1000);
   }
 
-  d = SWFMovie_add(movie, morph);
+  d = SWFMovie_add(movie, (SWFCharacter)morph);
 
   for(i=0; i<10; ++i)
   {
@@ -171,7 +174,7 @@ void testMorph(SWFMovie movie)
 void testJpeg(SWFMovie movie)
 {
   SWFFill fill;
-  SWFJpegBitmap jpeg;
+  SWFBitmap jpeg;
   SWFShape shape = newSWFShape();
   SWFDisplayItem i;
   FILE *file = fopen("test.jpg", "rb");
@@ -187,7 +190,7 @@ void testJpeg(SWFMovie movie)
   SWFShape_setRightFill(shape, fill);
   SWFShape_drawCharacterBounds(shape, (SWFCharacter)jpeg);
 
-  i = SWFMovie_add(movie, shape);
+  i = SWFMovie_add(movie, (SWFCharacter)shape);
   SWFDisplayItem_scale(i, 20.0, 20.0);
 }
 
@@ -197,7 +200,7 @@ void testJpeg(SWFMovie movie)
 void testJpegAlpha(SWFMovie movie)
 {
   SWFFill fill;
-  SWFJpegBitmap jpeg;
+  SWFBitmap jpeg;
   SWFShape shape = newSWFShape();
   SWFDisplayItem i;
   FILE *file = fopen("test.jpg", "rb");
@@ -219,7 +222,7 @@ void testJpegAlpha(SWFMovie movie)
   SWFShape_setRightFill(shape, fill);
   SWFShape_drawCharacterBounds(shape, (SWFCharacter)jpeg);
 
-  i = SWFMovie_add(movie, shape);
+  i = SWFMovie_add(movie, (SWFCharacter)shape);
   SWFDisplayItem_scale(i, 20.0, 20.0);
 }
 
@@ -249,7 +252,7 @@ void testText(SWFMovie movie)
   SWFText_setSpacing(t, 1.0);
   SWFText_addString(t, "blargghghgghghgh", NULL);
 
-  d = SWFMovie_add(movie, t);
+  d = SWFMovie_add(movie, (SWFCharacter)t);
   SWFDisplayItem_move(d, 160*20, 120*20);
 }
 
@@ -265,19 +268,19 @@ void testShape(SWFMovie movie)
   SWFFill f1 = SWFShape_addSolidFill(s, 0xff, 0, 0, 0xff);
   SWFFill f2 = SWFShape_addSolidFill(s, 0, 0, 0xff, 0xff);
 
-  SWFShape_moveTo(s, -1200, -1200);
+  SWFShape_movePenTo(s, -1200, -1200);
   SWFShape_setLineStyle(s, 20, 0, 0, 0, 0);
   SWFShape_setRightFill(s, f1);
-  SWFShape_lineToRelative(s, 2400, 0);
+  SWFShape_drawLine(s, 2400, 0);
   SWFShape_setRightFill(s, f2);
-  SWFShape_lineToRelative(s, 0, 2400);
+  SWFShape_drawLine(s, 0, 2400);
   SWFShape_setRightFill(s, f1);
-  SWFShape_lineToRelative(s, -2400, 0);
+  SWFShape_drawLine(s, -2400, 0);
   SWFShape_setRightFill(s, f2);
-  SWFShape_lineToRelative(s, 0, -2400);
+  SWFShape_drawLine(s, 0, -2400);
   SWFShape_end(s);
 
-  d = SWFMovie_add(movie, s);
+  d = SWFMovie_add(movie, (SWFCharacter)s);
 
   for(i=0; i<45; ++i)
   {
