@@ -65,8 +65,6 @@ Buffer bf, bc;
 %token <str> STRING
 %token <str> IDENTIFIER
 
-%token <getURLMethod> GETURL_METHOD
-
 %token EQ "=="
 %token LE "<="
 %token GE ">="
@@ -80,12 +78,12 @@ Buffer bf, bc;
 %token MEQ "*="
 %token SEQ "-="
 
-%token SHIFTLEFT "<<"
-%token SHIFTRIGHT ">>"
-%token SHIFTRIGHT2 ">>>"
-%token SHIFTLEFTEQ "<<="
-%token SHIFTRIGHTEQ ">>="
-%token SHIFTRIGHT2EQ ">>>="
+%token SHL "<<"
+%token SHR ">>"
+%token SHR2 ">>>"
+%token SHLEQ "<<="
+%token SHREQ ">>="
+%token SHR2EQ ">>>="
 
 
 /* ascending order of ops ..? */
@@ -919,6 +917,11 @@ expr
 		{ $$ = $2;
 		  bufferWriteInt($2, -1);
 		  bufferWriteOp($2, SWFACTION_MULTIPLY); }
+
+	| '~' expr %prec UMINUS
+		{ $$ = $2;
+		  bufferWriteInt($2, 0xffff);
+		  bufferWriteOp($2, SWFACTION_BITWISEXOR); }
 
 	| '!' expr
 		{ $$ = $2;
