@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -52,17 +52,20 @@ struct SWFSoundStreamBlock_s
 };
 
 
-int nextMP3Frame(SWFInput input);
+int
+nextMP3Frame(SWFInput input);
 
 
-int completeSWFSoundStream(SWFBlock block)
+int
+completeSWFSoundStream(SWFBlock block)
 {
 	return ((SWFSoundStreamBlock)block)->length + 4;
 }
 
 
-void writeSWFSoundStreamToMethod(SWFBlock block,
-				 SWFByteOutputMethod method, void *data)
+void
+writeSWFSoundStreamToMethod(SWFBlock block,
+														SWFByteOutputMethod method, void *data)
 {
 	SWFSoundStreamBlock streamblock = (SWFSoundStreamBlock)block;
 	SWFInput input = streamblock->stream->input;
@@ -74,18 +77,19 @@ void writeSWFSoundStreamToMethod(SWFBlock block,
 
 	methodWriteUInt16(streamblock->delay, method, data);
 
-	for(; l>0; --l)
+	for ( ; l>0; --l )
 		method(SWFInput_getChar(input), data);
 }
 
 
-SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream stream)
+SWFBlock
+SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 {
 	int delay, length;
 	SWFSoundStreamBlock block;
 	int frameSize;
 
-	if(stream->isFinished)
+	if ( stream->isFinished )
 		return NULL;
 
 	block = malloc(sizeof(struct SWFSoundStreamBlock_s));
@@ -107,17 +111,17 @@ SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 
 	delay = stream->delay + stream->samplesPerFrame;
 
-	if(stream->sampleRate > 32000)
+	if ( stream->sampleRate > 32000 )
 		frameSize = 1152;
 	else
 		frameSize = 576;
 
-	while(delay > frameSize)
+	while ( delay > frameSize )
 	{
 		++block->numFrames;
 		length = nextMP3Frame(stream->input);
 
-		if(length <= 0)
+		if ( length <= 0 )
 		{
 			stream->isFinished = TRUE;
 			SWFSoundStream_rewind(stream);
@@ -151,7 +155,8 @@ SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 #define MP3_CHANNEL_DUAL		 0x00000080
 #define MP3_CHANNEL_MONO		 0x000000C0
 
-SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
+SWFBlock
+SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 {
 	SWFOutput out = newSizedSWFOutput(6);
 	SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD);
@@ -162,14 +167,14 @@ SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 	/* get 4-byte header, bigendian */
 	flags = SWFInput_getChar(input);
 
-	if(flags == EOF)
+	if ( flags == EOF )
 		return NULL;
 
 	/* XXX - fix this mad hackery */
 
-	if(flags == 'I' &&
-		 SWFInput_getChar(input) == 'D' &&
-		 SWFInput_getChar(input) == '3')
+	if ( flags == 'I' &&
+			 SWFInput_getChar(input) == 'D' &&
+			 SWFInput_getChar(input) == '3' )
 	{
 		start = 2;
 
@@ -181,7 +186,7 @@ SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 		while(flags != 0xFF && flags != EOF);
 	}
 
-	if(flags == EOF)
+	if ( flags == EOF )
 		return NULL;
 
 	SWFInput_seek(input, -1, SEEK_CUR);
@@ -191,16 +196,16 @@ SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 
 	stream->start = start;
 
-	if((flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC)
+	if ( (flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC )
 		return NULL;
 
-	if((flags & MP3_CHANNEL) == MP3_CHANNEL_MONO)
+	if ( (flags & MP3_CHANNEL) == MP3_CHANNEL_MONO )
 		channels = SWF_SOUNDSTREAM_MONO;
 	else
 		channels = SWF_SOUNDSTREAM_STEREO;
 
 	/* XXX - this is a gross oversimplification */
-	switch(flags & MP3_VERSION)
+	switch ( flags & MP3_VERSION )
 	{
 		case MP3_VERSION_1:
 			stream->sampleRate = 44100; rate = SWF_SOUNDSTREAM_44KHZ; break;
@@ -212,8 +217,8 @@ SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 			stream->sampleRate = 11025; rate = SWF_SOUNDSTREAM_11KHZ; break;
 	}
 
-	flags = SWF_SOUNDSTREAM_MP3_COMPRESSED | rate |
-		      SWF_SOUNDSTREAM_16BITS | channels;
+	flags =
+		SWF_SOUNDSTREAM_MP3_COMPRESSED | rate | SWF_SOUNDSTREAM_16BITS | channels;
 
 	stream->flags = flags;
 
@@ -228,14 +233,16 @@ SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 }
 
 
-/* XXX - kill this */
-void SWFSoundStream_rewind(SWFSoundStream stream)
+/* XXX - kill this somehow.. */
+void
+SWFSoundStream_rewind(SWFSoundStream stream)
 {
 	SWFInput_seek(stream->input, stream->start, SEEK_SET);
 }
 
 
-SWFSoundStream newSWFSoundStream_fromInput(SWFInput input)
+SWFSoundStream
+newSWFSoundStream_fromInput(SWFInput input)
 {
 	SWFSoundStream stream = malloc(sizeof(struct SWFSoundStream_s));
 
@@ -254,16 +261,18 @@ SWFSoundStream newSWFSoundStream_fromInput(SWFInput input)
 }
 
 
-void destroySWFSoundStream(SWFSoundStream sound)
+void
+destroySWFSoundStream(SWFSoundStream sound)
 {
-	if(sound->freeInput)
+	if ( sound->freeInput )
 		destroySWFInput(sound->input);
 
-	sec_free((void**)&sound);
+	free(sound);
 }
 
 
-SWFSoundStream newSWFSoundStream(FILE *file)
+SWFSoundStream
+newSWFSoundStream(FILE* file)
 {
 	SWFSoundStream s = newSWFSoundStream_fromInput(newSWFInput_file(file));
 	s->freeInput = TRUE;

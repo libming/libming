@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -21,22 +21,22 @@
 
 typedef struct
 {
-  unsigned int mark44;
-  unsigned short level0;
-  unsigned short level1;
+	unsigned int mark44;
+	unsigned short level0;
+	unsigned short level1;
 } envPoint;
 
 struct SWFSoundInstance_s
 {
-  struct SWFBlock_s block;
+	struct SWFBlock_s block;
 
-  SWFSound sound;
-  unsigned int inPoint;
-  unsigned int outPoint;
-  int numLoops;
-  byte flags;
-  byte numEnvPoints;
-  envPoint *envPoints;
+	SWFSound sound;
+	unsigned int inPoint;
+	unsigned int outPoint;
+	int numLoops;
+	byte flags;
+	byte numEnvPoints;
+	envPoint *envPoints;
 };
 
 void writeSWFSoundInstanceToMethod(SWFBlock block,
@@ -59,27 +59,27 @@ void writeSWFSoundInstanceToMethod(SWFBlock block,
 	sound = (SWFSoundInstance)block;
 	flags = sound->flags;
 
-	if (sound->sound)
+	if ( sound->sound )
 		methodWriteUInt16(CHARACTERID(sound->sound), method, data);
 	else
 		methodWriteUInt16(0, method, data);	 /* 0 means NULL character */
 
 	method(flags, data);
 
-	if(flags & SWF_SOUNDINFO_HASINPOINT)
+	if ( flags & SWF_SOUNDINFO_HASINPOINT )
 		methodWriteUInt32(sound->inPoint, method, data);
 
-	if(flags & SWF_SOUNDINFO_HASOUTPOINT)
+	if ( flags & SWF_SOUNDINFO_HASOUTPOINT )
 		methodWriteUInt32(sound->outPoint, method, data);
 
-	if(flags & SWF_SOUNDINFO_HASLOOPS)
+	if ( flags & SWF_SOUNDINFO_HASLOOPS )
 		methodWriteUInt16(sound->numLoops, method, data);
 
-	if(flags & SWF_SOUNDINFO_HASENVELOPE)
+	if ( flags & SWF_SOUNDINFO_HASENVELOPE )
 	{
 		method(sound->numEnvPoints, data);
 
-		for(i=0; i<sound->numEnvPoints; ++i)
+		for ( i=0; i<sound->numEnvPoints; ++i )
 		{
 			methodWriteUInt32((sound->envPoints[i]).mark44, method, data);
 			methodWriteUInt16((sound->envPoints[i]).level0, method, data);
@@ -146,6 +146,14 @@ SWFSoundInstance newSWFSoundInstance_stop(SWFSound sound)
 SWFSoundInstance newSWFSoundInstance_startNoMultiple(SWFSound sound)
 {
 	SWFSoundInstance instance = newSWFSoundInstance(sound);
-  instance->flags = SWF_SOUNDINFO_SYNCNOMULTIPLE;
+	instance->flags = SWF_SOUNDINFO_SYNCNOMULTIPLE;
 	return instance;
 }
+
+
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -26,20 +26,21 @@
 
 struct SWFSound_s
 {
-  struct SWFCharacter_s character;
+	struct SWFCharacter_s character;
 
-  byte flags;
-  byte isFinished;
-  int numSamples;
-  int delay;
-  int samplesPerFrame;
+	byte flags;
+	byte isFinished;
+	int numSamples;
+	int delay;
+	int samplesPerFrame;
 
 	SWFInput input;
 	byte *data;
 };
 
 
-int getMP3Size(SWFInput input);
+int
+getMP3Size(SWFInput input);
 
 
 static int
@@ -47,15 +48,15 @@ soundDataSize(SWFSound sound)
 {
 	if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED)
 	{
-    int sampleCount = SWFInput_length(sound->input);
+		int sampleCount = SWFInput_length(sound->input);
 
-    if ((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS)
-      sampleCount /= 2;
+		if ((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS)
+			sampleCount /= 2;
 
-    if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO)
-      sampleCount /= 2;
+		if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO)
+			sampleCount /= 2;
 
-    return sampleCount;
+		return sampleCount;
 	}
 	else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_ADPCM_COMPRESSED)
 	{
@@ -87,13 +88,13 @@ soundDataSize(SWFSound sound)
 		m = (res - (16 + 6) * channels) / (nbits * channels);
 		return 4096 * n + m;
 	}
-  else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
-  {
-    int pos = SWFInput_tell(sound->input);
-    int samples = getMP3Size(sound->input);
-    SWFInput_seek(sound->input, pos, SEEK_SET);
-    return samples;
-  }
+	else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+	{
+		int pos = SWFInput_tell(sound->input);
+		int samples = getMP3Size(sound->input);
+		SWFInput_seek(sound->input, pos, SEEK_SET);
+		return samples;
+	}
 	else /* ??? */
 	{
 		return 0;
@@ -114,8 +115,8 @@ writeSWFSoundToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
 
 	methodWriteUInt32(soundDataSize(sound), method, data);
 
-  if ( (sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED )
-    methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);  // XXX - delay?
+	if ( (sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED )
+		methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);	// XXX - delay?
 
 	/* write samples */
 	for ( i=0; i<l; ++i )
@@ -123,30 +124,34 @@ writeSWFSoundToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
 }
 
 
-int completeDefineSWFSoundBlock(SWFBlock block)
+int
+completeDefineSWFSoundBlock(SWFBlock block)
 {
 	SWFSound sound = (SWFSound)block;
 
-  if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+	if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
 		return 7 + 2 + SWFInput_length(sound->input);
 	else
 		return 7 + SWFInput_length(sound->input);
 }
 
 
-void destroySWFSound(SWFBlock sound)
+void
+destroySWFSound(SWFBlock sound)
 {
-	sec_free((void**)&sound);
+	destroySWFCharacter(sound);
 }
 
 
-SWFSound newSWFSound(FILE *f, byte flags)
+SWFSound
+newSWFSound(FILE *f, byte flags)
 {
 	return newSWFSound_fromInput(newSWFInput_file(f), flags);
 }
 
 
-SWFSound newSWFSound_fromInput(SWFInput input, byte flags)
+SWFSound
+newSWFSound_fromInput(SWFInput input, byte flags)
 {
 	SWFSound sound = malloc(sizeof(struct SWFSound_s));
 	SWFBlock block = (SWFBlock)sound;
@@ -168,7 +173,8 @@ SWFSound newSWFSound_fromInput(SWFInput input, byte flags)
 }
 
 
-void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data)
+void
+SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data)
 {
 	sound->flags = flags;
 	sound->numSamples = numSamples;
