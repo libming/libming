@@ -1,24 +1,19 @@
 
 Stuff what to do (not in order):
 
-* Make abstractish buffer objects to deal with input from filehandles,
-  files, strings, etc.
+* SWFText_addString splits buffer into 127 (255?) character chunks
 
 
-* Allow movie.add(bitmap), creating a shape for the bitmap automatically
+* add $m->getStreamLength
+
+
+* SWFText should recognise \n and advance the y pos
 
 
 * Add filehandle args to php SWFBitmap constructor
 
 
 * Comment the new universal ming.h
-
-  And figure out how to make it work with c++, too..?
-
-
-* Add:
-
-  filehandle args to various functions
 
 
 * Add ButtonSound to button, access to button shape matrices and cxforms

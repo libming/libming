@@ -1,9 +1,31 @@
 
 MING HISTORY
 
+4.11.01
+	Added SWFInput object for abstracting file/buffer inputs
+	Added automagic shape wrapping for bitmaps in SWFMovie_add()
+	Removed SWFRect from public interface, added
+	  SWFCharacter_getWidth/Height
+	Updated c++ header (finally), moved to mingpp.h, added to make install
+	Fixed problem w/ default bitmap scaling noted by ..??
+	Changed 2000 to 2001 everywhere :)
+	Got rid of those silly inlines
+
+4.10.01
+	Started on flash5 actionscript compiler
+	Added settable error/warn functions to replace unpleasant core dumpage
+
+3.22.01
+	Fixed spacing bug on second addString noted by Richy Black
+
+3.18.01
+	Added Pete Schwamb's patch to png2dbl.c
+	(0.1.0)
+
 3.12.01
 	Argh.  Looks like I've been neglecting the CHANGES file..
 	Added scaling code.
+	Tweaked at the mp3 frame length calculation.
 	Many small bugs fixed.
 	Other stuff I can't remember.
 

@@ -1,3 +1,4 @@
+
 %module mingc
 %include typemaps.i
 %{
@@ -78,11 +79,11 @@ void my_fileno_write (unsigned char c, void * fd) {
 }
 
 int SWFMovie_simpleOutput(SWFMovie movie) {
-   return SWFMovie_output(movie, my_fileno_write, 1);
+   return SWFMovie_output(movie, my_fileno_write, (void *)1);
 }
 
 int SWFMovie_saveToFileNo(SWFMovie movie, int fd) {
-   return SWFMovie_output(movie, my_fileno_write, fd);
+   return SWFMovie_output(movie, my_fileno_write, (void *)fd);
 }
 
 %}
@@ -162,6 +163,8 @@ void SWFShape_drawCubic(SWFShape shape, float bx, float by,
 			float cx, float cy, float dx, float dy);
 void SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
 			  float cx, float cy, float dx, float dy);
+void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
+
 
 /* movieclip.h */
 
@@ -177,20 +180,11 @@ void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
 
 /* swf.h */
 
-  /* SWFRect */
-
-/*
-SWFRect newSWFRect(int minX, int maxX, int minY, int maxY);
-void destroySWFRect(SWFRect rect);
-int SWFRect_getWidth(SWFRect r);
-int SWFRect_getHeight(SWFRect r);
-*/
-
   /* SWFCharacter */
-/*
-SWFRect SWFCharacter_getBounds(SWFCharacter character);
-byte SWFBlock_isCharacter(SWFBlock block);
-*/
+
+float SWFCharacter_getWidth(SWFCharacter character);
+float SWFCharacter_getHeight(SWFCharacter character);
+
 
   /* SWFBitmap */
 
@@ -282,7 +276,7 @@ void SWFText_setFont(SWFText text, SWFFont font);
 void SWFText_setHeight(SWFText text, float height);
 void SWFText_moveTo(SWFText text, float x, float y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-void SWFText_addString(SWFText text, char *string, int *advance);
+void SWFText_addString(SWFText text, char *string, float *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
 float SWFText_getStringWidth(SWFText text, char *string);
 

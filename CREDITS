@@ -1,6 +1,13 @@
 
 All of the folks who counted bits and cleaned up the SWF File Reference.
 
+Raffaele Sena <raff@aromatic.org>
+    for gif2dbl.c, many patches, and pointing out my various
+    incompetencies ;)
+
+Jon Ribbens <jon@unequivocal.co.uk>
+    for numerous bug reports
+
 Fiore Basile <fiore@elecomsolutions.com>
     for wrapping ming into Python
 
@@ -27,10 +34,6 @@ Steve Spicklemire <steve@spvi.com>
 
 Andy Jeffries <andy@i-a.co.uk>
     for adding the overlooked saveToFile php function
-
-Raffaele Sena <raff@aromatic.org>
-    for gif2dbl.c, many patches, and pointing out my various
-    incompetencies ;)
 
 
 Full Sail Wassail for inspiration
