@@ -1,6 +1,10 @@
 
 Stuff what to do (not in order):
 
+* Make abstractish buffer objects to deal with input from filehandles,
+  files, strings, etc.
+
+
 * Allow movie.add(bitmap), creating a shape for the bitmap automatically
 
 
@@ -55,6 +59,9 @@ Stuff what to do (not in order):
 
   Think the goal should be to not have the user stuck in the timeline (i.e.,
   abolish movie->nextFrame()), be able to put anything anywhere at any time.
+
+  Callbacks look like the best way- you can pass an animate function which
+  is called every frame..
 
 
 * Make transforms easier
