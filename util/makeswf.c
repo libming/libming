@@ -69,17 +69,27 @@
 static char * readfile (char *file);
 static int preprocess (char *file, char *out, char *cppargs);
 static void compileError(const char *fmt, ...);
+static void add_import_spec(char *spec);
+static int add_imports(void);
 
 /* data */
 static char lastcompilemessage[MAXERRORMSG];
 static int lastcompilefailed = 0;
+static char **import_specs;
+static int numimport_specs = 0;
+SWFMovie mo;
 
 void
 usage (char *me, int ex)
 {
-   fprintf(stderr, "Usage: %s [-s <width>x<height>] [-r <framerate>] <output> <as> ...\n", me);
-   fprintf(stderr, "       %s [-D<macro>[=<def>]] [-p] [-I<includedir>...] [-s <width>x<height>] [-r <framerate>] <output> <as> ...\n", me);
-   exit(ex);
+	fprintf(stderr, "Usage: %s [OPTIONS] <output> <as> ...\n", me);
+	fprintf(stderr, "Options:\n");
+	fprintf(stderr, " -s <width>x<height>\n");
+	fprintf(stderr, " -r <frame_rate>\n");
+	fprintf(stderr, " -I <includedir>\n");
+	fprintf(stderr, " -D <macro>[=<def>]>\n");
+	fprintf(stderr, " -i <library.swf>:<sym>[,<sym>]>\n");
+	exit(ex);
 }
 
 /*
@@ -134,37 +144,37 @@ compileError(const char *fmt, ...)
 int
 main (int argc, char **argv)
 {
-   SWFMovie mo;
-   SWFAction ac;
-   char *code;
-   char *outputfile;
-   char ppfile[PATH_MAX];        /* preprocessed file */
-   struct stat statbuf;
-   int width=640, height=480;    /* default stage size */
-   int i;
-   int swfversion = DEFSWFVERSION;
-   int swfcompression = DEFSWFCOMPRESSION;
-   int dopreprocess = 1; /* use preprocessor by default */
-   int framerate = 12;
-   int compiledfiles = 0;
+	SWFAction ac;
+	char *code;
+	char *outputfile;
+	char ppfile[PATH_MAX];        /* preprocessed file */
+	struct stat statbuf;
+	int width=640, height=480;    /* default stage size */
+	int i;
+	int swfversion = DEFSWFVERSION;
+	int swfcompression = DEFSWFCOMPRESSION;
+	int dopreprocess = 1; /* use preprocessor by default */
+	int framerate = 12;
+	int compiledfiles = 0;
 #ifdef HAVE_GETOPT_LONG
-   struct option opts[] =
-   {
-    {"dont-preprocess", 0, 0, 'p'},
-    {"frame-rate", 1, 0, 'r'},
-    {"version", 1, 0, 'v'},
-    {"includepath", 1, 0, 'I'},
-    {"define", 1, 0, 'D'},
-    {"size", 1, 0, 's'},
-    {0, 0, 0, 0}
-   };
-   int opts_idx;
+	struct option opts[] =
+	{
+		{"dont-preprocess", 0, 0, 'p'},
+		{"frame-rate", 1, 0, 'r'},
+		{"version", 1, 0, 'v'},
+		{"includepath", 1, 0, 'I'},
+		{"define", 1, 0, 'D'},
+		{"size", 1, 0, 's'},
+		{"import", 1, 0, 'i'},
+		{0, 0, 0, 0}
+	};
+	int opts_idx;
 #endif
-   int c;
-   char cppargs[256];
-   char *me;
+	int c;
+	char cppargs[256];
+	char *me;
 
-   cppargs[0] = '\0';
+	cppargs[0] = '\0';
 
 
 	me = argv[0];
@@ -174,9 +184,9 @@ main (int argc, char **argv)
 		char buf [256];
 
 #ifdef HAVE_GETOPT_LONG
-		c = getopt_long (argc, argv, "ps:r:D:I:v:", opts, &opts_idx);
+		c = getopt_long (argc, argv, "ps:r:D:I:v:i:", opts, &opts_idx);
 #else
-		c = getopt (argc, argv, "ps:r:D:I:v:");
+		c = getopt (argc, argv, "ps:r:D:I:v:i:");
 #endif
 		if (c == -1) break;
 
@@ -208,6 +218,9 @@ main (int argc, char **argv)
 				sprintf(buf, "-I%s", optarg);
 				strcat(cppargs, buf);
 				break;
+			case 'i':
+				add_import_spec(optarg);
+				break;
 			case 'D':
 				// yes, you can smash the stack ... 
 				sprintf(buf, "-D%s", optarg);
@@ -217,9 +230,9 @@ main (int argc, char **argv)
 				usage(argv[0], 1);
 				break;
 		}
-   }
-   argv+=optind;
-   argc-=optind;
+	}
+	argv+=optind;
+	argc-=optind;
 
 	if ( argc < 2 ) usage(me, 1);
 
@@ -246,6 +259,11 @@ main (int argc, char **argv)
 	printf("Output compression level: %d\n", swfcompression);
 	printf("Output SWF version: %d\n", swfversion);
 
+   	/* 
+	 * Add imports
+	 */
+	if ( numimport_specs ) add_imports();
+
 	for ( i=1; i<argc; i++ )
 	{
 		struct stat statbuf;
@@ -253,8 +271,9 @@ main (int argc, char **argv)
 
 		if ( -1 == stat(argv[i], &statbuf) )
 		{
-			fprintf(stderr, "Can't stat '%s', skipping\n", argv[i]);
-			//continue;
+			fprintf(stderr, "Skipping source '%s': %s\n",
+				argv[i], strerror(errno));
+			continue;
 		}
 
 		if ( dopreprocess )
@@ -348,9 +367,73 @@ preprocess (char *file, char *out, char *cppargs)
 	return 1;
 }
 
+static void
+add_import_spec(char *spec)
+{
+	if ( numimport_specs == 0 )
+	{
+		import_specs = (char **)malloc(1);
+	}
+	else
+	{
+		import_specs = (char **)realloc(import_specs,
+				numimport_specs+1);
+	}
+	import_specs[numimport_specs] = spec;
+	numimport_specs++;
+}
+
+static int
+add_imports()
+{
+	int i;
+	SWFMovieClip mc;
+	//SWFDisplayItem di;
+	SWFAction ac;
+	struct stat statbuf;
+
+	mc = newSWFMovieClip();
+
+	for (i=0; i<numimport_specs; i++)
+	{
+		char *spec = import_specs[i];
+		char *file = strtok(spec, ":");
+		char *sym;
+
+   		if ( -1 == stat(file, &statbuf) )
+		{
+			fprintf(stderr, "Skipping imports from '%s': %s\n",
+				file, strerror(errno));
+			continue;
+		}
+
+		printf("Importing symbols from %s:", file);
+		fflush(stdout);
+		while ((sym=strtok(NULL, ",")))
+		{
+			SWFCharacter ch;
+
+			printf(" %s", sym);
+			fflush(stdout);
+			ch = SWFMovie_importCharacter(mo, file, sym);
+			SWFMovieClip_add(mc, (SWFBlock)ch);
+		}
+		printf("\n");
+	}
+
+	ac = compileSWFActionCode("_visible=false;");
+	SWFMovieClip_add(mc, (SWFBlock)ac);
+	SWFMovie_add(mo, (SWFBlock)mc);
+
+	return 1;
+}
+
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.8  2004/09/28 14:09:07  strk
+ * Added assets import support.
+ *
  * Revision 1.7  2004/09/28 06:59:29  strk
  * Added -v switch to set output version.
  * Added notice about output configuration.
