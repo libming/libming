@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <sys/stat.h>
-#ifdef unix
-  #include <unistd.h>
-#endif
 #include <stdlib.h>
+
 #include "jpeg.h"
 #include "block.h"
 
@@ -56,55 +53,44 @@ int completeSWFJpegBitmap(SWFBlock block)
 #define BUFFER_SIZE 1024
 
 /* clumsy utility function.. */
-void dumpJpegBlock(byte type, FILE *f,
+void dumpJpegBlock(byte type, SWFInput input,
 		   SWFByteOutputMethod method, void *data)
 {
-  int i, l, l0, l1, length;
-  byte buffer[BUFFER_SIZE];
+  int i, l0, l1, length;
 
   method(JPEG_MARKER, data);
   method(type, data);
 
-  method((l0 = fgetc(f)), data);
-  method((l1 = fgetc(f)), data);
+  method((l0 = SWFInput_getChar(input)), data);
+  method((l1 = SWFInput_getChar(input)), data);
 
   length = (l0<<8) + l1 - 2;
 
-  while(length > 0)
-  {
-    l = fread(buffer, sizeof(byte), min(BUFFER_SIZE, length), f);
-
-    /* SWFByteOutputMethod should have multibyte output.. */
-    for(i=0; i<l; ++i)
-      method(buffer[i], data);
-
-    length -= l;
-  }
+  for(i=0; i<length; ++i)
+    method(SWFInput_getChar(input), data);
 }
-int skipJpegBlock(FILE *f)
+
+int skipJpegBlock(SWFInput input)
 {
-  int length, l;
+  int length = (SWFInput_getChar(input)<<8) + SWFInput_getChar(input);
 
-  length = l = (fgetc(f)<<8) + fgetc(f);
-
-  for(l-=2; l>0; --l)
-    fgetc(f);
+  SWFInput_seek(input, length-2, SEEK_CUR);
 
   return length;
 }
 
-void methodWriteJpegFile(FILE *f, SWFByteOutputMethod method, void *data)
+void methodWriteJpegFile(SWFInput input,
+			 SWFByteOutputMethod method, void *data)
 {
-  byte buffer[BUFFER_SIZE];
-  int l, c, i;
+  int c;
 
-  rewind(f);
+  SWFInput_rewind(input);
 
-  if((c=fgetc(f)) != 0xFF)
-    error("Initial Jpeg marker not found!");
+  if((c = SWFInput_getChar(input)) != JPEG_MARKER)
+    SWF_error("Initial Jpeg marker not found!");
 
-  if((c=fgetc(f)) != 0xD8)
-    error("Jpeg SOI not found!");
+  if((c = SWFInput_getChar(input)) != JPEG_SOI)
+    SWF_error("Jpeg SOI not found!");
 
   /*
   method(JPEG_MARKER, data);
@@ -118,13 +104,13 @@ void methodWriteJpegFile(FILE *f, SWFByteOutputMethod method, void *data)
 
   for(;;)
   {
-    if(fgetc(f) != 0xFF)
-      error("Jpeg marker not found where expected!");
+    if(SWFInput_getChar(input) != JPEG_MARKER)
+      SWF_error("Jpeg marker not found where expected!");
 
-    switch(c=fgetc(f))
+    switch(c = SWFInput_getChar(input))
     {
       case JPEG_EOI:
-	error("Unexpected end of Jpeg file (EOI found)!");
+	SWF_error("Unexpected end of Jpeg file (EOI found)!");
 
 	/*      case JPEG_JFIF: */
       case JPEG_QUANT:
@@ -132,9 +118,9 @@ void methodWriteJpegFile(FILE *f, SWFByteOutputMethod method, void *data)
       case JPEG_DD:
 
 	/*	if(!finishedEncoding) */
-	dumpJpegBlock(c, f, method, data);
+	dumpJpegBlock(c, input, method, data);
 	/* else
-	   error("Encoding tables found in Jpeg image section!"); */
+	   SWF_error("Encoding tables found in Jpeg image section!"); */
 
 	break;
 
@@ -153,71 +139,64 @@ void methodWriteJpegFile(FILE *f, SWFByteOutputMethod method, void *data)
 	  method(c, data);
 	}
 	*/
-	dumpJpegBlock(c, f, method, data);
+	dumpJpegBlock(c, input, method, data);
 	break;
 
       case JPEG_SOS:
 	/*
 	if(!finishedEncoding)
-	  error("Found SOS before SOF in Jpeg file!");
+	  SWF_error("Found SOS before SOF in Jpeg file!");
 	*/
 	break;
 
       default:
-	/* dumpJpegBlock(c, f, method, data); */
-	skipJpegBlock(f);
+	/* dumpJpegBlock(c, input, method, data); */
+	skipJpegBlock(input);
     }
 
     if(c == JPEG_SOS)
       break;
 
-    if(feof(f))
-      error("Unexpected end of Jpeg file (EOF found)!");
+    if(SWFInput_eof(input))
+      SWF_error("Unexpected end of Jpeg file (EOF found)!");
   }
 
   if(c != JPEG_SOS)
-    error("SOS block not found in Jpeg file!");
+    SWF_error("SOS block not found in Jpeg file!");
 
   /* rest is SOS, dump to end of file */
   method(JPEG_MARKER, data);
   method(c, data);
 
-  while((l=fread(buffer, sizeof(byte), BUFFER_SIZE, f)) > 0)
-    for(i=0; i<l; ++i)
-      method(buffer[i], data);
+  while((c = SWFInput_getChar(input)) != EOF)
+    method(c, data);
 }
 
 void writeSWFJpegBitmapToMethod(SWFBlock block,
 				SWFByteOutputMethod method, void *data)
 {
   SWFJpegBitmap jpeg = (SWFJpegBitmap)block;
-  FILE *f = jpeg->file;
-  /*  byte finishedEncoding = FALSE; */
 
   methodWriteUInt16(CHARACTERID(jpeg), method, data);
-  methodWriteJpegFile(f, method, data);
+  methodWriteJpegFile(jpeg->input, method, data);
 }
 
 void writeSWFJpegWithAlphaToMethod(SWFBlock block,
 				   SWFByteOutputMethod method, void *data)
 {
   SWFJpegWithAlpha jpeg = (SWFJpegWithAlpha)block;
-  FILE *f = jpeg->file;
-  FILE *alpha = jpeg->alpha;
-  byte buffer[BUFFER_SIZE];
-  int l, i;
+  int c;
 
   methodWriteUInt16(CHARACTERID(jpeg), method, data);
   methodWriteUInt32(jpeg->jpegLength, method, data);
-  methodWriteJpegFile(f, method, data);
+  methodWriteJpegFile(jpeg->input, method, data);
 
   /* now write alpha file.. */
 
-  rewind(alpha);
+  SWFInput_rewind(jpeg->alpha);
 
-  while((l=fread(buffer, sizeof(byte), BUFFER_SIZE, alpha)) > 0)
-    for(i=0; i<l; ++i)
-      method(buffer[i], data);
+  while((c = SWFInput_getChar(jpeg->alpha)) != EOF)
+    method(c, data);
 }
 
 void destroySWFJpegBitmap(SWFBlock block)
@@ -233,7 +212,7 @@ struct jpegInfo
   int length;
 };
 
-struct jpegInfo *scanJpegFile(FILE *f)
+struct jpegInfo *scanJpegFile(SWFInput input)
 {
   int length = 0, l, c;
   long pos, end;
@@ -243,21 +222,21 @@ struct jpegInfo *scanJpegFile(FILE *f)
   /* scan file, get height and width, make sure it looks valid,
      also figure length of block.. */
 
-  if(fgetc(f) != 0xFF)
-    error("Initial Jpeg marker not found!");
+  if(SWFInput_getChar(input) != JPEG_MARKER)
+    SWF_error("Initial Jpeg marker not found!");
 
-  if(fgetc(f) != 0xD8)
-    error("Jpeg SOI not found!");
+  if(SWFInput_getChar(input) != JPEG_SOI)
+    SWF_error("Jpeg SOI not found!");
 
   for(;;)
   {
-    if(fgetc(f) != 0xFF)
-      error("Jpeg marker not found where expected!");
+    if(SWFInput_getChar(input) != JPEG_MARKER)
+      SWF_error("Jpeg marker not found where expected!");
 
-    switch(c=fgetc(f))
+    switch(c = SWFInput_getChar(input))
     {
       case JPEG_EOI:
-	error("Unexpected end of Jpeg file (EOI found)!");
+	SWF_error("Unexpected end of Jpeg file (EOI found)!");
 
 	/*      case JPEG_JFIF: */
       case JPEG_QUANT:
@@ -265,63 +244,67 @@ struct jpegInfo *scanJpegFile(FILE *f)
       case JPEG_DD:
 	/*
 	if(finishedEncoding)
-	  error("Encoding tables found in Jpeg image section!");
+	  SWF_error("Encoding tables found in Jpeg image section!");
 	*/
-	length += skipJpegBlock(f) + 2;
+	length += skipJpegBlock(input) + 2;
 	break;
 
       case JPEG_SOF1:
       case JPEG_SOF2:
-	error("Only baseline (frame 0) jpegs are supported!");
+	SWF_error("Only baseline (frame 0) jpegs are supported!");
 
       case JPEG_SOF0:
 	/*
 	if(finishedEncoding)
-	  error("Found second SOF in Jpeg file!")
+	  SWF_error("Found second SOF in Jpeg file!")
 	else
 	{
 	  finishedEncoding = TRUE;
 	  length += 4;*/ /* end image, start image */
 	/*}*/
 
-	l = (fgetc(f)<<8) + fgetc(f);
-	fgetc(f); /* precision */
-	info->height = (fgetc(f)<<8) + fgetc(f);
-	info->width = (fgetc(f)<<8) + fgetc(f);
+	l = SWFInput_getUInt16_BE(input);
+	SWFInput_getChar(input); /* precision */
+	info->height = SWFInput_getUInt16_BE(input);
+	info->width = SWFInput_getUInt16_BE(input);
+
 	length += l + 2;
 	l-=7;
-	for(; l>0; --l)
-	  fgetc(f);
+
+	SWFInput_seek(input, l, SEEK_CUR);
+
 	break;
 
       case JPEG_SOS:
 	/*
 	if(!finishedEncoding)
-	  error("Found SOS before SOF in Jpeg file!");
+	  SWF_error("Found SOS before SOF in Jpeg file!");
 	*/
 	break;
 
       default:
-	/* length += */ skipJpegBlock(f) /* + 2 */;
+	/* length += */
+	skipJpegBlock(input); /* + 2 */
     }
 
     if(c == JPEG_SOS)
       break;
 
-    if(feof(f))
-      error("Unexpected end of Jpeg file (EOF found)!");
+    if(SWFInput_eof(input))
+      SWF_error("Unexpected end of Jpeg file (EOF found)!");
   }
 
   if(c != JPEG_SOS)
-    error("SOS block not found in Jpeg file!");
+    SWF_error("SOS block not found in Jpeg file!");
 
   /* rest is SOS, dump to end of file */
 
   length += 2; /* SOS tag */
 
-  pos = ftell(f);
-  fseek(f, 0, SEEK_END);
-  end = ftell(f);
+  /* figure out how long the rest of the file is */
+  pos = SWFInput_tell(input);
+  SWFInput_seek(input, 0, SEEK_END);
+  end = SWFInput_tell(input);
 
   length += end - pos;
 
@@ -330,7 +313,7 @@ struct jpegInfo *scanJpegFile(FILE *f)
   return info;
 }
 
-SWFJpegBitmap newSWFJpegBitmap(FILE *f)
+SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input)
 {
   SWFJpegBitmap jpeg;
   struct jpegInfo *info;
@@ -344,9 +327,9 @@ SWFJpegBitmap newSWFJpegBitmap(FILE *f)
   BLOCK(jpeg)->type = SWF_DEFINEBITSJPEG2;
   CHARACTER(jpeg)->bounds = newSWFRect(0, 0, 0, 0);
 
-  jpeg->file = f;
+  jpeg->input = input;
 
-  info = scanJpegFile(f);
+  info = scanJpegFile(input);
 
   CHARACTER(jpeg)->bounds->maxX = info->width;
   CHARACTER(jpeg)->bounds->maxY = info->height;
@@ -359,13 +342,29 @@ SWFJpegBitmap newSWFJpegBitmap(FILE *f)
 }
 
 
+/* anonymous functions sure would be nice.. */
+
+void destroySWFJpegBitmap_andInputs(SWFBlock block)
+{
+  destroySWFInput(((SWFJpegBitmap)block)->input);
+  destroySWFJpegBitmap(block);
+}
+
+SWFJpegBitmap newSWFJpegBitmap(FILE *f)
+{
+  SWFJpegBitmap jpeg = newSWFJpegBitmap_fromInput(newSWFInput_file(f));
+  BLOCK(jpeg)->dtor = destroySWFJpegBitmap_andInputs;
+  return jpeg;
+}
+
+
 /* f is a jpeg file, alpha is zlib-compressed data */
 
-SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha)
+SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 {
   SWFJpegWithAlpha jpeg;
   struct jpegInfo *info;
-  struct stat sbuf;
+  int alen;
 
   jpeg = calloc(1, SWFJPEGWITHALPHA_SIZE);
 
@@ -376,10 +375,10 @@ SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha)
   BLOCK(jpeg)->type = SWF_DEFINEBITSJPEG3;
   CHARACTER(jpeg)->bounds = newSWFRect(0, 0, 0, 0);
 
-  jpeg->file = f;
+  jpeg->input = input;
   jpeg->alpha = alpha;
 
-  info = scanJpegFile(f);
+  info = scanJpegFile(input);
 
   CHARACTER(jpeg)->bounds->maxX = info->width;
   CHARACTER(jpeg)->bounds->maxY = info->height;
@@ -388,10 +387,26 @@ SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha)
 
   free(info);
 
-  if(fstat(fileno(alpha), &sbuf) != 0)
-    error("couldn't fstat alpha file!");
+  if((alen = SWFInput_length(alpha)) == -1)
+    SWF_error("couldn't get alpha file length!");
 
-  jpeg->length = jpeg->jpegLength + sbuf.st_size + 6;
+  jpeg->length = jpeg->jpegLength + alen + 6;
 
+  return jpeg;
+}
+
+void destroySWFJpegAlpha_andInputs(SWFBlock block)
+{
+  destroySWFInput(((SWFJpegWithAlpha)block)->input);
+  destroySWFInput(((SWFJpegWithAlpha)block)->alpha);
+  destroySWFJpegBitmap(block);
+}
+
+SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha)
+{
+  SWFJpegWithAlpha jpeg = newSWFJpegWithAlpha_fromInput(newSWFInput_file(f),
+							newSWFInput_file(alpha));
+
+  BLOCK(jpeg)->dtor = destroySWFJpegAlpha_andInputs;
   return jpeg;
 }

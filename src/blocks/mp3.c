@@ -1,5 +1,24 @@
+/*
+    Ming, an SWF output library
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
 #include "libswf.h"
+#include "input.h"
 
 #define MP3_FRAME_SYNC       0xFFE00000
 
@@ -53,14 +72,7 @@ int mp25_samplerate_table[] = { 11025, 12000, 8000 }; /* less samples in > versi
 
 /* rest of the header info doesn't affect frame size.. */
 
-void skipBytes(FILE *f, int length)
-{
-  for(; length>0; --length)
-    if(fgetc(f) == EOF)
-      return;
-}
-
-int nextMP3Frame(FILE *f)
+int nextMP3Frame(SWFInput input)
 {
   unsigned long flags;
   int frameLen;
@@ -68,13 +80,11 @@ int nextMP3Frame(FILE *f)
   int version, layer, channels, padding;
 
   /* get 4-byte header, bigendian */
-  if((flags = fgetc(f)) == EOF)
-    return 0;
 
-  flags <<= 24;
-  flags += fgetc(f) << 16;
-  flags += fgetc(f) << 8;
-  flags += fgetc(f);
+  flags = SWFInput_getUInt32_BE(input);
+
+  if(SWFInput_eof(input))
+    return 0;
 
   if((flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC)
     return -1;
@@ -135,7 +145,7 @@ int nextMP3Frame(FILE *f)
   else
     frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
 
-  skipBytes(f, frameLen-4);
+  SWFInput_seek(input, frameLen-4, SEEK_CUR);
 
   return frameLen;
 }

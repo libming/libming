@@ -5,7 +5,7 @@
 #include "output.h"
 #include "outputblock.h"
 
-int nextMP3Frame(FILE *f);
+int nextMP3Frame(SWFInput input);
 
 int completeSWFSoundStream(SWFBlock block)
 {
@@ -15,7 +15,7 @@ void writeSWFSoundStreamToMethod(SWFBlock block,
 				 SWFByteOutputMethod method, void *data)
 {
   SWFSoundStreamBlock stream = (SWFSoundStreamBlock)block;
-  FILE *f = stream->sound->file;
+  SWFInput input = stream->sound->input;
   int l = stream->length;
 
   methodWriteUInt16(stream->numFrames * 1152, /* stream->channels * 576, */
@@ -24,7 +24,7 @@ void writeSWFSoundStreamToMethod(SWFBlock block,
   methodWriteUInt16(stream->delay, method, data);
 
   for(; l>0; --l)
-    method(fgetc(f), data);
+    method(SWFInput_getChar(input), data);
 }
 SWFBlock SWFSound_getStreamBlock(SWFSound sound)
 {
@@ -53,12 +53,12 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
   while(delay > 1152)
   {
     ++stream->numFrames;
-    length = nextMP3Frame(sound->file);
+    length = nextMP3Frame(sound->input);
 
     if(length <= 0)
     {
       sound->isFinished = TRUE;
-      rewind(sound->file);
+      SWFSound_rewind(sound);
       break;
     }
 
@@ -92,23 +92,27 @@ SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate)
 {
   SWFOutput out = newSizedSWFOutput(6);
   SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD);
-  FILE *f = sound->file;
+  SWFInput input = sound->input;
   int rate, sampleRate, samplesPerFrame, channels, flags, start = 0;
 
   /* get 4-byte header, bigendian */
-  flags = fgetc(f);
+  flags = SWFInput_getChar(input);
 
   if(flags == EOF)
     return NULL;
 
   /* XXX - fix this mad hackery */
-  if(flags == 'I' && fgetc(f) == 'D' && fgetc(f) == '3')
+
+  if(flags == 'I' &&
+     SWFInput_getChar(input) == 'D' &&
+     SWFInput_getChar(input) == '3')
   {
     start = 2;
+
     do
     {
       ++start;
-      flags = fgetc(f);
+      flags = SWFInput_getChar(input);
     }
     while(flags != 0xFF && flags != EOF);
   }
@@ -116,17 +120,12 @@ SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate)
   if(flags == EOF)
     return NULL;
 
-  flags <<= 24;
-  flags += fgetc(f) << 16;
-  flags += fgetc(f) << 8;
-  flags += fgetc(f);
+  SWFInput_seek(input, -1, SEEK_CUR);
+  flags = SWFInput_getUInt32_BE(input);
 
-  rewind(f);
+  SWFInput_seek(input, start, SEEK_SET);
 
   sound->start = start;
-
-  for(; start>0; --start)
-    fgetc(f);
 
   if((flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC)
     return NULL;
@@ -160,7 +159,7 @@ SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate)
 /* XXX - kill this */
 void SWFSound_rewind(SWFSound sound)
 {
-  fseek(sound->file, sound->start, SEEK_SET);
+  SWFInput_seek(sound->input, sound->start, SEEK_SET);
 }
 
 void destroySWFSound(SWFSound sound)
@@ -168,10 +167,18 @@ void destroySWFSound(SWFSound sound)
   free(sound);
 }
 
-SWFSound newSWFSound(FILE *file)
+SWFSound newSWFSound_fromInput(SWFInput input)
 {
   SWFSound sound = calloc(1, SWFSOUND_SIZE);
-  sound->file = file;
+
+  /* XXX - destructor? */
+
+  sound->input = input;
   sound->delay = SWFSOUNDSTREAM_INITIAL_DELAY;
   return sound;
+}
+
+SWFSound newSWFSound(FILE *file)
+{
+  return newSWFSound_fromInput(newSWFInput_file(file));
 }

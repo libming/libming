@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,11 +22,12 @@
 
 #include <stdio.h>
 #include "bitmap.h"
+#include "input.h"
 
 struct _swfDBLBitmap
 {
   struct _bitmap bitmap;
-  FILE *file;
+  SWFInput input;
   int length;
 };
 typedef struct _swfDBLBitmap *SWFDBLBitmap;
@@ -34,5 +35,6 @@ typedef struct _swfDBLBitmap *SWFDBLBitmap;
 #define SWFDBLBITMAP_SIZE sizeof(struct _swfDBLBitmap)
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f);
+SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
 #endif /* SWF_DBL_H_INCLUDED */

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,11 +22,12 @@
 
 #include <stdio.h>
 #include "bitmap.h"
+#include "input.h"
 
 struct _swfJpegBitmap
 {
   struct _bitmap bitmap;
-  FILE *file;
+  SWFInput input;
   int length;
 };
 typedef struct _swfJpegBitmap *SWFJpegBitmap;
@@ -34,13 +35,14 @@ typedef struct _swfJpegBitmap *SWFJpegBitmap;
 #define SWFJPEGBITMAP_SIZE sizeof(struct _swfJpegBitmap)
 
 SWFJpegBitmap newSWFJpegBitmap(FILE *f);
+SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input);
 
 struct _swfJpegWithAlpha
 {
   struct _bitmap bitmap;
-  FILE *file; /* leave these here so that we */
+  SWFInput input; /* leave these here so that we */
   int length; /* can cast this to swfJpegBitmap */
-  FILE *alpha;
+  SWFInput alpha;
   int jpegLength;
 };
 typedef struct _swfJpegWithAlpha *SWFJpegWithAlpha;
@@ -48,5 +50,6 @@ typedef struct _swfJpegWithAlpha *SWFJpegWithAlpha;
 #define SWFJPEGWITHALPHA_SIZE sizeof(struct _swfJpegWithAlpha)
 
 SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha);
+SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 #endif /* SWF_JPEG_H_INCLUDED */

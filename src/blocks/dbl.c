@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,7 @@ int completeSWFDBLBitmap(SWFBlock block)
 {
   return ((SWFDBLBitmap)block)->length;
 }
+
 void destroySWFDBLBitmap(SWFBlock block)
 {
   SWFDBLBitmap dbl = (SWFDBLBitmap)block;
@@ -33,17 +34,16 @@ void destroySWFDBLBitmap(SWFBlock block)
 }
 
 void writeSWFDBLBitmapToMethod(SWFBlock block,
-				SWFByteOutputMethod method, void *data)
+			       SWFByteOutputMethod method, void *data)
 {
   SWFDBLBitmap dbl = (SWFDBLBitmap)block;
-  FILE *f = dbl->file;
   int i;
 
   methodWriteUInt16(CHARACTERID(dbl), method, data);
 
   /* just dump the rest of the file */
   for(i=block->length-2; i>0; --i)
-    method(fgetc(f), data);
+    method(SWFInput_getChar(dbl->input), data);
 }
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f)
@@ -51,6 +51,7 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
   SWFDBLBitmap dbl;
   int version;
   int width, height;
+  SWFInput input = newSWFInput_file(f);
 
   dbl = calloc(1, SWFDBLBITMAP_SIZE);
 
@@ -59,18 +60,18 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
   BLOCK(dbl)->complete = completeSWFDBLBitmap;
   BLOCK(dbl)->dtor = destroySWFDBLBitmap;
 
-  dbl->file = f;
+  dbl->input = input;
 
-  if(fgetc(f) != 'D' ||
-     fgetc(f) != 'B')
-    error("File is not a DBL file!");
+  if(SWFInput_getChar(input) != 'D' ||
+     SWFInput_getChar(input) != 'B')
+    SWF_error("File is not a DBL file!");
 
-  version = fgetc(f);
+  version = SWFInput_getChar(input);
 
   if(version != 'L' && version != 'l')
-    error("File is not a DBL file!");
+    SWF_error("File is not a DBL file!");
 
-  switch(fgetc(f))
+  switch(SWFInput_getChar(input))
   {
     case 1:
       BLOCK(dbl)->type = SWF_DEFINELOSSLESS;
@@ -79,39 +80,39 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
       BLOCK(dbl)->type = SWF_DEFINELOSSLESS2;
       break;
     default:
-      error("Unexpected DBL type byte!");
+      SWF_error("Unexpected DBL type byte!");
   }
 
   if(version == 'l')
   {
     /* wow, I'm an idiot. */
-    dbl->length = fgetc(f);
+    dbl->length = SWFInput_getChar(input);
     dbl->length <<= 8;
-    dbl->length += fgetc(f);
+    dbl->length += SWFInput_getChar(input);
     dbl->length <<= 8;
-    dbl->length += fgetc(f);
+    dbl->length += SWFInput_getChar(input);
     dbl->length <<= 8;
-    dbl->length += fgetc(f);
+    dbl->length += SWFInput_getChar(input);
     dbl->length += 2; /* character id */
   }
   else
   {
-    dbl->length = fgetc(f);
+    dbl->length = SWFInput_getChar(input);
     dbl->length <<= 8;
-    dbl->length += fgetc(f);
+    dbl->length += SWFInput_getChar(input);
     dbl->length += 2; /* character id */
   }
 
   /* d'oh!  forgot to get the width and height! */
 
   fgetc(f); /* format */
-  width = fgetc(f);
-  width += fgetc(f)<<8;
-  height = fgetc(f);
-  height += fgetc(f)<<8;
+  width = SWFInput_getChar(input);
+  width += SWFInput_getChar(input)<<8;
+  height = SWFInput_getChar(input);
+  height += SWFInput_getChar(input)<<8;
 
   /* roll back to beginning of dbl data */
-  fseek(f, -5L, SEEK_CUR);
+  SWFInput_seek(input, -5, SEEK_CUR);
 
   CHARACTER(dbl)->bounds = newSWFRect(0, width, 0, height);
 

@@ -3,6 +3,7 @@
 #define SWF_SOUNDSTREAM_H_INCLUDED
 
 #include "block.h"
+#include "input.h"
 
 #define SWF_SOUND_COMPRESSION      0xf0
 #define SWF_SOUND_NOT_COMPRESSED   (0<<4)
@@ -30,13 +31,14 @@ struct _sound
   int delay;
   int start;
   int samplesPerFrame;
-  FILE *file;
+  SWFInput input;
 };
 typedef struct _sound *SWFSound;
 
 #define SWFSOUND_SIZE sizeof(struct _sound)
 
 SWFSound newSWFSound(FILE *file);
+SWFSound newSWFSound_fromInput(SWFInput input);
 void destroySWFSound(SWFSound sound);
 
 
