@@ -539,7 +539,8 @@ int printActionRecord(Buffer f)
       println("enum2");
       break;
     case SWFACTION_TRY:
-    { int flag = readUInt8(f);
+    { //int flag = readUInt8(f);
+    	readUInt8(f);
 	  int try, catch, finally;
       char *name;
 	  try = readUInt16(f);
