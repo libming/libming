@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -23,55 +23,31 @@
 #include "blocks/swf.h"
 #include "fill.h"
 
-static inline void SWFShape_setLine(SWFShape shape, unsigned short width,
-				    byte r, byte g, byte b, byte a)
-{
-  SWFShape_setLineStyle(shape, width, r, g, b, a);
-}
+float SWFCharacter_getWidth(SWFCharacter character);
+float SWFCharacter_getHeight(SWFCharacter character);
 
-static inline SWFFill SWFShape_addSolidFill(SWFShape shape,
-					    byte r, byte g, byte b, byte a)
-{
-  return newSWFFill(SWFShape_addSolidFillStyle(shape, r, g, b, a));
-}
-static inline SWFFill SWFShape_addGradientFill(SWFShape shape,
-					       SWFGradient gradient,
-					       byte flags)
-{
-  return newSWFFill(SWFShape_addGradientFillStyle(shape, gradient, flags));
-}
-static inline SWFFill SWFShape_addBitmapFill(SWFShape shape,
-					     SWFBitmap bitmap, byte flags)
-{
-  return newSWFFill(SWFShape_addBitmapFillStyle(shape, bitmap, flags));
-}
 
-static inline void SWFShape_setLeftFill(SWFShape shape, SWFFill fill)
-{
-  SWFShape_setLeftFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
-}
-static inline void SWFShape_setRightFill(SWFShape shape, SWFFill fill)
-{
-  SWFShape_setRightFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
-}
+void SWFShape_setLine(SWFShape shape, unsigned short width,
+		      byte r, byte g, byte b, byte a);
 
-static inline void SWFShape_drawRect(SWFShape shape, SWFRect rect)
-{
-  SWFShape_lineToRelative(shape, SWFRect_getWidth(rect), 0);
-  SWFShape_lineToRelative(shape, 0, SWFRect_getHeight(rect));
-  SWFShape_lineToRelative(shape, -SWFRect_getWidth(rect), 0);
-  SWFShape_lineToRelative(shape, 0, -SWFRect_getHeight(rect));
-}
+SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
+
+SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
+				 byte flags);
+
+SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
+
+void SWFShape_setLeftFill(SWFShape shape, SWFFill fill);
+void SWFShape_setRightFill(SWFShape shape, SWFFill fill);
+
+void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 void SWFShape_setLine(SWFShape shape,
 		      unsigned short width, byte r, byte g, byte b, byte a);
 
 void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle);
 
-static inline void SWFShape_drawCircle(SWFShape shape, int r)
-{
-  SWFShape_drawArc(shape, r, 0, 360);
-}
+void SWFShape_drawCircle(SWFShape shape, int r);
 
 
 /* approximate a cubic bezier with quadratic segments,

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,6 +24,65 @@
 
 extern float Ming_scale;
 extern int Ming_cubicThreshold;
+
+float SWFCharacter_getWidth(SWFCharacter character)
+{
+  return SWFCharacter_getScaledWidth(character) / Ming_scale;
+}
+
+float SWFCharacter_getHeight(SWFCharacter character)
+{
+  return SWFCharacter_getScaledHeight(character) / Ming_scale;
+}
+
+
+void SWFShape_setLine(SWFShape shape, unsigned short width,
+		      byte r, byte g, byte b, byte a)
+{
+  SWFShape_setLineStyle(shape, width, r, g, b, a);
+}
+
+SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a)
+{
+  return newSWFFill(SWFShape_addSolidFillStyle(shape, r, g, b, a));
+}
+
+SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
+				 byte flags)
+{
+  return newSWFFill(SWFShape_addGradientFillStyle(shape, gradient, flags));
+}
+
+SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags)
+{
+  SWFFill fill = newSWFFill(SWFShape_addBitmapFillStyle(shape, bitmap, flags));
+  SWFFill_scaleTo(fill, Ming_scale, Ming_scale);
+  return fill;
+}
+
+void SWFShape_setLeftFill(SWFShape shape, SWFFill fill)
+{
+  SWFShape_setLeftFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
+}
+
+void SWFShape_setRightFill(SWFShape shape, SWFFill fill)
+{
+  SWFShape_setRightFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
+}
+
+void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character)
+{
+  SWFShape_lineToRelative(shape, SWFCharacter_getWidth(character), 0);
+  SWFShape_lineToRelative(shape, 0, SWFCharacter_getHeight(character));
+  SWFShape_lineToRelative(shape, -SWFCharacter_getWidth(character), 0);
+  SWFShape_lineToRelative(shape, 0, -SWFCharacter_getHeight(character));
+}
+
+void SWFShape_drawCircle(SWFShape shape, int r)
+{
+  SWFShape_drawArc(shape, r, 0, 360);
+}
+
 
 /* draw an arc of radius r, centered at (x,y), from angle startAngle to angle
    endAngle (measured in degrees clockwise from due north) */
@@ -63,9 +122,6 @@ void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle)
   }
 }
 
-#include <assert.h>
-#define error(x) { printf("ERROR: %s\n",(x)); assert(0); }
-
 
 struct control
 {
@@ -83,7 +139,7 @@ typedef struct control *Control;
 
 static void subdivideLeft(Control new, Control old, float t)
 {
-  assert(t>0.0 && t<1.0);
+  SWF_assert(t>0.0 && t<1.0);
 
   if(new != old)
     memcpy(new, old, sizeof(struct control));
@@ -106,7 +162,7 @@ static void subdivideLeft(Control new, Control old, float t)
 
 static void subdivideRight(Control new, Control old, float t)
 {
-  assert(t>0.0 && t<1.0);
+  SWF_assert(t>0.0 && t<1.0);
 
   if(new != old)
     memcpy(new, old, sizeof(struct control));
