@@ -86,7 +86,7 @@ SWFMovie_output(movie, compresslevel=-1)
 	SWF::Movie movie
 	int compresslevel
 	CODE:
-	RETVAL = SWFMovie_outputC(movie, fileOutputMethod, stdout, compresslevel);
+	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout, compresslevel);
 
 int 
 SWFMovie_save(movie, filename, compresslevel=-1)
@@ -100,7 +100,7 @@ SWFMovie_save(movie, filename, compresslevel=-1)
 		fprintf(stderr, "Unable to open %s\n", filename);
 		ST(0) = &sv_undef;
 	}else{
-                RETVAL = SWFMovie_outputC(movie, fileOutputMethod, f, compresslevel);
+                RETVAL = SWFMovie_output(movie, fileOutputMethod, f, compresslevel);
                 fclose(f);
 	}
         OUTPUT:
