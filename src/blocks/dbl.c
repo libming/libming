@@ -50,6 +50,7 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
 {
   SWFDBLBitmap dbl;
   int version;
+  int width, height;
 
   dbl = (SWFDBLBitmap)malloc(SWFDBLBITMAP_SIZE);
   memset(dbl, 0, SWFDBLBITMAP_SIZE);
@@ -58,7 +59,6 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
   BLOCK(dbl)->writeBlock = writeSWFDBLBitmapToMethod;
   BLOCK(dbl)->complete = completeSWFDBLBitmap;
   BLOCK(dbl)->dtor = destroySWFDBLBitmap;
-  CHARACTER(dbl)->bounds = newSWFRect(0, 0, 0, 0);
 
   dbl->file = f;
 
@@ -102,6 +102,19 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
     dbl->length += fgetc(f);
     dbl->length += 2; /* character id */
   }
+
+  /* d'oh!  forgot to get the width and height! */
+
+  fgetc(f); /* format */
+  width = fgetc(f);
+  width += fgetc(f)<<8;
+  height = fgetc(f);
+  height += fgetc(f)<<8;
+
+  /* roll back to beginning of dbl data */
+  fseek(f, -5L, SEEK_CUR);
+
+  CHARACTER(dbl)->bounds = newSWFRect(0, width, 0, height);
 
   return dbl;
 }
