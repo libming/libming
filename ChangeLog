@@ -1,3 +1,9 @@
+2002-09-21 00:00  peterdd
+
+	* util/: swftoperl.h, swftoperl.c, swftoperl.html, Makefile, 
+	TODO,README 
+	added swftoperl (based on swftophp) 
+	
 2002-09-05 01:37  erich
 
 	* perl_ext/Makefile.PL: added "-lz" so it links the zlib as well
