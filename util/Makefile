@@ -62,18 +62,6 @@ png2swf: png2swf.c
 makeswf: makeswf.c makeswf.h
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -L.. -lming $(MATHLIB) $(ZLIB)
 
-install: all
+install: $(BINARIES)
 	install -d $(bindir)
-	install -m 0755 swftophp $(bindir)
-	install -m 0755 swftoperl $(bindir)
-	install -m 0755 makefdb $(bindir)
-	install -m 0755 listfdb $(bindir)
-	install -m 0755 listjpeg $(bindir)
-	install -m 0755 listswf $(bindir)
-	install -m 0755 listaction $(bindir)
-	install -m 0755 png2dbl $(bindir)
-	#install -m 0755 gif2dbl $(bindir)
-	#install -m 0755 gif2mask $(bindir)
-	install -m 0755 raw2adpcm $(bindir)
-	install -m 0755 png2swf $(bindir)
-	install -m 0755 makeswf $(bindir)
+	install -m 0755 $(BINARIES) $(bindir)
