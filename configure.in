@@ -22,10 +22,14 @@ LIBS="${ZLIB} ${MATHLIB} ${GIFLIB} ${PNGLIB}"
 
 if test -n "${GIFLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
+	AC_DEFINE(USE_GIF)
+	AC_DEFINE(USE_ZLIB)
 fi
 
 if test -n "${PNGLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
+	AC_DEFINE(USE_PNG)
+	AC_DEFINE(USE_ZLIB)
 fi
 
  
@@ -33,6 +37,8 @@ fi
 AC_SUBST(LIBS)
 AC_SUBST(EXTRA_OBJS)
 
+
+AC_CONFIG_HEADER(src/ming_config.h)
 
 
 AC_OUTPUT(Rules.make config.make)
