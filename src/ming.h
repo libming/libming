@@ -34,8 +34,8 @@ extern "C" {
 
 #include <stdio.h>
 
-#define MING_VERSION        0.9
-#define MING_VERSION_TEXT  "0.9"
+#define MING_VERSION        0.3
+#define MING_VERSION_TEXT  "0.3"
 
 /* do we enable gif / png functions? */
 #include "ming_config.h"
