@@ -303,7 +303,6 @@ void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 
   if(list->soundStream)
   {
-    SWFSound_rewind(list->soundStream);
     stream = SWFSound_getStreamBlock(list->soundStream);
 
     if(stream)
