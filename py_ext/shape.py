@@ -1,6 +1,8 @@
 
 from ming import *
 
+Ming_setScale(1.0)
+
 s = SWFShape()
 l = s.setLine(4, 0x7f, 0, 0)
 f = s.addSolidFill(0xff, 0, 0)
@@ -16,5 +18,5 @@ m.setRate(12.0)
 m.add(s)
 m.nextFrame()
 
-m.save('shape.swf')
+m.save("test.swf")
 

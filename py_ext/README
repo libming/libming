@@ -4,6 +4,22 @@ PMing - a Python module for the Ming library
 
 WHAT'S NEW
 
+- 08 Jul 2004: sspickle moves some of the new API into the ming.py wrapper.
+		Lots more to do here... any help appreciated. ;-)
+		Also.. in the absense of any suggestion otherwise.. 
+		moving this mess to the main branch.
+
+- 07 Jul 2004: sspickle adds a reincarnated Zwiff package (Zope ming thingy).
+		You can just make a link in your instance home's Products directory
+		to the Zwiff directory (or just copy it) and use it in Zope.
+
+- 05 Jul 2004: sspickle finally gets distutils going for mingc. It 
+		looks like we need changes to ming.i, but i don't know
+		who else uses it... so I pulled a copy into py_ext for now.
+
+- 19 Aug 2001: sspickle adds slightly more pythonic Setup/build.py
+		(not using disttools just yet... but maybe next time!)
+
 - 19 Nov 2000: Dave adds destructors, messes up the ming.py file so it
 		acts like the php interface
 
@@ -21,6 +37,7 @@ REQUIREMENTS
 - Python 1.5.2 or above.
 - Ming library v0.2-pre-a
 - a recent version of SWIG if you're going to rebuild ming_wrap.c
+  (a reasonable ming_wrap.c is included now)
   SWIG 1.1p5 (which comes with Debian 2.2) won't work.
 
 

@@ -2,19 +2,24 @@ INSTALL
 
 - Extract in the ming main directory
 
->cd ming-0.0.2b
->tar xzvf pming-0.0.1a.tar.gz
 >cd py_ext 
 
-- then just type
+if platform == '*** UNIX ***':
 
->make
+	- then just type
 
-- and as root
+	>python build.py
 
->make install
+	- then follow instructions
 
-- Now you can try
+elif platform == '*** WINDOWS ***':
+	
+	# probably get a binary mingc.pyd from the web site?
+	# or maybe:
+	
+	> make
+	
+	> make install
 
 >python shape.py
 

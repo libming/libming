@@ -1,3 +1,4 @@
+
 import mingc
 
 # should raise an exception if return is non-zero:
@@ -9,9 +10,14 @@ def Ming_setCubicThreshold(t):
 def Ming_setScale(scale):
     mingc.Ming_setScale(scale);
 
+def Ming_getScale():
+    return mingc.Ming_getScale();
+
 def Ming_useSWFVersion(num):
     mingc.Ming_useSWFVersion(num);
 
+def Ming_setSWFCompression( level ):
+    return mingc.Ming_setSWFCompression( level )
 
 class SWFBase:
 
@@ -152,11 +158,14 @@ class SWFShape(SWFBase):
         return mingc.SWFShape_addBitmapFill(self.this, bitmap.this, flags)
 
 # addFill flags:
-SWFFILL_LINEAR_GRADIENT = mingc.SWFFILL_LINEAR_GRADIENT
-SWFFILL_RADIAL_GRADIENT = mingc.SWFFILL_RADIAL_GRADIENT
-SWFFILL_TILED_BITMAP    = mingc.SWFFILL_TILED_BITMAP
-SWFFILL_CLIPPED_BITMAP  = mingc.SWFFILL_CLIPPED_BITMAP
 
+SWFFILL_SOLID		= mingc.SWFFILL_SOLID		
+SWFFILL_GRADIENT	= mingc.SWFFILL_GRADIENT	
+SWFFILL_LINEAR_GRADIENT = mingc.SWFFILL_LINEAR_GRADIENT 
+SWFFILL_RADIAL_GRADIENT = mingc.SWFFILL_RADIAL_GRADIENT 
+SWFFILL_BITMAP		= mingc.SWFFILL_BITMAP		
+SWFFILL_TILED_BITMAP	= mingc.SWFFILL_TILED_BITMAP	
+SWFFILL_CLIPPED_BITMAP	= mingc.SWFFILL_CLIPPED_BITMAP
 
 class SWFFill(SWFBase):
 
@@ -291,6 +300,9 @@ class SWFDisplayItem(SWFBase):
         """
         return mingc.SWFDisplayItem_get_rot(self.this)
 
+    def setMatrix(self, a, b, c, d, x, y):
+        mingc.SWFDisplayItem_setMatrix(self.this, a, b, c, d, x, y)
+
 
 class SWFMovie(SWFBase):
 
@@ -352,6 +364,8 @@ class SWFMovie(SWFBase):
     def simpleOutput(self):
         return mingc.SWFMovie_simpleOutput(self.this)
 
+    def addExport(self, clipObj, libName):
+        return mingc.SWFMovie_addExport(self.this, clipObj, libName)
 
 class SWFSprite(SWFBase):
 
@@ -486,13 +500,15 @@ class JpegBitmap(SWFBitmap):
 class SWFText(SWFBase):
 
     def __init__(self):
+        self.__fonts={} # keep reference
         self.this = mingc.newSWFText2()
 
     def __del__(self):
         mingc.destroySWFText(self.this)
 
     def setFont(self, font):
-        mingc.SWFText_setFont(self.this, font.this)
+        self.__fonts[font.this]=font
+        self.this=mingc.SWFText_setFont(self.this, font.this)
 
     def setHeight(self, height):
         mingc.SWFText_setHeight(self.this, height)
@@ -541,6 +557,7 @@ class SWFText2(SWFText):
 class SWFTextField(SWFBase):
 
     def __init__(self, flags=None):
+        self.__fonts={} # keep reference
         self.this = mingc.newSWFTextField()
 
         if flags is not None:
@@ -551,6 +568,7 @@ class SWFTextField(SWFBase):
 
     def setFont(self, font):
 	self.font = font
+        self.__fonts[font.this]=font
         mingc.SWFTextField_setFont(self.this, font)
 
     def setBounds(self, width, height):
@@ -600,14 +618,23 @@ SWFTEXTFIELD_ALIGN_CENTER  = mingc.SWFTEXTFIELD_ALIGN_CENTER
 SWFTEXTFIELD_ALIGN_JUSTIFY = mingc.SWFTEXTFIELD_ALIGN_JUSTIFY
 
 # other flags:
-SWFTEXTFIELD_HASLENGTH = mingc.SWFTEXTFIELD_HASLENGTH
-SWFTEXTFIELD_NOEDIT    = mingc.SWFTEXTFIELD_NOEDIT
-SWFTEXTFIELD_PASSWORD  = mingc.SWFTEXTFIELD_PASSWORD
-SWFTEXTFIELD_MULTILINE = mingc.SWFTEXTFIELD_MULTILINE
-SWFTEXTFIELD_WORDWRAP  = mingc.SWFTEXTFIELD_WORDWRAP
-SWFTEXTFIELD_DRAWBOX   = mingc.SWFTEXTFIELD_DRAWBOX
-SWFTEXTFIELD_NOSELECT  = mingc.SWFTEXTFIELD_NOSELECT
 
+SWFTEXTFIELD_ONMASK    = mingc.SWFTEXTFIELD_ONMASK    
+SWFTEXTFIELD_OFFMASK   = mingc.SWFTEXTFIELD_OFFMASK   
+SWFTEXTFIELD_HASFONT   = mingc.SWFTEXTFIELD_HASFONT   
+SWFTEXTFIELD_HASLENGTH = mingc.SWFTEXTFIELD_HASLENGTH 
+SWFTEXTFIELD_HASCOLOR  = mingc.SWFTEXTFIELD_HASCOLOR  
+SWFTEXTFIELD_NOEDIT    = mingc.SWFTEXTFIELD_NOEDIT    
+SWFTEXTFIELD_PASSWORD  = mingc.SWFTEXTFIELD_PASSWORD  
+SWFTEXTFIELD_MULTILINE = mingc.SWFTEXTFIELD_MULTILINE 
+SWFTEXTFIELD_WORDWRAP  = mingc.SWFTEXTFIELD_WORDWRAP  
+SWFTEXTFIELD_HASTEXT   = mingc.SWFTEXTFIELD_HASTEXT   
+SWFTEXTFIELD_USEFONT   = mingc.SWFTEXTFIELD_USEFONT   
+SWFTEXTFIELD_HTML      = mingc.SWFTEXTFIELD_HTML      
+SWFTEXTFIELD_DRAWBOX   = mingc.SWFTEXTFIELD_DRAWBOX   
+SWFTEXTFIELD_NOSELECT  = mingc.SWFTEXTFIELD_NOSELECT  
+SWFTEXTFIELD_HASLAYOUT = mingc.SWFTEXTFIELD_HASLAYOUT 
+SWFTEXTFIELD_AUTOSIZE  = mingc.SWFTEXTFIELD_AUTOSIZE
 
 class SWFSound(SWFBase):
 
@@ -625,6 +652,23 @@ class SWFSoundStream(SWFBase):
 
     # display list destroys this..
 
+SWF_SOUND_COMPRESSION       = mingc.SWF_SOUND_COMPRESSION       
+SWF_SOUND_NOT_COMPRESSED    = mingc.SWF_SOUND_NOT_COMPRESSED    
+SWF_SOUND_ADPCM_COMPRESSED  = mingc.SWF_SOUND_ADPCM_COMPRESSED  
+SWF_SOUND_MP3_COMPRESSED    = mingc.SWF_SOUND_MP3_COMPRESSED    
+SWF_SOUND_NOT_COMPRESSED_LE = mingc.SWF_SOUND_NOT_COMPRESSED_LE 
+SWF_SOUND_NELLY_COMPRESSED  = mingc.SWF_SOUND_NELLY_COMPRESSED  
+SWF_SOUND_RATE              = mingc.SWF_SOUND_RATE              
+SWF_SOUND_5KHZ              = mingc.SWF_SOUND_5KHZ              
+SWF_SOUND_11KHZ             = mingc.SWF_SOUND_11KHZ             
+SWF_SOUND_22KHZ             = mingc.SWF_SOUND_22KHZ             
+SWF_SOUND_44KHZ             = mingc.SWF_SOUND_44KHZ             
+SWF_SOUND_BITS              = mingc.SWF_SOUND_BITS              
+SWF_SOUND_8BITS             = mingc.SWF_SOUND_8BITS             
+SWF_SOUND_16BITS            = mingc.SWF_SOUND_16BITS            
+SWF_SOUND_CHANNELS          = mingc.SWF_SOUND_CHANNELS          
+SWF_SOUND_MONO              = mingc.SWF_SOUND_MONO              
+SWF_SOUND_STEREO            = mingc.SWF_SOUND_STEREO            
 
 class SWFAction(SWFBase):
 
