@@ -496,11 +496,11 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 }
 */
 
-int
-SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
+SWFOutput
+SWFMovie_toOutput(SWFMovie movie, int level)
 {
 	int swflength, status;
-	SWFOutput header, headerbuffer, swfbuffer;
+	SWFOutput header, tempbuffer, buffer, swfbuffer;
 	SWFBlock backgroundBlock;
 	unsigned long compresslength, i;
 	char *compress;
@@ -537,50 +537,58 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 	if (level >  9) level = 9;
 
 	// reserve output buffer
-	headerbuffer = newSizedSWFOutput(8);
-	swfbuffer    = newSizedSWFOutput( swflength - 8 );
+	if(level >= 0)
+	{	// a little bit more than the uncompressed data
+		compresslength = swflength + (swflength/1000) + 15 + 1;
+		swfbuffer    = newSizedSWFOutput( compresslength + 8 );
+	}
+	else
+		swfbuffer    = newSizedSWFOutput( swflength );
 
-	if (level >= 0) SWFOutput_writeUInt8 (headerbuffer, 'C');
-	else SWFOutput_writeUInt8 (headerbuffer, 'F');
-	SWFOutput_writeUInt8 (headerbuffer, 'W');
-	SWFOutput_writeUInt8 (headerbuffer, 'S');
+	if (level >= 0) SWFOutput_writeUInt8 (swfbuffer, 'C');
+	else SWFOutput_writeUInt8 (swfbuffer, 'F');
+	SWFOutput_writeUInt8 (swfbuffer, 'W');
+	SWFOutput_writeUInt8 (swfbuffer, 'S');
 
-	SWFOutput_writeUInt8 (headerbuffer, movie->version);
+	SWFOutput_writeUInt8 (swfbuffer, movie->version);
 
 	// Movie length
-	SWFOutput_writeUInt32(headerbuffer, swflength);
+	SWFOutput_writeUInt32(swfbuffer, swflength);
 
-	SWFOutput_writeToMethod(header, SWFOutputMethod, swfbuffer);
+	if(level >= 0)
+		buffer = tempbuffer = newSizedSWFOutput( swflength - 8);
+	else
+		buffer = swfbuffer;
+
+	SWFOutput_writeToMethod(header, SWFOutputMethod, buffer);
 
 	destroySWFOutput(header);
 
 	// fill swfbuffer with blocklist
-	SWFBlockList_writeBlocksToMethod(movie->blockList, SWFOutputMethod, swfbuffer);
+	SWFBlockList_writeBlocksToMethod(movie->blockList, SWFOutputMethod, buffer);
 
-	// Output
-	SWFOutput_writeToMethod(headerbuffer, method, data);
 	if (level >= 0)
 	{
-		// a little bit more than the uncompressed data
-		compresslength = swflength + (swflength/1000) + 15 + 1;
-        	compress = (char *) malloc(compresslength);
-		if(compress) {
-			status = compress2 ( (Bytef*) compress, &compresslength, SWFOutput_getBuffer(swfbuffer), SWFOutput_getLength(swfbuffer), level);
-			if (status == Z_OK) {
-				for (i=0; i < compresslength; i++){
-					method (compress[i], data);
-				}
-				swflength = compresslength;
-			}
-	
-			free (compress);
-		}
+		status = compress2 ( (Bytef*) SWFOutput_getBuffer(swfbuffer)+8, &compresslength, SWFOutput_getBuffer(tempbuffer), SWFOutput_getLength(tempbuffer), level);
+		if (status == Z_OK) {
+			SWFOutput_truncate(swfbuffer, compresslength+8);
+			destroySWFOutput(tempbuffer);
+		} else SWF_error("compression failed");
 	}
-	else SWFOutput_writeToMethod(swfbuffer, method, data);
-	
-	return swflength;
+	return swfbuffer;
 }
 
+int
+SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
+{	SWFOutput swfbuffer = SWFMovie_toOutput(movie, level);
+	int swflength = SWFOutput_getLength(swfbuffer);
+	byte *buffer = SWFOutput_getBuffer(swfbuffer);
+	int n;
+	
+	for(n = 0 ; n < swflength ; n++)
+		method(*buffer++, data);
+	return swflength;
+}
 
 int
 SWFMovie_save(SWFMovie movie, const char *filename, int compressionlevel)

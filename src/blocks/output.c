@@ -259,6 +259,12 @@ SWFOutput_writeUInt8(SWFOutput out, int data)
 	--out->free;
 }
 
+void
+SWFOutput_truncate(SWFOutput out, int size)
+{	SWF_assert(size < out->buffersize);
+	out->pos = out->buffer + size;
+	out->free = out->buffersize - size;
+}
 
 void
 SWFOutput_writeSInt8(SWFOutput out, int data)

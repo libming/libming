@@ -46,6 +46,9 @@ void SWFOutput_grow(SWFOutput out);
 
 void SWFOutput_checkSize(SWFOutput out, int bytes);
 
+/* truncate a SizedSWFOutput after the final length is known */
+void SWFOutput_truncate(SWFOutput out, int size);
+
 void SWFOutput_byteAlign(SWFOutput out);
 
 int SWFOutput_getLength(SWFOutput out);
