@@ -198,7 +198,7 @@ newSWFDBLBitmapData_fromData(dblData data)
 	CHARACTER(dbl)->bounds = newSWFRect(0, dbl->width, 0, dbl->height);
 
 #if TRACK_ALLOCS
-	dbl->gcnode = ming_gc_add_node(dbl, destroySWFDBLBitmapData);
+	dbl->gcnode = ming_gc_add_node(dbl, (dtorfunctype)destroySWFDBLBitmapData);
 #endif
 
 	return dbl;
