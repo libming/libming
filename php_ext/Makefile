@@ -6,7 +6,7 @@ DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
 CFILES = ming.c
 
 php_ming.so: ming.o ../libming.a
-	${CC} -shared -fPIC ming.o ../libming.a -o php_ming.so -lm
+	${CC} -shared -fPIC ming.o ../libming.a -o php_ming.so -lm -lz
 
 ming.o: ${CFILES}
 	${CC} -fPIC ${DEFINES} -c ming.c -I. -I.. `php-config --includes`
