@@ -5,7 +5,18 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#include <string.h>
+
+//open()
+#include <fcntl.h>
+
+//fstat()
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
+//decompression
+#include <zlib.h>
 
 #include "blocktypes.h"
 #include "action.h"
@@ -19,14 +30,15 @@
   #define M_PI 3.14159265358979f
 #endif
 
-//const float PI = 3.14159265358979;
+char *filename,*tmp_name;
+FILE *tempfile;
 
 void skipBytes(FILE *f, int length);
 void silentSkipBytes(FILE *f, int length);
 char *blockName(int);
 void printSoundInstance(FILE *f, int id, int soundid);
 
-static m_version = {0};
+static int m_version = {0};
 void decompileAction(FILE *f, int length, int indent)
 {	if(m_version >= 5)
 		decompile5Action(f, length, indent);
@@ -516,53 +528,50 @@ void printFillChange(int id, struct Shape *shape, int fillNum, int side)
   }
 }
 
-void printShapeRec(struct Shape *shape, struct ShapeRecord *s, int id)
-{
-  switch(s->type)
-  {
-    case SHAPERECORD_END:
-      return;
+void printShapeRec(struct Shape *shape, struct ShapeRecord *s, int id){
+	switch(s->type){
+		
+		case SHAPERECORD_END:
+			return;
+		
+		case SHAPERECORD_STATECHANGE:
+			if(s->data.change.movetox != 0 || s->data.change.movetoy != 0){
+				printf("\t$s%i->movePenTo(%i, %i);\n", id, \
+					s->data.change.movetox, \
+					s->data.change.movetoy);
+			}
+      if(s->data.change.fill0 != -1){
+				printFillChange(id, shape, s->data.change.fill0, 0);
+			}
+      if(s->data.change.fill1 != -1){
+				printFillChange(id, shape, s->data.change.fill1, 1);
+			}
+      if(s->data.change.line != -1){
+				if(s->data.change.line == 0){
+					printf("\t$s%i->setLine(0);\n", id);
+				}
+				else{
+					struct LineStyle *line = &(shape->lines.line[s->data.change.line-1]);
+					printf("\t$s%i->setLine(%i, ", id, line->width);
+					printRGBA(&(line->color));
+					printf(");\n");
+				}
+			}
+			break;
 
-    case SHAPERECORD_STATECHANGE:
+		case SHAPERECORD_LINE:
+			printf("\t$s%i->drawLine(%i, %i);\n", id, s->data.line.x, s->data.line.y);
+			break;
 
-      if(s->data.change.movetox != 0 || s->data.change.movetoy != 0)
-	printf("\t$s%i->movePenTo(%i, %i);\n", id,
-	       s->data.change.movetox, s->data.change.movetoy);
+		case SHAPERECORD_CURVE:
+			printf("\t$s%i->drawCurve(%i, %i, %i, %i);\n", id,
+				s->data.curve.controlx, s->data.curve.controly,
+				s->data.curve.anchorx, s->data.curve.anchory);
+			break;
 
-      if(s->data.change.fill0 != -1)
-	printFillChange(id, shape, s->data.change.fill0, 0);
-
-      if(s->data.change.fill1 != -1)
-	printFillChange(id, shape, s->data.change.fill1, 1);
-
-      if(s->data.change.line != -1)
-      {
-	if(s->data.change.line == 0)
-	  printf("\t$s%i->setLine(0);\n", id);
-	else
-	{
-	  struct LineStyle *line = &(shape->lines.line[s->data.change.line-1]);
-
-	  printf("\t$s%i->setLine(%i, ", id, line->width);
-	  printRGBA(&(line->color));
-	  printf(");\n");
+		default:
+			error("Bad shape type: %i!\n", s->type);
 	}
-      }
-      break;
-
-    case SHAPERECORD_LINE:
-      printf("\t$s%i->drawLine(%i, %i);\n", id, s->data.line.x, s->data.line.y);
-      break;
-
-    case SHAPERECORD_CURVE:
-      printf("\t$s%i->drawCurve(%i, %i, %i, %i);\n", id,
-	     s->data.curve.controlx, s->data.curve.controly,
-	     s->data.curve.anchorx, s->data.curve.anchory);
-      break;
-
-    default:
-      error("Bad shape type: %i!\n", s->type);
-  }
 }
 
 void printDefineShape(struct Shape *shape, int id, int isMorph)
@@ -644,9 +653,9 @@ void printMorphShape(FILE *f, int length)
   while(fileOffset < here+offset &&
 	readShapeRec(f, &shape1)) ;
 
-  printf("\n\t$s0 = $s%i->getShape1();\n", id);
+  printf("\n\t$s%i_1 = $s%i->getShape1();\n", id, id);
 
-  printDefineShape(&shape1, 0, 0);
+  printDefineShape(&shape1, id, 0);
 
   byteAlign();
 
@@ -655,9 +664,9 @@ void printMorphShape(FILE *f, int length)
   while(fileOffset < start+length &&
 	readShapeRec(f, &shape2)) ;
 
-  printf("\n\t$s0 = $s%i->getShape2();\n", id);
+  printf("\n\t$s%i_2 = $s%i->getShape2();\n", id, id);
 
-  printDefineShape(&shape1, 0, 1);
+  printDefineShape(&shape1, id, 1);
 }
 
 /* JPEG stream markers: */
@@ -1715,57 +1724,117 @@ void skipBytes(FILE *f, int length)
     readUInt8(f);
 }
 
+/* Compressed swf-files have a 8 Byte uncompressed header and a zlib-compressed body. 
+*/
+int cws2fws(FILE *f, uLong outsize){
+
+	struct stat statbuffer;
+	int insize;
+	int err,tmp_fd;
+	Byte *inbuffer,*outbuffer;
+	
+	if((tmp_name = tmpnam(NULL)) == NULL){ error("Couldn't create tempfile.\n"); }
+	//fprintf(stderr,"tempfilename: %s\n",tmp_name);
+	if((tmp_fd = open(tmp_name, O_CREAT|O_EXCL|O_RDWR, 00600)) < 0){
+		error("Possible Link Attack detected!\n");
+	}
+	if( (tempfile=fdopen(tmp_fd, "w+"))< 0){ error("Couldn't open tempfile.\n"); }
+	if(stat(filename, &statbuffer)==-1){ error("stat() failed"); }
+	
+	insize = statbuffer.st_size-8;
+	inbuffer = malloc(insize);
+	if(!inbuffer){ error("malloc() failed"); }
+	fread(inbuffer,insize,1,f);
+	
+	/* We don't trust the value in the swfheader. */
+	do{
+		outbuffer = malloc(outsize);	
+		if (!outbuffer){ error("malloc(%lu) failed",outsize); }
+		
+		err=uncompress(outbuffer,&outsize,inbuffer,insize);
+		switch(err){
+			case Z_MEM_ERROR: error( "Not enough memory.\n");break;
+			case Z_BUF_ERROR: fprintf(stderr,"resizing outbuffer..\n");break;
+			case Z_DATA_ERROR: error("Data corrupted. Couldn't uncompress.\n");break;
+			case Z_OK: break;
+			default: error("Unknown returnvalue of uncompress:%i\n",err);
+		}
+		free(outbuffer);
+		outsize*=2;
+	} while(err == Z_BUF_ERROR);
+	outsize/=2;
+ 
+	fwrite(outbuffer, 1, outsize, tempfile);
+	rewind(tempfile);
+	return (int)outsize;
+}
+
+
 int main(int argc, char *argv[])
-{
+{	
   struct Movie m;
   FILE *f;
+	char first;
   int block, type, length, frame = 0, noactions = 0;
+	int compressed= 0;
+	
+	if(argc == 3 && strcmp(argv[1], "-a") == 0)
+	{	noactions = 1;
+		--argc;
+		++argv;
+	}
+	filename= argv[1];
+	
+	if(argc<2) {
+		error("Give me a filename.\n\n\tswftoperl myflash..swf >myflash.pl");
+	}
 
-  if(argc == 3 && strcmp(argv[1], "-a") == 0)
-  {	noactions = 1;
-	--argc;
-	++argv;
-  }
+	if(!(f = fopen(filename,"rb"))){
+		error("Sorry, can't seem to read that file.\n");
+	}
+	
+	first=readUInt8(f);
+	compressed=(first==('C'))?1:0;
+	if(!((first=='C' || first=='F') && readUInt8(f)=='W' && readUInt8(f)=='S')){
+		error("Doesn't look like a swf file to me..\n");
+	}
+	m.version = readUInt8(f);
+	m.size = readUInt32(f);
+	
+	if(compressed){
+		int unzipped=cws2fws(f, m.size);
+		if (m.size!=(unzipped+8)){
+			warning("m.size: %i != %i+8  Maybe wrong value in swfheader.\n",m.size, unzipped+8);
+		}
+		fclose(f);
+		f=tempfile;
+		rewind(f);
+	}	
 
-  if(argc<2) {
-  	error("Give me a filename.\n\n\tswftoperl myflash..swf >myflash.pl");
-  }
+	readRect(f, &(m.frame));
 
-  if(!(f = fopen(argv[1],"rb"))){
-  	error("Sorry, can't seem to read that file.\n");
-  }
+	m.rate = readUInt8(f)/256.0+readUInt8(f);
+	m.nFrames = readUInt16(f);
 
-  if(!(readUInt8(f)=='F' && readUInt8(f)=='W' && readUInt8(f)=='S')){
-	error("Doesn't look like a swf file to me..\n");
-  }
+	printf("#!/usr/bin/perl -w\n");
+	printf("# Generated by swftoperl converter included with ming. Have fun. \n\n");
+	printf("# Change this to your needs. If you installed perl-ming global you don't need this.\n");
+	printf("#use lib(\"/home/peter/mystuff/lib/site_perl\");\n\n");
 
-  m.version = m_version = readUInt8(f);
-  m.size = readUInt32(f);
+	printf("# We import all because our converter is not so clever to select only needed. ;-)\n");
+	printf("use SWF qw(:ALL);\n"); 
+	printf("# Just copy from a sample, needed to use Constants like SWFFILL_RADIAL_GRADIENT\n");
+	printf("use SWF::Constants qw(:Text :Button :DisplayItem :Fill);\n\n");
+	printf("SWF::setScale(1);\n");
+	printf("SWF::setVersion(%i);\n", m.version);
+	printf("\t$m = new SWF::Movie();\n\n");
+	printf("\t$m->setRate(%f);\n", m.rate);
+	printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
+	printf("\t$m->setFrames(%i);\n", m.nFrames);
 
-  readRect(f, &(m.frame));
-
-  m.rate = readUInt8(f)/256.0+readUInt8(f);
-  m.nFrames = readUInt16(f);
-
-  printf("#!/usr/bin/perl -w\n");
-  printf("# Generated by swftoperl converter included with ming. Have fun. \n\n");
-  printf("# Change this to your needs. If you installed perl-ming global you don't need this.\n");
-  printf("#use lib(\"/home/peter/mystuff/lib/site_perl\");\n\n");
-  
-  printf("# We import all because our converter is not so clever to select only needed. ;-)\n");
-  printf("use SWF qw(:ALL);\n"); 
-  printf("# Just copy from a sample, needed to use Constants like SWFFILL_RADIAL_GRADIENT\n");
-  printf("use SWF::Constants qw(:Text :Button :DisplayItem :Fill);\n\n");
-  printf("SWF::setScale(1);\n");
-  printf("SWF::setVersion(%i);\n", m.version);
-  printf("\t$m = new SWF::Movie();\n\n");
-  printf("\t$m->setRate(%f);\n", m.rate);
-  printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
-  printf("\t$m->setFrames(%i);\n", m.nFrames);
-
-  if(noactions)
-	m_version = 0;
-
+  if(noactions){ m_version = 0; }
+	else { m_version = m.version; }
+	
   for(;;)
   {
     block = readUInt16(f);
@@ -1785,7 +1854,7 @@ int main(int argc, char *argv[])
       case DEFINESHAPE2:
       case DEFINESHAPE:       printShape(f, length, type); break;
       case SETBACKGROUNDCOLOR: printSetBackgroundColor(f); break;
-      case SHOWFRAME:         printf("  $m->nextFrame();  # end of frame %i\n", ++frame); break;
+      case SHOWFRAME:         printf("\t$m->nextFrame();  # end of frame %i\n", ++frame); break;
       case PLACEOBJECT2:      printPlaceObject2(f); break;
       case REMOVEOBJECT2:     printRemoveObject2(f); break;
       case DOACTION:          printDoAction(f, length); break;
@@ -1803,17 +1872,18 @@ int main(int argc, char *argv[])
 
       //case DEFINEFONT:        printDefineFont(f, length); break;
       case DEFINEFONT2:       printDefineFont2(f, length); break;
-      /*case DEFINEFONTINFO:   printFontInfo(f, length); break;
-      case DEFINESOUND:        printDefineSound(f, length); break;
-      case SOUNDSTREAMHEAD:    printSoundStreamHead(f, 1); break;
-      case SOUNDSTREAMHEAD2:   printSoundStreamHead(f, 2); break;
-      case SOUNDSTREAMBLOCK:   printSoundStreamBlock(f, length); break;
-      case JPEGTABLES:         printJpegStream(f, length); break;
-      case DEFINEBITS:
-      case DEFINEBITSJPEG2:    printDefineBitsJpeg(f,length);  break;
+			/*
+			case DEFINEFONTINFO:   printFontInfo(f, length); break;
+			case DEFINESOUND:        printDefineSound(f, length); break;
+			case SOUNDSTREAMHEAD:    printSoundStreamHead(f, 1); break;
+			case SOUNDSTREAMHEAD2:   printSoundStreamHead(f, 2); break;
+			case SOUNDSTREAMBLOCK:   printSoundStreamBlock(f, length); break;
+			case JPEGTABLES:         printJpegStream(f, length); break;
+			case DEFINEBITS:
+			case DEFINEBITSJPEG2:    printDefineBitsJpeg(f,length);  break;
 
-      case DEFINEBITSJPEG3:
-      */
+			case DEFINEBITSJPEG3:
+			*/
       default:
 	printf("\t# %s, %i bytes \n", blockName(type), length);
 	silentSkipBytes(f, length);
@@ -1830,8 +1900,14 @@ int main(int argc, char *argv[])
     printf("\nDUMP\n\n");
   }
 
-  printf("\n\t#only for webserverscripts\n\t#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
-  printf("\t$m->output();\n");
-  
+  printf("\n\t#only for webserverscripts\n");
+	printf("\t#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
+  printf("\t$m->output(%i);\n",(compressed)?'9':'0');
+  printf("\t$m->save(\"$0.swf\",%i);\n",(compressed)?'9':'0');
+	
+	fclose(f);
+	if (compressed){
+		unlink(tmp_name);
+	}
   exit(0);
 }
