@@ -570,6 +570,13 @@ void_function_call
 		{ $$ = $3;
 		  bufferWriteU8($$, SWFACTION_TRACE); }
 
+	| GETURL '(' expr ',' expr urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0x40+$6); }
+
 	| LOADVARIABLES '(' expr ',' expr urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
