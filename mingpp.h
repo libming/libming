@@ -205,6 +205,9 @@ class SWFSound
   SWFSound(FILE *file)
     { this->sound = newSWFSound(file); }
 
+  SWFSound(SWFInput *input)
+    { this->sound = newSWFSound_fromInput(input->input); }
+
   SWFSound(char *filename)
     { this->sound = newSWFSound(fopen(filename, "rb")); }
 
@@ -379,8 +382,8 @@ class SWFBitmap : public SWFBlock
     }
   }
 
-  SWFBitmap(SWFInput input)
-    { this->bitmap = newSWFBitmap_fromInput(input); }
+  SWFBitmap(SWFInput *input)
+    { this->bitmap = newSWFBitmap_fromInput(input->input); }
 
   virtual ~SWFBitmap()
     { destroySWFBitmap(this->bitmap); }
