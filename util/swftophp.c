@@ -557,7 +557,7 @@ void printDefineShape(struct Shape *shape, int id, int isMorph)
     printShapeRec(shape, &(shape->shapes.shape[i]), id);
 }
 
-void printShape(FILE *f, int length)
+void printShape(FILE *f, int length, int shapeType)
 {
   struct Shape shape;
   int id, start = fileOffset;
@@ -565,6 +565,8 @@ void printShape(FILE *f, int length)
   memset(&shape, 0, sizeof(struct Shape));
 
   id = readUInt16(f);
+
+  shape.shapeType = shapeType;
 
   readRect(f, &(shape.bounds)); /* bounds */
 
@@ -1522,7 +1524,7 @@ int main(int argc, char *argv[])
     {
       case DEFINESHAPE3:
       case DEFINESHAPE2:
-      case DEFINESHAPE:		printShape(f, length);          break;
+      case DEFINESHAPE:		printShape(f, length, type);    break;
       case SETBACKGROUNDCOLOR:	printSetBackgroundColor(f);	break;
       case SHOWFRAME:           printf("\t$m->nextFrame();  /* (end of frame %i) */\n\n", frame++); break;
       case PLACEOBJECT2:	printPlaceObject2(f);		break;
