@@ -564,6 +564,8 @@ void SWFMovie_setRate(SWFMovie movie, float rate);
 void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
+void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name);
+
 /* XXX - 0.1 name: */
 #define SWFMovie_setFrames SWFMovie_setNumberOfFrames
 
