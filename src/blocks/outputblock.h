@@ -26,6 +26,7 @@
 #include "character.h"
 #include "matrix.h"
 #include "cxform.h"
+#include "exports.h"
 
 struct _outputBlock
 {
@@ -47,5 +48,6 @@ SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
 SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
 SWFOutputBlock newSWFRemoveObject2Block(int depth);
 SWFOutputBlock newSWFFrameLabelBlock(char *string);
+SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
 
 #endif /* SWF_OUTPUTBLOCK_H_INCLUDED */

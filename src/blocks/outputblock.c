@@ -106,3 +106,23 @@ SWFOutputBlock newSWFFrameLabelBlock(char *string)
 
   return newSWFOutputBlock(out, SWF_FRAMELABEL);
 }
+
+SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports)
+{
+  int n, sum;
+  SWFOutput out;
+
+  for(n = 0, sum = 2; n < nExports; ++n)
+    sum += 2 + strlen(exports[n].name) + 1;
+
+  out = newSizedSWFOutput(sum);
+  SWFOutput_writeUInt16(out, nExports);
+
+  for(n = 0; n < nExports; ++n)
+  {
+    SWFOutput_writeUInt16(out, CHARACTERID(exports[n].block));
+    SWFOutput_writeString(out, exports[n].name);
+  }
+
+  return newSWFOutputBlock(out, SWF_EXPORTASSETS);
+}

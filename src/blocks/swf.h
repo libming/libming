@@ -463,6 +463,7 @@ void SWFPlaceObject2Block_addAction(SWFPlaceObject2Block block,
   /* random blocks */
 
 typedef void *SWFOutputBlock;
+typedef void *SWFExports;
 
 SWFBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 				SWFMatrix matrix, SWFCXform cXform);
@@ -474,6 +475,7 @@ SWFBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
 SWFBlock newSWFShowFrameBlock();
 SWFBlock newSWFEndBlock();
 SWFBlock newSWFProtectBlock();
+SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
 
 
   /* SWFButton */
