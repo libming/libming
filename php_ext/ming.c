@@ -2367,12 +2367,12 @@ PHP_FUNCTION(swfmovie_output)
       php_error(E_WARNING,"compression level must be within 0..9");
       RETURN_FALSE;
     }
-    oldval = SWFMing_setSWFCompression(limit);			
+    oldval = Ming_setSWFCompression(limit);			
 	break;
   }
   out = SWFMovie_output(movie, &phpByteOutputMethod, NULL);
   if ( oldval >= -1 && oldval <= 9)
-	  SWFMing_setSWFCompression(oldval);
+	  Ming_setSWFCompression(oldval);
 
   RETURN_LONG(out);
 }
@@ -2412,7 +2412,7 @@ PHP_FUNCTION(swfmovie_saveToFile)
     	php_error(E_WARNING,"compression level must be within 0..9");
     	RETURN_FALSE;
     }
-    oldval = SWFMing_setSWFCompression(limit);
+    oldval = Ming_setSWFCompression(limit);
 	break;
   default:
 		WRONG_PARAM_COUNT;
@@ -2426,7 +2426,7 @@ PHP_FUNCTION(swfmovie_saveToFile)
 #endif
   out = SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpFileOutputMethod, what);
   if(oldval >= -1 && oldval <=9)
-	  SWFMing_setSWFCompression(oldval);
+	  Ming_setSWFCompression(oldval);
   
   RETURN_LONG(out);
 }
@@ -2460,7 +2460,7 @@ PHP_FUNCTION(swfmovie_save)
       php_error(E_WARNING,"compression level must be within 0..9");
       RETURN_FALSE;
     }
-    oldval = SWFMing_setSWFCompression(limit);
+    oldval = Ming_setSWFCompression(limit);
     break;
   default:
     WRONG_PARAM_COUNT;
@@ -2481,7 +2481,7 @@ PHP_FUNCTION(swfmovie_save)
 		                                    &phpFileOutputMethod, file);
   
     if(oldval >= -1 && oldval <=9)
-              SWFMing_setSWFCompression(oldval);
+              Ming_setSWFCompression(oldval);
     
     RETURN_LONG(retval);
   }
@@ -2499,7 +2499,7 @@ PHP_FUNCTION(swfmovie_save)
   fclose(file);
 
   if(oldval >= -1 && oldval <=9)
-	SWFMing_setSWFCompression(oldval);
+	Ming_setSWFCompression(oldval);
   
   RETURN_LONG(retval);
 }
