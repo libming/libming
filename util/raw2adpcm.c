@@ -179,15 +179,15 @@ int main(int argc, char *argv[])
 
   if (argc < 3) {
     printf("\
-%s converts a raw sound data to adpcm compressed.
-
-Usage:
-%s in out [16bit] [stereo]
-
-in     : the filename of input file, raw sound data
-out    : the filename of output file, ADPCM compressed
-16bit  : bits per sample     0=8bit 1=16bit   default=1=16bit
-stereo : number of channels  0=mono 1=stereo  default=1=stereo
+%s converts a raw sound data to adpcm compressed.\
+\
+Usage:\
+%s in out [16bit] [stereo]\
+\
+in     : the filename of input file, raw sound data\
+out    : the filename of output file, ADPCM compressed\
+16bit  : bits per sample     0=8bit 1=16bit   default=1=16bit\
+stereo : number of channels  0=mono 1=stereo  default=1=stereo\
 ", argv[0], argv[0]);
     exit(0);
   }
