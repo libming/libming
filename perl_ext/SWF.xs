@@ -17,7 +17,7 @@
 #include "swf_util.c"
 
 
-MODULE = SWF		PACKAGE = SWF		
+MODULE = SWF		PACKAGE = SWF			PREFIX = Ming_
 PROTOTYPES: ENABLE
 
 void
@@ -29,8 +29,13 @@ fileOutputMethod(b, data)
 void 
 Ming_setScale(scale)
     float scale
+
+void 
+Ming_useSWFVersion(version)
+    int version
     ALIAS:
-        SWF::setScale = 1
+        SWF::setVersion = 1
+
 
 MODULE = SWF		PACKAGE = SWF::Bitmap		PREFIX = SWFBitmap_
 
@@ -380,6 +385,42 @@ destroySWFSound(sound)
 MODULE = SWF		PACKAGE = SWF::DisplayItem	PREFIX = SWFDisplayItem_
 
 void
+SWFDisplayItem_import(pclass, ...)
+    SV *pclass
+
+    PREINIT:
+    I32 i = 0;
+    SV *caller = perl_eval_pv("scalar caller", TRUE);
+
+    CODE:
+    for(i=1; i<items; i++) {
+        my_import(pclass, caller, ST(i));
+    }
+
+I32
+constant()
+    ALIAS:
+	SWFACTION_ONLOAD = SWFACTION_ONLOAD
+     	SWFACTION_ENTERFRAME = SWFACTION_ENTERFRAME
+     	SWFACTION_UNLOAD = SWFACTION_UNLOAD
+     	SWFACTION_MOUSEMOVE = SWFACTION_MOUSEMOVE
+     	SWFACTION_MOUSEDOWN = SWFACTION_MOUSEDOWN
+     	SWFACTION_MOUSEUP = SWFACTION_MOUSEUP
+     	SWFACTION_KEYDOWN = SWFACTION_KEYDOWN
+   	SWFACTION_KEYUP = SWFACTION_KEYUP
+     	SWFACTION_DATA = SWFACTION_DATA
+    CODE:
+    RETVAL = ix;
+    OUTPUT:
+    RETVAL
+
+void 
+SWFDisplayItem_addAction(item, action, flags)
+	SWF::DisplayItem item
+	SWF::Action action
+	int flags
+
+void
 SWFDisplayItem_moveTo(item, x, y)
 	SWF::DisplayItem item
 	int x 
@@ -511,58 +552,45 @@ destroySWFShape(block)
         destroySWFShape(block);
 
 void
-SWFShape_moveTo(shape, x, y)
+SWFShape_movePenTo(shape, x, y)
 	SWF::Shape	shape
 	int	x
 	int	y
-        ALIAS:
-        SWF::Shape::movePenTo = 1
 
 void 
-SWFShape_moveToRelative(shape, x, y)
+SWFShape_movePen(shape, x, y)
         SWF::Shape shape
         int x
         int y
-        ALIAS:
-        SWF::Shape::movePen = 1
 
 void
-SWFShape_lineTo(shape, x, y)
+SWFShape_drawLineTo(shape, x, y)
 	SWF::Shape	shape
 	int	x
 	int	y
-	ALIAS:
-	SWF::Shape::drawLineTo = 1
-
 
 void
-SWFShape_lineToRelative(shape, dx, dy)
+SWFShape_drawLine(shape, dx, dy)
 	SWF::Shape	shape
 	int	dx
 	int	dy
-        ALIAS:
-        SWF::Shape::drawLine = 1
-
 
 void
-SWFShape_curveTo(shape, controlx, controly, anchorx, anchory)
+SWFShape_drawCurveTo(shape, controlx, controly, anchorx, anchory)
 	SWF::Shape	shape
 	int		controlx
 	int		controly
 	int		anchorx
 	int		anchory
-        ALIAS:
-        SWF::Shape::drawCurveTo = 1
 
 void
-SWFShape_curveToRelative(shape, controldx, controldy, anchordx, anchordy)
+SWFShape_drawCurve(shape, controldx, controldy, anchordx, anchordy)
 	SWF::Shape	shape
 	int		controldx
 	int		controldy
 	int		anchordx
 	int		anchordy
-        ALIAS:
-        SWF::Shape::drawCurve = 1
+
 
 void
 SWFShape_end(shape)
@@ -859,6 +887,8 @@ constant()
 	SWFTEXTFIELD_ALIGN_RIGHT = SWFTEXTFIELD_ALIGN_RIGHT
 	SWFTEXTFIELD_ALIGN_CENTER = SWFTEXTFIELD_ALIGN_CENTER
 	SWFTEXTFIELD_ALIGN_JUSTIFY = SWFTEXTFIELD_ALIGN_JUSTIFY
+	SWFTEXTFIELD_HTML = SWFTEXTFIELD_HTML
+	SWFTEXTFIELD_HASLENGTH = SWFTEXTFIELD_HASLENGTH
     CODE:
     RETVAL = ix;
     OUTPUT:
@@ -977,11 +1007,12 @@ SWFTextField_setAlignment(field, alignment)
 MODULE = SWF		PACKAGE = SWF::Action		PREFIX = SWFAction_
 
 SWF::Action
-SWFAction_new(package="SWF::Action", script=NULL)
+SWFAction_new(package="SWF::Action", script)
 	char *package
         char *script
 	CODE:
-        RETVAL = script ? compileSWFActionCode(script) : newSWFAction();
+	
+        RETVAL = compileSWFActionCode(script);
         ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
