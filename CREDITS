@@ -1,6 +1,9 @@
 
 All of the folks who counted bits and cleaned up the SWF File Reference.
 
+Soheil Seyfaie
+    for the Perl wrapper
+
 Wolfgang Hamann
     for many, many compiler patches
 
@@ -44,5 +47,5 @@ Steve Spicklemire
 Andy Jeffries
     for adding the overlooked saveToFile php function
 
-Iron Chef Chinese Chen Kenichi
+Iron Chef Chen Kenichi
     for everything else
