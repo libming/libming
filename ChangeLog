@@ -1,7 +1,12 @@
+2003-09-16 7:00  peterdd
+
+	* util/swftoperl.c: added buttonsound decompilation
+
 2003-09-13 11:30  peterdd
 
 	* perl_ext/Exports.c, Constants.xs, SWF/Constants.pm: added Sound-constants
 	* util/swftoperl.c: added onClipEvent decompilation
+	* util/cws2fws added, a small perlscript that decompress flash6+ files
 
 2003-08-06 17:30  erich
 
