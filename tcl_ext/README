@@ -1,0 +1,15 @@
+This is my short contribution to the ming projet.
+
+To compile : build the swing library of the parent directory 
+cd ..
+make
+cd tcl_ext
+make
+
+To test : tclsh test.tcl
+
+I use ReadHat 7.2  with tclsh8.4
+
+Have fun
+
+charles vidal
