@@ -100,8 +100,17 @@ SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
   {
     SWFShape shape = newSWFShape();
     SWFFill fill = SWFShape_addBitmapFill(shape, block, SWFFILL_TILED_BITMAP);
+
+    float width = SWFCharacter_getWidth((SWFCharacter)block);
+    float height = SWFCharacter_getHeight((SWFCharacter)block);
+
     SWFShape_setRightFill(shape, fill);
-    SWFShape_drawCharacterBounds(shape, (SWFCharacter)block);
+
+    /* bitmap's bounds aren't scaled, so drawCharacterBounds won't work */
+    SWFShape_drawLine(shape, Ming_scale*width, 0);
+    SWFShape_drawLine(shape, 0, Ming_scale*height);
+    SWFShape_drawLine(shape, -Ming_scale*width, 0);
+    SWFShape_drawLine(shape, 0, -Ming_scale*height);
 
     block = (SWFBlock)shape;
   }
