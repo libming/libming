@@ -31,6 +31,7 @@
 #include "blocks/cxform.h"
 #include "blocks/sound.h"
 #include "blocks/outputblock.h"
+#include "blocks/placeobject.h"
 
 #include "libming.h"
 #include "displaylist.h"
