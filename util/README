@@ -12,6 +12,7 @@ make swftoperl
 make all_binaries
 
 general tools:
+  makeswf - compile actionscript code into an .swf movie
   bindump - show file data in hex and binary
   hexdump - show file data in hex
 
