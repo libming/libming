@@ -160,11 +160,17 @@ class SWFDisplayItem
   void rotateTo(float degrees)
     { SWFDisplayItem_rotateTo(this->item, degrees); }
 
+  void getRotation(float *degrees)
+    { SWFDisplayItem_getRotation(this->item, degrees); }
+
   void move(float x, float y)
     { SWFDisplayItem_move(this->item, x, y); }
 
   void moveTo(float x, float y)
     { SWFDisplayItem_moveTo(this->item, x, y); }
+
+  void getPosition(float *x, float *y)
+    { SWFDisplayItem_getPosition(this->item, x, y); }
 
   void scale(float xScale, float yScale)
     { SWFDisplayItem_scale(this->item, xScale, yScale); }
@@ -178,6 +184,9 @@ class SWFDisplayItem
   void scaleTo(float scale)
     { SWFDisplayItem_scaleTo(this->item, scale, scale); }
 
+  void getScale(float *xScale, float *yScale)
+    { SWFDisplayItem_getScale(this->item, xScale, yScale); }
+
   void skewX(float skew)
     { SWFDisplayItem_skewX(this->item, skew); }
 
@@ -189,6 +198,9 @@ class SWFDisplayItem
 
   void skewYTo(float skew)
     { SWFDisplayItem_skewYTo(this->item, skew); }
+
+  void getSkew(float *xSkew, float *ySkew)
+    { SWFDisplayItem_getSkew(this->item, xSkew, ySkew); }
 
   int getDepth()
     { return SWFDisplayItem_getDepth(this->item); }

@@ -80,6 +80,15 @@ void SWFDisplayItem_addAction(SWFDisplayItem item,
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
 
+void SWFDisplayItem_getPosition(SWFDisplayItem item, float * x, 
+                                float * y);
+void SWFDisplayItem_getRotation(SWFDisplayItem item, 
+                                float * degrees);
+void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, 
+                             float * yScale);
+void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, 
+                            float * ySkew);
+
 
 struct _swfDisplayList
 {

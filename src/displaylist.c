@@ -152,6 +152,19 @@ void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
   SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
 }
 
+void SWFDisplayItem_getPosition(SWFDisplayItem item, float * x, float * y)
+{
+  checkBlock(item);
+// Allows passing one of the arguments as NULL 
+// if only one coordinate is needed
+
+  if(x != NULL) 
+    *x = item->position->x;
+
+  if(y != NULL)
+    *y = item->position->y;
+}
+
 void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees)
 {
   checkBlock(item);
@@ -166,6 +179,14 @@ void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees)
   SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
 }
 
+void SWFDisplayItem_getRotation(SWFDisplayItem item, float * degrees)
+{
+  checkBlock(item);
+
+  if(degrees != NULL)
+    *degrees = item->position->rot;
+}
+
 void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale)
 {
   checkBlock(item);
@@ -178,6 +199,18 @@ void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale)
   checkBlock(item);
   SWFPosition_scaleXYTo(item->position, xScale, yScale);
   SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
+}
+
+void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, 
+                             float * yScale)
+{
+  checkBlock(item);
+
+  if(xScale != NULL)
+    *xScale = item->position->xScale;
+
+  if(yScale != NULL)
+    *yScale = item->position->yScale;
 }
 
 void SWFDisplayItem_skewX(SWFDisplayItem item, float x)
@@ -206,6 +239,18 @@ void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
   checkBlock(item);
   SWFPosition_skewYTo(item->position, y);
   SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
+}
+
+void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, 
+                            float * ySkew)
+{
+  checkBlock(item);
+
+  if(xSkew != NULL)
+    *xSkew = item->position->xSkew;
+
+  if(ySkew != NULL)
+    *ySkew = item->position->ySkew;
 }
 
 void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b,
@@ -366,3 +411,4 @@ void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
     item = item->next;
   }
 }
+

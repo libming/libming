@@ -462,6 +462,15 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
 
+void SWFDisplayItem_getPosition(SWFDisplayItem item, float * x, 
+                                float * y);
+void SWFDisplayItem_getRotation(SWFDisplayItem item, 
+                                float * degrees);
+void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, 
+                             float * yScale);
+void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, 
+                            float * ySkew);
+
 #define SWFACTION_ONLOAD      (1<<0)
 #define SWFACTION_ENTERFRAME  (1<<1)
 #define SWFACTION_UNLOAD      (1<<2)
