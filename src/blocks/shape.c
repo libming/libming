@@ -347,7 +347,9 @@ newShapeRecord(SWFShape shape, shapeRecordType type)
 
 	shape->records[shape->nRecords].type = type;
 
-	return shape->records[shape->nRecords++];
+// this is intentional - at least one popular compiler cannot handle [shape->nRecords++]
+	shape->nRecords++;
+	return shape->records[shape->nRecords-1];
 }
 
 
