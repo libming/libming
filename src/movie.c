@@ -363,7 +363,7 @@ SWFMovie_add(SWFMovie movie, SWFBlock block)
 			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
 			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS2 )
 	{
-		block = (SWFBlock)newSWFShapeFromBitmap((SWFBitmap)block);
+		block = (SWFBlock)newSWFShapeFromBitmap((SWFBitmap)block, SWFFILL_TILED_BITMAP);
 	}
 
 	/* if it's a text object, we need to translate fonts into font characters */

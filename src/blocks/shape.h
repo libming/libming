@@ -42,8 +42,6 @@
 #define NOFILL NULL
 
 
-/* returns a shape containing the bitmap in a filled rect */
-SWFShape newSWFShapeFromBitmap(SWFBitmap bitmap);
 
 void SWFShape_addStyleHeader(SWFShape shape);
 

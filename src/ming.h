@@ -213,6 +213,11 @@ SWFLineStyle newSWFLineStyle(unsigned short width, byte r, byte g, byte b, byte 
 /***** SWFShape *****/
 
 SWFShape newSWFShape();
+/*
+ * returns a shape containing the bitmap in a filled rect
+ * flag can be SWFFILL_CLIPPED_BITMAP or SWFFILL_TILED_BITMAP
+ */
+SWFShape newSWFShapeFromBitmap(SWFBitmap bitmap, int flag);
 void destroySWFShape(SWFShape shape);
 
 void SWFShape_end(SWFShape shape);

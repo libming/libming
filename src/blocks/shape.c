@@ -194,13 +194,21 @@ newSWFShape()
 }
 
 
+/*
+ * Creates a shape filled with bitmap
+ */
 SWFShape
-newSWFShapeFromBitmap(SWFBitmap bitmap)
+newSWFShapeFromBitmap(SWFBitmap bitmap, int flag)
 {
 	SWFShape shape = newSWFShape();
 
+	if ( flag != SWFFILL_TILED_BITMAP && flag != SWFFILL_CLIPPED_BITMAP)
+	{
+		SWF_error("Invalid bitmap fill flag");
+	}
+
 	SWFFillStyle fill =
-		SWFShape_addBitmapFillStyle(shape, bitmap, SWFFILL_TILED_BITMAP);
+		SWFShape_addBitmapFillStyle(shape, bitmap, flag);
 
 	int width = SWFBitmap_getWidth(bitmap);
 	int height = SWFBitmap_getHeight(bitmap);

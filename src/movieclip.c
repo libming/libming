@@ -116,7 +116,7 @@ SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
 			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS2 )
 	{
-		block = (SWFBlock)newSWFShapeFromBitmap((SWFBitmap)block);
+		block = (SWFBlock)newSWFShapeFromBitmap((SWFBitmap)block, SWFFILL_TILED_BITMAP);
 	}
 
 	if ( SWFBlock_isCharacter(block) )
