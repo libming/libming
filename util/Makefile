@@ -42,10 +42,10 @@ listaction: blocktypes.o read.o listswf.c
 	${CC} -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
 
 swftoperl: blocktypes.o decompile.o decompile5.o read.o swftoperl.c
-	${CC} swftoperl.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm
+	${CC} swftoperl.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm -lz
 
 swftophp: blocktypes.o decompile.o decompile5.o read.o swftophp.c
-	${CC} swftophp.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm
+	${CC} swftophp.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm -lz
 
 swftopython: 
 	echo " swftopython: still not written"
@@ -71,6 +71,7 @@ png2swf: png2swf.c
 install: all_binaries
 	install -d $(BINDIR)
 	install -m 0755 swftophp $(BINDIR)
+	install -m 0755 swftoperl $(BINDIR)
 	install -m 0755 makefdb $(BINDIR)
 	install -m 0755 listfdb $(BINDIR)
 	install -m 0755 listjpeg $(BINDIR)
