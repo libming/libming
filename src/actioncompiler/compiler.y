@@ -375,20 +375,24 @@ iter_stmt
 		  bufferResolveJumps($$); }
 
 	| FOR '(' assign_stmts_opt ';' expr_opt ';' assign_stmts_opt ')' stmt
-                { bufferWriteU8($5, SWFACTION_LOGICALNOT);
-		  bufferWriteU8($5, SWFACTION_BRANCHIFTRUE);
-		  bufferWriteS16($5, 2);
-		  bufferWriteS16($5, bufferLength($9)+bufferLength($7)+5);
-		  bufferConcat($5, $9);
-		  bufferConcat($5, $7);
-		  bufferWriteU8($5, SWFACTION_BRANCHALWAYS);
-		  bufferWriteS16($5, 2);
-		  bufferWriteS16($5, -(bufferLength($5)+2));
-		  bufferResolveJumps($5);
-		  $$ = $3;
-		  if(!$$) $$ = newBuffer();
-		  bufferConcat($$, $5);
-		}
+                { if (!$5)
+                    $5 = newBuffer();
+                  else {
+                    bufferWriteU8($5, SWFACTION_LOGICALNOT);
+                    bufferWriteU8($5, SWFACTION_BRANCHIFTRUE);
+                    bufferWriteS16($5, 2);
+                    bufferWriteS16($5, bufferLength($9)+bufferLength($7)+5);
+                  }
+                  bufferConcat($5, $9);
+                  bufferConcat($5, $7);
+                  bufferWriteU8($5, SWFACTION_BRANCHALWAYS);
+                  bufferWriteS16($5, 2);
+                  bufferWriteS16($5, -(bufferLength($5)+2));
+                  resolveJumps($5);
+                  $$ = $3;
+                  if(!$$) $$ = newBuffer();
+                  bufferConcat($$, $5);
+                }
 
 	| FOR '(' identifier IN expr ')' stmt
 		{ }
