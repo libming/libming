@@ -1,0 +1,48 @@
+/* ====================================================================
+ * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the same terms as Perl itself.
+ * ====================================================================
+ *
+ * $Author$
+ * $Id$
+ */
+
+
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+
+#include "SWF.h"
+#include "perl_swf.h"
+
+
+MODULE = SWF::Morph	PACKAGE = SWF::Morph		PREFIX = SWFMorph_
+PROTOTYPES: ENABLE
+
+SWF::Morph
+SWFMorph_new(package="SWF::Morph")
+	char *package
+	CODE:
+        RETVAL = newSWFMorphShape();
+        ST(0) = sv_newmortal();
+        sv_setref_pv(ST(0), package, (void*)RETVAL);
+
+
+void
+destroySWFMorph(block)
+	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+        ALIAS:
+        SWF::Morph::DESTROY = 1
+        CODE:
+        S_DEBUG(2, fprintf(stderr, "Morph DESTROY CALLED\n"));
+        destroySWFMorph(block);
+
+
+SWF::Shape
+SWFMorph_getShape1(morph)
+	SWF::Morph	morph
+
+SWF::Shape
+SWFMorph_getShape2(morph)
+	SWF::Morph	morph
