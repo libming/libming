@@ -1,3 +1,46 @@
+2002-07-22 13:36  staybyte
+
+	* ming.h, mingpp.h, src/blocklist.c, src/blocklist.h,
+	src/blocktypes.h, src/displaylist.c, src/displaylist.h, src/fill.c,
+	src/fill.h, src/libming.h, src/ming.c, src/ming.h, src/movie.c,
+	src/movie.h, src/movieclip.c, src/movieclip.h, src/position.c,
+	src/position.h, src/shape_cubic.c, src/shape_cubic.h,
+	src/shape_util.c, src/shape_util.h, src/test.c, src/text_util.c,
+	src/text_util.h, src/actioncompiler/assembler.c,
+	src/actioncompiler/assembler.h, src/actioncompiler/compile.c,
+	src/actioncompiler/compile.h, src/actioncompiler/compileaction.c,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/browserfont.h, src/blocks/button.c, src/blocks/button.h,
+	src/blocks/character.c, src/blocks/character.h,
+	src/blocks/cxform.c, src/blocks/cxform.h, src/blocks/dbl.c,
+	src/blocks/dbl.h, src/blocks/error.c, src/blocks/error.h,
+	src/blocks/exports.h, src/blocks/fillstyle.c,
+	src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
+	src/blocks/fontinfo.c, src/blocks/fontinfo.h,
+	src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/input.c,
+	src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
+	src/blocks/libswf.h, src/blocks/linestyle.c,
+	src/blocks/linestyle.h, src/blocks/loadfont.c, src/blocks/matrix.c,
+	src/blocks/matrix.h, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/morph.c, src/blocks/morph.h, src/blocks/mp3.c,
+	src/blocks/output.c, src/blocks/output.h, src/blocks/outputblock.c,
+	src/blocks/outputblock.h, src/blocks/placeobject.c,
+	src/blocks/placeobject.h, src/blocks/read.c, src/blocks/rect.c,
+	src/blocks/rect.h, src/blocks/shape.c, src/blocks/shape.h,
+	src/blocks/sound.c, src/blocks/sound.h, src/blocks/soundinstance.c,
+	src/blocks/soundinstance.h, src/blocks/soundstream.c,
+	src/blocks/soundstream.h, src/blocks/sprite.c, src/blocks/sprite.h,
+	src/blocks/swf.h, src/blocks/text.c, src/blocks/text.h,
+	src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h: indent sources
+
+2002-07-22 13:35  staybyte
+
+	* php_ext/: ming.c, php_ming.h: add swfbutton_addsound
+
 2002-07-20 16:47  staybyte
 
 	* php_ext/ming.c: backporting from php cvs tree
