@@ -10,11 +10,7 @@
 #include "../blocks/action.h"
 #include "compile.h"
 
-extern int yydebug;
-extern char *lexBuffer;
-extern int lexBufferLen;
-
-int yyparse(void *b);
+extern int SWF_versionNum;
 
 SWFAction compileSWFActionCode(char *script)
 {
@@ -23,10 +19,20 @@ SWFAction compileSWFActionCode(char *script)
 
   /* yydebug = 1; */
 
-  parseInit(script);
+  if(SWF_versionNum == 4)
+  {
+    swf4ParseInit(script, 0);
 
-  if(yyparse((void *)&b) != 0)
-    return NULL;
+    if(swf4parse((void *)&b) != 0)
+      return NULL;
+  }
+  else
+  {
+    swf5ParseInit(script, 0);
+
+    if(swf5parse((void *)&b) != 0)
+      return NULL;
+  }
 
   output = newSWFOutput();
 
