@@ -223,6 +223,8 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 			return NULL;
 	}
 
+	SWFInput_seek(input, start, SEEK_SET);
+	
 	if ( (flags & MP3_CHANNEL) == MP3_CHANNEL_MONO )
 		channels = SWF_SOUNDSTREAM_MONO;
 	else
