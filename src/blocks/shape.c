@@ -321,6 +321,9 @@ void SWFShape_drawLine(SWFShape shape, int dx, int dy)
   if(shape->isEnded)
     return;
 
+  if(dx == 0 && dy == 0)
+    return;
+
   record = newShapeRecord(shape, SHAPERECORD_LINETO);
 
   record.record.lineTo->dx = dx;
@@ -349,6 +352,10 @@ void SWFShape_drawCurve(SWFShape shape,
   ShapeRecord record;
 
   if(shape->isEnded)
+    return;
+
+  if(controldx == 0 && controldy == 0 &&
+     anchordx == 0 && anchordy == 0)
     return;
 
   record = newShapeRecord(shape, SHAPERECORD_CURVETO);
