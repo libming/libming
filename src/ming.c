@@ -22,6 +22,11 @@ void Ming_setScale(float scale)
   Ming_scale = scale;
 }
 
+float Ming_getScale()
+{
+  return Ming_scale;
+}
+
 void Ming_setCubicThreshold(int num)
 {
   Ming_cubicThreshold = num;
