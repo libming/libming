@@ -51,5 +51,5 @@ jswf.jar: $(patsubst %.java,%.class,${SRCS})
 	$(JAR) cvf jswf.jar $+
 
 clean:
-	rm *.class *.jar
+	rm -f *.class *.jar
 
