@@ -3,6 +3,10 @@
  */
 
 
+2002-07-03 16:10  staybyte
+
+	* HISTORY: move CHANGES to HISTORY
+
 2002-02-02 12:35  erich
 
 	* java_ext/native/SWFNative.cc: fixed rotateTo, thanks to Tod E.
