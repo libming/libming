@@ -590,7 +590,8 @@ int SWFShape_getScaledPenY(SWFShape shape)
 
 #include "read.c"
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
+void SWFShape_drawScaledGlyph(SWFShape shape,
+			      SWFFont font, unsigned char c, int size)
 {
   byte *p = SWFFont_findCharacterGlyph(font, c);
   byte **f = &p;
@@ -612,8 +613,8 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
   if(readBits(f, 4) != 0) /* line bits */
     SWF_error("SWFShape_drawGlyph: was expecting line bits = 0");
 
-  /* now we get to parse the shape commands.  Oh boy. */
-  /* the first one will be a non-edge block- grab the moveto loc */
+  /* now we get to parse the shape commands.  Oh boy.
+     the first one will be a non-edge block- grab the moveto loc */
 
   readBits(f, 6); /* type 0, etc. */
 
@@ -621,10 +622,10 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
   x = readSBits(f, moveBits);
   y = readSBits(f, moveBits);
 
-  SWFShape_moveScaledPenTo(shape, x+startX, y+startY);
+  SWFShape_moveScaledPenTo(shape, startX + x*size/1024, startY + y*size/1024);
 
   if(readBits(f, 1) != 1) /* fill1 = 1 */
-    SWF_error("SWFShape_drawCharacter says: oops.  Was expecting fill1 = 1.");
+    SWF_error("SWFShape_drawGlyph: was expecting fill1 = 1.");
 
   /* translate the glyph's shape records into drawing commands */
 
@@ -641,7 +642,9 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
       x = readSBits(f, moveBits);
       y = readSBits(f, moveBits);
 
-      SWFShape_moveScaledPenTo(shape, x+startX, y+startY);
+      SWFShape_moveScaledPenTo(shape,
+			       startX + x*size/1024, startY + y*size/1024);
+
       continue;
     }
 
@@ -655,13 +658,13 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
 	x = readSBits(f, numBits);
 	y = readSBits(f, numBits);
 
-	SWFShape_drawScaledLine(shape, x, y);
+	SWFShape_drawScaledLine(shape, x*size/1024, y*size/1024);
       }
       else
 	if(readBits(f, 1)) /* vert = 1 */
-	  SWFShape_drawScaledLine(shape, 0, readSBits(f, numBits));
+	  SWFShape_drawScaledLine(shape, 0, readSBits(f, numBits)*size/1024);
 	else
-	  SWFShape_drawScaledLine(shape, readSBits(f, numBits), 0);
+	  SWFShape_drawScaledLine(shape, readSBits(f, numBits)*size/1024, 0);
     }
     else
     {
@@ -670,7 +673,9 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
       int anchorX = readSBits(f, numBits);
       int anchorY = readSBits(f, numBits);
 
-      SWFShape_drawScaledCurve(shape, controlX, controlY, anchorX, anchorY);
+      SWFShape_drawScaledCurve(shape,
+			       controlX*size/1024, controlY*size/1024,
+			       anchorX*size/1024, anchorY*size/1024);
     }
   }
 

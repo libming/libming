@@ -324,7 +324,8 @@ void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
 void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
 			      int anchordx, int anchordy);
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
+void SWFShape_drawScaledGlyph(SWFShape shape,
+			      SWFFont font, unsigned char c, int size);
 
 
 /* deprecated: */
