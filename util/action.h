@@ -70,6 +70,7 @@ typedef enum
   SWFACTION_RETURN                  = 0x3E,
   SWFACTION_MODULO                  = 0x3F,
   SWFACTION_NEW                     = 0x40,
+  SWFACTION_NEWMETHOD               = 0x53,
   SWFACTION_VAR                     = 0x41,
   SWFACTION_INITARRAY               = 0x42,
   SWFACTION_INITOBJECT              = 0x43,

@@ -917,6 +917,9 @@ int printActionRecord(FILE *f)
     case SWFACTION_NEW:
       println("New");
       break;
+    case SWFACTION_NEWMETHOD:
+      println("NewMethod");
+      break;
     case SWFACTION_TYPEOF:
       println("Typeof");
       break;
