@@ -5,8 +5,11 @@ require 't/config.pl';
 
 my $s = new SWF::Shape();
 
+my $filename = ming_dir() . '/examples/common/backyard.jpg';
+skip_test() unless (-e $filename);
+
 eval{
-    my $b = new SWF::Bitmap(ming_dir() . '/examples/common/backyard.jpg');
+    my $b = new SWF::Bitmap($filename);
     my $f = $s->addFill($b);
     $s->setRightFill($f);
 };

@@ -4,9 +4,12 @@ use SWF qw(:ALL);
 #use SWF;
 require 't/config.pl';
 
+my $filename = ming_dir() . '/examples/common/distortobass.mp3';
+skip_test() unless (-e $filename);
+
 my $movie = new SWF::Movie();
 $movie->setRate(12.0);
-my $sound = new SWF::Sound(ming_dir() . '/examples/common/distortobass.mp3');
+my $sound = new SWF::Sound($filename);
 ok();
 
 eval{

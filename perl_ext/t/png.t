@@ -3,9 +3,12 @@ BEGIN { $| = 1; print "1..1\n"; }
 use SWF qw(Shape Bitmap);
 require 't/config.pl';
 
+my $filename = ming_dir() . "/examples/common/png.dbl";
+skip_test() unless (-e $filename);
+
 eval{
     my $s = new SWF::Shape();
-    my $b = new SWF::Bitmap(ming_dir()."/examples/common/png.dbl");
+    my $b = new SWF::Bitmap($filename);
     my $f = $s->addFill($b);
     $s->setRightFill($f);
     
