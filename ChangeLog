@@ -1,3 +1,8 @@
+2003-09-13 11:30  peterdd
+
+	* perl_ext/Exports.c, Constants.xs, SWF/Constants.pm: added Sound-constants
+	* util/swftoperl.c: added onClipEvent decompilation
+
 2003-08-06 17:30  erich
 
 	* ming.i: update for swig1.3 (jtittsler)
@@ -18,7 +23,7 @@
 2003-04-10 04:40  peterdd
 
 	* src/blocks/morph.c: fixed a bug that slipped in with rev.1.9	
-   (thanks Olivier Matthey)
+	(thanks Olivier Matthey)
 	* perl_ext/SWF.pm: set ming-perl version to 0.3a-dev
 	 
 2003-03-28 22:16  whamann
