@@ -95,6 +95,9 @@ SWFFont_getCharacterKern(SWFFont font, unsigned short c1, unsigned short c2);
 SWFFontCharacter
 newSWFFontCharacter(SWFFont font);
 
+SWFFontCharacter
+newSWFDummyFontCharacter();
+
 void
 destroySWFFontCharacter(SWFBlock block);
 
@@ -103,7 +106,13 @@ SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
 			     unsigned short start, unsigned short end);
 
 void
-SWFFontCharacter_addChars(SWFFontCharacter font, unsigned short *string, int len);
+SWFFontCharacter_addWideChars(SWFFontCharacter font, unsigned short *string, int len);
+
+void
+SWFFontCharacter_addChars(SWFFontCharacter font, const char *string);
+
+void
+SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string);
 
 SWFFont
 SWFFontCharacter_getFont(SWFFontCharacter font);

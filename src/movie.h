@@ -93,4 +93,6 @@ SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int lev
 int
 SWFMovie_save(SWFMovie movie, const char *filename, int level);
 
+SWFCharacter
+SWFMovie_importChar(SWFMovie movie, const char *filename, const char *name);
 #endif /* MING_MOVIE_H_INCLUDED */

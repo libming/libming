@@ -56,4 +56,4 @@ clean:
 #	${CC} ${FLAGS} -c $<
 
 test: static test.o
-	${CC} -o test test.o libming.a ${LDFLAGS}
+	${CC} -o test test.o libming.a  ${EXTRA_LIBS} ${LDFLAGS}

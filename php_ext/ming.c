@@ -46,6 +46,7 @@ static SWFGradient getGradient(zval *id TSRMLS_DC);
 static SWFBitmap getBitmap(zval *id TSRMLS_DC);
 static SWFShape getShape(zval *id TSRMLS_DC);
 static SWFFont getFont(zval *id TSRMLS_DC);
+static SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC);
 static SWFText getText(zval *id TSRMLS_DC);
 static SWFTextField getTextField(zval *id TSRMLS_DC);
 static SWFDisplayItem getDisplayItem(zval *id TSRMLS_DC);
@@ -122,6 +123,7 @@ static int le_swffillp;
 static int le_swfgradientp;
 static int le_swfbitmapp;
 static int le_swffontp;
+static int le_swffontcharp;
 static int le_swftextp;
 static int le_swftextfieldp;
 static int le_swfdisplayitemp;
@@ -139,6 +141,7 @@ zend_class_entry fill_class_entry;
 zend_class_entry gradient_class_entry;
 zend_class_entry bitmap_class_entry;
 zend_class_entry font_class_entry;
+zend_class_entry fontchar_class_entry;
 zend_class_entry text_class_entry;
 zend_class_entry textfield_class_entry;
 zend_class_entry displayitem_class_entry;
@@ -194,6 +197,8 @@ SWFCharacter getCharacter(zval *id TSRMLS_DC)
     return (SWFCharacter)getShape(id TSRMLS_CC);
   else if(Z_OBJCE_P(id) == &font_class_entry)
     return (SWFCharacter)getFont(id TSRMLS_CC);
+  else if(Z_OBJCE_P(id) == &fontchar_class_entry)
+    return (SWFCharacter)getFontCharacter(id TSRMLS_CC);
   else if(Z_OBJCE_P(id) == &text_class_entry)
     return (SWFCharacter)getText(id TSRMLS_CC);
   else if(Z_OBJCE_P(id) == &textfield_class_entry)
@@ -1267,6 +1272,67 @@ PHP_FUNCTION(swffill_skewYTo)
 /* }}} */
 
 /* }}} */
+/* {{{ SWFFontCharacter */
+
+static zend_function_entry swffontchar_functions[] = {
+  PHP_FALIAS(addchars,         swffontchar_addChars,      NULL)
+  PHP_FALIAS(addutf8chars,     swffontchar_addUTF8Chars,  NULL)
+  { NULL, NULL, NULL }
+};
+
+/* {{{ internal function SWFText getFont(zval *id)
+   Returns the Font object in zval *id */
+
+static
+SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC)
+{
+  void *font = SWFgetProperty(id, "fontcharacter", 13, le_swffontcharp TSRMLS_CC);
+
+  if(!font)
+    php_error(E_ERROR, "called object is not an SWFFontCharacter!");
+
+  return (SWFFontCharacter)font;
+}
+
+static void destroy_SWFFontCharacter_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+  destroySWFBlock((SWFBlock)resource->ptr);
+}
+
+/* {{{ proto void swffontchar_addChars(string)
+   adds characters to a font for exporting font */
+
+PHP_FUNCTION(swffontchar_addChars)
+{
+  zval **zstring;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  SWFFontCharacter_addChars(getFontCharacter(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+}
+/* }}} */
+/* {{{ proto void swffontchar_addChars(string)
+   adds characters to a font for exporting font */
+
+PHP_FUNCTION(swffontchar_addUTF8Chars)
+{
+  zval **zstring;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  SWFFontCharacter_addUTF8Chars(getFontCharacter(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+}
+/* }}} */
+
+/* }}} */
 /* {{{ SWFFont */
 
 static zend_function_entry swffont_functions[] = {
@@ -1808,6 +1874,9 @@ static zend_function_entry swfmovie_functions[] = {
   PHP_FALIAS(writeexports,      swfmovie_writeExports,      NULL)
   PHP_FALIAS(startsound,        swfmovie_startSound,        NULL)
   PHP_FALIAS(stopsound,         swfmovie_stopSound,         NULL)
+  PHP_FALIAS(importchar,        swfmovie_importChar,        NULL)
+  PHP_FALIAS(importfont,        swfmovie_importFont,        NULL)
+  PHP_FALIAS(addfont,           swfmovie_addFont,           NULL)
   { NULL, NULL, NULL }
 };
 
@@ -1838,7 +1907,6 @@ PHP_FUNCTION(swfmovie_init)
   zend_list_addref(ret);
 }
 
-
 static void destroy_SWFMovie_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
 {
   destroySWFMovie((SWFMovie)resource->ptr);
@@ -1858,6 +1926,80 @@ SWFMovie getMovie(zval *id TSRMLS_DC)
 }
 
 /* }}} */
+	
+
+PHP_FUNCTION(swfmovie_importChar)
+{
+	SWFMovie movie;
+	SWFCharacter res;
+	int ret;
+	zval **libswf, **name;
+
+	if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &libswf, &name) == FAILURE)
+		WRONG_PARAM_COUNT;
+	convert_to_string_ex(libswf);
+	convert_to_string_ex(name);
+	movie = getMovie(getThis() TSRMLS_CC);
+	res = SWFMovie_importCharacter(movie, Z_STRVAL_PP(libswf), Z_STRVAL_PP(name));
+
+	if(res != NULL)
+	{
+		/* try and create a sprite object */
+    	ret = zend_list_insert(res, le_swfspritep);
+		object_init_ex(return_value, &sprite_class_entry);
+		add_property_resource(return_value, "sprite", ret);
+	}	
+}
+
+PHP_FUNCTION(swfmovie_addFont)
+{
+	SWFMovie movie;
+	SWFFontCharacter res;
+	int ret;
+	SWFFont font;
+	zval **zfont;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zfont) == FAILURE)
+	    WRONG_PARAM_COUNT;
+
+	convert_to_object_ex(zfont);
+
+	movie = getMovie(getThis() TSRMLS_CC);
+	font = getFont(*zfont TSRMLS_CC);
+	res = SWFMovie_addFont(movie, font);
+
+	if(res != NULL)
+	{
+		/* try and create a fontchar object */
+    	ret = zend_list_insert(res, le_swffontcharp);
+		object_init_ex(return_value, &fontchar_class_entry);
+		add_property_resource(return_value, "fontcharacter", ret);
+	}	
+}
+
+PHP_FUNCTION(swfmovie_importFont)
+{
+	SWFMovie movie;
+	SWFFontCharacter res;
+	int ret;
+	zval **libswf, **name;
+
+	if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &libswf, &name) == FAILURE)
+		WRONG_PARAM_COUNT;
+	convert_to_string_ex(libswf);
+	convert_to_string_ex(name);
+	movie = getMovie(getThis() TSRMLS_CC);
+	res = SWFMovie_importFont(movie, Z_STRVAL_PP(libswf), Z_STRVAL_PP(name));
+
+	if(res != NULL)
+	{
+		/* try and create a fontchar object */
+    	ret = zend_list_insert(res, le_swffontcharp);
+		object_init_ex(return_value, &fontchar_class_entry);
+		add_property_resource(return_value, "fontcharacter", ret);
+	}	
+}
+
 /* {{{ swfmovie_nextframe */
 
 PHP_FUNCTION(swfmovie_nextFrame)
@@ -3391,6 +3533,17 @@ static SWFTextField getTextField(zval *id TSRMLS_DC)
 /* }}} */
 /* {{{ proto void swftextfield_setFont(int font)
    Sets the font for this textfield */
+static
+SWFCharacter getFontOrFontChar(zval *id TSRMLS_DC)
+{
+	if(Z_OBJCE_P(id) == &font_class_entry)
+		return (SWFCharacter)getFont(id TSRMLS_CC);
+	else if(Z_OBJCE_P(id) == &fontchar_class_entry)
+		return (SWFCharacter)getFontCharacter(id TSRMLS_CC);
+	else
+		php_error(E_ERROR, "called object is not an SWFFont or SWFFontCharacter");
+	return NULL;
+}
 
 PHP_FUNCTION(swftextfield_setFont)
 {
@@ -3401,8 +3554,8 @@ PHP_FUNCTION(swftextfield_setFont)
     WRONG_PARAM_COUNT;
 
   convert_to_object_ex(font);
+    SWFTextField_setFont(field, getFontOrFontChar(*font TSRMLS_CC));
 
-  SWFTextField_setFont(field, getFont(*font TSRMLS_CC));
 }
 
 /* }}} */
@@ -3790,6 +3943,7 @@ PHP_MINIT_FUNCTION(ming)
   le_swftextp = zend_register_list_destructors_ex(destroy_SWFText_resource, NULL, "SWFText", module_number);
   le_swftextfieldp = zend_register_list_destructors_ex(destroy_SWFTextField_resource, NULL, "SWFTextField", module_number);
   le_swffontp = zend_register_list_destructors_ex(destroy_SWFFont_resource, NULL, "SWFFont", module_number);
+  le_swffontcharp = zend_register_list_destructors_ex(destroy_SWFFontCharacter_resource, NULL, "SWFFontCharacter", module_number);
   le_swfbuttonp = zend_register_list_destructors_ex(destroy_SWFButton_resource, NULL, "SWFButton", module_number);
   le_swfmorphp = zend_register_list_destructors_ex(destroy_SWFMorph_resource, NULL, "SWFMorph", module_number);
   le_swfspritep = zend_register_list_destructors_ex(destroy_SWFSprite_resource, NULL, "SWFSprite", module_number);
@@ -3809,6 +3963,7 @@ PHP_MINIT_FUNCTION(ming)
   INIT_CLASS_ENTRY(textfield_class_entry, "swftextfield",
 		   swftextfield_functions);
   INIT_CLASS_ENTRY(font_class_entry, "swffont", swffont_functions);
+  INIT_CLASS_ENTRY(fontchar_class_entry, "swffontcharacter", swffontchar_functions);
   INIT_CLASS_ENTRY(displayitem_class_entry, "swfdisplayitem",
 		   swfdisplayitem_functions);
   INIT_CLASS_ENTRY(movie_class_entry, "swfmovie", swfmovie_functions);
@@ -3826,6 +3981,7 @@ PHP_MINIT_FUNCTION(ming)
   zend_register_internal_class(&text_class_entry TSRMLS_CC);
   zend_register_internal_class(&textfield_class_entry TSRMLS_CC);
   zend_register_internal_class(&font_class_entry TSRMLS_CC);
+  zend_register_internal_class(&fontchar_class_entry TSRMLS_CC);
   zend_register_internal_class(&displayitem_class_entry TSRMLS_CC);
   zend_register_internal_class(&movie_class_entry TSRMLS_CC);
   zend_register_internal_class(&button_class_entry TSRMLS_CC);

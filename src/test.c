@@ -292,23 +292,65 @@ void testShape(SWFMovie movie)
 }
 
 /* }}} */
+/* {{{ testImport */
+
+void testImport(SWFMovie movie)
+{
+  int i;
+  SWFDisplayItem d;
+  SWFCharacter s = SWFMovie_importCharacter(movie, "library.swf", "square");
+
+  d = SWFMovie_add(movie, s);
+
+/*  for(i=0; i<45; ++i)
+  {
+    SWFDisplayItem_rotate(d, 360/45);
+    SWFDisplayItem_move(d, 160*20, 120*20);
+    SWFMovie_nextFrame(movie);
+    SWFDisplayItem_move(d, -160*20, -120*20);
+  }*/
+}
+
+/* }}} */
+/* {{{ testImportFont */
+
+void testImportFont(SWFMovie movie)
+{
+  SWFCharacter f = SWFMovie_importFont(movie, "emfonts.swf", "Arial");
+//  SWFCharacter f = SWFMovie_importFont(movie, "lib.swf", "myfont");
+  SWFTextField t = newSWFTextField();
+  SWFDisplayItem d;
+
+  SWFTextField_setFlags(t, SWFTEXTFIELD_DRAWBOX|SWFTEXTFIELD_HTML|SWFTEXTFIELD_USEFONT);
+  SWFTextField_setFont(t, f);
+  SWFTextField_setHeight(t, 24);
+  SWFTextField_setColor(t, 0, 0, 0, 0xff);
+  SWFTextField_setBounds(t, 200, 24);
+//  SWFTextField_addString(t, "<font face=\"AmericanUncD\">test</font>");
+
+  d = SWFMovie_add(movie, (SWFCharacter)t);
+  SWFDisplayItem_move(d, 10, 100);
+}
 /* {{{ testMp3 */
 
 void testMp3(SWFMovie movie)
 {
   FILE *f;
   SWFSoundStream sound;
+  int n;
 
-  if(!(f = fopen("test.mp3", "rb")))
+  if(!(f = fopen("/mnt/progs/ming-examples/common/distortobass.mp3", "rb")))
   {
     printf("Couldn't find test.mp3 file\n");
     exit(1);
   }
 
   sound = newSWFSoundStream(f);
-
   SWFMovie_setSoundStream(movie, sound);
-  SWFMovie_setNumberOfFrames(movie, 200);
+  n = SWFSoundStream_getFrames(sound);
+printf ("frames %d\n", n);
+n = 160;
+  SWFMovie_setNumberOfFrames(movie, n);
 }
 
 /* }}} */
@@ -367,7 +409,7 @@ void testSound2(SWFMovie movie)
 int main(int argc, char *argv[])
 {
   FILE *f;
-  SWFMovie m = newSWFMovie();
+  SWFMovie m = newSWFMovieWithVersion(6);
   int length;
 
   Ming_init();
@@ -376,7 +418,7 @@ int main(int argc, char *argv[])
 
   f = fopen("test.swf", "wb");
 
-  SWFMovie_setRate(m, 12.0);
+  SWFMovie_setRate(m, 15.0);
   SWFMovie_setDimension(m, WIDTH, HEIGHT);
   SWFMovie_setNumberOfFrames(m, 1);
 
@@ -385,13 +427,15 @@ int main(int argc, char *argv[])
   //testMorph(m);
   //testShape(m);
   //testText(m);
-  testSound2(m);
+  //testSound2(m);
   //testDBL(m);
   //testJpeg(m);
   //testJpegAlpha(m);
   //testMp3(m);
+  //testImport(m);
+  testImportFont(m);
 
-  length = SWFMovie_output(m, fileOutputMethod, f, 0);
+  length = SWFMovie_output(m, fileOutputMethod, f, -1);
   destroySWFMovie(m);
 
   printf("%i bytes written\n", length);

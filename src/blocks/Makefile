@@ -18,6 +18,7 @@ OFILES = \
 	font.o \
 	fontinfo.o \
 	gradient.o \
+	imports.o \
 	input.o \
 	jpeg.o \
 	linestyle.o \

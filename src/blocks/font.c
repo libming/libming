@@ -397,7 +397,25 @@ newSWFFontCharacter(SWFFont font)
 	return inst;
 }
 
+extern completeSWFImportCharacter(SWFBlock block);
 
+SWFFontCharacter
+newSWFDummyFontCharacter()
+{	SWFFontCharacter ret = (SWFFontCharacter) malloc(sizeof (struct SWFFontCharacter_s));
+	SWFCharacterInit((SWFCharacter) ret);
+	BLOCK(ret)->type = SWF_DEFINEFONT;
+	BLOCK(ret)->complete = completeSWFImportCharacter;
+	BLOCK(ret)->writeBlock = NULL;
+	BLOCK(ret)->dtor = NULL;
+	CHARACTERID(ret) = ++SWF_gNumCharacters;
+	
+	ret->flags = SWF_FONT_HASLAYOUT;
+	ret->nGlyphs = 1;
+	ret->codeTable = NULL;
+	
+	return ret;
+}
+	
 static void
 SWFFont_buildReverseMapping(SWFFont font)
 {
@@ -539,12 +557,28 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 }
 
 void
-SWFFontCharacter_addChars(SWFFontCharacter font, unsigned short *string, int len)
+SWFFontCharacter_addWideChars(SWFFontCharacter font, unsigned short *string, int len)
 {
 	while(--len >= 0)
 		SWFFontCharacter_addCharToTable(font, *string++);
 }
 
+void
+SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string)
+{
+	unsigned short *widestring;
+	int len;
+	len = UTF8ExpandString(string, &widestring);
+	SWFFontCharacter_addWideChars(font, widestring, len);
+	free(widestring);
+}
+
+void
+SWFFontCharacter_addChars(SWFFontCharacter font, const char *string)
+{
+	while(*string)
+		SWFFontCharacter_addCharToTable(font, *string++ & 0xff);
+}
 
 SWFFont
 SWFFontCharacter_getFont(SWFFontCharacter font)

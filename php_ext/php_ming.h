@@ -81,6 +81,9 @@ PHP_FUNCTION(swfmovie_addExport);
 PHP_FUNCTION(swfmovie_writeExports);
 PHP_FUNCTION(swfmovie_startSound);
 PHP_FUNCTION(swfmovie_stopSound);
+PHP_FUNCTION(swfmovie_importChar);
+PHP_FUNCTION(swfmovie_importFont);
+PHP_FUNCTION(swfmovie_addFont);
 
 PHP_FUNCTION(swfsprite_init);
 PHP_FUNCTION(swfsprite_add);
@@ -132,6 +135,9 @@ PHP_FUNCTION(swftextfield_setName);
 PHP_FUNCTION(swftextfield_addString);
 PHP_FUNCTION(swftextfield_setPadding);
 PHP_FUNCTION(swftextfield_addChars);
+
+PHP_FUNCTION(swffontchar_addChars);
+PHP_FUNCTION(swffontchar_addUTF8Chars);
 
 PHP_FUNCTION(swfdisplayitem_move);
 PHP_FUNCTION(swfdisplayitem_moveTo);

@@ -33,7 +33,7 @@ struct SWFTextField_s
 
 	SWFOutput out; /* cheap way out */
 	int flags;
-	BOOL isBrowserFont, isFontChar;
+	enum {Unresolved, BrowserFont, Font, FontChar, Imported} fonttype;
 
 	union
 	{
@@ -127,7 +127,11 @@ completeSWFTextField(SWFBlock block)
 	SWFOutput_writeRect(out, CHARACTER(field)->bounds);
 
 // fix flags here...
-	if(!field->isBrowserFont)
+	if(field->fonttype == Imported)
+	{	if(!field->font.fontchar)
+			SWF_error("no font given for textfield\n");
+	}
+	else if(field->fonttype != BrowserFont)
 	{	if(!field->font.fontchar)
 			SWF_error("no font given for textfield\n");
 		else if((SWFFont_getFlags(SWFFontCharacter_getFont(field->font.fontchar)) & SWF_FONT_HASLAYOUT) == 0 ||
@@ -219,8 +223,7 @@ newSWFTextField()
 	field->flags = 0x302d;
 
 	field->font.font = NULL;
-	field->isBrowserFont = FALSE;
-	field->isFontChar = FALSE;
+	field->fonttype = 0;
 	field->varName = NULL;
 	field->string = NULL;
 
@@ -241,35 +244,50 @@ newSWFTextField()
 	return field;
 }
 
-
+/* font machinery:
+	if a regular font (outlines in fdb) is used, it is added to the textfield
+	as type Font and later converted to a FontChar
+	while a Font, characters can be added (embedded)
+	an Imported font stays as is, so does a BrowserFont
+ */
 void
 SWFTextField_setFont(SWFTextField field, SWFBlock font)
 {	
 	if ( BLOCK(font)->type == SWF_DEFINEEDITTEXT )
 	{
-		field->isBrowserFont = TRUE;
+		field->fonttype = BrowserFont;
 		field->font.browserFont = (SWFBrowserFont)font;
+		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
+	}
+	else if ( BLOCK(font)->type == SWF_DEFINEFONT )
+	{
+		field->fonttype = Imported;
+		field->font.fontchar = (SWFFontCharacter)font;
 		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
 	}
 	else
 	{
-		field->isBrowserFont = FALSE;
+		field->fonttype = Font;
 		field->font.font = (SWFFont)font;
 	}
 }
 
 SWFFont
 SWFTextField_getUnresolvedFont(SWFTextField field)
-{	if((!field->isBrowserFont) && (!field->isFontChar))
-		return field->font.font;
-	return NULL;
+{	switch(field->fonttype)
+	{	case Font:
+			return field->font.font;
+		default:
+			return NULL;
+	}
 }
+
 
 void
 SWFTextField_addChars(SWFTextField field, const char *string)
 {
 	int n, len = strlen(string);
-	if((!field->isBrowserFont) && field->font.font &&
+	if((field->fonttype == Font) && field->font.font &&
 	 (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + len) * 2);
@@ -284,7 +302,7 @@ SWFTextField_addUTF8Chars(SWFTextField field, const char *string)
 {
 	unsigned short *widestring;
 	int n, len;
-	if((!field->isBrowserFont) && field->font.font &&
+	if((field->fonttype == Font) && field->font.font &&
 	 (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
 	{	len = UTF8ExpandString(string, &widestring);
 		field->embeds = (unsigned short *)realloc(
@@ -296,11 +314,16 @@ SWFTextField_addUTF8Chars(SWFTextField field, const char *string)
 	}
 }
 
+/*
+	this is called when the textfield is added to the movie,
+	so no more changes to it from that point
+	other type may still add characters to the fontchar
+ */
 void SWFTextField_setFontCharacter(SWFTextField field, SWFFontCharacter fontchar)
 {
-	field->isFontChar = TRUE;
+	field->fonttype = FontChar;
 	field->font.fontchar = fontchar;
-	SWFFontCharacter_addChars(fontchar, field->embeds, field->embedlen);
+	SWFFontCharacter_addWideChars(fontchar, field->embeds, field->embedlen);
 }
 	
 void
@@ -366,7 +389,7 @@ SWFTextField_addString(SWFTextField field, const char *string)
 	l = strlen(string);
 
 	SWFTextField_addStringOnly(field, string);
-	if((field->flags & SWFTEXTFIELD_USEFONT) && !field->isBrowserFont &&
+	if((field->flags & SWFTEXTFIELD_USEFONT) && (field->fonttype == FontChar) &&
 	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + l) * 2);
@@ -382,7 +405,7 @@ SWFTextField_addUTF8String(SWFTextField field, const char *string)
 	int l, n;
 
 	SWFTextField_addStringOnly(field, string);
-	if((field->flags & SWFTEXTFIELD_USEFONT) && !field->isBrowserFont &&
+	if((field->flags & SWFTEXTFIELD_USEFONT) && (field->fonttype == FontChar) &&
 	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
 	{	l = UTF8ExpandString(string, &widestring);
 		field->embeds = (unsigned short *)realloc(

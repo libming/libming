@@ -29,6 +29,7 @@
 #include "shape_util.h"
 
 #include "blocks/exports.h"
+#include "blocks/imports.h"
 #include "blocks/rect.h"
 
 
@@ -55,6 +56,10 @@ struct SWFMovie_s
 	/* export items */
 	int nExports;
 	struct SWFExport_s *exports;
+
+	/* import items */
+	int nImports;
+	struct SWFImportBlock_s **imports;
 
 	/* list of fonts used in this movie */
 	int nFonts;
@@ -95,6 +100,9 @@ destroySWFMovie(SWFMovie movie)
 	if ( movie->fonts != NULL )
 		free(movie->fonts);
 
+	if (movie->imports)
+		free(movie->imports);
+
 	free(movie);
 }
 
@@ -114,6 +122,9 @@ newSWFMovieWithVersion(int version)
 
 	movie->nExports = 0;
 	movie->exports = NULL;
+
+	movie->nImports = 0;
+	movie->imports = NULL;
 
 	movie->nFonts = 0;
 	movie->fonts = NULL;
@@ -173,6 +184,25 @@ SWFMovie_protect(SWFMovie movie)
 	SWFMovie_addBlock(movie, newSWFProtectBlock());
 }
 
+SWFFontCharacter
+SWFMovie_addFont(SWFMovie movie, SWFFont font)
+{
+	SWFFontCharacter fontchar;
+	int i;
+	
+	for( i = 0 ; i < movie->nFonts ; i++ )
+	{	fontchar = movie->fonts[i];
+		if ( SWFFontCharacter_getFont(fontchar) == font )
+			return fontchar;
+	}
+	movie->fonts = (SWFFontCharacter*)realloc(movie->fonts,
+					 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
+	fontchar = newSWFFontCharacter(font);
+	movie->fonts[movie->nFonts++] = fontchar;
+	SWFMovie_addBlock(movie, (SWFBlock)fontchar);
+	return fontchar;
+}
+
 
 static void
 SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
@@ -185,31 +215,10 @@ SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
 	while ( record != NULL )
 	{
 		SWFFont font = SWFTextRecord_getUnresolvedFont(record);
-		int i;
 
 		if ( font != NULL )
-		{
-			for ( i = 0; i < movie->nFonts; ++i )
-			{
-				fontchar = movie->fonts[i];
-
-				if ( SWFFontCharacter_getFont(fontchar) == font )
-				{
-					SWFTextRecord_setFontCharacter(record, fontchar);
-					break;
-				}
-			}
-
-			if ( i == movie->nFonts )
-			{
-				movie->fonts = (SWFFontCharacter*)realloc(movie->fonts,
-														 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
-
-				fontchar = newSWFFontCharacter(font);
-				movie->fonts[movie->nFonts++] = fontchar;
-				SWFTextRecord_setFontCharacter(record, fontchar);
-				SWFMovie_addBlock(movie, (SWFBlock)fontchar);
-			}
+		{	fontchar = SWFMovie_addFont(movie, font);
+			SWFTextRecord_setFontCharacter(record, fontchar);
 		}
 	
 		record = SWFTextRecord_getNextRecord(record);
@@ -222,28 +231,10 @@ SWFMovie_resolveTextfieldFont(SWFMovie movie, SWFTextField field)
 	// given a font used for a text field, add it to the movie
 	SWFFontCharacter fontchar;
 	SWFFont font = SWFTextField_getUnresolvedFont(field);
-	int i;
+
 	if ( font != NULL )
-	{
-		for( i = 0 ; i < movie->nFonts ; i++ )
-		{	fontchar = movie->fonts[i];
-			if ( SWFFontCharacter_getFont(fontchar) == font )
-			{	SWFTextField_setFontCharacter(field, fontchar);
-				break;
-			}
-		}
-
-		if( i == movie->nFonts )
-		{
-			movie->fonts = (SWFFontCharacter*)realloc(movie->fonts,
-														 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
-
-			fontchar = newSWFFontCharacter(font);
-			movie->fonts[movie->nFonts++] = fontchar;
-			SWFTextField_setFontCharacter(field, fontchar);
-			SWFMovie_addBlock(movie, (SWFBlock)fontchar);
-		}
-
+	{	fontchar = SWFMovie_addFont(movie, font);
+		SWFTextField_setFontCharacter(field, fontchar);
 	}
 }
 
@@ -260,19 +251,22 @@ SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
 void
 SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 {
-	if ( SWFBlock_getType(block) == SWF_DEFINESPRITE )
-	{
-		movie->exports = (struct SWFExport_s*)realloc(movie->exports,
+	switch( SWFBlock_getType(block))
+	{	case SWF_DEFINESPRITE:
+		case SWF_DEFINEFONT2:
+			movie->exports = (struct SWFExport_s*)realloc(movie->exports,
 														 (movie->nExports+1) * sizeof(struct SWFExport_s));
 
-		movie->exports[movie->nExports].block = block;
-		movie->exports[movie->nExports].name = strdup(name);
-
-		++movie->nExports;
+			movie->exports[movie->nExports].block = block;
+			movie->exports[movie->nExports].name = strdup(name);
+			++movie->nExports;
+		default:
+			break;
 	}
 }
 
-
+static void
+SWFMovie_addCharacterDependencies(SWFMovie movie, SWFCharacter character);
 static void
 SWFMovie_addDependency(SWFMovie movie, SWFCharacter character)
 {
@@ -284,6 +278,10 @@ SWFMovie_addDependency(SWFMovie movie, SWFCharacter character)
 	else if ( SWFBlock_getType((SWFBlock)character) == SWF_DEFINEEDITTEXT)
 	{
 		SWFMovie_resolveTextfieldFont(movie, (SWFTextField)character);
+	}
+	else if ( SWFBlock_getType((SWFBlock)character) == SWF_DEFINEFONT)
+	{
+		SWFMovie_addCharacterDependencies(movie, character);
 	}
 	SWFMovie_addBlock(movie, (SWFBlock)character);
 }
@@ -600,7 +598,72 @@ SWFMovie_save(SWFMovie movie, const char *filename, int compressionlevel)
 	return count;
 }
 
+int
+completeSWFImportCharacter(SWFBlock block)
+{	block->type = SWF_UNUSEDBLOCK;
+	return -2;
+}
 
+SWFImportBlock
+SWFMovie_addImport(SWFMovie movie, const char *filename, const char *name, int id)
+{	int n;
+	SWFImportBlock imports;
+	struct importitem *ip;
+	char *p;
+
+	for(n = 0 ; n < movie->nImports ; n++)
+		if(!strcmp(movie->imports[n]->filename, filename))
+			break;
+
+	if(n == movie->nImports)
+	{	movie->imports = (SWFImportBlock *) realloc(movie->imports,
+			 (movie->nImports+1) * sizeof(SWFImportBlock));
+		movie->imports[movie->nImports++] = newSWFImportBlock(filename);
+	}
+	imports = movie->imports[n];
+	for(ip = (struct importitem *)&(imports->importlist) ; ip->next ; )
+		ip = ip->next;
+	ip = ip->next = (struct importitem *)malloc(sizeof(struct importitem));
+	ip->next = NULL;
+	ip->id = id;
+	ip->name = p = (char *)malloc(strlen(name)+1);
+	while((*p++ = *name++) != 0)
+		;
+	return movie->imports[n];
+}
+
+SWFCharacter
+SWFMovie_importCharacter(SWFMovie movie, const char *filename, const char *name)
+{
+	SWFCharacter res;
+	SWFImportBlock importer;
+	int id;
+
+	res = (SWFCharacter) malloc(sizeof(struct SWFCharacter_s));
+	SWFCharacterInit(res);
+	CHARACTERID(res) = id = ++SWF_gNumCharacters;
+	BLOCK(res)->type = SWF_DEFINESPRITE;
+	BLOCK(res)->writeBlock = NULL;
+	BLOCK(res)->complete = completeSWFImportCharacter;
+	BLOCK(res)->dtor = destroySWFCharacter;
+	importer = SWFMovie_addImport(movie, filename, name, id);
+	SWFCharacter_addDependency(res, (SWFCharacter) importer);
+	return res;
+}
+
+SWFFontCharacter
+SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name)
+{
+	SWFFontCharacter res;
+	SWFImportBlock importer;
+	int id;
+
+	res = newSWFDummyFontCharacter();
+	id = CHARACTERID(res);
+	importer = SWFMovie_addImport(movie, filename, name, id);
+	SWFCharacter_addDependency((SWFCharacter) res, (SWFCharacter) importer);
+	return res;
+}
 /*
  * Local variables:
  * tab-width: 2
