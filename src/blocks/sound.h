@@ -23,12 +23,14 @@
 #define SWF_SOUND_H_INCLUDED
 
 typedef struct SWFSound_s *SWFSound;
-typedef struct SWFSoundInfo_s *SWFSoundInfo;
 
 #include "block.h"
 #include "method.h"
 #include "character.h"
 #include "output.h"
+#include "input.h"
+
+#define SWFSOUND_INITIAL_DELAY 1663
 
 #define SWF_SOUND_COMPRESSION      0xf0
 #define SWF_SOUND_NOT_COMPRESSED   (0<<4)
@@ -49,18 +51,6 @@ typedef struct SWFSoundInfo_s *SWFSoundInfo;
 #define SWF_SOUND_MONO             (0<<0)
 #define SWF_SOUND_STEREO           (1<<0)
 
-struct SWFSound_s
-{
-  struct SWFCharacter_s character;
-
-  byte flags;
-  byte isFinished;
-  int numSamples;
-  int delay;
-  int samplesPerFrame;
-  FILE *file;
-};
-
 #define SWF_SOUNDINFO_SYNCSTOPSOUND  (1<<5)
 #define SWF_SOUNDINFO_SYNCNOMULTIPLE (1<<4)
 #define SWF_SOUNDINFO_HASENVELOPE    (1<<3)
@@ -68,33 +58,15 @@ struct SWFSound_s
 #define SWF_SOUNDINFO_HASOUTPOINT    (1<<1)
 #define SWF_SOUNDINFO_HASINPOINT     (1<<0)
 
-typedef struct
-{
-  unsigned int mark44;
-  unsigned short level0;
-  unsigned short level1;
-} envPoint;
-
-struct SWFSoundInfo_s
-{
-  struct SWFBlock_s block;
-
-  SWFSound sound;
-  unsigned int inPoint;
-  unsigned int outPoint;
-  int numLoops;
-  byte flags;
-  byte numEnvPoints;
-  envPoint *envPoints;
-};
 
 SWFBlock newDefineSWFSoundBlock(SWFSound sound);
-SWFBlock newDefineSWFSoundStreamBlock(SWFOutput output);
-SWFBlock newSWFSoundStreamHeadBlock(SWFSound sound);
-SWFBlock newSWFSoundStreamHead2Block(SWFSound sound);
-SWFBlock newSWFStartSoundBlock();
 
-SWFSound newSWFSound();
+SWFSound newSWFSound(FILE *f, byte flags);
+
+SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
+
+void destroySWFSound(SWFBlock sound);
+
 void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data);
 
 #endif /* SWF_SOUND_H_INCLUDED */

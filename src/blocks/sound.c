@@ -19,179 +19,166 @@
 
 /* $Id$ */
 
-#if 0
-
 #include <stdio.h>
 
+#include "outputblock.h"
 #include "sound.h"
 
-int soundDataSize(SWFSound sound)
+struct SWFSound_s
 {
-  if((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED)
-  {
-    return sound->numSamples *
-      ((sound->flags&SWF_SOUND_BITS) == SWF_SOUND_16BITS) ? 2 : 1 *
-      ((sound->flags&SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO) ? 2 : 1;
-  }
-  else
-  {
-    int nBits = (sound->data[0] >> 6) + 2;
+  struct SWFCharacter_s character;
 
-    assert((sound->flags&SWF_SOUND_BITS) == SWF_SOUND_16BITS);
+  byte flags;
+  byte isFinished;
+  int numSamples;
+  int delay;
+  int samplesPerFrame;
 
-    /* 16 bits for initial sample, 6 for initial index */
-    /* double for stereo */
-    return ((16 + 6 + (sound->numSamples-1) * nBits) *
-	    (((sound->flags&SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO) ? 2 : 1) + 7)/8;
+	SWFInput input;
+	byte *data;
+};
+
+
+int getMP3Size(SWFInput input);
+
+
+static int
+soundDataSize(SWFSound sound)
+{
+	if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED)
+	{
+    int sampleCount = SWFInput_length(sound->input);
+
+    if ((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS)
+      sampleCount /= 2;
+
+    if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO)
+      sampleCount /= 2;
+
+    return sampleCount;
+	}
+	else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_ADPCM_COMPRESSED)
+	{
+		int filesize, channels, nbits;
+		int bitsize, blocksize, n, res, m;
+
+		SWF_assert((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS);
+
+		filesize = SWFInput_length(sound->input);
+
+		if ((sound->flags&SWF_SOUND_CHANNELS) == SWF_SOUND_MONO)
+			channels = 1;
+		else if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO)
+			channels = 2;
+		else
+			channels = 1;	 /* ? */
+
+		nbits = 4;	/* XXX - testing.. */
+
+		/*
+		 * Estimation of the sample count in ADPCM data from file size of the data.
+		 * This is an approximate calculation.
+		 */
+		bitsize = 8 * filesize - (2 + (8 - 1));
+		/* 2: header, (8 - 1): possible padding */
+		blocksize = ((16 + 6) + nbits * 4095) * channels;
+		n = bitsize / blocksize;
+		res = bitsize % blocksize;
+		m = (res - (16 + 6) * channels) / (nbits * channels);
+		return 4096 * n + m;
+	}
+  else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+  {
+    int pos = SWFInput_tell(sound->input);
+    int samples = getMP3Size(sound->input);
+    SWFInput_seek(sound->input, pos, SEEK_SET);
+    return samples;
   }
+	else /* ??? */
+	{
+		return 0;
+	}
 }
 
-void writeSWFSoundToStream(SWFBlock block,
-			   SWFByteOutputMethod method, void *data)
+
+void
+writeSWFSoundToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
-  int l, i;
-  SWFSound sound = (SWFSound)block;
+	int l, i;
+	SWFSound sound = (SWFSound)block;
 
-  methodWriteUInt16(CHARACTERID(sound), method, data);
-  method(sound->flags, data);
-  methodWriteUInt32(sound->numSamples, method, data);
+	methodWriteUInt16(CHARACTERID(sound), method, data);
+	method(sound->flags, data);
 
-  /* write samples */
-  l = soundDataSize(sound);
-  for(i=0; i<l; ++i)
-    method(sound->data[l], data);
+	l = SWFInput_length(sound->input);
+
+	methodWriteUInt32(soundDataSize(sound), method, data);
+
+  if ( (sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED )
+    methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);  // XXX - delay?
+
+	/* write samples */
+	for ( i=0; i<l; ++i )
+		method(SWFInput_getChar(sound->input), data);
 }
+
+
 int completeDefineSWFSoundBlock(SWFBlock block)
 {
-  SWFSound sound = (SWFSound)block;
-  return 7 + soundDataSize(sound);
+	SWFSound sound = (SWFSound)block;
+
+  if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+		return 7 + 2 + SWFInput_length(sound->input);
+	else
+		return 7 + SWFInput_length(sound->input);
 }
 
-SWFBlock newDefineSWFSoundStreamBlock(SWFOutput data)
+
+void destroySWFSound(SWFBlock sound)
 {
-  return newSWFOutputBlock(data, SWF_SOUNDSTREAMBLOCK);
+	sec_free((void**)&sound);
 }
 
-void writeSWFSoundStreamHeadToMethod(SWFBlock block,
-				     SWFByteOutputMethod method, void *data)
+
+SWFSound newSWFSound(FILE *f, byte flags)
 {
-  SWFSound sound = (SWFSound)block;
-  int numSamples = sound->numSamples;
-
-  method(sound->flags, data);
-  method(sound->flags, data);
-  methodWriteUInt16(numSamples, method, data);
+	return newSWFSound_fromInput(newSWFInput_file(f), flags);
 }
-int completeSWFSoundStreamHead(SWFBlock block)
+
+
+SWFSound newSWFSound_fromInput(SWFInput input, byte flags)
 {
-  return 4;
-}
-SWFBlock newSWFSoundStreamHead(SWFSound sound)
-{
-  
-  return newSWFBlock(SWF_SOUNDSTREAMHEAD, sound,
-		     &writeSWFSoundStreamHeadToMethod,
-		     &completeSWFSoundStreamHead);
-}
-SWFBlock newSWFSoundStreamHead2(SWFSound sound)
-{
-  return newSWFBlock(SWF_SOUNDSTREAMHEAD2, sound,
-		     &writeSWFSoundStreamHeadBlockToMethod,
-		     &completeSWFSoundStreamHeadBlock);
-}
+	SWFSound sound = malloc(sizeof(struct SWFSound_s));
+	SWFBlock block = (SWFBlock)sound;
 
-void writeSWFStartSoundToMethod(SWFBlock block,
-				SWFByteOutputMethod method, void *data)
-{
-  SWFSoundInfo soundInfo = (SWFSoundInfo)block;
-  byte flags = soundInfo->flags;
-  int i;
+	SWFCharacterInit((SWFCharacter)sound);
 
-  methodWriteUInt16(soundInfo->sound->soundNum, method, data);
-  method(flags, data);
+	CHARACTERID(sound) = ++SWF_gNumCharacters;
 
-  if(flags & SWF_SOUNDINFO_HASINPOINT)
-    methodWriteUInt32(soundInfo->inPoint, method, data);
-  if(flags & SWF_SOUNDINFO_HASOUTPOINT)
-    methodWriteUInt32(soundInfo->outPoint, method, data);
-  if(flags & SWF_SOUNDINFO_HASLOOPS)
-    methodWriteUInt16(soundInfo->numLoops, method, data);
-  if(flags & SWF_SOUNDINFO_HASENVELOPE)
-  {
-    method(soundInfo->numEnvPoints, data);
-    for(i=0; i<soundInfo->numEnvPoints; ++i)
-    {
-      methodWriteUInt32((soundInfo->envPoints[i]).mark44, method, data);
-      methodWriteUInt16((soundInfo->envPoints[i]).level0, method, data);
-      methodWriteUInt16((soundInfo->envPoints[i]).level1, method, data);
-    }
-  }
-}
-int completeSWFStartSound(SWFBlock block)
-{
-  SWFSoundInfo soundInfo = (SWFSoundInfo)block;
-  byte flags = soundInfo->flags;
+	block->type = SWF_DEFINESOUND;
 
-  return 3 + /* sound id + flags */
-    (flags&SWF_SOUNDINFO_HASINPOINT) ? 4 : 0 +
-    (flags&SWF_SOUNDINFO_HASOUTPOINT) ? 4 : 0 +
-    (flags&SWF_SOUNDINFO_HASLOOPS) ? 2 : 0 +
-    (flags&SWF_SOUNDINFO_HASENVELOPE) ? (1+8*soundInfo->numEnvPoints) : 0;
-}
-SWFBlock newSWFStartSound(SWFSoundInfo soundInfo)
-{
-  return newSWFBlock(SWF_STARTSOUND, soundInfo,
-		     &writeSWFStartSoundBlockToMethod,
-		     &completeSWFStartSoundBlock);
+	block->writeBlock = writeSWFSoundToStream;
+	block->complete = completeDefineSWFSoundBlock;
+	block->dtor = destroySWFSound;
+
+	sound->input = input;
+	sound->flags = flags;
+
+	return sound;
 }
 
-SWFSoundInfo newSWFSoundInfo(SWFSound sound)
-{
-  SWFSoundInfo soundInfo = calloc(SWF_SOUNDINFO_SIZE);
-  soundInfo->sound = sound;
-  soundInfo->envPoints = NULL;
-  return soundInfo;
-}
-
-/* XXX - temporary standin, ignoring all the soundinfo options */
-SWFBlock newStartSWFSoundBlock(SWFSound sound, int loops)
-{
-  SWFOutput out = newSizedSWFOutput(5);
-
-  SWFOutput_writeUInt16(CHARACTERID(sound));
-
-  if(loops>1)
-  {
-    SWFOutput_writeUInt8(out, 0x04);
-    SWFOutput_writeUInt16(out, loops);
-  }
-  else
-    SWFOutput_writeUInt8(out, 0);
-
-  return newSWFOutputBlock(out, SWF_STARTSOUND);
-}
-SWFBlock newStopSWFSoundBlock(SWFSound sound)
-{
-  SWFOutput out = newSizedSWFOutput(3);
-
-  SWFOutput_writeUInt16(CHARACTERID(sound));
-  SWFOutput_writeUInt8(out, 0x20);
-
-  return newSWFOutputBlock(out, SWF_STARTSOUND);
-}
-
-SWFSound newSWFSound()
-{
-  SWFSound sound = calloc(SWF_SOUND_SIZE);
-  sound->file = NULL;
-  return sound;
-}
 
 void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data)
 {
-  sound->flags = flags;
-  sound->numSamples = numSamples;
-  sound->data = data;
+	sound->flags = flags;
+	sound->numSamples = numSamples;
+	sound->data = data;
 }
 
-#endif
+
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */
