@@ -42,14 +42,14 @@ destroySWFShape(shape)
 void
 SWFShape_movePenTo(shape, x, y)
 	SWF::Shape	shape
-	int	x
-	int	y
+	float	x
+	float	y
 
 void 
 SWFShape_movePen(shape, x, y)
         SWF::Shape shape
-        int x
-        int y
+        float x
+        float y
 
 float
 SWFShape_getPenX(shape)
@@ -75,31 +75,51 @@ SWFShape_getPen(shape)
 void
 SWFShape_drawLineTo(shape, x, y)
 	SWF::Shape	shape
-	int	x
-	int	y
+	float	x
+	float	y
 
 void
 SWFShape_drawLine(shape, dx, dy)
 	SWF::Shape	shape
-	int	dx
-	int	dy
+	float	dx
+	float	dy
 
 void
 SWFShape_drawCurveTo(shape, controlx, controly, anchorx, anchory)
 	SWF::Shape	shape
-	int		controlx
-	int		controly
-	int		anchorx
-	int		anchory
+	float		controlx
+	float		controly
+	float		anchorx
+	float		anchory
 
 void
 SWFShape_drawCurve(shape, controldx, controldy, anchordx, anchordy)
 	SWF::Shape	shape
-	int		controldx
-	int		controldy
-	int		anchordx
-	int		anchordy
+	float		controldx
+	float		controldy
+	float		anchordx
+	float		anchordy
 
+
+void
+SWFShape_drawCubicTo(shape, bx, by, cx, cy, dx, dy)
+        SWF::Shape      shape
+        float           bx
+        float           by
+        float           cx
+        float           cy
+        float           dx
+        float           dy
+
+void
+SWFShape_drawCubic(shape, bx, by, cx, cy, dx, dy)
+        SWF::Shape      shape
+        float           bx
+        float           by
+        float           cx
+        float           cy
+        float           dx
+        float           dy
 
 void
 SWFShape_end(shape)
@@ -208,4 +228,4 @@ SWFShape_drawArc(shape, r, startAngle, endAngle)
 void
 SWFShape_drawCircle(shape, r)
         SWF::Shape shape
-        int r
+        float r
