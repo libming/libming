@@ -575,7 +575,7 @@ void_function_call
 
 	| DELETE expr_or_obj
 		{ $$ = $2;
-		  bufferWriteOp($$, SWFACTION_TRACE); }
+		  bufferWriteOp($$, SWFACTION_DELETE); }
 
 	| TRACE '(' expr_or_obj ')'
 		{ $$ = $3;
