@@ -1,3 +1,7 @@
+2002-08-08 04:07  opaque_ndst
+
+	* php_ext/ming.c: ming.c from php-4.2.2
+
 2002-08-07 23:39  opaque_ndst
 
 	* src/: Makefile, fill.c, ming.c, ming.h, position.c, position.h,
