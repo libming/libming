@@ -82,11 +82,6 @@ short
 SWFFont_getLeading(font)
 	SWF::Font	font
 
-void
-SWFFont_addChars(font, string)
-	SWF::Font font
-	char *  string
-
 char *
 SWFFont_getShape(font, code)
 	SWF::Font font
