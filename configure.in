@@ -1,0 +1,43 @@
+AC_INIT(ming.i)
+
+PACKAGE=ming
+VERSION=0.3a
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
+AM_CONFIG_HEADER(config.h)
+
+AC_PROG_LIBTOOL
+AM_PROG_CC_STDC
+AC_PROG_YACC
+AM_PROG_LEX
+
+AC_CHECK_FUNC(sin, MATHLIB="", [
+	AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
+		AC_ERROR([I can't find sin() function !!!])]
+		)]
+	)
+AC_SUBST(MATHLIB)
+
+AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", [
+	AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif", GIFLIB="")]
+	)
+AC_SUBST(GIFLIB)
+AM_CONDITIONAL(HAVE_GIF, test -n "$GIFLIB")
+
+AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
+AC_SUBST(ZLIB)
+AM_CONDITIONAL(HAVE_ZLIB, test -n "$ZLIB")
+
+AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="")
+AC_SUBST(PNGLIB)
+AM_CONDITIONAL(HAVE_PNG, test -n "$PNGLIB")
+
+dnl FIXME write tests for this
+AM_CONDITIONAL(WITH_CXX, false)
+AM_CONDITIONAL(WITH_PYTHON, false)
+AM_CONDITIONAL(WITH_RUBY, false)
+AM_CONDITIONAL(WITH_PERL, false)
+AM_CONDITIONAL(WITH_PHP, false)
+
+
+AC_OUTPUT(Makefile src/Makefile src/actioncompiler/Makefile 
+	src/blocks/Makefile util/Makefile py_ext/Makefile)
