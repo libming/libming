@@ -104,6 +104,8 @@ void swf5ParseInit(const char *script, int debug)
  void do_unput5(const char c) { unput(c); }
 %}
 
+HEXDIGIT [0-9a-fA-F]
+OCTDIGIT [0-7]
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
 
@@ -111,18 +113,18 @@ ID       [a-zA-Z_][a-zA-Z0-9_]*
   if(SWF_versionNum >= 6)
 	BEGIN(AS_V6);
 
-0x[0-9a-fA-F]+	{ count();	swf5lval.intVal = strtoul(yytext, NULL, 0);
-					return INTEGER;		}
-0[0-7]+			{ count();	swf5lval.intVal = strtoul(yytext, NULL, 0);
-					return INTEGER;		}
-{DIGIT}+		{ count();	swf5lval.intVal = atoi(yytext);
-					return INTEGER;		}
-{DIGIT}+"."{DIGIT}*	{ count();	swf5lval.doubleVal = atof(yytext);
-					return DOUBLE; 		}
-true			{ count();	swf5lval.intVal = 1;
-					return BOOLEAN;		}
-false			{ count();	swf5lval.intVal = 0;
-					return BOOLEAN;		}
+0x{HEXDIGIT}+		{ count(); swf5lval.intVal = strtoul(yytext, NULL, 0);
+				return INTEGER;	}
+0{OCTDIGIT}+		{ count(); swf5lval.intVal = strtoul(yytext, NULL, 0);
+				return INTEGER; }
+{DIGIT}+		{ count(); swf5lval.intVal = atoi(yytext);
+				return INTEGER;	}
+{DIGIT}+"."{DIGIT}*	{ count(); swf5lval.doubleVal = atof(yytext);
+				return DOUBLE; }
+true			{ count();swf5lval.intVal = 1;
+				return BOOLEAN;	}
+false			{ count(); swf5lval.intVal = 0;
+				return BOOLEAN;	}
 null			{ count();	return NULLVAL;		}
 break			{ count();	return BREAK;		}
 continue		{ count();	return CONTINUE;	}
@@ -144,7 +146,7 @@ with			{ count();	return WITH;		}
 asm			{ count();	BEGIN(asm); return ASM;		}
 eval			{ count();	return EVAL;		}
 typeof			{ count();	return TYPEOF; }
-instanceof			{ count();	return INSTANCEOF; }
+instanceof		{ count();	return INSTANCEOF; }
 
   /* legacy functions */
 random			{ count();	return RANDOM;	}
@@ -235,14 +237,14 @@ end			{ count();	return END;		}
 }
 
 <AS_V6>{
-try					{ count(); return TRY; }
-catch				{ count(); return CATCH; }
-throw				{ count(); return THROW; }
-finally				{ count(); return FINALLY; }
+try			{ count(); return TRY; }
+catch			{ count(); return CATCH; }
+throw			{ count(); return THROW; }
+finally			{ count(); return FINALLY; }
 }
 
-r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
-					return REGISTER;	}
+register\:{DIGIT}+	{ count(); swf5lval.str = strdup(yytext+2);
+				return REGISTER; }
 
 
 {ID}			{ count();	swf5lval.str = strdup(yytext);
@@ -276,8 +278,14 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 ">="			{ count();	return GE; }
 "==" 			{ count();	return EQ; }
 "!=" 			{ count();	return NE; }
-"===" 			{ count();	return EEQ; }
-"!==" 			{ count();	return NEE; }
+"===" 			{ count(); if(SWF_versionNum >= 6)
+					return EEQ;
+				   else
+				   	return EQ;  }
+"!==" 			{ count(); if(SWF_versionNum >= 6)
+					return NEE;
+				   else
+				   	return NE;  }
 "&&" 			{ count();	return LAN; }
 "||" 			{ count();	return LOR; }
 "*="			{ count();	return MEQ; }
