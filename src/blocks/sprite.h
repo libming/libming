@@ -30,6 +30,7 @@ struct _sprite
 {
   swfCharacter character;
   int frames;
+  int totalFrames;
   int nBlocks;
   SWFBlock *blocks;
 };
@@ -39,6 +40,8 @@ typedef struct _sprite *SWFSprite;
 
 SWFSprite newSWFSprite();
 void destroySWFSprite(SWFBlock block);
+
+void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);
 
 void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);

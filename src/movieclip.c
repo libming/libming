@@ -40,15 +40,11 @@ SWFMovieClip newSWFMovieClip()
 }
 void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
 {
-  clip->totalFrames = totalFrames;
+  SWFSprite_setNumberOfFrames((SWFSprite)clip, totalFrames);
 }
-
 
 void SWFMovieClip_addBlock(SWFMovieClip movie, SWFBlock block)
 {
-  if(SWFBlock_getType(block) == SWF_SHOWFRAME)
-    ++movie->nFrames;
-  
   SWFBlockList_addBlock(movie->blockList, block);
 }
 

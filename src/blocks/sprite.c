@@ -39,7 +39,8 @@ int completeSWFSprite(SWFBlock block)
   SWFSprite sprite = (SWFSprite)block;
 
   if(sprite->nBlocks < 1 ||
-     sprite->blocks[sprite->nBlocks-1]->type != SWF_SHOWFRAME)
+     sprite->blocks[sprite->nBlocks-1]->type != SWF_SHOWFRAME ||
+     sprite->frames <= sprite->totalFrames)
   {
     SWFSprite_addBlock(sprite, newSWFShowFrameBlock());
   }
@@ -82,8 +83,14 @@ SWFSprite newSWFSprite()
 
   sprite->blocks = NULL;
   sprite->frames = 0;
+  sprite->totalFrames = 0;
 
   return sprite;
+}
+
+void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames)
+{
+  sprite->totalFrames = totalFrames;
 }
 
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)

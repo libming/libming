@@ -535,7 +535,8 @@ typedef void *SWFSprite;
 SWFSprite newSWFSprite();
 void destroySWFSprite(SWFBlock block);
 
-SWFSprite newSWFSprite_fromArray(SWFBlock *blocks, int nBlocks);
+void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);
+
 void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
 

@@ -42,7 +42,6 @@ struct _swfMovieClip
   SWFBlockList blockList;
   SWFDisplayList displayList;
   unsigned short nFrames;
-  unsigned short totalFrames;
 };
 typedef struct _swfMovieClip *SWFMovieClip;
 
