@@ -171,17 +171,20 @@ main (int argc, char **argv)
 	int opts_idx;
 #endif
 	int c;
-	char cppargs[256];
+	char *cppargs;
+	size_t cppargsize = 256;
 	char *me;
 
-	cppargs[0] = '\0';
+	cppargs = malloc(cppargsize);
+	sprintf(cppargs, "%s", DEFAULT_FLAGS);
+	//cppargs[0] = '\0';
 
 
 	me = argv[0];
 
 	while (1)
 	{
-		char buf [256];
+		char buf [1024];
 
 #ifdef HAVE_GETOPT_LONG
 		c = getopt_long (argc, argv, "ps:r:D:I:v:i:", opts, &opts_idx);
@@ -215,7 +218,12 @@ main (int argc, char **argv)
 				break;
 			case 'I':
 				// yes, you can smash the stack ... 
-				sprintf(buf, "-I%s ", optarg);
+				sprintf(buf, " -I%s", optarg);
+				if (strlen(cppargs)+strlen(buf) > cppargsize)
+				{
+					cppargsize *= 2;
+					cppargs = realloc(cppargs, cppargsize);
+				}
 				strcat(cppargs, buf);
 				break;
 			case 'i':
@@ -223,7 +231,12 @@ main (int argc, char **argv)
 				break;
 			case 'D':
 				// yes, you can smash the stack ... 
-				sprintf(buf, "-D%s ", optarg);
+				sprintf(buf, " -D%s", optarg);
+				if (strlen(cppargs)+strlen(buf) > cppargsize)
+				{
+					cppargsize *= 2;
+					cppargs = realloc(cppargs, cppargsize);
+				}
 				strcat(cppargs, buf);
 				break;
 			default:
@@ -434,6 +447,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.12  2004/11/03 07:52:08  strk
+ * Introduced a default include path to easy code sharing.
+ *
  * Revision 1.11  2004/11/02 17:53:05  strk
  * Fixed a bug in -I and -D handling.
  *
