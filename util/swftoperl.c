@@ -14,12 +14,28 @@
 
 #include "swftoperl.h"
 
-const float PI = 3.14159265358979;
+
+#ifndef M_PI
+  #define M_PI 3.14159265358979f
+#endif
+
+//const float PI = 3.14159265358979;
 
 void skipBytes(FILE *f, int length);
 void silentSkipBytes(FILE *f, int length);
 char *blockName(int);
 void printSoundInstance(FILE *f, int id, int soundid);
+
+static m_version = {0};
+void decompileAction(FILE *f, int length, int indent)
+{	if(m_version >= 5)
+		decompile5Action(f, length, indent);
+	else if(m_version > 3)
+		decompile4Action(f, length, indent);
+	else
+		while(--length >= 0)
+			readUInt8(f);
+}
 
 void readMatrix(FILE *f, struct Matrix *s)
 {
@@ -267,7 +283,7 @@ void printTransform(struct Matrix *m, char ch, int num)
   }
   else
   {
-    angle = atan(c/a)*180/PI;
+    angle = atan(c/a)*180/M_PI;
 
     if(a<0)
     {
@@ -1703,7 +1719,13 @@ int main(int argc, char *argv[])
 {
   struct Movie m;
   FILE *f;
-  int block, type, length, frame = 0;
+  int block, type, length, frame = 0, noactions = 0;
+
+  if(argc == 3 && strcmp(argv[1], "-a") == 0)
+  {	noactions = 1;
+	--argc;
+	++argv;
+  }
 
   if(argc<2) {
   	error("Give me a filename.\n\n\tswftoperl myflash..swf >myflash.pl");
@@ -1717,7 +1739,7 @@ int main(int argc, char *argv[])
 	error("Doesn't look like a swf file to me..\n");
   }
 
-  m.version = readUInt8(f);
+  m.version = m_version = readUInt8(f);
   m.size = readUInt32(f);
 
   readRect(f, &(m.frame));
@@ -1740,6 +1762,9 @@ int main(int argc, char *argv[])
   printf("\t$m->setRate(%f);\n", m.rate);
   printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
   printf("\t$m->setFrames(%i);\n", m.nFrames);
+
+  if(noactions)
+	m_version = 0;
 
   for(;;)
   {

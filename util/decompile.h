@@ -57,4 +57,5 @@ struct _stack
 };
 typedef struct _stack *Stack;
 
-void decompileAction(FILE *f, int length, int indent);
+void decompile4Action(FILE *f, int length, int indent);
+void decompile5Action(FILE *f, int length, int indent);

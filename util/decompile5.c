@@ -2011,7 +2011,7 @@ void decompileStatements(Stack *statements, int n)
   putchar('\n');
 }
 
-void decompileAction(FILE *f, int length, int indent)
+void decompile5Action(FILE *f, int length, int indent)
 {
   Stack *statements = NULL;
   int n;

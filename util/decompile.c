@@ -1082,7 +1082,7 @@ static Stack negateExpression(Stack s)
 
 #define STATEMENTS_INCREMENT 16
 
-void decompileAction(FILE *f, int length, int indent)
+void decompile4Action(FILE *f, int length, int indent)
 {
   Stack s, *statements = NULL;
   int /*i, j,*/ off, nStatements = 0;

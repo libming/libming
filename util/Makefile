@@ -41,11 +41,11 @@ listswf_nd: blocktypes.o decompile.o read.o listswf.c
 listaction: blocktypes.o read.o listswf.c
 	${CC} -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
 
-swftoperl: blocktypes.o decompile.o read.o swftoperl.c
-	${CC} swftoperl.c blocktypes.o decompile.o read.o -o swftoperl -lm
+swftoperl: blocktypes.o decompile.o decompile5.o read.o swftoperl.c
+	${CC} swftoperl.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm
 
-swftophp: blocktypes.o decompile.o read.o swftophp.c
-	${CC} swftophp.c blocktypes.o decompile.o read.o -o swftophp -lm
+swftophp: blocktypes.o decompile.o decompile5.o read.o swftophp.c
+	${CC} swftophp.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm
 
 swftopython: 
 	echo " swftopython: still not written"

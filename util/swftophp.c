@@ -21,6 +21,17 @@
 void skipBytes(FILE *f, int length);
 char *blockName(int);
 
+static m_version = {0};
+void decompileAction(FILE *f, int length, int indent)
+{	if(m_version >= 5)
+		decompile5Action(f, length, indent);
+	else if(m_version > 3)
+		decompile4Action(f, length, indent);
+	else
+		while(--length >= 0)
+			readUInt8(f);
+}
+
 void readMatrix(FILE *f, struct Matrix *s)
 {
   int nBits;
@@ -1483,7 +1494,13 @@ int main(int argc, char *argv[])
 {
   struct Movie m;
   FILE *f;
-  int block, type, length, frame = 0;
+  int block, type, length, frame = 0, noactions = 0;
+
+  if(argc == 3 && strcmp(argv[1], "-a") == 0)
+  {	noactions = 1;
+	--argc;
+	++argv;
+  }
 
   if(argc<2)
     error("Give me a filename.\n");
@@ -1494,7 +1511,7 @@ int main(int argc, char *argv[])
   if(!(readUInt8(f)=='F' && readUInt8(f)=='W' && readUInt8(f)=='S'))
     error("Doesn't look like a swf file to me..\n");
 
-  m.version = readUInt8(f);
+  m.version = m_version = readUInt8(f);
   m.size = readUInt32(f);
 
   readRect(f, &(m.frame));
@@ -1507,6 +1524,9 @@ int main(int argc, char *argv[])
   printf("\t$m->setRate(%f);\n", m.rate);
   printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
   printf("\t$m->setFrames(%i);\n", m.nFrames);
+
+  if(noactions)
+	m_version = 0;
 
   for(;;)
   {
