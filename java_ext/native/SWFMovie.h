@@ -57,6 +57,14 @@ JNIEXPORT void JNICALL Java_SWFMovie_nSetCubicThreshold
 
 /*
  * Class:     SWFMovie
+ * Method:    nUseSWFVersion
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_SWFMovie_nUseSWFVersion
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     SWFMovie
  * Method:    nSetRate
  * Signature: (IF)V
  */

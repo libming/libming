@@ -44,6 +44,8 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
         { nSetScale (scale); }
     public void	setCubicThreshold (int v)
         { nSetCubicThreshold (v); }
+    public void	useSWFVersion (int num)
+        { nUseSWFVersion (num); }
     
     public void	setRate (float rate)
         { nSetRate (handle, rate); }

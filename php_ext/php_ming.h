@@ -158,6 +158,7 @@ PHP_FUNCTION(swfmorph_getShape2);
 
 PHP_FUNCTION(ming_setCubicThreshold);
 PHP_FUNCTION(ming_setScale);
+PHP_FUNCTION(ming_useSWFVersion);
 
 #else
 #define ming_module_ptr NULL

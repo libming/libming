@@ -47,6 +47,7 @@ static SWFMovieClip getSprite(zval *id);
 static zend_function_entry ming_functions[] = {
   PHP_FALIAS(ming_setcubicthreshold,  ming_setCubicThreshold,  NULL)
   PHP_FALIAS(ming_setscale,           ming_setScale,           NULL)
+  PHP_FALIAS(ming_useswfversion,      ming_useSWFVersion,      NULL)
   PHP_FALIAS(swfbutton_keypress,      swfbutton_keypress,      NULL)
   { NULL, NULL, NULL }
 };
@@ -73,6 +74,18 @@ PHP_FUNCTION(ming_setScale)
   convert_to_double_ex(num);
 
   Ming_setScale(Z_DVAL_PP(num));
+}
+
+PHP_FUNCTION(ming_useSWFVersion)
+{
+  zval **num;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &num) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(num);
+
+  Ming_useSWFVersion(Z_LVAL_PP(num));
 }
 
 static int le_swfmoviep;
@@ -3025,11 +3038,10 @@ void php_ming_error(char *msg, ...)
 
 PHP_RINIT_FUNCTION(ming)
 {
-  /* XXX - this didn't work so well last I tried..
+  /* XXX - this didn't work so well last I tried.. */
 
   if(Ming_init() != 0)
     php_error(E_ERROR, "Error initializing Ming module");
-  */
 }
 
 PHP_MINIT_FUNCTION(ming)

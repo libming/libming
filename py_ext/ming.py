@@ -9,6 +9,9 @@ def Ming_setCubicThreshold(t):
 def Ming_setScale(scale):
     mingc.Ming_setScale(scale);
 
+def Ming_useSWFVersion(num):
+    mingc.Ming_useSWFVersion(num);
+
 
 class SWFBase:
 

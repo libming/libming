@@ -38,6 +38,7 @@ public interface SWFMovieI extends SWFObjectI {
 
     public void			setScale (float scale);
     public void			setCubicThreshold (int v);
+    public void			useSWFVersion (int num);
     
     public void			setRate (float rate);
     public void			setDimension (int width, int height);

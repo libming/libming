@@ -482,6 +482,12 @@ SWFMing_setScale(scale)
         CODE:
                 Ming_setScale(scale);
 
+void
+SWFMing_useSWFVersion(num)
+        int num
+        CODE:
+                Ming_useSWFVersion(num);
+
 
 MODULE = SWF		PACKAGE = SWF::Movie		PREFIX = SWFMovie_
 
