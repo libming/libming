@@ -1,5 +1,7 @@
 
 #include <math.h>
+
+#include "ming.h"
 #include "shape_util.h"
 
 extern int Ming_cubicThreshold;
