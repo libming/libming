@@ -1,3 +1,12 @@
+2003-01-11 15:43  staybyte
+
+	* src/actioncompiler/swf5compiler.y: fix incorrect %token and %type
+	syntax
+
+2003-01-11 15:37  staybyte
+
+	* src/blocks/jpeg.c: accept SFO1 baseline jpegs
+
 2003-01-07 21:54  whamann
 
 	* perl_ext/Constants.xs, php_ext/ming.c, src/blocks/textfield.h,
