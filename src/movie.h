@@ -35,6 +35,15 @@ struct _swfMovie
   unsigned short nFrames;
   unsigned short totalFrames;
   byte version;
+
+  /* export items */
+  short nExports;
+
+  struct swfexport
+  {
+    SWFBlock block;
+    char *name;
+  } *exports;
 };
 typedef struct _swfMovie *SWFMovie;
 
@@ -60,6 +69,8 @@ SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block);
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 void SWFMovie_nextFrame(SWFMovie movie);
 void SWFMovie_labelFrame(SWFMovie movie, char *label);
+
+void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 

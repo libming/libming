@@ -22,11 +22,28 @@
 #include "movie.h"
 #include "shape_util.h"
 
+static void destroySWFExports(SWFMovie movie)
+{
+  int n;
+
+  for(n=0; n<movie->nExports; ++n)
+    free(movie->exports[n].name);
+
+  free(movie->exports);
+
+  movie->exports = 0;
+  movie->nExports = 0;
+}
+
 void destroySWFMovie(SWFMovie movie)
 {
   destroySWFBlockList(movie->blockList);
   destroySWFDisplayList(movie->displayList);
   destroySWFRect(movie->bounds);
+
+  if(movie->nExports > 0)
+    destroySWFExports(movie);
+
   free(movie);
 }
 
@@ -42,6 +59,9 @@ SWFMovie newSWFMovieWithVersion(int version)
   movie->bounds = newSWFRect(0, 320*20, 0, 240*20);
   movie->rate = 12.0;
   movie->totalFrames = 1;
+
+  movie->nExports = 0;
+  movie->exports = NULL;
 
   SWFMovie_addBlock(movie, newSWFSetBackgroundBlock(0xff,0xff,0xff));
 
@@ -86,6 +106,48 @@ void SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
     ++movie->nFrames;
 
   SWFBlockList_addBlock(movie->blockList, block);
+}
+
+void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name)
+{
+  if(SWFBlock_getType(block) == SWF_DEFINESPRITE)
+  {
+    movie->exports = realloc(movie->exports,
+			     (movie->nExports+1) * sizeof(struct swfexport));
+
+    movie->exports[movie->nExports].block = block;
+    movie->exports[movie->nExports].name = strdup(name);
+
+    ++movie->nExports;
+  }
+}
+
+/* from displaylist.c */
+void resolveDependencies(SWFCharacter character, SWFBlockList list);
+
+void SWFMovie_writeExports(SWFMovie movie)
+{
+  int n;
+
+  if(movie->nExports == 0)
+    return;
+
+  for(n=0 ; n<movie->nExports ; ++n)
+  {
+    SWFBlock b = movie->exports[n].block;
+
+    if(!SWFBlock_isDefined(b))
+    {
+      resolveDependencies(b, movie->blockList);
+      completeSWFBlock(b);
+      SWFMovie_addBlock(movie, b);
+    }
+  }
+
+  SWFMovie_addBlock(movie,
+		    newSWFExportBlock(movie->exports, movie->nExports));
+
+  destroySWFExports(movie);
 }
 
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
@@ -160,6 +222,9 @@ int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 {
   int length;
   SWFOutput header;
+
+  if(movie->nExports > 0)
+    SWFMovie_writeExports(movie);
 
   while(movie->nFrames < movie->totalFrames)
     SWFMovie_nextFrame(movie);
