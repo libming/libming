@@ -790,46 +790,50 @@ int printActionRecord(FILE *f)
     {
       int type;
       int start = fileOffset;
+      int count = 0;
 
+      print("Push:");
       while(fileOffset < start+length)
       {
+	if ( count++ ) putchar(',');
 	switch(type = readUInt8(f))
 	{
 	  case 0: /* string */
-	    println("Push String: %s", readString(f));
+	    printf(" string:%s", readString(f));
 	    break;
 	  case 1: /* property */
 	    readUInt16(f); /* always 0? */
-	    println("Push Property: %04x", readUInt16(f));
+	    printf(" property:%04x", readUInt16(f));
 	    break;
 	  case 2: /* null */
-	    println("Push NULL");
+	    printf(" NULL");
 	    break;
 	  case 3: /* ??? */
-	    println("Push type 3- ??");
+	    printf(" type_3:");
 	    break;
 	  case 4: 
-	    println("Push Register %i", readUInt8(f));
+	    printf(" register:%i", readUInt8(f));
 	    break;
 	  case 5:
 	    if(readUInt8(f))
-	      println("Push true");
+	      printf(" TRUE");
 	    else
-	      println("Push false");
+	      printf(" FALSE");
 	    break;
 	  case 6: /* double */
-	    println("Push %f", readDouble(f));
+	    printf(" double:%f", readDouble(f));
 	    break;
 	  case 7: /* int */
-	    println("Push %i", readSInt32(f));
+	    printf(" int:%i", readSInt32(f));
 	    break;
 	  case 8: /* dictionary */
-	    println("Push \"%s\"", dictionary[readUInt8(f)]);
+	    printf(" dict:\"%s\"", dictionary[readUInt8(f)]);
 	    break;
 	  default:
-	    println("unknown push type: %i", type);
+	    printf(" unknown_type_%i", type);
 	}
       }
+      putchar('\n');
       break;
     }
     case SWFACTION_GOTOFRAME:
