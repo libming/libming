@@ -1,0 +1,82 @@
+
+MING THE MODULE
+
+It's an SWF output library.  And it's a PHP module.  And so much more..
+
+It comprises almost all of Flash 4's functionality; the only thing missing
+is sound support (although you can do mp3 streaming now).
+
+Specifically, it lets you create: shapes (including morphs), text, sprites
+(aka movie clips), buttons, and actions in flash movies.
+
+The goal for Ming is to abstract away all of the mundane specifics of the
+SWF file format.
+
+Ming also includes a PHP wrapper which wraps Ming objects in PHP objects.
+Pretty cool..
+
+The python wrapper has been updated to mirror the functionality of the PHP
+interface, so you should be able to use the PHP documentation without
+getting terribly confused now.
+
+I can't speak for the ruby wrapper, and the perl wrapper most definitely
+doesn't work.  Be a deary and fix it for me, won't you?
+
+The c++ wrapper is just one big header file.  But it seems to work pretty
+well- check the examples directory.
+
+Ming is released under the LGPL.  See file LICENSE for the gory details.
+
+-dave@opaque.net
+
+
+BUILDING and INSTALLING:
+
+no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
+
+  unpack the tarfile (which you've obviously already done)
+  make
+
+  for the PHP module:
+  (should work with PHP-4.0.2 and up..)
+
+    to build as a PHP module (.so file):
+
+      cd php_ext
+      make
+      make install
+
+    to build into the php source:
+
+      mkdir <phpdir>/ext/ming
+      cp php_ext/* <phpdir>/ext/ming
+      cd <phpdir>
+      ./buildconf
+      ./configure --with-ming=<mingdir> <other config options>
+      build and install php as usual,
+      restart web server if necessary
+
+  for python:
+  (I think you need python 1.5.2 or above..)
+
+    cd py_ext
+    make
+    fix the install path in the Makefile
+    make install
+
+
+USING MING:
+
+  check the examples in the "examples" directory
+  Make your own, better, examples and send them to me.
+
+
+For useful information: http://www.opaque.net/ming/
+
+---
+
+Macromedia(r) and Flash(tm) are trademarks or registered trademarks of
+Macromedia, Inc. in the United States and/or other countries.
+
+Macromedia(r) does not sponsor, affiliate, or endorse this product and/or
+services.  Nor does the country of China.

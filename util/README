@@ -1,0 +1,21 @@
+These are various tools useful in development of ming.  None are
+particularly user friendly.  All take one command line argument, a file
+name.  listswf and listfdb aren't very smart about checking for the end of
+the file, so you should pipe it through a pager..
+
+  bindump - show file data in hex and binary
+  hexdump - show file data in hex
+  listswf - swf format disassembler
+  listfdb - show contents of fdb font file
+  listmp3 - show frame header info in an mp3 file
+  listjpeg - show frame header info in a jpeg file
+  makefdb - rip fdb font definition files out of a generator template file
+  swftophp - attempt to make a php/ming script out of an swf file
+
+  try "make <name>" where name is the program you want to build
+
+How do you make a generator template file?  Write some text in a flash movie
+using MM Flash, under "save as.." select "Generator Template".  Feed that
+file into makefdb, and it'll save every font def'n found therein into a file
+<font>.fdb.  If you don't save as a template, it won't write the entire glyph
+set out, only the letters you've actually used..  See, it's smart that way.

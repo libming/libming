@@ -1,0 +1,35 @@
+README
+
+PMing - a Python module for the Ming library
+
+WHAT'S NEW
+
+- 19 Nov 2000: Dave adds destructors, messes up the ming.py file so it
+		acts like the php interface
+
+- 24 Oct 2000: Dave makes an attempt at updating python wrapper for 0.0.3a
+
+- 11 July 2000: First release. Preliminary python class wrapper done. 
+
+
+FEATURES
+
+Acts just like the PHP interface, so documentation is now usable. :)
+
+
+REQUIREMENTS
+- Python 1.5.2 or above.
+- Ming library v.0.0.4
+- a recent version of SWIG if you're going to rebuild ming_wrap.c
+  SWIG 1.1p5 (which comes with Debian 2.2) won't work.
+
+
+LICENSE 
+This software is distributed with no warranty of layability nor 
+merchantability under the LGPL (get a copy at www.fsf.org).
+Copyleft Roberto Raggi <roberto@elecomsolutions.com>
+Member of the powerful dreamhouse [ n o z e ] 
+http://www.noze.it
+
+For information, (no)support, and flames 
+please contact Fiore Basile - <fiore@elecomsolutions.com>

@@ -1,0 +1,10 @@
+a Ruby module for the Ming library based on Python module.
+		Kazuki Sakamoto <sakamoto@splhack.org>
+
+compile:
+       ruby extconf.rb --with-ming-include=.. --with-ming-lib=..
+       make
+
+test:
+       ruby test.rb
+       ruby shape.rb

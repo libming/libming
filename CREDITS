@@ -1,0 +1,36 @@
+
+All of the folks who counted bits and cleaned up the SWF File Reference.
+
+Fiore Basile <fiore@elecomsolutions.com>
+    for wrapping ming into Python
+
+Christian Becker <christian.becker@lhsysnet.com>
+    for building the DLL
+
+Daniel Beulshausen <daniel@php4win.de>
+    for continuing to build the DLL and
+    pointing out changes in new versions of php
+
+Tim Goetze <tim@quitte.de>
+    for submitting patches with bug reports and
+    fixing the kerning code I never got around to
+
+Kazuki Sakamoto <sakamoto@splhack.org>
+    for submitting a Ruby wrapper and examples
+
+Akinori Musha <knu@idaemons.org>
+    for patching the Ruby wrapper
+
+Steve Spicklemire <steve@spvi.com>
+    for Python patches, asking the right questions, Zopeifying this mess,
+    and more
+
+Andy Jeffries <andy@i-a.co.uk>
+    for adding the overlooked saveToFile php function
+
+Raffaele Sena <raff@aromatic.org>
+    for gif2dbl.c, many patches, and pointing out my various
+    incompetencies ;)
+
+
+Full Sail Wassail for inspiration

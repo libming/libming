@@ -1,0 +1,23 @@
+INSTALL
+
+- Extract in the ming main directory
+
+>cd ming-0.0.2b
+>tar xzvf pming-0.0.1a.tar.gz
+>cd py_ext 
+
+- then just type
+
+>make
+
+- and as root
+
+>make install
+
+- Now you can try
+
+>python shape.py
+
+- It will generate the file shape.swf, 
+
+Have Fun!

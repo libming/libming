@@ -1,0 +1,503 @@
+ming_wrap.c
+
+[ Python Module : mingc ]
+
+
+destroySWFMovie(movie)
+        [ returns void  ]
+
+newSWFMovie()
+        [ returns SWFMovie  ]
+
+SWFMovie_setRate(movie,rate)
+        [ returns void  ]
+
+SWFMovie_setDimension(movie,x,y)
+        [ returns void  ]
+
+SWFMovie_setNumberOfFrames(movie,frames)
+        [ returns void  ]
+
+SWFMovie_setBackground(movie,r,g,b)
+        [ returns void  ]
+
+SWFMovie_setSoundStream(movie,sound)
+        [ returns void  ]
+
+SWFMovie_add(movie,block)
+        [ returns SWFDisplayItem  ]
+
+SWFMovie_remove(movie,item)
+        [ returns void  ]
+
+SWFMovie_nextFrame(movie)
+        [ returns void  ]
+
+SWFMovie_labelFrame(movie,label)
+        [ returns void  ]
+
+SWFMovie_output(movie,method,data)
+        [ returns int  ]
+
+SWFMovie_simpleOutput(movie)
+        [ returns int  ]
+
+SWFMovie_save(movie,filename)
+        [ returns void  ]
+
+SWFDisplayItem_rotate(item,degrees)
+        [ returns void  ]
+
+SWFDisplayItem_rotateTo(item,degrees)
+        [ returns void  ]
+
+SWFDisplayItem_move(item,x,y)
+        [ returns void  ]
+
+SWFDisplayItem_moveTo(item,x,y)
+        [ returns void  ]
+
+SWFDisplayItem_scale(item,xScale,yScale)
+        [ returns void  ]
+
+SWFDisplayItem_scaleTo(item,xScale,yScale)
+        [ returns void  ]
+
+SWFDisplayItem_skewX(item,x)
+        [ returns void  ]
+
+SWFDisplayItem_skewXTo(item,x)
+        [ returns void  ]
+
+SWFDisplayItem_skewY(item,y)
+        [ returns void  ]
+
+SWFDisplayItem_skewYTo(item,y)
+        [ returns void  ]
+
+SWFDisplayItem_getDepth(item)
+        [ returns int  ]
+
+SWFDisplayItem_setDepth(item,depth)
+        [ returns void  ]
+
+SWFDisplayItem_remove(item)
+        [ returns void  ]
+
+SWFDisplayItem_setName(item,name)
+        [ returns void  ]
+
+SWFDisplayItem_setRatio(item,ratio)
+        [ returns void  ]
+
+SWFDisplayItem_setCXform(item,cXform)
+        [ returns void  ]
+
+SWFDisplayItem_setColorAdd(item,r,g,b,a)
+        [ returns void  ]
+
+SWFDisplayItem_setColorMult(item,r,g,b,a)
+        [ returns void  ]
+
+SWFFill_skewX(fill,x)
+        [ returns void  ]
+
+SWFFill_skewXTo(fill,x)
+        [ returns void  ]
+
+SWFFill_skewY(fill,y)
+        [ returns void  ]
+
+SWFFill_skewYTo(fill,y)
+        [ returns void  ]
+
+SWFFill_scaleX(fill,x)
+        [ returns void  ]
+
+SWFFill_scaleXTo(fill,x)
+        [ returns void  ]
+
+SWFFill_scaleY(fill,y)
+        [ returns void  ]
+
+SWFFill_scaleYTo(fill,y)
+        [ returns void  ]
+
+SWFFill_scaleXY(fill,x,y)
+        [ returns void  ]
+
+SWFFill_scaleXYTo(fill,x,y)
+        [ returns void  ]
+
+SWFFill_rotate(fill,degrees)
+        [ returns void  ]
+
+SWFFill_rotateTo(fill,degrees)
+        [ returns void  ]
+
+SWFFill_move(fill,x,y)
+        [ returns void  ]
+
+SWFFill_moveTo(fill,x,y)
+        [ returns void  ]
+
+SWFShape_addSolidFill(shape,r,g,b,a)
+        [ returns SWFFill  ]
+
+SWFShape_addGradientFill(shape,gradient,flags)
+        [ returns SWFFill  ]
+
+SWFShape_addBitmapFill(shape,bitmap,flags)
+        [ returns SWFFill  ]
+
+SWFShape_setLeftFill(shape,fill)
+        [ returns void  ]
+
+SWFShape_setRightFill(shape,fill)
+        [ returns void  ]
+
+SWFShape_setLine(shape,width,r,g,b,a)
+        [ returns void  ]
+
+SWFShape_drawArc(shape,x,y,r,startAngle,endAngle)
+        [ returns void  ]
+
+SWFShape_drawCircle(shape,x,y,r)
+        [ returns void  ]
+
+newSWFMovieClip()
+        [ returns SWFMovieClip  ]
+
+SWFMovieClip_setNumberOfFrames(clip,frames)
+        [ returns void  ]
+
+SWFMovieClip_add(clip,block)
+        [ returns SWFDisplayItem  ]
+
+SWFMovieClip_remove(clip,item)
+        [ returns void  ]
+
+SWFMovieClip_nextFrame(clip)
+        [ returns void  ]
+
+newSWFRect(minX,maxX,minY,maxY)
+        [ returns SWFRect  ]
+
+SWFRect_getWidth(r)
+        [ returns int  ]
+
+SWFRect_getHeight(r)
+        [ returns int  ]
+
+SWFCharacter_getBounds(character)
+        [ returns SWFRect  ]
+
+SWFBlock_isCharacter(block)
+        [ returns byte  ]
+
+SWFBitmap_getWidth(b)
+        [ returns int  ]
+
+SWFBitmap_getHeight(b)
+        [ returns int  ]
+
+newSWFDBLBitmap(f)
+        [ returns SWFBitmap  ]
+
+newSWFJpegBitmap(f)
+        [ returns SWFBitmap  ]
+
+newSWFJpegWithAlpha(f,alpha)
+        [ returns SWFBitmap  ]
+
+newSWFGradient()
+        [ returns SWFGradient  ]
+
+SWFGradient_addEntry(gradient,ratio,r,g,b,a)
+        [ returns void  ]
+
+newSWFMatrix(a,b,c,d,x,y)
+        [ returns SWFMatrix  ]
+
+SWFMatrix_set(m,a,b,c,d,x,y)
+        [ returns SWFMatrix  ]
+
+SWFFILL_SOLID = 0x00
+        [ Constant: int  ]
+
+SWFFILL_GRADIENT = 0x10
+        [ Constant: int  ]
+
+SWFFILL_LINEAR_GRADIENT = 0x10
+        [ Constant: int  ]
+
+SWFFILL_RADIAL_GRADIENT = 0x12
+        [ Constant: int  ]
+
+SWFFILL_BITMAP = 0x40
+        [ Constant: int  ]
+
+SWFFILL_TILED_BITMAP = 0x40
+        [ Constant: int  ]
+
+SWFFILL_CLIPPED_BITMAP = 0x41
+        [ Constant: int  ]
+
+newSWFShape()
+        [ returns SWFShape  ]
+
+SWFShape_moveTo(shape,x,y)
+        [ returns void  ]
+
+SWFShape_lineTo(shape,x,y)
+        [ returns void  ]
+
+SWFShape_lineToRelative(shape,dx,dy)
+        [ returns void  ]
+
+SWFShape_curveTo(shape,controlx,controly,anchorx,anchory)
+        [ returns void  ]
+
+SWFShape_curveToRelative(shape,controldx,controldy,anchordx,anchordy)
+        [ returns void  ]
+
+SWFShape_end(shape)
+        [ returns void  ]
+
+newSWFMorphShape()
+        [ returns SWFMorph  ]
+
+SWFMorph_getShape1(morph)
+        [ returns SWFShape  ]
+
+SWFMorph_getShape2(morph)
+        [ returns SWFShape  ]
+
+newSWFFont()
+        [ returns SWFFont  ]
+
+loadSWFFontFromFile(file)
+        [ returns SWFFont  ]
+
+SWFFont_getStringWidth(font,string)
+        [ returns int  ]
+
+SWFFont_getAscent(font)
+        [ returns short  ]
+
+SWFFont_getDescent(font)
+        [ returns short  ]
+
+SWFFont_getLeading(font)
+        [ returns short  ]
+
+newSWFText()
+        [ returns SWFText  ]
+
+newSWFText2()
+        [ returns SWFText  ]
+
+SWFText_setFont(text,font)
+        [ returns void  ]
+
+SWFText_setHeight(text,height)
+        [ returns void  ]
+
+SWFText_setXY(text,x,y)
+        [ returns void  ]
+
+SWFText_setColor(text,r,g,b,a)
+        [ returns void  ]
+
+SWFText_addString(text,string,advance)
+        [ returns void  ]
+
+SWFText_setSpacing(text,spacing)
+        [ returns void  ]
+
+newSWFBrowserFont(name)
+        [ returns SWFBrowserFont  ]
+
+SWFTEXTFIELD_ONMASK = 0x2085
+        [ Constant: int  ]
+
+SWFTEXTFIELD_OFFMASK = 0x38FF
+        [ Constant: int  ]
+
+SWFTEXTFIELD_HASLENGTH = (1<<1)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_NOEDIT = (1<<3)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_PASSWORD = (1<<4)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_MULTILINE = (1<<5)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_WORDWRAP = (1<<6)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_DRAWBOX = (1<<11)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_NOSELECT = (1<<12)
+        [ Constant: int  ]
+
+SWFTEXTFIELD_ALIGN_LEFT = SWFTEXTFIELD_ALIGN_LEFT
+        [ Constant: int  ]
+
+SWFTEXTFIELD_ALIGN_RIGHT = SWFTEXTFIELD_ALIGN_RIGHT
+        [ Constant: int  ]
+
+SWFTEXTFIELD_ALIGN_CENTER = SWFTEXTFIELD_ALIGN_CENTER
+        [ Constant: int  ]
+
+SWFTEXTFIELD_ALIGN_JUSTIFY = SWFTEXTFIELD_ALIGN_JUSTIFY
+        [ Constant: int  ]
+
+newSWFTextField()
+        [ returns SWFTextField  ]
+
+SWFTextField_setFont(field,font)
+        [ returns void  ]
+
+SWFTextField_setBounds(field,width,height)
+        [ returns void  ]
+
+SWFTextField_setFlags(field,flags)
+        [ returns void  ]
+
+SWFTextField_setColor(field,r,g,b,a)
+        [ returns void  ]
+
+SWFTextField_setVariableName(field,name)
+        [ returns void  ]
+
+SWFTextField_addString(field,string)
+        [ returns void  ]
+
+SWFTextField_setHeight(field,height)
+        [ returns void  ]
+
+SWFTextField_setLeftMargin(field,leftMargin)
+        [ returns void  ]
+
+SWFTextField_setRightMargin(field,rightMargin)
+        [ returns void  ]
+
+SWFTextField_setIndentation(field,indentation)
+        [ returns void  ]
+
+SWFTextField_setLineSpacing(field,lineSpacing)
+        [ returns void  ]
+
+SWFTextField_setAlignment(field,alignment)
+        [ returns void  ]
+
+SWFTextField_setLength(field,length)
+        [ returns void  ]
+
+SWF_SOUND_COMPRESSION = 0xf0
+        [ Constant: int  ]
+
+SWF_SOUND_NOT_COMPRESSED = (0<<4)
+        [ Constant: int  ]
+
+SWF_SOUND_ADPCM_COMPRESSED = (1<<4)
+        [ Constant: int  ]
+
+SWF_SOUND_RATE = 0x0c
+        [ Constant: int  ]
+
+SWF_SOUND_5KHZ = (0<<2)
+        [ Constant: int  ]
+
+SWF_SOUND_11KHZ = (1<<2)
+        [ Constant: int  ]
+
+SWF_SOUND_22KHZ = (2<<2)
+        [ Constant: int  ]
+
+SWF_SOUND_44KHZ = (3<<2)
+        [ Constant: int  ]
+
+SWF_SOUND_BITS = 0x02
+        [ Constant: int  ]
+
+SWF_SOUND_8BIT = (0<<1)
+        [ Constant: int  ]
+
+SWF_SOUND_16BIT = (1<<1)
+        [ Constant: int  ]
+
+SWF_SOUND_CHANNELS = 0x01
+        [ Constant: int  ]
+
+SWF_SOUND_MONO = (0<<0)
+        [ Constant: int  ]
+
+SWF_SOUND_STEREO = (1<<0)
+        [ Constant: int  ]
+
+newSWFSound(file)
+        [ returns SWFSound  ]
+
+compileSWFActionCode(script)
+        [ returns SWFAction  ]
+
+SWFBUTTONRECORD_HITSTATE = (1<<3)
+        [ Constant: int  ]
+
+SWFBUTTONRECORD_DOWNSTATE = (1<<2)
+        [ Constant: int  ]
+
+SWFBUTTONRECORD_OVERSTATE = (1<<1)
+        [ Constant: int  ]
+
+SWFBUTTONRECORD_UPSTATE = (1<<0)
+        [ Constant: int  ]
+
+SWFBUTTON_OVERDOWNTOIDLE = (1<<8)
+        [ Constant: int  ]
+
+SWFBUTTON_IDLETOOVERDOWN = (1<<7)
+        [ Constant: int  ]
+
+SWFBUTTON_OUTDOWNTOIDLE = (1<<6)
+        [ Constant: int  ]
+
+SWFBUTTON_OUTDOWNTOOVERDOWN = (1<<5)
+        [ Constant: int  ]
+
+SWFBUTTON_OVERDOWNTOOUTDOWN = (1<<4)
+        [ Constant: int  ]
+
+SWFBUTTON_OVERDOWNTOOVERUP = (1<<3)
+        [ Constant: int  ]
+
+SWFBUTTON_OVERUPTOOVERDOWN = (1<<2)
+        [ Constant: int  ]
+
+SWFBUTTON_OVERUPTOIDLE = (1<<1)
+        [ Constant: int  ]
+
+SWFBUTTON_IDLETOOVERUP = (1<<0)
+        [ Constant: int  ]
+
+newSWFButton()
+        [ returns SWFButton  ]
+
+newSWFButtonRecord(flags,character,layer,matrix)
+        [ returns SWFButtonRecord  ]
+
+SWFButton_addShape(button,character,flags)
+        [ returns void  ]
+
+SWFButton_addAction(button,action,flags)
+        [ returns void  ]
+
+SWFButton_addRecord(button,record)
+        [ returns void  ]
+

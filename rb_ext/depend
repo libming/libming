@@ -1,0 +1,13 @@
+OBJS+= ming_wrap.o
+
+mingc.so: ming_wrap.o
+
+ming_wrap.o: ming_wrap.c
+
+ming_wrap.c: ../ming.i
+	swig -I.. -ruby ming.i
+
+clean: clean_local
+
+clean_local:
+	@rm -f ming_wrap.c

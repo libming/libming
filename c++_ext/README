@@ -1,0 +1,7 @@
+This is a simple c++ wrapper for ming which lets you use objects in more
+or less the same way you would with PHP or Python.  Note that the include
+paths are stuck to the current directory structure, most notably in this
+ming.h's #include of that other ming.h one level up.  If you're going to
+use this for anything, you'll have to work that out.
+
+_d

@@ -1,0 +1,91 @@
+
+Stuff what to do (not in order):
+
+* Add filehandle args to php SWFBitmap constructor
+
+
+* Comment the new universal ming.h
+
+  And figure out how to make it work with c++, too..?
+
+
+* Add:
+
+  filehandle args to various functions
+
+
+* Add ButtonSound to button, access to button shape matrices and cxforms
+
+
+* Add Sound
+
+  Need definesounds now, and maybe adpcm/uncompressed formats.
+
+
+* Read fonts from TTF/PS
+
+
+* Make importable blocks
+
+  Seems kind of wasteful to run lots of code to define a shape that never
+  changes.  It'd be better to dump the rendered shape definition out to a file
+  and pull that in when needed.
+
+
+* add proper error messages to compiler
+
+  "parse error" just isn't quite lucid enough.
+
+
+* getBounds for all drawable types
+
+  ..so you can center text 'n' stuff.
+  It exists in the c code, but there's no SWFRect in the php interface
+
+
+* Make animation easier
+
+  Setting position on every frame is tedious.  I'd like to be able to tell
+  an instance "head to point (x,y) in n frames".  Maybe simple newtonian
+  mechanics, like "setVelocity" and "setAcceleration".  Or maybe I'll just
+  make utility code in php first and see what works.
+
+  Think the goal should be to not have the user stuck in the timeline (i.e.,
+  abolish movie->nextFrame()), be able to put anything anywhere at any time.
+
+
+* Make transforms easier
+
+  Order of transform operations is currently fixed (skew, rotate, scale,
+  translate).  So you can't easily rotate around a point off-center.  I'd made
+  "path" objects trying to solve this, but they were confusing, hard to use.
+
+  And, as noted already, there are transforms we can't get at now, like in
+  buttons and text.
+
+
+* Make newSWFMorph(shape1, shape2)
+
+  Now that shapes have delayed completion this is possible.
+
+
+* Clean things up
+
+  Update header files.  Make names uniform.  Remove unused code.
+  Fix ugly hacks.  Et cetera.
+
+
+* Allow buffer-at-a-time output
+
+  fput'ing each byte is probably slowing us down a lot
+
+
+* make a java wrapper
+
+  so those jsp e-commerce solutions people can pay me (and you) the fat
+  consulting dollars to make their web sites all flashified
+
+
+* make a perl wrapper
+
+  the swig code doesn't seem to work out of the box..

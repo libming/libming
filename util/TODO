@@ -1,0 +1,4 @@
+* listswf and swftophp should be sharing more code- they're both almost 2000
+  lines long, and most of it is more or less the same..
+
+* make swftopy
