@@ -245,7 +245,7 @@ SWFShape newSWFShape();
 void destroySWFShape(SWFShape shape);
 
 void SWFShape_end(SWFShape shape);
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 /* deprecated: */
 void SWFShape_drawFontGlyph(SWFShape shape, SWFFont font, int c);

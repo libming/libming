@@ -128,7 +128,7 @@ void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
 			      int anchordx, int anchordy);
 
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 
 /* deprecated: */

@@ -158,8 +158,6 @@ SWFFont newSWFFont();
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFBlock block);
 
-byte *SWFFont_findCharacterGlyph(SWFFont font, int c);
-
 int SWFFont_getScaledStringWidth(SWFFont font, const char *string);
 
 short SWFFont_getScaledAscent(SWFFont font);
@@ -294,7 +292,7 @@ void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
 void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
 			      int anchordx, int anchordy);
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 
 /* deprecated: */

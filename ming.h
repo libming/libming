@@ -182,8 +182,6 @@ SWFFont newSWFFont();
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFBlock block);
 
-byte *SWFFont_findCharacterGlyph(SWFFont font, int c);
-
 int SWFFont_getStringWidth(SWFFont font, const char *string);
 
 /* XXX */
@@ -610,7 +608,7 @@ static inline void SWFShape_drawCircle(SWFShape shape, int r)
 }
 
 /* draw character c from font font into shape shape */
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */

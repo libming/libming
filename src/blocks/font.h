@@ -116,7 +116,7 @@ SWFFont loadSWFFontFromFile(FILE *file);
 void SWFFont_addTextToList(SWFFont font, struct _textRecord *text);
 void SWFFont_resolveTextList(SWFFont font);
 
-byte *SWFFont_findCharacterGlyph(SWFFont font, int c);
+byte *SWFFont_findCharacterGlyph(SWFFont font, unsigned char c);
 
 int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string);
 short SWFFont_getScaledAscent(SWFFont font);

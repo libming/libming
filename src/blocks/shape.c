@@ -591,7 +591,7 @@ int SWFShape_getScaledPenY(SWFShape shape)
 
 #include "read.c"
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c)
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
 {
   byte *p = SWFFont_findCharacterGlyph(font, c);
   byte **f = &p;
@@ -608,13 +608,12 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c)
   byteAlign();
 
   if(readBits(f, 4) != 1) /* fill bits */
-    error("SWFShape_drawCharacter: was expecting fill bits = 1");
+    error("SWFShape_drawGlyph: was expecting fill bits = 1");
 
   if(readBits(f, 4) != 0) /* line bits */
-    error("SWFShape_drawCharacter: was expecting line bits = 0");
+    error("SWFShape_drawGlyph: was expecting line bits = 0");
 
   /* now we get to parse the shape commands.  Oh boy. */
-
   /* the first one will be a non-edge block- grab the moveto loc */
 
   readBits(f, 6); /* type 0, etc. */
@@ -628,10 +627,7 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c)
   if(readBits(f, 1) != 1) /* fill1 = 1 */
     error("SWFShape_drawCharacter says: oops.  Was expecting fill1 = 1.");
 
-  /* we could just dump the rest if we had access to the shape's output buffer,
-     but this isn't that hard.. */
-
-  /* oh, and we aren't storing compiled shape bytes any more, anyway.. */
+  /* translate the glyph's shape records into drawing commands */
 
   for(;;)
   {

@@ -99,7 +99,7 @@ SWFFont newSWFFont()
   return font;
 }
 
-byte *SWFFont_findCharacterGlyph(SWFFont font, int c)
+byte *SWFFont_findCharacterGlyph(SWFFont font, unsigned char c)
 {
   return font->glyphOffset[font->codeTable[c]];
 }
