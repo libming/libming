@@ -38,6 +38,9 @@ int completeSWFSprite(SWFBlock block)
   int i, length = 0;
   SWFSprite sprite = (SWFSprite)block;
 
+  if(sprite->blocks[sprite->nBlocks-1]->type != SWF_SHOWFRAME)
+    SWFSprite_addBlock(sprite, newSWFShowFrameBlock());
+
   SWFSprite_addBlock(sprite, newSWFEndBlock());
 
   for(i=0; i<sprite->nBlocks; ++i)
@@ -75,6 +78,7 @@ SWFSprite newSWFSprite()
   BLOCK(sprite)->dtor = destroySWFSprite;
 
   sprite->blocks = NULL;
+  sprite->frames = 0;
 
   return sprite;
 }
