@@ -30,14 +30,14 @@ SWFShape_new(package="SWF::Shape")
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
 void
-destroySWFShape(block)
-	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+destroySWFShape(shape)
+	SWF::Shape 	shape
         ALIAS:
         SWF::Shape::DESTROY = 1
         CODE:
         S_DEBUG(2, fprintf(stderr, "Shape DESTROY CALLED\n"));
 	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
-        destroySWFShape(block);
+        destroySWFShape(shape);
 
 void
 SWFShape_movePenTo(shape, x, y)
