@@ -1,3 +1,4 @@
+
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
 CC = gcc -g -Wall
@@ -6,7 +7,8 @@ DEBUG = --debug
 
 LIBS = -lm
 
-OFILES = compile.o listaction.o lex.yy.o compiler.tab.o compileaction.o
+OFILES = compile.o listaction.o lex.yy.o compiler.tab.o compileaction.o \
+	 assembler.o
 
 all: ${OFILES}
 
@@ -15,7 +17,7 @@ clean:
 
 test: ${OFILES} main.o
 	${CC} -o test main.o compile.o listaction.o lex.yy.o \
-		compiler.tab.o ${LIBS}
+		compiler.tab.o assembler.o ${LIBS}
 
 #.o: .c .h
 
