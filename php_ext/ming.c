@@ -1026,7 +1026,7 @@ PHP_FUNCTION(swfdisplayitem_addAction)
   convert_to_object_ex(zaction);
   convert_to_long_ex(flags);
 
-  action = (SWFBlock)getAction(*zaction TSRMLS_CC);
+  action = /*(SWFBlock)*/getAction(*zaction TSRMLS_CC);
 
   SWFDisplayItem_addAction(item, action, Z_LVAL_PP(flags));
 }
@@ -1276,7 +1276,7 @@ PHP_FUNCTION(swffont_init)
     fclose(file);
   }
   else
-    font = newSWFBrowserFont(Z_STRVAL_PP(zfile));
+    font = (SWFFont) newSWFBrowserFont(Z_STRVAL_PP(zfile));
 
   ret = zend_list_insert(font, le_swffontp);
 

@@ -125,7 +125,7 @@ void
 SWFShape_end(shape)
 	SWF::Shape	shape
 
-int
+void
 SWFShape_setLineStyle(shape, width, r, g, b, a=0xff)
 	SWF::Shape	shape
 	unsigned short	width
