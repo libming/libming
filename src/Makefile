@@ -5,7 +5,7 @@ CC = gcc -g -Wall
 LIBDIR = /usr/local/lib
 
 OFILES = movie.o displaylist.o blocklist.o position.o movieclip.o \
-	 shape_util.o ming.o
+	 shape_util.o text_util.o ming.o
 
 COMPILEROFILES = actioncompiler/compile.o \
 		 actioncompiler/compiler.tab.o \
