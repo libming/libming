@@ -12,8 +12,8 @@ install: dynamic
 	install -d ${LIBDIR}
 	install -d ${INCLUDEDIR}
 	install libming.so ${LIBDIR}/libming.so.0.1
-	(cd ${LIBDIR} && ln -s libming.so.0.1 libming.so.0 && ln -s libming.so.0 libming.so)
 	install ming.h ${INCLUDEDIR}
+	(cd ${LIBDIR} && ln -fs libming.so.0.1 libming.so.0 && ln -fs libming.so.0 libming.so)
 
 dynamic:
 	cd src && make dynamic
