@@ -129,18 +129,11 @@ SWFShape SWFMorph_getShape2(SWFMorph morph)
 }
 
 
-int SWFMorph_getNDependencies(SWFCharacter character)
+int
+SWFMorph_getDependencies(SWFCharacter character, SWFBlock** outBlocks)
 {
   SWFMorph morph = (SWFMorph)character;
-
-  return SWFCharacter_getNDependencies(CHARACTER(morph->shape1));
-}
-
-
-SWFBlock *SWFMorph_getDependencies(SWFCharacter character)
-{
-  SWFMorph morph = (SWFMorph)character;
-  return SWFCharacter_getDependencies(CHARACTER(morph->shape1));
+  return SWFCharacter_getDependencies(CHARACTER(morph->shape1), outBlocks);
 }
 
 
@@ -167,7 +160,6 @@ SWFMorph newSWFMorphShape()
   SWFShape_setMorphFlag(morph->shape2);
 
   morph->character.getDependencies = SWFMorph_getDependencies;
-  morph->character.getNDependencies = SWFMorph_getNDependencies;
 
   return morph;
 }
