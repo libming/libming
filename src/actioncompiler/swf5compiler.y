@@ -60,6 +60,8 @@ Buffer bf, bc;
 %token LOADVARIABLES LOADMOVIE LOADVARIABLESNUM LOADMOVIENUM
 %token CALLFRAME STARTDRAG STOPDRAG GOTOFRAME SETTARGET
 
+%token TRY THROW CATCH FINALLY
+
 %token NULLVAL
 %token <intVal> INTEGER
 %token <doubleVal> DOUBLE
@@ -119,6 +121,7 @@ Buffer bf, bc;
 %type <action> program code
 %type <action> stmt stmts
 %type <action> if_stmt iter_stmt cont_stmt break_stmt return_stmt
+%type <action> try_catch_stmt throw_stmt
 %type <action> with_stmt
 %type <action> switch_stmt
 %type <action> anon_function_decl function_decl anycode
@@ -197,6 +200,59 @@ stmt
 	| switch_stmt
 	| return_stmt
 	| with_stmt
+	| try_catch_stmt ';'
+	| throw_stmt
+	;
+
+throw_stmt
+	: THROW expr_or_obj ';'		{ $$ = $2; bufferWriteOp($$, SWFACTION_THROW); }
+	;
+
+try_catch_stmt
+	: TRY stmt					{ 	$$ = newBuffer();
+									bufferWriteOp($$, SWFACTION_TRY);
+									bufferWriteS16($$, bufferLength($2)+8);
+									bufferWriteU8($$, 0);
+									bufferWriteS16($$, bufferLength($2));
+									bufferWriteS16($$, 0);
+									bufferWriteS16($$, 0);
+									bufferWriteU8($$, 0); /* catch name here? - empty string */
+									bufferConcat($$, $2);
+								 }
+	| TRY stmt CATCH '(' identifier ')' stmt		{ $$ = newBuffer();
+									bufferWriteOp($$, SWFACTION_TRY);
+									bufferWriteS16($$, bufferLength($2)+strlen($5)+bufferLength($7)+8);
+									bufferWriteU8($$, 0);
+									bufferWriteS16($$, bufferLength($2));
+									bufferWriteS16($$, bufferLength($7));
+									bufferWriteS16($$, 0);
+									bufferWriteHardString($$, (byte*)$5, strlen($5)+1);
+									bufferConcat($$, $2);
+									bufferConcat($$, $7);
+								}
+	| TRY stmt FINALLY stmt		{	$$ = newBuffer();
+									bufferWriteOp($$, SWFACTION_TRY);
+									bufferWriteS16($$, bufferLength($2)+bufferLength($4)+8);
+									bufferWriteU8($$, 0);
+									bufferWriteS16($$, bufferLength($2));
+									bufferWriteS16($$, bufferLength($4));
+									bufferWriteS16($$, 0);
+									bufferWriteU8($$, 0); /* catch name here? - empty string */
+									bufferConcat($$, $2);
+									bufferConcat($$, $4);
+								 }
+	| TRY stmt CATCH '(' identifier ')' stmt FINALLY stmt	{ $$ = newBuffer();
+									bufferWriteOp($$, SWFACTION_TRY);
+									bufferWriteS16($$, bufferLength($2)+strlen($5)+bufferLength($7)+bufferLength($9)+8);
+									bufferWriteU8($$, 0);
+									bufferWriteS16($$, bufferLength($2));
+									bufferWriteS16($$, bufferLength($7));
+									bufferWriteS16($$, bufferLength($9));
+									bufferWriteHardString($$, (byte*)$5, strlen($5)+1);
+									bufferConcat($$, $2);
+									bufferConcat($$, $7);
+									bufferConcat($$, $9);
+								}
 	;
 
 with_stmt

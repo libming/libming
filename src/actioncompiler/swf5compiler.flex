@@ -7,7 +7,7 @@
 #include "compile.h"
 #include "action.h"
 #include "blocks/error.h"
-#include "swf5compiler.h" /* defines token types */
+#include "swf5compiler.tab.h" /* defines token types */
 
 static int swf5debug;
 
@@ -70,6 +70,7 @@ static void unescape(char *buf)
   *w='\0';
 }
 
+extern int SWF_versionNum;
 void swf5ParseInit(const char *script, int debug)
 {
   checkByteOrder();
@@ -87,6 +88,7 @@ void swf5ParseInit(const char *script, int debug)
 %}
 
 %s asm
+%s AS_V6
 
 %{
  // forward declaration needed by the following function
@@ -106,6 +108,8 @@ DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
 
 %%
+  if(SWF_versionNum >= 6)
+	BEGIN(AS_V6);
 
 0x[0-9a-fA-F]+	{ count();	swf5lval.intVal = strtoul(yytext, NULL, 0);
 					return INTEGER;		}
@@ -228,6 +232,13 @@ branchiftrue		{ count();	return BRANCHIFTRUE; }
 post			{ count();	return POST; }
 get			{ count();	return GET; }
 end			{ count();	return END;		}
+}
+
+<AS_V6>{
+try					{ count(); return TRY; }
+catch				{ count(); return CATCH; }
+throw				{ count(); return THROW; }
+finally				{ count(); return FINALLY; }
 }
 
 r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
