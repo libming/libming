@@ -12,8 +12,8 @@ include ../Rules.make
 all:
 	cat README
 
-all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp png2dbl gif2dbl \
-	gif2mask listaction raw2adpcm png2swf
+all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp \
+	png2dbl gif2dbl gif2mask listaction raw2adpcm png2swf makeswf
 
 clean:
 	rm -f *.o listswf listswf.exe \
