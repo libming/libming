@@ -165,10 +165,12 @@ SWFFont loadSWFFontFromFile(FILE *file)
   fgetc(file); /* "reserved" */
 
   namelen = fgetc(file);
-  font->name = malloc(namelen);
+  font->name = malloc(namelen+1);
 
   for(i=0; i<namelen; ++i)
     font->name[i] = fgetc(file);
+
+  font->name[namelen] = '\0';
 
   nGlyphs = readUInt16(file);
 
