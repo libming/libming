@@ -2,13 +2,14 @@ use ExtUtils::MakeMaker;
 
 use Cwd qw(abs_path cwd);
 
+use strict;
+
 my @DEFAULT_DIR = qw(.. ./src);
 
 my $is_soheil;
 #$is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));
 #$Verbose=1 if $is_soheil;
 
-my @supported_ming_vers = qw(0.2-pre-a);
 my ($MING_DIR, $ming_version);
 
 
@@ -18,7 +19,7 @@ foreach my $src_dir (@DEFAULT_DIR) {
     print "    Trying $abs_src_dir ... " if $is_soheil;
     $ming_version = get_ming_version($src_dir);
 
-    if( $ming_version && version_supported($ming_version) ){
+    if( $ming_version ){
 	$MING_DIR = $src_dir;
         print "Yes\n" if $is_soheil;
 	last;
@@ -28,7 +29,7 @@ foreach my $src_dir (@DEFAULT_DIR) {
 
 ask_ming_dir() unless ($MING_DIR);
 
-print "Using ming version $ming_version in ". abs_path($MING_DIR) ."\n";
+print "\nUsing ming version $ming_version in the ". abs_path($MING_DIR) ." directory.\n\n";
 compile() unless ming_is_compiled();
 write_swf_h($MING_DIR);
 write_config_test ($MING_DIR);
@@ -41,14 +42,6 @@ WriteMakefile(
     'INC'	   => '',     # e.g., '-I/usr/include/other'
     'MYEXTLIB'     => $MING_DIR . '/libming.a',
 );
-
-sub version_supported{
-    my $ver = shift;
-    foreach (@supported_ming_vers){
-	return 1 if $ver eq $_;
-    }
-    return 0;
-}
 
 sub ming_is_compiled{
     return undef unless (-e "$MING_DIR/libming.a");
@@ -108,7 +101,7 @@ sub get_ming_version{
 	next unless /^#define/;
 	next unless s/^#define\s+MING_VERSION\s+(.*)/$1/;
 	chomp($version=$_);
-	print "MING VERSION = $version\n" if $Is_soheil;
+	print "MING VERSION = $version\n" if $is_soheil;
         return $version;
     }
     close(FH);
