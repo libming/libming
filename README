@@ -1,10 +1,10 @@
 
 MING THE MODULE
 
-Last updated 18th January 2004.
+Last updated 2nd February 2004.
 
-Ming is a Flash (SWF) output library.  It can be used from PHP, from Perl,
-from Ruby, from Python, from C, from C++, and probably more on the way.
+Ming is a Flash (SWF) output library.  It can be used from PHP, Perl,
+Ruby, Python, C, C++, Java, and probably more on the way.
 
 It comprises a lot of Flash functionality, including features of Flash 6.
 
@@ -34,108 +34,3 @@ For installation instructions, see the INSTALL file.
 
 The Ming Development Team
 http://ming.sf.net
-
-
-BUILDING and INSTALLING:
-
-no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
-
-    Unpack the Ming source tarball and go into the uncompressed
-    directory.
-
-    $ gunzip ming-0.3a.tar.gz
-    $ cd ming
-
-   Decide whether you want to include gif or png image format
-   handling in Ming, then adjust the ming_config.h, config.make,
-   and Makefile to suit your system.
-
-    $ vi <the appropriate files>
-
-
-  PHP
-  ***
-
-  (should work with PHP-4.0.2 and higher)
-
-  The preferred method is to build Ming as a PHP module (.so file):
-
-   1. Compile the main Ming library
-
-      $ make
-      $ make static
-
-   2. Compile the PHP module
-
-      $ cd php_ext
-      $ make
-
-   3. Install the PHP module
-
-      $ make install
-
-   4. Configure PHP to load Ming.  You need to adjust your
-      php.ini file, normally by adding:
-
-      extension=php_ming.so
-
-      to the extension section, and also making sure the
-      "extension_dir" parameter in the php.ini file is pointing
-      to the correct directory.  A common default of the php.ini
-      file is to be pointing to "./", which may need adjusting.
-
-
-   The alternative way is to build Ming into the PHP source,
-   though I'm personally not sure (Justin that is) if it still
-   works.  If you get this working successfully (or not), please
-   let me know at <jclift@digitaldistribution.com> and we'll update
-   the documentation to reflect it.
-
-      $ mkdir <phpdir>/ext/ming
-      $ cp php_ext/* <phpdir>/ext/ming
-      $ cd <phpdir>
-      $ ./buildconf
-      $ ./configure --with-ming=<mingdir> <other config options>
-
-   Then build and install php as usual, and restart the web server
-   if necessary.
-      
-
-  PYTHON
-  ******
-
-  (You may need python 1.5.2 or higher)
-
-      $ make static
-      $ cd py_ext
-      $ make mingcmodule.so
-
-  Then fix the install path in the Makefile
-
-  Then install
-
-      $ make install
-
-
-  PERL
-  ****
-
-  Read the README file in the perl_ext subdirectory.
-
-
-USING MING:
-
-  check the examples in the "examples" directory
-  Oh wait, it's not there anymore.  Check the web site.
-  Make your own, better, examples and send them to me.
-
-
-For useful information: http://www.opaque.net/ming/
-
----
-
-Macromedia(r) and Flash(tm) are trademarks or registered trademarks of
-Macromedia, Inc. in the United States and/or other countries.
-
-Macromedia(r) does not sponsor, affiliate, or endorse this product and/or
-services.  Nor does the country of China.
