@@ -16,10 +16,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "decompile.h"
 #include "read.h"
 #include "action.h"
+
+#define puts(s) fputs((s),stdout)
+
+static int gIndent;
 
 typedef enum
 {
@@ -30,19 +35,44 @@ typedef enum
   BRANCH_ELSE
 } Branchtype;
 
+static int readStatements(FILE *f, int length, Stack **slist);
+void decompileStatements(Stack *statements, int n);
+
 static void listItem(Stack s, Action parent);
 static void resolveOffsets(Stack *statements, int nStatements);
 static void untangleBranches(Stack *statements, int start, int stop,
 			     Branchtype type, int indent);
+static Stack negateExpression(Stack s);
+static void destroyStack(Stack s);
+static void destroyTree(Tree t);
 
-static int isNum(char *s)
+char **dictionary;
+Stack reg0;
+
+static int
+isNum(const char *s)
 {
   float f = atof(s);
 
-  if(f != 0 || s[0] == '0')
-    return true;
-  else
-    return false;
+  if(f != 0 || s[0] == '0') return true;
+  else return false;
+}
+
+int intVal(Stack s)
+{
+  if(s->type == 'i')
+    return s->data.inum;
+
+  if(s->type == 'd')
+    return (int)floor(s->data.dnum);
+
+  if(s->type == 's')
+    return atoi(s->data.string);
+
+  if(s->type == 't')
+    error("Can't call intVal on a tree!");
+
+  return 0;
 }
 
 static Stack stack = NULL;
@@ -55,24 +85,28 @@ static Stack newStack()
   return s;
 }
 
-static void destroy(Stack s)
+static void
+destroyTree(Tree t)
 {
-  if(!s)
-    return;
+	if(!t) return;
+	destroyStack(t->left);
+	destroyStack(t->right);
+	free(t);
+}
 
-  if(s->type == 't')
-  {
-    destroy(s->data.tree->left);
-    destroy(s->data.tree->right);
-    free(s->data.tree);
-  }
-  else if(s->type == 's')
-    free(s->data.string);
-
+static void
+destroyStack(Stack s)
+{
+  if(!s) return;
+  if(s->type == 't') destroyTree(s->data.tree);
+  //if(s->type == 's') free(s->data.string);
   free(s);
 }
 
-static Stack newTree(Stack left, Action action, Stack right)
+#define min(a,b) (((a)<(b))?(a):(b))
+
+/* XXX - this is lame nomenclature */
+static Stack newTreeBase(Stack left, Action action, Stack right)
 {
   Tree t = (Tree)malloc(sizeof(struct _tree));
   Stack s = newStack();
@@ -87,12 +121,57 @@ static Stack newTree(Stack left, Action action, Stack right)
   return s;
 }
 
-static Stack newString(char *string)
+static Stack newTree(Stack left, Action action, Stack right)
+{
+  Stack s = newTreeBase(left, action, right);
+
+  /* propagate offset values- tree head should have offset = min of its
+     children */
+
+  if(left == NULL)
+  {
+    if(right == NULL)
+      s->offset = 0;
+    else
+      s->offset = right->offset;
+  }
+  else
+  {
+    if(right == NULL)
+      s->offset = left->offset;
+    else
+      s->offset = min(left->offset, right->offset);
+  }
+
+  return s;
+}
+
+static Stack newString(const char *string)
 {
   Stack s = newStack();
 
   s->type = 's';
   s->data.string = string;
+
+  return s;
+}
+
+static Stack newDouble(double d)
+{
+  Stack s = newStack();
+
+  s->type = 'd';
+  s->data.dnum = d;
+
+  return s;
+}
+
+static Stack newInteger(int i)
+{
+  Stack s = newStack();
+
+  s->type = 'i';
+  s->data.inum = i;
 
   return s;
 }
@@ -125,38 +204,37 @@ static void push(Stack s)
   stack = s;
 }
 
-static char *negateString(char *s)
+static char *
+negateString(const char *s)
 {
-  int i, l = strlen(s)+1;
-  char *New = realloc(s, l+1);
+	int l = strlen(s)+1;
+	char *new = malloc(l+1);
 
-  for(i=l; i>0; --i)
-    New[i] = New[i-1];
+	memcpy(new, s+1, l);
+	new[0] = '-';
 
-  New[0] = '-';
-
-  return New;
+	return new;
 }
+
+/* looks like setProperty has been replaced by setMember in F5
+   but it still uses the pushdata property type */
 
 static Property getSetProperty(int prop)
 {
   switch(prop)
   {
-    case SWF_SETPROPERTY_X:		  return PROPERTY_X;
-    case SWF_SETPROPERTY_Y:		  return PROPERTY_Y;
-    case SWF_SETPROPERTY_XSCALE:	  return PROPERTY_XSCALE;
-    case SWF_SETPROPERTY_YSCALE:	  return PROPERTY_YSCALE;
-    case SWF_SETPROPERTY_ALPHA:		  return PROPERTY_ALPHA;
-    case SWF_SETPROPERTY_VISIBILITY:	  return PROPERTY_VISIBLE;
-    case SWF_SETPROPERTY_ROTATION:	  return PROPERTY_ROTATION;
-    case SWF_SETPROPERTY_NAME:		  return PROPERTY_NAME;
-    case SWF_SETPROPERTY_HIGHQUALITY:	  return PROPERTY_HIGHQUALITY;
-    case SWF_SETPROPERTY_SHOWFOCUSRECT:	  return PROPERTY_FOCUSRECT;
+    case SWF_SETPROPERTY_X:               return PROPERTY_X;
+    case SWF_SETPROPERTY_Y:               return PROPERTY_Y;
+    case SWF_SETPROPERTY_XSCALE:          return PROPERTY_XSCALE;
+    case SWF_SETPROPERTY_YSCALE:          return PROPERTY_YSCALE;
+    case SWF_SETPROPERTY_ALPHA:           return PROPERTY_ALPHA;
+    case SWF_SETPROPERTY_VISIBILITY:      return PROPERTY_VISIBLE;
+    case SWF_SETPROPERTY_ROTATION:        return PROPERTY_ROTATION;
+    case SWF_SETPROPERTY_NAME:            return PROPERTY_NAME;
+    case SWF_SETPROPERTY_HIGHQUALITY:     return PROPERTY_HIGHQUALITY;
+    case SWF_SETPROPERTY_SHOWFOCUSRECT:   return PROPERTY_FOCUSRECT;
     case SWF_SETPROPERTY_SOUNDBUFFERTIME: return PROPERTY_SOUNDBUFTIME;
-    case SWF_SETPROPERTY_WTHIT:		  return PROPERTY_WTHIT;
-    default:
-      error("unknown property: 0x%04x!", prop);
-      return SWF_SETPROPERTY_WTHIT;
+    default: return -1;
   }
 }
 
@@ -169,6 +247,10 @@ static Stack readActionRecord(FILE *f)
 
   switch(type)
   {
+    case SWFACTION_POP:
+      return newTree(NULL, type, NULL);
+      /*      return NULL; */
+
     /* no-arg */
     case SWFACTION_GETTIMER:
     case SWFACTION_STOPDRAGMOVIE:
@@ -178,10 +260,6 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_STOP:
     case SWFACTION_TOGGLEQUALITY:
     case SWFACTION_STOPSOUNDS:
-      return newTree(NULL, type, NULL);
-
-    case SWFACTION_POP:
-	  /* pop(); */
       return newTree(NULL, type, NULL);
 
     /* one-arg */
@@ -210,7 +288,6 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_LOGICALAND:
     case SWFACTION_LOGICALOR:
     case SWFACTION_STRINGEQ:
-    case SWFACTION_SETVARIABLE:
     case SWFACTION_STRINGCONCAT:
     case SWFACTION_STRINGCOMPARE:
 	{
@@ -218,6 +295,25 @@ static Stack readActionRecord(FILE *f)
       Stack left = pop();
       return newTree(left, type, right);
 	}
+
+    case SWFACTION_SETVARIABLE:
+    {
+      Stack right = pop();
+      Stack left = pop();
+
+      if(right->type == 't' &&
+	 right->data.tree->action == SWFACTION_SETREGISTER)
+      {
+	/* copy tree to register so we can use it on getregister */
+	/* and remove the register bit so we don't loop endlessly */
+	reg0 = newTree(left, type, right->data.tree->right);
+	destroyStack(right);
+
+	return NULL;
+      }
+      else
+	return newTree(left, type, right);
+    }
 
     case SWFACTION_GETPROPERTY:
     {
@@ -227,7 +323,7 @@ static Stack readActionRecord(FILE *f)
       if(right->type == 's')
       {
 	Stack New = newProperty(atoi(right->data.string));
-	destroy(right);
+	destroyStack(right);
 	right = New;
       }
       return newTree(left, type, right);
@@ -238,10 +334,11 @@ static Stack readActionRecord(FILE *f)
       Stack right = pop();
       Stack left = pop();
 
+      /* XXX - shouldn't we move this to listArithmetic? */
       if(left->type == 's' &&
 	 strcmp(left->data.string, "0") == 0)
       {
-	destroy(left);
+	destroyStack(left);
 	right->data.string = negateString(right->data.string);
 	return right;
       }
@@ -259,10 +356,10 @@ static Stack readActionRecord(FILE *f)
       if(property->type == 's')
       {
 	Stack New = newProperty(atoi(property->data.string));
-	destroy(property);
+	destroyStack(property);
 	property = New;
       }
-
+	
       return newTree(newTree(target, type, property),
 		     SWFACTION_SETVARIABLE, value);
 	}
@@ -283,26 +380,36 @@ static Stack readActionRecord(FILE *f)
       Stack source = pop();
       Stack arg;
 
-      if(level->type != 't' ||
-	 level->data.tree->action != SWFACTION_ADD)
-	error("WTHIT property not found in duplicateClip target level!");
-
-      if(level->data.tree->left->type == 'p' &&
-	 level->data.tree->left->data.prop == PROPERTY_WTHIT)
+      if(level->type == 'i' &&
+	 level->data.inum >= DUPCLIP_NUMBER)
       {
-        arg = level->data.tree->right;
-	level->data.tree->right = NULL;
-      }
-      else if(level->data.tree->right->type == 'p' &&
-	      level->data.tree->right->data.prop == PROPERTY_WTHIT)
-      {
-        arg = level->data.tree->left;
-        level->data.tree->left = NULL;
+	arg = level;
+	arg->data.inum -= DUPCLIP_NUMBER;
       }
       else
-	error("WTHIT property not found in duplicateClip target level!");
+      {
+	if(level->type != 't' ||
+	   (level->data.tree->action != SWFACTION_ADD &&
+	    level->data.tree->action != SWFACTION_NEWADD))
+	  error("magic number 0x4000 not found in duplicateClip target level!");
 
-      destroy(level);
+	if(level->data.tree->left->type == 'i' &&
+	   level->data.tree->left->data.inum == DUPCLIP_NUMBER)
+	{
+	  arg = level->data.tree->right;
+	  level->data.tree->right = NULL;
+	}
+	else if(level->data.tree->right->type == 'i' &&
+		level->data.tree->right->data.inum == DUPCLIP_NUMBER)
+	{
+	  arg = level->data.tree->left;
+	  level->data.tree->left = NULL;
+	}
+	else
+	  error("magic number 0x4000 not found in duplicateClip target level!");
+
+	destroyStack(level);
+      }
 
       return newTree(source, type, newTree(target, type, arg));
     }
@@ -315,84 +422,433 @@ static Stack readActionRecord(FILE *f)
       Stack lockmouse = pop();
       Stack constraint = pop();
 
-      if(constraint->type != 's')
-	error("Sorry, decompiler can't deal with conditional constraint!");
+      if(constraint->type == 't')
+	error("Sorry, decompiler can't deal with conditional constraint in dragMovie!");
 
-      if(strcmp(constraint->data.string, "0") == 0)
+      if(intVal(constraint) == 0)
 	return newTree(constraint, type, newTree(lockmouse, type, target));
-      else
-	  {
-		Stack s4 = pop();
-		Stack s3 = pop();
-		Stack s2 = pop();
-		Stack s1 = pop();
+      else {
+		Stack p4 = pop();
+		Stack p3 = pop();
+		Stack p2 = pop();
+		Stack p1 = pop();
 
-	return newTree(newTree(newTree(s1, type, s2), type,
-			       newTree(s3, type, s4)), type,
+	return newTree(newTree(newTree(p1, type, p2), type,
+			       newTree(p3, type, p4)), type,
 		       newTree(lockmouse, type, target));
 	  }
     }
 
     case SWFACTION_PUSHDATA:
     {
-      int local_type = readUInt8(f);
-      if(local_type==0)
-	return newString(readString(f));
-      else
+      Stack s = NULL;
+      int end = fileOffset + length;
+      int type;
+
+      int off = fileOffset - 3; /* save statement offset */
+
+      while(fileOffset < end)
       {
-	readUInt16(f); /* 0x0000 */
-        return newProperty(getSetProperty(readUInt16(f)));
+	if(s != NULL)
+	  push(s);
+
+	switch(type = readUInt8(f))
+	{
+	  case 0: /* string */
+	    s = newString(readString(f));
+	    break;
+	  case 1: /* property - not used? */
+	    readUInt16(f); /* 0x0000 */
+	    s = newProperty(getSetProperty(readUInt16(f)));
+	    break;
+	  case 2: /* null? */
+	    s = newString("NULL");
+	    break;
+	  case 3: /* ??? */
+	    s = newString("data type 0x03 (?)");
+	    break;
+	  case 4: /* register? */
+	    if(readUInt8(f) != 0)
+	      error("Sorry, can't deal with other than reg0!");
+
+	    s = reg0;
+	    s->offset = reg0->offset;
+	    //	    reg0 = NULL;
+	    break;
+	  case 5: /* boolean? */
+	    s = newString((readUInt8(f) == 0) ? "false" : "true");
+	    break;
+	  case 6: /* double */
+	    s = newDouble(readDouble(f));
+	    break;
+	  case 7: /* int */
+	    s = newInteger(readSInt32(f));
+	    break;
+	  case 8: /* dictionary ref */
+	    s = newString(dictionary[readUInt8(f)]);
+	    break;
+
+	  default:
+	    error("Unknown data type %i", type);
+	}
+
+	if(s->offset == 0)
+	  s->offset = off;
       }
+
+      return s;
     }
 
     case SWFACTION_GOTOFRAME:
-      return newTree((Stack)readUInt16(f), type, NULL);
+      return newTreeBase((Stack)readUInt16(f), type, NULL);
 
     case SWFACTION_GETURL:
     {
       char *url = readString(f);
       char *target = readString(f);
-      return newTree((Stack)url, type, (Stack)target);
+      return newTreeBase((Stack)url, type, (Stack)target);
     }
 
     case SWFACTION_GETURL2:
-	{
+    {
 	  Stack target = pop();
 	  Stack url = pop();
-      return newTree((Stack)readUInt8(f), type, newTree(url, type, target));
-	}
+
+      Stack s = newTree(url, type, target);
+      Stack t = newTreeBase((Stack)readUInt8(f), type, s);
+      t->offset = s->offset;
+      return t;
+    }
 
     case SWFACTION_WAITFORFRAMEEXPRESSION:
-      return newTree((Stack)readUInt8(f), type, NULL);
+      return newTreeBase((Stack)readUInt8(f), type, NULL);
 
     case SWFACTION_GOTOEXPRESSION:
-      return newTree(pop(), type, (Stack)readUInt8(f));
+    {
+      Stack s = pop();
+      Stack t = newTreeBase(s, type, (Stack)readUInt8(f));
+      t->offset = s->offset;
+      return t;
+    }
 
     case SWFACTION_SETTARGET:
     case SWFACTION_GOTOLABEL:
-      return newTree((Stack)readString(f), type, NULL);
-
+      return newTreeBase((Stack)readString(f), type, NULL);
 
     /* branches */
     case SWFACTION_BRANCHIFTRUE:
-      return newTree(pop(), type, (Stack)readSInt16(f));
+    {
+      Stack s = pop(), t;
+      int offset = readSInt16(f);
+      Action action;
+
+      /* if there's a dup or !dup in the condition, we've got an || or && */
+
+      /* XXX - silly hackery wrapping things in nots so the untangler
+	 recognises it.  Would be nice to clean up. */
+
+      if(s->type == 't' &&
+	 ((action = s->data.tree->action) == SWFACTION_DUP || /* it's an or */
+	  ((action = s->data.tree->action) == SWFACTION_LOGICALNOT && /* and */
+	   s->data.tree->left->type == 't' &&
+	   s->data.tree->left->data.tree->action == SWFACTION_DUP)))
+      {
+	int start = fileOffset; /* we're at the start of the next statement */
+	int off;
+	int end = start+offset; /* should be a logical not statement */
+
+	if(action == SWFACTION_DUP)
+	  push(newTree(s, SWFACTION_LOGICALOR, NULL));
+	else
+	{
+	  push(newTree(s->data.tree->left, SWFACTION_LOGICALAND, NULL));
+	  destroyStack(s);
+	}
+
+	/* now grab statements between here and end */
+
+	while(fileOffset < end)
+	{
+	  if(feof(f))
+	    break;
+
+	  off = fileOffset;
+
+	  if((s = readActionRecord(f)) != NULL)
+	  {
+	    push(s);
+
+	    if(s->offset == 0)
+	      s->offset = off;
+	  }
+	}
+
+	while(stack && stack->next &&
+	      stack->next->type == 't')
+	{
+	  if(stack->next->data.tree->action == SWFACTION_POP &&
+	     (stack->next->next->data.tree->action == SWFACTION_LOGICALAND ||
+	      stack->next->next->data.tree->action == SWFACTION_LOGICALOR))
+	  {
+	    t = pop();
+	    pop();
+
+	    if(stack->data.tree->right != NULL)
+	      error("Was expecting logical op's right side to be empty!");
+
+	    stack->data.tree->right = t;
+	  }
+	  else
+	    break;
+	}
+
+	return NULL;
+      }
+
+      /* check for conditions left on the stack from code above */
+
+      while(stack && stack->type == 't')
+      {
+	if(stack->data.tree->action == SWFACTION_LOGICALOR)
+	{
+	  stack->data.tree->right = negateExpression(s);
+	  s = newTree(pop(), SWFACTION_LOGICALNOT, NULL);
+	}
+	else if(stack->data.tree->action == SWFACTION_LOGICALAND)
+	{
+	  stack->data.tree->right = negateExpression(s);
+	  s = newTree(pop(), SWFACTION_LOGICALNOT, NULL);
+	}
+	else
+	  break;
+      }
+
+      t = newTreeBase(s, SWFACTION_BRANCHIFTRUE, (Stack)offset);
+
+      t->offset = s->offset;
+      return t;
+    }
 
     case SWFACTION_BRANCHALWAYS:
-      return newTree(NULL, type, (Stack)readSInt16(f));
+      return newTreeBase(NULL, type, (Stack)readSInt16(f));
 
     case SWFACTION_WAITFORFRAME:
 	{
 	  Stack left = (Stack)readUInt16(f);
 	  Stack right = (Stack)readUInt8(f);
-      return newTree(left, type, right);
+      return newTreeBase(left, type, right);
 	}
 
     case SWFACTION_END:
       return NULL;
 
+
+    /* v5 ops */
+    case SWFACTION_VAR:
+      return newTree(pop(), type, NULL);
+
+    case SWFACTION_VAREQUALS:
+	{
+      Stack right = pop();
+      Stack left = pop();
+
+      return newTree(left, type, right);
+	}
+
+    case SWFACTION_DELETE:
+      return newTree(pop(), type, NULL);
+
+    case SWFACTION_CALLFUNCTION:
+    {
+      Stack last = NULL, t;
+      int i, off;
+
+      Stack name = pop();
+      Stack nargs = pop();
+
+      if(nargs->type == 't')
+	error("Sorry, decompiler can't deal with conditional nargs!");
+
+      for(i=intVal(nargs); i>0; --i)
+	last = newTree(pop(), type, last);
+
+      if(intVal(nargs) > 0)
+	off = last->offset;
+      else
+	off = nargs->offset;
+
+      last = newTreeBase((Stack)intVal(nargs), type, last);
+
+      t = newTreeBase(name, type, last);
+      t->offset = off;
+      return t;
+    }
+
+    case SWFACTION_INCREMENT:
+    case SWFACTION_DECREMENT:
+    case SWFACTION_TYPEOF:
+    case SWFACTION_RETURN:
+    case SWFACTION_DUP:
+    case SWFACTION_TONUMBER:
+    case SWFACTION_TOSTRING:
+      return newTree(pop(), type, NULL);
+
+    case SWFACTION_MODULO:
+    case SWFACTION_NEW:
+    case SWFACTION_NEWADD:
+    case SWFACTION_NEWLESSTHAN:
+    case SWFACTION_NEWEQUAL:
+    case SWFACTION_SHIFTLEFT:
+    case SWFACTION_SHIFTRIGHT:
+    case SWFACTION_SHIFTRIGHT2:
+    case SWFACTION_BITWISEAND:
+    case SWFACTION_BITWISEOR:
+    case SWFACTION_BITWISEXOR:
+    case SWFACTION_GETMEMBER:
+    {
+      Stack right = pop();
+      Stack left = pop();
+
+      return newTree(left, type, right);
+    }
+
+    case SWFACTION_SETMEMBER:
+    {
+      Stack p3 = pop();
+      Stack p2 = pop();
+      Stack p1 = pop();
+
+      return newTree(p1, type, newTree(p2, type, p3));
+    }
+
+    case SWFACTION_CALLMETHOD:
+    {
+      Stack last = NULL, t;
+      int i, off;
+
+      Stack name = pop();
+      Stack object = pop();
+      Stack nargs = pop();
+
+      if(nargs->type == 't')
+	error("Sorry, decompiler can't deal with conditional nargs!");
+
+      for(i=intVal(nargs); i>0; --i)
+	last = newTree(pop(), type, last);
+
+      if(intVal(nargs) > 0)
+	off = last->offset;
+      else
+	off = nargs->offset;
+
+      last = newTreeBase((Stack)intVal(nargs), type, last);
+
+      t = newTree(name, type, newTree(object, type, last));
+      t->offset = off;
+      return t;
+    }
+
+    case SWFACTION_DECLARENAMES:
+    {
+      int i, items = readUInt8(f);
+
+      readUInt8(f);
+
+      /* should just keep static dictionary[256]? */
+      dictionary = realloc(dictionary, items*sizeof(char *));
+
+      for(i=0; i<items; ++i)
+	dictionary[i] = readString(f);
+
+      return NULL;
+    }
+
+    case SWFACTION_WITH:
+    {
+      Stack *statements;
+      int size = readUInt16(f);
+
+      int n = readStatements(f, size, &statements);
+
+      return newTree(pop(), type, newTreeBase((Stack)n, type, (Stack)statements));
+    }
+    case SWFACTION_DEFINEFUNCTION:
+    {
+      Stack tree, p, *statements;
+      int nargs, size, n;
+
+      char *name = readString(f);
+
+      tree = newTreeBase((Stack)name, type, NULL);
+      nargs = readUInt16(f);
+
+      p = tree;
+
+      for(; nargs>0; --nargs)
+      {
+	p->data.tree->right = newTreeBase((Stack)readString(f), type, NULL);
+	p = p->data.tree->right;
+      }
+
+      size = readUInt16(f);
+
+      n = readStatements(f, size, &statements);
+
+      return newTree(tree, type, newTreeBase((Stack)n, type, (Stack)statements));
+    }
+
+    case SWFACTION_ENUMERATE:
+      return newTree(pop(), type, NULL);
+
+    case SWFACTION_SETREGISTER:
+    {
+      Stack s, t;
+
+      if(length != 1)
+	error("Unexpected length (!=1) in setregister");
+
+      s = pop();
+      t = newTreeBase((Stack)readUInt8(f), type, s);
+      t->offset = s->offset;
+      return t;
+    }
+
+    case SWFACTION_INITOBJECT:
+    {
+      Stack *names, *values;
+      int i, nEntries = intVal(pop());
+
+      names = malloc(sizeof(Stack) * nEntries);
+      values = malloc(sizeof(Stack) * nEntries);
+
+      for(i=0; i<nEntries; ++i)
+      {
+	names[i] = pop();
+	values[i] = pop();
+      }
+
+      return newTreeBase((Stack)nEntries, type,
+			 newTreeBase((Stack)names, type, (Stack)values));
+    }
+
+    case SWFACTION_INITARRAY:
+    {
+      Stack *values;
+      int i, nEntries = intVal(pop());
+
+      values = malloc(sizeof(Stack) * nEntries);
+
+      for(i=0; i<nEntries; ++i)
+	values[i] = pop();
+
+      return newTreeBase((Stack)nEntries, type, (Stack)values);
+    }
+
     default:
-      printf("Unknown Action: %02X\n", type);
+      printf("Unknown Action: 0x%02X\n", type);
       dumpBytes(f, length);
+      putchar('\n');
+      assert(0);
       return NULL;
   }
 }
@@ -401,26 +857,28 @@ static void listProperty(Property prop)
 {
   switch(prop)
   {
-    case PROPERTY_X:		   printf("x"); break;
-    case PROPERTY_Y:		   printf("y"); break;
-    case PROPERTY_XSCALE:	   printf("xScale"); break;
-    case PROPERTY_YSCALE:	   printf("yScale"); break;
-    case PROPERTY_CURRENTFRAME:	   printf("currentFrame"); break;
-    case PROPERTY_TOTALFRAMES:	   printf("totalFrames"); break;
-    case PROPERTY_ALPHA:	   printf("alpha"); break;
-    case PROPERTY_VISIBLE:	   printf("visible"); break;
-    case PROPERTY_WIDTH:	   printf("width"); break;
-    case PROPERTY_HEIGHT:	   printf("height"); break;
-    case PROPERTY_ROTATION:	   printf("rotation"); break;
-    case PROPERTY_TARGET:	   printf("target"); break;
-    case PROPERTY_FRAMESLOADED:	   printf("framesLoaded"); break;
-    case PROPERTY_NAME:		   printf("name"); break;
-    case PROPERTY_DROPTARGET:	   printf("dropTarget"); break;
-    case PROPERTY_URL:  	   printf("url"); break;
-    case PROPERTY_HIGHQUALITY:	   printf("quality"); break;
-    case PROPERTY_FOCUSRECT:       printf("focusRect"); break;
-    case PROPERTY_SOUNDBUFTIME:    printf("soundBufTime"); break;
-    case PROPERTY_WTHIT:	   printf("WTHIT!?"); break;
+    case PROPERTY_X:		   printf("_x"); break;
+    case PROPERTY_Y:		   printf("_y"); break;
+    case PROPERTY_XMOUSE:	   printf("_xMouse"); break;
+    case PROPERTY_YMOUSE:	   printf("_yMouse"); break;
+    case PROPERTY_XSCALE:	   printf("_xScale"); break;
+    case PROPERTY_YSCALE:	   printf("_yScale"); break;
+    case PROPERTY_CURRENTFRAME:	   printf("_currentFrame"); break;
+    case PROPERTY_TOTALFRAMES:	   printf("_totalFrames"); break;
+    case PROPERTY_ALPHA:	   printf("_alpha"); break;
+    case PROPERTY_VISIBLE:	   printf("_visible"); break;
+    case PROPERTY_WIDTH:	   printf("_width"); break;
+    case PROPERTY_HEIGHT:	   printf("_height"); break;
+    case PROPERTY_ROTATION:	   printf("_rotation"); break;
+    case PROPERTY_TARGET:	   printf("_target"); break;
+    case PROPERTY_FRAMESLOADED:	   printf("_framesLoaded"); break;
+    case PROPERTY_NAME:		   printf("_name"); break;
+    case PROPERTY_DROPTARGET:	   printf("_dropTarget"); break;
+    case PROPERTY_URL:  	   printf("_url"); break;
+    case PROPERTY_HIGHQUALITY:	   printf("_quality"); break;
+    case PROPERTY_FOCUSRECT:       printf("_focusRect"); break;
+    case PROPERTY_SOUNDBUFTIME:    printf("_soundBufTime"); break;
+    case PROPERTY_WTHIT:	   printf("_WTHIT!?"); break;
     default:			   printf("unknown property!"); break;
   }
 }
@@ -438,21 +896,31 @@ static int precedence(Action type)
 
     case SWFACTION_LESSTHAN:       return 3;
     case SWFACTION_EQUAL:          return 3;
+    case SWFACTION_NEWEQUAL:       return 3;
 
-    case SWFACTION_ADD:            return 4;
-    case SWFACTION_SUBTRACT:       return 4;
+    case SWFACTION_SHIFTLEFT:      return 4;
+    case SWFACTION_SHIFTRIGHT:     return 4;
+    case SWFACTION_SHIFTRIGHT2:    return 4;
 
-    case SWFACTION_MULTIPLY:       return 5;
-    case SWFACTION_DIVIDE:         return 5;
+    case SWFACTION_NEWADD:         return 5;
+    case SWFACTION_ADD:            return 5;
+    case SWFACTION_SUBTRACT:       return 5;
 
-    case SWFACTION_GETVARIABLE:    return 6;
-    case SWFACTION_GETPROPERTY:    return 6;
+    case SWFACTION_MULTIPLY:       return 6;
+    case SWFACTION_DIVIDE:         return 6;
 
-    case SWFACTION_STRINGEQ:       return 7;
-    case SWFACTION_STRINGCONCAT:   return 7;
-    case SWFACTION_PUSHDATA:       return 7;
+    case SWFACTION_BITWISEAND:     return 7;
+    case SWFACTION_BITWISEOR:      return 7;
+    case SWFACTION_BITWISEXOR:     return 7;
 
-    case SWFACTION_SETPROPERTY:    return 8;
+    case SWFACTION_GETVARIABLE:    return 8;
+    case SWFACTION_GETPROPERTY:    return 8;
+
+    case SWFACTION_STRINGEQ:       return 9;
+    case SWFACTION_STRINGCONCAT:   return 9;
+    case SWFACTION_PUSHDATA:       return 9;
+
+    case SWFACTION_SETPROPERTY:    return 10;
 
     default:                       return 0;
   }
@@ -528,20 +996,59 @@ static void listNot(Stack s, Action parent)
 
 static void listAssign(Stack s)
 {
-  /* check for ++a, a+=b */
-
   Stack left = s->data.tree->left;
   Stack right = s->data.tree->right;
 
+  /* if it's a string, quote it
+     (can't do it in listItem because we don't know what side of the equals
+     sign we are..) */
+
+  if(right->type == 's')
+  {
+    listItem(left, SWFACTION_SETVARIABLE);
+    puts(" = '");
+    listItem(right, SWFACTION_SETVARIABLE);
+    putchar('\'');
+    return;
+  }
+
+  /* check for ++a w/ increment op */
+
   if(right->type == 't' &&
-     right->data.tree->action >= SWFACTION_ADD &&
-     right->data.tree->action <= SWFACTION_DIVIDE)
+     (right->data.tree->action == SWFACTION_INCREMENT ||
+      right->data.tree->action == SWFACTION_DECREMENT))
+  {
+    Stack rleft = right->data.tree->left;
+
+    if(rleft->type == 't' &&
+       rleft->data.tree->action == SWFACTION_GETVARIABLE &&
+       rleft->data.tree->left->type == 's' &&
+       left->type == 's' &&
+       strcmp(rleft->data.tree->left->data.string, left->data.string) == 0)
+    {
+      if(right->data.tree->action == SWFACTION_INCREMENT)
+	puts("++");
+      else
+	puts("--");
+
+      listItem(left, SWFACTION_SETVARIABLE);
+      return;
+    }
+  }
+
+  /* check for ++a and a+=b w/ traditional ops */
+
+  if(right->type == 't' &&
+     (right->data.tree->action == SWFACTION_NEWADD ||
+      (right->data.tree->action >= SWFACTION_ADD &&
+       right->data.tree->action <= SWFACTION_DIVIDE)))
   {
     Stack rleft = right->data.tree->left;
     Stack rright = right->data.tree->right;
     const char *op;
 
-    if(right->data.tree->action == SWFACTION_ADD)
+    if(right->data.tree->action == SWFACTION_ADD ||
+       right->data.tree->action == SWFACTION_NEWADD)
       op = " += ";
     else if(right->data.tree->action == SWFACTION_SUBTRACT)
       op = " -= ";
@@ -555,27 +1062,29 @@ static void listAssign(Stack s)
     if(rleft->type == 't' &&
        rleft->data.tree->action == SWFACTION_GETVARIABLE &&
        rleft->data.tree->left->type == 's' &&
+       left->type == 's' &&
        strcmp(rleft->data.tree->left->data.string, left->data.string) == 0)
     {
       if(rright->type == 's' &&
 	 strcmp(rright->data.string, "1") == 0)
       {
-	if(right->data.tree->action == SWFACTION_ADD)
+	if(right->data.tree->action == SWFACTION_ADD ||
+	   right->data.tree->action == SWFACTION_NEWADD)
 	{
-	  printf("++");
+	  puts("++");
 	  listItem(left, SWFACTION_SETVARIABLE);
 	  return;
 	}
 	else if(right->data.tree->action == SWFACTION_SUBTRACT)
 	{
-	  printf("--");
+	  puts("--");
 	  listItem(left, SWFACTION_SETVARIABLE);
 	  return;
 	}
       }
 
       listItem(left, SWFACTION_SETVARIABLE);
-      printf(op);
+      puts(op);
       listItem(rright, right->data.tree->action);
       return;
     }
@@ -588,30 +1097,31 @@ static void listAssign(Stack s)
       if(rleft->type == 's' &&
 	 strcmp(rleft->data.string, "1") == 0)
       {
-	if(right->data.tree->action == SWFACTION_ADD)
+	if(right->data.tree->action == SWFACTION_ADD ||
+	   right->data.tree->action == SWFACTION_NEWADD)
 	{
-	  printf("++");
+	  puts("++");
 	  listItem(left, SWFACTION_SETVARIABLE);
 	  return;
 	}
 	else if(right->data.tree->action == SWFACTION_SUBTRACT)
 	{
-	  printf("--");
+	  puts("--");
 	  listItem(left, SWFACTION_SETVARIABLE);
 	  return;
 	}
       }
 
       listItem(left, SWFACTION_SETVARIABLE);
-      printf(op);
+      puts(op);
       listItem(rleft, right->data.tree->action);
       return;
     }
   }
 
   listItem(left, SWFACTION_SETVARIABLE);
-  printf(" = ");
-  listItem(right, 0);
+  puts(" = ");
+  listItem(right, SWFACTION_SETVARIABLE);
 }
 
 static void listArithmetic(Stack s, Action parent)
@@ -636,11 +1146,20 @@ static void listArithmetic(Stack s, Action parent)
 
   switch(t->action)
   {
+    case SWFACTION_NEWADD:
     case SWFACTION_ADD:            op = (isShort?"+":" + "); break;
     case SWFACTION_SUBTRACT:       op = (isShort?"-":" - "); break;
     case SWFACTION_MULTIPLY:       op = (isShort?"*":" * "); break;
     case SWFACTION_DIVIDE:         op = (isShort?"/":" / "); break;
+    case SWFACTION_MODULO:         op = (isShort?"%":" % "); break;
+    case SWFACTION_BITWISEOR:      op = (isShort?"|":" | "); break;
+    case SWFACTION_BITWISEAND:     op = (isShort?"&":" & "); break;
+    case SWFACTION_BITWISEXOR:     op = (isShort?"^":" ^ "); break;
+    case SWFACTION_SHIFTLEFT:      op = (isShort?"<<":" << "); break;
+    case SWFACTION_SHIFTRIGHT:     op = (isShort?">>":" >> "); break;
+    case SWFACTION_SHIFTRIGHT2:    op = (isShort?">>>":" >>> "); break;
 
+    case SWFACTION_NEWEQUAL:
     case SWFACTION_EQUAL:          op = " == ";   break;
     case SWFACTION_LOGICALAND:     op = " && ";   break;
     case SWFACTION_LOGICALOR:      op = " || ";   break;
@@ -678,16 +1197,18 @@ static void listArithmetic(Stack s, Action parent)
     }
   }
 
-  /* parentesization rule */
+  /* parenthesization rule */
   parens = (precedence(parent) > precedence(t->action) ||
 	    (t->action == SWFACTION_MULTIPLY && parent == SWFACTION_DIVIDE) ||
-	    (t->action == SWFACTION_ADD && parent == SWFACTION_SUBTRACT));
+	    (t->action == SWFACTION_ADD && parent == SWFACTION_SUBTRACT) ||
+	    (t->action == SWFACTION_LOGICALAND && parent == SWFACTION_LOGICALOR) ||
+	    (t->action == SWFACTION_LOGICALOR && parent == SWFACTION_LOGICALAND));
 
   if(parens)
     putchar('(');
 
   listItem(left, t->action);
-  printf(op);
+  puts(op);
   listItem(right, t->action);
 
   if(parens)
@@ -704,19 +1225,38 @@ static void listItem(Stack s, Action parent)
        parent == SWFACTION_SETVARIABLE ||
        parent == SWFACTION_GETPROPERTY ||
        parent == SWFACTION_SETPROPERTY ||
+       parent == SWFACTION_GETMEMBER ||
+       parent == SWFACTION_SETMEMBER ||
        parent == SWFACTION_DUPLICATECLIP ||
+       parent == SWFACTION_NEW ||
+       parent == SWFACTION_VAR ||
+       parent == SWFACTION_VAREQUALS ||
+       parent == SWFACTION_CALLMETHOD ||
+       parent == SWFACTION_CALLFUNCTION ||
        isNum(s->data.string))
-      printf(s->data.string);
+      puts(s->data.string);
     else
     {
       putchar('\'');
-      printf(s->data.string);
+      puts(s->data.string);
       putchar('\'');
     }
   }
   else if(s->type == 'p')
   {
     listProperty(s->data.prop);
+  }
+  else if(s->type == 'd')
+  {
+    /* XXX - should prolly check for integerness, too */
+    if(s->data.dnum == 0)
+      putchar('0');
+    else
+      printf("%f", s->data.dnum);
+  }
+  else if(s->type == 'i')
+  {
+    printf("%i", s->data.inum);
   }
   else if(s->type == 't')
   {
@@ -744,7 +1284,7 @@ static void listItem(Stack s, Action parent)
 	if(parent == SWFACTION_GETVARIABLE ||
 	   parent == SWFACTION_GETPROPERTY)
 	{
-	  printf("valueOf(");
+	  puts("valueOf(");
 	  listArithmetic(s, parent);
 	  putchar(')');
 	}
@@ -763,18 +1303,23 @@ static void listItem(Stack s, Action parent)
       case SWFACTION_GETPROPERTY:
 	if(t->left->type == 's' &&
 	   t->left->data.string[0] == '\0')
-	  printf("this");
+	  puts("this");
 	else
 	  listItem(t->left, SWFACTION_GETPROPERTY);
 
 	putchar('.');
-	listItem(t->right, SWFACTION_GETPROPERTY);
+
+	if(t->right->type == 'i')
+	  listProperty(t->right->data.inum);
+	else
+	  listItem(t->right, SWFACTION_GETPROPERTY);
+
 	break;
 
       case SWFACTION_SETPROPERTY:
 	if(t->left->type == 's' &&
 	   t->left->data.string[0] == '\0')
-	  printf("this");
+	  puts("this");
 	else
 	  listItem(t->left, SWFACTION_SETPROPERTY);
 
@@ -784,11 +1329,11 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_MBSUBSTRING:
       case SWFACTION_SUBSTRING:
-	printf("substr(");
+	puts("substr(");
 	listItem(t->left, t->action);
-	printf(", ");
+	puts(", ");
 	listItem(t->right->data.tree->left, t->action);
-	printf(", ");
+	puts(", ");
 	listItem(t->right->data.tree->right, t->action);
 	putchar(')');
 	break;
@@ -799,50 +1344,62 @@ static void listItem(Stack s, Action parent)
 	break;
 
       case SWFACTION_STRINGLENGTH:
-	printf("strlen(");
+	puts("strlen(");
 	listItem(t->left, SWFACTION_STRINGLENGTH);
 	putchar(')');
 	break;
 
       case SWFACTION_INT:
-	printf("int(");
+	puts("int(");
 	listItem(t->left, SWFACTION_INT);
 	putchar(')');
 	break;
 
       case SWFACTION_RANDOM:
-	printf("random(");
+	puts("random(");
 	listItem(t->left, SWFACTION_RANDOM);
 	putchar(')');
 	break;
 
       case SWFACTION_MBLENGTH:
-	printf("mbstrlen(");
+	puts("mbstrlen(");
 	listItem(t->left, SWFACTION_MBLENGTH);
 	putchar(')');
 	break;
 
       case SWFACTION_ORD:
-	printf("ord(");
+	puts("ord(");
 	listItem(t->left, SWFACTION_ORD);
 	putchar(')');
 	break;
 
       case SWFACTION_CHR:
-	printf("chr(");
+	puts("chr(");
 	listItem(t->left, SWFACTION_CHR);
 	putchar(')');
 	break;
 
       case SWFACTION_MBORD:
-	printf("mbord(");
+	puts("mbord(");
 	listItem(t->left, SWFACTION_MBORD);
 	putchar(')');
 	break;
 
       case SWFACTION_MBCHR:
-	printf("mbchr(");
+	puts("mbchr(");
 	listItem(t->left, SWFACTION_MBCHR);
+	putchar(')');
+	break;
+
+      case SWFACTION_TONUMBER:
+	puts("Number(");
+	listItem(t->left, SWFACTION_TONUMBER);
+	putchar(')');
+	break;
+
+      case SWFACTION_TOSTRING:
+	puts("String(");
+	listItem(t->left, SWFACTION_TOSTRING);
 	putchar(')');
 	break;
 
@@ -851,76 +1408,76 @@ static void listItem(Stack s, Action parent)
 	break;
 
       case SWFACTION_GETTIMER:
-	printf("getTimer()");
+	puts("getTimer()");
 	break;
 
 	/* statements */
       case SWFACTION_DUPLICATECLIP:
-	printf("duplicateClip(");
+	puts("duplicateClip(");
 	listItem(t->left, SWFACTION_DUPLICATECLIP);
-	printf(", ");
+	puts(", ");
 	listItem(t->right->data.tree->left, SWFACTION_DUPLICATECLIP);
-	printf(", ");
+	puts(", ");
 	listItem(t->right->data.tree->right, SWFACTION_DUPLICATECLIP);
 	putchar(')');
 	break;
 
       case SWFACTION_STARTDRAGMOVIE:
-	printf("startDrag(");
+	puts("startDrag(");
 	listItem(t->right->data.tree->right, SWFACTION_STARTDRAGMOVIE);
-	printf(", ");
+	puts(", ");
 	listItem(t->right->data.tree->left, SWFACTION_STARTDRAGMOVIE);
 
 	if(t->left->type == 't')
 	{
 	  Tree root = t->left->data.tree;
-	  printf(", ");
+	  puts(", ");
 	  listItem(root->left->data.tree->left, SWFACTION_STARTDRAGMOVIE);
-	  printf(", ");
+	  puts(", ");
 	  listItem(root->right->data.tree->left, SWFACTION_STARTDRAGMOVIE);
-	  printf(", ");
+	  puts(", ");
 	  listItem(root->left->data.tree->right, SWFACTION_STARTDRAGMOVIE);
-	  printf(", ");
+	  puts(", ");
 	  listItem(root->right->data.tree->right, SWFACTION_STARTDRAGMOVIE);
 	}
 	putchar(')');
 	break;
 
       case SWFACTION_REMOVECLIP:
-	printf("removeClip(");
+	puts("removeClip(");
 	listItem(t->left, SWFACTION_REMOVECLIP);
 	putchar(')');
 	break;
       case SWFACTION_TRACE:
-	printf("trace(");
+	puts("trace(");
 	listItem(t->left, SWFACTION_TRACE);
 	putchar(')');
 	break;
       case SWFACTION_SETTARGETEXPRESSION:
-	printf("setTarget(");
+	puts("setTarget(");
 	listItem(t->left, SWFACTION_SETTARGETEXPRESSION);
 	putchar(')');
 	break;
       case SWFACTION_STOPDRAGMOVIE:
-	printf("stopDrag()");
+	puts("stopDrag()");
 	break;
       case SWFACTION_NEXTFRAME:
-	printf("nextFrame()");
+	puts("nextFrame()");
 	break;
       case SWFACTION_PREVFRAME:
-	printf("prevFrame()");
+	puts("prevFrame()");
 	break;
       case SWFACTION_PLAY:
-	printf("play()");
+	puts("play()");
 	break;
       case SWFACTION_STOP:
-	printf("stop()");
+	puts("stop()");
 	break;
       case SWFACTION_TOGGLEQUALITY:
-	printf("toggleQuality()");
+	puts("toggleQuality()");
 	break;
       case SWFACTION_STOPSOUNDS:
-	printf("stopSounds()");
+	puts("stopSounds()");
 	break;
 
       case SWFACTION_GOTOFRAME:
@@ -929,7 +1486,7 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_GETURL:
       {
-	printf("getURL('%s', '%s')", (char *)t->left, (char *)t->right);
+	printf("getURL(%s, %s)", (char *)t->left, (char *)t->right);
 	break;
       }
 
@@ -938,38 +1495,42 @@ static void listItem(Stack s, Action parent)
 	break;
 
       case SWFACTION_GETURL2:
-	printf("getURL(");
+      {
+	int type = (int)t->left;
+
+	puts("getURL2(");
 	listItem(t->right->data.tree->left, SWFACTION_GETURL2);
-	printf(", ");
+	puts(", ");
 	listItem(t->right->data.tree->right, SWFACTION_GETURL2);
 
-	switch((int)t->left)
+	switch(type)
 	{
-	  case 0: printf(")"); break;
-	  case 1: printf(", GET)"); break;
-	  case 2: printf(", POST)"); break;
-	  default: printf(", 0x%x /* ??? */)", (int)t->left);
+	  case 0: putchar(')'); break;
+	  case 1: puts(", GET)"); break;
+	  case 2: puts(", POST)"); break;
+	  default: printf(", type=%i (?))", type); break;
 	}
 	break;
+      }
 
       case SWFACTION_CALLFRAME:
-	printf("callFrame(");
+	puts("callFrame(");
 	listItem(t->left, SWFACTION_CALLFRAME);
         putchar(')');
 	break;
 
       case SWFACTION_GOTOEXPRESSION:
-	printf("gotoFrame(");
+	puts("gotoFrame(");
 	listItem(t->left, SWFACTION_GOTOEXPRESSION);
         putchar(')');
 
 	if((int)t->right == 1)
-	  printf(";\nplay()");
+	  puts(";\nplay()");
 	break;
 
       case SWFACTION_SETTARGET:
 	if(((char *)t->left)[0] == '\0')
-	  printf("setTarget(this)");
+	  puts("setTarget(this)");
 	else
 	  printf("setTarget('%s')", (char *)t->left);
 	break;
@@ -978,9 +1539,9 @@ static void listItem(Stack s, Action parent)
 	printf("gotoFrame('%s')", (char *)t->left);
 	break;
 
-	/* branches - shouldn't see these */
+	/* branches - shouldn't see these (but is good for debugging) */
       case SWFACTION_BRANCHIFTRUE:
-	printf("if(");
+	puts("if(");
 	listItem(t->left, SWFACTION_BRANCHIFTRUE);
 	printf(") branch %i", (int)t->right);
 	break;
@@ -993,6 +1554,253 @@ static void listItem(Stack s, Action parent)
 	printf("Wait for frame %i ", (int)t->left);
 	printf(" else skip %i", (int)t->right);
 	break;
+
+
+    /* v5 ops */
+      case SWFACTION_VAR:
+	puts("var ");
+	listItem(t->left, SWFACTION_VAR);
+	break;
+
+      case SWFACTION_VAREQUALS:
+	puts("var ");
+	listItem(t->left, SWFACTION_VAREQUALS);
+	puts(" = ");
+	listItem(t->right, SWFACTION_VAREQUALS);
+	break;
+
+      case SWFACTION_DELETE:
+	puts("delete ");
+	listItem(t->left, SWFACTION_DELETE);
+	break;
+
+      case SWFACTION_CALLFUNCTION:
+      {
+	int nargs, i;
+
+	listItem(t->left, SWFACTION_CALLFUNCTION);
+	putchar('(');
+
+	t = t->right->data.tree;
+	nargs = (int)t->left;
+
+	for(i=0; i<nargs; ++i)
+	{
+	  t = t->right->data.tree;
+	  if(i>0)
+	    puts(", ");
+	  listItem(t->left, SWFACTION_CALLFUNCTION);
+	}
+
+	putchar(')');
+
+	break;
+      }
+
+      case SWFACTION_RETURN:
+	puts("return ");
+	listItem(t->left, SWFACTION_RETURN);
+	break;
+
+      case SWFACTION_NEWEQUAL:
+      case SWFACTION_NEWADD:
+      case SWFACTION_SHIFTLEFT:
+      case SWFACTION_SHIFTRIGHT:
+      case SWFACTION_SHIFTRIGHT2:
+      case SWFACTION_BITWISEAND:
+      case SWFACTION_BITWISEOR:
+      case SWFACTION_BITWISEXOR:
+      case SWFACTION_MODULO:
+	listArithmetic(s, parent);
+	break;
+
+      case SWFACTION_NEW:
+	puts("new ");
+	listItem(t->right, SWFACTION_NEW);
+	putchar('(');
+	listItem(t->left, SWFACTION_NEW);
+	putchar(')');
+	break;
+
+      case SWFACTION_TYPEOF:
+	puts("typeof(");
+	listItem(t->left, SWFACTION_TYPEOF);
+	putchar(')');
+	break;
+
+      case SWFACTION_NEWLESSTHAN:
+	listLessThan(s, NONEGATE);
+	break;
+
+      case SWFACTION_GETMEMBER:
+	listItem(t->left, SWFACTION_GETMEMBER);
+	if(t->right->type == 'i')
+	{	putchar('[');
+		listItem(t->right, SWFACTION_GETMEMBER);
+		putchar(']');
+	}
+	else
+	{	putchar('.');
+		listItem(t->right, SWFACTION_GETMEMBER);
+	}
+	break;
+
+      case SWFACTION_SETMEMBER:
+	listItem(t->left, SWFACTION_SETMEMBER);
+	putchar('.');
+	listItem(t->right->data.tree->left, SWFACTION_SETMEMBER);
+	puts(" = ");
+	listItem(t->right->data.tree->right, SWFACTION_SETMEMBER);
+	break;
+
+      case SWFACTION_INCREMENT:
+	listItem(t->left, SWFACTION_INCREMENT);
+	puts("+1");
+	break;
+
+      case SWFACTION_DECREMENT:
+	listItem(t->left, SWFACTION_DECREMENT);
+	puts("-1");
+	break;
+
+      case SWFACTION_CALLMETHOD:
+      {
+	int nargs, i;
+
+	listItem(t->right->data.tree->left, SWFACTION_CALLMETHOD);
+	putchar('.');
+
+	listItem(t->left, SWFACTION_CALLMETHOD);
+	putchar('(');
+
+	t = t->right->data.tree->right->data.tree;
+	nargs = (int)t->left;
+
+	for(i=0; i<nargs; ++i)
+	{
+	  t = t->right->data.tree;
+	  if(i>0)
+	    puts(", ");
+	  listItem(t->left, SWFACTION_CALLMETHOD);
+	}
+
+	putchar(')');
+
+	break;
+      }
+
+      /* dealt with on parse */
+      case SWFACTION_DECLARENAMES:
+	error("Shouldn't get declareNames in listItem!");
+	break;
+
+      case SWFACTION_WITH:
+      {
+	int n = (int)t->right->data.tree->left;
+	Stack *statements = (Stack *)t->right->data.tree->right;
+
+	puts("with(");
+	puts((char *)t->left->data.tree);
+	puts(")\n{\n");
+	decompileStatements(statements, n);
+	puts("}");
+	break;
+      }
+
+      case SWFACTION_DEFINEFUNCTION:
+      {
+	int n = (int)t->right->data.tree->left;
+	Stack *statements = (Stack *)t->right->data.tree->right;
+
+	int first = 1;
+	Stack args = t->left->data.tree->right;
+
+	puts("function ");
+	puts((char *)t->left->data.tree->left);
+	putchar('(');
+
+	while(args != NULL)
+	{
+	  if(!first)
+	    puts(", ");
+
+	  first = 0;
+	  puts((char *)args->data.tree->left);
+	  args = args->data.tree->right;
+	}
+
+	puts(")\n{\n");
+	decompileStatements(statements, n);
+	puts("}");
+
+	break;
+      }
+
+      case SWFACTION_ENUMERATE:
+	puts("iterate over "); /* XXX */
+	listItem(t->left, SWFACTION_ENUMERATE);
+	break;
+
+      case SWFACTION_SETREGISTER:
+      {
+	/* XXX - shouldn't ever see this.. */
+	int n = (int)t->left;
+	puts("(_tmp");
+	putchar('0'+n);
+	puts(" = ");
+	listItem(t->right, SWFACTION_SETREGISTER);
+	putchar(')');
+
+	break;
+      }
+
+      case SWFACTION_DUP:
+	listItem(t->left, SWFACTION_DUP);
+	break;
+
+
+      case SWFACTION_INITOBJECT:
+      {
+	int i, nEntries = (int)t->left;
+	Stack *names = (Stack *)t->right->data.tree->left;
+	Stack *values = (Stack *)t->right->data.tree->right;
+
+	puts("{ ");
+
+	for(i=0; i<nEntries; ++i)
+	{
+	  listItem(names[i], SWFACTION_INITOBJECT);
+	  puts(" : ");
+	  listItem(values[i], SWFACTION_INITOBJECT);
+
+	  if(i < nEntries-1)
+	    puts(", ");
+	}
+
+	puts(" }");
+
+	break;
+      }
+
+      case SWFACTION_INITARRAY:
+      {
+	int i, nEntries = (int)t->left;
+	Stack *values = (Stack *)t->right;
+
+	puts("[ ");
+
+	for(i=0; i<nEntries; ++i)
+	{
+	  listItem(values[i], SWFACTION_INITOBJECT);
+
+	  if(i < nEntries-1)
+	    puts(", ");
+	}
+
+	puts(" ]");
+
+	break;
+      }
 
       default:
 	break;
@@ -1035,7 +1843,24 @@ static int isStatement(Stack s)
     case SWFACTION_BRANCHIFTRUE:
     case SWFACTION_CALLFRAME:
     case SWFACTION_GOTOEXPRESSION:
-	case SWFACTION_POP:
+
+      /*
+    case SWFACTION_CALLFUNCTION:
+    case SWFACTION_CALLMETHOD:
+      */
+
+    case SWFACTION_VAR:
+    case SWFACTION_VAREQUALS:
+    case SWFACTION_DELETE:
+    case SWFACTION_POP:
+    case SWFACTION_RETURN:
+    case SWFACTION_SETMEMBER:
+    case SWFACTION_DECLARENAMES:
+    case SWFACTION_WITH:
+    case SWFACTION_DEFINEFUNCTION:
+
+    case SWFACTION_ENUMERATE:
+
       return 1;
     default:
       return 0;
@@ -1054,7 +1879,10 @@ static Stack readStatement(FILE *f)
     if((s = readActionRecord(f)) == NULL)
       return NULL;
 
-    if(stack == NULL && isStatement(s))
+    if((int)s == -1) /* declarenames */
+      continue;
+
+    if(stack == NULL && reg0 == NULL && isStatement(s))
       /* supposedly, we've got a complete statement. */
       return s;
     else
@@ -1080,8 +1908,104 @@ static Stack negateExpression(Stack s)
   return newTree(s, SWFACTION_LOGICALNOT, NULL);
 }
 
-#define STATEMENTS_INCREMENT 16
+void showStack()
+{
+  Stack s = stack;
 
+  while(s != NULL &&
+	(s->type != 't' || s->data.tree->action != SWFACTION_DEFINEFUNCTION))
+  {
+    listItem(s, SWFACTION_END);
+    putchar('\n');
+    s = s->next;
+  }
+}
+
+int readStatements(FILE *f, int length, Stack **slist)
+{
+  Stack s, start = stack, *statements;
+  int i, n, off, end = fileOffset + length;
+  int wasNull = 0;
+
+  /* XXX - should use our own stack here? */
+
+  while(fileOffset<end)
+  {
+    if(feof(f))
+      break;
+
+    off = fileOffset;
+
+    if((s = readActionRecord(f)) != NULL)
+    {
+      push(s);
+
+      if(s->offset == 0)
+	s->offset = off;
+
+      wasNull = 0;
+    }
+    else
+      /* blah. */
+      wasNull = 1;
+
+    /*
+    showStack();
+    putchar('\n');
+    */
+  }
+
+  s = stack;
+  n = 0;
+
+  /* count statements */
+  while(s && s != start)
+  {
+    ++n;
+    s = s->next;
+  }
+
+  /* load statements from stack into array */
+
+  *slist = statements = (Stack *)malloc((n+1)*sizeof(Stack));
+
+  for(i=n-1; i>=0; --i)
+    statements[i] = pop();
+
+  /* give branch something to target */
+  s = newStack();
+  statements[n] = s;
+
+  s->offset = fileOffset;
+
+  if(wasNull)
+    --s->offset;
+
+  return n;
+}
+
+void listStatements(Stack *statements, int n)
+{
+  int i;
+
+  for(i=0; i<=n; ++i)
+  {
+    printf("%03i|%04i:  ", i, statements[i]->offset);
+    listItem(statements[i], SWFACTION_END);
+    putchar(';');
+    putchar('\n');
+  }
+}
+
+void decompileStatements(Stack *statements, int n)
+{
+  resolveOffsets(statements, n);
+  untangleBranches(statements, 0, n, BRANCH_NONE, gIndent);
+
+  putchar('\n');
+}
+
+#define STATEMENTS_INCREMENT 16
 void decompile4Action(FILE *f, int length, int indent)
 {
   Stack s, *statements = NULL;
@@ -1146,8 +2070,40 @@ void decompile4Action(FILE *f, int length, int indent)
       stack = stack->next;
     }
 
-    destroy(stack);
+    destroyStack(stack);
     stack = NULL;
+  }
+}
+
+void decompile5Action(FILE *f, int length, int indent)
+{
+  Stack *statements = NULL;
+  int n;
+
+  gIndent = indent;
+
+  n = readStatements(f, length, &statements);
+  /* listStatements(statements, n); */
+  decompileStatements(statements, n);
+
+  if(stack != NULL)
+  {
+    printf("Decompiler error: stack not empty!\n");
+    printf("Here's what's left over:\n\n");
+
+    /* dump stack remains */
+    while(stack)
+    {
+      listItem(stack, SWFACTION_END);
+      putchar(';');
+      putchar('\n');
+      stack = stack->next;
+    }
+
+    destroyStack(stack);
+    stack = NULL;
+
+    assert(0);
   }
 }
 
@@ -1165,7 +2121,14 @@ static void resolveOffsets(Stack *statements, int nStatements)
     {
       int offset = (int)t->right + statements[i+1]->offset;
 
-      if((int)t->right > 0)
+      if((int)t->right == 0)
+      {
+	/* don't know why this would happen, but it does.. */
+	t->right = (Stack)i;
+	statements[i]->target = i;
+	continue;
+      }
+      else if((int)t->right > 0)
       {
 	for(j=i+2; j<nStatements; ++j)
 	{
@@ -1200,7 +2163,7 @@ static void resolveOffsets(Stack *statements, int nStatements)
   }
 }
 
-#define INDENT { int ii=indent; while(ii-->0) { putchar(' '); putchar(' '); } }
+#define INDENT { int ii=indent; while(--ii>=0) { putchar(' '); putchar(' '); } }
 
 static void untangleBranches(Stack *statements, int start, int stop,
 			     Branchtype type, int indent)
@@ -1227,20 +2190,20 @@ static void untangleBranches(Stack *statements, int start, int stop,
       putchar('\n');
 
       INDENT
-        printf("do\n");
+	puts("do\n");
       INDENT
-	printf("{\n");
+	puts("{\n");
 
       s->target = -1;
 
       untangleBranches(statements, i, target, BRANCH_DO, indent+1);
 
       INDENT
-	printf("}\n");
+	puts("}\n");
       INDENT
-	printf("while(");
+	puts("while(");
         listItem(statements[target]->data.tree->left, SWFACTION_END);
-        printf(");\n");
+        puts(");\n");
 
       wasIf = 1;
 
@@ -1268,6 +2231,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
       continue;
     }
 
+    /* it's a conditional branch */
     offset = (int)t->right;
 
     if(offset < start || offset > stop)
@@ -1282,13 +2246,13 @@ static void untangleBranches(Stack *statements, int start, int stop,
       if(offset == stop)
       {
 	INDENT
-	  printf("break;\n");
+	  puts("break;\n");
 	continue;
       }
       else if(offset == start)
       {
 	INDENT
-	  printf("continue;\n");
+	  puts("continue;\n");
 	continue; /*ha!*/
       }
     }
@@ -1300,9 +2264,9 @@ static void untangleBranches(Stack *statements, int start, int stop,
       putchar('\n');
 
       INDENT
-	printf("while(");
+	puts("while(");
         listItem(negateExpression(t->left), SWFACTION_END);
-        printf(")\n");
+        puts(")\n");
 
       if(i < offset-3)
       {
@@ -1326,7 +2290,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
       continue;
     }
 
-    /* it's an if */
+    /* it's just an if */
 
     if(i>start)
       putchar('\n');
@@ -1351,7 +2315,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
       error("stmt %i: Unexpected backwards branch!", i);
 
     INDENT
-      printf("if(");
+      puts("if(");
 
     /* XXX - would like to reverse else and if if expression is already
        negated.. */
@@ -1376,10 +2340,70 @@ static void untangleBranches(Stack *statements, int start, int stop,
         putchar('\n');
     }
 
+    /* swallow up else-ifs */
+
+    for(;;)
+    {
+      int newOff;
+
+      if(!hasElse)
+	break;
+
+      if(statements[offset]->data.tree->action != SWFACTION_BRANCHIFTRUE)
+	break;
+
+      newOff = (int)statements[offset]->data.tree->right;
+
+      /* make sure we're still in this if's else bit */
+
+      if(statements[newOff-1]->data.tree->action != SWFACTION_BRANCHALWAYS ||
+	 (int)statements[newOff-1]->data.tree->right != end)
+	break;
+
+      i = offset;
+      offset = newOff;
+
+      s = statements[i];
+      t = s->data.tree;
+
+      INDENT
+	puts("else if(");
+
+      listItem(negateExpression(t->left), SWFACTION_END);
+      putchar(')');
+      putchar('\n');
+
+      if(i < offset-(hasElse?3:2))
+      {
+	INDENT
+	  putchar('{');
+	  putchar('\n');
+      }
+
+      if(offset-(hasElse?1:0) < i+1)
+      {
+	/* gimpy code */
+	INDENT
+	  puts("  ;\n");
+	break;
+      }
+
+      untangleBranches(statements, i+1, offset-(hasElse?1:0), BRANCH_IF, indent+1);
+
+      if(i < offset-(hasElse?3:2))
+      {
+	INDENT
+	  putchar('}');
+	  putchar('\n');
+      }
+    }
+
+    /* now take out ending else */
+
     if(hasElse)
     {
       INDENT
-	printf("else\n");
+	puts("else\n");
 
       if(offset+2 < end)
       {

@@ -45,7 +45,7 @@ struct _stack
   char type; /* (s)tring, (t)ree, (p)roperty, (b)ranch, (i), (d) */
   union
   {
-    char *string;
+    const char *string;
     int inum;
     double dnum;
     Tree tree;

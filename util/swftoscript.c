@@ -6,6 +6,8 @@
 #include <stdarg.h>
 #include <math.h>
 #include <string.h>
+#include <limits.h>
+#include <errno.h>
 
 //open()
 #include <fcntl.h>
@@ -29,7 +31,8 @@
   #define M_PI 3.14159265358979f
 #endif
 
-char *filename,*tmp_name;
+char *filename;
+char tmp_name[PATH_MAX];
 FILE *tempfile;
 
 void skipBytes(FILE *f, int length);
@@ -1760,23 +1763,38 @@ void skipBytes(FILE *f, int length)
     readUInt8(f);
 }
 
-/* Compressed swf-files have a 8 Byte uncompressed header and a zlib-compressed body. 
-*/
-int cws2fws(FILE *f, uLong outsize)
+/*
+ * Compressed swf-files have a 8 Byte uncompressed header and a
+ * zlib-compressed body. 
+ */
+int
+cws2fws(FILE *f, uLong outsize)
 {
 
 	struct stat statbuffer;
 	int insize;
 	int err,tmp_fd;
 	Byte *inbuffer,*outbuffer;
+
+	sprintf(tmp_name, "swftoscriptXXXXXX");
 	
-	if((tmp_name = tmpnam(NULL)) == NULL){ error("Couldn't create tempfile.\n"); }
-	//fprintf(stderr,"tempfilename: %s\n",tmp_name);
-	if((tmp_fd = open(tmp_name, O_CREAT|O_EXCL|O_RDWR, 00600)) < 0){
-		error("Possible Link Attack detected!\n");
+	tmp_fd = mkstemp(tmp_name);
+	if ( tmp_fd == -1 )
+	{
+		error("Couldn't create tempfile.\n");
 	}
-	if( (tempfile=fdopen(tmp_fd, "w+"))< 0){ error("Couldn't open tempfile.\n"); }
-	if(stat(filename, &statbuffer)==-1){ error("stat() failed"); }
+
+	tempfile = fdopen(tmp_fd, "w");
+	if ( ! tempfile )
+	{
+		error("fdopen: %s", strerror(errno));
+	}
+
+
+	if( stat(filename, &statbuffer) == -1 )
+	{
+		error("stat() failed on input file");
+	}
 	
 	insize = statbuffer.st_size-8;
 	inbuffer = malloc(insize);
@@ -1784,22 +1802,31 @@ int cws2fws(FILE *f, uLong outsize)
 	fread(inbuffer,insize,1,f);
 	
 	/* We don't trust the value in the swfheader. */
+	outbuffer=NULL;
 	do{
-		outbuffer = malloc(outsize);	
-		if (!outbuffer){ error("malloc(%lu) failed",outsize); }
+		outbuffer = realloc(outbuffer, outsize);	
+		if (!outbuffer) { error("malloc(%lu) failed",outsize); }
 		
 		err=uncompress(outbuffer,&outsize,inbuffer,insize);
 		switch(err){
-			case Z_MEM_ERROR: error( "Not enough memory.\n");break;
-			case Z_BUF_ERROR: fprintf(stderr,"resizing outbuffer..\n");break;
-			case Z_DATA_ERROR: error("Data corrupted. Couldn't uncompress.\n");break;
-			case Z_OK: break;
-			default: error("Unknown returnvalue of uncompress:%i\n",err);
+			case Z_MEM_ERROR:
+				error("Not enough memory.\n");
+				break;
+			case Z_BUF_ERROR:
+				fprintf(stderr,"resizing outbuffer..\n");
+				outsize*=2;
+				continue;
+			case Z_DATA_ERROR:
+				error("Data corrupted. Couldn't uncompress.\n");
+				break;
+			case Z_OK:
+				break;
+			default:
+				error("Unknown returnvalue of uncompress:%i\n",
+					err);
+				break;
 		}
-		free(outbuffer);
-		outsize*=2;
 	} while(err == Z_BUF_ERROR);
-	outsize/=2;
  
 	fwrite(outbuffer, 1, outsize, tempfile);
 	rewind(tempfile);
@@ -1809,8 +1836,8 @@ int cws2fws(FILE *f, uLong outsize)
 
 int main(int argc, char *argv[])
 {	
-  struct Movie m;
-  FILE *f;
+	struct Movie m;
+	FILE *f;
 	char first;
   int block, type, length, frame = 0, noactions = 0;
 	int compressed= 0;
