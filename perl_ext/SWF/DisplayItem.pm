@@ -115,13 +115,17 @@ Returns scale of $displayItem in x- and y-direction.
 
 Returns x- and y-skew of $displayItem.
 
+=item $depth = $displayItem->getDepth();
+
+Returns Z-order of $displayItem.
+
 =item $displayItem->setMask($level);
 
 =back
 
 =head1 AUTHOR
 
-Soheil Seyfaie (soheil@netcom.ca).
+Soheil Seyfaie (soheil AT users.sourceforge.net).
 
 =head1 SEE ALSO
 

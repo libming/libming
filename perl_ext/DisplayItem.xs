@@ -1,5 +1,5 @@
 /* ====================================================================
- * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2002 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
@@ -184,6 +184,10 @@ SWFDisplayItem_getRotation(item)
 	ST(0) = sv_newmortal();
 	sv_setnv(ST(0), (double)degrees);
 
+
+int
+SWFDisplayItem_getDepth(item)
+	SWF::DisplayItem item
 
 void
 SWFDisplayItem_DESTROY(item)
