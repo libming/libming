@@ -38,7 +38,19 @@ if test -n "${PNGLIB}"; then
 fi
 
  
+OS=`uname -s`
+if test "$OS" = "Darwin"; then
+	SHLIBEXT ="\$(MING_VER).dynlib"
+	SHLIBLDFLAGS="-dynamiclib -compatibility_version \$(MINOR_VERSION) \
+		-current_version \$(MAJOR_VERSION)"
+	CFLAGS="$CFLAGS -fno-common"
+else
+	SHLIBLDFLAGS="-shared"
+	SHLIBEXT=".so.\$(MING_VER)"
+fi
 
+AC_SUBST(SHLIBLDFLAGS)
+AC_SUBST(SHLIBEXT)
 AC_SUBST(EXTRA_OBJS)
 AC_SUBST(EXTRA_BINS)
 AC_SUBST(GIFLIB)

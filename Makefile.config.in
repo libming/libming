@@ -3,26 +3,22 @@ MINOR_VERSION = 3
 MICRO_VERSION = 0beta1
 MING_VER = $(MAJOR_VERSION).$(MINOR_VERSION).$(MICRO_VERSION)
 
-OS             = $(shell uname -s)
-
 CC	= @CC@
 CXX	= @CXX@
 PYTHON	= @PYTHON@
+CFLAGS  = @CFLAGS@
 
 INCLUDES       += -I. 
 LDLIBS         = $(LIBS)
 
+SHLIBLDFLAGS   = @SHLIBLDFLAGS@
+SHLIBEXT       = @SHLIBEXT@
+
 STATICLIB      = libming.a
-SHAREDLIB      = libming.so.$(MING_VER)
+SHAREDLIB      = libming$(SHLIBEXT)
 
-CFLAGS  += -g -Wall $(INCLUDES) 
+CFLAGS  += -Wall $(INCLUDES)
 
-SHLIBLDFLAGS   = -static
-
-# Uncomment the following lines to compile for Darwin
-#override CFLAGS         += -fno-common
-#SHLIBLDFLAGS            = -dynamiclib
-#SHAREDLIB                       = libming.$(MING_VER).dylib
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
