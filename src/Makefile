@@ -9,6 +9,7 @@ OFILES = \
 	blocklist.o \
 	displaylist.o \
 	fill.o \
+	font_util.o \
 	ming.o \
 	movie.o \
 	movieclip.o \
