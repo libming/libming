@@ -1,3 +1,9 @@
+2003-04-10 04:40  peterdd
+
+	* src/blocks/morph.c: fixed a bug that slipped in with rev.1.9	
+   (thanks Olivier Matthey)
+	* perl_ext/SWF.pm: set ming-perl version to 0.3a-dev
+	 
 2003-03-28 22:16  whamann
 
 	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: 
