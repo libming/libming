@@ -22,6 +22,8 @@
 #include "placeobject.h"
 #include "method.h"
 
+extern int SWF_versionNum;
+
 struct SWFPlaceObject2Block_s
 {
 	struct SWFBlock_s block;
@@ -41,6 +43,7 @@ struct SWFPlaceObject2Block_s
 	int actionORFlags;
 	SWFAction *actions;
 	int *actionFlags;
+//	char *actionChars;
 };
 
 
@@ -56,18 +59,31 @@ writeSWFPlaceObject2BlockToStream(SWFBlock block,
 	if ( place->nActions > 0 )
 	{
 		methodWriteUInt16(0, method, data); /* mystery number */
-		methodWriteUInt16(place->actionORFlags, method, data);
+// SWF6: UInt32
+		if(SWF_versionNum >= 6)
+			methodWriteUInt32(place->actionORFlags, method, data);
+		else
+			methodWriteUInt16(place->actionORFlags, method, data);
 
 		for ( i=0; i<place->nActions; ++i )
 		{
 			SWFOutputBlock block = (SWFOutputBlock)place->actions[i];
-
-			methodWriteUInt16(place->actionFlags[i], method, data);
+// SWF6: UInt32
+			if(SWF_versionNum >= 6)
+				methodWriteUInt32(place->actionFlags[i], method, data);
+			else
+				methodWriteUInt16(place->actionFlags[i], method, data);
 			methodWriteUInt32(SWFOutputBlock_getLength(block), method, data);
+// SWF6: extra char if(place->actionFlags[i] & 0x20000)
+			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000))
+				method(0, data);
 			SWFOutput_writeToMethod(SWFOutputBlock_getOutput(block), method, data);
 		}
-
-		methodWriteUInt16(0, method, data); /* trailing 0 for end of actions */
+// SWF6: UInt32
+		if(SWF_versionNum >= 6)
+			methodWriteUInt32(0, method, data); /* trailing 0 for end of actions */
+		else
+			methodWriteUInt16(0, method, data); /* trailing 0 for end of actions */
 	}
 }
 
@@ -114,15 +130,18 @@ completeSWFPlaceObject2Block(SWFBlock block)
 	if ( place->nActions != 0 )
 	{
 		int i;
-		actionLen += 4;
-
+// SWF6: 6
+		actionLen += (SWF_versionNum >= 6 ? 6 : 4);
 		for ( i=0; i<place->nActions; ++i )
 		{
 			SWFOutputBlock block = (SWFOutputBlock)place->actions[i];
-			actionLen += 6 + SWFOutputBlock_getLength(block);
+// SWF6: 8 (9 if char)
+			actionLen += (SWF_versionNum >= 6 ? 8 : 6) + SWFOutputBlock_getLength(block);
+			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000))
+				actionLen++;
 		}
-
-		actionLen += 2;
+// SWF6: 4
+		actionLen += (SWF_versionNum >= 6 ? 4 : 2);
 	}
 
 	place->out = out;
@@ -140,7 +159,9 @@ destroySWFPlaceObject2Block(SWFBlock block)
 		free(place->actions);
 
 	if ( place->actionFlags != NULL )
+//	{	free(place->actionChars);
 		free(place->actionFlags);
+//	}
 
 	if ( place->name != NULL )
 		free(place->name);
@@ -184,6 +205,7 @@ newSWFPlaceObject2Block(int depth)
 	place->nActions = 0;
 	place->actionORFlags = 0;
 	place->actionFlags = NULL;
+//	place->actionChars = NULL;
 	place->actions = NULL;
 
 	return place;
@@ -285,8 +307,12 @@ SWFPlaceObject2Block_addAction(SWFPlaceObject2Block block,
 	block->actionFlags =
 		realloc(block->actionFlags, (block->nActions+1) * sizeof(int));
 
+//	block->actionChars =
+//		realloc(block->actionChars, (block->nActions+1));
+
 	block->actions[block->nActions] = action;
 	block->actionFlags[block->nActions] = flags;
+//	block->actionChars[block->nActions] = actChar;
 	block->actionORFlags |= flags;
 
 	++block->nActions;

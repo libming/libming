@@ -26,7 +26,8 @@ enum
   PUSH_BOOLEAN = 5,
   PUSH_DOUBLE = 6,
   PUSH_INT = 7,
-  PUSH_CONSTANT = 8
+  PUSH_CONSTANT = 8,
+  PUSH_CONSTANT16 = 9
 };
 
 typedef enum
@@ -69,6 +70,32 @@ struct _buffer
 };
 
 #define BUFFER_SIZE sizeof(struct _buffer)
+
+struct switchcase
+{	Buffer cond, action;
+	int condlen, actlen, isbreak;
+};
+
+struct switchcases
+{
+	struct switchcase *list;
+	int count;
+};
+
+enum ctx
+{
+	CTX_FUNCTION = 1,
+	CTX_LOOP,
+	CTX_FOR_IN,
+	CTX_SWITCH,
+
+	CTX_BREAK,
+	CTX_CONTINUE
+};
+
+void addctx(enum ctx val);
+void delctx(enum ctx val);
+int chkctx(enum ctx val);
 
 void checkByteOrder();
 
@@ -115,6 +142,7 @@ char *stringConcat(char *a, char *b);
 
 /* resolve magic number standins to relative offsets */
 void bufferResolveJumps(Buffer out);
+void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 
 /* rather than setting globals... */
 void swf4ParseInit(char *string, int debug);

@@ -65,6 +65,7 @@ enum
   SWFACTION_GOTOEXPRESSION          = 0x9F,
 
 /* v5 actions */
+  SWFACTION_DELETEVAR               = 0x3A,/*not used yet*/
   SWFACTION_DELETE                  = 0x3B,
   SWFACTION_VAREQUALS               = 0x3C,
   SWFACTION_CALLFUNCTION            = 0x3D,
@@ -75,6 +76,7 @@ enum
   SWFACTION_INITARRAY               = 0x42,
   SWFACTION_INITOBJECT              = 0x43,
   SWFACTION_TYPEOF                  = 0x44,
+  SWFACTION_TARGETPATH              = 0x45,
   SWFACTION_ENUMERATE               = 0x46,
   SWFACTION_NEWADD                  = 0x47,
   SWFACTION_NEWLESSTHAN             = 0x48,
@@ -88,13 +90,16 @@ enum
   SWFACTION_INCREMENT               = 0x50,
   SWFACTION_DECREMENT               = 0x51,
   SWFACTION_CALLMETHOD              = 0x52,
+  SWFACTION_NEWMETHOD               = 0x53,/*not used yet*/
+  SWFACTION_INSTANCEOF              = 0x54,
+  SWFACTION_ENUM2                   = 0x55,/*not used yet*/
   SWFACTION_BITWISEAND              = 0x60,
   SWFACTION_BITWISEOR               = 0x61,
   SWFACTION_BITWISEXOR              = 0x62,
   SWFACTION_SHIFTLEFT               = 0x63,
   SWFACTION_SHIFTRIGHT              = 0x64,
   SWFACTION_SHIFTRIGHT2             = 0x65,
-
+  SWFACTION_STRICTEQ                = 0x66,
   SWFACTION_CONSTANTPOOL            = 0x88,
   SWFACTION_WITH                    = 0x94,
   SWFACTION_DEFINEFUNCTION          = 0x9B,

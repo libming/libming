@@ -28,8 +28,8 @@
 
 #include "compile.h"
 
-static int nConstants;
-static char *constants[256];
+static int nConstants, maxConstants;
+static char **constants;
 
 extern int SWF_versionNum;
 
@@ -120,13 +120,10 @@ int addConstant(char *s)
 			return i;
 	}
 
-	if(nConstants < 256)
-	{
-		constants[nConstants] = strdup(s);
-		return nConstants++;
-	}
-	else
-		return -1;
+	if(nConstants == maxConstants)
+		constants = (char **) realloc(constants, (maxConstants += 64) * sizeof(char *));
+	constants[nConstants] = strdup(s);
+	return nConstants++;
 }
 
 int bufferWriteConstants(Buffer out)
@@ -349,10 +346,15 @@ int bufferWriteConstantString(Buffer out, byte *string, int length)
 		bufferWriteU8(out, PUSH_STRING);
 		return bufferWriteHardString(out, string, length) + 1;
 	}
-	else
+	else if(n < 256)
 	{
 		bufferWriteU8(out, PUSH_CONSTANT);
 		return bufferWriteU8(out, n) + 1;
+	}
+	else
+	{
+		bufferWriteU8(out, PUSH_CONSTANT16);
+		return bufferWriteS16(out, n) + 1;
 	}
 }
 
@@ -533,6 +535,64 @@ void lower(char *s)
 	}
 }
 
+/* this code will eventually help to pop extra values off the
+ stack and make sure that continue and break address the proper
+ context
+ */
+static enum ctx *ctx_stack = {0};
+static ctx_count = {0}, ctx_len = {0};
+void addctx(enum ctx val)
+{	if(ctx_count >= ctx_len)
+		ctx_stack = realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
+	ctx_stack[ctx_count++] = val;
+}
+void delctx(enum ctx val)
+{	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
+		SWF_error("consistency check in delctx");
+}
+
+int chkctx(enum ctx val)
+{	int n, ret = 0;
+	switch(val)
+	{	case CTX_FUNCTION:
+			for(n = ctx_count ; --n >= 0 ; )
+				switch(ctx_stack[n])
+				{	case CTX_SWITCH:
+					case CTX_FOR_IN:
+						ret++;
+						break;
+					case CTX_FUNCTION:
+						return ret;
+					default: ; /* computers are stupid */
+				}
+			return -1;
+		case CTX_BREAK:
+			for(n = ctx_count ; --n >= 0 ; )
+				switch(ctx_stack[n])
+				{	case CTX_SWITCH:
+					case CTX_LOOP:
+						return 0;
+					case CTX_FOR_IN:
+						return 1;
+					case CTX_FUNCTION:
+						return -1;
+					default: ; /* computers are stupid */
+				}
+		case CTX_CONTINUE:
+			for(n = ctx_count ; --n >= 0 ; )
+				switch(ctx_stack[n])
+				{	case CTX_LOOP:
+					case CTX_FOR_IN:
+						return 0;
+					case CTX_FUNCTION:
+						return -1;
+					default: ; /* computers are stupid */
+				}
+		default: ; /* computers are stupid */
+	}
+	return 0;
+}
+
 /* replace MAGIC_CONTINUE_NUMBER and MAGIC_BREAK_NUMBER with jumps to
 	 head or tail, respectively */
 /* jump offset is relative to end of jump instruction */
@@ -584,6 +644,50 @@ void bufferResolveJumps(Buffer out)
 	}
 }
 
+// handle SWITCH statement
+
+void bufferResolveSwitch(Buffer buffer, struct switchcases *slp)
+{	struct switchcase *scp;
+	int n, len;
+	unsigned char *output;
+			
+	len = bufferLength(buffer);
+	for(n = 0, scp = slp->list ; n < slp->count ; n++, scp++)
+	{	scp->actlen = bufferLength(scp->action);
+		if((n < slp->count-1))
+			scp->actlen += 5;
+		if(scp->cond)
+		{	scp->condlen = bufferLength(scp->cond) + 8;
+			bufferWriteOp(buffer, SWFACTION_DUP);
+			bufferConcat(buffer, scp->cond);
+			bufferWriteOp(buffer, SWFACTION_NEWEQUALS);
+			bufferWriteOp(buffer, SWFACTION_LOGICALNOT);
+			bufferWriteOp(buffer, SWFACTION_BRANCHIFTRUE);
+			bufferWriteS16(buffer, 2);
+			bufferWriteS16(buffer, scp->actlen);
+		}
+		else
+			scp->condlen = 0;
+		bufferConcat(buffer, scp->action);
+		bufferWriteOp(buffer, SWFACTION_BRANCHALWAYS);
+		bufferWriteS16(buffer, 2);
+		bufferWriteS16(buffer, scp->isbreak ? MAGIC_BREAK_NUMBER : 0);
+		if(!scp->cond)
+		{	slp->count = n+1;
+			break;
+		}
+	}
+	for(n = 0, scp = slp->list ; n < slp->count ; n++, scp++)
+	{	len += scp->condlen;
+		output = buffer->buffer + len;
+		if((n < slp->count-1) && !scp->isbreak)
+		{	output[scp->actlen-2] = (scp+1)->condlen & 0xff;
+			output[scp->actlen-1] = (scp+1)->condlen >> 8;
+		}
+		len += scp->actlen;
+	}
+}
+	
 int lookupSetProperty(char *string)
 {
 	lower(string);

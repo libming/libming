@@ -512,5 +512,99 @@ SOURCE="..\src\blocks\textfield.h"
 SOURCE="..\src\blocks\utf8.h"
 # End Source File
 # End Group
+# Begin Group "Parsers"
+
+# PROP Default_Filter "y;flex"
+# Begin Source File
+
+SOURCE=..\src\actioncompiler\swf4compiler.flex
+
+!IF  "$(CFG)" == "libming - Win32 Release"
+
+# Begin Custom Build
+InputPath=..\src\actioncompiler\swf4compiler.flex
+
+"lex.swf4.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	flex -i -Pswf4 ..\src\actioncompiler\swf4compiler.flex
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libming - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\actioncompiler\swf4compiler.y
+
+!IF  "$(CFG)" == "libming - Win32 Release"
+
+# Begin Custom Build
+InputPath=..\src\actioncompiler\swf4compiler.y
+
+BuildCmds= \
+	bison -p swf4 ..\src\actioncompiler\swf4compiler.y \
+	bison --defines -p swf4 ..\src\actioncompiler\swf4compiler.y \
+	
+
+"..\src\actioncompiler\swf4compiler.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"..\src\actioncompiler\swf4compiler.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libming - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\actioncompiler\swf5compiler.flex
+
+!IF  "$(CFG)" == "libming - Win32 Release"
+
+# Begin Custom Build
+InputPath=..\src\actioncompiler\swf5compiler.flex
+
+"lex.swf5.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	flex -i -Pswf4 ..\src\actioncompiler\swf4compiler.flex
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libming - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\actioncompiler\swf5compiler.y
+
+!IF  "$(CFG)" == "libming - Win32 Release"
+
+# Begin Custom Build
+InputPath=..\src\actioncompiler\swf5compiler.y
+
+BuildCmds= \
+	bison -p swf5 ..\src\actioncompiler\swf5compiler.y \
+	bison --defines -p swf5 ..\src\actioncompiler\swf5compiler.y \
+	
+
+"..\src\actioncompiler\swf5compiler.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"..\src\actioncompiler\swf5compiler.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libming - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # End Target
 # End Project

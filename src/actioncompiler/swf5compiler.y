@@ -30,6 +30,8 @@ Buffer bf, bc;
     Buffer buffer;
     int count;
   } exprlist;
+  struct switchcase   switchcase;
+  struct switchcases switchcases;
   struct
   {
 	Buffer obj, ident, memexpr;
@@ -38,7 +40,7 @@ Buffer bf, bc;
 
 /* tokens etc. */
 
-%token BREAK, CONTINUE, FUNCTION, ELSE, SWITCH, CASE, FOR, IN, IF, WHILE,
+%token BREAK, CONTINUE, FUNCTION, ELSE, SWITCH, CASE, DEFAULT, FOR, IN, IF, WHILE,
   DO, VAR, NEW, DELETE, RETURN, END, WITH, ASM, EVAL
 
 %token RANDOM, GETTIMER, LENGTH, CONCAT, SUBSTR, TRACE, INT, ORD, CHR, GETURL,
@@ -46,7 +48,7 @@ Buffer bf, bc;
 
 %token DUP, SWAP, POP, PUSH, SETREGISTER, CALLFUNCTION, CALLMETHOD,
   AND, OR, XOR, MODULO, ADD, LESSTHAN, EQUALS,
-  INC, DEC, TYPEOF, ENUMERATE, INITOBJECT, INITARRAY, GETMEMBER,
+  INC, DEC, TYPEOF, INSTANCEOF, ENUMERATE, INITOBJECT, INITARRAY, GETMEMBER,
   SETMEMBER, SHIFTLEFT, SHIFTRIGHT, SHIFTRIGHT2, VAREQUALS, OLDADD, SUBTRACT,
   MULTIPLY, DIVIDE, OLDEQUALS, OLDLESSTHAN, LOGICALAND, LOGICALOR, NOT,
   STRINGEQ, STRINGLENGTH, SUBSTRING, GETVARIABLE, SETVARIABLE,
@@ -104,6 +106,8 @@ Buffer bf, bc;
 %nonassoc "++" "--"
 %right '!' '~' UMINUS
 %right POSTFIX
+%right TYPEOF
+%nonassoc INSTANCEOF
 %left '.' '[' ']'
 
 
@@ -111,7 +115,7 @@ Buffer bf, bc;
 %type <action> stmt, stmts
 %type <action> if_stmt, iter_stmt, cont_stmt, break_stmt, return_stmt
 %type <action> with_stmt
-%type <action> switch_stmt, switch_cases, switch_case
+%type <action> switch_stmt
 %type <action> anon_function_decl, function_decl, anycode
 %type <action> void_function_call, function_call, method_call
 %type <action> assign_stmt, assign_stmts, assign_stmts_opt
@@ -120,6 +124,9 @@ Buffer bf, bc;
 %type <lval> lvalue
 
 %type <exprlist> expr_list, objexpr_list, formals_list
+
+%type <switchcase> switch_case
+%type <switchcases> switch_cases
 
 %type <op> assignop, incdecop
 %type <getURLMethod> urlmethod
@@ -195,14 +202,27 @@ with_stmt
 		  bufferConcat($$, $6); }
 	;
 
+// only possible if there is an active CTX_FUNCTION
+// in some contexts, may have to pop a few values ...
 return_stmt
 	: RETURN ';'
-		{ $$ = newBuffer();
+		{ int tmp = chkctx(CTX_FUNCTION);
+		  if(tmp < 0)
+			swf5error("return outside function");
+		  $$ = newBuffer();
+		  while(--tmp >= 0)
+			bufferWriteOp($$, SWFACTION_POP);
 		  bufferWriteNull($$);
 		  bufferWriteOp($$, SWFACTION_RETURN); }
 
 	| RETURN expr ';'
-		{ $$ = $2;
+		{ int tmp = chkctx(CTX_FUNCTION);
+		  if(tmp < 0)
+			swf5error("return outside function");
+		  $$ = newBuffer();
+		  while(--tmp >= 0)
+			bufferWriteOp($$, SWFACTION_POP);
+		  bufferConcat($$, $2);
 		  bufferWriteOp($$, SWFACTION_RETURN); }
 	;
 
@@ -237,30 +257,51 @@ expr_opt
 	| expr		{ $$ = $1; }
 	;
 
+switch_init
+	: SWITCH
+		{ addctx(CTX_SWITCH); }
+	;
 
 switch_stmt
-	: SWITCH '(' expr ')' '{'
-		{ $$ = $3; }
+	: switch_init '(' expr ')' '{'
 	  switch_cases '}'
-		{ bufferConcat($$, $7);
+		{ $$ = $3;
+		  bufferResolveSwitch($$, &$6);
 		  bufferResolveJumps($$);
+		  bufferWriteOp($$, SWFACTION_POP);
+		  delctx(CTX_SWITCH);
  /* FIXME: continue in switch continues surrounding loop, if any */
 	}
 	;
 
 /* XXX */
 switch_cases
-	: switch_case
-		{ $$ = $1; }
+	: /* empty */
+		{ $$.count = 0;
+		  $$.list = 0; }
 
 	| switch_cases switch_case
 		{ $$ = $1;
-		  bufferConcat($$, $2); }
+		  $$.list = realloc($$.list, ($$.count+1) * sizeof(struct switchcase));
+		  $$.list[$$.count] = $2;
+		  $$.count++; }
 	;
 
 switch_case
-	: CASE INTEGER ':' stmt
-		{ $$ = newBuffer(); }
+	: CASE expr ':' stmts BREAK ';'
+		{ $$.cond = $2;
+		  $$.action = $4;
+		  $$.isbreak = 1; }
+
+	| CASE expr ':' stmts
+		{ $$.cond = $2;
+		  $$.action = $4;
+		  $$.isbreak = 0; }
+
+	| DEFAULT ':' stmts
+		{ $$.cond = NULL;
+		  $$.action = $3;
+		  $$.isbreak = 0; }
 	;
 
 
@@ -304,6 +345,7 @@ identifier
 	| INC	{ $$ = strdup("inc"); }
 	| DEC	{ $$ = strdup("dec"); }
 	| TYPEOF	{ $$ = strdup("typeof"); }
+	| INSTANCEOF	{ $$ = strdup("instanceof"); }
 	| ENUMERATE	{ $$ = strdup("enumerate"); }
 	| INITOBJECT	{ $$ = strdup("initobject"); }
 	| INITARRAY	{ $$ = strdup("initarray"); }
@@ -362,8 +404,13 @@ formals_list
 		  ++$$.count; }
 	;
 
+function_init
+	: FUNCTION
+		{ addctx(CTX_FUNCTION); }
+	;
+
 function_decl
-	: FUNCTION identifier '(' formals_list ')' stmt
+	: function_init identifier '(' formals_list ')' stmt
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
 		  bufferWriteS16($$, strlen($2) +
@@ -372,7 +419,8 @@ function_decl
 		  bufferWriteS16($$, $4.count);
 		  bufferConcat($$, $4.buffer);
 		  bufferWriteS16($$, bufferLength($6));
-		  bufferConcat($$, $6); }
+		  bufferConcat($$, $6);
+		  delctx(CTX_FUNCTION); }
 	;
 
 obj_ref
@@ -397,8 +445,28 @@ obj_ref
 	| method_call
 	;
 
+while_init
+	: WHILE
+		{ addctx(CTX_LOOP); }
+	;
+
+do_init
+	: DO
+		{ addctx(CTX_LOOP); }
+	;
+
+for_init
+	: /* empty */
+		{ addctx(CTX_LOOP); }
+	;
+
+for_in_init
+	: /* empty */
+		{ addctx(CTX_FOR_IN); }
+	;
+
 iter_stmt
-	: WHILE '(' expr ')' stmt
+	: while_init '(' expr ')' stmt
                 { $$ = $3;
 		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
 		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
@@ -408,17 +476,19 @@ iter_stmt
 		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
-		  bufferResolveJumps($$); }
+		  bufferResolveJumps($$);
+		  delctx(CTX_LOOP); }
 
-	| DO stmt WHILE '(' expr ')'
+	| do_init stmt WHILE '(' expr ')'
 		{ $$ = $2;
 		  bufferConcat($$, $5);
 		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
-		  bufferResolveJumps($$); }
+		  bufferResolveJumps($$);
+		  delctx(CTX_LOOP); }
 
-	| FOR '(' assign_stmts_opt ';' expr_opt ';' assign_stmts_opt ')' stmt
+	| FOR '(' assign_stmts_opt ';' expr_opt ';' assign_stmts_opt ')' for_init stmt
 		{
 		  if($3)
 		    $$ = $3;
@@ -440,19 +510,20 @@ iter_stmt
                     bufferWriteOp($7, SWFACTION_LOGICALNOT);
                     bufferWriteOp($7, SWFACTION_BRANCHIFTRUE);
                     bufferWriteS16($7, 2);
-                    bufferWriteS16($7, bufferLength($9)+5);
+                    bufferWriteS16($7, bufferLength($10)+5);
                   }
 
-                  bufferConcat($7, $9);
+                  bufferConcat($7, $10);
                   bufferWriteOp($7, SWFACTION_BRANCHALWAYS);
                   bufferWriteS16($7, 2);
                   bufferWriteS16($7, -(bufferLength($7)+2));
                   bufferResolveJumps($7);
 
                   bufferConcat($$, $7);
+				  delctx(CTX_LOOP);
                 }
 
-	| FOR '(' identifier IN obj_ref ')' stmt
+	| FOR '(' identifier IN obj_ref ')' for_in_init stmt
 		{ Buffer b2, b3;
 		  int tmp;
 
@@ -474,16 +545,18 @@ iter_stmt
 		  bufferWriteString(b3, $3, strlen($3)+1);
 		  bufferWriteRegister(b3, 0);
 		  bufferWriteOp(b3, SWFACTION_SETVARIABLE);
-		  bufferConcat(b3, $7);
+		  bufferConcat(b3, $8);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
 		  bufferConcat($$, b2);
+		  bufferWriteOp(b3, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16(b3, 2);
+		  bufferWriteS16(b3, -tmp);
+		  bufferResolveJumps(b3);
 		  bufferConcat($$, b3);
-		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
-		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, -tmp); }
+		  delctx(CTX_FOR_IN); }
 
-	| FOR '(' VAR identifier IN obj_ref ')' stmt
+	| FOR '(' VAR identifier IN obj_ref ')' for_in_init stmt
 		{ Buffer b2, b3;
 		  int tmp;
 
@@ -504,14 +577,16 @@ iter_stmt
 		  bufferWriteString(b3, $4, strlen($4)+1);
 		  bufferWriteRegister(b3, 0);
 		  bufferWriteOp(b3, SWFACTION_VAREQUALS);
-		  bufferConcat(b3, $8);
+		  bufferConcat(b3, $9);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
 		  bufferConcat($$, b2);
+		  bufferWriteOp(b3, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16(b3, 2);
+		  bufferWriteS16(b3, -tmp);
+		  bufferResolveJumps(b3);
 		  bufferConcat($$, b3);
-		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
-		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, -tmp); }
+		  delctx(CTX_FOR_IN); }
 	;
 
 assign_stmts_opt
@@ -519,17 +594,27 @@ assign_stmts_opt
 	| assign_stmts
 	;
 
+// continue only makes sense if there is a CTX_LOOP or CTX_FOR_IN
+// on the stack
 cont_stmt
 	: CONTINUE ';'
-		{ $$ = newBuffer();
+		{ if(chkctx(CTX_CONTINUE) < 0)
+			swf5error("continue outside loop");
+		  $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, MAGIC_CONTINUE_NUMBER); }
 	;
 
+// break is possible if there is a CTX_LOOP, CTX_FOR_IN or CTX_SWITCH
 break_stmt
 	: BREAK ';'
-		{ $$ = newBuffer();
+		{ int tmp = chkctx(CTX_BREAK);
+		  if(tmp < 0)
+			swf5error("break outside switch / loop");
+		  $$ = newBuffer();
+		  if(tmp)	/* break out of a for .. in */
+			bufferWriteOp($$, SWFACTION_POP);
 		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, MAGIC_BREAK_NUMBER); }
@@ -775,6 +860,7 @@ function_call
 	| TYPEOF '(' expr_or_obj ')'
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TYPEOF); }
+
 	;
 
 
@@ -797,7 +883,7 @@ expr_list
 	;
 
 anon_function_decl
-	: FUNCTION '(' formals_list ')' stmt
+	: function_init '(' formals_list ')' stmt
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
 		  bufferWriteS16($$, bufferLength($3.buffer) + 5);
@@ -805,7 +891,8 @@ anon_function_decl
 		  bufferWriteS16($$, $3.count);
 		  bufferConcat($$, $3.buffer);
 		  bufferWriteS16($$, bufferLength($5));
-		  bufferConcat($$, $5); }
+		  bufferConcat($$, $5);
+		  delctx(CTX_FUNCTION); }
 	;
 
 method_call
@@ -919,6 +1006,7 @@ lvalue
 	;
 
 /* these leave a value on the stack */
+
 expr
 	: primary
 
@@ -1073,6 +1161,12 @@ expr
 /* tricky case missing here: lvalue ASSIGN expr */
 /* like in x = y += z; */
 		}
+
+	| expr INSTANCEOF lvalue_expr
+		{ $$ = $1;
+		  bufferConcat($$, $3);
+		  bufferWriteOp($$, SWFACTION_INSTANCEOF); }
+
 	;
 
 expr_or_obj
@@ -1481,7 +1575,7 @@ opcode
 						     SWFACTION_CALLFUNCTION); }
 	| RETURN		{ $$ = bufferWriteOp(asmBuffer,
 						     SWFACTION_RETURN); }
-	| CALLMETHOD		{ $$ = bufferWriteOp(asmBuffer, 
+	| CALLMETHOD	{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_CALLMETHOD); }
 	| AND			{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_BITWISEAND); }
@@ -1503,6 +1597,8 @@ opcode
 						     SWFACTION_DECREMENT); }
 	| TYPEOF		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_TYPEOF); }
+	| INSTANCEOF	{ $$ = bufferWriteOp(asmBuffer, 
+						     SWFACTION_INSTANCEOF); }
 	| ENUMERATE		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_ENUMERATE); }
 	| DELETE		{ $$ = bufferWriteOp(asmBuffer, 
@@ -1573,3 +1669,4 @@ opcode
 	;
 
 %%
+

@@ -306,7 +306,7 @@ int printActionRecord(Buffer f)
 	    println("Push type 3- ??");
 	    break;
 	  case 4: 
-	    println("Push type 4 (%i)- ??", readUInt8(f));
+	    println("Push register %i", readUInt8(f));
 	    break;
 	  case 5:
 	    if(readUInt8(f))
@@ -323,6 +323,8 @@ int printActionRecord(Buffer f)
 	  case 8: /* dictionary */
 	    println("Push \"%s\"", dictionary[readUInt8(f)]);
 	    break;
+	  case 9: /* dictionary */
+	    println("Push \"%s\"", dictionary[readSInt16(f)]);
 	  default:
 	    println("unknown push type: %i", type);
 	}
@@ -520,6 +522,17 @@ int printActionRecord(Buffer f)
 
     case SWFACTION_SETREGISTER:
       println("set register %i", readUInt8(f));
+      break;
+
+/* f6 actions */
+    case SWFACTION_INSTANCEOF:
+      println("instanceof");
+      break;
+    case SWFACTION_STRICTEQ:
+      println("strict_equals");
+      break;
+    case SWFACTION_ENUM2:
+      println("enum2");
       break;
 
     default:

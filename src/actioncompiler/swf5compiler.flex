@@ -75,6 +75,8 @@ void swf5ParseInit(char *script, int debug)
 
 %}
 
+%s asm
+
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
 
@@ -95,6 +97,7 @@ function		{ count();	return FUNCTION;	}
 else			{ count();	return ELSE;		}
 switch			{ count();	return SWITCH;		}
 case			{ count();	return CASE;		}
+default			{ count();	return DEFAULT;		}
 for			{ count();	return FOR;		}
 in			{ count();	return IN;		}
 if			{ count();	return IF;		}
@@ -104,10 +107,11 @@ var			{ count();	return VAR;		}
 new			{ count();	return NEW;		}
 delete			{ count();	return DELETE;		}
 return			{ count();	return RETURN;		}
-end			{ count();	return END;		}
 with			{ count();	return WITH;		}
-asm			{ count();	return ASM;		}
+asm			{ count();	BEGIN(asm); return ASM;		}
 eval			{ count();	return EVAL;		}
+typeof			{ count();	return TYPEOF; }
+instanceof			{ count();	return INSTANCEOF; }
 
   /* legacy functions */
 random			{ count();	return RANDOM;	}
@@ -138,6 +142,7 @@ duplicateMovieClip	{ count();	return DUPLICATEMOVIECLIP; }
 removeMovieClip		{ count();	return REMOVEMOVIECLIP; }
 
   /* assembler ops */
+<asm>{
 dup			{ count();	return DUP; }
 swap			{ count();	return SWAP; }
 pop			{ count();	return POP; }
@@ -157,7 +162,6 @@ equals			{ count();	return EQUALS; }
 newequals		{ count();	return EQUALS; }
 inc			{ count();	return INC; }
 dec			{ count();	return DEC; }
-typeof			{ count();	return TYPEOF; }
 enumerate		{ count();	return ENUMERATE; }
 initobject		{ count();	return INITOBJECT; }
 initarray		{ count();	return INITARRAY; }
@@ -194,7 +198,8 @@ branchalways		{ count();	return BRANCHALWAYS; }
 branchiftrue		{ count();	return BRANCHIFTRUE; }
 post			{ count();	return POST; }
 get			{ count();	return GET; }
-
+end			{ count();	return END;		}
+}
 
 r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 					return REGISTER;	}
@@ -262,7 +267,7 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 "["			{ count();	return '['; }
 "]"			{ count();	return ']'; }
 "{"			{ count();	return '{'; }
-"}"			{ count();	return '}'; }
+"}"			{ count();	BEGIN(0); return '}'; }
 ","			{ count();	return ','; }
 "."			{ count();	return '.'; }
 "?"			{ count();	return '?'; }
