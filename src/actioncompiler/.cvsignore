@@ -2,3 +2,4 @@
 lex.yy.c
 compiler.tab.c
 compiler.tab.h
+test
