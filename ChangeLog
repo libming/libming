@@ -1,8 +1,3 @@
-/* Ming, an SWF output library
- * Changelog $Revision$
- */
-
-
 2002-07-03 18:35  staybyte
 
 	* CHANGES, ming.h, php_ext/config.m4, php_ext/ming.c,
