@@ -77,6 +77,8 @@ typedef enum
   SWFACTION_NEWADD                  = 0x47,
   SWFACTION_NEWLESSTHAN             = 0x48,
   SWFACTION_NEWEQUAL                = 0x49,
+  SWFACTION_TONUMBER                = 0x4A,
+  SWFACTION_TOSTRING                = 0x4B,
   SWFACTION_DUP                     = 0x4C,
   SWFACTION_SWAP                    = 0x4D,
   SWFACTION_GETMEMBER               = 0x4E,

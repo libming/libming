@@ -75,9 +75,12 @@ enum
   SWFACTION_INITARRAY               = 0x42,
   SWFACTION_INITOBJECT              = 0x43,
   SWFACTION_TYPEOF                  = 0x44,
+  SWFACTION_ENUMERATE               = 0x46,
   SWFACTION_NEWADD                  = 0x47,
   SWFACTION_NEWLESSTHAN             = 0x48,
   SWFACTION_NEWEQUALS               = 0x49,
+  SWFACTION_TONUMBER                = 0x4A,
+  SWFACTION_TOSTRING                = 0x4B,
   SWFACTION_DUP                     = 0x4C,
   SWFACTION_SWAP                    = 0x4D,
   SWFACTION_GETMEMBER               = 0x4E,
@@ -96,7 +99,6 @@ enum
   SWFACTION_WITH                    = 0x94,
   SWFACTION_DEFINEFUNCTION          = 0x9B,
 
-  SWFACTION_ENUMERATE               = 0x46,
   SWFACTION_SETREGISTER             = 0x87
 };
 

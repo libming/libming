@@ -94,7 +94,7 @@ void printDefineFont2(FILE *f, int length)
 
   fclose(out);
 
-  if(wide)
+  if(wide==2)
   {
     printf("Removing %s\n", name);
     unlink(name);

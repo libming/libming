@@ -598,10 +598,12 @@ static Stack readActionRecord(FILE *f)
 	while(stack && stack->next &&
 	      stack->next->type == 't')
 	{
-	  if(stack->next->data.tree->action == SWFACTION_LOGICALAND ||
-	     stack->next->data.tree->action == SWFACTION_LOGICALOR)
+	  if(stack->next->data.tree->action == SWFACTION_POP &&
+	     (stack->next->next->data.tree->action == SWFACTION_LOGICALAND ||
+	      stack->next->next->data.tree->action == SWFACTION_LOGICALOR))
 	  {
 	    t = pop();
+	    pop();
 
 	    if(stack->data.tree->right != NULL)
 	      error("Was expecting logical op's right side to be empty!");
@@ -699,6 +701,8 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_TYPEOF:
     case SWFACTION_RETURN:
     case SWFACTION_DUP:
+    case SWFACTION_TONUMBER:
+    case SWFACTION_TOSTRING:
       return newTree(pop(), type, NULL);
 
     case SWFACTION_MODULO:
@@ -713,21 +717,21 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_BITWISEOR:
     case SWFACTION_BITWISEXOR:
     case SWFACTION_GETMEMBER:
-	{
+    {
       Stack right = pop();
       Stack left = pop();
 
       return newTree(left, type, right);
-	}
+    }
 
     case SWFACTION_SETMEMBER:
-	{
+    {
       Stack p3 = pop();
       Stack p2 = pop();
       Stack p1 = pop();
 
       return newTree(p1, type, newTree(p2, type, p3));
-	}
+    }
 
     case SWFACTION_CALLMETHOD:
     {
@@ -805,7 +809,7 @@ static Stack readActionRecord(FILE *f)
       return newTree(tree, type, newTreeBase((Stack)n, type, (Stack)statements));
     }
 
-    case SWFACTION_ITERATE:
+    case SWFACTION_ENUMERATE:
       return newTree(pop(), type, NULL);
 
     case SWFACTION_SETREGISTER:
@@ -821,7 +825,7 @@ static Stack readActionRecord(FILE *f)
       return t;
     }
 
-    case SWFACTION_MAKEHASH:
+    case SWFACTION_INITOBJECT:
     {
       Stack *names, *values;
       int i, nEntries = intVal(pop());
@@ -1386,6 +1390,18 @@ static void listItem(Stack s, Action parent)
 	putchar(')');
 	break;
 
+      case SWFACTION_TONUMBER:
+	puts("Number(");
+	listItem(t->left, SWFACTION_TONUMBER);
+	putchar(')');
+	break;
+
+      case SWFACTION_TOSTRING:
+	puts("String(");
+	listItem(t->left, SWFACTION_TOSTRING);
+	putchar(')');
+	break;
+
       case SWFACTION_GETVARIABLE:
 	listItem(t->left, SWFACTION_GETVARIABLE);
 	break;
@@ -1712,9 +1728,9 @@ static void listItem(Stack s, Action parent)
 	break;
       }
 
-      case SWFACTION_ITERATE:
+      case SWFACTION_ENUMERATE:
 	puts("iterate over "); /* XXX */
-	listItem(t->left, SWFACTION_ITERATE);
+	listItem(t->left, SWFACTION_ENUMERATE);
 	break;
 
       case SWFACTION_SETREGISTER:
@@ -1735,7 +1751,7 @@ static void listItem(Stack s, Action parent)
 	break;
 
 
-      case SWFACTION_MAKEHASH:
+      case SWFACTION_INITOBJECT:
       {
 	int i, nEntries = (int)t->left;
 	Stack *names = (Stack *)t->right->data.tree->left;
@@ -1745,9 +1761,9 @@ static void listItem(Stack s, Action parent)
 
 	for(i=0; i<nEntries; ++i)
 	{
-	  listItem(names[i], SWFACTION_MAKEHASH);
+	  listItem(names[i], SWFACTION_INITOBJECT);
 	  puts(" : ");
-	  listItem(values[i], SWFACTION_MAKEHASH);
+	  listItem(values[i], SWFACTION_INITOBJECT);
 
 	  if(i < nEntries-1)
 	    puts(", ");
@@ -1815,7 +1831,7 @@ static int isStatement(Stack s)
     case SWFACTION_WITH:
     case SWFACTION_DEFINEFUNCTION:
 
-    case SWFACTION_ITERATE:
+    case SWFACTION_ENUMERATE:
 
       return 1;
     default:
