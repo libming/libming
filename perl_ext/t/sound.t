@@ -1,4 +1,4 @@
-BEGIN { $| = 1; print "1..3\n"; }
+BEGIN { $| = 1;}
 
 use SWF qw(:ALL);
 #use SWF;
@@ -6,7 +6,7 @@ require 't/config.pl';
 
 my $filename = ming_dir() . '/examples/common/distortobass.mp3';
 skip_test() unless (-e $filename);
-
+print "1..3\n";
 my $movie = new SWF::Movie();
 $movie->setRate(12.0);
 my $sound = new SWF::Sound($filename);

@@ -1,10 +1,12 @@
-BEGIN { $| = 1; print "1..1\n"; }
+BEGIN { $| = 1; }
 
 use SWF qw(Shape Bitmap);
 require 't/config.pl';
 
 my $filename = ming_dir() . "/examples/common/png.dbl";
 skip_test() unless (-e $filename);
+
+print "1..1\n"; 
 
 eval{
     my $s = new SWF::Shape();
