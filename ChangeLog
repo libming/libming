@@ -1,3 +1,21 @@
+2002-07-15 07:06  opaque_ndst
+
+	* ming.h: changed SWFMovie_add second arg back to void* to keep
+	existing code from complaining
+
+2002-07-15 07:02  opaque_ndst
+
+	* src/blocks/morph.c: changed getdependencies function to new
+	format
+
+2002-07-15 07:01  opaque_ndst
+
+	* src/blocks/mp3.c: added (empty, for now) getMP3Size function
+
+2002-07-15 07:00  opaque_ndst
+
+	* src/test.c: updated to make it compile again..
+
 2002-07-15 07:00  opaque_ndst
 
 	* src/: movie.c, movie.h, blocklist.c, blocklist.h, movieclip.c,
