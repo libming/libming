@@ -404,7 +404,8 @@ SWFMovie_labelFrame(SWFMovie movie, char *label)
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFFrameLabelBlock(label));
 }
 
-
+/* old outputfunction without possible compression */
+/*
 int
 SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 {
@@ -423,12 +424,13 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
         // add five for the setbackground block..
         length = SWFBlockList_completeBlocks(movie->blockList) + 5;
 
-        /* XXX - hack */
+	
+	//hack
         SWFDisplayList_rewindSoundStream(movie->displayList);
 
         header = newSizedSWFOutput(20);
 
-        /* figure size, write header */
+        // figure size, write header
 
         SWFOutput_writeRect(header, movie->bounds);
         SWFOutput_writeUInt16(header, (int)floor(movie->rate*256));
@@ -456,10 +458,10 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 
         return length;
 }
-
+*/
 
 int
-SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
+SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
 {
 	int swflength, status;
 	SWFOutput header, headerbuffer, swfbuffer;
@@ -545,7 +547,7 @@ SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int lev
 
 
 int
-SWFMovie_save(SWFMovie movie, char *filename)
+SWFMovie_save(SWFMovie movie, char *filename, int compressionlevel)
 {
 	FILE *f = fopen(filename, "wb");
 	int count;
@@ -553,7 +555,7 @@ SWFMovie_save(SWFMovie movie, char *filename)
 	if ( f == NULL )
 		return -1;
 
-	count = SWFMovie_output(movie, fileOutputMethod, f);
+	count = SWFMovie_output(movie, fileOutputMethod, f, compressionlevel);
 
 	fclose(f);
 
@@ -567,3 +569,4 @@ SWFMovie_save(SWFMovie movie, char *filename)
  * c-basic-offset: 2
  * End:
  */
+
