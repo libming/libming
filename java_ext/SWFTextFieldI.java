@@ -16,7 +16,6 @@
 
 
 
-
 //
 //  SWFText Interface
 //	text field
@@ -49,6 +48,7 @@ public interface SWFTextFieldI extends SWFObjectI {
 
     public void		setBounds (float width, float height);
     public void		setFlags (long flags);
+    public void         setHeight(float height );
     public void		setAlignment (int alignment);
     public void		align (int alignment);
 

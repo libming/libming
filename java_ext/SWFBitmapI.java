@@ -15,9 +15,6 @@
 //
 
 
-
-
-
 //
 //  SWFBitmap Interface
 //	bitmap in jpg or dbl format
@@ -29,8 +26,8 @@ public interface SWFBitmapI extends SWFObjectI {
     
     // public SWFBitmap (String filename, String alphamask);
 
-    public float	getWidth ();
-    public float	getHeight ();
+    public int getWidth ();
+    public int getHeight ();
 };
 
 

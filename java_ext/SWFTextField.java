@@ -15,11 +15,6 @@
 //
 
 
-
-
-
-
-
 //
 //  SWFText Class
 //	text field
@@ -50,6 +45,8 @@ public class SWFTextField extends SWFObject implements SWFTextFieldI {
         { nSetBounds (handle, width, height); }
     public void	setFlags (long flags)
         { nSetFlags (handle, flags); }
+    public void setHeight( float height ) 
+        { nSetHeight( handle, height ); }
     public void	setAlignment (int alignment)
         { nSetAlignment (handle, alignment); }
     public void	align (int alignment)
@@ -93,6 +90,7 @@ public class SWFTextField extends SWFObject implements SWFTextFieldI {
     protected native void	nSetFont (int handle, int Hfont);
     protected native void	nSetColor (int handle, int r, int g, int b, int alpha);
 
+    protected native void       nSetHeight( int handle, float height );
     protected native void	nAddString (int handle, String text);
 
     protected native void	nSetBounds (int handle, float width, float height);

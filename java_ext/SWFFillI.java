@@ -15,11 +15,6 @@
 //
 
 
-
-
-
-
-
 //
 //  SWFFill Interface
 //      general fill container
@@ -38,6 +33,8 @@ public interface SWFFillI extends SWFObjectI {
     public final static int	Bitmap = 0x40; 
     public final static int	TiledBitmap = 0x40; 
     public final static int	ClippedBitmap = 0x41; 
+    public final static int     NonSmoothedTiledBitmap = 0x42;
+    public final static int     NonSmoothedClippedBitmap = 0x43;
     
 
     // methods

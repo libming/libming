@@ -47,8 +47,12 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
         { nSetRate (handle, rate); }
     public void	setDimension (int width, int height)
         { nSetDimension (handle, width, height); }
-    public void	setFrames (int nframes)
-        { nSetRate (handle, nframes); }
+    
+    public void	setNumberOfFrames (int nframes)
+        { nSetNumberOfFrames (handle, nframes); }
+
+    public void useSWFVersion( int version )
+	    { nUseSWFVersion( version ); }
 
     public void	setBackground (int r, int g, int b)
         { nSetBackground (handle, r,g,b); }
@@ -117,7 +121,8 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
     
     protected native void	nSetRate (int handle, float rate);
     protected native void	nSetDimension (int handle, int width, int height);
-    protected native void	nSetFrames (int handle, int nframes);
+    protected native void	nSetNumberOfFrames (int handle, int nframes);
+    protected native void 	nUseSWFVersion(int version);
 
     protected native void	nSetBackground (int handle, int r, int g, int b);
     protected native void	nSetSoundStream (int handle, int HsoundStream);

@@ -15,8 +15,6 @@
 
 
 
-
-
 //
 //  SWFColor Interface
 //      color & alpha
@@ -60,7 +58,7 @@ public class SWFColor {
     
     public int getGreen ()
         { return g; }
-    public void setGreen (int r)
+    public void setGreen (int g)
         { this.g = g; }
     
     public int getBlue ()

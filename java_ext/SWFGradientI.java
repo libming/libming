@@ -17,8 +17,6 @@
 
 
 
-
-
 //
 //  SWFGradient Interface
 //	gradient
@@ -29,6 +27,7 @@
 //
 public interface SWFGradientI extends SWFObjectI {
     
+  public void addEntry( float ratio, SWFColor clr );
     public void	addEntry (float ratio, int r, int g, int b, int alpha);
 
 };

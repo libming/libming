@@ -71,7 +71,7 @@ JNIEXPORT void JNICALL Java_SWFBitmap_nDestroy
  * Method:    nGetWidth
  * Signature: (I)F
  */
-JNIEXPORT jfloat JNICALL Java_SWFBitmap_nGetWidth
+JNIEXPORT jint JNICALL Java_SWFBitmap_nGetWidth
   (JNIEnv *, jobject, jint);
 
 /*
@@ -79,7 +79,7 @@ JNIEXPORT jfloat JNICALL Java_SWFBitmap_nGetWidth
  * Method:    nGetHeight
  * Signature: (I)F
  */
-JNIEXPORT jfloat JNICALL Java_SWFBitmap_nGetHeight
+JNIEXPORT jint JNICALL Java_SWFBitmap_nGetHeight
   (JNIEnv *, jobject, jint);
 
 #ifdef __cplusplus

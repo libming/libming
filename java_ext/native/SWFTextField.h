@@ -70,6 +70,8 @@ JNIEXPORT void JNICALL Java_SWFTextField_nAddString
  */
 JNIEXPORT void JNICALL Java_SWFTextField_nSetBounds
   (JNIEnv *, jobject, jint, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_SWFTextField_nSetHeight
+  (JNIEnv *, jobject, jint, jfloat);
 
 /*
  * Class:     SWFTextField

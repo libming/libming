@@ -48,6 +48,15 @@ public class SWFShape extends SWFObject implements SWFShapeI {
 	this.color = SWFColor.identity();
     }
 
+    public float getPenX()
+    {
+	    return nGetPenX(handle);
+    }
+
+    public float getPenY()
+    {
+	    return nGetPenY(handle);
+    }
 
     public void	movePen (float x, float y)
         { nMovePen (handle, x, y); }
@@ -207,6 +216,8 @@ public class SWFShape extends SWFObject implements SWFShapeI {
 
     protected native void	nMovePen (int handle, float x, float y);
     protected native void	nMovePenTo (int handle, float x, float y);
+    protected native float	nGetPenX(int handle );
+    protected native float 	nGetPenY(int handle );
 
     protected native void	nDrawLine (int handle, float x, float y);
     protected native void	nDrawLineTo (int handle, float x, float y);
@@ -232,6 +243,7 @@ public class SWFShape extends SWFObject implements SWFShapeI {
     protected native void	nSetLeftFill (int handle, int Hfill);
     protected native void	nSetRightFill (int handle, int Hfill);
 
+    
 
     // variables
 

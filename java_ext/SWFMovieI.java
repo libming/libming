@@ -38,7 +38,7 @@ public interface SWFMovieI extends SWFObjectI {
     
     public void			setRate (float rate);
     public void			setDimension (int width, int height);
-    public void			setFrames (int nframes);
+    public void			setNumberOfFrames (int nframes);
 
     public void			setBackground (int r, int g, int b);
     public void			setSoundStream (SWFSoundStream sound_stream);

@@ -201,15 +201,24 @@ JNIEXPORT void JNICALL Java_SWFShape_nDrawCubicTo (JNIEnv *, jobject, jint handl
 
 JNIEXPORT void JNICALL Java_SWFShape_nDrawArc (JNIEnv *, jobject, jint handle, jfloat r, jfloat from, jfloat to)
 {
-    SWFShape_drawArc ((SWFShape)handle, (int)r, from, to);
+    SWFShape_drawArc ((SWFShape)handle, r, from, to);
 }
 
 
 JNIEXPORT void JNICALL Java_SWFShape_nDrawCircle (JNIEnv *, jobject, jint handle, jfloat r)
 {
-    SWFShape_drawCircle ((SWFShape)handle, (int)r);
+    SWFShape_drawCircle ((SWFShape)handle, r);
 }
 
+JNIEXPORT jfloat JNICALL Java_SWFShape_nGetPenX (JNIEnv *, jobject, jint handle)
+{
+	return SWFShape_getPenX( (SWFShape)handle );
+}
+
+JNIEXPORT jfloat JNICALL Java_SWFShape_nGetPenY (JNIEnv *, jobject, jint handle)
+{
+	return SWFShape_getPenY( (SWFShape)handle );
+}
 
 JNIEXPORT void JNICALL Java_SWFShape_nDrawGlyph (JNIEnv *, jobject, jint handle, jint Hfont, jint c)
 {
@@ -418,11 +427,15 @@ JNIEXPORT void JNICALL Java_SWFMovie_nSetDimension (JNIEnv *, jobject, jint hand
 }
 
 
-JNIEXPORT void JNICALL Java_SWFMovie_nSetFrames (JNIEnv *, jobject, jint handle, jint n)
+JNIEXPORT void JNICALL Java_SWFMovie_nSetNumberOfFrames (JNIEnv *, jobject, jint handle, jint n)
 {
     SWFMovie_setNumberOfFrames ((SWFMovie)handle, n);
 }
 
+JNIEXPORT void JNICALL Java_SWFMovie_nUseSWFVersion (JNIEnv *, jobject, jint version)
+{
+	Ming_useSWFVersion(version);
+}
 
 JNIEXPORT void JNICALL Java_SWFMovie_nSetBackground (JNIEnv *, jobject, jint handle, jint r, jint g, jint b)
 {
@@ -714,18 +727,21 @@ JNIEXPORT void JNICALL Java_SWFBitmap_nDestroy (JNIEnv *, jobject, jint handle)
 }
 
 
-JNIEXPORT jfloat JNICALL Java_SWFBitmap_nGetWidth (JNIEnv *, jobject, jint handle)
+JNIEXPORT jint JNICALL Java_SWFBitmap_nGetWidth (JNIEnv *, jobject, jint handle)
 {
     return SWFBitmap_getWidth ((SWFBitmap)handle);
 }
 
 
-JNIEXPORT jfloat JNICALL Java_SWFBitmap_nGetHeight (JNIEnv *, jobject, jint handle)
+JNIEXPORT jint JNICALL Java_SWFBitmap_nGetHeight (JNIEnv *, jobject, jint handle)
 {
     return SWFBitmap_getHeight ((SWFBitmap)handle);
 }
 
-
+JNIEXPORT void JNICALL Java_SWFTextField_nSetHeight (JNIEnv *, jobject, jint handle, jfloat height)
+{
+	 SWFTextField_setHeight ((SWFTextField)handle, height);
+}
 
 //
 //  SWFText Methods

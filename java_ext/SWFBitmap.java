@@ -16,7 +16,6 @@
 
 
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -58,9 +57,9 @@ public class SWFBitmap extends SWFObject implements SWFBitmapI {
     }
 
 
-    public float getWidth ()
+    public int getWidth ()
 	{ return nGetWidth (handle); }
-    public float getHeight ()
+    public int getHeight ()
 	{ return nGetHeight (handle); }
 
 	
@@ -72,8 +71,8 @@ public class SWFBitmap extends SWFObject implements SWFBitmapI {
     protected native int	nNewJpegWithAlpha (String filename, String alpha);
     protected native void	nDestroy (int handle);	
 
-    protected native float	nGetWidth (int handle);
-    protected native float	nGetHeight (int handle);
+    protected native int	nGetWidth (int handle);
+    protected native int	nGetHeight (int handle);
 
 };
 

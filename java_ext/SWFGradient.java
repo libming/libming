@@ -15,10 +15,6 @@
 //
 
 
-
-
-
-
 //
 //  SWFGradient Class
 //	gradient
@@ -46,7 +42,11 @@ public class SWFGradient extends SWFObject implements SWFGradientI {
 	nAddEntry (handle, ratio, r,g,b, alpha); 
     }
 
-    
+  public void addEntry( float ratio, SWFColor clr )
+  {
+    addEntry( ratio, clr.getRed(), clr.getGreen(), clr.getBlue(),
+              clr.getAlpha() );
+  }
     // native methods
 
     protected native int	nNew ();

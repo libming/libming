@@ -191,6 +191,12 @@ JNIEXPORT void JNICALL Java_SWFShape_nSetLeftFill
 JNIEXPORT void JNICALL Java_SWFShape_nSetRightFill
   (JNIEnv *, jobject, jint, jint);
 
+JNIEXPORT jfloat JNICALL Java_SWFShape_nGetPenX
+  (JNIEnv *, jobject, jint);
+
+JNIEXPORT jfloat JNICALL Java_SWFShape_nGetPenY
+  (JNIEnv *, jobject, jint);
+
 #ifdef __cplusplus
 }
 #endif
