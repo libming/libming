@@ -601,6 +601,7 @@ static zend_function_entry swfdisplayitem_functions[] = {
   PHP_FALIAS(addcolor,     swfdisplayitem_addColor,    NULL)
   PHP_FALIAS(multcolor,    swfdisplayitem_multColor,   NULL)
   PHP_FALIAS(setname,      swfdisplayitem_setName,     NULL)
+  PHP_FALIAS(addaction,    swfdisplayitem_addAction,   NULL)
   { NULL, NULL, NULL }
 };
 
@@ -942,6 +943,28 @@ PHP_FUNCTION(swfdisplayitem_setName)
   convert_to_string_ex(name);
 
   SWFDisplayItem_setName(item, Z_STRVAL_PP(name));
+}
+
+/* }}} */
+/* {{{ proto void swfdisplayitem_addAction(SWFAction action, int flags)
+   Adds this SWFAction to the given SWFSprite instance. */
+
+PHP_FUNCTION(swfdisplayitem_addAction)
+{
+  zval **zaction, **flags;
+  SWFAction action;
+  SWFDisplayItem item = getDisplayItem(getThis());
+
+  if(ZEND_NUM_ARGS() != 2 ||
+     zend_get_parameters_ex(2, &zaction, &flags) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zaction);
+  convert_to_long_ex(flags);
+
+  action = (SWFBlock)getAction(*zaction);
+
+  SWFDisplayItem_addAction(item, action, Z_LVAL_PP(flags));
 }
 
 /* }}} */
@@ -3017,6 +3040,17 @@ PHP_MINIT_FUNCTION(ming)
   CONSTANT("SWFTEXTFIELD_ALIGN_RIGHT",    SWFTEXTFIELD_ALIGN_RIGHT);
   CONSTANT("SWFTEXTFIELD_ALIGN_CENTER",   SWFTEXTFIELD_ALIGN_CENTER);
   CONSTANT("SWFTEXTFIELD_ALIGN_JUSTIFY",  SWFTEXTFIELD_ALIGN_JUSTIFY);
+
+  /* flags for SWFDisplayItem_addAction */
+  CONSTANT("SWFACTION_ONLOAD",            SWFACTION_ONLOAD);
+  CONSTANT("SWFACTION_ENTERFRAME",        SWFACTION_ENTERFRAME);
+  CONSTANT("SWFACTION_UNLOAD",            SWFACTION_UNLOAD);
+  CONSTANT("SWFACTION_MOUSEMOVE",         SWFACTION_MOUSEMOVE);
+  CONSTANT("SWFACTION_MOUSEDOWN",         SWFACTION_MOUSEDOWN);
+  CONSTANT("SWFACTION_MOUSEUP",           SWFACTION_MOUSEUP);
+  CONSTANT("SWFACTION_KEYDOWN",           SWFACTION_KEYDOWN);
+  CONSTANT("SWFACTION_KEYUP",             SWFACTION_KEYUP);
+  CONSTANT("SWFACTION_DATA",              SWFACTION_DATA);
 
   le_swfmoviep = zend_register_list_destructors_ex(destroy_SWFMovie_resource, NULL, "SWFMovie", module_number);
   le_swfshapep = zend_register_list_destructors_ex(destroy_SWFShape_resource, NULL, "SWFShape", module_number);

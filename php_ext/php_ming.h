@@ -150,6 +150,7 @@ PHP_FUNCTION(swfdisplayitem_setRatio);
 PHP_FUNCTION(swfdisplayitem_addColor);
 PHP_FUNCTION(swfdisplayitem_multColor);
 PHP_FUNCTION(swfdisplayitem_setName);
+PHP_FUNCTION(swfdisplayitem_addAction);
 
 PHP_FUNCTION(swfbutton_init);
 PHP_FUNCTION(swfbutton_setHit);
