@@ -74,7 +74,7 @@ raw2adpcm: raw2adpcm.c ../libming.a
 png2swf: png2swf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) png2swf.c -o png2swf ../libming.a $(LIBS)
 
-makeswf: makeswf.c
+makeswf: makeswf.c makeswf.h
 	$(CC) $(CFLAGS) $(LDFLAGS) -lming -L../ -o $@ $<
 
 install: all_binaries

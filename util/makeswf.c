@@ -46,6 +46,9 @@
  *
  */
 
+/* This is needed to get vasprintf definition */
+#define _GNU_SOURCE 1
+
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -339,6 +342,9 @@ preprocess (char *file, char *out, char *cppargs)
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.4  2004/07/19 08:22:56  strk
+ * GNU_SOURCE define in makeswf.c, makeswf.h dependency in Makefile
+ *
  * Revision 1.3  2004/07/15 12:45:54  strk
  * Added -D and -I switched for preprocessor control
  *

@@ -3,3 +3,4 @@
 
 /* Define this if you have getopt_long */
 #undef HAVE_GETOPT_LONG
+
