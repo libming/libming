@@ -113,7 +113,7 @@ newSWFPrebuilt()
 
 // functions to read swf
 
-static int verbose = {0};
+static int verbose = {1};
 
 struct bitstream
 {	char lastch;
@@ -460,6 +460,10 @@ static int handle_tag(TAG tp)
 				tagnam = "stagClipInit"; break;*/
 			/*case stagNewFontInfo:
 				tagnam = "stagNewFontInfo"; break;*/
+			case SWF_DEFINEVIDEOSTREAM:
+				tagnam = "stagDefineVideoStrem"; break;
+			case SWF_VIDEOFRAME:
+				tagnam = "stagVideoFrame"; break;
 		}
 		printf("tag %d %s\n", tp->type, tagnam);
 	}
@@ -494,10 +498,12 @@ static int handle_tag(TAG tp)
 		case SWF_NAMECHARACTER:
 		case SWF_DEFINEFONT2:
 		case SWF_DEFINEBUTTONCXFORM:
+		case SWF_DEFINEVIDEOSTREAM:
+		case SWF_VIDEOFRAME:
 		/*case SWF_NEWFONTINFO:*/
 			id = change_id(tp);
 			if(verbose)
-				printf("id %d\n", id);
+				printf("id %d offset %d\n", id, idoffset);
 			break;
 		/* to be processed specially */
 		case SWF_DEFINESHAPE:
@@ -551,6 +557,8 @@ static int handle_tag(TAG tp)
 		case SWF_SOUNDSTREAMHEAD:
 		case SWF_SOUNDSTREAMHEAD2:
 		case SWF_SOUNDSTREAMBLOCK:
+		case SWF_DEFINEVIDEOSTREAM:
+		case SWF_VIDEOFRAME:
 		case SWF_FREECHARACTER:
 		case SWF_PLACEOBJECT:
 		case SWF_REMOVEOBJECT:
