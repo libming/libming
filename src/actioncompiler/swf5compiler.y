@@ -56,7 +56,7 @@ Buffer bf, bc;
 %token STRINGEQ STRINGLENGTH SUBSTRING GETVARIABLE SETVARIABLE
 %token SETTARGETEXPRESSION  DUPLICATEMOVIECLIP REMOVEMOVIECLIP
 %token STRINGLESSTHAN MBLENGTH MBSUBSTRING MBORD MBCHR
-%token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET
+%token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET 
 %token LOADVARIABLES LOADMOVIE LOADVARIABLESNUM LOADMOVIENUM
 %token CALLFRAME STARTDRAG STOPDRAG GOTOFRAME SETTARGET
 
@@ -913,6 +913,23 @@ function_call
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
 		  free($1); }
+
+	| DELETE IDENTIFIER
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $2, strlen($2)+1);
+		  free($2);
+		  bufferWriteOp($$, SWFACTION_DELETE);  }
+
+	| DELETE lvalue_expr '.' IDENTIFIER
+		{ $$ = $2;
+		  bufferWriteString($$, $4, strlen($4)+1);
+		  free($4);
+		  bufferWriteOp($$, SWFACTION_DELETEVAR); }
+
+	| DELETE lvalue_expr '[' expr ']'
+		{ $$ = $2;
+		  bufferConcat($$, $4);
+		  bufferWriteOp($$, SWFACTION_DELETEVAR);  }
 
 	| EVAL '(' expr ')'
 		{ $$ = $3;
@@ -1779,9 +1796,6 @@ opcode
 						     SWFACTION_SHIFTRIGHT2); }
 	| VAR			{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_VAR); }
-	| VAREQUALS		{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_VAREQUALS); }
-
 	/* f4 ops */
 	| OLDADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }
 	| SUBTRACT		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SUBTRACT); }
