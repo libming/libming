@@ -297,7 +297,7 @@ class SWFMovie
     { SWFMovie_setBackground(this->movie, r, g, b); }
 
   void setSoundStream(SWFSoundStream *sound)
-    { SWFMovie_setSoundStream(this->movie, sound); }
+    { SWFMovie_setSoundStream(this->movie, sound->sound); /* wogl */ }
 
   SWFDisplayItem *add(SWFBlock *character)
     { return new SWFDisplayItem(SWFMovie_add(this->movie, character->getBlock())); }
@@ -495,7 +495,7 @@ class SWFFont : public SWFBlock
        strcmp(name + strlen(name) - 4, ".fdb") == 0)
       this->font = loadSWFFontFromFile(fopen(name, "rb"));
     else
-      this->font = 0 ; // wogl temporary !!!! newSWFBrowserFont(name);
+      this->font = 0 ; // wogl needs to be fixed - but how ???? newSWFBrowserFont(name);
   }
 
   virtual ~SWFFont()
@@ -805,5 +805,4 @@ class SWFButton : public SWFCharacter
   SWF_DECLAREONLY(SWFButton);
 };
 
-#endif /* SWF_MINGPP_H_INCLUDED */
 #endif /* SWF_MINGPP_H_INCLUDED */
