@@ -1,3 +1,8 @@
+2002-08-27 06:50  opaque_ndst
+
+	* src/blocks/input.c: fixed really stupid problem with
+	indeterminate function call ordering
+
 2002-08-19 15:58  staybyte
 
 	* src/movie.c: remove automatic version number change to 6
