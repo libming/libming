@@ -232,9 +232,6 @@ class SWFDisplayItem(SWFBase):
     def skewYTo(self, y):
         mingc.SWFDisplayItem_skewYTo(self.this, y)
 
-    def setMatrix(self, a, b, c, d, x, y):
-        mingc.SWFDisplayItem_setMatrix(self.this, a, b, c, d, x, y)
-
     def setName(self, name):
         mingc.SWFDisplayItem_setName(self.this, name)
 
@@ -256,53 +253,8 @@ class SWFDisplayItem(SWFBase):
     def remove(self):
         mingc.SWFDisplayItem_remove(self.this)
 
-    # methods to retrieve item position data
-    # added by David McNab <david@rebirthing.co.nz>
-    def get_x(self):
-        """
-        Returns the display item's current x position
-        """
-        return mingc.SWFDisplayItem_get_x(self.this)
-
-    def get_y(self):
-        """
-        Returns the display item's current y position
-        """
-        return mingc.SWFDisplayItem_get_y(self.this)
-
-    def get_xScale(self):
-        """
-        Returns the display item's current x scale
-        """
-        return mingc.SWFDisplayItem_get_xScale(self.this)
-
-    def get_yScale(self):
-        """
-        Returns the display item's current y scale
-        """
-        return mingc.SWFDisplayItem_get_yScale(self.this)
-
-    def get_xSkew(self):
-        """
-        Returns the display item's current x skew
-        """
-        return mingc.SWFDisplayItem_get_xSkew(self.this)
-
-    def get_ySkew(self):
-        """
-        Returns the display item's current y skew
-        """
-        return mingc.SWFDisplayItem_get_ySkew(self.this)
-
-    def get_rot(self):
-        """
-        Returns the display item's current rotation (in degrees)
-        """
-        return mingc.SWFDisplayItem_get_rot(self.this)
-
     def setMatrix(self, a, b, c, d, x, y):
         mingc.SWFDisplayItem_setMatrix(self.this, a, b, c, d, x, y)
-
 
 class SWFMovie(SWFBase):
 
@@ -340,9 +292,9 @@ class SWFMovie(SWFBase):
         mingc.SWFMovie_remove(self.this, item.this)
 
     def streamMp3(self, mp3):
-        sound = SWFSoundStream(mp3)
+        sound = SWFSound(mp3)
         self.blocks.append(sound)
-        mingc.SWFMovie_setSoundStream(self.this, sound.this)
+        mingc.SWFMovie_setSoundStream(self.this, sound)
 
     def setSoundStream(self, sound):
         self.blocks.append(sound)
@@ -351,11 +303,11 @@ class SWFMovie(SWFBase):
     def output(self):
         return mingc.SWFMovie_simpleOutput(self.this)
 
-    def save(self, filename, level=0):
-        mingc.SWFMovie_save(self.this, filename, level)
+    def save(self, filename):
+        mingc.SWFMovie_save(self.this, filename)
 
-    def saveToFile(self, file, level=0):
-        mingc.SWFMovie_saveToFileNo(self.this, file.fileno(), level)
+    def saveToFile(self, file):
+        mingc.SWFMovie_saveToFileNo(self.this, file.fileno())
 
     def labelFrame(self, label):
         mingc.SWFMovie_labelFrame(self.this, label)
@@ -522,9 +474,6 @@ class SWFText(SWFBase):
     def addString(self, s, advance=None):
         mingc.SWFText_addString(self.this, s, advance)
 
-    def addUTF8String(self, s, advance=None):
-        mingc.SWFText_addUTF8String(self.this, s, advance)
-
     def setSpacing(self, spacing):
         mingc.SWFText_setSpacing(self.this, spacing)
 
@@ -539,9 +488,6 @@ class SWFText(SWFBase):
 
     def getWidth(self, string):
         return mingc.SWFText_getStringWidth(self.this, string)
-
-    def getUTF8Width(self, string):
-        return mingc.SWFText_getUTF8StringWidth(self.this, string)
 
     # deprecated:
     def setXY(self, x, y):
@@ -638,17 +584,9 @@ SWFTEXTFIELD_AUTOSIZE  = mingc.SWFTEXTFIELD_AUTOSIZE
 
 class SWFSound(SWFBase):
 
-    def __init__(self, fname, flags=0):
-        self.file = open(fname, "rb")
-        self.this = mingc.newSWFSoundFromFileno(self.file.fileno(), flags)
-
-    # display list destroys this..
-
-class SWFSoundStream(SWFBase):
-
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.this = mingc.newSWFSoundStreamFromFileno(self.file.fileno())
+        self.this = mingc.newSWFSound(self.file)
 
     # display list destroys this..
 

@@ -1,28 +1,17 @@
 INSTALL
 
-- Extract in the ming main directory
+- Extract and build (static) ming.a in the ming main directory
 
->cd py_ext 
+> cd py_ext 
 
-if platform == '*** UNIX ***':
+> /path/to/python setup.py build
 
-	- then just type
+if all is ok, then
 
-	>python build.py
+> /path/to/python setup.py install
 
-	- then follow instructions
+> /path/to/python shape.py
 
-elif platform == '*** WINDOWS ***':
-	
-	# probably get a binary mingc.pyd from the web site?
-	# or maybe:
-	
-	> make
-	
-	> make install
-
->python shape.py
-
-- It will generate the file shape.swf, 
+- It will generate the file test.swf, 
 
 Have Fun!
