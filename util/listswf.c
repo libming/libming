@@ -243,7 +243,7 @@ void printFillStyle(FILE *f, int shapeType)
 
     putchar('\n');
   }
-  else if(type==0x10 || type==0x12) /* linear (0x10) or radial (0x10) gradient */
+  else if(type==0x10) /* linear */
   {
     println("Matrix:");
     ++gIndent;
@@ -258,7 +258,7 @@ void printFillStyle(FILE *f, int shapeType)
       --gIndent;
     }
 
-    println("Gradient:");
+    println("Gradient (linear):");
     ++gIndent;
     if(shapeType==DEFINEMORPHSHAPE)
       printMorphGradient(f);
@@ -266,9 +266,48 @@ void printFillStyle(FILE *f, int shapeType)
       printGradient(f, shapeType);
     --gIndent;
   }
-  else if(type==0x40 || type==0x41) /* tiled bitmap (0x40) or clipped bitmap (0x41) fill */
+  else if(type==0x12) /* radial gradient */
   {
-    println("Bitmap id: %i", readUInt16(f));
+    println("Matrix:");
+    ++gIndent;
+    printMatrix(f);
+    --gIndent;
+
+    if(shapeType==DEFINEMORPHSHAPE)
+    {
+      println("Matrix2:");
+      ++gIndent;
+      printMatrix(f);
+      --gIndent;
+    }
+
+    println("Gradient (radial):");
+    ++gIndent;
+    if(shapeType==DEFINEMORPHSHAPE)
+      printMorphGradient(f);
+    else
+      printGradient(f, shapeType);
+    --gIndent;
+  }
+  else if(type==0x40) /* tiled bitmap */
+  {
+    println("Bitmap id: %i (tiled)", readUInt16(f));
+    println("Bitmap matrix:");
+    ++gIndent;
+    printMatrix(f);
+    --gIndent;
+
+    if(shapeType==DEFINEMORPHSHAPE)
+    {
+      println("Bitmap matrix:");
+      ++gIndent;
+      printMatrix(f);
+      --gIndent;
+    }
+  }
+  else if(type==0x41) /* clipped bitmap */
+  {
+    println("Bitmap id: %i (clipped)", readUInt16(f));
     println("Bitmap matrix:");
     ++gIndent;
     printMatrix(f);
