@@ -10,6 +10,7 @@
 package SWF::Shape;
 use SWF ();
 
+$SWF::Shape::VERSION = $SWF::VERSION;
 
 sub setLeftFill{
     my $self = shift;

@@ -1,5 +1,5 @@
 # ====================================================================
-# Copyright (c) 2000 by Soheil Seyfaie. All rights reserved.
+# Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 # ====================================================================
@@ -8,6 +8,9 @@
 # $Id$
 
 package SWF::Font;
-use SWF ();
+use SWF();
+
+$SWF::Font::VERSION = $SWF::VERSION;
+
 
 1;

@@ -8,6 +8,9 @@
 # $Id$
 
 package SWF::Gradient;
-use SWF ();
+use SWF();
+
+$SWF::Gradient::VERSION = $SWF::VERSION;
+
 
 1;
