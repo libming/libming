@@ -20,4 +20,9 @@ SHLIBLDFLAGS   = -static
 #SHLIBLDFLAGS            = -dynamiclib
 #SHAREDLIB                       = libming.$(MING_VER).dylib
 
-PREFIX = @prefix@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+libdir = @libdir@
+includedir = @includedir@
+

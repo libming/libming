@@ -1,18 +1,15 @@
 include ../config.make
 include ../Rules.make
 
-# Default binary location for install: /usr/lib/libming/bin
-BINDIR = $(PREFIX)/lib/libming/bin
-
 INCLUDES	+= -I.. 
 
 PAGER ?= less
 
-all:
-	$(PAGER) README
-
-all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp \
+all: listswf listfdb makefdb listjpeg swftoperl swftophp \
 	png2dbl listaction raw2adpcm png2swf makeswf listmp3
+
+help:
+	$(PAGER) README
 
 clean:
 	rm -f *.o listswf listswf.exe \
@@ -26,6 +23,7 @@ clean:
 		  swftoperl swftoperl.exe \
 		  swftophp swftophp.exe \
 		  png2dbl png2dbl.exe \
+		  png2swf png2swf.exe \
 		  gif2dbl gif2dbl.exe \
 		  raw2adpcm raw2adpcm.exe \
 		  gif2mask gif2mask.exe makeswf makeswf.exe core
@@ -76,17 +74,18 @@ png2swf: png2swf.c
 makeswf: makeswf.c makeswf.h
 	$(CC) $(CFLAGS) $(LDFLAGS) -lming -o $@ $<
 
-install: all_binaries
-	install -d $(BINDIR)
-	install -m 0755 swftophp $(BINDIR)
-	install -m 0755 swftoperl $(BINDIR)
-	install -m 0755 makefdb $(BINDIR)
-	install -m 0755 listfdb $(BINDIR)
-	install -m 0755 listjpeg $(BINDIR)
-	install -m 0755 listswf $(BINDIR)
-	install -m 0755 listaction $(BINDIR)
-	install -m 0755 png2dbl $(BINDIR)
-	#install -m 0755 gif2dbl $(BINDIR)
-	#install -m 0755 gif2mask $(BINDIR)
-	install -m 0755 raw2adpcm $(BINDIR)
-	install -m 0755 png2swf $(BINDIR)
+install: all
+	install -d $(bindir)
+	install -m 0755 swftophp $(bindir)
+	install -m 0755 swftoperl $(bindir)
+	install -m 0755 makefdb $(bindir)
+	install -m 0755 listfdb $(bindir)
+	install -m 0755 listjpeg $(bindir)
+	install -m 0755 listswf $(bindir)
+	install -m 0755 listaction $(bindir)
+	install -m 0755 png2dbl $(bindir)
+	#install -m 0755 gif2dbl $(bindir)
+	#install -m 0755 gif2mask $(bindir)
+	install -m 0755 raw2adpcm $(bindir)
+	install -m 0755 png2swf $(bindir)
+	install -m 0755 makeswf $(bindir)

@@ -1,27 +1,30 @@
 include Rules.make
 
-LIBDIR = $(PREFIX)/lib
-INCLUDEDIR = $(PREFIX)/include
+DIRS = src util py_ext php_ext 
 
-DIRS = src util py_ext php_ext
+all: dynamic utils #static
 
-all: dynamic #static
-
-install: install-common install-dynamic #install-static
+install: install-common install-dynamic install-utils #install-static
 
 install-common:
-	install -d $(LIBDIR)
-	install -d $(INCLUDEDIR)
-	install -c -m 0644 src/ming.h $(INCLUDEDIR)
-	install -c -m 0644 src/ming_config.h $(INCLUDEDIR)
-	install -c -m 0644 mingpp.h $(INCLUDEDIR)
+	install -d $(libdir)
+	install -d $(includedir)
+	install -c -m 0644 src/ming.h $(includedir)
+	install -c -m 0644 src/ming_config.h $(includedir)
+	install -c -m 0644 mingpp.h $(includedir)
+
+install-utils:
+	(cd util && make install)
 
 install-dynamic: dynamic
-	install -c -m 0644 $(SHAREDLIB) $(LIBDIR)/
-	(cd $(LIBDIR) && ln -fs $(SHAREDLIB) libming.so.0 && ln -fs libming.so.0 libming.so)
+	install -c -m 0644 $(SHAREDLIB) $(libdir)/$(SHAREDLIB)
+	(cd $(libdir) && ln -fs $(SHAREDLIB) libming.so.0 && ln -fs libming.so.0 libming.so)
 
 install-static: static
-	install -c -m 0644 $(SHAREDLIB) $(LIBDIR)/
+	install -c -m 0644 $(SHAREDLIB) $(libdir)/
+
+utils:
+	(cd util && make)
 
 dynamic static:
 	(cd src && $(MAKE) $@)
@@ -30,7 +33,7 @@ clean:
 	for i in $(DIRS); do (cd $$i && $(MAKE) clean); done
 	if [ -f perl_ext/Makefile ] ; then cd perl_ext; $(MAKE) clean; fi
 	rm -f test.o test test.exe *.core *~
-	rm -f $(SHAREDLIB) $(SHAREDLIB)
+	rm -f $(SHAREDLIB) 
 	rm -f libming.a libming.so
 
 distclean: clean
