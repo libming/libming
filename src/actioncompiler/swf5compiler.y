@@ -776,6 +776,14 @@ void_function_call
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TRACE); }
 
+	| GETURL '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteOp($$, SWFACTION_PUSHDATA);
+		  bufferWriteS16($$, 2); bufferWriteS16($$, 0); // two 0 bytes	
+		  bufferWriteOp($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0); }
+	
 	| GETURL '(' expr ',' expr urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
