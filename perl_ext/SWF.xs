@@ -331,8 +331,12 @@ SWFMovie_save(movie, filename)
 void 
 SWFMovie_addExport(movie, block, name)
 	SWF::Movie movie 
-	SWF::Block block
+	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
 	char *name
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	SWFMovie_addExport(movie, block, name);
+	
 
 SWF::DisplayItem
 SWFMovie_add(movie, block)
@@ -691,13 +695,14 @@ SWFShape_xs_setRightFill(shape, fill=NULL)
 	CODE:
 	SWFShape_setRightFill(shape, fill);
 
-#void
-#SWFShape_drawFontGlyph(shape, font, c)
-#        SWF::Shape shape
-#        SWF::Font font
-#        int c
-#        ALIAS:
-#        SWF::Shape::drawGlyph = 1
+void
+SWFShape_drawGlyph(shape, font, c)
+        SWF::Shape shape
+        SWF::Font font
+        int c
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	SWFShape_drawGlyph(shape, font, c);
 
 void
 SWFShape_drawArc(shape, r, startAngle, endAngle)
