@@ -77,7 +77,7 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character)
   SWFShape_drawLine(shape, 0, -SWFCharacter_getHeight(character));
 }
 
-void SWFShape_drawCircle(SWFShape shape, int r)
+void SWFShape_drawCircle(SWFShape shape, float r)
 {
   SWFShape_drawArc(shape, r, 0, 360);
 }
@@ -86,7 +86,7 @@ void SWFShape_drawCircle(SWFShape shape, int r)
 /* draw an arc of radius r, centered at (x,y), from angle startAngle to angle
    endAngle (measured in degrees clockwise from due north) */
 
-void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle)
+void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle)
 {
   int i;
   float controlx, controly, anchorx, anchory, x, y;
