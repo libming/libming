@@ -363,7 +363,7 @@ newSWFFont()
 	font->leading = 0;
 
 	font->kernCount = 0;
-	font->kernTable = NULL;
+	font->kernTable.k = NULL;
 
 	font->shapes = NULL;
 
@@ -1110,7 +1110,7 @@ loadSWFFontFromFile(FILE *file)
 			else
 				font->kernTable.k = malloc(sizeof(struct kernInfo) * font->kernCount);
 		else
-			font->kernTable = NULL;
+			font->kernTable.k = NULL;
 
 		if(font->flags & SWF_FONT_WIDECODES)
 			for ( i=0; i<font->kernCount; ++i )
