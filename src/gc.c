@@ -52,6 +52,7 @@ ming_gc_remove_node(mem_node *node)
 		lastnode = node->prev;
 	}
 
+	free(node);
 #if DEBUG
 	printf("Node %p removed\n", node);
 	dumpNodeList();
@@ -69,8 +70,13 @@ Ming_collectGarbage()
 	ptr=firstnode;
 	while(ptr)
 	{
+		/*
+		 * The destructor will destroy the NODE from the
+		 * list, so we get to the next before calling it
+		 */
+		ptr1 = ptr->next;
 		ptr->dtor(ptr->ptr);
-		ptr = ptr->next;
+		ptr=ptr1;
 	}
 }
 
