@@ -1,12 +1,13 @@
 This list should always be empty:
 
+        - Fix Text.xs warnings (during compilation) 
+
+
+Documentation:
+        - Add addChars(), addExport(), writeExports() methods
+        - Add documentation for $button->setMenu(flag) 
 	- add SWFShape_drawCubic and SWFShape_drawCubicTo ????
-	- Add SWF::TextField method pod
-	- test under mod_perl (check $m->out)
-	- Make sure all open files are closed (e.g. Bitmap)
-	- Add a SUPPORT file - I'm getting too many private emails
-	- Fix Email address
-	- Update README file, it's out of date
+	- SWF::Text
 
 This is wish list:
 
