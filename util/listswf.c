@@ -894,6 +894,11 @@ int printActionRecord(FILE *f)
     case SWFACTION_DELETE:
       println("Delete");
       break;
+
+    case SWFACTION_DELETEVAR:
+      println("Delete2");
+      break;
+
     case SWFACTION_VAR:
       println("Var");
       break;

@@ -63,6 +63,7 @@ typedef enum
   SWFACTION_GOTOEXPRESSION          = 0x9F,
 
 /* v5 actions */
+  SWFACTION_DELETEVAR               = 0x3A,
   SWFACTION_DELETE                  = 0x3B,
   SWFACTION_VAREQUALS               = 0x3C,
   SWFACTION_CALLFUNCTION            = 0x3D,
