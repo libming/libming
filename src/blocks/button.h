@@ -23,12 +23,14 @@
 #define SWF_BUTTON_H_INCLUDED
 
 typedef struct SWFButton_s *SWFButton;
+typedef struct SWFButtonSound_s *SWFButtonSound;
 
 #include "block.h"
 #include "matrix.h"
 #include "action.h"
 #include "cxform.h"
 #include "sound.h"
+#include "soundinstance.h"
 
 #define SWFBUTTON_HIT    (1<<3)
 #define SWFBUTTON_DOWN   (1<<2)
@@ -59,10 +61,14 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
 
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 
+SWFSoundInstance
+SWFButton_addSound(SWFButton button, SWFSound sound, byte flag);
+
 SWFBlock newDefineSWFButtonBlock(SWFButton button);
 
-SWFBlock newDefineSWFButtonCXform(SWFButton button, SWFCXform *cXforms);
+SWFButtonSound newSWFButtonSound(SWFButton button);
 
-SWFBlock newDefineSWFButtonSWFSound(SWFButton button, SWFSound sound);
+SWFSoundInstance
+SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags);
 
 #endif /* SWF_BUTTON_H_INCLUDED */
