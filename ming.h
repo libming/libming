@@ -297,24 +297,6 @@ void SWFTextField_setLength(SWFTextField field, int length);
 
 typedef void *SWFSound;
 
-#define SWF_SOUND_COMPRESSION      0xf0
-#define SWF_SOUND_NOT_COMPRESSED   (0<<4)
-#define SWF_SOUND_ADPCM_COMPRESSED (1<<4)
-
-#define SWF_SOUND_RATE             0x0c
-#define SWF_SOUND_5KHZ             (0<<2)
-#define SWF_SOUND_11KHZ            (1<<2)
-#define SWF_SOUND_22KHZ            (2<<2)
-#define SWF_SOUND_44KHZ            (3<<2)
-
-#define SWF_SOUND_BITS             0x02
-#define SWF_SOUND_8BIT             (0<<1)
-#define SWF_SOUND_16BIT            (1<<1)
-
-#define SWF_SOUND_CHANNELS         0x01
-#define SWF_SOUND_MONO             (0<<0)
-#define SWF_SOUND_STEREO           (1<<0)
-
 SWFSound newSWFSound(FILE *file);
 SWFSound newSWFSound_fromInput(SWFInput input);
 void destroySWFSound(SWFSound sound);
@@ -473,6 +455,19 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
+
+#define SWFACTION_ONLOAD      (1<<0)
+#define SWFACTION_ENTERFRAME  (1<<1)
+#define SWFACTION_UNLOAD      (1<<2)
+#define SWFACTION_MOUSEMOVE   (1<<3)
+#define SWFACTION_MOUSEDOWN   (1<<4)
+#define SWFACTION_MOUSEUP     (1<<5)
+#define SWFACTION_KEYDOWN     (1<<6)
+#define SWFACTION_KEYUP       (1<<7)
+#define SWFACTION_DATA        (1<<8)
+
+void SWFDisplayItem_addAction(SWFDisplayItem item,
+			      SWFAction action, int flags);
 
 
 /* SWFFill adds a position object to manipulate SWFFillStyle's matrix. */

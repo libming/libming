@@ -123,6 +123,24 @@ class SWFCharacter : public SWFBlock
 };
 
 
+/*  SWFAction  */
+
+class SWFAction : public SWFBlock
+{
+ public:
+  c_SWFAction action;
+
+  SWFAction(char *script)
+    { this->action = compileSWFActionCode(script); }
+
+  // movies, buttons, etc. destroy the c_SWFAction..
+  virtual ~SWFAction() {}
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->action; }
+};
+
+
 /*  SWFDisplayItem  */
 
 class SWFDisplayItem
@@ -192,6 +210,9 @@ class SWFDisplayItem
 
   void multColor(float r, float g, float b, float a=1.0)
     { SWFDisplayItem_setColorMult(this->item, r, g, b, a); }
+
+  void addAction(SWFAction action, int flags)
+    { SWFDisplayItem_addAction(this->item, action->action, flags); }
 };
 
 
@@ -695,24 +716,6 @@ class SWFTextField : public SWFCharacter
 
   void setLength(int length)
     { SWFTextField_setLength(this->textField, length); }
-};
-
-
-/*  SWFAction  */
-
-class SWFAction : public SWFBlock
-{
- public:
-  c_SWFAction action;
-
-  SWFAction(char *script)
-    { this->action = compileSWFActionCode(script); }
-
-  // movies, buttons, etc. destroy the c_SWFAction..
-  virtual ~SWFAction() {}
-
-  c_SWFBlock getBlock()
-    { return (c_SWFBlock)this->action; }
 };
 
 
