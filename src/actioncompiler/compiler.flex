@@ -15,15 +15,18 @@ int lexBufferLen = 0;
 
 static int  sLineNumber = 0;
 static char szLine[1024];
-static char msgbufs[2][1024] = {0}, *msgline = {0};
+static char msgbufs[2][1024] = { {0}, {0} }, *msgline = {0};
 static int  column = 0;
 
 void parseInit(char *script)
 {
+  yyrestart(NULL);
+
   lexBuffer = script;
   lexBufferLen = strlen(script);
   sLineNumber = 0;
-  msgline = msgbufs;
+  column = 0;
+  msgline = msgbufs[0];
 }
 
 void countline()
@@ -97,28 +100,32 @@ asm			{ count();	return ASM;		}
 eval			{ count();	return EVAL;		}
 
   /* legacy functions */
-random		{ count();	return RANDOM;	}
-getTimer	{ count();	return GETTIMER;	}
-length		{ count();	return LENGTH;	}
-concat		{ count();	return CONCAT;	}
-substr		{ count();	return SUBSTR;	}
-trace		{ count();	return TRACE;	}
-int		{ count();	return INT;	}
-ord		{ count();	return ORD;	}
-chr		{ count();	return CHR;	}
-getURL		{ count();	return GETURL;	}
-getURL1		{ count();	return GETURL1; }
-nextFrame	{ count();	return NEXTFRAME;	}
-prevFrame	{ count();	return PREVFRAME;	}
-play		{ count();	return PLAY;		}
-stop		{ count();	return STOP;		}
-toggleQuality	{ count();	return TOGGLEQUALITY;	}
-stopSounds	{ count();	return STOPSOUNDS;	}
-
+random			{ count();	return RANDOM;	}
+getTimer		{ count();	return GETTIMER;	}
+length			{ count();	return LENGTH;	}
+concat			{ count();	return CONCAT;	}
+substr			{ count();	return SUBSTR;	}
+trace			{ count();	return TRACE;	}
+int			{ count();	return INT;	}
+ord			{ count();	return ORD;	}
+chr			{ count();	return CHR;	}
+getURL			{ count();	return GETURL;	}
+getURL1			{ count();	return GETURL1;	}
+nextFrame		{ count();	return NEXTFRAME;	}
+prevFrame		{ count();	return PREVFRAME;	}
+play			{ count();	return PLAY;		}
+stop			{ count();	return STOP;		}
+toggleQuality		{ count();	return TOGGLEQUALITY;	}
+stopSounds		{ count();	return STOPSOUNDS;	}
+callFrame		{ count();	return CALLFRAME;	}
+gotoFrame		{ count();	return GOTOFRAME;	}
+setTarget		{ count();	return SETTARGET;	}
 loadVariables		{ count();	return LOADVARIABLES;	}
 loadMovie		{ count();	return LOADMOVIE;	}
 loadVariablesNum	{ count();	return LOADVARIABLESNUM;	}
 loadMovieNum		{ count();	return LOADMOVIENUM;	}
+duplicateMovieClip	{ count();	return DUPLICATEMOVIECLIP; }
+removeMovieClip		{ count();	return REMOVEMOVIECLIP; }
 
   /* assembler ops */
 dup			{ count();	return DUP; }
@@ -165,10 +172,8 @@ substring		{ count();	return SUBSTRING; }
 getvariable		{ count();	return GETVARIABLE; }
 setvariable		{ count();	return SETVARIABLE; }
 settargetexpr		{ count();	return SETTARGETEXPRESSION; }
-duplicateclip		{ count();	return DUPLICATECLIP; }
-removeclip		{ count();	return REMOVECLIP; }
-startdrag		{ count();	return STARTDRAGMOVIE; }
-stopdrag		{ count();	return STOPDRAGMOVIE; }
+startdrag		{ count();	return STARTDRAG; }
+stopdrag		{ count();	return STOPDRAG; }
 stringlessthan		{ count();	return STRINGLESSTHAN; }
 mblength		{ count();	return MBLENGTH; }
 mbsubstring		{ count();	return MBSUBSTRING; }
@@ -177,7 +182,6 @@ mbchr			{ count();	return MBCHR; }
 branch			{ count();	return BRANCHALWAYS; }
 branchalways		{ count();	return BRANCHALWAYS; }
 branchiftrue		{ count();	return BRANCHIFTRUE; }
-geturl2			{ count();	return GETURL2; }
 post			{ count();	return POST; }
 get			{ count();	return GET; }
 POST			{ count();	return POST; }
@@ -403,7 +407,7 @@ void yyerror(char *msg)
   if(strlen(yytext))
   {
     SWF_error("\n%s\n%*s\nLine %i:  Reason: '%s'\n",
-	      msgline, ColumnNumber(), "^", LineNumber(), msg);
+	      LineText(), ColumnNumber(), "^", LineNumber(), msg);
   }
   else
   {
