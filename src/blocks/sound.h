@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* sound.h */
 
 #ifndef SWF_SOUND_H_INCLUDED
 #define SWF_SOUND_H_INCLUDED
@@ -59,15 +59,14 @@ typedef struct SWFSound_s *SWFSound;
 #define SWF_SOUNDINFO_HASINPOINT     (1<<0)
 
 
-SWFBlock newDefineSWFSoundBlock (SWFSound sound);
+SWFBlock newDefineSWFSoundBlock(SWFSound sound);
 
-SWFSound newSWFSound (FILE * f, byte flags);
+SWFSound newSWFSound(FILE *f, byte flags);
 
-SWFSound newSWFSound_fromInput (SWFInput input, byte flags);
+SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
 
-void destroySWFSound (SWFBlock sound);
+void destroySWFSound(SWFBlock sound);
 
-void SWFSound_setData (SWFSound sound, byte flags, int numSamples,
-		       byte * data);
+void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data);
 
 #endif /* SWF_SOUND_H_INCLUDED */

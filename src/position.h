@@ -17,8 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
 /* position.h - wrap matrices in something more usable */
 
 #ifndef MING_POSITION_H_INCLUDED
@@ -28,46 +26,46 @@ typedef struct SWFPosition_s *SWFPosition;
 
 #include "blocks/matrix.h"
 
-void destroySWFPosition (SWFPosition position);
-SWFPosition newSWFPosition (SWFMatrix matrix);
+void destroySWFPosition(SWFPosition position);
+SWFPosition newSWFPosition(SWFMatrix matrix);
 
-void SWFPosition_skewX (SWFPosition position, float x);
+void SWFPosition_skewX(SWFPosition position, float x);
 
-void SWFPosition_skewXTo (SWFPosition position, float x);
+void SWFPosition_skewXTo(SWFPosition position, float x);
 
-void SWFPosition_skewY (SWFPosition position, float y);
+void SWFPosition_skewY(SWFPosition position, float y);
 
-void SWFPosition_skewYTo (SWFPosition position, float y);
+void SWFPosition_skewYTo(SWFPosition position, float y);
 
-void SWFPosition_scaleX (SWFPosition position, float x);
+void SWFPosition_scaleX(SWFPosition position, float x);
 
-void SWFPosition_scaleXTo (SWFPosition position, float x);
+void SWFPosition_scaleXTo(SWFPosition position, float x);
 
-void SWFPosition_scaleY (SWFPosition position, float y);
+void SWFPosition_scaleY(SWFPosition position, float y);
 
-void SWFPosition_scaleYTo (SWFPosition position, float y);
+void SWFPosition_scaleYTo(SWFPosition position, float y);
 
-void SWFPosition_scaleXY (SWFPosition position, float x, float y);
+void SWFPosition_scaleXY(SWFPosition position, float x, float y);
 
-void SWFPosition_scaleXYTo (SWFPosition position, float x, float y);
+void SWFPosition_scaleXYTo(SWFPosition position, float x, float y);
 
-void SWFPosition_setMatrix (SWFPosition p, float a, float b, float c, float d,
-			    float x, float y);
+void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
+			   float x, float y);
 
-void SWFPosition_rotate (SWFPosition position, float degrees);
+void SWFPosition_rotate(SWFPosition position, float degrees);
 
-void SWFPosition_rotateTo (SWFPosition position, float degrees);
+void SWFPosition_rotateTo(SWFPosition position, float degrees);
 
-void SWFPosition_move (SWFPosition position, float x, float y);
+void SWFPosition_move(SWFPosition position, float x, float y);
 
-void SWFPosition_moveTo (SWFPosition position, float x, float y);
+void SWFPosition_moveTo(SWFPosition position, float x, float y);
 
-float SWFPosition_getRotation (SWFPosition position);
-float SWFPosition_getX (SWFPosition position);
-float SWFPosition_getY (SWFPosition position);
-float SWFPosition_getXScale (SWFPosition position);
-float SWFPosition_getYScale (SWFPosition position);
-float SWFPosition_getXSkew (SWFPosition position);
-float SWFPosition_getYSkew (SWFPosition position);
+float SWFPosition_getRotation(SWFPosition position);
+float SWFPosition_getX(SWFPosition position);
+float SWFPosition_getY(SWFPosition position);
+float SWFPosition_getXScale(SWFPosition position);
+float SWFPosition_getYScale(SWFPosition position);
+float SWFPosition_getXSkew(SWFPosition position);
+float SWFPosition_getYSkew(SWFPosition position);
 
 #endif /* MING_POSITION_H_INCLUDED */

@@ -17,8 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
 #include <math.h>
 
 #include "libming.h"
@@ -26,110 +24,75 @@
 
 extern float Ming_scale;
 
-void
-SWFText_setHeight (SWFText text, float height)
+void SWFText_setHeight(SWFText text, float height)
 {
-  SWFText_setScaledHeight (text, (int) rint (Ming_scale * height));
+  SWFText_setScaledHeight(text, (int)rint(Ming_scale*height));
 }
 
-void
-SWFText_moveTo (SWFText text, float x, float y)
+void SWFText_moveTo(SWFText text, float x, float y)
 {
-  SWFText_scaledMoveTo (text, (int) rint (Ming_scale * x),
-			(int) rint (Ming_scale * y));
+  SWFText_scaledMoveTo(text, (int)rint(Ming_scale*x), (int)rint(Ming_scale*y));
+}
+float SWFText_getStringWidth(SWFText text, const unsigned char *string)
+{
+  return SWFText_getScaledStringWidth(text, string)/Ming_scale;
+}
+float SWFText_getAscent(SWFText text)
+{
+  return SWFText_getScaledAscent(text)/Ming_scale;
+}
+float SWFText_getDescent(SWFText text)
+{
+  return SWFText_getScaledDescent(text)/Ming_scale;
+}
+float SWFText_getLeading(SWFText text)
+{
+  return SWFText_getScaledLeading(text)/Ming_scale;
 }
 
-float
-SWFText_getStringWidth (SWFText text, const unsigned char *string)
+float SWFFont_getStringWidth(SWFFont font, const unsigned char *string)
 {
-  return SWFText_getScaledStringWidth (text, string) / Ming_scale;
+  return SWFFont_getScaledStringWidth(font, string)/Ming_scale;
+}
+float SWFFont_getAscent(SWFFont font)
+{
+  return SWFFont_getScaledAscent(font)/Ming_scale;
+}
+float SWFFont_getDescent(SWFFont font)
+{
+  return SWFFont_getScaledDescent(font)/Ming_scale;
+}
+float SWFFont_getLeading(SWFFont font)
+{
+  return SWFFont_getScaledLeading(font)/Ming_scale;
 }
 
-float
-SWFText_getAscent (SWFText text)
+void SWFTextField_setBounds(SWFTextField field, float width, float height)
 {
-  return SWFText_getScaledAscent (text) / Ming_scale;
+  SWFTextField_setScaledBounds(field, (int)rint(Ming_scale*width),
+			       (int)rint(Ming_scale*height));
 }
-
-float
-SWFText_getDescent (SWFText text)
+void SWFTextField_setHeight(SWFTextField field, float height)
 {
-  return SWFText_getScaledDescent (text) / Ming_scale;
+  SWFTextField_setScaledFontHeight(field, (int)rint(Ming_scale*height));
 }
-
-float
-SWFText_getLeading (SWFText text)
+void SWFTextField_setFieldHeight(SWFTextField field, float height)
 {
-  return SWFText_getScaledLeading (text) / Ming_scale;
+  SWFTextField_setScaledFieldHeight(field, (int)rint(Ming_scale*height));
 }
-
-float
-SWFFont_getStringWidth (SWFFont font, const unsigned char *string)
+void SWFTextField_setLeftMargin(SWFTextField field, float leftMargin)
 {
-  return SWFFont_getScaledStringWidth (font, string) / Ming_scale;
+  SWFTextField_setScaledLeftMargin(field, (int)rint(Ming_scale*leftMargin));
 }
-
-float
-SWFFont_getAscent (SWFFont font)
+void SWFTextField_setRightMargin(SWFTextField field, float rightMargin)
 {
-  return SWFFont_getScaledAscent (font) / Ming_scale;
+  SWFTextField_setScaledRightMargin(field, (int)rint(Ming_scale*rightMargin));
 }
-
-float
-SWFFont_getDescent (SWFFont font)
+void SWFTextField_setIndentation(SWFTextField field, float indentation)
 {
-  return SWFFont_getScaledDescent (font) / Ming_scale;
+  SWFTextField_setScaledIndentation(field, (int)rint(Ming_scale*indentation));
 }
-
-float
-SWFFont_getLeading (SWFFont font)
+void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing)
 {
-  return SWFFont_getScaledLeading (font) / Ming_scale;
-}
-
-void
-SWFTextField_setBounds (SWFTextField field, float width, float height)
-{
-  SWFTextField_setScaledBounds (field, (int) rint (Ming_scale * width),
-				(int) rint (Ming_scale * height));
-}
-
-void
-SWFTextField_setHeight (SWFTextField field, float height)
-{
-  SWFTextField_setScaledFontHeight (field, (int) rint (Ming_scale * height));
-}
-
-void
-SWFTextField_setFieldHeight (SWFTextField field, float height)
-{
-  SWFTextField_setScaledFieldHeight (field, (int) rint (Ming_scale * height));
-}
-
-void
-SWFTextField_setLeftMargin (SWFTextField field, float leftMargin)
-{
-  SWFTextField_setScaledLeftMargin (field,
-				    (int) rint (Ming_scale * leftMargin));
-}
-
-void
-SWFTextField_setRightMargin (SWFTextField field, float rightMargin)
-{
-  SWFTextField_setScaledRightMargin (field,
-				     (int) rint (Ming_scale * rightMargin));
-}
-
-void
-SWFTextField_setIndentation (SWFTextField field, float indentation)
-{
-  SWFTextField_setScaledIndentation (field,
-				     (int) rint (Ming_scale * indentation));
-}
-
-void
-SWFTextField_setLineSpacing (SWFTextField field, float lineSpacing)
-{
-  SWFTextField_setScaledLineSpacing (field,
-				     (int) rint (Ming_scale * lineSpacing));
+  SWFTextField_setScaledLineSpacing(field, (int)rint(Ming_scale*lineSpacing));
 }

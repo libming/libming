@@ -21,43 +21,39 @@
 
 #include "method.h"
 
-void
-methodWriteUInt16 (int i, SWFByteOutputMethod method, void *data)
+void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
 {
-  method (i & 0xff, data);
-  i >>= 8;
-  method (i & 0xff, data);
+  method(i&0xff, data);
+  i>>=8;
+  method(i&0xff, data);
 }
 
 
-void
-methodWriteUInt32 (int i, SWFByteOutputMethod method, void *data)
+void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data)
 {
-  method (i & 0xff, data);
-  i >>= 8;
-  method (i & 0xff, data);
-  i >>= 8;
-  method (i & 0xff, data);
-  i >>= 8;
-  method (i & 0xff, data);
+  method(i&0xff, data);
+  i>>=8;
+  method(i&0xff, data);
+  i>>=8;
+  method(i&0xff, data);
+  i>>=8;
+  method(i&0xff, data);
 }
 
 
-void
-fileOutputMethod (byte b, void *data)
+void fileOutputMethod(byte b, void *data)
 {
-  FILE *f = (FILE *) data;
-  fputc (b, f);
+  FILE *f = (FILE *)data;
+  fputc(b, f);
 }
 
 
 // calls free() with cleanup the pointer
-void
-sec_free (void **ptr)
+void sec_free(void** ptr)
 {
-  if (*ptr != NULL)
-  {
-    free (*ptr);
-    *ptr = NULL;
+  if (*ptr != NULL) {
+    free(*ptr);
+    *ptr=NULL;
   }
 }
+

@@ -17,8 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
 #ifndef SWF_FONT_H_INCLUDED
 #define SWF_FONT_H_INCLUDED
 
@@ -44,38 +42,38 @@ typedef struct SWFFont_s *SWFFont;
 #define SWF_FONT_ISITALIC     (1<<0)
 
 
-SWFFont newSWFFont ();
+SWFFont newSWFFont();
 
-void destroySWFFont (SWFBlock block);
+void destroySWFFont(SWFBlock block);
 
-SWFFont loadSWFFontFromFile (FILE * file);
+SWFFont loadSWFFontFromFile(FILE *file);
 
-void SWFFont_addTextToList (SWFFont font, SWFTextRecord text);
+void SWFFont_addTextToList(SWFFont font, SWFTextRecord text);
 
-void SWFFont_resolveTextList (SWFFont font);
+void SWFFont_resolveTextList(SWFFont font);
 
-byte *SWFFont_findCharacterGlyph (SWFFont font, unsigned char c);
+byte *SWFFont_findCharacterGlyph(SWFFont font, unsigned char c);
 
-const char *SWFFont_getName (SWFFont font);
+const char* SWFFont_getName(SWFFont font);
 
-byte SWFFont_getFlags (SWFFont font);
+byte SWFFont_getFlags(SWFFont font);
 
-int SWFFont_getNGlyphs (SWFFont font);
+int SWFFont_getNGlyphs(SWFFont font);
 
-int SWFFont_getScaledStringWidth (SWFFont font, const unsigned char *string);
+int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string);
 
-short SWFFont_getScaledAscent (SWFFont font);
+short SWFFont_getScaledAscent(SWFFont font);
 
-short SWFFont_getScaledDescent (SWFFont font);
+short SWFFont_getScaledDescent(SWFFont font);
 
-short SWFFont_getScaledLeading (SWFFont font);
+short SWFFont_getScaledLeading(SWFFont font);
 
-int SWFFont_getGlyphCode (SWFFont font, byte c);
+int SWFFont_getGlyphCode(SWFFont font, byte c);
 
-SWFRect SWFFont_getGlyphBounds (SWFFont font, byte c);
+SWFRect SWFFont_getGlyphBounds(SWFFont font, byte c);
 
-int SWFFont_getCharacterAdvance (SWFFont font, byte c);
+int SWFFont_getCharacterAdvance(SWFFont font, byte c);
 
-int SWFFont_getCharacterKern (SWFFont font, byte c1, byte c2);
+int SWFFont_getCharacterKern(SWFFont font, byte c1, byte c2);
 
 #endif /* SWF_FONT_H_INCLUDED */

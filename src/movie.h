@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* movie.h */
+
 /* $Id$ */
 
 #ifndef MING_MOVIE_H_INCLUDED
@@ -29,42 +31,42 @@ typedef struct SWFMovie_s *SWFMovie;
 #include "blocks/soundinstance.h"
 
 
-void destroySWFMovie (SWFMovie movie);
+void destroySWFMovie(SWFMovie movie);
 
-SWFMovie newSWFMovie ();
+SWFMovie newSWFMovie();
 
-SWFMovie newSWFMovieWithVersion (int version);
+SWFMovie newSWFMovieWithVersion(int version);
 
-void SWFMovie_setRate (SWFMovie movie, float rate);
+void SWFMovie_setRate(SWFMovie movie, float rate);
 
-void SWFMovie_setDimension (SWFMovie movie, float x, float y);
+void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 
-void SWFMovie_setNumberOfFrames (SWFMovie movie, int frames);
+void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
-void SWFMovie_setBackground (SWFMovie movie, byte r, byte g, byte b);
+void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b);
 
-void SWFMovie_protect (SWFMovie movie);
+void SWFMovie_protect(SWFMovie movie);
 
-void SWFMovie_setSoundStream (SWFMovie movie, SWFSoundStream sound);
+void SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
 
-SWFSoundInstance SWFMovie_startSound (SWFMovie movie, SWFSound sound);
+SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 
-void SWFMovie_stopSound (SWFMovie movie, SWFSound sound);
+void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
 
-void SWFMovie_addBlock (SWFMovie movie, SWFBlock block);
+void SWFMovie_addBlock(SWFMovie movie, SWFBlock block);
 
-SWFDisplayItem SWFMovie_add (SWFMovie movie, SWFCharacter block);
+SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFCharacter block);
 
-void SWFMovie_remove (SWFMovie movie, SWFDisplayItem item);
+void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
-void SWFMovie_nextFrame (SWFMovie movie);
+void SWFMovie_nextFrame(SWFMovie movie);
 
-void SWFMovie_labelFrame (SWFMovie movie, char *label);
+void SWFMovie_labelFrame(SWFMovie movie, char *label);
 
-void SWFMovie_addExport (SWFMovie movie, SWFBlock block, char *name);
+void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name);
 
-int SWFMovie_output (SWFMovie movie, SWFByteOutputMethod method, void *data);
+int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 
-int SWFMovie_save (SWFMovie movie, char *filename);
+int SWFMovie_save(SWFMovie movie, char *filename);
 
 #endif /* MING_MOVIE_H_INCLUDED */

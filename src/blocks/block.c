@@ -28,50 +28,46 @@
 int SWF_gNumCharacters;
 
 
-void
-SWFBlock_setDefined (SWFBlock block)
+void SWFBlock_setDefined(SWFBlock block)
 {
   block->isDefined = TRUE;
 }
 
 
-byte
-SWFBlock_isDefined (SWFBlock block)
+byte SWFBlock_isDefined(SWFBlock block)
 {
   return block->isDefined;
 }
 
 
-int
-SWFBlock_getLength (SWFBlock block)
+int SWFBlock_getLength(SWFBlock block)
 {
   return block->length;
 }
 
 
-void
-destroySWFBlock (SWFBlock block)
+void destroySWFBlock(SWFBlock block)
 {
-  if (block->dtor)
-    block->dtor (block);
+  if(block->dtor)
+    block->dtor(block);
   else
-    sec_free ((void **) &block);
+    sec_free((void**)&block);
 }
 
 
-int
-completeSWFBlock (SWFBlock block)
+int completeSWFBlock(SWFBlock block)
 {
-  if (!block->completed)
+  if(!block->completed)
   {
-    if (block->complete)
-      block->length = block->complete (block);
+    if(block->complete)
+      block->length = block->complete(block);
 
     block->completed = TRUE;
   }
 
-  if (block->length > 62 ||
-      block->type == SWF_DEFINELOSSLESS || block->type == SWF_DEFINELOSSLESS2)
+  if(block->length>62 ||
+     block->type == SWF_DEFINELOSSLESS ||
+     block->type == SWF_DEFINELOSSLESS2)
   {
     return block->length + 6;
   }
@@ -80,38 +76,38 @@ completeSWFBlock (SWFBlock block)
 }
 
 
-int
-writeSWFBlockToMethod (SWFBlock block, SWFByteOutputMethod method, void *data)
+int writeSWFBlockToMethod(SWFBlock block,
+			  SWFByteOutputMethod method, void *data)
 {
-  if (!block->completed)
-    completeSWFBlock (block);
+  if(!block->completed)
+    completeSWFBlock(block);
 
   /* write header */
 
-  if (block->length > 62 ||
-      block->type == SWF_DEFINELOSSLESS || block->type == SWF_DEFINELOSSLESS2)
+  if(block->length > 62 ||
+     block->type == SWF_DEFINELOSSLESS ||
+     block->type == SWF_DEFINELOSSLESS2)
   {
     /* yep, a definebitslossless block has to be long form, even if it's
        under 63 bytes.. */
 
-    method (((block->type & 0x03) << 6) + 0x3f, data);
-    method ((block->type >> 2) & 0xff, data);
-    methodWriteUInt32 (block->length, method, data);
+    method(((block->type&0x03)<<6) + 0x3f, data);
+    method((block->type >> 2)&0xff, data);
+    methodWriteUInt32(block->length, method, data);
   }
   else
-    methodWriteUInt16 (block->length + ((block->type) << 6), method, data);
+    methodWriteUInt16(block->length + ((block->type)<<6), method, data);
 
-  if (block->writeBlock)
-    block->writeBlock (block, method, data);
+  if(block->writeBlock)
+    block->writeBlock(block, method, data);
 
-  return block->length + ((block->length > 62) ? 6 : 2);
+  return block->length + ((block->length>62)?6:2);
 }
 
 
-void
-SWFBlockInit (SWFBlock block)
+void SWFBlockInit(SWFBlock block)
 {
-  block->type = SWF_END;	// XXX - ???
+  block->type = SWF_END; // XXX - ???
   block->writeBlock = NULL;
   block->complete = NULL;
   block->dtor = NULL;
@@ -122,40 +118,35 @@ SWFBlockInit (SWFBlock block)
 }
 
 
-SWFBlock
-newEmptySWFBlock (SWFBlocktype type)
+SWFBlock newEmptySWFBlock(SWFBlocktype type)
 {
-  SWFBlock block = malloc (sizeof (struct SWFBlock_s));
-  SWFBlockInit (block);
+  SWFBlock block = malloc(sizeof(struct SWFBlock_s));
+  SWFBlockInit(block);
   block->type = type;
 
   return block;
 }
 
 
-SWFBlock
-newSWFShowFrameBlock ()
+SWFBlock newSWFShowFrameBlock()
 {
-  return newEmptySWFBlock (SWF_SHOWFRAME);
+  return newEmptySWFBlock(SWF_SHOWFRAME);
 }
 
 
-SWFBlock
-newSWFEndBlock ()
+SWFBlock newSWFEndBlock()
 {
-  return newEmptySWFBlock (SWF_END);
+  return newEmptySWFBlock(SWF_END);
 }
 
 
-SWFBlock
-newSWFProtectBlock ()
+SWFBlock newSWFProtectBlock()
 {
-  return newEmptySWFBlock (SWF_PROTECT);
+  return newEmptySWFBlock(SWF_PROTECT);
 }
 
 
-SWFBlocktype
-SWFBlock_getType (SWFBlock block)
+SWFBlocktype SWFBlock_getType(SWFBlock block)
 {
   return block->type;
 }

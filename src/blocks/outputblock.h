@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
-
 #ifndef SWF_OUTPUTBLOCK_H_INCLUDED
 #define SWF_OUTPUTBLOCK_H_INCLUDED
 
@@ -34,25 +31,25 @@ typedef struct SWFOutputBlock_s *SWFOutputBlock;
 #include "exports.h"
 
 
-SWFOutput SWFOutputBlock_getOutput (SWFOutputBlock block);
+SWFOutput SWFOutputBlock_getOutput(SWFOutputBlock block);
 
-int SWFOutputBlock_getLength (SWFOutputBlock block);
+int SWFOutputBlock_getLength(SWFOutputBlock block);
 
-SWFOutputBlock newSWFOutputBlock (SWFOutput out, SWFBlocktype type);
+SWFOutputBlock newSWFOutputBlock(SWFOutput out, SWFBlocktype type);
 
-SWFOutputBlock newSWFPlaceObjectBlock (SWFCharacter character, int depth,
-				       SWFMatrix matrix, SWFCXform cXform);
+SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
+				      SWFMatrix matrix, SWFCXform cXform);
 
-SWFOutputBlock newSWFSetBackgroundBlock (byte r, byte g, byte b);
+SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
 
-SWFOutputBlock newSWFRemoveObjectBlock (SWFCharacter character, int depth);
+SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
 
-SWFOutputBlock newSWFRemoveObject2Block (int depth);
+SWFOutputBlock newSWFRemoveObject2Block(int depth);
 
-SWFOutputBlock newSWFFrameLabelBlock (char *string);
+SWFOutputBlock newSWFFrameLabelBlock(char *string);
 
-SWFOutputBlock newSWFExportBlock (SWFExports exports, int nExports);
+SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
 
-void destroySWFOutputBlock (SWFBlock block);
+void destroySWFOutputBlock(SWFBlock block);
 
 #endif /* SWF_OUTPUTBLOCK_H_INCLUDED */

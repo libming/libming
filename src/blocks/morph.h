@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* morph.h */
 
 #ifndef SWF_MORPH_H_INCLUDED
 #define SWF_MORPH_H_INCLUDED
@@ -29,10 +29,10 @@ typedef struct SWFMorph_s *SWFMorph;
 #include "shape.h"
 
 
-SWFShape SWFMorph_getShape1 (SWFMorph morph);
+SWFShape SWFMorph_getShape1(SWFMorph morph);
 
-SWFShape SWFMorph_getShape2 (SWFMorph morph);
+SWFShape SWFMorph_getShape2(SWFMorph morph);
 
-SWFMorph newSWFMorphShape ();
+SWFMorph newSWFMorphShape();
 
 #endif /* SWF_MORPH_H_INCLUDED */

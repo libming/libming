@@ -17,8 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
 #ifndef SWF_FONTINFO_H_INCLUDED
 #define SWF_FONTINFO_H_INCLUDED
 
@@ -28,6 +26,6 @@ typedef struct SWFFontInfo_s *SWFFontInfo;
 #include "block.h"
 #include "font.h"
 
-SWFFontInfo newDefineSWFFontInfo (SWFFont font);
+SWFFontInfo newDefineSWFFontInfo(SWFFont font);
 
 #endif /* SWF_FONTINFO_H_INCLUDED */

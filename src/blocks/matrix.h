@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* matrix.h */
 
 #ifndef SWF_MATRIX_H_INCLUDED
 #define SWF_MATRIX_H_INCLUDED
@@ -26,39 +26,38 @@ typedef struct SWFMatrix_s *SWFMatrix;
 
 #include "output.h"
 
-SWFMatrix newSWFMatrix (float a, float b, float c, float d, int x, int y);
+SWFMatrix newSWFMatrix(float a, float b, float c, float d, int x, int y);
 
-SWFMatrix SWFMatrix_dup (SWFMatrix matrix);
+SWFMatrix SWFMatrix_dup(SWFMatrix matrix);
 
-void destroySWFMatrix (SWFMatrix matrix);
+void destroySWFMatrix(SWFMatrix matrix);
 
-void SWFOutput_writeMatrix (SWFOutput out, SWFMatrix matrix);
+void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix);
 
-SWFMatrix newSWFRotateMatrix (float degrees);
+SWFMatrix newSWFRotateMatrix(float degrees);
 
-int SWFMatrix_numBits (SWFMatrix matrix);
+int SWFMatrix_numBits(SWFMatrix matrix);
 
-void SWFMatrix_set (SWFMatrix m, float a, float b, float c, float d, int x,
-		    int y);
+void SWFMatrix_set(SWFMatrix m, float a, float b, float c, float d, int x, int y);
 
-void SWFMatrix_clearTranslate (SWFMatrix m);
+void SWFMatrix_clearTranslate(SWFMatrix m);
 
-void SWFMatrix_clearTransform (SWFMatrix m);
+void SWFMatrix_clearTransform(SWFMatrix m);
 
-void SWFMatrix_apply (SWFMatrix m, double *x, double *y, int xlate);
+void SWFMatrix_apply(SWFMatrix m, double *x, double *y, int xlate);
 
-void SWFMatrix_scaleXY (SWFMatrix matrix, float xScale, float yScale);
+void SWFMatrix_scaleXY(SWFMatrix matrix, float xScale, float yScale);
 
-void SWFMatrix_leftMultiply (SWFMatrix ma, SWFMatrix mb);
+void SWFMatrix_leftMultiply(SWFMatrix ma, SWFMatrix mb);
 
-void SWFMatrix_multiply (SWFMatrix a, SWFMatrix b);
+void SWFMatrix_multiply(SWFMatrix a, SWFMatrix b);
 
-void SWFMatrix_rotate (SWFMatrix matrix, float radians);
+void SWFMatrix_rotate(SWFMatrix matrix, float radians);
 
-void SWFMatrix_scale (SWFMatrix matrix, float factor);
+void SWFMatrix_scale(SWFMatrix matrix, float factor);
 
-void SWFMatrix_translate (SWFMatrix matrix, int dx, int dy);
+void SWFMatrix_translate(SWFMatrix matrix, int dx, int dy);
 
-void SWFMatrix_moveTo (SWFMatrix matrix, int x, int y);
+void SWFMatrix_moveTo(SWFMatrix matrix, int x, int y);
 
 #endif /* SWF_MATRIX_H_INCLUDED */

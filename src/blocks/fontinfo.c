@@ -29,56 +29,53 @@ struct SWFFontInfo_s
 };
 
 
-static void
-writeDefineSWFFontInfoBlock (SWFBlock block,
-			     SWFByteOutputMethod method, void *data)
+static void writeDefineSWFFontInfoBlock(SWFBlock block,
+					SWFByteOutputMethod method, void *data)
 {
-  SWFFontInfo info = (SWFFontInfo) block;
+  SWFFontInfo info = (SWFFontInfo)block;
   SWFFont font = info->font;
-  const char *fontname = SWFFont_getName (font);
+  const char* fontname = SWFFont_getName(font);
 
   int l, i;
 
-  methodWriteUInt16 (CHARACTERID (font), method, data);
+  methodWriteUInt16(CHARACTERID(font), method, data);
 
-  l = strlen (fontname);
+  l = strlen(fontname);
 
-  SWF_assert (l < 256);
-  method (l, data);
+  SWF_assert(l<256);
+  method(l, data);
 
-  for (i = 0; i < l; ++i)
-    method (fontname[i], data);
+  for(i=0; i<l; ++i)
+    method(fontname[i], data);
 
-  method (SWFFont_getFlags (font), data);
+  method(SWFFont_getFlags(font), data);
 
   /* write glyph-to-code table */
   /* XXX - no support for wide codes */
 
-  for (i = 0; i < SWFFont_getNGlyphs (font); ++i)
-    method (SWFFont_getGlyphCode (font, i), data);
+  for(i=0; i<SWFFont_getNGlyphs(font); ++i)
+    method(SWFFont_getGlyphCode(font, i), data);
 }
 
 
-static int
-completeDefineSWFFontInfoBlock (SWFBlock block)
+static int completeDefineSWFFontInfoBlock(SWFBlock block)
 {
-  SWFFontInfo info = (SWFFontInfo) block;
+  SWFFontInfo info = (SWFFontInfo)block;
   SWFFont font = info->font;
 
-  return strlen (SWFFont_getName (font)) + 4 + SWFFont_getNGlyphs (font);
+  return strlen(SWFFont_getName(font)) + 4 + SWFFont_getNGlyphs(font);
 }
 
 
-SWFFontInfo
-newDefineSWFFontInfo (SWFFont font)
+SWFFontInfo newDefineSWFFontInfo(SWFFont font)
 {
-  SWFFontInfo fontInfo = malloc (sizeof (struct SWFFontInfo_s));
+  SWFFontInfo fontInfo = malloc(sizeof(struct SWFFontInfo_s));
 
-  SWFCharacterInit ((SWFCharacter) fontInfo);
+  SWFCharacterInit((SWFCharacter)fontInfo);
 
-  BLOCK (fontInfo)->type = SWF_DEFINEFONTINFO;
-  BLOCK (fontInfo)->writeBlock = writeDefineSWFFontInfoBlock;
-  BLOCK (fontInfo)->complete = completeDefineSWFFontInfoBlock;
+  BLOCK(fontInfo)->type = SWF_DEFINEFONTINFO;
+  BLOCK(fontInfo)->writeBlock = writeDefineSWFFontInfoBlock;
+  BLOCK(fontInfo)->complete = completeDefineSWFFontInfoBlock;
   fontInfo->font = font;
 
   return fontInfo;

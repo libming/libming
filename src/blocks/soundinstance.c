@@ -17,8 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
 #include "soundinstance.h"
 
 typedef struct
@@ -26,8 +24,7 @@ typedef struct
   unsigned int mark44;
   unsigned short level0;
   unsigned short level1;
-}
-envPoint;
+} envPoint;
 
 struct SWFSoundInstance_s
 {
@@ -42,118 +39,113 @@ struct SWFSoundInstance_s
   envPoint *envPoints;
 };
 
-void
-writeSWFSoundInstanceToMethod (SWFBlock block,
-			       SWFByteOutputMethod method, void *data)
+void writeSWFSoundInstanceToMethod(SWFBlock block,
+																	 SWFByteOutputMethod method, void *data)
 {
-  SWFSoundInstance sound;
-  byte flags;
-  int i;
+	SWFSoundInstance sound;
+	byte flags;
+	int i;
 
-  // block may be null if we're calling from button.c:
+	// block may be null if we're calling from button.c:
 
-  if (block == NULL)
-  {
-    method (0, data);
-    method (0, data);
-    method (0, data);
-    return;
-  }
+	if ( block == NULL )
+	{
+		method(0, data);
+		method(0, data);
+		method(0, data);
+		return;
+	}
 
-  sound = (SWFSoundInstance) block;
-  flags = sound->flags;
+	sound = (SWFSoundInstance)block;
+	flags = sound->flags;
 
-  if (sound->sound)
-    methodWriteUInt16 (CHARACTERID (sound->sound), method, data);
-  else
-    methodWriteUInt16 (0, method, data);	/* 0 means NULL character */
+	if (sound->sound)
+		methodWriteUInt16(CHARACTERID(sound->sound), method, data);
+	else
+		methodWriteUInt16(0, method, data);	 /* 0 means NULL character */
 
-  method (flags, data);
+	method(flags, data);
 
-  if (flags & SWF_SOUNDINFO_HASINPOINT)
-    methodWriteUInt32 (sound->inPoint, method, data);
+	if(flags & SWF_SOUNDINFO_HASINPOINT)
+		methodWriteUInt32(sound->inPoint, method, data);
 
-  if (flags & SWF_SOUNDINFO_HASOUTPOINT)
-    methodWriteUInt32 (sound->outPoint, method, data);
+	if(flags & SWF_SOUNDINFO_HASOUTPOINT)
+		methodWriteUInt32(sound->outPoint, method, data);
 
-  if (flags & SWF_SOUNDINFO_HASLOOPS)
-    methodWriteUInt16 (sound->numLoops, method, data);
+	if(flags & SWF_SOUNDINFO_HASLOOPS)
+		methodWriteUInt16(sound->numLoops, method, data);
 
-  if (flags & SWF_SOUNDINFO_HASENVELOPE)
-  {
-    method (sound->numEnvPoints, data);
+	if(flags & SWF_SOUNDINFO_HASENVELOPE)
+	{
+		method(sound->numEnvPoints, data);
 
-    for (i = 0; i < sound->numEnvPoints; ++i)
-    {
-      methodWriteUInt32 ((sound->envPoints[i]).mark44, method, data);
-      methodWriteUInt16 ((sound->envPoints[i]).level0, method, data);
-      methodWriteUInt16 ((sound->envPoints[i]).level1, method, data);
-    }
-  }
+		for(i=0; i<sound->numEnvPoints; ++i)
+		{
+			methodWriteUInt32((sound->envPoints[i]).mark44, method, data);
+			methodWriteUInt16((sound->envPoints[i]).level0, method, data);
+			methodWriteUInt16((sound->envPoints[i]).level1, method, data);
+		}
+	}
 }
 
 
-int
-completeSWFSoundInstance (SWFBlock block)
+int completeSWFSoundInstance(SWFBlock block)
 {
-  SWFSoundInstance sound;
-  byte flags;
+	SWFSoundInstance sound;
+	byte flags;
 
-  // block may be null if we're calling from button.c:
+	// block may be null if we're calling from button.c:
 
-  if (block == NULL)
-    return 3;
+	if ( block == NULL )
+		return 3;
 
-  sound = (SWFSoundInstance) block;
-  flags = sound->flags;
+	sound = (SWFSoundInstance)block;
+	flags = sound->flags;
 
-  return 3 /* (sound id + flags) */  +
-    (flags & SWF_SOUNDINFO_HASINPOINT) ? 4 : 0 +
-    (flags & SWF_SOUNDINFO_HASOUTPOINT) ? 4 : 0 +
-    (flags & SWF_SOUNDINFO_HASLOOPS) ? 2 : 0 +
-    (flags & SWF_SOUNDINFO_HASENVELOPE) ? (1 + 8 * sound->numEnvPoints) : 0;
+	return 3 /* (sound id + flags) */ +
+		(flags & SWF_SOUNDINFO_HASINPOINT) ? 4 : 0 +
+		(flags & SWF_SOUNDINFO_HASOUTPOINT) ? 4 : 0 +
+		(flags & SWF_SOUNDINFO_HASLOOPS) ? 2 : 0 +
+		(flags & SWF_SOUNDINFO_HASENVELOPE) ? (1 + 8*sound->numEnvPoints) : 0;
 }
 
 
-SWFSoundInstance
-newSWFSoundInstance (SWFSound sound)
+SWFSoundInstance newSWFSoundInstance(SWFSound sound)
 {
-  SWFSoundInstance instance = malloc (sizeof (struct SWFSoundInstance_s));
-  SWFBlock block = (SWFBlock) instance;
+	SWFSoundInstance instance = malloc(sizeof(struct SWFSoundInstance_s));
+	SWFBlock block = (SWFBlock)instance;
 
-  SWFBlockInit (block);
+	SWFBlockInit(block);
 
-  block->type = SWF_STARTSOUND;
+	block->type = SWF_STARTSOUND;
 
-  block->writeBlock = writeSWFSoundInstanceToMethod;
-  block->complete = completeSWFSoundInstance;
-  /* block->dtor = destroySWFStartSoundBlock; */
+	block->writeBlock = writeSWFSoundInstanceToMethod;
+	block->complete = completeSWFSoundInstance;
+	/* block->dtor = destroySWFStartSoundBlock; */
 
-  instance->sound = sound;
-  instance->inPoint = 0;
-  instance->outPoint = 0;
-  instance->numLoops = 0;
-  instance->flags = 0;
-  instance->numEnvPoints = 0;
-  instance->envPoints = NULL;
+	instance->sound = sound;
+	instance->inPoint = 0;
+	instance->outPoint = 0;
+	instance->numLoops = 0;
+	instance->flags = 0;
+	instance->numEnvPoints = 0;
+	instance->envPoints = NULL;
 
-  return instance;
+	return instance;
 }
 
 
-SWFSoundInstance
-newSWFSoundInstance_stop (SWFSound sound)
+SWFSoundInstance newSWFSoundInstance_stop(SWFSound sound)
 {
-  SWFSoundInstance instance = newSWFSoundInstance (sound);
-  instance->flags = SWF_SOUNDINFO_SYNCSTOPSOUND;
-  return instance;
+	SWFSoundInstance instance = newSWFSoundInstance(sound);
+	instance->flags = SWF_SOUNDINFO_SYNCSTOPSOUND;
+	return instance;
 }
 
 
-SWFSoundInstance
-newSWFSoundInstance_startNoMultiple (SWFSound sound)
+SWFSoundInstance newSWFSoundInstance_startNoMultiple(SWFSound sound)
 {
-  SWFSoundInstance instance = newSWFSoundInstance (sound);
+	SWFSoundInstance instance = newSWFSoundInstance(sound);
   instance->flags = SWF_SOUNDINFO_SYNCNOMULTIPLE;
-  return instance;
+	return instance;
 }

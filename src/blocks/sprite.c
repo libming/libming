@@ -25,76 +25,72 @@
 #include "character.h"
 
 
-static void
-writeSWFSpriteToMethod (SWFBlock block,
-			SWFByteOutputMethod method, void *data)
+static void writeSWFSpriteToMethod(SWFBlock block,
+				   SWFByteOutputMethod method, void *data)
 {
   int i;
-  SWFSprite sprite = (SWFSprite) block;
+  SWFSprite sprite = (SWFSprite)block;
 
-  methodWriteUInt16 (CHARACTERID (sprite), method, data);
-  methodWriteUInt16 (sprite->frames, method, data);
+  methodWriteUInt16(CHARACTERID(sprite), method, data);
+  methodWriteUInt16(sprite->frames, method, data);
 
-  for (i = 0; i < sprite->nBlocks; ++i)
-    writeSWFBlockToMethod (sprite->blocks[i], method, data);
+  for(i=0; i<sprite->nBlocks; ++i)
+    writeSWFBlockToMethod(sprite->blocks[i], method, data);
 }
 
 
-static int
-completeSWFSprite (SWFBlock block)
+static int completeSWFSprite(SWFBlock block)
 {
   int i, length = 0;
-  SWFSprite sprite = (SWFSprite) block;
+  SWFSprite sprite = (SWFSprite)block;
 
-  if (sprite->nBlocks < 1 ||
-      sprite->blocks[sprite->nBlocks - 1]->type != SWF_SHOWFRAME ||
-      sprite->frames <= sprite->totalFrames)
+  if(sprite->nBlocks < 1 ||
+     sprite->blocks[sprite->nBlocks-1]->type != SWF_SHOWFRAME ||
+     sprite->frames <= sprite->totalFrames)
   {
-    SWFSprite_addBlock (sprite, newSWFShowFrameBlock ());
+    SWFSprite_addBlock(sprite, newSWFShowFrameBlock());
   }
 
-  SWFSprite_addBlock (sprite, newSWFEndBlock ());
+  SWFSprite_addBlock(sprite, newSWFEndBlock());
 
-  for (i = 0; i < sprite->nBlocks; ++i)
-    length += completeSWFBlock (sprite->blocks[i]);
+  for(i=0; i<sprite->nBlocks; ++i)
+    length += completeSWFBlock(sprite->blocks[i]);
 
-  return length + 4;
+  return length+4;
 }
 
 
-void
-destroySWFSprite (SWFBlock block)
+void destroySWFSprite(SWFBlock block)
 {
-  SWFSprite sprite = (SWFSprite) block;
+  SWFSprite sprite = (SWFSprite)block;
   int i;
 
-  SWFCharacter_clearDependencies (CHARACTER (block));
+  SWFCharacter_clearDependencies(CHARACTER(block));
 
-  for (i = 0; i < sprite->nBlocks; ++i)
+  for(i=0; i<sprite->nBlocks; ++i)
   {
     /* characters are destroyed separately */
 
-    if (!SWFBlock_isCharacter (sprite->blocks[i]))
-      destroySWFBlock (sprite->blocks[i]);
+    if(!SWFBlock_isCharacter(sprite->blocks[i]))
+      destroySWFBlock(sprite->blocks[i]);
   }
 
-  sec_free ((void **) &sprite->blocks);
-  sec_free ((void **) &sprite);
+  sec_free((void**)&sprite->blocks);
+  sec_free((void**)&sprite);
 }
 
 
-SWFSprite
-newSWFSprite ()
+SWFSprite newSWFSprite()
 {
-  SWFSprite sprite = malloc (sizeof (struct SWFSprite_s));
+  SWFSprite sprite = malloc(sizeof(struct SWFSprite_s));
 
-  SWFCharacterInit ((SWFCharacter) sprite);
+  SWFCharacterInit((SWFCharacter)sprite);
 
-  CHARACTERID (sprite) = ++SWF_gNumCharacters;
-  BLOCK (sprite)->type = SWF_DEFINESPRITE;
-  BLOCK (sprite)->writeBlock = writeSWFSpriteToMethod;
-  BLOCK (sprite)->complete = completeSWFSprite;
-  BLOCK (sprite)->dtor = destroySWFSprite;
+  CHARACTERID(sprite) = ++SWF_gNumCharacters;
+  BLOCK(sprite)->type = SWF_DEFINESPRITE;
+  BLOCK(sprite)->writeBlock = writeSWFSpriteToMethod;
+  BLOCK(sprite)->complete = completeSWFSprite;
+  BLOCK(sprite)->dtor = destroySWFSprite;
 
   sprite->nBlocks = 0;
   sprite->blocks = NULL;
@@ -105,36 +101,36 @@ newSWFSprite ()
 }
 
 
-void
-SWFSprite_setNumberOfFrames (SWFSprite sprite, int totalFrames)
+void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames)
 {
   sprite->totalFrames = totalFrames;
 }
 
 
-void
-SWFSprite_addBlock (SWFSprite sprite, SWFBlock block)
+void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 {
-  if (block->type == SWF_SHOWFRAME)
+  if(block->type == SWF_SHOWFRAME)
     ++sprite->frames;
 
-  if (block->type == SWF_SHOWFRAME ||
-      block->type == SWF_PLACEOBJECT ||
-      block->type == SWF_PLACEOBJECT2 ||
-      block->type == SWF_REMOVEOBJECT ||
-      block->type == SWF_REMOVEOBJECT2 ||
-      block->type == SWF_DOACTION ||
-      block->type == SWF_STARTSOUND ||
-      block->type == SWF_FRAMELABEL ||
-      block->type == SWF_SOUNDSTREAMHEAD ||
-      block->type == SWF_SOUNDSTREAMBLOCK || block->type == SWF_END)
+  if(block->type == SWF_SHOWFRAME ||
+     block->type == SWF_PLACEOBJECT ||
+     block->type == SWF_PLACEOBJECT2 ||
+     block->type == SWF_REMOVEOBJECT ||
+     block->type == SWF_REMOVEOBJECT2 ||
+     block->type == SWF_DOACTION ||
+     block->type == SWF_STARTSOUND ||
+     block->type == SWF_FRAMELABEL ||
+     block->type == SWF_SOUNDSTREAMHEAD ||
+     block->type == SWF_SOUNDSTREAMBLOCK ||
+     block->type == SWF_END)
   {
-    sprite->blocks = realloc (sprite->blocks,
-			      (sprite->nBlocks + 1) * sizeof (SWFBlock));
+    sprite->blocks = realloc(sprite->blocks,
+			     (sprite->nBlocks+1)*sizeof(SWFBlock));
 
     sprite->blocks[sprite->nBlocks++] = block;
 
     /* XXX - can we get sprite's dependencies? */
   }
-  else;				/* XXX - warn */
+  else
+    ; /* XXX - warn */
 }

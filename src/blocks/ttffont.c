@@ -28,8 +28,7 @@
 #define glyphLength(font,glyph) \
   ((font)->glyphOffset[(glyph)+1] - (font)->glyphOffset[(glyph)])
 
-SWFFont
-loadSWFFontfromTTF (char *filename)
+SWFFont loadSWFFontfromTTF(char *filename)
 {
   int i;
 
@@ -43,129 +42,124 @@ loadSWFFontfromTTF (char *filename)
   TT_Face_Properties properties;
   TT_UShort pid, eid;
 
-  TT_Init_FreeType (engine);
+  TT_Init_FreeType(engine);
 
-  error = TT_Open_Face (engine, filename, &face);
+  error = TT_Open_Face(engine, filename, &face);
 
-  if (error)
-    fprintf (stderr, "Could not open face.\n");
+  if(error)
+    fprintf(stderr, "Could not open face.\n");
 
-  TT_Get_Face_Properties (face, &properties);
+  TT_Get_Face_Properties(face, &properties);
 
-  for (i = 0; i < properties->num_CharMaps; ++i)
-    TT_Get_CharMap_ID (face, i, &pid, &eid);
+  for(i=0; i<properties->num_CharMaps; ++i)
+    TT_Get_CharMap_ID(face, i, &pid, &eid);
 
-  TT_Get_CharMap (face, charmapIndex, &charmap);
+  TT_Get_CharMap(face, charmapIndex, &charmap);
 
-  TT_New_Instance (face, &instance);
+  TT_New_Instance(face, &instance);
 
-  TT_New_Glyph (face, &glyph);
+  TT_New_Glyph(face, &glyph);
 
-  for (i = 0; i < whatever; ++i)
+  for(i=0; i<whatever; ++i)
   {
-    TT_Load_Glyph (instance, glyph, TT_Char_Index (charmap, i), loadFlags);
+    TT_Load_Glyph(instance, glyph, TT_Char_Index(charmap, i), loadFlags);
 
-    TT_Get_Glyph_Outline (glyph, &outline);
+    TT_Get_Glyph_Outline(glyph, &outline);
 
-    TT_Get_Glyph_Metrics (glyph, &metrics);
+    TT_Get_Glyph_Metrics(glyph, &metrics);
   }
 
-  TT_Done_FreeType (engine);
+  TT_Done_FreeType(engine);
 }
 
 
-int
-completeSWFFont (SWFBlock block)
+int completeSWFFont(SWFBlock block)
 {
-  SWFFont font = (SWFFont) block;
+  SWFFont font = (SWFFont)block;
   int size, i;
 
-  SWFFont_resolveTextList (font);
+  SWFFont_resolveTextList(font);
 
-  size = 2 + 2 * font->nGlyphs;
+  size = 2 + 2*font->nGlyphs;
 
   /* get length of each glyph from its output buffer */
-  for (i = 0; i < font->nGlyphs; ++i)
-    size += glyphLength (font, font->codeToGlyph[i]);
+  for(i=0; i<font->nGlyphs; ++i)
+    size += glyphLength(font, font->codeToGlyph[i]);
 
   return size;
 }
 
 
-void
-writeSWFFontToMethod (SWFBlock block, SWFByteOutputMethod method, void *data)
+void writeSWFFontToMethod(SWFBlock block,
+			  SWFByteOutputMethod method, void *data)
 {
-  SWFFont font = (SWFFont) block;
+  SWFFont font = (SWFFont)block;
   int offset, i;
   byte *p, *s;
 
-  methodWriteUInt16 (CHARACTERID (font), method, data);
+  methodWriteUInt16(CHARACTERID(font), method, data);
 
-  offset = font->nGlyphs * 2;
+  offset = font->nGlyphs*2;
 
   /* write offset table for glyphs */
-  for (i = 0; i < font->nGlyphs; ++i)
+  for(i=0; i<font->nGlyphs; ++i)
   {
-    methodWriteUInt16 (offset, method, data);
-    offset += glyphLength (font, font->codeToGlyph[i]);
+    methodWriteUInt16(offset, method, data);
+    offset += glyphLength(font, font->codeToGlyph[i]);
   }
 
   /* write shape records for glyphs */
-  for (i = 0; i < font->nGlyphs; ++i)
+  for(i=0; i<font->nGlyphs; ++i)
   {
     p = font->glyphOffset[font->codeToGlyph[i]];
-    s = font->glyphOffset[font->codeToGlyph[i] + 1];
+    s = font->glyphOffset[font->codeToGlyph[i]+1];
 
-    SWF_assert (p < s);
+    SWF_assert(p < s);
 
-    while (p < s)
-      method (*(p++), data);
+    while(p < s)
+      method(*(p++), data);
   }
 }
 
 
-void
-destroySWFFont (SWFBlock block)
+void destroySWFFont(SWFBlock block)
 {
-  SWFFont font = (SWFFont) block;
+  SWFFont font = (SWFFont)block;
 
-  sec_free ((void **) &font->shapes);
-  sec_free ((void **) &font->name);
-  sec_free ((void **) &font->kernTable);
+  sec_free((void**)&font->shapes);
+  sec_free((void**)&font->name);
+  sec_free((void**)&font->kernTable);
 }
 
 
-SWFFont
-newSWFFont ()
+SWFFont newSWFFont()
 {
-  SWFFont font = (SWFFont) malloc (SWFFONT_SIZE);
-  memset (font, 0, SWFFONT_SIZE);
+  SWFFont font = (SWFFont)malloc(SWFFONT_SIZE);
+  memset(font, 0, SWFFONT_SIZE);
 
-  CHARACTER (font)->number = ++SWF_gNumCharacters;
-  BLOCK (font)->type = SWF_DEFINEFONT;
-  BLOCK (font)->writeBlock = writeSWFFontToMethod;
-  BLOCK (font)->complete = completeSWFFont;
-  BLOCK (font)->dtor = destroySWFFont;
+  CHARACTER(font)->number = ++SWF_gNumCharacters;
+  BLOCK(font)->type = SWF_DEFINEFONT;
+  BLOCK(font)->writeBlock = writeSWFFontToMethod;
+  BLOCK(font)->complete = completeSWFFont;
+  BLOCK(font)->dtor = destroySWFFont;
 
   return font;
 }
 
 
-SWFFont
-loadSWFFontFromTTF (char *file)
+SWFFont loadSWFFontFromTTF(char *file)
 {
-  SWFFont font = newSWFFont ();
+  SWFFont font = newSWFFont();
   font->file = file;
 }
 
-void
-SWFFont_addTextToList (SWFFont font, struct _textRecord *text)
+void SWFFont_addTextToList(SWFFont font, struct _textRecord *text)
 {
-  SWFTextList textList = (SWFTextList) malloc (TEXTLIST_SIZE);
+  SWFTextList textList = (SWFTextList)malloc(TEXTLIST_SIZE);
   textList->next = NULL;
   textList->text = text;
 
-  if (font->currentList != NULL)
+  if(font->currentList != NULL)
     font->currentList->next = textList;
   else
     font->textList = textList;
@@ -173,10 +167,9 @@ SWFFont_addTextToList (SWFFont font, struct _textRecord *text)
   font->currentList = textList;
 }
 
-void
-SWFFont_addCharToTable (SWFFont font, byte c)
+void SWFFont_addCharToTable(SWFFont font, byte c)
 {
-  if (font->glyphToCode[c] == 0xff)	/* assuming one can't actually use all 255 */
+  if(font->glyphToCode[c]==0xff) /* assuming one can't actually use all 255 */
   {
     font->codeToGlyph[font->nGlyphs] = font->codeTable[c];
     font->glyphToCode[c] = font->nGlyphs;
@@ -185,23 +178,22 @@ SWFFont_addCharToTable (SWFFont font, byte c)
 }
 
 /* XXX - big confusion between terms here.  CodeTable isn't font->codeTable */
-void
-SWFFont_buildCodeTable (SWFFont font, SWFTextRecord text)
+void SWFFont_buildCodeTable(SWFFont font, SWFTextRecord text)
 {
   SWFTextRecord textRecord;
   byte *string;
   int l, i;
 
   textRecord = text;
-  while (textRecord != NULL)
+  while(textRecord != NULL)
   {
     string = textRecord->string;
 
-    if (string != NULL)
+    if(string != NULL)
     {
-      l = strlen (string);
-      for (i = 0; i < l; ++i)
-	SWFFont_addCharToTable (font, string[i]);
+      l = strlen(string);
+      for(i=0; i<l; ++i)
+      	SWFFont_addCharToTable(font, string[i]);
     }
 
     textRecord = textRecord->next;
@@ -210,18 +202,17 @@ SWFFont_buildCodeTable (SWFFont font, SWFTextRecord text)
 
 
 /* build code table from text in all proceding Text blocks */
-void
-SWFFont_resolveTextList (SWFFont font)
+void SWFFont_resolveTextList(SWFFont font)
 {
   SWFTextList textList, oldList;
 
   textList = font->textList;
-  while (textList != NULL)
+  while(textList != NULL)
   {
     oldList = textList;
-    SWFFont_buildCodeTable (font, textList->text);
+    SWFFont_buildCodeTable(font, textList->text);
     textList = textList->next;
-    sec_free ((void **) &oldList);
+    sec_free((void**)&oldList);
   }
 
   font->textList = NULL;

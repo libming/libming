@@ -8,7 +8,7 @@
 
 extern FILE *yyin;
 
-int yyparse ();
+int yyparse();
 
 int len;
 Buffer asmBuffer;
@@ -22,28 +22,26 @@ struct label
 
 struct label labels[256];
 
-static int
-findLabel (char *label)
+static int findLabel(char *label)
 {
   int i;
 
-  for (i = 0; i < nLabels; ++i)
+  for(i=0; i<nLabels; ++i)
   {
-    if (strcmp (label, labels[i].name) == 0)
+    if(strcmp(label, labels[i].name) == 0)
       return i;
   }
 
   return -1;
 }
 
-static void
-addLabel (char *label)
+static void addLabel(char *label)
 {
-  int i = findLabel (label);
+  int i = findLabel(label);
 
-  if (i == -1)
+  if(i == -1)
   {
-    labels[nLabels].name = strdup (label);
+    labels[nLabels].name = strdup(label);
     labels[nLabels].offset = len;
     ++nLabels;
   }
@@ -51,41 +49,39 @@ addLabel (char *label)
     labels[i].offset = len;
 }
 
-int
-bufferBranchTarget (Buffer output, char *label)
+int bufferBranchTarget(Buffer output, char *label)
 {
-  int i = findLabel (label);
+  int i = findLabel(label);
 
-  if (i == -1)
+  if(i == -1)
   {
     i = nLabels;
-    addLabel (label);
+    addLabel(label);
   }
 
-  return bufferWriteS16 (output, i);
+  return bufferWriteS16(output, i);
 }
 
-void
-bufferPatchTargets (Buffer buffer)
+void bufferPatchTargets(Buffer buffer)
 {
-  int l, i = 0;
+  int l, i=0;
   unsigned char *output = buffer->buffer;
 
-  while (i < len)
+  while(i<len)
   {
-    if (output[i] & 0x80)	/* then it's a multibyte instruction */
+    if(output[i] & 0x80) /* then it's a multibyte instruction */
     {
-      if (output[i] == SWFACTION_BRANCHALWAYS ||
-	  output[i] == SWFACTION_BRANCHIFTRUE)
+      if(output[i] == SWFACTION_BRANCHALWAYS ||
+	 output[i] == SWFACTION_BRANCHIFTRUE)
       {
 	int target, offset;
 
-	i += 3;			/* plus instruction plus two-byte length */
+	i += 3; /* plus instruction plus two-byte length */
 
 	target = output[i];
-	offset = labels[target].offset - (i + 2);
+	offset = labels[target].offset - (i+2);
 	output[i] = offset & 0xff;
-	output[++i] = (offset >> 8) & 0xff;
+	output[++i] = (offset>>8) & 0xff;
 	++i;
       }
       else
@@ -93,12 +89,13 @@ bufferPatchTargets (Buffer buffer)
 	++i;
 	l = output[i];
 	++i;
-	l += output[i] << 8;
+	l += output[i]<<8;
 
-	i += l + 1;
+	i += l+1;
       }
     }
     else
       ++i;
   }
 }
+

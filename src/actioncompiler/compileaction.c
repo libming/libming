@@ -1,6 +1,6 @@
 
 #ifndef WIN32
-#include <unistd.h>
+  #include <unistd.h>
 #endif
 
 #include <time.h>
@@ -12,38 +12,37 @@
 
 extern int SWF_versionNum;
 
-SWFAction
-compileSWFActionCode (char *script)
+SWFAction compileSWFActionCode(char *script)
 {
   SWFOutput output;
   Buffer b;
 
   /* yydebug = 1; */
 
-  if (SWF_versionNum == 4)
+  if(SWF_versionNum == 4)
   {
-    swf4ParseInit (script, 0);
+    swf4ParseInit(script, 0);
 
-    if (swf4parse ((void *) &b) != 0)
+    if(swf4parse((void *)&b) != 0)
       return NULL;
   }
   else
   {
-    swf5ParseInit (script, 0);
+    swf5ParseInit(script, 0);
 
-    if (swf5parse ((void *) &b) != 0)
+    if(swf5parse((void *)&b) != 0)
       return NULL;
   }
 
-  output = newSWFOutput ();
+  output = newSWFOutput();
 
-  if (b)
+  if(b)
   {
-    SWFOutput_writeBuffer (output, b->buffer, bufferLength (b));
-    destroyBuffer (b);
+    SWFOutput_writeBuffer(output, b->buffer, bufferLength(b));
+    destroyBuffer(b);
   }
 
-  SWFOutput_writeUInt8 (output, SWFACTION_END);
+  SWFOutput_writeUInt8(output, SWFACTION_END);
 
-  return newSWFAction_fromOutput (output);
+  return newSWFAction_fromOutput(output);
 }

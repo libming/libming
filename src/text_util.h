@@ -17,46 +17,44 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
-
 #ifndef MING_TEXT_UTIL_H_INCLUDED
 #define MING_TEXT_UTIL_H_INCLUDED
 
 #include "blocks/text.h"
 #include "blocks/textfield.h"
 
-void SWFText_setHeight (SWFText text, float height);
+void SWFText_setHeight(SWFText text, float height);
 
-void SWFText_moveTo (SWFText text, float x, float y);
+void SWFText_moveTo(SWFText text, float x, float y);
 
-float SWFText_getStringWidth (SWFText text, const unsigned char *string);
+float SWFText_getStringWidth(SWFText text, const unsigned char *string);
 
-float SWFText_getAscent (SWFText text);
+float SWFText_getAscent(SWFText text);
 
-float SWFText_getDescent (SWFText text);
+float SWFText_getDescent(SWFText text);
 
-float SWFText_getLeading (SWFText text);
+float SWFText_getLeading(SWFText text);
 
-float SWFFont_getStringWidth (SWFFont font, const unsigned char *string);
+float SWFFont_getStringWidth(SWFFont font, const unsigned char *string);
 
-float SWFFont_getAscent (SWFFont font);
+float SWFFont_getAscent(SWFFont font);
 
-float SWFFont_getDescent (SWFFont font);
+float SWFFont_getDescent(SWFFont font);
 
-float SWFFont_getLeading (SWFFont font);
+float SWFFont_getLeading(SWFFont font);
 
-void SWFTextField_setBounds (SWFTextField field, float width, float height);
+void SWFTextField_setBounds(SWFTextField field, float width, float height);
 
-void SWFTextField_setHeight (SWFTextField field, float height);
+void SWFTextField_setHeight(SWFTextField field, float height);
 
-void SWFTextField_setFieldHeight (SWFTextField field, float height);
+void SWFTextField_setFieldHeight(SWFTextField field, float height);
 
-void SWFTextField_setLeftMargin (SWFTextField field, float leftMargin);
+void SWFTextField_setLeftMargin(SWFTextField field, float leftMargin);
 
-void SWFTextField_setRightMargin (SWFTextField field, float rightMargin);
+void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
 
-void SWFTextField_setIndentation (SWFTextField field, float indentation);
+void SWFTextField_setIndentation(SWFTextField field, float indentation);
 
-void SWFTextField_setLineSpacing (SWFTextField field, float lineSpacing);
+void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
 
 #endif /* MING_TEXT_UTIL_H_INCLUDED */

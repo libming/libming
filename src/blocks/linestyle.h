@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* line.h */
 
 #ifndef SWF_LINE_H_INCLUDED
 #define SWF_LINE_H_INCLUDED
@@ -28,23 +28,23 @@ typedef struct SWFLineStyle_s *SWFLineStyle;
 #include "blocktypes.h"
 
 
-SWFLineStyle newSWFLineStyle (unsigned short width,
-			      byte r, byte g, byte b, byte a);
+SWFLineStyle newSWFLineStyle(unsigned short width,
+			     byte r, byte g, byte b, byte a);
 
 
 /* okay, this is kinda lame.. */
-byte SWFLineStyle_equals (SWFLineStyle line, unsigned short width,
-			  byte r, byte g, byte b, byte a);
+byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
+			 byte r, byte g, byte b, byte a);
 
-unsigned short SWFLineStyle_getWidth (SWFLineStyle line);
+unsigned short SWFLineStyle_getWidth(SWFLineStyle line);
 
-void SWFOutput_writeLineStyles (SWFOutput out,
-				SWFLineStyle * lines, int nLines,
-				SWFBlocktype shapeType);
+void SWFOutput_writeLineStyles(SWFOutput out,
+			       SWFLineStyle *lines, int nLines,
+			       SWFBlocktype shapeType);
 
 
-void SWFOutput_writeMorphLineStyles (SWFOutput out,
-				     SWFLineStyle * lines1, int nLines1,
-				     SWFLineStyle * lines2, int nLines2);
+void SWFOutput_writeMorphLineStyles(SWFOutput out,
+				    SWFLineStyle *lines1, int nLines1,
+				    SWFLineStyle *lines2, int nLines2);
 
 #endif /* SWF_LINE_H_INCLUDED */

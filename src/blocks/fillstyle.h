@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* fill.h */
 
 #ifndef SWF_FILL_H_INCLUDED
 #define SWF_FILL_H_INCLUDED
@@ -40,26 +40,26 @@ typedef struct SWFFillStyle_s *SWFFillStyle;
 
 /* fillstyle is a fill instance on a shape */
 
-SWFFillStyle newSWFSolidFillStyle (byte r, byte g, byte b, byte a);
+SWFFillStyle newSWFSolidFillStyle(byte r, byte g, byte b, byte a);
 
-SWFFillStyle newSWFGradientFillStyle (SWFGradient gradient, int flags);
+SWFFillStyle newSWFGradientFillStyle(SWFGradient gradient, int flags);
 
-SWFFillStyle newSWFBitmapFillStyle (SWFBitmap, int flags);
+SWFFillStyle newSWFBitmapFillStyle(SWFBitmap, int flags);
 
-void SWFFill_setIdx (SWFFillStyle fill, int idx);
+void SWFFill_setIdx(SWFFillStyle fill, int idx);
 
-int SWFFill_getIdx (SWFFillStyle fill);
+int SWFFill_getIdx(SWFFillStyle fill);
 
-SWFMatrix SWFFillStyle_getMatrix (SWFFillStyle fill);
+SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 
-int SWFFillStyle_equals (SWFFillStyle fill1, SWFFillStyle fill2);
+int SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2);
 
-void SWFOutput_writeFillStyles (SWFOutput out,
-				SWFFillStyle * fills, int nFills,
-				SWFBlocktype shapeType);
+void SWFOutput_writeFillStyles(SWFOutput out,
+			       SWFFillStyle *fills, int nFills,
+			       SWFBlocktype shapeType);
 
-void SWFOutput_writeMorphFillStyles (SWFOutput out,
-				     SWFFillStyle * fills1, int nFills1,
-				     SWFFillStyle * fills2, int nFills2);
+void SWFOutput_writeMorphFillStyles(SWFOutput out,
+				    SWFFillStyle *fills1, int nFills1,
+				    SWFFillStyle *fills2, int nFills2);
 
 #endif /* FILL_H_INCLUDED */

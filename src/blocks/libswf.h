@@ -31,27 +31,27 @@
 #include "error.h"
 
 #ifndef TRUE
-#define TRUE 1
+  #define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE 0
+  #define FALSE 0
 #endif
 
 #ifndef M_PI
-#define M_PI 3.14159265358979f
+  #define M_PI 3.14159265358979f
 #endif
 
 #ifndef min
-#define min(a,b) (((a)<(b))?(a):(b))
+  #define min(a,b) (((a)<(b))?(a):(b))
 #endif
 
 #ifndef max
-#define max(a,b) (((a)>(b))?(a):(b))
+  #define max(a,b) (((a)>(b))?(a):(b))
 #endif
 
 #ifndef rint
-#define rint(d) (floor((d)+0.5))
+  #define rint(d) (floor((d)+0.5))
 #endif
 
 typedef unsigned char byte;

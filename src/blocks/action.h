@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id$ */
+/* action.h */
 
 #ifndef SWF_ACTION_H_INCLUDED
 #define SWF_ACTION_H_INCLUDED
@@ -28,10 +28,10 @@
 
 typedef SWFOutputBlock SWFAction;
 
-SWFAction newSWFAction ();
+SWFAction newSWFAction();
 
-SWFAction newSWFAction_fromOutput (SWFOutput out);
+SWFAction newSWFAction_fromOutput(SWFOutput out);
 
-void destroySWFAction (SWFAction action);
+void destroySWFAction(SWFAction action);
 
 #endif /* SWF_ACTION_H_INCLUDED */

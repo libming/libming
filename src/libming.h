@@ -1,23 +1,3 @@
-/*
-    Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/* $Id$ */
 
 #ifndef MING_LIBMING_INCLUDED
 #define MING_LIBMING_INCLUDED
@@ -25,23 +5,23 @@
 #include <string.h>
 
 #ifndef TRUE
-#define TRUE 1
+  #define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE 0
+  #define FALSE 0
 #endif
 
 #ifndef M_PI
-#define M_PI 3.14159265358979f
+  #define M_PI 3.14159265358979f
 #endif
 
 #ifndef rint
-#define rint(d) (floor((d)+0.5))
+  #define rint(d) (floor((d)+0.5))
 #endif
 
 #ifndef WIN32
-#include <unistd.h>
+  #include <unistd.h>
 #endif
 
 #endif /* MING_LIBMING_INCLUDED */

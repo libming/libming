@@ -25,48 +25,45 @@
 #include "dbl.h"
 
 
-void
-destroySWFBitmap (SWFBlock block)
+void destroySWFBitmap(SWFBlock block)
 {
-  destroySWFBlock (block);
+  destroySWFBlock(block);
 }
 
 
-int
-SWFBitmap_getWidth (SWFBitmap b)
+int SWFBitmap_getWidth(SWFBitmap b)
 {
-  return SWFRect_getWidth (CHARACTER (b)->bounds);
+  return SWFRect_getWidth(CHARACTER(b)->bounds);
 }
 
 
-int
-SWFBitmap_getHeight (SWFBitmap b)
+int SWFBitmap_getHeight(SWFBitmap b)
 {
-  return SWFRect_getHeight (CHARACTER (b)->bounds);
+  return SWFRect_getHeight(CHARACTER(b)->bounds);
 }
 
 
 #define JPEG_MARKER 0xFF
 #define JPEG_SOI  0xD8
 
-SWFBitmap
-newSWFBitmap_fromInput (SWFInput input)
+SWFBitmap newSWFBitmap_fromInput(SWFInput input)
 {
-  int c1 = SWFInput_getChar (input);
-  int c2 = SWFInput_getChar (input);
+  int c1 = SWFInput_getChar(input);
+  int c2 = SWFInput_getChar(input);
 
-  SWFInput_rewind (input);
+  SWFInput_rewind(input);
 
-  if (c1 == JPEG_MARKER && c2 == JPEG_SOI)
-    return (SWFBitmap) newSWFJpegBitmap_fromInput (input);
+  if(c1 == JPEG_MARKER && c2 == JPEG_SOI)
+    return (SWFBitmap)newSWFJpegBitmap_fromInput(input);
 
-  if (c1 == 'D' && c2 == 'B')
-    return (SWFBitmap) newSWFDBLBitmap_fromInput (input);
+  if(c1 == 'D' && c2 == 'B')
+    return (SWFBitmap)newSWFDBLBitmap_fromInput(input);
 
-  if (c1 == 'G' && c2 == 'I')
-    SWF_error ("GIF images must be translated into DBL files for now");
+  if(c1 == 'G' && c2 == 'I')
+    SWF_error("GIF images must be translated into DBL files for now");
 
-  SWF_error ("Unrecognised file type");
+  SWF_error("Unrecognised file type");
 
   return NULL;
 }
+
