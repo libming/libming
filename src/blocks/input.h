@@ -18,6 +18,7 @@ int SWFInput_getChar(SWFInput input);
 int SWFInput_getUInt16(SWFInput input);
 int SWFInput_getUInt16_BE(SWFInput input);
 int SWFInput_getSInt16(SWFInput input);
+unsigned long SWFInput_getUInt24_BE(SWFInput input);
 unsigned long SWFInput_getUInt32(SWFInput input);
 unsigned long SWFInput_getUInt32_BE(SWFInput input);
 

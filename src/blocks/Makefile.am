@@ -29,7 +29,9 @@ libswf_la_SOURCES = \
 	soundstream.c \
 	sprite.c \
 	text.c \
-	textfield.c 
+	textfield.c \
+	utf8.c \
+	videostream.c
 
 libswf_la_LDFLAGS = $(MATHLIB)
 

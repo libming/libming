@@ -75,7 +75,7 @@ typedef struct SWFDisplayItem_s *SWFDisplayItem;
 typedef struct SWFFill_s *SWFFill;
 typedef struct SWFMovieClip_s *SWFMovieClip;
 typedef struct SWFMovie_s *SWFMovie;
-
+typedef struct SWFVideoStream_s *SWFVideoStream;
 
 /***** General Ming functions *****/
 
@@ -499,6 +499,15 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 SWFSoundInstance SWFButton_addSound(SWFButton button, SWFSound action, byte flags);
 void SWFButton_setMenu(SWFButton button, int flag);
+
+
+/****** SWFVideo ******/
+
+SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
+SWFVideoStream newSWFVideoStream(void);
+void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height);
+int SWFVideoStream_getNumFrames(SWFVideoStream stream);
+
 
 
 /***** SWFSprite *****/

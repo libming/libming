@@ -30,7 +30,7 @@
 #include "blocks/soundstream.h"
 #include "blocks/outputblock.h"
 #include "blocks/button.h"
-
+#include "blocks/videostream.h"
 
 #define ITEM_NEW						(1<<0)
 #define ITEM_REMOVED				(1<<1)
@@ -482,12 +482,13 @@ SWFDisplayList_rewindSoundStream(SWFDisplayList list)
 		SWFSoundStream_rewind(list->soundStream);
 }
 
-
 void
 SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 {
 	SWFDisplayItem item = list->head, last = NULL, next;
 	SWFCharacter character;
+	SWFPlaceObject2Block placeVideo;
+	int frame;
 
 	if ( list->soundStream )
 	{
@@ -495,7 +496,7 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 
 		if ( stream )
 			SWFBlockList_addBlock(blocklist, stream);
-	}
+	}	
 
 	while ( item != NULL )
 	{
@@ -518,12 +519,15 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 					(SWFBlock)newSWFRemoveObject2Block(item->depth));
 
 			next = item->next;
+			
 			destroySWFDisplayItem(item);
 			item = next;
 
 			continue;
 		}
-
+		
+				
+		
 		if ( character != NULL &&
 				 !SWFBlock_isDefined((SWFBlock)character) &&
 				 !list->isSprite )
@@ -538,6 +542,31 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 			if(buttonsound)
 				SWFBlockList_addBlock(blocklist, (SWFBlock)buttonsound);
 		}
+
+		
+		/* for each videostream in movie add VideoFrame */
+ 		if(character && ((SWFBlock)character)->type == SWF_DEFINEVIDEOSTREAM) {
+ 			SWFBlock video = SWFVideoStream_getVideoFrame((SWFVideoStream)character);
+ 			
+ 			if(!video)
+ 				break;
+ 		
+ 			/* well it isn't really clear why we need the place-block here
+ 			 * its not metioned in the flash-specs 
+ 			 * but its not working without */
+ 			if((item->flags & ITEM_NEW) == 0) 
+ 			{
+ 				frame = SWFVideoStream_getFrameNumber((SWFVideoFrame)video);
+ 				placeVideo = newSWFPlaceObject2Block(item->depth);
+ 				SWFPlaceObject2Block_setRatio(placeVideo, frame);
+ 				SWFPlaceObject2Block_setMove(placeVideo);
+ 				SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);
+ 			}
+ 				
+ 			 
+ 			SWFBlockList_addBlock(blocklist, video);
+ 		}
+		
 		item->flags = 0;
 		item->block = NULL;
 

@@ -37,7 +37,8 @@ OFILES = \
 	sprite.o \
 	text.o \
 	textfield.o \
-	utf8.o ${EXTRA_OBJS}
+	utf8.o \
+	videostream.o ${EXTRA_OBJS}
 
 all: ${OFILES}
 
