@@ -284,6 +284,7 @@ static int readPNG(png_structp png_ptr, dblData result)
 	free(data);
 	result->length = outsize;
 
+	free(png.data);
 	return 1;
 }
 

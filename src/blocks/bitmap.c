@@ -29,6 +29,7 @@
 
 void destroySWFBitmap(SWFBitmap bitmap)
 {
+	// this will acall bitmap->dtor;
 	destroySWFBlock((SWFBlock) bitmap);
 }
 

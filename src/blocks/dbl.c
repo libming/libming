@@ -153,14 +153,13 @@ static void
 destroySWFDBLBitmapData(SWFDBLBitmapData bitmap)
 {
 	if ( bitmap->data != NULL )
+	{
 		free(bitmap->data);
+	}
 
-//	if ( bitmap->input != NULL )
-//		destroySWFInput(bitmap->input);
-
-	// The bounds rectangle will be already freed in destroySWFCharacter
-	/*if ( CHARACTER(bitmap)->bounds != NULL )
-		destroySWFRect(CHARACTER(bitmap)->bounds);*/
+#if TRACK_ALLOCS
+	ming_gc_remove_node(bitmap->gcnode);
+#endif
 
 	destroySWFCharacter((SWFCharacter) bitmap);
 }
@@ -197,6 +196,10 @@ newSWFDBLBitmapData_fromData(dblData data)
 		BLOCK(dbl)->length++;
 
 	CHARACTER(dbl)->bounds = newSWFRect(0, dbl->width, 0, dbl->height);
+
+#if TRACK_ALLOCS
+	dbl->gcnode = ming_gc_add_node(dbl, destroySWFDBLBitmapData);
+#endif
 
 	return dbl;
 }

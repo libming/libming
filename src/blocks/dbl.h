@@ -48,6 +48,10 @@ struct SWFDBLBitmapData_s
 	unsigned short width, height;
 	unsigned char *data;
 	// SWFInput input;
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 SWFDBLBitmapData newSWFDBLBitmapData_fromData(dblData data);
