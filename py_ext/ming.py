@@ -113,7 +113,10 @@ class SWFShape(SWFBase):
     def drawCubic(self, bx, by, cx, cy, dx, dy):
         mingc.SWFShape_drawCubic(self.this, bx, by, cx, cy, dx, dy)
 
-    def drawGlyph(self, font, char):
+    def drawGlyph(self, font, char, size=None):
+        if size is None:
+            size = 1024 / mingc.Ming_getScale()
+
         mingc.SWFShape_drawGlyph(self.this, font.this, ord(char[0]))
 
     def drawCharacterBounds(self, char):

@@ -831,10 +831,11 @@ SWFShape_setRightFill(shape, fill)
 	SWF::Fill	fill
 
 void
-SWFShape_drawFontGlyph(shape, font, c)
+SWFShape_drawFontGlyph(shape, font, c, size=0)
         SWF::Shape shape
         SWF::Font font
         int c
+        int size
         ALIAS:
         SWF::Shape::drawGlyph = 1
 

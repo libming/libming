@@ -130,10 +130,10 @@ JNIEXPORT void JNICALL Java_SWFShape_nDrawCircle
 /*
  * Class:     SWFShape
  * Method:    nDrawGlyph
- * Signature: (III)V
+ * Signature: (IIII)V
  */
 JNIEXPORT void JNICALL Java_SWFShape_nDrawGlyph
-  (JNIEnv *, jobject, jint, jint, jint);
+  (JNIEnv *, jobject, jint, jint, jint, jint);
 
 /*
  * Class:     SWFShape

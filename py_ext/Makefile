@@ -1,8 +1,8 @@
-#PYINCDIR = /usr/local/include/python2.0
-#PYLIBDIR = /usr/local/lib/python2.0
+PYINCDIR = /usr/local/include/python2.0
+PYLIBDIR = /usr/local/lib/python2.0
 
-PYINCDIR = /usr/include/python1.5
-PYLIBDIR = /usr/lib/python1.5
+#PYINCDIR = /usr/include/python1.5
+#PYLIBDIR = /usr/lib/python1.5
 
 all:
 
