@@ -38,7 +38,7 @@ int
 Ming_init();
 
 void
-Ming_cleanup()
+Ming_cleanup();
 
 
 /* Change the scale, the scale, change it, yeah.  default is 20. */
