@@ -19,8 +19,8 @@ The python wrapper has been updated to mirror the functionality of the PHP
 interface, so you should be able to use the PHP documentation without
 getting terribly confused now.
 
-I can't speak for the ruby wrapper, and the perl wrapper most definitely
-doesn't work.  Be a deary and fix it for me, won't you?
+There's a perl XS wrapper now.  But I haven't used it so I can't tell you
+much about it.
 
 The c++ wrapper is just one big header file.  But it seems to work pretty
 well- check the examples directory.
@@ -42,6 +42,7 @@ no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
 
     to build as a PHP module (.so file):
 
+      make static
       cd php_ext
       make
       make install
@@ -59,8 +60,9 @@ no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
   for python:
   (I think you need python 1.5.2 or above..)
 
+    make static
     cd py_ext
-    make
+    make mingcmodule.so
     fix the install path in the Makefile
     make install
 
@@ -68,6 +70,7 @@ no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
 USING MING:
 
   check the examples in the "examples" directory
+  Oh wait, it's not there anymore.  Check the web site.
   Make your own, better, examples and send them to me.
 
 

@@ -1,6 +1,12 @@
 
 MING HISTORY
 
+3.12.01
+	Argh.  Looks like I've been neglecting the CHANGES file..
+	Added scaling code.
+	Many small bugs fixed.
+	Other stuff I can't remember.
+
 1.25.01
 	Spent the day discovering that if you split a source file up with
 	  includes, the gcc optimizer really hoses it
