@@ -3,9 +3,7 @@ prefix=`php-config --prefix`
 
 DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
 
-CFILES = ming.c swfaction.c swfbitmap.c swfbutton.c swfdisplayitem.c \
-	 swffill.c swffont.c swfgradient.c swfmorph.c swfmovie.c \
-	 swfshape.c swfsprite.c swftext.c swftextfield.c
+CFILES = ming.c
 
 php_ming.so: ming.o
 	${CC} -shared -fpic ming.o ../libming.a -o php_ming.so -lm
