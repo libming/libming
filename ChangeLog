@@ -1,3 +1,9 @@
+2002-08-18 20:16  staybyte
+
+	* ming.h, ming.i, php_ext/ming-dev.c, php_ext/ming.c, src/Makefile,
+	src/movie.c, src/movie.h, src/blocks/method.c, src/blocks/method.h:
+	add flash mx compression support
+
 2002-08-14 04:31  opaque_ndst
 
 	* src/blocks/text.c: fixed unitialized memory problem causing buggy
