@@ -78,6 +78,7 @@ ord		{ count();	return ORD;	}
 chr		{ count();	return CHR;	}
 callFrame	{ count();	return CALLFRAME;	}
 getURL		{ count();	return GETURL;	}
+getURL1		{ count();	return GETURL1; }
 loadMovie	{ count();	return LOADMOVIE;	}
 loadVariables	{ count();	return LOADVARIABLES;	}
 substr		{ count();	return SUBSTR;	}

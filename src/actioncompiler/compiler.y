@@ -44,6 +44,7 @@
 %token CHR
 %token CALLFRAME
 %token GETURL
+%token GETURL1
 %token LOADMOVIE
 %token LOADVARIABLES
 %token POSTURL
@@ -366,6 +367,15 @@ void_function_call
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, $7); }
+
+	| GETURL1 '(' STRING ',' STRING ')'
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_GETURL);
+		  bufferWriteS16($$, strlen($3) + strlen($5) + 2);
+		  bufferWriteHardString($$, $3, strlen($3));
+		  bufferWriteU8($$, 0);
+		  bufferWriteHardString($$, $5, strlen($5));
+		  bufferWriteU8($$, 0); }
 
 	| LOADMOVIE '(' expr ',' expr ')'
 		{ $$ = $3;
