@@ -70,10 +70,12 @@ void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
 void SWFShape_movePenTo(SWFShape shape, float x, float y);
 void SWFShape_movePen(SWFShape shape, float dx, float dy);
 
+void SWFShape_drawGlyph(SWFShape shape,
+			SWFFont font, unsigned char c, int size);
 
 /* deprecated: */
 
-#define SWFShape_drawFontGlyph SWFShape_drawGlyph
+#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c,0)
 
 
 #endif /* MING_SHAPE_H_INCLUDED */

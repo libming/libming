@@ -230,6 +230,15 @@ void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
 			   (int)rint(anchordy*Ming_scale));
 }
 
+void SWFShape_drawGlyph(SWFShape shape,
+			SWFFont font, unsigned char c, int size)
+{
+  if(size == 0)
+    SWFShape_drawScaledGlyph(shape, font, c, 1024);
+  else
+    SWFShape_drawScaledGlyph(shape, font, c, size*Ming_scale);
+}
+
 
 static int SWFShape_approxCubic(SWFShape shape, Control pts)
 {
