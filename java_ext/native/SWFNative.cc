@@ -279,7 +279,7 @@ JNIEXPORT void JNICALL Java_SWFDisplayItem_nRotate (JNIEnv *, jobject, jint hand
 
 JNIEXPORT void JNICALL Java_SWFDisplayItem_nRotateTo (JNIEnv *, jobject, jint handle, jfloat r)
 {
-    SWFDisplayItem_rotate ((SWFDisplayItem)handle, r);
+    SWFDisplayItem_rotateTo ((SWFDisplayItem)handle, r);
 }
 
 
