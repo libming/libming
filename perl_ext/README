@@ -1,30 +1,13 @@
-SWF.pm -- A perl interface to Ming.
+SWF.pm -- A perl interface for creating SWF files.
 
 ABSTRACT:
 ---------
 
-This is a autoloadable interface module for Ming - a library for generating 
+This is an auto-loadable interface module for Ming - a library for generating 
 SWF ("Flash") format movies.
 
 With this library you can create Flash movies on the fly with Perl.
 
-NOTE: This version REQUIRES Ming version 0.2-pre-a or above (I haven't 
-      tested previous versions). If you have an older version please
-      upgrade your Ming (http://www.opaque.net/ming). I've successfully
-      tested SWF.pm under Linux with Perl 5.005_03 and 5.6.
-
-IMPORTANT: This is a beta version as it hasn't been tested extensively. 
-           I won't recommend using it under mod_perl (my favorite Apache
-           module - see http://perl.apache.org) as it has memory leaks 
-           (you should be OK under CGI or standalone as long as your
-           program exits after generating Flash movie).
-
-COPYRIGHT INFO
---------------
-
- Copyright (c) 2000 by Soheil Seyfaie. All rights reserved.
- This program is free software; you can redistribute it and/or modify it
- under the same terms as Perl itself.
 
 INSTALLATION:
 -------------
@@ -37,18 +20,18 @@ Read these instructions all the way through before you start!
 
 2.  Unpack the tar file. Under Unix type:
 
-	zcat SWF-0.01b.tar.gz | tar xvf -
+	zcat SWF-xxxx.tar.gz | tar xvf -
 
-3.  To compile SWF.pm:
+3.  Compile:
 
-	a.  cd SWF-0.01b
+	a.  cd SWF-xxx
 	b.  perl Makefile.PL
 	c.  make
-        d.  make test (optional)
+        d.  make test (optional but recommended)
 	e.  make install
 
     During step (b), Makefile.PL will try to find your Ming distribution. 
-    If it fails it will ask you for the Ming directory.
+    If it fails, you will be asked to provide the Ming directory.
 
     If you want to install SWF into your home directory, replace step (b)
     with:
@@ -57,55 +40,24 @@ Read these instructions all the way through before you start!
 
 4.  There are some cgi demos in the examples directory. THE EXAMPLES ARE NOT
     PERLIASH (you can write it more succinctly in Perl). These examples were
-    created from PHP examples in the Ming distribution by adding the Perl
-    standard import semantic (use SWF) and replacing, e.g., SWFAction
-    with SWF::Action.
+    created from PHP examples in the Ming distribution.
 
 
-DOCUMENTATION
--------------
-
-I haven't finished documentation. But you may try to look up the documentation
-in pod format:
-
-	perldoc SWF
-
-If you know PHP interface to Ming, you already know how to use SWF.pm :-) Just
-remember to:
-
-	a. Add 'use SWF;' line to your script
-           NOTE: By default, SWF doesn't import constants to your scripts. 
-                 You may instruct SWF.pm to import a constant. For example:
-
-                 use SWF(SWFBUTTON_HIT);
-
-                 instructs SWF to import SWFBUTTON_HIT. If you want to 
-                 import all constants for Button, use the following syntax:
-
-                 use SWF(:Button);
-
-        b. Add '::' to all object creation lines. For example:
-		$s = new SWFShape();
-	   should be replaced with:
-		$s = new SWF::Shape();
-	c. Replace:
-	        $p = new SWFSprite;
-           with:
-		$p = new SWF::MovieClip;
-           As SWF doesn't recognize Sprite.
-
-That'a all folks ;-)
 
 
-IF YOU RUN INTO PROBLEMS
-------------------------
 
-Contact me ;-) Remember, this is beta version only.
+COPYRIGHT INFO
+--------------
+
+ Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
+ This program is free software; you can redistribute it and/or modify it
+ under the same terms as Perl itself.
+
 
 
 AUTHOR:
 _______
 Soheil Seyfaie
-soheil AT users.sourceforge.net
+soheil at users.sourceforge.net
 
 
