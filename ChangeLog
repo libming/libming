@@ -1,3 +1,13 @@
+2002-08-13 05:35  opaque_ndst
+
+	* src/blocks/text.c: fixed bug with calling getScaledStringWidth
+	after text object's been added to movie (and thereby "resolved",
+	replacing textrecords' fonts with fontchars)
+
+2002-08-13 05:33  opaque_ndst
+
+	* src/blocks/font.c: fixed an off-by-one malloc bug
+
 2002-08-12 03:43  opaque_ndst
 
 	* ming.h, src/ming.c, src/ming.h, src/blocks/font.c,
