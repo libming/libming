@@ -46,7 +46,6 @@ public interface SWFShapeI extends SWFObjectI {
     public void		drawArc (float r, float startAngle, float endAngle);
     public void		drawCircle (float r);
     public void		drawGlyph (SWFFontI font, int c) throws SWFException;
-    public void		drawGlyph (SWFFontI font, int c) throws SWFException;
 
     public void		end ();
 

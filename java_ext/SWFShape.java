@@ -89,12 +89,6 @@ public class SWFShape extends SWFObject implements SWFShapeI {
 	preserve (font);
     }
 
-    public void	drawGlyph (SWFFontI font, int c)
-	throws SWFException
-    {
-	drawGlyph(font, c, 0);
-    }
-
 
     public void	end ()
         { nEnd (handle); }
