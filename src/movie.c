@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,8 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
 #include "movie.h"
+#include "shape_util.h"
 
 void destroySWFMovie(SWFMovie movie)
 {
@@ -89,6 +89,23 @@ void SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
 
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
 {
+  /* if they're trying to add a raw bitmap, we'll be nice and turn
+     it into a shape */
+
+  if(SWFBlock_getType(block) == SWF_DEFINEBITS ||
+     SWFBlock_getType(block) == SWF_DEFINEBITSJPEG2 ||
+     SWFBlock_getType(block) == SWF_DEFINEBITSJPEG3 ||
+     SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
+     SWFBlock_getType(block) == SWF_DEFINELOSSLESS2)
+  {
+    SWFShape shape = newSWFShape();
+    SWFFill fill = SWFShape_addBitmapFill(shape, block, SWFFILL_TILED_BITMAP);
+    SWFShape_setRightFill(shape, fill);
+    SWFShape_drawCharacterBounds(shape, (SWFCharacter)block);
+
+    block = (SWFBlock)shape;
+  }
+
   if(SWFBlock_isCharacter(block))
   {
     return SWFDisplayList_add(movie->displayList, (SWFCharacter)block);
@@ -108,7 +125,7 @@ void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound)
 {
   SWFBlock block = SWFSound_getStreamHead(sound, movie->rate);
 
-  assert(block != NULL);
+  SWF_assert(block != NULL);
 
   SWFMovie_addBlock(movie, block);
   SWFDisplayList_setSoundStream(movie->displayList, sound);
