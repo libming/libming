@@ -948,6 +948,7 @@ static void listItem(Stack s, Action parent)
 	  case 0: printf(")"); break;
 	  case 1: printf(", GET)"); break;
 	  case 2: printf(", POST)"); break;
+	  default: printf(", 0x%x /* ??? */)", (int)t->left);
 	}
 	break;
 

@@ -806,13 +806,18 @@ int printActionRecord(FILE *f)
       println("Branch Always %i", readSInt16(f));
       break;
     case SWFACTION_GETURL2:
-      switch(readUInt8(f))
+    {
+      int flags = readUInt8(f);
+
+      switch(flags)
       {
         case 0: println("Get URL2 (Don't send)"); break;
         case 1: println("Get URL2 (GET)"); break;
         case 2: println("Get URL2 (POST)"); break;
+        default: println("GET URL2 (0x%x)", flags);
       }
       break;
+    }
     case SWFACTION_BRANCHIFTRUE:
       println("Branch If True %i", readSInt16(f));
       break;
