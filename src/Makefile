@@ -1,3 +1,4 @@
+
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
 CC = gcc -g -Wall
@@ -10,7 +11,8 @@ OFILES = movie.o displaylist.o blocklist.o position.o movieclip.o \
 COMPILEROFILES = actioncompiler/compile.o \
 		 actioncompiler/compiler.tab.o \
 		 actioncompiler/lex.yy.o \
-		 actioncompiler/compileaction.o
+		 actioncompiler/compileaction.o \
+		 actioncompiler/assembler.o
 
 all: dynamic
 
