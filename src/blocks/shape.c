@@ -613,7 +613,6 @@ void
 SWFShape_hideLine(SWFShape shape)
 {
 	ShapeRecord record;
-	int line;
 
 	if ( shape->isEnded )
 		return;
