@@ -10,7 +10,7 @@ all:
 	cat README
 
 all_binaries: listswf listfdb makefdb listjpeg swftophp png2dbl gif2dbl \
-	gif2mask listaction
+	gif2mask listaction raw2adpcm
 
 clean:
 	rm -f *.o listswf listswf.exe \
@@ -24,6 +24,7 @@ clean:
 		  swftophp swftophp.exe \
 		  png2dbl png2dbl.exe \
 		  gif2dbl gif2dbl.exe \
+		  raw2adpcm raw2adpcm.exe \
 		  gif2mask gif2mask.exe core
 
 #.o: .c .h
@@ -54,6 +55,9 @@ png2dbl: png2dbl.c
 gif2dbl: gif2dbl.c
 	${CC} gif2dbl.c -o gif2dbl -lz -lungif -lm
 
+raw2adpcm: raw2adpcm.c
+	${CC} raw2adpcm.c -o raw2adpcm -lming -lm
+
 install: all_binaries
 	install -d $(BINDIR)
 	install -m 0755 swftophp $(BINDIR)
@@ -65,4 +69,4 @@ install: all_binaries
 	install -m 0755 png2dbl $(BINDIR)
 	install -m 0755 gif2dbl $(BINDIR)
 	install -m 0755 gif2mask $(BINDIR)
-
+	install -m 0755 raw2adpcm $(BINDIR)

@@ -1,12 +1,21 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
 CC = gcc -g -Wall -fPIC -ggdb
-LDFLAGS = -lm -ldmalloc
+LDFLAGS = -lm # -ldmalloc
 
 LIBDIR = /usr/local/lib
 
-OFILES = movie.o displaylist.o blocklist.o position.o movieclip.o \
-	 shape_util.o shape_cubic.o text_util.o fill.o ming.o
+OFILES = \
+	blocklist.o \
+	displaylist.o \
+	fill.o \
+	ming.o \
+	movie.o \
+	movieclip.o \
+	position.o \
+	shape_cubic.o \
+	shape_util.o \
+	text_util.o
 
 COMPILEROFILES = actioncompiler/compile.o \
 		 actioncompiler/swf4compiler.tab.o \
