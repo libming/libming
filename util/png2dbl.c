@@ -160,6 +160,7 @@ struct pngdata readPNG(FILE *fp)
     int x, y;
     unsigned char *p;
     int alpha;
+    unsigned char r, g, b;
 
     for(y=0; y<png.height; ++y)
     {
@@ -167,10 +168,16 @@ struct pngdata readPNG(FILE *fp)
       {
 	p = png.data + rowbytes*y + 4*x;
 
-	alpha = p[0];
-	p[1] = (char)((p[1]*alpha)>>8);
-	p[2] = (char)((p[2]*alpha)>>8);
-	p[3] = (char)((p[3]*alpha)>>8);
+        r = p[0];
+        g = p[1];
+        b = p[2];
+
+	alpha = p[3];
+
+	p[0] = alpha;
+	p[1] = (char)((int)(r*alpha)>>8);
+	p[2] = (char)((int)(g*alpha)>>8);
+	p[3] = (char)((int)(b*alpha)>>8);
       }
     }
   }
