@@ -74,6 +74,7 @@ typedef enum
   SWFACTION_INITARRAY               = 0x42,
   SWFACTION_INITOBJECT              = 0x43,
   SWFACTION_TYPEOF                  = 0x44,
+  SWFACTION_TARGETPATH              = 0x45,
   SWFACTION_ENUMERATE               = 0x46,
   SWFACTION_NEWADD                  = 0x47,
   SWFACTION_NEWLESSTHAN             = 0x48,

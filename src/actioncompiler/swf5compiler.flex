@@ -141,6 +141,7 @@ do			{ count();	return DO;		}
 var			{ count();	return VAR;		}
 new			{ count();	return NEW;		}
 delete			{ count();	return DELETE;		}
+targetPath		{ count();	return TARGETPATH;	}
 return			{ count();	return RETURN;		}
 with			{ count();	return WITH;		}
 asm			{ count();	BEGIN(asm); return ASM;		}

@@ -4,7 +4,7 @@ PREFIX = $(DESTDIR)/usr
 # Default binary location for install: /usr/lib/libming/bin
 BINDIR = $(PREFIX)/lib/libming/bin
 
-INCLUDES	+= -I..
+INCLUDES	+= -I.. 
 
 ## Needs to be placed after variable defs but before rules
 include ../Rules.make

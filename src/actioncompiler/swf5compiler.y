@@ -43,7 +43,7 @@ Buffer bf, bc;
 /* tokens etc. */
 
 %token BREAK CONTINUE FUNCTION ELSE SWITCH CASE DEFAULT FOR IN IF WHILE
-%token DO VAR NEW DELETE RETURN END WITH ASM EVAL
+%token DO VAR NEW DELETE TARGETPATH RETURN END WITH ASM EVAL
 
 %token RANDOM GETTIMER LENGTH CONCAT SUBSTR TRACE INT ORD CHR GETURL
 %token GETURL1 NEXTFRAME PREVFRAME PLAY STOP TOGGLEQUALITY STOPSOUNDS
@@ -375,6 +375,7 @@ identifier
 	: IDENTIFIER
 	| NEW		{ $$ = strdup("new"); }
 	| DELETE	{ $$ = strdup("delete"); }
+	| TARGETPATH	{ $$ = strdup("targetPath"); }
 	| RANDOM	{ $$ = strdup("random"); }
 	| GETTIMER	{ $$ = strdup("getTimer"); }
 	| LENGTH	{ $$ = strdup("length"); }
@@ -735,6 +736,14 @@ void_function_call
 		  bufferWriteOp($$, SWFACTION_POP);
 		  free($1); }
 
+	| TARGETPATH '(' IDENTIFIER ')'
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $3, strlen($3)+1);
+		  free($3);
+		  bufferWriteOp($$, SWFACTION_GETVARIABLE); 
+		  bufferWriteOp($$, SWFACTION_TARGETPATH); 
+		  bufferWriteOp($$, SWFACTION_POP); }
+
 	| DELETE IDENTIFIER
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
@@ -913,6 +922,14 @@ function_call
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
 		  free($1); }
+
+	| TARGETPATH '(' IDENTIFIER ')'
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $3, strlen($3)+1);
+		  free($3);
+		  bufferWriteOp($$, SWFACTION_GETVARIABLE); 
+		  bufferWriteOp($$, SWFACTION_TARGETPATH); }
+
 
 	| DELETE IDENTIFIER
 		{ $$ = newBuffer();

@@ -920,6 +920,9 @@ int printActionRecord(FILE *f)
     case SWFACTION_TYPEOF:
       println("Typeof");
       break;
+    case SWFACTION_TARGETPATH:
+      println("TargetPath");
+      break;
     case SWFACTION_NEWADD:
       println("New Add");
       break;
