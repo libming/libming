@@ -137,7 +137,7 @@ int bufferWriteConstants(Buffer out)
 	for(i=0; i<nConstants; ++i)
 	{
 		len += bufferWriteHardString(out, constants[i], strlen(constants[i])+1);
-		free(&constants[i]);
+		free(constants[i]);
 	}
 
 	nConstants = 0;
