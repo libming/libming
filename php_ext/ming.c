@@ -254,7 +254,6 @@ static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
   destroySWFInput((SWFInput)resource->ptr);
 }
 
-/* not sure about the date to enter here.... */
 #ifdef PHP_HAVE_STREAMS 
 
 static SWFInput getInput(zval **zfile TSRMLS_DC)
