@@ -201,7 +201,7 @@ PHP_FUNCTION(ming_setCubicThreshold);
 PHP_FUNCTION(ming_setScale);
 PHP_FUNCTION(ming_useSWFVersion);
 PHP_FUNCTION(ming_useConstants);
-
+PHP_FUNCTION(ming_setSWFCompression);
 #else
 #define ming_module_ptr NULL
 #endif /* HAVE_MING */
