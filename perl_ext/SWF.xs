@@ -575,13 +575,13 @@ SWFMovie_add(movie, block)
 	SWF::Movie movie
 	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
 
+MODULE = SWF		PACKAGE = SWF::DisplayItem	PREFIX = SWFDisplayItem_
+
 void
 SWFDisplayItem_addAction(item, action, flags)
 	SWF::DisplayItem item
 	SWF::Action	action
 	int             flags
-
-MODULE = SWF		PACKAGE = SWF::DisplayItem	PREFIX = SWFDisplayItem_
 
 void
 SWFDisplayItem_moveTo(item, x, y)
