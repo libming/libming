@@ -1,0 +1,74 @@
+<HTML>
+<HEAD>
+<LINK rel="stylesheet" type="text/css" href="ming.css">
+</HEAD>
+<BODY>
+<H2>swftoperl - a flash to ming-perl converter.</H2>
+<P>Based on Daves swftophp. Tested only on a Linuxbox (SuSE 7.2). Would like to hear from success with other OS/versions. <a href="mailto:pl1@rcs.urz.tu-dresden.de">Peter Liscovius</a></P>
+<H3>Story:</H3>
+<P>I started from swftophp-source, converted this to a swftoperl and made some changes/enhancements, because swftophp and the util-stuff wasn't updated for a while. </P>
+<P>The aim is to provide a program that can take a flash 3/4/5/? file and convert it to a ming-perl script that produces the same or a better/smaller flashfile with the same behavior without the need to change anything.</P>
+
+<H3>Install:</H3>
+<P>Start a console, go to the $ming/util/ - directory and type <code>make swftoperl</code></P>
+<P>Now <b>swftoperl</b> should be build from c-source in the same directory. (i hope successful.)</P>
+<p>Type <code>swftoperl</code> to test. It should tell you something like <code>Give me a filename.</code>
+
+<H3>Usage:</H3>
+<P><code>swftoperl myflash.swf</code></P>
+<P>To save the script to a file, go to a console and type</P>
+<P>
+<code>swftoperl myflash.swf >myflash.pl</code> or<BR>
+<code>swftoperl /home/peter/myflash.swf >/home/peter/myflash.pl</code> or<BR>
+<code>swftoperl ~/myflash.swf >~/myflash.pl</code>
+<P>myflash.swf is the name of your flashfile.</P>
+<P>Some additional informations will be maybe printed to STDERR, so you don't have the ugly text in your myflash.pl , but you know about it. </P>
+<P>Works this in the same way under Windows?</P> 
+
+
+<H3>Changes:</H3>
+<UL>
+<LI>Working currently on fixing TextField features. Simply remove constants with a number like SWFTEXTFIELD_2. I try to find out the meaning of unexplained bits. (What position is SWFTEXTFIELD_HTML)? Heared about SWFTEXTFIELD_USEFONT. Which bit?
+
+Look at #defines before
+function <code>void printTextField(FILE *f, int length){}</code> in swftoperl.c
+<LI><code>SWF::Shape->setMaskLevel(depth)</code> included. Enables masks using shapes. (depth-1) is the number of the following objects(shapes,movieclips,..) that will maybe added at the same movie or movieclip. 
+<PRE>
+<CODE>
+$maskshape_i = $movie->add($maskshape);
+$maskshape_i->setMaskLevel(2);
+$shapeA_i = $movie->add($shapeA);
+$shapeB_i = $movie->add($shapeB);
+</CODE></PRE>
+<P>This will only mask the instance of <code>$shapeA</code> (depth=2), but not <code>$shapeB</code>-instance (depth=3).</P>
+
+<LI>Change "Sprite" to "MovieClip".</LI>
+</UL>
+
+<H3>Todo:</H3> Also look at file TODO
+<P>Much, much. But some things must be first done in ming/ming-perl itself.</P>
+<P>Here is a list of todos:</P>
+<UL>
+<LI>Text
+<LI>TextField and FONT. Uses only builtin "Browserfonts", not the font i wanted. I read there must be a constant SWFTEXTFIELD_USEFONT but i don't find it in the ming-source (0.2a). Example?  
+<LI>DefineFont2 
+<LI>command line options like <BR>
+--out=filename.pl <b>STDOUT</b><BR> 
+--writefonts=yes / <b>no</b><BR> 
+--fontdir=<b>.</b><BR> 
+--overwritefonts=yes / <b>no</b><BR>
+
+--writeBitmaps=<b>yes</b> / no if yes both filetypes are yes<BR>
+--writeJPEG=<b>yes</b> / no<BR>
+--writeGIF=<b>yes</b> / no<BR>
+--writeSound=<b>yes</b> / no  if yes both filetypes are yes<BR>
+--writeMP3=<b>yes</b> / no<BR>
+--writeWAV=<b>yes</b> / no<BR>
+--minglibdir= (default: an example in a perlcomment)<BR>
+<P>Bold words are the default values.</P>
+<LI>Actionscript should work without extra modifications.
+<LI>There are differences between F4 and F5 Actionscript. When you want to read x-property of <code>object</code>:  in FLASH 4  <code>object.x</code>, but in Flash5 <code>object._x</code>. So <code>SWF::setVersion(4/5)</code> is important.
+<LI><code>use SWF();</code> should automatically only import the used modules and CONSTANTS. Really needed?
+</UL>
+</BODY>
+</HTML>
