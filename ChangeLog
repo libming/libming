@@ -1,3 +1,20 @@
+2002-07-20 16:47  staybyte
+
+	* php_ext/ming.c: backporting from php cvs tree
+
+2002-07-20 16:30  staybyte
+
+	* util/gif2dbl.c: fixed spelling mistake
+
+2002-07-20 16:29  staybyte
+
+	* src/blocks/: character.c, character.h, dbl.c: fixed proto
+	mismatch
+
+2002-07-20 16:28  staybyte
+
+	* perl_ext/t/: fill.t, sound.t, sprite.t: add nl at end of files
+
 2002-07-15 07:06  opaque_ndst
 
 	* ming.h: changed SWFMovie_add second arg back to void* to keep
