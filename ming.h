@@ -886,9 +886,15 @@ void SWFMovie_labelFrame(SWFMovie movie, char *label);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 
-static inline void SWFMovie_save(SWFMovie movie, char *filename)
+static inline int SWFMovie_save(SWFMovie movie, char *filename)
 {
   FILE *f = fopen(filename, "wb");
-  SWFMovie_output(movie, fileOutputMethod, f);
+  int count;
+
+  if(f == NULL)
+    return -1;
+
+  count = SWFMovie_output(movie, fileOutputMethod, f);
   fclose(f);
+  return count;
 }
