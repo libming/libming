@@ -1,5 +1,5 @@
 
-#include "ming.h"
+#include "../mingpp.h"
 
 int main()
 {
