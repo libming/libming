@@ -49,6 +49,7 @@ void writeSWFTextToMethod(SWFBlock block,
 
   destroySWFOutput(out);
 }
+
 int completeSWFText(SWFBlock block)
 {
   int length = 4;
@@ -66,6 +67,7 @@ int completeSWFText(SWFBlock block)
 
   return length;
 }
+
 void destroySWFText(SWFBlock block)
 {
   SWFText text = (SWFText)block;
@@ -75,10 +77,10 @@ void destroySWFText(SWFBlock block)
 
   destroySWFOutput(text->out);
 
-  if(text->matrix)
+  if(text->matrix != NULL)
     destroySWFMatrix(text->matrix);
 
-  while(record!=NULL)
+  while(record != NULL)
   {
     next = record->next;
     destroySWFTextRecord(record);
@@ -88,6 +90,7 @@ void destroySWFText(SWFBlock block)
   destroySWFRect(CHARACTER(text)->bounds);
   free(text);
 }
+
 SWFText newSWFText()
 {
   SWFText text = calloc(1, SWF_TEXT_SIZE);
@@ -120,11 +123,13 @@ SWFTextRecord newSWFTextRecord()
   textRecord->height = 240;
   return textRecord;
 }
+
 void destroySWFTextRecord(SWFTextRecord record)
 {
-  if(record->string)
+  if(record->string != NULL)
     free(record->string);
-  if(record->advance)
+
+  if(record->advance != NULL)
     free(record->advance);
 
   free(record);
@@ -140,6 +145,7 @@ int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string)
   else
     return SWFFont_getScaledStringWidth(font, string)*height/1024;
 }
+
 short SWFText_getScaledAscent(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
@@ -150,6 +156,7 @@ short SWFText_getScaledAscent(SWFText text)
   else
     return SWFFont_getScaledAscent(font)*height/1024;
 }
+
 short SWFText_getScaledDescent(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
@@ -160,6 +167,7 @@ short SWFText_getScaledDescent(SWFText text)
   else
     return SWFFont_getScaledDescent(font)*height/1024;
 }
+
 short SWFText_getScaledLeading(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
@@ -359,6 +367,7 @@ void SWFText_resolveCodes(SWFText text)
   int l, i, curX=0, curY=0, curH=0, glyph;
 
   textRecord = text->textRecord;
+
   while(textRecord != NULL)
   {
     if(textRecord->flags & SWF_TEXT_HAS_FONT)
@@ -378,6 +387,13 @@ void SWFText_resolveCodes(SWFText text)
   while(textRecord != NULL)
   {
     oldRecord = textRecord;
+
+    if(textRecord->string == NULL || strlen(textRecord->string) == 0)
+    {
+      textRecord = textRecord->next;
+      destroySWFTextRecord(oldRecord);
+      continue;
+    }
 
     SWFOutput_byteAlign(out);
 
@@ -418,18 +434,16 @@ void SWFText_resolveCodes(SWFText text)
     }
 
     /* record type 0 */
-    if(textRecord->string != NULL)
-      l = strlen(textRecord->string);
-    else
-      l = 0;
+    l = strlen(textRecord->string);
 
-    SWF_assert(l<256);
+    if(l >= 256)
+      SWF_error("Found text record >= 256 characters!");
 
     SWFOutput_writeUInt8(out, l);
 
     /* XXX - er, browser fonts in text objects crash the player..
        Maybe because there's no definefontinfo block? */
-    
+
     if(textRecord->isBrowserFont)
     {
       for(i=0; i<l; ++i)
