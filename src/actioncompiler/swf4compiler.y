@@ -101,7 +101,7 @@
 /* ascending order of ops ..? */
 %left ','
 %right '=' "*=" "/=" "+=" "-="
-%left '?' ':'
+%right '?' ':'
 %left "&&" "||"
 %left "==" "!=" "===" "!=="
 %left '<' '>' "<=" ">=" "<=>"
