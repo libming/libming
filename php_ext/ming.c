@@ -2393,7 +2393,11 @@ PHP_FUNCTION(swfmovie_saveToFile)
   int oldval = INT_MIN;
   long out;
   void *what;
+#if ZEND_MODULE_API_NO >= 20020429
+  php_stream *stream;
+#endif
 
+  
   switch (ZEND_NUM_ARGS()) {
   case 1:
   	if(zend_get_parameters_ex(1, &x) == FAILURE)
@@ -2413,7 +2417,13 @@ PHP_FUNCTION(swfmovie_saveToFile)
   default:
 		WRONG_PARAM_COUNT;
 	}
+
+#if ZEND_MODULE_API_NO >= 20020429
+  php_stream_from_zval(stream, x);
+  php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&what, 1);
+#else
   ZEND_FETCH_RESOURCE(what, FILE *, x, -1,"File-Handle",php_file_le_fopen());
+#endif
   out = SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpFileOutputMethod, what);
   if(oldval >= -1 && oldval <=9)
 	  SWFMing_setSWFCompression(oldval);
@@ -2432,6 +2442,9 @@ PHP_FUNCTION(swfmovie_save)
   FILE *file;
   long retval;
   int oldval = INT_MIN;
+#if ZEND_MODULE_API_NO >= 20020429
+  php_stream *stream;
+#endif
 
   switch (ZEND_NUM_ARGS()) {
   case 1:
@@ -2456,7 +2469,13 @@ PHP_FUNCTION(swfmovie_save)
 
   if(Z_TYPE_PP(x) == IS_RESOURCE)
   {
+
+#if ZEND_MODULE_API_NO >= 20020429
+    php_stream_from_zval(stream, x);
+    php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&file, 1);
+#else
     ZEND_FETCH_RESOURCE(file, FILE *, x, -1,"File-Handle",php_file_le_fopen());
+#endif
 
     retval = SWFMovie_output(getMovie(getThis() TSRMLS_CC),
 		                                    &phpFileOutputMethod, file);
