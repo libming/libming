@@ -1,6 +1,12 @@
 
 Zwiff is a quick hack to let folks play with ming (http://ming.sf.net) using Zope.
 
+Beware... due to the way ming handles some errors, Zwiff can crash Zope ;-(. 
+
+Yeah.. we're thinking about fixing that. ;-)
+
+SJS
+
 In a Python Script try something like::
 
 	## Script (Python) "testMing"
