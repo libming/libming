@@ -17,6 +17,11 @@ static char szLine[1024];
 static char msgbufs[2][1024] = { {0}, {0} }, *msgline = {0};
 static int  column = 0;
 
+static void comment();
+static void comment1();
+static void count();
+static void warning(char *msg);
+
 #define YY_INPUT(buf,result,max_size) result=lexBufferInput(buf, max_size)
 
 /* thanks to the prolific and brilliant Raff: */
@@ -38,8 +43,19 @@ static void unescape(char *buf)
 {
   char *p, *p1;
 
-  for (p1=buf; (p=strchr(p1, '\\')) != 0; p1 = p+1)
+  for (p1=buf; (p=strchr(p1, '\\')) != 0; p1 = p+1) {
+    switch(p[1])
+    {
+    case 'b' : p[1] = '\b'; break;
+    case 'f' : p[1] = '\f'; break;
+    case 'n' : p[1] = '\n'; break;
+    case 'r' : p[1] = '\r'; break;
+    case 't' : p[1] = '\t'; break;
+    case 'x' :
+    case 'u' : warning("unsupported escape sequence");
+    }
     strcpy(p, p+1);
+  }
 }
 
 void swf4ParseInit(char *script, int debug)
@@ -55,11 +71,6 @@ void swf4ParseInit(char *script, int debug)
   column = 0;
   msgline = msgbufs[0];
 }
-
-static void comment();
-static void comment1();
-static void count();
-static void warning(char *msg);
 
 %}
 
