@@ -20,11 +20,36 @@ SWF::DisplayItem - SWF DisplayItem class
 
 =head1 SYNOPSIS
 
- use SWF::DisplayItem;
+
+ use SWF::DisplayItem();   # Do not import any constant
+
+ #import all constants to the current package
+ use SWF::DisplayItem qw(:DisplayItem);
 
 =head1 DESCRIPTION
 
 SWF::DisplayItem is used for animation. To create an SWF::DisplayItem object, you may use either L<SWF::Movie/"add"> or L<SWF::Sprite/"add"> method.
+
+
+By default, SWF::DisplayItem will not import anything to your package, i.e. you have to explicitly indicate which constants you need. Here is the list of constants that you may import to your package:
+
+    SWFACTION_ONLOAD
+    SWFACTION_ENTERFRAME
+    SWFACTION_UNLOAD
+    SWFACTION_MOUSEMOVE
+    SWFACTION_MOUSEDOWN
+    SWFACTION_MOUSEUP
+    SWFACTION_KEYDOWN
+    SWFACTION_KEYUP
+    SWFACTION_DATA
+
+For example, if you want to import SWFACTION_ONLOAD only, use the following statement:
+
+    use SWF::Button qw(SWFACTION_ONLOAD);
+
+You may use the following shortcut, if you want to import all constants
+
+    use SWF::DisplayItem ':DisplayItem';
 
 =head1 METHODS
 
@@ -93,6 +118,8 @@ Set $displayItem's name to $name (used for targetting with SWF::Action).
 =item $displayItem->remove();
 
 Remove $displayItem from the movie display list.
+
+=item $displayItem->setMask($level);
 
 =back
 
