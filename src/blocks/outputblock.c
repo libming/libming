@@ -54,6 +54,8 @@ SWFOutputBlock newSWFOutputBlock(SWFOutput out, SWFBlocktype type)
   return block;
 }
 
+/* placeObject2 block is in placeobject.c */
+
 SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 				      SWFMatrix matrix, SWFCXform cXform)
 {
@@ -61,54 +63,13 @@ SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 
   SWFOutput_writeUInt16(out, character->number);
   SWFOutput_writeUInt16(out, depth);
-  SWFOutput_writeMatrix(out, matrix); /* max length - 210 bits=27 bytes */
+  SWFOutput_writeMatrix(out, matrix); /* max length: 210 bits=27 bytes */
 
   if(cXform)
-    SWFOutput_writeCXform(out, cXform, SWF_PLACEOBJECT); /* max length - 9 bytes */
+    /* max length: 9 bytes */
+    SWFOutput_writeCXform(out, cXform, SWF_PLACEOBJECT);
 
   return newSWFOutputBlock(out, SWF_PLACEOBJECT);
-}
-
-SWFOutputBlock newSWFPlaceObject2Block(int depth, char *name, int ratio,
-				       SWFCXform cXform, SWFMatrix matrix,
-				       SWFCharacter character, int move)
-{
-  int flags = 0;
-  SWFOutput out = newSizedSWFOutput(60);
-
-  if(name)
-    flags |= SWF_PLACE_HAS_NAME;
-  if(ratio != -1)
-    flags |= SWF_PLACE_HAS_RATIO;
-  if(cXform)
-    flags |= SWF_PLACE_HAS_CXFORM;
-  if(matrix)
-    flags |= SWF_PLACE_HAS_MATRIX;
-  if(character)
-    flags |= SWF_PLACE_HAS_CHARACTER;
-  if(move)
-    flags |= SWF_PLACE_MOVE;
-
-  SWFOutput_writeUInt8(out, flags);
-
-  SWFOutput_writeUInt16(out, depth);
-
-  if(character)
-    SWFOutput_writeUInt16(out, character->number);
-
-  if(matrix)
-    SWFOutput_writeMatrix(out, matrix);
-
-  if(cXform)
-    SWFOutput_writeCXform(out, cXform, SWF_PLACEOBJECT2);
-
-  if(ratio != -1)
-    SWFOutput_writeUInt16(out, ratio);
-
-  if(name)
-    SWFOutput_writeString(out, name);
-
-  return newSWFOutputBlock(out, SWF_PLACEOBJECT2);
 }
 
 SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b)

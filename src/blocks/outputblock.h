@@ -23,9 +23,9 @@
 #include "libswf.h"
 #include "block.h"
 #include "output.h"
-#include "cxform.h"
-#include "matrix.h"
 #include "character.h"
+#include "matrix.h"
+#include "cxform.h"
 
 struct _outputBlock
 {
@@ -40,18 +40,8 @@ void destroySWFOutputBlock(SWFBlock block);
 
 SWFOutputBlock newSWFOutputBlock(SWFOutput out, SWFBlocktype type);
 
-#define SWF_PLACE_HAS_NAME        (1<<5)
-#define SWF_PLACE_HAS_RATIO       (1<<4)
-#define SWF_PLACE_HAS_CXFORM      (1<<3)
-#define SWF_PLACE_HAS_MATRIX      (1<<2)
-#define SWF_PLACE_HAS_CHARACTER   (1<<1)
-#define SWF_PLACE_MOVE            (1<<0)
-
 SWFOutputBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
 				      SWFMatrix matrix, SWFCXform cXform);
-SWFOutputBlock newSWFPlaceObject2Block(int depth, char *name, int ratio,
-				       SWFCXform cXform, SWFMatrix matrix,
-				       SWFCharacter character, int move);
 
 SWFOutputBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
 SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
