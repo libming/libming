@@ -1,7 +1,14 @@
-#include "perl_swf.h"
+/* ====================================================================
+ * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the same terms as Perl itself.
+ * ====================================================================
+ *
+ * $Author$
+ * $Id$
+ */
 
-// Export stuff. Blatintly copied from Apache::Constants. Thanks Doug ;-)
-// TODO: Check AUTOLOAD
+#include "perl_swf.h"
 
 static char *SWF_Fill_tag[] = {
      "SWFFILL_SOLID",
@@ -31,6 +38,7 @@ static char *SWF_Button_tag[] = {
      NULL,
 };
 
+
 static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_NOEDIT",
      "SWFTEXTFIELD_PASSWORD",
@@ -38,41 +46,44 @@ static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_MULTILINE",
      "SWFTEXTFIELD_WORDWRAP",
      "SWFTEXTFIELD_NOSELECT",
-     "SWFTEXTFIELD_HTML",
      "SWFTEXTFIELD_ALIGN_LEFT",
      "SWFTEXTFIELD_ALIGN_RIGHT",
      "SWFTEXTFIELD_ALIGN_CENTER",
      "SWFTEXTFIELD_ALIGN_JUSTIFY",
+     "SWFTEXTFIELD_HTML",
+     "SWFTEXTFIELD_HASLENGTH",
      NULL,
 };
 
-static char *SWF_PlaceObject_tag[] = {
-	"SWFCLIPEVENT_ONLOAD",
-	"SWFCLIPEVENT_ENTERFRAME",
-	"SWFCLIPEVENT_UNLOAD",
-	"SWFCLIPEVENT_MOUSEMOVE",
-	"SWFCLIPEVENT_MOUSEDOWN",
-	"SWFCLIPEVENT_MOUSEUP",
-	"SWFCLIPEVENT_KEYDOWN",
-	"SWFCLIPEVENT_KEYUP",
-	"SWFCLIPEVENT_DATA",
-	NULL
+
+static char *SWF_DisplayItem_tag[] = {
+     "SWFACTION_ONLOAD",
+     "SWFACTION_ENTERFRAME",
+     "SWFACTION_UNLOAD",
+     "SWFACTION_MOUSEMOVE",
+     "SWFACTION_MOUSEDOWN",
+     "SWFACTION_MOUSEUP",
+     "SWFACTION_KEYDOWN",
+     "SWFACTION_KEYUP",
+     "SWFACTION_DATA",
+     NULL,
 };
+
 
 static char **export_tags(char *tag) {
    switch (*tag) {
    case 'B':
      if(strEQ("Button", tag))
        return SWF_Button_tag;
+   case 'D':
+     if(strEQ("DisplayItem", tag))
+       return SWF_DisplayItem_tag;
    case 'F':
      if(strEQ("Fill", tag))
        return SWF_Fill_tag;
    case 'T':
      if(strEQ("Text", tag))
        return SWF_TextField_tag;
-   case 'C':
-     if(strEQ("Clip", tag))
-       return SWF_PlaceObject_tag;
    default:
      croak("unknown tag `%s'", tag);
    }
