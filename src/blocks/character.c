@@ -36,10 +36,8 @@ void SWFCharacterInit(SWFCharacter character)
 }
 
 
-void destroySWFCharacter(SWFBlock block)
+void destroySWFCharacter(SWFCharacter character)
 {
-  SWFCharacter character = (SWFCharacter)block;
-
   SWFCharacter_clearDependencies(character);
 
   if(character->bounds != NULL)

@@ -66,7 +66,6 @@ SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input)
   BLOCK(dbl)->writeBlock = writeSWFDBLBitmapToMethod;
   BLOCK(dbl)->complete = completeSWFDBLBitmap;
   BLOCK(dbl)->dtor = destroySWFCharacter;
-//  BLOCK(dbl)->dtor = destroySWFDBLBitmap_andInputs;
 
   dbl->input = input;
 

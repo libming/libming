@@ -65,7 +65,7 @@ void SWFCharacterInit(SWFCharacter character);
 
 /* destroy this character */
 
-void destroySWFCharacter(SWFBlock character);
+void destroySWFCharacter(SWFCharacter character);
 
 
 /* marks the given block as a dependency of the character- that is,
