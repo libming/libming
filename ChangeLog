@@ -1,3 +1,7 @@
+2004-02-08 12:09  erich
+
+	* rules.make: added "-lm" so everybody tries linking the math lib
+
 2004-02-04 00:53  erich
 
 	* ChangeLog, Makefile, php_ext/Makefile, py_ext/Makefile,
