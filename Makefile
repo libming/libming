@@ -25,10 +25,10 @@ install-static: static
 	install -m 0644 $(SHAREDLIB) $(LIBDIR)/
 
 dynamic static:
-	$(MAKE) -C src $@
+	(cd src && $(MAKE) $@)
 
 clean:
-	for i in $(DIRS); do $(MAKE) -C $$i clean; done
+	for i in $(DIRS); do (cd $$i && $(MAKE) clean); done
 	if [ -f perl_ext/Makefile ] ; then cd perl_ext; $(MAKE) clean; fi
 	rm -f test.o test test.exe *.core *~
 	rm -f $(SHAREDLIB) $(SHAREDLIB)
