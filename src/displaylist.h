@@ -32,19 +32,18 @@
 #define ITEM_CXFORMCHANGED  (1<<3)
 #define ITEM_RATIOCHANGED   (1<<4)
 
-#define ITEM_CHANGED  (ITEM_TRANSFORMED|ITEM_CXFORMCHANGED|ITEM_RATIOCHANGED)
+#define ITEM_CHANGED  (ITEM_TRANSFORMED|ITEM_CXFORMCHANGED|ITEM_RATIOCHANGED|ITEM_NEW)
 
 struct _swfDisplayItem
 {
   int flags;
   struct _swfDisplayItem *next;
   int depth;
+  SWFPlaceObject2Block block;
+
+  SWFCharacter character;
   SWFPosition position;
   SWFMatrix matrix;
-  SWFCharacter character;
-  int ratio;
-  SWFCXform cXform;
-  char *name;
 };
 typedef struct _swfDisplayItem *SWFDisplayItem;
 
@@ -74,8 +73,12 @@ void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
 void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 				 float r, float g, float b, float a);
 
+void SWFDisplayItem_addAction(SWFDisplayItem item,
+			      SWFAction action, int flags);
+
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
+
 
 struct _swfDisplayList
 {
