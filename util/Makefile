@@ -1,6 +1,6 @@
 include ../config.make
+include ../Rules.make
 
-PREFIX = $(DESTDIR)/usr
 # Default binary location for install: /usr/lib/libming/bin
 BINDIR = $(PREFIX)/lib/libming/bin
 
@@ -8,13 +8,10 @@ INCLUDES	+= -I..
 
 PAGER ?= less
 
-## Needs to be placed after variable defs but before rules
-include ../Rules.make
-
 all:
 	$(PAGER) README
 
-all_binaries: listswf_nd listfdb makefdb listjpeg swftoperl swftophp \
+all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp \
 	png2dbl listaction raw2adpcm png2swf makeswf listmp3
 
 clean:
@@ -35,12 +32,12 @@ clean:
 
 #.o: .c .h
 
-listswf: blocktypes.o decompile.o decompile5.o read.o listswf.c
+listswf_d: blocktypes.o decompile.o decompile5.o read.o listswf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) listswf.c blocktypes.o decompile.o decompile5.o read.o -o listswf -lm -lz
 
 decompile.o: action.h
 
-listswf_nd: blocktypes.o decompile.o read.o listswf.c
+listswf: blocktypes.o decompile.o read.o listswf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE listswf.c blocktypes.o decompile.o read.o -o listswf -lm -lz
 
 listaction: blocktypes.o read.o listswf.c
@@ -89,7 +86,7 @@ install: all_binaries
 	install -m 0755 listswf $(BINDIR)
 	install -m 0755 listaction $(BINDIR)
 	install -m 0755 png2dbl $(BINDIR)
-	install -m 0755 gif2dbl $(BINDIR)
-	install -m 0755 gif2mask $(BINDIR)
+	#install -m 0755 gif2dbl $(BINDIR)
+	#install -m 0755 gif2mask $(BINDIR)
 	install -m 0755 raw2adpcm $(BINDIR)
 	install -m 0755 png2swf $(BINDIR)
