@@ -298,7 +298,7 @@ SWFText_getScaledStringWidth(SWFText text, const char *string)
 	int height = text->currentRecord->height;
 	unsigned short* widestr;
 	int len = strlen(string);
-	int n;
+	int n, ret;
 
 	widestr = (unsigned short *)malloc(2 * len);
 	for(n = 0 ; n < len ; n++)
@@ -310,10 +310,11 @@ SWFText_getScaledStringWidth(SWFText text, const char *string)
 		font = text->currentRecord->font.font;
 
 	if ( text->currentRecord->isBrowserFont )
-		return 0;
+		ret = 0;
 	else
-		return SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
-// freeing string ?
+		ret = SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
+	free(widestr);
+	return ret;
 }
 
 int
@@ -322,18 +323,20 @@ SWFText_getScaledUTF8StringWidth(SWFText text, const char *string)
 	SWFFont font;
 	int height = text->currentRecord->height;
 	unsigned short* widestr;
-	int len = UTF8ExpandString(string, &widestr);
+	int len, ret;
 
+	len = UTF8ExpandString(string, &widestr);
 	if ( text->currentRecord->isResolved )
 		font = SWFFontCharacter_getFont(text->currentRecord->font.fontchar);
 	else
 		font = text->currentRecord->font.font;
 
 	if ( text->currentRecord->isBrowserFont )
-		return 0;
+		ret = 0;
 	else
-		return SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
-// freeing string ?
+		ret = SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
+	free(widestr);
+	return ret;
 }
 
 int
@@ -354,7 +357,6 @@ SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string)
 		return 0;
 	else
 		return SWFFont_getScaledWideStringWidth(font, string, len) * height / 1024;
-// freeing string ?
 }
 
 
@@ -411,7 +413,8 @@ SWFText_setFont(SWFText text, void* font)
 	textRecord->isBrowserFont = (BLOCK(font)->type == SWF_DEFINEEDITTEXT);
 
 	if ( textRecord->isBrowserFont )
-		textRecord->font.browserFont = (SWFBrowserFont)font;
+		SWF_error("cannot use browser font for SWFText");
+//		textRecord->font.browserFont = (SWFBrowserFont)font;
 	else
 		textRecord->font.font = (SWFFont)font;
 }
@@ -558,6 +561,8 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 
 	SWFFontCharacter fontchar = textRecord->font.fontchar;
 	SWFFont font = SWFFontCharacter_getFont(fontchar);
+
+	if(!len) return;	// do not try to calculate 1st char of null string
 
 	/* compute advances (spacing) from spacing, advance and kern table */
 
