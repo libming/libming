@@ -10,8 +10,38 @@ my $is_soheil;
 #$is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));
 #$Verbose=1 if $is_soheil;
 
-my ($MING_DIR, $ming_version);
 
+
+my @do_clean = qw {
+    SWF.h
+    Boot.xsh
+    t/config.pl
+    t/gradient.swf
+};
+
+for(@do_clean) { unlink $_ }
+
+my @SWF_MODULES = qw {
+    Action
+    Bitmap
+    Button
+    Constants
+    DisplayItem
+    Fill
+    Font
+    Gradient
+    Morph
+    Movie
+    MovieClip
+    Shape
+    Sound
+    Text
+    TextField
+};
+
+my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
+
+my ($MING_DIR, $ming_version);
 
 foreach my $src_dir (@DEFAULT_DIR) {
     next unless -d $src_dir;
@@ -33,15 +63,27 @@ print "\nUsing ming version $ming_version in the ". abs_path($MING_DIR) ." direc
 compile() unless ming_is_compiled();
 write_swf_h($MING_DIR);
 write_config_test ($MING_DIR);
+write_bootxs();
 
 WriteMakefile(
     'NAME'	   => 'SWF',
-    'VERSION_FROM' => 'SWF.pm', # finds $VERSION
-    'LIBS'	   => [''],   # e.g., '-lm' 
-    'DEFINE'	   => '',     # e.g., '-DHAVE_SOMETHING' 
-    'INC'	   => '',     # e.g., '-I/usr/include/other'
+    'VERSION_FROM' => 'SWF.pm',
+    ( $] <  5.005 ? () :
+      (
+       ABSTRACT   => 'Perl interface to Ming -  a library for generating SWF ("Flash") format movies.',
+       AUTHOR     => 'Soheil Seyfaie <soheil@users.sourceforge.net>',
+      )
+    ),
+    clean   => {
+        FILES   => "@do_clean",
+    },
     'MYEXTLIB'     => $MING_DIR . '/libming.a',
+    'OBJECT'       => "$XS_OBJECTS",
 );
+
+
+
+
 
 sub ming_is_compiled{
     return undef unless (-e "$MING_DIR/libming.a");
@@ -108,11 +150,18 @@ sub get_ming_version{
     return undef;
 }
 
-
+sub write_bootxs (){
+    local *FH;
+    open FH, ">Boot.xsh" or die "can't open Boot.xsh $!";
+    print FH "BOOT:\n{\n";
+    print FH join "\n", map "extern void boot_SWF__$_(CV *cv);", @SWF_MODULES;;
+    print FH "\n", join "\n", map "callXS(boot_SWF__$_, cv, mark);", @SWF_MODULES;
+     print FH "\n}\n";
+    close FH;
+}
 
 sub write_swf_h {
     my $dir = shift;
-    unlink "SWH.h";
     local *FH;
     open FH, ">SWF.h" or die "can't open SWF.h $!";
     print FH <<EOF;
@@ -124,7 +173,6 @@ sub write_swf_h {
  */
 
 #include "$dir/ming.h"
-#include "Exports.c"
 EOF
     close FH;
 }
