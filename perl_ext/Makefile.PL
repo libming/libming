@@ -2,45 +2,33 @@ use ExtUtils::MakeMaker;
 
 use Cwd qw(abs_path cwd);
 
-my @DEFAULT_DIR = qw(../.. ./src ../ ../ming-0.0.9 ../ming-0.0.9b ./ming-0.0.9 ./ming-0.0.9b);
+my @DEFAULT_DIR = qw(.. ./src);
 
-my $is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));
+my $is_soheil;
+#$is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));
 #$Verbose=1 if $is_soheil;
-my @supported_ming_vers = qw(0.0.9 0.0.9b 0.1.0 0.1.1);
+
+my @supported_ming_vers = qw(0.2-pre-a);
 my ($MING_DIR, $ming_version);
-
-
-
-print <<EOF;
-
-You need ming source code to install this software. If you haven't installed
-ming before, please download it from http://www.opaque.net (Please read the
-README file).
-
-I'll try to find Ming src directory. If I fail, I'll ask you for the Ming 
-directory.
-
-Searching for ming src code...
-EOF
 
 
 foreach my $src_dir (@DEFAULT_DIR) {
     next unless -d $src_dir;
     my $abs_src_dir = abs_path($src_dir);
-    print "    Trying $abs_src_dir ... ";
+    print "    Trying $abs_src_dir ... " if $is_soheil;
     $ming_version = get_ming_version($src_dir);
 
     if( $ming_version && version_supported($ming_version) ){
 	$MING_DIR = $src_dir;
-        print "Yes\n";
+        print "Yes\n" if $is_soheil;
 	last;
     }
-    print "No\n";
+    print "No\n" if $is_soheil;
 }
 
 ask_ming_dir() unless ($MING_DIR);
 
-print "Will use ming version $ming_version in ". abs_path($MING_DIR) ."\n";
+print "Using ming version $ming_version in ". abs_path($MING_DIR) ."\n";
 compile() unless ming_is_compiled();
 write_swf_h($MING_DIR);
 write_config_test ($MING_DIR);
@@ -71,13 +59,21 @@ sub compile{
     print "Compiling ming ...\n";
     my $cur_dir = cwd;
     chdir $MING_DIR;
-    system "make";
+    system "make static";
     chdir $cur_dir;
 }
 
 sub ask_ming_dir{
     while(1) {
-       print "Please tell me where I can find your Ming src (type q to quit): " ; 
+
+	print <<EOF;
+
+You need ming source code to install this software. If you haven't installed
+ming before, please download it from http://www.opaque.net (Please read the
+README file).
+
+EOF
+       print "Please tell me where I can find your Ming src (type q to quit): ";
        my $src_dir = prompt("", "");
        exit(0) if $src_dir eq "q";
        if(-d $src_dir) {
@@ -97,8 +93,8 @@ sub get_ming_version{
     my $d = shift;
     my $filename = shift || "ming.h";
 
-    my $file = "$d/src/$filename";
-    #print "Checking $file\n";
+    my $file = "$d/$filename";
+    print "Checking $file\n" if $is_soheil;
 
     return undef unless (-e $file);
 
@@ -128,7 +124,7 @@ sub write_swf_h {
     open FH, ">SWF.h" or die "can't open SWF.h $!";
     print FH <<EOF;
 /* ====================================================================
- * Copyright (c) 2000 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
@@ -149,7 +145,7 @@ sub write_config_test {
     open FH, ">t/config.pl" or die "can't open t/config.pl $!";
     print FH <<EOF;
 # ====================================================================
-# Copyright (c) 2000 by Soheil Seyfaie. All rights reserved.
+# Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 #  ====================================================================
