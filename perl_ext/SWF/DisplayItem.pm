@@ -99,6 +99,22 @@ Set $displayItem's name to $name (used for targetting with SWF::Action).
 
 Remove $displayItem from the movie display list.
 
+=item ($x, $y) = $displayItem->getPosition(();
+
+Returns displace coordinates of $displayitem.
+
+=item $degrees = $displayItem->getRotation();
+
+Returns rotation of $displayItem.
+
+=item ($x, $y) = $displayItem->getScale();
+
+Returns scale of $displayItem in x- and y-direction.
+
+=item ($x, $y) = $displayItem->getSkew();
+
+Returns x- and y-skew of $displayItem.
+
 =item $displayItem->setMask($level);
 
 =back
