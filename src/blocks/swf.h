@@ -443,6 +443,8 @@ void SWFPlaceObject2Block_setDepth(SWFPlaceObject2Block block, int depth);
 void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block,
 				  const char *name);
 void SWFPlaceObject2Block_setRatio(SWFPlaceObject2Block block, int ratio);
+void SWFPlaceObject2Block_setMaskLevel(SWFPlaceObject2Block block,
+				       int masklevel);
 void SWFPlaceObject2Block_setCXform(SWFPlaceObject2Block block,
 				    SWFCXform cXform);
 void SWFPlaceObject2Block_setColorAdd(SWFPlaceObject2Block block,
