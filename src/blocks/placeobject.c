@@ -32,6 +32,7 @@
 #include "matrix.h"
 #include "cxform.h"
 
+#include "libming.h"
 
 struct SWFPlaceObject2Block_s
 {

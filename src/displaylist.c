@@ -31,6 +31,7 @@
 #include "blocks/button.h"
 #include "blocks/videostream.h"
 #include "blocks/blocktypes.h"
+#include "libming.h"
 
 #define ITEM_NEW						(1<<0)
 #define ITEM_REMOVED				(1<<1)

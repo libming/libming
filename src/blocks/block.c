@@ -24,6 +24,7 @@
 
 #include "block.h"
 #include "method.h"
+#include "libming.h"
 
 
 void

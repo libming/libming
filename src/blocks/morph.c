@@ -27,6 +27,7 @@
 #include "fillstyle.h"
 #include "linestyle.h"
 
+#include "libming.h"
 
 struct SWFMorph_s
 {

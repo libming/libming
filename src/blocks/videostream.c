@@ -32,6 +32,7 @@
 #include "block.h"
 #include "character.h"
 #include "videostream.h"
+#include "libming.h"
 
 #define VIDEOTAG 0x09
 #define AUDIOTAG 0x08

@@ -24,6 +24,7 @@
 #include "character.h"
 #include "blocktypes.h"
 #include "morph.h"
+#include "libming.h"
 
 
 int SWF_gNumCharacters;

@@ -21,6 +21,7 @@
 
 #include "action.h"
 #include "outputblock.h"
+#include "libming.h"
 
 
 SWFAction newSWFAction()

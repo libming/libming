@@ -23,6 +23,7 @@
 
 #include "fontinfo.h"
 #include "method.h"
+#include "libming.h"
 
 struct SWFFontInfo_s
 {

@@ -26,6 +26,7 @@
 #include "blocks/matrix.h"
 #include "movie.h"
 #include "fill.h"
+#include "libming.h"
 
 
 float

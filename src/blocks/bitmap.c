@@ -25,6 +25,7 @@
 #include "dbl.h"
 #include "error.h"
 #include "input.h"
+#include "libming.h"
 
 void destroySWFBitmap(SWFBitmap bitmap)
 {

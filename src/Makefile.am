@@ -13,7 +13,8 @@ libming_la_SOURCES = \
 	movieclip.c \
 	shape_util.c \
 	text_util.c \
-	ming.c 
+	ming.c \
+	mem.c
 
 noinst_HEADERS = \
 	blocklist.h \
@@ -26,7 +27,8 @@ noinst_HEADERS = \
 	movieclip.h \
 	position.h \
 	shape_util.h \
-	text_util.h 
+	text_util.h \
+	mem.h
 
 libming_la_LIBADD = actioncompiler/libactioncompiler.la blocks/libswf.la
 libming_la_LDFLAGS = -version-info 1:0:0 $(MATHLIB)

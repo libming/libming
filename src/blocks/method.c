@@ -22,6 +22,7 @@
 #include "method.h"
 #include "output.h"
 
+#include "libming.h"
 
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
 {

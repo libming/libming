@@ -25,6 +25,7 @@
 #include "libming.h"
 #include "gradient.h"
 
+#include "libming.h"
 
 struct gradientEntry
 {

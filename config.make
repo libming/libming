@@ -1,6 +1,7 @@
 # set to your choice of png and / or gif formats
-EXTRA_OBJS = gifdbl.o pngdbl.o
+#EXTRA_OBJS = gifdbl.o pngdbl.o
 
 # zlib required for both image formats and for compressed swf6
-LIBS = -lz -lungif -lpng12 -lm
+#LIBS = -lz -lungif -lpng12 -lm
+LIBS = -lz -lm
 EXTRA_LIBS = ${LIBS}

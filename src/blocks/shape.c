@@ -27,6 +27,7 @@
 #include "fillstyle.h"
 #include "linestyle.h"
 #include "font.h"
+#include "libming.h"
 
 
 struct stateChangeRecord

@@ -25,6 +25,7 @@
 #include "blocks/text.h"
 #include "blocks/font.h"
 #include "blocks/textfield.h"
+#include "libming.h"
 
 
 void

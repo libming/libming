@@ -27,7 +27,7 @@
 #include "character.h"
 #include "method.h"
 #include "input.h"
-
+#include "libming.h"
 
 struct SWFSound_s
 {

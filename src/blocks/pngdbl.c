@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "ming_config.h"
+#include "libming.h"
 
 #if USE_PNG
 #include <png.h>

@@ -30,6 +30,7 @@
 #include "blocks/morph.h"
 #include "blocks/button.h"
 #include "blocks/text.h"
+#include "libming.h"
 
 struct SWFMovieClip_s
 {

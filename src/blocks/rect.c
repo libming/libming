@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include "rect.h"
-
+#include "libming.h"
 
 int
 SWFRect_numBits(SWFRect rect)

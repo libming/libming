@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "ming.h"
+#include "libming.h"
 
 #define WIDTH 320
 #define HEIGHT 240

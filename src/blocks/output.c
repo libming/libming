@@ -26,6 +26,7 @@
 #include "output.h"
 #include "error.h"
 
+#include "libming.h"
 
 struct SWFOutput_s
 {

@@ -24,6 +24,7 @@
 #include "browserfont.h"
 #include "font.h"
 #include "character.h"
+#include "libming.h"
 
 
 struct SWFBrowserFont_s

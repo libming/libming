@@ -24,6 +24,7 @@
 #include <math.h>
 #include "font.h"
 #include "method.h"
+#include "libming.h"
 
 #define glyphLength(font,glyph) \
   ((font)->glyphOffset[(glyph)+1] - (font)->glyphOffset[(glyph)])

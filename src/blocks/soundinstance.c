@@ -24,6 +24,7 @@
 #include "block.h"
 #include "method.h"
 #include "character.h"
+#include "libming.h"
 
 
 typedef struct

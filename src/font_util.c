@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "font_util.h"
 #include "blocks/block.h"
+#include "libming.h"
 
 
 typedef struct

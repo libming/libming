@@ -26,6 +26,7 @@
 #include "input.h"
 #include "error.h"
 #include "method.h"
+#include "libming.h"
 
 
 struct SWFJpegBitmap_s

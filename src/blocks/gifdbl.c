@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "ming_config.h"
+#include "libming.h"
 
 #if USE_GIF
 #include <gif_lib.h>

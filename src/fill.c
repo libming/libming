@@ -19,6 +19,7 @@
 
 #include "fill.h"
 #include "position.h"
+#include "libming.h"
 
 struct SWFFill_s
 {

@@ -44,6 +44,7 @@
 #include "blocks/textfield.h"
 #include "blocks/shape.h"
 #include "blocks/soundinstance.h"
+#include "libming.h"
 
 
 struct SWFMovie_s

@@ -30,6 +30,7 @@
 #include "sound.h"
 #include "method.h"
 #include "input.h"
+#include "libming.h"
 
 
 struct SWFSoundStream_s

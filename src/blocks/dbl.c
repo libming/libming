@@ -25,6 +25,7 @@
 #include "method.h"
 #include "error.h"
 #include "input.h"
+#include "libming.h"
 
 #include "ming_config.h"
 

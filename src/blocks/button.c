@@ -28,6 +28,7 @@
 #include "method.h"
 #include "soundinstance.h"
 #include "browserfont.h"
+#include "libming.h"
 
 
 struct buttonRecord

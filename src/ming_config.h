@@ -1,6 +1,13 @@
 #define USE_ZLIB 1
-#define USE_GIF 1
-#define USE_PNG 1
+#undef USE_GIF 
+#undef USE_PNG 
+
+/*
+ * Define this if you want Ming to release
+ * all memory it allocates at Ming_cleanup() time.
+ * Beware that the running speed will be much lower.
+ */
+#undef WRAP_MEMORY_MANAGEMENT
 
 #if USE_GIF
 #undef USE_ZLIB

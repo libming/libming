@@ -19,6 +19,8 @@
 
 /* $Id$ */
 
+#include "libming.h"
+
 /* this file is #include'd into shape.c, not compiled on its own.
    hacky, but it works for now.. */
 

@@ -5,6 +5,7 @@
 
 #include "imports.h"
 #include "method.h"
+#include "libming.h"
 
 int
 writeSWFImportBlockToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)

@@ -3,6 +3,7 @@
 
 #include "compile.h"
 #include "action.h"
+#include "libming.h"
 
 #define print(x)	{fputs(x,stdout);}
 

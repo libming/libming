@@ -30,6 +30,7 @@
 #include "matrix.h"
 #include "cxform.h"
 
+#include "libming.h"
 
 struct SWFOutputBlock_s
 {

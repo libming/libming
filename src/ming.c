@@ -20,10 +20,12 @@
 /* $Id$ */
 
 #include "ming.h"
+#include "libming.h"
 #include "blocks/character.h"
 #include "font_util.h"
 #include "shape_cubic.h"
 #include "blocks/error.h"
+#include "ming_config.h"
 
 
 int SWF_versionNum = 5;
@@ -52,6 +54,9 @@ Ming_cleanup()
 {
 	Ming_cleanupFonts();
 	/* TODO: destroy all dangling objects */
+#if WRAP_MEMORY_MANAGEMENT
+	ming_garbage_collect();
+#endif
 }
 
 

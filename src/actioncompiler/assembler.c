@@ -23,6 +23,7 @@
 #include "assembler.h"
 #include "compile.h"
 #include "action.h"
+#include "libming.h"
 
 
 int len;

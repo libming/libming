@@ -11,6 +11,7 @@
 
 #include "utf8.h"
 
+#include "libming.h"
 
 int UTF8Length(const char *string)
 {

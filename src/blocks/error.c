@@ -23,6 +23,7 @@
 #include <stdlib.h> // for exit()
 #include <stdarg.h>
 #include "error.h"
+#include "libming.h"
 
 
 void

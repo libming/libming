@@ -29,6 +29,7 @@
 #include "character.h"
 #include "error.h"
 #include "movie.h"
+#include "libming.h"
 
 
 // #define HAS_MMAP 1

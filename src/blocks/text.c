@@ -30,6 +30,7 @@
 #include "matrix.h"
 #include "font.h"
 
+#include "libming.h"
 
 struct SWFText_s
 {

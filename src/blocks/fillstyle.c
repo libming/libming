@@ -28,6 +28,7 @@
 #include "error.h"
 #include "gradient.h"
 #include "character.h"
+#include "libming.h"
 
 
 struct SWFFillStyle_s

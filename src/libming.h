@@ -30,6 +30,11 @@
 #define SWF_LIBMING_H_INCLUDED
 
 #include "ming.h"
+#include "ming_config.h"
+
+#if WRAP_MEMORY_MANAGEMENT
+#include "mem.h"
+#endif
 
 extern int Ming_cubicThreshold;
 extern int SWF_versionNum;
