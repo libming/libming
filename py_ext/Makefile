@@ -4,7 +4,7 @@ PYLIBDIR = /usr/local/lib/python2.0
 #PYINCDIR = /usr/include/python1.5
 #PYLIBDIR = /usr/lib/python1.5
 
-all:
+all: mingcmodule.so
 
 mingcmodule.so: ming_wrap.o ../libming.a
 	gcc -g -Wall -shared -o mingcmodule.so ming_wrap.o ../libming.a
@@ -17,6 +17,8 @@ mingc.pyd: ming_wrap.o
 ming_wrap.o: ming_wrap.c
 	gcc -g -Wall -I .. -I ${PYINCDIR} -fpic -c ming_wrap.c
 
+ming_wrap.c: swig
+
 ../libming.a:
 	cd ..; make static
 
@@ -24,7 +26,9 @@ swig:
 	swig -I.. -python ming.i
 
 clean:
-	rm -f mingcmodule.so core *~ *.o ming.pyc
+	rm -f mingcmodule.so core *~ *.o ming_wrap.c ming_wrap.doc ming.pyc
 
-install:
-	cp mingcmodule.so ming.py ${PYLIBDIR}/site-packages
+install: mingcmodule.so
+	install -d $(DESTDIR)${PYLIBDIR}/site-packages
+	install -m 0644 mingcmodule.so $(DESTDIR)${PYLIBDIR}/site-packages
+	install -m 0644 ming.py $(DESTDIR)${PYLIBDIR}/site-packages
