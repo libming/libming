@@ -242,18 +242,18 @@ void testText(SWFMovie movie)
   }
 
   SWFText_setFont(t, f);
-  SWFText_setHeight(t, 240);
+  SWFText_setHeight(t, 24);
   SWFText_setColor(t, 0, 0, 0, 0xff);
-  SWFText_setSpacing(t, 0.5);
+  SWFText_setSpacing(t, 0);
   SWFText_addString(t, "blargghghgghghgh", NULL);
 
-  SWFText_setXY(t, -1, 480);
-  SWFText_setHeight(t, 480);
-  SWFText_setSpacing(t, 1.0);
+  SWFText_setXY(t, -1, 48);
+  SWFText_setHeight(t, 48);
+  SWFText_setSpacing(t, 10);
   SWFText_addString(t, "blargghghgghghgh", NULL);
 
   d = SWFMovie_add(movie, (SWFCharacter)t);
-  SWFDisplayItem_move(d, 160*20, 120*20);
+  SWFDisplayItem_move(d, 10, 100);
 }
 
 /* }}} */
@@ -329,11 +329,11 @@ int main(int argc, char *argv[])
   SWFMovie_setDimension(m, WIDTH, HEIGHT);
   SWFMovie_setNumberOfFrames(m, 1);
 
-  testCubic(m);
+  //testCubic(m);
   //testDrawCharacter(m);
   //testMorph(m);
   //testShape(m);
-  //testText(m);
+  testText(m);
   //testDBL(m);
   //testJpeg(m);
   //testJpegAlpha(m);
