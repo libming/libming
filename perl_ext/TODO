@@ -4,7 +4,9 @@ This list should always be empty:
 	- Add SWF::TextField method pod
 	- test under mod_perl (check $m->out)
 	- Make sure all open files are closed (e.g. Bitmap)
-
+	- Add a SUPPORT file - I'm getting too many private emails
+	- Fix Email address
+	- Update README file, it's out of date
 
 This is wish list:
 
