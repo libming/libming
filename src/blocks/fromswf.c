@@ -21,6 +21,7 @@
 
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "libming.h"
 #include "fromswf.h"
@@ -123,7 +124,8 @@ typedef struct bitstream *BITS;
 
 #define alignbits(x) ((BITS)x)->bitoff = 0
 
-static getbits(BITS bp, int nbits)
+static int
+getbits(BITS bp, int nbits)
 {	int res = 0, nb, db;
 	for(nb = 0 ; nb < nbits ; nb += db)
 	{	if(bp->bitoff == 0)
@@ -139,7 +141,8 @@ static getbits(BITS bp, int nbits)
 	}
 	return res;
 }
-static getsbits(BITS bp, int nbits)
+static int
+getsbits(BITS bp, int nbits)
 {	int res = getbits(bp, nbits);
 	if(res & (1 << (nbits-1)))
 		res |= (-1) << nbits;
@@ -162,14 +165,14 @@ static void matrix(BITS bp)
 {	int hasscale, nscalebits, scalex, scaley;
 	int hasrotate, nrotatebits, rotateskew0, rotateskew1;
 	int ntranslatebits, translatex, translatey;
-	if(hasscale = getbits(bp, 1))
+	if((hasscale = getbits(bp, 1)))
 	{	nscalebits = getbits(bp, 5);
 		scalex = getbits(bp, nscalebits);
 		scaley = getbits(bp, nscalebits);
 		if(verbose)
 			printf("scale %d %d\n", scalex, scaley);
 	}
-	if(hasrotate = getbits(bp, 1))
+	if((hasrotate = getbits(bp, 1)))
 	{	nrotatebits = getbits(bp, 5);
 		rotateskew0 = getsbits(bp, nrotatebits);
 		rotateskew1 = getsbits(bp, nrotatebits);
@@ -198,13 +201,15 @@ static void rgba(BITS bp)
 	if(verbose)
 		printf("rgba %x %x %x %x\n", r, g, b, a);
 }
-static readint2(BITS bp)
+static int
+readint2(BITS bp)
 {	int res;
 	res = bp->readc(bp);
 	res |= bp->readc(bp) << 8;
 	return res;
 }
-static readint4(BITS bp)
+static int
+readint4(BITS bp)
 {	int res;
 	res = bp->readc(bp);
 	res |= bp->readc(bp) << 8;
@@ -590,7 +595,7 @@ static void shaperecord(TAG tp, int nfillbits, int nlinebits, int lev)
 			statelinestyle = getbits((BITS) tp, 1);
 			statefillstyle1 = getbits((BITS) tp, 1);
 			statefillstyle0 = getbits((BITS) tp, 1);
-			if(statemoveto = getbits((BITS) tp, 1))
+			if((statemoveto = getbits((BITS) tp, 1)))
 			{	movebits = getbits((BITS) tp, 5);
 				movex = getsbits((BITS) tp, movebits);
 				movey = getsbits((BITS) tp, movebits);
@@ -636,11 +641,11 @@ static void shaperecord(TAG tp, int nfillbits, int nlinebits, int lev)
 			}
 			else
 			{	nbits = getbits((BITS) tp, 4)+2;
-				if(genlineflag = getbits((BITS) tp, 1))
+				if((genlineflag = getbits((BITS) tp, 1)))
 				{	dx = getsbits((BITS) tp, nbits);
 					dy = getsbits((BITS) tp, nbits);
 				}
-				else if(vertlineflag = getbits((BITS) tp, 1))
+				else if((vertlineflag = getbits((BITS) tp, 1)))
 				{	dx = 0;
 					dy = getsbits((BITS) tp, nbits);
 				}
@@ -944,7 +949,7 @@ static void definebutton(TAG tp)
 	butid = change_id(tp);
 	if(verbose)
 		printf("char %d:\n", butid);
-	while(bstate = tp->readc(tp))
+	while((bstate = tp->readc(tp)))
 	{	if(bstate & 8)
 			if(verbose) printf("hit test ");
 		if(bstate & 4)
@@ -997,7 +1002,7 @@ static void definebutton2(TAG tp)
 	offs = readint2((BITS) tp);
 	if(verbose)
 		printf("id %d %s action offset %d\n", id, ch ? "menu" : "button", offs);
-	while(bstate = tp->readc(tp))
+	while((bstate = tp->readc(tp)))
 	{	if(bstate & 8)
 			if(verbose) printf("hit test ");
 		if(bstate & 4)
@@ -1065,7 +1070,7 @@ static void exportassets(TAG tp)
 	for(n = 0 ; n < nobj ; n++)
 	{	id = change_id(tp);
 		if(verbose) printf("%d ", id);
-		while(ch = tp->readc(tp))
+		while((ch = tp->readc(tp)))
 			if(verbose) putchar(ch);
 		if(verbose)
 			putchar((n < nobj-1) ? ' ' : '\n');
