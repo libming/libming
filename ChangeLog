@@ -1,3 +1,16 @@
+2003-03-28 22:16  whamann
+
+	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: 
+	replaced constant 0 by EOF in comment parsing functions
+
+2003-03-28 21:31  whamann
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: 
+	
+	allow windows line endings in actionscript return can now return an
+	anonymous object - should also be possible to pass one to a
+	function etc.
+
 2003-02-09 22:27  whamann
 
 	* src/blocks/text.c: 
