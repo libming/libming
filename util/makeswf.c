@@ -15,7 +15,7 @@
  * To change this, you'll have to update this file; it's very
  * simple, don't be afraid ;)
  *
- * Oh... input files are preprocessed using "cpp -P" unless you provide
+ * Oh... input files are preprocessed unless you provide
  * the -p flag (do not use preprocessor). -D can be used to set macros
  * and -I to add dirs to include search paths.
  *
@@ -62,7 +62,7 @@
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
 
-#define CPP "cpp -P -Wall"
+#define CPP "cpp -P -C -Wall"
 #define MAXERRORMSG 1024
 
 /* prototypes */
@@ -335,6 +335,9 @@ preprocess (char *file, char *out, char *cppargs)
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.6  2004/09/25 08:23:05  strk
+ * Added -C to cpp call
+ *
  * Revision 1.5  2004/09/25 08:17:11  strk
  * Post-processed files are kept and their name is shown to the user to
  * allow for error Line finding.
