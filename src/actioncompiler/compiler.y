@@ -388,7 +388,7 @@ iter_stmt
                   bufferWriteU8($5, SWFACTION_BRANCHALWAYS);
                   bufferWriteS16($5, 2);
                   bufferWriteS16($5, -(bufferLength($5)+2));
-                  resolveJumps($5);
+                  bufferResolveJumps($5);
                   $$ = $3;
                   if(!$$) $$ = newBuffer();
                   bufferConcat($$, $5);
