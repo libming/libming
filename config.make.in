@@ -1,0 +1,6 @@
+# set to your choice of png and / or gif formats
+EXTRA_OBJS = @EXTRA_OBJS@
+
+# zlib required for both image formats and for compressed swf6
+LIBS = @LIBS@
+EXTRA_LIBS = ${LIBS}
