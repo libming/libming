@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.2-pre-a
-#define MING_VERSION_TEXT  "0.2-pre-a"
+#define MING_VERSION        0.2a
+#define MING_VERSION_TEXT  "0.2a"
 
 int Ming_init();
 
@@ -546,7 +546,7 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 /* deprecated: */
 
-#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c,1024)
+#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c)
 
 
 typedef void *SWFMovieClip;
