@@ -32,7 +32,7 @@
 #include "ming.h"
 #include "ming_config.h"
 
-#include "mem.h"
+#include "gc.h"
 
 extern int Ming_cubicThreshold;
 extern int SWF_versionNum;
