@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.1.0
-#define MING_VERSION_TEXT  "0.1.0"
+#define MING_VERSION        0.1.1
+#define MING_VERSION_TEXT  "0.1.1"
 
 int Ming_init();
 
@@ -31,6 +31,10 @@ void Ming_setCubicThreshold(int num);
 
 /* sets the overall scale, default is 20 */
 void Ming_setScale(float scale);
+
+/* change the error/warn behavior.  Default prints message and exits. */
+void Ming_setWarnFunction(void (*warn)(char *msg, ...));
+void Ming_setErrorFunction(void (*error)(char *msg, ...));
 
 
 typedef unsigned char byte;
@@ -83,6 +87,8 @@ typedef void *SWFBitmap;
 void destroySWFBitmap(SWFBitmap b);
 int SWFBitmap_getWidth(SWFBitmap b);
 int SWFBitmap_getHeight(SWFBitmap b);
+
+SWFBitmap newSWFBitmap_fromInput(SWFInput input);
 
 
   /* SWFDBLBitmap extends SWFBitmap */

@@ -371,6 +371,9 @@ class SWFBitmap : public SWFBlock
     }
   }
 
+  SWFBitmap(SWFInput input)
+    { this->bitmap = newSWFBitmap_fromInput(input); }
+
   virtual ~SWFBitmap()
     { destroySWFBitmap(this->bitmap); }
 
