@@ -1,5 +1,10 @@
 Revision history for Perl extension SWF.
 
+0.01b  Fri Aug 10
+	- updated the CVS version
+	- fixed DESTROY
+	- Loads of other changes.
+
 0.01b  Mon Jan  15 23:23:02 2001
 	- beta version
 
