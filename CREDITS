@@ -1,6 +1,15 @@
 
 All of the folks who counted bits and cleaned up the SWF File Reference.
 
+Justin Clift
+    for getting the 0.3 release out the door
+
+Mohammad A. Haque
+    for refactoring the Makefiles and build process to be multi-platform
+
+Klaus Rechert
+    for adding the Video Stream capabilities
+
 Soheil Seyfaie
     for the Perl wrapper
 
