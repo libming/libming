@@ -612,7 +612,8 @@ void printDefineBitsLossless(FILE *f, int length)
     unsigned char *data, *buffer;
     long size = width*height;
     long bufsize = start+length-fileOffset;
-    int i, res;
+    int i;
+    //int res;
 
     buffer = malloc(bufsize);
 
@@ -1280,7 +1281,7 @@ void printDefineFont(FILE *f, int length)
 
 void printDefineFont2(FILE *f, int length)
 {
-  int flags, nGlyphs, namelen, off, i, fillBits, lineBits;
+  int flags, nGlyphs, namelen, i, fillBits, lineBits;
   int here = fileOffset;
   int *offset;
 
@@ -1931,6 +1932,19 @@ void skipBytes(FILE *f, int length)
     readUInt8(f);
 }
 
+void printImportAssets(FILE *f, int length)
+{
+      int n, i;
+      println("\tAsset URL: %s", readString(f));
+      n = readUInt16(f);
+      println("\tNumber of assets: %d", n);
+      for (i=0; i<n; i++)
+      {
+      	print("\tTag%d: %d\n", i+1, readUInt16(f));
+      	print("\tName%d: %s\n", i+1, readString(f));
+      }
+}
+
 int main(int argc, char *argv[])
 {
   FILE *f;
@@ -2038,17 +2052,4 @@ int main(int argc, char *argv[])
   dumpBytes(f, size-fileOffset);
 
   return 0;
-}
-
-void printImportAssets(FILE *f, int length)
-{
-      int n, i;
-      println("\tAsset URL: %s", readString(f));
-      n = readUInt16(f);
-      println("\tNumber of assets: %d", n);
-      for (i=0; i<n; i++)
-      {
-      	print("\tTag%d: %d\n", i+1, readUInt16(f));
-      	print("\tName%d: %s\n", i+1, readString(f));
-      }
 }

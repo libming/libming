@@ -2,6 +2,8 @@
 #ifndef SWF_BLOCKTYPES_H_INCLUDED
 #define SWF_BLOCKTYPES_H_INCLUDED
 
+extern const char *blockName(int header);
+
 typedef enum
 {
   DEFINESHAPE			=  2,
