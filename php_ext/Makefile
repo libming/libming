@@ -14,7 +14,7 @@ ming.o: ${CFILES}
 	${CC} ${CFLAGS} -fPIC ${DEFINES} -c ming.c -I. -I../src -I.. `php-config --includes`
 
 ../libming.a:
-	cd ..; make static
+	cd ..; $(MAKE) static
 
 clean:
 	rm -f php_ming.so ming.o

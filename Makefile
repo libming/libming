@@ -25,11 +25,11 @@ install-static: static
 	install -m 0644 $(SHAREDLIB) $(LIBDIR)/
 
 dynamic static:
-	make -C src $@
+	$(MAKE) -C src $@
 
 clean:
-	for i in $(DIRS); do make -C $$i clean; done
-	if [ -f perl_ext/Makefile ] ; then cd perl_ext; make clean; fi
+	for i in $(DIRS); do $(MAKE) -C $$i clean; done
+	if [ -f perl_ext/Makefile ] ; then cd perl_ext; $(MAKE) clean; fi
 	rm -f test.o test test.exe *.core *~
 	rm -f $(SHAREDLIB) $(SHAREDLIB)
 	rm -f libming.a libming.so

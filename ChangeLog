@@ -1,3 +1,19 @@
+2004-02-04 00:45  erich
+	* Makefile
+	* php_ext/Makefile
+	* py_ext/Makefile
+	* src/Makefile
+	* tcl_ext/Makefile
+	* util/Makefile: replaced "make" by $(MAKE),
+		this should help building with "gmake" on *BSD
+
+
+2004-* multiple
+	* didn't update the changelog.
+
+2003-* multiple
+	* didn't update the changelog.
+
 2003-10-15 6:19  peterdd
 
 	* util/swftoperl.c: added swfdecompression

@@ -34,21 +34,21 @@ all: dynamic
 # ar -x /usr/lib/libcc_dynamic.a lib/macosx-fpsave.o
 
 dynamic: ${OFILES}
-	cd blocks && make
-	cd actioncompiler && make
+	cd blocks && $(MAKE)
+	cd actioncompiler && $(MAKE)
 	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o libming.so
 	cp libming.so ..
 
 static: ${OFILES}
-	cd blocks && make
-	cd actioncompiler && make
+	cd blocks && $(MAKE)
+	cd actioncompiler && $(MAKE)
 	ar r libming.a blocks/*.o ${OFILES} ${COMPILEROFILES}
 	ranlib libming.a  # bsd requires this?
 	cp libming.a ..
 
 clean:
-	cd blocks && make clean
-	cd actioncompiler && make clean
+	cd blocks && $(MAKE) clean
+	cd actioncompiler && $(MAKE) clean
 	rm -f *.o libming.a libming.so test test.exe core *.core
 
 # breaks on bsd:

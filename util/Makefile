@@ -66,7 +66,7 @@ gif2dbl: gif2dbl.c
 	$(CC) $(CFLAGS) $(LDFLAGS) gif2dbl.c -o gif2dbl -lz -lungif -lm
 
 ../libming.a:
-	cd ..; make static
+	cd ..; $(MAKE) static
 
 raw2adpcm: raw2adpcm.c ../libming.a
 	$(CC) $(CFLAGS) $(LDFLAGS) raw2adpcm.c -o raw2adpcm ../libming.a $(LIBS)

@@ -28,7 +28,7 @@ ming_wrap.c:
 	swig $(INCLUDES) -python ming.i
 
 ../$(STATICLIB):
-	make -C ../ static
+	$(MAKE) -C ../ static
 
 clean:
 	rm -f _mingcmodule.so mingc.py *.pyc core *~ *.o ming_wrap.c ming_wrap.doc

@@ -9,7 +9,7 @@ ming_wrap.o: ming_wrap.c
 	gcc -g -Wall -I ..  -fpic -c ming_wrap.c
 
 ../libming.a:
-	cd ..; make static
+	cd ..; $(MAKE) static
 
 swig:
 	swig -I.. -tcl ming.i
