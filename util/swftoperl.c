@@ -1055,8 +1055,7 @@ void printDefineButton2(FILE *f, int length)
   printf("\n\t### Button2 %i ###\n", id);
   printf("\t$s%i = new SWF::Button();\n", id);
 
-  if(flags)
-    printf("\t# Button should be tracked as menu item (whatever that means..)\n");
+  if(flags){printf("\t$s%i->setMenu();\n",id);}
 
   offset = readUInt16(f);
 
