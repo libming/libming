@@ -535,7 +535,7 @@ static int handle_tag(TAG tp)
 			definebuttonsound(tp);
 			break;
 		default:
-			error("unknown tag %d\n", tp->type);
+			SWF_error("unknown tag %d\n", tp->type);
 	}
 	switch(tp->type)
 	{	case SWF_END:
@@ -572,7 +572,7 @@ static void definesprite(TAG sp)
 		free(tp);
 	} while(type);
 	if(sp->datptr != sp->datend)
-		error("consistency check: file size wrong in sprite\n");
+		SWF_error("consistency check: file size wrong in sprite\n");
 }
 
 /* shape */

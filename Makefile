@@ -13,16 +13,16 @@ install: install-common install-dynamic #install-static
 install-common:
 	install -d $(LIBDIR)
 	install -d $(INCLUDEDIR)
-	install -m 0644 src/ming.h $(INCLUDEDIR)
-	install -m 0644 src/ming_config.h $(INCLUDEDIR)
-	install -m 0644 mingpp.h $(INCLUDEDIR)
+	install -c -m 0644 src/ming.h $(INCLUDEDIR)
+	install -c -m 0644 src/ming_config.h $(INCLUDEDIR)
+	install -c -m 0644 mingpp.h $(INCLUDEDIR)
 
 install-dynamic: dynamic
-	install -m 0644 $(SHAREDLIB) $(LIBDIR)/
+	install -c -m 0644 $(SHAREDLIB) $(LIBDIR)/
 	(cd $(LIBDIR) && ln -fs $(SHAREDLIB) libming.so.0 && ln -fs libming.so.0 libming.so)
 
 install-static: static
-	install -m 0644 $(SHAREDLIB) $(LIBDIR)/
+	install -c -m 0644 $(SHAREDLIB) $(LIBDIR)/
 
 dynamic static:
 	(cd src && $(MAKE) $@)
