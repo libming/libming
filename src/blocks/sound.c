@@ -120,7 +120,7 @@ writeSWFSoundToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
 
 	/* write samples */
 	for ( i=0; i<l; ++i )
-		method(SWFInput_getChar(sound->input), data);
+		method((unsigned char)SWFInput_getChar(sound->input), data);
 }
 
 

@@ -164,7 +164,7 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 	method(inst->flags, data); /* main flags */
 	method(0, data);																					/* more flags */
-	method(strlen(font->name), data);
+	method((unsigned char)strlen(font->name), data);
 
 	for ( p = font->name; *p != '\0'; ++p )
 		method(*p, data);
@@ -333,7 +333,7 @@ newSWFFontCharacter(SWFFont font)
 	CHARACTERID(inst) = ++SWF_gNumCharacters;
 
 	inst->font = font;
-	inst->flags = font->flags & (~SWF_FONT_HASLAYOUT) & (~SWF_FONT_WIDEOFFSETS);
+	inst->flags = (unsigned char)(font->flags & (~SWF_FONT_HASLAYOUT) & (~SWF_FONT_WIDEOFFSETS));
 
 	inst->nGlyphs = 0;
 	inst->codeTable = NULL;
@@ -674,7 +674,7 @@ SWFFont_getScaledLeading(SWFFont font)
 }
 
 
-int
+unsigned short
 SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short c)
 {
 	return font->codeTable[c];

@@ -461,10 +461,10 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 int
 SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
 {
-	int swflength, status, i;
+	int swflength, status;
 	SWFOutput header, headerbuffer, swfbuffer;
 	SWFBlock backgroundBlock;
-	unsigned long compresslength;
+	unsigned long compresslength, i;
 	char *compress;
 
 	if ( movie->nExports > 0 )

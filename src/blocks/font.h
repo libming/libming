@@ -108,7 +108,7 @@ SWFFontCharacter_getNGlyphs(SWFFontCharacter font);
 void
 SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text);
 
-int
+unsigned short
 SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short c);
 
 #endif /* SWF_FONT_H_INCLUDED */

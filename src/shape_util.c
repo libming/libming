@@ -39,7 +39,7 @@ float SWFCharacter_getHeight(SWFCharacter character)
 void SWFShape_setLine(SWFShape shape, unsigned short width,
 					byte r, byte g, byte b, byte a)
 {
-	SWFShape_setLineStyle(shape, Ming_scale*width, r, g, b, a);
+	SWFShape_setLineStyle(shape, (unsigned short)(Ming_scale*width), r, g, b, a);
 }
 
 
@@ -102,30 +102,31 @@ void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle)
 	float controlx, controly, anchorx, anchory, x, y;
 
 	/* first determine number of segments, 8 at most */
-	int nSegs = 1 + floor(7*(endAngle-startAngle)/360);
+	int nSegs = (int)(1 + floor(7*(endAngle-startAngle)/360));
 
 	/* subangle is half the angle of each segment */
 	float subangle = M_PI*(endAngle-startAngle)/nSegs/360;
 
 	float angle = M_PI*startAngle/180;
 
-	x = rint(r*sin(angle));
-	y = -rint(r*cos(angle));
+	x = (float)rint(r*sin(angle));
+	y = (float)-rint(r*cos(angle));
 
 	SWFShape_movePen(shape, x, y);
 
-	for(i=0; i<nSegs; ++i)
+	for ( i=0; i<nSegs; ++i )
 	{
 		angle += subangle;
-		controlx = r*sin(angle)/cos(subangle);
-		controly = -r*cos(angle)/cos(subangle);
+		controlx = (float)(r*sin(angle)/cos(subangle));
+		controly = (float)(-r*cos(angle)/cos(subangle));
 		angle += subangle;
-		anchorx = r*sin(angle);
-		anchory = -r*cos(angle);
+		anchorx = (float)(r*sin(angle));
+		anchory = (float)(-r*cos(angle));
 
 		SWFShape_drawCurve(shape,
-					 rint(controlx)-x, rint(controly)-y,
-					 rint(anchorx-controlx), rint(anchory-controly));
+					 (float)rint(controlx)-x, (float)rint(controly)-y,
+					 (float)rint(anchorx-controlx), (float)rint(anchory-controly));
+
 		x = anchorx;
 		y = anchory;
 	}
@@ -196,7 +197,7 @@ void SWFShape_drawSizedGlyph(SWFShape shape,
 	if(size == 0)
 		SWFShape_drawScaledGlyph(shape, font, c, 1024);
 	else
-		SWFShape_drawScaledGlyph(shape, font, c, size*Ming_scale);
+		SWFShape_drawScaledGlyph(shape, font, c, (int)(size*Ming_scale));
 }
 
 

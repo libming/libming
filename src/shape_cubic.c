@@ -223,29 +223,29 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 								{ (float)cx, (float)cy }, { (float)dx, (float)dy } };
 	cubic new;
 
-	if(d>0)
+	if ( d > 0 )
 	{
 		/* two roots */
 
-		t1 = (-b-sqrt(d))/(2*a);
-		t2 = (-b+sqrt(d))/(2*a);
+		t1 = (float)((-b-sqrt(d))/(2*a));
+		t2 = (float)((-b+sqrt(d))/(2*a));
 
-		if(a<0)
+		if ( a < 0 )
 		{
 			float tmp = t2;
 			t2 = t1;
 			t1 = tmp;
 		}
 	}
-	else if(d==0)
+	else if ( d == 0 )
 	{
 		/* singular root */
-		t1 = -b/(2*a);
+		t1 = (float)(-b/(2*a));
 	}
 
 	/* use subdivision method to build t=0..t1, t=t1..t2, t=t2..1 curves */
 
-	if(t1 > 0.0 && t1 < 1.0)
+	if ( t1 > 0.0 && t1 < 1.0 )
 	{
 		subdivideCubicLeft(&new, &pts, t1);
 
@@ -262,7 +262,7 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 		t2 = (t2-t1)/(1-t1);
 	}
 
-	if(t2 > 0.0 && t2 < 1.0)
+	if ( t2 > 0.0 && t2 < 1.0 )
 	{
 		subdivideCubicLeft(&new, &pts, t2);
 

@@ -43,10 +43,10 @@ newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
 {
 	SWFCXform cXform = malloc(sizeof(struct SWFCXform_s));
 
-	cXform->rMult = floor(256*rMult);
-	cXform->gMult = floor(256*gMult);
-	cXform->bMult = floor(256*bMult);
-	cXform->aMult = floor(256*aMult);
+	cXform->rMult = (int)floor(256*rMult);
+	cXform->gMult = (int)floor(256*gMult);
+	cXform->bMult = (int)floor(256*bMult);
+	cXform->aMult = (int)floor(256*aMult);
 
 	cXform->rAdd = rAdd;
 	cXform->gAdd = gAdd;
@@ -85,10 +85,10 @@ void
 SWFCXform_setColorMult(SWFCXform cXform,
 											 float rMult, float gMult, float bMult, float aMult)
 {
-	cXform->rMult = floor(256*rMult);
-	cXform->gMult = floor(256*gMult);
-	cXform->bMult = floor(256*bMult);
-	cXform->aMult = floor(256*aMult);
+	cXform->rMult = (int)floor(256*rMult);
+	cXform->gMult = (int)floor(256*gMult);
+	cXform->bMult = (int)floor(256*bMult);
+	cXform->aMult = (int)floor(256*aMult);
 }
 
 

@@ -113,14 +113,14 @@ SWFMatrix_numBits(SWFMatrix matrix)
 	if ( !((matrix->scaleX == 0 && matrix->scaleY == 0) ||
 				 (matrix->scaleX == 1.0 && matrix->scaleY == 1.0)) )
 	{
-		bits += 5 + 2*max(SWFOutput_numSBits(matrix->scaleX),
-					SWFOutput_numSBits(matrix->scaleY));
+		bits += 5 + 2*max(SWFOutput_numSBits((int)matrix->scaleX),
+					SWFOutput_numSBits((int)matrix->scaleY));
 	}
 
 	if ( matrix->rotate0 != 0 || matrix->rotate1 != 0 )
 	{
-		bits += 5 + 2*max(SWFOutput_numSBits(matrix->rotate0),
-					SWFOutput_numSBits(matrix->rotate1));
+		bits += 5 + 2*max(SWFOutput_numSBits((int)matrix->rotate0),
+					SWFOutput_numSBits((int)matrix->rotate1));
 	}
 
 	if ( matrix->translateX != 0 || matrix->translateY != 0 )
@@ -147,8 +147,8 @@ SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 	}
 	else
 	{
-		int xScale = floor(matrix->scaleX * (1<<FIXEDBITS));
-		int yScale = floor(matrix->scaleY * (1<<FIXEDBITS));
+		int xScale = (int)floor(matrix->scaleX * (1<<FIXEDBITS));
+		int yScale = (int)floor(matrix->scaleY * (1<<FIXEDBITS));
 
 		SWFOutput_writeBits(out, 1, 1);
 		nBits = max(SWFOutput_numSBits(xScale), SWFOutput_numSBits(yScale));
@@ -163,8 +163,8 @@ SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 	}
 	else
 	{
-		int rot0 = floor(matrix->rotate0 * (1<<FIXEDBITS));
-		int rot1 = floor(matrix->rotate1 * (1<<FIXEDBITS));
+		int rot0 = (int)floor(matrix->rotate0 * (1<<FIXEDBITS));
+		int rot1 = (int)floor(matrix->rotate1 * (1<<FIXEDBITS));
 
 		SWFOutput_writeBits(out, 1, 1);
 		nBits = max(SWFOutput_numSBits(rot0), SWFOutput_numSBits(rot1));
@@ -195,8 +195,8 @@ SWFMatrix_apply(SWFMatrix m, double *x, double *y, int xlate)
 	if ( m == NULL )
 		return;
 
-	newx = m->scaleX * (*x) + m->rotate0 * (*y);
-	newy = m->scaleY * (*y) + m->rotate1 * (*x);
+	newx = (int)(m->scaleX * (*x) + m->rotate0 * (*y));
+	newy = (int)(m->scaleY * (*y) + m->rotate1 * (*x));
 
 	*x = newx + (xlate ? m->translateX : 0);
 	*y = newx + (xlate ? m->translateY : 0);
@@ -219,8 +219,8 @@ void SWFMatrix_multiply(SWFMatrix ma, SWFMatrix mb)
 	ma->scaleY = c*f+d*h;
 
 	tmp = e*ma->translateX + g*ma->translateY + mb->translateX;
-	ma->translateY = f*ma->translateX + h*ma->translateY + mb->translateY;
-	ma->translateX = tmp;
+	ma->translateY = (int)(f*ma->translateX + h*ma->translateY + mb->translateY);
+	ma->translateX = (int)tmp;
 }
 
 
@@ -242,7 +242,9 @@ SWFMatrix
 newSWFRotateMatrix(float degrees)
 {
 	float r = degrees * M_PI/180;
-	return newSWFMatrix(cos(r), sin(r), -sin(r), cos(r), 0, 0);
+
+	return newSWFMatrix((float)cos(r), (float)sin(r),
+											(float)-sin(r), (float)cos(r), 0, 0);
 }
 
 

@@ -66,7 +66,8 @@ newSWFPosition(SWFMatrix matrix)
 static void
 updateMatrix(SWFPosition p)
 {
-	float cRot = cos(p->rot*M_PI/180), sRot = sin(p->rot*M_PI/180);
+	float cRot = (float)cos(p->rot*M_PI/180);
+	float sRot = (float)sin(p->rot*M_PI/180);
 	float xS = p->xSkew, yS = p->ySkew;
 	SWFMatrix m = p->matrix;
 

@@ -493,7 +493,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 	int i;
 	int len = textRecord->strlen;
 	unsigned short* widestring = textRecord->string;
-	int glyph;
+	unsigned short glyph;
 
 	SWFFontCharacter fontchar = textRecord->font.fontchar;
 	SWFFont font = SWFFontCharacter_getFont(fontchar);
@@ -511,7 +511,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 	for ( i=0; i<len; ++i )
 	{
 		int adv;
-		int nextglyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[i+1]);
+		unsigned short nextglyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[i+1]);
 
 		adv = SWFFont_getCharacterAdvance(font, (unsigned short)glyph);
 		adv += textRecord->spacing;
@@ -676,7 +676,7 @@ SWFText_resolveCodes(SWFText text)
 				SWFRect glyphBounds;
 				int minX, maxX, minY, maxY;
 
-				int code =
+				unsigned short code =
 					SWFFontCharacter_getGlyphCode(fontchar, textRecord->string[i]);
 
 				glyphBounds = SWFFont_getGlyphBounds(font, code);

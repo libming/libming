@@ -78,7 +78,7 @@ writeSWFSoundStreamToMethod(SWFBlock block,
 	methodWriteUInt16(streamblock->delay, method, data);
 
 	for ( ; l>0; --l )
-		method(SWFInput_getChar(input), data);
+		method((unsigned char)SWFInput_getChar(input), data);
 }
 
 
@@ -222,7 +222,7 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 
 	stream->flags = flags;
 
-	stream->samplesPerFrame = floor(stream->sampleRate / frameRate);
+	stream->samplesPerFrame = (int)floor(stream->sampleRate / frameRate);
 
 	SWFOutput_writeUInt8(out, flags & 0x0f); /* preferred mix format.. (?) */
 	SWFOutput_writeUInt8(out, flags);

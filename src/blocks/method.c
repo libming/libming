@@ -24,21 +24,21 @@
 
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
 {
-	method(i&0xff, data);
+	method((unsigned char)(i&0xff), data);
 	i>>=8;
-	method(i&0xff, data);
+	method((unsigned char)(i&0xff), data);
 }
 
 
 void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data)
 {
-	method(i&0xff, data);
+	method((unsigned char)(i&0xff), data);
 	i>>=8;
-	method(i&0xff, data);
+	method((unsigned char)(i&0xff), data);
 	i>>=8;
-	method(i&0xff, data);
+	method((unsigned char)(i&0xff), data);
 	i>>=8;
-	method(i&0xff, data);
+	method((unsigned char)(i&0xff), data);
 }
 
 

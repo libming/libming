@@ -85,343 +85,207 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\action.c"
+SOURCE="..\src\blocks\action.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\action.h"
+SOURCE="..\src\actioncompiler\assembler.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\bitmap.c"
+SOURCE="..\src\blocks\bitmap.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\bitmap.h"
+SOURCE="..\src\blocks\block.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\block.c"
+SOURCE="..\src\blocklist.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\block.h"
+SOURCE="..\src\blocks\browserfont.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocklist.c"
+SOURCE="..\src\blocks\button.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocklist.h"
+SOURCE="..\src\blocks\character.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\blocktypes.h"
+SOURCE="..\src\actioncompiler\compile.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocktypes.h"
+SOURCE="..\src\actioncompiler\compileaction.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\browserfont.c"
+SOURCE="..\src\blocks\cxform.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\browserfont.h"
+SOURCE="..\src\blocks\dbl.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\button.c"
+SOURCE="..\src\displaylist.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\button.h"
+SOURCE="..\src\blocks\error.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\character.c"
+SOURCE="..\src\fill.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\character.h"
+SOURCE="..\src\blocks\fillstyle.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\cxform.c"
+SOURCE="..\src\blocks\font.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\cxform.h"
+SOURCE="..\src\font_util.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\dbl.c"
+SOURCE="..\src\blocks\fontinfo.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\dbl.h"
+SOURCE="..\src\blocks\gradient.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\displaylist.c"
+SOURCE="..\src\blocks\input.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\displaylist.h"
+SOURCE="..\src\blocks\jpeg.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\error.c"
+SOURCE="..\src\actioncompiler\lex.swf4.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\error.h"
+SOURCE="..\src\actioncompiler\lex.swf5.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\fill.c"
+SOURCE="..\src\blocks\linestyle.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\fill.h"
+SOURCE="..\src\actioncompiler\listaction.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\fillstyle.c"
+SOURCE="..\src\blocks\matrix.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\fillstyle.h"
+SOURCE="..\src\blocks\method.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\font.c"
+SOURCE="..\src\ming.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\font.h"
+SOURCE="..\src\blocks\morph.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\fontinfo.c"
+SOURCE="..\src\movie.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\fontinfo.h"
+SOURCE="..\src\movieclip.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\gradient.c"
+SOURCE="..\src\blocks\mp3.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\gradient.h"
+SOURCE="..\src\blocks\output.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\input.c"
+SOURCE="..\src\blocks\outputblock.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\input.h"
+SOURCE="..\src\blocks\placeobject.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\jpeg.c"
+SOURCE="..\src\position.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\jpeg.h"
+SOURCE="..\src\blocks\rect.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\libswf.h"
+SOURCE="..\src\blocks\shape.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\libming.h"
+SOURCE="..\src\shape_cubic.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\linestyle.c"
+SOURCE="..\src\shape_util.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\linestyle.h"
+SOURCE="..\src\blocks\sound.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\loadfont.c"
+SOURCE="..\src\blocks\soundstream.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\matrix.c"
+SOURCE="..\src\blocks\sprite.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\matrix.h"
+SOURCE="..\src\actioncompiler\swf4compiler.tab.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\method.c"
+SOURCE="..\src\actioncompiler\swf5compiler.tab.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\method.h"
+SOURCE="..\src\blocks\text.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\ming.c"
+SOURCE="..\src\text_util.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\ming.h"
+SOURCE="..\src\blocks\textfield.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\morph.c"
+SOURCE="..\src\blocks\ttffont.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\src\blocks\morph.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\movie.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\movie.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\movieclip.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\movieclip.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\mp3.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\output.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\output.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\outputblock.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\outputblock.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\placeobject.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\position.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\position.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\rect.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\rect.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\shape.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\shape.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\shape_cubic.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\shape_util.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\shape_util.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\sound.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\sound.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\soundstream.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\soundstream.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\sprite.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\sprite.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\swf.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\text.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\text.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\text_util.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\text_util.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\textfield.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\textfield.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\ttffont.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\ming-0.2a\src\blocks\ttffont.h"
+SOURCE="..\src\blocks\utf8.c"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -429,7 +293,219 @@ SOURCE="..\..\ming-0.2a\src\blocks\ttffont.h"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE="..\..\ming-0.2a\mingpp.h"
+SOURCE="..\src\actioncompiler\action.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\action.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\actioncompiler\assembler.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\bitmap.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\block.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocklist.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\blocktypes.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocktypes.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\browserfont.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\button.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\character.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\actioncompiler\compile.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\cxform.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\dbl.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\displaylist.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\error.h.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\exports.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\fill.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\fillstyle.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\font.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\font_util.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\fontinfo.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\gradient.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\input.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\jpeg.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\libming.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\libswf.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\linestyle.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\matrix.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\method.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\ming.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\mingpp.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\morph.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\movie.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\movieclip.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\output.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\outputblock.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\placeobject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\position.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\rect.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\shape.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\shape_cubic.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\shape_util.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\sound.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\soundinstance.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\soundstream.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\sprite.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\swf.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\actioncompiler\swf4compiler.tab.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\actioncompiler\swf5compiler.tab.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\text.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\text_util.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\textfield.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\utf8.h"
 # End Source File
 # End Group
 # End Target

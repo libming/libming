@@ -86,13 +86,13 @@ dumpJpegBlock(byte type,
 	method(JPEG_MARKER, data);
 	method(type, data);
 
-	method((l0 = SWFInput_getChar(input)), data);
-	method((l1 = SWFInput_getChar(input)), data);
+	method((unsigned char)(l0 = SWFInput_getChar(input)), data);
+	method((unsigned char)(l1 = SWFInput_getChar(input)), data);
 
 	length = (l0<<8) + l1 - 2;
 
 	for ( i=0; i<length; ++i )
-		method(SWFInput_getChar(input), data);
+		method((unsigned char)SWFInput_getChar(input), data);
 }
 
 
@@ -145,7 +145,7 @@ methodWriteJpegFile(SWFInput input, SWFByteOutputMethod method, void *data)
 			case JPEG_HUFF:
 			case JPEG_DD:
 				/* if(!finishedEncoding) */
-				dumpJpegBlock(c, input, method, data);
+				dumpJpegBlock((unsigned char)c, input, method, data);
 				/* else
 					 SWF_error("Encoding tables found in Jpeg image section!"); */
 				break;
@@ -165,7 +165,7 @@ methodWriteJpegFile(SWFInput input, SWFByteOutputMethod method, void *data)
 					method(c, data);
 				}
 				*/
-				dumpJpegBlock(c, input, method, data);
+				dumpJpegBlock((unsigned char)c, input, method, data);
 				break;
 
 			case JPEG_SOS:
@@ -192,10 +192,10 @@ methodWriteJpegFile(SWFInput input, SWFByteOutputMethod method, void *data)
 
 	/* rest is SOS, dump to end of file */
 	method(JPEG_MARKER, data);
-	method(c, data);
+	method((unsigned char)c, data);
 
 	while ( (c = SWFInput_getChar(input)) != EOF )
-		method(c, data);
+		method((unsigned char)c, data);
 }
 
 
@@ -226,7 +226,7 @@ writeSWFJpegWithAlphaToMethod(SWFBlock block,
 	SWFInput_rewind(jpeg->alpha);
 
 	while ( (c = SWFInput_getChar(jpeg->alpha)) != EOF )
-		method(c, data);
+		method((unsigned char)c, data);
 }
 
 

@@ -49,7 +49,7 @@ writeSWFDBLBitmapToMethod(SWFBlock block,
 
 	/* just dump the rest of the file */
 	for ( i=block->length-2; i>0; --i )
-		method(SWFInput_getChar(dbl->input), data);
+		method((unsigned char)SWFInput_getChar(dbl->input), data);
 }
 
 

@@ -1,6 +1,8 @@
 
 Stuff what to do (not in order):
 
+* add fontinfo for textfields
+
 * Make fonts and other large assets work between sessions
 
 * make leading/linespacing terminology consistent btwn text/textfield
@@ -9,7 +11,7 @@ Stuff what to do (not in order):
 
 * Change SWFButton::addShape to SWFButton::add and have it return a displayitem
 
-* proofread Damien Seguy's PHP docs
+* proofread/update PHP docs
 
 * SWFText_addString splits buffer into 127 (255?) character chunks
 

@@ -20,6 +20,7 @@
 /* $Id$ */
 
 #include <stdio.h>
+#include <stdlib.h> // for exit()
 #include <stdarg.h>
 
 #include "error.h"
