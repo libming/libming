@@ -1,7 +1,7 @@
 
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
-CC = gcc -g -Wall
+CC = gcc -g -Wall -fPIC
 
 DEBUG = --debug
 
@@ -21,7 +21,8 @@ OFILES = ${MOSTFILES} compileaction.o
 all: ${OFILES}
 
 clean:
-	rm -f ${OFILES} ${GENERATED} compiler compiler.exe core test main.o
+	rm -f ${OFILES} ${GENERATED} compiler compiler.exe core test main.o \
+	swf*compiler.tab.* lex*.c
 
 test: ${MOSTFILES} main.o
 	${CC} -o test main.o ${MOSTFILES} ${LIBS}
