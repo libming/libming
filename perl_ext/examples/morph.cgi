@@ -37,5 +37,6 @@ for(my $r=0; $r<=10; ++$r){
     $i->setRatio($r/10);
     $m->nextFrame();
 }
+$m->nextFrame();
 
 $m->output();
