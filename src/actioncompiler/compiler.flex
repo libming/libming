@@ -399,31 +399,14 @@ void warning(char *msg)
 
 void yyerror(char *msg)
 {
-   // report a error
-   if (strlen(yytext))
-   {
-      printprog();
-      SWF_warn("\n%*s", ColumnNumber(), "^");
-      SWF_error("\nLine %4.4d:  Reason: '%s' \n", LineNumber(), msg);
-   }
-   else
-   {
-//    printf("\n%*s", 0, "^");
-      SWF_error("\nLine %d: Reason: 'Unexpected EOF found while looking for input.'\n", LineNumber());
-   }
+  // report a error
+  if(strlen(yytext))
+  {
+    SWF_error("\n%s\n%*s\nLine %i:  Reason: '%s'\n",
+	      msgline, ColumnNumber(), "^", LineNumber(), msg);
+  }
+  else
+  {
+    SWF_error("\nLine %d: Reason: 'Unexpected EOF found while looking for input.'\n", LineNumber());
+  }
 }
-
-/*
-main( argc, argv )
-int argc;
-char **argv;
-    {
-    ++argv, --argc;  *//* skip over program name *//*
-    if ( argc > 0 )
-            yyin = fopen( argv[0], "r" );
-    else
-            yyin = stdin;
-
-    yylex();
-    }
-*/
