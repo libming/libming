@@ -98,6 +98,15 @@ void destroySWFPlaceObject2Block(SWFBlock block)
   if(place->name != NULL)
     free(place->name);
 
+  if(place->out)
+    destroySWFOutput(place->out);
+
+  if(place->matrix)
+    destroySWFMatrix(place->matrix);
+
+  if(place->cXform)
+    destroySWFCXform(place->cXform);
+
   free(place);
 }
 
