@@ -1,19 +1,9 @@
-'''
-'''  makeswf Version @version@
-'''
-.de Sh
-.br
-.ne 5
-.PP
-\fB\\$1\fR
-.PP
-..
-.TH makeswf 1 "27 Mar 2005"
+.TH makeswf 1 "27 Mar 2005" "" "Ming utils"
+.\" $Id$
 .SH NAME
-makeswf - Ming's actionscript compiler.
+makeswf - actionscript compiler
 .SH SYNOPSIS
 .B makeswf [OPTIONS] <frame.as> ...
-
 .SH DESCRIPTION
 .B makeswf
 is a command line interface to the Ming library actionscript compiler.
@@ -21,7 +11,7 @@ is a command line interface to the Ming library actionscript compiler.
 Bytecode resulting from compilation of each given source file will
 be stored in a separate frame of the output.
 .PP
-Supported options:
+.SH OPTIONS
 .TP
 \fB\-o\fR <output>
 Write SWF file to <output>. Default is ``out.swf''.
@@ -52,7 +42,5 @@ The file is not required to be found at compile time, and
 no check is performed to ensure symbols are therein defined.
 It will be loaded at runtime, so make sure to specify the
 correct runtime path to find it.
-
 .SH AUTHOR
 Written by Sandro Santilli <strk@keybit.net>
-
