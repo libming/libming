@@ -16,6 +16,7 @@ OFILES = \
 	fillstyle.o \
 	font.o \
 	fontinfo.o \
+	fromswf.o \
 	gradient.o \
 	imports.o \
 	input.o \
