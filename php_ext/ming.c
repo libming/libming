@@ -1628,9 +1628,6 @@ PHP_FUNCTION(swfmovie_streamMp3)
   if((*zfile)->type == IS_RESOURCE)
   {
     ZEND_FETCH_RESOURCE(file, FILE *, zfile, -1,"File-Handle",php_file_le_fopen());
-
-    RETURN_LONG(SWFMovie_output(getMovie(getThis()),
-				&phpFileOutputMethod, file));
   }
   else
   {
@@ -2820,7 +2817,7 @@ PHP_FUNCTION(swftextfield_setLineSpacing)
 
   convert_to_long_ex(spacing);
 
-  SWFTextField_setIndentation(field, Z_LVAL_PP(spacing));
+  SWFTextField_setLineSpacing(field, Z_LVAL_PP(spacing));
 }
 
 /* }}} */
