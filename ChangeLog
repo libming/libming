@@ -1,3 +1,72 @@
+2003-02-09 22:27  whamann
+
+	* src/blocks/text.c: 
+	fixed segfault for zero-length string: computeAdvances did
+	calculate width of 1st character anyways zero-length may occur from
+	addString("") or by changing attributes twice in a row
+
+2003-02-07 23:03  whamann
+
+	* src/blocks/button.c: 
+	-fix for buttons with bitmaps - please try
+
+2003-02-01 18:36  soheil
+
+	* perl_ext/TODO: Updated
+
+2003-02-01 18:33  soheil
+
+	* perl_ext/SWF/TextField.pm: Updated/Fixed documentation
+
+2003-02-01 18:30  soheil
+
+	* perl_ext/SWF/Shape.pm: Added getPen() documentation
+
+2003-02-01 18:26  soheil
+
+	* perl_ext/TextField.xs: Replaced setMargin wuth setMargins
+
+2003-01-25 21:35  soheil
+
+	* perl_ext/README: Updated.
+
+2003-01-25 21:22  soheil
+
+	* perl_ext/SUPPORT: Initial import to CVS
+
+2003-01-21 00:24  soheil
+
+	* perl_ext/Movie.xs: Renamed SWFMovie_xs_output to SWFMovie_output
+
+2003-01-21 00:23  soheil
+
+	* perl_ext/SWF/Movie.pm: Added SWF::Movie::output()
+
+2003-01-21 00:19  soheil
+
+	* perl_ext/Makefile.PL: Added SWF::MyConfig.pm
+
+2003-01-20 23:16  soheil
+
+	* perl_ext/CREDITS: Initial import to CVS
+
+2003-01-19 16:47  soheil
+
+	* perl_ext/SWF/.cvsignore: initial import to cvs
+
+2003-01-19 16:40  soheil
+
+	* perl_ext/SWF.pm: Fixed my Email address
+
+2003-01-11 19:07  soheil
+
+	* perl_ext/Exports.c: Added SWFTEXTFIELD_AUTOSIZE
+
+2003-01-11 19:05  soheil
+
+	* perl_ext/SWF/Constants.pm: - Added SWFTEXTFIELD_USEFONT &
+	SWFTEXTFIELD_AUTOSIZE - Fixed Typo & my email address
+
 2003-01-11 15:43  staybyte
 
 	* src/actioncompiler/swf5compiler.y: fix incorrect %token and %type
