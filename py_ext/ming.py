@@ -74,6 +74,10 @@ class SWFShape(SWFBase):
             self.fills.append(arg1)
             return SWFFill(mingc.SWFShape_addBitmapFill(self.this, arg1.this, arg2))
 
+        if arg1.this[-13:] == 'SWFJpegBitmap':
+            self.fills.append(arg1)
+            return SWFFill(mingc.SWFShape_addBitmapFill(self.this, arg1.this, arg2))
+
         else:
             raise AttributeError, "bad argument to SWFShape::addFill"
 
@@ -255,6 +259,19 @@ class SWFDisplayItem(SWFBase):
 
     def setMatrix(self, a, b, c, d, x, y):
         mingc.SWFDisplayItem_setMatrix(self.this, a, b, c, d, x, y)
+
+    def addAction(self, actionScript, flags):
+        mingc.SWFDisplayItem_addAction(self.this, actionScript, flags)
+
+SWFACTION_ONLOAD      = mingc.SWFACTION_ONLOAD      
+SWFACTION_ENTERFRAME  = mingc.SWFACTION_ENTERFRAME  
+SWFACTION_UNLOAD      = mingc.SWFACTION_UNLOAD      
+SWFACTION_MOUSEMOVE   = mingc.SWFACTION_MOUSEMOVE   
+SWFACTION_MOUSEDOWN   = mingc.SWFACTION_MOUSEDOWN   
+SWFACTION_MOUSEUP     = mingc.SWFACTION_MOUSEUP     
+SWFACTION_KEYDOWN     = mingc.SWFACTION_KEYDOWN     
+SWFACTION_KEYUP       = mingc.SWFACTION_KEYUP       
+SWFACTION_DATA        = mingc.SWFACTION_DATA        
 
 class SWFMovie(SWFBase):
 
@@ -460,7 +477,7 @@ class SWFText(SWFBase):
 
     def setFont(self, font):
         self.__fonts[font.this]=font
-        self.this=mingc.SWFText_setFont(self.this, font.this)
+        mingc.SWFText_setFont(self.this, font.this)
 
     def setHeight(self, height):
         mingc.SWFText_setHeight(self.this, height)

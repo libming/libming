@@ -60,9 +60,9 @@ float Ming_getScale();
 void Ming_useSWFVersion(int version);
 
 typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
-	     *SWFShape, *SWFAction, *SWFGradient, *SWFButton, *SWFButtonRecord,
-	     *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
-	     *SWFFont, *SWFText, *SWFTextField;
+             *SWFShape, *SWFAction, *SWFGradient, *SWFButton, *SWFButtonRecord,
+             *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
+             *SWFFont, *SWFText, *SWFTextField;
 
 /*
  * Set output compression level.
@@ -150,18 +150,18 @@ SWFGradient newSWFGradient();
 void destroySWFGradient(SWFGradient gradient);
 
 void SWFGradient_addEntry(SWFGradient gradient,
-			  float ratio, byte r, byte g, byte b, byte a);
+                          float ratio, byte r, byte g, byte b, byte a);
 
 
 /***** SWFFillStyle - a fill instance on a shape *****/
 
-#define SWFFILL_SOLID			0x00
-#define SWFFILL_GRADIENT		0x10
-#define SWFFILL_LINEAR_GRADIENT 	0x10
-#define SWFFILL_RADIAL_GRADIENT 	0x12
-#define SWFFILL_BITMAP			0x40
-#define SWFFILL_TILED_BITMAP		0x40
-#define SWFFILL_CLIPPED_BITMAP		0x41
+#define SWFFILL_SOLID                   0x00
+#define SWFFILL_GRADIENT                0x10
+#define SWFFILL_LINEAR_GRADIENT         0x10
+#define SWFFILL_RADIAL_GRADIENT         0x12
+#define SWFFILL_BITMAP                  0x40
+#define SWFFILL_TILED_BITMAP            0x40
+#define SWFFILL_CLIPPED_BITMAP          0x41
 
 SWFFillStyle newSWFSolidFillStyle(byte r, byte g, byte b, byte a);
 SWFFillStyle newSWFGradientFillStyle(SWFGradient gradient, byte radial);
@@ -199,20 +199,20 @@ void SWFShape_drawLineTo(SWFShape shape, float x, float y);
 void SWFShape_drawLine(SWFShape shape, float dx, float dy);
 
 void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
-			  float anchorx, float anchory);
+                          float anchorx, float anchory);
 void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
-			float anchordx, float anchordy);
+                        float anchordx, float anchordy);
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
-			  byte r, byte g, byte b, byte a);
+                          byte r, byte g, byte b, byte a);
 void SWFShape_hideLine(SWFShape shape);
 
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
-					byte r, byte g, byte b, byte a);
+                                        byte r, byte g, byte b, byte a);
 SWFFillStyle SWFShape_addGradientFillStyle(SWFShape shape,
-					   SWFGradient gradient, byte flags);
+                                           SWFGradient gradient, byte flags);
 SWFFillStyle SWFShape_addBitmapFillStyle(SWFShape shape,
-					 SWFBitmap bitmap, byte flags);
+                                         SWFBitmap bitmap, byte flags);
 
 void SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill);
 void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill);
@@ -349,7 +349,7 @@ void SWFTextField_addChars(SWFTextField field, const char *string);
   /*void SWFTextField_addUTF8Chars(SWFTextField field, const char *string);*/
 
 void SWFTextField_setAlignment(SWFTextField field,
-			       SWFTextFieldAlignment alignment);
+                               SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);
 
 
@@ -408,7 +408,7 @@ void SWFSoundInstance_setNoMultiple(SWFSoundInstance instance);
 
 /* create a new color transform with the given parameters */
 SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
-		       float rMult, float gMult, float bMult, float aMult);
+                       float rMult, float gMult, float bMult, float aMult);
 /* create a new color transform with the given additive parameters and
    default multiplicative */
 SWFCXform newSWFAddCXform(int rAdd, int gAdd, int bAdd, int aAdd);
@@ -419,11 +419,11 @@ void destroySWFCXform(SWFCXform cXform);
 
 /* set the additive part of the color transform to the given parameters */
 void SWFCXform_setColorAdd(SWFCXform cXform,
-			   int rAdd, int gAdd, int bAdd, int aAdd);
+                           int rAdd, int gAdd, int bAdd, int aAdd);
 /* set the multiplicative part of the color transform to the given
    parameters */
 void SWFCXform_setColorMult(SWFCXform cXform,
-			    float rMult, float gMult, float bMult, float aMult);
+                            float rMult, float gMult, float bMult, float aMult);
 
 
 /***** SWFAction *****/
@@ -528,7 +528,7 @@ void SWFPosition_scaleXY(SWFPosition position, float x, float y);
 void SWFPosition_scaleXYTo(SWFPosition position, float x, float y);
 
 void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
-			   float x, float y);
+                           float x, float y);
 
 void SWFPosition_rotate(SWFPosition position, float degrees);
 void SWFPosition_rotateTo(SWFPosition position, float degrees);
@@ -556,7 +556,7 @@ void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, float * yScale
 void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, float * ySkew);
 
 void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
-			      float c, float d, float x, float y);
+                              float c, float d, float x, float y);
 
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
@@ -566,9 +566,9 @@ void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel);
 void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio);
 void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform);
 void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
-				int r, int g, int b, int a);
+                                int r, int g, int b, int a);
 void SWFDisplayItem_setColorMult(SWFDisplayItem item,
-				 float r, float g, float b, float a);
+                                 float r, float g, float b, float a);
 
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
@@ -616,13 +616,13 @@ void SWFFill_move(SWFFill fill, float x, float y);
 void SWFFill_moveTo(SWFFill fill, float x, float y);
 
 void SWFFill_setMatrix(SWFFill fill, float a, float b,
-		       float c, float d, float x, float y);
+                       float c, float d, float x, float y);
 
 
 /***** shape_util.h *****/
 
 void SWFShape_setLine(SWFShape shape, unsigned short width,
-		      byte r, byte g, byte b, byte a);
+                      byte r, byte g, byte b, byte a);
 
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
 SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient, byte flags);
@@ -644,9 +644,9 @@ void SWFShape_drawSizedGlyph(SWFShape shape, SWFFont font, unsigned short c, int
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */
 int SWFShape_drawCubic(SWFShape shape, float bx, float by,
-		       float cx, float cy, float dx, float dy);
+                       float cx, float cy, float dx, float dy);
 int SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
-			 float cx, float cy, float dx, float dy);
+                         float cx, float cy, float dx, float dy);
 void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 
