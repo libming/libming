@@ -82,7 +82,7 @@ SWFMovie_labelFrame(movie, label)
 	char *	label
 
 int 
-SWFMovie_output(movie, compresslevel=-1)
+SWFMovie_xs_output(movie, compresslevel=-1)
 	SWF::Movie movie
 	int compresslevel
 	CODE:
