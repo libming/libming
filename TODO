@@ -1,6 +1,9 @@
 
 Stuff what to do (not in order):
 
+* Allow movie.add(bitmap), creating a shape for the bitmap automatically
+
+
 * Add filehandle args to php SWFBitmap constructor
 
 
