@@ -24,7 +24,7 @@ install-dynamic: dynamic
 	(cd $(libdir) && ln -fs $(SHAREDLIB) libming.so.0 && ln -fs libming.so.0 libming.so)
 
 install-static: static
-	install -c -m 0644 $(SHAREDLIB) $(libdir)/
+	install -c -m 0644 libming.a $(libdir)/
 
 utils:
 	(cd util && make)
