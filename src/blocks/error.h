@@ -2,6 +2,8 @@
 #ifndef SWF_ERROR_H_INCLUDED
 #define SWF_ERROR_H_INCLUDED
 
+/* XXX - error calls should be macros to save the file/lineno */
+
 extern void (*SWF_warn)(char *msg, ...);
 extern void (*SWF_error)(char *msg, ...);
 
