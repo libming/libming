@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef MING_FILL_H_INCLUDED
 #define MING_FILL_H_INCLUDED
 
@@ -27,41 +29,41 @@ typedef struct SWFFill_s *SWFFill;
 
 /* SWFFill adds a position object to manipulate SWFFillStyle's matrix. */
 
-SWFFill newSWFFill(SWFFillStyle fillstyle);
+SWFFill newSWFFill (SWFFillStyle fillstyle);
 
-SWFFillStyle SWFFill_getFillStyle(SWFFill fill);
+SWFFillStyle SWFFill_getFillStyle (SWFFill fill);
 
-void destroySWFFill(SWFFill fill);
+void destroySWFFill (SWFFill fill);
 
-void SWFFill_skewX(SWFFill fill, float x);
+void SWFFill_skewX (SWFFill fill, float x);
 
-void SWFFill_skewXTo(SWFFill fill, float x);
+void SWFFill_skewXTo (SWFFill fill, float x);
 
-void SWFFill_skewY(SWFFill fill, float y);
+void SWFFill_skewY (SWFFill fill, float y);
 
-void SWFFill_skewYTo(SWFFill fill, float y);
+void SWFFill_skewYTo (SWFFill fill, float y);
 
-void SWFFill_scaleX(SWFFill fill, float x);
+void SWFFill_scaleX (SWFFill fill, float x);
 
-void SWFFill_scaleXTo(SWFFill fill, float x);
+void SWFFill_scaleXTo (SWFFill fill, float x);
 
-void SWFFill_scaleY(SWFFill fill, float y);
+void SWFFill_scaleY (SWFFill fill, float y);
 
-void SWFFill_scaleYTo(SWFFill fill, float y);
+void SWFFill_scaleYTo (SWFFill fill, float y);
 
-void SWFFill_scaleXY(SWFFill fill, float x, float y);
+void SWFFill_scaleXY (SWFFill fill, float x, float y);
 
-void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
+void SWFFill_scaleXYTo (SWFFill fill, float x, float y);
 
-void SWFFill_rotate(SWFFill fill, float degrees);
+void SWFFill_rotate (SWFFill fill, float degrees);
 
-void SWFFill_rotateTo(SWFFill fill, float degrees);
+void SWFFill_rotateTo (SWFFill fill, float degrees);
 
-void SWFFill_move(SWFFill fill, float x, float y);
+void SWFFill_move (SWFFill fill, float x, float y);
 
-void SWFFill_moveTo(SWFFill fill, float x, float y);
+void SWFFill_moveTo (SWFFill fill, float x, float y);
 
-void SWFFill_setMatrix(SWFFill fill, float a, float b,
-		       float c, float d, float x, float y);
+void SWFFill_setMatrix (SWFFill fill, float a, float b,
+			float c, float d, float x, float y);
 
 #endif /* MING_FILL_H_INCLUDED */

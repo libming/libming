@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_TEXT_H_INCLUDED
 #define SWF_TEXT_H_INCLUDED
 
@@ -43,42 +45,42 @@ typedef struct SWFTextRecord_s *SWFTextRecord;
 #define FONTID(t) (((t)->isBrowserFont) ? CHARACTERID((t)->font.browserFont) : CHARACTERID((t)->font.font))
 
 
-SWFText newSWFText();
+SWFText newSWFText ();
 
-SWFText newSWFText2();
+SWFText newSWFText2 ();
 
-void destroySWFText(SWFBlock block);
+void destroySWFText (SWFBlock block);
 
-void SWFOutput_writeText(SWFOutput out, SWFText text);
+void SWFOutput_writeText (SWFOutput out, SWFText text);
 
-void SWFText_setFont(SWFText text, SWFBlock font);
+void SWFText_setFont (SWFText text, SWFBlock font);
 
-void SWFText_setScaledHeight(SWFText text, int height);
+void SWFText_setScaledHeight (SWFText text, int height);
 
-void SWFText_scaledMoveTo(SWFText text, int x, int y);
+void SWFText_scaledMoveTo (SWFText text, int x, int y);
 
-void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
+void SWFText_setColor (SWFText text, byte r, byte g, byte b, byte a);
 
-void SWFText_addString(SWFText text, const char *string, int *advance);
+void SWFText_addString (SWFText text, const char *string, int *advance);
 
-void SWFText_setSpacing(SWFText text, float spacing);
+void SWFText_setSpacing (SWFText text, float spacing);
 
-int SWFText_getScaledStringWidth(SWFText text, const char *string);
+int SWFText_getScaledStringWidth (SWFText text, const char *string);
 
-short SWFText_getScaledAscent(SWFText text);
+short SWFText_getScaledAscent (SWFText text);
 
-short SWFText_getScaledDescent(SWFText text);
+short SWFText_getScaledDescent (SWFText text);
 
-short SWFText_getScaledLeading(SWFText text);
+short SWFText_getScaledLeading (SWFText text);
 
-void SWFText_resolveCodes(SWFText text);
+void SWFText_resolveCodes (SWFText text);
 
-SWFTextRecord newSWFTextRecord();
+SWFTextRecord newSWFTextRecord ();
 
-void destroySWFTextRecord(SWFTextRecord record);
+void destroySWFTextRecord (SWFTextRecord record);
 
-char *SWFTextRecord_getString(SWFTextRecord record);
+char *SWFTextRecord_getString (SWFTextRecord record);
 
-SWFTextRecord SWFTextRecord_getNext(SWFTextRecord record);
+SWFTextRecord SWFTextRecord_getNext (SWFTextRecord record);
 
 #endif /* SWF_TEXT_H_INCLUDED */

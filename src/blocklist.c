@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include "blocklist.h"
 
@@ -37,27 +39,29 @@ struct SWFBlockList_s
 };
 
 
-void destroySWFBlockList(SWFBlockList list)
+void
+destroySWFBlockList (SWFBlockList list)
 {
   int i;
 
-  for(i=0; i<list->nBlocks; ++i)
+  for (i = 0; i < list->nBlocks; ++i)
   {
     /* characters were instantiated by the user, so user has to
        destroy them. */
 
-    if(!list->blocks[i].isCharacter)
-      destroySWFBlock(list->blocks[i].block);
+    if (!list->blocks[i].isCharacter)
+      destroySWFBlock (list->blocks[i].block);
   }
 
-  sec_free((void**)&list->blocks);
-  sec_free((void**)&list);
+  sec_free ((void **) &list->blocks);
+  sec_free ((void **) &list);
 }
 
 
-SWFBlockList newSWFBlockList()
+SWFBlockList
+newSWFBlockList ()
 {
-  SWFBlockList blockList = malloc(sizeof(struct SWFBlockList_s));
+  SWFBlockList blockList = malloc (sizeof (struct SWFBlockList_s));
 
   blockList->nBlocks = 0;
   blockList->blocks = NULL;
@@ -68,85 +72,90 @@ SWFBlockList newSWFBlockList()
 
 #define SWFBLOCKLIST_INCREMENT 16
 
-void SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
+void
+SWFBlockList_addBlock (SWFBlockList list, SWFBlock block)
 {
-  if ( SWFBlock_isDefined(block) )
+  if (SWFBlock_isDefined (block))
     return;
 
-  if ( list->nBlocks%SWFBLOCKLIST_INCREMENT == 0 )
+  if (list->nBlocks % SWFBLOCKLIST_INCREMENT == 0)
   {
-    list->blocks = realloc(list->blocks,
-			   (list->nBlocks+SWFBLOCKLIST_INCREMENT) *
-			   sizeof(struct blockListEntry));
+    list->blocks = realloc (list->blocks,
+			    (list->nBlocks + SWFBLOCKLIST_INCREMENT) *
+			    sizeof (struct blockListEntry));
   }
 
   list->blocks[list->nBlocks].block = block;
-  list->blocks[list->nBlocks].isCharacter = SWFBlock_isCharacter(block);
+  list->blocks[list->nBlocks].isCharacter = SWFBlock_isCharacter (block);
   ++list->nBlocks;
 
-  SWFBlock_setDefined(block);
+  SWFBlock_setDefined (block);
 }
 
 
-void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite)
+void
+SWFBlockList_addToSprite (SWFBlockList list, SWFSprite sprite)
 {
   int i;
 
-  for(i=0; i<list->nBlocks; ++i)
-    SWFSprite_addBlock(sprite, list->blocks[i].block);
+  for (i = 0; i < list->nBlocks; ++i)
+    SWFSprite_addBlock (sprite, list->blocks[i].block);
 
   list->nBlocks = 0;
 
-  sec_free((void**)&list->blocks);
+  sec_free ((void **) &list->blocks);
 }
 
 
-int SWFBlockList_completeBlocks(SWFBlockList list)
+int
+SWFBlockList_completeBlocks (SWFBlockList list)
 {
   int i, total = 0;
 
-  for(i=0; i<list->nBlocks; ++i)
-    total += completeSWFBlock(list->blocks[i].block);
+  for (i = 0; i < list->nBlocks; ++i)
+    total += completeSWFBlock (list->blocks[i].block);
 
   return total;
 }
 
 
-int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
-				     SWFByteOutputMethod method, void *data)
+int
+SWFBlockList_writeBlocksToMethod (SWFBlockList list,
+				  SWFByteOutputMethod method, void *data)
 {
   int i, size = 0;
 
-  for(i=0; i<list->nBlocks; ++i)
-    size += writeSWFBlockToMethod(list->blocks[i].block, method, data);
+  for (i = 0; i < list->nBlocks; ++i)
+    size += writeSWFBlockToMethod (list->blocks[i].block, method, data);
 
   return size;
 }
 
 
 void
-SWFBlockList_resolveCharacterDependencies(SWFBlockList list,
-																					SWFCharacter character)
+SWFBlockList_resolveCharacterDependencies (SWFBlockList list,
+					   SWFCharacter character)
 {
-	SWFBlock *deps;
-	int i, nDeps;
+  SWFBlock *deps;
+  int i, nDeps;
 
-	if ( (nDeps = SWFCharacter_getDependencies(character, &deps)) > 0 )
-	{
-		for ( i=0; i<nDeps; ++i )
-		{
-			SWFBlock block = deps[i];
+  if ((nDeps = SWFCharacter_getDependencies (character, &deps)) > 0)
+  {
+    for (i = 0; i < nDeps; ++i)
+    {
+      SWFBlock block = deps[i];
 
-			if ( !SWFBlock_isDefined(block) )
-			{
-				if ( SWFBlock_isCharacter(block) )
-					SWFBlockList_resolveCharacterDependencies(list, (SWFCharacter)block);
+      if (!SWFBlock_isDefined (block))
+      {
+	if (SWFBlock_isCharacter (block))
+	  SWFBlockList_resolveCharacterDependencies (list,
+						     (SWFCharacter) block);
 
-				SWFBlockList_addBlock(list, block);
-				SWFBlock_setDefined(block);
-			}
-		}
+	SWFBlockList_addBlock (list, block);
+	SWFBlock_setDefined (block);
+      }
+    }
 
-		SWFCharacter_clearDependencies(character);
-	}
+    SWFCharacter_clearDependencies (character);
+  }
 }

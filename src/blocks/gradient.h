@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* gradient.h */
+/* $Id$ */
 
 #ifndef SWF_GRADIENT_H_INCLUDED
 #define SWF_GRADIENT_H_INCLUDED
@@ -28,17 +28,18 @@ typedef struct SWFGradient_s *SWFGradient;
 #include "matrix.h"
 #include "bitmap.h"
 
-SWFGradient newSWFGradient();
+SWFGradient newSWFGradient ();
 
-void destroySWFGradient(SWFGradient gradient);
+void destroySWFGradient (SWFGradient gradient);
 
-void SWFGradient_addEntry(SWFGradient gradient,
-			  float ratio, byte r, byte g, byte b, byte a);
+void SWFGradient_addEntry (SWFGradient gradient,
+			   float ratio, byte r, byte g, byte b, byte a);
 
-void SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient,
-			    SWFBlocktype shapeType);
+void SWFOutput_writeGradient (SWFOutput out, SWFGradient gradient,
+			      SWFBlocktype shapeType);
 
-void SWFOutput_writeMorphGradient(SWFOutput out,
-				  SWFGradient gradient1, SWFGradient gradient2);
+void SWFOutput_writeMorphGradient (SWFOutput out,
+				   SWFGradient gradient1,
+				   SWFGradient gradient2);
 
 #endif /* SWF_GRADIENT_H_INCLUDED */

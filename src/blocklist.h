@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef MING_BLOCKLIST_H_INCLUDED
 #define MING_BLOCKLIST_H_INCLUDED
 
@@ -27,21 +29,21 @@ typedef struct SWFBlockList_s *SWFBlockList;
 #include "blocks/sprite.h"
 
 
-SWFBlockList newSWFBlockList();
+SWFBlockList newSWFBlockList ();
 
-void SWFBlockList_addBlock(SWFBlockList blocklist, SWFBlock block);
+void SWFBlockList_addBlock (SWFBlockList blocklist, SWFBlock block);
 
-void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite);
+void SWFBlockList_addToSprite (SWFBlockList list, SWFSprite sprite);
 
-int SWFBlockList_completeBlocks(SWFBlockList list);
+int SWFBlockList_completeBlocks (SWFBlockList list);
 
-int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
-				     SWFByteOutputMethod method, void *data);
+int SWFBlockList_writeBlocksToMethod (SWFBlockList list,
+				      SWFByteOutputMethod method, void *data);
 
-void destroySWFBlockList(SWFBlockList list);
+void destroySWFBlockList (SWFBlockList list);
 
 void
-SWFBlockList_resolveCharacterDependencies(SWFBlockList list,
-					  SWFCharacter character);
+SWFBlockList_resolveCharacterDependencies (SWFBlockList list,
+					   SWFCharacter character);
 
 #endif /* MING_BLOCKLIST_H_INCLUDED */

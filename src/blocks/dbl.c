@@ -31,109 +31,114 @@ struct SWFDBLBitmap_s
 };
 
 
-static int completeSWFDBLBitmap(SWFBlock block)
+static int
+completeSWFDBLBitmap (SWFBlock block)
 {
-  return SWFBlock_getLength(block);
+  return SWFBlock_getLength (block);
 }
 
 
-static void writeSWFDBLBitmapToMethod(SWFBlock block,
-				      SWFByteOutputMethod method, void *data)
+static void
+writeSWFDBLBitmapToMethod (SWFBlock block,
+			   SWFByteOutputMethod method, void *data)
 {
-  SWFDBLBitmap dbl = (SWFDBLBitmap)block;
+  SWFDBLBitmap dbl = (SWFDBLBitmap) block;
   int i;
 
-  methodWriteUInt16(CHARACTERID(dbl), method, data);
+  methodWriteUInt16 (CHARACTERID (dbl), method, data);
 
   /* just dump the rest of the file */
-  for(i=block->length-2; i>0; --i)
-    method(SWFInput_getChar(dbl->input), data);
+  for (i = block->length - 2; i > 0; --i)
+    method (SWFInput_getChar (dbl->input), data);
 }
 
 
-SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input)
+SWFDBLBitmap
+newSWFDBLBitmap_fromInput (SWFInput input)
 {
   SWFDBLBitmap dbl;
   int version;
   int width, height;
 
-  dbl = malloc(sizeof(struct SWFDBLBitmap_s));
+  dbl = malloc (sizeof (struct SWFDBLBitmap_s));
 
-  SWFCharacterInit((SWFCharacter)dbl);
+  SWFCharacterInit ((SWFCharacter) dbl);
 
-  CHARACTERID(dbl) = ++SWF_gNumCharacters;
+  CHARACTERID (dbl) = ++SWF_gNumCharacters;
 
-  BLOCK(dbl)->writeBlock = writeSWFDBLBitmapToMethod;
-  BLOCK(dbl)->complete = completeSWFDBLBitmap;
-  BLOCK(dbl)->dtor = destroySWFCharacter;
+  BLOCK (dbl)->writeBlock = writeSWFDBLBitmapToMethod;
+  BLOCK (dbl)->complete = completeSWFDBLBitmap;
+  BLOCK (dbl)->dtor = destroySWFCharacter;
 
   dbl->input = input;
 
-  if(SWFInput_getChar(input) != 'D' ||
-     SWFInput_getChar(input) != 'B')
+  if (SWFInput_getChar (input) != 'D' || SWFInput_getChar (input) != 'B')
   {
-    SWF_error("File is not a DBL file!");
+    SWF_error ("File is not a DBL file!");
   }
 
-  version = SWFInput_getChar(input);
+  version = SWFInput_getChar (input);
 
-  if(version != 'L' && version != 'l')
-    SWF_error("File is not a DBL file!");
+  if (version != 'L' && version != 'l')
+    SWF_error ("File is not a DBL file!");
 
-  switch(SWFInput_getChar(input))
+  switch (SWFInput_getChar (input))
   {
-    case 1:
-      BLOCK(dbl)->type = SWF_DEFINELOSSLESS;
-      break;
-    case 2:
-      BLOCK(dbl)->type = SWF_DEFINELOSSLESS2;
-      break;
-    default:
-      SWF_error("Unexpected DBL type byte!");
+  case 1:
+    BLOCK (dbl)->type = SWF_DEFINELOSSLESS;
+    break;
+  case 2:
+    BLOCK (dbl)->type = SWF_DEFINELOSSLESS2;
+    break;
+  default:
+    SWF_error ("Unexpected DBL type byte!");
   }
 
-  if(version == 'l')
+  if (version == 'l')
   {
-    BLOCK(dbl)->length = SWFInput_getUInt32_BE(input);
-    BLOCK(dbl)->length += 2; /* character id */
+    BLOCK (dbl)->length = SWFInput_getUInt32_BE (input);
+    BLOCK (dbl)->length += 2;	/* character id */
   }
   else
   {
     /* first version used a 2-byte file length..  brilliant, eh? */
 
-    BLOCK(dbl)->length = SWFInput_getUInt16_BE(input);
-    BLOCK(dbl)->length += 2; /* character id */
+    BLOCK (dbl)->length = SWFInput_getUInt16_BE (input);
+    BLOCK (dbl)->length += 2;	/* character id */
   }
 
-  SWFInput_getChar(input); /* format */
+  SWFInput_getChar (input);	/* format */
 
-  width = SWFInput_getUInt16(input);
-  height = SWFInput_getUInt16(input);
+  width = SWFInput_getUInt16 (input);
+  height = SWFInput_getUInt16 (input);
 
   /* roll back to beginning of dbl data */
-  SWFInput_seek(input, -5, SEEK_CUR);
+  SWFInput_seek (input, -5, SEEK_CUR);
 
-  CHARACTER(dbl)->bounds = newSWFRect(0, width, 0, height);
+  CHARACTER (dbl)->bounds = newSWFRect (0, width, 0, height);
 
   return dbl;
 }
 
 
-static void destroySWFDBLBitmap_andInputs(SWFBlock block)
+static void
+destroySWFDBLBitmap_andInputs (SWFBlock block)
 {
-  SWFDBLBitmap bitmap = (SWFDBLBitmap)block;
+  SWFDBLBitmap bitmap = (SWFDBLBitmap) block;
 
-  SWFCharacter_clearDependencies(CHARACTER(block));
-  if (bitmap->input != NULL) destroySWFInput(bitmap->input);
-  if (CHARACTER(bitmap)->bounds != NULL) destroySWFRect(CHARACTER(bitmap)->bounds);
-  sec_free((void**)&bitmap);
+  SWFCharacter_clearDependencies (CHARACTER (block));
+  if (bitmap->input != NULL)
+    destroySWFInput (bitmap->input);
+  if (CHARACTER (bitmap)->bounds != NULL)
+    destroySWFRect (CHARACTER (bitmap)->bounds);
+  sec_free ((void **) &bitmap);
 }
 
 
-SWFDBLBitmap newSWFDBLBitmap(FILE *f)
+SWFDBLBitmap
+newSWFDBLBitmap (FILE * f)
 {
-  SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput(newSWFInput_file(f));
-  BLOCK(dbl)->dtor = destroySWFDBLBitmap_andInputs;
+  SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput (newSWFInput_file (f));
+  BLOCK (dbl)->dtor = destroySWFDBLBitmap_andInputs;
   return dbl;
 }
-

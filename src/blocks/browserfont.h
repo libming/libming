@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_BROWSERFONT_H_INCLUDED
 #define SWF_BROWSERFONT_H_INCLUDED
 
@@ -26,8 +28,8 @@ typedef struct SWFBrowserFont_s *SWFBrowserFont;
 #include "output.h"
 #include "character.h"
 
-SWFBrowserFont newSWFBrowserFont(char *name);
+SWFBrowserFont newSWFBrowserFont (char *name);
 
-SWFOutput SWFBrowserFont_getOutput(SWFBrowserFont font);
+SWFOutput SWFBrowserFont_getOutput (SWFBrowserFont font);
 
 #endif /* SWF_BROWSERFONT_H_INCLUDED */

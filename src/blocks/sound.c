@@ -34,20 +34,20 @@ struct SWFSound_s
   int delay;
   int samplesPerFrame;
 
-	SWFInput input;
-	byte *data;
+  SWFInput input;
+  byte *data;
 };
 
 
-int getMP3Size(SWFInput input);
+int getMP3Size (SWFInput input);
 
 
 static int
-soundDataSize(SWFSound sound)
+soundDataSize (SWFSound sound)
 {
-	if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED)
-	{
-    int sampleCount = SWFInput_length(sound->input);
+  if ((sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED)
+  {
+    int sampleCount = SWFInput_length (sound->input);
 
     if ((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS)
       sampleCount /= 2;
@@ -56,123 +56,129 @@ soundDataSize(SWFSound sound)
       sampleCount /= 2;
 
     return sampleCount;
-	}
-	else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_ADPCM_COMPRESSED)
-	{
-		int filesize, channels, nbits;
-		int bitsize, blocksize, n, res, m;
-
-		SWF_assert((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS);
-
-		filesize = SWFInput_length(sound->input);
-
-		if ((sound->flags&SWF_SOUND_CHANNELS) == SWF_SOUND_MONO)
-			channels = 1;
-		else if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO)
-			channels = 2;
-		else
-			channels = 1;	 /* ? */
-
-		nbits = 4;	/* XXX - testing.. */
-
-		/*
-		 * Estimation of the sample count in ADPCM data from file size of the data.
-		 * This is an approximate calculation.
-		 */
-		bitsize = 8 * filesize - (2 + (8 - 1));
-		/* 2: header, (8 - 1): possible padding */
-		blocksize = ((16 + 6) + nbits * 4095) * channels;
-		n = bitsize / blocksize;
-		res = bitsize % blocksize;
-		m = (res - (16 + 6) * channels) / (nbits * channels);
-		return 4096 * n + m;
-	}
-  else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+  }
+  else if ((sound->flags & SWF_SOUND_COMPRESSION) ==
+	   SWF_SOUND_ADPCM_COMPRESSED)
   {
-    int pos = SWFInput_tell(sound->input);
-    int samples = getMP3Size(sound->input);
-    SWFInput_seek(sound->input, pos, SEEK_SET);
+    int filesize, channels, nbits;
+    int bitsize, blocksize, n, res, m;
+
+    SWF_assert ((sound->flags & SWF_SOUND_BITS) == SWF_SOUND_16BITS);
+
+    filesize = SWFInput_length (sound->input);
+
+    if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_MONO)
+      channels = 1;
+    else if ((sound->flags & SWF_SOUND_CHANNELS) == SWF_SOUND_STEREO)
+      channels = 2;
+    else
+      channels = 1;		/* ? */
+
+    nbits = 4;			/* XXX - testing.. */
+
+    /*
+     * Estimation of the sample count in ADPCM data from file size of the data.
+     * This is an approximate calculation.
+     */
+    bitsize = 8 * filesize - (2 + (8 - 1));
+    /* 2: header, (8 - 1): possible padding */
+    blocksize = ((16 + 6) + nbits * 4095) * channels;
+    n = bitsize / blocksize;
+    res = bitsize % blocksize;
+    m = (res - (16 + 6) * channels) / (nbits * channels);
+    return 4096 * n + m;
+  }
+  else if ((sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+  {
+    int pos = SWFInput_tell (sound->input);
+    int samples = getMP3Size (sound->input);
+    SWFInput_seek (sound->input, pos, SEEK_SET);
     return samples;
   }
-	else /* ??? */
-	{
-		return 0;
-	}
+  else				/* ??? */
+  {
+    return 0;
+  }
 }
 
 
 void
-writeSWFSoundToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
+writeSWFSoundToStream (SWFBlock block, SWFByteOutputMethod method, void *data)
 {
-	int l, i;
-	SWFSound sound = (SWFSound)block;
+  int l, i;
+  SWFSound sound = (SWFSound) block;
 
-	methodWriteUInt16(CHARACTERID(sound), method, data);
-	method(sound->flags, data);
+  methodWriteUInt16 (CHARACTERID (sound), method, data);
+  method (sound->flags, data);
 
-	l = SWFInput_length(sound->input);
+  l = SWFInput_length (sound->input);
 
-	methodWriteUInt32(soundDataSize(sound), method, data);
+  methodWriteUInt32 (soundDataSize (sound), method, data);
 
-  if ( (sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED )
-    methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);  // XXX - delay?
+  if ((sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+    methodWriteUInt16 (SWFSOUND_INITIAL_DELAY, method, data);	// XXX - delay?
 
-	/* write samples */
-	for ( i=0; i<l; ++i )
-		method(SWFInput_getChar(sound->input), data);
+  /* write samples */
+  for (i = 0; i < l; ++i)
+    method (SWFInput_getChar (sound->input), data);
 }
 
 
-int completeDefineSWFSoundBlock(SWFBlock block)
+int
+completeDefineSWFSoundBlock (SWFBlock block)
 {
-	SWFSound sound = (SWFSound)block;
+  SWFSound sound = (SWFSound) block;
 
-  if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
-		return 7 + 2 + SWFInput_length(sound->input);
-	else
-		return 7 + SWFInput_length(sound->input);
+  if ((sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+    return 7 + 2 + SWFInput_length (sound->input);
+  else
+    return 7 + SWFInput_length (sound->input);
 }
 
 
-void destroySWFSound(SWFBlock sound)
+void
+destroySWFSound (SWFBlock sound)
 {
-	sec_free((void**)&sound);
+  sec_free ((void **) &sound);
 }
 
 
-SWFSound newSWFSound(FILE *f, byte flags)
+SWFSound
+newSWFSound (FILE * f, byte flags)
 {
-	return newSWFSound_fromInput(newSWFInput_file(f), flags);
+  return newSWFSound_fromInput (newSWFInput_file (f), flags);
 }
 
 
-SWFSound newSWFSound_fromInput(SWFInput input, byte flags)
+SWFSound
+newSWFSound_fromInput (SWFInput input, byte flags)
 {
-	SWFSound sound = malloc(sizeof(struct SWFSound_s));
-	SWFBlock block = (SWFBlock)sound;
+  SWFSound sound = malloc (sizeof (struct SWFSound_s));
+  SWFBlock block = (SWFBlock) sound;
 
-	SWFCharacterInit((SWFCharacter)sound);
+  SWFCharacterInit ((SWFCharacter) sound);
 
-	CHARACTERID(sound) = ++SWF_gNumCharacters;
+  CHARACTERID (sound) = ++SWF_gNumCharacters;
 
-	block->type = SWF_DEFINESOUND;
+  block->type = SWF_DEFINESOUND;
 
-	block->writeBlock = writeSWFSoundToStream;
-	block->complete = completeDefineSWFSoundBlock;
-	block->dtor = destroySWFSound;
+  block->writeBlock = writeSWFSoundToStream;
+  block->complete = completeDefineSWFSoundBlock;
+  block->dtor = destroySWFSound;
 
-	sound->input = input;
-	sound->flags = flags;
+  sound->input = input;
+  sound->flags = flags;
 
-	return sound;
+  return sound;
 }
 
 
-void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data)
+void
+SWFSound_setData (SWFSound sound, byte flags, int numSamples, byte * data)
 {
-	sound->flags = flags;
-	sound->numSamples = numSamples;
-	sound->data = data;
+  sound->flags = flags;
+  sound->numSamples = numSamples;
+  sound->data = data;
 }
 
 

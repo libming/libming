@@ -23,20 +23,22 @@
 #include "outputblock.h"
 
 
-SWFAction newSWFAction()
+SWFAction
+newSWFAction ()
 {
-  return newSWFOutputBlock(newSWFOutput(), SWF_DOACTION);
+  return newSWFOutputBlock (newSWFOutput (), SWF_DOACTION);
 }
 
 
-void destroySWFAction(SWFAction action)
+void
+destroySWFAction (SWFAction action)
 {
-  destroySWFOutputBlock((SWFBlock)action);
+  destroySWFOutputBlock ((SWFBlock) action);
 }
 
 
-SWFAction newSWFAction_fromOutput(SWFOutput out)
+SWFAction
+newSWFAction_fromOutput (SWFOutput out)
 {
-  return newSWFOutputBlock(out, SWF_DOACTION);
+  return newSWFOutputBlock (out, SWF_DOACTION);
 }
-

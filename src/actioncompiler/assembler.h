@@ -6,7 +6,7 @@
 
 extern Buffer asmBuffer;
 
-void bufferPatchLength(Buffer buffer, int len);
-int bufferBranchTarget(Buffer buffer, char *label);
+void bufferPatchLength (Buffer buffer, int len);
+int bufferBranchTarget (Buffer buffer, char *label);
 
 #endif /* ASSEMBLER_H_INCLUDED */

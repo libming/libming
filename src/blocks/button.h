@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* button.h */
+/* $Id$ */
 
 #ifndef SWF_BUTTON_H_INCLUDED
 #define SWF_BUTTON_H_INCLUDED
@@ -53,22 +53,23 @@ typedef struct SWFButtonSound_s *SWFButtonSound;
 #define SWF_BUTTON_TRACKASMENU  (1<<0)
 
 
-SWFButton newSWFButton();
+SWFButton newSWFButton ();
 
-void destroySWFButton(SWFBlock block);
+void destroySWFButton (SWFBlock block);
 
-void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
+void SWFButton_addShape (SWFButton button, SWFCharacter character,
+			 byte flags);
 
-void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
-
-SWFSoundInstance
-SWFButton_addSound(SWFButton button, SWFSound sound, byte flag);
-
-SWFBlock newDefineSWFButtonBlock(SWFButton button);
-
-SWFButtonSound newSWFButtonSound(SWFButton button);
+void SWFButton_addAction (SWFButton button, SWFAction action, int flags);
 
 SWFSoundInstance
-SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags);
+SWFButton_addSound (SWFButton button, SWFSound sound, byte flag);
+
+SWFBlock newDefineSWFButtonBlock (SWFButton button);
+
+SWFButtonSound newSWFButtonSound (SWFButton button);
+
+SWFSoundInstance
+SWFButtonSound_setSound (SWFButtonSound sounds, SWFSound sound, byte flags);
 
 #endif /* SWF_BUTTON_H_INCLUDED */

@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* sprite.h */
+/* $Id$ */
 
 #ifndef SWF_SPRITE_H_INCLUDED
 #define SWF_SPRITE_H_INCLUDED
@@ -41,14 +41,14 @@ struct SWFSprite_s
 };
 
 
-SWFSprite newSWFSprite();
+SWFSprite newSWFSprite ();
 
-void destroySWFSprite(SWFBlock block);
+void destroySWFSprite (SWFBlock block);
 
-void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);
+void SWFSprite_setNumberOfFrames (SWFSprite sprite, int totalFrames);
 
-void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
+void SWFSprite_setBlocks (SWFSprite sprite, SWFBlock * blocks, int nBlocks);
 
-void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
+void SWFSprite_addBlock (SWFSprite sprite, SWFBlock block);
 
 #endif /* SWF_SPRITE_H_INCLUDED */

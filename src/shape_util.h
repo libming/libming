@@ -17,63 +17,69 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef MING_SHAPE_H_INCLUDED
 #define MING_SHAPE_H_INCLUDED
 
 #include "fill.h"
 #include "blocks/shape.h"
 
-float SWFCharacter_getWidth(SWFCharacter character);
-float SWFCharacter_getHeight(SWFCharacter character);
+float SWFCharacter_getWidth (SWFCharacter character);
+float SWFCharacter_getHeight (SWFCharacter character);
 
 
-void SWFShape_setLine(SWFShape shape, unsigned short width,
-		      byte r, byte g, byte b, byte a);
+void SWFShape_setLine (SWFShape shape, unsigned short width,
+		       byte r, byte g, byte b, byte a);
 
-SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
+SWFFill SWFShape_addSolidFill (SWFShape shape, byte r, byte g, byte b,
+			       byte a);
 
-SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
-				 byte flags);
+SWFFill SWFShape_addGradientFill (SWFShape shape, SWFGradient gradient,
+				  byte flags);
 
-SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
+SWFFill SWFShape_addBitmapFill (SWFShape shape, SWFBitmap bitmap, byte flags);
 
-void SWFShape_setLeftFill(SWFShape shape, SWFFill fill);
-void SWFShape_setRightFill(SWFShape shape, SWFFill fill);
+void SWFShape_setLeftFill (SWFShape shape, SWFFill fill);
+void SWFShape_setRightFill (SWFShape shape, SWFFill fill);
 
-void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
+void SWFShape_drawCharacterBounds (SWFShape shape, SWFCharacter character);
 
-void SWFShape_setLine(SWFShape shape,
-		      unsigned short width, byte r, byte g, byte b, byte a);
+void SWFShape_setLine (SWFShape shape,
+		       unsigned short width, byte r, byte g, byte b, byte a);
 
-void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle);
+void SWFShape_drawArc (SWFShape shape, float r, float startAngle,
+		       float endAngle);
 
-void SWFShape_drawCircle(SWFShape shape, float r);
+void SWFShape_drawCircle (SWFShape shape, float r);
 
 
 /* approximate a cubic bezier with quadratic segments,
    returns the number of segments used */
 
-int SWFShape_drawCubic(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
-int SWFShape_drawCubicTo(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
+int SWFShape_drawCubic (SWFShape shape, float bx, float by, float cx,
+			float cy, float dx, float dy);
+int SWFShape_drawCubicTo (SWFShape shape, float bx, float by, float cx,
+			  float cy, float dx, float dy);
 
 /* x,y relative to shape origin */
-void SWFShape_drawLineTo(SWFShape shape, float x, float y);
-void SWFShape_drawLine(SWFShape shape, float dx, float dy);
+void SWFShape_drawLineTo (SWFShape shape, float x, float y);
+void SWFShape_drawLine (SWFShape shape, float dx, float dy);
 
 /*  */
-void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
-			  float anchorx, float anchory);
+void SWFShape_drawCurveTo (SWFShape shape, float controlx, float controly,
+			   float anchorx, float anchory);
 
-void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
-			float anchordx, float anchordy);
+void SWFShape_drawCurve (SWFShape shape, float controldx, float controldy,
+			 float anchordx, float anchordy);
 
-void SWFShape_movePenTo(SWFShape shape, float x, float y);
-void SWFShape_movePen(SWFShape shape, float dx, float dy);
+void SWFShape_movePenTo (SWFShape shape, float x, float y);
+void SWFShape_movePen (SWFShape shape, float dx, float dy);
 
-void SWFShape_drawSizedGlyph(SWFShape shape,
-			     SWFFont font, unsigned char c, int size);
+void SWFShape_drawSizedGlyph (SWFShape shape,
+			      SWFFont font, unsigned char c, int size);
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
+void SWFShape_drawGlyph (SWFShape shape, SWFFont font, unsigned char c);
 
 /* deprecated: */
 

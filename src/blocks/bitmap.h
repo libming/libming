@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* bitmap.h */
+/* $Id$ */
 
 #ifndef SWF_BITMAP_H_INCLUDED
 #define SWF_BITMAP_H_INCLUDED
@@ -29,12 +29,12 @@
 typedef SWFCharacter SWFBitmap;
 
 
-void destroySWFBitmap(SWFBlock block);
+void destroySWFBitmap (SWFBlock block);
 
-int SWFBitmap_getWidth(SWFBitmap b);
+int SWFBitmap_getWidth (SWFBitmap b);
 
-int SWFBitmap_getHeight(SWFBitmap b);
+int SWFBitmap_getHeight (SWFBitmap b);
 
-SWFBitmap newSWFBitmap_fromInput(SWFInput input);
+SWFBitmap newSWFBitmap_fromInput (SWFInput input);
 
 #endif /* SWF_BITMAP_H_INCLUDED */

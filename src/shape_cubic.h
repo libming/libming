@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef MING_SHAPE_CUBIC_H_INCLUDED
 #define MING_SHAPE_CUBIC_H_INCLUDED
 
@@ -25,12 +27,12 @@
 /* approximate a cubic bezier with quadratic segments,
    returns the number of segments used */
 
-int SWFShape_drawCubic(SWFShape shape,
-		       float bx, float by, float cx, float cy,
-		       float dx, float dy);
+int SWFShape_drawCubic (SWFShape shape,
+			float bx, float by, float cx, float cy,
+			float dx, float dy);
 
-int SWFShape_drawCubicTo(SWFShape shape,
-			 float bx, float by, float cx, float cy,
-			 float dx, float dy);
+int SWFShape_drawCubicTo (SWFShape shape,
+			  float bx, float by, float cx, float cy,
+			  float dx, float dy);
 
 #endif /* MING_SHAPE_CUBIC_H_INCLUDED */

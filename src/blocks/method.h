@@ -41,14 +41,14 @@ struct _byteOutput
 ..or something like that, something that actually works.
 */
 
-typedef void (*SWFByteOutputMethod)(byte b, void *data);
+typedef void (*SWFByteOutputMethod) (byte b, void *data);
 
-void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data);
+void methodWriteUInt16 (int i, SWFByteOutputMethod method, void *data);
 
-void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data);
+void methodWriteUInt32 (int i, SWFByteOutputMethod method, void *data);
 
-void fileOutputMethod(byte b, void *data);
+void fileOutputMethod (byte b, void *data);
 
-void sec_free(void** ptr);
+void sec_free (void **ptr);
 
 #endif /* SWF_METHOD_H_INCLUDED */

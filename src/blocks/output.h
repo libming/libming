@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* output.h */
+/* $Id$ */
 
 #ifndef SWF_OUTPUT_H_INCLUDED
 #define SWF_OUTPUT_H_INCLUDED
@@ -31,59 +31,59 @@ typedef struct SWFOutput_s *SWFOutput;
 
 
 /* create/destroy output object */
-SWFOutput newSWFOutput();
+SWFOutput newSWFOutput ();
 
-SWFOutput newSizedSWFOutput(int size);
+SWFOutput newSizedSWFOutput (int size);
 
-void destroySWFOutput(SWFOutput out);
+void destroySWFOutput (SWFOutput out);
 
 /* write output's buffer to stream */
-void SWFOutput_writeToMethod(SWFOutput out,
-			     SWFByteOutputMethod method, void *data);
+void SWFOutput_writeToMethod (SWFOutput out,
+			      SWFByteOutputMethod method, void *data);
 
 /* utilities for writing */
-void SWFOutput_grow(SWFOutput out);
+void SWFOutput_grow (SWFOutput out);
 
-void SWFOutput_checkSize(SWFOutput out, int bytes);
+void SWFOutput_checkSize (SWFOutput out, int bytes);
 
-void SWFOutput_byteAlign(SWFOutput out);
+void SWFOutput_byteAlign (SWFOutput out);
 
-int SWFOutput_getLength(SWFOutput out);
+int SWFOutput_getLength (SWFOutput out);
 
-void SWFOutput_setNext(SWFOutput out, SWFOutput next);
+void SWFOutput_setNext (SWFOutput out, SWFOutput next);
 
-SWFOutput SWFOutput_getNext(SWFOutput out);
+SWFOutput SWFOutput_getNext (SWFOutput out);
 
-byte* SWFOutput_getBuffer(SWFOutput out);
+byte *SWFOutput_getBuffer (SWFOutput out);
 
-byte* SWFOutput_getCurPos(SWFOutput out);
+byte *SWFOutput_getCurPos (SWFOutput out);
 
 /* write data to output */
-void SWFOutput_writeBits(SWFOutput out, int data, int bits);
+void SWFOutput_writeBits (SWFOutput out, int data, int bits);
 
-void SWFOutput_writeSBits(SWFOutput out, int data, int bits);
+void SWFOutput_writeSBits (SWFOutput out, int data, int bits);
 
-void SWFOutput_writeUInt8(SWFOutput out, int data);
+void SWFOutput_writeUInt8 (SWFOutput out, int data);
 
-void SWFOutput_writeSInt8(SWFOutput out, int data);
+void SWFOutput_writeSInt8 (SWFOutput out, int data);
 
-void SWFOutput_writeUInt16(SWFOutput out, int data);
+void SWFOutput_writeUInt16 (SWFOutput out, int data);
 
-void SWFOutput_writeSInt16(SWFOutput out, int data);
+void SWFOutput_writeSInt16 (SWFOutput out, int data);
 
-void SWFOutput_writeUInt32(SWFOutput out, long data);
+void SWFOutput_writeUInt32 (SWFOutput out, long data);
 
-void SWFOutput_writeSInt32(SWFOutput out, long data);
+void SWFOutput_writeSInt32 (SWFOutput out, long data);
 
-void SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes);
+void SWFOutput_writeBuffer (SWFOutput out, char *buffer, int bytes);
 
 
 /* number of bits required to store num */
-int SWFOutput_numBits(int num);
+int SWFOutput_numBits (int num);
 
-int SWFOutput_numSBits(int num);
+int SWFOutput_numSBits (int num);
 
 
-void SWFOutput_writeString(SWFOutput out, const byte *string);
+void SWFOutput_writeString (SWFOutput out, const byte * string);
 
 #endif /* SWF_OUTPUT_H_INCLUDED */

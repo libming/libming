@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_TTFFONT_H_INCLUDED
 #define SWF_TTFFONT_H_INCLUDED
 
@@ -48,7 +50,7 @@ struct KernInfo
 struct _textList
 {
   struct _textList *next;
-  struct _textRecord *text;		/* hrm.  any way around this? */
+  struct _textRecord *text;	/* hrm.  any way around this? */
 };
 typedef struct _textList *SWFTextList;
 
@@ -92,14 +94,14 @@ typedef struct _textRecord *SWFTextRecord;
 
 #define TEXTRECORD_SIZE sizeof(struct _textRecord)
 
-SWFTextRecord newSWFTextRecord();
-void destroySWFTextRecord(SWFTextRecord record);
+SWFTextRecord newSWFTextRecord ();
+void destroySWFTextRecord (SWFTextRecord record);
 
-SWFFont newSWFFont();
-void destroySWFFont(SWFBlock block);
-SWFFont loadSWFFontFromTTF(char *file);
+SWFFont newSWFFont ();
+void destroySWFFont (SWFBlock block);
+SWFFont loadSWFFontFromTTF (char *file);
 
-void SWFFont_addTextToList(SWFFont font, struct _textRecord *text);
-void SWFFont_resolveTextList(SWFFont font);
+void SWFFont_addTextToList (SWFFont font, struct _textRecord *text);
+void SWFFont_resolveTextList (SWFFont font);
 
 #endif /* SWF_TTFFONT_H_INCLUDED */

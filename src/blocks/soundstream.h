@@ -17,7 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* soundstream.h */
+/* $Id$ */
 
 #ifndef SWF_SOUNDSTREAM_H_INCLUDED
 #define SWF_SOUNDSTREAM_H_INCLUDED
@@ -48,16 +48,16 @@ typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
 #define SWF_SOUNDSTREAM_STEREO           (1<<0)
 
 
-SWFSoundStream newSWFSoundStream(FILE *file);
+SWFSoundStream newSWFSoundStream (FILE * file);
 
-SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
+SWFSoundStream newSWFSoundStream_fromInput (SWFInput input);
 
-void destroySWFSoundStream(SWFSoundStream sound);
+void destroySWFSoundStream (SWFSoundStream sound);
 
-SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream sound, float frameRate);
+SWFBlock SWFSoundStream_getStreamHead (SWFSoundStream sound, float frameRate);
 
-SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream sound);
+SWFBlock SWFSoundStream_getStreamBlock (SWFSoundStream sound);
 
-void SWFSoundStream_rewind(SWFSoundStream sound);
+void SWFSoundStream_rewind (SWFSoundStream sound);
 
 #endif /* SWF_SOUNDSTREAM_H_INCLUDED */

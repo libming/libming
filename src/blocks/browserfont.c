@@ -28,61 +28,65 @@ struct SWFBrowserFont_s
 };
 
 
-static void writeSWFBrowserFontToMethod(SWFBlock block,
-					SWFByteOutputMethod method, void *data)
+static void
+writeSWFBrowserFontToMethod (SWFBlock block,
+			     SWFByteOutputMethod method, void *data)
 {
-  SWFOutput out = ((SWFBrowserFont)block)->out;
-  SWFOutput_writeToMethod(out, method, data);
+  SWFOutput out = ((SWFBrowserFont) block)->out;
+  SWFOutput_writeToMethod (out, method, data);
 }
 
 
-static int completeSWFBrowserFont(SWFBlock block)
+static int
+completeSWFBrowserFont (SWFBlock block)
 {
-  SWFBrowserFont font = (SWFBrowserFont)block;
+  SWFBrowserFont font = (SWFBrowserFont) block;
   SWFOutput out = font->out;
-  SWFOutput_byteAlign(out);
-  BLOCK(font)->type = SWF_DEFINEFONT2; /* see below */
+  SWFOutput_byteAlign (out);
+  BLOCK (font)->type = SWF_DEFINEFONT2;	/* see below */
 
-  return SWFOutput_getLength(out);
+  return SWFOutput_getLength (out);
 }
 
 
-void destroySWFBrowserFont(SWFBlock block)
+void
+destroySWFBrowserFont (SWFBlock block)
 {
-  SWFBrowserFont f = (SWFBrowserFont)block;
-  destroySWFOutput(f->out);
-  sec_free((void**)&f);
+  SWFBrowserFont f = (SWFBrowserFont) block;
+  destroySWFOutput (f->out);
+  sec_free ((void **) &f);
 }
 
 
-SWFBrowserFont newSWFBrowserFont(char *name)
+SWFBrowserFont
+newSWFBrowserFont (char *name)
 {
   unsigned int i;
-  SWFBrowserFont font = malloc(sizeof(struct SWFBrowserFont_s));
-  SWFOutput out = newSWFOutput();
+  SWFBrowserFont font = malloc (sizeof (struct SWFBrowserFont_s));
+  SWFOutput out = newSWFOutput ();
 
-  SWFCharacterInit((SWFCharacter)font);
+  SWFCharacterInit ((SWFCharacter) font);
 
-  BLOCK(font)->writeBlock = writeSWFBrowserFontToMethod;
-  BLOCK(font)->complete = completeSWFBrowserFont;
-  BLOCK(font)->dtor = destroySWFBrowserFont;
+  BLOCK (font)->writeBlock = writeSWFBrowserFontToMethod;
+  BLOCK (font)->complete = completeSWFBrowserFont;
+  BLOCK (font)->dtor = destroySWFBrowserFont;
 
   /* XXX - hack here: we change type to defineFont2 on completion
      so that we can tell the difference in setFont: */
 
-  BLOCK(font)->type = SWF_DEFINEEDITTEXT;
-  CHARACTERID(font) = ++SWF_gNumCharacters;
+  BLOCK (font)->type = SWF_DEFINEEDITTEXT;
+  CHARACTERID (font) = ++SWF_gNumCharacters;
 
-  SWFOutput_writeUInt16(out, CHARACTERID(font));
-  SWFOutput_writeUInt8(out, 0); /* maybe italic or bold flag? */
-  SWFOutput_writeUInt8(out, 0); /* reserved flags */
-  SWFOutput_writeUInt8(out, strlen(name));
+  SWFOutput_writeUInt16 (out, CHARACTERID (font));
+  SWFOutput_writeUInt8 (out, 0);	/* maybe italic or bold flag? */
+  SWFOutput_writeUInt8 (out, 0);	/* reserved flags */
+  SWFOutput_writeUInt8 (out, strlen (name));
 
-  for(i=0; i<strlen(name); ++i)
-    SWFOutput_writeUInt8(out, name[i]);
+  for (i = 0; i < strlen (name); ++i)
+    SWFOutput_writeUInt8 (out, name[i]);
 
-  SWFOutput_writeUInt16(out, 0); /* number of glyphs */
-  SWFOutput_writeSInt16(out, 2); /* offset */
+  SWFOutput_writeUInt16 (out, 0);	/* number of glyphs */
+  SWFOutput_writeSInt16 (out, 2);	/* offset */
 
   font->out = out;
 
@@ -90,7 +94,8 @@ SWFBrowserFont newSWFBrowserFont(char *name)
 }
 
 
-SWFOutput SWFBrowserFont_getOutput(SWFBrowserFont font)
+SWFOutput
+SWFBrowserFont_getOutput (SWFBrowserFont font)
 {
   return font->out;
 }

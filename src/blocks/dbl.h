@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_DBL_H_INCLUDED
 #define SWF_DBL_H_INCLUDED
 
@@ -30,12 +32,12 @@ typedef struct SWFDBLBitmap_s *SWFDBLBitmap;
 
 /* create a new DBL (define bits lossless) bitmap from the given file */
 
-SWFDBLBitmap newSWFDBLBitmap(FILE *f);
+SWFDBLBitmap newSWFDBLBitmap (FILE * f);
 
 
 /* create a new DBL bitmap from the given input object */
 
-SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
+SWFDBLBitmap newSWFDBLBitmap_fromInput (SWFInput input);
 
 
 #endif /* SWF_DBL_H_INCLUDED */

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_JPEG_H_INCLUDED
 #define SWF_JPEG_H_INCLUDED
 
@@ -27,12 +29,13 @@ typedef struct SWFJpegWithAlpha_s *SWFJpegWithAlpha;
 #include "input.h"
 
 
-SWFJpegBitmap newSWFJpegBitmap(FILE *f);
+SWFJpegBitmap newSWFJpegBitmap (FILE * f);
 
-SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input);
+SWFJpegBitmap newSWFJpegBitmap_fromInput (SWFInput input);
 
-SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha);
+SWFJpegWithAlpha newSWFJpegWithAlpha (FILE * f, FILE * alpha);
 
-SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
+SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput (SWFInput input,
+						SWFInput alpha);
 
 #endif /* SWF_JPEG_H_INCLUDED */

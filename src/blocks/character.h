@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_CHARACTER_H_INCLUDED
 #define SWF_CHARACTER_H_INCLUDED
 
@@ -54,55 +56,55 @@ struct SWFCharacter_s
   /* a morph needs to acquire dependencies from its shapes.
      this is weird, but the easiest way I can think of to do this. */
 
-  int (*getDependencies)(SWFCharacter character, SWFBlock** outBlocks);
+  int (*getDependencies) (SWFCharacter character, SWFBlock ** outBlocks);
 };
 
 
 /* initialize character values to something sane */
 
-void SWFCharacterInit(SWFCharacter character);
+void SWFCharacterInit (SWFCharacter character);
 
 
 /* destroy this character */
 
-void destroySWFCharacter(SWFCharacter character);
+void destroySWFCharacter (SWFCharacter character);
 
 
 /* marks the given block as a dependency of the character- that is,
    we should define the block before defining the character */
 
-void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency);
+void SWFCharacter_addDependency (SWFCharacter character, SWFBlock dependency);
 
 
 /* returns the character's dependency list */
 
 int
-SWFCharacter_getDependencies(SWFCharacter character, SWFBlock** outBlocks);
+SWFCharacter_getDependencies (SWFCharacter character, SWFBlock ** outBlocks);
 
 
 /* clears the character's dependecy list */
 
-void SWFCharacter_clearDependencies(SWFCharacter character);
+void SWFCharacter_clearDependencies (SWFCharacter character);
 
 
 /* returns the scaled (i.e., in twips) width of the character */
 
-int SWFCharacter_getScaledWidth(SWFCharacter character);
+int SWFCharacter_getScaledWidth (SWFCharacter character);
 
 
 /* returns the scaled (i.e., in twips) height of the character */
 
-int SWFCharacter_getScaledHeight(SWFCharacter character);
+int SWFCharacter_getScaledHeight (SWFCharacter character);
 
 
 /* returns the character's SWFRect bounds object */
 
-SWFRect SWFCharacter_getBounds(SWFCharacter character);
+SWFRect SWFCharacter_getBounds (SWFCharacter character);
 
 
 /* returns non-zero if the given block is a character type */
 
-int SWFBlock_isCharacter(SWFBlock block);
+int SWFBlock_isCharacter (SWFBlock block);
 
 
 #endif /* SWF_CHARACTER_H_INCLUDED */
