@@ -341,6 +341,7 @@ void bufferResolveJumps(Buffer out)
       if(*p == SWFACTION_BRANCHALWAYS)
       {
 	p += 3; /* plus instruction plus two-byte length */
+
 	if(*p == MAGIC_CONTINUE_NUMBER_LO &&
 	   *(p+1) == MAGIC_CONTINUE_NUMBER_HI)
 	{
@@ -356,7 +357,7 @@ void bufferResolveJumps(Buffer out)
 	  *(p+1) = (target>>8) & 0xff;
 	}
 
-	p+=2;
+	p += 2;
       }
       else
       {
@@ -364,6 +365,7 @@ void bufferResolveJumps(Buffer out)
 	l = *p;
 	++p;
 	l += *p<<8;
+	++p;
 
 	p += l;
       }
