@@ -49,6 +49,7 @@ typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
 
 
 SWFSoundStream newSWFSoundStream(FILE *file);
+SWFSoundStream newSWFSoundStreamFromFileno(int fd); /* added by David McNab <david@rebirthing.co.nz> */
 
 SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 

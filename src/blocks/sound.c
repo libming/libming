@@ -150,6 +150,16 @@ newSWFSound(FILE *f, byte flags)
 	return newSWFSound_fromInput(newSWFInput_file(f), flags);
 }
 
+/* added by David McNab <david@rebirthing.co.nz> */
+/* required so that python can pass in file descriptors instead of FILE* streams */
+
+SWFSound
+newSWFSoundFromFileno(int fd, byte flags)
+{
+  FILE *fp = fdopen(fd, "r");
+  return newSWFSound(fp, flags);
+}
+
 
 SWFSound
 newSWFSound_fromInput(SWFInput input, byte flags)

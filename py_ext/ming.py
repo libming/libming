@@ -325,9 +325,9 @@ class SWFMovie(SWFBase):
         mingc.SWFMovie_remove(self.this, item.this)
 
     def streamMp3(self, mp3):
-        sound = SWFSound(mp3)
+        sound = SWFSoundStream(mp3)
         self.blocks.append(sound)
-        mingc.SWFMovie_setSoundStream(self.this, sound)
+        mingc.SWFMovie_setSoundStream(self.this, sound.this)
 
     def setSoundStream(self, sound):
         self.blocks.append(sound)
@@ -602,9 +602,17 @@ SWFTEXTFIELD_NOSELECT  = mingc.SWFTEXTFIELD_NOSELECT
 
 class SWFSound(SWFBase):
 
+    def __init__(self, fname, flags=0):
+        self.file = open(fname, "rb")
+        self.this = mingc.newSWFSoundFromFileno(self.file.fileno(), flags)
+
+    # display list destroys this..
+
+class SWFSoundStream(SWFBase):
+
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.this = mingc.newSWFSound(self.file)
+        self.this = mingc.newSWFSoundStreamFromFileno(self.file.fileno())
 
     # display list destroys this..
 

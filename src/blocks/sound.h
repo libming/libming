@@ -65,6 +65,10 @@ SWFBlock newDefineSWFSoundBlock(SWFSound sound);
 
 SWFSound newSWFSound(FILE *f, byte flags);
 
+/* added by David McNab to facilitate Python access */
+SWFSound newSWFSoundFromFileno(int fd, byte flags);
+
+
 SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
 
 void destroySWFSound(SWFBlock sound);
