@@ -429,12 +429,12 @@ class SWFBitmap(SWFBase):
 
         if ext == '.dbl' or ext == '.DBL':
             self.file = open(fname, "rb")
-            self.this = mingc.newSWFDBLBitmap(self.file)
+            self.this = mingc.newSWFBitmap_fromInput(mingc.newSWFInput_file(self.file))
 
         elif ext == '.jpg' or ext == '.JPG':
             self.file = open(fname, "rb")
             if alpha is None:
-                self.this = mingc.newSWFJpegBitmap(self.file)
+                self.this = mingc.newSWFBitmap_fromInput(mingc.newSWFInput_file(self.file))
             else:
                 self.alpha = open(alpha, "rb")
                 self.this = mingc.newSWFJpegWithAlpha(self.file, self.alpha)
