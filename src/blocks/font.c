@@ -1217,6 +1217,7 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 	struct out o;
 	int moveBits, x, y;
 	int straight, numBits;
+	int numFillBits, numLineBits;
 	int startX = 0;
 	int startY = 0;
 	int style;
@@ -1227,10 +1228,10 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 
 	byteAlign();
 
-	if ( readBitsP(f, 4) != 1 ) /* fill bits */
+	if ( (numFillBits = readBitsP(f, 4)) != 1 ) /* fill bits */
 		SWF_error("SWFFont_getShape: bad file format (was expecting fill bits = 1)");
 
-	if ( readBitsP(f, 4) > 1 ) /* line bits */
+	if ( (numLineBits = readBitsP(f, 4)) > 1 ) /* line bits */
 		SWF_error("SWFFont_getShape: bad file format (was expecting line bits = 0)");
 
 	/* now we get to parse the shape commands.	Oh boy.
@@ -1250,13 +1251,13 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 		return o.buf;
 
 	if ( style & 1 )
-		if ( readBitsP(f, 1) != 0 ) /* fill0 = 0 */
+		if ( readBitsP(f, numFillBits) != 0 ) /* fill0 = 0 */
 			SWF_error("SWFFont_getShape: bad file format (was expecting fill0 = 0)");
 	if ( style & 2 )
-		if ( readBitsP(f, 1) != 1 ) /* fill1 = 1 */
+		if ( readBitsP(f, numFillBits) != 1 ) /* fill1 = 1 */
 			SWF_error("SWFFont_getShape: bad file format (was expecting fill1 = 1)");
 	if ( style & 4 )
-		if ( readBitsP(f, 1) != 0 ) /* line = 1 */
+		if ( readBitsP(f, numLineBits) != 0 ) /* line = 1 */
 			SWF_error("SWFFont_getShape: bad file format (was expecting line = 0)");
 
 	/* translate the glyph's shape records into drawing commands */
