@@ -1,3 +1,6 @@
+#ifndef MING_CONFIG_H
+#define MING_CONFIG_H
+
 #define USE_ZLIB 1
 #undef USE_GIF 
 #undef USE_PNG 
@@ -19,4 +22,6 @@
 #if USE_PNG
 #undef USE_ZLIB
 #define USE_ZLIB 1
+#endif
+
 #endif

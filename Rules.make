@@ -3,6 +3,7 @@ MING_VER = 0.3beta1
 OS             = $(shell uname -s)
 
 CC             = gcc
+CXX	       = g++
 
 INCLUDES       := -I. $(INCLUDES)
 LDLIBS         = $(LIBS)
