@@ -328,6 +328,11 @@ SWFMovie_save(movie, filename)
         OUTPUT:
         RETVAL
 
+void 
+SWFMovie_addExport(movie, block, name)
+	SWF::Movie movie 
+	SWF::Block block
+	char *name
 
 SWF::DisplayItem
 SWFMovie_add(movie, block)
@@ -413,6 +418,12 @@ constant()
     RETVAL = ix;
     OUTPUT:
     RETVAL
+
+void 
+SWFDisplayItem_setMaskLevel(item, masklevel)
+	SWF::DisplayItem item
+	int masklevel
+
 
 void 
 SWFDisplayItem_addAction(item, action, flags)
