@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.2a
-#define MING_VERSION_TEXT  "0.2a"
+#define MING_VERSION        0.2c
+#define MING_VERSION_TEXT  "0.2c"
 
 int Ming_init();
 

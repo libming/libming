@@ -39,7 +39,7 @@ struct SWFPosition_s
 void destroySWFPosition(SWFPosition position)
 {
   /* something else owns the matrix, so don't free it. */
-  free(position);
+  sec_free((void**)&position);
 }
 
 

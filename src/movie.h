@@ -19,6 +19,8 @@
 
 /* movie.h */
 
+/* $Id$ */
+
 #ifndef MING_MOVIE_H_INCLUDED
 #define MING_MOVIE_H_INCLUDED
 
@@ -41,6 +43,8 @@ void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
 void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b);
+
+void SWFMovie_Protect(SWFMovie movie);
 
 void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound);
 

@@ -46,7 +46,8 @@ char *stringConcat(char *a, char *b)
   {
     a = realloc(a, strlen(a)+strlen(b)+1);
     strcat(a,b);
-    free(b);
+    sec_free((void**)&b);
+
     return a;
   }
   else
@@ -115,7 +116,7 @@ int bufferWriteConstants(Buffer out)
   for(i=0; i<nConstants; ++i)
   {
     len += bufferWriteHardString(out, constants[i], strlen(constants[i])+1);
-    free(constants[i]);
+    sec_free((void**)&constants[i]);
   }
 
   nConstants = 0;
@@ -141,11 +142,8 @@ Buffer newBuffer()
 
 void destroyBuffer(Buffer out)
 {
-  if(out)
-  {
-    free(out->buffer);
-    free(out);
-  }
+  sec_free((void**)&out->buffer);
+  sec_free((void**)&out);
 }
 
 int bufferLength(Buffer out)

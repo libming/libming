@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <string.h>
 #include <math.h>
 
@@ -131,7 +133,7 @@ void destroySWFText(SWFBlock block)
   }
 
   destroySWFRect(CHARACTER(text)->bounds);
-  free(text);
+  sec_free((void**)&text);
 }
 
 
@@ -185,12 +187,11 @@ SWFTextRecord newSWFTextRecord()
 void destroySWFTextRecord(SWFTextRecord record)
 {
   if(record->string != NULL)
-    free(record->string);
+    sec_free((void**)&record->string);
 
   if(record->advance != NULL)
-    free(record->advance);
-
-  free(record);
+  sec_free((void**)&record->advance);
+  sec_free((void**)&record);
 }
 
 
@@ -206,7 +207,7 @@ SWFTextRecord SWFTextRecord_getNext(SWFTextRecord record)
 }
 
 
-int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string)
+int SWFText_getScaledStringWidth(SWFText text, const char *string)
 {
   SWFFont font = text->currentRecord->font.font;
   int height = text->currentRecord->height;
@@ -269,7 +270,7 @@ void SWFText_setFont(SWFText text, SWFBlock font)
   textRecord->flags |= SWF_TEXT_HAS_FONT;
 
   /* XXX */  
-  if((textRecord->isBrowserFont = (BLOCK(font)->type == SWF_TEXTFIELD)))
+  if((textRecord->isBrowserFont = (BLOCK(font)->type == SWF_DEFINEEDITTEXT)))
   {
     textRecord->font.browserFont = (SWFBrowserFont)font;
   }

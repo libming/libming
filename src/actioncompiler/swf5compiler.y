@@ -1,3 +1,4 @@
+/* $Id$ */
 
 %start program
 
@@ -144,6 +145,7 @@ program
 		  bufferConcat(b, bf);
 		  bufferConcat(b, bc);
 		  *((Buffer *)buffer) = b; }
+	;
 
 code
 	: anycode
@@ -228,6 +230,7 @@ if_stmt
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5));
 		  bufferConcat($$, $5); }
+	;
 
 expr_opt
 	: /* empty */	{ $$ = NULL; }
@@ -569,6 +572,10 @@ void_function_call
 		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
 		  bufferWriteOp($$, SWFACTION_POP);
 		  free($1); }
+
+	| DELETE expr_or_obj
+		{ $$ = $2;
+		  bufferWriteOp($$, SWFACTION_TRACE); }
 
 	| TRACE '(' expr_or_obj ')'
 		{ $$ = $3;

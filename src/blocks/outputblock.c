@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdio.h>
 
 #include "outputblock.h"
@@ -62,7 +64,7 @@ void destroySWFOutputBlock(SWFBlock block)
 {
   SWFOutputBlock b = (SWFOutputBlock)block;
   destroySWFOutput(b->output);
-  free(block);
+  sec_free((void**)&block);
 }
 
 

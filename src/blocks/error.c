@@ -1,3 +1,4 @@
+/* $Id$ */
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -41,3 +42,4 @@ void SWF_assert(int c)
   if(!c)
     SWF_error("failed assertion");
 }
+

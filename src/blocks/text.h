@@ -63,7 +63,7 @@ void SWFText_addString(SWFText text, const char *string, int *advance);
 
 void SWFText_setSpacing(SWFText text, float spacing);
 
-int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string);
+int SWFText_getScaledStringWidth(SWFText text, const char *string);
 
 short SWFText_getScaledAscent(SWFText text);
 

@@ -1,3 +1,4 @@
+/* $Id$ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #endif
 
 #include "input.h"
-
+#include "method.h"
 
 struct SWFInput_s
 {
@@ -107,7 +108,7 @@ void destroySWFInput(SWFInput input)
 
 static void SWFInput_dtor(SWFInput input)
 {
-  free(input);
+  sec_free((void**)&input);
 }
 
 
@@ -237,8 +238,8 @@ SWFInput newSWFInput_buffer(unsigned char *buffer, int length)
 
 static void SWFInput_buffer_dtor(SWFInput input)
 {
-  free(input->data);
-  free(input);
+  sec_free((void**)&input->data);
+  sec_free((void**)&input);
 }
 
 
@@ -339,7 +340,7 @@ static int SWFInput_stream_getChar(SWFInput input)
 
 static void SWFInput_stream_dtor(SWFInput input)
 {
-  free(input->data);
+  sec_free((void**)&input->data);
 }
 
 

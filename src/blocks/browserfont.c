@@ -17,6 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
 
 #include "browserfont.h"
 
@@ -50,7 +51,7 @@ void destroySWFBrowserFont(SWFBlock block)
 {
   SWFBrowserFont f = (SWFBrowserFont)block;
   destroySWFOutput(f->out);
-  free(f);
+  sec_free((void**)&f);
 }
 
 
@@ -69,7 +70,7 @@ SWFBrowserFont newSWFBrowserFont(char *name)
   /* XXX - hack here: we change type to defineFont2 on completion
      so that we can tell the difference in setFont: */
 
-  BLOCK(font)->type = SWF_TEXTFIELD;
+  BLOCK(font)->type = SWF_DEFINEEDITTEXT;
   CHARACTERID(font) = ++SWF_gNumCharacters;
 
   SWFOutput_writeUInt16(out, CHARACTERID(font));

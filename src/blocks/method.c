@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include "method.h"
 
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
@@ -44,3 +46,14 @@ void fileOutputMethod(byte b, void *data)
   FILE *f = (FILE *)data;
   fputc(b, f);
 }
+
+
+// calls free() with cleanup the pointer
+void sec_free(void** ptr)
+{
+  if (*ptr != NULL) {
+    free(*ptr);
+    *ptr=NULL;
+  }
+}
+

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include "button.h"
 
 struct buttonRecord
@@ -187,19 +189,19 @@ void destroySWFButton(SWFBlock block)
     if(button->records[i]->matrix != NULL)
       destroySWFMatrix(button->records[i]->matrix);
 
-    free(button->records[i]);
+    sec_free((void**)&button->records[i]);
   }
 
-  free(button->records);
+  sec_free((void**)&button->records);
 
   for(i=0; i<button->nActions; ++i)
     destroySWFAction(button->actions[i].action);
 
-  free(button->actions);
+  sec_free((void**)&button->actions);
 
   destroySWFOutput(button->out);
 
-  free(button);
+  sec_free((void**)&button);
 }
 
 

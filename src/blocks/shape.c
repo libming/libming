@@ -17,6 +17,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
+
 #include "shape.h"
 
 
@@ -32,12 +35,14 @@ struct stateChangeRecord
 };
 typedef struct stateChangeRecord *StateChangeRecord;
 
+
 struct lineToRecord
 {
   int dx;
   int dy;
 };
 typedef struct lineToRecord *LineToRecord;
+
 
 struct curveToRecord
 {
@@ -48,12 +53,14 @@ struct curveToRecord
 };
 typedef struct curveToRecord *CurveToRecord;
 
+
 typedef enum
 {
   SHAPERECORD_STATECHANGE,
   SHAPERECORD_LINETO,
   SHAPERECORD_CURVETO
 } shapeRecordType;
+
 
 struct shapeRecord
 {
@@ -67,6 +74,7 @@ struct shapeRecord
   } record;
 };
 typedef struct shapeRecord ShapeRecord;
+
 
 struct SWFShape_s
 {
@@ -124,23 +132,23 @@ void destroySWFShape(SWFBlock block)
 
     /* gradients and bitmaps are destroyed separately */
 
-    free(shape->fills[i]);
+    sec_free((void**)&shape->fills[i]);
   }
 
   if(shape->fills != NULL)
   {
-    free(shape->fills);
+    sec_free((void**)&shape->fills);
 
     for(i=0; i<shape->nLines; ++i)
-      free(shape->lines[i]);
+      sec_free((void**)&shape->lines[i]);
   }
 
   if(shape->lines != NULL)
-    free(shape->lines);
+    sec_free((void**)&shape->lines);
 
   destroySWFRect(CHARACTER(shape)->bounds);
   destroySWFOutput(shape->out);
-  free(shape);
+  sec_free((void**)&shape);
 }
 
 
@@ -202,7 +210,7 @@ void SWFShape_end(SWFShape shape)
       SWFShape_writeShapeRecord(shape, shape->records[i]);
     }
 
-    free(shape->records[i].record.stateChange); /* all in union are pointers */
+    sec_free((void**)&shape->records[i].record.stateChange); /* all in union are pointers */
   }
 
   SWFOutput_writeBits(shape->out, 0, 6); /* end tag */
@@ -215,7 +223,7 @@ void SWFShape_end(SWFShape shape)
   if(BLOCK(shape)->type > 0) /* i.e., shape with style */
     SWFShape_addStyleHeader(shape);
 
-  free(shape->records);
+  sec_free((void**)&shape->records);
   shape->nRecords = 0;
 }
 
@@ -605,7 +613,7 @@ static SWFFillStyle addFillStyle(SWFShape shape, SWFFillStyle fill)
   {
     if(SWFFillStyle_equals(fill, shape->fills[i]))
     {
-      free(fill);
+      sec_free((void**)&fill);
       return shape->fills[i];
     }
   }
@@ -845,3 +853,4 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
   /* no idea where the pen was left */
   SWFShape_moveScaledPenTo(shape, startX, startY);
 }
+

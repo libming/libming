@@ -19,6 +19,8 @@
 
 /* libswf.h - global typedefs, etc. */
 
+/* $Id$ */
+
 #ifndef LIBSWF_H_INCLUDED
 #define LIBSWF_H_INCLUDED
 

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include "dbl.h"
 #include "block.h"
@@ -64,6 +66,7 @@ SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input)
   BLOCK(dbl)->writeBlock = writeSWFDBLBitmapToMethod;
   BLOCK(dbl)->complete = completeSWFDBLBitmap;
   BLOCK(dbl)->dtor = destroySWFCharacter;
+//  BLOCK(dbl)->dtor = destroySWFDBLBitmap_andInputs;
 
   dbl->input = input;
 
@@ -122,8 +125,9 @@ static void destroySWFDBLBitmap_andInputs(SWFBlock block)
   SWFDBLBitmap bitmap = (SWFDBLBitmap)block;
 
   SWFCharacter_clearDependencies(CHARACTER(block));
-  destroySWFInput(bitmap->input);
-  destroySWFRect(CHARACTER(bitmap)->bounds);
+  if (bitmap->input != NULL) destroySWFInput(bitmap->input);
+  if (CHARACTER(bitmap)->bounds != NULL) destroySWFRect(CHARACTER(bitmap)->bounds);
+  sec_free((void**)&bitmap);
 }
 
 
@@ -133,3 +137,4 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
   BLOCK(dbl)->dtor = destroySWFDBLBitmap_andInputs;
   return dbl;
 }
+

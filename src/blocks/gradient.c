@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -51,7 +53,7 @@ SWFGradient newSWFGradient()
 
 void destroySWFGradient(SWFGradient gradient)
 {
-  free(gradient);
+  sec_free((void**)&gradient);
 }
 
 

@@ -1,3 +1,5 @@
+/* $Id$ */
+
 %start program
 
 %{
@@ -141,6 +143,8 @@ program
         : elems
 		{ *((Buffer *)buffer) = $1; }
 
+	;
+
 elems
 	: elem
 	| elems elem
@@ -277,6 +281,7 @@ if_stmt
 		  bufferWriteS16($3, bufferLength($5));
 		  bufferConcat($3, $5);
 		  $$ = $3; }
+	;
 
 expr_opt
 	: /* empty */	{ $$ = NULL; }

@@ -1,8 +1,8 @@
 /*
    +----------------------------------------------------------------------+
-   | PHP version 4.0                                                      |
+   | PHP Version 4                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2001 The PHP Group                                |
+   | Copyright (c) 1997-2002 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 2.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -16,22 +16,17 @@
    +----------------------------------------------------------------------+
 */
 
-#include "php.h"
+/* $Id$ */
 
 #ifndef _PHP_MING_H
 #define _PHP_MING_H
 
-#ifdef COMPILE_DL_MING
-#undef HAVE_MING
-#define HAVE_MING 1
-#endif
-
 #if HAVE_MING
-
-#include "ming.h"
 
 extern zend_module_entry ming_module_entry;
 #define ming_module_ptr &ming_module_entry
+
+#include <ming.h>
 
 PHP_RINIT_FUNCTION(ming);
 PHP_MINIT_FUNCTION(ming);
@@ -77,6 +72,7 @@ PHP_FUNCTION(swfmovie_remove);
 PHP_FUNCTION(swfmovie_nextFrame);
 PHP_FUNCTION(swfmovie_labelFrame);
 PHP_FUNCTION(swfmovie_setBackground);
+PHP_FUNCTION(swfmovie_Protect);
 PHP_FUNCTION(swfmovie_setRate);
 PHP_FUNCTION(swfmovie_setDimension);
 PHP_FUNCTION(swfmovie_setFrames);

@@ -1,3 +1,4 @@
+/* $Id$ */
 
 #include "placeobject.h"
 #include "method.h"
@@ -114,13 +115,13 @@ void destroySWFPlaceObject2Block(SWFBlock block)
   SWFPlaceObject2Block place = (SWFPlaceObject2Block)block;
 
   if(place->actions)
-    free(place->actions);
+    sec_free((void**)&place->actions);
 
   if(place->actionFlags)
-    free(place->actionFlags);
+    sec_free((void**)&place->actionFlags);
 
   if(place->name != NULL)
-    free(place->name);
+    sec_free((void**)&place->name);
 
   if(place->out)
     destroySWFOutput(place->out);
@@ -131,7 +132,7 @@ void destroySWFPlaceObject2Block(SWFBlock block)
   if(place->cXform)
     destroySWFCXform(place->cXform);
 
-  free(place);
+  sec_free((void**)&place);
 }
 
 
@@ -167,8 +168,7 @@ SWFPlaceObject2Block newSWFPlaceObject2Block(int depth)
 
 void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block, const char *name)
 {
-  if(block->name != NULL)
-    free(block->name);
+  sec_free((void**)&block->name);
 
   block->name = strdup(name);
 }
@@ -217,8 +217,7 @@ void SWFPlaceObject2Block_setColorMult(SWFPlaceObject2Block block,
 void SWFPlaceObject2Block_setMatrix(SWFPlaceObject2Block block,
 				    SWFMatrix matrix)
 {
-  if(block->matrix != NULL)
-    free(block->matrix);
+  sec_free((void**)&block->matrix);
 
   block->matrix = SWFMatrix_dup(matrix);
 }

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <math.h>
 
 #include "font.h"
@@ -30,11 +32,13 @@ struct kernInfo
   short adjustment;
 };
 
+
 struct SWFTextList_s
 {
   struct SWFTextList_s *next;
   struct SWFTextRecord_s *text;		/* hrm.  any way around this? */
 };
+
 
 struct SWFFont_s
 {
@@ -148,8 +152,7 @@ void destroySWFFont(SWFBlock block)
 {
   SWFFont font = (SWFFont)block;
 
-  if(font->shapes)
-    free(font->shapes);
+  sec_free((void**)&font->shapes);
 
   if(font->bounds)
   {
@@ -158,16 +161,12 @@ void destroySWFFont(SWFBlock block)
     for(i=0; i<font->nFontGlyphs; ++i)
       destroySWFRect(font->bounds[i]);
 
-    free(font->bounds);
+    sec_free((void**)&font->bounds);
   }
 
-  if(font->name)
-    free(font->name);
-
-  if(font->kernTable)
-    free(font->kernTable);
-
-  free(font);
+  sec_free((void**)&font->name);
+  sec_free((void**)&font->kernTable);
+  sec_free((void**)&font);
 }
 
 
@@ -261,7 +260,7 @@ void SWFFont_resolveTextList(SWFFont font)
     oldList = textList;
     SWFFont_buildCodeTable(font, textList->text);
     textList = textList->next;
-    free(oldList);
+    sec_free((void**)&oldList);
   }
 
   font->textList = NULL;
@@ -615,3 +614,4 @@ SWFFont loadSWFFontFromFile(FILE *file)
 
   return font;
 }
+

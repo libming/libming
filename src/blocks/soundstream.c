@@ -1,3 +1,5 @@
+/* $Id$ */
+
 
 #include <stdio.h>
 #include <math.h>
@@ -238,7 +240,7 @@ void destroySWFSound(SWFSound sound)
   if(sound->freeInput)
     destroySWFInput(sound->input);
 
-  free(sound);
+  sec_free((void**)&sound);
 }
 
 

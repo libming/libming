@@ -1,3 +1,4 @@
+/* $Id$ */
 
 /* convert everything to objects, resolve dependencies, etc.. */
 
@@ -1501,7 +1502,7 @@ int main(int argc, char *argv[])
   m.rate = readUInt8(f)/256.0+readUInt8(f);
   m.nFrames = readUInt16(f);
 
-  printf("<?\n");
+  printf("<?php\n");
   printf("\t$m = new SWFMovie();\n");
   printf("\t$m->setRate(%f);\n", m.rate);
   printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
@@ -1571,7 +1572,7 @@ int main(int argc, char *argv[])
 
   printf("\n\theader('Content-type: application/x-shockwave-flash');\n");
   printf("\t$m->output();\n");
-  printf("?>\n");
+  printf("?>");
 
   exit(0);
 }

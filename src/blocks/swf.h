@@ -170,7 +170,7 @@ void SWFGradient_addEntry(SWFGradient gradient,
 
 typedef void *SWFMatrix;
 
-SWFMatrix newSWFMatrix(int a, int b, int c, int d, int x, int y);
+SWFMatrix newSWFMatrix(float a, float b, float c, float d, int x, int y);
 void destroySWFMatrix(SWFMatrix matrix);
 
 SWFMatrix SWFMatrix_set(SWFMatrix m,
@@ -187,7 +187,7 @@ SWFFont newSWFFont();
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFBlock block);
 
-int SWFFont_getScaledStringWidth(SWFFont font, const char *string);
+int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string);
 
 short SWFFont_getScaledAscent(SWFFont font);
 short SWFFont_getScaledDescent(SWFFont font);
@@ -202,7 +202,7 @@ SWFText newSWFText();
 SWFText newSWFText2();
 void destroySWFText(SWFBlock block);
 
-void SWFText_setFont(SWFText text, SWFFont font);
+void SWFText_setFont(SWFText text, SWFBlock font);
 void SWFText_setScaledHeight(SWFText text, int height);
 void SWFText_scaledMoveTo(SWFText text, int x, int y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
@@ -296,9 +296,8 @@ SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 
 typedef void *SWFLineStyle;
 
-SWFLineStyle newSWFLineStyle(int width, int r, int g, int b, int a);
-byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
-			 byte r, byte g, byte b, byte a);
+SWFLineStyle newSWFLineStyle(unsigned short width, byte r, byte g, byte b, byte a);
+byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width, byte r, byte g, byte b, byte a);
 
 
   /* SWFShape */
@@ -437,7 +436,7 @@ typedef void *SWFPlaceObject2Block;
 #define SWF_PLACEACTION_KEYUP       (1<<7)
 #define SWF_PLACEACTION_DATA        (1<<8)
 
-SWFPlaceObject2Block newSWFPlaceObject2Block();
+SWFPlaceObject2Block newSWFPlaceObject2Block(int depth);
 
 void SWFPlaceObject2Block_setDepth(SWFPlaceObject2Block block, int depth);
 void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block,

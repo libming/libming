@@ -1,3 +1,5 @@
+/* $Id$ */
+
 
 static int buffer;
 static int bufbits = 0; /* # of bits in buffer */

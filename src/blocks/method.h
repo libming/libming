@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #ifndef SWF_METHOD_H_INCLUDED
 #define SWF_METHOD_H_INCLUDED
 
@@ -46,5 +48,7 @@ void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data);
 void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data);
 
 void fileOutputMethod(byte b, void *data);
+
+void sec_free(void** ptr);
 
 #endif /* SWF_METHOD_H_INCLUDED */

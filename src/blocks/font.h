@@ -44,7 +44,7 @@ typedef struct SWFFont_s *SWFFont;
 
 SWFFont newSWFFont();
 
-void destroySWFFont();
+void destroySWFFont(SWFBlock block);
 
 SWFFont loadSWFFontFromFile(FILE *file);
 

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include "morph.h"
 
 struct SWFMorph_s
@@ -111,7 +113,7 @@ void destroySWFMorph(SWFBlock block)
   destroySWFShape(morph->shape2);
   */
 
-  free(morph);
+  sec_free((void**)&morph);
 }
 
 

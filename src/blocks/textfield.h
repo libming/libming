@@ -17,8 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef SWF_TEXTFIELD_H_INCLUDED
-#define SWF_TEXTFIELD_H_INCLUDED
+#ifndef SWF_DEFINEEDITTEXT_H_INCLUDED
+#define SWF_DEFINEEDITTEXT_H_INCLUDED
 
 typedef struct SWFTextField_s *SWFTextField;
 
@@ -73,4 +73,4 @@ void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);
 
-#endif /* SWF_TEXTFIELD_H_INCLUDED */
+#endif /* SWF_DEFINEEDITTEXT_H_INCLUDED */

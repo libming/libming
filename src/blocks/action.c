@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include "action.h"
 #include "outputblock.h"
 
@@ -26,12 +28,15 @@ SWFAction newSWFAction()
   return newSWFOutputBlock(newSWFOutput(), SWF_DOACTION);
 }
 
+
 void destroySWFAction(SWFAction action)
 {
   destroySWFOutputBlock((SWFBlock)action);
 }
 
+
 SWFAction newSWFAction_fromOutput(SWFOutput out)
 {
   return newSWFOutputBlock(out, SWF_DOACTION);
 }
+

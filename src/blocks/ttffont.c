@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #if 0
 
 #include <math.h>
@@ -70,6 +72,7 @@ SWFFont loadSWFFontfromTTF(char *filename)
   TT_Done_FreeType(engine);
 }
 
+
 int completeSWFFont(SWFBlock block)
 {
   SWFFont font = (SWFFont)block;
@@ -85,6 +88,8 @@ int completeSWFFont(SWFBlock block)
 
   return size;
 }
+
+
 void writeSWFFontToMethod(SWFBlock block,
 			  SWFByteOutputMethod method, void *data)
 {
@@ -115,17 +120,18 @@ void writeSWFFontToMethod(SWFBlock block,
       method(*(p++), data);
   }
 }
+
+
 void destroySWFFont(SWFBlock block)
 {
   SWFFont font = (SWFFont)block;
 
-  if(font->shapes)
-    free(font->shapes);
-  if(font->name)
-    free(font->name);
-  if(font->kernTable)
-    free(font->kernTable);
+  sec_free((void**)&font->shapes);
+  sec_free((void**)&font->name);
+  sec_free((void**)&font->kernTable);
 }
+
+
 SWFFont newSWFFont()
 {
   SWFFont font = (SWFFont)malloc(SWFFONT_SIZE);
@@ -139,6 +145,7 @@ SWFFont newSWFFont()
 
   return font;
 }
+
 
 SWFFont loadSWFFontFromTTF(char *file)
 {
@@ -193,6 +200,7 @@ void SWFFont_buildCodeTable(SWFFont font, SWFTextRecord text)
   }
 }
 
+
 /* build code table from text in all proceding Text blocks */
 void SWFFont_resolveTextList(SWFFont font)
 {
@@ -204,7 +212,7 @@ void SWFFont_resolveTextList(SWFFont font)
     oldList = textList;
     SWFFont_buildCodeTable(font, textList->text);
     textList = textList->next;
-    free(oldList);
+    sec_free((void**)&oldList);
   }
 
   font->textList = NULL;

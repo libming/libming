@@ -50,10 +50,8 @@ void destroySWFBlockList(SWFBlockList list)
       destroySWFBlock(list->blocks[i].block);
   }
 
-  if(list->blocks != NULL)
-    free(list->blocks);
-
-  free(list);
+  sec_free((void**)&list->blocks);
+  sec_free((void**)&list);
 }
 
 
@@ -99,8 +97,7 @@ void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite)
 
   list->nBlocks = 0;
 
-  free(list->blocks);
-  list->blocks = NULL;
+  sec_free((void**)&list->blocks);
 }
 
 

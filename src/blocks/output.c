@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -96,8 +98,8 @@ void destroySWFOutput(SWFOutput out)
   while(o != NULL)
   {
     next = o->next;
-    free(o->buffer);
-    free(o);
+    sec_free((void**)&o->buffer);
+    sec_free((void**)&o);
     o = next;
   }
 }

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include "character.h"
 #include "blocktypes.h"
 
@@ -94,9 +96,8 @@ void SWFCharacter_clearDependencies(SWFCharacter character)
   character->nDependencies = 0;
 
   if(character->dependencies != NULL)
-    free(character->dependencies);
+    sec_free((void**)&character->dependencies);
 
-  character->dependencies = NULL;
 }
 
 
@@ -136,7 +137,7 @@ int SWFBlock_isCharacter(SWFBlock block)
      type == SWF_DEFINELOSSLESS ||
      type == SWF_DEFINELOSSLESS2 ||
      type == SWF_DEFINEFONT || type == SWF_DEFINEFONT2 ||
-     type == SWF_TEXTFIELD)
+     type == SWF_DEFINEEDITTEXT)
     return TRUE;
   else
     return FALSE;

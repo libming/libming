@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -54,11 +56,10 @@ static void destroySWFExports(SWFMovie movie)
   int n;
 
   for(n=0; n<movie->nExports; ++n)
-    free(movie->exports[n].name);
+    sec_free((void**)&movie->exports[n].name);
 
-  free(movie->exports);
+  sec_free((void**)&movie->exports);
 
-  movie->exports = 0;
   movie->nExports = 0;
 }
 
@@ -72,7 +73,7 @@ void destroySWFMovie(SWFMovie movie)
   if(movie->nExports > 0)
     destroySWFExports(movie);
 
-  free(movie);
+  sec_free((void**)&movie);
 }
 
 
@@ -117,9 +118,8 @@ extern float Ming_scale;
 
 void SWFMovie_setDimension(SWFMovie movie, float width, float height)
 {
-  if(movie->bounds)
-    free(movie->bounds);
-
+  sec_free((void**)&movie->bounds);
+  
   movie->bounds = newSWFRect(0, (int)rint(Ming_scale*width),
 			     0, (int)rint(Ming_scale*height));
 }
@@ -136,6 +136,12 @@ void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b)
   movie->r = r;
   movie->g = g;
   movie->b = b;
+}
+
+
+void SWFMovie_Protect(SWFMovie movie)
+{
+  SWFMovie_addBlock(movie, newSWFProtectBlock());
 }
 
 

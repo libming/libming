@@ -1,4 +1,3 @@
-
 /* gif2dbl: convert a gif file to a DBL file using a RGB palette
  * for non-transparent gifs and RGBA palette for transparent ones.
  *
@@ -6,6 +5,9 @@
  *
  * (derived from gif2mask.c)
  */
+
+/* $Id$ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,18 +29,21 @@ void error(char *msg)
  */
 int getTransparentColor(GifFileType * file)
 {
-  int i;
+  int i,returnvalue=-1;
   ExtensionBlock * ext = file->SavedImages[0].ExtensionBlocks;
  
   for (i=0; i < file->SavedImages[0].ExtensionBlockCount; i++, ext++) {
-  
+
     if (ext->Function == GRAPHICS_EXT_FUNC_CODE) {
-      if (ext->Bytes[0] & 1)	/* there is a transparent color */
-        return ext->Bytes[3];	/* here it is */
+      if (ext->Bytes[0] & 1){   /* there is a transparent color */
+        if (!ext->Bytes[3]) returnvalue=255; // exeption
+        else returnvalue=ext->Bytes[3];
+      }
     }
+
   }
 
-  return -1;
+  return returnvalue;
 }
 
 unsigned char *readGif(char *fileName, int *length, int *bytesPerColor)
@@ -229,31 +234,40 @@ int main(int argc, char *argv[])
 
   dbl = fopen(outfile, "wb");
 
+  if (dbl)
+  {
 	/* DBL header */
-  fputc('D', dbl);
-  fputc('B', dbl);
-  fputc('l', dbl);
-  fputc(bytesPerColor==3 ? 1 : 2, dbl);	/* 1: RGB - 2: RGBA */
+    fputc('D', dbl);
+    fputc('B', dbl);
+    fputc('l', dbl);
+    fputc(bytesPerColor==3 ? 1 : 2, dbl);	/* 1: RGB - 2: RGBA */
 
 	/* fill size */
-  fputc(((outsize+6) >> 24) & 0xFF, dbl);
-  fputc(((outsize+6) >> 16) & 0xFF, dbl);
-  fputc(((outsize+6) >> 8) & 0xFF, dbl);
-  fputc(((outsize+6) >> 0) & 0xFF, dbl);
+    fputc(((outsize+6) >> 24) & 0xFF, dbl);
+    fputc(((outsize+6) >> 16) & 0xFF, dbl);
+    fputc(((outsize+6) >> 8) & 0xFF, dbl);
+    fputc(((outsize+6) >> 0) & 0xFF, dbl);
 
 	/* write header */
-  if(fwrite(data, sizeof(char), 6, dbl) != 6) {
-	perror(outfile);
-	exit(1);
-  }
+    if(fwrite(data, sizeof(char), 6, dbl) != 6)
+    {
+      perror(outfile);
+      exit(1);
+    }
 	/* write compressed data */
-  if(fwrite(outdata, sizeof(char), outsize, dbl) != outsize)
-  {
-	perror(outfile);
-    	exit(-1);
-  }
+    if(fwrite(outdata, sizeof(char), outsize, dbl) != outsize)
+    {
+      perror(outfile);
+      exit(-1);
+    }
 
 	/* and we are done! */
-  fclose(dbl);
+    fclose(dbl);
+  }
+  else {
+    perror(outfile);
+    exit(-1);
+  }
+
   exit(0);
 }

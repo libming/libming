@@ -47,7 +47,7 @@ SWFFillStyle SWFFill_getFillStyle(SWFFill fill)
 void destroySWFFill(SWFFill fill)
 {
   destroySWFPosition(fill->position);
-  free(fill);
+  sec_free((void**)&fill);
 }
 
 

@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -152,13 +154,9 @@ void destroySWFTextField(SWFBlock block)
   destroySWFRect(CHARACTER(f)->bounds);
   destroySWFOutput(f->out);
 
-  if(f->varName != NULL)
-    free(f->varName);
-
-  if(f->string != NULL)
-    free(f->string);
-
-  free(f);
+  sec_free((void**)&f->varName);
+  sec_free((void**)&f->string);
+  sec_free((void**)&f);
 }
 
 
@@ -171,7 +169,7 @@ SWFTextField newSWFTextField()
   BLOCK(field)->writeBlock = writeSWFTextFieldToMethod;
   BLOCK(field)->complete = completeSWFTextField;
   BLOCK(field)->dtor = destroySWFTextField;
-  BLOCK(field)->type = SWF_TEXTFIELD;
+  BLOCK(field)->type = SWF_DEFINEEDITTEXT;
 
   CHARACTERID(field) = ++SWF_gNumCharacters;
   CHARACTER(field)->bounds = newSWFRect(-40, 280, -40, 280);

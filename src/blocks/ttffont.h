@@ -96,7 +96,7 @@ SWFTextRecord newSWFTextRecord();
 void destroySWFTextRecord(SWFTextRecord record);
 
 SWFFont newSWFFont();
-void destroySWFFont();
+void destroySWFFont(SWFBlock block);
 SWFFont loadSWFFontFromTTF(char *file);
 
 void SWFFont_addTextToList(SWFFont font, struct _textRecord *text);

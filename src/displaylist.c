@@ -22,8 +22,8 @@
 #include <math.h>
 
 #include "displaylist.h"
-#include "blocktypes.h"
 
+#include "blocks/blocktypes.h"
 #include "blocks/placeobject.h"
 #include "blocks/character.h"
 #include "blocks/matrix.h"
@@ -61,7 +61,7 @@ void destroySWFDisplayItem(SWFDisplayItem item)
 
   /* character is freed in blocklist */
 
-  free(item);
+  sec_free((void**)&item);
 }
 
 
@@ -76,7 +76,7 @@ void destroySWFDisplayList(SWFDisplayList list)
     item = next;
   }
 
-  free(list);
+  sec_free((void**)&list);
 }
 
 

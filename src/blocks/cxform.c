@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -53,15 +55,18 @@ SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
   return cXform;
 }
 
+
 SWFCXform newSWFAddCXform(int rAdd, int gAdd, int bAdd, int aAdd)
 {
   return newSWFCXform(rAdd, gAdd, bAdd, aAdd, 1.0, 1.0, 1.0, 1.0);
 }
 
+
 SWFCXform newSWFMultCXform(float rMult, float gMult, float bMult, float aMult)
 {
   return newSWFCXform(0, 0, 0, 0, rMult, gMult, bMult, aMult);
 }
+
 
 void SWFCXform_setColorAdd(SWFCXform cXform,
 			   int rAdd, int gAdd, int bAdd, int aAdd)
@@ -72,6 +77,7 @@ void SWFCXform_setColorAdd(SWFCXform cXform,
   cXform->aAdd = aAdd;
 }
 
+
 void SWFCXform_setColorMult(SWFCXform cXform,
 			    float rMult, float gMult, float bMult, float aMult)
 {
@@ -81,10 +87,12 @@ void SWFCXform_setColorMult(SWFCXform cXform,
   cXform->aMult = floor(256*aMult);
 }
 
+
 void destroySWFCXform(SWFCXform cXform)
 {
-  free(cXform);
+  sec_free((void**)&cXform);
 }
+
 
 void SWFOutput_writeCXform(SWFOutput out, SWFCXform cXform, SWFBlocktype type)
 {
@@ -148,3 +156,4 @@ void SWFOutput_writeCXform(SWFOutput out, SWFCXform cXform, SWFBlocktype type)
       SWFOutput_writeSBits(out, cXform->aAdd, nBits);
   }
 }
+

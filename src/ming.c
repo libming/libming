@@ -1,3 +1,4 @@
+/* $Id$ */
 
 #include "ming.h"
 
@@ -21,15 +22,18 @@ int Ming_init()
   return 0;
 }
 
+
 void Ming_setScale(float scale)
 {
   Ming_scale = scale;
 }
 
+
 float Ming_getScale()
 {
   return Ming_scale;
 }
+
 
 void Ming_setCubicThreshold(int num)
 {
@@ -42,10 +46,12 @@ void Ming_setWarnFunction(void (*warn)(char *msg, ...))
   setSWFWarnFunction(warn);
 }
 
+
 void Ming_setErrorFunction(void (*error)(char *msg, ...))
 {
   setSWFErrorFunction(error);
 }
+
 
 void Ming_useSWFVersion(int version)
 {
@@ -54,3 +60,4 @@ void Ming_useSWFVersion(int version)
 
   SWF_versionNum = version;
 }
+

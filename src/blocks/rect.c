@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 #include "rect.h"
 
@@ -58,7 +60,7 @@ void SWFOutput_writeRect(SWFOutput out, SWFRect rect)
 
 void destroySWFRect(SWFRect rect)
 {
-  free(rect);
+  sec_free((void**)&rect);
 }
 
 

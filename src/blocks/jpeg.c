@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id$ */
+
 #include <stdlib.h>
 
 #include "jpeg.h"
@@ -227,8 +229,8 @@ void writeSWFJpegWithAlphaToMethod(SWFBlock block,
 
 void destroySWFJpegBitmap(SWFBlock block)
 {
-  free(CHARACTER(block)->bounds);
-  free(block);
+  sec_free((void**)&CHARACTER(block)->bounds);
+  sec_free((void**)&block);
 }
 
 
@@ -365,7 +367,7 @@ SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input)
 
   jpeg->length = info->length + 4;
 
-  free(info);
+  sec_free((void**)&info);
 
   return jpeg;
 }
@@ -414,7 +416,7 @@ SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 
   jpeg->jpegLength = info->length + 2; /* ?? */
 
-  free(info);
+  sec_free((void**)&info);
 
   if((alen = SWFInput_length(alpha)) == -1)
     SWF_error("couldn't get alpha file length!");
