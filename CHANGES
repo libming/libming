@@ -1,6 +1,13 @@
 
 MING HISTORY
 
+5.8.01-7.8.01
+	Added lots of compiler patches from Wolfgang Hamann
+	Finally fixed the annoying bug causing random compiler errors
+	Added Ming_useSWFVersion
+	Didn't fix MP3 streaming
+	(0.2-pre-a)
+
 5.7.01
 	Got silly placeobject2 stuff working.
 	Added clip events

@@ -3,12 +3,6 @@ Stuff what to do (not in order):
 
 * make leading/linespacing terminology consistent btwn text/textfield
 
-* set size of drawGlyph
-
-* gNumCharacters is being preserved across sessions! Argh!
-
-* Add swf5 compiler and assembler
-
 * Add masks
 
 * Change SWFButton::addShape to SWFButton::add and have it return a displayitem
