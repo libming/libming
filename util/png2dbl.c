@@ -8,6 +8,7 @@
 #include <zlib.h>
 
 int verbose = 0;
+typedef unsigned char byte;
 
 void error(char *s, ...)
 {
@@ -44,6 +45,10 @@ struct pngdata readPNG(FILE *fp)
 {
   struct pngdata png;
   unsigned char header[8];
+  unsigned int x, y;
+  unsigned char *p;
+  byte alpha;
+  byte r, g, b;
 
   png_structp png_ptr;
   png_infop info_ptr, end_info;
@@ -190,11 +195,6 @@ struct pngdata readPNG(FILE *fp)
      png.color_type == PNG_COLOR_TYPE_RGB)
   {
     /* alpha has to be pre-applied, bytes shifted */
-
-    unsigned int x, y;
-    unsigned char *p;
-    byte alpha;
-    byte r, g, b;
 
     if(verbose)
       printf("color type: RGB ALPHA\n");
