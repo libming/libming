@@ -739,21 +739,24 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
-		  bufferWriteOp($$, SWFACTION_DELETE); }
+		  bufferWriteOp($$, SWFACTION_DELETE); 
+		  bufferWriteOp($$, SWFACTION_POP); }
 
 	| DELETE lvalue_expr '.' IDENTIFIER
 		{ $$ = $2;
 		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		  bufferWriteString($$, $4, strlen($4)+1);
 		  free($4);
-		  bufferWriteOp($$, SWFACTION_DELETEVAR); }
+		  bufferWriteOp($$, SWFACTION_DELETEVAR);
+		  bufferWriteOp($$, SWFACTION_POP); }
 
 	| DELETE lvalue_expr '[' expr ']'
 		{ $$ = $2;
 		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		  bufferConcat($$, $4);
 		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		  bufferWriteOp($$, SWFACTION_DELETEVAR); }
+		  bufferWriteOp($$, SWFACTION_DELETEVAR); 
+		  bufferWriteOp($$, SWFACTION_POP); }
 
 	| TRACE '(' expr_or_obj ')'
 		{ $$ = $3;
