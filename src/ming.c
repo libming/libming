@@ -104,8 +104,8 @@ void Ming_setErrorFunction(void (*error)(const char *msg, ...))
 
 void Ming_useSWFVersion(int version)
 {
-	if(version < 4 || version > 6)
-		SWF_error("Only SWF versions 4, 5 and 6 are currently supported!\n");
+	if(version < 4 || version > 7)
+		SWF_error("Only SWF versions 4 to 7 are currently supported!\n");
 
 	SWF_versionNum = version;
 
