@@ -1,10 +1,29 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "action.h"
 #include "compile.h"
 
 #define print(x)	{fputs(x,stdout);}
+
+int gIndent;
+#define INDENT_LEVEL 2
+
+void println(char *s, ...)
+{
+  va_list ap;
+  int n = gIndent*INDENT_LEVEL;
+
+  while(n-- > 0)
+    putchar(' ');
+
+  va_start(ap, s);
+  vprintf(s, ap);
+  va_end(ap);
+
+  putchar('\n');
+}
 
 int fileOffset = 0;
 
@@ -36,6 +55,23 @@ long readSInt32(Buffer f)
 unsigned long readUInt32(Buffer f)
 {
   return (unsigned long)(readUInt8(f) + (readUInt8(f)<<8) + (readUInt8(f)<<16) + (readUInt8(f)<<24));
+}
+
+double readDouble(Buffer f)
+{
+  double d;
+  unsigned char *p = (unsigned char *)&d;
+
+  p[4] = readUInt8(f);
+  p[5] = readUInt8(f);
+  p[6] = readUInt8(f);
+  p[7] = readUInt8(f);
+  p[0] = readUInt8(f);
+  p[1] = readUInt8(f);
+  p[2] = readUInt8(f);
+  p[3] = readUInt8(f);
+
+  return d;
 }
 
 char *readString(Buffer f)
@@ -108,6 +144,10 @@ void dumpBytes(Buffer f, int length)
   putchar('\n');
 }
 
+void printDoAction(Buffer f, int length);
+
+char *dictionary[256];
+
 int printActionRecord(Buffer f)
 {
   int length = 0, type;
@@ -122,209 +162,374 @@ int printActionRecord(Buffer f)
   switch(type)
   {
     case SWFACTION_ADD:
-      printf("Add\n");
+      println("Add");
       break;
     case SWFACTION_SUBTRACT:
-      printf("Subtract\n");
+      println("Subtract");
       break;
     case SWFACTION_MULTIPLY:
-      printf("Multiply\n");
+      println("Multiply");
       break;
     case SWFACTION_DIVIDE:
-      printf("Divide\n");
+      println("Divide");
       break;
     case SWFACTION_EQUAL:
-      printf("Equals\n");
+      println("Equals");
       break;
     case SWFACTION_LESSTHAN:
-      printf("Less Than\n");
+      println("Less Than");
       break;
     case SWFACTION_LOGICALAND:
-      printf("And\n");
+      println("And");
       break;
     case SWFACTION_LOGICALOR:
-      printf("Or\n");
+      println("Or");
       break;
     case SWFACTION_LOGICALNOT:
-      printf("Not\n");
+      println("Not");
       break;
     case SWFACTION_STRINGEQ:
-      printf("String eq\n");
+      println("String eq");
       break;
     case SWFACTION_STRINGLENGTH:
-      printf("String Length\n");
+      println("String Length");
       break;
     case SWFACTION_SUBSTRING:
-      printf("Substring\n");
+      println("Substring");
+      break;
+    case SWFACTION_POP:
+      println("Pop");
       break;
     case SWFACTION_INT:
-      printf("Int\n");
+      println("Int");
       break;
     case SWFACTION_GETVARIABLE:
-      printf("Get Variable\n");
+      println("Get Variable");
       break;
     case SWFACTION_SETVARIABLE:
-      printf("Set Variable\n");
+      println("Set Variable");
       break;
     case SWFACTION_SETTARGETEXPRESSION:
-      printf("Set Target Expression\n");
+      println("Set Target Expression");
       break;
     case SWFACTION_STRINGCONCAT:
-      printf("String Concat\n");
+      println("String Concat");
       break;
     case SWFACTION_GETPROPERTY:
-      printf("Get Property\n");
+      println("Get Property");
       break;
     case SWFACTION_SETPROPERTY:
-      printf("Set Property\n");
+      println("Set Property");
       break;
     case SWFACTION_DUPLICATECLIP:
-      printf("Duplicate Clip\n");
+      println("Duplicate Clip");
       break;
     case SWFACTION_REMOVECLIP:
-      printf("Remove Clip\n");
+      println("Remove Clip");
       break;
     case SWFACTION_TRACE:
-      printf("Trace\n");
+      println("Trace");
       break;
     case SWFACTION_STARTDRAGMOVIE:
-      printf("Start Drag Movie\n");
+      println("Start Drag Movie");
       break;
     case SWFACTION_STOPDRAGMOVIE:
-      printf("Stop Drag Movie\n");
+      println("Stop Drag Movie");
       break;
     case SWFACTION_STRINGCOMPARE:
-      printf("String Compare\n");
+      println("String Compare");
       break;
     case SWFACTION_RANDOM:
-      printf("Random\n");
+      println("Random");
       break;
     case SWFACTION_MBLENGTH:
-      printf("String MB Length\n");
+      println("String MB Length");
       break;
     case SWFACTION_ORD:
-      printf("Ord\n");
+      println("Ord");
       break;
     case SWFACTION_CHR:
-      printf("Chr\n");
+      println("Chr");
       break;
     case SWFACTION_GETTIMER:
-      printf("Get Timer\n");
+      println("Get Timer");
       break;
     case SWFACTION_MBSUBSTRING:
-      printf("MB Substring\n");
+      println("MB Substring");
       break;
     case SWFACTION_MBORD:
-      printf("MB Ord\n");
+      println("MB Ord");
       break;
     case SWFACTION_MBCHR:
-      printf("MB Chr\n");
+      println("MB Chr");
       break;
     case SWFACTION_NEXTFRAME:
-      printf("Next Frame\n");
+      println("Next Frame");
       break;
     case SWFACTION_PREVFRAME:
-      printf("Previous Frame\n");
+      println("Previous Frame");
       break;
     case SWFACTION_PLAY:
-      printf("Play\n");
+      println("Play");
       break;
     case SWFACTION_STOP:
-      printf("Stop\n");
+      println("Stop");
       break;
     case SWFACTION_TOGGLEQUALITY:
-      printf("Toggle Quality\n");
+      println("Toggle Quality");
       break;
     case SWFACTION_STOPSOUNDS:
-      printf("Stop Sounds\n");
+      println("Stop Sounds");
       break;
 
     /* ops with args */
     case SWFACTION_PUSHDATA:
     {
-      int type = readUInt8(f);
-      if(type==0)
-        printf("Push String: %s\n", readString(f));
-      else
+      int type;
+      int start = fileOffset;
+
+      while(fileOffset < start+length)
       {
-	readUInt16(f); /* always 0..? */
-        printf("Push Property: %04x\n", readUInt16(f));
+	switch(type = readUInt8(f))
+	{
+	  case 0: /* string */
+	    println("Push String: %s", readString(f));
+	    break;
+	  case 1: /* property */
+	    readUInt16(f); /* always 0? */
+	    println("Push Property: %04x", readUInt16(f));
+	    break;
+	  case 2: /* null */
+	    println("Push NULL");
+	    break;
+	  case 3: /* ??? */
+	    println("Push type 3- ??");
+	    break;
+	  case 4: 
+	    println("Push type 4 (%i)- ??", readUInt8(f));
+	    break;
+	  case 5:
+	    if(readUInt8(f))
+	      println("Push true");
+	    else
+	      println("Push false");
+	    break;
+	  case 6: /* double */
+	    println("Push %f", readDouble(f));
+	    break;
+	  case 7: /* int */
+	    println("Push %i", readSInt32(f));
+	    break;
+	  case 8: /* dictionary */
+	    println("Push \"%s\"", dictionary[readUInt8(f)]);
+	    break;
+	  default:
+	    println("unknown push type: %i", type);
+	}
       }
       break;
     }
     case SWFACTION_GOTOFRAME:
-      printf("Goto Frame %i\n", readUInt16(f));
+      println("Goto Frame %i", readUInt16(f));
       break;
     case SWFACTION_GETURL:
     {
       char *url = readString(f);
-      printf("Get URL \"%s\" target \"%s\"\n", url, readString(f));
+      println("Get URL \"%s\" target \"%s\"", url, readString(f));
       break;
     }
     case SWFACTION_WAITFORFRAMEEXPRESSION:
-      printf("Wait For Frame Expression\n");
-      dumpBytes(f, length);
+      println("Wait For Frame Expression, skip %i\n", readUInt8(f));
       break;
     case SWFACTION_BRANCHALWAYS:
-      printf("Branch Always %i\n", readSInt16(f));
+      println("Branch Always %i", readSInt16(f));
       break;
     case SWFACTION_GETURL2:
       switch(readUInt8(f))
       {
-        case 0: printf("Get URL2 (Don't send)\n"); break;
-        case 1: printf("Get URL2 (GET)\n"); break;
-        case 2: printf("Get URL2 (POST)\n"); break;
+        case 0: println("Get URL2 (Don't send)"); break;
+        case 1: println("Get URL2 (GET)"); break;
+        case 2: println("Get URL2 (POST)"); break;
       }
       break;
     case SWFACTION_BRANCHIFTRUE:
-      printf("Branch If True %i\n", readSInt16(f));
+      println("Branch If True %i", readSInt16(f));
       break;
     case SWFACTION_CALLFRAME:
-      printf("Call Frame\n");
+      println("Call Frame");
       dumpBytes(f, length);
       break;
     case SWFACTION_GOTOEXPRESSION:
-      printf("Goto Expression ");
-
+      print("Goto Expression");
       if(readUInt8(f) == 1)
-	printf("and Play\n");
+	printf(" and Play\n");
       else
-	printf("and Stop\n");
-
+	printf(" and Stop\n");
       break;
     case SWFACTION_WAITFORFRAME:
     {
       int frame = readUInt16(f);
-      printf("Wait for frame %i else skip %i\n", frame, readUInt8(f));
+      println("Wait for frame %i else skip %i", frame, readUInt8(f));
       break;
     }
     case SWFACTION_SETTARGET:
-      printf("Set Target %s\n", readString(f));
+      println("Set Target %s", readString(f));
       break;
     case SWFACTION_GOTOLABEL:
-      printf("Goto Label %s\n", readString(f));
+      println("Goto Label %s", readString(f));
       break;
-
     case SWFACTION_END:
-      printf("End\n");
       return 0;
       break;
+
+    /* f5 ops */
+    case SWFACTION_DELETE:
+      println("Delete");
+      break;
+    case SWFACTION_VAR:
+      println("Var");
+      break;
+    case SWFACTION_VAREQUALS:
+      println("Var assign");
+      break;
+    case SWFACTION_INITARRAY:
+      println("Init array");
+      break;
+    case SWFACTION_INITOBJECT:
+      println("Init object");
+      break;
+    case SWFACTION_CALLFUNCTION:
+      println("call function");
+      break;
+    case SWFACTION_RETURN:
+      println("return");
+      break;
+    case SWFACTION_MODULO:
+      println("modulo");
+      break;
+    case SWFACTION_NEW:
+      println("new");
+      break;
+    case SWFACTION_TYPEOF:
+      println("typeof");
+      break;
+    case SWFACTION_NEWADD:
+      println("new add");
+      break;
+    case SWFACTION_NEWLESSTHAN:
+      println("new less than");
+      break;
+    case SWFACTION_NEWEQUALS:
+      println("new equals");
+      break;
+    case SWFACTION_DUP:
+      println("dup");
+      break;
+    case SWFACTION_SWAP:
+      println("swap");
+      break;
+    case SWFACTION_GETMEMBER:
+      println("get member");
+      break;
+    case SWFACTION_SETMEMBER:
+      println("set member");
+      break;
+    case SWFACTION_INCREMENT:
+      println("increment");
+      break;
+    case SWFACTION_CALLMETHOD:
+      println("call method");
+      break;
+    case SWFACTION_BITWISEAND:
+      println("bitwise and");
+      break;
+    case SWFACTION_BITWISEOR:
+      println("bitwise or");
+      break;
+    case SWFACTION_BITWISEXOR:
+      println("bitwise xor");
+      break;
+    case SWFACTION_SHIFTLEFT:
+      println("shift left");
+      break;
+    case SWFACTION_SHIFTRIGHT:
+      println("shift right");
+      break;
+    case SWFACTION_SHIFTRIGHT2:
+      println("shift right 2");
+      break;
+
+    case SWFACTION_CONSTANTPOOL:
+    {
+      int i, n = readUInt8(f);
+      readUInt8(f);
+      print("declare dictionary:");
+
+      for(i=0; i<n; ++i)
+	printf(" %s%c", dictionary[i]=readString(f), (i<n-1)?',':'\n');
+
+      break;
+    }
+    case SWFACTION_WITH:
+    {
+      println("with");
+
+      ++gIndent;
+      printDoAction(f, readUInt16(f));
+      --gIndent;
+
+      break;
+    }
+    case SWFACTION_DEFINEFUNCTION:
+    {
+      char *name = readString(f);
+      int n = readUInt16(f);
+
+      print("function ");
+      print(name);
+      putchar('(');
+
+      printf("%s", readString(f));
+      --n;
+
+      for(; n>0; --n)
+	printf(", %s", readString(f));
+
+      putchar(')');
+      putchar('\n');
+
+      ++gIndent;
+      printDoAction(f, readUInt16(f));
+      --gIndent;
+
+      break;
+    }
+
+    case SWFACTION_ENUMERATE:
+      println("enumerate");
+      break;
+
+    case SWFACTION_SETREGISTER:
+      println("set register %i", readUInt8(f));
+      break;
+
     default:
-      printf("Unknown Action: %02X\n", type);
+      println("Unknown Action: %02X", type);
       dumpBytes(f, length);
   }
+
   return 1;
 }
 
-void printDoAction(Buffer f)
+void printDoAction(Buffer f, int length)
 {
   int end;
 
   if(!f)
     return;
 
-  end = bufferLength(f);
-  fileOffset = 0;
+  end = fileOffset + length;
 
-  while(printActionRecord(f) && fileOffset < end) ;
+  while(fileOffset < end && printActionRecord(f))
+    ;
 }

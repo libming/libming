@@ -1,6 +1,8 @@
 
-#ifndef COMPILER_H_INCLUDED
-#define COMPILER_H_INCLUDED
+#ifndef COMPILE_H_INCLUDED
+#define COMPILE_H_INCLUDED
+
+typedef struct _buffer *Buffer;
 
 #include <stdio.h>
 #include "../blocks/output.h"
@@ -14,6 +16,17 @@ int yylex();
 #ifndef max
   #define max(x,y)	(((x)>(y))?(x):(y))
 #endif
+
+enum
+{
+  PUSH_STRING = 0,
+  PUSH_NULL = 3,
+  PUSH_REGISTER = 4,
+  PUSH_BOOLEAN = 5,
+  PUSH_DOUBLE = 6,
+  PUSH_INT = 7,
+  PUSH_CONSTANT = 8
+};
 
 typedef enum
 {
@@ -43,8 +56,6 @@ typedef enum
 #define MAGIC_BREAK_NUMBER_LO    0xFF
 #define MAGIC_BREAK_NUMBER_HI    0x7F
 
-#define SETPROPERTY_WTHIT_STRING "18048"
-
 #define BUFFER_INCREMENT 128
 
 struct _buffer
@@ -54,50 +65,49 @@ struct _buffer
   int buffersize;
   int free;
 };
-typedef struct _buffer *Buffer;
 
 #define BUFFER_SIZE sizeof(struct _buffer)
 
 /* This is the only function needs be visible: */
 SWFAction compileSWFActionCode(char *script);
 
-/* blah */
-void stringPrepend(char *a, char *b);
-
 /* create/destroy buffer object */
 Buffer newBuffer();
 void destroyBuffer(Buffer out);
-void bufferConcat(Buffer a, Buffer b);     /* destroys b. */
-void bufferWriteBuffer(Buffer a, Buffer b);   /* doesn't. */
-
-/* write buffer's buffer to stream */
-void bufferWriteToStream(Buffer out, FILE *f);
+int bufferConcat(Buffer a, Buffer b);        /* destroys b. */
+int bufferWriteBuffer(Buffer a, Buffer b);   /* doesn't. */
 
 /* utilities for writing */
 void bufferGrow(Buffer out);
-Buffer bufferCheckSize(Buffer out, int bytes);
+void bufferCheckSize(Buffer out, int bytes);
 
 int bufferLength(Buffer out);
 
+/* constant pool stuff */
+int addConstant(char *s);
+int bufferWriteConstants(Buffer out);
+
 /* write data to buffer */
-void bufferWriteU8(Buffer out, int data);
-void bufferWriteS16(Buffer out, int data);
-void bufferWriteData(Buffer out, byte *buffer, int bytes);
-void bufferWriteString(Buffer out, byte *string, int length);
-void bufferWriteHardString(Buffer out, byte *string, int length);
-void bufferWriteGetProperty(Buffer out, char *string);
-void bufferWriteSetProperty(Buffer out, char *string);
-void bufferWriteWTHITProperty(Buffer out);
+int bufferWriteU8(Buffer out, int data);
+int bufferWriteS16(Buffer out, int data);
+int bufferWriteData(Buffer out, byte *buffer, int bytes);
+int bufferWriteHardString(Buffer out, byte *string, int length);
+int bufferWriteConstantString(Buffer out, byte *string, int length);
+int bufferWriteString(Buffer out, byte *string, int length);
+int bufferWriteInt(Buffer out, int i);
+int bufferWriteDouble(Buffer out, double d);
+int bufferWriteNull(Buffer out);
+int bufferWriteBoolean(Buffer out, int val);
+int bufferWriteRegister(Buffer out, int num);
+int bufferWriteSetRegister(Buffer out, int num);
+int bufferWriteGetProperty(Buffer out, char *string);
+int bufferWriteSetProperty(Buffer out, char *string);
+int bufferWriteWTHITProperty(Buffer out);
 
 /* concat b to a, destroy b */
 char *stringConcat(char *a, char *b);
 
-/* duplicate and triplicate what's on top of the stack.
-   uses temp var "_tmp" */
-void bufferDup(Buffer out);
-void bufferTrip(Buffer out);
-
 /* resolve magic number standins to relative offsets */
-void resolveJumps(Buffer out);
+void bufferResolveJumps(Buffer out);
 
-#endif /* COMPILER_H_INCLUDED */
+#endif /* COMPILE_H_INCLUDED */

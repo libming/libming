@@ -46,67 +46,124 @@ ID       [a-zA-Z_][a-zA-Z0-9_]*
 
 %%
 
-{DIGIT}+		{ count();	yylval.str = strdup(yytext);
-					return NUMBER; 		}
-{DIGIT}+"."{DIGIT}*	{ count();	yylval.str = strdup(yytext);
-					return NUMBER; 		}
-true			{ count();	yylval.str = strdup("1");
-					return NUMBER;		}
-false			{ count();	yylval.str = strdup("0");
-					return NUMBER;		}
+{DIGIT}+		{ count();	yylval.intVal = atoi(yytext);
+					return INTEGER;		}
+{DIGIT}+"."{DIGIT}*	{ count();	yylval.doubleVal = atof(yytext);
+					return DOUBLE; 		}
+true			{ count();	yylval.intVal = 1;
+					return BOOLEAN;		}
+false			{ count();	yylval.intVal = 0;
+					return BOOLEAN;		}
+null			{ count();	return NULLVAL;		}
 break			{ count();	return BREAK;		}
 continue		{ count();	return CONTINUE;	}
+function		{ count();	return FUNCTION;	}
 else			{ count();	return ELSE;		}
+switch			{ count();	return SWITCH;		}
+case			{ count();	return CASE;		}
 for			{ count();	return FOR;		}
+in			{ count();	return IN;		}
 if			{ count();	return IF;		}
 while			{ count();	return WHILE;		}
 do			{ count();	return DO;		}
-valueOf			{ count(); 	return EVAL;		}
+var			{ count();	return VAR;		}
+new			{ count();	return NEW;		}
+delete			{ count();	return DELETE;		}
+return			{ count();	return RETURN;		}
+end			{ count();	return END;		}
+with			{ count();	return WITH;		}
+asm			{ count();	return ASM;		}
+eval			{ count();	return EVAL;		}
 
-  /* functions */
+  /* legacy functions */
 random		{ count();	return RANDOM;	}
-time		{ count();	return TIME;	}
+getTimer	{ count();	return GETTIMER;	}
 length		{ count();	return LENGTH;	}
-int		{ count();	return INT;	}
 concat		{ count();	return CONCAT;	}
-duplicateClip	{ count();	return DUPLICATECLIP;	}
-removeClip	{ count();	return REMOVECLIP;	}
+substr		{ count();	return SUBSTR;	}
 trace		{ count();	return TRACE;	}
-startDrag	{ count();	return STARTDRAG;	}
-stopDrag	{ count();	return STOPDRAG;	}
+int		{ count();	return INT;	}
 ord		{ count();	return ORD;	}
 chr		{ count();	return CHR;	}
-callFrame	{ count();	return CALLFRAME;	}
 getURL		{ count();	return GETURL;	}
 getURL1		{ count();	return GETURL1; }
-loadMovie	{ count();	return LOADMOVIE;	}
-loadVariables	{ count();	return LOADVARIABLES;	}
-substr		{ count();	return SUBSTR;	}
-
-  /* getURL2 methods */
-post		{ count();	yylval.getURLMethod = GETURL_METHOD_POST;
-				return GETURL_METHOD;	}
-get		{ count();	yylval.getURLMethod = GETURL_METHOD_GET;
-				return GETURL_METHOD;	}
-nosend		{ count();	yylval.getURLMethod = GETURL_METHOD_NOSEND;
-				return GETURL_METHOD;	}
-
-
-  /* v3 functions */
 nextFrame	{ count();	return NEXTFRAME;	}
 prevFrame	{ count();	return PREVFRAME;	}
 play		{ count();	return PLAY;		}
 stop		{ count();	return STOP;		}
 toggleQuality	{ count();	return TOGGLEQUALITY;	}
 stopSounds	{ count();	return STOPSOUNDS;	}
-gotoFrame	{ count();	return GOTOFRAME;	}
-frameLoaded	{ count();	return FRAMELOADED;	}
-setTarget	{ count();	return SETTARGET;	}
+
+  /* assembler ops */
+dup			{ count();	return DUP; }
+swap			{ count();	return SWAP; }
+pop			{ count();	return POP; }
+push			{ count();	return PUSH; }
+setregister		{ count();	return SETREGISTER; }
+callfunction		{ count();	return CALLFUNCTION; }
+callmethod		{ count();	return CALLMETHOD; }
+and			{ count();	return AND; }
+or			{ count();	return OR; }
+xor			{ count();	return XOR; }
+modulo			{ count();	return MODULO; }
+add			{ count();	return ADD; }
+newadd			{ count();	return ADD; }
+lessthan		{ count();	return LESSTHAN; }
+newlessthan		{ count();	return LESSTHAN; }
+equals			{ count();	return EQUALS; }
+newequals		{ count();	return EQUALS; }
+inc			{ count();	return INC; }
+dec			{ count();	return DEC; }
+typeof			{ count();	return TYPEOF; }
+enumerate		{ count();	return ENUMERATE; }
+initobject		{ count();	return INITOBJECT; }
+initarray		{ count();	return INITARRAY; }
+getmember		{ count();	return GETMEMBER; }
+setmember		{ count();	return SETMEMBER; }
+shiftleft		{ count();	return SHIFTLEFT; }
+shiftright		{ count();	return SHIFTRIGHT; }
+shiftright2		{ count();	return SHIFTRIGHT2; }
+varequals		{ count();	return VAREQUALS; }
+oldadd			{ count();	return OLDADD; }
+subtract		{ count();	return SUBTRACT; }
+multiply		{ count();	return MULTIPLY; }
+divide			{ count();	return DIVIDE; }
+oldequals		{ count();	return OLDEQUALS; }
+oldlessthan		{ count();	return OLDLESSTHAN; }
+logicaland		{ count();	return LOGICALAND; }
+logicalor		{ count();	return LOGICALOR; }
+not			{ count();	return NOT; }
+stringeq		{ count();	return STRINGEQ; }
+stringlength		{ count();	return STRINGLENGTH; }
+substring		{ count();	return SUBSTRING; }
+getvariable		{ count();	return GETVARIABLE; }
+setvariable		{ count();	return SETVARIABLE; }
+settargetexpr		{ count();	return SETTARGETEXPRESSION; }
+duplicateclip		{ count();	return DUPLICATECLIP; }
+removeclip		{ count();	return REMOVECLIP; }
+startdrag		{ count();	return STARTDRAGMOVIE; }
+stopdrag		{ count();	return STOPDRAGMOVIE; }
+stringlessthan		{ count();	return STRINGLESSTHAN; }
+mblength		{ count();	return MBLENGTH; }
+mbsubstring		{ count();	return MBSUBSTRING; }
+mbord			{ count();	return MBORD; }
+mbchr			{ count();	return MBCHR; }
+branch			{ count();	return BRANCHALWAYS; }
+branchalways		{ count();	return BRANCHALWAYS; }
+branchiftrue		{ count();	return BRANCHIFTRUE; }
+geturl2			{ count();	return GETURL2; }
+post			{ count();	return POST; }
+get			{ count();	return GET; }
 
 
-this			{ count();      return THIS;	}
+r\:{DIGIT}+		{ count();	yylval.str = strdup(yytext+2);
+					return REGISTER;	}
+
 
 {ID}			{ count();	yylval.str = strdup(yytext);
+					return IDENTIFIER;	}
+
+\/{ID}			{ count();	yylval.str = strdup(yytext);
 					return IDENTIFIER;	}
 
 \"(\\.|[^\\"])*\"	{ count();	yylval.str = strdup(yytext+1);
@@ -131,8 +188,6 @@ this			{ count();      return THIS;	}
 
 "++"			{ count();	return INC; }
 "--"			{ count();	return DEC; }
-"<"			{ count();	return '<'; }
-">"			{ count();	return '>'; }
 "<="			{ count();	return LE; }
 ">="			{ count();	return GE; }
 "==" 			{ count();	return EQ; }
@@ -143,16 +198,22 @@ this			{ count();      return THIS;	}
 "/="			{ count();	return DEQ; }
 "+="			{ count();	return IEQ; }
 "-="			{ count();	return SEQ; }
-"==="			{ count();	return STREQ; }
-"!=="			{ count();	return STRNE; }
-"<=>"			{ count();	return STRCMP; }
-".."			{ count();	return PARENT; }
+"<<"			{ count();	return SHIFTLEFT; }
+">>"			{ count();	return SHIFTRIGHT; }
+">>>"			{ count();	return SHIFTRIGHT2; }
+"<<="			{ count();	return SHIFTLEFTEQ; }
+">>="			{ count();	return SHIFTRIGHTEQ; }
+">>>="			{ count();	return SHIFTRIGHT2EQ; }
 
+"<"			{ count();	return '<'; }
+">"			{ count();	return '>'; }
 ";"			{ count();	return ';'; }
 "="			{ count();	return '='; }
 "+"			{ count();	return '+'; }
 "-"			{ count();	return '-'; }
 "&"			{ count();	return '&'; }
+"|"			{ count();	return '|'; }
+"^"			{ count();	return '^'; }
 "*"			{ count();	return '*'; }
 "/"			{ count();	return '/'; }
 "!"			{ count();	return '!'; }
@@ -167,7 +228,7 @@ this			{ count();      return THIS;	}
 "?"			{ count();	return '?'; }
 ":"			{ count();	return ':'; }
 
-\n			{ count();	column = 0;
+"\n"			{ count();	column = 0;
 					strcpy(szLine, yytext + 1);
 					++sLineNumber;	yyless(1);	}
 

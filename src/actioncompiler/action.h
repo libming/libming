@@ -33,6 +33,7 @@ enum
   SWFACTION_STRINGEQ                = 0x13,
   SWFACTION_STRINGLENGTH            = 0x14,
   SWFACTION_SUBSTRING               = 0x15,
+  SWFACTION_POP                     = 0x17,
   SWFACTION_INT                     = 0x18,
   SWFACTION_GETVARIABLE             = 0x1C,
   SWFACTION_SETVARIABLE             = 0x1D,
@@ -61,13 +62,42 @@ enum
   SWFACTION_GETURL2                 = 0x9A,
   SWFACTION_BRANCHIFTRUE            = 0x9D,
   SWFACTION_CALLFRAME               = 0x9E,
-  SWFACTION_GOTOEXPRESSION          = 0x9F
-};
+  SWFACTION_GOTOEXPRESSION          = 0x9F,
 
-enum
-{
-  SWFACTION_PUSHDATA_STRING         = 0,
-  SWFACTION_PUSHDATA_PROPERTY       = 1
+/* v5 actions */
+  SWFACTION_DELETE                  = 0x3B,
+  SWFACTION_VAREQUALS               = 0x3C,
+  SWFACTION_CALLFUNCTION            = 0x3D,
+  SWFACTION_RETURN                  = 0x3E,
+  SWFACTION_MODULO                  = 0x3F,
+  SWFACTION_NEW                     = 0x40,
+  SWFACTION_VAR                     = 0x41,
+  SWFACTION_INITARRAY               = 0x42,
+  SWFACTION_INITOBJECT              = 0x43,
+  SWFACTION_TYPEOF                  = 0x44,
+  SWFACTION_NEWADD                  = 0x47,
+  SWFACTION_NEWLESSTHAN             = 0x48,
+  SWFACTION_NEWEQUALS               = 0x49,
+  SWFACTION_DUP                     = 0x4C,
+  SWFACTION_SWAP                    = 0x4D,
+  SWFACTION_GETMEMBER               = 0x4E,
+  SWFACTION_SETMEMBER               = 0x4F,
+  SWFACTION_INCREMENT               = 0x50,
+  SWFACTION_DECREMENT               = 0x51,
+  SWFACTION_CALLMETHOD              = 0x52,
+  SWFACTION_BITWISEAND              = 0x60,
+  SWFACTION_BITWISEOR               = 0x61,
+  SWFACTION_BITWISEXOR              = 0x62,
+  SWFACTION_SHIFTLEFT               = 0x63,
+  SWFACTION_SHIFTRIGHT              = 0x64,
+  SWFACTION_SHIFTRIGHT2             = 0x65,
+
+  SWFACTION_CONSTANTPOOL            = 0x88,
+  SWFACTION_WITH                    = 0x94,
+  SWFACTION_DEFINEFUNCTION          = 0x9B,
+
+  SWFACTION_ENUMERATE               = 0x46,
+  SWFACTION_SETREGISTER             = 0x87
 };
 
 #endif /* ACTION_H_INCLUDED */

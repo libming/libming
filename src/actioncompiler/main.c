@@ -15,7 +15,7 @@ extern int lexBufferLen;
 #define BUFFER_INC 1024
 
 int yyparse(void *b);
-void printDoAction(Buffer f);
+void printDoAction(Buffer f, int length);
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +29,15 @@ int main(int argc, char *argv[])
   yydebug = 1;
 
   if(argc > 1)
+  {
     f = fopen(argv[1], "r");
+
+    if(f == NULL)
+    {
+      printf("Couldn't open input file %s\n", argv[1]);
+      exit(-1);
+    }
+  }
   else
     f = stdin;
 
@@ -44,11 +52,19 @@ int main(int argc, char *argv[])
   yyparse((void *)&b);
 
   if(b == NULL)
+  {
+    printf("\nOutput buffer empty\n");
     exit(1);
+  }
 
   bufferWriteU8(b, SWFACTION_END);
 
   putchar('\n');
+  putchar('\n');
 
-  printDoAction(b);
+  printDoAction(b, bufferLength(b));
+
+  putchar('\n');
+
+  exit(0);
 }
