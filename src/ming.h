@@ -92,6 +92,12 @@ float Ming_getScale();
 /* set the version number to use */
 void Ming_useSWFVersion(int version);
 
+/*
+ * Set output compression level.
+ * Return previous value.
+ */ 
+int Ming_setSWFCompression(int level);
+
 /* change the error/warn behavior.  Default prints message and exits. */
 void Ming_setWarnFunction(void (*warn)(const char *msg, ...));
 void Ming_setErrorFunction(void (*error)(const char *msg, ...));
@@ -715,8 +721,8 @@ void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 void SWFMovie_nextFrame(SWFMovie movie);
 void SWFMovie_labelFrame(SWFMovie movie, const char *label);
 
-int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
-int SWFMovie_save(SWFMovie movie, const char *filename, int level);
+int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
+int SWFMovie_save(SWFMovie movie, const char *filename);
 
   /* deprecated */
   /*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/

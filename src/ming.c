@@ -27,6 +27,7 @@
 
 
 int SWF_versionNum = 5;
+int SWF_compression = -1;
 
 float Ming_scale = 20.0;
 int Ming_cubicThreshold = 10000;
@@ -50,12 +51,25 @@ void
 Ming_cleanup()
 {
 	Ming_cleanupFonts();
+	/* TODO: destroy all dangling objects */
 }
 
 
 void Ming_setScale(float scale)
 {
 	Ming_scale = scale;
+}
+
+/*
+ * Set output compression level.
+ * Return previous value.
+ */ 
+int
+Ming_setSWFCompression(int level)
+{
+	int oldlevel = SWF_compression;
+	SWF_compression = level;
+	return oldlevel;
 }
 
 
@@ -89,6 +103,7 @@ void Ming_useSWFVersion(int version)
 		SWF_error("Only SWF versions 4, 5 and 6 are currently supported!\n");
 
 	SWF_versionNum = version;
+
 }
 
 

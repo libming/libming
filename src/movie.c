@@ -597,11 +597,17 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 }
 
 int
-SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level)
-{	SWFOutput swfbuffer = SWFMovie_toOutput(movie, level);
-	int swflength = SWFOutput_getLength(swfbuffer);
-	byte *buffer = SWFOutput_getBuffer(swfbuffer);
+SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
+{
+	SWFOutput swfbuffer;
+	int swflength;
+	byte *buffer;
 	int n;
+	int level = SWF_compression;
+
+	swfbuffer = SWFMovie_toOutput(movie, level);
+	swflength = SWFOutput_getLength(swfbuffer);
+	buffer = SWFOutput_getBuffer(swfbuffer);
 	
 	for(n = 0 ; n < swflength ; n++)
 		method(*buffer++, data);
@@ -610,7 +616,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 }
 
 int
-SWFMovie_save(SWFMovie movie, const char *filename, int compressionlevel)
+SWFMovie_save(SWFMovie movie, const char *filename)
 {
 	FILE *f = fopen(filename, "wb");
 	int count;
@@ -618,7 +624,7 @@ SWFMovie_save(SWFMovie movie, const char *filename, int compressionlevel)
 	if ( f == NULL )
 		return -1;
 
-	count = SWFMovie_output(movie, fileOutputMethod, f, compressionlevel);
+	count = SWFMovie_output(movie, fileOutputMethod, f);
 
 	fclose(f);
 

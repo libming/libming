@@ -33,6 +33,7 @@
 
 extern int Ming_cubicThreshold;
 extern int SWF_versionNum;
+extern int SWF_compression;
 extern float Ming_scale;
 
 

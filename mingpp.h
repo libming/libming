@@ -312,13 +312,20 @@ class SWFMovie
     { SWFMovie_labelFrame(this->movie, label); }
 
   int output(int level=-1)
-    { return SWFMovie_output(this->movie, fileOutputMethod, stdout, level); }
+  {
+    int oldlevel = Ming_setSWFCompression(level);
+    int ret = SWFMovie_output(this->movie, fileOutputMethod, stdout);
+    Ming_setSWFCompression(oldlevel);
+    return ret;
+  }
 
   int save(const char *filename, int level=-1)
   {
+    int oldlevel = Ming_setSWFCompression(level);
     FILE *fp = fopen(filename, "wb");
-    const int result = SWFMovie_output(this->movie, fileOutputMethod, fp, level);
+    const int result = SWFMovie_output(this->movie, fileOutputMethod, fp);
     fclose(fp);
+    Ming_setSWFCompression(oldlevel);
     return result;
   }
 
