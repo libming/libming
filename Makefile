@@ -34,4 +34,4 @@ clean:
 	rm -f libming.a libming.so
 
 distclean: clean
-	rm -f Rules.make make.config
+	rm -Rf Rules.make config.make autom4te.cache config.log config.status
