@@ -975,7 +975,7 @@ void printDefineButton(FILE *f, int length)
   while(printButtonRecord(f, 1, id)) ;
 
   printf("\t$a = new SWFAction(\"\n\n");
-  decompileAction(f, length-(fileOffset-offset));
+  decompileAction(f, length-(fileOffset-offset), 0);
   printf("\t\");\n");
   printf("\t$s%i->setAction($a);\n", id);
 }
@@ -989,9 +989,9 @@ int printButton2ActionCondition(FILE *f, int end, int id)
   printf("\t$a = new SWFAction(\"\n\n");
 
   if(offset == 0)
-    decompileAction(f, end-fileOffset);
+    decompileAction(f, end-fileOffset, 0);
   else
-    decompileAction(f, offset-4);
+    decompileAction(f, offset-4, 0);
 
   printf("\t\");\n");
   printf("\t$s%i->addAction($a, ", id);
@@ -1287,13 +1287,13 @@ void printDoAction(FILE *f, int length)
   if(sprite == 0)
   {
     printf("\t$m->add(new SWFAction(\"\n\n");
-    decompileAction(f, length);
+    decompileAction(f, length, 0);
     printf("\t\"));\n");
   }
   else
   {
     printf("\t$s%i->add(new SWFAction(\"\n\n", sprite);
-    decompileAction(f, length);
+    decompileAction(f, length, 0);
     printf("\t\"));\n");
   }
 }
