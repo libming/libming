@@ -39,15 +39,24 @@ struct SWFMovieClip_s
 	SWFBlockList blockList;
 	SWFDisplayList displayList;
 	unsigned short nFrames;
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 
 void
 destroySWFMovieClip(SWFMovieClip movieClip)
 {
+#if TRACK_ALLOCS
+	ming_gc_remove_node(movieClip->gcnode);
+#endif
+
 	destroySWFBlockList(movieClip->blockList);
 	destroySWFDisplayList(movieClip->displayList);
 	destroySWFSprite((SWFSprite)movieClip);
+
 }
 
 
@@ -59,6 +68,10 @@ newSWFMovieClip()
 
 	clip->blockList = newSWFBlockList();
 	clip->displayList = newSWFSpriteDisplayList();
+
+#if TRACK_ALLOCS
+	clip->gcnode = ming_gc_add_node(clip, destroySWFMovieClip);
+#endif
 
 	return clip;
 }

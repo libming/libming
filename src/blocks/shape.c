@@ -99,6 +99,10 @@ struct SWFShape_s
 	short lineWidth;
 	BOOL isMorph;
 	BOOL isEnded;
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 
@@ -154,6 +158,10 @@ destroySWFShape(SWFShape shape)
 
 	destroySWFOutput(shape->out);
 
+#if TRACK_ALLOCS
+	ming_gc_remove_node(shape->gcnode);
+#endif
+
 	destroySWFCharacter((SWFCharacter) shape);
 }
 
@@ -189,6 +197,10 @@ newSWFShape()
 	shape->isEnded = FALSE;
 
 	SWFOutput_writeUInt8(shape->out, 0); /* space for nFillBits, nLineBits */
+
+#if TRACK_ALLOCS
+	shape->gcnode = ming_gc_add_node(shape, destroySWFShape);
+#endif
 
 	return shape;
 }
