@@ -216,6 +216,7 @@ r\:{DIGIT}+		{ count();	yylval.str = strdup(yytext+2);
 "^"			{ count();	return '^'; }
 "*"			{ count();	return '*'; }
 "/"			{ count();	return '/'; }
+"%"			{ count();	return '%'; }
 "!"			{ count();	return '!'; }
 "("			{ count();	return '('; }
 ")"			{ count();	return ')'; }

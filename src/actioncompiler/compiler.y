@@ -93,7 +93,7 @@
 %left '&' '|' '^'
 %left "<<" ">>" ">>>"
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '%'
 %right "++" "--"
 %right '!' '~' UMINUS
 %right POSTFIX
@@ -530,6 +530,32 @@ pf_expr
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  bufferWriteU8($$, SWFACTION_SWAP);
 		  bufferWriteU8($$, SWFACTION_SETVARIABLE); }
+
+	| expr '.' identifier incdecop %prec POSTFIX
+		{ $$ = $1;				   /* a */
+		  bufferWriteU8($$, SWFACTION_DUP);	   /* a, a */
+		  bufferWriteString($$, $3, strlen($3)+1); /* a, a, i */
+		  bufferWriteU8($$, SWFACTION_GETMEMBER);  /* a, a.i */
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SWAP);       /* a.i, a */
+		  bufferWriteString($$, $3, strlen($3)+1); /* a.i, a, i */
+		  bufferWriteRegister($$, 0);              /* a.i, a, i, a.i */
+		  bufferWriteU8($$, $4);		   /* a.i, a, i, a.i+1 */
+		  bufferWriteU8($$, SWFACTION_SETMEMBER); }
+
+	| expr '[' expr ']' incdecop %prec POSTFIX
+		{ $$ = $3;
+		  bufferConcat($$, $1);                    /* i, a */
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SWAP);       /* a, i */
+		  bufferWriteU8($$, SWFACTION_DUP);	   /* a, i, i */
+		  bufferWriteRegister($$, 0);              /* a, i, i, a */
+		  bufferWriteU8($$, SWFACTION_SWAP);       /* a, i, a, i */
+		  bufferWriteU8($$, SWFACTION_GETMEMBER);  /* a, i, a[i] */
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, $5);		   /* a, i, a[i]+1 */
+		  bufferWriteU8($$, SWFACTION_SETMEMBER);
+		  bufferWriteRegister($$, 0);              /* a[i] */ }
 	;
 
 anon_function_decl
@@ -748,6 +774,8 @@ expr
 		  bufferWriteU8($$, SWFACTION_SETVARIABLE);
 		  free($2); }
 
+	| pf_expr
+
 	| '-' expr
 		{ $$ = $2;
 		  bufferWriteString($2, "-1", 3);
@@ -775,6 +803,11 @@ expr
 		{ $$ = $1;
 		  bufferConcat($$, $3);
 		  bufferWriteU8($$, SWFACTION_DIVIDE); }
+
+	| expr '%' expr
+		{ $$ = $1;
+		  bufferConcat($$, $3);
+		  bufferWriteU8($$, SWFACTION_MODULO); }
 
 	| expr '+' expr
 		{ $$ = $1;
@@ -856,16 +889,15 @@ expr
 
 
 assign_stmt
-	: pf_expr
-
-	| ASM '{'
+	: ASM '{'
 		{ asmBuffer = newBuffer(); }
 	  opcode_list '}'
 		{ $$ = asmBuffer; }
 
 	| VAR identifier '=' expr
-		{ $$ = $4;
+		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
+		  bufferConcat($$, $4);
 		  bufferWriteU8($$, SWFACTION_VAREQUALS); }
 
 	| VAR identifier
@@ -892,6 +924,15 @@ assign_stmt
 		  bufferWriteU8($$, SWFACTION_SETVARIABLE);
 		  free($2); }
 
+	| identifier incdecop %prec POSTFIX
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  bufferWriteU8($$, SWFACTION_GETVARIABLE);
+		  bufferWriteU8($$, $2);
+		  bufferWriteU8($$, SWFACTION_SETVARIABLE);
+		  free($1); }
+
 	| incdecop expr '.' identifier
 		{ $$ = newBuffer();
 		  bufferWriteBuffer($$, $2);		    /* a */
@@ -903,6 +944,18 @@ assign_stmt
 		  bufferWriteU8($$, SWFACTION_SWAP);	    /* a, i, a.i+1 */
 		  bufferWriteU8($$, SWFACTION_SETMEMBER);   /* a.i = a.i+1 */
 		  free($4); }
+
+	| expr '.' identifier incdecop %prec POSTFIX
+		{ $$ = newBuffer();
+		  bufferWriteBuffer($$, $1);                /* a */
+		  bufferWriteU8($$, SWFACTION_DUP);         /* a, a */
+		  bufferWriteString($$, $3, strlen($3)+1);  /* a, a, i */
+		  bufferWriteU8($$, SWFACTION_GETMEMBER);   /* a, a.i */
+		  bufferWriteU8($$, $4);                    /* a, a.i+1 */
+		  bufferWriteString($$, $3, strlen($3)+1);  /* a, a.i+1, i */
+		  bufferWriteU8($$, SWFACTION_SWAP);        /* a, i, a.i+1 */
+		  bufferWriteU8($$, SWFACTION_SETMEMBER);   /* a.i = a.i+1 */
+		  free($3); }
 
 	| incdecop expr '[' expr ']'
 		  /* weird contortions so that $4 can use reg 0.. */
@@ -916,6 +969,19 @@ assign_stmt
 		  bufferWriteU8($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		  bufferWriteU8($$, $1);		  /* a, i, a[i]+1 */
 		  bufferWriteU8($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+1 */ }
+
+	| expr '[' expr ']' incdecop %prec POSTFIX
+		/* weird contortions so that $3 can use reg 0.. */
+		{ $$ = $3;                                /* i */
+		  bufferConcat($$, $1);			  /* i, a */
+		  bufferWriteSetRegister($$, 0);
+		  bufferWriteU8($$, SWFACTION_SWAP);      /* a, i */
+		  bufferWriteU8($$, SWFACTION_DUP);       /* a, i, i */
+		  bufferWriteRegister($$, 0);             /* a, i, i, a */
+		  bufferWriteU8($$, SWFACTION_SWAP);      /* a, i, a, i */
+		  bufferWriteU8($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
+		  bufferWriteU8($$, $5);                  /* a, i, a[i]+1 */
+                  bufferWriteU8($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+1 */ }
 
 	| identifier '=' expr
 		{ $$ = newBuffer();
