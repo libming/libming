@@ -44,8 +44,8 @@ void Ming_useSWFVersion(int version);
 
 /* change the error/warn behavior.  Default prints message and exits. */
 
-void Ming_setWarnFunction(void (*warn)(char *msg, ...));
-void Ming_setErrorFunction(void (*error)(char *msg, ...));
+void Ming_setWarnFunction(void (*warn)(const char *msg, ...));
+void Ming_setErrorFunction(void (*error)(const char *msg, ...));
 
 
 typedef unsigned char byte;
@@ -94,7 +94,7 @@ float SWFCharacter_getHeight(SWFCharacter character);
 
   /* SWFBitmap */
 
-typedef struct SWFBitmap_s *SWFBitmap;
+typedef SWFCharacter SWFBitmap;
 
 void destroySWFBitmap(SWFBitmap b);
 int SWFBitmap_getWidth(SWFBitmap b);
@@ -175,7 +175,7 @@ void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
 
 void SWFShape_end(SWFShape shape);
 
-int SWFShape_setLineStyle(SWFShape shape, unsigned short width,
+void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 			  byte r, byte g, byte b, byte a);
 
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
@@ -207,10 +207,11 @@ typedef struct SWFFont_s *SWFFont;
 
 SWFFont newSWFFont();
 SWFFont loadSWFFontFromFile(FILE *file);
-void destroySWFFont(SWFFont font);
+void destroySWFFont(SWFBlock Block);
 
 float SWFFont_getStringWidth(SWFFont font, const char *string);
 float SWFFont_getUTF8StringWidth(SWFFont font, const char *string);
+/*float SWFFont_getWideStringWidth(SWFFont font, const char *string);*/
 
 /* XXX */
 #define SWFFont_getWidth SWFFont_getStringWidth
@@ -285,8 +286,8 @@ SWFText_getLeading(SWFText text);
 
 
   /* SWFBrowserFont */
-
-SWFFont newSWFBrowserFont(char *name);
+typedef struct SWFBrowserFont_s *SWFBrowserFont;
+SWFBrowserFont newSWFBrowserFont(const char *name);
 void destroySWFBrowserFont(SWFFont font);
 
 
@@ -327,8 +328,9 @@ void SWFTextField_setFont(SWFTextField field, void *font);
 void SWFTextField_setBounds(SWFTextField field, float width, float height);
 void SWFTextField_setFlags(SWFTextField field, int flags);
 void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
-void SWFTextField_setVariableName(SWFTextField field, char *name);
-void SWFTextField_addString(SWFTextField field, char *string);
+void SWFTextField_setVariableName(SWFTextField field, const char *name);
+void SWFTextField_addString(SWFTextField field, const char *string);
+void SWFTextField_addUTF8String(SWFTextField field, const char *string);
 
 void SWFTextField_setHeight(SWFTextField field, float height);
 void SWFTextField_setFieldHeight(SWFTextField field, float height);
@@ -337,7 +339,8 @@ void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
 void SWFTextField_setIndentation(SWFTextField field, float indentation);
 void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
 void SWFTextField_setPadding(SWFTextField field, float padding);
-void SWFTextField_addChars(SWFTextField field, char *string);
+void SWFTextField_addChars(SWFTextField field, const char *string);
+/*void SWFTextField_addUTF8Chars(SWFTextField field, const char *string);*/
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);
@@ -356,10 +359,30 @@ void destroySWFSoundStream(SWFSoundStream sound);
 
 typedef struct SWFSound_s *SWFSound;
 
-SWFSound newSWFSound(FILE *file);
-SWFSound newSWFSound_fromInput(SWFInput input);
+SWFSound newSWFSound(FILE *file, int flags);
+SWFSound newSWFSound_fromInput(SWFInput input, int flags);
 void destroySWFSound(SWFSound sound);
 
+#define SWF_SOUND_COMPRESSION      0xf0
+#define SWF_SOUND_NOT_COMPRESSED   (0<<4)
+#define SWF_SOUND_ADPCM_COMPRESSED (1<<4)
+#define SWF_SOUND_MP3_COMPRESSED   (2<<4)
+#define SWF_SOUND_NOT_COMPRESSED_LE (3<<4)
+#define SWF_SOUND_NELLY_COMPRESSED (6<<4)
+
+#define SWF_SOUND_RATE             0x0c
+#define SWF_SOUND_5KHZ             (0<<2)
+#define SWF_SOUND_11KHZ            (1<<2)
+#define SWF_SOUND_22KHZ            (2<<2)
+#define SWF_SOUND_44KHZ            (3<<2)
+
+#define SWF_SOUND_BITS             0x02
+#define SWF_SOUND_8BITS            (0<<1)
+#define SWF_SOUND_16BITS           (1<<1)
+
+#define SWF_SOUND_CHANNELS         0x01
+#define SWF_SOUND_MONO             (0<<0)
+#define SWF_SOUND_STEREO           (1<<0)
 
   /* SWFSoundInstance - created from SWFMovie[Clip]_startSound,
      lets you change the parameters of the sound event (loops, etc.) */
@@ -395,9 +418,9 @@ void destroySWFCXform(SWFCXform cXform);
 
   /* SWFAction */
 
-typedef void *SWFAction;
+typedef struct SWFOutputBlock_s * SWFAction;
 
-SWFAction compileSWFActionCode(char *script);
+SWFAction compileSWFActionCode(const char *script);
 void destroySWFAction(SWFAction action);
 
 
@@ -446,8 +469,8 @@ void destroySWFButton(SWFButton button);
 
 void SWFButton_addShape(SWFButton button, void *character, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
-void SWFButton_addSound(SWFButton button, SWFSound action, int flags);
-
+SWFSoundInstance SWFButton_addSound(SWFButton button, SWFSound action, int flags);
+void SWFButton_setMenu(SWFButton button, int flag);
 
   /* SWFSprite */
 
@@ -607,10 +630,10 @@ void SWFShape_drawCircle(SWFShape shape, float r);
 
 
 /* draw character c from font font into shape shape at size size */
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned short c);
 
 void SWFShape_drawSizedGlyph(SWFShape shape,
-			     SWFFont font, unsigned char c, int size);
+			     SWFFont font, unsigned short c, int size);
 
 #define SWFShape_drawFontGlyph SWFShape_drawGlyph
 
@@ -643,9 +666,9 @@ void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 
 void SWFMovieClip_nextFrame(SWFMovieClip clip);
 
-void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
+void SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label);
 
-void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate);
+void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate);
 
 SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 
@@ -668,11 +691,11 @@ void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
-void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name);
+void SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name);
 
 void SWFMovie_setBackground(SWFMovie movie, int r, int g, int b);
 
-void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound);
+void SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
 
 SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 
@@ -684,7 +707,7 @@ void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
 void SWFMovie_nextFrame(SWFMovie movie);
 
-void SWFMovie_labelFrame(SWFMovie movie, char *label);
+void SWFMovie_labelFrame(SWFMovie movie, const char *label);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
 
