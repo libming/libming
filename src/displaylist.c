@@ -109,6 +109,15 @@ void SWFDisplayItem_remove(SWFDisplayItem item)
   item->flags |= ITEM_REMOVED;
 }
 
+static inline void checkBlock(SWFDisplayItem item)
+{
+  if(item->block == NULL)
+    item->block = newSWFPlaceObject2Block(item->depth);
+
+  if((item->flags & ITEM_NEW) == 0)
+    SWFPlaceObject2Block_setMove(item->block);
+}
+
 int SWFDisplayItem_getDepth(SWFDisplayItem item)
 {
   return item->depth;
@@ -127,15 +136,6 @@ void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
   }
 
   SWFPlaceObject2Block_setDepth(item->block, depth);
-}
-
-static inline void checkBlock(SWFDisplayItem item)
-{
-  if(item->block == NULL)
-    item->block = newSWFPlaceObject2Block(item->depth);
-
-  if((item->flags & ITEM_NEW) == 0)
-    SWFPlaceObject2Block_setMove(item->block);
 }
 
 void SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
