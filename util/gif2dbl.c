@@ -37,7 +37,7 @@ int getTransparentColor(GifFileType * file)
     if (ext->Function == GRAPHICS_EXT_FUNC_CODE) {
       if (ext->Bytes[0] & 1){   /* there is a transparent color */
         if (!ext->Bytes[3]) returnvalue=255; // exception
-        else returnvalue=ext->Bytes[3];
+        else returnvalue=ext->Bytes[3]&0xff;
       }
     }
 

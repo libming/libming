@@ -99,7 +99,7 @@ destroySWFPrebuilt(SWFPrebuilt defines)
 SWFPrebuilt
 newSWFPrebuilt()
 {
-	SWFPrebuilt data = (SWFPrebuilt)malloc(sizeof(struct SWFBlock_s));
+	SWFPrebuilt data = (SWFPrebuilt)malloc(sizeof(struct SWFPrebuilt_s));
 	
 	SWFBlockInit((SWFBlock)data);
 	BLOCK(data)->type = SWF_PREBUILT;
@@ -113,7 +113,7 @@ newSWFPrebuilt()
 
 // functions to read swf
 
-static int verbose = {1};
+static int verbose = {0};
 
 struct bitstream
 {	char lastch;
