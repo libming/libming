@@ -71,17 +71,6 @@ void SWFShape_movePenTo(SWFShape shape, float x, float y);
 void SWFShape_movePen(SWFShape shape, float dx, float dy);
 
 
-/* Change the scale, the scale, change it, yeah.  default is 20. */
-
-void Ming_setScale(float scale);
-
-
-/* sets the threshold error for drawing cubic beziers.  Lower is more
-   accurate, hence larger file size. */
-
-void Ming_setCubicThreshold(int num);
-
-
 /* deprecated: */
 
 #define SWFShape_drawFontGlyph SWFShape_drawGlyph

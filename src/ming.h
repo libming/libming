@@ -35,6 +35,23 @@ extern int Ming_cubicThreshold;
 
 int Ming_init();
 
+/* Change the scale, the scale, change it, yeah.  default is 20. */
+
+void Ming_setScale(float scale);
+
+
+/* sets the threshold error for drawing cubic beziers.  Lower is more
+   accurate, hence larger file size. */
+
+void Ming_setCubicThreshold(int num);
+
+
+/* change the error/warn behavior */
+
+void Ming_setWarnFunction(void (*warn)(char *msg, ...));
+void Ming_setErrorFunction(void (*error)(char *msg, ...));
+
+
 /* stupid redef problem if we just include movieclip.h */
 
 typedef void *SWFMovieClip;
