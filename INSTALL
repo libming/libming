@@ -1,23 +1,17 @@
 
 Installing Ming
 
-Last updated 18th January 2004.
+Last updated 2nd February 2004.
 
-Unfortunately we haven't made Ming use autoconf yet (if you'd like
-to, please let us know!)
+Unfortunately we haven't made Ming use autoconf yet.  If you'd like
+to help with this, please let us know!
 
   Unpack the Ming source tarball and go into the uncompressed
   directory.
 
-    $ gunzip ming-0.3alpha2.tar.gz
-    $ tar xfp ming-0.3alpha2.tar
+    $ gunzip ming-0.3beta1.tar.gz
+    $ tar xfp ming-0.3beta1.tar
     $ cd ming
-
-  Decide whether you want to include gif or png image format
-  handling in Ming, then adjust the ming_config.h, config.make,
-  and Makefile to suit your system.
-
-    $ vi <the appropriate files>
 
 
   PHP
@@ -52,11 +46,7 @@ to, please let us know!)
       file is to be pointing to "./", which may need adjusting.
 
 
-   The alternative way is to build Ming into the PHP source,
-   though I'm personally not sure (Justin that is) if it still
-   works.  If you get this working successfully (or not), please
-   let me know at <jclift@digitaldistribution.com> and we'll update
-   the documentation to reflect it.
+   The alternative way is to build Ming into the PHP source:
 
       $ mkdir <phpdir>/ext/ming
       $ cp php_ext/* <phpdir>/ext/ming
@@ -64,9 +54,8 @@ to, please let us know!)
       $ ./buildconf
       $ ./configure --with-ming=<mingdir> <other config options>
 
-   Then build and install php as usual, and restart the web server
-   if necessary.
-      
+   Then build and install php as usual, then restart your web server.
+
 
   PYTHON
   ******
