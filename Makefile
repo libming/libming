@@ -31,3 +31,4 @@ clean:
 	for i in $(DIRS); do make -C $$i clean; done
 	rm -f test.o test test.exe *.core *~
 	rm -f $(SHAREDLIB) $(SHAREDLIB)
+	rm -f libming.a libming.so
