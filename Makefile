@@ -1,6 +1,5 @@
 include Rules.make
 
-PREFIX = $(DESTDIR)/usr
 LIBDIR = $(PREFIX)/lib
 INCLUDEDIR = $(PREFIX)/include
 
@@ -33,3 +32,6 @@ clean:
 	rm -f test.o test test.exe *.core *~
 	rm -f $(SHAREDLIB) $(SHAREDLIB)
 	rm -f libming.a libming.so
+
+distclean: clean
+	rm -f Rules.make make.config
