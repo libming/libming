@@ -37,6 +37,22 @@ static char *SWF_Button_tag[] = {
      NULL,
 };
 
+static char *SWF_Sound_tag[] = {
+     "SWF_SOUND_NOT_COMPRESSED",
+     "SWF_SOUND_ADPCM_COMPRESSED",
+     "SWF_SOUND_MP3_COMPRESSED",
+     "SWF_SOUND_NOT_COMPRESSED_LE",
+     "SWF_SOUND_NELLY_COMPRESSED",
+     "SWF_SOUND_5KHZ",
+     "SWF_SOUND_11KHZ",
+     "SWF_SOUND_22KHZ",
+     "SWF_SOUND_44KHZ",
+     "SWF_SOUND_8BITS",
+     "SWF_SOUND_16BITS",
+     "SWF_SOUND_MONO",
+     "SWF_SOUND_STEREO",
+     NULL,
+};
 
 static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_NOEDIT",
@@ -81,7 +97,10 @@ static char **export_tags(char *tag) {
        return SWF_DisplayItem_tag;
    case 'F':
      if(strEQ("Fill", tag))
-       return SWF_Fill_tag;
+       return SWF_Fill_tag;   
+	 case 'S':
+     if(strEQ("Sound", tag))
+       return SWF_Sound_tag;
    case 'T':
      if(strEQ("Text", tag))
        return SWF_TextField_tag;

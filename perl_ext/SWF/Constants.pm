@@ -77,6 +77,27 @@ This tag imports constants most commonly used by SWF::Fill.
     SWFFILL_TILED_BITMAP
     SWFFILL_CLIPPED_BITMAP
 
+=item Sound
+
+This tag imports constants most commonly used by SWF::Sound.
+
+    SWF_SOUND_NOT_COMPRESSED
+    SWF_SOUND_NOT_COMPRESSED_LE
+    SWF_SOUND_ADPCM_COMPRESSED
+    SWF_SOUND_MP3_COMPRESSED
+    SWF_SOUND_NELLY_COMPRESSED
+
+    SWF_SOUND_5KHZ
+    SWF_SOUND_11KHZ
+    SWF_SOUND_22KHZ
+    SWF_SOUND_44KHZ
+
+    SWF_SOUND_8BITS
+    SWF_SOUND_16BITS
+
+    SWF_SOUND_MONO
+    SWF_SOUND_STEREO
+
 =item Text
 
 This tag imports constants most commonly used by SWF::TextField.
