@@ -3,15 +3,27 @@
 #include <string.h>
 
 #define DEBUG_MEM 0
-#define CHECK_NODES 1
+#define CHECK_NODES 0
+
+void *ming_calloc(size_t nmemb, size_t size);
+void *ming_malloc(size_t size);
+void *ming_realloc(void *ptr, size_t size);
+void ming_free(void *ptr);
+char *ming_strdup(const char *s);
+char *ming_strndup(const char *s, size_t size);
+void ming_garbage_collect(void);
 
 typedef struct NODE_T
 {
 #if CHECK_NODES
 	struct NODE_T *self;
+	size_t size;
 #endif
 	struct NODE_T *next;
 	struct NODE_T *prev;
+#if CHECK_NODES
+	struct NODE_T *self2;
+#endif
 	void *data;
 }
 NODE;
@@ -32,6 +44,9 @@ ming_calloc(size_t nmemb, size_t size)
 	fprintf(stderr, "ming_calloc(%d, %d)\n", nmemb, size);
 #endif
 
+	if ( size == 0 )
+		fprintf(stderr, "ming_calloc(%d, %d)\n", nmemb, size);
+
 	node = (NODE *)calloc(nmemb, size+NODHDRSZ);
 	if ( ! node )
 	{
@@ -49,6 +64,8 @@ ming_calloc(size_t nmemb, size_t size)
 	}
 #if CHECK_NODES
 	node->self = node;
+	node->self2 = node;
+	node->size = size;
 #endif
 
 	node->next = NULL;
@@ -91,6 +108,8 @@ ming_malloc(size_t size)
 
 #if CHECK_NODES
 	node->self = node;
+	node->self2 = node;
+	node->size = size;
 #endif
 
 	return &(node->data);
@@ -101,7 +120,6 @@ void *
 ming_realloc(void *oldptr, size_t size)
 {
 	NODE *node, *oldnode, *prev, *next;
-	void *ret;
 
 #if DEBUG_MEM
 	fprintf(stderr, "ming_realloc(%p, %d)\n", oldptr, size);
@@ -115,13 +133,23 @@ ming_realloc(void *oldptr, size_t size)
 		return ming_malloc(size);
 	}
 
+	if ( ! size )
+	{
+#if DEBUG_MEM
+		fprintf(stderr, " calls ming_free(%p)\n", oldptr);
+#endif
+		ming_free(oldptr);
+		return NULL;
+	}
+
 	oldnode = oldptr-NODHDRSZ;
 
 #if CHECK_NODES
-	if ( oldnode->self != oldnode )
+	if ( oldnode->self != oldnode || oldnode->self2 != oldnode )
 	{
-		fprintf(stderr, "WARN! ming_realloc(): corrupted node (node:%p,self:%p)\n", oldnode, oldnode->self);
-		return realloc(oldptr, size);
+		fprintf(stderr, "WARN! ming_realloc(%p,%d): corrupted node (node:%p,self:%p)\n", oldptr, size, oldnode, oldnode->self);
+		return NULL;
+		//return realloc(oldptr, size);
 	}
 #endif
 
@@ -154,6 +182,8 @@ ming_realloc(void *oldptr, size_t size)
 
 #if CHECK_NODES
 	node->self = node;
+	node->self2 = node;
+	node->size = size;
 #endif
 
 #if DEBUG_MEM
@@ -176,7 +206,7 @@ ming_free(void *ptr)
 
 
 #if CHECK_NODES
-	if ( node->self != node )
+	if ( node->self != node || node->self2 != node )
 	{
 		fprintf(stderr, "WARN! ming_free: corrupted node (node:%p,self:%p)\n", node, node->self);
 		return;
@@ -221,12 +251,15 @@ ming_strdup(const char *s)
 {
 	NODE *node;
 	char *ret;
+	size_t size;
 
 #if DEBUG_MEM
 	fprintf(stderr, "ming_strdup(%p)\n", s);
 #endif
 
-	node = malloc(strlen(s)+1+NODHDRSZ);
+	size = strlen(s)+1;
+
+	node = malloc(size+NODHDRSZ);
 	if ( ! node )
 	{
 #if DEBUG_MEM
@@ -253,6 +286,8 @@ ming_strdup(const char *s)
 
 #if CHECK_NODES
 	node->self = node;
+	node->self2 = node;
+	node->size = size;
 #endif
 
 	return ret;
@@ -296,6 +331,8 @@ ming_strndup(const char *s, size_t size)
 
 #if CHECK_NODES
 	node->self = node;
+	node->self2 = node;
+	node->size = size;
 #endif
 
 	return ret;
