@@ -1,13 +1,12 @@
-PYINCDIR = /usr/local/include/python2.0
-PYLIBDIR = /usr/local/lib/python2.0
+PYVERSION = 2.3
+PYPREFIX = /usr
+PYINCDIR = $(PYPREFIX)/include/python$(PYVERSION)
+PYLIBDIR = $(PYPREFIX)/lib/python$(PYVERSION)
 
-#PYINCDIR = /usr/include/python1.5
-#PYLIBDIR = /usr/lib/python1.5
+all: _mingcmodule.so
 
-all: mingcmodule.so
-
-mingcmodule.so: ming_wrap.o
-	gcc -g -Wall -shared -o mingcmodule.so ming_wrap.o -lming
+_mingcmodule.so: ming_wrap.o
+	gcc -g -Wall -shared -o _mingcmodule.so ming_wrap.o -lming
 
 mingc.pyd: ming_wrap.o
 	dllwrap --dllname mingc.pyd --driver-name gcc --def mingc.def \
@@ -26,9 +25,11 @@ swig:
 	swig -I.. -python ming.i
 
 clean:
-	rm -f mingcmodule.so core *~ *.o ming_wrap.c ming_wrap.doc ming.pyc
+	rm -f _mingcmodule.so mingc.py *.pyc core *~ *.o ming_wrap.c ming_wrap.doc
 
-install: mingcmodule.so
+install: _mingcmodule.so
 	install -d $(DESTDIR)${PYLIBDIR}/site-packages
-	install -m 0644 mingcmodule.so $(DESTDIR)${PYLIBDIR}/site-packages
+	install -m 0644 _mingcmodule.so $(DESTDIR)${PYLIBDIR}/site-packages
 	install -m 0644 ming.py $(DESTDIR)${PYLIBDIR}/site-packages
+	install -m 0644 mingc.py $(DESTDIR)$(PYLIBDIR)/site-packages
+
