@@ -1,0 +1,288 @@
+
+MING HISTORY
+
+29.06.02
+	Steve Alberty:
+	  backporting php extension from php cvs tree
+	  segfaults: bypass some double free() calls (temporary)
+	  gif2dbl: fixed problems with 255 color picture + transparency
+	  added SWFMovie->Protect
+	  swf2php: small changes in output
+	  BUG 558500: fixed reported conflicts (thanks Tsutomu Ikegami)
+	  blocktypes: add missing types for coming extensions
+	  minor changes
+
+12.22.01
+	Added Martin Weber's MSVC project files
+	Added Wolfgang Hamann's fixes
+
+12.16.01
+	Added php 4.1.0 ming.c wrapper code
+
+11.9.01
+	General cleanup:
+	  moved structure definitions into .c files
+	  added accessor functions where necessary
+	  removed inline functions
+	  replaced void* typedefs in ming.h with struct pointers
+	  fixed some memory leaks (?)
+
+9.15.01
+	Added displayitem accessor functions patch from Uri Yanover
+	Added png2dbl data alignment fixes from Ingo Wilken
+
+7.9.01 - 8.17.01
+	Fixed MP3 streaming
+	Other stuff I didn't remember to write down
+	(0.2a)
+
+5.8.01-7.8.01
+	Added lots of compiler patches from Wolfgang Hamann
+	Finally fixed the annoying bug causing random compiler errors
+	Added Ming_useSWFVersion
+	Didn't fix MP3 streaming
+	(0.2-pre-a)
+
+5.7.01
+	Got silly placeobject2 stuff working.
+	Added clip events
+
+5.6.01
+	Added Jon Ribbens' fix for output code
+	Added Jonathan Shore's Java wrapper code
+
+4.22.01
+	Fixed linestyle scaling
+
+4.12.01
+	Moved php wrapper over to input foo, allowing bitmaps/mp3s from
+	  streams/urls/processes/whatever
+	Changed bitmap/mp3 constructors to read strings as data, not filenames
+	Added php error function to propagate ming errors into php
+	(0.1.1)
+
+4.11.01
+	Added SWFInput<BS> object for abstracting file/buffer inputs
+	Added automagic shape wrapping for bitmaps in SWFMovie_add()
+	Removed SWFRect from public interface, added
+	  SWFCharacter_getWidth/Height
+	Updated c++ header (finally), moved to mingpp.h, added to make install
+	Fixed problem w/ default bitmap scaling noted by ..??
+	Changed 2000 to 2001 everywhere :)
+	Got rid of those silly inlines
+
+4.10.01
+	Started on flash5 actionscript compiler
+	Added settable error/warn functions to replace unpleasant core dumpage
+
+3.22.01
+	Fixed spacing bug on second addString noted by Richy Black
+
+3.18.01
+	Added Pete Schwamb's patch to png2dbl.c
+	(0.1.0)
+
+3.12.01
+	Argh.  Looks like I've been neglecting the CHANGES file..
+	Added scaling code.
+	Tweaked at the mp3 frame length calculation.
+	Many small bugs fixed.
+	Other stuff I can't remember.
+
+1.25.01
+	Spent the day discovering that if you split a source file up with
+	  includes, the gcc optimizer really hoses it
+	Moved filehandle freeing for files opened in the php wrapper into
+	  php destructors, dropping the hacky blah::freeFiles nonsense
+	(0.0.9c)
+
+1.24.01
+	Fixed a stupid compiler bug when doing "++blah;"
+	Added Tiz Goetze's filenumber patch to python code
+	Added Kazuki Sakamoto's Ruby examples
+
+1.22.01
+	Added Raff's kerning fix to text.c
+
+1.20.01
+	Added .so make/install to toplevel Makefile, created huge ugly ming.h
+
+1.19.01
+	Fixed bad sprite path freeing noted by Jon Ribbens
+	Added filehandle args to php SWFMovie::streamMp3 and SWFMovie::save
+
+1.18.01
+	Finished cubic bezier approximation code
+	Fixed order of args in startDrag constraint
+	Fixed gotoFrame to recognize variable name as an expression, not a
+	  frame label
+	Added access to fill and display item transform matrices
+
+1.4.01
+	Finished C examples.  Tedious.
+	Added Wolfgang Glunz's patches to make compiling on win32 easier
+	  (including changing src/shape.? to src/shape_util.?)
+	(0.0.9b)
+
+1.3.01
+	Updated documentation.  What fun.
+	Fixed problem with objects popping to (0,0)- guess we need some
+	  redundancy in placeoject after all
+	Added Raff's fix for ugly compiler input hackery
+
+1.2.01
+	Fixed UMR in SWFDisplayList_add found by Itamar Shtull-Trauring
+	Fixed setXFill(0) and setLine(0) problem in php wrapper found by Vito
+	Added c/ dir to examples
+
+1.1.01
+	Fixed FMR in destroySWFText noted by Itamar Shtull-Trauring
+
+12.14.00
+	Fixed redundancy in placeobject block emission
+	Updated swftophp.  Seems to work reasonably well now.
+	Added SWFShape::setLeft/RightFill(r,g,b[,a]) shortcut
+	I can't believe how long this file is already..
+	(0.0.9)
+
+12.13.00
+	Added c++ header, ported mini-test suite to c++
+
+12.10.00
+	Added kerning to getStringWidth thanks to Tomas Znamenacek's bug report
+
+11.30.00
+	Added intermediate storage format for shape defs so that we can
+	  add fills and lines whenever we want
+	fixed setLine so that it actually works as advertsed
+
+11.2?.00
+	Added Raffaele Sena's makefdb patch for bold/italic fonts
+
+11.19.00
+	Fixed all (purify-detectable) memory leakage
+	Added SWFShape_drawFontGlyph
+	Updated python ming.py to match PHP interface
+	"Ported" php examples to python
+	Prolly other stuff I can't remember now..
+	(0.0.4)
+
+11.16.00
+	Added Raffaele Sena's giftodbl code
+	Fixed boneheaded 16-bit file length limit in dbl files
+
+11.08.00
+	Fixed getURL miscompile, added loadMovie command
+	Changed listswf to scan for start of movie (so you don't have to
+	  strip the server response stuff), accept input from stdin
+
+11.07.00
+	Added Steve Spicklemeyer's python patches
+
+10.23.00
+	Cleaning, documenting..  ugh.
+	(0.0.3a)
+
+10.22.00
+	Added CXform
+	Replaced add/set linestyle with single setline which looks for an
+	  already defined line entry
+
+10.21.00
+	Big push for 0.0.3-
+	Added gradients, finally
+	Added access to gradient/bitmap matrices through position object
+	  ..which means shape::add*Fill returns an SWFFill object now,
+	  not a number
+	Replaced setfillstyle[0,1] with set[left,right]fillstyle
+
+10.19.00
+	Fixed another use of uninitited value spotted by Tim Goetze
+	Added SWFFont_getStringWidth
+
+10.13.00
+	Fixed problem with morph not presenting shapes' dependencies
+
+10.12.00
+	Added Tim Goetze's kerning code to text.c
+	Added rudimentary PNG support through goofy external dbl
+	  (definebitslossless) files
+	Added setLeftFill and setRightFill to php shape methods (just
+	  aliases to setFillstyle0 and setFillstyle1, actually)
+	Added Ruby module submitted by Kazuki Sakamoto <sakamoto@splhack.org>
+	(0.0.2e)
+
+10.03.00
+	Fixed misalloc in loadfont (thanks to Tim Goetze)
+	Updated swf.h to quell php compilation warnings
+
+08.14.00
+	Finally bothered to php-wrap jpeg alpha stuff.  Lazy me.
+	(0.0.2d)
+
+08.09.00
+	Added alpha channels to jpeg fills (at Christian Becker's
+	suggestion), via an external .msk file.  Weird, but I didn't want
+	to force linkage against libungif and zlib.
+
+07.30.00
+	Played with decompiling swf5 actionscript.  Them shortcircuit
+	operations are making it difficult, 'specially with the semi-dumb 
+	way they've implemented &&.
+
+07.23.00
+	Many bugs in compiler found (and hopefully fixed), thanks to
+	swf->php.  Lots of small tweaks, can't remember most of it.
+	(0.0.2c)
+
+07.20.00
+	First stab at swf->php util
+
+07.11.00
+	Added python bindings from the swell guys at noze to ming package
+	(http://www.elecomsolutions.com/noze/software/pming/)
+
+07.09.00
+	Added SWFTextField, browser-defined fonts (at Paul
+	  Cheyrou-Lagreze's suggestion)
+	Fixed some stupid bugs in compiler (++a;, setTarget('blah');)
+	(0.0.2b)
+
+07.08.00
+	Added decompiler to listswf util.  It rocks.
+
+07.05.00
+	Changed button to type 2, added addShape and addAction methods to
+	  add shapes and actions (natch) to buttons with the various flags
+
+07.01.00
+	Canada Day!
+	Added action compiler code, SWFMovieClip (adds a displaylist to 
+	  SWFSprite)
+	Added php wrappers for SWFMorph, SWFButton, SWFMovieClip,
+	  SWFAction
+	(0.0.2a)
+
+06.25.00
+	fixed problem noted by Blair Ireland where fdb's glyph code isn't
+	  the same as ascii code
+	(0.0.1c)
+
+06.12.00
+	added folding tags to php code, with function descriptions!
+	changed to proper versions of zend functions
+	  getParameters -> zend_get_parameters_ex
+	  GET_PARAM_COUNT(ht) -> ZEND_NUM_ARGS()
+	  etc.
+	(0.0.1b)
+
+06.11.00
+	hacked in support for jpeg bitmap fills and MP3 streaming, very hacky
+	added dependency list to SWFCharacter, so that jpegs and fonts
+	  don't have to be added to SWFMovies
+	moved isDefined flag to SWFBlock
+
+06.07.00
+	my birthday! (Dave's, that is.  And Ming's, too, I guess..)
+	first public release (0.0.1a)
+	includes shapes, text, and animation
