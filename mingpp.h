@@ -18,6 +18,7 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
@@ -291,13 +292,13 @@ class SWFMovie
   void labelFrame(char *label)
     { SWFMovie_labelFrame(this->movie, label); }
 
-  int output()
-    { return SWFMovie_output(this->movie, fileOutputMethod, stdout); }
+  int output(int level=-1)
+    { return SWFMovie_output(this->movie, fileOutputMethod, stdout, level); }
 
-  int save(const char *filename)
+  int save(const char *filename, int level=-1)
   {
     FILE *fp = fopen(filename, "wb");
-    const int result = SWFMovie_output(this->movie, fileOutputMethod, fp);
+    const int result = SWFMovie_output(this->movie, fileOutputMethod, fp, level);
     fclose(fp);
     return result;
   }
@@ -732,3 +733,4 @@ class SWFButton : public SWFCharacter
   void addAction(SWFAction *action, int flags)
     { SWFButton_addAction(this->button, action->action, flags); }
 };
+
