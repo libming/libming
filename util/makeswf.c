@@ -32,14 +32,9 @@
  * TODO
  * ----
  * 
- * - Try to keep lines number after preprocessing
- *   ( keep comments ? / what about includes ? / keep preprocessed files ? )
- *   ( postprocess error messages substituting Line no ? )
- *
  * - Change command line to:
  *	makeswf [-o <outputfile>] [-p] <input> ...
  * 
- * - Allow for preprocesed files keeping
  * - Accept output version as parameter.
  * - Accept compression level as parameter.
  * - Accept -v for versioning and credits.
@@ -241,6 +236,7 @@ main (int argc, char **argv)
 	for ( i=1; i<argc; i++ )
 	{
 		struct stat statbuf;
+		char *filename = argv[i];
 
 		if ( -1 == stat(argv[i], &statbuf) )
 		{
@@ -252,18 +248,15 @@ main (int argc, char **argv)
 		{
 			sprintf(ppfile, "%s.pp", argv[i]);
 			if ( ! preprocess(argv[i], ppfile, cppargs) ) continue;
-			if ( ! (code=readfile(ppfile)) ) continue;
-			unlink(ppfile);
+			//unlink(ppfile);
+			filename = ppfile;
 		}
-		else
+		if ( ! (code=readfile(filename)) )
 		{
-			if ( ! (code=readfile(argv[i])) )
-			{
-				continue;
-			}
+			continue;
 		}
 
-		printf("Compiling code from %s... ", argv[i]);
+		printf("Compiling code from %s... ", filename);
 		fflush(stdout);
 		lastcompilefailed=0;
 		ac = compileSWFActionCode(code);
@@ -342,6 +335,10 @@ preprocess (char *file, char *out, char *cppargs)
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.5  2004/09/25 08:17:11  strk
+ * Post-processed files are kept and their name is shown to the user to
+ * allow for error Line finding.
+ *
  * Revision 1.4  2004/07/19 08:22:56  strk
  * GNU_SOURCE define in makeswf.c, makeswf.h dependency in Makefile
  *
