@@ -3,9 +3,8 @@
 CC = gcc -g -Wall -I. ${CFLAGS} #-fPIC -ggdb
 LDFLAGS = -lm -lz # -ldmalloc
 
-LIBDIR = /usr/local/lib
-
 include ../config.make
+include ../Rules.make
 
 OFILES = \
 	blocklist.o \
@@ -36,8 +35,8 @@ all: dynamic
 dynamic: ${OFILES}
 	cd blocks && $(MAKE)
 	cd actioncompiler && $(MAKE)
-	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o libming.so
-	cp libming.so ..
+	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o $(SHAREDLIB)
+	cp $(SHAREDLIB) ..
 
 static: ${OFILES}
 	cd blocks && $(MAKE)
