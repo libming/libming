@@ -77,6 +77,10 @@ void swf5ParseInit(const char *script, int debug)
 
 %s asm
 
+%{
+ void do_unput5(const char *x) { unput(*x); }
+%}
+
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
 
@@ -355,7 +359,7 @@ loop:
    if ((c1 = getinput()) != '/' && c != EOF)
    {
       // false start as this was no end of comment
-      unput(c1);
+      do_unput5(c1);
       goto loop;
    }
 

@@ -74,6 +74,10 @@ void swf4ParseInit(const char *script, int debug)
 
 %}
 
+%{
+ void do_unput4(const char *x) { unput(*x); }
+}%
+
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
 LEVEL	 \.\.?
@@ -291,7 +295,7 @@ loop:
    if ((c1 = getinput()) != '/' && c != EOF)
    {
       // false start as this was no end of comment
-      unput(c1);
+      do_unput4(c1);
       goto loop;
    }
 
