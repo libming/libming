@@ -224,6 +224,7 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	}
 
 	SWFInput_seek(input, start, SEEK_SET);
+	stream->start = start;	// for rewind	
 	
 	if ( (flags & MP3_CHANNEL) == MP3_CHANNEL_MONO )
 		channels = SWF_SOUNDSTREAM_MONO;
