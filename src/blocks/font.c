@@ -49,6 +49,10 @@ struct textList
 
 struct SWFFont_s
 {
+	// even though SWFFont isn't represented in the SWF file,
+	// this lets us call destroySWFBlock(font)
+	struct SWFBlock_s block;
+
 	byte *name;
 	byte flags;
 
@@ -215,11 +219,14 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 
 void
-destroySWFFont(SWFFont font)
+destroySWFFont(SWFBlock block)
 {
+	SWFFont font = (SWFFont)block;
+
 	if ( font->shapes != NULL )
 	{
 #if HAS_MMAP
+		// XXX - if mmap failed, we malloced this!
 		int len = font->glyphOffset[font->nGlyphs] - font->glyphOffset[0];
 		munmap(font->shapes, len);
 #else
@@ -294,6 +301,13 @@ SWFFont
 newSWFFont()
 {
 	SWFFont font = malloc(sizeof(struct SWFFont_s));
+
+	SWFBlockInit((SWFBlock)font);
+
+	BLOCK(font)->type = SWF_UNUSEDBLOCK;
+	BLOCK(font)->writeBlock = NULL;
+	BLOCK(font)->complete = NULL;
+	BLOCK(font)->dtor = destroySWFFont;
 
 	font->name = NULL;
 	font->flags = 0;

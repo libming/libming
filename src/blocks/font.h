@@ -47,7 +47,7 @@ SWFFont
 newSWFFont();
 
 void
-destroySWFFont(SWFFont font);
+destroySWFFont(SWFBlock block);
 
 SWFFont
 loadSWFFontFromFile(FILE *file);

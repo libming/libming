@@ -24,6 +24,8 @@
 
 typedef enum
 {
+  SWF_UNUSEDBLOCK               = -1, // tell ming to skip this
+
   SWF_CHARACTERSET		= 51,
   SWF_DEFINEBITS                =  6,
   SWF_DEFINEBITSJPEG2           = 21,

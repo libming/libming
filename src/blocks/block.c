@@ -62,6 +62,9 @@ destroySWFBlock(SWFBlock block)
 int
 completeSWFBlock(SWFBlock block)
 {
+	if ( block->type == SWF_UNUSEDBLOCK )
+		return 0;
+
 	if ( !block->completed )
 	{
 		if ( block->complete )
@@ -85,10 +88,15 @@ int
 writeSWFBlockToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFBlocktype type = block->type;
-	unsigned int length = block->length;
+	unsigned int length;
+	
+	if ( type == SWF_UNUSEDBLOCK )
+		return 0;
 
 	if ( !block->completed )
 		completeSWFBlock(block);
+
+	length = block->length;
 
 	/* write header */
 
