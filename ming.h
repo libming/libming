@@ -182,7 +182,7 @@ SWFFont newSWFFont();
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFBlock block);
 
-int SWFFont_getStringWidth(SWFFont font, const char *string);
+float SWFFont_getStringWidth(SWFFont font, const char *string);
 
 /* XXX */
 #define SWFFont_getWidth SWFFont_getStringWidth
