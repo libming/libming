@@ -51,7 +51,10 @@ typedef enum
   SWF_END			=  0,
   SWF_DOACTION		        = 12,
   SWF_EXPORTASSETS              = 56,
-  SWF_IMPORTASSETS              = 57
+  SWF_IMPORTASSETS              = 57,
+  SWF_INITACTION			= 59,
+  SWF_DEFINEVIDEOSTREAM		= 60,
+  SWF_VIDEOFRAME		= 61
 } SWFBlocktype;
 
 #endif /* SWF_BLOCKTYPES_H_INCLUDED */

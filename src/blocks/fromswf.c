@@ -500,6 +500,7 @@ static int handle_tag(TAG tp)
 		case SWF_DEFINEBUTTONCXFORM:
 		case SWF_DEFINEVIDEOSTREAM:
 		case SWF_VIDEOFRAME:
+		case SWF_INITACTION:
 		/*case SWF_NEWFONTINFO:*/
 			id = change_id(tp);
 			if(verbose)

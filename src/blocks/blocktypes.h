@@ -88,6 +88,7 @@ typedef enum
   SWF_SOUNDSTREAMHEAD2          = 45,
   SWF_STARTSOUND                = 15,
   SWF_SYNCFRAME			= 29,
+  SWF_INITACTION				= 59,
   SWF_DEFINEVIDEOSTREAM		= 60,
   SWF_VIDEOFRAME		= 61,
 // these are pseudo definitions that do not correspond to actual swf file tags
