@@ -292,19 +292,19 @@ static ShapeRecord newShapeRecord(SWFShape shape, shapeRecordType type)
   {
     case SHAPERECORD_STATECHANGE:
     {
-      StateChangeRecord change = malloc(sizeof(struct stateChangeRecord));
+      StateChangeRecord change = calloc(1,sizeof(struct stateChangeRecord));
       shape->records[shape->nRecords].record.stateChange = change;
       break;
     }
     case SHAPERECORD_LINETO:
     {
-      LineToRecord lineTo = malloc(sizeof(struct lineToRecord));
+      LineToRecord lineTo = calloc(1,sizeof(struct lineToRecord));
       shape->records[shape->nRecords].record.lineTo = lineTo;
       break;
     }
     case SHAPERECORD_CURVETO:
     {
-      CurveToRecord curveTo = malloc(sizeof(struct curveToRecord));
+      CurveToRecord curveTo = calloc(1,sizeof(struct curveToRecord));
       shape->records[shape->nRecords].record.curveTo = curveTo;
       break;
     }

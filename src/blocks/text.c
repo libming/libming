@@ -152,6 +152,8 @@ SWFText newSWFText()
 
   text->out = newSWFOutput();
   text->currentRecord = text->textRecord = newSWFTextRecord();
+  text->matrix = NULL;
+  text->nAdvanceBits = 0;
 
   return text;
 }
@@ -172,6 +174,9 @@ SWFTextRecord newSWFTextRecord()
 
   textRecord->spacing = 1.0;
   textRecord->height = 240;
+  textRecord->flags = 0;
+  textRecord->string = NULL;
+  textRecord->next = NULL;
 
   return textRecord;
 }

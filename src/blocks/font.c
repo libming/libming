@@ -173,7 +173,7 @@ void destroySWFFont(SWFBlock block)
 
 SWFFont newSWFFont()
 {
-  SWFFont font = malloc(sizeof(struct SWFFont_s));
+  SWFFont font = calloc(sizeof(struct SWFFont_s));
 
   SWFCharacterInit((SWFCharacter)font);
 
@@ -184,6 +184,7 @@ SWFFont newSWFFont()
   BLOCK(font)->dtor = destroySWFFont;
 
   memset(&(font->glyphToCode), 0xff, 256);
+  font->currentList = NULL;
 
   return font;
 }
