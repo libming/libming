@@ -31,7 +31,6 @@ static char *SWF_Button_tag[] = {
      NULL,
 };
 
-
 static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_NOEDIT",
      "SWFTEXTFIELD_PASSWORD",
@@ -39,6 +38,7 @@ static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_MULTILINE",
      "SWFTEXTFIELD_WORDWRAP",
      "SWFTEXTFIELD_NOSELECT",
+     "SWFTEXTFIELD_HTML",
      "SWFTEXTFIELD_ALIGN_LEFT",
      "SWFTEXTFIELD_ALIGN_RIGHT",
      "SWFTEXTFIELD_ALIGN_CENTER",
@@ -46,7 +46,18 @@ static char *SWF_TextField_tag[] = {
      NULL,
 };
 
-
+static char *SWF_PlaceObject_tag[] = {
+	"SWFCLIPEVENT_ONLOAD",
+	"SWFCLIPEVENT_ENTERFRAME",
+	"SWFCLIPEVENT_UNLOAD",
+	"SWFCLIPEVENT_MOUSEMOVE",
+	"SWFCLIPEVENT_MOUSEDOWN",
+	"SWFCLIPEVENT_MOUSEUP",
+	"SWFCLIPEVENT_KEYDOWN",
+	"SWFCLIPEVENT_KEYUP",
+	"SWFCLIPEVENT_DATA",
+	NULL
+};
 
 static char **export_tags(char *tag) {
    switch (*tag) {
@@ -59,6 +70,9 @@ static char **export_tags(char *tag) {
    case 'T':
      if(strEQ("Text", tag))
        return SWF_TextField_tag;
+   case 'C':
+     if(strEQ("Clip", tag))
+       return SWF_PlaceObject_tag;
    default:
      croak("unknown tag `%s'", tag);
    }

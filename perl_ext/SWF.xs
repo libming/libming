@@ -216,6 +216,13 @@ SWFTEXTFIELD_NOSELECT()
    RETVAL
 
 int
+SWFTEXTFIELD_HTML()
+   CODE:
+   RETVAL= SWFTEXTFIELD_HTML;
+   OUTPUT:
+   RETVAL
+
+int
 SWFTEXTFIELD_ALIGN_LEFT()
    CODE:
    RETVAL= SWFTEXTFIELD_ALIGN_LEFT;
@@ -242,6 +249,70 @@ SWFTEXTFIELD_ALIGN_JUSTIFY()
    RETVAL= SWFTEXTFIELD_ALIGN_JUSTIFY;
    OUTPUT:
    RETVAL
+
+int
+SWFCLIPEVENT_ONLOAD()
+   CODE:
+   RETVAL=SWF_PLACEACTION_ONLOAD;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_ENTERFRAME()
+   CODE:
+   RETVAL=SWF_PLACEACTION_ENTERFRAME;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_UNLOAD()
+   CODE:
+   RETVAL=SWF_PLACEACTION_UNLOAD;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_MOUSEMOVE()
+   CODE:
+   RETVAL=SWF_PLACEACTION_MOUSEMOVE;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_MOUSEDOWN()
+   CODE:
+   RETVAL=SWF_PLACEACTION_MOUSEDOWN;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_MOUSEUP()
+   CODE:
+   RETVAL=SWF_PLACEACTION_MOUSEUP;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_KEYDOWN()
+   CODE:
+   RETVAL=SWF_PLACEACTION_KEYDOWN;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_KEYUP()
+   CODE:
+   RETVAL=SWF_PLACEACTION_KEYUP;
+   OUTPUT:
+   RETVAL
+
+int
+SWFCLIPEVENT_DATA()
+   CODE:
+   RETVAL=SWF_PLACEACTION_DATA;
+   OUTPUT:
+   RETVAL
+
 
 void
 fileOutputMethod(b, data)
@@ -403,6 +474,15 @@ SWFGradient_addEntry(gradient, ratio, r, g, b, a=0xff)
 	byte		a
 
 
+MODULE = SWF            PACKAGE = SWF::Ming             PREFIX = SWFMing_
+
+void
+SWFMing_setScale(scale)
+        float scale
+        CODE:
+                Ming_setScale(scale);
+
+
 MODULE = SWF		PACKAGE = SWF::Movie		PREFIX = SWFMovie_
 
 void
@@ -480,11 +560,26 @@ SWFMovie_save(movie, filename)
         RETVAL
 
 
+void
+SWFMovie_addExport(movie, block, name)
+	SWF::Movie movie
+	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
+	char *name
+
+void
+SWFMovie_export(movie)
+	SWF::Movie movie
+
 SWF::DisplayItem
 SWFMovie_add(movie, block)
 	SWF::Movie movie
 	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
 
+void
+SWFDisplayItem_addAction(item, action, flags)
+	SWF::DisplayItem item
+	SWF::Action	action
+	int             flags
 
 MODULE = SWF		PACKAGE = SWF::DisplayItem	PREFIX = SWFDisplayItem_
 

@@ -6,7 +6,7 @@ my @DEFAULT_DIR = qw(../.. ./src ../ ../ming-0.0.9 ../ming-0.0.9b ./ming-0.0.9 .
 
 my $is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));
 #$Verbose=1 if $is_soheil;
-my @supported_ming_vers = qw(0.0.9 0.0.9b);
+my @supported_ming_vers = qw(0.0.9 0.0.9b 0.1.0 0.1.1);
 my ($MING_DIR, $ming_version);
 
 
