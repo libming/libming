@@ -18,7 +18,7 @@ OFILES = \
 	shape_cubic.o \
 	shape_util.o \
 	text_util.o \
-	mem.o
+	gc.o
 
 COMPILEROFILES = actioncompiler/compile.o \
 		 actioncompiler/swf4compiler.tab.o \
