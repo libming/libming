@@ -1,6 +1,6 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
-CC = gcc -g -Wall
+CC = gcc -g -Wall -fPIC
 
 OFILES = output.o character.o shape.o morph.o fillstyle.o matrix.o font.o \
 	 block.o cxform.o text.o action.o button.o placeobject.o \
