@@ -86,7 +86,9 @@ SWFMovie_xs_output(movie, compresslevel=-1)
 	SWF::Movie movie
 	int compresslevel
 	CODE:
-	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout, compresslevel);
+	if(compresslevel >= -1)
+		Ming_setCompression(compresslevel);
+	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout);
 
 int 
 SWFMovie_save(movie, filename, compresslevel=-1)
@@ -100,7 +102,9 @@ SWFMovie_save(movie, filename, compresslevel=-1)
 		fprintf(stderr, "Unable to open %s\n", filename);
 		ST(0) = &sv_undef;
 	}else{
-                RETVAL = SWFMovie_output(movie, fileOutputMethod, f, compresslevel);
+		if(compresslevel >= -1)
+			Ming_setCompression(compresslevel);
+                RETVAL = SWFMovie_output(movie, fileOutputMethod, f);
                 fclose(f);
 	}
         OUTPUT:
@@ -137,7 +141,7 @@ SWFMovie_remove(movie, item)
 void
 SWFMovie_setSoundStream(movie, sound)
 	SWF::Movie movie
-	SWF::Sound sound
+	SWF::SoundStream sound
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
 	SWFMovie_setSoundStream(movie, sound);
