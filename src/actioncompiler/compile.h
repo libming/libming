@@ -117,6 +117,7 @@ int bufferLength(Buffer out);
 /* constant pool stuff */
 int addConstant(const char *s);
 int bufferWriteConstants(Buffer out);
+#define MAXCONSTANTPOOLSIZE 65533
 
 /* write data to buffer */
 int bufferWriteOp(Buffer out, int data);

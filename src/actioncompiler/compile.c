@@ -28,7 +28,7 @@
 
 #include "compile.h"
 
-static int nConstants = {0}, maxConstants = {0};
+static int nConstants = {0}, maxConstants = {0}, sizeConstants = {0};
 static char **constants;
 
 extern int SWF_versionNum;
@@ -120,9 +120,13 @@ int addConstant(const char *s)
 			return i;
 	}
 
+	/* Don't let constant pool biggern then allowed */
+	if ( sizeConstants+strlen(s)+1 > MAXCONSTANTPOOLSIZE ) return -1;
+
 	if(nConstants == maxConstants)
 		constants = (char **) realloc(constants, (maxConstants += 64) * sizeof(char *));
 	constants[nConstants] = strdup(s);
+	sizeConstants += (strlen(s)+1);
 	return nConstants++;
 }
 
@@ -144,7 +148,7 @@ int bufferWriteConstants(Buffer out)
 	}
 
 	nConstants = 0;
-
+	sizeConstants = 0;
 	bufferPatchLength(out, len);
 
 	return len+3;
