@@ -344,7 +344,7 @@ PHP_FUNCTION(swfbitmap_init)
   SWFBitmap bitmap;
   SWFInput input, maskinput;
   int ret;
-
+//fprintf(stderr, "newSWFBitmap_fromInput %x %d\n", newSWFBitmap_fromInput, getpid()); sleep(30);
   if(ZEND_NUM_ARGS() == 1)
   {
     if(zend_get_parameters_ex(1, &zfile) == FAILURE)
@@ -383,10 +383,12 @@ PHP_FUNCTION(swfbitmap_init)
   else
     bitmap = newSWFBitmap_fromInput(input);
 
-  ret = zend_list_insert(bitmap, le_swfbitmapp);
-  object_init_ex(getThis(), &bitmap_class_entry);
-  add_property_resource(getThis(), "bitmap", ret);
-  zend_list_addref(ret);
+	if(bitmap)
+	{	ret = zend_list_insert(bitmap, le_swfbitmapp);
+		object_init_ex(getThis(), &bitmap_class_entry);
+		add_property_resource(getThis(), "bitmap", ret);
+		zend_list_addref(ret);
+	}
 }
 
 static void destroy_SWFBitmap_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
