@@ -12,6 +12,7 @@
 #include "assembler.h"
 
 #define YYPARSE_PARAM buffer
+//#define DEBUG 1
 
 Buffer bf, bc;
 
@@ -58,7 +59,7 @@ Buffer bf, bc;
 %token STRINGLESSTHAN MBLENGTH MBSUBSTRING MBORD MBCHR
 %token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET 
 %token LOADVARIABLES LOADMOVIE LOADVARIABLESNUM LOADMOVIENUM
-%token CALLFRAME STARTDRAG STOPDRAG GOTOFRAME SETTARGET
+%token CALLFRAME STARTDRAG STOPDRAG GOTOFRAME SETTARGET 
 
 %token TRY THROW CATCH FINALLY
 
@@ -728,8 +729,12 @@ level
 	;
 
 void_function_call
-	: IDENTIFIER '(' expr_list ')'
-		{ $$ = $3.buffer;
+	: identifier '(' expr_list ')'
+		{
+#ifdef DEBUG
+		  printf("void_function_call: IDENTIFIER '(' expr_list ')'\n");
+#endif
+		  $$ = $3.buffer;
 		  bufferWriteInt($$, $3.count);
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
@@ -917,7 +922,11 @@ void_function_call
 
 function_call
 	: IDENTIFIER '(' expr_list ')'
-		{ $$ = $3.buffer;
+		{
+#ifdef DEBUG
+		  printf("function_call: %s '(' expr_list ')'\n", $1);
+#endif
+		  $$ = $3.buffer;
 		  bufferWriteInt($$, $3.count);
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
@@ -1314,19 +1323,51 @@ expr
 expr_or_obj
 	: expr
 
-	| NEW identifier
-		{ $$ = newBuffer();
+	| NEW IDENTIFIER
+		{
+#ifdef DEBUG
+		  printf("NEW %s\n", $2);
+#endif
+		  $$ = newBuffer();
 		  bufferWriteInt($$, 0);
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
 		  bufferWriteOp($$, SWFACTION_NEW); }
 
-	| NEW identifier '(' expr_list ')'
-		{ $$ = $4.buffer;
+	| NEW IDENTIFIER '(' expr_list ')'
+		{
+#ifdef DEBUG
+		  printf("NEW %s '(' expr_list ')'\n", $2);
+#endif
+		  $$ = $4.buffer;
 		  bufferWriteInt($$, $4.count);
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
 		  bufferWriteOp($$, SWFACTION_NEW); }
+
+	| NEW lvalue_expr '.' IDENTIFIER
+		{
+#ifdef DEBUG
+		  printf("NEW lvalue_expr '.' %s\n", $4);
+#endif
+		  $$ = $2;
+		  bufferWriteInt($$, 0);
+		  bufferWriteString($$, $4, strlen($4)+1);
+		  free($4);
+		  bufferWriteOp($$, SWFACTION_NEWMETHOD); }
+
+
+	| NEW lvalue_expr '.' IDENTIFIER '(' expr_list ')'
+		{
+#ifdef DEBUG
+		  printf("NEW lvalue_expr '.' %s '(' expr_list ')'\n", $4);
+#endif
+		  $$ = $2;
+		  bufferConcat($$, $6.buffer);
+		  bufferWriteInt($$, $6.count);
+		  bufferWriteString($$, $4, strlen($4)+1);
+		  free($4);
+		  bufferWriteOp($$, SWFACTION_NEWMETHOD); }
 
 	| '[' expr_list ']'
 		{ $$ = $2.buffer;
