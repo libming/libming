@@ -5,7 +5,7 @@ OS             = $(shell uname -s)
 CC             = gcc
 CXX	       = g++
 
-INCLUDES       := -I. $(INCLUDES)
+INCLUDES       += -I. 
 LDLIBS         = $(LIBS)
 
 STATICLIB      = libming.a
