@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <assert.h>
 #include <string.h>
 #include <math.h>
 #include "text.h"
@@ -424,7 +423,7 @@ void SWFText_resolveCodes(SWFText text)
     else
       l = 0;
 
-    assert(l<256);
+    SWF_assert(l<256);
 
     SWFOutput_writeUInt8(out, l);
 
@@ -458,7 +457,7 @@ void SWFText_resolveCodes(SWFText text)
     {
       SWFFont font = textRecord->font.font;
 
-      assert(font != NULL);
+      SWF_assert(font != NULL);
 
       for(i=0; i<l; ++i)
       {
@@ -467,12 +466,12 @@ void SWFText_resolveCodes(SWFText text)
 	SWFOutput_writeBits(out, font->glyphToCode[textRecord->string[i]],
 			    nGlyphBits);
 
-	assert(textRecord != NULL);
+	SWF_assert(textRecord != NULL);
 
 	advance = (int)floor(textRecord->advance[i]);
 	SWFOutput_writeBits(out, advance, text->nAdvanceBits);
 
-	assert(font->bounds != NULL);
+	SWF_assert(font->bounds != NULL);
 
 	if(CHARACTER(text)->bounds)
 	{

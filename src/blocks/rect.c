@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <assert.h>
 #include <stdlib.h>
 #include "rect.h"
 
@@ -35,7 +34,7 @@ void SWFOutput_writeRect(SWFOutput out, SWFRect rect)
 		  max(SWFOutput_numSBits(rect->minY),
 		      SWFOutput_numSBits(rect->maxY)));
 
-  assert(nBits<32);
+  SWF_assert(nBits<32);
 
   SWFOutput_writeBits(out, nBits, 5);
   SWFOutput_writeSBits(out, rect->minX, nBits);

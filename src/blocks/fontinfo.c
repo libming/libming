@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -31,7 +31,7 @@ void writeDefineSWFFontInfoBlock(SWFBlock block,
 
   l = strlen(font->name);
 
-  assert(l<256);
+  SWF_assert(l<256);
   method(l, data);
 
   for(i=0; i<l; ++i)

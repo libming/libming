@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,11 +24,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 #include <string.h>
 
-#define warn(x) printf("WARNING: %s\n",(x))
-#define error(x) { printf("ERROR: %s\n",(x)); assert(0); }
+#include "error.h"
 
 #ifndef TRUE
   #define TRUE 1

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -16,8 +16,6 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
-#include <assert.h>
 
 #include "action.h"
 #include "outputblock.h"
@@ -46,7 +44,7 @@ void SWFAction_end(SWFAction action)
 void SWFAction_addShortRecord(SWFAction action, byte record)
 {
   SWFOutput output = ((SWFOutputBlock)action)->output;
-  assert(record < 0x80);
+  SWF_assert(record < 0x80);
   SWFOutput_writeUInt8(output, record);
 }
 

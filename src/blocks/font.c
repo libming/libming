@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -63,7 +63,7 @@ void writeSWFFontToMethod(SWFBlock block,
     p = font->glyphOffset[font->codeToGlyph[i]];
     s = font->glyphOffset[font->codeToGlyph[i]+1];
 
-    assert(p < s);
+    SWF_assert(p < s);
 
     while(p < s)
       method(*(p++), data);

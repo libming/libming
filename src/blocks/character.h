@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -58,7 +58,9 @@ void SWFCharacter_clearDependencies(SWFCharacter character);
 #define CHARACTER(s) ((SWFCharacter)(s))
 #define CHARACTERID(s) (((SWFCharacter)(s))->number)
 
-SWFRect SWFCharacter_getBounds(SWFCharacter character);
-byte SWFBlock_isCharacter(SWFBlock block);
+int SWFCharacter_getScaledWidth(SWFCharacter character);
+int SWFCharacter_getScaledHeight(SWFCharacter character);
+
+int SWFBlock_isCharacter(SWFBlock block);
 
 #endif /* SWF_CHARACTER_H_INCLUDED */

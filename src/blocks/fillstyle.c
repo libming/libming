@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 
 #include "blocktypes.h"
 #include "output.h"
@@ -55,7 +54,7 @@ int SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2)
       return (fill1->data.bitmap == fill2->data.bitmap);
 
     default:
-      error("Unknown fill type");
+      SWF_error("Unknown fill type");
   }
 
   return 0;
@@ -103,7 +102,7 @@ void SWFOutput_writeFillStyles(SWFOutput out,
       SWFOutput_writeMatrix(out, fill->matrix);
     }
     else
-      assert(0);
+      SWF_assert(0);
   }
 }
 
@@ -114,7 +113,7 @@ void SWFOutput_writeMorphFillStyles(SWFOutput out,
   int i, type;
   SWFFillStyle fill1, fill2;
 
-  assert(nFills1 == nFills2);
+  SWF_assert(nFills1 == nFills2);
 
   if(nFills1<255)
     SWFOutput_writeUInt8(out, nFills1);
@@ -129,7 +128,7 @@ void SWFOutput_writeMorphFillStyles(SWFOutput out,
     fill1 = fills1[0];
     fill2 = fills2[0];
 
-    assert(fill1->type == fill2->type);
+    SWF_assert(fill1->type == fill2->type);
 
     type = fill1->type;
 
@@ -154,15 +153,15 @@ void SWFOutput_writeMorphFillStyles(SWFOutput out,
     }
     else if(type & SWF_FILL_BITMAP)
     {
-      assert(CHARACTERID(fill1->data.bitmap) ==
-	     CHARACTERID(fill2->data.bitmap));
+      SWF_assert(CHARACTERID(fill1->data.bitmap) ==
+		 CHARACTERID(fill2->data.bitmap));
 
       SWFOutput_writeUInt16(out, CHARACTERID(fill1->data.bitmap));
       SWFOutput_writeMatrix(out, fill1->matrix);
       SWFOutput_writeMatrix(out, fill2->matrix);
     }
     else
-      assert(0);
+      SWF_assert(0);
 
     ++fill1;
     ++fill2;

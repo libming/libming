@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -54,14 +54,21 @@ void SWFCharacter_clearDependencies(SWFCharacter character)
   character->dependencies = NULL;
 }
 
-SWFRect SWFCharacter_getBounds(SWFCharacter character)
+int SWFCharacter_getScaledWidth(SWFCharacter character)
 {
-  return character->bounds;
+  return character->bounds->maxX - character->bounds->minX;
 }
 
+int SWFCharacter_getScaledHeight(SWFCharacter character)
+{
+  return character->bounds->maxY - character->bounds->minY;
+}
+
+
 /* rather, should it go on the display list..
-   character is a sloppy category now */
-byte SWFBlock_isCharacter(SWFBlock block)
+   character is a bit of a sloppy category now */
+
+int SWFBlock_isCharacter(SWFBlock block)
 {
   SWFBlocktype type = block->type;
 

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,15 @@
 #include "blocktypes.h"
 
 typedef unsigned char byte;
+
+
+extern void (*SWF_warn)(char *msg, ...);
+extern void (*SWF_error)(char *msg, ...);
+
+void setSWFWarnFunction(void (*error)(char *msg, ...));
+void setSWFErrorFunction(void (*error)(char *msg, ...));
+
+void SWF_assert(int c);
 
 
   /* a generic output method.  specific instances dump output to file,
@@ -54,6 +63,21 @@ void SWFBlock_setDefined(SWFBlock block);
 byte SWFBlock_isDefined(SWFBlock block);
 
 SWFBlocktype SWFBlock_getType(SWFBlock block);
+
+
+  /* SWFInput */
+
+typedef void *SWFInput;
+
+int SWFInput_length(SWFInput input);
+void SWFInput_rewind(SWFInput input);
+int SWFInput_tell(SWFInput input);
+void SWFInput_seek(SWFInput input, long offset, int whence);
+int SWFInput_eof(SWFInput input);
+
+SWFInput newSWFInput_file(FILE *f);
+SWFInput newSWFInput_stream(FILE *f);
+SWFInput newSWFInput_buffer(unsigned char *buffer, int length);
 
 
   /* SWFOutput */
@@ -97,8 +121,10 @@ SWFBlock *SWFCharacter_getDependencies(SWFCharacter character);
 int SWFCharacter_getNDependencies(SWFCharacter character);
 void SWFCharacter_clearDependencies(SWFCharacter character);
 
-SWFRect SWFCharacter_getBounds(SWFCharacter character);
-byte SWFBlock_isCharacter(SWFBlock block);
+int SWFCharacter_getScaledWidth(SWFCharacter character);
+int SWFCharacter_getScaledHeight(SWFCharacter character);
+
+int SWFBlock_isCharacter(SWFBlock block);
 
 
   /* SWFBitmap */
@@ -115,6 +141,7 @@ int SWFBitmap_getHeight(SWFBitmap b);
 typedef void *SWFDBLBitmap;
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f);
+SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
 
   /* SWFJpegBitmap */
@@ -122,7 +149,9 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 typedef void *SWFJpegBitmap, *SWFJpegWithAlpha;
 
 SWFJpegBitmap newSWFJpegBitmap(FILE *f);
+SWFJpegBitmap newSWFJpegBitmap_fromInput(SWFInput input);
 SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha);
+SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 
   /* SWFGradient */
@@ -355,6 +384,7 @@ typedef void *SWFSound;
 #define SWF_SOUND_STEREO           (1<<0)
 
 SWFSound newSWFSound(FILE *file);
+SWFSound newSWFSound_fromInput(SWFInput input);
 void destroySWFSound(SWFSound sound);
 
 SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate);

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -89,7 +89,7 @@ void SWFOutput_writeMorphLineStyles(SWFOutput out,
   SWFLineStyle line1, line2;
   int i;
 
-  assert(nLines1 == nLines2);
+  SWF_assert(nLines1 == nLines2);
 
   if(nLines1<255)
     SWFOutput_writeUInt8(out, nLines1);

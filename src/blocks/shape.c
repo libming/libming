@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <assert.h>
 #include "shape.h"
 
 #define STYLE_INCREMENT 4
@@ -195,7 +194,7 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
 	int y = record.record.stateChange->moveToY;
         int nBits = max(SWFOutput_numSBits(x), SWFOutput_numSBits(y));
 
-        assert(nBits<32);
+        SWF_assert(nBits<32);
         SWFOutput_writeBits(out, nBits, 5);
         SWFOutput_writeSBits(out, x, nBits);
         SWFOutput_writeSBits(out, y, nBits);
@@ -241,7 +240,7 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
       if(dx==0)
       {
 	nBits = SWFOutput_numSBits(dy);
-	assert(nBits<18);
+	SWF_assert(nBits<18);
 	SWFOutput_writeBits(out, nBits-2, 4);
 	SWFOutput_writeBits(out, 1, 2); /* vertical line */
 	SWFOutput_writeSBits(out, dy, nBits);
@@ -249,7 +248,7 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
       else if(dy==0)
       {
 	nBits = SWFOutput_numSBits(dx);
-	assert(nBits<18);
+	SWF_assert(nBits<18);
 	SWFOutput_writeBits(out, nBits-2, 4);
 	SWFOutput_writeBits(out, 0, 2); /* horizontal line */
 	SWFOutput_writeSBits(out, dx, nBits);
@@ -257,7 +256,7 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
       else
       {
 	nBits = max(SWFOutput_numSBits(dx), SWFOutput_numSBits(dy));
-	assert(nBits<18);
+	SWF_assert(nBits<18);
 	SWFOutput_writeBits(out, nBits-2, 4);
 	SWFOutput_writeBits(out, 1, 1); /* general line */
 	SWFOutput_writeSBits(out, dx, nBits);
@@ -282,7 +281,7 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
       if(nBits<2)
 	nBits = 2;
 
-      assert(nBits<18);
+      SWF_assert(nBits<18);
 
       SWFOutput_writeBits(out, 2, 2); /* curved edge */
       SWFOutput_writeBits(out, nBits-2, 4);
@@ -295,7 +294,7 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
     }
 
     default:
-      error("Unknown shapeRecordType");
+      SWF_error("Unknown shapeRecordType");
   }
 }
 
@@ -500,7 +499,7 @@ SWFFillStyle SWFShape_addBitmapFillStyle(SWFShape shape,
     fill->type = SWF_FILL_TILED_BITMAP;
 
   fill->data.bitmap = bitmap;
-  fill->matrix = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
+  fill->matrix = newSWFMatrix(20.0, 0, 0, 20.0, 0, 0);
 
   SWFCharacter_addDependency((SWFCharacter)shape, (SWFBlock)bitmap);
 
@@ -518,7 +517,7 @@ void SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill)
 
   if(fill != NOFILL)
   {
-    assert(fill->idx <= shape->nFills);
+    SWF_assert(fill->idx <= shape->nFills);
     record.record.stateChange->leftFill = fill->idx;
   }
   else
@@ -538,7 +537,7 @@ void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 
   if(fill != NOFILL)
   {
-    assert(fill->idx <= shape->nFills);
+    SWF_assert(fill->idx <= shape->nFills);
     record.record.stateChange->rightFill = fill->idx;
   }
   else
@@ -608,10 +607,10 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
   byteAlign();
 
   if(readBits(f, 4) != 1) /* fill bits */
-    error("SWFShape_drawGlyph: was expecting fill bits = 1");
+    SWF_error("SWFShape_drawGlyph: was expecting fill bits = 1");
 
   if(readBits(f, 4) != 0) /* line bits */
-    error("SWFShape_drawGlyph: was expecting line bits = 0");
+    SWF_error("SWFShape_drawGlyph: was expecting line bits = 0");
 
   /* now we get to parse the shape commands.  Oh boy. */
   /* the first one will be a non-edge block- grab the moveto loc */
@@ -625,7 +624,7 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
   SWFShape_moveScaledPenTo(shape, x+startX, y+startY);
 
   if(readBits(f, 1) != 1) /* fill1 = 1 */
-    error("SWFShape_drawCharacter says: oops.  Was expecting fill1 = 1.");
+    SWF_error("SWFShape_drawCharacter says: oops.  Was expecting fill1 = 1.");
 
   /* translate the glyph's shape records into drawing commands */
 
