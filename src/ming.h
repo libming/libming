@@ -504,6 +504,7 @@ void SWFButton_setMenu(SWFButton button, int flag);
 /****** SWFVideo ******/
 
 SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
+SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
 SWFVideoStream newSWFVideoStream(void);
 void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height);
 int SWFVideoStream_getNumFrames(SWFVideoStream stream);

@@ -31,6 +31,7 @@ typedef SWFTextField       SWF__TextField;
 typedef SWFSound           SWF__Sound;
 typedef SWFSoundInstance   SWF__SoundInstance;
 typedef SWFSoundStream     SWF__SoundStream;
+typedef SWFVideoStream	   SWF__VideoStream;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef

@@ -40,6 +40,7 @@ my @SWF_MODULES = qw {
 	SoundStream
     Text
     TextField
+    VideoStream
 };
 
 my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
@@ -204,7 +205,7 @@ sub write_swf_h {
  * ====================================================================
  */
 
-#include "$dir/ming.h"
+#include "$dir/src/ming.h"
 EOF
     close FH;
 }

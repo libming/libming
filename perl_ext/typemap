@@ -22,6 +22,7 @@ SWF::TextField					T_PTROBJ
 SWF::Sound					T_PTROBJ
 SWF::SoundStream					T_PTROBJ
 SWF::SoundInstance					T_PTROBJ
+SWF::VideoStream				T_PTROBJ
 
 INPUT
 T_PTRINT

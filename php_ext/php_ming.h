@@ -36,6 +36,10 @@ PHP_FUNCTION(swfbitmap_init);
 PHP_FUNCTION(swfbitmap_getWidth);
 PHP_FUNCTION(swfbitmap_getHeight);
 
+PHP_FUNCTION(swfvideostream_init);
+PHP_FUNCTION(swfvideostream_setdimension);
+PHP_FUNCTION(swfvideostream_getnumframes);
+
 PHP_FUNCTION(swffill_init);
 PHP_FUNCTION(swffill_moveTo);
 PHP_FUNCTION(swffill_scaleTo);
