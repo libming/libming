@@ -40,24 +40,33 @@ static int lexBufferInput(char *buf, int max_size)
   return l;
 }
 
-        /* very inefficient method of unescaping strings */
 static void unescape(char *buf)
 {
-  char *p, *p1;
+  char *r, *w;
 
-  for (p1=buf; (p=strchr(p1, '\\')) != 0; p1 = p+1) {
-    switch(p[1])
-    {
-    case 'b' : p[1] = '\b'; break;
-    case 'f' : p[1] = '\f'; break;
-    case 'n' : p[1] = '\n'; break;
-    case 'r' : p[1] = '\r'; break;
-    case 't' : p[1] = '\t'; break;
-    case 'x' :
-    case 'u' : warning("unsupported escape sequence");
-    }
-    strcpy(p, p+1);
+  r=buf; // read
+  w=buf; // write
+  while (*r)
+  {
+	if ( *r == '\\' )
+	{
+		r++;
+		switch(*r)
+		{
+			case 'b' : *w = '\b'; break;
+			case 'f' : *w = '\f'; break;
+			case 'n' : *w = '\n'; break;
+			case 'r' : *w = '\r'; break;
+			case 't' : *w = '\t'; break;
+			case 'x' :
+			case 'u' : fprintf(stderr,"unsupported escape sequence\n");
+		}
+		w++;
+		r++;
+	}
+	*w++ = *r++;
   }
+  *w='\0';
 }
 
 void swf4ParseInit(const char *script, int debug)
