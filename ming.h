@@ -633,7 +633,7 @@ SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 
 void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
 
-SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFCharacter block);
+SWFDisplayItem SWFMovie_add(SWFMovie movie, void* block);
 
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
