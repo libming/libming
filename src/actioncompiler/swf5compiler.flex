@@ -241,9 +241,11 @@ try			{ count(); return TRY; }
 catch			{ count(); return CATCH; }
 throw			{ count(); return THROW; }
 finally			{ count(); return FINALLY; }
+"===" 			{ count(); return EEQ; }
+"!==" 			{ count(); return NEE; }
 }
 
-register\:{DIGIT}+	{ count(); swf5lval.str = strdup(yytext+2);
+<asm>r\:{DIGIT}+	{ count(); swf5lval.str = strdup(yytext+2);
 				return REGISTER; }
 
 
@@ -278,14 +280,6 @@ register\:{DIGIT}+	{ count(); swf5lval.str = strdup(yytext+2);
 ">="			{ count();	return GE; }
 "==" 			{ count();	return EQ; }
 "!=" 			{ count();	return NE; }
-"===" 			{ count(); if(SWF_versionNum >= 6)
-					return EEQ;
-				   else
-				   	return EQ;  }
-"!==" 			{ count(); if(SWF_versionNum >= 6)
-					return NEE;
-				   else
-				   	return NE;  }
 "&&" 			{ count();	return LAN; }
 "||" 			{ count();	return LOR; }
 "*="			{ count();	return MEQ; }
