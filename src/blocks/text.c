@@ -545,7 +545,7 @@ void
 SWFText_addString(SWFText text, const char* string, int* advance)
 {
 	int len = strlen(string);
-	unsigned short* widestring = (unsigned short*)malloc(len * sizeof(unsigned short));
+	unsigned short widestring[len];
 	int i;
 	
 	for ( i = 0; i < len; ++i )
