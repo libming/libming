@@ -21,9 +21,6 @@
 
 #include "blocks/swf.h"
 
-#define MING_VERSION        0.1.0
-#define MING_VERSION_TEXT  "0.1.0"
-
 #include "movie.h"
 #include "displaylist.h"
 #include "fill.h"
@@ -50,6 +47,11 @@ void Ming_setCubicThreshold(int num);
 
 void Ming_setWarnFunction(void (*warn)(char *msg, ...));
 void Ming_setErrorFunction(void (*error)(char *msg, ...));
+
+
+/* set the version number to use */
+
+void Ming_useSWFVersion(int version);
 
 
 /* stupid redef problem if we just include movieclip.h */

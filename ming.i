@@ -44,6 +44,7 @@ int Ming_init();
 void Ming_setScale(float scale);
 float Ming_getScale();
 void Ming_setCubicThreshold(int num);
+void Ming_useSWFVersion(int version);
 
 
 /* movie.h */
