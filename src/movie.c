@@ -34,8 +34,8 @@ extern int SWF_gNumCharacters;
 
 SWFMovie newSWFMovieWithVersion(int version)
 {
-  SWFMovie movie = (SWFMovie)malloc(SWFMOVIE_SIZE);
-  memset(movie, 0, SWFMOVIE_SIZE);
+  SWFMovie movie = calloc(1, SWFMOVIE_SIZE);
+
   movie->version = version;
   movie->blockList = newSWFBlockList();
   movie->displayList = newSWFDisplayList();
@@ -57,12 +57,15 @@ void SWFMovie_setRate(SWFMovie movie, float rate)
   movie->rate = rate;
 }
 
-void SWFMovie_setDimension(SWFMovie movie, int width, int height)
+extern float Ming_scale;
+
+void SWFMovie_setDimension(SWFMovie movie, float width, float height)
 {
   if(movie->bounds)
     free(movie->bounds);
 
-  movie->bounds = newSWFRect(0, width, 0, height);
+  movie->bounds = newSWFRect(0, (int)rint(Ming_scale*width),
+			     0, (int)rint(Ming_scale*height));
 }
 
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int totalFrames)

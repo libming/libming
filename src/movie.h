@@ -45,7 +45,7 @@ SWFMovie newSWFMovie();
 SWFMovie newSWFMovieWithVersion(int version);
 
 void SWFMovie_setRate(SWFMovie movie, float rate);
-void SWFMovie_setDimension(SWFMovie movie, int x, int y);
+void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
 /* XXX - 0.1 name: */

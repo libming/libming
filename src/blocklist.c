@@ -39,9 +39,7 @@ void destroySWFBlockList(SWFBlockList list)
 
 SWFBlockList newSWFBlockList()
 {
-  SWFBlockList blockList = (SWFBlockList)malloc(SWFBLOCKLIST_SIZE);
-  memset(blockList, 0, SWFBLOCKLIST_SIZE);
-
+  SWFBlockList blockList = calloc(1, SWFBLOCKLIST_SIZE);
   return blockList;
 }
 
@@ -51,9 +49,9 @@ void SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
     return;
 
   if(list->nBlocks%SWFBLOCKLIST_INCREMENT == 0)
-    list->blocks = (swfBlockEntry *)realloc(list->blocks,
-					    (list->nBlocks+SWFBLOCKLIST_INCREMENT) *
-					    sizeof(swfBlockEntry));
+    list->blocks = realloc(list->blocks,
+			   (list->nBlocks+SWFBLOCKLIST_INCREMENT) *
+			   sizeof(swfBlockEntry));
 
   list->blocks[list->nBlocks].block = block;
   list->blocks[list->nBlocks].isCharacter = SWFBlock_isCharacter(block);
