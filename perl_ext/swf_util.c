@@ -8,6 +8,14 @@
  * $Id$
  *
  */
+
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+
+#include "SWF.h"
+#include "perl_swf.h"
+
 static HV *swf_refcnt_hv = Nullhv;
 
 void swf_util_cleanup(void)
