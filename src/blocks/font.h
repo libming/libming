@@ -103,7 +103,7 @@ SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
 			     unsigned short start, unsigned short end);
 
 void
-SWFFontCharacter_addChars(SWFFontCharacter font, char *string);
+SWFFontCharacter_addChars(SWFFontCharacter font, unsigned short *string, int len);
 
 SWFFont
 SWFFontCharacter_getFont(SWFFontCharacter font);

@@ -572,7 +572,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 	for ( i=0; i<len; ++i )
 	{
 		int adv;
-		unsigned short nextglyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[i+1]);
+		unsigned short nextglyph;
 
 		adv = SWFFont_getCharacterAdvance(font, (unsigned short)glyph);
 		adv += textRecord->spacing;
@@ -580,7 +580,9 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 		/* get kerning from font's kern table */
 
 		if ( i < len-1 )
+		{	nextglyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[i+1]);
 			adv += SWFFont_getCharacterKern(font, glyph, nextglyph);
+		}
 
 		if ( textRecord->advance != NULL )
 			adv += textRecord->advance[i];

@@ -85,12 +85,12 @@ void
 SWFMovie_writeExports(SWFMovie movie);
 
 int
-SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
+SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
+
+/*int
+SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
 
 int
-SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
-
-int
-SWFMovie_save(SWFMovie movie, char *filename);
+SWFMovie_save(SWFMovie movie, char *filename, int level);
 
 #endif /* MING_MOVIE_H_INCLUDED */

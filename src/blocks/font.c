@@ -539,10 +539,10 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 }
 
 void
-SWFFontCharacter_addChars(SWFFontCharacter font, char *string)
+SWFFontCharacter_addChars(SWFFontCharacter font, unsigned short *string, int len)
 {
-	while(*string)
-		SWFFontCharacter_addCharToTable(font, (unsigned char) *string++);
+	while(--len >= 0)
+		SWFFontCharacter_addCharToTable(font, *string++);
 }
 
 
@@ -984,8 +984,10 @@ loadSWFFontFromFile(FILE *file)
 
 	flags = fgetc(file);
 
-/* this isn't right, and I don't know why..
+/* this isn't right, and I don't know why.. */
 
+	if(flags & SWF_LOAD_FONT_HASLAYOUT)
+		font->flags |= SWF_FONT_HASLAYOUT;
 	if(flags & SWF_LOAD_FONT_SHIFTJIS)
 		font->flags |= SWF_FONT_SHIFTJIS;
 	if(flags & SWF_LOAD_FONT_ANSI)
@@ -996,11 +998,10 @@ loadSWFFontFromFile(FILE *file)
 		font->flags |= SWF_FONT_ISITALIC;
 	if(flags & SWF_LOAD_FONT_BOLD)
 		font->flags |= SWF_FONT_ISBOLD;
-*/
 
-	font->flags = flags; // XXX - ???
+//	font->flags = flags; // XXX - ???
 // new rules... SWF6 said to require unicode, no ansi, no shiftjis
-	font->flags |= SWF_FONT_SHIFTJIS;
+//	font->flags |= SWF_FONT_SHIFTJIS;
 
 	fgetc(file); /* "reserved" */
 

@@ -1733,7 +1733,7 @@ PHP_FUNCTION(swfmovie_output)
 	break;
   }
 
-  RETURN_LONG(SWFMovie_outputC(movie, &phpByteOutputMethod, NULL, limit));
+  RETURN_LONG(SWFMovie_output(movie, &phpByteOutputMethod, NULL, limit));
 }
 
 
@@ -1747,15 +1747,30 @@ void phpFileOutputMethod(byte b, void *data)
 
 PHP_FUNCTION(swfmovie_saveToFile)
 {
-  zval **x;
-  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+  zval **x, **zlimit = NULL;
+  int limit = -1;
   void *what;
 
-  if((ZEND_NUM_ARGS() != 1) || zend_get_parameters_ex(1, &x) == FAILURE)
-    WRONG_PARAM_COUNT;
-
+  switch (ZEND_NUM_ARGS()) {
+  case 1:
+  	if(zend_get_parameters_ex(1, &x) == FAILURE)
+		WRONG_PARAM_COUNT;
+	break;
+  case 2:
+	if(zend_get_parameters_ex(2, &x, &zlimit) == FAILURE)
+		 WRONG_PARAM_COUNT;
+	convert_to_long_ex(zlimit);
+    limit = Z_LVAL_PP(zlimit);
+    if((limit<0)||(limit>9)) {
+    	php_error(E_WARNING,"compression level must be within 0..9");
+    	RETURN_FALSE;
+    }
+	break;
+  default:
+		WRONG_PARAM_COUNT;
+	}
   ZEND_FETCH_RESOURCE(what, FILE *, x, -1,"File-Handle",php_file_le_fopen());
-  RETURN_LONG(SWFMovie_output(movie, &phpFileOutputMethod, what));
+  RETURN_LONG(SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpFileOutputMethod, what, limit));
 }
 
 
@@ -1793,7 +1808,7 @@ PHP_FUNCTION(swfmovie_save)
   {
     ZEND_FETCH_RESOURCE(file, FILE *, x, -1,"File-Handle",php_file_le_fopen());
 
-    RETURN_LONG(SWFMovie_outputC(getMovie(getThis() TSRMLS_CC),
+    RETURN_LONG(SWFMovie_output(getMovie(getThis() TSRMLS_CC),
 				&phpFileOutputMethod, file, limit));
   }
 
@@ -1804,7 +1819,7 @@ PHP_FUNCTION(swfmovie_save)
   if(file == NULL)
     php_error(E_ERROR, "couldn't open file %s for writing", Z_STRVAL_PP(x));
 
-  retval = SWFMovie_outputC(getMovie(getThis() TSRMLS_CC),
+  retval = SWFMovie_output(getMovie(getThis() TSRMLS_CC),
 			      &phpFileOutputMethod, (void *)file, limit);
 
   fclose(file);

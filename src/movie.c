@@ -216,6 +216,36 @@ SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
 	}
 }
 
+static void
+SWFMovie_resolveTextfieldFont(SWFMovie movie, SWFTextField field)
+{
+	// given a font used for a text field, add it to the movie
+	SWFFontCharacter fontchar;
+	SWFFont font = SWFTextField_getFont(field);
+	int i;
+	if ( font != NULL )
+	{
+		for( i = 0 ; i < movie->nFonts ; i++ )
+		{	fontchar = movie->fonts[i];
+			if ( SWFFontCharacter_getFont(fontchar) == font )
+			{	SWFTextField_setFontCharacter(field, fontchar);
+				break;
+			}
+		}
+
+		if( i == movie->nFonts )
+		{
+			movie->fonts = realloc(movie->fonts,
+														 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
+
+			fontchar = newSWFFontCharacter(font);
+			movie->fonts[movie->nFonts++] = fontchar;
+			SWFTextField_setFontCharacter(field, fontchar);
+			SWFMovie_addBlock(movie, (SWFBlock)fontchar);
+		}
+
+	}
+}
 
 void
 SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
@@ -251,7 +281,10 @@ SWFMovie_addDependency(SWFMovie movie, SWFCharacter character)
 	{
 		SWFMovie_resolveTextFonts(movie, (SWFText)character);
 	}
-
+	else if ( SWFBlock_getType((SWFBlock)character) == SWF_DEFINEEDITTEXT)
+	{
+		SWFMovie_resolveTextfieldFont(movie, (SWFTextField)character);
+	}
 	SWFMovie_addBlock(movie, (SWFBlock)character);
 }
 
@@ -327,6 +360,11 @@ SWFMovie_add(SWFMovie movie, SWFBlock block)
 			 SWFBlock_getType(block) == SWF_DEFINETEXT2 )
 	{
 		SWFMovie_resolveTextFonts(movie, (SWFText)block);
+	}
+
+	if ( SWFBlock_getType(block) == SWF_DEFINEEDITTEXT)
+	{
+		SWFMovie_resolveTextfieldFont(movie, (SWFTextField)block);
 	}
 
 	if ( SWFBlock_isCharacter(block) )
@@ -468,7 +506,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 	SWFBlock backgroundBlock;
 	unsigned long compresslength, i;
 	char *compress;
-
+//fprintf(stderr, "SWFMovie_output %x %d\n", SWFMovie_output, getpid()); sleep(30);
 	if ( movie->nExports > 0 )
 		SWFMovie_writeExports(movie);
 

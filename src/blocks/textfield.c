@@ -33,7 +33,7 @@ struct SWFTextField_s
 
 	SWFOutput out; /* cheap way out */
 	int flags;
-	BOOL isBrowserFont;
+	BOOL isBrowserFont, isFontChar;
 
 	union
 	{
@@ -62,6 +62,8 @@ struct SWFTextField_s
 
 	char *varName;
 	char *string;
+	unsigned short *embeds;
+	int embedlen;
 };
 
 
@@ -123,13 +125,6 @@ completeSWFTextField(SWFBlock block)
 
 	SWFOutput_writeUInt16(out, CHARACTERID(field));
 	SWFOutput_writeRect(out, CHARACTER(field)->bounds);
-	SWFOutput_writeUInt16(out, field->flags);
-	SWFOutput_writeUInt16(out, CHARACTERID(field->font.fontchar));
-	SWFOutput_writeUInt16(out, field->fontHeight);
-	SWFOutput_writeUInt8(out, field->r);
-	SWFOutput_writeUInt8(out, field->g);
-	SWFOutput_writeUInt8(out, field->b);
-	SWFOutput_writeUInt8(out, field->a);
 
 // fix flags here...
 	if(!field->isBrowserFont)
@@ -140,6 +135,14 @@ completeSWFTextField(SWFBlock block)
 			field->flags &= ~SWFTEXTFIELD_USEFONT;
 	if(field->string && *field->string)
 		field->flags |= SWFTEXTFIELD_HASTEXT;
+
+	SWFOutput_writeUInt16(out, field->flags);
+	SWFOutput_writeUInt16(out, CHARACTERID(field->font.fontchar));
+	SWFOutput_writeUInt16(out, field->fontHeight);
+	SWFOutput_writeUInt8(out, field->r);
+	SWFOutput_writeUInt8(out, field->g);
+	SWFOutput_writeUInt8(out, field->b);
+	SWFOutput_writeUInt8(out, field->a);
 
 	if ( field->flags & SWFTEXTFIELD_HASLENGTH )
 		SWFOutput_writeUInt16(out, field->length);
@@ -178,6 +181,9 @@ destroySWFTextField(SWFBlock block)
 	if ( f->string != NULL )
 		free(f->string);
 
+	if ( f->embeds != NULL )
+		free(f->embeds);
+
 	destroySWFCharacter(block);
 }
 
@@ -211,6 +217,7 @@ newSWFTextField()
 
 	field->font.font = NULL;
 	field->isBrowserFont = FALSE;
+	field->isFontChar = FALSE;
 	field->varName = NULL;
 	field->string = NULL;
 
@@ -225,17 +232,22 @@ newSWFTextField()
 	field->rightMargin = 0;
 	field->indentation = 0;
 
+	field->embeds = NULL;
+	field->embedlen = 0;
+
 	return field;
 }
 
 
 void
 SWFTextField_setFont(SWFTextField field, SWFBlock font)
-{
-	if ( BLOCK(font)->type == SWF_DEFINEFONT2 )
+{	
+	if((SWFFont_getFlags((SWFFont)font) & SWF_FONT_HASLAYOUT) &&
+	  (field->flags & SWFTEXTFIELD_USEFONT))
 	{
 		field->isBrowserFont = FALSE;
 		field->font.font = (SWFFont)font;
+//		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
 	}
 	else
 	{
@@ -245,15 +257,32 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 	}
 }
 
+SWFFont
+SWFTextField_getFont(SWFTextField field)
+{	if((!field->isBrowserFont) && (!field->isFontChar))
+		return field->font.font;
+	return NULL;
+}
 
 void
 SWFTextField_addChars(SWFTextField field, char *string)
 {
-	if((!field->isBrowserFont) && field->font.fontchar)
-		SWFFontCharacter_addChars(field->font.fontchar, string);
+	int n, len = strlen(string);
+	if((!field->isBrowserFont) && field->font.font)
+	{	field->embeds = (unsigned short *)realloc(
+			field->embeds, (field->embedlen + len) * 2);
+		for(n = 0 ; n < len  ; n++)
+			field->embeds[field->embedlen++] = string[n];
+	}
 }
 
-
+void SWFTextField_setFontCharacter(SWFTextField field, SWFFontCharacter fontchar)
+{
+	field->isFontChar = TRUE;
+	field->font.fontchar = fontchar;
+	SWFFontCharacter_addChars(fontchar, field->embeds, field->embedlen);
+}
+	
 void
 SWFTextField_setScaledBounds(SWFTextField field, int width, int height)
 {
