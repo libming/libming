@@ -1,3 +1,81 @@
+2002-08-07 23:39  opaque_ndst
+
+	* src/: Makefile, fill.c, ming.c, ming.h, position.c, position.h,
+	shape_cubic.c, shape_util.c: formatting changes, cosmetic only
+
+2002-08-07 23:38  opaque_ndst
+
+	* src/blocktypes.h: added DEFINEEDITTEXT (textfield) type
+
+2002-08-07 23:37  opaque_ndst
+
+	* src/blocks/: Makefile, action.c, bitmap.c, block.c, block.h,
+	browserfont.c, cxform.c, dbl.c, error.c, fillstyle.c, fontinfo.c,
+	gradient.c, jpeg.c, libswf.h, linestyle.c, matrix.c, method.c,
+	method.h, morph.c, mp3.c, output.c, outputblock.c, placeobject.c,
+	read.c, rect.c, rect.h, shape.c, shape.h, sprite.c, sprite.h,
+	textfield.h, ttffont.c: removed superfluous sec_free calls,
+	formatting changes (cosmetic only)
+
+2002-08-07 23:36  opaque_ndst
+
+	* src/blocks/: sound.c, soundinstance.c, soundstream.c: added
+	Goto's sound code, with support for adpcm and raw pcm (untested)
+
+2002-08-07 23:35  opaque_ndst
+
+	* src/blocks/: input.c, input.h: added read method for many-byte
+	reading.  Should replace getc..
+
+2002-08-07 23:34  opaque_ndst
+
+	* src/: text_util.c, text_util.h: added SWFText_setSpacing
+
+2002-08-07 23:33  opaque_ndst
+
+	* src/actioncompiler/: Makefile, assembler.c, compile.c,
+	compileaction.c: removed superfluous sec_free calls formatted code
+	(cosmetic only)
+
+2002-08-07 23:32  opaque_ndst
+
+	* src/: blocklist.c, blocklist.h, displaylist.c, displaylist.h,
+	movie.c, movie.h, movieclip.c, movieclip.h, blocks/character.c,
+	blocks/character.h: rewrote dependency inheritance code to deal
+	with SWFFontCharacters, fix block ordering bugs
+
+2002-08-07 23:30  opaque_ndst
+
+	* src/blocks/button.c: added Goto's button sound code (untested)
+
+2002-08-07 23:30  opaque_ndst
+
+	* src/blocks/textfield.c: changed default flags to fix problem
+	reported (long ago..) by Wolfgang Hamann
+
+2002-08-07 23:29  opaque_ndst
+
+	* src/blocks/: text.c, font.c, font.h, text.h: factored
+	SWFFontCharacter out of SWFFont-   contains the movie-specific
+	information in a font	allows SWFFont objects to be used across
+	multiple movies
+	
+	added (untested) 16-bit font support
+
+2002-08-07 23:25  opaque_ndst
+
+	* src/blocks/: utf8.c, utf8.h: UTF8 decoding code for international
+	text support
+
+2002-08-07 23:24  opaque_ndst
+
+	* src/test.c: updated ming calls, compiles again
+
+2002-08-07 23:24  opaque_ndst
+
+	* util/listswf.c: replaced changed code- font offset table really
+	does contain nGlyphs+1 entries
+
 2002-08-05 20:56  opaque_ndst
 
 	* src/blocks/loadfont.c: code moved to font.c
