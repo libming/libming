@@ -81,6 +81,7 @@ typedef struct SWFVideoStream_s *SWFVideoStream;
 
 int Ming_init();
 void Ming_cleanup();
+void Ming_collectGarbage();
 
 /* sets the threshold error for drawing cubic beziers.  Lower is more
    accurate, hence larger file size. */
