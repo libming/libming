@@ -118,11 +118,8 @@ destroySWFBitmap(bitmap)
         SWF::Bitmap     bitmap 
         ALIAS:
         SWF::Bitmap::DESTROY = 1
-	PREINIT:
-	SWF__Block 	block;
         CODE:
 	S_DEBUG(2, fprintf(stderr, "Bitmap DESTROY CALLED\n"));
-	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
-        destroySWFBitmap(block);
+        destroySWFBitmap(bitmap);
 
 
