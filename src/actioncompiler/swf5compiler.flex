@@ -80,6 +80,13 @@ void swf5ParseInit(const char *script, int debug)
 
 %{
  // forward declaration needed by the following function
+#ifndef YY_PROTO
+#ifdef YY_USE_PROTOS
+#define YY_PROTO(proto) proto
+#else
+#define YY_PROTO(proto) ()
+#endif
+#endif
  static void yyunput YY_PROTO(( int c, char *buf_ptr ));
 
  void do_unput5(const char c) { unput(c); }
