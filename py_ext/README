@@ -19,7 +19,7 @@ Acts just like the PHP interface, so documentation is now usable. :)
 
 REQUIREMENTS
 - Python 1.5.2 or above.
-- Ming library v.0.0.4
+- Ming library v0.2-pre-a
 - a recent version of SWIG if you're going to rebuild ming_wrap.c
   SWIG 1.1p5 (which comes with Debian 2.2) won't work.
 

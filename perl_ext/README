@@ -8,7 +8,7 @@ SWF ("Flash") format movies.
 
 With this library you can create Flash movies on the fly with Perl.
 
-NOTE: This version REQUIRES Ming version 0.0.9 or 0.0.9a (I haven't 
+NOTE: This version REQUIRES Ming version 0.2-pre-a or above (I haven't 
       tested previous versions). If you have an older version please
       upgrade your Ming (http://www.opaque.net/ming). I've successfully
       tested SWF.pm under Linux with Perl 5.005_03 and 5.6.
