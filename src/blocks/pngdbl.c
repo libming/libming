@@ -309,7 +309,7 @@ newSWFDBLBitmap_fromPngFile(char *fileName)
 }
 
 SWFDBLBitmapData
-newSWFDBLBitmapData_fromPngInput(SWFInput input)
+newSWFDBLBitmap_fromPngInput(SWFInput input)
 {
 	SWFDBLBitmapData ret;
 	png_structp png_ptr;

@@ -223,7 +223,7 @@ static int gifReadFunc(GifFileType *gif, char *buf, int len)
 }
 
 SWFDBLBitmapData
-newSWFDBLBitmapData_fromGifInput(SWFInput input)
+newSWFDBLBitmap_fromGifInput(SWFInput input)
 {	GifFileType *file;
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;
