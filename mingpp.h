@@ -524,6 +524,11 @@ class SWFBitmap : public SWFBlock
  public:
   c_SWFBitmap bitmap;
 
+// begin minguts (added because caused windows to crash) 2004/08/31 ((((
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->bitmap; }
+// )))) end minguts 2004/08/31
+
   SWFBitmap(const char *filename, const char *alpha=NULL)
   {
     if(strlen(filename) > 4)
