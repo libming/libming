@@ -1062,7 +1062,7 @@ loadSWFFontFromFile(FILE *file)
 	/* adjust offset table to point to shapes */
 
 	for ( i=0; i<=nGlyphs; ++i )
-		font->glyphOffset[i] += (unsigned int)font->shapes;
+		font->glyphOffset[i] += (unsigned long)font->shapes;
 
 	/* read glyph-to-code table */
 
