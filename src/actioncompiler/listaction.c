@@ -540,9 +540,9 @@ int printActionRecord(Buffer f)
       break;
     case SWFACTION_TRY:
     { //int flag = readUInt8(f);
-    	readUInt8(f);
-	  int try, catch, finally;
-      char *name;
+	int try, catch, finally;
+	char *name;
+    	  readUInt8(f);
 	  try = readUInt16(f);
 	  catch = readUInt16(f);
 	  finally = readUInt16(f);
