@@ -29,7 +29,7 @@
 #include "blocks/block.h"
 #include "blocks/matrix.h"
 #include "blocks/cxform.h"
-#include "blocks/sound.h"
+#include "blocks/soundstream.h"
 #include "blocks/outputblock.h"
 #include "blocks/placeobject.h"
 
@@ -56,6 +56,7 @@ SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 void SWFMovieClip_nextFrame(SWFMovieClip clip);
 void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
+void SWFMovie_setSoundStream(SWFMovieClip movie, SWFSound sound, float rate);
 
 int SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);
 

@@ -200,10 +200,11 @@ void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound)
 {
   SWFBlock block = SWFSound_getStreamHead(sound, movie->rate);
 
-  SWF_assert(block != NULL);
-
-  SWFMovie_addBlock(movie, block);
-  SWFDisplayList_setSoundStream(movie->displayList, sound);
+  if(block != NULL)
+  {
+    SWFMovie_addBlock(movie, block);
+    SWFDisplayList_setSoundStream(movie->displayList, sound);
+  }
 }
 
 

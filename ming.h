@@ -550,6 +550,7 @@ SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 void SWFMovieClip_nextFrame(SWFMovieClip clip);
 void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
+void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate);
 
 
 /* movie.h */

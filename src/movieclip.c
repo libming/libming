@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+
 #include "movieclip.h"
 
 void destroySWFMovieClip(SWFMovieClip clip)
@@ -41,6 +42,27 @@ void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
 {
   clip->totalFrames = totalFrames;
 }
+
+
+void SWFMovieClip_addBlock(SWFMovieClip movie, SWFBlock block)
+{
+  if(SWFBlock_getType(block) == SWF_SHOWFRAME)
+    ++movie->nFrames;
+  
+  SWFBlockList_addBlock(movie->blockList, block);
+}
+
+void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate)
+{
+  SWFBlock block = SWFSound_getStreamHead(sound, rate);
+  
+  if(block != NULL)
+  {
+    SWFMovieClip_addBlock(clip, block);
+    SWFDisplayList_setSoundStream(clip->displayList, sound);
+  }
+}
+
 
 SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 {
