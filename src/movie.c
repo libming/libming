@@ -21,6 +21,7 @@
 #include <math.h>
 #include "movie.h"
 #include "shape_util.h"
+#include "ming.h"
 
 static void destroySWFExports(SWFMovie movie)
 {
@@ -70,7 +71,7 @@ SWFMovie newSWFMovieWithVersion(int version)
 
 SWFMovie newSWFMovie()
 {
-  return newSWFMovieWithVersion(5);
+  return newSWFMovieWithVersion(SWF_versionNum);
 }
 
 void SWFMovie_setRate(SWFMovie movie, float rate)
