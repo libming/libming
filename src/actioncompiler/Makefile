@@ -1,9 +1,6 @@
-include ../../config.make
-CC = gcc -g -Wall -I. -I.. ${CFLAGS}
+include ../../Makefile.config
 
-INCLUDES	+= -I..
-LIBS		+= -lm
-
+CFLAGS += -I..
 DEBUG = --debug
 
 # In case we need to get more information out of flex
@@ -16,9 +13,6 @@ MOSTFILES = compile.o listaction.o \
 GENERATED = lex.swf4.c lex.swf5.c swf5compiler.tab.c swf4compiler.tab.c
 
 OFILES = $(MOSTFILES) compileaction.o
-
-## Needs to be placed after variable defs but before rules
-include ../../Rules.make
 
 all: $(OFILES)
 

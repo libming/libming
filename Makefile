@@ -1,8 +1,8 @@
 
-all install dynamic static clean distclean: Rules.make config.make
+all install dynamic static clean distclean: Makefile.config
 	$(MAKE) -f Makefile-real $@
 
-config.log Rules.make config.make: config.status Rules.make.in config.make.in
+config.log Makefile.config: config.status Makefile.config.in 
 	./config.status
 
 config.status: 

@@ -1,10 +1,4 @@
-#CC = gcc -g -pg -a	# profiling flags
-#CC = gcc -O5
-CC = gcc -g -Wall -I. ${CFLAGS} #-fPIC -ggdb
-LDFLAGS = -lm -lz # -ldmalloc
-
-include ../config.make
-include ../Rules.make
+include ../Makefile.config
 
 OFILES = \
 	blocklist.o \

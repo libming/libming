@@ -1,7 +1,6 @@
-include ../../config.make
-CC = gcc -g -Wall -I. -I.. ${CFLAGS}
+include ../../Makefile.config
 
-INCLUDES	+= -I..
+CFLAGS += -I..
 
 OFILES = \
 	action.o \
@@ -39,9 +38,6 @@ OFILES = \
 	textfield.o \
 	utf8.o \
 	videostream.o $(EXTRA_OBJS)
-
-## Needs to be placed after variable defs but before rules
-include ../../Rules.make
 
 all: $(OFILES)
 

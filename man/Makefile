@@ -1,5 +1,4 @@
-include ../config.make
-include ../Rules.make
+include ../Makefile.config
 
 MAN1=makeswf.1
 

@@ -30,3 +30,15 @@ libdir = @libdir@
 includedir = @includedir@
 mandir = @mandir@
 
+GIFLIB = @GIFLIB@
+PNGLIB = @PNGLIB@
+MATHLIB = @MATHLIB@
+ZLIB = @ZLIB@
+
+# set to your choice of png and / or gif formats
+EXTRA_OBJS = @EXTRA_OBJS@
+EXTRA_BINS = @EXTRA_BINS@
+
+# zlib required for both image formats and for compressed swf6
+LIBS = $(ZLIB) $(MATHLIB) $(GIFLIB) $(PNGLIB)
+EXTRA_LIBS = $(LIBS)

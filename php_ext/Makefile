@@ -1,5 +1,4 @@
-include ../config.make
-include ../Rules.make
+include ../Makefile.config
 
 prefix=`php-config --prefix`
 

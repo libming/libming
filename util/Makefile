@@ -1,5 +1,4 @@
-include ../config.make
-include ../Rules.make
+include ../Makefile.config
 
 CFLAGS += -I.. -I../src
 LDFLAGS += -L.. -lming $(LIBS) -Wl,-rpath,..

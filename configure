@@ -2660,7 +2660,7 @@ fi
 
 
 
-                    ac_config_files="$ac_config_files Rules.make config.make"
+          ac_config_files="$ac_config_files Makefile.config"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -3185,8 +3185,7 @@ for ac_config_target in $ac_config_targets
 do
   case "$ac_config_target" in
   # Handling of arguments.
-  "Rules.make" ) CONFIG_FILES="$CONFIG_FILES Rules.make" ;;
-  "config.make" ) CONFIG_FILES="$CONFIG_FILES config.make" ;;
+  "Makefile.config" ) CONFIG_FILES="$CONFIG_FILES Makefile.config" ;;
   "src/ming_config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/ming_config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

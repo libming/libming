@@ -46,4 +46,4 @@ AC_SUBST(ZLIB)
 AC_CONFIG_HEADER(src/ming_config.h)
 
 
-AC_OUTPUT(Rules.make config.make)
+AC_OUTPUT(Makefile.config)
