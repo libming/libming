@@ -210,6 +210,7 @@ SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFFont font);
 
 float SWFFont_getStringWidth(SWFFont font, const char *string);
+float SWFFont_getUTF8StringWidth(SWFFont font, const char *string);
 
 /* XXX */
 #define SWFFont_getWidth SWFFont_getStringWidth
@@ -217,6 +218,7 @@ float SWFFont_getStringWidth(SWFFont font, const char *string);
 float SWFFont_getAscent(SWFFont font);
 float SWFFont_getDescent(SWFFont font);
 float SWFFont_getLeading(SWFFont font);
+char *SWFFont_getShape(SWFFont font, short code);
 
 
   /* SWFText */
@@ -260,6 +262,12 @@ SWFText_setSpacing(SWFText text, float spacing);
 float
 SWFText_getStringWidth(SWFText text, const char* string);
 
+float
+SWFText_getUTF8StringWidth(SWFText text, const char* string);
+
+float
+SWFText_getWideStringWidth(SWFText text, const unsigned short* string);
+
 /* XXX */
 #define SWFText_getWidth SWFText_getStringWidth
 
@@ -286,17 +294,23 @@ void destroySWFBrowserFont(SWFFont font);
 
 typedef struct SWFTextField_s *SWFTextField;
 
-#define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x38FF /* off bits */
+#define SWFTEXTFIELD_ONMASK  0x2005 /* on bits */
+#define SWFTEXTFIELD_OFFMASK 0x3BFF /* off bits */
 
+#define SWFTEXTFIELD_HASFONT   (1<<0)   /* font and size given */
 #define SWFTEXTFIELD_HASLENGTH (1<<1)
+#define SWFTEXTFIELD_HASCOLOR  (1<<2)
 #define SWFTEXTFIELD_NOEDIT    (1<<3)
 #define SWFTEXTFIELD_PASSWORD  (1<<4)
 #define SWFTEXTFIELD_MULTILINE (1<<5)
 #define SWFTEXTFIELD_WORDWRAP  (1<<6)
+#define SWFTEXTFIELD_HASTEXT   (1<<7)   /* initial text present */
+#define SWFTEXTFIELD_USEFONT   (1<<8)
+#define SWFTEXTFIELD_HTML      (1<<9)
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
-#define SWFTEXTFIELD_HTML      (1<<9) /* 0x0200 */
+#define SWFTEXTFIELD_HASLAYOUT (1<<13)  /* align, margin, lspace, indent */
+#define SWFTEXTFIELD_AUTOSIZE  (1<<14)
 
 typedef enum
 {
@@ -322,6 +336,8 @@ void SWFTextField_setLeftMargin(SWFTextField field, float leftMargin);
 void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
 void SWFTextField_setIndentation(SWFTextField field, float indentation);
 void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
+void SWFTextField_setPadding(SWFTextField field, float padding);
+void SWFTextField_addChars(SWFTextField field, char *string);
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);
@@ -670,8 +686,8 @@ void SWFMovie_nextFrame(SWFMovie movie);
 
 void SWFMovie_labelFrame(SWFMovie movie, char *label);
 
-int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
+int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
 
-int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);
+/*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
 
 int SWFMovie_save(SWFMovie movie, const char *filename, int level);
