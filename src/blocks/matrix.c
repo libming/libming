@@ -42,7 +42,8 @@ SWFMatrix newSWFMatrix(float a, float b, float c, float d, int x, int y)
   return m;
 }
 
-void SWFMatrix_set(SWFMatrix m, float a, float b, float c, float d, int x, int y)
+void SWFMatrix_set(SWFMatrix m,
+		   float a, float b, float c, float d, int x, int y)
 {
   m->scaleX = a;
   m->rotate0 = b;
@@ -64,11 +65,6 @@ void SWFMatrix_clearTransform(SWFMatrix m)
   m->rotate0 = 0;
   m->rotate1 = 0;
   m->scaleY = 1.0;
-}
-
-void SWFMatrix_copy(SWFMatrix src, SWFMatrix dest)
-{
-  memcpy(dest, src, sizeof(struct _matrix));
 }
 
 SWFMatrix SWFMatrix_dup(SWFMatrix matrix)
@@ -110,7 +106,9 @@ void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 
   if((matrix->scaleX == 0 && matrix->scaleY == 0) ||
      (matrix->scaleX == 1.0 && matrix->scaleY == 1.0))
-    SWFOutput_writeBits(out, 0, 1);
+  {
+    SWFOutput_writeBits(out, 0, 1);  
+  }
   else
   {
     int xScale = floor(matrix->scaleX * (1<<FIXEDBITS));
@@ -124,7 +122,9 @@ void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
   }
 
   if(matrix->rotate0 == 0 && matrix->rotate1 == 0)
+  {
     SWFOutput_writeBits(out, 0, 1);
+  }
   else
   {
     int rot0 = floor(matrix->rotate0 * (1<<FIXEDBITS));
@@ -138,7 +138,10 @@ void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
   }
 
   if(matrix->translateX != 0 || matrix->translateY != 0)
-    nBits = max(SWFOutput_numSBits(matrix->translateX), SWFOutput_numSBits(matrix->translateY));
+  {
+    nBits = max(SWFOutput_numSBits(matrix->translateX),
+		SWFOutput_numSBits(matrix->translateY));
+  }
   else
     nBits = 0;
 
@@ -147,9 +150,19 @@ void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
   SWFOutput_writeSBits(out, matrix->translateY, nBits);
 }
 
-/* I really hate putting this stuff here, but how else can we
-   hide the matrix implementation? */
+void SWFMatrix_apply(SWFMatrix m, double *x, double *y, int xlate)
+{
+  int newx, newy;
 
+  if(m == NULL)
+    return;
+
+  newx = m->scaleX * (*x) + m->rotate0 * (*y);
+  newy = m->scaleY * (*y) + m->rotate1 * (*x);
+
+  *x = newx + (xlate ? m->translateX : 0);
+  *y = newx + (xlate ? m->translateY : 0);
+}
 
 
 /*  | a b || e f |   | ae+bg af+bh |
@@ -186,10 +199,10 @@ void SWFMatrix_leftMultiply(SWFMatrix ma, SWFMatrix mb)
 
 SWFMatrix newSWFRotateMatrix(float degrees)
 {
-  return newSWFMatrix( cos(degrees*M_PI/180), sin(degrees*M_PI/180),
-		      -sin(degrees*M_PI/180), cos(degrees*M_PI/180),
-		      0, 0);
+  float r = degrees * M_PI/180;
+  return newSWFMatrix(cos(r), sin(r), -sin(r), cos(r), 0, 0);
 }
+
 void SWFMatrix_rotate(SWFMatrix matrix, float degrees)
 {
   SWFMatrix rot = newSWFRotateMatrix(degrees);

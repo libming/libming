@@ -38,7 +38,6 @@ typedef struct _matrix *SWFMatrix;
 
 SWFMatrix newSWFMatrix(float a, float b, float c, float d, int x, int y);
 SWFMatrix SWFMatrix_dup(SWFMatrix matrix);
-void SWFMatrix_copy(SWFMatrix src, SWFMatrix dest);
 void destroySWFMatrix(SWFMatrix matrix);
 void SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix);
 
@@ -49,6 +48,8 @@ int SWFMatrix_numBits(SWFMatrix matrix);
 void SWFMatrix_set(SWFMatrix m, float a, float b, float c, float d, int x, int y);
 void SWFMatrix_clearTranslate(SWFMatrix m);
 void SWFMatrix_clearTransform(SWFMatrix m);
+
+void SWFMatrix_apply(SWFMatrix m, double *x, double *y, int xlate);
 
 void SWFMatrix_scaleXY(SWFMatrix matrix, float xScale, float yScale);
 void SWFMatrix_leftMultiply(SWFMatrix ma, SWFMatrix mb);
