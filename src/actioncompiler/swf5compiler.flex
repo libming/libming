@@ -146,8 +146,8 @@ return			{ count();	return RETURN;		}
 with			{ count();	return WITH;		}
 asm			{ count();	BEGIN(asm); return ASM;		}
 eval			{ count();	return EVAL;		}
-typeof			{ count();	return TYPEOF; }
-instanceof		{ count();	return INSTANCEOF; }
+type[oO]f		{ count();	return TYPEOF; }
+instance[oO]f		{ count();	return INSTANCEOF; }
 
   /* legacy functions */
 random			{ count();	return RANDOM;	}
@@ -159,8 +159,8 @@ trace			{ count();	return TRACE;	}
 int			{ count();	return INT;	}
 ord			{ count();	return ORD;	}
 chr			{ count();	return CHR;	}
-getURL			{ count();	return GETURL;	}
-getURL1			{ count();	return GETURL1;	}
+get[uU][rR][lL]		{ count();	return GETURL;	}
+get[uU][rR][lL]1	{ count();	return GETURL1;	}
 nextFrame		{ count();	return NEXTFRAME;	}
 prevFrame		{ count();	return PREVFRAME;	}
 play			{ count();	return PLAY;		}

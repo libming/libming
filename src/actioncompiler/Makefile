@@ -46,9 +46,11 @@ swf4compiler.tab.h: swf4compiler.y
 lex.swf4.o: lex.swf4.c
 
 lex.swf4.c: swf4compiler.flex swf4compiler.tab.h
-	flex $(FLEXDEBUG) -i -Pswf4 swf4compiler.flex
+	#flex $(FLEXDEBUG) -i -Pswf4 swf4compiler.flex
+	flex $(FLEXDEBUG) -Pswf4 swf4compiler.flex
 
 lex.swf5.o: lex.swf5.c
 
 lex.swf5.c: swf5compiler.flex swf5compiler.tab.h
-	flex $(FLEXDEBUG) -i -Pswf5 swf5compiler.flex
+	#flex $(FLEXDEBUG) -i -Pswf5 swf5compiler.flex
+	flex $(FLEXDEBUG) -Pswf5 swf5compiler.flex
