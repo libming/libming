@@ -242,10 +242,8 @@ float SWFText_getLeading(SWFText text);
 
   /* SWFBrowserFont */
 
-typedef struct SWFBrowserFont_s *SWFBrowserFont;
-
-SWFBrowserFont newSWFBrowserFont(char *name);
-void destroySWFBrowserFont(SWFBrowserFont font);
+SWFFont newSWFBrowserFont(char *name);
+void destroySWFBrowserFont(SWFFont font);
 
 
   /* SWFTextField */
@@ -539,6 +537,9 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 void SWFShape_drawSizedGlyph(SWFShape shape,
 			     SWFFont font, unsigned char c, int size);
+
+#define SWFShape_drawFontGlyph SWFShape_drawGlyph
+
 
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */
