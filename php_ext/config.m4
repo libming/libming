@@ -24,7 +24,7 @@ if test "$PHP_MING" != "no"; then
     AC_DEFINE(HAVE_MING,1,[ ])
   ],[
     AC_MSG_ERROR(Ming library 0.2a or greater required.)
-  ])
+  ], -lm)
 
   PHP_EXTENSION(ming, $ext_shared)
 fi
