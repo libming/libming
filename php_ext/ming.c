@@ -499,6 +499,7 @@ PHP_FUNCTION(swfbitmap_init)
 {
   zval **zfile, **zmask = NULL;
   SWFBitmap bitmap;
+  SWFJpegWithAlpha bitmap_alpha;
   SWFInput input, maskinput;
   int ret;
 //fprintf(stderr, "newSWFBitmap_fromInput %x %d\n", newSWFBitmap_fromInput, getpid()); sleep(30);
@@ -535,17 +536,25 @@ PHP_FUNCTION(swfbitmap_init)
     else
       maskinput = getInput(zmask TSRMLS_CC);
 
-    bitmap = newSWFJpegWithAlpha_fromInput(input, maskinput);
+      bitmap_alpha = newSWFJpegWithAlpha_fromInput(input, maskinput);
+      if(bitmap_alpha)
+      {
+	      ret = zend_list_insert(bitmap_alpha, le_swfbitmapp);
+	      object_init_ex(getThis(), &bitmap_class_entry);
+	      add_property_resource(getThis(), "bitmap", ret);
+	      zend_list_addref(ret);
+      }
   }
-  else
+  else {
     bitmap = newSWFBitmap_fromInput(input);
-
-	if(bitmap)
-	{	ret = zend_list_insert(bitmap, le_swfbitmapp);
-		object_init_ex(getThis(), &bitmap_class_entry);
-		add_property_resource(getThis(), "bitmap", ret);
-		zend_list_addref(ret);
-	}
+    if(bitmap)
+    {	
+	    ret = zend_list_insert(bitmap, le_swfbitmapp);
+	    object_init_ex(getThis(), &bitmap_class_entry);
+	    add_property_resource(getThis(), "bitmap", ret);
+	    zend_list_addref(ret);
+    }
+  }
 }
 
 static void destroy_SWFBitmap_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
@@ -3827,12 +3836,12 @@ static SWFTextField getTextField(zval *id TSRMLS_DC)
 /* {{{ proto void swftextfield_setFont(int font)
    Sets the font for this textfield */
 static
-SWFCharacter getFontOrFontChar(zval *id TSRMLS_DC)
+SWFBlock getFontOrFontChar(zval *id TSRMLS_DC)
 {
 	if(Z_OBJCE_P(id) == &font_class_entry)
-		return (SWFCharacter)getFont(id TSRMLS_CC);
+		return (SWFBlock)getFont(id TSRMLS_CC);
 	else if(Z_OBJCE_P(id) == &fontchar_class_entry)
-		return (SWFCharacter)getFontCharacter(id TSRMLS_CC);
+		return (SWFBlock)getFontCharacter(id TSRMLS_CC);
 	else
 		php_error(E_ERROR, "called object is not an SWFFont or SWFFontCharacter");
 	return NULL;
