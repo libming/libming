@@ -217,7 +217,7 @@ return_stmt
 		  bufferWriteNull($$);
 		  bufferWriteOp($$, SWFACTION_RETURN); }
 
-	| RETURN expr ';'
+	| RETURN expr_or_obj ';'
 		{ int tmp = chkctx(CTX_FUNCTION);
 		  if(tmp < 0)
 			swf5error("return outside function");

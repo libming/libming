@@ -280,7 +280,7 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 ":"			{ count();	return ':'; }
 "~"			{ count();	return '~'; }
 
-"\n"			{ count();	strcpy(szLine, yytext + 1);
+\r?\n			{ count();	strcpy(szLine, yytext + 1);
 					countline();	yyless(1);	}
 
 .			SWF_error("Unrecognized character: %s\n", yytext);
