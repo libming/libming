@@ -230,6 +230,29 @@ static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
   destroySWFInput((SWFInput)resource->ptr);
 }
 
+/* not sure about the date to enter here.... */
+#if (ZEND_MODULE_API_NO > 20020429)
+
+static SWFInput getInput(zval **zfile TSRMLS_DC)
+{
+	FILE *file;
+	void *what;
+	int type;
+	SWFInput input;
+
+	what = zend_fetch_resource(zfile TSRMLS_CC, -1, "File-Handle", &type, 1, php_file_le_stream());
+
+	if (php_stream_cast((php_stream*)what, PHP_STREAM_AS_STDIO, (void *) &file, REPORT_ERRORS) != SUCCESS) {
+		return NULL;
+	}
+  
+	input = newSWFInput_file(file);
+	zend_list_addref(Z_LVAL_PP(zfile));
+	zend_list_addref(zend_list_insert(input, le_swfinputp));
+	return input;
+}
+
+#else
 #define SOCKBUF_INCREMENT 10240
 
 /* turn a socket into an SWFInput by copying everything to a buffer. */
@@ -277,7 +300,7 @@ static SWFInput getInput(zval **zfile TSRMLS_DC)
 
   return input;
 }
-
+#endif
 /* }}} */
 
 /* {{{ SWFAction */
