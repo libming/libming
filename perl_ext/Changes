@@ -1,5 +1,10 @@
 Revision history for Perl extension SWF.
 
+Tue Sep 25, 2001	  
+           - added DisplayItem accessor methods
+           - fixed SWF::Font::new method to accept browser fonts
+             (reported by Zbigniew).
+          
 0.09-dev  Sun Sep 23
           - added SWF::Constants (this makes using SWF easier but it 
             changes interface a bit :( Now you need to say, for example:
