@@ -43,8 +43,7 @@ SWFMovie newSWFMovieWithVersion(int version)
   movie->rate = 12.0;
   movie->totalFrames = 1;
 
-  SWFBlockList_addBlock(movie->blockList,
-			newSWFSetBackgroundBlock(0xff,0xff,0xff));
+  SWFMovie_addBlock(movie, newSWFSetBackgroundBlock(0xff,0xff,0xff));
 
   return movie;
 }
@@ -77,6 +76,14 @@ void SWFMovie_setBackground(SWFMovie movie, int r, int g, int b)
   movie->blockList->blocks[0].block = newSWFSetBackgroundBlock(r,g,b);
 }
 
+void SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
+{
+  if(SWFBlock_getType(block) == SWF_SHOWFRAME)
+    ++movie->nFrames;
+
+  SWFBlockList_addBlock(movie->blockList, block);
+}
+
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
 {
   if(SWFBlock_isCharacter(block))
@@ -84,7 +91,7 @@ SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
     return SWFDisplayList_add(movie->displayList, (SWFCharacter)block);
   }
   else
-    SWFBlockList_addBlock(movie->blockList, block);
+    SWFMovie_addBlock(movie, block);
 
   return NULL;
 }
@@ -100,7 +107,7 @@ void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound)
 
   assert(block != NULL);
 
-  SWFBlockList_addBlock(movie->blockList, block);
+  SWFMovie_addBlock(movie, block);
   SWFDisplayList_setSoundStream(movie->displayList, sound);
 }
 
@@ -108,13 +115,12 @@ void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound)
 void SWFMovie_nextFrame(SWFMovie movie)
 {
   SWFDisplayList_writeBlocks(movie->displayList, movie->blockList);
-  SWFBlockList_addBlock(movie->blockList, newSWFShowFrameBlock());
-  ++movie->nFrames;
+  SWFMovie_addBlock(movie, newSWFShowFrameBlock());
 }
 
 void SWFMovie_labelFrame(SWFMovie movie, char *label)
 {
-  SWFBlockList_addBlock(movie->blockList, newSWFFrameLabelBlock(label));
+  SWFMovie_addBlock(movie, newSWFFrameLabelBlock(label));
 }
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
@@ -125,7 +131,7 @@ int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
   while(movie->nFrames < movie->totalFrames)
     SWFMovie_nextFrame(movie);
 
-  SWFBlockList_addBlock(movie->blockList, newSWFEndBlock());
+  SWFMovie_addBlock(movie, newSWFEndBlock());
 
   length = SWFBlockList_completeBlocks(movie->blockList);
 

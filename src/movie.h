@@ -55,6 +55,7 @@ void SWFMovie_setBackground(SWFMovie movie, int r, int g, int b);
 
 void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound);
 
+void SWFMovie_addBlock(SWFMovie movie, SWFBlock block);
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block);
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 void SWFMovie_nextFrame(SWFMovie movie);
