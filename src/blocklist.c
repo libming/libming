@@ -47,8 +47,8 @@ destroySWFBlockList(SWFBlockList list)
 
 	for ( i=0; i<list->nBlocks; ++i )
 	{
-		/* characters were instantiated by the user, so user has to
-			 destroy them. */
+		/* characters other than fontchars were instantiated by the user,
+			 so user has to destroy them. */
 
 		if ( !list->blocks[i].isCharacter )
 			destroySWFBlock(list->blocks[i].block);
@@ -87,7 +87,12 @@ SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
 	}
 
 	list->blocks[list->nBlocks].block = block;
-	list->blocks[list->nBlocks].isCharacter = SWFBlock_isCharacter(block);
+
+	list->blocks[list->nBlocks].isCharacter =
+		SWFBlock_isCharacter(block) &&
+		SWFBlock_getType(block) != SWF_DEFINEFONT &&
+		SWFBlock_getType(block) != SWF_DEFINEFONT2;
+
 	++list->nBlocks;
 
 	SWFBlock_setDefined(block);

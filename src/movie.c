@@ -91,6 +91,9 @@ destroySWFMovie(SWFMovie movie)
 	if ( movie->nExports > 0 )
 		destroySWFExports(movie);
 
+	if ( movie->fonts != NULL )
+		free(movie->fonts);
+
 	free(movie);
 }
 

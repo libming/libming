@@ -227,6 +227,27 @@ destroySWFFont(SWFFont font)
 #endif
 	}
 
+	if ( font->flags & SWF_FONT_WIDECODES )
+	{
+		if ( font->codeToGlyph.wideMap != NULL )
+		{
+			int i;
+
+			for ( i = 0; i < 256; ++i )
+			{
+				if ( font->codeToGlyph.wideMap[i] != NULL )
+					free(font->codeToGlyph.wideMap[i]);
+			}
+
+			free(font->codeToGlyph.wideMap);
+		}
+	}
+	else
+	{
+		if ( font->codeToGlyph.charMap != NULL )
+			free(font->codeToGlyph.charMap);
+	}
+
 	if ( font->bounds != NULL )
 		free(font->bounds);
 
@@ -236,6 +257,15 @@ destroySWFFont(SWFFont font)
 	if ( font->kernTable != NULL )
 		free(font->kernTable);
 
+	if ( font->glyphOffset != NULL )
+		free(font->glyphOffset);
+
+	if ( font->glyphToCode != NULL )
+		free(font->glyphToCode);
+
+	if ( font->advances != NULL )
+		free(font->advances);
+
 	free(font);
 }
 
@@ -244,6 +274,14 @@ void
 destroySWFFontCharacter(SWFBlock block)
 {
 	SWFFontCharacter font = (SWFFontCharacter)block;
+	struct textList* text = font->textList;
+
+	while ( text != NULL )
+	{
+		struct textList* next = text->next;
+		free(text);
+		text = next;
+	}
 
 	if ( font->codeTable != NULL )
 		free(font->codeTable);
