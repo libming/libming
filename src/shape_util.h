@@ -74,12 +74,9 @@ static inline void SWFShape_drawCircle(SWFShape shape, int r)
 }
 
 
-/* draw character c from font font into shape shape */
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+/* approximate a cubic bezier with quadratic segments,
+   returns the number of segments used */
 
-
-/* approximate a cubic bezier with quadratic segments */
-/* returns the number of segments used */
 int SWFShape_drawCubic(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
 int SWFShape_drawCubicTo(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
 
