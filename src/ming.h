@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2000  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,10 @@
 #include "displaylist.h"
 #include "fill.h"
 #include "shape_util.h"
+#include "text_util.h"
+
+extern float Ming_scale;
+extern int Ming_cubicThreshold;
 
 int Ming_init();
 
