@@ -253,7 +253,7 @@ SOURCE="..\src\blocks\sound.c"
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\blocks\soundinstance.c
+SOURCE="..\src\blocks\soundinstance.c"
 # End Source File
 # Begin Source File
 
@@ -291,7 +291,16 @@ SOURCE="..\src\blocks\ttffont.c"
 
 SOURCE="..\src\blocks\utf8.c"
 # End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\imports.c"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\videostream.c"
+# End Source File
 # End Group
+
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
@@ -510,6 +519,14 @@ SOURCE="..\src\blocks\textfield.h"
 # Begin Source File
 
 SOURCE="..\src\blocks\utf8.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\imports.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\blocks\videostream.h"
 # End Source File
 # End Group
 # Begin Group "Parsers"
