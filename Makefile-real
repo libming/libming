@@ -4,7 +4,7 @@ DIRS = src util py_ext php_ext
 
 all: dynamic utils static
 
-install: install-common install-dynamic install-utils install-static
+install: install-common install-dynamic install-utils install-static install-man
 
 install-common:
 	install -d $(libdir)
@@ -15,6 +15,9 @@ install-common:
 
 install-utils:
 	(cd util && make install)
+
+install-man:
+	(cd man && make install)
 
 install-dynamic: dynamic
 	install -c -m 0644 $(SHAREDLIB) $(libdir)/$(SHAREDLIB)

@@ -1,0 +1,58 @@
+'''
+'''  makeswf Version @version@
+'''
+.de Sh
+.br
+.ne 5
+.PP
+\fB\\$1\fR
+.PP
+..
+.TH makeswf 1 "27 Mar 2005"
+.SH NAME
+makeswf - Ming's actionscript compiler.
+.SH SYNOPSIS
+.B makeswf [OPTIONS] <frame.as> ...
+
+.SH DESCRIPTION
+.B makeswf
+is a command line interface to the Ming library actionscript compiler.
+.PP
+Bytecode resulting from compilation of each given source file will
+be stored in a separate frame of the output.
+.PP
+Supported options:
+.TP
+\fB\-o\fR <output>
+Write SWF file to <output>. Default is ``out.swf''.
+.TP
+\fB\-s\fR <width>x<height>
+Set output frame size.
+.TP
+\fB\-r\fR <frame_rate>
+Set output frame rate (defaults to 12).
+.TP
+\fB\-v\fR <swfversion>
+Set output SWF version (defaults to 6).
+.TP
+\fB\-c\fR <compression_level>
+Set output compression level (defaults to 9).
+.TP
+\fB\-I\fR <dir>
+Add <dir> to the include search path.
+The option is passed to the C preprocessor.
+.TP
+\fB\-D\fR <macro>[=<def>]>
+Define <macro>.
+The option is passed to the C preprocessor.
+.TP
+\fB\-i\fR <library.swf>:<sym>[,<sym>]>
+Import named symbols from the given SWF file.
+The file is not required to be found at compile time, and
+no check is performed to ensure symbols are therein defined.
+It will be loaded at runtime, so make sure to specify the
+correct runtime path to find it.
+
+.SH AUTHOR
+Written by Sandro Santilli <strk@keybit.net>
+
