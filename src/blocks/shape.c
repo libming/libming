@@ -199,7 +199,7 @@ newSWFShapeFromBitmap(SWFBitmap bitmap)
 	SWFShape shape = newSWFShape();
 
 	SWFFillStyle fill =
-		SWFShape_addBitmapFillStyle(shape, bitmap, SWF_FILL_TILED_BITMAP);
+		SWFShape_addBitmapFillStyle(shape, bitmap, SWFFILL_TILED_BITMAP);
 
 	int width = SWFBitmap_getWidth(bitmap);
 	int height = SWFBitmap_getHeight(bitmap);

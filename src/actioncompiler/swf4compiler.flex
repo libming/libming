@@ -75,7 +75,6 @@ void swf4ParseInit(const char *script, int debug)
 
 %}
 
-<<<<<<< swf4compiler.flex
 %{
  // forward declaration needed by the following function
  static void yyunput YY_PROTO(( int c, char *buf_ptr ));
@@ -83,12 +82,6 @@ void swf4ParseInit(const char *script, int debug)
  void do_unput4(const char c) { unput(c); }
 %}
 
-=======
-%{
- void do_unput4(const char *x) { unput(*x); }
-%}
-
->>>>>>> 1.9
 DIGIT    [0-9]
 ID       [a-zA-Z_][a-zA-Z0-9_]*
 LEVEL	 \.\.?
