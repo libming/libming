@@ -34,9 +34,11 @@ typedef void (*destroySWFBlockMethod)(struct _block *block);
 struct _block
 {
   SWFBlocktype type;
+
   writeSWFBlockMethod writeBlock;
   completeSWFBlockMethod complete;
   destroySWFBlockMethod dtor;
+
   int length;
   byte isDefined;
   byte completed;
