@@ -1,7 +1,7 @@
 
 Installing Ming
 
-Last updated 16th January 2004.
+Last updated 18th January 2004.
 
 Unfortunately we haven't made Ming use autoconf yet (if you'd like
 to, please let us know!)
@@ -9,7 +9,8 @@ to, please let us know!)
   Unpack the Ming source tarball and go into the uncompressed
   directory.
 
-    $ gunzip ming-0.3a.tar.gz
+    $ gunzip ming-0.3alpha2.tar.gz
+    $ tar xfp ming-0.3alpha2.tar
     $ cd ming
 
   Decide whether you want to include gif or png image format
