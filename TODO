@@ -1,6 +1,8 @@
 
 Stuff what to do (not in order):
 
+* Make fonts and other large assets work between sessions
+
 * make leading/linespacing terminology consistent btwn text/textfield
 
 * Add masks
@@ -17,14 +19,9 @@ Stuff what to do (not in order):
 
 * Comment the new universal ming.h
 
-* Add ButtonSound to button, access to button shape matrices and cxforms
+* Add access to button shape matrices and cxforms
 
 * Update swftophp (including SWFTEXTFIELD_HTML)
-
-* Add Sound
-
-  Need definesounds now, and maybe adpcm/uncompressed formats.
-
 
 * Read fonts from TTF/PS
 
