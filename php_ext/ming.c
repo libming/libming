@@ -1251,8 +1251,8 @@ static SWFMorph getMorph(zval *id TSRMLS_DC)
 }
 /* }}} */
 
-/* {{{ proto SWFShape swfmorph_getShape1(void)
-   Return's this SWFMorph's start shape */
+/* {{{ proto object swfmorph_getShape1(void)
+   Return's this SWFMorph's start shape object */
 PHP_FUNCTION(swfmorph_getShape1)
 {
 	SWFMorph morph = getMorph(getThis() TSRMLS_CC);
@@ -1265,8 +1265,8 @@ PHP_FUNCTION(swfmorph_getShape1)
 }
 /* }}} */
 
-/* {{{ proto SWFShape swfmorph_getShape2(void)
-   Return's this SWFMorph's start shape */
+/* {{{ proto object swfmorph_getShape2(void)
+   Return's this SWFMorph's start shape object */
 PHP_FUNCTION(swfmorph_getShape2)
 {
 	SWFMorph morph = getMorph(getThis() TSRMLS_CC);
@@ -1277,7 +1277,6 @@ PHP_FUNCTION(swfmorph_getShape2)
 	add_property_resource(return_value, "shape", ret);
 	zend_list_addref(ret);
 }
-/* }}} */
 /* }}} */
 
 /* {{{ SWFMovie
@@ -1299,6 +1298,7 @@ static zend_function_entry swfmovie_functions[] = {
 	PHP_FALIAS(streammp3,         swfmovie_streamMp3,         NULL)
 	{ NULL, NULL, NULL }
 };
+/* }}} */
 
 /* {{{ swfmovie_init
 */
@@ -2148,8 +2148,8 @@ static SWFMovieClip getSprite(zval *id TSRMLS_DC)
 }
 /* }}} */
 
-/* {{{ proto SWFDisplayItem swfsprite_add(SWFCharacter)
-   Adds the character to the sprite, returns a displayitem */
+/* {{{ proto object swfsprite_add(SWFCharacter)
+   Adds the character to the sprite, returns a displayitem object */
 PHP_FUNCTION(swfsprite_add)
 {
 	zval **zchar;
