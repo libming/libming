@@ -123,7 +123,6 @@
 %type <action> function_call
 %type <action> lhs_expr
 %type <action> pf_expr
-%type <action> lhs_expr
 %type <action> rhs_expr
 %type <action> assign_stmt
 %type <action> assign_stmts
