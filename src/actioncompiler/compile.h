@@ -11,7 +11,9 @@
 void yyerror(char *msg);
 int yylex();
 
-#define max(x,y)	(((x)>(y))?(x):(y))
+#ifndef max
+  #define max(x,y)	(((x)>(y))?(x):(y))
+#endif
 
 typedef enum
 {

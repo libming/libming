@@ -1,5 +1,8 @@
 
-#include <unistd.h>
+#ifndef WIN32
+  #include <unistd.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -262,6 +265,7 @@ void bufferTrip(Buffer out)
    head or tail, respectively */
 /* jump offset is relative to end of jump instruction */
 /* I can't believe this actually worked */
+
 void resolveJumps(Buffer out)
 {
   byte *p = out->buffer;

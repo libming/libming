@@ -1,5 +1,8 @@
 
-#include <unistd.h>
+#ifndef WIN32
+  #include <unistd.h>
+#endif
+
 #include <time.h>
 #include <stdio.h>
 

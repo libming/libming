@@ -14,6 +14,9 @@ extern int lexBufferLen;
 
 #define BUFFER_INC 1024
 
+int yyparse(void *b);
+void printDoAction(Buffer f);
+
 int main(int argc, char *argv[])
 {
   FILE *f;
