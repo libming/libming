@@ -19,12 +19,30 @@
 #include <stdio.h>
 #include <math.h>
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "php.h"
 
 #if HAVE_MING
 #include "ext/standard/info.h"
 #include "ext/standard/file.h"
 #include "php_ming.h"
+
+static SWFMovie getMovie(zval *id);
+static SWFFill getFill(zval *id);
+static SWFGradient getGradient(zval *id);
+static SWFBitmap getBitmap(zval *id);
+static SWFShape getShape(zval *id);
+static SWFFont getFont(zval *id);
+static SWFText getText(zval *id);
+static SWFTextField getTextField(zval *id);
+static SWFDisplayItem getDisplayItem(zval *id);
+static SWFButton getButton(zval *id);
+static SWFAction getAction(zval *id);
+static SWFMorph getMorph(zval *id);
+static SWFMovieClip getSprite(zval *id);
 
 static zend_function_entry ming_functions[] = {
   PHP_FALIAS(ming_setcubicthreshold,  ming_setCubicThreshold,  NULL)
@@ -234,11 +252,10 @@ PHP_FUNCTION(swfaction_init)
 
   convert_to_string_ex(script);
 
-  /* XXX - need to deal with compiler errors */
   action = compileSWFActionCode(Z_STRVAL_PP(script));
 
   if(!action)
-    php_error(E_ERROR, "Couldn't compile code.  And I'm not smart enough to tell you why, sorry.");
+    php_error(E_ERROR, "Couldn't compile actionscript.");
 
   ret = zend_list_insert(action, le_swfactionp);
 
@@ -252,7 +269,7 @@ PHP_FUNCTION(swfaction_init)
 /* {{{ internal function getAction
    Returns the SWFAction object contained in zval *id */
 
-static inline SWFAction getAction(zval *id)
+static SWFAction getAction(zval *id)
 {
   void *action = SWFgetProperty(id, "action", 6, le_swfactionp);
 
@@ -337,7 +354,7 @@ static void destroy_SWFBitmap_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getBitmap
    Returns the SWFBitmap object contained in zval *id */
 
-static inline SWFBitmap getBitmap(zval *id)
+static SWFBitmap getBitmap(zval *id)
 {
   void *bitmap = SWFgetProperty(id, "bitmap", 6, le_swfbitmapp);
 
@@ -409,7 +426,7 @@ static void destroy_SWFButton_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getButton
    Returns the SWFButton object contained in zval *id */
 
-static inline SWFButton getButton(zval *id)
+static SWFButton getButton(zval *id)
 {
   void *button = SWFgetProperty(id, "button", 6, le_swfbuttonp);
 
@@ -1001,7 +1018,7 @@ static void destroy_SWFFill_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getFill
    Returns the SWFFill object contained in zval *id */
 
-static inline SWFFill getFill(zval *id)
+static SWFFill getFill(zval *id)
 {
   void *fill = SWFgetProperty(id, "fill", 4, le_swffillp);
 
@@ -1155,7 +1172,7 @@ PHP_FUNCTION(swffont_init)
 
   if(strcmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".fdb") == 0)
   {
-    file = V_FOPEN(Z_STRVAL_PP(zfile), "rb");
+    file = VCWD_FOPEN(Z_STRVAL_PP(zfile), "rb");
 
     if(!file)
       php_error(E_ERROR, "Couldn't find FDB file %s", Z_STRVAL_PP(zfile));
@@ -1264,7 +1281,7 @@ static void destroy_SWFGradient_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getGradient
    Returns the SWFGradient object contained in zval *id */
 
-static inline SWFGradient getGradient(zval *id)
+static SWFGradient getGradient(zval *id)
 {
   void *gradient = SWFgetProperty(id, "gradient", 8, le_swfgradientp);
 
@@ -1343,7 +1360,7 @@ static void destroy_SWFMorph_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getMorph
    Returns the SWFMorph object contained in zval *id */
 
-static inline SWFMorph getMorph(zval *id)
+static SWFMorph getMorph(zval *id)
 {
   void *morph = SWFgetProperty(id, "morph", 5, le_swfmorphp);
 
@@ -1587,7 +1604,7 @@ PHP_FUNCTION(swfmovie_save)
 
   convert_to_string_ex(x);
 
-  file = V_FOPEN(Z_STRVAL_PP(x), "wb");
+  file = VCWD_FOPEN(Z_STRVAL_PP(x), "wb");
 
   if(file == NULL)
     php_error(E_ERROR, "couldn't open file %s for writing", Z_STRVAL_PP(x));
@@ -1741,7 +1758,7 @@ static void destroy_SWFShape_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getShape
    Returns the SWFShape object contained in zval *id */
 
-static inline SWFShape getShape(zval *id)
+static SWFShape getShape(zval *id)
 {
   void *shape = SWFgetProperty(id, "shape", 5, le_swfshapep);
 
@@ -2173,21 +2190,35 @@ PHP_FUNCTION(swfshape_drawcurve)
 }
 
 /* }}} */
-/* {{{ proto void swfshape_drawglyph(SWFFont font, string character)
+/* {{{ proto void swfshape_drawglyph(SWFFont font, string character [, int size])
    Draws the first character in the given string into the shape using the
    glyph definition from the given font */
 
 PHP_FUNCTION(swfshape_drawglyph)
 {
-  zval **font, **c;
+  zval **font, **c, **zsize;
+  int size;
 
-  if((ZEND_NUM_ARGS() != 2) || zend_get_parameters_ex(2, &font, &c) == FAILURE)
-    WRONG_PARAM_COUNT;
+  if(ZEND_NUM_ARGS() == 2)
+  {
+    if(zend_get_parameters_ex(2, &font, &c) == FAILURE)
+      WRONG_PARAM_COUNT;
+
+    size = 1024/Ming_getScale();
+  }
+  else if(ZEND_NUM_ARGS() == 3)
+  {
+    if(zend_get_parameters_ex(3, &font, &c, &zsize) == FAILURE)
+      WRONG_PARAM_COUNT;
+
+    convert_to_long_ex(zsize);
+    size = Z_LVAL_PP(zsize);
+  }
 
   convert_to_string_ex(c);
 
-  SWFShape_drawFontGlyph(getShape(getThis()), getFont(*font),
-			 Z_STRVAL_PP(c)[0]);
+  SWFShape_drawGlyph(getShape(getThis()),
+					 getFont(*font), Z_STRVAL_PP(c)[0], size);
 }
 
 /* }}} */
@@ -2708,7 +2739,7 @@ static void destroy_SWFTextField_resource(zend_rsrc_list_entry *resource)
 /* {{{ internal function getTextField
    Returns the SWFTextField object contained in zval *id */
 
-static inline SWFTextField getTextField(zval *id)
+static SWFTextField getTextField(zval *id)
 {
   void *field = SWFgetProperty(id, "textfield", 9, le_swftextfieldp);
 
@@ -2994,8 +3025,11 @@ void php_ming_error(char *msg, ...)
 
 PHP_RINIT_FUNCTION(ming)
 {
+  /* XXX - this didn't work so well last I tried..
+
   if(Ming_init() != 0)
     php_error(E_ERROR, "Error initializing Ming module");
+  */
 }
 
 PHP_MINIT_FUNCTION(ming)
@@ -3109,3 +3143,12 @@ PHP_MINIT_FUNCTION(ming)
 /* }}} */
 
 #endif
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: sw=4 ts=4 tw=78 fdm=marker
+ * vim<600: sw=4 ts=4 tw=78
+ */
