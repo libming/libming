@@ -72,10 +72,10 @@ void SWFShape_setRightFill(SWFShape shape, SWFFill fill)
 
 void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character)
 {
-  SWFShape_lineToRelative(shape, SWFCharacter_getWidth(character), 0);
-  SWFShape_lineToRelative(shape, 0, SWFCharacter_getHeight(character));
-  SWFShape_lineToRelative(shape, -SWFCharacter_getWidth(character), 0);
-  SWFShape_lineToRelative(shape, 0, -SWFCharacter_getHeight(character));
+  SWFShape_drawLine(shape, SWFCharacter_getWidth(character), 0);
+  SWFShape_drawLine(shape, 0, SWFCharacter_getHeight(character));
+  SWFShape_drawLine(shape, -SWFCharacter_getWidth(character), 0);
+  SWFShape_drawLine(shape, 0, -SWFCharacter_getHeight(character));
 }
 
 void SWFShape_drawCircle(SWFShape shape, int r)
