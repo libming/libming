@@ -255,7 +255,7 @@ static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
 }
 
 /* not sure about the date to enter here.... */
-#if (ZEND_MODULE_API_NO >= 20020429)
+#ifdef PHP_HAVE_STREAMS 
 
 static SWFInput getInput(zval **zfile TSRMLS_DC)
 {
@@ -2472,7 +2472,7 @@ PHP_FUNCTION(swfmovie_saveToFile)
   int oldval = INT_MIN;
   long out;
   void *what;
-#if ZEND_MODULE_API_NO >= 20020429
+#ifdef PHP_HAVE_STREAMS 
   php_stream *stream;
 #endif
 
@@ -2497,7 +2497,7 @@ PHP_FUNCTION(swfmovie_saveToFile)
 		WRONG_PARAM_COUNT;
 	}
 
-#if ZEND_MODULE_API_NO >= 20020429
+#ifdef PHP_HAVE_STREAMS
   php_stream_from_zval(stream, x);
   php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&what, 1);
 #else
@@ -2521,7 +2521,7 @@ PHP_FUNCTION(swfmovie_save)
   FILE *file;
   long retval;
   int oldval = INT_MIN;
-#if ZEND_MODULE_API_NO >= 20020429
+#ifdef PHP_HAVE_STREAMS 
   php_stream *stream;
 #endif
 
@@ -2549,7 +2549,7 @@ PHP_FUNCTION(swfmovie_save)
   if(Z_TYPE_PP(x) == IS_RESOURCE)
   {
 
-#if ZEND_MODULE_API_NO >= 20020429
+#ifdef PHP_HAVE_STREAMS
     php_stream_from_zval(stream, x);
     php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&file, 1);
 #else
