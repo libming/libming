@@ -7,10 +7,10 @@ DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
 CFILES = ming.c
 
 php_ming.so: ming.o ../libming.a
-	${CC} -shared -fPIC ming.o ../libming.a -o php_ming.so ${EXTRA_LIBS}
+	${CC} ${CFLAGS} -shared -fPIC ming.o ../libming.a -o php_ming.so ${EXTRA_LIBS}
 
 ming.o: ${CFILES}
-	${CC} -fPIC ${DEFINES} -c ming.c -I. -I.. -I../src `php-config --includes`
+	${CC} ${CFLAGS} -fPIC ${DEFINES} -c ming.c -I. -I.. -I../src `php-config --includes`
 
 ../libming.a:
 	cd ..; make static
