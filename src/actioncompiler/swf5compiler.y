@@ -154,6 +154,7 @@ program
 		  bufferConcat(b, bf);
 		  bufferConcat(b, bc);
 		  *((Buffer *)buffer) = b; }
+	| /* nothing */ { Buffer b = newBuffer(); *((Buffer *)buffer) = b; }
 	;
 
 code
@@ -482,8 +483,12 @@ iter_stmt
 		  delctx(CTX_LOOP); }
 
 	| do_init stmt WHILE '(' expr ')'
-		{ $$ = $2;
-		  bufferConcat($$, $5);
+		{ if($2)
+			{	$$ = $2;
+		  		bufferConcat($$, $5);
+			}
+			else
+				$$ = $5;
 		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
