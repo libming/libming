@@ -19,7 +19,7 @@
 #endif
 
 void skipBytes(FILE *f, int length);
-char *blockName(int);
+//char *blockName(int);
 
 static m_version = {0};
 void decompileAction(FILE *f, int length, int indent)

@@ -18,7 +18,7 @@ typedef unsigned char boolean;
 #define true (boolean)1
 #define false (boolean)0
 
-char *blockName(Blocktype type);
+//char *blockName(Blocktype type);
 
 char *indent()
 {

@@ -1,4 +1,5 @@
 #include <time.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,38 +8,57 @@
 
 void usage()
 {
-  printf("png2swf - Converte uma imagem PNG em SWF\n\n");
-  printf("Uso: png2swf arquivo.png [arquivo.swf] width height\n");
+  printf("img2swf - Converts an image in an SWF\n");
+  printf("Usage: img2swf <image> <output> [<width> <height>]\n");
   exit(1);
 }
 
-void convertePNG(SWFMovie movie, char *f)
+void embed_image(SWFMovie movie, char *f)
 {
-  SWFFill fill;
-  SWFBitmap png;
-  SWFShape shape;
-  SWFDisplayItem i;
+	SWFFill fill;
+	SWFBitmap bm;
+	SWFShape shape;
+	SWFDisplayItem i;
+	FILE *raster;
+	SWFInput in;
 
-  png = newSWFDBLBitmap_fromPngFile(f);
-  shape = newSWFShape();
+        if (!(raster = fopen (f, "rb")))
+        {
+                fprintf (stdout, "%s: %s\n", f, strerror (errno));
+		exit(1);
+        }
+
+        if (!(in = newSWFInput_file(raster)))
+        {
+                fprintf (stdout, "Can't create SWFInput from file\n");
+		exit(1);
+        }
+
+        if (!(bm = newSWFBitmap_fromInput (in)))
+        {
+                fprintf (stdout, "Error creating bitmap");
+		exit(1);
+        }
+
+
+	shape = newSWFShape();
   
-  SWFShape_movePenTo(shape, 0, 0);
+	SWFShape_movePenTo(shape, 0, 0);
 
-  fill = SWFShape_addBitmapFill(shape, png, SWFFILL_CLIPPED_BITMAP);
-  SWFShape_setRightFill(shape, fill);
-  SWFShape_drawLineTo(shape, 0, 640);
-  SWFShape_drawLineTo(shape, 480, 640);
-  SWFShape_drawLineTo(shape, 480, 0);
-  SWFShape_drawLineTo(shape, 0, 0);
+	fill = SWFShape_addBitmapFill(shape, bm, SWFFILL_CLIPPED_BITMAP);
+	SWFShape_setRightFill(shape, fill);
+	SWFShape_drawLineTo(shape, 0, 640);
+	SWFShape_drawLineTo(shape, 480, 640);
+	SWFShape_drawLineTo(shape, 480, 0);
+	SWFShape_drawLineTo(shape, 0, 0);
 
-  i = SWFMovie_add(movie, (SWFCharacter)shape);
+	i = SWFMovie_add(movie, (SWFBlock)shape);
 }
 
 int main(int argc, char *argv[])
 {
   int len, w, h;
   char *outfile;
-  FILE *f;
   SWFMovie m = newSWFMovie();
 
   if((argc < 2) || (argc > 5))
@@ -53,6 +73,7 @@ int main(int argc, char *argv[])
   }
 
   Ming_init();
+  Ming_setSWFCompression(9);
 
   srand(time(NULL));
 
@@ -72,15 +93,13 @@ int main(int argc, char *argv[])
   else
     outfile = argv[2];
 
-  f = fopen(outfile, "wb");
-
   SWFMovie_setRate(m, 12.0);
   SWFMovie_setDimension(m, w, h);
   SWFMovie_setNumberOfFrames(m, 1);
 
-  convertePNG(m, argv[1]);
+  embed_image(m, argv[1]);
 
-  SWFMovie_output(m, fileOutputMethod, f, 9);
+  SWFMovie_save(m, outfile);
   destroySWFMovie(m);
 
   exit(0);

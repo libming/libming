@@ -1,0 +1,15 @@
+makefdb
+-------
+How do you make a generator template file?  Write some text in a flash
+movie using MM Flash(4,5,..?), under "save as.." select "Generator
+Template".  Feed that file into makefdb, and it'll save every font
+def'n found therein into a file <font>.fdb.  If you don't save as a
+template, it won't write the entire glyph set out, only the letters
+you've actually used..  See, it's smart that way.
+
+graphics
+--------
+There is a software named auto-trace (http://autotrace.sourceforge.net),
+that can vectorize a bitmap (*.bmp,*.pbm,..)  and save it to swf (using
+ming) only using SWFShapes. Then just "swfto... swffile" and  .. smile.
+   

@@ -35,7 +35,7 @@ FILE *tempfile;
 
 void skipBytes(FILE *f, int length);
 void silentSkipBytes(FILE *f, int length);
-char *blockName(int);
+//char *blockName(int);
 void printSoundInstance(FILE *f, int id, int soundid);
 
 static int m_version = {0};

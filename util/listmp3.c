@@ -169,7 +169,7 @@ void printMP3Headers(FILE *f)
 
   putchar('\n');
 
-  length = numFrames*(sampleRate > 3200 ? 1152 : 576)/samplerate;
+  length = numFrames*(samplerate > 3200 ? 1152 : 576)/samplerate;
 
   printf("Number of frames: %i\n", numFrames);
   printf("Average bitrate: %i\n", bitrateSum/numFrames);

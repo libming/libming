@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "../src/blocks/input.h"
 #include "../src/blocks/output.h"
+#include "../src/libming.h"
 
 /*
  * ADPCM tables

@@ -14,8 +14,8 @@ include ../Rules.make
 all:
 	$(PAGER) README
 
-all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp \
-	png2dbl gif2dbl gif2mask listaction raw2adpcm png2swf makeswf
+all_binaries: listswf_nd listfdb makefdb listjpeg swftoperl swftophp \
+	png2dbl listaction raw2adpcm png2swf makeswf listmp3
 
 clean:
 	rm -f *.o listswf listswf.exe \
