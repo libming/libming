@@ -25,6 +25,10 @@ struct SWFFill_s
 {
 	SWFFillStyle fillstyle;
 	SWFPosition position;
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 
@@ -35,6 +39,10 @@ newSWFFill(SWFFillStyle fillstyle)
 
 	fill->fillstyle = fillstyle;
 	fill->position = newSWFPosition(SWFFillStyle_getMatrix(fill->fillstyle));
+
+#if TRACK_ALLOCS
+	fill->gcnode = ming_gc_add_node(fill, destroySWFFill);
+#endif
 
 	return fill;
 }
@@ -51,6 +59,9 @@ void
 destroySWFFill(SWFFill fill)
 {
 	destroySWFPosition(fill->position);
+#if TRACK_ALLOCS
+	ming_gc_remove_node(fill->gcnode);
+#endif
 	free(fill);
 }
 

@@ -46,6 +46,10 @@ struct SWFInput_s
 	int offset;
 	int length;
 	void *data;
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 
@@ -171,6 +175,9 @@ destroySWFInput(SWFInput input)
 static void
 SWFInput_dtor(SWFInput input)
 {
+#if TRACK_ALLOCS
+	ming_gc_remove_node(input->gcnode);
+#endif
 	free(input);
 }
 
@@ -253,6 +260,10 @@ newSWFInput_file(FILE *f)
 	input->offset = 0;
 	input->length = buf.st_size;
 
+#if TRACK_ALLOCS
+	input->gcnode = ming_gc_add_node(input, destroySWFInput);
+#endif
+
 	return input;
 }
 
@@ -322,6 +333,10 @@ newSWFInput_buffer(unsigned char* buffer, int length)
 	input->offset = 0;
 	input->length = length;
 
+#if TRACK_ALLOCS
+	input->gcnode = ming_gc_add_node(input, destroySWFInput);
+#endif
+
 	return input;
 }
 
@@ -330,6 +345,9 @@ static void
 SWFInput_buffer_dtor(SWFInput input)
 {
 	free(input->data);
+#if TRACK_ALLOCS
+	ming_gc_remove_node(input->gcnode);
+#endif
 	free(input);
 }
 
@@ -340,6 +358,9 @@ newSWFInput_allocedBuffer(unsigned char *buffer, int length)
 {
 	SWFInput input = newSWFInput_buffer(buffer, length);
 	input->destroy = SWFInput_buffer_dtor;
+#if TRACK_ALLOCS
+	input->gcnode = ming_gc_add_node(input, destroySWFInput);
+#endif
 	return input;
 }
 
@@ -482,6 +503,10 @@ static void
 SWFInput_stream_dtor(SWFInput input)
 {
 	free(input->data);
+#if TRACK_ALLOCS
+	ming_gc_remove_node(input->gcnode);
+#endif
+	free(input);
 }
 
 static int SWFInput_stream_eof(SWFInput input)
@@ -510,6 +535,10 @@ newSWFInput_stream(FILE* f)
 	data->buffer = NULL;
 
 	input->data = (void *)data;
+
+#if TRACK_ALLOCS
+	input->gcnode = ming_gc_add_node(input, destroySWFInput);
+#endif
 
 	return input;
 }

@@ -35,6 +35,11 @@ struct SWFJpegBitmap_s
 
 	SWFInput input;
 	int length;
+
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 struct SWFJpegWithAlpha_s
@@ -238,6 +243,9 @@ void
 destroySWFJpegBitmap(SWFJpegBitmap jpegBitmap)
 {
 	free(CHARACTER(jpegBitmap)->bounds);
+#if TRACK_ALLOCS
+	ming_gc_remove_node(jpegBitmap->gcnode);
+#endif
 	free(jpegBitmap);
 }
 
@@ -379,6 +387,10 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 	jpeg->length = info->length + 4;
 
 	free(info);
+
+#if TRACK_ALLOCS
+	jpeg->gcnode = ming_gc_add_node(jpeg, destroySWFBitmap);
+#endif
 
 	return jpeg;
 }
