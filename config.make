@@ -2,4 +2,4 @@
 EXTRA_OBJS = gifdbl.o pngdbl.o
 
 # zlib required for both image formats and for compressed swf6
-EXTRA_LIBS = -lz -lungif -lpng12
+LIBS = -lz -lungif -lpng12

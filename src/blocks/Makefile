@@ -1,8 +1,6 @@
-#CC = gcc -g -pg -a	# profiling flags
-#CC = gcc -O5
-CC = gcc -g -Wall -I.. -I. ${CFLAGS} #-fPIC -ggdb
-
 include ../../config.make
+
+INCLUDES	+= -I..
 
 OFILES = \
 	action.o \
@@ -38,13 +36,12 @@ OFILES = \
 	text.o \
 	textfield.o \
 	utf8.o \
-	videostream.o ${EXTRA_OBJS}
+	videostream.o $(EXTRA_OBJS)
 
-all: ${OFILES}
+## Needs to be placed after variable defs but before rules
+include ../../Rules.make
+
+all: $(OFILES)
 
 clean:
 	rm -f *.o *.core core
-
-# breaks on bsd:
-#.c.o: .c .h
-#	${CC} -c $<

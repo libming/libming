@@ -1,43 +1,33 @@
-#CC = gcc -g -pg -a	# profiling flags
-#CC = gcc -O5
-CC = gcc -g -Wall
+include Rules.make
 
-#PREFIX = /usr/local
-PREFIX = ${DESTDIR}/usr
-LIBDIR = ${PREFIX}/lib
-INCLUDEDIR = ${PREFIX}/include
+PREFIX = $(DESTDIR)/usr
+LIBDIR = $(PREFIX)/lib
+INCLUDEDIR = $(PREFIX)/include
+
+DIRS = src util py_ext php_ext
 
 all: dynamic #static
 
 install: install-common install-dynamic #install-static
 
 install-common:
-	install -d ${LIBDIR}
-	install -d ${INCLUDEDIR}
-	install -m 0644 src/ming.h ${INCLUDEDIR}
-	install -m 0644 src/ming_config.h ${INCLUDEDIR}
-	install -m 0644 mingpp.h ${INCLUDEDIR}
+	install -d $(LIBDIR)
+	install -d $(INCLUDEDIR)
+	install -m 0644 src/ming.h $(INCLUDEDIR)
+	install -m 0644 src/ming_config.h $(INCLUDEDIR)
+	install -m 0644 mingpp.h $(INCLUDEDIR)
 
 install-dynamic: dynamic
-	install -m 0644 libming.so ${LIBDIR}/libming.so.0.2
-	(cd ${LIBDIR} && ln -fs libming.so.0.2 libming.so.0 && ln -fs libming.so.0 libming.so)
+	install -m 0644 $(SHAREDLIB) $(LIBDIR)/
+	(cd $(LIBDIR) && ln -fs $(SHAREDLIB) libming.so.0 && ln -fs libming.so.0 libming.so)
 
 install-static: static
-	install -m 0644 libming.a ${LIBDIR}/libming.a
+	install -m 0644 $(SHAREDLIB) $(LIBDIR)/
 
-dynamic:
-	cd src && make dynamic
-
-static:
-	cd src && make static
+dynamic static:
+	make -C src $@
 
 clean:
-	cd src && make clean
-	cd util && make clean
-	cd py_ext && make clean
-	cd php_ext && make clean
+	for i in $(DIRS); do make -C $$i clean; done
 	rm -f test.o test test.exe *.core *~
-	rm -f libming.a libming.so
-
-#.c.o: .c .h
-#	${CC} ${FLAGS} -c $<
+	rm -f $(SHAREDLIB) $(SHAREDLIB)
