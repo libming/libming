@@ -31,6 +31,7 @@ struct _sound
   int delay;
   int start;
   int samplesPerFrame;
+  int sampleRate;
   SWFInput input;
 };
 typedef struct _sound *SWFSound;
@@ -48,7 +49,6 @@ struct _soundStreamBlock
 {
   swfBlock block;
   SWFSound sound;
-  byte channels;
   int numFrames;
   int delay;
   int length;

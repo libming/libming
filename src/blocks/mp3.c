@@ -77,7 +77,7 @@ int nextMP3Frame(SWFInput input)
   unsigned long flags;
   int frameLen;
   int bitrate, bitrate_idx, samplerate, samplerate_idx;
-  int version, layer, channels, padding;
+  int version, layer, padding;
 
   /* get 4-byte header, bigendian */
 
@@ -91,8 +91,6 @@ int nextMP3Frame(SWFInput input)
 
   bitrate_idx = (flags & MP3_BITRATE) >> MP3_BITRATE_SHIFT;
   samplerate_idx = (flags & MP3_SAMPLERATE) >> MP3_SAMPLERATE_SHIFT;
-
-  channels = ((flags & MP3_CHANNEL) == MP3_CHANNEL_MONO) ? 1 : 2;
 
   switch(flags & MP3_VERSION)
   {
@@ -143,7 +141,7 @@ int nextMP3Frame(SWFInput input)
   if(version == 1)
     frameLen = 144 * bitrate * 1000 / samplerate + padding;
   else
-    frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
+    frameLen = 72 * bitrate * 1000 / samplerate + padding;
 
   SWFInput_seek(input, frameLen-4, SEEK_CUR);
 

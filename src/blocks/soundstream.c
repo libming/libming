@@ -18,7 +18,8 @@ void writeSWFSoundStreamToMethod(SWFBlock block,
   SWFInput input = stream->sound->input;
   int l = stream->length;
 
-  methodWriteUInt16(stream->numFrames * 1152, /* stream->channels * 576, */
+  methodWriteUInt16(stream->numFrames *
+		    (stream->sound->sampleRate > 32000 ? 1152 : 576),
 		    method, data);
 
   methodWriteUInt16(stream->delay, method, data);
@@ -30,6 +31,7 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
 {
   int delay, length;
   SWFSoundStreamBlock stream;
+  int frameSize;
 
   if(sound->isFinished)
     return NULL;
@@ -40,8 +42,9 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
   BLOCK(stream)->writeBlock = writeSWFSoundStreamToMethod;
   BLOCK(stream)->dtor = NULL;
   BLOCK(stream)->type = SWF_SOUNDSTREAMBLOCK;
+
   stream->sound = sound;
-  stream->channels = (sound->flags&SWF_SOUND_CHANNELS)+1;
+  stream->length = 0;
 
   /* see how many frames we can put in this block,
      see how big they are */
@@ -50,7 +53,12 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
 
   delay = sound->delay + sound->samplesPerFrame;
 
-  while(delay > 1152)
+  if(sound->sampleRate > 32000)
+    frameSize = 1152;
+  else
+    frameSize = 576;
+
+  while(delay > frameSize)
   {
     ++stream->numFrames;
     length = nextMP3Frame(sound->input);
@@ -63,7 +71,7 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
     }
 
     stream->length += length;
-    delay -= 1152;
+    delay -= frameSize;
   }
 
   sound->delay = delay;
@@ -93,7 +101,7 @@ SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate)
   SWFOutput out = newSizedSWFOutput(6);
   SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD);
   SWFInput input = sound->input;
-  int rate, sampleRate, samplesPerFrame, channels, flags, start = 0;
+  int rate, channels, flags, start = 0;
 
   /* get 4-byte header, bigendian */
   flags = SWFInput_getChar(input);
@@ -138,19 +146,19 @@ SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate)
   /* XXX - this is a gross oversimplification */
   switch(flags & MP3_VERSION)
   {
-    case MP3_VERSION_1:  sampleRate = 44100; rate = SWF_SOUND_44KHZ; break;
-    case MP3_VERSION_2:  sampleRate = 22050; rate = SWF_SOUND_22KHZ; break;
-    case MP3_VERSION_25: sampleRate = 11025; rate = SWF_SOUND_11KHZ; break;
+    case MP3_VERSION_1:  sound->sampleRate = 44100; rate = SWF_SOUND_44KHZ; break;
+    case MP3_VERSION_2:  sound->sampleRate = 22050; rate = SWF_SOUND_22KHZ; break;
+    case MP3_VERSION_25: sound->sampleRate = 11025; rate = SWF_SOUND_11KHZ; break;
   }
 
   flags = SWF_SOUND_MP3_COMPRESSED | rate | SWF_SOUND_16BITS | channels;
   sound->flags = flags;
 
-  sound->samplesPerFrame = samplesPerFrame = floor(sampleRate/frameRate);
+  sound->samplesPerFrame = floor(sound->sampleRate / frameRate);
 
-  SWFOutput_writeUInt8(out, 0x0A); /* XXX - mix format. ?? */
+  SWFOutput_writeUInt8(out, flags & 0x0f); /* preferred mix format.. (?) */
   SWFOutput_writeUInt8(out, flags);
-  SWFOutput_writeUInt16(out, samplesPerFrame);
+  SWFOutput_writeUInt16(out, sound->samplesPerFrame);
   SWFOutput_writeUInt16(out, SWFSOUNDSTREAM_INITIAL_DELAY);
 
   return (SWFBlock)block;
