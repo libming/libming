@@ -215,7 +215,7 @@ main (int argc, char **argv)
 				break;
 			case 'I':
 				// yes, you can smash the stack ... 
-				sprintf(buf, "-I%s", optarg);
+				sprintf(buf, "-I%s ", optarg);
 				strcat(cppargs, buf);
 				break;
 			case 'i':
@@ -223,7 +223,7 @@ main (int argc, char **argv)
 				break;
 			case 'D':
 				// yes, you can smash the stack ... 
-				sprintf(buf, "-D%s", optarg);
+				sprintf(buf, "-D%s ", optarg);
 				strcat(cppargs, buf);
 				break;
 			default:
@@ -360,6 +360,7 @@ preprocess (char *file, char *out, char *cppargs)
 	int ret;
 
 	sprintf(buf, "%s %s %s > %s", CPP, cppargs, file, out);
+	//printf("%s\n", buf);
 
 	ret = system(buf);
 	if ( ret ) return 0;
@@ -433,6 +434,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.11  2004/11/02 17:53:05  strk
+ * Fixed a bug in -I and -D handling.
+ *
  * Revision 1.10  2004/09/29 10:07:29  strk
  * ImportAssets executed even if import file is not found on filesystem.
  * A warning is issued in that case.
