@@ -619,10 +619,10 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
   readBits(f, 6); /* type 0, etc. */
 
   moveBits = readBits(f, 5);
-  x = readSBits(f, moveBits);
-  y = readSBits(f, moveBits);
+  x = startX + readSBits(f, moveBits);
+  y = startY + readSBits(f, moveBits);
 
-  SWFShape_moveScaledPenTo(shape, startX + x*size/1024, startY + y*size/1024);
+  SWFShape_moveScaledPenTo(shape, x*size/1024, y*size/1024);
 
   if(readBits(f, 1) != 1) /* fill1 = 1 */
     SWF_error("SWFShape_drawGlyph: was expecting fill1 = 1.");
@@ -639,11 +639,10 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
 	break;
 
       moveBits = readBits(f, 5);
-      x = readSBits(f, moveBits);
-      y = readSBits(f, moveBits);
+      x = startX + readSBits(f, moveBits);
+      y = startY + readSBits(f, moveBits);
 
-      SWFShape_moveScaledPenTo(shape,
-			       startX + x*size/1024, startY + y*size/1024);
+      SWFShape_moveScaledPenTo(shape, x*size/1024, y*size/1024);
 
       continue;
     }
