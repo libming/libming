@@ -233,7 +233,7 @@ void
 destroySWFText(SWFText text);
 
 void
-SWFText_setFont(SWFText text, void *font);
+SWFText_setFont(SWFText text, void* font);
 
 void
 SWFText_setHeight(SWFText text, float height);
@@ -245,7 +245,10 @@ void
 SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
 
 void
-SWFText_addString(SWFText text, const char *string, int *advance);
+SWFText_addString(SWFText text, const char* string, int* advance);
+
+void
+SWFText_addUTF8String(SWFText text, const char* string, int* advance);
 
 void
 SWFText_addWideString(SWFText text, const unsigned short* string,
@@ -255,7 +258,7 @@ void
 SWFText_setSpacing(SWFText text, float spacing);
 
 float
-SWFText_getStringWidth(SWFText text, const char *string);
+SWFText_getStringWidth(SWFText text, const char* string);
 
 /* XXX */
 #define SWFText_getWidth SWFText_getStringWidth

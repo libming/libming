@@ -464,7 +464,7 @@ SWFText_addWideString(SWFText text, const unsigned short* widestring,
 
 
 void
-SWFText_addString(SWFText text, const char* string, int* advance)
+SWFText_addUTF8String(SWFText text, const char* string, int* advance)
 {
 	unsigned short* widestring;
 	int len = UTF8ExpandString(string, &widestring);
@@ -484,6 +484,20 @@ SWFText_addString(SWFText text, const char* string, int* advance)
 	textRecord->advance = advance;
 	textRecord->strlen = len;
 	textRecord->string = widestring;
+}
+
+
+void
+SWFText_addString(SWFText text, const char* string, int* advance)
+{
+	int len = strlen(string);
+	unsigned short* widestring = malloc(len * sizeof(unsigned short));
+	int i;
+	
+	for ( i = 0; i < len; ++i )
+		widestring[i] = string[i];
+
+	SWFText_addWideString(text, widestring, len, advance);
 }
 
 

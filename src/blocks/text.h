@@ -72,6 +72,9 @@ void
 SWFText_addString(SWFText text, const char* string, int* advance);
 
 void
+SWFText_addUTF8String(SWFText text, const char* string, int* advance);
+
+void
 SWFText_addWideString(SWFText text, const unsigned short* string,
 		      int strlen, int* advance);
 
