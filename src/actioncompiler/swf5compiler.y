@@ -777,7 +777,11 @@ void_function_call
 		  bufferWriteOp($$, SWFACTION_TRACE); }
 
 	| GETURL '(' expr ')'
-		{ $$ = $3;
+		{
+#ifdef DEBUG
+		  printf("void_function_call: GETURL '(' expr ')'\n");
+#endif
+		  $$ = $3;
 		  bufferWriteOp($$, SWFACTION_PUSHDATA);
 		  bufferWriteS16($$, 2); bufferWriteS16($$, 0); // two 0 bytes	
 		  bufferWriteOp($$, SWFACTION_GETURL2);
@@ -785,7 +789,11 @@ void_function_call
 		  bufferWriteU8($$, 0); }
 	
 	| GETURL '(' expr ',' expr urlmethod ')'
-		{ $$ = $3;
+		{
+#ifdef DEBUG
+		  printf("void_function_call: GETURL '(' expr ',' expr urlmethod ')'\n");
+#endif
+		  $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferWriteOp($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
@@ -1005,7 +1013,11 @@ function_call
 		  bufferWriteOp($$, SWFACTION_SUBSTRING); }
 
 	| TYPEOF '(' expr_or_obj ')'
-		{ $$ = $3;
+		{
+#ifdef DEBUG
+		  printf("function_call: TYPEOF '(' expr_or_obj ')'\n");
+#endif
+		  $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TYPEOF); }
 
 	;
