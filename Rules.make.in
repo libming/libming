@@ -1,4 +1,7 @@
-MING_VER = 0.3beta1
+MAJOR_VERSION = 0
+MINOR_VERSION = 3
+MICRO_VERSION = 0beta1
+MING_VER = $(MAJOR_VERSION).$(MINOR_VERSION).$(MICRO_VERSION)
 
 OS             = $(shell uname -s)
 

@@ -39,6 +39,7 @@ dynamic: ${OFILES}
 	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o $(SHAREDLIB)
 	cp $(SHAREDLIB) ..
 	ln -fs $(SHAREDLIB) ../libming.so
+	ln -fs $(SHAREDLIB) ../libming.so.$(MAJOR_VERSION)
 
 static: ${OFILES}
 	cd blocks && $(MAKE)

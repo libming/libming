@@ -1,7 +1,8 @@
 include ../config.make
 include ../Rules.make
 
-INCLUDES += -I.. -I../src
+CFLAGS += -I.. -I../src
+LDFLAGS += -L.. -lming
 
 PAGER ?= less
 
@@ -60,7 +61,7 @@ png2swf: png2swf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) png2swf.c -o png2swf ../libming.a $(LIBS)
 
 makeswf: makeswf.c makeswf.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -L.. -lming $(MATHLIB) $(ZLIB)
+	$(CC) $(CFLAGS) $(LDFLAGS) -lming -o $@ $< 
 
 install: $(BINARIES)
 	install -d $(bindir)
