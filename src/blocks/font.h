@@ -27,7 +27,6 @@
 #include "blocktypes.h"
 #include "block.h"
 #include "output.h"
-#include "shape.h"
 #include "rect.h"
 #include "character.h"
 #include "browserfont.h"
@@ -119,10 +118,10 @@ void SWFFont_resolveTextList(SWFFont font);
 
 byte *SWFFont_findCharacterGlyph(SWFFont font, int c);
 
-int SWFFont_getStringWidth(SWFFont font, const unsigned char *string);
-short SWFFont_getAscent(SWFFont font);
-short SWFFont_getDescent(SWFFont font);
-short SWFFont_getLeading(SWFFont font);
+int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string);
+short SWFFont_getScaledAscent(SWFFont font);
+short SWFFont_getScaledDescent(SWFFont font);
+short SWFFont_getScaledLeading(SWFFont font);
 
 /* XXX */
 #define SWFFont_getWidth SWFFont_getStringWidth

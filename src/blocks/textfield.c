@@ -21,6 +21,33 @@
 #include <string.h>
 #include "textfield.h"
 
+/* after every metric change, we update the bounds for the
+   SWFCharacter_getBounds function */
+
+static void resetBounds(SWFTextField field)
+{
+  CHARACTER(field)->bounds->minX = -field->padding;
+  CHARACTER(field)->bounds->minY = -field->padding;
+
+  if(field->width == 0)
+  {
+    int width = field->fontHeight*(field->string ? strlen(field->string) : 0);
+    CHARACTER(field)->bounds->maxX = field->padding + width;
+  }
+  else
+    CHARACTER(field)->bounds->maxX = field->padding + field->width;
+
+  if(field->fieldHeight == 0)
+  {
+    CHARACTER(field)->bounds->maxY =
+      field->padding + field->fontHeight*field->nLines +
+      (field->nLines-1)*field->lineSpacing;
+  }
+  else
+    CHARACTER(field)->bounds->maxY = field->padding + field->fieldHeight;
+}
+
+
 void writeSWFTextFieldToMethod(SWFBlock block,
 			       SWFByteOutputMethod method, void *data)
 {
@@ -31,26 +58,20 @@ int completeSWFTextField(SWFBlock block)
 {
   SWFTextField field = (SWFTextField)block;
 
-  /* stupid and ugly */
+  /* we're guessing how big the block's going to be.. */
   SWFOutput out = newSizedSWFOutput(42 +
 				    ((field->varName)?strlen(field->varName):0)+
 				    ((field->string)?strlen(field->string):0));
 
   field->out = out;
 
-  if(!CHARACTER(field)->bounds)
-    CHARACTER(field)->bounds = newSWFRect(-40,
-					  40 + field->height *
-					  (field->string ?
-					   strlen(field->string) : 0), -40,
-					  40 + field->nLines*field->height +
-					  (field->nLines-1)*field->lineSpacing);
+  resetBounds(field);
 
   SWFOutput_writeUInt16(out, CHARACTERID(field));
   SWFOutput_writeRect(out, CHARACTER(field)->bounds);
   SWFOutput_writeUInt16(out, field->flags);
   SWFOutput_writeUInt16(out, FONTID(field));
-  SWFOutput_writeUInt16(out, field->height);
+  SWFOutput_writeUInt16(out, field->fontHeight);
   SWFOutput_writeUInt8(out, field->r);
   SWFOutput_writeUInt8(out, field->g);
   SWFOutput_writeUInt8(out, field->b);
@@ -70,7 +91,7 @@ int completeSWFTextField(SWFBlock block)
   SWFOutput_writeString(out, field->string);
 
   /* XXX - if font is a real font, do we need to talk to it? */
-  /* flash just makes a browser font for (editable) textfields for all fonts */
+  /* flash 4 just makes a browser font for (editable) textfields for all fonts */
 
   SWFOutput_byteAlign(out);
   return SWFOutput_length(out);
@@ -87,21 +108,28 @@ void destroySWFTextField(SWFBlock block)
 }
 SWFTextField newSWFTextField()
 {
-  SWFTextField field = (SWFTextField)malloc(SWFTEXTFIELD_SIZE);
-  memset(field, 0, SWFTEXTFIELD_SIZE);
+  SWFTextField field = calloc(1, SWFTEXTFIELD_SIZE);
 
   BLOCK(field)->writeBlock = writeSWFTextFieldToMethod;
   BLOCK(field)->complete = completeSWFTextField;
   BLOCK(field)->dtor = destroySWFTextField;
   BLOCK(field)->type = SWF_TEXTFIELD;
   CHARACTERID(field) = ++SWF_gNumCharacters;
+  CHARACTER(field)->bounds = newSWFRect(-40, 280, -40, 280);
 
   field->lineSpacing = 40;
-  field->height = 240;
+  field->padding = 40;
+  field->fontHeight = 240;
+  field->fieldHeight = 0;
+  field->width = 0;
   field->a = 0xff;
   field->nLines = 1;
 
   field->flags = 0x30ad;
+
+  field->font.font = NULL;
+  field->varName = NULL;
+  field->string = NULL;
 
   return field;
 }
@@ -122,12 +150,11 @@ void SWFTextField_setFont(SWFTextField field, SWFBlock font)
   SWFCharacter_addDependency((SWFCharacter)field, font);
 }
 
-void SWFTextField_setBounds(SWFTextField field, int width, int height)
+void SWFTextField_setScaledBounds(SWFTextField field, int width, int height)
 {
-  if(CHARACTER(field)->bounds)
-    free(CHARACTER(field)->bounds);
-
-  CHARACTER(field)->bounds = newSWFRect(-40, width+40, -40, height+40);
+  field->width = width;
+  field->fieldHeight = height;
+  resetBounds(field);
 }
 
 void SWFTextField_setFlags(SWFTextField field, int flags)
@@ -149,7 +176,7 @@ void SWFTextField_addString(SWFTextField field, char *string)
 {
   int l;
 
-  for(l=0; string[l]!=0; ++l)
+  for(l=0; string[l]!='\0'; ++l)
   {
     if(string[l] == '\n')
       ++field->nLines;
@@ -157,33 +184,50 @@ void SWFTextField_addString(SWFTextField field, char *string)
 
   if(field->string)
   {
-    field->string =
-      realloc(field->string, strlen(field->string)+l+1);
-
+    field->string = realloc(field->string, strlen(field->string)+l+1);
     strcat(field->string, string);
   }
   else
     field->string = strdup(string);
+
+  resetBounds(field);
 }
-void SWFTextField_setHeight(SWFTextField field, int height)
+void SWFTextField_setScaledFontHeight(SWFTextField field, int height)
 {
-  field->height = height;
+  field->fontHeight = height;
+  resetBounds(field);
 }
-void SWFTextField_setLeftMargin(SWFTextField field, int leftMargin)
+void SWFTextField_setScaledFieldHeight(SWFTextField field, int height)
+{
+  field->fieldHeight = height;
+  resetBounds(field);
+}
+void SWFTextField_setScaledWidth(SWFTextField field, int width)
+{
+  field->width = width;
+  resetBounds(field);
+}
+void SWFTextField_setScaledPadding(SWFTextField field, int padding)
+{
+  field->padding = padding;
+  resetBounds(field);
+}
+void SWFTextField_setScaledLeftMargin(SWFTextField field, int leftMargin)
 {
   field->leftMargin = leftMargin;
 }
-void SWFTextField_setRightMargin(SWFTextField field, int rightMargin)
+void SWFTextField_setScaledRightMargin(SWFTextField field, int rightMargin)
 {
   field->rightMargin = rightMargin;
 }
-void SWFTextField_setIndentation(SWFTextField field, int indentation)
+void SWFTextField_setScaledIndentation(SWFTextField field, int indentation)
 {
   field->indentation = indentation;
 }
-void SWFTextField_setLineSpacing(SWFTextField field, int lineSpacing)
+void SWFTextField_setScaledLineSpacing(SWFTextField field, int lineSpacing)
 {
   field->lineSpacing = lineSpacing;
+  resetBounds(field);
 }
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment)

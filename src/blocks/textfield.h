@@ -40,6 +40,7 @@
 #define SWFTEXTFIELD_WORDWRAP  (1<<6)
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
+#define SWFTEXTFIELD_HTML      (1<<9) /* 0x0200 */
 
 typedef enum
 {
@@ -62,7 +63,10 @@ struct _textField
   } font;
 
   int nLines;
-  int height;
+  int fontHeight;
+  int fieldHeight;
+  int width;
+  int padding;
   byte r;
   byte g;
   byte b;
@@ -84,17 +88,19 @@ SWFTextField newSWFTextField();
 SWFBrowserFont newSWFBrowserFont(char *name);
 
 void SWFTextField_setFont(SWFTextField field, SWFBlock font);
-void SWFTextField_setBounds(SWFTextField field, int width, int height);
+void SWFTextField_setScaledBounds(SWFTextField field, int width, int height);
 void SWFTextField_setFlags(SWFTextField field, int flags);
 void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
 void SWFTextField_setVariableName(SWFTextField field, char *name);
 void SWFTextField_addString(SWFTextField field, char *string);
 
-void SWFTextField_setHeight(SWFTextField field, int height);
-void SWFTextField_setLeftMargin(SWFTextField field, int leftMargin);
-void SWFTextField_setRightMargin(SWFTextField field, int rightMargin);
-void SWFTextField_setIndentation(SWFTextField field, int indentation);
-void SWFTextField_setLineSpacing(SWFTextField field, int lineSpacing);
+void SWFTextField_setScaledFontHeight(SWFTextField field, int height);
+void SWFTextField_setScaledFieldHeight(SWFTextField field, int height);
+void SWFTextField_setScaledWidth(SWFTextField field, int width);
+void SWFTextField_setScaledLeftMargin(SWFTextField field, int leftMargin);
+void SWFTextField_setScaledRightMargin(SWFTextField field, int rightMargin);
+void SWFTextField_setScaledIndentation(SWFTextField field, int indentation);
+void SWFTextField_setScaledLineSpacing(SWFTextField field, int lineSpacing);
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);

@@ -150,6 +150,102 @@ void SWFMatrix_clearTransform(SWFMatrix m);
 void SWFMatrix_copy(SWFMatrix src, SWFMatrix dest);
 
 
+  /* SWFFont */
+
+typedef void *SWFFont;
+
+SWFFont newSWFFont();
+SWFFont loadSWFFontFromFile(FILE *file);
+void destroySWFFont(SWFBlock block);
+
+byte *SWFFont_findCharacterGlyph(SWFFont font, int c);
+
+int SWFFont_getScaledStringWidth(SWFFont font, const char *string);
+
+short SWFFont_getScaledAscent(SWFFont font);
+short SWFFont_getScaledDescent(SWFFont font);
+short SWFFont_getScaledLeading(SWFFont font);
+
+
+  /* SWFText */
+
+typedef void *SWFText;
+
+SWFText newSWFText();
+SWFText newSWFText2();
+void destroySWFText(SWFBlock block);
+
+void SWFText_setFont(SWFText text, SWFFont font);
+void SWFText_setScaledHeight(SWFText text, int height);
+void SWFText_scaledMoveTo(SWFText text, int x, int y);
+void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
+void SWFText_addString(SWFText text, const char *string, int *advance);
+void SWFText_setSpacing(SWFText text, float spacing);
+
+int SWFText_getScaledStringWidth(SWFText text, const char *string);
+
+short SWFText_getScaledAscent(SWFText text);
+short SWFText_getScaledDescent(SWFText text);
+short SWFText_getScaledLeading(SWFText text);
+
+
+/* deprecated: */
+#define SWFText_setXY(t,x,y) SWFText_moveTo((t),(x),(y))
+
+
+  /* SWFBrowserFont */
+
+typedef void *SWFBrowserFont;
+
+SWFBrowserFont newSWFBrowserFont(char *name);
+void destroySWFBrowserFont(SWFBlock block);
+
+
+  /* SWFTextField */
+
+typedef void *SWFTextField;
+
+#define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
+#define SWFTEXTFIELD_OFFMASK 0x38FF /* off bits */
+
+#define SWFTEXTFIELD_HASLENGTH (1<<1)
+#define SWFTEXTFIELD_NOEDIT    (1<<3)
+#define SWFTEXTFIELD_PASSWORD  (1<<4)
+#define SWFTEXTFIELD_MULTILINE (1<<5)
+#define SWFTEXTFIELD_WORDWRAP  (1<<6)
+#define SWFTEXTFIELD_DRAWBOX   (1<<11)
+#define SWFTEXTFIELD_NOSELECT  (1<<12)
+#define SWFTEXTFIELD_HTML      (1<<9) /* 0x0200 */
+
+typedef enum
+{
+  SWFTEXTFIELD_ALIGN_LEFT    = 0,
+  SWFTEXTFIELD_ALIGN_RIGHT   = 1,
+  SWFTEXTFIELD_ALIGN_CENTER  = 2,
+  SWFTEXTFIELD_ALIGN_JUSTIFY = 3
+} SWFTextFieldAlignment;
+
+SWFTextField newSWFTextField();
+void destroySWFTextField(SWFBlock block);
+
+void SWFTextField_setFont(SWFTextField field, SWFBlock font);
+void SWFTextField_setScaledBounds(SWFTextField field, int width, int height);
+void SWFTextField_setFlags(SWFTextField field, int flags);
+void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
+void SWFTextField_setVariableName(SWFTextField field, char *name);
+void SWFTextField_addString(SWFTextField field, char *string);
+
+void SWFTextField_setScaledFontHeight(SWFTextField field, int height);
+void SWFTextField_setScaledFieldHeight(SWFTextField field, int height);
+void SWFTextField_setScaledLeftMargin(SWFTextField field, int leftMargin);
+void SWFTextField_setScaledRightMargin(SWFTextField field, int rightMargin);
+void SWFTextField_setScaledIndentation(SWFTextField field, int indentation);
+void SWFTextField_setScaledLineSpacing(SWFTextField field, int lineSpacing);
+void SWFTextField_setAlignment(SWFTextField field,
+			       SWFTextFieldAlignment alignment);
+void SWFTextField_setLength(SWFTextField field, int length);
+
+
   /* SWFFillStyle */
 
 typedef void *SWFFillStyle;
@@ -185,29 +281,30 @@ typedef void *SWFShape;
 SWFShape newSWFShape();
 void destroySWFShape(SWFBlock block);
 
-void SWFShape_movePenTo(SWFShape shape, int x, int y);
-void SWFShape_movePen(SWFShape shape, int x, int y);
+int SWFShape_getScaledPenX(SWFShape shape);
+int SWFShape_getScaledPenY(SWFShape shape);
 
-int SWFShape_getPenX(SWFShape shape);
-int SWFShape_getPenY(SWFShape shape);
+void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
+void SWFShape_moveScaledPen(SWFShape shape, int x, int y);
 
-void SWFShape_drawLineTo(SWFShape shape, int x, int y);
-void SWFShape_drawLine(SWFShape shape, int dx, int dy);
-void SWFShape_drawCurveTo(SWFShape shape,
-			  int controlx, int controly,
-			  int anchorx, int anchory);
-void SWFShape_drawCurve(SWFShape shape,
-			int controldx, int controldy,
-			int anchordx, int anchordy);
+void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
+void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
+void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
+				int anchorx, int anchory);
+void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
+			      int anchordx, int anchordy);
+
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+
 
 /* deprecated: */
 
-#define SWFShape_moveTo SWFShape_movePenTo
-#define SWFShape_moveToRelative SWFShape_movePen
-#define SWFShape_lineTo SWFShape_drawLineTo
-#define SWFShape_lineToRelative SWFShape_drawLine
-#define SWFShape_curveTo SWFShape_drawCurveTo
-#define SWFShape_curveToRelative SWFShape_drawCurve
+#define SWFShape_moveTo SWFShape_moveScaledPenTo
+#define SWFShape_moveToRelative SWFShape_moveScaledPen
+#define SWFShape_lineTo SWFShape_drawScaledLineTo
+#define SWFShape_lineToRelative SWFShape_drawScaledLine
+#define SWFShape_curveTo SWFShape_drawScaledCurveTo
+#define SWFShape_curveToRelative SWFShape_drawScaledCurve
 
 void SWFShape_end(SWFShape shape);
 
@@ -235,105 +332,6 @@ SWFMorph newSWFMorphShape();
 void destroySWFMorph(SWFBlock block);
 SWFShape SWFMorph_getShape1(SWFMorph morph);
 SWFShape SWFMorph_getShape2(SWFMorph morph);
-
-
-  /* SWFFont */
-
-typedef void *SWFFont;
-
-SWFFont newSWFFont();
-SWFFont loadSWFFontFromFile(FILE *file);
-void destroySWFFont(SWFBlock block);
-
-byte *SWFFont_findCharacterGlyph(SWFFont font, int c);
-
-int SWFFont_getStringWidth(SWFFont font, const char *string);
-
-/* XXX */
-#define SWFFont_getWidth SWFFont_getStringWidth
-
-short SWFFont_getAscent(SWFFont font);
-short SWFFont_getDescent(SWFFont font);
-short SWFFont_getLeading(SWFFont font);
-
-
-  /* SWFText */
-
-typedef void *SWFText;
-
-SWFText newSWFText();
-SWFText newSWFText2();
-void destroySWFText(SWFBlock block);
-
-void SWFText_setFont(SWFText text, SWFFont font);
-void SWFText_setHeight(SWFText text, int height);
-void SWFText_moveTo(SWFText text, int x, int y);
-void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-void SWFText_addString(SWFText text, const char *string, int *advance);
-void SWFText_setSpacing(SWFText text, float spacing);
-
-int SWFText_getStringWidth(SWFText text, const char *string);
-
-/* XXX */
-#define SWFText_getWidth SWFText_getStringWidth
-
-short SWFText_getAscent(SWFText text);
-short SWFText_getDescent(SWFText text);
-short SWFText_getLeading(SWFText text);
-
-/* deprecated: */
-#define SWFText_setXY(t,x,y) SWFText_moveTo((t),(x),(y))
-
-
-  /* SWFBrowserFont */
-
-typedef void *SWFBrowserFont;
-
-SWFBrowserFont newSWFBrowserFont(char *name);
-void destroySWFBrowserFont(SWFBlock block);
-
-
-  /* SWFTextField */
-
-typedef void *SWFTextField;
-
-#define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x38FF /* off bits */
-
-#define SWFTEXTFIELD_HASLENGTH (1<<1)
-#define SWFTEXTFIELD_NOEDIT    (1<<3)
-#define SWFTEXTFIELD_PASSWORD  (1<<4)
-#define SWFTEXTFIELD_MULTILINE (1<<5)
-#define SWFTEXTFIELD_WORDWRAP  (1<<6)
-#define SWFTEXTFIELD_DRAWBOX   (1<<11)
-#define SWFTEXTFIELD_NOSELECT  (1<<12)
-
-typedef enum
-{
-  SWFTEXTFIELD_ALIGN_LEFT    = 0,
-  SWFTEXTFIELD_ALIGN_RIGHT   = 1,
-  SWFTEXTFIELD_ALIGN_CENTER  = 2,
-  SWFTEXTFIELD_ALIGN_JUSTIFY = 3
-} SWFTextFieldAlignment;
-
-SWFTextField newSWFTextField();
-void destroySWFTextField(SWFBlock block);
-
-void SWFTextField_setFont(SWFTextField field, SWFBlock font);
-void SWFTextField_setBounds(SWFTextField field, int width, int height);
-void SWFTextField_setFlags(SWFTextField field, int flags);
-void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
-void SWFTextField_setVariableName(SWFTextField field, char *name);
-void SWFTextField_addString(SWFTextField field, char *string);
-
-void SWFTextField_setHeight(SWFTextField field, int height);
-void SWFTextField_setLeftMargin(SWFTextField field, int leftMargin);
-void SWFTextField_setRightMargin(SWFTextField field, int rightMargin);
-void SWFTextField_setIndentation(SWFTextField field, int indentation);
-void SWFTextField_setLineSpacing(SWFTextField field, int lineSpacing);
-void SWFTextField_setAlignment(SWFTextField field,
-			       SWFTextFieldAlignment alignment);
-void SWFTextField_setLength(SWFTextField field, int length);
 
 
   /* sound - only mp3 streaming implemented */

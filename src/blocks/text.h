@@ -56,23 +56,21 @@ void destroySWFText(SWFBlock block);
 void SWFOutput_writeText(SWFOutput out, SWFText text);
 
 void SWFText_setFont(SWFText text, SWFBlock font);
-void SWFText_moveTo(SWFText text, int x, int y);
+void SWFText_setScaledHeight(SWFText text, int height);
+void SWFText_scaledMoveTo(SWFText text, int x, int y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
 void SWFText_addString(SWFText text, const char *string, int *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
 
-int SWFText_getStringWidth(SWFText text, const unsigned char *string);
+int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string);
 
-/* XXX */
-#define SWFText_getWidth SWFText_getStringWidth
-
-short SWFText_getAscent(SWFText text);
-short SWFText_getDescent(SWFText text);
-short SWFText_getLeading(SWFText text);
+short SWFText_getScaledAscent(SWFText text);
+short SWFText_getScaledDescent(SWFText text);
+short SWFText_getScaledLeading(SWFText text);
 
 void SWFText_resolveCodes(SWFText text);
 
 /* deprecated: */
-#define SWFText_setXY(t,x,y) SWFText_moveTo((t),(x),(y))
+#define SWFText_setXY(t,x,y) SWFText_scaledMoveTo((t),(x),(y))
 
 #endif /* SWF_TEXT_H_INCLUDED */

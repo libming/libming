@@ -91,8 +91,7 @@ void destroySWFText(SWFBlock block)
 }
 SWFText newSWFText()
 {
-  SWFText text = (SWFText)malloc(SWF_TEXT_SIZE);
-  memset(text, 0, SWF_TEXT_SIZE);
+  SWFText text = calloc(1, SWF_TEXT_SIZE);
 
   CHARACTERID(text) = ++SWF_gNumCharacters;
   BLOCK(text)->type = SWF_DEFINETEXT;
@@ -117,8 +116,7 @@ SWFText newSWFText2()
 
 SWFTextRecord newSWFTextRecord()
 {
-  SWFTextRecord textRecord = (SWFTextRecord)malloc(TEXTRECORD_SIZE);
-  memset(textRecord, 0, TEXTRECORD_SIZE);
+  SWFTextRecord textRecord = calloc(1, TEXTRECORD_SIZE);
   textRecord->spacing = 1.0;
   textRecord->height = 240;
   return textRecord;
@@ -133,7 +131,7 @@ void destroySWFTextRecord(SWFTextRecord record)
   free(record);
 }
 
-int SWFText_getStringWidth(SWFText text, const unsigned char *string)
+int SWFText_getScaledStringWidth(SWFText text, const unsigned char *string)
 {
   SWFFont font = text->currentRecord->font.font;
   int height = text->currentRecord->height;
@@ -141,9 +139,9 @@ int SWFText_getStringWidth(SWFText text, const unsigned char *string)
   if(text->currentRecord->isBrowserFont)
     return 0;
   else
-    return SWFFont_getStringWidth(font, string)*height/1024;
+    return SWFFont_getScaledStringWidth(font, string)*height/1024;
 }
-short SWFText_getAscent(SWFText text)
+short SWFText_getScaledAscent(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
   int height = text->currentRecord->height;
@@ -151,9 +149,9 @@ short SWFText_getAscent(SWFText text)
   if(text->currentRecord->isBrowserFont)
     return 0;
   else
-    return SWFFont_getAscent(font)*height/1024;
+    return SWFFont_getScaledAscent(font)*height/1024;
 }
-short SWFText_getDescent(SWFText text)
+short SWFText_getScaledDescent(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
   int height = text->currentRecord->height;
@@ -161,9 +159,9 @@ short SWFText_getDescent(SWFText text)
   if(text->currentRecord->isBrowserFont)
     return 0;
   else
-    return SWFFont_getDescent(font)*height/1024;
+    return SWFFont_getScaledDescent(font)*height/1024;
 }
-short SWFText_getLeading(SWFText text)
+short SWFText_getScaledLeading(SWFText text)
 {
   SWFFont font = text->currentRecord->font.font;
   int height = text->currentRecord->height;
@@ -171,7 +169,7 @@ short SWFText_getLeading(SWFText text)
   if(text->currentRecord->isBrowserFont)
     return 0;
   else
-    return SWFFont_getLeading(font)*height/1024;
+    return SWFFont_getScaledLeading(font)*height/1024;
 }
 
 void SWFText_setFont(SWFText text, SWFBlock font)
@@ -203,7 +201,7 @@ void SWFText_setFont(SWFText text, SWFBlock font)
   SWFCharacter_addDependency((SWFCharacter)text, font);
 }
 
-void SWFText_setHeight(SWFText text, int height)
+void SWFText_setScaledHeight(SWFText text, int height)
 {
   SWFTextRecord textRecord = text->currentRecord;
 
@@ -242,7 +240,7 @@ void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a)
   textRecord->a = a;
 }
 
-void SWFText_moveTo(SWFText text, int x, int y)
+void SWFText_scaledMoveTo(SWFText text, int x, int y)
 {
   SWFTextRecord textRecord = text->currentRecord;
 
@@ -298,7 +296,7 @@ void SWFText_addString(SWFText text, const char *string, int *advance)
   textRecord->string = strdup(string);
 
   l = strlen(string);
-  textRecord->advance = (int *)malloc(sizeof(int)*l);
+  textRecord->advance = malloc(sizeof(int)*l);
 
   if(textRecord->isBrowserFont)
   {

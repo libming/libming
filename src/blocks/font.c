@@ -86,8 +86,7 @@ void destroySWFFont(SWFBlock block)
 }
 SWFFont newSWFFont()
 {
-  SWFFont font = (SWFFont)malloc(SWFFONT_SIZE);
-  memset(font, 0, SWFFONT_SIZE);
+  SWFFont font = calloc(1, SWFFONT_SIZE);
 
   CHARACTER(font)->number = ++SWF_gNumCharacters;
   BLOCK(font)->type = SWF_DEFINEFONT;
@@ -107,7 +106,7 @@ byte *SWFFont_findCharacterGlyph(SWFFont font, int c)
 
 void SWFFont_addTextToList(SWFFont font, struct _textRecord *text)
 {
-  SWFTextList textList = (SWFTextList)malloc(TEXTLIST_SIZE);
+  SWFTextList textList = calloc(1, TEXTLIST_SIZE);
   textList->next = NULL;
   textList->text = text;
 
@@ -170,7 +169,7 @@ void SWFFont_resolveTextList(SWFFont font)
 }
 
 /* return length of given string in whatever units these are we're using */
-int SWFFont_getStringWidth(SWFFont font, const unsigned char *string)
+int SWFFont_getScaledStringWidth(SWFFont font, const unsigned char *string)
 {
   int i, j, width = 0, l = strlen(string);
   int glyph, glyph2;
@@ -205,15 +204,15 @@ int SWFFont_getStringWidth(SWFFont font, const unsigned char *string)
 }
 
 /* get some font metrics */
-short SWFFont_getAscent(SWFFont font)
+short SWFFont_getScaledAscent(SWFFont font)
 {
   return font->ascent;
 }
-short SWFFont_getDescent(SWFFont font)
+short SWFFont_getScaledDescent(SWFFont font)
 {
   return font->descent;
 }
-short SWFFont_getLeading(SWFFont font)
+short SWFFont_getScaledLeading(SWFFont font)
 {
   return font->leading;
 }
