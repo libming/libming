@@ -10,6 +10,7 @@
 package SWF::Button;
 use SWF();
 
+$SWF::Button::VERSION = $SWF::VERSION;
 
 1;
 
@@ -21,39 +22,12 @@ SWF::Button - SWF button class
 
 =head1 SYNOPSIS
 
- use SWF::Button();   # Do not import any constant
- my $button = new SWF::Button();
-
- #import all constants and functions available to current package
- use SWF::Button qw(:Button);
+ use SWF::Button;
 
 
 =head1 DESCRIPTION
 
-Creates buttons for flash movies. By default, SWF::Button will not import anything to your package, i.e. you have to explicitly indicate which constant or function you need. Here is the list of constants and functions that you may import to your package:
-
-    SWFBUTTON_MOUSEUP
-    SWFBUTTON_HIT
-    SWFBUTTON_DOWN
-    SWFBUTTON_OVER
-    SWFBUTTON_UP
-    SWFBUTTON_MOUSEOVER
-    SWFBUTTON_MOUSEOUT
-    SWFBUTTON_MOUSEDOWN
-    SWFBUTTON_DRAGOUT
-    SWFBUTTON_DRAGOVER
-    SWFBUTTON_MOUSEUPOUTSIDE
-    SWFBUTTON_KEYPRESS
-    SWFBUTTON_ONKEYPRESS
-
-For example, if you want to import SWFBUTTON_MOUSEOVER and SWFBUTTON_MOUSEOUT
-only, use the following statement:
-
-    use SWF::Button qw(SWFBUTTON_MOUSEOVER SWFBUTTON_MOUSEOUT);
-
-You may use the following shortcut, if you want to import everything
-
-    use SWF::Button ':Button';
+Creates buttons for flash movies.
 
 =head1 METHODS
 
@@ -62,7 +36,6 @@ You may use the following shortcut, if you want to import everything
 =item new SWF::Button();
 
 Creates a new Button object.
-
 
 =item $button->addShape($shape, FLAG);
 
