@@ -1,45 +1,37 @@
 AC_INIT(ming.i)
 
-PACKAGE=ming
-VERSION=0.3beta1
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
-AM_CONFIG_HEADER(ming_config.h)
-
-AM_MAINTAINER_MODE
-
-AC_PROG_LIBTOOL
-AC_PROG_CC
-AC_PROG_YACC
-AM_PROG_LEX
-
-AC_CHECK_FUNC(sin, MATHLIB="", [
-	AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
-		AC_ERROR([I can't find sin() function !!!])]
-		)]
-	)
-AC_SUBST(MATHLIB)
-
-AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", [
-	AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif", GIFLIB="")]
-	)
-AC_SUBST(GIFLIB)
-AM_CONDITIONAL(HAVE_GIF, test -n "$GIFLIB")
-
-AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
-AC_SUBST(ZLIB)
-AM_CONDITIONAL(HAVE_ZLIB, test -n "$ZLIB")
+AC_CHECK_LIB(gif, PrintGifError,
+	GIFLIB="-lgif", [
+	AC_CHECK_LIB(ungif, PrintGifError,
+		GIFLIB="-lungif",
+		GIFLIB="")]
+)
 
 AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="")
-AC_SUBST(PNGLIB)
-AM_CONDITIONAL(HAVE_PNG, test -n "$PNGLIB")
 
-dnl FIXME write tests for this
-AM_CONDITIONAL(WITH_CXX, false)
-AM_CONDITIONAL(WITH_PYTHON, false)
-AM_CONDITIONAL(WITH_RUBY, false)
-AM_CONDITIONAL(WITH_PERL, false)
-AM_CONDITIONAL(WITH_PHP, false)
+AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
+
+AC_CHECK_FUNC(sin, MATHLIB="", [
+        AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
+		AC_ERROR([I can't find sin() function !!!])]
+	)]
+)
+
+EXTRA_OBJS=
+LIBS="${ZLIB} ${MATHLIB} ${GIFLIB} ${PNGLIB}"
+
+if test -n "${GIFLIB}"; then
+	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
+fi
+
+if test -n "${PNGLIB}"; then
+	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
+fi
+
+ 
+
+AC_SUBST(LIBS EXTRA_OBJS)
 
 
-AC_OUTPUT(Makefile src/Makefile src/actioncompiler/Makefile 
-	src/blocks/Makefile util/Makefile c++_ext/Makefile)
+
+AC_OUTPUT(Rules.make config.make)
