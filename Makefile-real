@@ -2,9 +2,9 @@ include Rules.make
 
 DIRS = src util py_ext php_ext 
 
-all: dynamic utils #static
+all: dynamic utils static
 
-install: install-common install-dynamic install-utils #install-static
+install: install-common install-dynamic install-utils install-static
 
 install-common:
 	install -d $(libdir)
