@@ -66,6 +66,10 @@ extern "C"
   #undef SWFInput
 }
 
+#define SWF_DECLAREONLY(classname) \
+	private: \
+	classname(const classname&); \
+	const classname& operator=(const classname&)
 
 /*  SWFInput  */
 
@@ -73,8 +77,6 @@ class SWFInput
 {
  public:
   c_SWFInput input;
-
-  SWFInput() { }
 
   SWFInput(FILE *f)
     { this->input = newSWFInput_file(f); }
@@ -91,6 +93,9 @@ class SWFInput
   }
 
   virtual ~SWFInput() { destroySWFInput(this->input); }
+
+  SWF_DECLAREONLY(SWFInput);
+  SWFInput();
 };
 
 
@@ -119,6 +124,9 @@ class SWFCharacter : public SWFBlock
 
   virtual c_SWFBlock getBlock()
     { return NULL; }
+
+  SWFCharacter() {} //needed for base classing
+  SWF_DECLAREONLY(SWFCharacter);
 };
 
 
@@ -129,7 +137,7 @@ class SWFAction : public SWFBlock
  public:
   c_SWFAction action;
 
-  SWFAction(char *script)
+  SWFAction(const char *script)
     { this->action = compileSWFActionCode(script); }
 
   // movies, buttons, etc. destroy the c_SWFAction..
@@ -137,6 +145,9 @@ class SWFAction : public SWFBlock
 
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->action; }
+
+  SWF_DECLAREONLY(SWFAction);
+  SWFAction();
 };
 
 
@@ -224,6 +235,9 @@ class SWFDisplayItem
 
   void addAction(SWFAction *action, int flags)
     { SWFDisplayItem_addAction(this->item, action->action, flags); }
+
+  SWF_DECLAREONLY(SWFDisplayItem);
+  SWFDisplayItem();
 };
 
 
@@ -234,17 +248,19 @@ class SWFSound
  public:
   c_SWFSound sound;
 
-  SWFSound(FILE *file)
-    { this->sound = newSWFSound(file); }
+  SWFSound(FILE *file, int flags)
+    { this->sound = newSWFSound(file, flags); }
 
-  SWFSound(SWFInput *input)
-    { this->sound = newSWFSound_fromInput(input->input); }
+  SWFSound(SWFInput *input, int flags)
+    { this->sound = newSWFSound_fromInput(input->input, flags); }
 
-  SWFSound(char *filename)
-    { this->sound = newSWFSound(fopen(filename, "rb")); }
+  SWFSound(char *filename, int flags)
+    { this->sound = newSWFSound(fopen(filename, "rb"), flags); }
 
   virtual ~SWFSound()
     { destroySWFSound(this->sound); }
+  SWF_DECLAREONLY(SWFSound);
+  SWFSound();
 };
 
 
@@ -289,7 +305,7 @@ class SWFMovie
   void nextFrame()
     { SWFMovie_nextFrame(this->movie); }
 
-  void labelFrame(char *label)
+  void labelFrame(const char *label)
     { SWFMovie_labelFrame(this->movie, label); }
 
   int output(int level=-1)
@@ -302,6 +318,8 @@ class SWFMovie
     fclose(fp);
     return result;
   }
+
+  SWF_DECLAREONLY(SWFMovie);
 };
 
 
@@ -365,6 +383,8 @@ class SWFFill
 
   void moveTo(float x, float y)
     { SWFFill_move(this->fill, x, y); }
+  SWF_DECLAREONLY(SWFFill);
+  SWFFill();
 };
 
 
@@ -383,6 +403,7 @@ class SWFGradient
 
   void addEntry(float ratio, int r, int g, int b, int a=0xff)
     { SWFGradient_addEntry(this->gradient, ratio, r, g, b, a); }
+  SWF_DECLAREONLY(SWFGradient);
 };
 
 
@@ -393,7 +414,7 @@ class SWFBitmap : public SWFBlock
  public:
   c_SWFBitmap bitmap;
 
-  SWFBitmap(char *filename, char *alpha=NULL)
+  SWFBitmap(const char *filename, const char *alpha=NULL)
   {
     if(strlen(filename) > 4)
     {
@@ -425,6 +446,8 @@ class SWFBitmap : public SWFBlock
 
   float getHeight()
     { return SWFBitmap_getHeight(this->bitmap); }
+  SWF_DECLAREONLY(SWFBitmap);
+  SWFBitmap();
 };
 
 
@@ -441,17 +464,17 @@ class SWFFont : public SWFBlock
   SWFFont(FILE *file)
     { this->font = loadSWFFontFromFile(file); }
 
-  SWFFont(char *name)
+  SWFFont(const char *name)
   {
     if(strlen(name) > 4 &&
        strcmp(name + strlen(name) - 4, ".fdb") == 0)
       this->font = loadSWFFontFromFile(fopen(name, "rb"));
     else
-      this->font = newSWFBrowserFont(name);
+      this->font = 0 ; // wogl temporary !!!! newSWFBrowserFont(name);
   }
 
   virtual ~SWFFont()
-    { destroySWFFont(this->font); }
+    { destroySWFFont((c_SWFBlock)this->font); }
 
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->font; }
@@ -470,6 +493,7 @@ class SWFFont : public SWFBlock
 
   float getLeading()
     { return SWFFont_getLeading(this->font); }
+  SWF_DECLAREONLY(SWFFont);
 };
 
 
@@ -543,12 +567,14 @@ class SWFShape : public SWFCharacter
   void drawCircle(float r)
     { SWFShape_drawCircle(this->shape, r); }
 
-  void drawGlyph(SWFFont *font, unsigned char c, int size=0)
+  void drawGlyph(SWFFont *font, unsigned short c, int size=0)
     { SWFShape_drawSizedGlyph(this->shape, font->font, c, size); }
 
   // deprecated?
-  void drawFontGlyph(SWFFont *font, unsigned char c)
+  void drawFontGlyph(SWFFont *font, unsigned short c)
     { SWFShape_drawGlyph(this->shape, font->font, c); }
+
+  SWF_DECLAREONLY(SWFShape);
 };
 
 
@@ -582,6 +608,7 @@ class SWFSprite : public SWFCharacter
 
   void labelFrame(char *label)
     { SWFMovieClip_labelFrame(this->clip, label); }
+  SWF_DECLAREONLY(SWFSprite);
 };
 
 
@@ -606,6 +633,7 @@ class SWFMorph : public SWFCharacter
 
   SWFShape *getShape2()
     { return new SWFShape(SWFMorph_getShape2(this->morph)); }
+  SWF_DECLAREONLY(SWFMorph);
 };
 
 
@@ -641,6 +669,9 @@ class SWFText : public SWFCharacter
   void addString(const char *string, int *advance=NULL)
     { SWFText_addString(this->text, string, advance); }
 
+  void addUTF8String(const char *string, int *advance=NULL)
+    { SWFText_addUTF8String(this->text, string, advance); }
+
   void setSpacing(float spacing)
     { SWFText_setSpacing(this->text, spacing); }
 
@@ -649,6 +680,10 @@ class SWFText : public SWFCharacter
 
   float getWidth(const char *string)
     { return SWFText_getStringWidth(this->text, string); }
+
+  float getUTF8Width(const char *string)
+    { return SWFText_getUTF8StringWidth(this->text, string); }
+  SWF_DECLAREONLY(SWFText);
 };
 
 /*  SWFTextField  */
@@ -679,11 +714,14 @@ class SWFTextField : public SWFCharacter
   void setColor(int r, int g, int b, int a=0xff)
     { SWFTextField_setColor(this->textField, r, g, b, a); }
 
-  void setVariableName(char *name)
+  void setVariableName(const char *name)
     { SWFTextField_setVariableName(this->textField, name); }
 
-  void addString(char *string)
+  void addString(const char *string)
     { SWFTextField_addString(this->textField, string); }
+
+  void addUTF8String(const char *string)
+    { SWFTextField_addUTF8String(this->textField, string); }
 
   void setHeight(float height)
     { SWFTextField_setHeight(this->textField, height); }
@@ -697,6 +735,9 @@ class SWFTextField : public SWFCharacter
   void setIndentation(float indentation)
     { SWFTextField_setIndentation(this->textField, indentation); }
 
+  void setPadding(float padding)
+    { SWFTextField_setPadding(this->textField, padding); }
+
   void setLineSpacing(float lineSpacing)
     { SWFTextField_setLineSpacing(this->textField, lineSpacing); }
 
@@ -708,6 +749,7 @@ class SWFTextField : public SWFCharacter
 
   void setLength(int length)
     { SWFTextField_setLength(this->textField, length); }
+  SWF_DECLAREONLY(SWFTextField);
 };
 
 
@@ -732,5 +774,9 @@ class SWFButton : public SWFCharacter
 
   void addAction(SWFAction *action, int flags)
     { SWFButton_addAction(this->button, action->action, flags); }
+
+  void setMenu(int flag=0)
+    { SWFButton_setMenu(this->button, flag); }
+  SWF_DECLAREONLY(SWFButton);
 };
 
