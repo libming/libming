@@ -26,7 +26,7 @@
 #include "method.h"
 #include "utf8.h"
 
-#define HAS_MMAP 1
+// #define HAS_MMAP 1
 
 #ifdef HAS_MMAP
 	#include <unistd.h>
@@ -874,7 +874,7 @@ loadSWFFontFromFile(FILE *file)
 	font->nGlyphs = nGlyphs;
 
 	font->bounds = malloc(nGlyphs * sizeof(struct SWFRect_s));
-	font->glyphOffset = malloc(nGlyphs * sizeof(*font->glyphOffset));
+	font->glyphOffset = malloc((nGlyphs + 1) * sizeof(*font->glyphOffset));
 	font->glyphToCode = malloc(nGlyphs * sizeof(*font->glyphToCode));
 	font->advances = malloc(nGlyphs * sizeof(*font->advances));
 
