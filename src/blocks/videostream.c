@@ -221,8 +221,6 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream) {
 	/* seek block->length + UInt32 after VideoTag */
 	SWFInput_seek(stream->input, block->length + 4, SEEK_CUR);
 	
-	printf("frame %i\n", stream->frame);
-	
 	return (SWFBlock)block;
 }
 
@@ -427,12 +425,10 @@ static int setStreamProperties(SWFVideoStream stream)
 	
 	switch (stream->codecId) {
 		case VIDEO_CODEC_H263:
-			printf("h263 stream\n");
 			ret = setH263StreamDimension(stream);
 			stream->smoothingFlag = VIDEO_SMOOTHING;
 			break;
 		case VIDEO_CODEC_SCREEN:
-			printf("screen stream\n");
 			ret = setScreenStreamDimension(stream);
 			stream->smoothingFlag = 0;
 			break;
@@ -515,7 +511,9 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	ulchar = SWFInput_getUInt32_BE(stream->input);
 	stream->start = ulchar + 4;
 	
-	setStreamProperties(stream);
+	if (setStreamProperties(stream) < 0)
+		return NULL;
+	
 	return stream;
 }
 
