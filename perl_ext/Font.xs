@@ -23,20 +23,30 @@ PROTOTYPES: ENABLE
 SWF::Font
 SWFFont_new(package="SWF::Font", filename)
 	char *package
-	char *filename
+	char *filename = NO_INIT
 	PREINIT:
-	FILE *f;
+	FILE   *f;
+	STRLEN len;
 	CODE:
-	if (!(f = fopen(filename, "rb"))) {
-		fprintf(stderr, "Unable to open %s\n", filename);
-		ST(0) = &sv_undef;
-	}else{
-        	RETVAL = loadSWFFontFromFile(f);
-                fclose(f);
-	        ST(0) = sv_newmortal();
-        	sv_setref_pv(ST(0), package, (void*)RETVAL);
+	filename = (char *) SvPV(ST(1), len);
+	if (strncasecmp(filename+len-4, ".fdb", 4) == 0){
+	    if (!(f = fopen(filename, "rb"))) {
+		fprintf(stderr, "Unable to open FDB file %s\n", filename);
+		RETVAL = &sv_undef;
+	    }else{
+		RETVAL = loadSWFFontFromFile(f);
+		fclose(f);
+	    }
 	}
+	else
+	    RETVAL = newSWFBrowserFont(filename);
 
+	if(RETVAL == &sv_undef)
+	    ST(0) = &sv_undef;
+	else{
+	   ST(0) = sv_newmortal();
+           sv_setref_pv(ST(0), package, (void*)RETVAL);
+        }
 
 void
 destroySWFFont(block)
@@ -45,8 +55,7 @@ destroySWFFont(block)
         SWF::Font::DESTROY = 1
         CODE:
         S_DEBUG(2, fprintf(stderr, "FONT DESTROY CALLED\n"));
-        destroySWFFont(block);
-
+	destroySWFBlock((SWFBlock)block);
 
 int
 SWFFont_getStringWidth(font, string)
