@@ -294,6 +294,7 @@ SWFInput_buffer_read(SWFInput input, unsigned char* buffer, int count)
 		count = input->length - input->offset;
 
 	memcpy(buffer, (unsigned char*)input->data + input->offset, count);
+	input->offset += count;
 
 	return count;
 }
