@@ -1,10 +1,9 @@
 # ====================================================================
-# Copyright (c) 2000-2002 by Soheil Seyfaie. All rights reserved.
+# Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 # ====================================================================
 
-# $Author$
 # $Id$
 
 package SWF::Movie;
@@ -17,6 +16,15 @@ use strict;
 sub streamMp3{
     my ($movie,$filename) = @_;
     $movie->setSoundStream(new SWF::Sound($filename));
+}
+
+sub output{
+    #/xxx/ Should we allow use to specify???
+    my $output_method = \&xs_output;
+    $output_method = \&Apache::SWF::xs_output
+	if ( $INC{'Apache/SWF.pm'} && 
+	     substr($ENV{GATEWAY_INTERFACE}||'',0,8) eq 'CGI-Perl');
+    return &$output_method(@_);
 }
 
 
@@ -42,7 +50,7 @@ Ming supports many Flash4 and Flash5 features and some of Flash MX(Flash6).
 The SWF::Movie object contains information like the flashversion, the size, the frames per second, the background color. Except that, the SWF::Movie behaves like 
 a SWF::MovieClip. It only cannot be added to another SWF::Movie or SWF::MovieClip. ;-)
 
-Notice: The version of your flashmovie can be set by the object SWF. See SWF for more details. (Why is it there and not in SWF::Movie?)
+Notice: The version of your flashmovie can be set by the object SWF. See SWF for more details.
 
 =head1 METHODS
 
@@ -244,9 +252,10 @@ Notice: compression available since Flash MX(Flash 6). Ming does not check this 
 
 =head1 AUTHOR
 
-	Soheil Seyfaie (soheil at users.sourceforge.net)
-	Peter Liscovius (peterdd at users.sourceforge.net)
+Soheil Seyfaie (soheil at users.sourceforge.net).
 
 =head1 SEE ALSO
 
-SWF::DisplayItem, SWF::MovieClip, SWF::Action, SWF::Shape, SWF::Sound, SWF::Text, SWF::TextField
+SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text
+
+=cut
