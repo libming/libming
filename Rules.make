@@ -11,14 +11,11 @@ LDLIBS         = $(LIBS)
 STATICLIB      = libming.a
 SHAREDLIB      = libming.so.$(MING_VER)
 
-override CFLAGS                := -g -Wall $(INCLUDES) $(CFLAGS)
-override LDFLAGS       :=  $(LDFLAGS)
+CFLAGS  += -g -Wall $(INCLUDES) 
 
 SHLIBLDFLAGS   = -static
 
-ifeq ($(OS), Darwin)
-       override CFLAGS         += -fno-common
-       SHLIBLDFLAGS            = -dynamiclib
-       SHAREDLIB                       = libming.$(MING_VER).dylib
-else
-endif
+# Uncomment the following lines to compile for Darwin
+#override CFLAGS         += -fno-common
+#SHLIBLDFLAGS            = -dynamiclib
+#SHAREDLIB                       = libming.$(MING_VER).dylib
