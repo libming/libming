@@ -10,7 +10,7 @@ php_ming.so: ming.o ../libming.a
 	${CC} ${CFLAGS} -shared -fPIC ming.o ../libming.a -o php_ming.so ${EXTRA_LIBS}
 
 ming.o: ${CFILES}
-	${CC} ${CFLAGS} -fPIC ${DEFINES} -c ming.c -I. -I.. -I../src `php-config --includes`
+	${CC} ${CFLAGS} -fPIC ${DEFINES} -c ming.c -I. -I../src -I.. `php-config --includes`
 
 ../libming.a:
 	cd ..; make static
