@@ -1,5 +1,8 @@
 AC_INIT(ming.i)
 
+AC_PROG_CC
+AC_PROG_CXX
+
 AC_CHECK_LIB(gif, PrintGifError,
 	GIFLIB="-lgif", [
 	AC_CHECK_LIB(ungif, PrintGifError,

@@ -5,8 +5,8 @@ MING_VER = $(MAJOR_VERSION).$(MINOR_VERSION).$(MICRO_VERSION)
 
 OS             = $(shell uname -s)
 
-CC             = gcc
-CXX	       = g++
+CC             = @CC@
+CXX	       = @CXX@
 
 INCLUDES       += -I. 
 LDLIBS         = $(LIBS)
