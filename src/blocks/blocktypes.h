@@ -88,8 +88,8 @@ typedef enum
   SWF_SOUNDSTREAMHEAD2          = 45,
   SWF_STARTSOUND                = 15,
   SWF_SYNCFRAME			= 29,
-  SWF_DEFINEVIDEOSTREAM         = 60,
-  SWF_VIDEOFRAME               = 61
+  SWF_DEFINEVIDEOSTREAM		= 60,
+  SWF_VIDEOFRAME		= 61
 } SWFBlocktype;
 
 #endif /* SWF_BLOCKTYPES_H_INCLUDED */

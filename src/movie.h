@@ -42,7 +42,7 @@ SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int lev
 
 SWFCharacter SWFMovie_importChar(SWFMovie movie, const char *filename, const char *name);
 
-#warning FIXME: This function should go somewhere else
+/* FIXME: This function should go somewhere else */
 int completeSWFImportCharacter(SWFBlock block);
 
 #endif /* SWF_MOVIE_H_INCLUDED */

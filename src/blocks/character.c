@@ -162,7 +162,8 @@ SWFBlock_isCharacter(SWFBlock block)
 			 type == SWF_DEFINELOSSLESS ||
 			 type == SWF_DEFINELOSSLESS2 ||
 			 type == SWF_DEFINEFONT || type == SWF_DEFINEFONT2 ||
-			 type == SWF_DEFINEEDITTEXT )
+			 type == SWF_DEFINEEDITTEXT ||
+			 type == SWF_DEFINEVIDEOSTREAM)
 	{
 		return TRUE;
 	}

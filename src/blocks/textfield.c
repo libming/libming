@@ -29,14 +29,14 @@
 #include "browserfont.h"
 #include "font.h"
 
-
+typedef enum {Unresolved, BrowserFont, Font, FontChar, Imported} FontType;
 struct SWFTextField_s
 {
 	struct SWFCharacter_s character;
 
 	SWFOutput out; /* cheap way out */
 	int flags;
-	enum {Unresolved, BrowserFont, Font, FontChar, Imported} fonttype;
+	FontType fonttype;
 
 	union
 	{
@@ -224,7 +224,7 @@ newSWFTextField()
 	field->flags = 0x302d;
 
 	field->font.font = NULL;
-	field->fonttype = 0;
+	field->fonttype = Unresolved;
 	field->varName = NULL;
 	field->string = NULL;
 

@@ -49,7 +49,7 @@ struct pngdata readPNG(FILE *fp)
   png_infop info_ptr, end_info;
   png_bytep *row_pointers;
 
-  int i, rowbytes, depth;
+  unsigned int i, rowbytes, depth;
 
   if(!fp)
     error("Couldn't open file!\n");
@@ -171,7 +171,7 @@ struct pngdata readPNG(FILE *fp)
 
     for(i=0; i<(int)png.num_palette; ++i)
       png.palette[i].red = png.palette[i].green = png.palette[i].blue = 
-	(i*255)/(png.num_palette-1);
+	(png_byte) (i*255)/(png.num_palette-1);
   }
 
 
@@ -191,10 +191,10 @@ struct pngdata readPNG(FILE *fp)
   {
     /* alpha has to be pre-applied, bytes shifted */
 
-    int x, y;
+    unsigned int x, y;
     unsigned char *p;
-    int alpha;
-    unsigned char r, g, b;
+    byte alpha;
+    byte r, g, b;
 
     if(verbose)
       printf("color type: RGB ALPHA\n");
@@ -225,7 +225,7 @@ struct pngdata readPNG(FILE *fp)
 static void
 alignedcopy(struct pngdata png, unsigned char *data)
 {
-  int row;
+  unsigned int row;
   int alignedrowsize;
   int pngrowsize;
   unsigned char *pngdata;

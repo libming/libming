@@ -153,12 +153,12 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 /* create a new DBL bitmap from the given input object */
 SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
-#ifdef USE_GIF
-SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(char *name);
+#if USE_GIF
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(const char *name);
 SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input);
 #endif
-#ifdef USE_PNG
-SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(char *name);
+#if USE_PNG
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(const char *name);
 SWFDBLBitmapData newSWFDBLBitmapData_fromPngInput(SWFInput input);
 #endif
 

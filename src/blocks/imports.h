@@ -13,15 +13,16 @@
 #include "ming.h"
 #include "block.h"
 
+struct importitem
+{	struct importitem *next;
+	int id;
+	char *name;
+};
 struct SWFImportBlock_s
 {
 	struct SWFBlock_s block;
 	char *filename;
-	struct importitem
-	{	struct importitem *next;
-		int id;
-		char *name;
-	} *importlist;
+	struct importitem *importlist;
 };
 typedef struct SWFImportBlock_s *SWFImportBlock;
 

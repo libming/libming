@@ -27,7 +27,7 @@ struct pngdata
 // required - read from SWFInput
 // png_init_io seems to be the one to change
 
-png_structp openPngFromFile(FILE *fp)
+static png_structp openPngFromFile(FILE *fp)
 {	unsigned char header[8];
 	png_structp result;
 
@@ -43,7 +43,7 @@ png_structp openPngFromFile(FILE *fp)
 }
 
 static int pngReadFunc(png_structp png, char *buf, int len)
-{	SWFInput input = png->io_ptr;
+{	SWFInput input = (SWFInput) png->io_ptr;
 	return SWFInput_read(input, buf, len);
 }
 
@@ -51,7 +51,7 @@ png_structp openPngFromInput(SWFInput input)
 {	unsigned char header[8];
 	png_structp result;
 	
-	if(SWFInput_read(input, header, 8) != 8)
+	if(SWFInput_read(input, (char *)header, 8) != 8)
 		return NULL;
 	if(!png_check_sig(header, 8))
 		return NULL;
@@ -65,7 +65,7 @@ png_structp openPngFromInput(SWFInput input)
 static void
 alignedcopy(struct pngdata png, unsigned char *data)
 {
-	int row;
+	unsigned int row;
 	int alignedrowsize;
 	int pngrowsize;
 	unsigned char *pngdata;
@@ -82,7 +82,7 @@ alignedcopy(struct pngdata png, unsigned char *data)
 	}
 }
 
-int readPNG(png_structp png_ptr, dblData result)
+static int readPNG(png_structp png_ptr, dblData result)
 {
 	struct pngdata png;
 	unsigned char *data;
@@ -90,7 +90,7 @@ int readPNG(png_structp png_ptr, dblData result)
 	png_infop info_ptr, end_info;
 	png_bytep *row_pointers;
 
-	int i, rowbytes, depth, alignedsize;
+	unsigned int i, rowbytes, depth, alignedsize;
 	long outsize;
 
 	info_ptr = png_create_info_struct(png_ptr);
@@ -221,7 +221,7 @@ int readPNG(png_structp png_ptr, dblData result)
 	{
 		/* alpha has to be pre-applied, bytes shifted */
 
-		int x, y;
+		unsigned int x, y;
 		unsigned char *p;
 		int alpha;
 		unsigned char r, g, b;
@@ -279,7 +279,7 @@ int readPNG(png_structp png_ptr, dblData result)
 	result->data = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
 	/* compress the RGB color table (if present) and image data one block */
   
-	compress2(result->data, &outsize, data, alignedsize, 9);
+	compress2(result->data, (uLongf *) &outsize, data, alignedsize, 9);
 	free(data);
 	result->length = outsize;
 
@@ -287,7 +287,7 @@ int readPNG(png_structp png_ptr, dblData result)
 }
 
 
-SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(char *fileName)
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(const char *fileName)
 {
 	SWFDBLBitmapData ret;
 	FILE *fp;

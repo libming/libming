@@ -63,15 +63,15 @@ void skipMP3(SWFSoundStream stream, float skip)
 	int frameSize;
 	int skipFrames, l;
 	
-	if(skipFrames <= 0)
-		return;
-	
 	if ( stream->sampleRate > 32000 )
 		frameSize = 1152;
 	else
 	        frameSize = 576;
 		 
 	skipFrames = (int)floor((skip  / frameSize) / stream->sampleRate);
+
+	if(skipFrames <= 0)
+		return;
 
 	while(skipFrames > 0) {
 		l = nextMP3Frame(stream->input);

@@ -377,9 +377,10 @@ SWFMovie_add(SWFMovie movie, SWFBlock block)
 	{
 		SWFMovie_resolveTextfieldFont(movie, (SWFTextField)block);
 	}
-
+	
 	if ( SWFBlock_isCharacter(block) )
 	{
+		
 		SWFCharacter_setFinished((SWFCharacter)block);
 		SWFMovie_addCharacterDependencies(movie, (SWFCharacter)block);
 
@@ -604,6 +605,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 	
 	for(n = 0 ; n < swflength ; n++)
 		method(*buffer++, data);
+	destroySWFOutput(swfbuffer);
 	return swflength;
 }
 

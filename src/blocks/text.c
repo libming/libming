@@ -590,6 +590,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 		if ( i < len-1 )
 		{	nextglyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[i+1]);
 			adv += SWFFont_getCharacterKern(font, glyph, nextglyph);
+			glyph = nextglyph;
 		}
 
 		if ( textRecord->advance != NULL )
@@ -600,7 +601,6 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 		textRecord->nAdvanceBits = max(textRecord->nAdvanceBits,
 																	 SWFOutput_numSBits(textRecord->advance[i]));
 
-		glyph = nextglyph;
 	}
 }
 

@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "\php\src\zlib-1.1.4" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "\php\src\zlib-1.1.4" /I "..\src" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /c
 # ADD BASE RSC /l 0x407 /d "NDEBUG" /l 0.907
 # ADD RSC /l 0x407 /d "NDEBUG" /l 0.907
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "\php\src\zlib-1.1.4" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "\php\src\zlib-1.1.4" /I "..\src" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D inline=__inline /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x407 /d "_DEBUG" /l 0.907
 # ADD RSC /l 0x407 /d "_DEBUG" /l 0.907
 BSC32=bscmake.exe
@@ -526,7 +526,7 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf4compiler.flex
 
 "$(InputDir)\lex.swf4.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	flex -i -Pswf4 -o$(InputDir)\lex.swf4.c $(InputDir)\swf4compiler.flex
+	D:\sw\cygwin\bin\flex.exe -i -Pswf4 -o$(InputDir)\lex.swf4.c $(InputDir)\swf4compiler.flex
 
 # End Custom Build
 
@@ -537,7 +537,7 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf4compiler.flex
 
 "$(InputDir)\lex.swf4.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	flex -d -i -Pswf4 -o$(InputDir)\lex.swf4.c $(InputDir)\swf4compiler.flex
+	D:\sw\cygwin\bin\flex.exe -d -i -Pswf4 -o$(InputDir)\lex.swf4.c $(InputDir)\swf4compiler.flex
 
 # End Custom Build
 
@@ -555,8 +555,8 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf4compiler.y
 
 BuildCmds= \
-	bison -p swf4 $(InputDir)\swf4compiler.y \
-	bison --defines -p swf4 $(InputDir)\swf4compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines -p swf4 $(InputDir)\swf4compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines --defines -p swf4 $(InputDir)\swf4compiler.y \
 	
 
 "$(InputDir)\swf4compiler.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -573,8 +573,8 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf4compiler.y
 
 BuildCmds= \
-	bison --debug -p swf4 $(InputDir)\swf4compiler.y \
-	bison --defines --debug -p swf4 $(InputDir)\swf4compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines --debug -p swf4 $(InputDir)\swf4compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines --defines --debug -p swf4 $(InputDir)\swf4compiler.y \
 	
 
 "$(InputDir)\swf4compiler.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -598,7 +598,7 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf5compiler.flex
 
 "$(InputDir)\lex.swf5.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	flex -i -Pswf5 -o$(InputDir)\lex.swf5.c $(InputDir)\swf5compiler.flex
+	D:\sw\cygwin\bin\flex.exe -i -Pswf5 -o$(InputDir)\lex.swf5.c $(InputDir)\swf5compiler.flex
 
 # End Custom Build
 
@@ -609,7 +609,7 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf5compiler.flex
 
 "$(InputDir)\lex.swf5.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	flex -d -i -Pswf5 -o$(InputDir)\lex.swf5.c $(InputDir)\swf5compiler.flex
+	D:\sw\cygwin\bin\flex.exe -d -i -Pswf5 -o$(InputDir)\lex.swf5.c $(InputDir)\swf5compiler.flex
 
 # End Custom Build
 
@@ -627,8 +627,8 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf5compiler.y
 
 BuildCmds= \
-	bison -p swf5 $(InputDir)\swf5compiler.y \
-	bison --defines -p swf5 $(InputDir)\swf5compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines -p swf5 $(InputDir)\swf5compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines --defines -p swf5 $(InputDir)\swf5compiler.y \
 	
 
 "$(InputDir)\swf5compiler.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -645,8 +645,8 @@ InputDir=\PHP\ming\src\actioncompiler
 InputPath=..\src\actioncompiler\swf5compiler.y
 
 BuildCmds= \
-	bison --debug -p swf5 $(InputDir)\swf5compiler.y \
-	bison --defines --debug -p swf5 $(InputDir)\swf5compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines --debug -p swf5 $(InputDir)\swf5compiler.y \
+	D:\sw\UnxUtils\usr\local\wbin\bison.exe --no-lines --defines --debug -p swf5 $(InputDir)\swf5compiler.y \
 	
 
 "$(InputDir)\swf5compiler.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
