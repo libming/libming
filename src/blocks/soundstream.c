@@ -18,7 +18,7 @@ void writeSWFSoundStreamToMethod(SWFBlock block,
   FILE *f = stream->sound->file;
   int l = stream->length;
 
-  methodWriteUInt16(stream->numFrames * stream->channels * 576,
+  methodWriteUInt16(stream->numFrames * 1152, /* stream->channels * 576, */
 		    method, data);
 
   methodWriteUInt16(stream->delay, method, data);
@@ -34,8 +34,7 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
   if(sound->isFinished)
     return NULL;
 
-  stream = malloc(SWFSOUNDSTREAMBLOCK_SIZE);
-  memset(stream, 0, SWFSOUNDSTREAMBLOCK_SIZE);
+  stream = calloc(1, SWFSOUNDSTREAMBLOCK_SIZE);
 
   BLOCK(stream)->complete = completeSWFSoundStream;
   BLOCK(stream)->writeBlock = writeSWFSoundStreamToMethod;
@@ -51,7 +50,7 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
 
   delay = sound->delay + sound->samplesPerFrame;
 
-  while(delay > 576)
+  while(delay > 1152)
   {
     ++stream->numFrames;
     length = nextMP3Frame(sound->file);
@@ -64,7 +63,7 @@ SWFBlock SWFSound_getStreamBlock(SWFSound sound)
     }
 
     stream->length += length;
-    delay -= 576;
+    delay -= 1152;
   }
 
   sound->delay = delay;
@@ -171,8 +170,7 @@ void destroySWFSound(SWFSound sound)
 
 SWFSound newSWFSound(FILE *file)
 {
-  SWFSound sound = (SWFSound)malloc(SWFSOUND_SIZE);
-  memset(sound, 0, SWFSOUND_SIZE);
+  SWFSound sound = calloc(1, SWFSOUND_SIZE);
   sound->file = file;
   sound->delay = SWFSOUNDSTREAM_INITIAL_DELAY;
   return sound;

@@ -130,7 +130,10 @@ int nextMP3Frame(FILE *f)
   if(layer == 1)
     padding <<= 2;
 
-  frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
+  if(version == 1)
+    frameLen = 144 * bitrate * 1000 / samplerate + padding;
+  else
+    frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
 
   skipBytes(f, frameLen-4);
 
