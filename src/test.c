@@ -1,14 +1,17 @@
 /*
   warning:
   this is not a concise demonstration of the c interface to ming.
-  this is a shell for new functions so that I can easily load them into gdb.
+  this is a shell for new functions so that I can easily load them into gdb
+  and a quick way to check for linkage errors.
+  I make no guarantee that this represents the latest incarnation of the ming
+  api..
 */
 
 #include <time.h>
 #include "ming.h"
 
-#define WIDTH (20*320)
-#define HEIGHT (20*240)
+#define WIDTH 320
+#define HEIGHT 240
 
 
 /* {{{ testCubic */
@@ -26,7 +29,7 @@ void testCubic(SWFMovie movie)
   SWFShape_setLine(shape, 20, 0, 0, 0, 0xff);
 
   SWFShape_movePenTo(shape, ax, ay);
-  SWFShape_drawCubicBezier(shape, bx, by, cx, cy, dx, dy);
+  SWFShape_drawCubic(shape, bx, by, cx, cy, dx, dy);
 
   SWFMovie_add(movie, shape);
 
@@ -136,8 +139,6 @@ void testMorph(SWFMovie movie)
   SWFDisplayItem d;
   int i;
 
-  srandom(time(NULL));
-
   SWFShape_moveTo(shape1, 0, 0);
   SWFShape_moveTo(shape2, 0, 0);
 
@@ -146,8 +147,8 @@ void testMorph(SWFMovie movie)
 
   for(i=0; i<20; ++i)
   {
-    SWFShape_lineTo(shape1, random()%2000-1000, random()%2000-1000);
-    SWFShape_lineTo(shape2, random()%2000-1000, random()%2000-1000);
+    SWFShape_lineTo(shape1, rand()%2000-1000, rand()%2000-1000);
+    SWFShape_lineTo(shape2, rand()%2000-1000, rand()%2000-1000);
   }
 
   d = SWFMovie_add(movie, morph);
@@ -184,7 +185,7 @@ void testJpeg(SWFMovie movie)
   jpeg = newSWFJpegBitmap(file);
   fill = SWFShape_addBitmapFill(shape, jpeg, SWFFILL_TILED_BITMAP);
   SWFShape_setRightFill(shape, fill);
-  SWFShape_drawRect(shape, SWFCharacter_getBounds(jpeg));
+  SWFShape_drawCharacterBounds(shape, (SWFCharacter)jpeg);
 
   i = SWFMovie_add(movie, shape);
   SWFDisplayItem_scale(i, 20.0, 20.0);
@@ -216,7 +217,7 @@ void testJpegAlpha(SWFMovie movie)
   jpeg = newSWFJpegWithAlpha(file, alpha);
   fill = SWFShape_addBitmapFill(shape, jpeg, SWFFILL_TILED_BITMAP);
   SWFShape_setRightFill(shape, fill);
-  SWFShape_drawRect(shape, SWFCharacter_getBounds(jpeg));
+  SWFShape_drawCharacterBounds(shape, (SWFCharacter)jpeg);
 
   i = SWFMovie_add(movie, shape);
   SWFDisplayItem_scale(i, 20.0, 20.0);
@@ -314,6 +315,8 @@ int main(int argc, char *argv[])
   FILE *f;
   SWFMovie m = newSWFMovie();
   int length;
+
+  Ming_init();
 
   srand(time(NULL));
 
