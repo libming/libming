@@ -31,11 +31,17 @@ int completeSWFFont(SWFBlock block)
 
   SWFFont_resolveTextList(font);
 
-  size = 2 + 2*font->nGlyphs;
+  size = 9 + strlen(font->name) + 3*font->nGlyphs;
 
   /* get length of each glyph from its output buffer */
   for(i=0; i<font->nGlyphs; ++i)
     size += glyphLength(font, font->codeToGlyph[i]);
+
+  if(size > 65500)
+  {
+    size += 2*(font->nGlyphs+1);
+    font->flags |= SWF_FONT_WIDEOFFSETS;
+  }
 
   return size;
 }
@@ -48,13 +54,27 @@ void writeSWFFontToMethod(SWFBlock block,
 
   methodWriteUInt16(CHARACTERID(font), method, data);
 
-  offset = font->nGlyphs*2;
+  method(font->flags & SWF_FONT_WIDEOFFSETS ? 8 : 0, data); /* main flags */
+  method(0, data);                                          /* more flags */
+  method(strlen(font->name), data);
+
+  for(p = font->name; *p != '\0'; ++p)
+    method(*p, data);
+
+  methodWriteUInt16(font->nGlyphs, method, data);
+
+  offset = (font->nGlyphs+1)*(font->flags & SWF_FONT_WIDEOFFSETS ? 4 : 2);
 
   /* write offset table for glyphs */
   for(i=0; i<font->nGlyphs; ++i)
   {
-    methodWriteUInt16(offset, method, data);
-    offset += glyphLength(font, font->codeToGlyph[i]);
+    if(font->flags & SWF_FONT_WIDEOFFSETS)
+      methodWriteUInt32(offset, method, data);
+    else
+      methodWriteUInt16(offset, method, data);
+
+    if(i < font->nGlyphs)
+      offset += glyphLength(font, font->codeToGlyph[i]);
   }
 
   /* write shape records for glyphs */
@@ -68,7 +88,12 @@ void writeSWFFontToMethod(SWFBlock block,
     while(p < s)
       method(*(p++), data);
   }
+
+  /* write (dummy) character mapping */
+  for(i=0; i<font->nGlyphs; ++i)    /* this is rubbish - would need another */
+    method(i, data);                /* table to reverse mapping */
 }
+
 void destroySWFFont(SWFBlock block)
 {
   SWFFont font = (SWFFont)block;
@@ -89,7 +114,7 @@ SWFFont newSWFFont()
   SWFFont font = calloc(1, SWFFONT_SIZE);
 
   CHARACTER(font)->number = ++SWF_gNumCharacters;
-  BLOCK(font)->type = SWF_DEFINEFONT;
+  BLOCK(font)->type = SWF_DEFINEFONT2;
   BLOCK(font)->writeBlock = writeSWFFontToMethod;
   BLOCK(font)->complete = completeSWFFont;
   BLOCK(font)->dtor = destroySWFFont;

@@ -29,12 +29,13 @@
 #include "character.h"
 #include "browserfont.h"
 
-#define SWF_FONT_UNICODE    (1<<5)
-#define SWF_FONT_SHIFTJIS   (1<<4)
-#define SWF_FONT_ANSI       (1<<3)
-#define SWF_FONT_ISITALIC   (1<<2)
-#define SWF_FONT_ISBOLD     (1<<1)
-#define SWF_FONT_WIDECODES  (1<<0)
+#define SWF_FONT_UNICODE      (1<<6)
+#define SWF_FONT_SHIFTJIS     (1<<5)
+#define SWF_FONT_ANSI         (1<<4)
+#define SWF_FONT_WIDEOFFSETS  (1<<3)
+#define SWF_FONT_WIDECODES    (1<<2)
+#define SWF_FONT_ISBOLD       (1<<1)
+#define SWF_FONT_ISITALIC     (1<<0)
 
 struct KernInfo
 {
