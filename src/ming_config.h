@@ -3,11 +3,13 @@
 #undef USE_PNG 
 
 /*
- * Define this if you want Ming to release
- * all memory it allocates at Ming_cleanup() time.
- * Beware that the running speed will be much lower.
+ * Define this if you want Ming to track
+ * all objects allocations. Ming will
+ * mantain a linked doubly linked list 
+ * of allocated objects, call ming_garbage_collect
+ * to get rid of them all.
  */
-#undef WRAP_MEMORY_MANAGEMENT
+#undef TRACK_ALLOCS
 
 #if USE_GIF
 #undef USE_ZLIB
