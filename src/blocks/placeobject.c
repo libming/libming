@@ -67,17 +67,17 @@ writeSWFPlaceObject2BlockToStream(SWFBlock block,
 
 		for ( i=0; i<place->nActions; ++i )
 		{
-			SWFOutputBlock block = (SWFOutputBlock)place->actions[i];
+			SWFOutputBlock local_block = (SWFOutputBlock)place->actions[i];
 // SWF6: UInt32
 			if(SWF_versionNum >= 6)
 				methodWriteUInt32(place->actionFlags[i], method, data);
 			else
 				methodWriteUInt16(place->actionFlags[i], method, data);
-			methodWriteUInt32(SWFOutputBlock_getLength(block), method, data);
+			methodWriteUInt32(SWFOutputBlock_getLength(local_block), method, data);
 // SWF6: extra char if(place->actionFlags[i] & 0x20000)
 			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000))
 				method(0, data);
-			SWFOutput_writeToMethod(SWFOutputBlock_getOutput(block), method, data);
+			SWFOutput_writeToMethod(SWFOutputBlock_getOutput(local_block), method, data);
 		}
 // SWF6: UInt32
 		if(SWF_versionNum >= 6)
@@ -125,7 +125,7 @@ completeSWFPlaceObject2Block(SWFBlock block)
 		SWFOutput_writeUInt16(out, place->masklevel);
 
 	if ( place->name != NULL )
-		SWFOutput_writeString(out, place->name);
+		SWFOutput_writeString(out, (byte*)place->name);
 
 	if ( place->nActions != 0 )
 	{
@@ -134,9 +134,9 @@ completeSWFPlaceObject2Block(SWFBlock block)
 		actionLen += (SWF_versionNum >= 6 ? 6 : 4);
 		for ( i=0; i<place->nActions; ++i )
 		{
-			SWFOutputBlock block = (SWFOutputBlock)place->actions[i];
+			SWFOutputBlock local_block = (SWFOutputBlock)place->actions[i];
 // SWF6: 8 (9 if char)
-			actionLen += (SWF_versionNum >= 6 ? 8 : 6) + SWFOutputBlock_getLength(block);
+			actionLen += (SWF_versionNum >= 6 ? 8 : 6) + SWFOutputBlock_getLength(local_block);
 			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000))
 				actionLen++;
 		}
@@ -182,7 +182,7 @@ destroySWFPlaceObject2Block(SWFBlock block)
 SWFPlaceObject2Block
 newSWFPlaceObject2Block(int depth)
 {
-	SWFPlaceObject2Block place = malloc(sizeof(struct SWFPlaceObject2Block_s));
+	SWFPlaceObject2Block place = (SWFPlaceObject2Block)malloc(sizeof(struct SWFPlaceObject2Block_s));
 
 	SWFBlockInit((SWFBlock)place);
 
@@ -302,10 +302,10 @@ SWFPlaceObject2Block_addAction(SWFPlaceObject2Block block,
 															 SWFAction action, int flags)
 {
 	block->actions =
-		realloc(block->actions, (block->nActions+1) * sizeof(SWFAction));
+		(SWFAction*)realloc(block->actions, (block->nActions+1) * sizeof(SWFAction));
 
 	block->actionFlags =
-		realloc(block->actionFlags, (block->nActions+1) * sizeof(int));
+		(int*)realloc(block->actionFlags, (block->nActions+1) * sizeof(int));
 
 //	block->actionChars =
 //		realloc(block->actionChars, (block->nActions+1));

@@ -92,7 +92,7 @@ SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 	if ( stream->isFinished )
 		return NULL;
 
-	block = malloc(sizeof(struct SWFSoundStreamBlock_s));
+	block = (SWFSoundStreamBlock) malloc(sizeof(struct SWFSoundStreamBlock_s));
 
 	SWFBlockInit((SWFBlock)block);
 
@@ -244,7 +244,7 @@ SWFSoundStream_rewind(SWFSoundStream stream)
 SWFSoundStream
 newSWFSoundStream_fromInput(SWFInput input)
 {
-	SWFSoundStream stream = malloc(sizeof(struct SWFSoundStream_s));
+	SWFSoundStream stream = (SWFSoundStream)malloc(sizeof(struct SWFSoundStream_s));
 
 	/* XXX - destructor? */
 

@@ -60,7 +60,7 @@ newSWFDBLBitmap_fromInput(SWFInput input)
 	int version;
 	int width, height;
 
-	dbl = malloc(sizeof(struct SWFDBLBitmap_s));
+	dbl = (SWFDBLBitmap)malloc(sizeof(struct SWFDBLBitmap_s));
 
 	SWFCharacterInit((SWFCharacter)dbl);
 

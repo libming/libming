@@ -28,7 +28,7 @@
 
 #include "compile.h"
 
-static int nConstants, maxConstants;
+static int nConstants = {0}, maxConstants = {0};
 static char **constants;
 
 extern int SWF_versionNum;
@@ -64,7 +64,7 @@ char *stringConcat(char *a, char *b)
 	{
 		if ( b != NULL )
 		{
-			a = realloc(a, strlen(a)+strlen(b)+1);
+			a = (char*)realloc(a, strlen(a)+strlen(b)+1);
 			strcat(a, b);
 			free(b);
 		}
@@ -104,13 +104,13 @@ void bufferPatchPushLength(Buffer buffer, int len)
 }
 
 
-static useConstants = 1;
-void Ming_useConstants(flag)
+static int useConstants = 1;
+void Ming_useConstants(int flag)
 {	useConstants = flag;
 }
 
 
-int addConstant(char *s)
+int addConstant(const char *s)
 {
 	int i;
 
@@ -139,7 +139,7 @@ int bufferWriteConstants(Buffer out)
 
 	for(i=0; i<nConstants; ++i)
 	{
-		len += bufferWriteHardString(out, constants[i], strlen(constants[i])+1);
+		len += bufferWriteHardString(out,(byte*) constants[i], strlen(constants[i])+1);
 		free(constants[i]);
 	}
 
@@ -155,7 +155,7 @@ Buffer newBuffer()
 	Buffer out = (Buffer)malloc(BUFFER_SIZE);
 	memset(out, 0, BUFFER_SIZE);
 
-	out->buffer = malloc(BUFFER_INCREMENT);
+	out->buffer = (byte*)malloc(BUFFER_INCREMENT);
 	out->pos = out->buffer;
 	*(out->pos) = 0;
 	out->buffersize = out->free = BUFFER_INCREMENT;
@@ -183,10 +183,10 @@ void bufferCheckSize(Buffer out, int bytes)
 {
 	if(bytes > out->free)
 	{
-		int new = BUFFER_INCREMENT * ((bytes-out->free-1)/BUFFER_INCREMENT + 1);
+		int New = BUFFER_INCREMENT * ((bytes-out->free-1)/BUFFER_INCREMENT + 1);
 
 		int num = bufferLength(out); /* in case buffer gets displaced.. */
-		unsigned char *newbuf = realloc(out->buffer, out->buffersize+new);
+		unsigned char *newbuf = (unsigned char*)realloc(out->buffer, out->buffersize+New);
 
 		if(newbuf != out->buffer)
 		{
@@ -202,12 +202,12 @@ void bufferCheckSize(Buffer out, int bytes)
 		}
 
 		out->buffer = newbuf;
-		out->buffersize += new;
-		out->free += new;
+		out->buffersize += New;
+		out->free += New;
 	}
 }
 
-int bufferWriteData(Buffer b, byte *data, int length)
+int bufferWriteData(Buffer b, const byte *data, int length)
 {
 	int i;
 
@@ -337,7 +337,7 @@ int bufferWriteConstantString(Buffer out, byte *string, int length)
 		return -1;
 
 	if(useConstants)
-		n = addConstant(string);
+		n = addConstant((char*) string);
 	else
 		n = -1;
 
@@ -540,10 +540,10 @@ void lower(char *s)
  context
  */
 static enum ctx *ctx_stack = {0};
-static ctx_count = {0}, ctx_len = {0};
+static int ctx_count = {0}, ctx_len = {0};
 void addctx(enum ctx val)
 {	if(ctx_count >= ctx_len)
-		ctx_stack = realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
+		ctx_stack = (enum ctx*) realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
 	ctx_stack[ctx_count++] = val;
 }
 void delctx(enum ctx val)
@@ -732,7 +732,7 @@ int bufferWriteWTHITProperty(Buffer out)
 	return 8;
 }
 
-char *lookupGetProperty(char *string)
+const char *lookupGetProperty(char *string)
 {
 	lower(string);
 
@@ -762,13 +762,13 @@ char *lookupGetProperty(char *string)
 
 int bufferWriteGetProperty(Buffer out, char *string)
 {
-	char *property = lookupGetProperty(string);
+	const char *property = lookupGetProperty(string);
 
 	bufferWriteU8(out, SWFACTION_PUSHDATA);
 	bufferWriteS16(out, strlen(property)+2);
 	bufferWriteU8(out, PUSH_STRING);
 
-	return 4 + bufferWriteData(out, property, strlen(property)+1);
+	return 4 + bufferWriteData(out, (byte*) property, strlen(property)+1);
 }
 
 

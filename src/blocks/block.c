@@ -142,7 +142,7 @@ SWFBlockInit(SWFBlock block)
 SWFBlock
 newEmptySWFBlock(SWFBlocktype type)
 {
-	SWFBlock block = malloc(sizeof(struct SWFBlock_s));
+	SWFBlock block = (SWFBlock) malloc(sizeof(struct SWFBlock_s));
 	SWFBlockInit(block);
 	block->type = type;
 

@@ -54,7 +54,7 @@ struct SWFFillStyle_s
 SWFFillStyle
 newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 {
-	SWFFillStyle fill = malloc(sizeof(struct SWFFillStyle_s));
+	SWFFillStyle fill = (SWFFillStyle)malloc(sizeof(struct SWFFillStyle_s));
 
 	fill->type = SWF_FILL_SOLID;
 	fill->data.solid.r = r;
@@ -70,7 +70,7 @@ newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 SWFFillStyle
 newSWFGradientFillStyle(SWFGradient gradient, int flags)
 {
-	SWFFillStyle fill = malloc(sizeof(struct SWFFillStyle_s));
+	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
 
 	if ( flags == SWF_FILL_RADIAL_GRADIENT )
 		fill->type = SWF_FILL_RADIAL_GRADIENT;
@@ -87,7 +87,7 @@ newSWFGradientFillStyle(SWFGradient gradient, int flags)
 SWFFillStyle
 newSWFBitmapFillStyle(SWFBitmap bitmap, int flags)
 {
-	SWFFillStyle fill = malloc(sizeof(struct SWFFillStyle_s));
+	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
 
 	if ( flags == SWF_FILL_CLIPPED_BITMAP )
 		fill->type = SWF_FILL_CLIPPED_BITMAP;

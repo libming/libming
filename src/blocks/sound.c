@@ -153,7 +153,7 @@ newSWFSound(FILE *f, byte flags)
 SWFSound
 newSWFSound_fromInput(SWFInput input, byte flags)
 {
-	SWFSound sound = malloc(sizeof(struct SWFSound_s));
+	SWFSound sound = (SWFSound)malloc(sizeof(struct SWFSound_s));
 	SWFBlock block = (SWFBlock)sound;
 
 	SWFCharacterInit((SWFCharacter)sound);

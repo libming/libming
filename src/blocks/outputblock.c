@@ -79,7 +79,7 @@ destroySWFOutputBlock(SWFBlock block)
 SWFOutputBlock
 newSWFOutputBlock(SWFOutput out, SWFBlocktype type)
 {
-	SWFOutputBlock block = malloc(sizeof(struct SWFOutputBlock_s));
+	SWFOutputBlock block = (SWFOutputBlock)malloc(sizeof(struct SWFOutputBlock_s));
 
 	SWFBlockInit((SWFBlock)block);
 
@@ -148,10 +148,10 @@ newSWFRemoveObject2Block(int depth)
 
 
 SWFOutputBlock
-newSWFFrameLabelBlock(char *string)
+newSWFFrameLabelBlock(const char *string)
 {
 	SWFOutput out = newSizedSWFOutput(strlen(string)+2);
-	SWFOutput_writeString(out, string);
+	SWFOutput_writeString(out, (byte*)string);
 
 	return newSWFOutputBlock(out, SWF_FRAMELABEL);
 }
@@ -172,7 +172,7 @@ newSWFExportBlock(SWFExports exports, int nExports)
 	for ( n = 0; n < nExports; ++n )
 	{
 		SWFOutput_writeUInt16(out, CHARACTERID(exports[n].block));
-		SWFOutput_writeString(out, exports[n].name);
+		SWFOutput_writeString(out, (byte*)exports[n].name);
 	}
 
 	return newSWFOutputBlock(out, SWF_EXPORTASSETS);

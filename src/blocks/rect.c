@@ -61,7 +61,7 @@ destroySWFRect(SWFRect rect)
 SWFRect
 newSWFRect(int minX, int maxX, int minY, int maxY)
 {
-	SWFRect rect = malloc(sizeof(struct SWFRect_s));
+	SWFRect rect = (SWFRect)malloc(sizeof(struct SWFRect_s));
 
 	rect->minX = min(minX, maxX);
 	rect->maxX = max(minX, maxX);

@@ -145,7 +145,7 @@ SWFMorph_getShape2(SWFMorph morph)
 SWFMorph
 newSWFMorphShape()
 {
-	SWFMorph morph = malloc(sizeof(struct SWFMorph_s));
+	SWFMorph morph = (SWFMorph) malloc(sizeof(struct SWFMorph_s));
 
 	SWFCharacterInit((SWFCharacter)morph);
 
@@ -159,10 +159,10 @@ newSWFMorphShape()
 	morph->out = newSWFOutput();
 
 	morph->shape1 = newSWFShape();
-	BLOCK(morph->shape1)->type = 0;
+	BLOCK(morph->shape1)->type = SWF_END;
 
 	morph->shape2 = newSWFShape();
-	BLOCK(morph->shape2)->type = 0;
+	BLOCK(morph->shape2)->type = SWF_END;
 	SWFShape_setMorphFlag(morph->shape2);
 
 	return morph;

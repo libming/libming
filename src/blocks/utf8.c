@@ -128,7 +128,7 @@ int UTF8ExpandString(const char* string, unsigned short** outstr)
 		if ( (count % EXPANDSTRING_INCREMENT) == 0 )
 		{
 			output =
-				realloc(output,
+				(unsigned short*) realloc(output,
 								sizeof(unsigned short) * (count + EXPANDSTRING_INCREMENT));
 		}
 

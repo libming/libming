@@ -4,14 +4,14 @@
 
 /* XXX - error calls should be macros to save the file/lineno */
 
-extern void (*SWF_warn)(char *msg, ...);
-extern void (*SWF_error)(char *msg, ...);
+extern void (*SWF_warn)(const char *msg, ...);
+extern void (*SWF_error)(const char *msg, ...);
 
-void warn_default(char *msg, ...);
-void error_default(char *msg, ...);
+void warn_default(const char *msg, ...);
+void error_default(const char *msg, ...);
 
-void setSWFWarnFunction(void (*error)(char *msg, ...));
-void setSWFErrorFunction(void (*error)(char *msg, ...));
+void setSWFWarnFunction(void (*error)(const char *msg, ...));
+void setSWFErrorFunction(void (*error)(const char *msg, ...));
 
 void SWF_assert(int c);
 

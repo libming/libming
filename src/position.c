@@ -47,7 +47,7 @@ void destroySWFPosition(SWFPosition position)
 SWFPosition
 newSWFPosition(SWFMatrix matrix)
 {
-	SWFPosition p = malloc(sizeof(struct SWFPosition_s));
+	SWFPosition p = (SWFPosition)malloc(sizeof(struct SWFPosition_s));
 
 	p->x = 0;
 	p->y = 0;

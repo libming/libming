@@ -100,7 +100,7 @@ int chkctx(enum ctx val);
 void checkByteOrder();
 
 /* This is the only function needs be visible: */
-SWFAction compileSWFActionCode(char *script);
+SWFAction compileSWFActionCode(const char *script);
 
 /* create/destroy buffer object */
 Buffer newBuffer();
@@ -115,7 +115,7 @@ void bufferCheckSize(Buffer out, int bytes);
 int bufferLength(Buffer out);
 
 /* constant pool stuff */
-int addConstant(char *s);
+int addConstant(const char *s);
 int bufferWriteConstants(Buffer out);
 
 /* write data to buffer */
@@ -123,10 +123,15 @@ int bufferWriteOp(Buffer out, int data);
 int bufferWritePushOp(Buffer out);
 int bufferWriteU8(Buffer out, int data);
 int bufferWriteS16(Buffer out, int data);
-int bufferWriteData(Buffer out, byte *buffer, int bytes);
+int bufferWriteData(Buffer out, const byte *buffer, int bytes);
 int bufferWriteHardString(Buffer out, byte *string, int length);
 int bufferWriteConstantString(Buffer out, byte *string, int length);
 int bufferWriteString(Buffer out, byte *string, int length);
+#ifdef __cplusplus
+/* helper function to avoid many casts */
+inline int bufferWriteString(Buffer out, char *string, int length) {
+	return bufferWriteString(out,(byte*) string, length); }
+#endif
 int bufferWriteInt(Buffer out, int i);
 int bufferWriteDouble(Buffer out, double d);
 int bufferWriteNull(Buffer out);
@@ -145,8 +150,8 @@ void bufferResolveJumps(Buffer out);
 void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 
 /* rather than setting globals... */
-void swf4ParseInit(char *string, int debug);
-void swf5ParseInit(char *string, int debug);
+void swf4ParseInit(const char *string, int debug);
+void swf5ParseInit(const char *string, int debug);
 
 int swf4parse(void *b);
 int swf5parse(void *b);

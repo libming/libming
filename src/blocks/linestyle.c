@@ -36,7 +36,7 @@ struct SWFLineStyle_s
 SWFLineStyle newSWFLineStyle(unsigned short width,
 					 byte r, byte g, byte b, byte a)
 {
-	SWFLineStyle line = malloc(sizeof(struct SWFLineStyle_s));
+	SWFLineStyle line = (SWFLineStyle)malloc(sizeof(struct SWFLineStyle_s));
 
 	line->width = width;
 	line->r = r;

@@ -46,7 +46,7 @@ struct SWFMatrix_s
 SWFMatrix
 newSWFMatrix(float a, float b, float c, float d, int x, int y)
 {
-	SWFMatrix m = malloc(sizeof(struct SWFMatrix_s));
+	SWFMatrix m = (SWFMatrix)malloc(sizeof(struct SWFMatrix_s));
 
 	m->scaleX = a;
 	m->rotate0 = b;
@@ -92,7 +92,7 @@ SWFMatrix_clearTransform(SWFMatrix m)
 SWFMatrix
 SWFMatrix_dup(SWFMatrix matrix)
 {
-	SWFMatrix m = malloc(sizeof(struct SWFMatrix_s));
+	SWFMatrix m = (SWFMatrix)malloc(sizeof(struct SWFMatrix_s));
 	memcpy(m, matrix, sizeof(struct SWFMatrix_s));
 	return m;
 }
@@ -199,7 +199,7 @@ SWFMatrix_apply(SWFMatrix m, double *x, double *y, int xlate)
 	newy = (int)(m->scaleY * (*y) + m->rotate1 * (*x));
 
 	*x = newx + (xlate ? m->translateX : 0);
-	*y = newx + (xlate ? m->translateY : 0);
+	*y = newy + (xlate ? m->translateY : 0); 
 }
 
 

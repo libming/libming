@@ -85,7 +85,7 @@ destroySWFSprite(SWFBlock block)
 SWFSprite
 newSWFSprite()
 {
-	SWFSprite sprite = malloc(sizeof(struct SWFSprite_s));
+	SWFSprite sprite = (SWFSprite)malloc(sizeof(struct SWFSprite_s));
 
 	SWFCharacterInit((SWFCharacter)sprite);
 
@@ -130,7 +130,7 @@ SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 			 block->type == SWF_END )
 	{
 		sprite->blocks =
-			realloc(sprite->blocks, (sprite->nBlocks + 1) * sizeof(SWFBlock));
+			(SWFBlock*) realloc(sprite->blocks, (sprite->nBlocks + 1) * sizeof(SWFBlock));
 
 		sprite->blocks[sprite->nBlocks++] = block;
 	}

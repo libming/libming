@@ -7,9 +7,9 @@
 #include "action.h"
 #include "swf4compiler.tab.h" /* defines token types */
 
-int swf4debug;
+static int swf4debug;
 
-static char *lexBuffer = NULL;
+static const char *lexBuffer = NULL;
 static int lexBufferLen = 0;
 
 static int  sLineNumber = 0;
@@ -58,7 +58,7 @@ static void unescape(char *buf)
   }
 }
 
-void swf4ParseInit(char *script, int debug)
+void swf4ParseInit(const char *script, int debug)
 {
   checkByteOrder();
   yyrestart(NULL);
@@ -222,6 +222,13 @@ this			{ count();      return THIS;	}
 .			printf( "Unrecognized character: %s\n", yytext );
 
 %%
+static int getinput() {
+#ifdef __cplusplus
+					return yyinput();
+#else
+					return input();
+#endif
+}
 
 int swf4wrap()
 {
@@ -263,7 +270,7 @@ static void comment(void)
 loop:
    // We have the start of a comment so look skip everything up to the
    // end of the comment character
-   while ((c = input()) != '*' && c != EOF)
+   while ((c = getinput()) != '*' && c != EOF)
    {
       if(column < 1023)
          msgline[column] = c;
@@ -281,7 +288,7 @@ loop:
    }
 
    // is this the end of comment character
-   if ((c1 = input()) != '/' && c != EOF)
+   if ((c1 = getinput()) != '/' && c != EOF)
    {
       // false start as this was no end of comment
       unput(c1);
@@ -304,7 +311,7 @@ static void comment1(void)
    int c;
 
    // this is a line comment
-   while ((c = input()) != '\n' && c != EOF)
+   while ((c = getinput()) != '\n' && c != EOF)
    {
       if (swf4debug) putchar(c);
 

@@ -112,7 +112,7 @@ int completeSWFSoundInstance(SWFBlock block)
 
 SWFSoundInstance newSWFSoundInstance(SWFSound sound)
 {
-	SWFSoundInstance instance = malloc(sizeof(struct SWFSoundInstance_s));
+	SWFSoundInstance instance = (SWFSoundInstance)malloc(sizeof(struct SWFSoundInstance_s));
 	SWFBlock block = (SWFBlock)instance;
 
 	SWFBlockInit(block);

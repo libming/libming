@@ -26,7 +26,7 @@
 #include "error.h"
 
 void
-warn_default(char *msg, ...)
+warn_default(const char *msg, ...)
 {
 	va_list args;
 
@@ -37,7 +37,7 @@ warn_default(char *msg, ...)
 
 
 void
-error_default(char *msg, ...)
+error_default(const char *msg, ...)
 {
 	va_list args;
 
@@ -48,19 +48,19 @@ error_default(char *msg, ...)
 }
 
 
-void (*SWF_warn)(char *msg, ...) = warn_default;
-void (*SWF_error)(char *msg, ...) = error_default;
+void (*SWF_warn)(const char *msg, ...) = warn_default;
+void (*SWF_error)(const char *msg, ...) = error_default;
 
 
 void
-setSWFWarnFunction(void (*warnfunc)(char *msg, ...))
+setSWFWarnFunction(void (*warnfunc)(const char *msg, ...))
 {
 	SWF_warn = warnfunc;
 }
 
 
 void
-setSWFErrorFunction(void (*errorfunc)(char *msg, ...))
+setSWFErrorFunction(void (*errorfunc)(const char *msg, ...))
 {
 	SWF_error = errorfunc;
 }

@@ -22,7 +22,7 @@
 /* this file is #include'd into shape.c, not compiled on its own.
    hacky, but it works for now.. */
 
-static int buffer;
+static int buffer; 
 static int bufbits = 0; /* # of bits in buffer */
 
 static void byteAlign()

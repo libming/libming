@@ -74,7 +74,6 @@ completeSWFJpegBitmap(SWFBlock block)
 }
 
 
-#define BUFFER_SIZE 1024
 
 /* clumsy utility function.. */
 void
@@ -251,7 +250,7 @@ scanJpegFile(SWFInput input)
 	int length = 0, l, c;
 	long pos, end;
 
-	struct jpegInfo* info = malloc(sizeof(struct jpegInfo));
+	struct jpegInfo* info = (struct jpegInfo*)malloc(sizeof(struct jpegInfo));
 
 	/* scan file, get height and width, make sure it looks valid,
 		 also figure length of block.. */
@@ -355,7 +354,7 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 	SWFJpegBitmap jpeg;
 	struct jpegInfo *info;
 
-	jpeg = malloc(sizeof(struct SWFJpegBitmap_s));
+	jpeg = (SWFJpegBitmap) malloc(sizeof(struct SWFJpegBitmap_s));
 
 	SWFCharacterInit((SWFCharacter)jpeg);
 
@@ -406,7 +405,7 @@ newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 	struct jpegInfo *info;
 	int alen;
 
-	jpeg = malloc(sizeof(struct SWFJpegWithAlpha_s));
+	jpeg = (SWFJpegWithAlpha) malloc(sizeof(struct SWFJpegWithAlpha_s));
 
 	SWFCharacterInit((SWFCharacter)jpeg);
 

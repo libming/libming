@@ -39,10 +39,10 @@ struct SWFOutput_s
 SWFOutput
 newSWFOutput()
 {
-	SWFOutput out = malloc(sizeof(struct SWFOutput_s));
+	SWFOutput out = (SWFOutput) malloc(sizeof(struct SWFOutput_s));
 
 	out->next = NULL;
-	out->buffer = malloc(OUTPUT_BUFFER_INCREMENT);
+	out->buffer = (byte*) malloc(OUTPUT_BUFFER_INCREMENT);
 	out->pos = out->buffer;
 	*(out->pos) = 0;
 	out->buffersize = out->free = OUTPUT_BUFFER_INCREMENT;
@@ -58,10 +58,10 @@ newSWFOutput()
 SWFOutput
 newSizedSWFOutput(int size)
 {
-	SWFOutput out = malloc(sizeof(struct SWFOutput_s));
+	SWFOutput out = (SWFOutput)malloc(sizeof(struct SWFOutput_s));
 
 	out->next = NULL;
-	out->buffer = malloc(size+1);
+	out->buffer = (byte*) malloc(size+1);
 	out->pos = out->buffer;
 	*(out->pos) = 0;
 	out->buffersize = out->free = size+1;
@@ -114,7 +114,7 @@ SWFOutput_grow(SWFOutput out)
 	int num = out->pos - out->buffer; /* in case buffer gets displaced.. */
 
 	unsigned char* newbuf =
-		realloc(out->buffer, out->buffersize + OUTPUT_BUFFER_INCREMENT);
+		(unsigned char*)realloc(out->buffer, out->buffersize + OUTPUT_BUFFER_INCREMENT);
 
 	if ( newbuf != out->buffer )
 		out->pos = newbuf+num;
@@ -146,19 +146,19 @@ SWFOutput_checkSize(SWFOutput out, int bytes)
 {
 	if ( bytes >= out->free )
 	{
-		int new = OUTPUT_BUFFER_INCREMENT *
+		int New = OUTPUT_BUFFER_INCREMENT *
 							((bytes-out->free-1)/OUTPUT_BUFFER_INCREMENT + 1);
 
 		int num = out->pos - out->buffer; /* in case buffer gets displaced.. */
 
-		unsigned char *newbuf = realloc(out->buffer, out->buffersize+new);
+		unsigned char *newbuf = (unsigned char*)realloc(out->buffer, out->buffersize+New);
 
 		if ( newbuf != out->buffer )
 			out->pos = newbuf + num;
 
 		out->buffer = newbuf;
-		out->buffersize += new;
-		out->free += new;
+		out->buffersize += New;
+		out->free += New;
 	}
 }
 

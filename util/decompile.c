@@ -128,14 +128,14 @@ static void push(Stack s)
 static char *negateString(char *s)
 {
   int i, l = strlen(s)+1;
-  char *new = realloc(s, l+1);
+  char *New = realloc(s, l+1);
 
   for(i=l; i>0; --i)
-    new[i] = new[i-1];
+    New[i] = New[i-1];
 
-  new[0] = '-';
+  New[0] = '-';
 
-  return new;
+  return New;
 }
 
 static Property getSetProperty(int prop)
@@ -226,9 +226,9 @@ static Stack readActionRecord(FILE *f)
 
       if(right->type == 's')
       {
-	Stack new = newProperty(atoi(right->data.string));
+	Stack New = newProperty(atoi(right->data.string));
 	destroy(right);
-	right = new;
+	right = New;
       }
       return newTree(left, type, right);
     }
@@ -258,9 +258,9 @@ static Stack readActionRecord(FILE *f)
 
       if(property->type == 's')
       {
-	Stack new = newProperty(atoi(property->data.string));
+	Stack New = newProperty(atoi(property->data.string));
 	destroy(property);
-	property = new;
+	property = New;
       }
 
       return newTree(newTree(target, type, property),
@@ -335,8 +335,8 @@ static Stack readActionRecord(FILE *f)
 
     case SWFACTION_PUSHDATA:
     {
-      int type = readUInt8(f);
-      if(type==0)
+      int local_type = readUInt8(f);
+      if(local_type==0)
 	return newString(readString(f));
       else
       {
@@ -539,7 +539,7 @@ static void listAssign(Stack s)
   {
     Stack rleft = right->data.tree->left;
     Stack rright = right->data.tree->right;
-    char *op;
+    const char *op;
 
     if(right->data.tree->action == SWFACTION_ADD)
       op = " += ";
@@ -1200,7 +1200,7 @@ static void resolveOffsets(Stack *statements, int nStatements)
   }
 }
 
-#define INDENT { int i=indent; while(i-->0) { putchar(' '); putchar(' '); } }
+#define INDENT { int ii=indent; while(ii-->0) { putchar(' '); putchar(' '); } }
 
 static void untangleBranches(Stack *statements, int start, int stop,
 			     Branchtype type, int indent)

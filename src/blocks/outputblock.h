@@ -46,7 +46,7 @@ SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
 
 SWFOutputBlock newSWFRemoveObject2Block(int depth);
 
-SWFOutputBlock newSWFFrameLabelBlock(char *string);
+SWFOutputBlock newSWFFrameLabelBlock(const char *string);
 
 SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
 

@@ -51,7 +51,7 @@ void fileOutputMethod(byte b, void *data)
 
 void SWFOutputMethod(byte i, void *data)
 {
-	SWFOutput_writeUInt8(data, i);
+	SWFOutput_writeUInt8( (SWFOutput) data, i);
 }
 /*
  * Local variables:

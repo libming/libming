@@ -3377,7 +3377,7 @@ PHP_MINFO_FUNCTION(ming)
 #define ERROR_BUFSIZE 1024
 
 /* custom error handler propagates ming errors up to php */
-void php_ming_error(char *msg, ...)
+void php_ming_error(const char *msg, ...)
 {
   va_list args;
   char buffer[ERROR_BUFSIZE];

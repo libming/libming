@@ -157,7 +157,7 @@ static Stack newTree(Stack left, Action action, Stack right)
   return s;
 }
 
-static Stack newString(char *string)
+static Stack newString(const char *string)
 {
   Stack s = newStack();
 
@@ -218,14 +218,14 @@ static void push(Stack s)
 static char *negateString(char *s)
 {
   int i, l = strlen(s)+1;
-  char *new = realloc(s, l+1);
+  char *New = realloc(s, l+1);
 
   for(i=l; i>0; --i)
-    new[i] = new[i-1];
+    New[i] = New[i-1];
 
-  new[0] = '-';
+  New[0] = '-';
 
-  return new;
+  return New;
 }
 
 /* looks like setProperty has been replaced by setMember in F5
@@ -334,9 +334,9 @@ static Stack readActionRecord(FILE *f)
 
       if(right->type == 's')
       {
-	Stack new = newProperty(atoi(right->data.string));
+	Stack New = newProperty(atoi(right->data.string));
 	destroy(right);
-	right = new;
+	right = New;
       }
       return newTree(left, type, right);
     }
@@ -367,9 +367,9 @@ static Stack readActionRecord(FILE *f)
 
       if(property->type == 's')
       {
-	Stack new = newProperty(atoi(property->data.string));
+	Stack New = newProperty(atoi(property->data.string));
 	destroy(property);
-	property = new;
+	property = New;
       }
 	
       return newTree(newTree(target, type, property),
@@ -1057,7 +1057,7 @@ static void listAssign(Stack s)
   {
     Stack rleft = right->data.tree->left;
     Stack rright = right->data.tree->right;
-    char *op;
+    const char *op;
 
     if(right->data.tree->action == SWFACTION_ADD ||
        right->data.tree->action == SWFACTION_NEWADD)
@@ -1139,7 +1139,7 @@ static void listAssign(Stack s)
 static void listArithmetic(Stack s, Action parent)
 {
   int isShort, parens = 0;
-  char *op;
+  const char *op;
   Tree t = s->data.tree;
   Stack left = t->left, right = t->right;
 
@@ -2099,7 +2099,7 @@ static void resolveOffsets(Stack *statements, int nStatements)
   }
 }
 
-#define INDENT { int i=indent; while(--i>=0) { putchar(' '); putchar(' '); } }
+#define INDENT { int ii=indent; while(--ii>=0) { putchar(' '); putchar(' '); } }
 
 static void untangleBranches(Stack *statements, int start, int stop,
 			     Branchtype type, int indent)

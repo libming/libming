@@ -46,7 +46,7 @@ void
 SWFMovieClip_nextFrame(SWFMovieClip clip);
 
 void
-SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
+SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label);
 
 void
 SWFMovie_setSoundStream(SWFMovieClip movie, SWFSound sound, float rate);

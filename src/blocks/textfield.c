@@ -25,7 +25,7 @@
 #include "libswf.h"
 
 #include "textfield.h"
-
+#include "utf8.h"
 
 struct SWFTextField_s
 {
@@ -157,9 +157,9 @@ completeSWFTextField(SWFBlock block)
 	SWFOutput_writeUInt16(out, field->indentation);
 	SWFOutput_writeUInt16(out, field->lineSpacing);
 
-	SWFOutput_writeString(out, field->varName);
+	SWFOutput_writeString(out, (byte*) field->varName);
 	if ( field->flags & SWFTEXTFIELD_HASTEXT )
-		SWFOutput_writeString(out, field->string);
+		SWFOutput_writeString(out, (byte*)field->string);
 
 	/*
 		XXX - if font is a real font, do we need to talk to it?
@@ -194,7 +194,7 @@ destroySWFTextField(SWFBlock block)
 SWFTextField
 newSWFTextField()
 {
-	SWFTextField field = malloc(sizeof(struct SWFTextField_s));
+	SWFTextField field = (SWFTextField)malloc(sizeof(struct SWFTextField_s));
 
 	SWFCharacterInit((SWFCharacter)field);
 
@@ -266,7 +266,7 @@ SWFTextField_getUnresolvedFont(SWFTextField field)
 }
 
 void
-SWFTextField_addChars(SWFTextField field, char *string)
+SWFTextField_addChars(SWFTextField field, const char *string)
 {
 	int n, len = strlen(string);
 	if((!field->isBrowserFont) && field->font.font &&
@@ -274,8 +274,25 @@ SWFTextField_addChars(SWFTextField field, char *string)
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + len) * 2);
 		for(n = 0 ; n < len  ; n++)
-			field->embeds[field->embedlen++] = string[n];
+			field->embeds[field->embedlen++] = string[n] & 0xff;
 		field->flags |= SWFTEXTFIELD_USEFONT;
+	}
+}
+
+void
+SWFTextField_addUTF8Chars(SWFTextField field, const char *string)
+{
+	unsigned short *widestring;
+	int n, len;
+	if((!field->isBrowserFont) && field->font.font &&
+	 (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	{	len = UTF8ExpandString(string, &widestring);
+		field->embeds = (unsigned short *)realloc(
+			field->embeds, (field->embedlen + len) * 2);
+		for(n = 0 ; n < len  ; n++)
+			field->embeds[field->embedlen++] = widestring[n];
+		field->flags |= SWFTEXTFIELD_USEFONT;
+		free(widestring);
 	}
 }
 
@@ -313,16 +330,16 @@ SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a)
 
 
 void
-SWFTextField_setVariableName(SWFTextField field, char *name)
+SWFTextField_setVariableName(SWFTextField field, const char *name)
 {
 	field->varName = strdup(name);
 }
 
 
-void
-SWFTextField_addString(SWFTextField field, char *string)
+static void
+SWFTextField_addStringOnly(SWFTextField field, const char *string)
 {
-	int l, n;
+	int l;
 
 	for ( l=0; string[l]!='\0'; ++l )
 	{
@@ -332,20 +349,47 @@ SWFTextField_addString(SWFTextField field, char *string)
 
 	if ( field->string )
 	{
-		field->string = realloc(field->string, strlen(field->string)+l+1);
+		field->string = (char*)realloc(field->string, strlen(field->string)+l+1);
 		strcat(field->string, string);
 	}
 	else
 		field->string = strdup(string);
 
 	resetBounds(field);
+}
 
+void
+SWFTextField_addString(SWFTextField field, const char *string)
+{
+	int l, n;
+
+	l = strlen(string);
+
+	SWFTextField_addStringOnly(field, string);
 	if((field->flags & SWFTEXTFIELD_USEFONT) && !field->isBrowserFont &&
 	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + l) * 2);
 		for(n = 0 ; n < l  ; n++)
-			field->embeds[field->embedlen++] = string[n];
+			field->embeds[field->embedlen++] = string[n] & 0xff;
+	}
+}
+
+void
+SWFTextField_addUTF8String(SWFTextField field, const char *string)
+{
+	unsigned short *widestring;
+	int l, n;
+
+	SWFTextField_addStringOnly(field, string);
+	if((field->flags & SWFTEXTFIELD_USEFONT) && !field->isBrowserFont &&
+	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	{	l = UTF8ExpandString(string, &widestring);
+		field->embeds = (unsigned short *)realloc(
+			field->embeds, (field->embedlen + l) * 2);
+		for(n = 0 ; n < l  ; n++)
+			field->embeds[field->embedlen++] = widestring[n];
+		free(widestring);
 	}
 }
 

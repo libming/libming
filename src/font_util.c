@@ -1,11 +1,12 @@
 
 #include "font_util.h"
 
-static struct
+typedef struct
 {
   char* name;
   SWFFont font;
-} *Ming_fontList = NULL;
+} Ming_fontListStruct;
+static Ming_fontListStruct *Ming_fontList = NULL;
 
 static int Ming_numFonts = 0;
 
@@ -32,7 +33,7 @@ Ming_loadFont(const char* path, const char* name)
   if ( font == NULL )
     return NULL;
 
-  Ming_fontList = realloc(Ming_fontList,
+  Ming_fontList = (Ming_fontListStruct*)realloc(Ming_fontList,
 			  Ming_numFonts * sizeof(*Ming_fontList));
 
   Ming_fontList[Ming_numFonts].name = strdup(name);

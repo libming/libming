@@ -431,9 +431,9 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteU8($$, SWFACTION_GETURL);
 		  bufferWriteS16($$, strlen($3) + strlen($5) + 2);
-		  bufferWriteHardString($$, $3, strlen($3));
+		  bufferWriteHardString($$, (byte*)$3, strlen($3));
 		  bufferWriteU8($$, 0);
-		  bufferWriteHardString($$, $5, strlen($5));
+		  bufferWriteHardString($$, (byte*)$5, strlen($5));
 		  bufferWriteU8($$, 0); }
 
 	| LOADMOVIE '(' expr ',' expr ')'
@@ -528,7 +528,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteU8($$, SWFACTION_GOTOLABEL);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
 		  free($3); }
 
 	| GOTOFRAME '(' expr ')'
@@ -547,7 +547,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteU8($$, SWFACTION_SETTARGET);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
 		  free($3); }
 
 	| SETTARGET '(' expr ')'
@@ -559,7 +559,7 @@ void_function_call
 			/* SetTarget(STRING) */
 		  bufferWriteU8($$, SWFACTION_SETTARGET);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
 			/* stmt */
 		  bufferConcat($$, $5);
 			/* SetTarget('') */

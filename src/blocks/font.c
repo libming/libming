@@ -141,7 +141,7 @@ completeSWFFontCharacter(SWFBlock block)
 	size += 2; // character id
 	size += 2; // flags
 	size += 1; // name length
-	size += strlen(font->name); // font name
+	size += strlen((const char*)font->name); // font name
 	size += 2; // nglyphs
 	size += 2 * (inst->nGlyphs + 1); // offset table
 
@@ -189,7 +189,7 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 	method(inst->flags, data); /* main flags */
 	method(0, data);																					/* more flags */
-	method((unsigned char)strlen(font->name), data);
+	method((unsigned char)strlen((const char*)font->name), data);
 
 	for ( p = font->name; *p != '\0'; ++p )
 		method(*p, data);
@@ -339,7 +339,7 @@ destroySWFFontCharacter(SWFBlock block)
 SWFFont
 newSWFFont()
 {
-	SWFFont font = malloc(sizeof(struct SWFFont_s));
+	SWFFont font = (SWFFont) malloc(sizeof(struct SWFFont_s));
 
 	SWFBlockInit((SWFBlock)font);
 
@@ -374,7 +374,7 @@ newSWFFont()
 SWFFontCharacter
 newSWFFontCharacter(SWFFont font)
 {
-	SWFFontCharacter inst = malloc(sizeof(struct SWFFontCharacter_s));
+	SWFFontCharacter inst = (SWFFontCharacter) malloc(sizeof(struct SWFFontCharacter_s));
 
 	SWFCharacterInit((SWFCharacter)inst);
 
@@ -405,7 +405,7 @@ SWFFont_buildReverseMapping(SWFFont font)
 
 	if ( font->flags & SWF_FONT_WIDECODES )
 	{
-		font->codeToGlyph.wideMap = malloc(256 * sizeof(unsigned short*));
+		font->codeToGlyph.wideMap = (unsigned short**)malloc(256 * sizeof(unsigned short*));
 
 		for ( i=0; i<256; ++i )
 			font->codeToGlyph.wideMap[i] = NULL;
@@ -418,7 +418,7 @@ SWFFont_buildReverseMapping(SWFFont font)
 
 			if ( font->codeToGlyph.wideMap[high] == NULL )
 			{
-				font->codeToGlyph.wideMap[high] = malloc(256 * sizeof(unsigned short));
+				font->codeToGlyph.wideMap[high] = (unsigned short*)malloc(256 * sizeof(unsigned short));
 				memset(font->codeToGlyph.wideMap[high], 0, 256 * sizeof(unsigned short));
 			}
 
@@ -427,7 +427,7 @@ SWFFont_buildReverseMapping(SWFFont font)
 	}
 	else
 	{
-		font->codeToGlyph.charMap = malloc(256 * sizeof(char));
+		font->codeToGlyph.charMap = (byte*) malloc(256 * sizeof(char));
 		memset(font->codeToGlyph.charMap, 0, 256 * sizeof(char));
 
 		for ( i=0; i<font->nGlyphs; ++i )
@@ -474,7 +474,7 @@ SWFFont_findGlyph(SWFFont font, unsigned short c)
 void
 SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text)
 {
-	struct textList* textList = malloc(sizeof(struct textList));
+	struct textList* textList = (struct textList* )malloc(sizeof(struct textList));
 
 	textList->next = font->textList;
 	textList->text = text;
@@ -521,7 +521,7 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 
 	if ( font->nGlyphs % CODETABLE_INCREMENT == 0 )
 	{
-		font->codeTable = realloc(font->codeTable,
+		font->codeTable = (unsigned short*) realloc(font->codeTable,
 															(font->nGlyphs + CODETABLE_INCREMENT) *
 															sizeof(unsigned short));
 	}
@@ -633,7 +633,7 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 const char*
 SWFFont_getName(SWFFont font)
 {
-	return font->name;
+	return (const char*) font->name;
 }
 
 
@@ -716,7 +716,7 @@ SWFFont_getScaledStringWidth(SWFFont font, const char* string)
 	unsigned short* widestr;
 	int len = strlen(string);
 	int n, width;
-	widestr = malloc(2 * len);
+	widestr = (unsigned short*) malloc(2 * len);
 	for(n = 0 ; n < len ; n++)
 		widestr[n] = (unsigned char)string[n];
 	width = SWFFont_getScaledWideStringWidth(font, widestr, len);
@@ -866,8 +866,8 @@ readUInt32(FILE *f)
 }
 
 
-int buffer;
-int bufbits = 0; /* # of bits in buffer */
+static int buffer;
+static int bufbits = 0; /* # of bits in buffer */
 
 static void
 byteAlign()
@@ -1010,7 +1010,7 @@ loadSWFFontFromFile(FILE *file)
 	fgetc(file); /* "reserved" */
 
 	namelen = fgetc(file);
-	font->name = malloc(namelen+1);
+	font->name = (byte*) malloc(namelen+1);
 
 	for ( i=0; i<namelen; ++i )
 		font->name[i] = fgetc(file);
@@ -1021,10 +1021,10 @@ loadSWFFontFromFile(FILE *file)
 
 	font->nGlyphs = nGlyphs;
 
-	font->bounds = malloc(nGlyphs * sizeof(struct SWFRect_s));
-	font->glyphOffset = malloc((nGlyphs + 1) * sizeof(*font->glyphOffset));
-	font->glyphToCode = malloc(nGlyphs * sizeof(*font->glyphToCode));
-	font->advances = malloc(nGlyphs * sizeof(*font->advances));
+	font->bounds = (struct SWFRect_s*) malloc(nGlyphs * sizeof(struct SWFRect_s));
+	font->glyphOffset = (byte**)malloc((nGlyphs + 1) * sizeof(*font->glyphOffset));
+	font->glyphToCode = (unsigned short*)malloc(nGlyphs * sizeof(*font->glyphToCode));
+	font->advances = (short*) malloc(nGlyphs * sizeof(*font->advances));
 
 	if ( flags & SWF_LOAD_FONT_WIDEOFFSETS )
 	{
@@ -1053,7 +1053,7 @@ loadSWFFontFromFile(FILE *file)
 #endif
 
 	/* it helps to allocate the right amount. (thanks, Tim!) */
-	font->shapes = malloc(font->glyphOffset[nGlyphs] - font->glyphOffset[0] + 1);
+	font->shapes = (byte*)malloc(font->glyphOffset[nGlyphs] - font->glyphOffset[0] + 1);
 
 	p = font->shapes;
 
@@ -1111,9 +1111,9 @@ loadSWFFontFromFile(FILE *file)
 
 		if ( font->kernCount > 0 )
 			if(font->flags & SWF_FONT_WIDECODES)
-				font->kernTable.w = malloc(sizeof(struct kernInfo16) * font->kernCount);
+				font->kernTable.w = (struct kernInfo16*) malloc(sizeof(struct kernInfo16) * font->kernCount);
 			else
-				font->kernTable.k = malloc(sizeof(struct kernInfo) * font->kernCount);
+				font->kernTable.k = (struct kernInfo*)malloc(sizeof(struct kernInfo) * font->kernCount);
 		else
 			font->kernTable.k = NULL;
 
@@ -1140,7 +1140,7 @@ struct out
 	int len;
 };
 
-static void oprintf(struct out *op, char *fmt, ...)
+static void oprintf(struct out *op, const char *fmt, ...)
 {	va_list ap;
 	char buf[256];
 	int d, l;
@@ -1223,6 +1223,7 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 
 	o.len = 0;
 	o.ptr = o.buf = (char *)malloc(1);
+	*o.ptr = 0;
 
 	byteAlign();
 
@@ -1237,12 +1238,16 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 
 	readBitsP(f, 2); /* type 0, newstyles */
 	style = readBitsP(f, 3);
-	readBitsP(f, 1);
-	moveBits = readBitsP(f, 5);
-	x = startX + readSBitsP(f, moveBits);
-	y = startY + readSBitsP(f, moveBits);
+	
+	if(readBitsP(f, 1))
+	{	moveBits = readBitsP(f, 5);
+		x = startX + readSBitsP(f, moveBits);
+		y = startY + readSBitsP(f, moveBits);
 
-	oprintf(&o, "moveto %d,%d\n", x, y);
+		oprintf(&o, "moveto %d,%d\n", x, y);
+	}
+	else if(style == 0)	/* no style, no move => space character */
+		return o.buf;
 
 	if ( style & 1 )
 		if ( readBitsP(f, 1) != 0 ) /* fill0 = 0 */

@@ -76,10 +76,10 @@ void
 SWFMovie_nextFrame(SWFMovie movie);
 
 void
-SWFMovie_labelFrame(SWFMovie movie, char *label);
+SWFMovie_labelFrame(SWFMovie movie, const char *label);
 
 void
-SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name);
+SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name);
 
 void
 SWFMovie_writeExports(SWFMovie movie);
@@ -91,6 +91,6 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
 
 int
-SWFMovie_save(SWFMovie movie, char *filename, int level);
+SWFMovie_save(SWFMovie movie, const char *filename, int level);
 
 #endif /* MING_MOVIE_H_INCLUDED */

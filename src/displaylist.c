@@ -18,12 +18,12 @@
 */
 
 #include <stdlib.h>
-#include <string.h>
+/* not used? #include <string.h> */
 #include <math.h>
 
 #include "displaylist.h"
 
-#include "blocks/blocktypes.h"
+/* not used? #include "blocks/blocktypes.h" */
 #include "blocks/placeobject.h"
 #include "blocks/character.h"
 #include "blocks/matrix.h"
@@ -94,7 +94,7 @@ destroySWFDisplayList(SWFDisplayList list)
 SWFDisplayList
 newSWFDisplayList()
 {
-	SWFDisplayList list = malloc(sizeof(struct SWFDisplayList_s));
+	SWFDisplayList list = (SWFDisplayList)malloc(sizeof(struct SWFDisplayList_s));
 
 	list->isSprite = FALSE;
 	list->head = NULL;
@@ -109,7 +109,7 @@ newSWFDisplayList()
 SWFDisplayList
 newSWFSpriteDisplayList()
 {
-	SWFDisplayList list = malloc(sizeof(struct SWFDisplayList_s));
+	SWFDisplayList list = (SWFDisplayList)malloc(sizeof(struct SWFDisplayList_s));
 
 	list->isSprite = TRUE;
 	list->head = NULL;
@@ -124,7 +124,7 @@ newSWFSpriteDisplayList()
 SWFDisplayItem
 SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 {
-	SWFDisplayItem item = malloc(sizeof(struct SWFDisplayItem_s));
+	SWFDisplayItem item = (SWFDisplayItem) malloc(sizeof(struct SWFDisplayItem_s));
 
 	item->flags = ITEM_NEW;
 	item->next = NULL;

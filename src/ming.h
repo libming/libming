@@ -54,8 +54,8 @@ void Ming_setCubicThreshold(int num);
 
 /* change the error/warn behavior */
 
-void Ming_setWarnFunction(void (*warn)(char *msg, ...));
-void Ming_setErrorFunction(void (*error)(char *msg, ...));
+void Ming_setWarnFunction(void (*warn)(const char *msg, ...));
+void Ming_setErrorFunction(void (*error)(const char *msg, ...));
 
 
 /* set the version number to use */
@@ -65,7 +65,7 @@ void Ming_useSWFVersion(int version);
 
 /* stupid redef problem if we just include movieclip.h */
 
-typedef void *SWFMovieClip;
+typedef struct SWFMovieClip_s *SWFMovieClip;
 
 void destroySWFMovieClip(SWFMovieClip clip);
 SWFMovieClip newSWFMovieClip();
@@ -74,6 +74,6 @@ void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int frames);
 SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 void SWFMovieClip_nextFrame(SWFMovieClip clip);
-void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
+void SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label);
 
 int SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);

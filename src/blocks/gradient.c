@@ -44,7 +44,7 @@ struct SWFGradient_s
 SWFGradient
 newSWFGradient()
 {
-	SWFGradient gradient = malloc(sizeof(struct SWFGradient_s));
+	SWFGradient gradient = (SWFGradient) malloc(sizeof(struct SWFGradient_s));
 
 	gradient->nGrads = 0;
 

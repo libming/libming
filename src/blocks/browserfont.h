@@ -26,7 +26,9 @@ typedef struct SWFBrowserFont_s *SWFBrowserFont;
 #include "output.h"
 #include "character.h"
 
-SWFBrowserFont newSWFBrowserFont(char *name);
+extern int SWF_versionNum;
+
+SWFBrowserFont newSWFBrowserFont(const char *name);
 
 SWFOutput SWFBrowserFont_getOutput(SWFBrowserFont font);
 

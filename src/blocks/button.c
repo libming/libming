@@ -37,7 +37,7 @@ struct actionRecord
 	int flags;
 	SWFAction action;
 };
-typedef struct actionRecord* ActionRecord;
+/* typedef struct actionRecord* ActionRecord; */
 
 struct SWFButton_s
 {
@@ -68,7 +68,7 @@ struct SWFButtonSound_s
 static ButtonRecord newSWFButtonRecord(byte flags, SWFCharacter character,
 									 unsigned short layer, SWFMatrix matrix)
 {
-	ButtonRecord record = malloc(sizeof(struct buttonRecord));
+	ButtonRecord record = (ButtonRecord) malloc(sizeof(struct buttonRecord));
 
 	record->flags = flags;
 	record->character = character;
@@ -85,7 +85,7 @@ static void SWFButton_addRecord(SWFButton button, ButtonRecord record)
 {
 	if ( button->nRecords % BUTTONRECORD_INCREMENT == 0 )
 	{
-		button->records = realloc(button->records,
+		button->records = (ButtonRecord*) realloc(button->records,
 						(button->nRecords + BUTTONRECORD_INCREMENT) *
 						sizeof(ButtonRecord));
 	}
@@ -105,7 +105,7 @@ void SWFButton_addAction(SWFButton button, SWFAction action, int flags)
 
 	if ( button->nActions % BUTTONRECORD_INCREMENT == 0 )
 	{
-		button->actions = realloc(button->actions,
+		button->actions = (struct actionRecord*) realloc(button->actions,
 						(button->nActions + BUTTONRECORD_INCREMENT) *
 						sizeof(struct actionRecord));
 	}
@@ -170,8 +170,8 @@ int completeSWFButton(SWFBlock block)
 	ButtonRecord record;
 	SWFOutput out = newSWFOutput();
 	int i, length = 0, layer;
-	char *offset;
-	extern SWF_versionNum;
+	byte *offset;
+	extern int SWF_versionNum;
 
 	SWFOutput_writeUInt16(out, CHARACTERID(button));
 	SWFOutput_writeUInt8(out, button->menuflag);
@@ -244,7 +244,7 @@ void destroySWFButton(SWFBlock block)
 SWFButton
 newSWFButton()
 {
-	SWFButton button = malloc(sizeof(struct SWFButton_s));
+	SWFButton button = (SWFButton) malloc(sizeof(struct SWFButton_s));
 
 	SWFCharacterInit((SWFCharacter)button);
 
@@ -328,7 +328,7 @@ completeSWFButtonSound(SWFBlock block)
 SWFButtonSound
 newSWFButtonSound(SWFButton button)
 {
-	SWFButtonSound buttonSound = malloc(sizeof(struct SWFButtonSound_s));
+	SWFButtonSound buttonSound = (SWFButtonSound) malloc(sizeof(struct SWFButtonSound_s));
 	SWFBlock block = (SWFBlock)buttonSound;
 
 	SWFBlockInit(block);

@@ -167,7 +167,7 @@ struct pngdata readPNG(FILE *fp)
     png.color_type = PNG_COLOR_TYPE_PALETTE;
     png.num_palette = 1 << depth;
 
-    png.palette = malloc(sizeof(png_color) * png.num_palette);
+    png.palette = (png_color*) malloc(sizeof(png_color) * png.num_palette);
 
     for(i=0; i<(int)png.num_palette; ++i)
       png.palette[i].red = png.palette[i].green = png.palette[i].blue = 
@@ -176,10 +176,10 @@ struct pngdata readPNG(FILE *fp)
 
 
   /* malloc stuff */
-  row_pointers = malloc(png.height*sizeof(png_bytep));
+  row_pointers = (png_bytep*) malloc(png.height*sizeof(png_bytep));
   rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
-  png.data = malloc(png.height * rowbytes);
+  png.data = (unsigned char*) malloc(png.height * rowbytes);
 
   for(i=0; i<png.height; ++i)
     row_pointers[i] = png.data + rowbytes*i;
@@ -246,7 +246,7 @@ void writeDBL(FILE *f, struct pngdata png)
 {
   unsigned char *data, *outdata;
   int alignedsize;
-  long outsize;
+  unsigned long outsize;
   int hasAlpha =
     png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA ||
     png.color_type == PNG_COLOR_TYPE_RGB_ALPHA;
@@ -262,18 +262,18 @@ void writeDBL(FILE *f, struct pngdata png)
   {
     int tablesize = png.num_palette * sizeof(png_color);
   
-    data = malloc(tablesize + alignedsize);
+    data = (unsigned char*) malloc(tablesize + alignedsize);
     memcpy(data, png.palette, tablesize);
     alignedcopy(png, data + tablesize);
     alignedsize += tablesize;
   }
   else
   {
-    data = malloc(alignedsize);
+    data = (unsigned char*) malloc(alignedsize);
     alignedcopy(png, data);
   }
 
-  outdata = malloc(outsize = (int)floor(alignedsize*1.01+12));
+  outdata = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
   
   /* compress the RGB color table (if present) and image data one block */
   

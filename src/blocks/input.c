@@ -34,11 +34,11 @@
 
 struct SWFInput_s
 {
-	void (*destroy)(SWFInput this);
-	int (*getChar)(SWFInput this);
-	int (*read)(SWFInput this, unsigned char* buffer, int count);
-	void (*seek)(SWFInput this, long offset, int whence);
-	int (*eof)(SWFInput this);
+	void (*destroy)(SWFInput This);
+	int (*getChar)(SWFInput This);
+	int (*read)(SWFInput This, unsigned char* buffer, int count);
+	void (*seek)(SWFInput This, long offset, int whence);
+	int (*eof)(SWFInput This);
 
 	int offset;
 	int length;
@@ -105,7 +105,7 @@ SWFInput_getUInt32_BE(SWFInput input)
 int
 SWFInput_read(SWFInput input, char* buffer, int count)
 {
-	return input->read(input, buffer, count);
+	return input->read(input, (unsigned char*) buffer, count);
 }
 
 
@@ -224,7 +224,7 @@ newSWFInput_file(FILE *f)
 	if ( fstat(fileno(f), &buf) == -1 )
 		SWF_error("Couldn't fstat filehandle in newSWFInput_file");;
 
-	input = malloc(sizeof(struct SWFInput_s));
+	input = (SWFInput) malloc(sizeof(struct SWFInput_s));
 
 	input->getChar = SWFInput_file_getChar;
 	input->destroy = SWFInput_dtor;
@@ -292,7 +292,7 @@ SWFInput_buffer_seek(SWFInput input, long offset, int whence)
 SWFInput
 newSWFInput_buffer(unsigned char* buffer, int length)
 {
-	SWFInput input = malloc(sizeof(struct SWFInput_s));
+	SWFInput input = (SWFInput) malloc(sizeof(struct SWFInput_s));
 
 	input->getChar = SWFInput_buffer_getChar;
 	input->destroy = SWFInput_dtor;
@@ -328,7 +328,8 @@ newSWFInput_allocedBuffer(unsigned char *buffer, int length)
 
 /* SWFInput_stream */
 
-#define INPUTSTREAM_INCREMENT 1024
+#define INPUTSTREAM_INCREMENT 32768
+#define MAX_INPUTSTREAM (32*1024*1024) // 32 mb
 
 struct SWFInputStreamData
 {
@@ -340,11 +341,11 @@ struct SWFInputStreamData
 static void
 SWFInput_stream_seek(SWFInput input, long offset, int whence)
 {
-	int len;
+	int len, l, readOffset;
 	struct SWFInputStreamData *data;
 
 	if ( whence == SEEK_CUR )
-		input->offset = min(input->length, input->offset + offset);
+		input->offset = input->offset + offset;
 
 	else if ( whence == SEEK_SET )
 		input->offset = offset;
@@ -355,31 +356,45 @@ SWFInput_stream_seek(SWFInput input, long offset, int whence)
 		/* XXX - might want to put a limit on how much we suck (ha) */
 
 		while ( SWFInput_getChar(input) != EOF )
-			;
+			if (input->length > MAX_INPUTSTREAM)
+				break;
 
 		input->offset = input->length - offset;
 	}
+
+	if (input->offset < 0)
+		input->offset = 0;
 
 	if ( input->offset < input->length )
 		return;
 
 	/* now slurp up as much data as we need to get here */
 
-	len = ((input->offset/INPUTSTREAM_INCREMENT)+1) * INPUTSTREAM_INCREMENT;
+	len = (((input->offset - input->length)/INPUTSTREAM_INCREMENT)+1) * INPUTSTREAM_INCREMENT;
 
-	data = input->data;
+	readOffset = input->length;
+	input->length += len;
+	data = (struct SWFInputStreamData*) input->data;
 
-	data->buffer = realloc(data->buffer, sizeof(unsigned char) * len);
+	data->buffer = (unsigned char*)realloc(data->buffer, sizeof(unsigned char) * (input->length + len));
 
-	while(len > 0)
-		len -= fread(data->buffer, sizeof(unsigned char), len, data->file);
+	l=1; /* just to initialize to something */
+	while((len > 0) && (l > 0))
+	{
+		l = fread(data->buffer, sizeof(unsigned char), len, data->file);
+		len -= l;
+		readOffset += l;
+	}
 }
 
 
 static int
 SWFInput_stream_getChar(SWFInput input)
 {
-	struct SWFInputStreamData *data = input->data;
+	struct SWFInputStreamData *data = (struct SWFInputStreamData *) input->data;
+
+	if (input->offset >= MAX_INPUTSTREAM)
+		return EOF;
 
 	if ( input->offset == input->length )
 	{
@@ -394,7 +409,7 @@ SWFInput_stream_getChar(SWFInput input)
 		{
 			if ( input->length % INPUTSTREAM_INCREMENT == 0 )
 			{
-				data->buffer = realloc(data->buffer,
+				data->buffer = (unsigned char*) realloc(data->buffer,
 															 sizeof(unsigned char) *
 															 (input->length + INPUTSTREAM_INCREMENT));
 			}
@@ -418,7 +433,7 @@ SWFInput_stream_getChar(SWFInput input)
 static int
 SWFInput_stream_read(SWFInput input, unsigned char* buffer, int count)
 {
-	struct SWFInputStreamData *data = input->data;
+	struct SWFInputStreamData *data = (struct SWFInputStreamData *) input->data;
 	int need = input->offset + count - input->length;
 
 	if ( need > 0 )
@@ -426,7 +441,7 @@ SWFInput_stream_read(SWFInput input, unsigned char* buffer, int count)
 		int num;
 
 		data->buffer =
-			realloc(data->buffer,
+			(unsigned char*) realloc(data->buffer,
 							sizeof(unsigned char) * INPUTSTREAM_INCREMENT *
 							(((input->offset + count) / INPUTSTREAM_INCREMENT) + 1));
 		
@@ -451,17 +466,21 @@ SWFInput_stream_dtor(SWFInput input)
 	free(input->data);
 }
 
+static int SWFInput_stream_eof(SWFInput input)
+{
+	return ((input->offset >= input->length) ? feof((FILE *)input->data) : 0);
+}
 
 SWFInput
 newSWFInput_stream(FILE* f)
 {
-	SWFInput input = malloc(sizeof(struct SWFInput_s));
+	SWFInput input = (SWFInput)malloc(sizeof(struct SWFInput_s));
 
-	struct SWFInputStreamData *data = malloc(sizeof(struct SWFInputStreamData));
+	struct SWFInputStreamData *data = (struct SWFInputStreamData *)malloc(sizeof(struct SWFInputStreamData));
 
 	input->getChar = SWFInput_stream_getChar;
 	input->destroy = SWFInput_stream_dtor;
-	input->eof = SWFInput_file_eof;
+	input->eof = SWFInput_stream_eof;
 	input->read = SWFInput_stream_read;
 	input->seek = SWFInput_stream_seek;
 	input->data = (void *)f;

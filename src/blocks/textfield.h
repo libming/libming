@@ -59,14 +59,15 @@ typedef enum
 #define SWFTEXTFIELD_SIZE sizeof(struct _textField)
 
 SWFTextField newSWFTextField();
-SWFBrowserFont newSWFBrowserFont(char *name);
+SWFBrowserFont newSWFBrowserFont(const char *name);
 
 void SWFTextField_setFont(SWFTextField field, SWFBlock font);
 void SWFTextField_setScaledBounds(SWFTextField field, int width, int height);
 void SWFTextField_setFlags(SWFTextField field, int flags);
 void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
-void SWFTextField_setVariableName(SWFTextField field, char *name);
-void SWFTextField_addString(SWFTextField field, char *string);
+void SWFTextField_setVariableName(SWFTextField field, const char *name);
+void SWFTextField_addString(SWFTextField field, const char *string);
+void SWFTextField_addUTF8String(SWFTextField field, const char *string);
 
 void SWFTextField_setScaledFontHeight(SWFTextField field, int height);
 void SWFTextField_setScaledFieldHeight(SWFTextField field, int height);
@@ -81,7 +82,7 @@ void SWFTextField_setAlignment(SWFTextField field,
 void SWFTextField_setLength(SWFTextField field, int length);
 
 void SWFTextField_setFontCharacter(SWFTextField field, SWFFontCharacter fontchar);
-void SWFTextField_addChars(SWFTextField field, char *string);
+void SWFTextField_addChars(SWFTextField field, const char *string);
 SWFFont SWFTextField_getUnresolvedFont(SWFTextField field);
 
 #endif /* SWF_DEFINEEDITTEXT_H_INCLUDED */

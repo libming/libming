@@ -24,9 +24,6 @@
 #include "compile.h"
 #include "assembler.h"
 
-extern FILE *yyin;
-
-int yyparse();
 
 int len;
 Buffer asmBuffer;

@@ -8,7 +8,6 @@
 #include "read.h"
 #include "decompile.h"
 
-#include <zlib.h>
 
 #ifdef NODECOMPILE
 #define decompileAction(f,l,n) printDoAction((f),(l))
@@ -18,12 +17,12 @@
 
 #define puts(s) fputs((s),stdout)
 
-char *blockName(Blocktype type);
+/* char *blockName(Blocktype type); */
 void skipBytes(FILE *f, int length);
 
 #define INDENT_LEVEL 3
 
-void print(char *s, ...)
+void print(const char *s, ...)
 {
   va_list ap;
   int n = gIndent*INDENT_LEVEL;
@@ -35,7 +34,7 @@ void print(char *s, ...)
   vprintf(s, ap);
   va_end(ap);
 }
-void println(char *s, ...)
+void println(const char *s, ...)
 {
   va_list ap;
   int n = gIndent*INDENT_LEVEL;
@@ -921,8 +920,7 @@ int printActionRecord(FILE *f)
 
     case SWFACTION_DECLARENAMES:
     {
-      int i, n = readUInt8(f);
-      readUInt8(f);
+      int i, n = readUInt16(f);
       print("Declare Dictionary:");
 
       for(i=0; i<n; ++i)

@@ -68,13 +68,13 @@ void Ming_setCubicThreshold(int num)
 }
 
 
-void Ming_setWarnFunction(void (*warn)(char *msg, ...))
+void Ming_setWarnFunction(void (*warn)(const char *msg, ...))
 {
 	setSWFWarnFunction(warn);
 }
 
 
-void Ming_setErrorFunction(void (*error)(char *msg, ...))
+void Ming_setErrorFunction(void (*error)(const char *msg, ...))
 {
 	setSWFErrorFunction(error);
 }

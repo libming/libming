@@ -20,6 +20,7 @@
 /* $Id$ */
 
 #include "browserfont.h"
+#include "font.h"
 
 struct SWFBrowserFont_s
 {
@@ -60,10 +61,10 @@ destroySWFBrowserFont(SWFBlock block)
 
 
 SWFBrowserFont
-newSWFBrowserFont(char *name)
+newSWFBrowserFont(const char *name)
 {
 	unsigned int i;
-	SWFBrowserFont font = malloc(sizeof(struct SWFBrowserFont_s));
+	SWFBrowserFont font = (SWFBrowserFont) malloc(sizeof(struct SWFBrowserFont_s));
 	SWFOutput out = newSWFOutput();
 
 	SWFCharacterInit((SWFCharacter)font);
@@ -79,7 +80,7 @@ newSWFBrowserFont(char *name)
 	CHARACTERID(font) = ++SWF_gNumCharacters;
 
 	SWFOutput_writeUInt16(out, CHARACTERID(font));
-	SWFOutput_writeUInt8(out, 0); /* maybe italic or bold flag? */
+	SWFOutput_writeUInt8(out, (SWF_versionNum > 5) ? SWF_FONT_WIDECODES : 0); /* maybe italic or bold flag? */
 	SWFOutput_writeUInt8(out, 0); /* reserved flags */
 	SWFOutput_writeUInt8(out, strlen(name));
 

@@ -155,7 +155,7 @@ destroySWFShape(SWFBlock block)
 SWFShape
 newSWFShape()
 {
-	SWFShape shape = malloc(sizeof(struct SWFShape_s));
+	SWFShape shape = (SWFShape)malloc(sizeof(struct SWFShape_s));
 
 	SWFCharacterInit((SWFCharacter)shape);
 
@@ -313,7 +313,7 @@ newShapeRecord(SWFShape shape, shapeRecordType type)
 {
 	if ( shape->nRecords % SHAPERECORD_INCREMENT == 0 )
 	{
-		shape->records = realloc(shape->records,
+		shape->records = (ShapeRecord*) realloc(shape->records,
 					 sizeof(ShapeRecord) *
 					 (shape->nRecords + SHAPERECORD_INCREMENT));
 	}
@@ -322,19 +322,19 @@ newShapeRecord(SWFShape shape, shapeRecordType type)
 	{
 		case SHAPERECORD_STATECHANGE:
 		{
-			StateChangeRecord change = calloc(1,sizeof(struct stateChangeRecord));
+			StateChangeRecord change = (StateChangeRecord)calloc(1,sizeof(struct stateChangeRecord));
 			shape->records[shape->nRecords].record.stateChange = change;
 			break;
 		}
 		case SHAPERECORD_LINETO:
 		{
-			LineToRecord lineTo = calloc(1,sizeof(struct lineToRecord));
+			LineToRecord lineTo = (LineToRecord) calloc(1,sizeof(struct lineToRecord));
 			shape->records[shape->nRecords].record.lineTo = lineTo;
 			break;
 		}
 		case SHAPERECORD_CURVETO:
 		{
-			CurveToRecord curveTo = calloc(1,sizeof(struct curveToRecord));
+			CurveToRecord curveTo = (CurveToRecord) calloc(1,sizeof(struct curveToRecord));
 			shape->records[shape->nRecords].record.curveTo = curveTo;
 			break;
 		}
@@ -576,7 +576,7 @@ SWFShape_addLineStyle(SWFShape shape, unsigned short width,
 {
 	if ( shape->nLines % STYLE_INCREMENT == 0 )
 	{
-		shape->lines = realloc(shape->lines,
+		shape->lines = (SWFLineStyle*)realloc(shape->lines,
 													 (shape->nLines+STYLE_INCREMENT) *
 													 sizeof(SWFLineStyle));
 	}
@@ -661,7 +661,7 @@ addFillStyle(SWFShape shape, SWFFillStyle fill)
 	if ( shape->nFills%STYLE_INCREMENT == 0 )
 	{
 		shape->fills =
-			realloc(shape->fills,
+			(SWFFillStyle*)realloc(shape->fills,
 							(shape->nFills+STYLE_INCREMENT) * sizeof(SWFFillStyle));
 	}
 
@@ -825,11 +825,14 @@ SWFShape_drawScaledGlyph(SWFShape shape,
 
 	readBitsP(f, 2); /* type 0, newstyles */
 	style = readBitsP(f, 3);
-	readBitsP(f, 1);
 
-	moveBits = readBitsP(f, 5);
-	x = startX + readSBitsP(f, moveBits);
-	y = startY + readSBitsP(f, moveBits);
+	if(readBitsP(f, 1))
+	{	moveBits = readBitsP(f, 5);
+		x = startX + readSBitsP(f, moveBits);
+		y = startY + readSBitsP(f, moveBits);
+	}
+	else if(style == 0)	/* no style, no move => space character */
+		return;
 
 	SWFShape_moveScaledPenTo(shape, x*size/1024, y*size/1024);
 

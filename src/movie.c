@@ -102,7 +102,7 @@ destroySWFMovie(SWFMovie movie)
 SWFMovie
 newSWFMovieWithVersion(int version)
 {
-	SWFMovie movie = malloc(sizeof(struct SWFMovie_s));
+	SWFMovie movie = (SWFMovie) malloc(sizeof(struct SWFMovie_s));
 
 	movie->version = version;
 	movie->blockList = newSWFBlockList();
@@ -202,7 +202,7 @@ SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
 
 			if ( i == movie->nFonts )
 			{
-				movie->fonts = realloc(movie->fonts,
+				movie->fonts = (SWFFontCharacter*)realloc(movie->fonts,
 														 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
 
 				fontchar = newSWFFontCharacter(font);
@@ -235,7 +235,7 @@ SWFMovie_resolveTextfieldFont(SWFMovie movie, SWFTextField field)
 
 		if( i == movie->nFonts )
 		{
-			movie->fonts = realloc(movie->fonts,
+			movie->fonts = (SWFFontCharacter*)realloc(movie->fonts,
 														 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
 
 			fontchar = newSWFFontCharacter(font);
@@ -258,11 +258,11 @@ SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
 
 
 void
-SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name)
+SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 {
 	if ( SWFBlock_getType(block) == SWF_DEFINESPRITE )
 	{
-		movie->exports = realloc(movie->exports,
+		movie->exports = (struct SWFExport_s*)realloc(movie->exports,
 														 (movie->nExports+1) * sizeof(struct SWFExport_s));
 
 		movie->exports[movie->nExports].block = block;
@@ -382,7 +382,7 @@ SWFMovie_add(SWFMovie movie, SWFBlock block)
 
 
 void
-SWFMovie_remove(SWFMovie movie, SWFDisplayItem item)
+SWFMovie_remove(SWFMovie movie , SWFDisplayItem item)
 {
 	SWFDisplayItem_remove(item);
 }
@@ -437,7 +437,7 @@ SWFMovie_nextFrame(SWFMovie movie)
 
 
 void
-SWFMovie_labelFrame(SWFMovie movie, char *label)
+SWFMovie_labelFrame(SWFMovie movie, const char *label)
 {
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFFrameLabelBlock(label));
 }
@@ -567,7 +567,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 		compresslength = swflength + (swflength/1000) + 15 + 1;
         	compress = (char *) malloc(compresslength);
 		if(compress) {
-			status = compress2 (compress, &compresslength, SWFOutput_getBuffer(swfbuffer), SWFOutput_getLength(swfbuffer), level);
+			status = compress2 ( (Bytef*) compress, &compresslength, SWFOutput_getBuffer(swfbuffer), SWFOutput_getLength(swfbuffer), level);
 			if (status == Z_OK) {
 				for (i=0; i < compresslength; i++){
 					method (compress[i], data);
@@ -585,7 +585,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 
 
 int
-SWFMovie_save(SWFMovie movie, char *filename, int compressionlevel)
+SWFMovie_save(SWFMovie movie, const char *filename, int compressionlevel)
 {
 	FILE *f = fopen(filename, "wb");
 	int count;

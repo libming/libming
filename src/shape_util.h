@@ -77,9 +77,9 @@ void SWFShape_getPen(SWFShape shape, float* penX, float* penY);
 
 
 void SWFShape_drawSizedGlyph(SWFShape shape,
-			     SWFFont font, unsigned char c, int size);
+			     SWFFont font, unsigned short c, int size);
 
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned short c);
 
 /* deprecated: */
 

@@ -66,64 +66,64 @@ static float errorPoints(float ax, float ay, float bx, float by)
 	return abs(ax-bx) + abs(ay-by);
 }
 
-static void subdivideCubicLeft(cubic *new, cubic *old, float t)
+static void subdivideCubicLeft(cubic *New, cubic *old, float t)
 {
 	SWF_assert(t>0.0 && t<1.0);
 
-	if(new != old)
-		memcpy(new, old, sizeof(cubic));
+	if(New != old)
+		memcpy(New, old, sizeof(cubic));
 
-	new->d.x = t*new->c.x + (1-t)*new->d.x;
-	new->d.y = t*new->c.y + (1-t)*new->d.y;
-	new->c.x = t*new->b.x + (1-t)*new->c.x;
-	new->c.y = t*new->b.y + (1-t)*new->c.y;
-	new->b.x = t*new->a.x + (1-t)*new->b.x;
-	new->b.y = t*new->a.y + (1-t)*new->b.y;
+	New->d.x = t*New->c.x + (1-t)*New->d.x;
+	New->d.y = t*New->c.y + (1-t)*New->d.y;
+	New->c.x = t*New->b.x + (1-t)*New->c.x;
+	New->c.y = t*New->b.y + (1-t)*New->c.y;
+	New->b.x = t*New->a.x + (1-t)*New->b.x;
+	New->b.y = t*New->a.y + (1-t)*New->b.y;
 
-	new->d.x = t*new->c.x + (1-t)*new->d.x;
-	new->d.y = t*new->c.y + (1-t)*new->d.y;
-	new->c.x = t*new->b.x + (1-t)*new->c.x;
-	new->c.y = t*new->b.y + (1-t)*new->c.y;
+	New->d.x = t*New->c.x + (1-t)*New->d.x;
+	New->d.y = t*New->c.y + (1-t)*New->d.y;
+	New->c.x = t*New->b.x + (1-t)*New->c.x;
+	New->c.y = t*New->b.y + (1-t)*New->c.y;
 
-	new->d.x = t*new->c.x + (1-t)*new->d.x;
-	new->d.y = t*new->c.y + (1-t)*new->d.y;
+	New->d.x = t*New->c.x + (1-t)*New->d.x;
+	New->d.y = t*New->c.y + (1-t)*New->d.y;
 }
 
-static void subdivideCubicRight(cubic *new, cubic *old, float t)
+static void subdivideCubicRight(cubic *New, cubic *old, float t)
 {
 	SWF_assert(t>0.0 && t<1.0);
 
-	if(new != old)
-		memcpy(new, old, sizeof(cubic));
+	if(New != old)
+		memcpy(New, old, sizeof(cubic));
 
-	new->a.x = t*new->a.x + (1-t)*new->b.x;
-	new->a.y = t*new->a.y + (1-t)*new->b.y;
-	new->b.x = t*new->b.x + (1-t)*new->c.x;
-	new->b.y = t*new->b.y + (1-t)*new->c.y;
-	new->c.x = t*new->c.x + (1-t)*new->d.x;
-	new->c.y = t*new->c.y + (1-t)*new->d.y;
+	New->a.x = t*New->a.x + (1-t)*New->b.x;
+	New->a.y = t*New->a.y + (1-t)*New->b.y;
+	New->b.x = t*New->b.x + (1-t)*New->c.x;
+	New->b.y = t*New->b.y + (1-t)*New->c.y;
+	New->c.x = t*New->c.x + (1-t)*New->d.x;
+	New->c.y = t*New->c.y + (1-t)*New->d.y;
 
-	new->a.x = t*new->a.x + (1-t)*new->b.x;
-	new->a.y = t*new->a.y + (1-t)*new->b.y;
-	new->b.x = t*new->b.x + (1-t)*new->c.x;
-	new->b.y = t*new->b.y + (1-t)*new->c.y;
+	New->a.x = t*New->a.x + (1-t)*New->b.x;
+	New->a.y = t*New->a.y + (1-t)*New->b.y;
+	New->b.x = t*New->b.x + (1-t)*New->c.x;
+	New->b.y = t*New->b.y + (1-t)*New->c.y;
 
-	new->a.x = t*new->a.x + (1-t)*new->b.x;
-	new->a.y = t*new->a.y + (1-t)*new->b.y;
+	New->a.x = t*New->a.x + (1-t)*New->b.x;
+	New->a.y = t*New->a.y + (1-t)*New->b.y;
 }
 
 static int SWFShape_approxCubic(SWFShape shape, cubic *c);
 
 static int subdivideCubic(SWFShape shape, cubic *c)
 {
-	cubic new;
+	cubic New;
 	int nCurves;
 
-	subdivideCubicLeft(&new, c, 0.5);
-	nCurves = SWFShape_approxCubic(shape, &new);
+	subdivideCubicLeft(&New, c, 0.5);
+	nCurves = SWFShape_approxCubic(shape, &New);
 
-	subdivideCubicRight(&new, c, 0.5);
-	nCurves += SWFShape_approxCubic(shape, &new);
+	subdivideCubicRight(&New, c, 0.5);
+	nCurves += SWFShape_approxCubic(shape, &New);
 
 	return nCurves;
 }
@@ -221,7 +221,7 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 
 	cubic pts = { { (float)ax, (float)ay }, { (float)bx, (float)by },
 								{ (float)cx, (float)cy }, { (float)dx, (float)dy } };
-	cubic new;
+	cubic New;
 
 	if ( d > 0 )
 	{
@@ -247,9 +247,9 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 
 	if ( t1 > 0.0 && t1 < 1.0 )
 	{
-		subdivideCubicLeft(&new, &pts, t1);
+		subdivideCubicLeft(&New, &pts, t1);
 
-		nCurves += SWFShape_approxCubic(shape, &new);
+		nCurves += SWFShape_approxCubic(shape, &New);
 
 		/*
 		nCurves += SWFShape_drawCubicTo(shape,
@@ -264,9 +264,9 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 
 	if ( t2 > 0.0 && t2 < 1.0 )
 	{
-		subdivideCubicLeft(&new, &pts, t2);
+		subdivideCubicLeft(&New, &pts, t2);
 
-		nCurves += SWFShape_approxCubic(shape, &new);
+		nCurves += SWFShape_approxCubic(shape, &New);
 
 		/*
 		nCurves += SWFShape_drawCubicTo(shape,

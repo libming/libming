@@ -10,7 +10,7 @@
 int gIndent;
 #define INDENT_LEVEL 2
 
-void println(char *s, ...)
+void println(const char *s, ...)
 {
   va_list ap;
   int n = gIndent*INDENT_LEVEL;
@@ -350,8 +350,8 @@ int printActionRecord(Buffer f)
       {
 	int flags = readUInt8(f);
 
-	char *op = (flags & 0x80) ? "Get URL2 (loadvariables)" : "Get URL2";
-	char *tgt = (flags & 0x40) ? " into target" : "";
+	const char *op = (flags & 0x80) ? "Get URL2 (loadvariables)" : "Get URL2";
+	const char *tgt = (flags & 0x40) ? " into target" : "";
 
 	switch(flags & 0x03)
 	{

@@ -18,7 +18,6 @@
 */
 
 #include <stdlib.h>
-#include <math.h>
 
 #include "movieclip.h"
 #include "blocks/sprite.h"
@@ -50,7 +49,7 @@ SWFMovieClip
 newSWFMovieClip()
 {
 	SWFMovieClip clip = (SWFMovieClip)newSWFSprite();
-	clip = realloc(clip, sizeof(struct SWFMovieClip_s));
+	clip = (SWFMovieClip)realloc(clip, sizeof(struct SWFMovieClip_s));
 
 	clip->blockList = newSWFBlockList();
 	clip->displayList = newSWFSpriteDisplayList();
@@ -144,7 +143,7 @@ SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item)
 
 
 void
-SWFMovieClip_labelFrame(SWFMovieClip clip, char *label)
+SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label)
 {
 	SWFSprite_addBlock((SWFSprite)clip, (SWFBlock)newSWFFrameLabelBlock(label));
 }

@@ -1,7 +1,7 @@
 
 #include "blocktypes.h"
 
-char *blockName(int header)
+const char *blockName(int header)
 {
   switch(header)
   {

@@ -4,12 +4,12 @@
 
 #include "compile.h"
 
-extern FILE *yyin;
-extern Buffer out;
+/* extern FILE *yyin;
+extern Buffer out; */
 #define print(x)	{fputs(x,stdout);}
 
-char *buffer;
-int bufferLen;
+static char *buffer;
+static int bufferLen;
 
 #define BUFFER_INC 1024
 
@@ -17,12 +17,12 @@ void printDoAction(Buffer f, int length);
 
 #include "../blocks/error.h"
 
-void (*SWF_error)(char *msg, ...);
-void (*SWF_warn)(char *msg, ...);
+void (*SWF_error)(const char *msg, ...);
+void (*SWF_warn)(const char *msg, ...);
 
-int SWF_versionNum = 5;
+static int SWF_versionNumber = 5;
 
-void print_error(char *msg, ...)
+void print_error(const char *msg, ...)
 {
   va_list args;
 
@@ -32,7 +32,7 @@ void print_error(char *msg, ...)
   exit(0);
 }
 
-void print_warn(char *msg, ...)
+void print_warn(const char *msg, ...)
 {
   va_list args;
 
@@ -55,12 +55,12 @@ int main(int argc, char *argv[])
 
   while (argc > 1) {
     if (strcmp(argv[1], "--4") == 0) {
-      SWF_versionNum = 4;
+      SWF_versionNumber = 4;
       argc--;
       argv++;
     } else
     if (strcmp(argv[1], "--5") == 0) {
-      SWF_versionNum = 5;
+      SWF_versionNumber = 5;
       argc--;
       argv++;
     } else
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
   bufferLen += size;
 
-  if (SWF_versionNum == 4) {
+  if (SWF_versionNumber == 4) {
     printf("======================\n");
     printf("Using Flash 4 compiler\n");
     printf("======================\n");

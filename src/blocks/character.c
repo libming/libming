@@ -66,7 +66,7 @@ SWFCharacter_addDependency(SWFCharacter character, SWFCharacter dependency)
 			return;
 #endif
 	character->dependencies =
-		realloc(character->dependencies,
+		(SWFCharacter*)realloc(character->dependencies,
 						sizeof(SWFCharacter) * (character->nDependencies + 1));
 
 	character->dependencies[character->nDependencies] = dependency;
@@ -103,7 +103,7 @@ SWFCharacter_getDependencies(SWFCharacter character,
 
 		if ( !SWFBlock_isDefined((SWFBlock)c) )
 		{
-			deps = realloc(deps, sizeof(SWFCharacter) * (nDeps + 1));
+			deps = (SWFCharacter*) realloc(deps, sizeof(SWFCharacter) * (nDeps + 1));
 			deps[nDeps] = c;
 			++nDeps;
 		}

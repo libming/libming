@@ -154,7 +154,7 @@ destroySWFText(SWFBlock block)
 SWFText
 newSWFText()
 {
-	SWFText text = malloc(sizeof(struct SWFText_s));
+	SWFText text = (SWFText)malloc(sizeof(struct SWFText_s));
 
 	SWFCharacterInit((SWFCharacter)text);
 
@@ -190,7 +190,7 @@ newSWFText2()
 SWFTextRecord
 SWFText_addTextRecord(SWFText text)
 {
-	SWFTextRecord textRecord = malloc(sizeof(struct SWFTextRecord_s));
+	SWFTextRecord textRecord = (SWFTextRecord)malloc(sizeof(struct SWFTextRecord_s));
 	SWFTextRecord current = text->currentRecord;
 
 	textRecord->flags = 0;
@@ -508,7 +508,7 @@ SWFText_addWideString(SWFText text, const unsigned short* widestring,
 
 	textRecord->advance = advance;
 	textRecord->strlen = len;
-	textRecord->string = malloc(sizeof(unsigned short) * len);
+	textRecord->string = (unsigned short*)malloc(sizeof(unsigned short) * len);
 	memcpy(textRecord->string, widestring, sizeof(unsigned short) * len);
 }
 
@@ -541,7 +541,7 @@ void
 SWFText_addString(SWFText text, const char* string, int* advance)
 {
 	int len = strlen(string);
-	unsigned short* widestring = malloc(len * sizeof(unsigned short));
+	unsigned short* widestring = (unsigned short*)malloc(len * sizeof(unsigned short));
 	int i;
 	
 	for ( i = 0; i < len; ++i )
@@ -568,7 +568,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 
 	if ( textRecord->advance == NULL )
 	{
-		textRecord->advance = malloc(sizeof(int) * len);
+		textRecord->advance = (int*)malloc(sizeof(int) * len);
 		memset(textRecord->advance, 0, sizeof(int) * len);
 	}
 

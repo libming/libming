@@ -62,7 +62,7 @@ destroySWFBlockList(SWFBlockList list)
 SWFBlockList
 newSWFBlockList()
 {
-	SWFBlockList blockList = malloc(sizeof(struct SWFBlockList_s));
+	SWFBlockList blockList = (SWFBlockList) malloc(sizeof(struct SWFBlockList_s));
 
 	blockList->nBlocks = 0;
 	blockList->blocks = NULL;
@@ -81,7 +81,7 @@ SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
 
 	if ( list->nBlocks % SWFBLOCKLIST_INCREMENT == 0 )
 	{
-		list->blocks = realloc(list->blocks,
+		list->blocks = (struct blockListEntry*) realloc(list->blocks,
 													 (list->nBlocks + SWFBLOCKLIST_INCREMENT) *
 													 sizeof(struct blockListEntry));
 	}

@@ -284,7 +284,7 @@ switch_cases
 
 	| switch_cases switch_case
 		{ $$ = $1;
-		  $$.list = realloc($$.list, ($$.count+1) * sizeof(struct switchcase));
+		  $$.list = (struct switchcase*) realloc($$.list, ($$.count+1) * sizeof(struct switchcase));
 		  $$.list[$$.count] = $2;
 		  $$.count++; }
 	;
@@ -397,12 +397,12 @@ formals_list
 
 	| identifier
 		{ $$.buffer = newBuffer();
-		  bufferWriteHardString($$.buffer, $1, strlen($1)+1);
+		  bufferWriteHardString($$.buffer, (byte*)$1, strlen($1)+1);
 		  $$.count = 1; }
 
 	| formals_list ',' identifier
 		{ $$ = $1;
-		  bufferWriteHardString($$.buffer, $3, strlen($3)+1);
+		  bufferWriteHardString($$.buffer, (byte*)$3, strlen($3)+1);
 		  ++$$.count; }
 	;
 
@@ -417,7 +417,7 @@ function_decl
 		  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
 		  bufferWriteS16($$, strlen($2) +
 				     bufferLength($4.buffer) + 5);
-		  bufferWriteHardString($$, $2, strlen($2)+1);
+		  bufferWriteHardString($$, (byte*) $2, strlen($2)+1);
 		  bufferWriteS16($$, $4.count);
 		  bufferConcat($$, $4.buffer);
 		  bufferWriteS16($$, bufferLength($6));
@@ -637,7 +637,7 @@ urlmethod
 
 level
 	: INTEGER
-		{ char *lvlstring = malloc(12*sizeof(char));
+		{ char *lvlstring = (char*) malloc(12*sizeof(char));
 		  sprintf(lvlstring, "_level%d", $1);
 		  $$ = newBuffer();
 		  bufferWriteString($$, lvlstring, strlen(lvlstring)+1);
@@ -748,9 +748,9 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GETURL);
 		  bufferWriteS16($$, strlen($3) + strlen($5) + 2);
-		  bufferWriteHardString($$, $3, strlen($3));
+		  bufferWriteHardString($$, (byte*)$3, strlen($3));
 		  bufferWriteU8($$, 0);
-		  bufferWriteHardString($$, $5, strlen($5));
+		  bufferWriteHardString($$, (byte*)$5, strlen($5));
 		  bufferWriteU8($$, 0); }
 
 	/* v3 actions */
@@ -788,7 +788,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GOTOLABEL);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
 		  free($3); }
 
 	| GOTOFRAME '(' expr ')'
@@ -801,7 +801,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_SETTARGET);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
 		  free($3); }
 
 	| SETTARGET '(' expr ')'
@@ -1532,7 +1532,7 @@ with
 	;
 
 push_item
-	: STRING		{ $$ = bufferWriteConstantString(asmBuffer, $1,
+	: STRING		{ $$ = bufferWriteConstantString(asmBuffer,(byte*) $1,
 								 strlen($1)+1); }
 
 	| INTEGER		{ bufferWriteU8(asmBuffer, PUSH_INT);
