@@ -6,37 +6,37 @@
 %}
 
 %typemap(python,in) FILE * {
-  if (!PyFile_Check($source)) {
+  if (!PyFile_Check($input)) {
     PyErr_SetString(PyExc_TypeError, "Need a file!");
     return NULL;
   }
-  $target = PyFile_AsFile($source);
+  $1 = PyFile_AsFile($input);
 }
 
 %typemap(python,in) char * {
-  if (!PyString_Check($source)) {
+  if (!PyString_Check($input)) {
     PyErr_SetString(PyExc_TypeError, "not a string");
     return NULL;
   }
-  $target = PyString_AsString($source);
+  $1 = PyString_AsString($input);
 }
 
 typedef unsigned char byte;
 
 %typemap(python,in) byte * {
-  if (!PyString_Check($source)) {
+  if (!PyString_Check($input)) {
     PyErr_SetString(PyExc_TypeError, "not a string");
     return NULL;
   }
-  $target = PyString_AsString($source);
+  $1 = PyString_AsString($input);
 }
 
 %typemap(ruby,in) int * {
-  if (NIL_P($source)) {
-         $target = 0;
+  if (NIL_P($input)) {
+         $1 = 0;
   } else {
-    Check_Type($source, T_ARRAY);
-    $target = (int *)RARRAY($source)->ptr;
+    Check_Type($input, T_ARRAY);
+    $1 = (int *)RARRAY($input)->ptr;
   }
 }
 
