@@ -1,3 +1,7 @@
+2003-08-06 17:30  erich
+
+	* ming.i: update for swig1.3 (jtittsler)
+
 2003-08-06 17:20  erich
 
 	* util/raw2adpcm.c: fix for gcc 3.3.x, (multiline string)
