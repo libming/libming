@@ -25,6 +25,7 @@
 #include "position.h"
 #include "blocks/matrix.h"
 #include "movie.h"
+#include "blocks/error.h"
 
 
 void destroySWFPosition(SWFPosition position)
@@ -61,6 +62,11 @@ updateMatrix(SWFPosition p)
 	float sRot = (float)sin(p->rot*M_PI/180);
 	float xS = p->xSkew, yS = p->ySkew;
 	SWFMatrix m = p->matrix;
+	if ( ! m )
+	{
+		SWF_warn("Warning! tried to change the matrix of an object with no matrix");
+		return;
+	}
 
 	SWFMatrix_set(m, p->xScale * (cRot - xS*sRot),
 		p->xScale * (yS*cRot - (xS*yS+1)*sRot),
