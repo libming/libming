@@ -7,7 +7,7 @@
 #include "compile.h"
 #include "action.h"
 #include "blocks/error.h"
-#include "swf4compiler.h" /* defines token types */
+#include "swf4compiler.tab.h" /* defines token types */
 
 static int swf4debug;
 
