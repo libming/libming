@@ -71,6 +71,6 @@ void SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes);
 int SWFOutput_numBits(int num);
 int SWFOutput_numSBits(int num);
 
-void SWFOutput_writeString(SWFOutput out, byte *string);
+void SWFOutput_writeString(SWFOutput out, const byte *string);
 
 #endif /* SWF_OUTPUT_H_INCLUDED */

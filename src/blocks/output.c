@@ -106,7 +106,7 @@ int SWFOutput_length(SWFOutput out)
 
   while(out!=NULL)
   {
-    size += (out->pos)-(out->buffer);
+    size += (out->pos) - (out->buffer) + (out->bitpos>0 ? 1 : 0);
     out = out->next;
   }
 
@@ -273,7 +273,7 @@ int SWFOutput_numSBits(int num)
     return SWFOutput_numBits(num)+1;
 }
 
-void SWFOutput_writeString(SWFOutput out, unsigned char *string)
+void SWFOutput_writeString(SWFOutput out, const unsigned char *string)
 {
   char c;
 
