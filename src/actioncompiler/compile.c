@@ -3,6 +3,8 @@
   #include <unistd.h>
 #endif
 
+#define LITTLE_ENDIAN
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -224,10 +226,17 @@ int bufferWriteInt(Buffer out, int i)
   bufferWriteS16(out, 5);
   bufferWriteU8(out, PUSH_INT);
 
+#ifdef LITTLE_ENDIAN
   bufferWriteU8(out, p[0]);
   bufferWriteU8(out, p[1]);
   bufferWriteU8(out, p[2]);
   bufferWriteU8(out, p[3]);
+#else
+  bufferWriteU8(out, p[3]);
+  bufferWriteU8(out, p[2]);
+  bufferWriteU8(out, p[1]);
+  bufferWriteU8(out, p[0]);
+#endif
 
   return 8;
 }
@@ -240,6 +249,7 @@ int bufferWriteDouble(Buffer out, double d)
   bufferWriteS16(out, 9);
   bufferWriteU8(out, PUSH_DOUBLE);
 
+#ifdef LITTLE_ENDIAN
   bufferWriteU8(out, p[4]);
   bufferWriteU8(out, p[5]);
   bufferWriteU8(out, p[6]);
@@ -248,6 +258,16 @@ int bufferWriteDouble(Buffer out, double d)
   bufferWriteU8(out, p[1]);
   bufferWriteU8(out, p[2]);
   bufferWriteU8(out, p[3]);
+#else
+  bufferWriteU8(out, p[7]);
+  bufferWriteU8(out, p[6]);
+  bufferWriteU8(out, p[5]);
+  bufferWriteU8(out, p[4]);
+  bufferWriteU8(out, p[3]);
+  bufferWriteU8(out, p[2]);
+  bufferWriteU8(out, p[1]);
+  bufferWriteU8(out, p[0]);
+#endif
 
   return 12;
 }
