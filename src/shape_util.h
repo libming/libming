@@ -45,9 +45,9 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 void SWFShape_setLine(SWFShape shape,
 		      unsigned short width, byte r, byte g, byte b, byte a);
 
-void SWFShape_drawArc(SWFShape shape, int r, float startAngle, float endAngle);
+void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle);
 
-void SWFShape_drawCircle(SWFShape shape, int r);
+void SWFShape_drawCircle(SWFShape shape, float r);
 
 
 /* approximate a cubic bezier with quadratic segments,
