@@ -42,9 +42,13 @@ typedef SWFSound           SWF__Sound;
 #define aTHXo_
 #endif
 
-
-int swf_debug = 0;   /* Should we get this from, say, $SWF::debug? */
+#ifndef S_DEBUG
+#define swf_debug 0   /* Should we get this from, say, $SWF::debug? */
 #define S_DEBUG(level,code)  if (swf_debug >= level) { code; }
+#endif
+
+void swf_stash_refcnt_inc(SV *sv_key, SV *sv_value);
+void swf_stash_refcnt_dec(SV *sv_key);
 
 #endif /* PERL_SWF_H_INCLUDED */
 
