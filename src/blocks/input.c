@@ -187,12 +187,21 @@ void SWFInput_buffer_seek(SWFInput input, long offset, int whence)
     input->offset = min(input->length, offset);
 }
 
+void SWFInput_buffer_dtor(SWFInput input)
+{
+  /* XXX - user alloced the buffer, so they should free it..
+     but that's not so easy when user can't tell what kind of input this is */
+
+  free(input->data);
+  free(input);
+}
+
 SWFInput newSWFInput_buffer(unsigned char *buffer, int length)
 {
   SWFInput input = calloc(1, sizeof(struct _swfInput));
 
   input->getChar = SWFInput_buffer_getChar;
-  input->destroy = SWFInput_dtor;
+  input->destroy = SWFInput_buffer_dtor;
   input->eof = SWFInput_buffer_eof;
   input->seek = SWFInput_buffer_seek;
   input->data = (void *)buffer;
