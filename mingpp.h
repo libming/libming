@@ -53,7 +53,7 @@ extern "C"
   #define SWFPrebuiltClip c_SWFPrebuiltClip
 // )))) end minguts 2004/08/31
 
-  #include <src/ming.h>
+  #include <ming.h>
 
   #undef SWFShape
   #undef SWFMovie
@@ -539,7 +539,7 @@ class SWFBitmap : public SWFBlock
 #if USE_GIF
       
       else if(strcmp(filename+strlen(filename)-4, ".gif") == 0)
-	this->bitmap = (c_SWFBitmap) newSWFDBLBitmapData_fromGifFile(fopen(filename, "rb"));
+	this->bitmap = (c_SWFBitmap) newSWFDBLBitmapData_fromGifFile(filename);
 
 #endif
 
