@@ -21,8 +21,8 @@
 
 #include "blocks/swf.h"
 
-#define MING_VERSION        0.0.9c
-#define MING_VERSION_TEXT  "0.0.9c"
+#define MING_VERSION        0.1.0
+#define MING_VERSION_TEXT  "0.1.0"
 
 #include "movie.h"
 #include "displaylist.h"
