@@ -1,0 +1,97 @@
+
+Installing Ming
+
+Last updated 16th January 2004.
+
+Unfortunately we haven't made Ming use autoconf yet (if you'd like
+to, please let us know!)
+
+  Unpack the Ming source tarball and go into the uncompressed
+  directory.
+
+    $ gunzip ming-0.3a.tar.gz
+    $ cd ming
+
+  Decide whether you want to include gif or png image format
+  handling in Ming, then adjust the config.h, config.make,
+  and Makefile to suit your system.
+
+    $ vi <the appropriate files>
+
+
+  PHP
+  ***
+
+  (should work with PHP-4.0.2 and higher)
+
+  The preferred method is to build Ming as a PHP module (.so file):
+
+   1. Compile the main Ming library
+
+      $ make
+      $ make static
+
+   2. Compile the PHP module
+
+      $ cd php_ext
+      $ make
+
+   3. Install the PHP module
+
+      $ make install
+
+   4. Configure PHP to load Ming.  You need to adjust your
+      php.ini file, normally by adding:
+
+      extension=php_ming.so
+
+      to the extension section, and also making sure the
+      "extension_dir" parameter in the php.ini file is pointing
+      to the correct directory.  A common default of the php.ini
+      file is to be pointing to "./", which may need adjusting.
+
+
+   The alternative way is to build Ming into the PHP source,
+   though I'm personally not sure (Justin that is) if it still
+   works.  If you get this working successfully (or not), please
+   let me know at <jclift@digitaldistribution.com> and we'll update
+   the documentation to reflect it.
+
+      $ mkdir <phpdir>/ext/ming
+      $ cp php_ext/* <phpdir>/ext/ming
+      $ cd <phpdir>
+      $ ./buildconf
+      $ ./configure --with-ming=<mingdir> <other config options>
+
+   Then build and install php as usual, and restart the web server
+   if necessary.
+      
+
+  PYTHON
+  ******
+
+  (You may need python 1.5.2 or higher)
+
+      $ make static
+      $ cd py_ext
+      $ make mingcmodule.so
+
+  Then fix the install path in the Makefile
+
+  Then install
+
+      $ make install
+
+
+  PERL
+  ****
+
+  Read the README file in the perl_ext subdirectory.
+
+
+USING MING:
+
+  Check the web site:
+
+    http://ming.sf.net
+
