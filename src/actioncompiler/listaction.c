@@ -282,6 +282,9 @@ int printActionRecord(Buffer f)
     case SWFACTION_STOPSOUNDS:
       println("Stop Sounds");
       break;
+    case SWFACTION_THROW:
+      println("Throw");
+      break;
 
     /* ops with args */
     case SWFACTION_PUSHDATA:
@@ -535,6 +538,35 @@ int printActionRecord(Buffer f)
     case SWFACTION_ENUM2:
       println("enum2");
       break;
+    case SWFACTION_TRY:
+    { int flag = readUInt8(f);
+	  int try, catch, finally;
+      char *name;
+	  try = readUInt16(f);
+	  catch = readUInt16(f);
+	  finally = readUInt16(f);
+      name = readString(f);  // if ((flag&4) == 0)
+	// catch var or reg here
+      println("try");
+      ++gIndent;
+	  if(try)
+      	printDoAction(f, try);
+      --gIndent;
+	  if(catch)
+      {	print("catch ("); print(name); println(" )");
+        ++gIndent;
+	    printDoAction(f, catch);
+	    --gIndent;
+	  }
+	  if(finally)
+      {	println("finally");
+        ++gIndent;
+	    printDoAction(f, finally);
+	    --gIndent;
+	  }
+      break;
+	}
+    
 
     default:
       println("Unknown Action: %02X", type);

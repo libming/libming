@@ -56,6 +56,7 @@ enum
   SWFACTION_STARTDRAGMOVIE          = 0x27,
   SWFACTION_STOPDRAGMOVIE           = 0x28,
   SWFACTION_STRINGCOMPARE           = 0x29,
+  SWFACTION_THROW                   = 0x2a,
   SWFACTION_RANDOM                  = 0x30,
   SWFACTION_MBLENGTH                = 0x31,
   SWFACTION_ORD                     = 0x32,
@@ -110,6 +111,7 @@ enum
   SWFACTION_SHIFTRIGHT2             = 0x65,
   SWFACTION_STRICTEQ                = 0x66,
   SWFACTION_CONSTANTPOOL            = 0x88,
+  SWFACTION_TRY                     = 0x8f,
   SWFACTION_WITH                    = 0x94,
   SWFACTION_DEFINEFUNCTION          = 0x9B,
 

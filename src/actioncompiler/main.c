@@ -64,6 +64,11 @@ int main(int argc, char *argv[])
       argc--;
       argv++;
     } else
+    if (strcmp(argv[1], "--6") == 0) {
+      SWF_versionNumber = 6;
+      argc--;
+      argv++;
+    } else
       break;
   }
 
@@ -87,6 +92,9 @@ int main(int argc, char *argv[])
   }
 
   bufferLen += size;
+
+// swf5compiler may understand different code
+  SWF_versionNum = SWF_versionNumber;
 
   if (SWF_versionNumber == 4) {
     printf("======================\n");
