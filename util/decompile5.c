@@ -843,6 +843,19 @@ static Stack readActionRecord(FILE *f)
 			 newTreeBase((Stack)names, type, (Stack)values));
     }
 
+    case SWFACTION_INITARRAY:
+    {
+      Stack *names, *values;
+      int i, nEntries = intVal(pop());
+
+      values = malloc(sizeof(Stack) * nEntries);
+
+      for(i=0; i<nEntries; ++i)
+	values[i] = pop();
+
+      return newTreeBase((Stack)nEntries, type, (Stack)values);
+    }
+
     default:
       printf("Unknown Action: 0x%02X\n", type);
       dumpBytes(f, length);
@@ -1770,6 +1783,26 @@ static void listItem(Stack s, Action parent)
 	}
 
 	puts(" }");
+
+	break;
+      }
+
+      case SWFACTION_INITARRAY:
+      {
+	int i, nEntries = (int)t->left;
+	Stack *values = (Stack *)t->right;
+
+	puts("[ ");
+
+	for(i=0; i<nEntries; ++i)
+	{
+	  listItem(values[i], SWFACTION_INITOBJECT);
+
+	  if(i < nEntries-1)
+	    puts(", ");
+	}
+
+	puts(" ]");
 
 	break;
       }
