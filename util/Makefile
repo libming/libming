@@ -2,8 +2,15 @@
 #CC = gcc -O5
 CC = gcc -g -Wall
 
+PREFIX = ${DESTDIR}/usr
+# Default binary location for install: /usr/lib/libming/bin
+BINDIR = ${PREFIX}/lib/libming/bin
+
 all:
 	cat README
+
+all_binaries: listswf listfdb makefdb listjpeg swftophp png2dbl gif2dbl \
+	gif2mask listaction
 
 clean:
 	rm -f *.o listswf listswf.exe \
@@ -38,11 +45,23 @@ makefdb: blocktypes.o makefdb.c read.o
 	${CC} makefdb.c read.o blocktypes.o -o makefdb
 
 gif2mask: gif2mask.c
-	${CC} gif2mask.c -o gif2mask -lgif -lm -lz
+	${CC} gif2mask.c -o gif2mask -lungif -lm -lz
 
 png2dbl: png2dbl.c
 	${CC} png2dbl.c -o png2dbl -lz -lpng -lm
 
 gif2dbl: gif2dbl.c
 	${CC} gif2dbl.c -o gif2dbl -lz -lungif -lm
+
+install: all_binaries
+	install -d $(BINDIR)
+	install -m 0755 swftophp $(BINDIR)
+	install -m 0755 makefdb $(BINDIR)
+	install -m 0755 listfdb $(BINDIR)
+	install -m 0755 listjpeg $(BINDIR)
+	install -m 0755 listswf $(BINDIR)
+	install -m 0755 listaction $(BINDIR)
+	install -m 0755 png2dbl $(BINDIR)
+	install -m 0755 gif2dbl $(BINDIR)
+	install -m 0755 gif2mask $(BINDIR)
 
