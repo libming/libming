@@ -42,6 +42,7 @@ const char *blockName(int header)
     case 12: return "DoAction"; 	        break;
     case 37: return "TextField";                break;
     case 56: return "LibrarySymbol";            break;
+    case 57: return "ImportAssets";             break;
     case 58: return "Password";                 break;
 
     default: return "Unknown block type";	break;

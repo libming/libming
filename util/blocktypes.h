@@ -41,6 +41,7 @@ typedef enum
   DOACTION			= 12,
   TEXTFIELD                     = 37,
   LIBRARYSYMBOL                 = 56,
+  IMPORTASSETS            	= 57,
   PASSWORD                      = 58
 } Blocktype;
 

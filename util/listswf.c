@@ -2026,6 +2026,7 @@ int main(int argc, char *argv[])
       case TEXTFIELD:		printTextField(f, length);	break;
       case LIBRARYSYMBOL:	printLibrarySymbol(f, length);	break;
       case PASSWORD:		printPassword(f, length);	break;
+      case IMPORTASSETS:	printImportAssets(f, length);   break;
 
       default:                  dumpBytes(f, length);	        break;
     }
@@ -2037,4 +2038,17 @@ int main(int argc, char *argv[])
   dumpBytes(f, size-fileOffset);
 
   return 0;
+}
+
+void printImportAssets(FILE *f, int length)
+{
+      int n, i;
+      println("\tAsset URL: %s", readString(f));
+      n = readUInt16(f);
+      println("\tNumber of assets: %d", n);
+      for (i=0; i<n; i++)
+      {
+      	print("\tTag%d: %d\n", i+1, readUInt16(f));
+      	print("\tName%d: %s\n", i+1, readString(f));
+      }
 }
