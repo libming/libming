@@ -43,7 +43,7 @@ void destroySWFBrowserFont(SWFBlock block)
 SWFBrowserFont newSWFBrowserFont(char *name)
 {
   unsigned int i;
-  SWFBrowserFont font = (SWFBrowserFont)malloc(SWFBROWSERFONT_SIZE);
+  SWFBrowserFont font = calloc(1, SWFBROWSERFONT_SIZE);
   SWFOutput out = newSWFOutput();
   memset(font, 0, SWFBROWSERFONT_SIZE);
 

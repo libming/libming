@@ -43,8 +43,7 @@ void destroySWFOutputBlock(SWFBlock block)
 }
 SWFOutputBlock newSWFOutputBlock(SWFOutput out, SWFBlocktype type)
 {
-  SWFOutputBlock block = (SWFOutputBlock)malloc(SWFOUTPUTBLOCK_SIZE);
-  memset(block, 0, SWFOUTPUTBLOCK_SIZE);
+  SWFOutputBlock block = calloc(1, SWFOUTPUTBLOCK_SIZE);
 
   BLOCK(block)->type = type;
   BLOCK(block)->writeBlock = writeSWFOutputBlockToStream;

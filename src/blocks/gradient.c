@@ -24,8 +24,7 @@
 
 SWFGradient newSWFGradient()
 {
-  SWFGradient gradient = (SWFGradient)malloc(GRADIENT_SIZE);
-  memset(gradient, 0, GRADIENT_SIZE);
+  SWFGradient gradient = calloc(1, GRADIENT_SIZE);
   return gradient;
 }
 void destroySWFGradient(SWFGradient gradient)

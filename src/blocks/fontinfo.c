@@ -51,8 +51,8 @@ int completeDefineSWFFontInfoBlock(SWFBlock block)
 }
 SWFFontInfo newDefineSWFFontInfo(SWFFont font)
 {
-  SWFFontInfo fontInfo = (SWFFontInfo)malloc(FONTINFO_SIZE);
-  memset(fontInfo, 0, FONTINFO_SIZE);
+  SWFFontInfo fontInfo = calloc(1, FONTINFO_SIZE);
+
   BLOCK(fontInfo)->type = SWF_DEFINEFONTINFO;
   BLOCK(fontInfo)->writeBlock = writeDefineSWFFontInfoBlock;
   BLOCK(fontInfo)->complete = completeDefineSWFFontInfoBlock;

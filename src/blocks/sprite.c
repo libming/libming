@@ -66,13 +66,16 @@ void destroySWFSprite(SWFBlock block)
 
 SWFSprite newSWFSprite()
 {
-  SWFSprite sprite = (SWFSprite)malloc(SWF_SPRITE_SIZE);
-  memset(sprite, 0, SWF_SPRITE_SIZE);
+  SWFSprite sprite = calloc(1, SWF_SPRITE_SIZE);
+
   CHARACTERID(sprite) = ++SWF_gNumCharacters;
   BLOCK(sprite)->type = SWF_DEFINESPRITE;
   BLOCK(sprite)->writeBlock = writeSWFSpriteToMethod;
   BLOCK(sprite)->complete = completeSWFSprite;
   BLOCK(sprite)->dtor = destroySWFSprite;
+
+  sprite->blocks = NULL;
+
   return sprite;
 }
 
@@ -93,8 +96,9 @@ void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
      block->type == SWF_SOUNDSTREAMBLOCK ||
      block->type == SWF_END)
   {
-    sprite->blocks = (SWFBlock *)realloc(sprite->blocks,
-					 (sprite->nBlocks+1)*sizeof(SWFBlock));
+    sprite->blocks = realloc(sprite->blocks,
+			     (sprite->nBlocks+1)*sizeof(SWFBlock));
+
     sprite->blocks[sprite->nBlocks++] = block;
 
     /* XXX - can we get sprite's dependencies? */

@@ -26,7 +26,7 @@
 SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
 		       float rMult, float gMult, float bMult, float aMult)
 {
-  SWFCXform cXform = (SWFCXform)malloc(CXFORM_SIZE);
+  SWFCXform cXform = malloc(CXFORM_SIZE);
 
   cXform->rMult = floor(256*rMult);
   cXform->gMult = floor(256*gMult);

@@ -335,8 +335,7 @@ SWFJpegBitmap newSWFJpegBitmap(FILE *f)
   SWFJpegBitmap jpeg;
   struct jpegInfo *info;
 
-  jpeg = (SWFJpegBitmap)malloc(SWFJPEGBITMAP_SIZE);
-  memset(jpeg, 0, SWFJPEGBITMAP_SIZE);
+  jpeg = calloc(1, SWFJPEGBITMAP_SIZE);
 
   CHARACTERID(jpeg) = ++SWF_gNumCharacters;
   BLOCK(jpeg)->writeBlock = writeSWFJpegBitmapToMethod;
@@ -368,8 +367,7 @@ SWFJpegWithAlpha newSWFJpegWithAlpha(FILE *f, FILE *alpha)
   struct jpegInfo *info;
   struct stat sbuf;
 
-  jpeg = (SWFJpegWithAlpha)malloc(SWFJPEGWITHALPHA_SIZE);
-  memset(jpeg, 0, SWFJPEGWITHALPHA_SIZE);
+  jpeg = calloc(1, SWFJPEGWITHALPHA_SIZE);
 
   CHARACTERID(jpeg) = ++SWF_gNumCharacters;
   BLOCK(jpeg)->writeBlock = writeSWFJpegWithAlphaToMethod;

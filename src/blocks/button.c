@@ -23,7 +23,7 @@ static SWFButtonRecord newSWFButtonRecord(byte flags, SWFCharacter character,
 					  unsigned short layer,
 					  SWFMatrix matrix)
 {
-  SWFButtonRecord record = (SWFButtonRecord)malloc(BUTTONRECORD_SIZE);
+  SWFButtonRecord record = calloc(1, BUTTONRECORD_SIZE);
 
   record->flags = flags;
   record->character = character;
@@ -160,13 +160,17 @@ void destroySWFButton(SWFBlock block)
 
 SWFButton newSWFButton()
 {
-  SWFButton button = (SWFButton)malloc(SWFBUTTON_SIZE);
-  memset(button, 0, SWFBUTTON_SIZE);
+  SWFButton button = calloc(1, SWFBUTTON_SIZE);
+
   CHARACTERID(button) = ++SWF_gNumCharacters;
   BLOCK(button)->type = SWF_DEFINEBUTTON2;
   BLOCK(button)->writeBlock = writeSWFButtonToMethod;
   BLOCK(button)->complete = completeSWFButton;
   BLOCK(button)->dtor = destroySWFButton;
+
+  button->records = NULL;
+  button->actions = NULL;
+  button->out = NULL;
 
   return button;
 }

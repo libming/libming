@@ -51,7 +51,7 @@ void destroySWFRect(SWFRect rect)
 
 SWFRect newSWFRect(int minX, int maxX, int minY, int maxY)
 {
-  SWFRect rect = (SWFRect)malloc(SWFRECT_SIZE);
+  SWFRect rect = malloc(SWFRECT_SIZE);
   rect->minX = min(minX, maxX);
   rect->maxX = max(minX, maxX);
   rect->minY = min(minY, maxY);
@@ -84,8 +84,8 @@ void SWFRect_includeRect(SWFRect a, SWFRect b)
 /* make rect big enough to include (x,y) + width extra */
 void SWFRect_includePoint(SWFRect rect, int x, int y, int width)
 {
-  if(x-width-1 < rect->minX) rect->minX = x-width-1;
+  if(x-width-1 < rect->minX) rect->minX = x-width;
   if(x+width > rect->maxX) rect->maxX = x+width;
-  if(y-width-1 < rect->minY) rect->minY = y-width-1;
+  if(y-width-1 < rect->minY) rect->minY = y-width;
   if(y+width > rect->maxY) rect->maxY = y+width;
 }

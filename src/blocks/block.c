@@ -91,10 +91,12 @@ int writeSWFBlockToMethod(SWFBlock block,
 
 SWFBlock newEmptySWFBlock(SWFBlocktype type)
 {
-  SWFBlock block = (SWFBlock)malloc(BLOCK_SIZE);
-  memset(block, 0, BLOCK_SIZE);
-
+  SWFBlock block = calloc(1, BLOCK_SIZE);
   block->type = type;
+
+  block->writeBlock = NULL;
+  block->complete = NULL;
+  block->dtor = NULL;
 
   return block;
 }

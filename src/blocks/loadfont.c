@@ -184,8 +184,7 @@ SWFFont loadSWFFontFromFile(FILE *file)
       font->glyphOffset[i] = (byte *)(readUInt16(file) - 2*nGlyphs - 2);
 
   /* it helps to allocate the right amount. (thanks, Tim!) */
-  font->shapes = (byte *)malloc(font->glyphOffset[nGlyphs] -
-				font->glyphOffset[0] + 1);
+  font->shapes = malloc(font->glyphOffset[nGlyphs] - font->glyphOffset[0] + 1);
 
   /* adjust offset table to point to shapes */
   for(i=0; i<=nGlyphs; ++i)

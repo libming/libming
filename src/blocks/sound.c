@@ -146,9 +146,9 @@ SWFBlock newSWFStartSound(SWFSoundInfo soundInfo)
 
 SWFSoundInfo newSWFSoundInfo(SWFSound sound)
 {
-  SWFSoundInfo soundInfo = (SWFSoundInfo)malloc(SWF_SOUNDINFO_SIZE);
-  memset(soundInfo, 0, SWF_SOUNDINFO_SIZE);
+  SWFSoundInfo soundInfo = calloc(SWF_SOUNDINFO_SIZE);
   soundInfo->sound = sound;
+  soundInfo->envPoints = NULL;
   return soundInfo;
 }
 
@@ -181,8 +181,8 @@ SWFBlock newStopSWFSoundBlock(SWFSound sound)
 
 SWFSound newSWFSound()
 {
-  SWFSound sound = (SWFSound)malloc(SWF_SOUND_SIZE);
-  memset(sound, 0, SWF_SOUND_SIZE);
+  SWFSound sound = calloc(SWF_SOUND_SIZE);
+  sound->file = NULL;
   return sound;
 }
 

@@ -25,8 +25,7 @@
 
 SWFOutput newSWFOutput()
 {
-  SWFOutput out = (SWFOutput)malloc(OUTPUT_SIZE);
-  memset(out, 0, OUTPUT_SIZE);
+  SWFOutput out = calloc(1, OUTPUT_SIZE);
 
   out->buffer = malloc(OUTPUT_BUFFER_INCREMENT);
   out->pos = out->buffer;
@@ -41,8 +40,7 @@ SWFOutput newSWFOutput()
    use if you have an upper limit to how big this'll get */
 SWFOutput newSizedSWFOutput(int size)
 {
-  SWFOutput out = (SWFOutput)malloc(OUTPUT_SIZE);
-  memset(out, 0, OUTPUT_SIZE);
+  SWFOutput out = calloc(1, OUTPUT_SIZE);
 
   out->buffer = malloc(size+1);
   out->pos = out->buffer;

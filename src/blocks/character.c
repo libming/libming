@@ -22,9 +22,9 @@
 
 void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency)
 {
-  character->dependencies = (SWFBlock *)realloc(character->dependencies,
-						sizeof(SWFBlock) *
-						(character->nDependencies+1));
+  character->dependencies = realloc(character->dependencies,
+				    sizeof(SWFBlock) *
+				    (character->nDependencies+1));
 
   character->dependencies[character->nDependencies] = dependency;
   ++character->nDependencies;

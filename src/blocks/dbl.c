@@ -52,8 +52,7 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
   int version;
   int width, height;
 
-  dbl = (SWFDBLBitmap)malloc(SWFDBLBITMAP_SIZE);
-  memset(dbl, 0, SWFDBLBITMAP_SIZE);
+  dbl = calloc(1, SWFDBLBITMAP_SIZE);
 
   CHARACTERID(dbl) = ++SWF_gNumCharacters;
   BLOCK(dbl)->writeBlock = writeSWFDBLBitmapToMethod;

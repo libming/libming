@@ -114,8 +114,7 @@ SWFBlock *SWFMorph_getDependencies(SWFCharacter character)
 
 SWFMorph newSWFMorphShape()
 {
-  SWFMorph morph = (SWFMorph)malloc(MORPH_SIZE);
-  memset(morph, 0, MORPH_SIZE);
+  SWFMorph morph = calloc(1, MORPH_SIZE);
 
   BLOCK(morph)->type = SWF_DEFINEMORPHSHAPE;
   BLOCK(morph)->writeBlock = writeSWFMorphBlockToStream;
