@@ -1430,11 +1430,7 @@ expr_or_obj
 	;
 
 primary
-	: function_call
-
-	| anon_function_decl
-
-	| method_call
+	: anon_function_decl
 
 	| lvalue_expr
 
