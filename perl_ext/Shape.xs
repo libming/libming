@@ -51,6 +51,27 @@ SWFShape_movePen(shape, x, y)
         int x
         int y
 
+float
+SWFShape_getPenX(shape)
+        SWF::Shape shape
+
+float
+SWFShape_getPenY(shape)
+        SWF::Shape shape
+
+
+void
+SWFShape_getPen(shape)
+        SWF::Shape shape
+        PREINIT:
+        float           x;
+        float           y;
+        PPCODE:
+        SWFShape_getPen(shape, &x, &y);
+        EXTEND(SP, 2);
+        PUSHs(sv_2mortal(newSVnv((double)x)));
+        PUSHs(sv_2mortal(newSVnv((double)y)));
+
 void
 SWFShape_drawLineTo(shape, x, y)
 	SWF::Shape	shape
