@@ -1,3 +1,7 @@
+2003-10-15 6:19  peterdd
+
+	* util/swftoperl.c: added swfdecompression
+	
 2003-09-16 7:00  peterdd
 
 	* util/swftoperl.c: added buttonsound decompilation
