@@ -9,8 +9,7 @@ php_ming.so: ming.o
 	${CC} -shared -fpic ming.o ../libming.a -o php_ming.so -lm
 
 ming.o: ${CFILES}
-	${CC} ${DEFINES} -c ming.c \
-	  -I. -I.. `php-config --includes` -lm
+	${CC} ${DEFINES} -c ming.c -I. -I.. `php-config --includes`
 
 clean:
 	rm -f php_ming.so

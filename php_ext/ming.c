@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP version 4.0                                                      |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997, 1998, 1999, 2000 The PHP Group                   |
+   | Copyright (c) 1997-2001 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 2.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -23,6 +23,7 @@
 
 #if HAVE_MING
 #include "ext/standard/info.h"
+#include "ext/standard/file.h"
 #include "php_ming.h"
 
 static zend_function_entry ming_functions[] = {
@@ -71,6 +72,8 @@ static int le_swfmorphp;
 static int le_swfspritep;
 
 static int le_fopen;
+static int le_socket;
+static int le_popen;
 
 zend_class_entry movie_class_entry;
 zend_class_entry shape_class_entry;
@@ -125,7 +128,7 @@ static void *SWFgetProperty(zval *id, char *name, int namelen, int proptype)
 /* {{{ internal function SWFCharacter getCharacter(zval *id)
    Returns the SWFCharacter contained in zval *id */
 
-SWFCharacter getCharacter(zval *id)
+static SWFCharacter getCharacter(zval *id)
 {
   if(id->value.obj.ce == &shape_class_entry)
     return (SWFCharacter)getShape(id);
@@ -141,11 +144,58 @@ SWFCharacter getCharacter(zval *id)
     return (SWFCharacter)getMorph(id);
   else if(id->value.obj.ce == &sprite_class_entry)
     return (SWFCharacter)getSprite(id);
+  else if(id->value.obj.ce == &bitmap_class_entry)
+    return (SWFCharacter)getBitmap(id);
   else
     php_error(E_ERROR, "called object is not an SWFCharacter");
 }
 
 /* }}} */
+
+/* }}} */
+/* {{{ getInput - utility func for making an SWFInput from an fopened resource */
+
+#define SOCKBUF_INCREMENT 10240
+
+/* turn a socket into an SWFInput by copying everything to a buffer. */
+/* not pretty, but it works */
+
+static SWFInput newSWFInput_sock(int socket)
+{
+  char *buffer = NULL;
+  int l, offset = 0, alloced = 0;
+
+  do
+  {
+    if(offset <= alloced)
+    {
+      alloced += SOCKBUF_INCREMENT;
+      buffer = realloc(buffer, alloced);
+    }
+
+    l = php_sock_fread(buffer+offset, SOCKBUF_INCREMENT, socket);
+
+    offset += l;
+  }
+  while(l > 0);
+
+  return newSWFInput_buffer(buffer, offset);
+}
+
+static SWFInput getInput(zval **zfile)
+{
+  FILE *file;
+  int type, s, offset;
+  char *buffer;
+
+  file = (FILE *)zend_fetch_resource(zfile, -1, "File-Handle", &type, 3,
+				     le_fopen, le_socket, popen);
+
+  if(type == le_socket)
+    return newSWFInput_sock(*(int *)file);
+  else
+    return newSWFInput_file(file);
+}
 
 /* }}} */
 
@@ -215,77 +265,70 @@ static zend_function_entry swfbitmap_functions[] = {
 
 PHP_FUNCTION(swfbitmap_init)
 {
-  zval **file, **mask;
-  char *filename, *maskname = NULL;
+  zval **zfile, **zmask = NULL;
+  FILE *file, *mask;
   SWFBitmap bitmap;
-  int ret, l;
+  SWFInput input, maskinput;
+  int ret, type;
 
   if(ZEND_NUM_ARGS() == 1)
   {
-    if(zend_get_parameters_ex(1, &file) == FAILURE)
+    if(zend_get_parameters_ex(1, &zfile) == FAILURE)
       WRONG_PARAM_COUNT;
   }
   else if(ZEND_NUM_ARGS() == 2)
   {
-    if(zend_get_parameters_ex(2, &file, &mask) == FAILURE)
+    if(zend_get_parameters_ex(2, &zfile, &zmask) == FAILURE)
       WRONG_PARAM_COUNT;
-
-    maskname = Z_STRVAL_PP(mask);
   }
   else
     WRONG_PARAM_COUNT;
 
-  filename = Z_STRVAL_PP(file);
-  l = Z_STRLEN_PP(file);
-
-  if(strncasecmp(filename+l-4, ".jpg", 4) == 0 ||
-     strncasecmp(filename+l-5, ".jpeg", 5) == 0)
+  if((*zfile)->type != IS_RESOURCE)
   {
-    if(maskname != NULL)
-    {
-      FILE *jpeg, *mask;
-      if((jpeg = V_FOPEN(filename, "rb")) == NULL)
-	 php_error(E_ERROR, "Couldn't find file %s", filename);
+    convert_to_string_ex(zfile);
 
-      if((mask = V_FOPEN(maskname, "rb")) == NULL)
-	php_error(E_ERROR, "Couldn't find file %s", maskname);
+    file = V_FOPEN(Z_STRVAL_PP(zfile), "rb");
 
-      bitmap = newSWFJpegWithAlpha(jpeg, mask);
+    if(!file)
+      php_error(E_ERROR, "Couldn't find file %s", Z_STRVAL_PP(zfile));
 
-      ZEND_REGISTER_RESOURCE(NULL, jpeg, le_fopen);
-      ZEND_REGISTER_RESOURCE(NULL, mask, le_fopen);
-    }
-    else
-    {
-      FILE *jpeg;
+    ZEND_REGISTER_RESOURCE(NULL, file, le_fopen);
 
-      if((jpeg = V_FOPEN(filename, "rb")) == NULL)
-	 php_error(E_ERROR, "Couldn't find file %s", filename);
-
-      bitmap = newSWFJpegBitmap(jpeg);
-
-      ZEND_REGISTER_RESOURCE(NULL, jpeg, le_fopen);
-    }
-  }
-  else if(strncasecmp(filename+l-4, ".dbl", 4) == 0)
-  {
-    FILE *dbl;
-
-    if((dbl = V_FOPEN(filename, "rb")) == NULL)
-      php_error(E_ERROR, "Couldn't find file %s", filename);
-
-    bitmap = newSWFDBLBitmap(dbl);
-
-    ZEND_REGISTER_RESOURCE(NULL, dbl, le_fopen);
+    input = newSWFInput_file(file);
   }
   else
-    php_error(E_ERROR, "Sorry, can't tell what type of file %s is", filename);
+    input = getInput(zfile);
+
+  if(zmask != NULL)
+  {
+    if((*zmask)->type != IS_RESOURCE)
+    {
+      convert_to_string_ex(zmask);
+
+      mask = V_FOPEN(Z_STRVAL_PP(zmask), "rb");
+
+      if(!mask)
+	php_error(E_ERROR, "Couldn't find file %s", Z_STRVAL_PP(zmask));
+
+      ZEND_REGISTER_RESOURCE(NULL, mask, le_fopen);
+
+      maskinput = newSWFInput_file(mask);
+    }
+    else
+      mask = getInput(zmask);
+
+    bitmap = newSWFJpegWithAlpha_fromInput(input, maskinput);
+  }
+  else
+    bitmap = newSWFBitmap_fromInput(input);
 
   ret = zend_list_insert(bitmap, le_swfbitmapp);
   object_init_ex(getThis(), &bitmap_class_entry);
   add_property_resource(getThis(), "bitmap", ret);
   zend_list_addref(ret);
 }
+
 static void destroy_SWFBitmap_resource(zend_rsrc_list_entry *resource)
 {
   destroySWFBitmap((SWFBitmap)resource->ptr);
@@ -1487,15 +1530,15 @@ PHP_FUNCTION(swfmovie_saveToFile)
 {
   zval **x;
   SWFMovie movie = getMovie(getThis());
-  int type;
-  int le_fopen;
-  void *what;
+  FILE *file;
 
   if((ZEND_NUM_ARGS() != 1) || zend_get_parameters_ex(1, &x) == FAILURE)
     WRONG_PARAM_COUNT;
 
-  ZEND_FETCH_RESOURCE(what, FILE *, x, -1,"File-Handle",php_file_le_fopen());
-  RETURN_LONG(SWFMovie_output(movie, &phpFileOutputMethod, what));
+  file = (FILE *)zend_fetch_resource(x, -1, "File-Handle", NULL, 2,
+				     le_fopen, le_popen);
+
+  RETURN_LONG(SWFMovie_output(movie, &phpFileOutputMethod, (void *)file));
 }
 
 
@@ -1513,10 +1556,11 @@ PHP_FUNCTION(swfmovie_save)
 
   if((*x)->type == IS_RESOURCE)
   {
-    ZEND_FETCH_RESOURCE(file, FILE *, x, -1,"File-Handle",php_file_le_fopen());
+    file = (FILE *)zend_fetch_resource(x, -1, "File-Handle", NULL, 2,
+				       le_fopen, le_popen);
 
     RETURN_LONG(SWFMovie_output(getMovie(getThis()),
-				&phpFileOutputMethod, file));
+				&phpFileOutputMethod, (void *)file));
   }
 
   convert_to_string_ex(x);
@@ -1610,16 +1654,13 @@ PHP_FUNCTION(swfmovie_streamMp3)
   FILE *file;
   zval **zfile;
   SWFSound sound;
+  SWFInput input;
   SWFMovie movie = getMovie(getThis());
 
   if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zfile) == FAILURE)
     WRONG_PARAM_COUNT;
 
-  if((*zfile)->type == IS_RESOURCE)
-  {
-    ZEND_FETCH_RESOURCE(file, FILE *, zfile, -1,"File-Handle",php_file_le_fopen());
-  }
-  else
+  if((*zfile)->type != IS_RESOURCE)
   {
     convert_to_string_ex(zfile);
 
@@ -1629,9 +1670,13 @@ PHP_FUNCTION(swfmovie_streamMp3)
       php_error(E_ERROR, "Couldn't find file %s", Z_STRVAL_PP(zfile));
 
     ZEND_REGISTER_RESOURCE(NULL, file, le_fopen);
-  }
 
-  sound = newSWFSound(file);
+    input = newSWFInput_file(file);
+  }
+  else
+    input = getInput(zfile);
+
+  sound = newSWFSound_fromInput(input);
   SWFMovie_setSoundStream(movie, sound);
 }
 
@@ -2916,13 +2961,31 @@ PHP_MINFO_FUNCTION(ming)
 /* {{{ proto PHP_MINIT_FUNCTION(ming)
 */
 
+#define ERROR_BUFSIZE 1024
+
+/* custom error handler propagates ming errors up to php */
+void php_ming_error(char *msg, ...)
+{
+  va_list args;
+  char buffer[ERROR_BUFSIZE];
+
+  va_start(args, msg);
+  vsnprintf(buffer, ERROR_BUFSIZE, msg, args);
+  va_end(args);
+
+  php_error(E_ERROR, buffer);
+}
+
 PHP_MINIT_FUNCTION(ming)
 {
   if(Ming_init() != 0)
     php_error(E_ERROR, "Error initializing Ming module");
 
-  le_fopen = php_file_le_fopen();
+  Ming_setErrorFunction(php_ming_error);
 
+  le_fopen = php_file_le_fopen();
+  le_popen = php_file_le_popen();
+  le_socket = php_file_le_socket();
 
 #define CONSTANT(s,c) REGISTER_LONG_CONSTANT((s), (c), CONST_CS | CONST_PERSISTENT)
 
@@ -2955,7 +3018,9 @@ PHP_MINIT_FUNCTION(ming)
   CONSTANT("SWFTEXTFIELD_WORDWRAP",       SWFTEXTFIELD_WORDWRAP);
   CONSTANT("SWFTEXTFIELD_DRAWBOX",        SWFTEXTFIELD_DRAWBOX);
   CONSTANT("SWFTEXTFIELD_NOSELECT",       SWFTEXTFIELD_NOSELECT);
+#ifdef SWFTEXTFIELD_HTML
   CONSTANT("SWFTEXTFIELD_HTML",           SWFTEXTFIELD_HTML);
+#endif
 
   /* flags for SWFTextField_align */
   CONSTANT("SWFTEXTFIELD_ALIGN_LEFT",     SWFTEXTFIELD_ALIGN_LEFT);
