@@ -12,7 +12,7 @@
 #include "assembler.h"
 
 #define YYPARSE_PARAM buffer
-//#define DEBUG 1
+#define DEBUG 1
 
 Buffer bf, bc;
 
@@ -1350,10 +1350,22 @@ expr_or_obj
 #ifdef DEBUG
 		  printf("NEW lvalue_expr '.' %s\n", $4);
 #endif
-		  $$ = $2;
+		  $$ = newBuffer();
 		  bufferWriteInt($$, 0);
+		  bufferConcat($$, $2);
 		  bufferWriteString($$, $4, strlen($4)+1);
 		  free($4);
+		  bufferWriteOp($$, SWFACTION_NEWMETHOD); }
+
+	| NEW lvalue_expr '[' expr ']'
+		{
+#ifdef DEBUG
+		  printf("NEW lvalue_expr '[' expr ']'\n");
+#endif
+		  $$ = newBuffer();
+		  bufferWriteInt($$, 0);
+		  bufferConcat($$, $2);
+		  bufferConcat($$, $4);
 		  bufferWriteOp($$, SWFACTION_NEWMETHOD); }
 
 
@@ -1362,11 +1374,22 @@ expr_or_obj
 #ifdef DEBUG
 		  printf("NEW lvalue_expr '.' %s '(' expr_list ')'\n", $4);
 #endif
-		  $$ = $2;
-		  bufferConcat($$, $6.buffer);
+		  $$ = $6.buffer;
 		  bufferWriteInt($$, $6.count);
+		  bufferConcat($$, $2);
 		  bufferWriteString($$, $4, strlen($4)+1);
 		  free($4);
+		  bufferWriteOp($$, SWFACTION_NEWMETHOD); }
+
+	| NEW lvalue_expr '[' expr ']' '(' expr_list ')'
+		{
+#ifdef DEBUG
+		  printf("NEW lvalue_expr '[' expr ']' '(' expr_list ')'\n");
+#endif
+		  $$ = $7.buffer;
+		  bufferWriteInt($$, $7.count);
+		  bufferConcat($$, $2);
+		  bufferConcat($$, $4);
 		  bufferWriteOp($$, SWFACTION_NEWMETHOD); }
 
 	| '[' expr_list ']'
