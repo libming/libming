@@ -155,7 +155,7 @@ static Property getSetProperty(int prop)
     case SWF_SETPROPERTY_SOUNDBUFFERTIME: return PROPERTY_SOUNDBUFTIME;
     case SWF_SETPROPERTY_WTHIT:		  return PROPERTY_WTHIT;
     default:
-      error("unknown property: %04x!", prop);
+      error("unknown property: 0x%04x!", prop);
       return SWF_SETPROPERTY_WTHIT;
   }
 }
@@ -178,6 +178,10 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_STOP:
     case SWFACTION_TOGGLEQUALITY:
     case SWFACTION_STOPSOUNDS:
+      return newTree(NULL, type, NULL);
+
+    case SWFACTION_POP:
+	  /* pop(); */
       return newTree(NULL, type, NULL);
 
     /* one-arg */
@@ -209,7 +213,11 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_SETVARIABLE:
     case SWFACTION_STRINGCONCAT:
     case SWFACTION_STRINGCOMPARE:
-      return newTree(pop(), type, pop());
+	{
+      Stack right = pop();
+      Stack left = pop();
+      return newTree(left, type, right);
+	}
 
     case SWFACTION_GETPROPERTY:
     {
@@ -243,12 +251,30 @@ static Stack readActionRecord(FILE *f)
 
     /* three-arg */
     case SWFACTION_SETPROPERTY:
-      return newTree(newTree(pop(), type, pop()),
-		     SWFACTION_SETVARIABLE, pop());
+	{
+	  Stack value = pop();
+	  Stack property = pop();
+	  Stack target = pop();
+
+      if(property->type == 's')
+      {
+	Stack new = newProperty(atoi(property->data.string));
+	destroy(property);
+	property = new;
+      }
+
+      return newTree(newTree(target, type, property),
+		     SWFACTION_SETVARIABLE, value);
+	}
 
     case SWFACTION_MBSUBSTRING:
     case SWFACTION_SUBSTRING:
-      return newTree(pop(), type, newTree(pop(), type, pop()));
+	{
+	  Stack s3 = pop();
+	  Stack s2 = pop();
+	  Stack s1 = pop();
+      return newTree(s1, type, newTree(s2, type, s3));
+	}
 
     case SWFACTION_DUPLICATECLIP:
     {
@@ -295,9 +321,16 @@ static Stack readActionRecord(FILE *f)
       if(strcmp(constraint->data.string, "0") == 0)
 	return newTree(constraint, type, newTree(lockmouse, type, target));
       else
-	return newTree(newTree(newTree(pop(), type, pop()), type,
-			       newTree(pop(), type, pop())), type,
+	  {
+		Stack s4 = pop();
+		Stack s3 = pop();
+		Stack s2 = pop();
+		Stack s1 = pop();
+
+	return newTree(newTree(newTree(s1, type, s2), type,
+			       newTree(s3, type, s4)), type,
 		       newTree(lockmouse, type, target));
+	  }
     }
 
     case SWFACTION_PUSHDATA:
@@ -323,7 +356,11 @@ static Stack readActionRecord(FILE *f)
     }
 
     case SWFACTION_GETURL2:
-      return newTree((Stack)readUInt8(f), type, newTree(pop(), type, pop()));
+	{
+	  Stack target = pop();
+	  Stack url = pop();
+      return newTree((Stack)readUInt8(f), type, newTree(url, type, target));
+	}
 
     case SWFACTION_WAITFORFRAMEEXPRESSION:
       return newTree((Stack)readUInt8(f), type, NULL);
@@ -570,7 +607,7 @@ static void listAssign(Stack s)
 
   listItem(left, SWFACTION_SETVARIABLE);
   printf(" = ");
-  listItem(right, SWFACTION_SETVARIABLE);
+  listItem(right, 0);
 }
 
 static void listArithmetic(Stack s, Action parent)
@@ -894,16 +931,16 @@ static void listItem(Stack s, Action parent)
 	break;
 
       case SWFACTION_GETURL2:
-	printf("getURL('");
+	printf("getURL(");
 	listItem(t->right->data.tree->left, SWFACTION_GETURL2);
-	printf("', '");
+	printf(", ");
 	listItem(t->right->data.tree->right, SWFACTION_GETURL2);
 
 	switch((int)t->left)
 	{
-	  case 0: printf("')"); break;
-	  case 1: printf("', GET)"); break;
-	  case 2: printf("', POST)"); break;
+	  case 0: printf(")"); break;
+	  case 1: printf(", GET)"); break;
+	  case 2: printf(", POST)"); break;
 	}
 	break;
 
@@ -996,6 +1033,23 @@ static int isStatement(Stack s)
   }
 }
 
+static int isIgnorable(Stack s)
+{
+  Tree t;
+
+  if(s->type != 't')
+    return 0;
+
+  t = s->data.tree;
+
+  if (t->action == SWFACTION_POP) {
+	printf("/* POP */\n");
+	return 1;
+  }
+
+  return 0;
+}
+
 static Stack readStatement(FILE *f)
 {
   Stack s;
@@ -1011,7 +1065,7 @@ static Stack readStatement(FILE *f)
     if(stack == NULL && isStatement(s))
       /* supposedly, we've got a complete statement. */
       return s;
-    else
+    else if (! isIgnorable(s))
       push(s);
   }
 }
