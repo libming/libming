@@ -5,6 +5,8 @@ LDFLAGS = -lm -lz # -ldmalloc
 
 LIBDIR = /usr/local/lib
 
+include ../config.make
+
 OFILES = \
 	blocklist.o \
 	displaylist.o \

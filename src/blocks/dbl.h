@@ -37,5 +37,26 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 
 SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
+#if (USE_GIF + USE_PNG)
+struct dbl_data
+{	int length;
+	byte hasalpha, format, format2;
+	unsigned short width, height;
+	unsigned char *data;
+};
+typedef struct dbl_data *dblData;
+
+struct SWFDBLBitmapData_s
+{
+	struct SWFCharacter_s bitmap;
+	unsigned char format, format2;
+	unsigned short width, height;
+	unsigned char *data;
+	// SWFInput input;
+};
+typedef struct SWFDBLBitmapData_s *SWFDBLBitmapData;
+
+SWFDBLBitmapData newSWFDBLBitmapData_fromData(dblData data);
+#endif
 
 #endif /* SWF_DBL_H_INCLUDED */

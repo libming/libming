@@ -20,6 +20,7 @@
 /* $Id$ */
 
 #include <stdlib.h>
+#include "../../config.h"
 #include "dbl.h"
 #include "block.h"
 
@@ -121,6 +122,82 @@ newSWFDBLBitmap_fromInput(SWFInput input)
 	return dbl;
 }
 
+#if (USE_GIF + USE_PNG)
+static void
+writeSWFDBLBitmapDataToMethod(SWFBlock block,
+													SWFByteOutputMethod method, void *data)
+{
+	SWFDBLBitmapData dbl = (SWFDBLBitmapData)block;
+	int i;
+	unsigned char *ptr;
+
+	methodWriteUInt16(CHARACTERID(dbl), method, data);
+	method(dbl->format, data);
+	methodWriteUInt16(dbl->width, method, data);
+	methodWriteUInt16(dbl->height, method, data);
+	i=block->length-8;
+	if(dbl->format == 3)	// palette image
+		method(dbl->format2, data);
+	else
+		i++;
+	/* just dump the rest of the file */
+	for (ptr = dbl->data; i>0; --i )
+		method(*ptr++, data);
+}
+
+static void
+destroySWFDBLBitmapData(SWFBlock block)
+{
+	SWFDBLBitmapData bitmap = (SWFDBLBitmapData)block;
+
+	if ( bitmap->data != NULL )
+		free(bitmap->data);
+
+//	if ( bitmap->input != NULL )
+//		destroySWFInput(bitmap->input);
+
+	if ( CHARACTER(bitmap)->bounds != NULL )
+		destroySWFRect(CHARACTER(bitmap)->bounds);
+
+	destroySWFCharacter(block);
+}
+
+SWFDBLBitmapData
+newSWFDBLBitmapData_fromData(dblData data)
+{
+	SWFDBLBitmapData dbl;
+
+	dbl = (SWFDBLBitmapData)malloc(sizeof(struct SWFDBLBitmapData_s));
+
+	SWFCharacterInit((SWFCharacter)dbl);
+
+	CHARACTERID(dbl) = ++SWF_gNumCharacters;
+
+	BLOCK(dbl)->writeBlock = writeSWFDBLBitmapDataToMethod;
+	BLOCK(dbl)->complete = completeSWFDBLBitmap;
+	BLOCK(dbl)->dtor = destroySWFDBLBitmapData;
+
+	dbl->width = data->width;
+	dbl->height = data->height;
+	dbl->format = data->format;
+	dbl->format2 = data->format2;
+	dbl->data = data->data;
+
+	if(data->hasalpha)
+		BLOCK(dbl)->type = SWF_DEFINELOSSLESS2;
+	else
+		BLOCK(dbl)->type = SWF_DEFINELOSSLESS;
+
+	BLOCK(dbl)->length = data->length;
+	BLOCK(dbl)->length += 7; /* character id, format, width, height */
+	if(dbl->format == 3)
+		BLOCK(dbl)->length++;
+
+	CHARACTER(dbl)->bounds = newSWFRect(0, dbl->width, 0, dbl->height);
+
+	return dbl;
+}
+#endif
 
 static void
 destroySWFDBLBitmap_andInputs(SWFBlock block)

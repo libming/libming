@@ -2,6 +2,8 @@
 #CC = gcc -O5
 CC = gcc -g -Wall #-fPIC -ggdb
 
+include ../../config.make
+
 OFILES = \
 	action.o \
 	bitmap.o \
@@ -34,7 +36,7 @@ OFILES = \
 	sprite.o \
 	text.o \
 	textfield.o \
-	utf8.o
+	utf8.o ${EXTRA_OBJS}
 
 all: ${OFILES}
 
