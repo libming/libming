@@ -292,11 +292,11 @@ class SWFMovie(SWFBase):
     def output(self):
         return mingc.SWFMovie_simpleOutput(self.this)
 
-    def save(self, filename):
-        mingc.SWFMovie_save(self.this, filename)
+    def save(self, filename, level=0):
+        mingc.SWFMovie_save(self.this, filename, level)
 
-    def saveToFile(self, file):
-        mingc.SWFMovie_saveToFileNo(self.this, file.fileno())
+    def saveToFile(self, file, level=0):
+        mingc.SWFMovie_saveToFileNo(self.this, file.fileno(), level)
 
     def labelFrame(self, label):
         mingc.SWFMovie_labelFrame(self.this, label)
