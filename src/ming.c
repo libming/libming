@@ -20,6 +20,7 @@
 /* $Id$ */
 
 #include "ming.h"
+#include "font_util.h"
 
 extern int SWF_gNumCharacters;
 
