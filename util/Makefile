@@ -1,3 +1,5 @@
+include ../config.make
+
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
 CC = gcc -g -Wall
@@ -62,8 +64,11 @@ png2dbl: png2dbl.c
 gif2dbl: gif2dbl.c
 	${CC} gif2dbl.c -o gif2dbl -lz -lungif -lm
 
-raw2adpcm: raw2adpcm.c
-	${CC} raw2adpcm.c -o raw2adpcm -lming -lm
+../libming.a:
+	cd ..; make static
+
+raw2adpcm: raw2adpcm.c ../libming.a
+	${CC} raw2adpcm.c -o raw2adpcm ../libming.a -lm ${EXTRA_LIBS} -I../src
 
 png2swf: png2swf.c
 	${CC} png2swf.c -o png2swf ../ming/libming.a -lm -lz -lpng
