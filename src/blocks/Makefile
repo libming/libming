@@ -1,4 +1,5 @@
 include ../../config.make
+CC = gcc -g -Wall -I. -I.. ${CFLAGS}
 
 INCLUDES	+= -I..
 
