@@ -1,5 +1,5 @@
 # ====================================================================
-# Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+# Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 # ====================================================================
@@ -23,60 +23,54 @@ SWF::TextField - SWF TextField class
 =head1 SYNOPSIS
 
 	use SWF::TextField;
+	$textfield = new SWF::TextField([flags]);
 
-	use SWF::TextField(FLAG | FLAG | ..);
+
 
 =head1 DESCRIPTION
 
-This is a textfield-object for flash movies.
+Unlike SWF::Text objects, TextFields cannot be rotated, scaled non-proportionally, or skewed. However, TextFields can be used as form entries and they can use browser-defined fonts. 
 
-A TextField can contain a fixed initial string, show values of 
-ActionScript-variables and can act as inputfield.
+==head1 NOTES:
 
-The behavior of a TextField is quite good configurable through setting
-the SWFTEXTFIELD-flags. The layout is configurable with the set-methods.
-
-TextField is inplemented into Flash since Flash3. 
-Most of features for TextFields are available since Flash4.
-Simple HTML-tags in TextField are possible since Flash5.
-
-Remember that Flash uses by default browserfonts.
-
-Add the needed characters explicit into your movie. (experimental feature)
-
-If you use "_sans.fdb" you are safe, because this tells the flashplayer to 
-use a Helvetica or Arial-stylish font on every OS. By default a 
-times-new-roman-stylish font will be used. (think I)
-
-Oct.2002: There are currently different versions of ming with different 
-supportlevel for textfield out there. Hope this will converge soon.
-
-Widefont stuff is not documented for now. 
-
-All values are in pixels here. (default scale)
-Currently they will be rounded to integer pixels, but i think this 
-pixel/twips-switching should be fixed/done completly in the ming-lib and 
-the user should never think about it again. 
-
-=head1 FLAGS
-
-see SWF::Constants
+    TextField is implemented into Flash since Flash3. 
+    Most of features for TextFields are available since Flash4.
+    Simple HTML-tags in TextField are possible since Flash5.
 
 =head1 METHODS 
 
 =over
 
-=item addString($string)
+=item new SWF::TextField([flags]);
 
-Set an initial string.
+Creates a TextField object whose behaviour is dictated by C<flags> (see also SWF::Constants): 
 
-	$tf->addString("blablabla"); 
+  SWFTEXTFIELD_NOEDIT:        Non-editable Textfiled
+  SWFTEXTFIELD_PASSWORD:      Obscure user input with astricts.
+  SWFTEXTFIELD_DRAWBOX:       Draw a border around TextField
+  SWFTEXTFIELD_MULTILINE:     TextFiels may contain multiple lines
+  SWFTEXTFIELD_WORDWRAP:      Warp text when text reaches TextField border
+  SWFTEXTFIELD_NOSELECT:      TextField is not selected when user clicks on it
+  SWFTEXTFIELD_ALIGN_LEFT:    Align text to the left
+  SWFTEXTFIELD_ALIGN_RIGHT:   Align text to the right
+  SWFTEXTFIELD_ALIGN_CENTER:  Align text to the center
+  SWFTEXTFIELD_ALIGN_JUSTIFY: Justify text
+  SWFTEXTFIELD_HTML:          Add HTML markup string
+  SWFTEXTFIELD_HASLENGTH:     
+  SWFTEXTFIELD_USEFONT:       Want to embed font
+  SWFTEXTFIELD_AUTOSIZE:
 
 
-Notice: ming-API currently(CVS Oct.2002) in unstable definition. Maybe 
-addUTF8() or addWideString(). Try what works in your version of ming.
+Flags may be combined with the bitwise OR operation. For example:
 
-=item	setAlignment(SWF::Constants)
+    my $t = new SWF::TextField(SWFTEXTFIELD_MULTILINE | SWFTEXTFIELD_WORDWRAP);
+
+
+=item $textfield->addString($string)
+
+Add $string to TextField. Text is appended to the existing text.
+
+=item $textfield->align(alignment)
 
 Set the alignment of the text in the textfield. Possible values are
 
@@ -86,16 +80,12 @@ Set the alignment of the text in the textfield. Possible values are
 	SWFTEXTFIELD_ALIGN_JUSTIFY
 	
 By default a SWF::TextField ist left aligned.
-	
-	$tf->setAlignment(SWFTEXTFIELD_RIGHT);
 
-=item	setBounds(width,height)
+=item $textfield->setBounds(width, height)
 
-Set the width and height of the textfield.
-	
-	$tf->setBounds(50,40);
+Sets the width and height of the textfield.
 
-=item setColor(red,green,blue,[alpha])
+=item $textfield->setColor(red, green, blue [, alpha])
 
 Set the color of the text. An 8 bit value for each parameter. You can use 
 the hex or decimal notation. Even mixed.
@@ -103,121 +93,55 @@ the hex or decimal notation. Even mixed.
 	$tf->setColor(0xcc,0,0x33);
 	$tf->setColor(204,0,51,255);
 
-=item setFieldHeight(height)
+=item $textfield->setFont($font)
 
-Set the field height? Combine it with $f->getHeight();
+Sets an SWF::Font object -$font- to be used in the TextField.
 
-=item setFont(SWF::Font)
+=item $textfield->setPadding(padding)
 
-By default, the defaultfont of the client will be used.
+Set TextField padding.
 
-Please put all possible characters into the movie. (experimental)
-use method addChars(); not in official version!
+=item $textfield->setHeight(height)
 
-Example: If you have a textfield that shows the current money on 
-your account you should add "+-0123456789,. $EUR". Don't forget the 
-spacecharacter :-). 
+Set the height of font in your textfield.
 
-	$tf->setFont($font);
+=item $textfield->setIndentation(indentation)
 
-=item setHeight(height)
+Set the indentation of the first line of a paragraph.
 
-Set the height of font in your texfield in pixels.
+=item $textfield->setLeftMargin(left)
 
-	$tf->setHeight(14);
+Sets the left margin of the textfield.
 
-=item setIndentation(indentation)
+=item $textfield->setRightMargin(right)
 
-Set the indentation of the first line of a paragraph. Makes only sense for 
-multiline.
+Sets the right margin of the textfield.
 
-	$tf->setIndentation(2.0);
+=item $textfield->setMargins(left, right)
 
-=item setLeftMargin(leftmargin)
+Sets left and right margins of $textfield.
 
-Set the left margin of the textfield.
+=item $textfield->setLineSpacing(linespacing)
 
-	$tf->setLeftMargin(2.0);
+Sets the space between lines. 
 
-=item setRightMargin(rightmargin)
+=item $textfield->setName($name)
 
-Set the right margin of the textfield.
+Assigns a name to the TextField which could be used to reference the TextField within ActionScript.
 
-        $tf->setRightMargin(2.0);
+=item $textfield->addChars(string)
 
-=item setLineSpacing(linespacing)
 
-Sets the space between lines. Makes only sense for multiline.
-
-	$tf->setLineSpacing(2.5);
-
-=item setName($string)
-
-$string is the name of a variable.
-	
-	$tf->setName('var1');
-	$tf->setName('_root.totalFrames');
-
-	
-	#getfunctions not implemented for now:
-	#getBounds(width,height)
-        #getHeight(height)
-        #getFieldHeight(height)
-        #getLeftMargin(leftmargin)
-        #getRightMargin(rightmargin)
-        #getIndentation(indentation)
-        #getLineSpacing(linespacing)	
 
 =back
 
-=head1 EXAMPLE
-
-Two textfields. First shows a changing Actionscript-variable, in the 
-second we put a Perl-variable as string into the textfield.
-	
-	#!/usr/bin/perl -w
-	use SWF("Text");
-	use SWF::Constants(":Text");
-	use English; # $OSNAME instead of cryptic $^O 
-	 
-	$m = new SWF::Movie();
-	$m->setDimension(200,100);
-	 
-	$f = new SWF::Font("_sans.fdb"); #good, _sans is a good default font. 
-	 
-	$tf1 = new SWF::TextField(SWFTEXTFIELD_DRAWBOX | SWFTEXTFIELD_WORDWRAP);
-	$tf1->setFont($f);
-	$tf1->addString("whoaw - a string. :-)"); # here useless but possible
-	$tf1->setHeight(14); # font size, default value??
-	$tf1->setBounds(70,20); # default values??
-	$tf1->setName("_root.currentFrame"); # Actionscript variable	
-	 
-	tf2 = new SWF::TextField(SWFTEXTFIELD_DRAWBOX | SWFTEXTFIELD_NOEDIT);
-	$tf2->setFont($f);
-	$tf2->setHeight(11.25);
-	$tf2->setBounds(50,14);
-	$tf2->addString($OSNAME); # We put the systems name into the field.
-	 
-	# We put our 2 textfields in the movie.
-	$tf1_i= $m->add($tf1);
-	$tf2_i= $m->add($tf2);
-	$tf1_i->move(20,20);
-	$tf2_i->move(20,50);
-	 
-	# make 10 frame
-	for ($i=1;$i<=10;$i++){
-		$m->nextFrame();
-	}
-	$m->save("textfield.swf");
-
 =head1 AUTHOR
 
-Soheil Seyfaie (soheil at users.sourceforge.net)
-
-Documentation: Peter Liscovius (peterdd at users.sourceforge.net)
+Soheil Seyfaie (soheil at users.sourceforge.net).
 
 =head1 SEE ALSO
 
-	SWF::Constants, SWF::Font, SWF::Action
+SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text
 
 =cut
+
