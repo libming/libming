@@ -1,10 +1,9 @@
 /* ====================================================================
- * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
  *
- * $Author$
  * $Id$
  */
 
@@ -53,6 +52,7 @@ static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_HTML",
      "SWFTEXTFIELD_HASLENGTH",
      "SWFTEXTFIELD_USEFONT",
+     "SWFTEXTFIELD_AUTOSIZE",
      NULL,
 };
 
