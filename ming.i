@@ -40,6 +40,9 @@ typedef unsigned char byte;
 }
 
 int Ming_init();
+void Ming_setScale(float scale);
+void Ming_setCubicThreshold(int num);
+
 
 /* movie.h */
 
@@ -52,7 +55,7 @@ void destroySWFMovie(SWFMovie movie);
 SWFMovie newSWFMovie();
 
 void SWFMovie_setRate(SWFMovie movie, float rate);
-void SWFMovie_setDimension(SWFMovie movie, int x, int y);
+void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 void SWFMovie_setBackground(SWFMovie movie, int r, int g, int b);
 
@@ -89,15 +92,16 @@ int SWFMovie_saveToFileNo(SWFMovie movie, int fd) {
 
 void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees);
 void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees);
-void SWFDisplayItem_move(SWFDisplayItem item, int x, int y);
-void SWFDisplayItem_moveTo(SWFDisplayItem item, int x, int y);
+void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
+void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
 void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale);
 void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale);
 void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
 void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
-void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b, float c, float d, int x, int y);
+void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b,
+			      float c, float d, float x, float y);
 
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
@@ -126,9 +130,10 @@ void SWFFill_scaleXY(SWFFill fill, float x, float y);
 void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
 void SWFFill_rotate(SWFFill fill, float degrees);
 void SWFFill_rotateTo(SWFFill fill, float degrees);
-void SWFFill_move(SWFFill fill, int x, int y);
-void SWFFill_moveTo(SWFFill fill, int x, int y);
-void SWFFill_setMatrix(SWFFill fill, float a, float b, float c, float d, int x, int y);
+void SWFFill_move(SWFFill fill, float x, float y);
+void SWFFill_moveTo(SWFFill fill, float x, float y);
+void SWFFill_setMatrix(SWFFill fill, float a, float b,
+		       float c, float d, float x, float y);
 
 
 /* shape.h */
@@ -144,10 +149,19 @@ void SWFShape_setLine(SWFShape shape,
 void SWFShape_drawArc(SWFShape shape, int r,
 		      float startAngle, float endAngle);
 void SWFShape_drawCircle(SWFShape shape, int r);
-void SWFShape_drawFontGlyph(SWFShape shape, SWFFont font, int c);
-void SWFShape_drawCubic(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy);
-void SWFShape_drawCubicTo(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy);
 
+void SWFShape_movePenTo(SWFShape shape, float x, float y);
+void SWFShape_movePen(SWFShape shape, float x, float y);
+void SWFShape_drawLineTo(SWFShape shape, float x, float y);
+void SWFShape_drawLine(SWFShape shape, float dx, float dy);
+void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
+			  float anchorx, float anchory);
+void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
+			float anchordx, float anchordy);
+void SWFShape_drawCubic(SWFShape shape, float bx, float by,
+			float cx, float cy, float dx, float dy);
+void SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
+			  float cx, float cy, float dx, float dy);
 
 /* movieclip.h */
 
@@ -165,24 +179,25 @@ void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
 
   /* SWFRect */
 
+/*
 SWFRect newSWFRect(int minX, int maxX, int minY, int maxY);
 void destroySWFRect(SWFRect rect);
 int SWFRect_getWidth(SWFRect r);
 int SWFRect_getHeight(SWFRect r);
-
+*/
 
   /* SWFCharacter */
-
+/*
 SWFRect SWFCharacter_getBounds(SWFCharacter character);
 byte SWFBlock_isCharacter(SWFBlock block);
-
+*/
 
   /* SWFBitmap */
 
 void destroySWFBitmap(SWFBitmap b);
 
-int SWFBitmap_getWidth(SWFBitmap b);
-int SWFBitmap_getHeight(SWFBitmap b);
+float SWFBitmap_getWidth(SWFBitmap b);
+float SWFBitmap_getHeight(SWFBitmap b);
 
 
   /* SWFDBLBitmap */
@@ -206,12 +221,12 @@ void SWFGradient_addEntry(SWFGradient gradient,
 
   /* SWFMatrix */
 
+/*
 SWFMatrix newSWFMatrix(int a, int b, int c, int d, int x, int y);
 void destroySWFMatrix(SWFMatrix matrix);
-
 SWFMatrix SWFMatrix_set(SWFMatrix m,
-			float a, float b, float c, float d, int x, int y);
-
+			float a, float b, float c, float d, float x, float y);
+*/
 
   /* SWFFillStyle */
 
@@ -229,26 +244,11 @@ SWFMatrix SWFMatrix_set(SWFMatrix m,
 SWFShape newSWFShape();
 void destroySWFShape(SWFShape shape);
 
-void SWFShape_movePenTo(SWFShape shape, int x, int y);
-void SWFShape_movePen(SWFShape shape, int x, int y);
-void SWFShape_drawLineTo(SWFShape shape, int x, int y);
-void SWFShape_drawLine(SWFShape shape, int dx, int dy);
-void SWFShape_drawCurveTo(SWFShape shape,
-		   	  int controlx, int controly, int anchorx, int anchory);
-void SWFShape_drawCurve(SWFShape shape,
-		        int controldx, int controldy, int anchordx, int anchordy);
 void SWFShape_end(SWFShape shape);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
 
 /* deprecated: */
-void SWFShape_moveTo(SWFShape shape, int x, int y);
-void SWFShape_moveToRelative(SWFShape shape, int x, int y);
-void SWFShape_lineTo(SWFShape shape, int x, int y);
-void SWFShape_lineToRelative(SWFShape shape, int dx, int dy);
-void SWFShape_curveTo(SWFShape shape,
-		      int controlx, int controly, int anchorx, int anchory);
-void SWFShape_curveToRelative(SWFShape shape,
-		              int controldx, int controldy,
-			      int anchordx, int anchordy);
+void SWFShape_drawFontGlyph(SWFShape shape, SWFFont font, int c);
 
 
   /* SWFMorph */
@@ -265,10 +265,11 @@ SWFFont newSWFFont();
 void destroySWFFont(SWFFont font);
 SWFFont loadSWFFontFromFile(FILE *READ);
 
-int SWFFont_getStringWidth(SWFFont font, char *string);
-short SWFFont_getAscent(SWFFont font);
-short SWFFont_getDescent(SWFFont font);
-short SWFFont_getLeading(SWFFont font);
+float SWFFont_getStringWidth(SWFFont font, char *string);
+
+float SWFFont_getAscent(SWFFont font);
+float SWFFont_getDescent(SWFFont font);
+float SWFFont_getLeading(SWFFont font);
 
 
   /* SWFText */
@@ -278,12 +279,16 @@ SWFText newSWFText2();
 void destroySWFText(SWFText text);
 
 void SWFText_setFont(SWFText text, SWFFont font);
-void SWFText_setHeight(SWFText text, int height);
-void SWFText_moveTo(SWFText text, int x, int y);
+void SWFText_setHeight(SWFText text, float height);
+void SWFText_moveTo(SWFText text, float x, float y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
 void SWFText_addString(SWFText text, char *string, int *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
-int SWFText_getStringWidth(SWFText text, char *string);
+float SWFText_getStringWidth(SWFText text, char *string);
+
+float SWFText_getAscent(SWFText text);
+float SWFText_getDescent(SWFText text);
+float SWFText_getLeading(SWFText text);
 
 
   /* SWFBrowserFont */
@@ -304,6 +309,7 @@ void destroySWFBrowserFont(SWFBrowserFont b);
 #define SWFTEXTFIELD_WORDWRAP  (1<<6)
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
+#define SWFTEXTFIELD_HTML      (1<<9) /* 0x0200 */
 
 typedef enum
 {
@@ -317,17 +323,18 @@ SWFTextField newSWFTextField();
 void destroySWFTextField(SWFTextField field);
 
 void SWFTextField_setFont(SWFTextField field, SWFBlock font);
-void SWFTextField_setBounds(SWFTextField field, int width, int height);
+void SWFTextField_setBounds(SWFTextField field, float width, float height);
 void SWFTextField_setFlags(SWFTextField field, int flags);
 void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
 void SWFTextField_setVariableName(SWFTextField field, char *name);
 void SWFTextField_addString(SWFTextField field, char *string);
 
-void SWFTextField_setHeight(SWFTextField field, int height);
-void SWFTextField_setLeftMargin(SWFTextField field, int leftMargin);
-void SWFTextField_setRightMargin(SWFTextField field, int rightMargin);
-void SWFTextField_setIndentation(SWFTextField field, int indentation);
-void SWFTextField_setLineSpacing(SWFTextField field, int lineSpacing);
+void SWFTextField_setHeight(SWFTextField field, float height);
+void SWFTextField_setFieldHeight(SWFTextField field, float height);
+void SWFTextField_setLeftMargin(SWFTextField field, float leftMargin);
+void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
+void SWFTextField_setIndentation(SWFTextField field, float indentation);
+void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);

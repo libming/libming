@@ -19,50 +19,18 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.0.9c
-#define MING_VERSION_TEXT  "0.0.9c"
+#define MING_VERSION        0.1.0
+#define MING_VERSION_TEXT  "0.1.0"
 
 int Ming_init();
 
+/* sets the threshold error for drawing cubic beziers.  Lower is more
+   accurate, hence larger file size. */
 
-typedef enum
-{
-  SWF_DEFINESHAPE		=  2,
-  SWF_DEFINESHAPE2		= 22,
-  SWF_DEFINESHAPE3		= 32,
-  SWF_DEFINEMORPHSHAPE	        = 46,
-  SWF_DEFINEBITS		=  6,
-  SWF_DEFINEBITSJPEG2		= 21,
-  SWF_DEFINEBITSJPEG3		= 35,
-  SWF_DEFINELOSSLESS		= 20,
-  SWF_DEFINELOSSLESS2		= 36,
-  SWF_JPEGTABLES		=  8,
-  SWF_DEFINEBUTTON		=  7,
-  SWF_DEFINEBUTTON2		= 34,
-  SWF_DEFINEBUTTONCXFORM	= 23,
-  SWF_DEFINEBUTTONSOUND	        = 17,
-  SWF_DEFINEFONT		= 10,
-  SWF_DEFINEFONT2		= 48,
-  SWF_DEFINEFONTINFO		= 13,
-  SWF_DEFINETEXT		= 11,
-  SWF_DEFINETEXT2		= 33,
-  SWF_DEFINESOUND		= 14,
-  SWF_SOUNDSTREAMBLOCK	        = 19,
-  SWF_SOUNDSTREAMHEAD		= 18,
-  SWF_SOUNDSTREAMHEAD2	        = 45,
-  SWF_DEFINESPRITE		= 39,
-  SWF_PLACEOBJECT		=  4,
-  SWF_PLACEOBJECT2		= 26,
-  SWF_REMOVEOBJECT		=  5,
-  SWF_REMOVEOBJECT2		= 28,
-  SWF_SHOWFRAME			=  1,
-  SWF_SETBACKGROUNDCOLOR	=  9,
-  SWF_FRAMELABEL		= 43,
-  SWF_PROTECT			= 24,
-  SWF_STARTSOUND		= 15,
-  SWF_END			=  0,
-  SWF_DOACTION		        = 12
-} SWFBlocktype;
+void Ming_setCubicThreshold(int num);
+
+/* sets the overall scale, default is 20 */
+void Ming_setScale(float scale);
 
 
 typedef unsigned char byte;
@@ -73,52 +41,17 @@ typedef unsigned char byte;
 
 typedef void (*SWFByteOutputMethod)(byte b, void *data);
 
-void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data);
-void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data);
-
 void fileOutputMethod(byte b, void *data);
 
 
 /* we dig opaque types */
 
-
-  /* SWFBlock is the parent for all classes in this directory */
-
-typedef void *SWFBlock;
-
-int completeSWFBlock(SWFBlock block);
-void destroySWFBlock(SWFBlock block);
-int writeSWFBlockToMethod(SWFBlock block,
-			  SWFByteOutputMethod method, void *data);
-
-void SWFBlock_setDefined(SWFBlock block);
-byte SWFBlock_isDefined(SWFBlock block);
-
-SWFBlocktype SWFBlock_getType(SWFBlock block);
-
-
-  /* SWFOutput */
-
-typedef void *SWFOutput;
-
-SWFOutput newSWFOutput();
-SWFOutput newSizedSWFOutput(int size);
-void destroySWFOutput(SWFOutput out);
-
-int SWFOutput_length(SWFOutput out);
-void SWFOutput_byteAlign(SWFOutput out);
-void SWFOutput_writeUInt16(SWFOutput out, int data);
-void SWFOutput_writeToMethod(SWFOutput out,
-			     SWFByteOutputMethod method, void *data);
+typedef void *SWFBlock, *SWFMatrix;
 
 
   /* SWFRect */
 
 typedef void *SWFRect;
-
-SWFRect newSWFRect(int minX, int maxX, int minY, int maxY);
-void destroySWFRect(SWFRect rect);
-void SWFOutput_writeRect(SWFOutput output, SWFRect rect);
 
 int SWFRect_getWidth(SWFRect r);
 int SWFRect_getHeight(SWFRect r);
@@ -130,35 +63,26 @@ int SWFRect_getHeight(SWFRect r);
 
 typedef void *SWFCharacter;
 
-/* this is a silly hack to track blocks which are dependent on others.
-   Would be nice to have this in the ming layer above instead */
-
-void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency);
-SWFBlock *SWFCharacter_getDependencies(SWFCharacter character);
-int SWFCharacter_getNDependencies(SWFCharacter character);
-void SWFCharacter_clearDependencies(SWFCharacter character);
-
 SWFRect SWFCharacter_getBounds(SWFCharacter character);
-byte SWFBlock_isCharacter(SWFBlock block);
 
 
   /* SWFBitmap */
 
 typedef void *SWFBitmap;
 
-void destroySWFBitmap(SWFBlock block);
+void destroySWFBitmap(SWFBitmap b);
 int SWFBitmap_getWidth(SWFBitmap b);
 int SWFBitmap_getHeight(SWFBitmap b);
 
 
-  /* SWFDBLBitmap */
+  /* SWFDBLBitmap extends SWFBitmap */
 
 typedef void *SWFDBLBitmap;
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 
 
-  /* SWFJpegBitmap */
+  /* SWFJpegBitmap extends SWFBitmap */
 
 typedef void *SWFJpegBitmap, *SWFJpegWithAlpha;
 
@@ -174,21 +98,6 @@ SWFGradient newSWFGradient();
 void destroySWFGradient(SWFGradient gradient);
 void SWFGradient_addEntry(SWFGradient gradient,
 			  float ratio, byte r, byte g, byte b, byte a);
-
-
-  /* SWFMatrix */
-
-typedef void *SWFMatrix;
-
-SWFMatrix newSWFMatrix(int a, int b, int c, int d, int x, int y);
-void destroySWFMatrix(SWFMatrix matrix);
-
-SWFMatrix SWFMatrix_set(SWFMatrix m,
-			float a, float b, float c, float d, int x, int y);
-void SWFMatrix_clearTranslate(SWFMatrix m);
-void SWFMatrix_clearTransform(SWFMatrix m);
-
-void SWFMatrix_copy(SWFMatrix src, SWFMatrix dest);
 
 
   /* SWFFillStyle */
@@ -215,8 +124,6 @@ SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 typedef void *SWFLineStyle;
 
 SWFLineStyle newSWFLineStyle(int width, int r, int g, int b, int a);
-byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
-			 byte r, byte g, byte b, byte a);
 
 
   /* SWFShape */
@@ -226,29 +133,18 @@ typedef void *SWFShape;
 SWFShape newSWFShape();
 void destroySWFShape(SWFBlock block);
 
-void SWFShape_movePenTo(SWFShape shape, int x, int y);
-void SWFShape_movePen(SWFShape shape, int x, int y);
+void SWFShape_movePenTo(SWFShape shape, float x, float y);
+void SWFShape_movePen(SWFShape shape, float x, float y);
 
-int SWFShape_getPenX(SWFShape shape);
-int SWFShape_getPenY(SWFShape shape);
+float SWFShape_getPenX(SWFShape shape);
+float SWFShape_getPenY(SWFShape shape);
 
-void SWFShape_drawLineTo(SWFShape shape, int x, int y);
-void SWFShape_drawLine(SWFShape shape, int dx, int dy);
-void SWFShape_drawCurveTo(SWFShape shape,
-			  int controlx, int controly,
-			  int anchorx, int anchory);
-void SWFShape_drawCurve(SWFShape shape,
-			int controldx, int controldy,
-			int anchordx, int anchordy);
-
-/* deprecated: */
-
-#define SWFShape_moveTo SWFShape_movePenTo
-#define SWFShape_moveToRelative SWFShape_movePen
-#define SWFShape_lineTo SWFShape_drawLineTo
-#define SWFShape_lineToRelative SWFShape_drawLine
-#define SWFShape_curveTo SWFShape_drawCurveTo
-#define SWFShape_curveToRelative SWFShape_drawCurve
+void SWFShape_drawLineTo(SWFShape shape, float x, float y);
+void SWFShape_drawLine(SWFShape shape, float dx, float dy);
+void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
+			  float anchorx, float anchory);
+void SWFShape_drawCurve(SWFShape shape, float controldx, int controldy,
+			float anchordx, float anchordy);
 
 void SWFShape_end(SWFShape shape);
 
@@ -293,9 +189,9 @@ int SWFFont_getStringWidth(SWFFont font, const char *string);
 /* XXX */
 #define SWFFont_getWidth SWFFont_getStringWidth
 
-short SWFFont_getAscent(SWFFont font);
-short SWFFont_getDescent(SWFFont font);
-short SWFFont_getLeading(SWFFont font);
+float SWFFont_getAscent(SWFFont font);
+float SWFFont_getDescent(SWFFont font);
+float SWFFont_getLeading(SWFFont font);
 
 
   /* SWFText */
@@ -307,20 +203,20 @@ SWFText newSWFText2();
 void destroySWFText(SWFBlock block);
 
 void SWFText_setFont(SWFText text, SWFFont font);
-void SWFText_setHeight(SWFText text, int height);
-void SWFText_moveTo(SWFText text, int x, int y);
+void SWFText_setHeight(SWFText text, float height);
+void SWFText_moveTo(SWFText text, float x, float y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
 void SWFText_addString(SWFText text, const char *string, int *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
 
-int SWFText_getStringWidth(SWFText text, const char *string);
+float SWFText_getStringWidth(SWFText text, const char *string);
 
 /* XXX */
 #define SWFText_getWidth SWFText_getStringWidth
 
-short SWFText_getAscent(SWFText text);
-short SWFText_getDescent(SWFText text);
-short SWFText_getLeading(SWFText text);
+float SWFText_getAscent(SWFText text);
+float SWFText_getDescent(SWFText text);
+float SWFText_getLeading(SWFText text);
 
 /* deprecated: */
 #define SWFText_setXY(t,x,y) SWFText_moveTo((t),(x),(y))
@@ -348,6 +244,7 @@ typedef void *SWFTextField;
 #define SWFTEXTFIELD_WORDWRAP  (1<<6)
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
+#define SWFTEXTFIELD_HTML      (1<<9) /* 0x0200 */
 
 typedef enum
 {
@@ -361,17 +258,18 @@ SWFTextField newSWFTextField();
 void destroySWFTextField(SWFBlock block);
 
 void SWFTextField_setFont(SWFTextField field, SWFBlock font);
-void SWFTextField_setBounds(SWFTextField field, int width, int height);
+void SWFTextField_setBounds(SWFTextField field, float width, float height);
 void SWFTextField_setFlags(SWFTextField field, int flags);
 void SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a);
 void SWFTextField_setVariableName(SWFTextField field, char *name);
 void SWFTextField_addString(SWFTextField field, char *string);
 
-void SWFTextField_setHeight(SWFTextField field, int height);
-void SWFTextField_setLeftMargin(SWFTextField field, int leftMargin);
-void SWFTextField_setRightMargin(SWFTextField field, int rightMargin);
-void SWFTextField_setIndentation(SWFTextField field, int indentation);
-void SWFTextField_setLineSpacing(SWFTextField field, int lineSpacing);
+void SWFTextField_setHeight(SWFTextField field, float height);
+void SWFTextField_setFieldHeight(SWFTextField field, float height);
+void SWFTextField_setLeftMargin(SWFTextField field, float leftMargin);
+void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
+void SWFTextField_setIndentation(SWFTextField field, float indentation);
+void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);
@@ -402,10 +300,6 @@ typedef void *SWFSound;
 SWFSound newSWFSound(FILE *file);
 void destroySWFSound(SWFSound sound);
 
-SWFBlock SWFSound_getStreamHead(SWFSound sound, float frameRate);
-SWFBlock SWFSound_getStreamBlock(SWFSound sound);
-void SWFSound_rewind(SWFSound sound);
-
 
   /* SWFCXform */
 
@@ -427,31 +321,10 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 void destroySWFCXform(SWFCXform cXform);
 
 
-  /* random blocks */
-
-typedef void *SWFOutputBlock;
-
-SWFBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
-				SWFMatrix matrix, SWFCXform cXform);
-SWFBlock newSWFPlaceObject2Block(int depth, char *name, int ratio,
-				 SWFCXform cXform, SWFMatrix matrix,
-				 SWFCharacter character, int move);
-
-SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
-SWFOutputBlock newSWFRemoveObject2Block(int depth);
-SWFOutputBlock newSWFFrameLabelBlock(char *string);
-SWFBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
-SWFBlock newSWFShowFrameBlock();
-SWFBlock newSWFEndBlock();
-SWFBlock newSWFProtectBlock();
-
-
   /* SWFAction */
 
 typedef void *SWFAction;
 
-SWFAction newSWFAction();
-SWFAction newSWFAction_fromOutput(SWFOutput out);
 SWFAction compileSWFActionCode(char *script);
 void destroySWFAction(SWFAction action);
 
@@ -502,9 +375,6 @@ void destroySWFButton(SWFBlock block);
 void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 
-SWFBlock newSWFButtonCXform(SWFButton button, SWFCXform *cXforms);
-SWFBlock newSWFButtonSound(SWFButton button, SWFSound sound);
-
 
   /* SWFSprite */
 
@@ -513,8 +383,6 @@ typedef void *SWFSprite;
 SWFSprite newSWFSprite();
 void destroySWFSprite(SWFBlock block);
 
-SWFSprite newSWFSprite_fromArray(SWFBlock *blocks, int nBlocks);
-void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
 
 
@@ -550,84 +418,28 @@ void SWFPosition_scaleYTo(SWFPosition position, float y);
 void SWFPosition_scaleXY(SWFPosition position, float x, float y);
 void SWFPosition_scaleXYTo(SWFPosition position, float x, float y);
 void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
-			   int x, int y);
+			   float x, float y);
 
 void SWFPosition_rotate(SWFPosition position, float degrees);
 void SWFPosition_rotateTo(SWFPosition position, float degrees);
-void SWFPosition_move(SWFPosition position, int x, int y);
-void SWFPosition_moveTo(SWFPosition position, int x, int y);
+void SWFPosition_move(SWFPosition position, float x, float y);
+void SWFPosition_moveTo(SWFPosition position, float x, float y);
 
 
-/* blocklist.h */
-
-/* we have to note which blocks are characters b/c characters may be destroyed
-   before we have a chance to look at them */
-
-struct _swfBlockListEntry
-{
-  SWFBlock block;
-  byte isCharacter;
-};
-typedef struct _swfBlockListEntry swfBlockEntry;
-
-struct _swfBlockList
-{
-  swfBlockEntry *blocks;
-  int nBlocks;
-};
-typedef struct _swfBlockList *SWFBlockList;
-
-#define SWFBLOCKLIST_SIZE sizeof(struct _swfBlockList)
-
-#define SWFBLOCKLIST_INCREMENT 16
-
-SWFBlockList newSWFBlockList();
-void SWFBlockList_addBlock(SWFBlockList blocklist, SWFBlock block);
-
-int SWFBlockList_completeBlocks(SWFBlockList list);
-int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
-				     SWFByteOutputMethod method, void *data);
-
-void destroySWFBlockList(SWFBlockList list);
-
-
-/* displaylist.h */
-
-#define ITEM_NEW            (1<<0)
-#define ITEM_REMOVED        (1<<1)
-#define ITEM_DISPLACED      (1<<2)
-#define ITEM_TRANSFORMED    (1<<3)
-#define ITEM_CXFORMCHANGED  (1<<4)
-#define ITEM_RATIOCHANGED   (1<<5)
-
-struct _swfDisplayItem
-{
-  int flags;
-  struct _swfDisplayItem *next;
-  int depth;
-  SWFPosition position;
-  SWFMatrix matrix;
-  SWFCharacter character;
-  int ratio;
-  SWFCXform cXform;
-  char *name;
-};
-typedef struct _swfDisplayItem *SWFDisplayItem;
-
-#define SWFDISPLAYITEM_SIZE sizeof(struct _swfDisplayItem)
+typedef void *SWFDisplayItem;
 
 void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees);
 void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees);
-void SWFDisplayItem_move(SWFDisplayItem item, int x, int y);
-void SWFDisplayItem_moveTo(SWFDisplayItem item, int x, int y);
+void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
+void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
 void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale);
 void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale);
 void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
 void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
-void SWFDisplayItem_setMatrix(SWFDisplayItem i,
-			      float a, float b, float c, float d, int x, int y);
+void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
+			      float c, float d, float x, float y);
 
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
@@ -643,28 +455,6 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
 
-struct _swfDisplayList
-{
-  SWFSound soundStream;
-  SWFDisplayItem head;
-  SWFDisplayItem tail;
-  byte isSprite;
-  int depth;
-};
-typedef struct _swfDisplayList *SWFDisplayList;
-
-#define SWFDISPLAYLIST_SIZE sizeof(struct _swfDisplayList)
-
-void destroySWFDisplayList(SWFDisplayList list);
-SWFDisplayList newSWFDisplayList();
-SWFDisplayList newSWFSpriteDisplayList();
-void SWFDisplayList_nextFrame(SWFDisplayList list);
-
-SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter shape);
-void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist);
-
-void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSound sound);
-
 
 /* SWFFill adds a position object to manipulate SWFFillStyle's matrix. */
 
@@ -676,6 +466,8 @@ struct _swfFill
 typedef struct _swfFill *SWFFill;
 
 #define SWFFILL_SIZE (sizeof(struct _swfFill))
+
+#include <stdlib.h>
 
 static inline SWFFill newSWFFill(SWFFillStyle fillstyle)
 {
@@ -749,15 +541,16 @@ static inline void SWFFill_rotateTo(SWFFill fill, float degrees)
 {
   SWFPosition_rotateTo(fill->position, degrees);
 }
-static inline void SWFFill_move(SWFFill fill, int x, int y)
+static inline void SWFFill_move(SWFFill fill, float x, float y)
 {
   SWFPosition_move(fill->position, x, y);
 }
-static inline void SWFFill_moveTo(SWFFill fill, int x, int y)
+static inline void SWFFill_moveTo(SWFFill fill, float x, float y)
 {
   SWFPosition_moveTo(fill->position, x, y);
 }
-static inline void SWFFill_setMatrix(SWFFill fill, float a, float b, float c, float d, int x, int y)
+static inline void SWFFill_setMatrix(SWFFill fill, float a, float b,
+				     float c, float d, float x, float y)
 {
   SWFPosition_setMatrix(fill->position, a, b, c, d, x, y);
 }
@@ -796,14 +589,15 @@ static inline void SWFShape_setRightFill(SWFShape shape, SWFFill fill)
 {
   SWFShape_setRightFillStyle(shape, fill==NULL ? NULL : fill->fillstyle);
 }
-
+/*
 static inline void SWFShape_drawRect(SWFShape shape, SWFRect rect)
 {
-  SWFShape_lineToRelative(shape, SWFRect_getWidth(rect), 0);
-  SWFShape_lineToRelative(shape, 0, SWFRect_getHeight(rect));
-  SWFShape_lineToRelative(shape, -SWFRect_getWidth(rect), 0);
-  SWFShape_lineToRelative(shape, 0, -SWFRect_getHeight(rect));
+  SWFShape_drawLine(shape, SWFRect_getWidth(rect), 0);
+  SWFShape_drawLine(shape, 0, SWFRect_getHeight(rect));
+  SWFShape_drawLine(shape, -SWFRect_getWidth(rect), 0);
+  SWFShape_drawLine(shape, 0, -SWFRect_getHeight(rect));
 }
+*/
 
 void SWFShape_setLine(SWFShape shape,
 		      unsigned short width, byte r, byte g, byte b, byte a);
@@ -820,13 +614,10 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
 
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */
-int SWFShape_drawCubic(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy);
-int SWFShape_drawCubicTo(SWFShape shape, int bx, int by, int cx, int cy, int dx, int dy);
-
-/* sets the threshold error for drawing cubic beziers.  Lower is more
-   accurate, hence larger file size. */
-
-void Ming_setCubicThreshold(int num);
+int SWFShape_drawCubic(SWFShape shape, float bx, float by,
+		       float cx, float cy, float dx, float dy);
+int SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
+			 float cx, float cy, float dx, float dy);
 
 
 /* deprecated: */
@@ -845,31 +636,17 @@ void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 void SWFMovieClip_nextFrame(SWFMovieClip clip);
 void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
 
-int SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);
-
 
 /* movie.h */
 
-struct _swfMovie
-{
-  SWFBlockList blockList;
-  SWFDisplayList displayList;
-  float rate;
-  SWFRect bounds;
-  unsigned short nFrames;
-  unsigned short totalFrames;
-  byte version;
-};
-typedef struct _swfMovie *SWFMovie;
-
-#define SWFMOVIE_SIZE sizeof(struct _swfMovie)
+typedef void *SWFMovie;
 
 void destroySWFMovie(SWFMovie movie);
 SWFMovie newSWFMovie();
 SWFMovie newSWFMovieWithVersion(int version);
 
 void SWFMovie_setRate(SWFMovie movie, float rate);
-void SWFMovie_setDimension(SWFMovie movie, int x, int y);
+void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
 /* XXX - 0.1 name: */
