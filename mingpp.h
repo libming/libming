@@ -83,6 +83,14 @@ class SWFInput
   SWFInput(unsigned char *buffer, int length)
     { this->input = newSWFInput_buffer(buffer, length); }
 
+  SWFInput(unsigned char *buffer, int length, int alloced)
+  {
+    if(alloced)
+      this->input = newSWFInput_allocedBuffer(buffer, length);
+    else
+      this->input = newSWFInput_buffer(buffer, length);
+  }
+
   virtual ~SWFInput() { destroySWFInput(this->input); }
 };
 

@@ -70,6 +70,7 @@ static int le_swfbuttonp;
 static int le_swfactionp;
 static int le_swfmorphp;
 static int le_swfspritep;
+static int le_swfinputp;
 
 static int le_fopen;
 static int le_socket;
@@ -155,6 +156,11 @@ static SWFCharacter getCharacter(zval *id)
 /* }}} */
 /* {{{ getInput - utility func for making an SWFInput from an fopened resource */
 
+static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource)
+{
+  destroySWFInput((SWFInput)resource->ptr);
+}
+
 #define SOCKBUF_INCREMENT 10240
 
 /* turn a socket into an SWFInput by copying everything to a buffer. */
@@ -179,7 +185,7 @@ static SWFInput newSWFInput_sock(int socket)
   }
   while(l > 0);
 
-  return newSWFInput_buffer(buffer, offset);
+  return newSWFInput_allocedBuffer(buffer, offset);
 }
 
 static SWFInput getInput(zval **zfile)
@@ -187,14 +193,19 @@ static SWFInput getInput(zval **zfile)
   FILE *file;
   int type, s, offset;
   char *buffer;
+  SWFInput input;
 
   file = (FILE *)zend_fetch_resource(zfile, -1, "File-Handle", &type, 3,
 				     le_fopen, le_socket, popen);
 
   if(type == le_socket)
-    return newSWFInput_sock(*(int *)file);
+    input = newSWFInput_sock(*(int *)file);
   else
-    return newSWFInput_file(file);
+    input = newSWFInput_file(file);
+
+  zend_list_addref(zend_list_insert(input, le_swfinputp));
+
+  return input;
 }
 
 /* }}} */
@@ -287,15 +298,8 @@ PHP_FUNCTION(swfbitmap_init)
   if((*zfile)->type != IS_RESOURCE)
   {
     convert_to_string_ex(zfile);
-
-    file = V_FOPEN(Z_STRVAL_PP(zfile), "rb");
-
-    if(!file)
-      php_error(E_ERROR, "Couldn't find file %s", Z_STRVAL_PP(zfile));
-
-    ZEND_REGISTER_RESOURCE(NULL, file, le_fopen);
-
-    input = newSWFInput_file(file);
+    input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+    zend_list_addref(zend_list_insert(input, le_swfinputp));
   }
   else
     input = getInput(zfile);
@@ -305,15 +309,8 @@ PHP_FUNCTION(swfbitmap_init)
     if((*zmask)->type != IS_RESOURCE)
     {
       convert_to_string_ex(zmask);
-
-      mask = V_FOPEN(Z_STRVAL_PP(zmask), "rb");
-
-      if(!mask)
-	php_error(E_ERROR, "Couldn't find file %s", Z_STRVAL_PP(zmask));
-
-      ZEND_REGISTER_RESOURCE(NULL, mask, le_fopen);
-
-      maskinput = newSWFInput_file(mask);
+      maskinput = newSWFInput_buffer(Z_STRVAL_PP(zmask), Z_STRLEN_PP(zmask));
+      zend_list_addref(zend_list_insert(maskinput, le_swfinputp));
     }
     else
       mask = getInput(zmask);
@@ -1663,15 +1660,8 @@ PHP_FUNCTION(swfmovie_streamMp3)
   if((*zfile)->type != IS_RESOURCE)
   {
     convert_to_string_ex(zfile);
-
-    file = V_FOPEN(Z_STRVAL_PP(zfile), "rb");
-
-    if(!file)
-      php_error(E_ERROR, "Couldn't find file %s", Z_STRVAL_PP(zfile));
-
-    ZEND_REGISTER_RESOURCE(NULL, file, le_fopen);
-
-    input = newSWFInput_file(file);
+    input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+    zend_list_addref(zend_list_insert(input, le_swfinputp));
   }
   else
     input = getInput(zfile);
@@ -3042,6 +3032,8 @@ PHP_MINIT_FUNCTION(ming)
 
   le_swfdisplayitemp = zend_register_list_destructors_ex(NULL, NULL, "SWFDisplayItem", module_number);
   le_swfactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFAction", module_number);
+
+  le_swfinputp = zend_register_list_destructors_ex(destroy_SWFInput_resource, NULL, "SWFInput", module_number);
 
   INIT_CLASS_ENTRY(shape_class_entry, "swfshape", swfshape_functions);
   INIT_CLASS_ENTRY(fill_class_entry, "swffill", swffill_functions);

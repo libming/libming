@@ -66,6 +66,7 @@ int SWFInput_eof(SWFInput input);
 SWFInput newSWFInput_file(FILE *f);
 SWFInput newSWFInput_stream(FILE *f);
 SWFInput newSWFInput_buffer(unsigned char *buffer, int length);
+SWFInput newSWFInput_allocedBuffer(unsigned char *buffer, int length);
 
 void destroySWFInput(SWFInput input);
 
