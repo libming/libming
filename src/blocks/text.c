@@ -200,6 +200,7 @@ SWFText_addTextRecord(SWFText text)
 	textRecord->x = 0;
 	textRecord->y = 0;
 	textRecord->advance = NULL;
+	textRecord->nAdvanceBits = 0;
 
 	if ( current == NULL )
 	{
