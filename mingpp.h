@@ -532,12 +532,12 @@ class SWFShape : public SWFCharacter
   void drawCircle(float r)
     { SWFShape_drawCircle(this->shape, r); }
 
-  void drawGlyph(SWFFont *font, unsigned char c)
-    { SWFShape_drawFontGlyph(this->shape, font->font, c); }
+  void drawGlyph(SWFFont *font, unsigned char c, int size=0)
+    { SWFShape_drawGlyph(this->shape, font->font, c, size); }
 
   // deprecated?
   void drawFontGlyph(SWFFont *font, unsigned char c)
-    { SWFShape_drawFontGlyph(this->shape, font->font, c); }
+    { SWFShape_drawGlyph(this->shape, font->font, c, 0); }
 };
 
 

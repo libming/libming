@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.1.1
-#define MING_VERSION_TEXT  "0.1.1"
+#define MING_VERSION        0.2a
+#define MING_VERSION_TEXT  "#MING_VERSION"
 
 int Ming_init();
 
@@ -31,6 +31,7 @@ void Ming_setCubicThreshold(int num);
 
 /* sets the overall scale, default is 20 */
 void Ming_setScale(float scale);
+float Ming_getScale();
 
 /* change the error/warn behavior.  Default prints message and exits. */
 void Ming_setWarnFunction(void (*warn)(char *msg, ...));
@@ -522,8 +523,9 @@ void SWFShape_drawArc(SWFShape shape, float r,
 void SWFShape_drawCircle(SWFShape shape, float r);
 
 
-/* draw character c from font font into shape shape */
-void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
+/* draw character c from font font into shape shape at size size */
+void SWFShape_drawGlyph(SWFShape shape,
+			SWFFont font, unsigned char c, int size);
 
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */
@@ -537,7 +539,7 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 /* deprecated: */
 
-#define SWFShape_drawFontGlyph SWFShape_drawGlyph
+#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c,1024)
 
 
 typedef void *SWFMovieClip;
