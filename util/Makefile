@@ -46,11 +46,11 @@ listswf_nd: blocktypes.o decompile.o read.o listswf.c
 listaction: blocktypes.o read.o listswf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
 
-swftoperl: blocktypes.o decompile.o decompile5.o read.o swftoperl.c
-	$(CC) $(CFLAGS) $(LDFLAGS) swftoperl.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm -lz
+swftoperl: blocktypes.o decompile.o decompile5.o read.o swftoscript.c
+	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) swftoscript.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm -lz
 
-swftophp: blocktypes.o decompile.o decompile5.o read.o swftophp.c
-	$(CC) $(CFLAGS) $(LDFLAGS) swftophp.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm -lz
+swftophp: blocktypes.o decompile.o decompile5.o read.o swftoscript.c
+	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) swftoscript.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm -lz
 
 swftopython: 
 	echo " swftopython: still not written"
