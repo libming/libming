@@ -62,30 +62,39 @@ void destroySWFDisplayList(SWFDisplayList list)
 
 SWFDisplayList newSWFDisplayList()
 {
-  SWFDisplayList list = (SWFDisplayList)malloc(SWFDISPLAYLIST_SIZE);
-  memset(list, 0, SWFDISPLAYLIST_SIZE);
+  SWFDisplayList list = calloc(1, SWFDISPLAYLIST_SIZE);
+
   list->isSprite = FALSE;
+  list->head = NULL;
+  list->tail = NULL;
+  list->soundStream = NULL;
+
   return list;
 }
 
 SWFDisplayList newSWFSpriteDisplayList()
 {
-  SWFDisplayList list = (SWFDisplayList)malloc(SWFDISPLAYLIST_SIZE);
-  memset(list, 0, SWFDISPLAYLIST_SIZE);
+  SWFDisplayList list = calloc(1, SWFDISPLAYLIST_SIZE);
+
   list->isSprite = TRUE;
+  list->head = NULL;
+  list->tail = NULL;
+  list->soundStream = NULL;
+
   return list;
 }
 
 SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 {
-  SWFDisplayItem item = (SWFDisplayItem)malloc(SWFDISPLAYITEM_SIZE);
-  memset(item, 0, SWFDISPLAYITEM_SIZE);
-  item->flags = ITEM_NEW;
+  SWFDisplayItem item = calloc(1, SWFDISPLAYITEM_SIZE);
+
+  item->flags = ITEM_NEW | ITEM_TRANSFORMED;
   item->next = NULL;
   item->character = character;
   item->depth = ++list->depth;
   item->matrix = newSWFMatrix(0, 0, 0, 0, 0, 0);
   item->position = newSWFPosition(item->matrix);
+  item->cXform = NULL;
 
   if(list->tail)
     list->tail->next = item;
@@ -111,12 +120,12 @@ void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
   item->depth = depth;
 }
 
-void SWFDisplayItem_move(SWFDisplayItem item, int x, int y)
+void SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
 {
   SWFPosition_move(item->position, x, y);
   item->flags |= ITEM_TRANSFORMED;
 }
-void SWFDisplayItem_moveTo(SWFDisplayItem item, int x, int y)
+void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
 {
   SWFPosition_moveTo(item->position, x, y);
   item->flags |= ITEM_TRANSFORMED;
@@ -162,8 +171,8 @@ void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
   item->flags |= ITEM_TRANSFORMED;
 }
 
-void SWFDisplayItem_setMatrix(SWFDisplayItem item,
-			      float a, float b, float c, float d, int x, int y)
+void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b,
+			      float c, float d, float x, float y)
 {
   SWFPosition_setMatrix(item->position, a, b, c, d, x, y);
   item->flags |= ITEM_TRANSFORMED;
@@ -178,7 +187,7 @@ void SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 }
 void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio)
 {
-  item->ratio = (int)floor(ratio*65535+0.5);
+  item->ratio = (int)rint(ratio*65535);
   item->flags |= ITEM_RATIOCHANGED;
 }
 void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform)
@@ -262,7 +271,7 @@ void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
     if(character != NULL)
       resolveDependencies(character, blocklist);
 
-    if(item->flags&ITEM_REMOVED)
+    if(item->flags & ITEM_REMOVED)
     {
       if(item == list->head)
 	list->head = item->next;
@@ -286,36 +295,20 @@ void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 
     /* blank out info that hasn't changed */
 
-    if(item->flags&ITEM_CXFORMCHANGED)
-      cXform = item->cXform;
-    else
-      cXform = NULL;
+    cXform = (item->flags & ITEM_CXFORMCHANGED) ? item->cXform : NULL;
+    matrix = (item->flags & ITEM_TRANSFORMED) ? item->matrix : NULL;
 
-    if(item->flags&ITEM_TRANSFORMED)
-    {
-      matrix = item->matrix;
-
-      if(!(item->flags&ITEM_TRANSFORMED))
-      {
-	SWFMatrix_clearTranslate(matrix);
-	SWFMatrix_clearTransform(matrix);
-      }
-    }
-    else
-      matrix = NULL;
-
-    if(!(item->flags&ITEM_RATIOCHANGED) &&
+    if(!(item->flags & ITEM_RATIOCHANGED) &&
        (character == NULL ||
 	SWFBlock_getType(item->character) != SWF_DEFINEMORPHSHAPE))
       item->ratio = -1;
 
-    if(!(item->flags&ITEM_NEW))
+    if(!(item->flags & ITEM_NEW))
       character = NULL;
 
     if(item->flags != 0)
     {
-      int move = item->flags&(ITEM_TRANSFORMED|ITEM_RATIOCHANGED|ITEM_CXFORMCHANGED) &&
-	!(item->flags&ITEM_NEW);
+      int move = (item->flags & ITEM_CHANGED) && !(item->flags&ITEM_NEW);
 
       block = newSWFPlaceObject2Block(item->depth, item->name, item->ratio,
 				      cXform, matrix, character, move);

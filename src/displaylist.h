@@ -28,10 +28,11 @@
 
 #define ITEM_NEW            (1<<0)
 #define ITEM_REMOVED        (1<<1)
-#define ITEM_DISPLACED      (1<<2)
-#define ITEM_TRANSFORMED    (1<<3)
-#define ITEM_CXFORMCHANGED  (1<<4)
-#define ITEM_RATIOCHANGED   (1<<5)
+#define ITEM_TRANSFORMED    (1<<2)
+#define ITEM_CXFORMCHANGED  (1<<3)
+#define ITEM_RATIOCHANGED   (1<<4)
+
+#define ITEM_CHANGED  (ITEM_TRANSFORMED|ITEM_CXFORMCHANGED|ITEM_RATIOCHANGED)
 
 struct _swfDisplayItem
 {
@@ -51,16 +52,16 @@ typedef struct _swfDisplayItem *SWFDisplayItem;
 
 void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees);
 void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees);
-void SWFDisplayItem_move(SWFDisplayItem item, int x, int y);
-void SWFDisplayItem_moveTo(SWFDisplayItem item, int x, int y);
+void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
+void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
 void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale);
 void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale);
 void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
 void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
-void SWFDisplayItem_setMatrix(SWFDisplayItem i,
-			      float a, float b, float c, float d, int x, int y);
+void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
+			      float c, float d, float x, float y);
 
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
