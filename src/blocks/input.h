@@ -32,6 +32,8 @@ unsigned long SWFInput_getUInt32(SWFInput input);
 
 unsigned long SWFInput_getUInt32_BE(SWFInput input);
 
+// input types
+
 SWFInput newSWFInput_file(FILE *f);
 
 SWFInput newSWFInput_stream(FILE *f);
