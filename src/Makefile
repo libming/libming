@@ -38,6 +38,7 @@ dynamic: ${OFILES}
 	cd actioncompiler && $(MAKE)
 	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o $(SHAREDLIB)
 	cp $(SHAREDLIB) ..
+	ln -fs $(SHAREDLIB) ../libming.so
 
 static: ${OFILES}
 	cd blocks && $(MAKE)
