@@ -61,6 +61,8 @@ static void unescape(char *buf)
 			case 't' : *w = '\t'; break;
 			case 'x' :
 			case 'u' : fprintf(stderr,"unsupported escape sequence\n");
+				break;
+			default : *w = *r; break;
 		}
 		w++;
 		r++;
@@ -108,6 +110,7 @@ HEXDIGIT [0-9a-fA-F]
 OCTDIGIT [0-7]
 DIGIT    [0-9]
 ID       [$a-zA-Z_][$a-zA-Z0-9_]*
+EXPONENT [eE][-+]?{DIGIT}+
 
 %%
   if(SWF_versionNum >= 6)
@@ -119,8 +122,10 @@ ID       [$a-zA-Z_][$a-zA-Z0-9_]*
 				return INTEGER; }
 {DIGIT}+		{ count(); swf5lval.intVal = atoi(yytext);
 				return INTEGER;	}
-{DIGIT}+"."{DIGIT}*	{ count(); swf5lval.doubleVal = atof(yytext);
+{DIGIT}+"."{DIGIT}*{EXPONENT}?	{ count(); swf5lval.doubleVal = atof(yytext);
 				return DOUBLE; }
+{DIGIT}+*{EXPONENT}?		{ count(); swf5lval.intVal = atof(yytext);
+				return DOUBLE;	}
 true			{ count();swf5lval.intVal = 1;
 				return BOOLEAN;	}
 false			{ count(); swf5lval.intVal = 0;
