@@ -1,4 +1,63 @@
-* listswf and swftophp should be sharing more code- they're both almost 2000
+* listswf, swftophp and swftoperl should be sharing more code- they're both almost 2000
   lines long, and most of it is more or less the same..
 
-* make swftopy
+overall:
+  definefont, definefont2  
+  flash6 stuff?
+
+* hextools: 
+	How about combining listswf with hextools and show different colors 
+	for each block. Output could be colored text (with ncurses, but 
+	limited colors) or easier: a HTML page with a table 
+	with many <font>/<style>-tags. 
+	
+	Or swf :-).
+	
+	That would help analyzing flashmovies.
+  
+* listswf:
+	-definefont2 
+* swftophp:
+  	
+* swftoperl:
+	- be up to date with the current ming-perl-api 
+	- 0x88 library reading.
+	- detect, if ?possible?, the place of path of the needed use lib(""); command?
+	- complete analyzation.
+	- more intuitive variable names ($s34 for a SWF::TextField() 
+	  is'nt satisfying.
+	  
+	  possible improved naming sceme? (# is number, short variablenames for often used objects, long for rarely used)
+	  $a# for Action
+	  $m# for Movie
+	  $mc# for MovieClip
+	  $morph# for Morph 
+	  $s# for Shapes
+	  $tf# for TextField
+	  $text# for Text
+	  $bitmap# for bitmaps  
+	  ..
+
+	  $name#_i# for all instances
+	  
+	- add commandlineoptions:
+		--outfile          (default: write to STDOUT)
+		
+		--minglib          (default: --minglib=)
+		--fontdir          (default: --fontdir=./)
+		--writefonts       (default: --writefonts=no)
+		--overwritefonts   (default: --overwritefonts=no)
+		
+		--bitmapdir        (default: --bitmapdir=./)
+		--writebitmaps     (default: --writebitmaps=no)
+		--overwritebitmaps (default: --overwritebitmaps=no)
+		
+		--sounddir         (default: --dir=./)
+		--writesounds      (default: --writesounds=no)
+		--overwritesounds  (default: --overwritesounds=no)
+		
+		--all   (--writefonts=yes --writebitmaps --writesounds)
+		--forceall ( like all, but overwrites existing files
+		
+* swftopython:
+	write swftopython
