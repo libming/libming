@@ -72,10 +72,10 @@ PHP_FUNCTION(swfmovie_remove);
 PHP_FUNCTION(swfmovie_nextFrame);
 PHP_FUNCTION(swfmovie_labelFrame);
 PHP_FUNCTION(swfmovie_setBackground);
-PHP_FUNCTION(swfmovie_Protect);
 PHP_FUNCTION(swfmovie_setRate);
 PHP_FUNCTION(swfmovie_setDimension);
 PHP_FUNCTION(swfmovie_setFrames);
+PHP_FUNCTION(swfmovie_Protect);
 PHP_FUNCTION(swfmovie_streamMp3);
 
 PHP_FUNCTION(swfsprite_init);
@@ -143,6 +143,7 @@ PHP_FUNCTION(swfbutton_setDown);
 PHP_FUNCTION(swfbutton_setAction);
 PHP_FUNCTION(swfbutton_addShape);
 PHP_FUNCTION(swfbutton_addAction);
+PHP_FUNCTION(swfbutton_addSound);
 
 PHP_FUNCTION(swfbutton_keypress);
 
