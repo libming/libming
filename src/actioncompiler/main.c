@@ -10,8 +10,8 @@ extern int yydebug;
 
 #define print(x)	{fputs(x,stdout);}
 
-extern char *lexBuffer;
-extern int lexBufferLen;
+char *buffer;
+int bufferLen;
 
 #define BUFFER_INC 1024
 
@@ -22,6 +22,10 @@ void printDoAction(Buffer f, int length);
 
 void (*SWF_error)(char *msg, ...);
 void (*SWF_warn)(char *msg, ...);
+
+int SWF_versionNum = 5;
+
+int yydebug;
 
 void print_error(char *msg, ...)
 {
@@ -51,10 +55,8 @@ int main(int argc, char *argv[])
   SWF_error = print_error;
   SWF_warn = print_warn;
 
-  lexBuffer = malloc(BUFFER_INC);
-  lexBufferLen = 0;
-
-  yydebug = 1;
+  buffer = malloc(BUFFER_INC);
+  bufferLen = 0;
 
   if(argc > 1)
   {
@@ -69,16 +71,16 @@ int main(int argc, char *argv[])
   else
     f = stdin;
 
-  while((size = fread(lexBuffer+lexBufferLen, 1, BUFFER_INC, f)) == BUFFER_INC)
+  while((size = fread(buffer+bufferLen, 1, BUFFER_INC, f)) == BUFFER_INC)
   {
-    lexBuffer = realloc(lexBuffer, lexBufferLen+2*BUFFER_INC);
-    lexBufferLen += BUFFER_INC;
+    buffer = realloc(buffer, bufferLen+2*BUFFER_INC);
+    bufferLen += BUFFER_INC;
   }
 
-  lexBufferLen += size;
-  parseInit(lexBuffer);
+  bufferLen += size;
 
-  yyparse((void *)&b);
+  swf5ParseInit(buffer, 1);
+  swf5parse((void *)&b);
 
   if(b == NULL)
   {
