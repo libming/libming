@@ -295,7 +295,7 @@ SWFFillStyle newSWFBitmapFillStyle(SWFCharacter bitmap, byte flags);
 SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 
 
-/* SWFLineStyle */
+  /* SWFLineStyle */
 
 typedef void *SWFLineStyle;
 
@@ -415,25 +415,6 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 void destroySWFCXform(SWFCXform cXform);
 
 
-  /* random blocks */
-
-typedef void *SWFOutputBlock;
-
-SWFBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
-				SWFMatrix matrix, SWFCXform cXform);
-SWFBlock newSWFPlaceObject2Block(int depth, char *name, int ratio,
-				 SWFCXform cXform, SWFMatrix matrix,
-				 SWFCharacter character, int move);
-
-SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
-SWFOutputBlock newSWFRemoveObject2Block(int depth);
-SWFOutputBlock newSWFFrameLabelBlock(char *string);
-SWFBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
-SWFBlock newSWFShowFrameBlock();
-SWFBlock newSWFEndBlock();
-SWFBlock newSWFProtectBlock();
-
-
   /* SWFAction */
 
 typedef void *SWFAction;
@@ -442,6 +423,57 @@ SWFAction newSWFAction();
 SWFAction newSWFAction_fromOutput(SWFOutput out);
 SWFAction compileSWFActionCode(char *script);
 void destroySWFAction(SWFAction action);
+
+
+  /* placeobject.h */
+
+typedef void *SWFPlaceObject2Block;
+
+#define SWF_PLACEACTION_ONLOAD      (1<<0)
+#define SWF_PLACEACTION_ENTERFRAME  (1<<1)
+#define SWF_PLACEACTION_UNLOAD      (1<<2)
+#define SWF_PLACEACTION_MOUSEMOVE   (1<<3)
+#define SWF_PLACEACTION_MOUSEDOWN   (1<<4)
+#define SWF_PLACEACTION_MOUSEUP     (1<<5)
+#define SWF_PLACEACTION_KEYDOWN     (1<<6)
+#define SWF_PLACEACTION_KEYUP       (1<<7)
+#define SWF_PLACEACTION_DATA        (1<<8)
+
+SWFPlaceObject2Block newSWFPlaceObject2Block();
+
+void SWFPlaceObject2Block_setDepth(SWFPlaceObject2Block block, int depth);
+void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block,
+				  const char *name);
+void SWFPlaceObject2Block_setRatio(SWFPlaceObject2Block block, int ratio);
+void SWFPlaceObject2Block_setCXform(SWFPlaceObject2Block block,
+				    SWFCXform cXform);
+void SWFPlaceObject2Block_setColorAdd(SWFPlaceObject2Block block,
+				      int r, int g, int b, int a);
+void SWFPlaceObject2Block_setColorMult(SWFPlaceObject2Block block,
+				       float r, float g, float b, float a);
+void SWFPlaceObject2Block_setMatrix(SWFPlaceObject2Block block,
+				    SWFMatrix matrix);
+void SWFPlaceObject2Block_setCharacter(SWFPlaceObject2Block block,
+				       SWFCharacter character);
+void SWFPlaceObject2Block_setMove(SWFPlaceObject2Block block);
+void SWFPlaceObject2Block_addAction(SWFPlaceObject2Block block,
+				    SWFAction action, int flags);
+
+
+  /* random blocks */
+
+typedef void *SWFOutputBlock;
+
+SWFBlock newSWFPlaceObjectBlock(SWFCharacter character, int depth,
+				SWFMatrix matrix, SWFCXform cXform);
+
+SWFOutputBlock newSWFRemoveObjectBlock(SWFCharacter character, int depth);
+SWFOutputBlock newSWFRemoveObject2Block(int depth);
+SWFOutputBlock newSWFFrameLabelBlock(char *string);
+SWFBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
+SWFBlock newSWFShowFrameBlock();
+SWFBlock newSWFEndBlock();
+SWFBlock newSWFProtectBlock();
 
 
   /* SWFButton */
