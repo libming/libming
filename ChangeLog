@@ -1,3346 +1,3223 @@
-2004-02-08 12:09  erich
+2004-04-01 09:30  strk
 
-	* rules.make: added "-lm" so everybody tries linking the math lib
+	* src/: actioncompiler/Makefile, blocks/Makefile: Updated to be
+	accepted by BSD-make
 
-2004-02-04 00:53  erich
+2004-04-01 09:25  strk
+
+	* Makefile: Updated to be accepted by BSD-make
+
+2004-03-31 15:02  strk
+
+	* src/: mem.c, mem.h: Added deeper checks on passed nodes. Defaults
+	to avoid checking.
+
+2004-03-31 13:50  strk
+
+	* src/actioncompiler/compile.c: initialized global **constants
+
+2004-03-31 13:01  strk
+
+	* src/mem.c: Added compile-time option to check passed pointers
+
+2004-03-31 12:56  strk
+
+	* src/shape_util.c: Added <stdlib> include before local ones
+
+2004-03-31 09:03  strk
+
+	* src/: libming.h, mem.c, mem.h: Added memory wrapping functions. 
+	Inverted wrapping mechanism. All wrapper code has to be explicit.
+
+2004-03-30 15:07  strk
+
+	* config.make, src/Makefile, src/Makefile.am, src/displaylist.c,
+	src/fill.c, src/font_util.c, src/libming.h, src/ming.c, src/ming.h,
+	src/ming_config.h, src/movie.c, src/movieclip.c, src/shape_util.c,
+	src/test.c, src/text_util.c, src/actioncompiler/assembler.c,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/blocks/action.c, src/blocks/bitmap.c, src/blocks/block.c,
+	src/blocks/browserfont.c, src/blocks/button.c,
+	src/blocks/character.c, src/blocks/dbl.c, src/blocks/error.c,
+	src/blocks/fillstyle.c, src/blocks/font.c, src/blocks/fontinfo.c,
+	src/blocks/gifdbl.c, src/blocks/gradient.c, src/blocks/imports.c,
+	src/blocks/jpeg.c, src/blocks/method.c, src/blocks/morph.c,
+	src/blocks/output.c, src/blocks/outputblock.c,
+	src/blocks/placeobject.c, src/blocks/pngdbl.c, src/blocks/read.c,
+	src/blocks/rect.c, src/blocks/shape.c, src/blocks/sound.c,
+	src/blocks/soundinstance.c, src/blocks/soundstream.c,
+	src/blocks/text.c, src/blocks/ttffont.c, src/blocks/utf8.c,
+	src/blocks/videostream.c: Made all files include "libming.h". 
+	Added a WRAP_MEMORY_MANAGEMENT define in src/ming_config.h.  Added
+	mem.c mem.h modules with MM wrapping mechanisms.
+
+2004-03-26 16:49  strk
+
+	* src/Makefile: Applied patch from Klaus Rechert <klaus@rechert.de>
+
+2004-03-26 15:37  strk
+
+	* php_ext/: ming.c, php_ming.h: Added patch from Klaus Rechert
+	<klaus@rechert.de> to make use of new movie compression interface.
+
+2004-03-25 09:41  strk
+
+	* php_ext/Makefile: Added compiler tips on how to find php includes
+
+2004-03-25 08:28  strk
+
+	* mingpp.h, src/libming.h, src/ming.c, src/ming.h, src/movie.c:
+	Reverted SWFMovie_save() and SWFMovie_output APIs back to their
+	original signature. Added Ming_setSWFCompression() to handle
+	compression.
+
+2004-02-17 17:04  whamann
+
+	* mingpp.h: 
+	fixes contributed by Pete Schwamb pete@the-valley.org
+
+2004-02-17 17:02  whamann
+
+	* src/actioncompiler/swf5compiler.y: 
+	memory leak fixes contributed by Pete Schwamb pete@the-valley.org
+
+2004-02-17 16:20  whamann
+
+	* src/blocks/shape.c: 
+	rewrite some code so that a broken compiler can handle it :)
+
+2004-02-11 07:58  whamann
+
+	* util/decompile5.c: 
+	change so that an array reference item[1] rather than item.1 is
+	generated from push item, getvariable, push 1, getmember
+
+2004-02-08 11:05  erich
+
+	* ChangeLog: updated
+
+2004-02-08 10:59  erich
+
+	* config.make: should fix the python build issue
+
+2004-02-04 00:30  erich
+
+	* ChangeLog: Generated new changelog using cvs2cl.pl
+
+2004-02-03 23:53  erich
 
 	* ChangeLog, Makefile, php_ext/Makefile, py_ext/Makefile,
-	  src/Makefile, tcl_ext/Makefile, util/Makefile: Replaced make by
-	  $(MAKE) in the makefile, that should help those BSD users with
-	  gmake
+	src/Makefile, tcl_ext/Makefile, util/Makefile: Replaced make by
+	$(MAKE) in the makefile, that should help those BSD users with
+	gmake
 
-2004-02-02 13:20  vapour
+2004-02-02 12:20  vapour
 
 	* Rules.make, configure.in, perl_ext/SWF.pm, src/ming.h: Updated
-	  the version number to be 0.3beta1.
+	the version number to be 0.3beta1.
 
-2004-02-02 13:07  vapour
+2004-02-02 12:07  vapour
 
 	* README: Removed the installation instructions, as they're already
-	  in the INSTALL file.
+	in the INSTALL file.
 
-2004-02-02 12:59  vapour
+2004-02-02 11:59  vapour
 
 	* INSTALL: Updated to reflect the new Ming tarball name, plus
-	  removed reference to commenting out the GIF and PNG support.
+	removed reference to commenting out the GIF and PNG support.
 
-2004-02-02 12:46  vapour
+2004-02-02 11:46  vapour
 
 	* src/ming.h: Changed the version number to reflect reality.
 
-2004-02-02 11:54  vapour
+2004-02-02 10:54  vapour
 
 	* config.make: Added the EXTRA_LIBS environment variable to get the
-	  PHP module working.
+	PHP module working.
 
-2004-01-18 20:29  whamann
+2004-01-18 19:29  whamann
 
 	* php_ext/ming.c, src/ming.h, src/movie.c, src/movie.h,
-	  src/actioncompiler/swf4compiler.flex,
-	  src/actioncompiler/swf5compiler.flex, src/blocks/blocktypes.h,
-	  src/blocks/character.c, src/blocks/gifdbl.c,
-	  src/blocks/imports.h, src/blocks/input.c, src/blocks/pngdbl.c,
-	  src/blocks/soundstream.c, src/blocks/text.c,
-	  src/blocks/textfield.c, util/png2dbl.c, win32/libming.dsp:
-	  patches by Wolfgang Glunz <wolfgang.glunz@siemens.com> fix a few
-	  types so the stricter c++ typechecking is happy too
+	src/actioncompiler/swf4compiler.flex,
+	src/actioncompiler/swf5compiler.flex, src/blocks/blocktypes.h,
+	src/blocks/character.c, src/blocks/gifdbl.c, src/blocks/imports.h,
+	src/blocks/input.c, src/blocks/pngdbl.c, src/blocks/soundstream.c,
+	src/blocks/text.c, src/blocks/textfield.c, util/png2dbl.c,
+	win32/libming.dsp: 
+	patches by Wolfgang Glunz <wolfgang.glunz@siemens.com> fix a few
+	types so the stricter c++ typechecking is happy too
 
-2004-01-18 14:42  vapour
+2004-01-18 13:42  vapour
 
 	* Makefile: Small fix to run make clean in perl_ext when
-	  appropriate.
+	appropriate.
 
-2004-01-18 14:20  vapour
+2004-01-18 13:20  vapour
 
 	* Makefile: Small fix to also remove the leftover libming.so and
-	  libming.a
+	libming.a
 
-2004-01-18 12:10  vapour
+2004-01-18 11:10  vapour
 
 	* INSTALL: Added a missing line.
 
-2004-01-18 11:47  vapour
+2004-01-18 10:47  vapour
 
 	* README: Changed the "Last Modified" line to be correct.
 
-2004-01-18 11:45  vapour
+2004-01-18 10:45  vapour
 
 	* CREDITS: Added Klaus Rechert, Mohammad Haque, and myself to the
-	  CREDITS.
+	CREDITS.
 
-2004-01-18 10:37  vapour
+2004-01-18 09:37  vapour
 
 	* Makefile, config.make, src/actioncompiler/Makefile,
-	  src/blocks/Makefile: Further patches by Mohammad Haque to
-	  organise the Makefiles.
+	src/blocks/Makefile: Further patches by Mohammad Haque to organise
+	the Makefiles.
 
-2004-01-18 10:11  vapour
+2004-01-18 09:11  vapour
 
 	* Rules.make, c++_ext/Makefile, py_ext/Makefile, util/Makefile:
-	  Further refactoring by Mohammad of the Makefiles.
+	Further refactoring by Mohammad of the Makefiles.
 
-2004-01-18 08:50  vapour
+2004-01-18 07:50  vapour
 
 	* perl_ext/Makefile.PL: Fixed the Makefile to correctly find
-	  src/ming.h
+	src/ming.h
 
-2004-01-18 07:46  vapour
+2004-01-18 06:46  vapour
 
 	* INSTALL, Makefile, README, config.h, configure.in, ming.h,
-	  php_ext/Makefile, php_ext/ming-dev.c, php_ext/ming-streams.c,
-	  php_ext/ming.c, src/config.h, src/ming.h, src/ming_config.h,
-	  src/test.c, src/blocks/dbl.c, src/blocks/gifdbl.c,
-	  src/blocks/pngdbl.c, util/png2swf.c: Mohammad Haque's changes to
-	  start cutting down the number of header files that were spread
-	  around.
+	php_ext/Makefile, php_ext/ming-dev.c, php_ext/ming-streams.c,
+	php_ext/ming.c, src/config.h, src/ming.h, src/ming_config.h,
+	src/test.c, src/blocks/dbl.c, src/blocks/gifdbl.c,
+	src/blocks/pngdbl.c, util/png2swf.c: Mohammad Haque's changes to
+	start cutting down the number of header files that were spread
+	around.
 
-2004-01-17 06:52  vapour
+2004-01-17 05:52  vapour
 
 	* src/: Makefile, actioncompiler/Makefile, blocks/Makefile: Added
-	  the CFLAGS and EXTRALIBS bits from Mohammad Haque.
+	the CFLAGS and EXTRALIBS bits from Mohammad Haque.
+	
+	Haven't included the -dynamiclib (or something like that)
+	replacements for the -shared options, as we should work out a
+	solution that helps more people first.
 
-	  Haven't included the -dynamiclib (or something like that)
-	  replacements for the -shared options, as we should work out a
-	  solution that helps more people first.
-
-2004-01-17 06:37  vapour
+2004-01-17 05:37  vapour
 
 	* perl_ext/VideoStream.xs: Added Klaus' perl_ext/VideoStream.xs
-	  file, as I forgot to include it before.
+	file, as I forgot to include it before.
 
-2004-01-17 06:30  vapour
+2004-01-17 05:30  vapour
 
 	* php_ext/Makefile: Swapped around the -I arguments, at Klaus'
-	  suggestion.
+	suggestion.
 
-2004-01-17 06:27  vapour
+2004-01-17 05:27  vapour
 
 	* src/ming.h, perl_ext/Makefile.PL, perl_ext/perl_swf.h,
-	  perl_ext/typemap, php_ext/ming.c, php_ext/php_ming.h: Klaus'
-	  patches for video streaming support.
+	perl_ext/typemap, php_ext/ming.c, php_ext/php_ming.h: Klaus'
+	patches for video streaming support.
 
-2004-01-17 05:34  vapour
+2004-01-17 04:34  vapour
 
 	* php_ext/Makefile: Altered the Makefile to pick up the CFLAGS
-	  environment variable.
+	environment variable.
 
-2004-01-17 05:25  vapour
+2004-01-17 04:25  vapour
 
 	* src/blocks/input.c: Patch by Mohammad Haque to fix the missing
-	  SWFInput_getUInt24_BE bug.
+	SWFInput_getUInt24_BE bug.
 
-2004-01-15 20:38  vapour
+2004-01-15 19:38  vapour
 
 	* util/: Makefile, raw2adpcm.c: Patches by goto
-	  <harpy@lily.freemail.ne.jp> to fix util/raw2adpcm and also add
-	  some help text to it.
+	<harpy@lily.freemail.ne.jp> to fix util/raw2adpcm and also add some
+	help text to it.
 
-2004-01-15 18:17  vapour
+2004-01-15 17:17  vapour
 
 	* INSTALL, README: Split the old README into both an INSTALL and a
-	  README now.
+	README now.
 
-2004-01-15 15:40  vapour
+2004-01-15 14:40  vapour
 
 	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex:
-	  Patches by goto <harpy@lily.freemail.ne.jp> to fix the YY_PROTO
-	  errors.
+	Patches by goto <harpy@lily.freemail.ne.jp> to fix the YY_PROTO
+	errors.
 
-2004-01-15 15:30  vapour
+2004-01-15 14:30  vapour
 
 	* src/: displaylist.c, blocks/blocktypes.h: Fixes by Klaus Rechert
-	  to help get video streaming working.
+	to help get video streaming working.
 
-2004-01-11 11:56  whamann
+2004-01-11 10:56  whamann
 
-	* php_ext/ming.c:
-	  added a conditional to use php streams rather than files,
-	  sockets, ...	depending on module api.  This is supposed to fix
-	  the "missing symbol ... _le_socket" error If anyone knows the
-	  proper php release date for the switch, please report
+	* php_ext/ming.c: 
+	added a conditional to use php streams rather than files, sockets,
+	...  depending on module api.  This is supposed to fix the "missing
+	symbol ... _le_socket" error If anyone knows the proper php release
+	date for the switch, please report
 
-2004-01-11 11:42  whamann
+2004-01-11 10:42  whamann
 
 	* src/: displaylist.c, ming.h, blocks/Makefile, blocks/Makefile.am,
-	  blocks/input.h, blocks/videostream.c, blocks/videostream.h:
-	  Ming Video streams, contributed by Klaus Rechert
-	  <klaus@geekserver.net>
+	blocks/input.h, blocks/videostream.c, blocks/videostream.h: 
+	Ming Video streams, contributed by Klaus Rechert
+	<klaus@geekserver.net>
 
-2004-01-11 10:47  whamann
+2004-01-11 09:47  whamann
 
-	* src/actioncompiler/: compile.h, main.c:
-	  wrong constant value, after header restructuring the
-	  actioncompiler test program was missing a declaration
+	* src/actioncompiler/: compile.h, main.c: 
+	wrong constant value, after header restructuring the actioncompiler
+	test program was missing a declaration
 
-2003-12-14 12:48  whamann
+2003-12-14 11:48  whamann
 
-	* src/blocks/font.c:
-	  fix pointer relocation problem on 64bit machines - thanks to
-	  Benjamin Osheroff <ben@gimbo.net>
+	* src/blocks/font.c: 
+	fix pointer relocation problem on 64bit machines - thanks to
+	Benjamin Osheroff <ben@gimbo.net>
 
-2003-12-14 12:18  whamann
+2003-12-14 11:18  whamann
 
-	* src/actioncompiler/: swf4compiler.y, swf5compiler.y:
-	  changed associativity of ? : from left to right - thanks
-	  joerg_richter69@hotmail.com
+	* src/actioncompiler/: swf4compiler.y, swf5compiler.y: 
+	changed associativity of ? : from left to right - thanks
+	joerg_richter69@hotmail.com
 
-2003-12-14 11:07  whamann
+2003-12-14 10:07  whamann
 
 	* c++_ext/Makefile, java_ext/native/Makefile, perl_ext/Makefile.PL,
-	  perl_ext/SoundStream.xs, php_ext/Makefile, php_ext/ming.c,
-	  py_ext/Makefile, py_ext/ming.py, src/config.h, src/font_util.h,
-	  src/ming.h, src/shape_cubic.h, src/shape_util.h,
-	  src/blocks/bitmap.c, src/blocks/dbl.c, src/blocks/font.c,
-	  src/blocks/gifdbl.c, src/blocks/pngdbl.c, src/blocks/shape.h,
-	  src/blocks/soundstream.c, src/blocks/soundstream.h,
-	  util/action.h, util/blocktypes.h, util/makefdb.c, util/output.h,
-	  util/read.h, util/swftophp.c:
-	  cleanup patch by michael.schmitt@teststep.org - see changelog for
-	  details
+	perl_ext/SoundStream.xs, php_ext/Makefile, php_ext/ming.c,
+	py_ext/Makefile, py_ext/ming.py, src/config.h, src/font_util.h,
+	src/ming.h, src/shape_cubic.h, src/shape_util.h,
+	src/blocks/bitmap.c, src/blocks/dbl.c, src/blocks/font.c,
+	src/blocks/gifdbl.c, src/blocks/pngdbl.c, src/blocks/shape.h,
+	src/blocks/soundstream.c, src/blocks/soundstream.h, util/action.h,
+	util/blocktypes.h, util/makefdb.c, util/output.h, util/read.h,
+	util/swftophp.c: 
+	cleanup patch by michael.schmitt@teststep.org - see changelog for
+	details
 
-2003-11-08 19:30  whamann
-
-	* src/: actioncompiler/swf4compiler.flex,
-	  actioncompiler/swf5compiler.flex, blocks/shape.c: [no log
-	  message]
-
-2003-11-08 19:24  whamann
+2003-11-08 18:24  whamann
 
 	* perl_ext/Font.xs, src/Makefile, src/blocklist.c, src/blocklist.h,
-	  src/blocktypes.h, src/displaylist.c, src/displaylist.h,
-	  src/fill.h, src/font_util.c, src/font_util.h, src/libming.h,
-	  src/ming.c, src/ming.h, src/movie.c, src/movie.h,
-	  src/movieclip.c, src/movieclip.h, src/position.c, src/position.h,
-	  src/shape_cubic.c, src/shape_cubic.h, src/shape_util.c,
-	  src/shape_util.h, src/text_util.c, src/text_util.h,
-	  src/actioncompiler/Makefile, src/actioncompiler/action.h,
-	  src/actioncompiler/assembler.c, src/actioncompiler/assembler.h,
-	  src/actioncompiler/compile.c, src/actioncompiler/compile.h,
-	  src/actioncompiler/compileaction.c,
-	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
-	  src/actioncompiler/swf4compiler.flex,
-	  src/actioncompiler/swf4compiler.y,
-	  src/actioncompiler/swf5compiler.flex,
-	  src/actioncompiler/swf5compiler.y, src/blocks/Makefile,
-	  src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
-	  src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
-	  src/blocks/blocktypes.h, src/blocks/browserfont.c,
-	  src/blocks/browserfont.h, src/blocks/button.c,
-	  src/blocks/button.h, src/blocks/character.c,
-	  src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
-	  src/blocks/dbl.c, src/blocks/dbl.h, src/blocks/error.c,
-	  src/blocks/error.h, src/blocks/exports.h, src/blocks/fillstyle.c,
-	  src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
-	  src/blocks/fontinfo.h, src/blocks/gifdbl.c,
-	  src/blocks/gradient.c, src/blocks/gradient.h,
-	  src/blocks/imports.c, src/blocks/imports.h, src/blocks/input.c,
-	  src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
-	  src/blocks/linestyle.c, src/blocks/linestyle.h,
-	  src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/morph.c, src/blocks/morph.h,
-	  src/blocks/mp3.c, src/blocks/output.c, src/blocks/output.h,
-	  src/blocks/outputblock.c, src/blocks/outputblock.h,
-	  src/blocks/placeobject.c, src/blocks/placeobject.h,
-	  src/blocks/pngdbl.c, src/blocks/rect.c, src/blocks/rect.h,
-	  src/blocks/shape.c, src/blocks/shape.h, src/blocks/sound.c,
-	  src/blocks/sound.h, src/blocks/soundinstance.c,
-	  src/blocks/soundinstance.h, src/blocks/soundstream.c,
-	  src/blocks/soundstream.h, src/blocks/sprite.c,
-	  src/blocks/sprite.h, src/blocks/text.c, src/blocks/text.h,
-	  src/blocks/textfield.c, src/blocks/textfield.h,
-	  src/blocks/ttffont.c, src/blocks/ttffont.h, src/blocks/utf8.c,
-	  src/blocks/utf8.h:
-	  big cleanup patch by Michael Schmitt
-	  <Michael.Schmitt@teststep.org>
+	src/blocktypes.h, src/displaylist.c, src/displaylist.h, src/fill.h,
+	src/font_util.c, src/font_util.h, src/libming.h, src/ming.c,
+	src/ming.h, src/movie.c, src/movie.h, src/movieclip.c,
+	src/movieclip.h, src/position.c, src/position.h, src/shape_cubic.c,
+	src/shape_cubic.h, src/shape_util.c, src/shape_util.h,
+	src/text_util.c, src/text_util.h, src/actioncompiler/Makefile,
+	src/actioncompiler/action.h, src/actioncompiler/assembler.c,
+	src/actioncompiler/assembler.h, src/actioncompiler/compile.c,
+	src/actioncompiler/compile.h, src/actioncompiler/compileaction.c,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/actioncompiler/swf4compiler.flex,
+	src/actioncompiler/swf4compiler.y,
+	src/actioncompiler/swf5compiler.flex,
+	src/actioncompiler/swf5compiler.y, src/blocks/Makefile,
+	src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/browserfont.h, src/blocks/button.c, src/blocks/button.h,
+	src/blocks/character.c, src/blocks/character.h,
+	src/blocks/cxform.c, src/blocks/cxform.h, src/blocks/dbl.c,
+	src/blocks/dbl.h, src/blocks/error.c, src/blocks/error.h,
+	src/blocks/exports.h, src/blocks/fillstyle.c,
+	src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
+	src/blocks/fontinfo.h, src/blocks/gifdbl.c, src/blocks/gradient.c,
+	src/blocks/gradient.h, src/blocks/imports.c, src/blocks/imports.h,
+	src/blocks/input.c, src/blocks/input.h, src/blocks/jpeg.c,
+	src/blocks/jpeg.h, src/blocks/linestyle.c, src/blocks/linestyle.h,
+	src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
+	src/blocks/method.h, src/blocks/morph.c, src/blocks/morph.h,
+	src/blocks/mp3.c, src/blocks/output.c, src/blocks/output.h,
+	src/blocks/outputblock.c, src/blocks/outputblock.h,
+	src/blocks/placeobject.c, src/blocks/placeobject.h,
+	src/blocks/pngdbl.c, src/blocks/rect.c, src/blocks/rect.h,
+	src/blocks/shape.c, src/blocks/shape.h, src/blocks/sound.c,
+	src/blocks/sound.h, src/blocks/soundinstance.c,
+	src/blocks/soundinstance.h, src/blocks/soundstream.c,
+	src/blocks/soundstream.h, src/blocks/sprite.c, src/blocks/sprite.h,
+	src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
+	src/blocks/textfield.h, src/blocks/ttffont.c, src/blocks/ttffont.h,
+	src/blocks/utf8.c, src/blocks/utf8.h: 
+	big cleanup patch by Michael Schmitt <Michael.Schmitt@teststep.org>
 
-2003-11-07 07:33  whamann
+2003-11-07 06:33  whamann
 
-	* src/blocks/: gifdbl.c, pngdbl.c:
-	  fixed function names to go in sync with the declarations in
-	  ming.h
+	* src/blocks/: gifdbl.c, pngdbl.c: 
+	fixed function names to go in sync with the declarations in ming.h
 
-2003-11-04 00:12  whamann
+2003-11-03 23:12  whamann
 
 	* src/movie.c, src/movie.h, src/movieclip.c, php_ext/ming.c,
-	  src/blocks/soundstream.c, src/blocks/soundstream.h:
-	  contributed by Klaus Rechert <klaus@geekserver.net> soundstream
-	  (and the php streammp3() function) now accept an extra skip
-	  parameter specifying the amount of time to skip at the beginning
-	  of sound.  Note - the skipped sound will NOT be exported to the
-	  swf file.  It is not tested whether streammp3 returns the correct
-	  number of frames with skipping.
+	src/blocks/soundstream.c, src/blocks/soundstream.h: 
+	contributed by Klaus Rechert <klaus@geekserver.net> soundstream
+	(and the php streammp3() function) now accept an extra skip
+	parameter specifying the amount of time to skip at the beginning of
+	sound.	Note - the skipped sound will NOT be exported to the swf
+	file.  It is not tested whether streammp3 returns the correct
+	number of frames with skipping.
 
-2003-10-15 06:30  peterdd
+2003-10-15 04:30  peterdd
 
 	* ChangeLog: swf decompression for swftoperl
 
-2003-10-15 06:09  peterdd
+2003-10-15 04:09  peterdd
 
 	* util/Makefile: -lz for swf decompression, added swftoperl to
-	  install:
+	install:
 
-2003-10-15 06:03  peterdd
+2003-10-15 04:03  peterdd
 
 	* util/swftoperl.c: automatic decompression added, fix for -a
 
-2003-10-10 17:39  whamann
+2003-10-10 15:39  whamann
 
-	* py_ext/ming.py:
-	  new setmatrix function contributed by Dirk Datzert
-	  <dirk.datzert@tks-rasselstein.thyssenkrupp.com>
+	* py_ext/ming.py: 
+	new setmatrix function contributed by Dirk Datzert
+	<dirk.datzert@tks-rasselstein.thyssenkrupp.com>
 
-2003-10-10 17:36  whamann
+2003-10-10 15:36  whamann
 
-	* src/blocks/: bitmap.c, gifdbl.c, pngdbl.c:
-	  brought declarations and actual function names in sync
-	  contributed by fabiano@x3ng.com.br
+	* src/blocks/: bitmap.c, gifdbl.c, pngdbl.c: 
+	brought declarations and actual function names in sync contributed
+	by fabiano@x3ng.com.br
 
-2003-10-10 17:16  whamann
+2003-10-10 15:16  whamann
 
-	* util/: Makefile, png2swf.c:
-	  Contributed by Fabiano Weimar dos Santos <fabiano@x3ng.com.br>
+	* util/: Makefile, png2swf.c: 
+	Contributed by Fabiano Weimar dos Santos <fabiano@x3ng.com.br>
 
-2003-09-25 08:21  whamann
+2003-09-25 06:21  whamann
 
 	* util/: Makefile, decompile.c, decompile.h, decompile5.c,
-	  swftoperl.c, swftophp.c:
+	swftoperl.c, swftophp.c: 
+	
+	changed swftophp / swftoperl to decode actions according to movie
+	version, also added -a flag to skip decoding of actions completely
 
-	  changed swftophp / swftoperl to decode actions according to movie
-	  version, also added -a flag to skip decoding of actions
-	  completely
+2003-09-21 09:27  whamann
 
-2003-09-21 11:27  whamann
+	* src/actioncompiler/: compile.c, compile.h: 
+	ensure that constant pool cannot grow beyond 64K and overflow the
+	size for a single action - patch provided by strk <strk@keybit.net>
 
-	* src/actioncompiler/: compile.c, compile.h:
-	  ensure that constant pool cannot grow beyond 64K and overflow the
-	  size for a single action - patch provided by strk
-	  <strk@keybit.net>
-
-2003-09-16 07:10  peterdd
+2003-09-16 05:10  peterdd
 
 	* ChangeLog: added buttonsound decompilation to swftoperl.c
 
-2003-09-16 06:45  peterdd
+2003-09-16 04:45  peterdd
 
 	* util/swftoperl.c: added functions for buttonsound and
-	  soundinstance
+	soundinstance
 
-2003-09-13 11:35  peterdd
+2003-09-13 09:35  peterdd
 
 	* ChangeLog: soundconstants for perl and small swftoperl.c fix
 
-2003-09-13 11:22  peterdd
+2003-09-13 09:22  peterdd
 
 	* perl_ext/: SWF/Constants.pm, Constants.xs, Exports.c: added
-	  SWF::Sound-constants
+	SWF::Sound-constants
 
-2003-09-12 14:59  whamann
+2003-09-12 12:59  whamann
 
-	* src/: movie.c, blocks/output.c, blocks/output.h:
-	  changed SWFMovie_output - there is now a new method SWFOutput
-	  SWFMovie_toOutput(movie, level) which is intended to deliver a
-	  movie as a binary string to the language bindings
+	* src/: movie.c, blocks/output.c, blocks/output.h: 
+	changed SWFMovie_output - there is now a new method SWFOutput
+	SWFMovie_toOutput(movie, level) which is intended to deliver a
+	movie as a binary string to the language bindings
 
-2003-09-12 12:41  whamann
+2003-09-12 10:41  whamann
 
-	* ming.h:
-	  Michael Schmitt somewhat beautified ming.h
+	* ming.h: 
+	Michael Schmitt somewhat beautified ming.h
 
-2003-09-12 12:20  whamann
+2003-09-12 10:20  whamann
 
 	* py_ext/ming.py, src/blocks/sound.c, src/blocks/sound.h,
-	  src/blocks/soundstream.c, src/blocks/soundstream.h:
-	  fixes by David McNab <david@rebirthing.co.nz> fix sound
-	  declarations in ming.h / ming.i, add interface functions required
-	  by python to open sound files
+	src/blocks/soundstream.c, src/blocks/soundstream.h: 
+	fixes by David McNab <david@rebirthing.co.nz> fix sound
+	declarations in ming.h / ming.i, add interface functions required
+	by python to open sound files
 
-2003-09-12 12:10  whamann
+2003-09-12 10:10  whamann
 
 	* py_ext/ming.py, php_ext/ming.c, php_ext/php_ming.h,
-	  src/displaylist.c, src/displaylist.h, src/position.c,
-	  src/position.h:
-	  Patches contributed by David McNab <david@rebirthing.co.nz> Add a
-	  bunch of get_ methods to retrieve the position, scale, ...  of
-	  displayitems to the core and the python binding Added similar
-	  calls to the php binding Note: there are already functions in the
-	  perl binding
+	src/displaylist.c, src/displaylist.h, src/position.c,
+	src/position.h: 
+	Patches contributed by David McNab <david@rebirthing.co.nz> Add a
+	bunch of get_ methods to retrieve the position, scale, ...  of
+	displayitems to the core and the python binding Added similar calls
+	to the php binding Note: there are already functions in the perl
+	binding
 
-2003-09-12 12:01  whamann
+2003-09-12 10:01  whamann
 
-	* py_ext/Makefile:
-	  fixes by David McNab <david@rebirthing.co.nz> to fix python build
-	  process
+	* py_ext/Makefile: 
+	fixes by David McNab <david@rebirthing.co.nz> to fix python build
+	process
 
-2003-09-12 11:48  whamann
+2003-09-12 09:48  whamann
 
-	* Makefile, README, TODO:
-	  forgot to update TODO ...
+	* Makefile, README, TODO: 
+	forgot to update TODO ...
 
-2003-09-12 08:13  peterdd
+2003-09-12 06:13  peterdd
 
 	* util/swftoperl.c: setMenu(); for SWF::Button added
 
-2003-09-11 14:42  peterdd
-
-	* util/cws2fws: [no log message]
-
-2003-09-11 13:55  peterdd
+2003-09-11 11:55  peterdd
 
 	* util/swftoperl.c: added onClipEvent to printPlaceObject2
 
-2003-08-29 04:23  peterdd
+2003-08-29 02:23  peterdd
 
 	* src/actioncompiler/swf4compiler.flex: fixed nasty typo
 
-2003-08-28 23:54  whamann
+2003-08-28 21:54  whamann
 
-	* config.h, config.make:
-	  conditional code: use these two files to control whether you want
-	  to include gif or png converters
+	* config.h, config.make: 
+	conditional code: use these two files to control whether you want
+	to include gif or png converters
 
-2003-08-12 12:27  whamann
+2003-08-12 10:27  whamann
 
 	* php_ext/ming.c, php_ext/php_ming.h, src/Makefile, src/movie.c,
-	  src/movie.h, src/test.c, src/blocks/Makefile, src/blocks/font.c,
-	  src/blocks/font.h, src/blocks/imports.c, src/blocks/imports.h,
-	  src/blocks/textfield.c:
-	  allow to import movieclips and fonts from a shared library and to
-	  export font for shared lib usage Implemented in library and php
-	  binding at the moment: -- code to use library --
-	  $movie->importChar("libfile.swf", "myclip"); $font =
-	  $movie->importFont("libfile.swf", "font1");
-	  $textfield->setFont($font); -- code to export library -- $font =
-	  new SWFFont(".....fdb"); $fontchar = $movie->addFont($font);
-	  $fontchar->addChars("abcd...."); $movie->addExport($fontchar,
-	  "font1"); -- note that font sharing is known to be flaky, so
-	  please test finished apps with many players
+	src/movie.h, src/test.c, src/blocks/Makefile, src/blocks/font.c,
+	src/blocks/font.h, src/blocks/imports.c, src/blocks/imports.h,
+	src/blocks/textfield.c: 
+	allow to import movieclips and fonts from a shared library and to
+	export font for shared lib usage Implemented in library and php
+	binding at the moment: -- code to use library --
+	$movie->importChar("libfile.swf", "myclip"); $font =
+	$movie->importFont("libfile.swf", "font1");
+	$textfield->setFont($font); -- code to export library -- $font =
+	new SWFFont(".....fdb"); $fontchar = $movie->addFont($font);
+	$fontchar->addChars("abcd...."); $movie->addExport($fontchar,
+	"font1"); -- note that font sharing is known to be flaky, so please
+	test finished apps with many players
 
-2003-08-06 17:42  erich
+2003-08-06 15:42  erich
 
 	* CREDITS: added Jim Tittsler (jtittsler)
 
-2003-08-06 17:32  erich
+2003-08-06 15:32  erich
 
 	* ChangeLog: one more patch from jtittsler
 
-2003-08-06 17:30  erich
+2003-08-06 15:30  erich
 
 	* ming.i: accepted jtittslers fourth patch for newer swig version
 
-2003-08-06 17:27  erich
+2003-08-06 15:27  erich
 
 	* ChangeLog: added my changes and patches from jtittsler
 
-2003-08-06 17:24  erich
+2003-08-06 15:24  erich
 
 	* ChangeLog: added my changes and patches from jtissler
 
-2003-08-06 17:22  erich
+2003-08-06 15:22  erich
 
 	* py_ext/shape.py: modified to reflect web page version. thanks to
-	  Jim Tittsler (jtittsler)
+	Jim Tittsler (jtittsler)
 
-2003-08-06 17:20  erich
+2003-08-06 15:20  erich
 
 	* py_ext/ming.py: added compression level argument, optional.
-	  thanks to Jim Tittsler (jtittsler)
+	thanks to Jim Tittsler (jtittsler)
 
-2003-08-06 17:13  erich
+2003-08-06 15:13  erich
 
 	* ming.i: updating the swig file to track recent changes
 
-2003-08-06 17:11  erich
+2003-08-06 15:11  erich
 
 	* util/raw2adpcm.c: fix for gcc 3.3.x which does no longer support
-	  certain multiline strings
+	certain multiline strings
 
-2003-08-06 17:11  erich
+2003-08-06 15:11  erich
 
 	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: fixes
-	  for flex 2.5
+	for flex 2.5
 
-2003-08-03 19:55  whamann
+2003-08-03 17:55  whamann
 
-	* php_ext/ming.c:
-	  fixed problem with bitmap creation - if bitmap cannot be read or
-	  converted, no longer wants to bless a null pointer into a
-	  swfbitmap resource
+	* php_ext/ming.c: 
+	fixed problem with bitmap creation - if bitmap cannot be read or
+	converted, no longer wants to bless a null pointer into a swfbitmap
+	resource
 
-2003-08-03 19:53  whamann
+2003-08-03 17:53  whamann
 
 	* src/: Makefile, blocks/Makefile, blocks/dbl.c, blocks/dbl.h,
-	  blocks/gifdbl.c, blocks/pngdbl.c:
-	  added support for including png and gif images - requires -lpng,
-	  -lgif or -lungif, and -lz edit config.h and config.make if you
-	  dont have / want these
+	blocks/gifdbl.c, blocks/pngdbl.c: 
+	added support for including png and gif images - requires -lpng,
+	-lgif or -lungif, and -lz edit config.h and config.make if you dont
+	have / want these
 
-2003-07-20 23:15  whamann
+2003-07-20 21:15  whamann
 
-	* php_ext/ming.c, src/blocks/soundstream.c:
-	  added new function SWFSoundStream_getFrames() to return the
-	  length of a sound stream in frames PHP interface: $nframes =
-	  $movie->streammp3($fp);
+	* php_ext/ming.c, src/blocks/soundstream.c: 
+	added new function SWFSoundStream_getFrames() to return the length
+	of a sound stream in frames PHP interface: $nframes =
+	$movie->streammp3($fp);
 
-2003-07-18 23:16  whamann
+2003-07-18 21:16  whamann
 
-	* src/blocks/linestyle.c:
-	  allow line color change even if line width is zero
+	* src/blocks/linestyle.c: 
+	allow line color change even if line width is zero
 
-2003-07-14 22:58  whamann
+2003-07-14 20:58  whamann
 
-	* mingpp.h:
-	  added flags parameter to SWFsound declarations; this accepts
-	  sample rate, mono / stereo, 8/16 bit parameters
+	* mingpp.h: 
+	added flags parameter to SWFsound declarations; this accepts sample
+	rate, mono / stereo, 8/16 bit parameters
 
-2003-07-08 12:59  whamann
+2003-07-08 10:59  whamann
 
-	* ming.h:
-	  sound related defines added....
+	* ming.h: 
+	sound related defines added....
 
-2003-06-18 12:26  whamann
+2003-06-18 10:26  whamann
 
 	* perl_ext/SWF/SoundInstance.pm, perl_ext/SWF/SoundStream.pm,
-	  perl_ext/Button.xs, perl_ext/Makefile.PL, perl_ext/Movie.xs,
-	  perl_ext/MovieClip.xs, perl_ext/Sound.xs,
-	  perl_ext/SoundInstance.xs, perl_ext/SoundStream.xs,
-	  perl_ext/perl_swf.h, perl_ext/typemap, php_ext/ming.c,
-	  php_ext/php_ming.h, src/displaylist.c, src/test.c,
-	  src/blocks/button.c, src/blocks/sound.c, src/blocks/sound.h,
-	  src/blocks/soundinstance.c:
-	  adding event sounds $s = new SWFSound(....,
-	  SWF_SOUND_44KHZ|SWF_SOUND_STEREO) $si = $movie->startSound($s)
-	  $si->loopCount(4) $si = $button->addSound($s,
-	  SWFBUTTON_MOUSEDOWN) $si->noMultiple()
+	perl_ext/Button.xs, perl_ext/Makefile.PL, perl_ext/Movie.xs,
+	perl_ext/MovieClip.xs, perl_ext/Sound.xs,
+	perl_ext/SoundInstance.xs, perl_ext/SoundStream.xs,
+	perl_ext/perl_swf.h, perl_ext/typemap, php_ext/ming.c,
+	php_ext/php_ming.h, src/displaylist.c, src/test.c,
+	src/blocks/button.c, src/blocks/sound.c, src/blocks/sound.h,
+	src/blocks/soundinstance.c: 
+	adding event sounds $s = new SWFSound(....,
+	SWF_SOUND_44KHZ|SWF_SOUND_STEREO) $si = $movie->startSound($s)
+	$si->loopCount(4) $si = $button->addSound($s, SWFBUTTON_MOUSEDOWN)
+	$si->noMultiple()
 
-2003-06-18 12:21  whamann
+2003-06-18 10:21  whamann
 
-	* php_ext/Makefile:
-	  added -lz flag for compiling in the zlib compression
+	* php_ext/Makefile: 
+	added -lz flag for compiling in the zlib compression
 
-2003-06-04 20:31  whamann
+2003-06-04 18:31  whamann
 
 	* php_ext/ming-streams.c, util/decompile.c,
-	  src/actioncompiler/swf5compiler.y:
-	  ming.h - added missing swfbutton_setmenu() decompile.c - another
-	  const char * swf5compiler.y - fixed delete operator
-	  ming-streams.c - updated from ming-dev.c for recent php versions
+	src/actioncompiler/swf5compiler.y: 
+	ming.h - added missing swfbutton_setmenu() decompile.c - another
+	const char * swf5compiler.y - fixed delete operator ming-streams.c
+	- updated from ming-dev.c for recent php versions
 
-2003-05-09 23:51  whamann
+2003-05-09 21:51  whamann
 
-	* src/blocks/: font.c, shape.c:
-	  fix to shape->drawGlyph() and font->getShape() problem: font
-	  files definitely will state 1 fill style and 0 line styles. Some
-	  font files use 1 bit to encode the line style, others use 0 bits.
-	  Code now uses actual number of bits here
+	* src/blocks/: font.c, shape.c: 
+	fix to shape->drawGlyph() and font->getShape() problem: font files
+	definitely will state 1 fill style and 0 line styles. Some font
+	files use 1 bit to encode the line style, others use 0 bits. Code
+	now uses actual number of bits here
 
-2003-04-10 07:11  whamann
+2003-04-10 05:11  whamann
 
-	* src/actioncompiler/swf5compiler.y:
-	  fixes for empty actions and do {} while
+	* src/actioncompiler/swf5compiler.y: 
+	fixes for empty actions and do {} while
 
-2003-04-10 04:44  peterdd
+2003-04-10 02:44  peterdd
 
 	* ChangeLog: fixed morph.c and sync versionnumber for perl_ext
 
-2003-04-10 04:28  peterdd
+2003-04-10 02:28  peterdd
 
 	* src/blocks/morph.c: fixed 2 typos
 
-2003-04-10 04:21  peterdd
+2003-04-10 02:21  peterdd
 
 	* perl_ext/SWF.pm: synchronized the versionnumber
 
-2003-04-06 15:59  whamann
+2003-04-06 13:59  whamann
 
-	* perl_ext/Shape.xs, php_ext/ming.c:
-	  more type casts
+	* perl_ext/Shape.xs, php_ext/ming.c: 
+	more type casts
 
-2003-04-06 15:43  whamann
+2003-04-06 13:43  whamann
 
 	* php_ext/ming.c, src/blocklist.c, src/displaylist.c,
-	  src/font_util.c, src/ming.c, src/ming.h, src/movie.c,
-	  src/movie.h, src/movieclip.c, src/movieclip.h, src/position.c,
-	  src/shape_cubic.c, src/shape_util.c, src/shape_util.h,
-	  src/text_util.c, src/actioncompiler/assembler.c,
-	  src/actioncompiler/compile.c, src/actioncompiler/compile.h,
-	  src/actioncompiler/compileaction.c,
-	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
-	  src/actioncompiler/swf4compiler.flex,
-	  src/actioncompiler/swf4compiler.y,
-	  src/actioncompiler/swf5compiler.flex,
-	  src/actioncompiler/swf5compiler.y, src/blocks/block.c,
-	  src/blocks/browserfont.c, src/blocks/browserfont.h,
-	  src/blocks/button.c, src/blocks/character.c, src/blocks/cxform.c,
-	  src/blocks/dbl.c, src/blocks/error.c, src/blocks/error.h,
-	  src/blocks/fillstyle.c, src/blocks/font.c, src/blocks/gradient.c,
-	  src/blocks/input.c, src/blocks/jpeg.c, src/blocks/linestyle.c,
-	  src/blocks/matrix.c, src/blocks/method.c, src/blocks/morph.c,
-	  src/blocks/output.c, src/blocks/outputblock.c,
-	  src/blocks/outputblock.h, src/blocks/placeobject.c,
-	  src/blocks/read.c, src/blocks/rect.c, src/blocks/shape.c,
-	  src/blocks/sound.c, src/blocks/soundinstance.c,
-	  src/blocks/soundstream.c, src/blocks/sprite.c, src/blocks/swf.h,
-	  src/blocks/text.c, src/blocks/textfield.c,
-	  src/blocks/textfield.h, src/blocks/utf8.c, util/blocktypes.c,
-	  util/decompile.c, util/decompile5.c, util/listswf.c,
-	  util/png2dbl.c, util/read.h:
-	  changes by Wolfgang Glunz to make things compile with c++ -
-	  mostly added type decls
+	src/font_util.c, src/ming.c, src/ming.h, src/movie.c, src/movie.h,
+	src/movieclip.c, src/movieclip.h, src/position.c,
+	src/shape_cubic.c, src/shape_util.c, src/shape_util.h,
+	src/text_util.c, src/actioncompiler/assembler.c,
+	src/actioncompiler/compile.c, src/actioncompiler/compile.h,
+	src/actioncompiler/compileaction.c,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/actioncompiler/swf4compiler.flex,
+	src/actioncompiler/swf4compiler.y,
+	src/actioncompiler/swf5compiler.flex,
+	src/actioncompiler/swf5compiler.y, src/blocks/block.c,
+	src/blocks/browserfont.c, src/blocks/browserfont.h,
+	src/blocks/button.c, src/blocks/character.c, src/blocks/cxform.c,
+	src/blocks/dbl.c, src/blocks/error.c, src/blocks/error.h,
+	src/blocks/fillstyle.c, src/blocks/font.c, src/blocks/gradient.c,
+	src/blocks/input.c, src/blocks/jpeg.c, src/blocks/linestyle.c,
+	src/blocks/matrix.c, src/blocks/method.c, src/blocks/morph.c,
+	src/blocks/output.c, src/blocks/outputblock.c,
+	src/blocks/outputblock.h, src/blocks/placeobject.c,
+	src/blocks/read.c, src/blocks/rect.c, src/blocks/shape.c,
+	src/blocks/sound.c, src/blocks/soundinstance.c,
+	src/blocks/soundstream.c, src/blocks/sprite.c, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/utf8.c, util/blocktypes.c, util/decompile.c,
+	util/decompile5.c, util/listswf.c, util/png2dbl.c, util/read.h: 
+	changes by Wolfgang Glunz to make things compile with c++ - mostly
+	added type decls
 
-2003-04-01 08:34  staybyte
+2003-03-28 22:16  whamann
 
-	* ChangeLog: [no log message]
+	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: 
+	replaced constant 0 by EOF in comment parsing functions
 
-2003-03-28 23:16  whamann
+2003-03-28 21:31  whamann
 
-	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex:
-	  replaced constant 0 by EOF in comment parsing functions
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: 
+	
+	allow windows line endings in actionscript return can now return an
+	anonymous object - should also be possible to pass one to a
+	function etc.
 
-2003-03-28 22:31  whamann
+2003-02-09 22:27  whamann
 
-	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y:
+	* src/blocks/text.c: 
+	fixed segfault for zero-length string: computeAdvances did
+	calculate width of 1st character anyways zero-length may occur from
+	addString("") or by changing attributes twice in a row
 
-	  allow windows line endings in actionscript return can now return
-	  an anonymous object - should also be possible to pass one to a
-	  function etc.
+2003-02-07 23:03  whamann
 
-2003-02-13 19:26  staybyte
+	* src/blocks/button.c: 
+	-fix for buttons with bitmaps - please try
 
-	* ChangeLog: [no log message]
-
-2003-02-09 23:27  whamann
-
-	* src/blocks/text.c:
-	  fixed segfault for zero-length string: computeAdvances did
-	  calculate width of 1st character anyways zero-length may occur
-	  from addString("") or by changing attributes twice in a row
-
-2003-02-08 00:03  whamann
-
-	* src/blocks/button.c:
-	  -fix for buttons with bitmaps - please try
-
-2003-02-01 19:36  soheil
+2003-02-01 18:36  soheil
 
 	* perl_ext/TODO: Updated
 
-2003-02-01 19:33  soheil
+2003-02-01 18:33  soheil
 
 	* perl_ext/SWF/TextField.pm: Updated/Fixed documentation
 
-2003-02-01 19:30  soheil
+2003-02-01 18:30  soheil
 
 	* perl_ext/SWF/Shape.pm: Added getPen() documentation
 
-2003-02-01 19:26  soheil
+2003-02-01 18:26  soheil
 
 	* perl_ext/TextField.xs: Replaced setMargin wuth setMargins
 
-2003-01-25 22:35  soheil
+2003-01-25 21:35  soheil
 
 	* perl_ext/README: Updated.
 
-2003-01-25 22:22  soheil
+2003-01-25 21:22  soheil
 
 	* perl_ext/SUPPORT: Initial import to CVS
 
-2003-01-21 01:24  soheil
+2003-01-21 00:24  soheil
 
 	* perl_ext/Movie.xs: Renamed SWFMovie_xs_output to SWFMovie_output
 
-2003-01-21 01:23  soheil
+2003-01-21 00:23  soheil
 
 	* perl_ext/SWF/Movie.pm: Added SWF::Movie::output()
 
-2003-01-21 01:19  soheil
+2003-01-21 00:19  soheil
 
 	* perl_ext/Makefile.PL: Added SWF::MyConfig.pm
 
-2003-01-21 00:16  soheil
+2003-01-20 23:16  soheil
 
 	* perl_ext/CREDITS: Initial import to CVS
 
-2003-01-19 17:47  soheil
+2003-01-19 16:47  soheil
 
 	* perl_ext/SWF/.cvsignore: initial import to cvs
 
-2003-01-19 17:40  soheil
+2003-01-19 16:40  soheil
 
 	* perl_ext/SWF.pm: Fixed my Email address
 
-2003-01-11 20:07  soheil
+2003-01-11 19:07  soheil
 
 	* perl_ext/Exports.c: Added SWFTEXTFIELD_AUTOSIZE
 
-2003-01-11 20:05  soheil
+2003-01-11 19:05  soheil
 
 	* perl_ext/SWF/Constants.pm: - Added SWFTEXTFIELD_USEFONT &
-	  SWFTEXTFIELD_AUTOSIZE - Fixed Typo & my email address
+	SWFTEXTFIELD_AUTOSIZE - Fixed Typo & my email address
 
-2003-01-11 16:44  staybyte
-
-	* ChangeLog: [no log message]
-
-2003-01-11 16:43  staybyte
+2003-01-11 15:43  staybyte
 
 	* src/actioncompiler/swf5compiler.y: fix incorrect %token and %type
-	  syntax
+	syntax
 
-2003-01-11 16:37  staybyte
+2003-01-11 15:37  staybyte
 
 	* src/blocks/jpeg.c: accept SFO1 baseline jpegs
 
-2003-01-08 10:54  staybyte
-
-	* ChangeLog: [no log message]
-
-2003-01-07 22:54  whamann
+2003-01-07 21:54  whamann
 
 	* perl_ext/Constants.xs, php_ext/ming.c, src/blocks/textfield.h,
-	  src/blocks/swf.h:
-	  new constant SWFTEXTFIELD_AUTOSIZE
+	src/blocks/swf.h: 
+	new constant SWFTEXTFIELD_AUTOSIZE
 
-2003-01-07 22:25  whamann
+2003-01-07 21:25  whamann
 
 	* perl_ext/Button.xs, php_ext/ming.c, php_ext/php_ming.h,
-	  src/actioncompiler/compile.c,
-	  src/actioncompiler/swf5compiler.flex,
-	  src/actioncompiler/swf5compiler.y, src/movie.c,
-	  src/blocks/button.c, src/blocks/button.h, src/blocks/swf.h,
-	  src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
-	  src/blocks/textfield.h:
-	  assorted changes: font handling - got rid of two annoying
-	  segfaults button - support "track as menu" behaviour compiler -
-	  finished things like ~ or &= ops compiler - if (...) { .... }
-	  else { /*empty*/ } no longer crashes
+	src/actioncompiler/compile.c, src/actioncompiler/swf5compiler.flex,
+	src/actioncompiler/swf5compiler.y, src/movie.c,
+	src/blocks/button.c, src/blocks/button.h, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
+	src/blocks/textfield.h: 
+	assorted changes: font handling - got rid of two annoying segfaults
+	button - support "track as menu" behaviour compiler - finished
+	things like ~ or &= ops compiler - if (...) { .... } else {
+	/*empty*/ } no longer crashes
 
-2003-01-06 16:45  staybyte
-
-	* ChangeLog: [no log message]
-
-2003-01-04 20:44  soheil
+2003-01-04 19:44  soheil
 
 	* perl_ext/Morph.xs: Added refcnt of SWF::Shape
 
-2003-01-04 19:00  soheil
+2003-01-04 18:00  soheil
 
 	* perl_ext/t/: png.t, sound.t: No. of tests is printed after
-	  skip_test();
+	skip_test();
 
-2003-01-04 18:57  soheil
+2003-01-04 17:57  soheil
 
 	* perl_ext/t/filljpeg.t: No. of tests is now printed after
-	  skip_test();
+	skip_test();
 
-2002-12-31 17:07  staybyte
+2002-12-21 15:20  whamann
 
-	* ChangeLog: [no log message]
+	* win32/libming.dsp: 
+	changes by Frank Kromann: debug build passes debug options to flex
+	and bison file removed and added again - should retain windows line
+	endings now
 
-2002-12-21 16:20  whamann
-
-	* win32/libming.dsp:
-	  changes by Frank Kromann: debug build passes debug options to
-	  flex and bison file removed and added again - should retain
-	  windows line endings now
-
-2002-12-21 16:17  whamann
-
-	* win32/libming.dsp: [no log message]
-
-2002-12-16 13:23  whamann
+2002-12-16 12:23  whamann
 
 	* src/actioncompiler/action.h, src/actioncompiler/compile.c,
-	  src/actioncompiler/compile.h, src/actioncompiler/listaction.c,
-	  src/actioncompiler/swf5compiler.flex,
-	  src/actioncompiler/swf5compiler.y, src/blocks/placeobject.c,
-	  win32/libming.dsp:
-	  compiler changes: added switch() added x instanceof y returning
-	  out of a switch pops stack popping stack when breaking /
-	  returning out of for/in does not work yet support for more than
-	  256 constants in the pool
+	src/actioncompiler/compile.h, src/actioncompiler/listaction.c,
+	src/actioncompiler/swf5compiler.flex,
+	src/actioncompiler/swf5compiler.y, src/blocks/placeobject.c,
+	win32/libming.dsp: 
+	compiler changes: added switch() added x instanceof y returning out
+	of a switch pops stack popping stack when breaking / returning out
+	of for/in does not work yet support for more than 256 constants in
+	the pool
+	
+	placeobject - different format of placeobject record for MX does
+	not include the keycode so far nor any methods to set those bits
+	
+	libming.dsp provided by Frank Kromann - calls up flex and bison
 
-	  placeobject - different format of placeobject record for MX does
-	  not include the keycode so far nor any methods to set those bits
-
-	  libming.dsp provided by Frank Kromann - calls up flex and bison
-
-2002-12-10 23:10  whamann
+2002-12-10 22:10  whamann
 
 	* src/blocks/font.c, src/blocks/shape.c, src/font_util.c,
-	  win32/libming.dsp:
-	  added Frank Kromann's changes - optimizing compile could swap
-	  bytes on windows added a change to drawglyph to allow styles in
-	  the fonts - some fonts use 1 linestyle
+	win32/libming.dsp: 
+	added Frank Kromann's changes - optimizing compile could swap bytes
+	on windows added a change to drawglyph to allow styles in the fonts
+	- some fonts use 1 linestyle
 
-2002-12-01 09:52  whamann
+2002-12-01 08:52  whamann
 
-	* perl_ext/Font.xs:
-	  removed SWFFont_addChars
+	* perl_ext/Font.xs: 
+	removed SWFFont_addChars
 
-2002-11-26 17:11  sspickle
+2002-11-26 16:11  sspickle
 
 	* py_ext/: .cvsignore, Makefile, Setup, build.py, setup.py: This
-	  seems to work with the 'fink' ming installer..
+	seems to work with the 'fink' ming installer..
 
-2002-11-25 21:14  whamann
+2002-11-26 16:11  sspickle
 
-	* mingpp.h:
-	  checking in mingpp.h again - contributions from Fabiano Weimar
-	  dos Santos and John Blanco
+	* py_ext/setup.py: file setup.py was initially added on branch
+	new-py_ext-makefile.
 
-2002-11-22 14:58  whamann
+2002-11-25 20:14  whamann
 
-	* src/actioncompiler/swf4compiler.y:
-	  c++ support for compressed movies removed duplicate declaration
-	  in swf4compile.y contributed by Fabiano Weimar dos Santos
+	* mingpp.h: 
+	checking in mingpp.h again - contributions from Fabiano Weimar dos
+	Santos and John Blanco
 
-2002-11-20 18:15  raff
+2002-11-22 13:58  whamann
 
-	* src/font_util.h:
-	  This definition is also in text_util.h
+	* src/actioncompiler/swf4compiler.y: 
+	c++ support for compressed movies removed duplicate declaration in
+	swf4compile.y contributed by Fabiano Weimar dos Santos
 
-	  I don't know why there are two, but they should at least be the
-	  same.
+2002-11-20 17:15  raff
 
-	  (as in text_util.h, I am adding the extra "len" argument, since
-	  that's how the function is implemented).
+	* src/font_util.h: 
+	This definition is also in text_util.h
+	
+	I don't know why there are two, but they should at least be the
+	same.
+	
+	(as in text_util.h, I am adding the extra "len" argument, since
+	that's how the function is implemented).
 
-2002-11-19 18:26  peterdd
+2002-11-19 17:26  peterdd
 
 	* perl_ext/Shape.xs: added drawCubic and drawCubicTo
 
-2002-11-19 09:01  whamann
+2002-11-19 08:01  whamann
 
-	* src/blocks/textfield.c:
-	  another take at textfields with/without embedding
+	* src/blocks/textfield.c: 
+	another take at textfields with/without embedding
 
-2002-11-15 21:36  whamann
+2002-11-15 20:36  whamann
 
-	* ming.h:
-	  header changes for - text field handling - codepage / utf8 fonts
-	  - save compressed
+	* ming.h: 
+	header changes for - text field handling - codepage / utf8 fonts -
+	save compressed
 
-2002-11-15 18:43  raff
+2002-11-15 17:43  raff
 
 	* src/text_util.h: If I trust the implementation, this function
-	  needs an additional parameter (at least to make Ming compile).
+	needs an additional parameter (at least to make Ming compile).
 
-2002-11-14 10:31  whamann
+2002-11-14 09:31  whamann
 
 	* src/.cvsignore, src/movie.c, src/movie.h, src/text_util.h,
-	  src/blocks/font.c, src/blocks/font.h, php_ext/ming.c,
-	  src/blocks/text.c, src/blocks/textfield.c,
-	  src/blocks/textfield.h:
-	  another take at dynamic textfields with embedded font, this time
-	  they seem to work also removed one source of segfaults from the
-	  font handling code
+	src/blocks/font.c, src/blocks/font.h, php_ext/ming.c,
+	src/blocks/text.c, src/blocks/textfield.c, src/blocks/textfield.h: 
+	another take at dynamic textfields with embedded font, this time
+	they seem to work also removed one source of segfaults from the
+	font handling code
 
-2002-11-14 00:18  whamann
+2002-11-13 23:18  whamann
 
-	* src/blocks/font.c:
-	  avoid compiler warnings with a pointer union
+	* src/blocks/font.c: 
+	avoid compiler warnings with a pointer union
 
-2002-11-13 19:21  whamann
+2002-11-13 18:21  whamann
 
-	* src/movie.c:
+	* src/movie.c: 
+	
+	2002-22-13 17:00  peterdd
+	
+	* perl_ext/Movie.xs perl_ext/Shape.xs src/shape_util.h
+	src/shape_util.c getPen, getPenX and getPenY added for the
+	interfaces (Movie.c)
+	
+	2002-11-07 13:50  peterdd
+	
+		*
+	perl_ext/Movie.xs,perl_ext/SWF/Movie.pm,perl_ext/SWF/TextField.pm
+	documentation for SWF::Movie and SWF::TextField save/output- method
+	of the perl-ming extension now supports flash6 compression protect
+	for perl_ext added
 
-	  2002-22-13 17:00  peterdd
-
-	  * perl_ext/Movie.xs perl_ext/Shape.xs src/shape_util.h
-	  src/shape_util.c getPen, getPenX and getPenY added for the
-	  interfaces (Movie.c)
-
-	  2002-11-07 13:50  peterdd
-
-		  *
-	  perl_ext/Movie.xs,perl_ext/SWF/Movie.pm,perl_ext/SWF/TextField.pm
-	  documentation for SWF::Movie and SWF::TextField save/output-
-	  method of the perl-ming extension now supports flash6 compression
-	  protect for perl_ext added
-
-2002-11-13 16:21  peterdd
+2002-11-13 15:21  peterdd
 
 	* perl_ext/Movie.xs: changed save and output back because normal
-	  output routine handles compression too
+	output routine handles compression too
 
-2002-11-13 16:18  peterdd
+2002-11-13 15:18  peterdd
 
 	* perl_ext/Shape.xs: added getPen getPenX getPenY
 
-2002-11-13 16:16  peterdd
+2002-11-13 15:16  peterdd
 
 	* src/: shape_util.c, shape_util.h: added getPen getPenX and
-	  getPenY
+	getPenY
 
-2002-11-13 00:15  zebulon75018
+2002-11-12 23:15  zebulon75018
 
 	* tcl_ext/: Makefile, README, test.tcl: First commit for the tcl
-	  extension After making the mingc.so try tclsh test.tcl , it's the
-	  shape example.
+	extension After making the mingc.so try tclsh test.tcl , it's the
+	shape example.
 
-2002-11-12 10:52  whamann
+2002-11-12 09:52  whamann
 
 	* src/displaylist.c, src/displaylist.h, src/font_util.h,
-	  src/ming.c, src/movie.h, src/text_util.c, src/text_util.h,
-	  src/actioncompiler/compile.c, src/actioncompiler/listaction.c,
-	  src/actioncompiler/swf5compiler.y, src/blocks/character.c,
-	  src/blocks/font.c, src/blocks/font.h, src/blocks/read.c,
-	  src/blocks/shape.c, perl_ext/Constants.xs,
-	  perl_ext/DisplayItem.xs, perl_ext/Exports.c, perl_ext/Font.xs,
-	  perl_ext/Movie.xs, perl_ext/SWF.xs, perl_ext/Text.xs,
-	  perl_ext/TextField.xs, php_ext/ming.c, php_ext/php_ming.h,
-	  src/blocks/swf.h, src/blocks/text.c, src/blocks/text.h,
-	  src/blocks/textfield.c, src/blocks/textfield.h:
-	  changed: - use addString() and getWidth() for codepage text again
-	  use addUTF8String() and getUTF8Width() for unicode text
+	src/ming.c, src/movie.h, src/text_util.c, src/text_util.h,
+	src/actioncompiler/compile.c, src/actioncompiler/listaction.c,
+	src/actioncompiler/swf5compiler.y, src/blocks/character.c,
+	src/blocks/font.c, src/blocks/font.h, src/blocks/read.c,
+	src/blocks/shape.c, perl_ext/Constants.xs, perl_ext/DisplayItem.xs,
+	perl_ext/Exports.c, perl_ext/Font.xs, perl_ext/Movie.xs,
+	perl_ext/SWF.xs, perl_ext/Text.xs, perl_ext/TextField.xs,
+	php_ext/ming.c, php_ext/php_ming.h, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
+	src/blocks/textfield.h: 
+	changed: - use addString() and getWidth() for codepage text again
+	use addUTF8String() and getUTF8Width() for unicode text
+	
+	- modified the drawshape function to handle some existing fonts
+	that specify 1 bit (rather than 0 bits) for the number of line
+	styles
+	
+	added: - endMask() for mask operations use:	$mask_instance =
+	$movie->add($shape); // mask shape     // add more characters on
+	top of the mask       $mask_instance->endMask();
+	
+	- font embedding for text fields use:	$tf = new SWFTextField(....
+	| SWFTEXTFIELD_USEFONT);    $tf->setFont($font);   
+	$tf->addChars("0123456789"); will create a text field that uses
+	font embedding only for numbers.  Note a) adding chars actually
+	adds to a font instance rather than the text field, so if one text
+	field is set up for digits and the other for alphabet, both will
+	have all alphanumerics available Note b) with html text fields, it
+	is possible to mix fonts. With FP5, both browser and embedded fonts
+	could be mixed. FP6 now requires all fonts to be embedded
+	
+	- Ming_useConstants(flag) function to disable the use of constant
+	pool in actionscripts ... would make sense to disable if you create
+	100 buttons with simple script
+	
+	- added a few existing functions to the php and perl interfaces:   
+	    $textfield->setPadding()	    $movie->addExport()    
+	$movie->writeExports()
+	
+	- new function $font->getShape(code) returns the character shape as
+	a multiline text. It is meant to be split into lines, where every
+	line represents a line or curve segment. For a possible use see
+	http://www.neuralust.com/~mingdocs/code/knifeexample.swf
 
-	  - modified the drawshape function to handle some existing fonts
-	  that specify 1 bit (rather than 0 bits) for the number of line
-	  styles
-
-	  added: - endMask() for mask operations use:	  $mask_instance =
-	  $movie->add($shape); // mask shape	 // add more characters on
-	  top of the mask	$mask_instance->endMask();
-
-	  - font embedding for text fields use:   $tf = new
-	  SWFTextField(.... | SWFTEXTFIELD_USEFONT);
-	  $tf->setFont($font);	  $tf->addChars("0123456789"); will create
-	  a text field that uses font embedding only for numbers.  Note a)
-	  adding chars actually adds to a font instance rather than the
-	  text field, so if one text field is set up for digits and the
-	  other for alphabet, both will have all alphanumerics available
-	  Note b) with html text fields, it is possible to mix fonts. With
-	  FP5, both browser and embedded fonts could be mixed. FP6 now
-	  requires all fonts to be embedded
-
-	  - Ming_useConstants(flag) function to disable the use of constant
-	  pool in actionscripts ... would make sense to disable if you
-	  create 100 buttons with simple script
-
-	  - added a few existing functions to the php and perl interfaces:
-		$textfield->setPadding()	$movie->addExport()
-	  $movie->writeExports()
-
-	  - new function $font->getShape(code) returns the character shape
-	  as a multiline text. It is meant to be split into lines, where
-	  every line represents a line or curve segment. For a possible use
-	  see http://www.neuralust.com/~mingdocs/code/knifeexample.swf
-
-2002-11-07 13:39  peterdd
+2002-11-07 12:39  peterdd
 
 	* perl_ext/SWF/TextField.pm: typofixes
 
-2002-11-07 13:37  peterdd
+2002-11-07 12:37  peterdd
 
 	* perl_ext/SWF/Movie.pm: added documentation for SWF::Movie
 
-2002-11-07 13:32  peterdd
+2002-11-07 12:32  peterdd
 
 	* perl_ext/Movie.xs: added protect and compressed output
 
-2002-11-07 07:25  peterdd
+2002-11-07 06:25  peterdd
 
 	* perl_ext/Movie.xs: save method now supports compression.
 
-2002-10-22 04:50  peterdd
+2002-10-22 02:50  peterdd
 
 	* util/swftoperl.c: fixed Content-type:
 
-2002-10-07 07:43  peterdd
+2002-10-07 05:43  peterdd
 
 	* perl_ext/examples/morph.cgi: fix: added an extra frame at end of
-	  morph.
+	morph.
 
-2002-10-07 07:31  peterdd
+2002-10-07 05:31  peterdd
 
 	* perl_ext/SWF/TextField.pm: added some documentation
 
-2002-10-07 07:22  peterdd
+2002-10-07 05:22  peterdd
 
 	* util/ming.css: deleted unused stuff
 
-2002-09-24 05:11  soheil
+2002-09-24 03:11  soheil
 
 	* perl_ext/TODO: Updated
 
-2002-09-24 05:10  soheil
+2002-09-24 03:10  soheil
 
 	* perl_ext/README: Fixed my email address
 
-2002-09-24 05:10  soheil
+2002-09-24 03:10  soheil
 
 	* perl_ext/.cvsignore: - Added BOOT.xsh - Added generated .c files
 
-2002-09-24 04:57  soheil
+2002-09-24 02:57  soheil
 
 	* perl_ext/: DisplayItem.xs, SWF/DisplayItem.pm: Added
-	  $displayItem->getDepth()
+	$displayItem->getDepth()
 
-2002-09-21 00:45  peterdd
+2002-09-20 22:45  peterdd
 
 	* util/ming.css: added a stylesheet for swftoperl.html
 
-2002-09-21 00:00  peterdd
+2002-09-20 22:00  peterdd
 
 	* ChangeLog: added swftoperl
 
-2002-09-20 23:49  peterdd
+2002-09-20 21:49  peterdd
 
 	* util/TODO: a new TODO for util/ :-)
 
-2002-09-20 23:45  peterdd
+2002-09-20 21:45  peterdd
 
 	* util/README: more structure for the README
 
-2002-09-20 23:41  peterdd
+2002-09-20 21:41  peterdd
 
 	* util/swftoperl.html: instructions for swftoperl
 
-2002-09-20 23:39  peterdd
+2002-09-20 21:39  peterdd
 
 	* util/Makefile: added make swftoperl
 
-2002-09-20 23:38  peterdd
+2002-09-20 21:38  peterdd
 
 	* util/swftoperl.c: initial import
 
-2002-09-20 23:36  peterdd
+2002-09-20 21:36  peterdd
 
 	* util/swftoperl.h: for swftoperl
 
-2002-09-05 01:38  erich
+2002-09-04 23:38  erich
 
 	* ChangeLog: fixed perl_ext
 
-2002-09-05 01:36  erich
+2002-09-04 23:36  erich
 
 	* CREDITS: added myself ;)
 
-2002-09-05 01:31  erich
+2002-09-04 23:31  erich
 
 	* perl_ext/Makefile.PL: fix perl extension
 
-2002-09-03 23:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-09-03 22:25  opaque_ndst
+2002-09-03 20:25  opaque_ndst
 
 	* src/blocks/: block.c, blocktypes.h, font.c, font.h: made SWFFont
-	  a SWFBlock type again so we can use destroySWFBlock in the
-	  wrapper code and ignore whether it's an SWFFont or SWFBrowserFont
+	a SWFBlock type again so we can use destroySWFBlock in the wrapper
+	code and ignore whether it's an SWFFont or SWFBrowserFont
 
-2002-08-31 19:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-31 18:08  opaque_ndst
+2002-08-31 16:08  opaque_ndst
 
 	* ming.h, src/blocks/text.c, src/blocks/text.h: changed
-	  SWFText_addString to SWFText_addUTF8String, replaced
-	  SWFText_addString with old behavior
+	SWFText_addString to SWFText_addUTF8String, replaced
+	SWFText_addString with old behavior
 
-2002-08-28 21:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-28 20:05  opaque_ndst
+2002-08-28 18:05  opaque_ndst
 
 	* TODO, src/movie.c, src/position.c, src/shape_cubic.c,
-	  src/shape_util.c, src/blocks/block.c, src/blocks/cxform.c,
-	  src/blocks/dbl.c, src/blocks/error.c, src/blocks/font.c,
-	  src/blocks/font.h, src/blocks/input.c, src/blocks/jpeg.c,
-	  src/blocks/matrix.c, src/blocks/method.c, src/blocks/read.c,
-	  src/blocks/sound.c, src/blocks/soundstream.c, src/blocks/text.c,
-	  src/blocks/utf8.c, win32/libming.dsp: type casts to quell
-	  warnings on windows
+	src/shape_util.c, src/blocks/block.c, src/blocks/cxform.c,
+	src/blocks/dbl.c, src/blocks/error.c, src/blocks/font.c,
+	src/blocks/font.h, src/blocks/input.c, src/blocks/jpeg.c,
+	src/blocks/matrix.c, src/blocks/method.c, src/blocks/read.c,
+	src/blocks/sound.c, src/blocks/soundstream.c, src/blocks/text.c,
+	src/blocks/utf8.c, win32/libming.dsp: type casts to quell warnings
+	on windows
 
-2002-08-27 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-27 08:50  opaque_ndst
+2002-08-27 06:50  opaque_ndst
 
 	* src/blocks/input.c: fixed really stupid problem with
-	  indeterminate function call ordering
-
-2002-08-19 18:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-19 17:58  staybyte
-
-	* src/movie.c: remove automatic version number change to 6
-
-2002-08-19 16:00  staybyte
-
-	* ChangeLog: [no log message]
+	indeterminate function call ordering
 
 2002-08-19 15:58  staybyte
 
+	* src/movie.c: remove automatic version number change to 6
+
+2002-08-19 13:58  staybyte
+
 	* src/actioncompiler/swf5compiler.y: correct entry for action
-	  script command delete
+	script command delete
 
-2002-08-18 23:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-18 22:16  staybyte
+2002-08-18 20:16  staybyte
 
 	* ming.h, ming.i, php_ext/ming-dev.c, php_ext/ming.c, src/Makefile,
-	  src/movie.c, src/movie.h, src/blocks/method.c,
-	  src/blocks/method.h: add flash mx compression support
+	src/movie.c, src/movie.h, src/blocks/method.c, src/blocks/method.h:
+	add flash mx compression support
 
-2002-08-14 07:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-14 06:31  opaque_ndst
+2002-08-14 04:31  opaque_ndst
 
 	* src/blocks/text.c: fixed unitialized memory problem causing buggy
-	  advance lists
+	advance lists
 
-2002-08-14 06:30  opaque_ndst
+2002-08-14 04:30  opaque_ndst
 
 	* src/actioncompiler/compile.c: fixed stupid typo causing crashing
-	  on compilation
+	on compilation
 
-2002-08-13 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-13 08:13  opaque_ndst
+2002-08-13 06:13  opaque_ndst
 
 	* src/ming.h: added missing semicolon
 
-2002-08-13 08:13  opaque_ndst
+2002-08-13 06:13  opaque_ndst
 
 	* src/: font_util.c, font_util.h: functions to let ming keep fonts
-	  across process lifetime
+	across process lifetime
 
-2002-08-13 08:11  opaque_ndst
+2002-08-13 06:11  opaque_ndst
 
 	* src/Makefile: added font_util.o
 
-2002-08-13 08:11  opaque_ndst
+2002-08-13 06:11  opaque_ndst
 
 	* src/ming.c: added font_util.h include
 
-2002-08-13 08:10  opaque_ndst
+2002-08-13 06:10  opaque_ndst
 
 	* src/: blocklist.c, movie.c, blocks/font.c: fixed memory leaks
 
-2002-08-13 08:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-13 07:35  opaque_ndst
+2002-08-13 05:35  opaque_ndst
 
 	* src/blocks/text.c: fixed bug with calling getScaledStringWidth
-	  after text object's been added to movie (and thereby "resolved",
-	  replacing textrecords' fonts with fontchars)
+	after text object's been added to movie (and thereby "resolved",
+	replacing textrecords' fonts with fontchars)
 
-2002-08-13 07:33  opaque_ndst
+2002-08-13 05:33  opaque_ndst
 
 	* src/blocks/font.c: fixed an off-by-one malloc bug
 
-2002-08-12 06:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-12 05:43  opaque_ndst
+2002-08-12 03:43  opaque_ndst
 
 	* ming.h, src/ming.c, src/ming.h, src/blocks/font.c,
-	  src/blocks/font.h, src/blocks/text.c, src/blocks/text.h: fixed
-	  wide font support
+	src/blocks/font.h, src/blocks/text.c, src/blocks/text.h: fixed wide
+	font support
 
-2002-08-08 22:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-08 21:22  opaque_ndst
+2002-08-08 19:22  opaque_ndst
 
 	* php_ext/ming-dev.c: ming.c for PHP-4.3.0dev
 
-2002-08-08 07:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-08 06:07  opaque_ndst
+2002-08-08 04:07  opaque_ndst
 
 	* php_ext/ming.c: ming.c from php-4.2.2
 
-2002-08-08 02:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-08 01:43  opaque_ndst
-
-	* TODO, HISTORY: [no log message]
-
-2002-08-08 01:39  opaque_ndst
+2002-08-07 23:39  opaque_ndst
 
 	* src/: Makefile, fill.c, ming.c, ming.h, position.c, position.h,
-	  shape_cubic.c, shape_util.c: formatting changes, cosmetic only
+	shape_cubic.c, shape_util.c: formatting changes, cosmetic only
 
-2002-08-08 01:38  opaque_ndst
+2002-08-07 23:38  opaque_ndst
 
 	* src/blocktypes.h: added DEFINEEDITTEXT (textfield) type
 
-2002-08-08 01:37  opaque_ndst
+2002-08-07 23:37  opaque_ndst
 
 	* src/blocks/: Makefile, action.c, bitmap.c, block.c, block.h,
-	  browserfont.c, cxform.c, dbl.c, error.c, fillstyle.c, fontinfo.c,
-	  gradient.c, jpeg.c, libswf.h, linestyle.c, matrix.c, method.c,
-	  method.h, morph.c, mp3.c, output.c, outputblock.c, placeobject.c,
-	  read.c, rect.c, rect.h, shape.c, shape.h, sprite.c, sprite.h,
-	  textfield.h, ttffont.c: removed superfluous sec_free calls,
-	  formatting changes (cosmetic only)
+	browserfont.c, cxform.c, dbl.c, error.c, fillstyle.c, fontinfo.c,
+	gradient.c, jpeg.c, libswf.h, linestyle.c, matrix.c, method.c,
+	method.h, morph.c, mp3.c, output.c, outputblock.c, placeobject.c,
+	read.c, rect.c, rect.h, shape.c, shape.h, sprite.c, sprite.h,
+	textfield.h, ttffont.c: removed superfluous sec_free calls,
+	formatting changes (cosmetic only)
 
-2002-08-08 01:36  opaque_ndst
+2002-08-07 23:36  opaque_ndst
 
 	* src/blocks/: sound.c, soundinstance.c, soundstream.c: added
-	  Goto's sound code, with support for adpcm and raw pcm (untested)
+	Goto's sound code, with support for adpcm and raw pcm (untested)
 
-2002-08-08 01:35  opaque_ndst
+2002-08-07 23:35  opaque_ndst
 
 	* src/blocks/: input.c, input.h: added read method for many-byte
-	  reading.  Should replace getc..
+	reading.  Should replace getc..
 
-2002-08-08 01:34  opaque_ndst
+2002-08-07 23:34  opaque_ndst
 
 	* src/: text_util.c, text_util.h: added SWFText_setSpacing
 
-2002-08-08 01:33  opaque_ndst
+2002-08-07 23:33  opaque_ndst
 
 	* src/actioncompiler/: Makefile, assembler.c, compile.c,
-	  compileaction.c: removed superfluous sec_free calls formatted
-	  code (cosmetic only)
+	compileaction.c: removed superfluous sec_free calls formatted code
+	(cosmetic only)
 
-2002-08-08 01:32  opaque_ndst
+2002-08-07 23:32  opaque_ndst
 
 	* src/: blocklist.c, blocklist.h, displaylist.c, displaylist.h,
-	  movie.c, movie.h, movieclip.c, movieclip.h, blocks/character.c,
-	  blocks/character.h: rewrote dependency inheritance code to deal
-	  with SWFFontCharacters, fix block ordering bugs
+	movie.c, movie.h, movieclip.c, movieclip.h, blocks/character.c,
+	blocks/character.h: rewrote dependency inheritance code to deal
+	with SWFFontCharacters, fix block ordering bugs
 
-2002-08-08 01:30  opaque_ndst
+2002-08-07 23:30  opaque_ndst
 
 	* src/blocks/button.c: added Goto's button sound code (untested)
 
-2002-08-08 01:30  opaque_ndst
+2002-08-07 23:30  opaque_ndst
 
 	* src/blocks/textfield.c: changed default flags to fix problem
-	  reported (long ago..) by Wolfgang Hamann
+	reported (long ago..) by Wolfgang Hamann
 
-2002-08-08 01:29  opaque_ndst
+2002-08-07 23:29  opaque_ndst
 
 	* src/blocks/: text.c, font.c, font.h, text.h: factored
-	  SWFFontCharacter out of SWFFont-   contains the movie-specific
-	  information in a font   allows SWFFont objects to be used across
-	  multiple movies
+	SWFFontCharacter out of SWFFont-   contains the movie-specific
+	information in a font	allows SWFFont objects to be used across
+	multiple movies
+	
+	added (untested) 16-bit font support
 
-	  added (untested) 16-bit font support
-
-2002-08-08 01:25  opaque_ndst
+2002-08-07 23:25  opaque_ndst
 
 	* src/blocks/: utf8.c, utf8.h: UTF8 decoding code for international
-	  text support
+	text support
 
-2002-08-08 01:24  opaque_ndst
+2002-08-07 23:24  opaque_ndst
 
 	* src/test.c: updated ming calls, compiles again
 
-2002-08-08 01:24  opaque_ndst
+2002-08-07 23:24  opaque_ndst
 
 	* util/listswf.c: replaced changed code- font offset table really
-	  does contain nGlyphs+1 entries
+	does contain nGlyphs+1 entries
 
-2002-08-05 23:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-08-05 22:56  opaque_ndst
+2002-08-05 20:56  opaque_ndst
 
 	* src/blocks/loadfont.c: code moved to font.c
 
-2002-07-23 01:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-23 00:37  opaque_ndst
+2002-07-22 22:37  opaque_ndst
 
 	* ming.h, mingpp.h, src/blocklist.c, src/blocklist.h,
-	  src/blocktypes.h, src/displaylist.c, src/displaylist.h,
-	  src/fill.c, src/fill.h, src/libming.h, src/ming.c, src/ming.h,
-	  src/movie.c, src/movie.h, src/movieclip.c, src/movieclip.h,
-	  src/position.c, src/position.h, src/shape_cubic.c,
-	  src/shape_cubic.h, src/shape_util.c, src/shape_util.h,
-	  src/test.c, src/text_util.c, src/text_util.h,
-	  src/actioncompiler/assembler.c, src/actioncompiler/assembler.h,
-	  src/actioncompiler/compile.c, src/actioncompiler/compile.h,
-	  src/actioncompiler/compileaction.c,
-	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
-	  src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
-	  src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
-	  src/blocks/blocktypes.h, src/blocks/browserfont.c,
-	  src/blocks/browserfont.h, src/blocks/button.c,
-	  src/blocks/button.h, src/blocks/character.c,
-	  src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
-	  src/blocks/dbl.c, src/blocks/dbl.h, src/blocks/error.c,
-	  src/blocks/error.h, src/blocks/exports.h, src/blocks/fillstyle.c,
-	  src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
-	  src/blocks/fontinfo.c, src/blocks/fontinfo.h,
-	  src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/input.c,
-	  src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
-	  src/blocks/libswf.h, src/blocks/linestyle.c,
-	  src/blocks/linestyle.h, src/blocks/loadfont.c,
-	  src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/morph.c, src/blocks/morph.h,
-	  src/blocks/mp3.c, src/blocks/output.c, src/blocks/output.h,
-	  src/blocks/outputblock.c, src/blocks/outputblock.h,
-	  src/blocks/placeobject.c, src/blocks/placeobject.h,
-	  src/blocks/read.c, src/blocks/rect.c, src/blocks/rect.h,
-	  src/blocks/shape.c, src/blocks/shape.h, src/blocks/sound.c,
-	  src/blocks/sound.h, src/blocks/soundinstance.c,
-	  src/blocks/soundinstance.h, src/blocks/soundstream.c,
-	  src/blocks/soundstream.h, src/blocks/sprite.c,
-	  src/blocks/sprite.h, src/blocks/swf.h, src/blocks/text.c,
-	  src/blocks/text.h, src/blocks/textfield.c,
-	  src/blocks/textfield.h, src/blocks/ttffont.c,
-	  src/blocks/ttffont.h: rolled back indentation changes
+	src/blocktypes.h, src/displaylist.c, src/displaylist.h, src/fill.c,
+	src/fill.h, src/libming.h, src/ming.c, src/ming.h, src/movie.c,
+	src/movie.h, src/movieclip.c, src/movieclip.h, src/position.c,
+	src/position.h, src/shape_cubic.c, src/shape_cubic.h,
+	src/shape_util.c, src/shape_util.h, src/test.c, src/text_util.c,
+	src/text_util.h, src/actioncompiler/assembler.c,
+	src/actioncompiler/assembler.h, src/actioncompiler/compile.c,
+	src/actioncompiler/compile.h, src/actioncompiler/compileaction.c,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/browserfont.h, src/blocks/button.c, src/blocks/button.h,
+	src/blocks/character.c, src/blocks/character.h,
+	src/blocks/cxform.c, src/blocks/cxform.h, src/blocks/dbl.c,
+	src/blocks/dbl.h, src/blocks/error.c, src/blocks/error.h,
+	src/blocks/exports.h, src/blocks/fillstyle.c,
+	src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
+	src/blocks/fontinfo.c, src/blocks/fontinfo.h,
+	src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/input.c,
+	src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
+	src/blocks/libswf.h, src/blocks/linestyle.c,
+	src/blocks/linestyle.h, src/blocks/loadfont.c, src/blocks/matrix.c,
+	src/blocks/matrix.h, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/morph.c, src/blocks/morph.h, src/blocks/mp3.c,
+	src/blocks/output.c, src/blocks/output.h, src/blocks/outputblock.c,
+	src/blocks/outputblock.h, src/blocks/placeobject.c,
+	src/blocks/placeobject.h, src/blocks/read.c, src/blocks/rect.c,
+	src/blocks/rect.h, src/blocks/shape.c, src/blocks/shape.h,
+	src/blocks/sound.c, src/blocks/sound.h, src/blocks/soundinstance.c,
+	src/blocks/soundinstance.h, src/blocks/soundstream.c,
+	src/blocks/soundstream.h, src/blocks/sprite.c, src/blocks/sprite.h,
+	src/blocks/swf.h, src/blocks/text.c, src/blocks/text.h,
+	src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h: rolled back indentation
+	changes
 
-2002-07-22 16:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-22 15:36  staybyte
+2002-07-22 13:36  staybyte
 
 	* ming.h, mingpp.h, src/blocklist.c, src/blocklist.h,
-	  src/blocktypes.h, src/displaylist.c, src/displaylist.h,
-	  src/fill.c, src/fill.h, src/libming.h, src/ming.c, src/ming.h,
-	  src/movie.c, src/movie.h, src/movieclip.c, src/movieclip.h,
-	  src/position.c, src/position.h, src/shape_cubic.c,
-	  src/shape_cubic.h, src/shape_util.c, src/shape_util.h,
-	  src/test.c, src/text_util.c, src/text_util.h,
-	  src/actioncompiler/assembler.c, src/actioncompiler/assembler.h,
-	  src/actioncompiler/compile.c, src/actioncompiler/compile.h,
-	  src/actioncompiler/compileaction.c,
-	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
-	  src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
-	  src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
-	  src/blocks/blocktypes.h, src/blocks/browserfont.c,
-	  src/blocks/browserfont.h, src/blocks/button.c,
-	  src/blocks/button.h, src/blocks/character.c,
-	  src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
-	  src/blocks/dbl.c, src/blocks/dbl.h, src/blocks/error.c,
-	  src/blocks/error.h, src/blocks/exports.h, src/blocks/fillstyle.c,
-	  src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
-	  src/blocks/fontinfo.c, src/blocks/fontinfo.h,
-	  src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/input.c,
-	  src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
-	  src/blocks/libswf.h, src/blocks/linestyle.c,
-	  src/blocks/linestyle.h, src/blocks/loadfont.c,
-	  src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/morph.c, src/blocks/morph.h,
-	  src/blocks/mp3.c, src/blocks/output.c, src/blocks/output.h,
-	  src/blocks/outputblock.c, src/blocks/outputblock.h,
-	  src/blocks/placeobject.c, src/blocks/placeobject.h,
-	  src/blocks/read.c, src/blocks/rect.c, src/blocks/rect.h,
-	  src/blocks/shape.c, src/blocks/shape.h, src/blocks/sound.c,
-	  src/blocks/sound.h, src/blocks/soundinstance.c,
-	  src/blocks/soundinstance.h, src/blocks/soundstream.c,
-	  src/blocks/soundstream.h, src/blocks/sprite.c,
-	  src/blocks/sprite.h, src/blocks/swf.h, src/blocks/text.c,
-	  src/blocks/text.h, src/blocks/textfield.c,
-	  src/blocks/textfield.h, src/blocks/ttffont.c,
-	  src/blocks/ttffont.h: indent sources
+	src/blocktypes.h, src/displaylist.c, src/displaylist.h, src/fill.c,
+	src/fill.h, src/libming.h, src/ming.c, src/ming.h, src/movie.c,
+	src/movie.h, src/movieclip.c, src/movieclip.h, src/position.c,
+	src/position.h, src/shape_cubic.c, src/shape_cubic.h,
+	src/shape_util.c, src/shape_util.h, src/test.c, src/text_util.c,
+	src/text_util.h, src/actioncompiler/assembler.c,
+	src/actioncompiler/assembler.h, src/actioncompiler/compile.c,
+	src/actioncompiler/compile.h, src/actioncompiler/compileaction.c,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/browserfont.h, src/blocks/button.c, src/blocks/button.h,
+	src/blocks/character.c, src/blocks/character.h,
+	src/blocks/cxform.c, src/blocks/cxform.h, src/blocks/dbl.c,
+	src/blocks/dbl.h, src/blocks/error.c, src/blocks/error.h,
+	src/blocks/exports.h, src/blocks/fillstyle.c,
+	src/blocks/fillstyle.h, src/blocks/font.c, src/blocks/font.h,
+	src/blocks/fontinfo.c, src/blocks/fontinfo.h,
+	src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/input.c,
+	src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
+	src/blocks/libswf.h, src/blocks/linestyle.c,
+	src/blocks/linestyle.h, src/blocks/loadfont.c, src/blocks/matrix.c,
+	src/blocks/matrix.h, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/morph.c, src/blocks/morph.h, src/blocks/mp3.c,
+	src/blocks/output.c, src/blocks/output.h, src/blocks/outputblock.c,
+	src/blocks/outputblock.h, src/blocks/placeobject.c,
+	src/blocks/placeobject.h, src/blocks/read.c, src/blocks/rect.c,
+	src/blocks/rect.h, src/blocks/shape.c, src/blocks/shape.h,
+	src/blocks/sound.c, src/blocks/sound.h, src/blocks/soundinstance.c,
+	src/blocks/soundinstance.h, src/blocks/soundstream.c,
+	src/blocks/soundstream.h, src/blocks/sprite.c, src/blocks/sprite.h,
+	src/blocks/swf.h, src/blocks/text.c, src/blocks/text.h,
+	src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h: indent sources
 
-2002-07-22 15:35  staybyte
+2002-07-22 13:35  staybyte
 
 	* php_ext/: ming.c, php_ming.h: add swfbutton_addsound
 
-2002-07-21 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-20 18:47  staybyte
+2002-07-20 16:47  staybyte
 
 	* php_ext/ming.c: backporting from php cvs tree
 
-2002-07-20 18:30  staybyte
+2002-07-20 16:30  staybyte
 
 	* util/gif2dbl.c: fixed spelling mistake
 
-2002-07-20 18:29  staybyte
+2002-07-20 16:29  staybyte
 
 	* src/blocks/: character.c, character.h, dbl.c: fixed proto
-	  mismatch
+	mismatch
 
-2002-07-20 18:28  staybyte
+2002-07-20 16:28  staybyte
 
 	* perl_ext/t/: fill.t, sound.t, sprite.t: add nl at end of files
 
-2002-07-17 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-15 09:06  opaque_ndst
+2002-07-15 07:06  opaque_ndst
 
 	* ming.h: changed SWFMovie_add second arg back to void* to keep
-	  existing code from complaining
+	existing code from complaining
 
-2002-07-15 09:02  opaque_ndst
+2002-07-15 07:02  opaque_ndst
 
 	* src/blocks/morph.c: changed getdependencies function to new
-	  format
+	format
 
-2002-07-15 09:01  opaque_ndst
+2002-07-15 07:01  opaque_ndst
 
 	* src/blocks/mp3.c: added (empty, for now) getMP3Size function
 
-2002-07-15 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-15 09:00  opaque_ndst
+2002-07-15 07:00  opaque_ndst
 
 	* src/test.c: updated to make it compile again..
 
-2002-07-15 09:00  opaque_ndst
+2002-07-15 07:00  opaque_ndst
 
 	* src/: movie.c, movie.h, blocklist.c, blocklist.h, movieclip.c,
-	  movieclip.h, displaylist.c, displaylist.h, blocks/character.c,
-	  blocks/character.h: added sound code to SWFMovie and SWFMovieClip
-	  changed getdependency function slightly moved resolvedependency
-	  function to blocklist.c
+	movieclip.h, displaylist.c, displaylist.h, blocks/character.c,
+	blocks/character.h: added sound code to SWFMovie and SWFMovieClip
+	changed getdependency function slightly moved resolvedependency
+	function to blocklist.c
 
-2002-07-15 08:57  opaque_ndst
+2002-07-15 06:57  opaque_ndst
 
 	* src/blocks/: button.c, button.h: added sound code
 
-2002-07-15 08:56  opaque_ndst
+2002-07-15 06:56  opaque_ndst
 
 	* src/Makefile, src/blocks/Makefile, util/Makefile: straightened
-	  out OFILES added new sound code
+	out OFILES added new sound code
 
-2002-07-15 08:36  opaque_ndst
+2002-07-15 06:36  opaque_ndst
 
 	* src/blocks/: sound.c, sound.h, soundstream.c, soundstream.h:
-	  Added functions for non-streaming sounds.  These don't quite work
-	  yet, but they don't seem to break existing code..
+	Added functions for non-streaming sounds.  These don't quite work
+	yet, but they don't seem to break existing code..
 
-2002-07-15 08:35  opaque_ndst
+2002-07-15 06:35  opaque_ndst
 
 	* ming.h: added SWFSound and SWFSoundInstance functions
 
-2002-07-15 08:33  opaque_ndst
+2002-07-15 06:33  opaque_ndst
 
 	* util/raw2adpcm.c: an ADPCM coder..
 
-2002-07-15 08:33  opaque_ndst
+2002-07-15 06:33  opaque_ndst
 
 	* src/blocks/: soundinstance.c, soundinstance.h: SWFSoundInstance
-	  is an instance handle for sounds, generated by
-	  SWFMovie_startSound or SWFButton_addSound.  Lets you change
-	  parameters like loop points and envelopes
+	is an instance handle for sounds, generated by SWFMovie_startSound
+	or SWFButton_addSound.	Lets you change parameters like loop points
+	and envelopes
 
-2002-07-14 23:01  opaque_ndst
+2002-07-14 21:01  opaque_ndst
 
 	* src/Makefile.am, src/actioncompiler/Makefile.am,
-	  src/blocks/Makefile.am, util/Makefile.am: first stab at
-	  autoconf'ing this mess
+	src/blocks/Makefile.am, util/Makefile.am: first stab at
+	autoconf'ing this mess
 
-2002-07-14 22:58  opaque_ndst
+2002-07-14 20:58  opaque_ndst
 
 	* Makefile.am, autogen.sh, configure.in: first stab at autoconf'ing
-	  this mess
+	this mess
 
-2002-07-14 22:20  opaque_ndst
+2002-07-14 20:20  opaque_ndst
 
 	* util/decompile5.c: added SWFACTION_INITARRAY handler
 
-2002-07-05 12:48  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-05 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-04 09:00  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-03 20:35  staybyte
+2002-07-03 18:35  staybyte
 
 	* CHANGES, ming.h, php_ext/config.m4, php_ext/ming.c,
-	  php_ext/php_ming.h, src/Makefile, src/blocklist.c,
-	  src/displaylist.c, src/fill.c, src/ming.c, src/ming.h,
-	  src/movie.c, src/movie.h, src/position.c,
-	  src/actioncompiler/Makefile, src/actioncompiler/compile.c,
-	  src/actioncompiler/swf4compiler.y,
-	  src/actioncompiler/swf5compiler.y, src/blocks/Makefile,
-	  src/blocks/action.c, src/blocks/bitmap.c, src/blocks/block.c,
-	  src/blocks/blocktypes.h, src/blocks/browserfont.c,
-	  src/blocks/button.c, src/blocks/character.c, src/blocks/cxform.c,
-	  src/blocks/dbl.c, src/blocks/error.c, src/blocks/fillstyle.c,
-	  src/blocks/font.c, src/blocks/font.h, src/blocks/fontinfo.c,
-	  src/blocks/gradient.c, src/blocks/input.c, src/blocks/jpeg.c,
-	  src/blocks/libswf.h, src/blocks/linestyle.c,
-	  src/blocks/loadfont.c, src/blocks/matrix.c, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/morph.c, src/blocks/mp3.c,
-	  src/blocks/output.c, src/blocks/outputblock.c,
-	  src/blocks/placeobject.c, src/blocks/read.c, src/blocks/rect.c,
-	  src/blocks/shape.c, src/blocks/sound.c, src/blocks/soundstream.c,
-	  src/blocks/sprite.c, src/blocks/swf.h, src/blocks/text.c,
-	  src/blocks/text.h, src/blocks/textfield.c,
-	  src/blocks/textfield.h, src/blocks/ttffont.c,
-	  src/blocks/ttffont.h, util/gif2dbl.c, util/listswf.c,
-	  util/swftophp.c: fixed some problems with segfaults
+	php_ext/php_ming.h, src/Makefile, src/blocklist.c,
+	src/displaylist.c, src/fill.c, src/ming.c, src/ming.h, src/movie.c,
+	src/movie.h, src/position.c, src/actioncompiler/Makefile,
+	src/actioncompiler/compile.c, src/actioncompiler/swf4compiler.y,
+	src/actioncompiler/swf5compiler.y, src/blocks/Makefile,
+	src/blocks/action.c, src/blocks/bitmap.c, src/blocks/block.c,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/button.c, src/blocks/character.c, src/blocks/cxform.c,
+	src/blocks/dbl.c, src/blocks/error.c, src/blocks/fillstyle.c,
+	src/blocks/font.c, src/blocks/font.h, src/blocks/fontinfo.c,
+	src/blocks/gradient.c, src/blocks/input.c, src/blocks/jpeg.c,
+	src/blocks/libswf.h, src/blocks/linestyle.c, src/blocks/loadfont.c,
+	src/blocks/matrix.c, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/morph.c, src/blocks/mp3.c, src/blocks/output.c,
+	src/blocks/outputblock.c, src/blocks/placeobject.c,
+	src/blocks/read.c, src/blocks/rect.c, src/blocks/shape.c,
+	src/blocks/sound.c, src/blocks/soundstream.c, src/blocks/sprite.c,
+	src/blocks/swf.h, src/blocks/text.c, src/blocks/text.h,
+	src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h, util/gif2dbl.c,
+	util/listswf.c, util/swftophp.c: fixed some problems with segfaults
 
-2002-07-03 20:29  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-03 18:12  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-03 18:10  staybyte
+2002-07-03 16:10  staybyte
 
 	* HISTORY: move CHANGES to HISTORY
 
-2002-07-03 12:49  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-07-03 12:30  staybyte
-
-	* ChangeLog: [no log message]
-
-2002-02-02 13:35  erich
+2002-02-02 12:35  erich
 
 	* java_ext/native/SWFNative.cc: fixed rotateTo, thanks to Tod E.
-	  Kurt
+	Kurt
 
-2002-01-10 18:15  erich
+2002-01-10 17:15  erich
 
 	* src/blocks/font.c: oops, broke that fix. next try
 
-2002-01-10 18:10  erich
+2002-01-10 17:10  erich
 
 	* src/blocks/: font.c, shape.c, text.c: included fixes from Uwe
-	  Traum
+	Traum
 
-2001-12-30 21:26  soheil
+2001-12-30 20:26  soheil
 
 	* perl_ext/Bitmap.xs: Fixed SWF::Bitmap::DESTROY
 
-2001-12-30 21:23  soheil
+2001-12-30 20:23  soheil
 
 	* perl_ext/Button.xs: Fixed destroySWFButton
 
-2001-12-30 21:22  soheil
+2001-12-30 20:22  soheil
 
 	* perl_ext/Font.xs: Fixed SWF::Font::new
 
-2001-12-30 21:20  soheil
+2001-12-30 20:20  soheil
 
 	* perl_ext/Morph.xs: Fixed destroySWFMorph
 
-2001-12-30 21:19  soheil
+2001-12-30 20:19  soheil
 
 	* perl_ext/Shape.xs: Fixed destroySWFShape
 
-2001-12-30 21:18  soheil
+2001-12-30 20:18  soheil
 
 	* perl_ext/Text.xs: Fixed destroySWFText
 
-2001-12-30 21:18  soheil
+2001-12-30 20:18  soheil
 
 	* perl_ext/TextField.xs: Fixed destroySWFTextField
 
-2001-12-24 02:32  erich
+2001-12-24 01:32  erich
 
 	* ming.i, mingpp.h: attemt to get ming.i and mingpp.h into sync
-	  with ming.h and main source...
+	with ming.h and main source...
 
-2001-12-23 21:13  opaque_ndst
-
-	* CHANGES: [no log message]
-
-2001-12-23 00:11  opaque_ndst
+2001-12-22 23:11  opaque_ndst
 
 	* src/shape_cubic.c: added ming.h include for defines needed on
-	  win32
+	win32
 
-2001-12-23 00:09  opaque_ndst
+2001-12-22 23:09  opaque_ndst
 
 	* src/actioncompiler/action.h, util/action.h, util/decompile5.c,
-	  util/makefdb.c: added Wolfgang Hamann's fixes
+	util/makefdb.c: added Wolfgang Hamann's fixes
 
-2001-12-22 23:35  opaque_ndst
+2001-12-22 22:35  opaque_ndst
 
 	* win32/: libming.dsp, libming.dsw: MSVC project files from Martin
-	  Weber
+	Weber
 
-2001-12-14 06:31  opaque_ndst
+2001-12-14 05:31  opaque_ndst
 
 	* ming.h: added deprecated SWFFont_drawFontGlyph define for php
 
-2001-12-14 06:29  opaque_ndst
+2001-12-14 05:29  opaque_ndst
 
 	* php_ext/: ming.c, config.m4: added Rasmus's changes for 4.1.0
 
-2001-12-08 23:52  erich
+2001-12-08 22:52  erich
 
 	* mingpp.h: Reported by Raymond Penners, inconsistency to ming.h in
-	  addString
+	addString
 
-2001-11-29 07:36  opaque_ndst
+2001-11-29 06:36  opaque_ndst
 
 	* CHANGES, TODO, ming.h, src/Makefile, src/blocklist.c,
-	  src/blocklist.h, src/displaylist.c, src/displaylist.h,
-	  src/fill.c, src/fill.h, src/ming.h, src/movie.c, src/movie.h,
-	  src/movieclip.c, src/movieclip.h, src/position.c, src/position.h,
-	  src/shape_util.c, src/shape_util.h, src/text_util.h,
-	  src/actioncompiler/assembler.c, src/actioncompiler/assembler.h,
-	  src/blocks/Makefile, src/blocks/action.c, src/blocks/action.h,
-	  src/blocks/bitmap.c, src/blocks/bitmap.h, src/blocks/block.c,
-	  src/blocks/block.h, src/blocks/browserfont.c,
-	  src/blocks/browserfont.h, src/blocks/button.c,
-	  src/blocks/button.h, src/blocks/character.c,
-	  src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
-	  src/blocks/dbl.c, src/blocks/dbl.h, src/blocks/exports.h,
-	  src/blocks/fillstyle.c, src/blocks/fillstyle.h,
-	  src/blocks/font.c, src/blocks/font.h, src/blocks/fontinfo.c,
-	  src/blocks/fontinfo.h, src/blocks/gradient.c,
-	  src/blocks/gradient.h, src/blocks/input.c, src/blocks/input.h,
-	  src/blocks/jpeg.c, src/blocks/jpeg.h, src/blocks/linestyle.c,
-	  src/blocks/linestyle.h, src/blocks/loadfont.c,
-	  src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/morph.c, src/blocks/morph.h,
-	  src/blocks/output.c, src/blocks/output.h,
-	  src/blocks/outputblock.c, src/blocks/outputblock.h,
-	  src/blocks/placeobject.c, src/blocks/placeobject.h,
-	  src/blocks/rect.c, src/blocks/rect.h, src/blocks/shape.c,
-	  src/blocks/shape.h, src/blocks/sound.h, src/blocks/soundstream.c,
-	  src/blocks/soundstream.h, src/blocks/sprite.c,
-	  src/blocks/sprite.h, src/blocks/text.c, src/blocks/text.h,
-	  src/blocks/textfield.c, src/blocks/textfield.h: general code
-	  cleanup:
+	src/blocklist.h, src/displaylist.c, src/displaylist.h, src/fill.c,
+	src/fill.h, src/ming.h, src/movie.c, src/movie.h, src/movieclip.c,
+	src/movieclip.h, src/position.c, src/position.h, src/shape_util.c,
+	src/shape_util.h, src/text_util.h, src/actioncompiler/assembler.c,
+	src/actioncompiler/assembler.h, src/blocks/Makefile,
+	src/blocks/action.c, src/blocks/action.h, src/blocks/bitmap.c,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/browserfont.c, src/blocks/browserfont.h,
+	src/blocks/button.c, src/blocks/button.h, src/blocks/character.c,
+	src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
+	src/blocks/dbl.c, src/blocks/dbl.h, src/blocks/exports.h,
+	src/blocks/fillstyle.c, src/blocks/fillstyle.h, src/blocks/font.c,
+	src/blocks/font.h, src/blocks/fontinfo.c, src/blocks/fontinfo.h,
+	src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/input.c,
+	src/blocks/input.h, src/blocks/jpeg.c, src/blocks/jpeg.h,
+	src/blocks/linestyle.c, src/blocks/linestyle.h,
+	src/blocks/loadfont.c, src/blocks/matrix.c, src/blocks/matrix.h,
+	src/blocks/method.c, src/blocks/method.h, src/blocks/morph.c,
+	src/blocks/morph.h, src/blocks/output.c, src/blocks/output.h,
+	src/blocks/outputblock.c, src/blocks/outputblock.h,
+	src/blocks/placeobject.c, src/blocks/placeobject.h,
+	src/blocks/rect.c, src/blocks/rect.h, src/blocks/shape.c,
+	src/blocks/shape.h, src/blocks/sound.h, src/blocks/soundstream.c,
+	src/blocks/soundstream.h, src/blocks/sprite.c, src/blocks/sprite.h,
+	src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
+	src/blocks/textfield.h: general code cleanup:
+	
+	changed void* object typedefs to struct pointers moved structure
+	definitions into .c files where possible some memory leaks plugged
+	random kruft removed
 
-	  changed void* object typedefs to struct pointers moved structure
-	  definitions into .c files where possible some memory leaks
-	  plugged random kruft removed
-
-2001-11-29 07:34  opaque_ndst
+2001-11-29 06:34  opaque_ndst
 
 	* py_ext/Makefile: changed ming library linkage from static to
-	  dynamic
+	dynamic
 
-2001-10-24 02:33  erich
+2001-10-24 00:33  erich
 
 	* php_ext/ming.c: fix for php4 rc1
 
-2001-10-24 02:20  erich
+2001-10-24 00:20  erich
 
 	* php_ext/config.m4: added -lm so config detects ming again...
 
-2001-09-26 04:33  soheil
+2001-09-26 02:33  soheil
 
 	* perl_ext/Changes: Updated
 
-2001-09-26 04:33  soheil
+2001-09-26 02:33  soheil
 
 	* perl_ext/Font.xs: fixed SWF::Font::new method to accept browser
-	  fonts (reported by Zbigniew).
+	fonts (reported by Zbigniew).
 
-2001-09-26 03:07  soheil
+2001-09-26 01:07  soheil
 
 	* perl_ext/DisplayItem.xs: added accessor methods
 
-2001-09-26 03:05  soheil
+2001-09-26 01:05  soheil
 
 	* perl_ext/SWF/DisplayItem.pm: added documentation for accessor
-	  methods.
+	methods.
 
-2001-09-25 23:54  erich
+2001-09-25 21:54  erich
 
 	* java_ext/Makefile: added -f to rm in clean target
 
-2001-09-25 22:11  erich
+2001-09-25 20:11  erich
 
 	* src/shape_util.h: synced with shape_util.c changes
 
-2001-09-25 21:43  erich
+2001-09-25 19:43  erich
 
 	* java_ext/Makefile: added rm *.jar to clean target
 
-2001-09-25 19:27  erich
+2001-09-25 17:27  erich
 
 	* java_ext/: SWFMovie.java, SWFMovieI.java: removed undefined
-	  useSWFVersion, so the java extension builds
+	useSWFVersion, so the java extension builds
 
-2001-09-25 19:25  erich
+2001-09-25 17:25  erich
 
 	* java_ext/: SWFShape.java, SWFShapeI.java: removed duplicate
-	  drawGlyph
+	drawGlyph
 
-2001-09-25 19:03  erich
+2001-09-25 17:03  erich
 
 	* rb_ext/test.rb: trying to get this to run...
 
-2001-09-25 18:25  erich
+2001-09-25 16:25  erich
 
 	* perl_ext/SWF/Shape.pm: fixed two typos (shpae instead of shape)
-	  reported by alfie in #debian.de@IRCNet
+	reported by alfie in #debian.de@IRCNet
 
-2001-09-25 18:20  erich
+2001-09-25 16:20  erich
 
 	* util/Makefile: added listaction to clean target
 
-2001-09-25 18:08  erich
+2001-09-25 16:08  erich
 
 	* Makefile: now honors , added -m 0644 to install
 
-2001-09-25 18:07  erich
+2001-09-25 16:07  erich
 
 	* util/Makefile: added install target
 
-2001-09-25 18:02  erich
+2001-09-25 16:02  erich
 
 	* src/blocks/Makefile: added -fPIC
 
-2001-09-25 18:01  erich
+2001-09-25 16:01  erich
 
 	* src/Makefile: -fPIC fixes
 
-2001-09-25 17:58  erich
+2001-09-25 15:58  erich
 
 	* src/actioncompiler/Makefile: added -fPIC, clean target now
-	  removes autogenerated files
+	removes autogenerated files
 
-2001-09-25 17:54  erich
+2001-09-25 15:54  erich
 
 	* php_ext/Makefile, py_ext/Makefile: Small makefile fixes, now
-	  using install instead of cp, honors DESTDIR now
+	using install instead of cp, honors DESTDIR now
 
-2001-09-25 17:52  erich
+2001-09-25 15:52  erich
 
 	* java_ext/Makefile: added clean target
 
-2001-09-24 04:04  soheil
+2001-09-24 02:04  soheil
 
 	* perl_ext/SWF/Sound.pm: added version
 
-2001-09-24 03:36  soheil
+2001-09-24 01:36  soheil
 
 	* perl_ext/Changes: updated changes
 
-2001-09-24 03:30  soheil
+2001-09-24 01:30  soheil
 
 	* perl_ext/MANIFEST: removed example files
 
-2001-09-24 03:27  soheil
+2001-09-24 01:27  soheil
 
 	* perl_ext/t/drag.t: add SWF::Constants
 
-2001-09-24 03:26  soheil
+2001-09-24 01:26  soheil
 
 	* perl_ext/: SWF/Constants.pm, examples/action.cgi,
-	  examples/alphafill.cgi: initial import to cvs
+	examples/alphafill.cgi: initial import to cvs
 
-2001-09-24 03:24  soheil
+2001-09-24 01:24  soheil
 
 	* perl_ext/swf_util.c: added header files
 
-2001-09-24 03:09  soheil
+2001-09-24 01:09  soheil
 
 	* perl_ext/perl_swf.h: added swf_stash_refcnt_inc/dec methods
 
-2001-09-24 03:07  soheil
+2001-09-24 01:07  soheil
 
 	* perl_ext/TODO: Updated the list
 
-2001-09-24 03:04  soheil
+2001-09-24 01:04  soheil
 
 	* perl_ext/t/button.t: - added SWF::Constants
 
-2001-09-24 03:02  soheil
+2001-09-24 01:02  soheil
 
 	* perl_ext/SWF/TextField.pm: - added version - Moved :Text to
-	  Constants
+	Constants
 
-2001-09-24 02:59  soheil
+2001-09-24 00:59  soheil
 
 	* perl_ext/SWF/: Movie.pm, Shape.pm, Sprite.pm, Text.pm: - added
-	  version
+	version
 
-2001-09-24 02:55  soheil
+2001-09-24 00:55  soheil
 
 	* perl_ext/SWF/: Fill.pm, Font.pm, Gradient.pm, Morph.pm: - added
-	  version
+	version
 
-2001-09-24 02:54  soheil
+2001-09-24 00:54  soheil
 
 	* perl_ext/SWF/DisplayItem.pm: - added version - Moved :DisplayItem
-	  to Constants
+	to Constants
 
-2001-09-24 02:53  soheil
+2001-09-24 00:53  soheil
 
 	* perl_ext/SWF/Button.pm: - added version - Moved :Button to
-	  Constants.pm
+	Constants.pm
 
-2001-09-24 02:49  soheil
+2001-09-24 00:49  soheil
 
 	* perl_ext/SWF/: Action.pm, Bitmap.pm: - added version
 
-2001-09-24 02:47  soheil
+2001-09-24 00:47  soheil
 
 	* perl_ext/SWF.pm: - added Constants to @EXPORT_OK - Changed
-	  version to 0.09-dev
+	version to 0.09-dev
 
-2001-09-24 02:44  soheil
+2001-09-24 00:44  soheil
 
 	* perl_ext/SWF.xs: Splitted the XS file
 
-2001-09-24 02:44  soheil
+2001-09-24 00:44  soheil
 
 	* perl_ext/Makefile.PL: - added clean - added @SWF_MODULES +
-	  write_bootxs() (needed for spliting SWF.xs)
+	write_bootxs() (needed for spliting SWF.xs)
 
-2001-09-24 02:40  soheil
+2001-09-24 00:40  soheil
 
 	* perl_ext/Exports.c: Fixed possible typo warning
 
-2001-09-24 02:37  soheil
+2001-09-24 00:37  soheil
 
 	* perl_ext/: Action.xs, Bitmap.xs, Button.xs, Constants.xs,
-	  DisplayItem.xs, Fill.xs, Font.xs, Gradient.xs, Morph.xs,
-	  Movie.xs, MovieClip.xs, Shape.xs, Sound.xs, Text.xs,
-	  TextField.xs: Initial import to cvs
+	DisplayItem.xs, Fill.xs, Font.xs, Gradient.xs, Morph.xs, Movie.xs,
+	MovieClip.xs, Shape.xs, Sound.xs, Text.xs, TextField.xs: Initial
+	import to cvs
 
-2001-09-18 23:05  opaque_ndst
+2001-09-18 21:05  opaque_ndst
 
 	* src/shape_util.c: changed drawarc/circle radius arg type to float
 
-2001-09-16 00:39  opaque_ndst
+2001-09-15 22:39  opaque_ndst
 
 	* util/png2dbl.c: added Ingo Wilken's patch for word-aligning the
-	  PNG data
+	PNG data
 
-2001-09-16 00:10  opaque_ndst
+2001-09-15 22:10  opaque_ndst
 
 	* ming.h, mingpp.h, src/displaylist.c, src/displaylist.h: added Uri
-	  Yanover's displayitem property accessor functions
+	Yanover's displayitem property accessor functions
 
-2001-08-22 03:21  soheil
+2001-08-22 01:21  soheil
 
 	* perl_ext/Changes: Updated Changes
 
-2001-08-22 03:18  soheil
+2001-08-22 01:18  soheil
 
 	* perl_ext/TODO: updated TODO list
 
-2001-08-22 03:15  soheil
+2001-08-22 01:15  soheil
 
 	* perl_ext/SWF/TextField.pm: - added documentation for importing
-	  constants (need to add method pod)
+	constants (need to add method pod)
 
-2001-08-22 03:13  soheil
+2001-08-22 01:13  soheil
 
 	* perl_ext/examples/: glyph.cgi, keypress.cgi, text.cgi: initial
-	  import to cvs
+	import to cvs
 
-2001-08-22 03:11  soheil
+2001-08-22 01:11  soheil
 
 	* perl_ext/SWF.xs: updated SWFMovie::addExport SWFShape::drawGlyph
-	  (patch submitted by Wolfgang Hamann)
+	(patch submitted by Wolfgang Hamann)
 
-2001-08-19 23:41  opaque_ndst
-
-	* CHANGES, CREDITS: [no log message]
-
-2001-08-19 23:40  opaque_ndst
+2001-08-19 21:40  opaque_ndst
 
 	* php_ext/: Makefile.in, config.m4: updated from php4 cvs
 
-2001-08-19 13:26  sspickle
+2001-08-19 11:26  sspickle
 
 	* py_ext/: .cvsignore, INSTALL, README, Setup, build.py,
-	  ming_wrap.c, shape.py: added new build.py Setup, and ming_wrap.c
-	  for folks who don't have swig
+	ming_wrap.c, shape.py: added new build.py Setup, and ming_wrap.c
+	for folks who don't have swig
 
-2001-08-17 19:56  opaque_ndst
+2001-08-19 11:26  sspickle
+
+	* py_ext/Setup: file Setup was initially added on branch
+	new-py_ext-makefile.
+
+2001-08-19 11:26  sspickle
+
+	* py_ext/build.py: file build.py was initially added on branch
+	new-py_ext-makefile.
+
+2001-08-17 17:56  opaque_ndst
 
 	* src/: ming.h, movie.c: newSWFMovie didn't actually look at
-	  SWF_versionNum before..  Oops.
+	SWF_versionNum before..  Oops.
 
-2001-08-12 02:10  opaque_ndst
+2001-08-12 00:10  opaque_ndst
 
 	* src/Makefile: added shape_cubic
 
-2001-08-12 02:10  opaque_ndst
+2001-08-12 00:10  opaque_ndst
 
 	* ming.h: changed version number, fixed SWFShape_drawFontGlyph
-	  macro
+	macro
 
-2001-08-12 02:09  opaque_ndst
+2001-08-12 00:09  opaque_ndst
 
 	* src/: shape_cubic.c, shape_cubic.h, shape_util.c: moved cubic
-	  functions to shape_cubic.c
+	functions to shape_cubic.c
 
-2001-08-09 03:46  soheil
+2001-08-09 01:46  soheil
 
 	* perl_ext/SWF/DisplayItem.pm: - added documentation for importing
-	  SWFACTION_* constants - added setMask() method doc (need to
-	  explain)
+	SWFACTION_* constants - added setMask() method doc (need to
+	explain)
 
-2001-08-09 03:43  soheil
+2001-08-09 01:43  soheil
 
 	* perl_ext/t/.cvsignore: Fixed filename
 
-2001-08-09 03:42  soheil
+2001-08-09 01:42  soheil
 
 	* perl_ext/t/.cvsignore: initial import to cvs
 
-2001-08-09 03:40  soheil
+2001-08-09 01:40  soheil
 
 	* perl_ext/.cvsignore: Fixed list of files
 
-2001-08-09 03:37  soheil
+2001-08-09 01:37  soheil
 
 	* perl_ext/SWF.xs: - added SWF::Movie::addExport() - added
-	  SWF::DisplayItem::setMaskLevel()
+	SWF::DisplayItem::setMaskLevel()
 
-2001-08-08 06:45  soheil
+2001-08-08 04:45  soheil
 
 	* perl_ext/SWF/Bitmap.pm: - fixed documentation
 
-2001-08-08 06:44  soheil
+2001-08-08 04:44  soheil
 
 	* perl_ext/SWF.pm: - added SWF::setVersion($version) perldoc
 
-2001-08-08 06:42  soheil
+2001-08-08 04:42  soheil
 
 	* perl_ext/Exports.c: - added SWFTEXTFIELD_HASLENGTH - removed
-	  :Clip constants. ming.h doesn't have it! - added :DisplayItem
-	  constants
+	:Clip constants. ming.h doesn't have it! - added :DisplayItem
+	constants
 
-2001-08-08 06:42  soheil
+2001-08-08 04:42  soheil
 
 	* perl_ext/SWF.xs: - added SWF::setVersion() - added DisplayItem
-	  constants - added DisplayItem::addAction() - removed deprecated
-	  methods from SWF::Shape - added SWFTEXTFIELD_HTML and
-	  SWFTEXTFIELD_HASLENGTH to TextField constants - fixed
-	  Action::new(). The script cannot be NULL
+	constants - added DisplayItem::addAction() - removed deprecated
+	methods from SWF::Shape - added SWFTEXTFIELD_HTML and
+	SWFTEXTFIELD_HASLENGTH to TextField constants - fixed
+	Action::new(). The script cannot be NULL
 
-2001-08-08 06:40  soheil
+2001-08-08 04:40  soheil
 
 	* perl_ext/Makefile.PL: Fixed inlude directory for ming.h
 
-2001-08-08 03:22  soheil
+2001-08-08 01:22  soheil
 
 	* perl_ext/Makefile.PL: Removed @supported_ming_vers. No need to
-	  check ming version as we're going to distribute perl-ming though
-	  CVS, ming website, or CPAN.
+	check ming version as we're going to distribute perl-ming though
+	CVS, ming website, or CPAN.
 
-2001-08-06 23:45  soheil
+2001-08-06 21:45  soheil
 
 	* perl_ext/examples/: animation.cgi, morph.cgi, sprite.cgi: initial
-	  import to cvs
+	import to cvs
 
-2001-08-06 23:32  soheil
+2001-08-06 21:32  soheil
 
 	* perl_ext/examples/: shape.cgi, jpegfill.cgi: initial import to
-	  cvs
+	cvs
 
-2001-08-06 23:30  soheil
+2001-08-06 21:30  soheil
 
 	* perl_ext/Makefile.PL: added skip_test() to t/config.pl
 
-2001-08-06 23:29  soheil
+2001-08-06 21:29  soheil
 
 	* perl_ext/t/: filljpeg.t, png.t, sound.t: - if required file
-	  doesn't exist, call skip_test()
+	doesn't exist, call skip_test()
 
-2001-08-06 22:51  soheil
+2001-08-06 20:51  soheil
 
 	* perl_ext/perl_swf.h: - added SWFSound - added debug level
 
-2001-08-06 22:48  soheil
+2001-08-06 20:48  soheil
 
 	* perl_ext/MANIFEST: - added SWF/*.pm file - added swf_util.c -
-	  added more test files
+	added more test files
 
-2001-08-06 22:44  soheil
+2001-08-06 20:44  soheil
 
 	* perl_ext/: SWF/Action.pm, SWF/Bitmap.pm, SWF/Button.pm,
-	  SWF/DisplayItem.pm, SWF/Fill.pm, SWF/Font.pm, SWF/Gradient.pm,
-	  SWF/Morph.pm, SWF/Movie.pm, SWF/Shape.pm, SWF/Sound.pm,
-	  SWF/Sprite.pm, SWF/Text.pm, SWF/TextField.pm, t/00_basic.t,
-	  t/01_shape.t, t/03_movie.t, t/button.t, t/drag.t, t/fill.t,
-	  t/filljpeg.t, t/gradient.t, t/png.t, t/sound.t, t/sprite.t:
-	  initial import to cvs
+	SWF/DisplayItem.pm, SWF/Fill.pm, SWF/Font.pm, SWF/Gradient.pm,
+	SWF/Morph.pm, SWF/Movie.pm, SWF/Shape.pm, SWF/Sound.pm,
+	SWF/Sprite.pm, SWF/Text.pm, SWF/TextField.pm, t/00_basic.t,
+	t/01_shape.t, t/03_movie.t, t/button.t, t/drag.t, t/fill.t,
+	t/filljpeg.t, t/gradient.t, t/png.t, t/sound.t, t/sprite.t: initial
+	import to cvs
 
-2001-08-06 22:41  soheil
+2001-08-06 20:41  soheil
 
 	* perl_ext/typemap: added SWF::Sound
 
-2001-08-06 22:37  soheil
+2001-08-06 20:37  soheil
 
 	* perl_ext/SWF.pm: 1- added import() 2- added doc
 
-2001-08-06 22:34  soheil
+2001-08-06 20:34  soheil
 
 	* perl_ext/swf_util.c: initail import to cvs
 
-2001-08-06 22:33  soheil
+2001-08-06 20:33  soheil
 
 	* perl_ext/SWF.xs: - Added swf_util.c - Made necessary changes to
-	  compile with 0.2-pre-a version - Fixed some of memory leaks
+	compile with 0.2-pre-a version - Fixed some of memory leaks
 
-2001-08-06 22:28  soheil
+2001-08-06 20:28  soheil
 
 	* perl_ext/Makefile.PL: - For now, we'll only support 0.2-pre-a -
-	  Fixed DEFAULT_DIR
+	Fixed DEFAULT_DIR
 
-2001-08-01 08:10  raff
+2001-08-01 06:10  raff
 
 	* util/png2dbl.c: Maybe this fixes the strange colors in PNG
-	  images:
+	images:
+	
+	- filler goes AFTER (RGBA) not before (ARGB ?) - do strange things
+	with alpha channel also for RGB, since	 we convert it in RGBA -
+	added a --verbose option that may help to find problems cVS:
+	----------------------------------------------------------------------
 
-	  - filler goes AFTER (RGBA) not before (ARGB ?) - do strange
-	  things with alpha channel also for RGB, since   we convert it in
-	  RGBA - added a --verbose option that may help to find problems
-	  cVS:
-	  ----------------------------------------------------------------------
-
-2001-07-29 06:36  raff
+2001-07-29 04:36  raff
 
 	* ming.h: If the implementation uses int, the prototype should use
-	  int to or very bad things will happen when you try to use the
-	  advance list!
+	int to or very bad things will happen when you try to use the
+	advance list!
 
-2001-07-26 02:59  raff
+2001-07-26 00:59  raff
 
 	* src/displaylist.c: I don't know why I can compile (most of the
-	  times ): but just in case, let's declare functions before using
-	  them.
+	times ): but just in case, let's declare functions before using
+	them.
 
-2001-07-26 02:10  raff
+2001-07-26 00:10  raff
 
 	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y: Added
-	  (only to the Flash 4 compiler) :
+	(only to the Flash 4 compiler) :
+	
+	- getProperty(object, property) - gotoAndPlay(frame) - gotoFrame()
+	is really gotoAndStop - tellTarget(target) { block } -
+	frameLoaded(expr) - callFrame(string) - don't ask me why, but I had
+	a variable named like	a frame.
+	
+	Some of these changes can easily be ported (copied) to the Flash 5
+	compiler.
 
-	  - getProperty(object, property) - gotoAndPlay(frame) -
-	  gotoFrame() is really gotoAndStop - tellTarget(target) { block }
-	  - frameLoaded(expr) - callFrame(string) - don't ask me why, but I
-	  had a variable named like   a frame.
-
-	  Some of these changes can easily be ported (copied) to the Flash
-	  5 compiler.
-
-2001-07-26 02:05  raff
+2001-07-26 00:05  raff
 
 	* Makefile: Added entries to build and install Ming as a static
-	  library.
+	library.
+	
+	In order to automatically build both static and dynamic libraries,
+	remove the comment (# sign) from the 'all' and 'install' targets.
 
-	  In order to automatically build both static and dynamic
-	  libraries, remove the comment (# sign) from the 'all' and
-	  'install' targets.
-
-2001-07-26 02:00  raff
+2001-07-26 00:00  raff
 
 	* ming.h: prototypes for Ming_setSWFVersion() and
-	  SWFDisplayItem_setMaskLevel()
+	SWFDisplayItem_setMaskLevel()
 
-2001-07-26 01:58  raff
+2001-07-25 23:58  raff
 
 	* src/shape_util.h: SWFShape_drawGlyph really only has 3
-	  parameters, not 4
+	parameters, not 4
 
-2001-07-26 01:57  raff
+2001-07-25 23:57  raff
 
 	* src/: displaylist.c, displaylist.h: - added
-	  SWFDisplayItem_setMaskLevel() - in SWFDisplayItem_setDepth(),
-	  either I set the depth in the PlaceObject   thing, or there is
-	  really no point of having this function (unless I am	 missing
-	  something).
+	SWFDisplayItem_setMaskLevel() - in SWFDisplayItem_setDepth(),
+	either I set the depth in the PlaceObject   thing, or there is
+	really no point of having this function (unless I am   missing
+	something).
 
-2001-07-26 01:55  raff
+2001-07-25 23:55  raff
 
 	* src/blocks/swf.h: added prototype for
-	  SWFPlaceObject2Block_setMaskLevel()
+	SWFPlaceObject2Block_setMaskLevel()
 
-2001-07-26 01:49  raff
+2001-07-25 23:49  raff
 
 	* src/blocks/: placeobject.c, placeobject.h: - the masklevel (clip
-	  depth) comes before the object name, not after - exported
-	  SWFPlaceObject2Block_setMaskLevel - I really need to be able to
-	  change the depth level   (SWFPlaceObject2Block_setDepth) before
-	  emitting the object, in order to   properly use the masklevel.
+	depth) comes before the object name, not after - exported
+	SWFPlaceObject2Block_setMaskLevel - I really need to be able to
+	change the depth level	 (SWFPlaceObject2Block_setDepth) before
+	emitting the object, in order to   properly use the masklevel.
 
-2001-07-25 02:33  raff
+2001-07-25 00:33  raff
 
 	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y: This
-	  fixes a bunch of problems with parsing a "sprite path" in the
-	  Flash 4 compiler (I don't know how the Flash 5 compiler works,
-	  but since this part of the code is completely different it may be
-	  ok).
+	fixes a bunch of problems with parsing a "sprite path" in the Flash
+	4 compiler (I don't know how the Flash 5 compiler works, but since
+	this part of the code is completely different it may be ok).
+	
+	Now you can do things like /root/movie/submovie:variable, ./movie,
+	/movie/../anothermovie, etc. (I used to have problems with more
+	than one submovie)
+	
+	(note: I am not simplifying ANY path - i.e. the ones containing ..
+	- they get sent straight to the Flash player. But it seems to work,
+	so... :)
 
-	  Now you can do things like /root/movie/submovie:variable,
-	  ./movie, /movie/../anothermovie, etc. (I used to have problems
-	  with more than one submovie)
-
-	  (note: I am not simplifying ANY path - i.e. the ones containing
-	  .. - they get sent straight to the Flash player. But it seems to
-	  work, so... :)
-
-2001-07-25 02:29  raff
+2001-07-25 00:29  raff
 
 	* src/actioncompiler/Makefile: - 'make clean' now also removes the
-	  files generated by flex and bison.  - added a FLEXDEBUG option,
-	  in case I really need to see what's going on.
+	files generated by flex and bison.  - added a FLEXDEBUG option, in
+	case I really need to see what's going on.
 
-2001-07-25 02:25  raff
+2001-07-25 00:25  raff
 
 	* src/actioncompiler/main.c: I still am faithfull to the Flash 4
-	  compiler, so here is a --4 option to select it (the default, as
-	  before, is to use the new compiler).
+	compiler, so here is a --4 option to select it (the default, as
+	before, is to use the new compiler).
 
-2001-07-24 02:06  opaque_ndst
+2001-07-24 00:06  opaque_ndst
 
 	* src/libming.h: commented out garbage after #endif
 
-2001-07-18 03:05  raff
+2001-07-18 01:05  raff
 
 	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: added
-	  escape sequences \b, \f, \n, \r, \t and a warning message for \x
-	  and \u (every other character that follows a '\' is left
-	  unchanged but of course the '\' is removed).
+	escape sequences \b, \f, \n, \r, \t and a warning message for \x
+	and \u (every other character that follows a '\' is left unchanged
+	but of course the '\' is removed).
 
-2001-07-18 02:37  raff
+2001-07-18 00:37  raff
 
 	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex:
-	  Strings can contain escaped characters ( mainly the escape
-	  character itself '\' and quotes, so I guess removing the escape
-	  character is the right thing to do - and I am too lazy to find a
-	  way to do it in Flex :)
+	Strings can contain escaped characters ( mainly the escape
+	character itself '\' and quotes, so I guess removing the escape
+	character is the right thing to do - and I am too lazy to find a
+	way to do it in Flex :)
+	
+	One day we can support escape sequences ( \b, \f, \n, \r, \t ) and
+	hex/unicode values ( \xHH, \uHHHH ) by "fixing" the unescape
+	function.
 
-	  One day we can support escape sequences ( \b, \f, \n, \r, \t )
-	  and hex/unicode values ( \xHH, \uHHHH ) by "fixing" the unescape
-	  function.
-
-2001-07-14 02:42  opaque_ndst
+2001-07-14 00:42  opaque_ndst
 
 	* src/: libming.h, blocks/libswf.h: added rint define
 
-2001-07-14 02:35  opaque_ndst
+2001-07-14 00:35  opaque_ndst
 
 	* util/: listmp3.c, listswf.c: fixed mp3 frame parsing
 
-2001-07-14 02:35  opaque_ndst
+2001-07-14 00:35  opaque_ndst
 
 	* src/blocks/: mp3.c, soundstream.c, soundstream.h: okay, I think
-	  this fixes mp3 streaming..
+	this fixes mp3 streaming..
 
-2001-07-14 02:34  opaque_ndst
+2001-07-14 00:34  opaque_ndst
 
 	* src/displaylist.c: removed soundrewind method call from
-	  writeBlocks- what was I thinking??
+	writeBlocks- what was I thinking??
 
-2001-07-12 04:53  opaque_ndst
-
-	* CREDITS: [no log message]
-
-2001-07-12 04:49  opaque_ndst
+2001-07-12 02:49  opaque_ndst
 
 	* src/Makefile: added libming.so to make clean
 
-2001-07-12 04:48  opaque_ndst
+2001-07-12 02:48  opaque_ndst
 
 	* Makefile: changed install to libming-0.2
 
-2001-07-12 04:48  opaque_ndst
-
-	* src/actioncompiler/: oldcompiler.flex, oldcompiler.y: [no log
-	  message]
-
-2001-07-12 04:42  opaque_ndst
+2001-07-12 02:42  opaque_ndst
 
 	* ming.i, java_ext/SWFShape.java, java_ext/SWFShapeI.java,
-	  java_ext/native/SWFShape.h, perl_ext/SWF.xs, php_ext/ming.c,
-	  py_ext/ming.py, rb_ext/ming.rb: changed calls to
-	  SWFShape_drawGlyph to SWFShape_drawSizedGlyph
+	java_ext/native/SWFShape.h, perl_ext/SWF.xs, php_ext/ming.c,
+	py_ext/ming.py, rb_ext/ming.rb: changed calls to SWFShape_drawGlyph
+	to SWFShape_drawSizedGlyph
 
-2001-07-12 04:36  opaque_ndst
+2001-07-12 02:36  opaque_ndst
 
 	* perl_ext/README, php_ext/config.m4, py_ext/README: changed ming
-	  lib requirements to 0.2-pre-a
+	lib requirements to 0.2-pre-a
 
-2001-07-12 04:35  opaque_ndst
+2001-07-12 02:35  opaque_ndst
 
 	* java_ext/SWFMovie.java, java_ext/SWFMovieI.java,
-	  java_ext/native/SWFMovie.h, perl_ext/SWF.xs, php_ext/ming.c,
-	  php_ext/php_ming.h, py_ext/ming.py: added Ming_useSWFVersion
+	java_ext/native/SWFMovie.h, perl_ext/SWF.xs, php_ext/ming.c,
+	php_ext/php_ming.h, py_ext/ming.py: added Ming_useSWFVersion
 
-2001-07-12 04:32  opaque_ndst
-
-	* CHANGES, CREDITS, TODO: [no log message]
-
-2001-07-12 04:32  opaque_ndst
+2001-07-12 02:32  opaque_ndst
 
 	* src/shape_util.c, src/shape_util.h, ming.h, mingpp.h: moved sized
-	  drawGlyph to drawSizedGlyph, restoring api compatibility
+	drawGlyph to drawSizedGlyph, restoring api compatibility
 
-2001-07-12 04:25  opaque_ndst
+2001-07-12 02:25  opaque_ndst
 
 	* src/blocks/swf.h: removed unused SWFMatrix_copy
 
-2001-07-12 04:24  opaque_ndst
+2001-07-12 02:24  opaque_ndst
 
 	* src/blocks/shape.c: fixed pen positioning in drawGlyph
 
-2001-07-12 04:23  opaque_ndst
+2001-07-12 02:23  opaque_ndst
 
 	* src/blocks/: matrix.c, matrix.h: added SWFMatrix_apply, various
-	  small cleanups
+	small cleanups
 
-2001-07-12 04:22  opaque_ndst
+2001-07-12 02:22  opaque_ndst
 
 	* src/actioncompiler/swf5compiler.y: added ~ op, changed shift ops'
-	  token names to avoid collision with assembler ops
+	token names to avoid collision with assembler ops
 
-2001-07-12 04:21  opaque_ndst
+2001-07-12 02:21  opaque_ndst
 
 	* src/actioncompiler/swf5compiler.flex: changed shift ops' token
-	  names to avoid colliding with assembler ops
+	names to avoid colliding with assembler ops
 
-2001-07-11 02:01  opaque_ndst
+2001-07-11 00:01  opaque_ndst
 
 	* src/actioncompiler/: compile.c, compile.h, swf5compiler.flex,
-	  swf5compiler.y: various small fixes..
+	swf5compiler.y: various small fixes..
 
-2001-07-09 07:27  opaque_ndst
+2001-07-09 05:27  opaque_ndst
 
 	* perl_ext/SWF.xs, py_ext/Makefile, py_ext/ming.py, rb_ext/ming.rb:
-	  added size arg to SWFShape_drawGlyph
+	added size arg to SWFShape_drawGlyph
 
-2001-07-09 07:23  opaque_ndst
+2001-07-09 05:23  opaque_ndst
 
 	* java_ext/: SWFShape.java, SWFShapeI.java, native/SWFShape.h:
-	  added size arg to SWFShape_drawGlyph
+	added size arg to SWFShape_drawGlyph
 
-2001-07-09 03:39  opaque_ndst
+2001-07-09 01:39  opaque_ndst
 
 	* ming.i: added Ming_useSWFVersion(num)
 
-2001-07-09 03:37  opaque_ndst
+2001-07-09 01:37  opaque_ndst
 
 	* src/blocks/shape.c: now tracking pre-scaled pen in drawGlyph to
-	  fix leaky shapes caused by rounding errors
+	fix leaky shapes caused by rounding errors
 
-2001-07-09 03:36  opaque_ndst
+2001-07-09 01:36  opaque_ndst
 
 	* src/blocks/Makefile: removed unused stuff..
 
-2001-07-09 03:36  opaque_ndst
+2001-07-09 01:36  opaque_ndst
 
 	* src/Makefile: added new compiler files
 
-2001-07-09 03:35  opaque_ndst
+2001-07-09 01:35  opaque_ndst
 
 	* src/: ming.c, ming.h: added Ming_useSWFVersion(num)
 
-2001-07-09 03:33  opaque_ndst
+2001-07-09 01:33  opaque_ndst
 
 	* src/actioncompiler/compileaction.c: changed yyparse to
-	  swf[45]parse
+	swf[45]parse
 
-2001-07-09 03:33  opaque_ndst
+2001-07-09 01:33  opaque_ndst
 
 	* src/actioncompiler/main.c: changed yyparse to swf5parse
 
-2001-07-09 03:32  opaque_ndst
+2001-07-09 01:32  opaque_ndst
 
 	* src/actioncompiler/: compile.c, compile.h: added Wolfgang's
-	  patches allowing multiple data per push op
+	patches allowing multiple data per push op
 
-2001-07-09 03:32  opaque_ndst
+2001-07-09 01:32  opaque_ndst
 
 	* src/actioncompiler/: .cvsignore, Makefile: added new files
 
-2001-07-08 22:17  opaque_ndst
+2001-07-08 20:17  opaque_ndst
 
 	* util/png2dbl.c: turns out 24-bit images still need the extra byte
-	  padding..  weird.
+	padding..  weird.
 
-2001-07-08 04:35  opaque_ndst
+2001-07-08 02:35  opaque_ndst
 
 	* src/actioncompiler/swf5compiler.y: oops, forgot to change the
-	  WriteU8s to WriteOps
+	WriteU8s to WriteOps
 
-2001-07-08 04:21  opaque_ndst
+2001-07-08 02:21  opaque_ndst
 
 	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y,
-	  swf5compiler.flex, swf5compiler.y: split back into two separate
-	  compilers, added many patches from Wolfgang Hamann
+	swf5compiler.flex, swf5compiler.y: split back into two separate
+	compilers, added many patches from Wolfgang Hamann
 
-2001-07-08 04:19  opaque_ndst
+2001-07-08 02:19  opaque_ndst
 
 	* src/actioncompiler/: compiler.flex, compiler.y: moved to
-	  swf[45]compiler
+	swf[45]compiler
 
-2001-07-01 22:40  opaque_ndst
+2001-07-01 20:40  opaque_ndst
 
 	* src/: shape_util.c, shape_util.h: added size arg to
-	  SWFShape_drawGlyph
+	SWFShape_drawGlyph
 
-2001-07-01 22:40  opaque_ndst
+2001-07-01 20:40  opaque_ndst
 
 	* src/blocks/: shape.c, shape.h, swf.h: added size arg to
-	  SWFShape_draw[Scaled]Glyph
+	SWFShape_draw[Scaled]Glyph
 
-2001-07-01 22:39  opaque_ndst
+2001-07-01 20:39  opaque_ndst
 
 	* src/ming.c: added Ming_getScale()
 
-2001-07-01 22:39  opaque_ndst
+2001-07-01 20:39  opaque_ndst
 
 	* ming.h, ming.i, mingpp.h: added size arg to SWFShape_drawGlyph
-	  function
+	function
 
-2001-07-01 22:38  opaque_ndst
+2001-07-01 20:38  opaque_ndst
 
 	* php_ext/: ming.c, php_ming.h: added changes from php4 cvs:
-	  removal of "inline" from get* functions changed V_FOPEN to
-	  VCWD_FOPEN added RINIT function (but commented it out, it seems
-	  to mess things up..)
+	removal of "inline" from get* functions changed V_FOPEN to
+	VCWD_FOPEN added RINIT function (but commented it out, it seems to
+	mess things up..)
 
-2001-07-01 02:06  opaque_ndst
+2001-07-01 00:06  opaque_ndst
 
 	* src/actioncompiler/compiler.y: added getURL as synonym for
-	  loadMovie
+	loadMovie
 
-2001-07-01 01:27  opaque_ndst
+2001-06-30 23:27  opaque_ndst
 
 	* util/: decompile.c, listswf.c: added default case in geturl args
-	  switch
+	switch
 
-2001-07-01 01:26  opaque_ndst
+2001-06-30 23:26  opaque_ndst
 
 	* src/actioncompiler/compiler.y: added back some legacy functions
-	  from oldcompiler.y in vain attempt at backwards compatibility
+	from oldcompiler.y in vain attempt at backwards compatibility
 
-2001-07-01 01:26  opaque_ndst
+2001-06-30 23:26  opaque_ndst
 
 	* src/actioncompiler/compiler.flex: added yyreset to parseInit call
-	  added various legacy function calls
+	added various legacy function calls
 
-2001-06-20 10:04  opaque_ndst
+2001-06-20 08:04  opaque_ndst
 
 	* src/actioncompiler/compile.c: added position increment after
-	  non-branch wide instruction
+	non-branch wide instruction
 
-2001-06-20 10:03  opaque_ndst
+2001-06-20 08:03  opaque_ndst
 
 	* src/actioncompiler/compiler.flex: fixed error reporting- now only
-	  one call to SWF_error is made
+	one call to SWF_error is made
 
-2001-06-20 10:02  opaque_ndst
+2001-06-20 08:02  opaque_ndst
 
 	* src/actioncompiler/compiler.y: fixes the case
+	
+	  if((++x % 100) == 0)
+	    foo();
 
-	    if((++x % 100) == 0)
-	      foo();
-
-2001-06-20 10:01  opaque_ndst
+2001-06-20 08:01  opaque_ndst
 
 	* src/blocks/text.c: attempting to deal with empty-stringed text
-	  records
+	records
 
-2001-06-20 08:20  opaque_ndst
+2001-06-20 06:20  opaque_ndst
 
 	* src/movieclip.c: removed initializer for now nonexistent
-	  totalFrames field
+	totalFrames field
 
-2001-06-20 04:47  opaque_ndst
+2001-06-20 02:47  opaque_ndst
 
 	* src/blocks/loadfont.c: cosmetic..
 
-2001-06-20 04:46  opaque_ndst
+2001-06-20 02:46  opaque_ndst
 
 	* src/: movieclip.c, movieclip.h, blocks/sprite.c, blocks/sprite.h,
-	  blocks/swf.h: added (working) setNumberOfFrames to SWFSprite
+	blocks/swf.h: added (working) setNumberOfFrames to SWFSprite
 
-2001-06-20 04:10  opaque_ndst
+2001-06-20 02:10  opaque_ndst
 
 	* util/swftophp.c: added Pete Schwamb's patch for saving shape type
 
-2001-06-20 03:31  opaque_ndst
+2001-06-20 01:31  opaque_ndst
 
 	* mingpp.h: fixed pointer reference in SWFDisplayItem::addAction
 
-2001-06-20 03:29  opaque_ndst
+2001-06-20 01:29  opaque_ndst
 
 	* perl_ext/SWF.xs: moved SWFDisplayItem_addAction w/in the
-	  SWFDisplayItem methods area
+	SWFDisplayItem methods area
 
-2001-06-20 03:15  opaque_ndst
+2001-06-20 01:15  opaque_ndst
 
 	* ming.h, src/displaylist.c, src/movie.c, src/movieclip.c,
-	  src/movieclip.h: added Jonathan Shore's patches for adding sound
-	  streams to movie clips.  Sure, it might be defeating the purpose
-	  since they're loaded in one frame, but someone might have a good
-	  use for it..
+	src/movieclip.h: added Jonathan Shore's patches for adding sound
+	streams to movie clips.  Sure, it might be defeating the purpose
+	since they're loaded in one frame, but someone might have a good
+	use for it..
 
-2001-06-20 03:05  opaque_ndst
+2001-06-20 01:05  opaque_ndst
 
 	* src/blocks/output.c: added paranoid case to checkSize()-
-	  reportedly fixes things, even though I think it shouldn't..  My
-	  guess is it's an off-by-one error somewhere else that's
-	  propagating.
+	reportedly fixes things, even though I think it shouldn't..  My
+	guess is it's an off-by-one error somewhere else that's
+	propagating.
 
-2001-06-19 22:03  opaque_ndst
+2001-06-19 20:03  opaque_ndst
 
 	* src/blocks/font.c: added [required] extra offset entry
 
-2001-06-19 21:34  opaque_ndst
+2001-06-19 19:34  opaque_ndst
 
 	* src/blocks/character.c: added SWF_DEFINEFONT2 to
-	  SWFCharacter_isBlock so that font block isn't destroyed by
-	  blocklist
+	SWFCharacter_isBlock so that font block isn't destroyed by
+	blocklist
 
-2001-06-17 20:57  raff
+2001-06-17 18:57  raff
 
 	* util/decompile.c: same problem in the old decompiler
 
-2001-06-17 20:54  raff
+2001-06-17 18:54  raff
 
 	* util/decompile5.c: one more call in call
 
-2001-06-17 19:23  raff
+2001-06-17 17:23  raff
 
 	* util/decompile5.c: applying my changes to the old decompile
-	  module (no pop() inside function calls) to this new version, so I
-	  can play with it on Mac OSX :)
+	module (no pop() inside function calls) to this new version, so I
+	can play with it on Mac OSX :)
 
-2001-06-15 03:03  opaque_ndst
+2001-06-15 01:03  opaque_ndst
 
 	* util/action.h: added various missed opcodes
 
-2001-06-15 03:02  opaque_ndst
+2001-06-15 01:02  opaque_ndst
 
 	* util/listswf.c: cosmetic changes
 
-2001-06-15 03:02  opaque_ndst
-
-	* util/Makefile: [no log message]
-
-2001-06-15 03:02  opaque_ndst
+2001-06-15 01:02  opaque_ndst
 
 	* util/read.c: fixed goofo with string space allocing, hexdumping
 
-2001-06-15 02:57  opaque_ndst
+2001-06-15 00:57  opaque_ndst
 
 	* util/decompile5.c: added the swf5 decompiler
 
-2001-06-15 02:55  opaque_ndst
+2001-06-15 00:55  opaque_ndst
 
 	* src/actioncompiler/: compile.c, compile.h, compileaction.c,
-	  compiler.flex, compiler.y, listaction.c, main.c: added Wolfgang
-	  Hamann's assorted patches: fixed error reporting, fixed constant
-	  pool writing, numerous other small improvements
+	compiler.flex, compiler.y, listaction.c, main.c: added Wolfgang
+	Hamann's assorted patches: fixed error reporting, fixed constant
+	pool writing, numerous other small improvements
 
-2001-06-15 02:54  opaque_ndst
+2001-06-15 00:54  opaque_ndst
 
 	* src/: movie.c, movie.h: Added Wolfgang Hamann's library symbol
-	  patches
+	patches
 
-2001-06-15 02:53  opaque_ndst
+2001-06-15 00:53  opaque_ndst
 
 	* src/blocktypes.h: added symbol export type
 
-2001-06-15 02:53  opaque_ndst
+2001-06-15 00:53  opaque_ndst
 
 	* ming.h: added SWFMovie_addExport
 
-2001-06-15 02:52  opaque_ndst
+2001-06-15 00:52  opaque_ndst
 
 	* perl_ext/: Exports.c, Makefile.PL, SWF.xs: added Wolfgang
-	  Hamann's changes- clip event handlers for the placeobject tag,
-	  export symbols, the textfield html flag, and the
-	  SWF::Ming::setScale function.
+	Hamann's changes- clip event handlers for the placeobject tag,
+	export symbols, the textfield html flag, and the
+	SWF::Ming::setScale function.
 
-2001-06-15 01:38  opaque_ndst
+2001-06-14 23:38  opaque_ndst
 
 	* src/blocks/: outputblock.c, outputblock.h, swf.h: added Wolfgang
-	  Hamann's exportlist patches
+	Hamann's exportlist patches
 
-2001-06-15 01:38  opaque_ndst
+2001-06-14 23:38  opaque_ndst
 
 	* src/blocks/loadfont.c: made name record large enough to hold
-	  trailing '\0'.  oops.
+	trailing '\0'.	oops.
 
-2001-06-15 01:37  opaque_ndst
+2001-06-14 23:37  opaque_ndst
 
 	* src/blocks/: font.c, font.h: added Wolfgang Hamann's definefont2
-	  patches allowing for wideoffset fonts
+	patches allowing for wideoffset fonts
 
-2001-06-15 01:36  opaque_ndst
+2001-06-14 23:36  opaque_ndst
 
 	* src/blocks/blocktypes.h: added export tag type
 
-2001-06-15 01:36  opaque_ndst
+2001-06-14 23:36  opaque_ndst
 
 	* src/blocks/block.h: purely cosmetic
 
-2001-06-15 01:35  opaque_ndst
+2001-06-14 23:35  opaque_ndst
 
 	* src/blocks/exports.h: a list of exported clip symbols
 
-2001-06-14 20:38  opaque_ndst
+2001-06-14 18:38  opaque_ndst
 
 	* src/actioncompiler/compile.c: added sloppy endianness code
 
-2001-06-14 20:36  opaque_ndst
+2001-06-14 18:36  opaque_ndst
 
 	* src/blocks/sprite.c: fixed segv in completion of empty sprites
 
-2001-06-14 11:11  raff
+2001-06-14 09:11  raff
 
 	* util/decompile.c: a bunch of fixes to make the ActionScript look
-	  more like ActionScript :)
+	more like ActionScript :)
+	
+	- calling multiple pop() as parameters to a function is very bad,  
+	because the C standard doesn't guarantee that they'll be called  
+	in the order you expect. Most of the compilers push parameters	
+	left to right, but gcc on Mac OSX has to be special!
+	
+	  In most of the places the pop() calls were already outside the
+	  function calls, but a few of them didn't make it.
+	
+	- SETPROPERTY wasn't correctly expanding the property name, as
+	GETPROPERTY   did
+	
+	- fixed a few things with strings
+	
+	- unknown opcodes stop the decompilation process, but ACTION_POP is
+	a   known opcode (don't know when Flash generates it, but it
+	does!).    Still there are some cases where the decompilare get
+	lost, mostly	after a POP, but I am not sure of what to do!
 
-	  - calling multiple pop() as parameters to a function is very bad,
-	    because the C standard doesn't guarantee that they'll be called
-	    in the order you expect. Most of the compilers push parameters
-	   left to right, but gcc on Mac OSX has to be special!
-
-	    In most of the places the pop() calls were already outside the
-	    function calls, but a few of them didn't make it.
-
-	  - SETPROPERTY wasn't correctly expanding the property name, as
-	  GETPROPERTY	did
-
-	  - fixed a few things with strings
-
-	  - unknown opcodes stop the decompilation process, but ACTION_POP
-	  is a	 known opcode (don't know when Flash generates it, but it
-	  does!).    Still there are some cases where the decompilare get
-	  lost, mostly	  after a POP, but I am not sure of what to do!
-
-2001-06-14 11:02  raff
+2001-06-14 09:02  raff
 
 	* util/swftophp.c: the right type for DefineText2 is DEFINETEXT2
-	  not 2
+	not 2
 
-2001-05-22 07:24  opaque_ndst
+2001-05-22 05:24  opaque_ndst
 
 	* src/blocks/placeobject.c: Fixed memory leaks
 
-2001-05-22 07:23  opaque_ndst
+2001-05-22 05:23  opaque_ndst
 
 	* src/actioncompiler/: compiler.flex, compiler.y: Added Wolfgang
-	  Hamann's fixes, added a.i++ and a[i]++
+	Hamann's fixes, added a.i++ and a[i]++
 
-2001-05-21 20:28  opaque_ndst
+2001-05-21 18:28  opaque_ndst
 
 	* php_ext/: ming.c, php_ming.h: added request initializer, moved
-	  Ming_init() call into it
+	Ming_init() call into it
 
-2001-05-21 12:25  jshore
+2001-05-21 10:25  jshore
 
 	* java_ext/native/: SWFAction.h, SWFBitmap.h, SWFButton.h,
-	  SWFDisplayItem.h, SWFFill.h, SWFFont.h, SWFGradient.h,
-	  SWFMorph.h, SWFMovie.h, SWFMovieClip.h, SWFNative.cc,
-	  SWFNative.h, SWFShape.h, SWFSound.h, SWFText.h, SWFTextField.h,
-	  SWFUtilities.h: new functionality
+	SWFDisplayItem.h, SWFFill.h, SWFFont.h, SWFGradient.h, SWFMorph.h,
+	SWFMovie.h, SWFMovieClip.h, SWFNative.cc, SWFNative.h, SWFShape.h,
+	SWFSound.h, SWFText.h, SWFTextField.h, SWFUtilities.h: new
+	functionality
 
-2001-05-21 12:24  jshore
-
-	* java_ext/Makefile: [no log message]
-
-2001-05-21 12:23  jshore
+2001-05-21 10:23  jshore
 
 	* java_ext/: README, SWFAction.java, SWFActionI.java,
-	  SWFBitmap.java, SWFBitmapI.java, SWFButton.java, SWFButtonI.java,
-	  SWFColor.java, SWFDimensionableI.java, SWFDisplayItem.java,
-	  SWFDisplayItemI.java, SWFException.java, SWFFill.java,
-	  SWFFillI.java, SWFFont.java, SWFFontI.java, SWFGradient.java,
-	  SWFGradientI.java, SWFMatrix.java, SWFMorph.java, SWFMorphI.java,
-	  SWFMovie.java, SWFMovieClip.java, SWFMovieClipI.java,
-	  SWFMovieI.java, SWFObject.java, SWFObjectI.java, SWFShape.java,
-	  SWFShapeI.java, SWFSound.java, SWFSoundI.java, SWFText.java,
-	  SWFTextField.java, SWFTextFieldI.java, SWFTextI.java: new
-	  functionality & GC fixes
+	SWFBitmap.java, SWFBitmapI.java, SWFButton.java, SWFButtonI.java,
+	SWFColor.java, SWFDimensionableI.java, SWFDisplayItem.java,
+	SWFDisplayItemI.java, SWFException.java, SWFFill.java,
+	SWFFillI.java, SWFFont.java, SWFFontI.java, SWFGradient.java,
+	SWFGradientI.java, SWFMatrix.java, SWFMorph.java, SWFMorphI.java,
+	SWFMovie.java, SWFMovieClip.java, SWFMovieClipI.java,
+	SWFMovieI.java, SWFObject.java, SWFObjectI.java, SWFShape.java,
+	SWFShapeI.java, SWFSound.java, SWFSoundI.java, SWFText.java,
+	SWFTextField.java, SWFTextFieldI.java, SWFTextI.java: new
+	functionality & GC fixes
 
-2001-05-12 04:07  raff
+2001-05-12 02:07  raff
 
 	* src/actioncompiler/compiler.y: oops, resolveJumps seems to now be
-	  called bufferResolveJumps!
+	called bufferResolveJumps!
+	
+	(this is what happen when I make changes on one version, and check
+	in another ):
 
-	  (this is what happen when I make changes on one version, and
-	  check in another ):
-
-2001-05-12 01:24  raff
+2001-05-11 23:24  raff
 
 	* src/actioncompiler/: compiler.y, oldcompiler.y: This fixes a
-	  segment fault when compiling something like:
+	segment fault when compiling something like:
+	
+		for (;;) {
+		    ...
+		}
+	
+	In this case the conditional expression is NULL (since there isn't
+	one).
+	
+	So, the code checks if the conditional expression is null and in
+	that case creates a new buffer and SKIP the code that generates the
+	conditional branch.
 
-		  for (;;) {
-		      ...
-		  }
-
-	  In this case the conditional expression is NULL (since there
-	  isn't one).
-
-	  So, the code checks if the conditional expression is null and in
-	  that case creates a new buffer and SKIP the code that generates
-	  the conditional branch.
-
-2001-05-11 03:41  opaque_ndst
+2001-05-11 01:41  opaque_ndst
 
 	* src/blocks/sprite.c: now adds trailing showFrame block to sprite
-	  if it's not there
+	if it's not there
 
-2001-05-09 20:21  opaque_ndst
+2001-05-09 18:21  opaque_ndst
 
 	* ming.h, mingpp.h: added SWFDisplayItem_addAction
 
-2001-05-09 20:21  opaque_ndst
-
-	* CHANGES, CREDITS, TODO: [no log message]
-
-2001-05-09 09:43  opaque_ndst
+2001-05-09 07:43  opaque_ndst
 
 	* php_ext/Makefile: added static linkage to libdd.a w/ php_ming.so
 
-2001-05-09 09:42  opaque_ndst
+2001-05-09 07:42  opaque_ndst
 
 	* php_ext/: ming.c, php_ming.h: added SWFDisplayItem::addAction
 
-2001-05-09 08:51  opaque_ndst
+2001-05-09 06:51  opaque_ndst
 
 	* src/text_util.c: fixed descent/leading scaling
 
-2001-05-09 08:51  opaque_ndst
+2001-05-09 06:51  opaque_ndst
 
 	* src/shape_util.c: fixed line scaling
 
-2001-05-09 08:20  opaque_ndst
+2001-05-09 06:20  opaque_ndst
 
 	* src/movieclip.h: added placeobject.h include
 
-2001-05-09 08:19  opaque_ndst
+2001-05-09 06:19  opaque_ndst
 
 	* src/movie.c: changed default version to 5
 
-2001-05-09 07:35  opaque_ndst
+2001-05-09 05:35  opaque_ndst
 
 	* src/: displaylist.c, displaylist.h: added new placeobject2
-	  handling
+	handling
 
-2001-05-09 07:35  opaque_ndst
+2001-05-09 05:35  opaque_ndst
 
 	* src/Makefile: added actioncompiler/assembler.?
 
-2001-05-09 06:09  opaque_ndst
+2001-05-09 04:09  opaque_ndst
 
 	* src/blocks/swf.h: added placeobject functions
 
-2001-05-09 06:05  opaque_ndst
+2001-05-09 04:05  opaque_ndst
 
 	* src/blocks/: outputblock.c, outputblock.h: moved placeobject2
-	  stuff to placeobject.[ch]
+	stuff to placeobject.[ch]
 
-2001-05-09 06:04  opaque_ndst
+2001-05-09 04:04  opaque_ndst
 
 	* src/blocks/: output.c, output.h: added Jon Ribbens' patches, made
-	  some other small fixes
+	some other small fixes
 
-2001-05-09 05:29  opaque_ndst
+2001-05-09 03:29  opaque_ndst
 
 	* src/blocks/: action.c, action.h: yanked unused deprecated action
-	  stuff
+	stuff
 
-2001-05-09 04:48  opaque_ndst
+2001-05-09 02:48  opaque_ndst
 
 	* src/blocks/Makefile: added placeobject stuff
 
-2001-05-09 04:48  opaque_ndst
+2001-05-09 02:48  opaque_ndst
 
 	* src/blocks/: placeobject.c, placeobject.h: placeobject stuff now
-	  a separate object
+	a separate object
 
-2001-05-09 03:47  opaque_ndst
+2001-05-09 01:47  opaque_ndst
 
 	* src/actioncompiler/: action.h, compile.c, compile.h,
-	  compiler.flex, compiler.y, listaction.c, main.c: added new swf5
-	  action compiler
+	compiler.flex, compiler.y, listaction.c, main.c: added new swf5
+	action compiler
 
-2001-05-09 03:14  opaque_ndst
+2001-05-09 01:14  opaque_ndst
 
 	* src/actioncompiler/: assembler.c, assembler.h: assembler support
-	  functions
+	functions
 
-2001-05-09 03:13  opaque_ndst
+2001-05-09 01:13  opaque_ndst
 
 	* src/actioncompiler/Makefile: added assembler
 
-2001-05-09 03:13  opaque_ndst
+2001-05-09 01:13  opaque_ndst
 
 	* src/actioncompiler/: oldcompiler.flex, oldcompiler.y: these are
-	  the old swf4 compiler bits..
+	the old swf4 compiler bits..
 
-2001-05-08 21:03  opaque_ndst
+2001-05-08 19:03  opaque_ndst
 
 	* src/actioncompiler/swf5compiler.y: moved this to compiler.y
 
-2001-05-07 05:28  jshore
+2001-05-07 03:28  jshore
 
 	* java_ext/: SWFAction.java, SWFActionI.java, SWFBitmap.java,
-	  SWFBitmapI.java, SWFButton.java, SWFButtonI.java,
-	  SWFDisplayItem.java, SWFDisplayItemI.java, SWFException.java,
-	  SWFFill.java, SWFFillI.java, SWFFont.java, SWFFontI.java,
-	  SWFGradient.java, SWFGradientI.java, SWFMorph.java,
-	  SWFMorphI.java, SWFMovie.java, SWFMovieClip.java,
-	  SWFMovieClipI.java, SWFMovieI.java, SWFObject.java,
-	  SWFObjectI.java, SWFShape.java, SWFShapeI.java, SWFSound.java,
-	  SWFSoundI.java, SWFText.java, SWFTextField.java,
-	  SWFTextFieldI.java, SWFTextI.java, native/SWFAction.h,
-	  native/SWFBitmap.h, native/SWFButton.h, native/SWFDisplayItem.h,
-	  native/SWFFill.h, native/SWFFont.h, native/SWFGradient.h,
-	  native/SWFMorph.h, native/SWFMovie.h, native/SWFMovieClip.h,
-	  native/SWFNative.cc, native/SWFNative.h, native/SWFShape.h,
-	  native/SWFSound.h, native/SWFText.h, native/SWFTextField.h,
-	  native/SWFUtilities.h, Tests/Simple.java, Tests/SlideShow.java:
-	  spelling error
+	SWFBitmapI.java, SWFButton.java, SWFButtonI.java,
+	SWFDisplayItem.java, SWFDisplayItemI.java, SWFException.java,
+	SWFFill.java, SWFFillI.java, SWFFont.java, SWFFontI.java,
+	SWFGradient.java, SWFGradientI.java, SWFMorph.java, SWFMorphI.java,
+	SWFMovie.java, SWFMovieClip.java, SWFMovieClipI.java,
+	SWFMovieI.java, SWFObject.java, SWFObjectI.java, SWFShape.java,
+	SWFShapeI.java, SWFSound.java, SWFSoundI.java, SWFText.java,
+	SWFTextField.java, SWFTextFieldI.java, SWFTextI.java,
+	native/SWFAction.h, native/SWFBitmap.h, native/SWFButton.h,
+	native/SWFDisplayItem.h, native/SWFFill.h, native/SWFFont.h,
+	native/SWFGradient.h, native/SWFMorph.h, native/SWFMovie.h,
+	native/SWFMovieClip.h, native/SWFNative.cc, native/SWFNative.h,
+	native/SWFShape.h, native/SWFSound.h, native/SWFText.h,
+	native/SWFTextField.h, native/SWFUtilities.h, Tests/Simple.java,
+	Tests/SlideShow.java: spelling error
 
-2001-05-07 05:25  jshore
+2001-05-07 03:25  jshore
 
 	* java_ext/README: information
 
-2001-05-07 04:49  jshore
+2001-05-07 02:49  jshore
 
 	* java_ext/Tests/: Simple.java, SlideShow.java: new java extension
 
-2001-05-07 04:44  jshore
+2001-05-07 02:44  jshore
 
 	* java_ext/: SWFAction.java, SWFActionI.java, SWFBitmap.java,
-	  SWFBitmapI.java, SWFButton.java, SWFButtonI.java,
-	  SWFDisplayItem.java, SWFDisplayItemI.java, SWFException.java,
-	  SWFFill.java, SWFFillI.java, SWFFont.java, SWFFontI.java,
-	  SWFGradient.java, SWFGradientI.java, SWFMorph.java,
-	  SWFMorphI.java, SWFMovie.java, SWFMovieClip.java,
-	  SWFMovieClipI.java, SWFMovieI.java, SWFObject.java,
-	  SWFObjectI.java, SWFShape.java, SWFShapeI.java, SWFSound.java,
-	  SWFSoundI.java, SWFText.java, SWFTextField.java,
-	  SWFTextFieldI.java, SWFTextI.java, native/Makefile,
-	  native/SWFAction.h, native/SWFBitmap.h, native/SWFButton.h,
-	  native/SWFDisplayItem.h, native/SWFFill.h, native/SWFFont.h,
-	  native/SWFGradient.h, native/SWFMorph.h, native/SWFMovie.h,
-	  native/SWFMovieClip.h, native/SWFNative.cc, native/SWFNative.h,
-	  native/SWFShape.h, native/SWFSound.h, native/SWFText.h,
-	  native/SWFTextField.h, native/SWFUtilities.h: new java extension
+	SWFBitmapI.java, SWFButton.java, SWFButtonI.java,
+	SWFDisplayItem.java, SWFDisplayItemI.java, SWFException.java,
+	SWFFill.java, SWFFillI.java, SWFFont.java, SWFFontI.java,
+	SWFGradient.java, SWFGradientI.java, SWFMorph.java, SWFMorphI.java,
+	SWFMovie.java, SWFMovieClip.java, SWFMovieClipI.java,
+	SWFMovieI.java, SWFObject.java, SWFObjectI.java, SWFShape.java,
+	SWFShapeI.java, SWFSound.java, SWFSoundI.java, SWFText.java,
+	SWFTextField.java, SWFTextFieldI.java, SWFTextI.java,
+	native/Makefile, native/SWFAction.h, native/SWFBitmap.h,
+	native/SWFButton.h, native/SWFDisplayItem.h, native/SWFFill.h,
+	native/SWFFont.h, native/SWFGradient.h, native/SWFMorph.h,
+	native/SWFMovie.h, native/SWFMovieClip.h, native/SWFNative.cc,
+	native/SWFNative.h, native/SWFShape.h, native/SWFSound.h,
+	native/SWFText.h, native/SWFTextField.h, native/SWFUtilities.h: new
+	java extension
 
-2001-05-07 04:42  jshore
-
-	* java_ext/Makefile: [no log message]
-
-2001-05-06 00:51  opaque_ndst
+2001-05-05 22:51  opaque_ndst
 
 	* src/blocks/output.c: added John Ribbens' fixes
 
-2001-04-20 03:35  opaque_ndst
+2001-04-20 01:35  opaque_ndst
 
 	* mingpp.h: fixed confusion about input, added SWFSound constructor
-	  from SWFInput
+	from SWFInput
 
-2001-04-14 04:50  opaque_ndst
+2001-04-14 02:50  opaque_ndst
 
 	* src/shape_util.c: got rid of deprecated lineToRelative crap in
-	  drawCharacterBounds
+	drawCharacterBounds
 
-2001-04-14 04:49  opaque_ndst
+2001-04-14 02:49  opaque_ndst
 
 	* src/movie.c: fixed scaling in automagic bitmap shapifying
 
-2001-04-14 04:48  opaque_ndst
+2001-04-14 02:48  opaque_ndst
 
 	* php_ext/ming.c: fixed stuff.	made it work.  yep.
 
-2001-04-14 04:48  opaque_ndst
-
-	* CHANGES: [no log message]
-
-2001-04-13 02:51  opaque_ndst
+2001-04-13 00:51  opaque_ndst
 
 	* src/blocks/input.c: fixed typo
 
-2001-04-13 02:50  opaque_ndst
+2001-04-13 00:50  opaque_ndst
 
 	* ming.h, mingpp.h, php_ext/ming.c, src/blocks/input.c,
-	  src/blocks/input.h, src/blocks/swf.h: added hacky
-	  SWFInput_allocedBuffer nonsense
+	src/blocks/input.h, src/blocks/swf.h: added hacky
+	SWFInput_allocedBuffer nonsense
 
-2001-04-13 02:49  opaque_ndst
-
-	* CHANGES: [no log message]
-
-2001-04-13 02:29  opaque_ndst
+2001-04-13 00:29  opaque_ndst
 
 	* src/blocks/input.c: buffer input now frees buffer.  I don't like
-	  it, but I can't see any way around it..
+	it, but I can't see any way around it..
 
-2001-04-13 02:28  opaque_ndst
+2001-04-13 00:28  opaque_ndst
 
 	* src/blocks/dbl.c: fixed stupid typo
 
-2001-04-13 02:12  opaque_ndst
+2001-04-13 00:12  opaque_ndst
 
 	* src/blocks/jpeg.h: moved typedef above includes
 
-2001-04-13 02:12  opaque_ndst
+2001-04-13 00:12  opaque_ndst
 
 	* src/blocks/swf.h: added newSWFBitmap_fromInput
 
-2001-04-13 02:11  opaque_ndst
+2001-04-13 00:11  opaque_ndst
 
-	* src/blocks/input.c: forgot to inc offset on buffer's getChar.
-	  oops.
+	* src/blocks/input.c: forgot to inc offset on buffer's getChar. 
+	oops.
 
-2001-04-13 02:11  opaque_ndst
+2001-04-13 00:11  opaque_ndst
 
 	* src/blocks/error.h: added a little note..
 
-2001-04-13 02:10  opaque_ndst
+2001-04-13 00:10  opaque_ndst
 
 	* src/blocks/: dbl.c, dbl.h: added SWFInput interfaces
 
-2001-04-13 02:09  opaque_ndst
+2001-04-13 00:09  opaque_ndst
 
 	* src/blocks/: bitmap.c, bitmap.h: added newSWFBitmap_fromInput
 
-2001-04-13 02:08  opaque_ndst
+2001-04-13 00:08  opaque_ndst
 
 	* src/: ming.h, shape_util.h: moved setScale/Threshold over to
-	  ming.h, added seterror/warn to ming.h
+	ming.h, added seterror/warn to ming.h
 
-2001-04-13 02:07  opaque_ndst
+2001-04-13 00:07  opaque_ndst
 
 	* src/ming.c: added seterror/warn functions
 
-2001-04-13 02:06  opaque_ndst
+2001-04-13 00:06  opaque_ndst
 
 	* php_ext/: Makefile, ming.c, php_ming.h: added new SWFInput stuff
 
-2001-04-13 02:05  opaque_ndst
+2001-04-13 00:05  opaque_ndst
 
 	* ming.h, mingpp.h: fixed version number, added seterror/warn
-	  functions, SWFBitmap_fromInput
+	functions, SWFBitmap_fromInput
 
-2001-04-12 11:45  opaque_ndst
-
-	* CREDITS, Makefile, ming.i: [no log message]
-
-2001-04-12 11:43  opaque_ndst
+2001-04-12 09:43  opaque_ndst
 
 	* c++_ext/: README, test.cpp: updated to match new code
 
-2001-04-12 11:42  opaque_ndst
+2001-04-12 09:42  opaque_ndst
 
 	* py_ext/: Makefile, ming.py: updated for new stuff
 
-2001-04-12 11:41  opaque_ndst
-
-	* CHANGES, TODO: [no log message]
-
-2001-04-12 11:40  opaque_ndst
+2001-04-12 09:40  opaque_ndst
 
 	* src/test.c: random changes.  like it matters, anyway.  whatever.
 
-2001-04-12 11:40  opaque_ndst
+2001-04-12 09:40  opaque_ndst
 
 	* src/: movieclip.c, movieclip.h: changed 2000 to 2001
 
-2001-04-12 11:39  opaque_ndst
+2001-04-12 09:39  opaque_ndst
 
 	* src/ming.h: added global extern crap
 
-2001-04-12 11:38  opaque_ndst
+2001-04-12 09:38  opaque_ndst
 
 	* src/libming.h: ifdef wrapper for unistd.h
 
-2001-04-12 11:37  opaque_ndst
+2001-04-12 09:37  opaque_ndst
 
 	* src/movie.c: added SWFMovie_add(SWFBitmap) automagic shape
-	  wrapping convenience code
+	wrapping convenience code
 
-2001-04-12 11:36  opaque_ndst
+2001-04-12 09:36  opaque_ndst
 
 	* src/Makefile: added fill.o
 
-2001-04-12 11:35  opaque_ndst
+2001-04-12 09:35  opaque_ndst
 
 	* src/: blocklist.c, blocklist.h, displaylist.c, displaylist.h,
-	  movie.h, position.c, position.h, text_util.c, text_util.h:
-	  changed 2000 to 2001
+	movie.h, position.c, position.h, text_util.c, text_util.h: changed
+	2000 to 2001
 
-2001-04-12 11:34  opaque_ndst
+2001-04-12 09:34  opaque_ndst
 
 	* src/: shape_util.c, shape_util.h: removed annoying inline
-	  functions, added
+	functions, added
 
-2001-04-12 11:33  opaque_ndst
+2001-04-12 09:33  opaque_ndst
 
 	* src/: fill.c, fill.h: removed the annoying inline functions
 
-2001-04-12 11:32  opaque_ndst
+2001-04-12 09:32  opaque_ndst
 
 	* src/actioncompiler/: compile.c, compile.h, compileaction.c,
-	  main.c: small tweaks to make things compile easier under windows
+	main.c: small tweaks to make things compile easier under windows
 
-2001-04-12 11:31  opaque_ndst
+2001-04-12 09:31  opaque_ndst
 
 	* src/actioncompiler/swf5compiler.y: first steps toward a flash 5
-	  compiler.. still not really working
+	compiler.. still not really working
 
-2001-04-12 11:29  opaque_ndst
+2001-04-12 09:29  opaque_ndst
 
 	* src/blocks/: Makefile, action.c, action.h, bitmap.c, bitmap.h,
-	  block.c, block.h, blocktypes.h, browserfont.c, browserfont.h,
-	  button.c, button.h, character.c, character.h, cxform.c, cxform.h,
-	  fillstyle.c, fillstyle.h, font.c, font.h, fontinfo.c, fontinfo.h,
-	  gradient.c, gradient.h, libswf.h, linestyle.c, linestyle.h,
-	  loadfont.c, matrix.c, matrix.h, method.c, method.h, morph.c,
-	  morph.h, output.c, output.h, outputblock.c, outputblock.h,
-	  rect.c, rect.h, shape.c, shape.h, sound.c, sound.h, sprite.c,
-	  sprite.h, swf.h, text.c, text.h, textfield.c, textfield.h,
-	  ttffont.c, ttffont.h: changed 2000 to 2001
+	block.c, block.h, blocktypes.h, browserfont.c, browserfont.h,
+	button.c, button.h, character.c, character.h, cxform.c, cxform.h,
+	fillstyle.c, fillstyle.h, font.c, font.h, fontinfo.c, fontinfo.h,
+	gradient.c, gradient.h, libswf.h, linestyle.c, linestyle.h,
+	loadfont.c, matrix.c, matrix.h, method.c, method.h, morph.c,
+	morph.h, output.c, output.h, outputblock.c, outputblock.h, rect.c,
+	rect.h, shape.c, shape.h, sound.c, sound.h, sprite.c, sprite.h,
+	swf.h, text.c, text.h, textfield.c, textfield.h, ttffont.c,
+	ttffont.h: changed 2000 to 2001
 
-2001-04-12 11:29  opaque_ndst
+2001-04-12 09:29  opaque_ndst
 
 	* src/blocks/: dbl.c, dbl.h, jpeg.c, jpeg.h, mp3.c, soundstream.c,
-	  soundstream.h: updated to use SWFInput object
+	soundstream.h: updated to use SWFInput object
 
-2001-04-12 11:28  opaque_ndst
+2001-04-12 09:28  opaque_ndst
 
 	* src/blocks/: error.c, error.h: new flexible error methods
 
-2001-04-12 11:28  opaque_ndst
+2001-04-12 09:28  opaque_ndst
 
 	* src/blocks/: input.c, input.h: new datasource abstraction thingy
 
-2001-04-12 11:24  opaque_ndst
+2001-04-12 09:24  opaque_ndst
 
 	* perl_ext/: Changes, Exports.c, MANIFEST, Makefile.PL, README,
-	  SWF.pm, SWF.xs, TODO, perl_swf.h, typemap: first include
+	SWF.pm, SWF.xs, TODO, perl_swf.h, typemap: first include
 
-2001-04-12 11:21  opaque_ndst
+2001-04-12 09:21  opaque_ndst
 
 	* ming.h, mingpp.h: hey, here's the new header files..
 
-2001-04-12 11:20  opaque_ndst
+2001-04-12 09:20  opaque_ndst
 
 	* c++_ext/ming.h: moved to ../mingpp.h
 
-2001-04-12 11:19  opaque_ndst
+2001-04-12 09:19  opaque_ndst
 
 	* util/png2dbl.c: added byteorder fix
 
-2001-03-22 20:38  opaque_ndst
+2001-03-22 19:38  opaque_ndst
 
 	* src/blocks/text.c: now carries height from one record to the next
-	  when you addString, setColor, etc.
+	when you addString, setColor, etc.
 
-2001-03-17 05:20  opaque_ndst
+2001-03-17 04:20  opaque_ndst
 
 	* php_ext/Makefile: replaced include nonsense with `php-config
-	  --includes`
+	--includes`
 
-2001-03-17 05:15  opaque_ndst
+2001-03-17 04:15  opaque_ndst
 
 	* py_ext/Makefile: changed to static linkage with libming
 
-2001-03-17 05:15  opaque_ndst
-
-	* CHANGES, README, TODO: [no log message]
-
-2001-03-17 05:14  opaque_ndst
+2001-03-17 04:14  opaque_ndst
 
 	* src/ming.h: fixed version number
 
-2001-03-17 03:41  opaque_ndst
+2001-03-17 02:41  opaque_ndst
 
 	* Makefile: fixed ln so ming.h gets installed
 
-2001-03-17 00:42  opaque_ndst
+2001-03-16 23:42  opaque_ndst
 
 	* perl_ext/: Makefile, ming_wrap.c, ming_wrap.doc, mingc.pm,
-	  sample.pl: replaced with soheil's XS module
+	sample.pl: replaced with soheil's XS module
 
-2001-03-13 10:01  opaque_ndst
+2001-03-13 09:01  opaque_ndst
 
 	* src/blocks/text.c: removed superfluous textrecord 0/1 type
-	  jostling as per Raff's investigative elucidations.
+	jostling as per Raff's investigative elucidations.
 
-2001-03-13 09:51  opaque_ndst
+2001-03-13 08:51  opaque_ndst
 
 	* src/actioncompiler/: compiler.flex, compiler.y: added Raff's
-	  getURL1 function
+	getURL1 function
 
-2001-03-13 09:43  opaque_ndst
+2001-03-13 08:43  opaque_ndst
 
 	* src/shape_util.h: yanked SWFShape_drawGlyph
 
-2001-03-13 08:00  opaque_ndst
+2001-03-13 07:00  opaque_ndst
 
 	* ming.h: changed SWFFont_getStringWidth return to float
 
-2001-03-13 03:19  opaque_ndst
+2001-03-13 02:19  opaque_ndst
 
 	* ming.h, ming.i, src/blocks/font.c, src/blocks/font.h,
-	  src/blocks/shape.c, src/blocks/shape.h, src/blocks/swf.h: changed
-	  drawGlyph arg to unsigned char so 8-bit character codes work
+	src/blocks/shape.c, src/blocks/shape.h, src/blocks/swf.h: changed
+	drawGlyph arg to unsigned char so 8-bit character codes work
 
-2001-03-12 23:24  opaque_ndst
+2001-03-12 22:24  opaque_ndst
 
 	* src/blocks/textfield.h: fixed offbits to allow for
-	  SWFTEXTFIELD_HTML
+	SWFTEXTFIELD_HTML
 
-2001-03-12 22:02  opaque_ndst
+2001-03-12 21:02  opaque_ndst
 
 	* util/: listmp3.c, listswf.c: added frameLen tweak
 
-2001-03-12 22:01  opaque_ndst
+2001-03-12 21:01  opaque_ndst
 
 	* util/read.c: removed damn assert(0) to quell dumping
 
-2001-03-12 22:00  opaque_ndst
+2001-03-12 21:00  opaque_ndst
 
 	* py_ext/ming.py: added Ming_setScale, Ming_setCubicThreshold, and
-	  flags arg to SWFTextField()
+	flags arg to SWFTextField()
 
-2001-03-12 21:58  opaque_ndst
+2001-03-12 20:58  opaque_ndst
 
 	* php_ext/: ming.c, php_ming.h: added Ming_setScale, changed scalar
-	  args to floats
+	args to floats
 
-2001-03-12 21:57  opaque_ndst
+2001-03-12 20:57  opaque_ndst
 
 	* ming.h, ming.i: changed scalar args to floats, cleaned out some
-	  non-public functions
+	non-public functions
 
-2001-03-12 21:55  opaque_ndst
-
-	* TODO: [no log message]
-
-2001-03-12 21:55  opaque_ndst
+2001-03-12 20:55  opaque_ndst
 
 	* src/: blocklist.c, movie.c, movie.h: changed malloc/memset to
-	  calloc, changed scalar args to floats and added scaling code
+	calloc, changed scalar args to floats and added scaling code
 
-2001-03-12 21:54  opaque_ndst
+2001-03-12 20:54  opaque_ndst
 
 	* src/ming.c: added Ming_setScale, moved Ming_setCubicThreshold
-	  here
+	here
 
-2001-03-12 21:53  opaque_ndst
+2001-03-12 20:53  opaque_ndst
 
 	* src/: fill.h, position.c, position.h: changed scalar args to
-	  floats, adding scaling code
+	floats, adding scaling code
 
-2001-03-12 21:50  opaque_ndst
+2001-03-12 20:50  opaque_ndst
 
 	* src/: displaylist.c, displaylist.h: include [empty] matrix for
-	  items left at (0,0)- some things don't seem to show up otherwise
+	items left at (0,0)- some things don't seem to show up otherwise
 
-2001-03-12 21:49  opaque_ndst
+2001-03-12 20:49  opaque_ndst
 
 	* src/: shape_util.c, shape_util.h: wrapped all metric-related
-	  functions with scaled versions
+	functions with scaled versions
 
-2001-03-12 21:48  opaque_ndst
+2001-03-12 20:48  opaque_ndst
 
 	* src/Makefile: added text_util
 
-2001-03-12 21:47  opaque_ndst
+2001-03-12 20:47  opaque_ndst
 
 	* src/blocks/: block.c, browserfont.c, button.c, character.c,
-	  cxform.c, dbl.c, fontinfo.c, gradient.c, jpeg.c, loadfont.c,
-	  matrix.c, morph.c, output.c, outputblock.c, rect.c, sound.c,
-	  sprite.c: changed malloc/memset to calloc, assigning NULL to
-	  pointers manually now for portability's sake
+	cxform.c, dbl.c, fontinfo.c, gradient.c, jpeg.c, loadfont.c,
+	matrix.c, morph.c, output.c, outputblock.c, rect.c, sound.c,
+	sprite.c: changed malloc/memset to calloc, assigning NULL to
+	pointers manually now for portability's sake
 
-2001-03-12 21:46  opaque_ndst
+2001-03-12 20:46  opaque_ndst
 
 	* src/blocks/: mp3.c, soundstream.c: tweaked mp3 frame size
-	  calculation, seems to be more compatible
+	calculation, seems to be more compatible
 
-2001-03-12 21:45  opaque_ndst
+2001-03-12 20:45  opaque_ndst
 
 	* src/blocks/: read.c, shape.c, shape.h: added "scaled" to
-	  metric-related function names, moved cubic bezier and glyph
-	  drawing code down here
+	metric-related function names, moved cubic bezier and glyph drawing
+	code down here
 
-2001-03-12 21:44  opaque_ndst
+2001-03-12 20:44  opaque_ndst
 
 	* src/blocks/: font.c, font.h, swf.h, text.c, text.h, textfield.c,
-	  textfield.h: added "scaled" to all metric-related function names
+	textfield.h: added "scaled" to all metric-related function names
 
-2001-03-12 21:41  opaque_ndst
+2001-03-12 20:41  opaque_ndst
 
 	* src/read.c: moved down to blocks along with drawGlyph
 
-2001-03-12 21:41  opaque_ndst
+2001-03-12 20:41  opaque_ndst
 
 	* src/: text_util.c, text_util.h: scales text/font/textfield
-	  metrics by Ming_scale
+	metrics by Ming_scale
 
-2001-03-07 05:14  opaque_ndst
+2001-03-07 04:14  opaque_ndst
 
 	* php_ext/ming.c: fixed stupid setLineSpacing/setIndentation
-	  mistake and goof in streamMp3(FILE *)
+	mistake and goof in streamMp3(FILE *)
 
-2001-03-05 02:36  opaque_ndst
+2001-03-05 01:36  opaque_ndst
 
 	* src/blocks/output.c: writeString now stops on null, not on < 0,
-	  so we can output 8-bit chars.  oops.
+	so we can output 8-bit chars.  oops.
 
-2001-03-05 02:35  opaque_ndst
+2001-03-05 01:35  opaque_ndst
 
 	* py_ext/ming.py: saved a reference to font in
-	  SWFTextField::setFont so that it doesn't get freed if you do
-	  t.setFont(SWFFont("boink"))
+	SWFTextField::setFont so that it doesn't get freed if you do
+	t.setFont(SWFFont("boink"))
 
-2001-02-27 07:16  opaque_ndst
+2001-02-27 06:16  opaque_ndst
 
 	* src/blocks/shape.c: added check for adding empty line/curve
 
-2001-02-26 22:24  opaque_ndst
+2001-02-26 21:24  opaque_ndst
 
 	* py_ext/Makefile: added ming.pyc to make clean
 
-2001-02-22 07:10  raff
+2001-02-22 06:10  raff
 
 	* util/: makefdb.c, read.c, read.h: Ming currently doesn't support
-	  wide-character fonts, but maybe we don't want to abort the
-	  program run, since there may be other fonts we want to extract.
+	wide-character fonts, but maybe we don't want to abort the program
+	run, since there may be other fonts we want to extract.
+	
+	The "fix" is quite an hack: let the program do whatever it normally
+	does, but at the end remove the file, to avoid that using it may
+	crash the library.
 
-	  The "fix" is quite an hack: let the program do whatever it
-	  normally does, but at the end remove the file, to avoid that
-	  using it may crash the library.
-
-2001-02-21 23:47  opaque_ndst
+2001-02-21 22:47  opaque_ndst
 
 	* TODO: added automatic bitmap-to-shape
 
-2001-02-21 23:46  opaque_ndst
+2001-02-21 22:46  opaque_ndst
 
 	* py_ext/Makefile: added dependency on ../libming.a for
-	  mingcmodule.so
+	mingcmodule.so
 
-2001-02-21 23:46  opaque_ndst
+2001-02-21 22:46  opaque_ndst
 
 	* py_ext/.cvsignore: added ming.pyc
 
-2001-02-21 23:45  opaque_ndst
+2001-02-21 22:45  opaque_ndst
 
 	* src/blocks/text.c: check for string == NULL before strlen
 
-2001-02-21 23:27  opaque_ndst
+2001-02-21 22:27  opaque_ndst
 
 	* src/blocks/dbl.c: Now grabs width and height from dbl file!
 
-2001-02-17 04:27  opaque_ndst
+2001-02-17 03:27  opaque_ndst
 
 	* py_ext/.cvsignore: added ming_wrap.c and ming_wrap.doc
 
-2001-02-17 04:25  opaque_ndst
+2001-02-17 03:25  opaque_ndst
 
 	* py_ext/: ming_wrap.c, ming_wrap.doc: removed swig-generated files
 
-2001-02-17 04:24  opaque_ndst
+2001-02-17 03:24  opaque_ndst
 
 	* util/swftophp.c: added indent arg to decompileAction calls
 
-2001-02-17 04:23  opaque_ndst
+2001-02-17 03:23  opaque_ndst
 
 	* src/actioncompiler/.cvsignore: added test
 
-2001-02-17 04:19  opaque_ndst
+2001-02-17 03:19  opaque_ndst
 
 	* ming.h, ming.i, src/movie.h: added -1 return from SWFMovie_save
-	  if named file doesn't exist
+	if named file doesn't exist
 
-2001-02-17 04:18  opaque_ndst
+2001-02-17 03:18  opaque_ndst
 
 	* ming_wrap.c: removed generated file
 
-2001-02-17 04:17  opaque_ndst
+2001-02-17 03:17  opaque_ndst
 
 	* .cvsignore: added ming_wrap.c generated file
 
-2001-02-17 04:17  opaque_ndst
+2001-02-17 03:17  opaque_ndst
 
 	* .cvsignore, c++_ext/.cvsignore, perl_ext/.cvsignore,
-	  php_ext/.cvsignore, py_ext/.cvsignore, rb_ext/.cvsignore,
-	  src/.cvsignore, src/actioncompiler/.cvsignore,
-	  src/blocks/.cvsignore: Dave learns what .cvsignore files are for
+	php_ext/.cvsignore, py_ext/.cvsignore, rb_ext/.cvsignore,
+	src/.cvsignore, src/actioncompiler/.cvsignore,
+	src/blocks/.cvsignore: Dave learns what .cvsignore files are for
 
-2001-02-17 04:11  opaque_ndst
+2001-02-17 03:11  opaque_ndst
 
 	* util/.cvsignore: Dave discovers what .cvsignore files are for..
 
-2001-02-16 23:23  opaque_ndst
+2001-02-16 22:23  opaque_ndst
 
 	* php_ext/Makefile: Fixed botched CFILES define.  oops.
 
-2001-02-15 22:03  opaque_ndst
+2001-02-15 21:03  opaque_ndst
 
 	* src/actioncompiler/.cvsignore: added generated files lex.yy.c
-	  compiler.tab.c compiler.tab.h
+	compiler.tab.c compiler.tab.h
 
-2001-02-15 22:01  opaque_ndst
+2001-02-15 21:01  opaque_ndst
 
 	* src/actioncompiler/: compiler.tab.c, compiler.tab.h, lex.yy.c:
-	  removed bison/flex-generated files
+	removed bison/flex-generated files
 
-2001-02-15 21:58  opaque_ndst
+2001-02-15 20:58  opaque_ndst
 
 	* src/: movie.c, movie.h: added SWFMovie_addBlock at Adam
-	  Cohen-Rose's suggestion.  This helps reduce movie's dependency on
-	  blockList.
+	Cohen-Rose's suggestion.  This helps reduce movie's dependency on
+	blockList.
 
-2001-02-13 00:15  opaque_ndst
+2001-02-12 23:15  opaque_ndst
 
 	* php_ext/ming.dsp: MS dev studio project file.  From php's
-	  ext/ming
+	ext/ming
 
-2001-02-08 22:41  opaque_ndst
+2001-02-08 21:41  opaque_ndst
 
 	* php_ext/config.m4: Changed withval to PHP_MING as to not hose the
-	  php build
+	php build
 
-2001-02-08 22:40  opaque_ndst
+2001-02-08 21:40  opaque_ndst
 
 	* Makefile: Changed to "install" method for RPM sake
 
-2001-02-01 02:00  opaque_ndst
+2001-02-01 01:00  opaque_ndst
 
 	* CHANGES, CREDITS, LICENSE, Makefile, README, TODO, ming.h,
-	  ming.i, ming_wrap.c, php_ext/Makefile.in, php_ext/config.m4,
-	  php_ext/Makefile, php_ext/README, php_ext/make_module.sh,
-	  php_ext/ming.c, php_ext/php_ming.h, py_ext/INSTALL,
-	  py_ext/Makefile, py_ext/README, py_ext/TODO, py_ext/ming.py,
-	  py_ext/ming_wrap.c, py_ext/ming_wrap.doc, py_ext/mingc.def,
-	  py_ext/shape.py, py_ext/test.py, src/Makefile, src/blocklist.c,
-	  src/blocklist.h, src/blocktypes.h, src/displaylist.c,
-	  src/displaylist.h, src/libming.h, src/ming.h, src/movie.c,
-	  src/movie.h, src/movieclip.c, src/movieclip.h, src/fill.h,
-	  src/ming.c, src/position.c, src/position.h, src/read.c,
-	  src/shape_util.c, src/shape_util.h, src/test.c,
-	  src/actioncompiler/Makefile, src/actioncompiler/action.h,
-	  src/actioncompiler/compile.c, src/actioncompiler/compile.h,
-	  src/actioncompiler/compileaction.c,
-	  src/actioncompiler/compiler.flex, src/actioncompiler/compiler.y,
-	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
-	  src/actioncompiler/compiler.tab.c,
-	  src/actioncompiler/compiler.tab.h, src/actioncompiler/lex.yy.c,
-	  src/blocks/Makefile, src/blocks/action.c, src/blocks/action.h,
-	  src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
-	  src/blocks/blocktypes.h, src/blocks/browserfont.c,
-	  src/blocks/browserfont.h, src/blocks/button.c,
-	  src/blocks/button.h, src/blocks/character.c,
-	  src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
-	  src/blocks/font.c, src/blocks/font.h, src/blocks/fontinfo.c,
-	  src/blocks/fontinfo.h, src/blocks/linestyle.c, src/blocks/jpeg.c,
-	  src/blocks/jpeg.h, src/blocks/libswf.h, src/blocks/loadfont.c,
-	  src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/mp3.c, src/blocks/output.c,
-	  src/blocks/output.h, src/blocks/outputblock.c,
-	  src/blocks/outputblock.h, src/blocks/rect.c, src/blocks/rect.h,
-	  src/blocks/shape.c, src/blocks/shape.h, src/blocks/sound.c,
-	  src/blocks/sound.h, src/blocks/soundstream.c,
-	  src/blocks/soundstream.h, src/blocks/sprite.c,
-	  src/blocks/sprite.h, src/blocks/swf.h, src/blocks/text.c,
-	  src/blocks/bitmap.c, src/blocks/dbl.c, src/blocks/dbl.h,
-	  src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/text.h,
-	  src/blocks/textfield.c, src/blocks/textfield.h,
-	  src/blocks/ttffont.c, src/blocks/ttffont.h,
-	  src/blocks/fillstyle.c, src/blocks/fillstyle.h,
-	  src/blocks/linestyle.h, src/blocks/morph.c, src/blocks/morph.h,
-	  util/Makefile, util/README, util/TODO, util/action.h,
-	  util/bindump.c, util/blocktypes.c, util/blocktypes.h,
-	  util/decompile.c, util/decompile.h, util/gif2mask.c,
-	  util/hexdump.c, util/libswf.h, util/listfdb.c, util/listjpeg.c,
-	  util/listmp3.c, util/listswf.c, util/makefdb.c, util/output.h,
-	  util/read.c, util/read.h, util/swftophp.c, util/swftophp.h,
-	  perl_ext/Makefile, perl_ext/sample.pl, util/gif2dbl.c,
-	  util/png2dbl.c, c++_ext/Makefile, c++_ext/test.cpp,
-	  perl_ext/README, perl_ext/ming_wrap.c, perl_ext/ming_wrap.doc,
-	  perl_ext/mingc.pm, rb_ext/README, rb_ext/depend,
-	  rb_ext/extconf.rb, rb_ext/ming.rb, rb_ext/shape.rb,
-	  rb_ext/test.rb, c++_ext/README, c++_ext/ming.h: Initial revision
+	ming.i, ming_wrap.c, php_ext/Makefile.in, php_ext/config.m4,
+	php_ext/Makefile, php_ext/README, php_ext/make_module.sh,
+	php_ext/ming.c, php_ext/php_ming.h, py_ext/INSTALL,
+	py_ext/Makefile, py_ext/README, py_ext/TODO, py_ext/ming.py,
+	py_ext/ming_wrap.c, py_ext/ming_wrap.doc, py_ext/mingc.def,
+	py_ext/shape.py, py_ext/test.py, src/Makefile, src/blocklist.c,
+	src/blocklist.h, src/blocktypes.h, src/displaylist.c,
+	src/displaylist.h, src/libming.h, src/ming.h, src/movie.c,
+	src/movie.h, src/movieclip.c, src/movieclip.h, src/fill.h,
+	src/ming.c, src/position.c, src/position.h, src/read.c,
+	src/shape_util.c, src/shape_util.h, src/test.c,
+	src/actioncompiler/Makefile, src/actioncompiler/action.h,
+	src/actioncompiler/compile.c, src/actioncompiler/compile.h,
+	src/actioncompiler/compileaction.c,
+	src/actioncompiler/compiler.flex, src/actioncompiler/compiler.y,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/actioncompiler/compiler.tab.c,
+	src/actioncompiler/compiler.tab.h, src/actioncompiler/lex.yy.c,
+	src/blocks/Makefile, src/blocks/action.c, src/blocks/action.h,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/browserfont.h, src/blocks/button.c, src/blocks/button.h,
+	src/blocks/character.c, src/blocks/character.h,
+	src/blocks/cxform.c, src/blocks/cxform.h, src/blocks/font.c,
+	src/blocks/font.h, src/blocks/fontinfo.c, src/blocks/fontinfo.h,
+	src/blocks/linestyle.c, src/blocks/jpeg.c, src/blocks/jpeg.h,
+	src/blocks/libswf.h, src/blocks/loadfont.c, src/blocks/matrix.c,
+	src/blocks/matrix.h, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/mp3.c, src/blocks/output.c, src/blocks/output.h,
+	src/blocks/outputblock.c, src/blocks/outputblock.h,
+	src/blocks/rect.c, src/blocks/rect.h, src/blocks/shape.c,
+	src/blocks/shape.h, src/blocks/sound.c, src/blocks/sound.h,
+	src/blocks/soundstream.c, src/blocks/soundstream.h,
+	src/blocks/sprite.c, src/blocks/sprite.h, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/bitmap.c, src/blocks/dbl.c,
+	src/blocks/dbl.h, src/blocks/gradient.c, src/blocks/gradient.h,
+	src/blocks/text.h, src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h, src/blocks/fillstyle.c,
+	src/blocks/fillstyle.h, src/blocks/linestyle.h, src/blocks/morph.c,
+	src/blocks/morph.h, util/Makefile, util/README, util/TODO,
+	util/action.h, util/bindump.c, util/blocktypes.c,
+	util/blocktypes.h, util/decompile.c, util/decompile.h,
+	util/gif2mask.c, util/hexdump.c, util/libswf.h, util/listfdb.c,
+	util/listjpeg.c, util/listmp3.c, util/listswf.c, util/makefdb.c,
+	util/output.h, util/read.c, util/read.h, util/swftophp.c,
+	util/swftophp.h, perl_ext/Makefile, perl_ext/sample.pl,
+	util/gif2dbl.c, util/png2dbl.c, c++_ext/Makefile, c++_ext/test.cpp,
+	perl_ext/README, perl_ext/ming_wrap.c, perl_ext/ming_wrap.doc,
+	perl_ext/mingc.pm, rb_ext/README, rb_ext/depend, rb_ext/extconf.rb,
+	rb_ext/ming.rb, rb_ext/shape.rb, rb_ext/test.rb, c++_ext/README,
+	c++_ext/ming.h: Initial revision
 
-2001-02-01 02:00  opaque_ndst
+2001-02-01 01:00  opaque_ndst
 
 	* CHANGES, CREDITS, LICENSE, Makefile, README, TODO, ming.h,
-	  ming.i, ming_wrap.c, php_ext/Makefile.in, php_ext/config.m4,
-	  php_ext/Makefile, php_ext/README, php_ext/make_module.sh,
-	  php_ext/ming.c, php_ext/php_ming.h, py_ext/INSTALL,
-	  py_ext/Makefile, py_ext/README, py_ext/TODO, py_ext/ming.py,
-	  py_ext/ming_wrap.c, py_ext/ming_wrap.doc, py_ext/mingc.def,
-	  py_ext/shape.py, py_ext/test.py, src/Makefile, src/blocklist.c,
-	  src/blocklist.h, src/blocktypes.h, src/displaylist.c,
-	  src/displaylist.h, src/libming.h, src/ming.h, src/movie.c,
-	  src/movie.h, src/movieclip.c, src/movieclip.h, src/fill.h,
-	  src/ming.c, src/position.c, src/position.h, src/read.c,
-	  src/shape_util.c, src/shape_util.h, src/test.c,
-	  src/actioncompiler/Makefile, src/actioncompiler/action.h,
-	  src/actioncompiler/compile.c, src/actioncompiler/compile.h,
-	  src/actioncompiler/compileaction.c,
-	  src/actioncompiler/compiler.flex, src/actioncompiler/compiler.y,
-	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
-	  src/actioncompiler/compiler.tab.c,
-	  src/actioncompiler/compiler.tab.h, src/actioncompiler/lex.yy.c,
-	  src/blocks/Makefile, src/blocks/action.c, src/blocks/action.h,
-	  src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
-	  src/blocks/blocktypes.h, src/blocks/browserfont.c,
-	  src/blocks/browserfont.h, src/blocks/button.c,
-	  src/blocks/button.h, src/blocks/character.c,
-	  src/blocks/character.h, src/blocks/cxform.c, src/blocks/cxform.h,
-	  src/blocks/font.c, src/blocks/font.h, src/blocks/fontinfo.c,
-	  src/blocks/fontinfo.h, src/blocks/linestyle.c, src/blocks/jpeg.c,
-	  src/blocks/jpeg.h, src/blocks/libswf.h, src/blocks/loadfont.c,
-	  src/blocks/matrix.c, src/blocks/matrix.h, src/blocks/method.c,
-	  src/blocks/method.h, src/blocks/mp3.c, src/blocks/output.c,
-	  src/blocks/output.h, src/blocks/outputblock.c,
-	  src/blocks/outputblock.h, src/blocks/rect.c, src/blocks/rect.h,
-	  src/blocks/shape.c, src/blocks/shape.h, src/blocks/sound.c,
-	  src/blocks/sound.h, src/blocks/soundstream.c,
-	  src/blocks/soundstream.h, src/blocks/sprite.c,
-	  src/blocks/sprite.h, src/blocks/swf.h, src/blocks/text.c,
-	  src/blocks/bitmap.c, src/blocks/dbl.c, src/blocks/dbl.h,
-	  src/blocks/gradient.c, src/blocks/gradient.h, src/blocks/text.h,
-	  src/blocks/textfield.c, src/blocks/textfield.h,
-	  src/blocks/ttffont.c, src/blocks/ttffont.h,
-	  src/blocks/fillstyle.c, src/blocks/fillstyle.h,
-	  src/blocks/linestyle.h, src/blocks/morph.c, src/blocks/morph.h,
-	  util/Makefile, util/README, util/TODO, util/action.h,
-	  util/bindump.c, util/blocktypes.c, util/blocktypes.h,
-	  util/decompile.c, util/decompile.h, util/gif2mask.c,
-	  util/hexdump.c, util/libswf.h, util/listfdb.c, util/listjpeg.c,
-	  util/listmp3.c, util/listswf.c, util/makefdb.c, util/output.h,
-	  util/read.c, util/read.h, util/swftophp.c, util/swftophp.h,
-	  perl_ext/Makefile, perl_ext/sample.pl, util/gif2dbl.c,
-	  util/png2dbl.c, c++_ext/Makefile, c++_ext/test.cpp,
-	  perl_ext/README, perl_ext/ming_wrap.c, perl_ext/ming_wrap.doc,
-	  perl_ext/mingc.pm, rb_ext/README, rb_ext/depend,
-	  rb_ext/extconf.rb, rb_ext/ming.rb, rb_ext/shape.rb,
-	  rb_ext/test.rb, c++_ext/README, c++_ext/ming.h: initial import
+	ming.i, ming_wrap.c, php_ext/Makefile.in, php_ext/config.m4,
+	php_ext/Makefile, php_ext/README, php_ext/make_module.sh,
+	php_ext/ming.c, php_ext/php_ming.h, py_ext/INSTALL,
+	py_ext/Makefile, py_ext/README, py_ext/TODO, py_ext/ming.py,
+	py_ext/ming_wrap.c, py_ext/ming_wrap.doc, py_ext/mingc.def,
+	py_ext/shape.py, py_ext/test.py, src/Makefile, src/blocklist.c,
+	src/blocklist.h, src/blocktypes.h, src/displaylist.c,
+	src/displaylist.h, src/libming.h, src/ming.h, src/movie.c,
+	src/movie.h, src/movieclip.c, src/movieclip.h, src/fill.h,
+	src/ming.c, src/position.c, src/position.h, src/read.c,
+	src/shape_util.c, src/shape_util.h, src/test.c,
+	src/actioncompiler/Makefile, src/actioncompiler/action.h,
+	src/actioncompiler/compile.c, src/actioncompiler/compile.h,
+	src/actioncompiler/compileaction.c,
+	src/actioncompiler/compiler.flex, src/actioncompiler/compiler.y,
+	src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	src/actioncompiler/compiler.tab.c,
+	src/actioncompiler/compiler.tab.h, src/actioncompiler/lex.yy.c,
+	src/blocks/Makefile, src/blocks/action.c, src/blocks/action.h,
+	src/blocks/bitmap.h, src/blocks/block.c, src/blocks/block.h,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/browserfont.h, src/blocks/button.c, src/blocks/button.h,
+	src/blocks/character.c, src/blocks/character.h,
+	src/blocks/cxform.c, src/blocks/cxform.h, src/blocks/font.c,
+	src/blocks/font.h, src/blocks/fontinfo.c, src/blocks/fontinfo.h,
+	src/blocks/linestyle.c, src/blocks/jpeg.c, src/blocks/jpeg.h,
+	src/blocks/libswf.h, src/blocks/loadfont.c, src/blocks/matrix.c,
+	src/blocks/matrix.h, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/mp3.c, src/blocks/output.c, src/blocks/output.h,
+	src/blocks/outputblock.c, src/blocks/outputblock.h,
+	src/blocks/rect.c, src/blocks/rect.h, src/blocks/shape.c,
+	src/blocks/shape.h, src/blocks/sound.c, src/blocks/sound.h,
+	src/blocks/soundstream.c, src/blocks/soundstream.h,
+	src/blocks/sprite.c, src/blocks/sprite.h, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/bitmap.c, src/blocks/dbl.c,
+	src/blocks/dbl.h, src/blocks/gradient.c, src/blocks/gradient.h,
+	src/blocks/text.h, src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h, src/blocks/fillstyle.c,
+	src/blocks/fillstyle.h, src/blocks/linestyle.h, src/blocks/morph.c,
+	src/blocks/morph.h, util/Makefile, util/README, util/TODO,
+	util/action.h, util/bindump.c, util/blocktypes.c,
+	util/blocktypes.h, util/decompile.c, util/decompile.h,
+	util/gif2mask.c, util/hexdump.c, util/libswf.h, util/listfdb.c,
+	util/listjpeg.c, util/listmp3.c, util/listswf.c, util/makefdb.c,
+	util/output.h, util/read.c, util/read.h, util/swftophp.c,
+	util/swftophp.h, perl_ext/Makefile, perl_ext/sample.pl,
+	util/gif2dbl.c, util/png2dbl.c, c++_ext/Makefile, c++_ext/test.cpp,
+	perl_ext/README, perl_ext/ming_wrap.c, perl_ext/ming_wrap.doc,
+	perl_ext/mingc.pm, rb_ext/README, rb_ext/depend, rb_ext/extconf.rb,
+	rb_ext/ming.rb, rb_ext/shape.rb, rb_ext/test.rb, c++_ext/README,
+	c++_ext/ming.h: initial import
 
