@@ -4,17 +4,92 @@
 # it under the same terms as Perl itself.
 # ====================================================================
 
-package SWF;
+# $Author$
+# $Id$
 
+package SWF;
 use strict;
-use vars qw($VERSION @ISA);
+use Carp 'croak';
 
 require DynaLoader;
-@ISA = qw(DynaLoader);
+@SWF::ISA = qw(DynaLoader);
 
-$VERSION = '0.01b';
+$SWF::VERSION = '0.01b';
 
-bootstrap SWF $VERSION;
+my @EXPORT_OK = qw(Action Bitmap Button DisplayItem Fill Font Gradient Morph Movie Shape Sound Sprite Text TextField);
+
+bootstrap SWF $SWF::VERSION;
+
+
+sub import{
+    my $self = shift;
+    my @modules = @_;
+
+    my $package = (caller())[0];
+    my @failed;
+
+    foreach my $module (@modules) {
+	my $code = "package $package; ";
+	if($module eq ':ALL'){
+	    map{$code .= "use SWF::$_; "} @EXPORT_OK;
+	}else{
+	    $code .= "use SWF::$module;";
+	}
+
+	eval($code);
+	if ($@) {
+	    warn $@;
+	    push(@failed, $module);
+	}
+    }
+    @failed and croak "could not import qw(" . join(' ', @failed) . ")";
+}
+
 
 1;
 __END__
+
+
+=head1 NAME
+
+SWF: an autoloadable interface module for Ming - a library for generating 
+SWF ("Flash") format movies.
+
+=head1 SYNOPSIS
+
+ # Don't import other modules
+ use SWF;              
+ or use SWF();
+
+ # import all SWF modules
+ use SWF qw(:ALL);
+
+ # import SWF::Shape and SWF::Movie only.
+ use SWF qw(Shape Movie);
+
+
+=head1 DESCRIPTION
+
+By default, SWF doesn't import other SWF classes. You may, however, instruct SWF to import all modules by using the following syntax:
+
+            use SWF qw(:ALL);
+
+=head1 METHODS
+
+=over 4
+
+=item SWF::setScale($scale);
+
+Sets scale to $scale.
+
+=back
+
+=head1 AUTHOR
+
+Soheil Seyfaie (soheil@netcom.ca).
+
+=head1 SEE ALSO
+
+SWF, SWF::Action, SWF::Button, SWF::Action, SWF::Bitmap, SWF::Button, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::Text, SWF::TextField.
+
+=cut
