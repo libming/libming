@@ -2,19 +2,27 @@
 #CC = gcc -O5
 CC = gcc -g -Wall
 
+#PREFIX = /usr/local
 PREFIX = /usr
 LIBDIR = ${PREFIX}/lib
 INCLUDEDIR = ${PREFIX}/include
 
-all: dynamic
+all: dynamic #static
 
-install: dynamic
+install: install-common install-dynamic #install-static
+
+install-common:
 	install -d ${LIBDIR}
 	install -d ${INCLUDEDIR}
-	install libming.so ${LIBDIR}/libming.so.0.2
 	install ming.h ${INCLUDEDIR}
 	install mingpp.h ${INCLUDEDIR}
+
+install-dynamic: dynamic
+	install libming.so ${LIBDIR}/libming.so.0.2
 	(cd ${LIBDIR} && ln -fs libming.so.0.2 libming.so.0 && ln -fs libming.so.0 libming.so)
+
+install-static: static
+	install libming.a ${LIBDIR}/libming.a
 
 dynamic:
 	cd src && make dynamic
