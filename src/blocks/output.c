@@ -273,7 +273,7 @@ void SWFOutput_writeString(SWFOutput out, unsigned char *string)
 
   if(string)
   {
-    while((c=*(string++)) > 0)
+    while((c=*(string++)) != 0)
       SWFOutput_writeUInt8(out, c);
   }
 
