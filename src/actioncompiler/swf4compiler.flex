@@ -33,6 +33,15 @@ static int lexBufferInput(char *buf, int max_size)
   return l;
 }
 
+        /* very inefficient method of unescaping strings */
+static void unescape(char *buf)
+{
+  char *p, *p1;
+
+  for (p1=buf; (p=strchr(p1, '\\')) != 0; p1 = p+1)
+    strcpy(p, p+1);
+}
+
 void swf4ParseInit(char *script, int debug)
 {
   checkByteOrder();
@@ -124,10 +133,12 @@ this			{ count();      return THIS;	}
 
 \"(\\.|[^\\"])*\"	{ count();	swf4lval.str = strdup(yytext+1);
 					swf4lval.str[strlen(swf4lval.str)-1]=0;
+                                        unescape(swf4lval.str);
 					return STRING;		}
 
 \'(\\.|[^\\'])*\'	{ count();	swf4lval.str = strdup(yytext+1);
 					swf4lval.str[strlen(swf4lval.str)-1]=0;
+                                        unescape(swf4lval.str);
 					return STRING; 		}
 
 \"(\\.|[^\\"])*$	{ count();	swf4lval.str = strdup("");
