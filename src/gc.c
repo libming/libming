@@ -62,7 +62,7 @@ ming_gc_remove_node(mem_node *node)
 void
 Ming_collectGarbage()
 {
-	mem_node *ptr, *ptr1;
+	mem_node *ptr;
 #if DEBUG
 	printf("GC called\n");
 	dumpNodeList();
