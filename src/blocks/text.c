@@ -179,6 +179,7 @@ void SWFText_setFont(SWFText text, SWFBlock font)
   if(textRecord->string != NULL)
   {
     textRecord->next = newSWFTextRecord();
+    textRecord->next->height = textRecord->height;
     textRecord = textRecord->next;
     text->currentRecord = textRecord;
   }
@@ -229,6 +230,7 @@ void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a)
     textRecord->next->isBrowserFont = textRecord->isBrowserFont;
     textRecord->next->font = textRecord->font;
     textRecord->next->spacing = textRecord->spacing;
+    textRecord->next->height = textRecord->height;
     textRecord = textRecord->next;
     text->currentRecord = textRecord;
   }
@@ -250,6 +252,7 @@ void SWFText_scaledMoveTo(SWFText text, int x, int y)
     textRecord->next->isBrowserFont = textRecord->isBrowserFont;
     textRecord->next->font = textRecord->font;
     textRecord->next->spacing = textRecord->spacing;
+    textRecord->next->height = textRecord->height;
     textRecord = textRecord->next;
     text->currentRecord = textRecord;
   }
@@ -289,6 +292,7 @@ void SWFText_addString(SWFText text, const char *string, int *advance)
     textRecord->next = newSWFTextRecord();
     textRecord->next->isBrowserFont = textRecord->isBrowserFont;
     textRecord->next->font = textRecord->font;
+    textRecord->next->height = textRecord->height;
     textRecord = textRecord->next;
     text->currentRecord = textRecord;
   }
