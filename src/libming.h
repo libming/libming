@@ -24,4 +24,4 @@
   #include <unistd.h>
 #endif
 
-#endif MING_LIBMING_INCLUDED
+#endif /* MING_LIBMING_INCLUDED */
