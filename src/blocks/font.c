@@ -173,7 +173,7 @@ void destroySWFFont(SWFBlock block)
 
 SWFFont newSWFFont()
 {
-  SWFFont font = calloc(sizeof(struct SWFFont_s));
+  SWFFont font = calloc(1,sizeof(struct SWFFont_s));
 
   SWFCharacterInit((SWFCharacter)font);
 
