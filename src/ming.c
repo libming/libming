@@ -26,3 +26,14 @@ void Ming_setCubicThreshold(int num)
 {
   Ming_cubicThreshold = num;
 }
+
+
+void Ming_setWarnFunction(void (*warn)(char *msg, ...))
+{
+  setSWFWarnFunction(warn);
+}
+
+void Ming_setErrorFunction(void (*error)(char *msg, ...))
+{
+  setSWFErrorFunction(error);
+}
