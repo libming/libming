@@ -29,6 +29,7 @@
 #ifndef SWF_LIBMING_H_INCLUDED
 #define SWF_LIBMING_H_INCLUDED
 
+
 #include "ming.h"
 #include "ming_config.h"
 
@@ -38,6 +39,7 @@ extern int Ming_cubicThreshold;
 extern int SWF_versionNum;
 extern int SWF_compression;
 extern float Ming_scale;
+extern void fileOutputMethod(byte b, void *data);
 
 
 typedef unsigned char BOOL;

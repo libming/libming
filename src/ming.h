@@ -108,7 +108,7 @@ void Ming_setErrorFunction(void (*error)(const char *msg, ...));
 /* a generic output method.  specific instances dump output to file,
    send to stdout, etc. */
 typedef void (*SWFByteOutputMethod)(byte b, void *data);
-void fileOutputMethod(byte b, void *data);
+//void fileOutputMethod(byte b, void *data);
 
 
 /***** SWFBlock *****/
@@ -746,4 +746,5 @@ SWFCharacter SWFMovie_importCharacter(SWFMovie movie, const char *filename, cons
 }
 #endif
 
-#endif
+#endif /* SWF_MING_H_INCLUDED */
+
