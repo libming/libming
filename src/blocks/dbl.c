@@ -111,7 +111,7 @@ SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input)
 void destroySWFDBLBitmap_andInputs(SWFBlock block)
 {
   destroySWFInput(((SWFDBLBitmap)block)->input);
-  destroySWFJpegBitmap(block);
+  destroySWFDBLBitmap(block);
 }
 
 SWFDBLBitmap newSWFDBLBitmap(FILE *f)
