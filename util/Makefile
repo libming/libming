@@ -1,12 +1,13 @@
 include ../config.make
 
-#CC = gcc -g -pg -a	# profiling flags
-#CC = gcc -O5
-CC = gcc -g -Wall
-
-PREFIX = ${DESTDIR}/usr
+PREFIX = $(DESTDIR)/usr
 # Default binary location for install: /usr/lib/libming/bin
-BINDIR = ${PREFIX}/lib/libming/bin
+BINDIR = $(PREFIX)/lib/libming/bin
+
+INCLUDES	+= -I..
+
+## Needs to be placed after variable defs but before rules
+include ../Rules.make
 
 all:
 	cat README
@@ -32,46 +33,46 @@ clean:
 
 #.o: .c .h
 
-listswf: blocktypes.o decompile.o read.o listswf.c
-	${CC} listswf.c blocktypes.o decompile.o read.o -o listswf -lm -lz
+listswf: blocktypes.o decompile.o decompile5.o read.o listswf.c
+	$(CC) $(CFLAGS) $(LDFLAGS) listswf.c blocktypes.o decompile.o decompile5.o read.o -o listswf -lm -lz
 
 decompile.o: action.h
 
 listswf_nd: blocktypes.o decompile.o read.o listswf.c
-	${CC} -DNODECOMPILE listswf.c blocktypes.o decompile.o read.o -o listswf -lm -lz
+	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE listswf.c blocktypes.o decompile.o read.o -o listswf -lm -lz
 
 listaction: blocktypes.o read.o listswf.c
-	${CC} -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
 
 swftoperl: blocktypes.o decompile.o decompile5.o read.o swftoperl.c
-	${CC} swftoperl.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm -lz
+	$(CC) $(CFLAGS) $(LDFLAGS) swftoperl.c blocktypes.o decompile.o decompile5.o read.o -o swftoperl -lm -lz
 
 swftophp: blocktypes.o decompile.o decompile5.o read.o swftophp.c
-	${CC} swftophp.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm -lz
+	$(CC) $(CFLAGS) $(LDFLAGS) swftophp.c blocktypes.o decompile.o decompile5.o read.o -o swftophp -lm -lz
 
 swftopython: 
 	echo " swftopython: still not written"
 
 makefdb: blocktypes.o makefdb.c read.o
-	${CC} makefdb.c read.o blocktypes.o -o makefdb
+	$(CC) $(CFLAGS) $(LDFLAGS) makefdb.c read.o blocktypes.o -o makefdb
 
 gif2mask: gif2mask.c
-	${CC} gif2mask.c -o gif2mask -lungif -lm -lz
+	$(CC) $(CFLAGS) $(LDFLAGS) gif2mask.c -o gif2mask -lungif -lm -lz
 
 png2dbl: png2dbl.c
-	${CC} png2dbl.c -o png2dbl -lz -lpng -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) png2dbl.c -o png2dbl -lz -lpng12 -lm
 
 gif2dbl: gif2dbl.c
-	${CC} gif2dbl.c -o gif2dbl -lz -lungif -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) gif2dbl.c -o gif2dbl -lz -lungif -lm
 
 ../libming.a:
 	cd ..; make static
 
 raw2adpcm: raw2adpcm.c ../libming.a
-	${CC} raw2adpcm.c -o raw2adpcm ../libming.a -lm ${EXTRA_LIBS} -I../src
+	$(CC) $(CFLAGS) $(LDFLAGS) raw2adpcm.c -o raw2adpcm ../libming.a $(LIBS)
 
 png2swf: png2swf.c
-	${CC} png2swf.c -o png2swf ../ming/libming.a -lm -lz -lpng
+	$(CC) $(CFLAGS) $(LDFLAGS) png2swf.c -o png2swf ../libming.a $(LIBS)
 
 install: all_binaries
 	install -d $(BINDIR)
