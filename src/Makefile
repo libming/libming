@@ -35,7 +35,7 @@ static: ${OFILES}
 clean:
 	cd blocks && make clean
 	cd actioncompiler && make clean
-	rm -f *.o libming.a test test.exe core *.core
+	rm -f *.o libming.a libming.so test test.exe core *.core
 
 # breaks on bsd:
 #.c.o: .c .h
