@@ -31,7 +31,7 @@
 #include "browserfont.h"
 
 #define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x38FF /* off bits */
+#define SWFTEXTFIELD_OFFMASK 0x3AFF /* off bits */
 
 #define SWFTEXTFIELD_HASLENGTH (1<<1)
 #define SWFTEXTFIELD_NOEDIT    (1<<3)
