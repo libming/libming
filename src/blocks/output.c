@@ -37,6 +37,7 @@ SWFOutput newSWFOutput()
 
 /* same as above but with specified buffer size,
    use if you have an upper limit to how big this'll get */
+
 SWFOutput newSizedSWFOutput(int size)
 {
   SWFOutput out = calloc(1, OUTPUT_SIZE);
@@ -87,7 +88,9 @@ void destroySWFOutput(SWFOutput out)
 void SWFOutput_grow(SWFOutput out)
 {
   int num = out->pos - out->buffer; /* in case buffer gets displaced.. */
-  unsigned char *newbuf = realloc(out->buffer, out->buffersize+OUTPUT_BUFFER_INCREMENT);
+
+  unsigned char *newbuf = realloc(out->buffer,
+				  out->buffersize+OUTPUT_BUFFER_INCREMENT);
 
   if(newbuf != out->buffer)
     out->pos = newbuf+num;
@@ -118,11 +121,12 @@ void SWFOutput_checkSize(SWFOutput out, int bytes)
     int new = OUTPUT_BUFFER_INCREMENT *
               ((bytes-out->free-1)/OUTPUT_BUFFER_INCREMENT + 1);
 
-    int num = SWFOutput_length(out); /* in case buffer gets displaced.. */
+    int num = out->pos - out->buffer; /* in case buffer gets displaced.. */
+
     unsigned char *newbuf = realloc(out->buffer, out->buffersize+new);
 
     if(newbuf != out->buffer)
-      out->pos = newbuf+num;
+      out->pos = newbuf + num;
 
     out->buffer = newbuf;
     out->buffersize += new;
@@ -135,8 +139,8 @@ void SWFOutput_byteAlign(SWFOutput out)
   if(out->bitpos > 0)
   {
     SWFOutput_checkSize(out, 1);
-    out->pos++;
-    out->free--;
+    ++out->pos;
+    --out->free;
     out->bitpos = 0;
   }
 }
@@ -144,24 +148,25 @@ void SWFOutput_writeBits(SWFOutput out, int data, int bits)
 {
   int bitpos = out->bitpos;
 
-  if(bitpos==0)
+  if(bitpos == 0)
     *(out->pos) = 0;
 
-  SWFOutput_checkSize(out, (bits+bitpos)/8);
+  SWFOutput_checkSize(out, (bits+bitpos+7)/8);
+
   while(bits > 0)
   {
-    if(bits+bitpos >= 8)
+    if(bits + bitpos >= 8)
     {
-      *(out->pos) += (data>>(bits+bitpos-8)) & 0xff;
+      *(out->pos) += (data >> (bits+bitpos-8)) & 0xff;
       bits -= 8-bitpos;
-      out->pos++;
+      ++out->pos;
       *(out->pos) = 0;
-      out->free--;
+      --out->free;
       bitpos = 0;
     }
     else
     {
-      *(out->pos) += (data<<(8-bits-bitpos))&0xff;
+      *(out->pos) += (data << (8-bits-bitpos)) & 0xff;
       bitpos += bits;
       bits = 0;
     }
@@ -177,6 +182,7 @@ void SWFOutput_writeSBits(SWFOutput out, int data, int bits)
 
   SWFOutput_writeBits(out, data, bits);
 }
+
 void SWFOutput_writeUInt8(SWFOutput out, int data)
 {
   /* think we have to byte align when we write whole bytes */
@@ -184,9 +190,10 @@ void SWFOutput_writeUInt8(SWFOutput out, int data)
 
   SWFOutput_checkSize(out, 1);
   *(out->pos) = data;
-  out->pos++;
-  out->free--;
+  ++out->pos;
+  --out->free;
 }
+
 void SWFOutput_writeSInt8(SWFOutput out, int data)
 {
   if(data < 0)
@@ -194,12 +201,14 @@ void SWFOutput_writeSInt8(SWFOutput out, int data)
 
   SWFOutput_writeUInt8(out, data);
 }
+
 void SWFOutput_writeUInt16(SWFOutput out, int data)
 {
   SWFOutput_writeUInt8(out, data&0xff);
   data >>= 8;
   SWFOutput_writeUInt8(out, data&0xff);
 }
+
 void SWFOutput_writeSInt16(SWFOutput out, int data)
 {
   if(data < 0)
@@ -209,6 +218,7 @@ void SWFOutput_writeSInt16(SWFOutput out, int data)
   data >>= 8;
   SWFOutput_writeUInt8(out, data%256);
 }
+
 void SWFOutput_writeUInt32(SWFOutput out, long data)
 {
   SWFOutput_writeUInt8(out, data&0xff);
@@ -219,6 +229,7 @@ void SWFOutput_writeUInt32(SWFOutput out, long data)
   data >>= 8;
   SWFOutput_writeUInt8(out, data&0xff);
 }
+
 void SWFOutput_writeSInt32(SWFOutput out, long data)
 {
   if(data < 0)
@@ -245,10 +256,10 @@ int SWFOutput_numBits(int num)
 {
   int i=0;
 
-  while(num>0)
+  while(num > 0)
   {
-      num >>= 1;
-      ++i;
+    num >>= 1;
+    ++i;
   }
 
   return i;
@@ -270,7 +281,7 @@ void SWFOutput_writeString(SWFOutput out, unsigned char *string)
 
   if(string)
   {
-    while((c=*(string++)) != 0)
+    while((c = *(string++)) != 0)
       SWFOutput_writeUInt8(out, c);
   }
 
