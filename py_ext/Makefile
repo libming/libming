@@ -1,13 +1,13 @@
-PYINCDIR = /usr/local/include/python2.0
-PYLIBDIR = /usr/local/lib/python2.0
+#PYINCDIR = /usr/local/include/python2.0
+#PYLIBDIR = /usr/local/lib/python2.0
 
-#PYINCDIR = /usr/include/python1.5
-#PYLIBDIR = /usr/lib/python1.5
+PYINCDIR = /usr/include/python1.5
+PYLIBDIR = /usr/lib/python1.5
 
 all:
 
 mingcmodule.so: ming_wrap.o ../libming.a
-	gcc -g -Wall -L .. -shared -o mingcmodule.so ming_wrap.o  -lming
+	gcc -g -Wall -shared -o mingcmodule.so ming_wrap.o ../libming.a
 
 mingc.pyd: ming_wrap.o
 	dllwrap --dllname mingc.pyd --driver-name gcc --def mingc.def \
