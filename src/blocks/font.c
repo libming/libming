@@ -218,7 +218,10 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 void
 destroySWFFont(SWFFont font)
-{
+{	// should not happen but seemingly does
+	if (!font)
+		return;
+
 	if ( font->shapes != NULL )
 	{
 #if HAS_MMAP

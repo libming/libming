@@ -758,6 +758,7 @@ static void morphfillstyle(TAG tp)
 	}
 	else if(cod == 0x10 || cod == 0x12)
 	{	matrix((BITS) tp);
+		alignbits();
 		matrix((BITS) tp);
 		morphgradient(tp);
 	}
@@ -765,6 +766,7 @@ static void morphfillstyle(TAG tp)
 	{	id = change_id(tp);
 		if(verbose) printf("fill with id %d\n", id);
 		matrix((BITS) tp);
+		alignbits();
 		matrix((BITS) tp);
 	}
 	else
