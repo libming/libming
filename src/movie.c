@@ -47,9 +47,10 @@ SWFMovie newSWFMovieWithVersion(int version)
 
   return movie;
 }
+
 SWFMovie newSWFMovie()
 {
-  return newSWFMovieWithVersion(4);
+  return newSWFMovieWithVersion(5);
 }
 
 void SWFMovie_setRate(SWFMovie movie, float rate)
@@ -89,6 +90,9 @@ void SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
 
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
 {
+  if(block == NULL)
+    return NULL;
+
   /* if they're trying to add a raw bitmap, we'll be nice and turn
      it into a shape */
 
