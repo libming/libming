@@ -33,6 +33,7 @@
 extern zend_module_entry ming_module_entry;
 #define ming_module_ptr &ming_module_entry
 
+PHP_RINIT_FUNCTION(ming);
 PHP_MINIT_FUNCTION(ming);
 PHP_MINFO_FUNCTION(ming);
 

@@ -2946,16 +2946,17 @@ PHP_FUNCTION(swftextfield_addString)
 
 /* }}} */
 
-zend_module_entry ming_module_entry = {
-	"ming",
-	ming_functions,
-	PHP_MINIT(ming),
-	NULL,
-	NULL,
-	NULL,
-	PHP_MINFO(ming),
-	STANDARD_MODULE_PROPERTIES
-};
+zend_module_entry ming_module_entry =
+  {
+    "ming",
+    ming_functions,
+    PHP_MINIT(ming), /* module init function */
+    NULL,            /* module shutdown function */
+    PHP_RINIT(ming), /* request init function */
+    NULL,            /* request shutdown function */
+    PHP_MINFO(ming), /* module info function */
+    STANDARD_MODULE_PROPERTIES
+  };
 
 #if defined(COMPILE_DL) || defined(COMPILE_DL_MING)
 ZEND_GET_MODULE(ming)
@@ -2991,11 +2992,14 @@ void php_ming_error(char *msg, ...)
   php_error(E_ERROR, buffer);
 }
 
-PHP_MINIT_FUNCTION(ming)
+PHP_RINIT_FUNCTION(ming)
 {
   if(Ming_init() != 0)
     php_error(E_ERROR, "Error initializing Ming module");
+}
 
+PHP_MINIT_FUNCTION(ming)
+{
   Ming_setErrorFunction(php_ming_error);
 
   le_fopen = php_file_le_fopen();
