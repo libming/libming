@@ -1,6 +1,13 @@
 
 MING HISTORY
 
+12.22.01
+	Added Martin Weber's MSVC project files
+	Added Wolfgang Hamann's fixes
+
+12.16.01
+	Added php 4.1.0 ming.c wrapper code
+
 11.9.01
 	General cleanup:
 	  moved structure definitions into .c files
