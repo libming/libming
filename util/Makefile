@@ -60,7 +60,7 @@ gif2mask: gif2mask.c
 	$(CC) $(CFLAGS) $(LDFLAGS) gif2mask.c -o gif2mask -lungif -lm -lz
 
 png2dbl: png2dbl.c
-	$(CC) $(CFLAGS) $(LDFLAGS) png2dbl.c -o png2dbl -lz -lpng12 -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) png2dbl.c -o png2dbl -lz -lpng -lm
 
 gif2dbl: gif2dbl.c
 	$(CC) $(CFLAGS) $(LDFLAGS) gif2dbl.c -o gif2dbl -lz -lungif -lm
@@ -73,6 +73,9 @@ raw2adpcm: raw2adpcm.c ../libming.a
 
 png2swf: png2swf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) png2swf.c -o png2swf ../libming.a $(LIBS)
+
+makeswf: makeswf.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -lming -L../ -o $@ $<
 
 install: all_binaries
 	install -d $(BINDIR)
