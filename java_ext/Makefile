@@ -40,7 +40,8 @@ SRCS = \
 	SWFTextField.java \
 	SWFTextFieldI.java \
 	SWFTextI.java\
-	SWFSoundStream.java
+	SWFSoundStream.java\
+	SWFVideoStream.java
 
 
 all: jswf.jar
