@@ -1,43 +1,53 @@
-/*
- * makeswf - a command line actionscript compiler
+/****************************************************************************
  *
- * Copyleft (g) 2003 strk@keybit.net
+ *  makeswf - a command line actionscript compiler
  *
- * Intro
- * -----
+ *  Copyright (C) 2003 2004 2005 "Sandro Santilli" <strk@keybit.net>
  *
- * This is a simple Flash actionscript compiler that
- * uses libming to do its job. You'll find it useful
- * only when coding in pure actionscript, thus probably
- * only when using the Flash 6 drawing API.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * Output version is set to '6' and compression level to '9'.
- * To change this, you'll have to update this file; it's very
- * simple, don't be afraid ;)
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * Oh... input files are preprocessed unless you provide
- * the -p flag (do not use preprocessor). -D can be used to set macros
- * and -I to add dirs to include search paths.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * If you need another kind of preprocessing change the CPP define on
- * top of this file.
- *
- * Build
- * -----
- *
- * This binary will link dinamically to libming, so you should
- * install ming somewhere, or let the linker know where to find
- * the ming library.
- *
- * TODO
- * ----
+ ****************************************************************************
  * 
- * - Change command line to:
- *	makeswf [-o <outputfile>] [-p] <input> ...
- * 
- * - Accept -V for versioning and credits.
+ *  Intro
+ *  -----
  *
- */
+ *  This is a simple Flash actionscript compiler that
+ *  uses libming to do its job. You'll find it useful
+ *  only when coding in pure actionscript, thus probably
+ *  only when using the Flash 6 drawing API.
+ *
+ *  Input files are preprocessed unless you provide
+ *  the -p flag (do not use preprocessor). -D can be used to set macros
+ *  and -I to add dirs to include search paths.
+ *
+ *  If you need another kind of preprocessing change the CPP define on
+ *  top of this file.
+ *
+ *  Build
+ *  -----
+ *
+ *  This binary will link dinamically to libming, so you should
+ *  install ming somewhere, or let the linker know where to find
+ *  the ming library.
+ *
+ *  TODO
+ *  ----
+ * 
+ *  - Accept -V for versioning and credits.
+ *
+ ***************************************************************************/
 
 /* This is needed to get vasprintf definition */
 #define _GNU_SOURCE 1
@@ -80,8 +90,10 @@ SWFMovie mo;
 void
 usage (char *me, int ex)
 {
-	fprintf(stderr, "Usage: %s [OPTIONS] <output> <as> ...\n", me);
+	fprintf(stderr, "Usage: %s [OPTIONS] <frame.as> ...\n",
+		me);
 	fprintf(stderr, "Options:\n");
+	fprintf(stderr, " -o <output>\n");
 	fprintf(stderr, " -s <width>x<height>\n");
 	fprintf(stderr, " -r <frame_rate>\n");
 	fprintf(stderr, " -v <output_version>\n");
@@ -146,7 +158,7 @@ main (int argc, char **argv)
 {
 	SWFAction ac;
 	char *code;
-	char *outputfile;
+	char *outputfile="out.swf";
 	char ppfile[PATH_MAX];        /* preprocessed file */
 	struct stat statbuf;
 	int width=640, height=480;    /* default stage size */
@@ -166,6 +178,7 @@ main (int argc, char **argv)
 		{"includepath", 1, 0, 'I'},
 		{"define", 1, 0, 'D'},
 		{"size", 1, 0, 's'},
+		{"output", 1, 0, 'o'},
 		{"import", 1, 0, 'i'},
 		{0, 0, 0, 0}
 	};
@@ -188,9 +201,9 @@ main (int argc, char **argv)
 		char buf [1024];
 
 #ifdef HAVE_GETOPT_LONG
-		c = getopt_long (argc, argv, "ps:r:D:I:v:c:i:", opts, &opts_idx);
+		c = getopt_long (argc, argv, "ps:r:D:I:v:c:i:o:", opts, &opts_idx);
 #else
-		c = getopt (argc, argv, "ps:r:D:I:v:i:c:");
+		c = getopt (argc, argv, "ps:r:D:I:v:i:c:o:");
 #endif
 		if (c == -1) break;
 
@@ -241,6 +254,9 @@ main (int argc, char **argv)
 			case 'i':
 				add_import_spec(optarg);
 				break;
+			case 'o':
+				outputfile = optarg;
+				break;
 			case 'D':
 				// yes, you can smash the stack ... 
 				sprintf(buf, " -D%s", optarg);
@@ -259,9 +275,8 @@ main (int argc, char **argv)
 	argv+=optind;
 	argc-=optind;
 
-	if ( argc < 2 ) usage(me, 1);
+	if ( argc < 1 ) usage(me, 1);
 
-	outputfile = argv[0];
 	if ( ! stat(outputfile, &statbuf) )
 	{
 	}
@@ -289,7 +304,7 @@ main (int argc, char **argv)
 	 */
 	if ( numimport_specs ) add_imports();
 
-	for ( i=1; i<argc; i++ )
+	for ( i=0; i<argc; i++ )
 	{
 		struct stat statbuf;
 		char *filename = argv[i];
@@ -333,6 +348,8 @@ main (int argc, char **argv)
 		}
 		SWFMovie_add(mo, (SWFBlock)ac);
 		compiledfiles++;
+		SWFMovie_nextFrame(mo);
+
 	}
 
 	if ( ! compiledfiles )
@@ -459,6 +476,13 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.15  2005/03/22 13:41:30  strk
+ * Changed calling interface:
+ * 	- all arguments are source files
+ * 	- each source file will be stored in a separate
+ * 	  frame, in the order they appear
+ * 	- output will be "out.swf" unless -o <output> is used
+ *
  * Revision 1.14  2004/11/10 14:00:46  strk
  * Added support for specifying output compression level
  *
