@@ -205,7 +205,7 @@ sub write_swf_h {
  * ====================================================================
  */
 
-#include "$dir/src/ming.h"
+#include "$dir/ming.h"
 EOF
     close FH;
 }
