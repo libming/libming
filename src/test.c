@@ -178,6 +178,7 @@ void testJpeg(SWFMovie movie)
   SWFBitmap jpeg;
   SWFShape shape = newSWFShape();
   SWFDisplayItem i;
+  SWFInput input;
   FILE *file = fopen("test.jpg", "rb");
 
   if(!file)
@@ -186,13 +187,12 @@ void testJpeg(SWFMovie movie)
     exit(1);
   }
 
-  jpeg = newSWFJpegBitmap(file);
-  fill = SWFShape_addBitmapFill(shape, jpeg, SWFFILL_TILED_BITMAP);
-  SWFShape_setRightFill(shape, fill);
-  SWFShape_drawCharacterBounds(shape, (SWFCharacter)jpeg);
+  input = newSWFInput_file(file);
+  jpeg = newSWFBitmap_fromInput(input);
 
-  i = SWFMovie_add(movie, (SWFCharacter)shape);
-  SWFDisplayItem_scale(i, 20.0, 20.0);
+  i = SWFMovie_add(movie, jpeg);
+  SWFDisplayItem_moveTo(i,100,100);
+  SWFDisplayItem_rotate(i,45.0);
 }
 
 /* }}} */
