@@ -1,5 +1,8 @@
 .AppleDouble
-lex.yy.c
-compiler.tab.c
-compiler.tab.h
+lex.swf5.c
+swf5compiler.tab.c
+swf5compiler.tab.h
+lex.swf4.c
+swf4compiler.tab.c
+swf4compiler.tab.h
 test

@@ -7,27 +7,40 @@ DEBUG = --debug
 
 LIBS = -lm
 
-OFILES = compile.o listaction.o lex.yy.o compiler.tab.o compileaction.o \
-	 assembler.o
+MOSTFILES = compile.o listaction.o \
+	    lex.swf4.o lex.swf5.o swf5compiler.tab.o swf4compiler.tab.o \
+	    assembler.o
+
+OFILES = ${MOSTFILES} compileaction.o
 
 all: ${OFILES}
 
 clean:
 	rm -f ${OFILES} compiler compiler.exe core test main.o
 
-test: ${OFILES} main.o
-	${CC} -o test main.o compile.o listaction.o lex.yy.o \
-		compiler.tab.o assembler.o ${LIBS}
+test: ${MOSTFILES} main.o
+	${CC} -o test main.o ${MOSTFILES} ${LIBS}
 
 #.o: .c .h
 
-compiler.tab.c: compiler.y
-	bison compiler.y
+swf5compiler.tab.c: swf5compiler.y
+	bison -p swf5 swf5compiler.y
 
-compiler.tab.h: compiler.y
-	bison --defines ${DEBUG} compiler.y
+swf5compiler.tab.h: swf5compiler.y
+	bison --defines ${DEBUG} -p swf5 swf5compiler.y
 
-lex.yy.o: lex.yy.c
+swf4compiler.tab.c: swf4compiler.y
+	bison -p swf4 swf4compiler.y
 
-lex.yy.c: compiler.flex compiler.tab.h
-	flex compiler.flex
+swf4compiler.tab.h: swf4compiler.y
+	bison --defines ${DEBUG} -p swf4 swf4compiler.y
+
+lex.swf4.o: lex.swf4.c
+
+lex.swf4.c: swf4compiler.flex swf4compiler.tab.h
+	flex -i -Pswf4 swf4compiler.flex
+
+lex.swf5.o: lex.swf5.c
+
+lex.swf5.c: swf5compiler.flex swf5compiler.tab.h
+	flex -i -Pswf5 swf5compiler.flex
