@@ -162,7 +162,7 @@ int SWFInput_buffer_getChar(SWFInput input)
   if(input->offset >= input->length)
     return EOF;
   else
-    return ((unsigned char *)input->data)[input->offset];
+    return ((unsigned char *)input->data)[input->offset++];
 }
 
 int SWFInput_buffer_eof(SWFInput input)
