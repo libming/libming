@@ -46,6 +46,9 @@ struct SWFTextRecord_s
 	byte flags;
 	BOOL isBrowserFont;
 
+	// if it's not a browser font, is it a font or a fontchar?
+	BOOL isResolved;
+
 	union
 	{
 		SWFFont font;
@@ -53,14 +56,17 @@ struct SWFTextRecord_s
 		SWFFontCharacter fontchar;
 	} font;
 
+	// color
 	byte r;
 	byte g;
 	byte b;
 	byte a;
 
+	// position
 	int x;
 	int y;
 
+	// metrics
 	int height;
 	int spacing;
 
@@ -198,6 +204,7 @@ SWFText_addTextRecord(SWFText text)
 	if ( current == NULL )
 	{
 		textRecord->isBrowserFont = FALSE;
+		textRecord->isResolved = FALSE;
 		textRecord->font.font = NULL;
 		textRecord->spacing = 0;
 		textRecord->height = 240;
@@ -211,6 +218,7 @@ SWFText_addTextRecord(SWFText text)
 	else
 	{
 		textRecord->isBrowserFont = current->isBrowserFont;
+		textRecord->isResolved = current->isResolved;
 		textRecord->font = current->font;
 		textRecord->spacing = current->spacing;
 		textRecord->height = current->height;
@@ -277,6 +285,7 @@ void
 SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font)
 {
 	record->font.fontchar = font;
+	record->isResolved = TRUE;
 	SWFFontCharacter_addTextToList(font, record);
 }
 
@@ -284,10 +293,15 @@ SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font)
 int
 SWFText_getScaledStringWidth(SWFText text, const char *string)
 {
-	SWFFont font = text->currentRecord->font.font;
+	SWFFont font;
 	int height = text->currentRecord->height;
 	unsigned short* widestr;
 	int len = UTF8ExpandString(string, &widestr);
+
+	if ( text->currentRecord->isResolved )
+		font = SWFFontCharacter_getFont(text->currentRecord->font.fontchar);
+	else
+		font = text->currentRecord->font.font;
 
 	if ( text->currentRecord->isBrowserFont )
 		return 0;
@@ -355,7 +369,8 @@ SWFText_setFont(SWFText text, void* font)
 }
 
 
-void SWFText_setScaledHeight(SWFText text, int height)
+void
+SWFText_setScaledHeight(SWFText text, int height)
 {
 	SWFTextRecord textRecord = text->currentRecord;
 
