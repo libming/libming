@@ -46,8 +46,12 @@ extern "C"
   #define SWFButton       c_SWFButton
   #define SWFSoundStream  c_SWFSoundStream
   #define SWFInput        c_SWFInput
+  #define SWFSound        c_SWFSound
 
-  #define SWFSound  c_SWFSound // added by minguts
+// begin minguts 2004/08/31 ((((
+  #define SWFFontCharacter c_SWFFontCharacter
+  #define SWFPrebuiltClip c_SWFPrebuiltClip
+// )))) end minguts 2004/08/31
 
   #include <src/ming.h>
 
@@ -69,7 +73,11 @@ extern "C"
   #undef SWFButton
   #undef SWFSoundStream
   #undef SWFInput
-  #undef SWFSound // added by minguts
+  #undef SWFSound
+// begin minguts 2004/08/31 ((((
+  #undef SWFFontCharacter
+  #undef SWFPrebuiltClip 
+// )))) end minguts 2004/08/31
 }
 
 #define SWF_DECLAREONLY(classname) \
@@ -114,7 +122,6 @@ class SWFBlock
     { return NULL; }
 };
 
-
 /*  SWFCharacter  */
 
 class SWFCharacter : public SWFBlock
@@ -122,18 +129,72 @@ class SWFCharacter : public SWFBlock
  public:
   c_SWFCharacter character;
 
+// begin minguts 2004/08/31 (needed by new class SWFFontCharacter) ((((
+  SWFCharacter(c_SWFCharacter character)
+    { this->character = character; }
+// )))) end minguts 2004/08/31
+
   float getWidth()
     { return SWFCharacter_getWidth(this->character); }
 
   float getHeight()
     { return SWFCharacter_getHeight(this->character); }
 
+// begin minguts 2004/08/31 (removed NULL , needed by new class SWFFontCharacter) ((((
   virtual c_SWFBlock getBlock()
-    { return NULL; }
+    { return (c_SWFBlock)this->character; }
+// )))) end minguts 2004/08/31
 
   SWFCharacter() {} //needed for base classing
   SWF_DECLAREONLY(SWFCharacter);
 };
+// begin minguts 2004/08/31: added two new classes: "SWFFontCharacter" and "SWFPrebuiltClip" ((((
+/*  SWFFontCharacter */
+class SWFFontCharacter : public SWFCharacter
+{
+ public:
+  c_SWFFontCharacter fontcharacter;
+
+  SWFFontCharacter(c_SWFFontCharacter fontcharacter)
+    { this->fontcharacter = fontcharacter; }
+
+  virtual ~SWFFontCharacter()
+    { }
+
+  SWF_DECLAREONLY(SWFFontCharacter);
+  SWFFontCharacter();
+};
+// 
+
+/*  SWFPrebuiltClip */
+
+class SWFPrebuiltClip : public SWFCharacter/* SWFBlock */
+{
+ public:
+  c_SWFPrebuiltClip prebuiltclip;
+
+  SWFPrebuiltClip(c_SWFPrebuiltClip prebuiltclip)
+    { this->prebuiltclip = prebuiltclip; }
+
+  virtual ~SWFPrebuiltClip()
+    { }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->prebuiltclip; }
+
+
+  SWFPrebuiltClip(const char *name)
+  {
+    if(strlen(name) > 4 &&
+       strcmp(name + strlen(name) - 4, ".swf") == 0)
+      this->prebuiltclip = newSWFPrebuiltClip_fromFile(name);
+    else
+      this->prebuiltclip = 0 ; // needs to be fixed - but how ????
+  }
+  SWF_DECLAREONLY(SWFPrebuiltClip);
+  SWFPrebuiltClip();
+};
+// )))) end minguts 2004/08/31
 
 
 /*  SWFAction  */
@@ -270,7 +331,7 @@ class SWFSoundStream
 };
 
 
-/*  SWFSound class added by minguts */
+
 
 class SWFSound
 {
@@ -355,10 +416,17 @@ class SWFMovie
     return result;
   }
 
-  void startSound(SWFSound *sound) // added by minguts
-    { SWFMovie_startSound(this->movie, sound->sound); } // added by minguts
-  void stopSound(SWFSound *sound) // added by minguts
-    { SWFMovie_stopSound(this->movie, sound->sound); } // added by minguts
+  void startSound(SWFSound *sound)
+    { SWFMovie_startSound(this->movie, sound->sound); }
+  void stopSound(SWFSound *sound)
+    { SWFMovie_stopSound(this->movie, sound->sound); }
+
+// begin minguts 2004/08/31 ((((
+	SWFCharacter *importCharacter(const char *filename, const char *name)
+	{ return new SWFCharacter(SWFMovie_importCharacter(this->movie, filename, name));}
+	SWFFontCharacter *importFont(const char *filename, const char *name)
+	{ return new SWFFontCharacter(SWFMovie_importFont(this->movie, filename, name)); }
+// )))) end minguts 2004/08/31
 
   SWF_DECLAREONLY(SWFMovie);
 };
@@ -617,6 +685,13 @@ class SWFShape : public SWFCharacter
   void setLine(unsigned short width, byte r, byte g, byte b, byte a=0xff)
     { SWFShape_setLine(this->shape, width, r, g, b, a); }
 
+// begin minguts 2004/08/31 ((((
+  void drawCharacterBounds(SWFCharacter *character)
+	{ SWFShape_drawCharacterBounds(this->shape, character->character); }
+  void setLineStyle(unsigned short width, byte r, byte g, byte b, byte a=0xff) // alias for setline
+	{ setLine(width, r, g, b, a); }
+// )))) end minguts 2004/08/31
+
   void drawArc(float r, float startAngle, float endAngle)
     { SWFShape_drawArc(this->shape, r, startAngle, endAngle); }
 
@@ -834,8 +909,8 @@ class SWFButton : public SWFCharacter
   void setMenu(int flag=0)
     { SWFButton_setMenu(this->button, flag); }
 
-  void addSound(SWFSound *sound, int flags) // added by minguts
-    { SWFButton_addSound(this->button, sound->sound, flags); } // added by minguts
+  void addSound(SWFSound *sound, int flags)
+    { SWFButton_addSound(this->button, sound->sound, flags); }
 
   SWF_DECLAREONLY(SWFButton);
 };
