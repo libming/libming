@@ -88,6 +88,9 @@ int SWFVideoStream_getFrameNumber(SWFVideoFrame frame)
 	return frame->frameNum;
 }
 
+#define SKIPTAG(input, tag) SWFInput_seek((input), (tag).dataSize + 4, SEEK_CUR)
+
+
 struct FLVTag_s * getNextFLVTag(SWFInput input, struct FLVTag_s *tag) {
 	int ichar;
 	unsigned long ulchar;
@@ -179,8 +182,12 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream) {
 		return NULL;
 
 	/* TODO: AudioTag */
-	if(tag.tagType != VIDEOTAG)
-		return NULL;
+	while (tag.tagType != VIDEOTAG) {
+		SKIPTAG(stream->input, tag);
+		if(!getNextFLVTag(stream->input, &tag)) 
+			return NULL;
+	}
+		
 
 	ichar = SWFInput_getChar(stream->input);
 	if(ichar == EOF)
@@ -240,10 +247,12 @@ static int setStreamDimension(SWFVideoStream stream)
 	
 	SWFInput_seek(stream->input, stream->start, SEEK_SET);
 
-	if(!getNextFLVTag(stream->input, &tag) || tag.tagType != VIDEOTAG) 
-		return -1;	
-	else 
-	{
+	while(getNextFLVTag(stream->input, &tag)) {
+		if(tag.tagType != VIDEOTAG) {
+			SKIPTAG(stream->input, tag);
+			continue;
+		}
+	
 		/* skip:
 		 * videodata-header 1 byte
 		 * pictureStartCode UB[17] 2 byte ( 1 bit remaining )
@@ -293,6 +302,7 @@ static int setStreamDimension(SWFVideoStream stream)
 		}
 						
 	}
+	return -1;
 }
 		
 		
@@ -304,7 +314,6 @@ static int getNumFrames(SWFVideoStream stream)
 {
 
 	int numFrames = 0;
-	int seek;
 	struct FLVTag_s tag;
 	
 	SWFInput_seek(stream->input, stream->start, SEEK_SET);
@@ -312,8 +321,7 @@ static int getNumFrames(SWFVideoStream stream)
 	while(getNextFLVTag(stream->input, &tag)) {
 		if(tag.tagType == VIDEOTAG)
 			numFrames++;
-		seek = tag.dataSize + 4;
-		SWFInput_seek(stream->input, seek, SEEK_CUR);
+		SKIPTAG(stream->input, tag);
 	}
 
 	return numFrames;
