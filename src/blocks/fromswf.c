@@ -830,13 +830,6 @@ static void shape(TAG tp, int lev)
 	shaperecord(tp, nfillbits, nlinebits,lev);
 }
 
-static int bits_req(n)
-{	int j, k;
-	for(j = 1, k = 0 ; j <= n ; k++)
-		j <<= 1;
-	return k;
-}
-
 static void definemorphshape(TAG tp)
 {	unsigned short id, fcnt, lcnt;
 	unsigned long loff;
