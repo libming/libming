@@ -1,0 +1,27 @@
+=head1 NAME
+
+CREDITS - perl-ming contributors
+
+=head1 MAJOR CONTRIBUTORS
+
+Thanks to the following people for their contribution (sorted by name):
+
+=over 4
+
+=item Dave Hayden (opaque_ndst at users.sourceforge.net)
+
+For creating the Ming library
+
+=item Erich Schubert (erich at users.sourceforge.net)
+
+For Debian packaging
+
+=item Peter Liscovius (peterdd at users.sourceforge.net)
+
+For SWF::Movie and SWF::TextField documentation.
+
+=item Wolfgang Hamann (whamann at users.sourceforge.net)
+
+For fixing and maintaining the Ming library
+
+
