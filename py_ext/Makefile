@@ -14,15 +14,13 @@ mingc.pyd: ming_wrap.o
 	  --target=i386-mingw32 -Llib/ -lpython15
 
 ming_wrap.o: ming_wrap.c
-	gcc -g -Wall -I .. -I ${PYINCDIR} -fpic -c ming_wrap.c
+	gcc -g -Wall -I.. -I ${PYINCDIR} -fpic -c ming_wrap.c
 
-ming_wrap.c: swig
+ming_wrap.c:
+	swig -I.. -python ming.i
 
 ../libming.a:
 	cd ..; make static
-
-swig:
-	swig -I.. -python ming.i
 
 clean:
 	rm -f _mingcmodule.so mingc.py *.pyc core *~ *.o ming_wrap.c ming_wrap.doc

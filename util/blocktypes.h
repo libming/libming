@@ -1,6 +1,6 @@
 
-#ifndef BLOCKTYPES_H_INCLUDED
-#define BLOCKTYPES_H_INCLUDED
+#ifndef SWF_BLOCKTYPES_H_INCLUDED
+#define SWF_BLOCKTYPES_H_INCLUDED
 
 typedef enum
 {
@@ -44,4 +44,4 @@ typedef enum
   PASSWORD                      = 58
 } Blocktype;
 
-#endif /* BLOCKTYPES_H_INCLUDED */
+#endif /* SWF_BLOCKTYPES_H_INCLUDED */

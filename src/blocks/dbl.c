@@ -157,8 +157,9 @@ destroySWFDBLBitmapData(SWFDBLBitmapData bitmap)
 //	if ( bitmap->input != NULL )
 //		destroySWFInput(bitmap->input);
 
-	if ( CHARACTER(bitmap)->bounds != NULL )
-		destroySWFRect(CHARACTER(bitmap)->bounds);
+	// The bounds rectangle will be already freed in destroySWFCharacter
+	/*if ( CHARACTER(bitmap)->bounds != NULL )
+		destroySWFRect(CHARACTER(bitmap)->bounds);*/
 
 	destroySWFCharacter((SWFCharacter) bitmap);
 }
@@ -206,8 +207,9 @@ destroySWFDBLBitmap_andInputs(SWFDBLBitmap bitmap)
 	if ( bitmap->input != NULL )
 		destroySWFInput(bitmap->input);
 
-	if ( CHARACTER(bitmap)->bounds != NULL )
-		destroySWFRect(CHARACTER(bitmap)->bounds);
+  // The bounds rectangle will be already freed in destroySWFCharacter
+	/*if ( CHARACTER(bitmap)->bounds != NULL )
+		destroySWFRect(CHARACTER(bitmap)->bounds);*/
 
 	destroySWFCharacter((SWFCharacter) bitmap);
 }

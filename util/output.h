@@ -1,7 +1,7 @@
 /* output.h */
 
-#ifndef OUTPUT_H_INCLUDED
-#define OUTPUT_H_INCLUDED
+#ifndef SWF_OUTPUT_H_INCLUDED
+#define SWF_OUTPUT_H_INCLUDED
 
 #include "libswf.h"
 
@@ -55,4 +55,4 @@ int numSBits(int num);
 void outputWriteRect(Output out, int xmin, int xmax, int ymin, int ymax);
 void outputWriteString(Output out, byte *string);
 
-#endif /* OUTPUT_H_INCLUDED */
+#endif /* SWF_OUTPUT_H_INCLUDED */

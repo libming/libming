@@ -31,56 +31,6 @@
 
 #include "ming.h"
 
-float SWFCharacter_getWidth(SWFCharacter character);
-float SWFCharacter_getHeight(SWFCharacter character);
-
-
-void SWFShape_setLine(SWFShape shape, unsigned short width,
-		      byte r, byte g, byte b, byte a);
-
-SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
-
-SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient,
-				 byte flags);
-
-SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
-
-void SWFShape_setLeftFill(SWFShape shape, SWFFill fill);
-void SWFShape_setRightFill(SWFShape shape, SWFFill fill);
-
-void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
-
-void SWFShape_setLine(SWFShape shape,
-		      unsigned short width, byte r, byte g, byte b, byte a);
-
-void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle);
-
-void SWFShape_drawCircle(SWFShape shape, float r);
-
-
-/* approximate a cubic bezier with quadratic segments,
-   returns the number of segments used */
-
-int SWFShape_drawCubic(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
-int SWFShape_drawCubicTo(SWFShape shape, float bx, float by, float cx, float cy, float dx, float dy);
-
-/* x,y relative to shape origin */
-void SWFShape_drawLineTo(SWFShape shape, float x, float y);
-void SWFShape_drawLine(SWFShape shape, float dx, float dy);
-
-/*  */
-void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
-			  float anchorx, float anchory);
-
-void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
-			float anchordx, float anchordy);
-
-void SWFShape_movePenTo(SWFShape shape, float x, float y);
-void SWFShape_movePen(SWFShape shape, float dx, float dy);
-
-float SWFShape_getPenX(SWFShape shape);
-float SWFShape_getPenY(SWFShape shape);
-
-void SWFShape_getPen(SWFShape shape, float* penX, float* penY);
+/* Currently, there are no internal functions or types */
 
 #endif /* SWF_SHAPE_UTIL_H_INCLUDED */

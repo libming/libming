@@ -38,6 +38,11 @@ SWFSoundStream_new(package="SWF::SoundStream", filename)
                sv_setref_pv(ST(0), package, (void*)RETVAL);
        }
 
+
+int SWFSoundStream_getFrames(sound)
+	SWF::SoundStream	sound
+
+
 void
 destroySWFSoundStream(sound)
 	SWF::SoundStream	sound

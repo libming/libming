@@ -51,8 +51,6 @@ int SWFShape_getScaledPenX(SWFShape shape);
 
 int SWFShape_getScaledPenY(SWFShape shape);
 
-void SWFShape_getScaledPenXY(SWFShape shape, int* outX, int* outY);
-
 void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
 
 void SWFShape_moveScaledPen(SWFShape shape, int x, int y);
@@ -71,9 +69,6 @@ void SWFShape_drawScaledCurve(SWFShape shape,
 
 void SWFShape_drawScaledGlyph(SWFShape shape,
 	    		      SWFFont font, unsigned short c, int size);
-
-void
-SWFShape_flushStateChange(SWFShape shape);
 
 SWFOutput
 SWFShape_getOutput(SWFShape shape);

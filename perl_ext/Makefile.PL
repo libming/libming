@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 use Cwd qw(abs_path cwd);
 use strict;
 
-my @DEFAULT_DIR = qw(.. ./src);
+my @DEFAULT_DIR = qw(.. ../src);
 
 my $is_soheil;
 #$is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));

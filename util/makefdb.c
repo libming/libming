@@ -37,7 +37,7 @@ void printDefineFont2(FILE *f, int length)
   if(flags & FONTINFO2_WIDECODES) {
 #if 1
     wide = 1;
-    warning("Sorry, wide code fonts not supported.");
+    /* warning("Sorry, wide code fonts not supported."); */
 #else
     error("Sorry, wide code fonts not supported.");
 #endif

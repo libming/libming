@@ -1,5 +1,5 @@
-#ifndef ACTION_H_INCLUDED
-#define ACTION_H_INCLUDED
+#ifndef SWF_ACTION_H_INCLUDED
+#define SWF_ACTION_H_INCLUDED
 
 typedef enum
 {
@@ -144,4 +144,4 @@ typedef enum
 
 #define DUPCLIP_NUMBER           0x4000
 
-#endif /* ACTION_H_INCLUDED */
+#endif /* SWF_ACTION_H_INCLUDED */

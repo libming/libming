@@ -1,5 +1,5 @@
-#ifndef READ_H_INCLUDED
-#define READ_H_INCLUDED
+#ifndef SWF_READ_H_INCLUDED
+#define SWF_READ_H_INCLUDED
 
 extern int gIndent;
 extern int fileOffset;
@@ -26,4 +26,4 @@ void dumpBytes(FILE *f, int length);
 
 void dumpBuffer(unsigned char *buf, int length);
 
-#endif /* READ_H_INCLUDED */
+#endif /* SWF_READ_H_INCLUDED */

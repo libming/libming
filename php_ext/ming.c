@@ -2406,7 +2406,7 @@ PHP_FUNCTION(swfmovie_streamMp3)
     input = getInput(zfile TSRMLS_CC);
 
   sound = newSWFSoundStream_fromInput(input);
-  SWFMovie_setSoundStream(movie, sound, skip);
+  SWFMovie_setSoundStreamAt(movie, sound, skip);
   RETURN_LONG(SWFSoundStream_getFrames(sound));
 }
 

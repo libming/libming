@@ -34,11 +34,11 @@ extern "C" {
 
 #include <stdio.h>
 
-#define MING_VERSION        0.3a
-#define MING_VERSION_TEXT  "0.3a"
+#define MING_VERSION        0.9
+#define MING_VERSION_TEXT  "0.9"
 
 /* do we enable gif / png functions? */
-#include "../config.h"
+#include "config.h"
 
 
 /***** Type definitions - avoid cyclic dependencies ****/
@@ -154,12 +154,12 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
 #ifdef USE_GIF
-SWFDBLBitmapData newSWFDBLBitmap_fromGifFile(char *name);
-SWFDBLBitmapData newSWFDBLBitmap_fromGifInput(SWFInput input);
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(char *name);
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input);
 #endif
 #ifdef USE_PNG
-SWFDBLBitmapData newSWFDBLBitmap_fromPngFile(char *name);
-SWFDBLBitmapData newSWFDBLBitmap_fromPngInput(SWFInput input);
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(char *name);
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngInput(SWFInput input);
 #endif
 
 
@@ -215,9 +215,12 @@ void SWFShape_movePen(SWFShape shape, float x, float y);
 
 float SWFShape_getPenX(SWFShape shape);
 float SWFShape_getPenY(SWFShape shape);
+void SWFShape_getPen(SWFShape shape, float* penX, float* penY);
 
+/* x,y relative to shape origin */
 void SWFShape_drawLineTo(SWFShape shape, float x, float y);
 void SWFShape_drawLine(SWFShape shape, float dx, float dy);
+
 void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
 			  float anchorx, float anchory);
 void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
@@ -673,6 +676,7 @@ SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 
 void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate);
+void SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip);
 SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 

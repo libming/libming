@@ -305,12 +305,12 @@ newSWFSoundStream_fromInput(SWFInput input)
 
 
 void
-destroySWFSoundStream(SWFSoundStream sound)
+destroySWFSoundStream(SWFSoundStream stream)
 {
-	if ( sound->freeInput )
-		destroySWFInput(sound->input);
+	if ( stream->freeInput )
+		destroySWFInput(stream->input);
 
-	free(sound);
+	free(stream);
 }
 
 

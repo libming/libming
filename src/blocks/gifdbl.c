@@ -206,8 +206,7 @@ readGif(GifFileType *file, dblData result)
  *	DGifOpen - use for open from input
  */
 
-SWFDBLBitmapData
-newSWFDBLBitmapData_fromGifFile(char *fileName)
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(char *fileName)
 {	GifFileType *file;
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;
@@ -226,7 +225,7 @@ static int gifReadFunc(GifFileType *gif, char *buf, int len)
 	return SWFInput_read(input, buf, len);
 }
 
-SWFDBLBitmapData newSWFDBLBitmap_fromGifInput(SWFInput input)
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input)
 {	GifFileType *file;
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;

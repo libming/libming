@@ -989,6 +989,10 @@ loadSWFFontFromFile(FILE *file)
 		font->flags |= SWF_FONT_ISITALIC;
 	if(flags & SWF_LOAD_FONT_BOLD)
 		font->flags |= SWF_FONT_ISBOLD;
+	if(flags & SWF_LOAD_FONT_WIDEOFFSETS)
+		font->flags |= SWF_FONT_WIDEOFFSETS;
+	if(flags & SWF_LOAD_FONT_WIDECODES)
+		font->flags |= SWF_FONT_WIDECODES;
 
 //	font->flags = flags; // XXX - ???
 // new rules... SWF6 said to require unicode, no ansi, no shiftjis

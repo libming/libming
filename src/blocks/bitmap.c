@@ -62,15 +62,15 @@ SWFBitmap newSWFBitmap_fromInput(SWFInput input)
 		return (SWFBitmap) newSWFDBLBitmap_fromInput(input);
 
 	if(c1 == 'G' && c2 == 'I')
-#if 1
-		return (SWFBitmap) newSWFDBLBitmap_fromGifInput(input);
+#if USE_GIF
+		return (SWFBitmap) newSWFDBLBitmapData_fromGifInput(input);
 #else
 		SWF_error("GIF images must be translated into DBL files for now");
 #endif
 
 	if(c2 == 'P' && c3 == 'N')
-#if 1
-		return (SWFBitmap) newSWFDBLBitmap_fromPngInput(input);
+#if USE_PNG
+		return (SWFBitmap) newSWFDBLBitmapData_fromPngInput(input);
 #else
 		SWF_error("PNG images must be translated into DBL files for now");
 #endif

@@ -260,7 +260,7 @@ void readFillStyle(FILE *f, struct FillStyle *s, Blocktype shapeType, int isMorp
     error("Unknown fill type: %i\n", type);
 }
 
-void printTransform(struct Matrix *m, char ch, int num)
+void printTransform(struct Matrix *m, char ch, int num, int always)
 {
   float a = m->xScale, b = m->rot0, c = m->rot1, d = m->yScale;
 
@@ -300,7 +300,7 @@ void printTransform(struct Matrix *m, char ch, int num)
   if(yScale > 1.0-TOLERANCE && yScale < 1.0+TOLERANCE)
     yScale = 1.0;
 
-  if(xScale != 1.0 || yScale != 1.0)
+  if((xScale != 1.0) || (yScale != 1.0) || always)
   {
     if(xScale == yScale)
       printf("\t$%c%i->scaleTo(%f);\n", ch, num, xScale);
@@ -347,10 +347,10 @@ void printFillStyle(struct FillStyle *s, int id, int num, int isMorph)
   if(isMorph)
   {
     if(s->type == 0x40 || s->type == 0x41)
-      printTransform(&(s->matrix2), 'f', num);
+      printTransform(&(s->matrix2), 'f', num, 0);
   }
   else
-    printTransform(&(s->matrix), 'f', num);
+    printTransform(&(s->matrix), 'f', num, 0);
 }
 
 void readFillStyleArray(FILE *f, struct Shape *shape, int isMorph)
@@ -1107,7 +1107,7 @@ void printPlaceObject(FILE *f, int length)
   else
     printf("\t$j%i = $s%i->add($s%i);\n", depth, sprite, id);
 
-  printTransform(&m, (sprite==0)?'i':'j', depth);
+  printTransform(&m, (sprite==0)?'i':'j', depth, 0);
 
   if(fileOffset < start+length)
   {
@@ -1138,12 +1138,12 @@ void printPlaceObject2(FILE *f)
     else
       printf("\t$j%i = $s%i->add($s%i);\n", depth, sprite, readUInt16(f));
   }
-
+// if it has a matrix but no character, always show xform !!!
   if(flags & PLACE_HASMATRIX)
   {
     struct Matrix m;
     readMatrix(f, &m);
-    printTransform(&m, (sprite==0)?'i':'j', depth);
+    printTransform(&m, (sprite==0)?'i':'j', depth, !(flags & PLACE_HASCHARACTER));
   }
 
   if(flags & PLACE_HASCXFORM)

@@ -52,7 +52,7 @@ typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
 #define SWF_SOUNDSTREAM_MONO             (0<<0)
 #define SWF_SOUNDSTREAM_STEREO           (1<<0)
 
-SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream sound, float frameRate, float skip);
+SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip);
 
 SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream sound);
 

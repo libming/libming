@@ -29,21 +29,8 @@
 #ifndef SWF_SHAPE_CUBIC_H_INCLUDED
 #define SWF_SHAPE_CUBIC_H_INCLUDED
 
-#include <string.h>
-
 #include "ming.h"
-#include "blocks/error.h"
 
-
-/* approximate a cubic bezier with quadratic segments,
-   returns the number of segments used */
-
-int SWFShape_drawCubic(SWFShape shape,
-		       float bx, float by, float cx, float cy,
-		       float dx, float dy);
-
-int SWFShape_drawCubicTo(SWFShape shape,
-			 float bx, float by, float cx, float cy,
-			 float dx, float dy);
+/* Currently, there are no internal functions or types */
 
 #endif /* SWF_SHAPE_CUBIC_H_INCLUDED */
