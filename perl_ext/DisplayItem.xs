@@ -136,6 +136,55 @@ void
 SWFDisplayItem_remove(item)
 	SWF::DisplayItem item
 
+
+void 
+SWFDisplayItem_getPosition(item)
+    	SWF::DisplayItem item
+	PREINIT:
+        float           x;
+        float           y;
+	PPCODE:
+	SWFDisplayItem_getPosition(item, &x, &y);
+	EXTEND(SP, 2);
+	PUSHs(sv_2mortal(newSVnv((double)x)));
+	PUSHs(sv_2mortal(newSVnv((double)y)));
+
+void 
+SWFDisplayItem_getScale(item)
+	SWF::DisplayItem item
+	PREINIT:
+	float             xScale;
+	float             yScale;
+	PPCODE:
+	SWFDisplayItem_getScale(item, &xScale, &yScale);
+	EXTEND(SP, 2);
+	PUSHs(sv_2mortal(newSVnv((double)xScale)));
+	PUSHs(sv_2mortal(newSVnv((double)yScale)));
+
+void 
+SWFDisplayItem_getSkew(item)
+	SWF::DisplayItem item
+	PREINIT:
+	float             xSkew;
+	float             ySkew;
+	PPCODE:
+	SWFDisplayItem_getSkew(item, &xSkew, &ySkew);
+	EXTEND(SP, 2);
+	PUSHs(sv_2mortal(newSVnv((double)xSkew)));
+	PUSHs(sv_2mortal(newSVnv((double)ySkew)));
+
+
+void 
+SWFDisplayItem_getRotation(item)
+	SWF::DisplayItem item
+	PREINIT:
+	float    degrees;
+	CODE:
+	SWFDisplayItem_getRotation(item, &degrees);
+	ST(0) = sv_newmortal();
+	sv_setnv(ST(0), (double)degrees);
+
+
 void
 SWFDisplayItem_DESTROY(item)
 	SWF::DisplayItem	item
