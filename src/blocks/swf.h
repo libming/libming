@@ -233,7 +233,7 @@ void destroySWFBrowserFont(SWFBlock block);
 typedef void *SWFTextField;
 
 #define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x3BFF /* off bits */
+#define SWFTEXTFIELD_OFFMASK 0x7BFF /* off bits */
 
 #define SWFTEXTFIELD_HASFONT   (1<<0)	/* font and size given */
 #define SWFTEXTFIELD_HASLENGTH (1<<1)
@@ -248,6 +248,7 @@ typedef void *SWFTextField;
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
 #define SWFTEXTFIELD_HASLAYOUT (1<<13)	/* align, margin, lspace, indent */
+#define SWFTEXTFIELD_AUTOSIZE  (1<<14)	/* SWF6 */
 
 typedef enum
 {
