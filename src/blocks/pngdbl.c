@@ -286,7 +286,7 @@ int readPNG(png_structp png_ptr, dblData result)
 
 
 SWFDBLBitmapData
-newSWFDBLBitmapData_fromPngFile(char *fileName)
+newSWFDBLBitmap_fromPngFile(char *fileName)
 {
 	SWFDBLBitmapData ret;
 	FILE *fp;

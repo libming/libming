@@ -203,7 +203,7 @@ readGif(GifFileType *file, dblData result)
  */
 
 SWFDBLBitmapData
-newSWFDBLBitmapData_fromGifFile(char *fileName)
+newSWFDBLBitmap_fromGifFile(char *fileName)
 {	GifFileType *file;
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;
