@@ -7,6 +7,8 @@ JAR = $(JAVADIR)/bin/jar
 
 
 SRCS = \
+	SWFColor.java \
+	SWFMatrix.java \
 	SWFAction.java \
 	SWFActionI.java \
 	SWFBitmap.java \
