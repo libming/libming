@@ -235,6 +235,7 @@ void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 			  byte r, byte g, byte b, byte a);
+void SWFShape_hideLine(SWFShape shape);
 
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
 					byte r, byte g, byte b, byte a);

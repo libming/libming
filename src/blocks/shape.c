@@ -610,6 +610,24 @@ addStyleRecord(SWFShape shape)
 
 
 void
+SWFShape_hideLine(SWFShape shape)
+{
+	ShapeRecord record;
+	int line;
+
+	if ( shape->isEnded )
+		return;
+
+	if ( shape->isMorph )
+		return;
+
+	record = addStyleRecord(shape);
+
+	record.record.stateChange->line = 0;
+	record.record.stateChange->flags |= SWF_SHAPE_LINESTYLEFLAG;
+}
+
+void
 SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 											byte r, byte g, byte b, byte a)
 {
