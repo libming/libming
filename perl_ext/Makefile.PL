@@ -206,6 +206,7 @@ sub write_swf_h {
  */
 
 #include "$dir/ming.h"
+#include "$dir/libming.h"
 EOF
     close FH;
 }
