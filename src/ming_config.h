@@ -9,7 +9,7 @@
  * of allocated objects, call ming_garbage_collect
  * to get rid of them all.
  */
-#undef TRACK_ALLOCS
+#define TRACK_ALLOCS 1
 
 #if USE_GIF
 #undef USE_ZLIB
