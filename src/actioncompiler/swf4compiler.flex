@@ -215,7 +215,7 @@ this			{ count();      return THIS;	}
 "?"			{ count();	return '?'; }
 ":"			{ count();	return ':'; }
 
-\n			{ count();	column = 0;
+\r?\n			{ count();	column = 0;
 					strcpy(szLine, yytext + 1);
 					++sLineNumber;	yyless(1);	}
 
@@ -258,12 +258,12 @@ static void comment(void)
 {
    // Handle block comments
 
-   char c, c1;
+   int c, c1;
 
 loop:
    // We have the start of a comment so look skip everything up to the
    // end of the comment character
-   while ((c = input()) != '*' && c != 0)
+   while ((c = input()) != '*' && c != EOF)
    {
       if(column < 1023)
          msgline[column] = c;
@@ -281,7 +281,7 @@ loop:
    }
 
    // is this the end of comment character
-   if ((c1 = input()) != '/' && c != 0)
+   if ((c1 = input()) != '/' && c != EOF)
    {
       // false start as this was no end of comment
       unput(c1);
@@ -289,11 +289,11 @@ loop:
    }
 
    // write out the start of the end of comment
-   if (c != 0)
+   if (c != EOF)
       if (swf4debug) putchar(c);
 
    // write out the end of the end of comment
-   if (c1 != 0) 
+   if (c1 != EOF) 
       if (swf4debug) putchar(c1);
 }
 
@@ -301,10 +301,10 @@ static void comment1(void)
 {
    // Handle comment of type 1 (ie '//')
 
-   char c;
+   int c;
 
    // this is a line comment
-   while ((c = input()) != '\n' && c != 0)
+   while ((c = input()) != '\n' && c != EOF)
    {
       if (swf4debug) putchar(c);
 
