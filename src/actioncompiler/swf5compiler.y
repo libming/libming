@@ -1366,6 +1366,52 @@ primary
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1); }
+	| lvalue assignop expr
+		{ if($1.obj)
+		  {
+		    if($1.ident)
+		    {
+		      $$ = $1.obj;			      /* a */
+		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, a */
+		      bufferWriteBuffer($$, $1.ident);	      /* a, a, i */
+		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, a.i */
+		      bufferConcat($$, $3);		      /* a, a.i, v */
+		      bufferWriteOp($$, $2);		      /* a, a.i+v */
+		      bufferConcat($$, $1.ident);	      /* a, a.i+v, i */
+		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a.i+v */
+		      bufferWriteSetRegister($$, 0);
+		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a.i = a.i+v */
+		      bufferWriteRegister($$, 0);
+		    }
+		    else
+		    {
+		      $$ = $1.memexpr;			      /* i */
+		      bufferConcat($$, $1.obj);		      /* i, a */
+		      bufferWriteSetRegister($$, 0);
+		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, i, i */
+		      bufferWriteRegister($$, 0);	      /* a, i, i, a */
+		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
+		      bufferConcat($$, $3);		      /* a, i, a[i], v */
+		      bufferWriteOp($$, $2);		      /* a, i, a[i]+v */
+		      bufferWriteSetRegister($$, 0);
+		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+v */
+		      bufferWriteRegister($$, 0);
+		    }
+		  }
+		  else
+		  {
+		    $$ = $1.ident;
+		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
+		    bufferConcat($$, $3);
+		    bufferWriteOp($$, $2);
+		    bufferWriteSetRegister($$, 0);
+		    bufferWriteOp($$, SWFACTION_SETVARIABLE);
+		    bufferWriteRegister($$, 0);
+		  }
+		}
 	;
 
 init_vars
