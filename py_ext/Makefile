@@ -21,7 +21,7 @@ swig:
 	swig -I.. -python ming.i
 
 clean:
-	rm -f mingcmodule.so core *~ *.o
+	rm -f mingcmodule.so core *~ *.o ming.pyc
 
 install:
 	cp mingcmodule.so ming.py ${PYLIBDIR}/site-packages
