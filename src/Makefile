@@ -5,7 +5,7 @@ CC = gcc -g -Wall
 LIBDIR = /usr/local/lib
 
 OFILES = movie.o displaylist.o blocklist.o position.o movieclip.o \
-	 shape_util.o text_util.o ming.o
+	 shape_util.o text_util.o fill.o ming.o
 
 COMPILEROFILES = actioncompiler/compile.o \
 		 actioncompiler/compiler.tab.o \
@@ -37,5 +37,5 @@ clean:
 #.c.o: .c .h
 #	${CC} ${FLAGS} -c $<
 
-test: dynamic test.o
-	${CC} test.o -o test -L. -lming -lm
+test: static test.o
+	${CC} -o test test.o libming.a -lm
