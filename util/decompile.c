@@ -617,7 +617,7 @@ static void listAssign(Stack s)
 static void listArithmetic(Stack s, Action parent)
 {
   int isShort, parens = 0;
-  char *op;
+  const char *op;
   Tree t = s->data.tree;
   Stack left = t->left, right = t->right;
 
