@@ -192,7 +192,7 @@ SWFInput newSWFInput_buffer(unsigned char *buffer, int length)
   SWFInput input = calloc(1, sizeof(struct _swfInput));
 
   input->getChar = SWFInput_buffer_getChar;
-  input->destroy = SWFInput_buffer_dtor;
+  input->destroy = SWFInput_dtor;
   input->eof = SWFInput_buffer_eof;
   input->seek = SWFInput_buffer_seek;
   input->data = (void *)buffer;
