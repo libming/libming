@@ -30,12 +30,14 @@
 
 #include "error.h"
 
+typedef unsigned char BOOL;
+
 #ifndef TRUE
-  #define TRUE 1
+  #define TRUE ((BOOL)1)
 #endif
 
 #ifndef FALSE
-  #define FALSE 0
+  #define FALSE ((BOOL)0)
 #endif
 
 #ifndef M_PI

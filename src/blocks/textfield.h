@@ -30,7 +30,7 @@ typedef struct SWFTextField_s *SWFTextField;
 #include "font.h"
 #include "browserfont.h"
 
-#define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
+#define SWFTEXTFIELD_ONMASK  0x2005 /* on bits */
 #define SWFTEXTFIELD_OFFMASK 0x3AFF /* off bits */
 
 #define SWFTEXTFIELD_HASLENGTH (1<<1)

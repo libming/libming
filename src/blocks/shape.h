@@ -45,65 +45,89 @@ typedef struct SWFShape_s *SWFShape;
 
 
 /* returns new shape object */
-SWFShape newSWFShape();
+SWFShape
+newSWFShape();
 
-void destroySWFShape(SWFBlock block);
+/* returns a shape containing the bitmap in a filled rect */
+SWFShape
+newSWFShapeFromBitmap(SWFBitmap bitmap);
 
-void SWFShape_addStyleHeader(SWFShape shape);
+void
+destroySWFShape(SWFBlock block);
 
-int SWFShape_getScaledPenX(SWFShape shape);
+void
+SWFShape_addStyleHeader(SWFShape shape);
 
-int SWFShape_getScaledPenY(SWFShape shape);
+int
+SWFShape_getScaledPenX(SWFShape shape);
 
-void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
+int
+SWFShape_getScaledPenY(SWFShape shape);
 
-void SWFShape_moveScaledPen(SWFShape shape, int x, int y);
+void
+SWFShape_getScaledPenXY(SWFShape shape, int* outX, int* outY);
 
-void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
+void
+SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
 
-void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
+void
+SWFShape_moveScaledPen(SWFShape shape, int x, int y);
 
-void SWFShape_drawScaledCurveTo(SWFShape shape,
-				int controlx, int controly,
-				int anchorx, int anchory);
+void
+SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
 
-void SWFShape_drawScaledCurve(SWFShape shape,
-			      int controldx, int controldy,
-			      int anchordx, int anchordy);
+void
+SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
 
-void SWFShape_drawScaledGlyph(SWFShape shape,
-			      SWFFont font, unsigned char c, int size);
+void
+SWFShape_drawScaledCurveTo(SWFShape shape,
+			   int controlx, int controly,
+			   int anchorx, int anchory);
 
-void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
-			   byte r, byte g, byte b, byte a);
+void
+SWFShape_drawScaledCurve(SWFShape shape,
+			 int controldx, int controldy,
+			 int anchordx, int anchordy);
 
-SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
-					byte r, byte g, byte b, byte a);
+void
+SWFShape_drawScaledGlyph(SWFShape shape,
+			 SWFFont font, unsigned short c, int size);
 
-SWFFillStyle SWFShape_addGradientFillStyle(SWFShape shape,
-					   SWFGradient gradient, byte flags);
+void
+SWFShape_setLineStyle(SWFShape shape, unsigned short width,
+		      byte r, byte g, byte b, byte a);
 
-SWFFillStyle SWFShape_addBitmapFillStyle(SWFShape shape,
-					 SWFBitmap bitmap, byte flags);
+SWFFillStyle
+SWFShape_addSolidFillStyle(SWFShape shape, byte r, byte g, byte b, byte a);
 
-void SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill);
+SWFFillStyle
+SWFShape_addGradientFillStyle(SWFShape shape, SWFGradient gradient, byte flags);
 
-void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill);
+SWFFillStyle
+SWFShape_addBitmapFillStyle(SWFShape shape, SWFBitmap bitmap, byte flags);
 
-void SWFShape_end(SWFShape shape);
+void
+SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill);
 
-void SWFShape_flushStateChange(SWFShape shape);
+void
+SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill);
 
-SWFOutput SWFShape_getOutput(SWFShape shape);
+void
+SWFShape_end(SWFShape shape);
 
-SWFFillStyle *SWFShape_getFills(SWFShape shape);
+void
+SWFShape_flushStateChange(SWFShape shape);
 
-int SWFShape_getNFills(SWFShape shape);
+SWFOutput
+SWFShape_getOutput(SWFShape shape);
 
-SWFLineStyle *SWFShape_getLines(SWFShape shape);
+void
+SWFShape_getFills(SWFShape shape, SWFFillStyle** outFills, int* outNFills);
 
-int SWFShape_getNLines(SWFShape shape);
+void
+SWFShape_getLines(SWFShape shape, SWFLineStyle** outLines, int* outNLines);
 
-void SWFShape_setMorphFlag(SWFShape shape);
+void
+SWFShape_setMorphFlag(SWFShape shape);
 
 #endif /* SWF_SHAPE_H_INCLUDED */

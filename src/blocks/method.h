@@ -49,6 +49,4 @@ void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data);
 
 void fileOutputMethod(byte b, void *data);
 
-void sec_free(void** ptr);
-
 #endif /* SWF_METHOD_H_INCLUDED */

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -25,120 +25,128 @@
 
 struct SWFLineStyle_s
 {
-  unsigned short width;
-  byte r;
-  byte g;
-  byte b;
-  byte a;
+	unsigned short width;
+	byte r;
+	byte g;
+	byte b;
+	byte a;
 };
 
 
 SWFLineStyle newSWFLineStyle(unsigned short width,
-			     byte r, byte g, byte b, byte a)
+					 byte r, byte g, byte b, byte a)
 {
-  SWFLineStyle line = malloc(sizeof(struct SWFLineStyle_s));
+	SWFLineStyle line = malloc(sizeof(struct SWFLineStyle_s));
 
-  line->width = width;
-  line->r = r;
-  line->g = g;
-  line->b = b;
-  line->a = a;
+	line->width = width;
+	line->r = r;
+	line->g = g;
+	line->b = b;
+	line->a = a;
 
-  return line;
+	return line;
 }
 
 
 byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
 			 byte r, byte g, byte b, byte a)
 {
-  if(line->width == 0 && width == 0)
-    return TRUE;
+	if(line->width == 0 && width == 0)
+		return TRUE;
 
-  if(line->width == width &&
-     line->r == r &&
-     line->g == g &&
-     line->b == b &&
-     line->a == a)
-  {
-    return TRUE;
-  }
+	if(line->width == width &&
+		 line->r == r &&
+		 line->g == g &&
+		 line->b == b &&
+		 line->a == a)
+	{
+		return TRUE;
+	}
 
-  return FALSE;
+	return FALSE;
 }
 
 
 unsigned short SWFLineStyle_getWidth(SWFLineStyle line)
 {
-  return line->width;
+	return line->width;
 }
 
 
 void SWFOutput_writeLineStyles(SWFOutput out,
-			       SWFLineStyle *lines, int nLines,
-			       SWFBlocktype shapeType)
+						 SWFLineStyle *lines, int nLines,
+						 SWFBlocktype shapeType)
 {
-  SWFLineStyle line;
-  int i;
+	SWFLineStyle line;
+	int i;
 
-  if(nLines<255)
-    SWFOutput_writeUInt8(out, nLines);
-  else
-  {
-    SWFOutput_writeUInt8(out, 255);
-    SWFOutput_writeUInt16(out, nLines);
-  }
+	if(nLines<255)
+		SWFOutput_writeUInt8(out, nLines);
+	else
+	{
+		SWFOutput_writeUInt8(out, 255);
+		SWFOutput_writeUInt16(out, nLines);
+	}
 
-  for(i=0; i<nLines; ++i)
-  {
-    line = lines[i];
+	for(i=0; i<nLines; ++i)
+	{
+		line = lines[i];
 
-    SWFOutput_writeUInt16(out, line->width);
-    SWFOutput_writeUInt8(out, line->r);
-    SWFOutput_writeUInt8(out, line->g);
-    SWFOutput_writeUInt8(out, line->b);
+		SWFOutput_writeUInt16(out, line->width);
+		SWFOutput_writeUInt8(out, line->r);
+		SWFOutput_writeUInt8(out, line->g);
+		SWFOutput_writeUInt8(out, line->b);
 
-    if(shapeType==SWF_DEFINESHAPE3)
-      SWFOutput_writeUInt8(out, line->a);
+		if(shapeType==SWF_DEFINESHAPE3)
+			SWFOutput_writeUInt8(out, line->a);
 
-    ++line;
-  }
+		++line;
+	}
 }
 
 
 void SWFOutput_writeMorphLineStyles(SWFOutput out,
-				    SWFLineStyle *lines1, int nLines1,
-				    SWFLineStyle *lines2, int nLines2)
+						SWFLineStyle *lines1, int nLines1,
+						SWFLineStyle *lines2, int nLines2)
 {
-  SWFLineStyle line1, line2;
-  int i;
+	SWFLineStyle line1, line2;
+	int i;
 
-  SWF_assert(nLines1 == nLines2);
+	SWF_assert(nLines1 == nLines2);
 
-  if(nLines1<255)
-    SWFOutput_writeUInt8(out, nLines1);
-  else
-  {
-    SWFOutput_writeUInt8(out, 255);
-    SWFOutput_writeUInt16(out, nLines1);
-  }
+	if(nLines1<255)
+		SWFOutput_writeUInt8(out, nLines1);
+	else
+	{
+		SWFOutput_writeUInt8(out, 255);
+		SWFOutput_writeUInt16(out, nLines1);
+	}
 
-  for(i=0; i<nLines1; ++i)
-  {
-    line1 = lines1[i];
-    line2 = lines2[i];
+	for(i=0; i<nLines1; ++i)
+	{
+		line1 = lines1[i];
+		line2 = lines2[i];
 
-    SWFOutput_writeUInt16(out, line1->width);
-    SWFOutput_writeUInt16(out, line2->width);
-    SWFOutput_writeUInt8(out, line1->r);
-    SWFOutput_writeUInt8(out, line1->g);
-    SWFOutput_writeUInt8(out, line1->b);
-    SWFOutput_writeUInt8(out, line1->a);
-    SWFOutput_writeUInt8(out, line2->r);
-    SWFOutput_writeUInt8(out, line2->g);
-    SWFOutput_writeUInt8(out, line2->b);
-    SWFOutput_writeUInt8(out, line2->a);
+		SWFOutput_writeUInt16(out, line1->width);
+		SWFOutput_writeUInt16(out, line2->width);
+		SWFOutput_writeUInt8(out, line1->r);
+		SWFOutput_writeUInt8(out, line1->g);
+		SWFOutput_writeUInt8(out, line1->b);
+		SWFOutput_writeUInt8(out, line1->a);
+		SWFOutput_writeUInt8(out, line2->r);
+		SWFOutput_writeUInt8(out, line2->g);
+		SWFOutput_writeUInt8(out, line2->b);
+		SWFOutput_writeUInt8(out, line2->a);
 
-    ++line1;
-    ++line2;
-  }
+		++line1;
+		++line2;
+	}
 }
+
+
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */

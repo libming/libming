@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -23,37 +23,34 @@
 
 void methodWriteUInt16(int i, SWFByteOutputMethod method, void *data)
 {
-  method(i&0xff, data);
-  i>>=8;
-  method(i&0xff, data);
+	method(i&0xff, data);
+	i>>=8;
+	method(i&0xff, data);
 }
 
 
 void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data)
 {
-  method(i&0xff, data);
-  i>>=8;
-  method(i&0xff, data);
-  i>>=8;
-  method(i&0xff, data);
-  i>>=8;
-  method(i&0xff, data);
+	method(i&0xff, data);
+	i>>=8;
+	method(i&0xff, data);
+	i>>=8;
+	method(i&0xff, data);
+	i>>=8;
+	method(i&0xff, data);
 }
 
 
 void fileOutputMethod(byte b, void *data)
 {
-  FILE *f = (FILE *)data;
-  fputc(b, f);
+	FILE *f = (FILE *)data;
+	fputc(b, f);
 }
 
 
-// calls free() with cleanup the pointer
-void sec_free(void** ptr)
-{
-  if (*ptr != NULL) {
-    free(*ptr);
-    *ptr=NULL;
-  }
-}
-
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */

@@ -1,6 +1,6 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
-CC = gcc -g -Wall -fPIC -ggdb
+CC = gcc -g -Wall #-fPIC -ggdb
 
 OFILES = \
 	action.o \
@@ -33,7 +33,8 @@ OFILES = \
 	soundstream.o \
 	sprite.o \
 	text.o \
-	textfield.o
+	textfield.o \
+	utf8.o
 
 all: ${OFILES}
 

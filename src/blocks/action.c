@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -25,18 +25,25 @@
 
 SWFAction newSWFAction()
 {
-  return newSWFOutputBlock(newSWFOutput(), SWF_DOACTION);
+	return newSWFOutputBlock(newSWFOutput(), SWF_DOACTION);
 }
 
 
 void destroySWFAction(SWFAction action)
 {
-  destroySWFOutputBlock((SWFBlock)action);
+	destroySWFOutputBlock((SWFBlock)action);
 }
 
 
 SWFAction newSWFAction_fromOutput(SWFOutput out)
 {
-  return newSWFOutputBlock(out, SWF_DOACTION);
+	return newSWFOutputBlock(out, SWF_DOACTION);
 }
 
+
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */

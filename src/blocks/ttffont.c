@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -126,9 +126,9 @@ void destroySWFFont(SWFBlock block)
 {
   SWFFont font = (SWFFont)block;
 
-  sec_free((void**)&font->shapes);
-  sec_free((void**)&font->name);
-  sec_free((void**)&font->kernTable);
+  free(font->shapes);
+  free(font->name);
+  free(font->kernTable);
 }
 
 
@@ -212,7 +212,7 @@ void SWFFont_resolveTextList(SWFFont font)
     oldList = textList;
     SWFFont_buildCodeTable(font, textList->text);
     textList = textList->next;
-    sec_free((void**)&oldList);
+    free(oldList);
   }
 
   font->textList = NULL;

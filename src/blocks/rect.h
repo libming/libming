@@ -22,6 +22,15 @@
 
 typedef struct SWFRect_s *SWFRect;
 
+struct SWFRect_s
+{
+  int minX;
+  int maxX;
+  int minY;
+  int maxY;
+};
+
+
 #include "libswf.h"
 #include "output.h"
 
