@@ -2,7 +2,7 @@
 #include <stdarg.h>
 
 #include "compile.h"
-
+#include "action.h"
 
 #define print(x)	{fputs(x,stdout);}
 
