@@ -80,7 +80,8 @@ struct pngdata readPNG(FILE *fp)
     error("Couldn't create end_info\n");
   }
 
-  if(setjmp(png_ptr->jmpbuf)) {
+  if(setjmp(png_ptr->jmpbuf))
+  {
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     fclose(fp);
     error("Mystery error (longjmp called)\n");
@@ -94,8 +95,18 @@ struct pngdata readPNG(FILE *fp)
 	       &png.bit_depth, &png.color_type,
 	       NULL, NULL, NULL);
 
-  if(png.color_type == PNG_COLOR_TYPE_PALETTE) {
-	if (verbose) printf("color type: PALETTE\n");
+  if(verbose)
+  {
+    printf("size %ld/%ld color %d/%d/%ld\n",
+	   png.width, png.height, png.bit_depth, png.color_type,
+	   png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS));
+  }
+
+  if(png.color_type == PNG_COLOR_TYPE_PALETTE)
+  {
+    if(verbose)
+      printf("color type: PALETTE\n");
+
     png_get_PLTE(png_ptr, info_ptr, &png.palette, &png.num_palette);
   }
 
@@ -109,18 +120,27 @@ struct pngdata readPNG(FILE *fp)
   if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
     png_set_expand(png_ptr);
 
-  if(png.bit_depth == 16) {
-	if (verbose) printf("depth: 16\n");
+  if(png.bit_depth == 16)
+  {
+    if(verbose)
+      printf("depth: 16\n");
+
     png_set_strip_16(png_ptr);
   }
 
-  if(png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-	if (verbose) printf("color type: GRAY ALPHA\n");
+  if(png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+  {
+    if(verbose)
+      printf("color type: GRAY ALPHA\n");
+
     png_set_gray_to_rgb(png_ptr);
   }
 
-  if(png.color_type == PNG_COLOR_TYPE_RGB) {
-	if (verbose) printf("color type: RGB\n");
+  if(png.color_type == PNG_COLOR_TYPE_RGB)
+  {
+    if(verbose)
+      printf("color type: RGB\n");
+
     png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
   }
 
@@ -166,8 +186,9 @@ struct pngdata readPNG(FILE *fp)
 
   png_read_image(png_ptr, row_pointers);
 
-  if(png.color_type == PNG_COLOR_TYPE_RGB_ALPHA
-  || png.color_type == PNG_COLOR_TYPE_RGB) {
+  if(png.color_type == PNG_COLOR_TYPE_RGB_ALPHA ||
+     png.color_type == PNG_COLOR_TYPE_RGB)
+  {
     /* alpha has to be pre-applied, bytes shifted */
 
     int x, y;
@@ -175,7 +196,8 @@ struct pngdata readPNG(FILE *fp)
     int alpha;
     unsigned char r, g, b;
 
-	if (verbose) printf("color type: RGB ALPHA\n");
+    if(verbose)
+      printf("color type: RGB ALPHA\n");
 
     for(y=0; y<png.height; ++y)
     {
@@ -200,10 +222,30 @@ struct pngdata readPNG(FILE *fp)
   return png;
 }
 
+static void
+alignedcopy(struct pngdata png, unsigned char *data)
+{
+  int row;
+  int alignedrowsize;
+  int pngrowsize;
+  unsigned char *pngdata;
+
+  alignedrowsize = (png.width * png.channels + 3) & ~3;
+  pngdata = png.data;
+  pngrowsize = png.width * png.channels;
+
+  for( row = 0; row < png.height; row++ )
+  {
+    memcpy(data, pngdata, pngrowsize);
+    pngdata += pngrowsize;
+    data += alignedrowsize;
+  }
+}
+
 void writeDBL(FILE *f, struct pngdata png)
 {
   unsigned char *data, *outdata;
-  int size;
+  int alignedsize;
   long outsize;
   int hasAlpha =
     png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA ||
@@ -214,25 +256,28 @@ void writeDBL(FILE *f, struct pngdata png)
   fputc('l', f);
   fputc(hasAlpha ? 2 : 1, f);
 
-  size = png.width * png.height * png.channels;
+  alignedsize = png.height * ((png.width * png.channels + 3) & ~3);
 
   if(png.color_type == PNG_COLOR_TYPE_PALETTE)
   {
     int tablesize = png.num_palette * sizeof(png_color);
-
-    data = realloc(png.palette, tablesize + size);
-
-    memcpy(data + tablesize, png.data, size);
-    size += tablesize;
+  
+    data = malloc(tablesize + alignedsize);
+    memcpy(data, png.palette, tablesize);
+    alignedcopy(png, data + tablesize);
+    alignedsize += tablesize;
   }
   else
-    data = png.data;
+  {
+    data = malloc(alignedsize);
+    alignedcopy(png, data);
+  }
 
-  outdata = malloc(outsize = (int)floor(size*1.01+12));
-
+  outdata = malloc(outsize = (int)floor(alignedsize*1.01+12));
+  
   /* compress the RGB color table (if present) and image data one block */
-
-  compress2(outdata, &outsize, data, size, 9);
+  
+  compress2(outdata, &outsize, data, alignedsize, 9);
 
   /* write the remaining file size */
 
