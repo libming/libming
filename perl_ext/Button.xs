@@ -31,14 +31,14 @@ SWFButton_new(package="SWF::Button")
 
 
 void
-destroySWFButton(block)
-        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+destroySWFButton(button)
+        SWF::Button      button
         ALIAS:
         SWF::Button::DESTROY = 1
         CODE:
         S_DEBUG(2, fprintf(stderr, "Button DESTROY CALLED\n"));
 	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
-        destroySWFButton(block);
+        destroySWFButton(button);
 
 void
 SWFButton_addShape(button, character, flags=0)
@@ -79,4 +79,3 @@ SWFButton_addAction(button, action, flags=SWFBUTTON_MOUSEUP)
         int             flags
         ALIAS:
         SWF::Button::setAction = 1
-
