@@ -21,7 +21,6 @@
 /* not used? #include <string.h> */
 #include <math.h>
 
-/* not used? #include "blocks/blocktypes.h" */
 #include "blocks/placeobject.h"
 #include "blocks/character.h"
 #include "blocks/matrix.h"
@@ -31,6 +30,7 @@
 #include "blocks/outputblock.h"
 #include "blocks/button.h"
 #include "blocks/videostream.h"
+#include "blocks/blocktypes.h"
 
 #define ITEM_NEW						(1<<0)
 #define ITEM_REMOVED				(1<<1)
