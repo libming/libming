@@ -16,7 +16,8 @@
  * simple, don't be afraid ;)
  *
  * Oh... input files are preprocessed using "cpp -P" unless you provide
- * the -p flag (do not use preprocessor).
+ * the -p flag (do not use preprocessor). -D can be used to set macros
+ * and -I to add dirs to include search paths.
  *
  * If you need another kind of preprocessing change the CPP define on
  * top of this file.
@@ -63,12 +64,12 @@
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
 
-#define CPP "cpp -P"
+#define CPP "cpp -P -Wall"
 #define MAXERRORMSG 1024
 
 /* prototypes */
 static char * readfile (char *file);
-static int preprocess (char *file, char *out);
+static int preprocess (char *file, char *out, char *cppargs);
 static void compileError(const char *fmt, ...);
 
 /* data */
@@ -78,7 +79,8 @@ static int lastcompilefailed = 0;
 void
 usage (char *me, int ex)
 {
-   fprintf(stderr, "Usage: %s [-p] [-s <width>x<height>] [-r <framerate>] <output> <as> ...\n", me);
+   fprintf(stderr, "Usage: %s [-s <width>x<height>] [-r <framerate>] <output> <as> ...\n", me);
+   fprintf(stderr, "       %s [-D<macro>[=<def>]] [-p] [-I<includedir>...] [-s <width>x<height>] [-r <framerate>] <output> <as> ...\n", me);
    exit(ex);
 }
 
@@ -146,6 +148,7 @@ main (int argc, char **argv)
    int swfcompression = DEFSWFCOMPRESSION;
    int dopreprocess = 1; /* use preprocessor by default */
    int framerate = 12;
+   int compiledfiles = 0;
 #ifdef HAVE_GETOPT_LONG
    struct option opts[] =
    {
@@ -157,42 +160,61 @@ main (int argc, char **argv)
    int opts_idx;
 #endif
    int c;
+   char cppargs[256];
+   char *me;
 
-   if ( argc < 3 ) usage(argv[0], 1);
+   cppargs[0] = '\0';
 
-   while (1)
-   {
+
+	me = argv[0];
+
+	while (1)
+	{
+		char buf [256];
+
 #ifdef HAVE_GETOPT_LONG
-      c = getopt_long (argc, argv, "ps:r:", opts, &opts_idx);
+		c = getopt_long (argc, argv, "ps:r:", opts, &opts_idx);
 #else
-      c = getopt (argc, argv, "ps:r:");
+		c = getopt (argc, argv, "ps:r:D:I:");
 #endif
-      if (c == -1) break;
+		if (c == -1) break;
 
-      switch (c)
-      {
-         case 'p':
-            dopreprocess=0;
-            break;
-         case 's':
-            if ( sscanf(optarg, "%dx%d", &width, &height) != 2 )
-            {
-               usage(argv[0], 1);
-            }
-            break;
-         case 'r':
-            if ( sscanf(optarg, "%d", &framerate) != 1 )
-            {
-               usage(argv[0], 1);
-            }
-            break;
-         default:
-            usage(argv[0], 1);
-            break;
-      }
+		switch (c)
+		{
+			case 'p':
+				dopreprocess=0;
+				break;
+			case 's':
+				if ( sscanf(optarg, "%dx%d", &width, &height) != 2 )
+				{
+					usage(argv[0], 1);
+				}
+				break;
+			case 'r':
+				if ( sscanf(optarg, "%d", &framerate) != 1 )
+				{
+					usage(argv[0], 1);
+				}
+				break;
+			case 'I':
+				// yes, you can smash the stack ... 
+				sprintf(buf, "-I%s", optarg);
+				strcat(cppargs, buf);
+				break;
+			case 'D':
+				// yes, you can smash the stack ... 
+				sprintf(buf, "-D%s", optarg);
+				strcat(cppargs, buf);
+				break;
+			default:
+				usage(argv[0], 1);
+				break;
+		}
    }
    argv+=optind;
    argc-=optind;
+
+   if ( argc < 2 ) usage(me, 1);
 
    outputfile = argv[0];
    if ( ! stat(outputfile, &statbuf) )
@@ -213,48 +235,62 @@ main (int argc, char **argv)
    SWFMovie_setDimension(mo, (float)width, (float)height);
    SWFMovie_setRate(mo, framerate);
 
-   for ( i=1; i<argc; i++ )
-   {
+	for ( i=1; i<argc; i++ )
+	{
+		struct stat statbuf;
 
-      if ( dopreprocess )
-      {
-         sprintf(ppfile, "%s.cpp", argv[i]);
-         if ( ! preprocess(argv[i], ppfile) ) continue;
-         if ( ! (code=readfile(ppfile)) ) continue;
-         unlink(ppfile);
-      }
-      else
-      {
-         if ( ! (code=readfile(argv[i])) ) continue;
-      }
+		if ( -1 == stat(argv[i], &statbuf) )
+		{
+			fprintf(stderr, "Can't stat '%s', skipping\n", argv[i]);
+			//continue;
+		}
 
+		if ( dopreprocess )
+		{
+			sprintf(ppfile, "%s.pp", argv[i]);
+			if ( ! preprocess(argv[i], ppfile, cppargs) ) continue;
+			if ( ! (code=readfile(ppfile)) ) continue;
+			unlink(ppfile);
+		}
+		else
+		{
+			if ( ! (code=readfile(argv[i])) )
+			{
+				continue;
+			}
+		}
 
+		printf("Compiling code from %s... ", argv[i]);
+		fflush(stdout);
+		lastcompilefailed=0;
+		ac = compileSWFActionCode(code);
+		free(code);
+		if ( lastcompilefailed )
+		{
+			printf("failed:\n"); 
+			printCompileMessage();
+			exit(1);
+		}
+		else
+		{
+			printf("done.\n"); 
+		}
+		SWFMovie_add(mo, (SWFBlock)ac);
+		compiledfiles++;
+	}
 
+	if ( ! compiledfiles )
+	{
+		printf("No valid input files\n");
+		return 1;
+	}
 
-      printf("Compiling code from %s... ", argv[i]);
-      fflush(stdout);
-      lastcompilefailed=0;
-      ac = compileSWFActionCode(code);
-      free(code);
-      if ( lastcompilefailed )
-      {
-         printf("failed:\n"); 
-         printCompileMessage();
-         exit(1);
-      }
-      else
-      {
-         printf("done.\n"); 
-      }
-      SWFMovie_add(mo, (SWFBlock)ac);
-   }
+	printf("Saving output to %s... ", outputfile);
+	fflush(stdout);
+	SWFMovie_save(mo, outputfile);
+	printf("done.\n"); 
 
-   printf("Saving output to %s... ", outputfile);
-   fflush(stdout);
-   SWFMovie_save(mo, outputfile);
-   printf("done.\n"); 
-
-   return 0;
+	return 0;
 }
 
 static char *
@@ -287,46 +323,24 @@ readfile (char *file)
 }
 
 static int
-preprocess (char *file, char *out)
+preprocess (char *file, char *out, char *cppargs)
 {
-   char buf[1024];
+	char buf[1024];
+	int ret;
 
-   sprintf(buf, "%s %s > %s", CPP, file, out);
-   system(buf);
+	sprintf(buf, "%s %s %s > %s", CPP, cppargs, file, out);
 
-   return 1;
+	ret = system(buf);
+	if ( ret ) return 0;
+
+	return 1;
 }
 
 /*************************************************************8
  *
  * $Log$
- * Revision 1.2  2004/04/29 08:06:48  strk
- * moved copyright notice on top
+ * Revision 1.3  2004/07/15 12:45:54  strk
+ * Added -D and -I switched for preprocessor control
  *
- * Revision 1.1  2004/04/26 09:12:13  strk
- * Added simple commandline actionscript compiler.
  *
- * Revision 1.7  2004/04/01 09:00:16  strk
- * Fixed typo in -r handling
- *
- * Revision 1.6  2004/03/31 22:08:21  strk
- * Added framerate switch
- *
- * Revision 1.5  2004/03/31 22:02:30  strk
- * SWFMovie_save() call corrected to latest API
- * 
- * Revision 1.4  2003/09/29 10:01:53  strk
- * 
- * making a mess ;)
- * 
- * Revision 1.3  2003/09/29 10:00:01  strk
- * 
- * Added a new introductory comment before the log list
- * (also found that when entering log with cvs it's better not include
- *  a newline after CVS: lines)
- * 
- * Revision 1.2  2003/09/29 09:58:09  strk
- * 
- * Added |Log| in a comment at top file to see if it will work
- * (modified)
  */
