@@ -1,4 +1,4 @@
-BEGIN { $| = 1; print "1..2\n"; }
+BEGIN { $| = 1;}
 
 use SWF qw(Shape Bitmap);
 require 't/config.pl';
@@ -7,6 +7,7 @@ my $s = new SWF::Shape();
 
 my $filename = ming_dir() . '/examples/common/backyard.jpg';
 skip_test() unless (-e $filename);
+print "1..2\n"; 
 
 eval{
     my $b = new SWF::Bitmap($filename);
