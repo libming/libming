@@ -3,6 +3,31 @@
  */
 
 
+2002-07-03 18:35  staybyte
+
+	* CHANGES, ming.h, php_ext/config.m4, php_ext/ming.c,
+	php_ext/php_ming.h, src/Makefile, src/blocklist.c,
+	src/displaylist.c, src/fill.c, src/ming.c, src/ming.h, src/movie.c,
+	src/movie.h, src/position.c, src/actioncompiler/Makefile,
+	src/actioncompiler/compile.c, src/actioncompiler/swf4compiler.y,
+	src/actioncompiler/swf5compiler.y, src/blocks/Makefile,
+	src/blocks/action.c, src/blocks/bitmap.c, src/blocks/block.c,
+	src/blocks/blocktypes.h, src/blocks/browserfont.c,
+	src/blocks/button.c, src/blocks/character.c, src/blocks/cxform.c,
+	src/blocks/dbl.c, src/blocks/error.c, src/blocks/fillstyle.c,
+	src/blocks/font.c, src/blocks/font.h, src/blocks/fontinfo.c,
+	src/blocks/gradient.c, src/blocks/input.c, src/blocks/jpeg.c,
+	src/blocks/libswf.h, src/blocks/linestyle.c, src/blocks/loadfont.c,
+	src/blocks/matrix.c, src/blocks/method.c, src/blocks/method.h,
+	src/blocks/morph.c, src/blocks/mp3.c, src/blocks/output.c,
+	src/blocks/outputblock.c, src/blocks/placeobject.c,
+	src/blocks/read.c, src/blocks/rect.c, src/blocks/shape.c,
+	src/blocks/sound.c, src/blocks/soundstream.c, src/blocks/sprite.c,
+	src/blocks/swf.h, src/blocks/text.c, src/blocks/text.h,
+	src/blocks/textfield.c, src/blocks/textfield.h,
+	src/blocks/ttffont.c, src/blocks/ttffont.h, util/gif2dbl.c,
+	util/listswf.c, util/swftophp.c: fixed some problems with segfaults
+
 2002-07-03 16:10  staybyte
 
 	* HISTORY: move CHANGES to HISTORY
