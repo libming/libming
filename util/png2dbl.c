@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -7,6 +6,8 @@
 
 #include <png.h>
 #include <zlib.h>
+
+int verbose = 0;
 
 void error(char *s, ...)
 {
@@ -22,7 +23,7 @@ void usage()
 {
   printf("png2dbl - convert a png file to an SWF DefineBitsLossless\n");
   printf("          or DefineBitsLossless2 block\n");
-  printf("\nUsage: png2bmap <file.png>\n");
+  printf("\nUsage: png2bmap [--verbose] <file.png>\n");
   printf("where file.png is your png file.  Writes to file.dbl.\n");
   exit(1);
 }
@@ -93,8 +94,10 @@ struct pngdata readPNG(FILE *fp)
 	       &png.bit_depth, &png.color_type,
 	       NULL, NULL, NULL);
 
-  if(png.color_type == PNG_COLOR_TYPE_PALETTE)
+  if(png.color_type == PNG_COLOR_TYPE_PALETTE) {
+	if (verbose) printf("color type: PALETTE\n");
     png_get_PLTE(png_ptr, info_ptr, &png.palette, &png.num_palette);
+  }
 
   /* force bitdepth of 8 if necessary */
 
@@ -106,14 +109,20 @@ struct pngdata readPNG(FILE *fp)
   if(png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
     png_set_expand(png_ptr);
 
-  if(png.bit_depth == 16)
+  if(png.bit_depth == 16) {
+	if (verbose) printf("depth: 16\n");
     png_set_strip_16(png_ptr);
+  }
 
-  if(png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+  if(png.color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+	if (verbose) printf("color type: GRAY ALPHA\n");
     png_set_gray_to_rgb(png_ptr);
+  }
 
-  if(png.color_type == PNG_COLOR_TYPE_RGB)
-    png_set_filler(png_ptr, 0xff, PNG_FILLER_BEFORE);
+  if(png.color_type == PNG_COLOR_TYPE_RGB) {
+	if (verbose) printf("color type: RGB\n");
+    png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+  }
 
 
   /* update info w/ the set transformations */
@@ -132,6 +141,8 @@ struct pngdata readPNG(FILE *fp)
        an rgb color table */
 
     int i;
+
+	if (verbose) printf("color type: GRAY\n");
 
     png.color_type = PNG_COLOR_TYPE_PALETTE;
     png.num_palette = 1 << depth;
@@ -155,14 +166,16 @@ struct pngdata readPNG(FILE *fp)
 
   png_read_image(png_ptr, row_pointers);
 
-  if(png.color_type == PNG_COLOR_TYPE_RGB_ALPHA)
-  {
+  if(png.color_type == PNG_COLOR_TYPE_RGB_ALPHA
+  || png.color_type == PNG_COLOR_TYPE_RGB) {
     /* alpha has to be pre-applied, bytes shifted */
 
     int x, y;
     unsigned char *p;
     int alpha;
     unsigned char r, g, b;
+
+	if (verbose) printf("color type: RGB ALPHA\n");
 
     for(y=0; y<png.height; ++y)
     {
@@ -269,6 +282,12 @@ int main(int argc, char *argv[])
   int len;
   char *outfile;
   struct pngdata png;
+
+  if (argc > 2 && strcmp(argv[1], "--verbose")==0) {
+	verbose = 1;
+	argc--;
+	argv++;
+  }
 
   if(argc < 2)
     usage();
