@@ -1,3 +1,14 @@
+2002-08-28 18:05  opaque_ndst
+
+	* TODO, src/movie.c, src/position.c, src/shape_cubic.c,
+	src/shape_util.c, src/blocks/block.c, src/blocks/cxform.c,
+	src/blocks/dbl.c, src/blocks/error.c, src/blocks/font.c,
+	src/blocks/font.h, src/blocks/input.c, src/blocks/jpeg.c,
+	src/blocks/matrix.c, src/blocks/method.c, src/blocks/read.c,
+	src/blocks/sound.c, src/blocks/soundstream.c, src/blocks/text.c,
+	src/blocks/utf8.c, win32/libming.dsp: type casts to quell warnings
+	on windows
+
 2002-08-27 06:50  opaque_ndst
 
 	* src/blocks/input.c: fixed really stupid problem with
