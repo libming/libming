@@ -19,6 +19,8 @@
 
 #include "bitmap.h"
 #include "rect.h"
+#include "jpeg.h"
+#include "dbl.h"
 
 void destroySWFBitmap(SWFBlock block)
 {
@@ -30,8 +32,34 @@ int SWFBitmap_getWidth(SWFBitmap b)
   SWFRect bounds = CHARACTER(b)->bounds;
   return bounds->maxX - bounds->minX;
 }
+
 int SWFBitmap_getHeight(SWFBitmap b)
 {
   SWFRect bounds = CHARACTER(b)->bounds;
   return bounds->maxY - bounds->minY;
+}
+
+
+#define JPEG_MARKER 0xFF
+#define JPEG_SOI  0xD8
+
+SWFBitmap newSWFBitmap_fromInput(SWFInput input)
+{
+  int c1 = SWFInput_getChar(input);
+  int c2 = SWFInput_getChar(input);
+
+  SWFInput_rewind(input);
+
+  if(c1 == JPEG_MARKER && c2 == JPEG_SOI)
+    return (SWFBitmap)newSWFJpegBitmap_fromInput(input);
+
+  if(c1 == 'D' && c2 == 'B')
+    return (SWFBitmap)newSWFDBLBitmap_fromInput(input);
+
+  if(c1 == 'G' && c2 == 'I')
+    SWF_error("GIF images must be translated into DBL files for now");
+
+  SWF_error("Unrecognised file type");
+
+  return NULL;
 }

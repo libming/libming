@@ -135,6 +135,8 @@ void destroySWFBitmap(SWFBlock block);
 int SWFBitmap_getWidth(SWFBitmap b);
 int SWFBitmap_getHeight(SWFBitmap b);
 
+SWFBitmap newSWFBitmap_fromInput(SWFInput input);
+
 
   /* SWFDBLBitmap */
 
