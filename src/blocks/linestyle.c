@@ -51,8 +51,8 @@ SWFLineStyle newSWFLineStyle(unsigned short width,
 byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
 			 byte r, byte g, byte b, byte a)
 {
-	if(line->width == 0 && width == 0)
-		return TRUE;
+//	if(line->width == 0 && width == 0)
+//		return TRUE;
 
 	if(line->width == width &&
 		 line->r == r &&
