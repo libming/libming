@@ -48,6 +48,10 @@
   #define max(a,b) (((a)>(b))?(a):(b))
 #endif
 
+#ifndef rint
+  #define rint(d) (floor((d)+0.5))
+#endif
+
 typedef unsigned char byte;
 
 #endif /* LIBSWF_H_INCLUDED */

@@ -16,6 +16,10 @@
   #define M_PI 3.14159265358979f
 #endif
 
+#ifndef rint
+  #define rint(d) (floor((d)+0.5))
+#endif
+
 #ifndef WIN32
   #include <unistd.h>
 #endif
