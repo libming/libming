@@ -157,7 +157,7 @@ void printMP3Headers(FILE *f)
     if(version == 1)
       frameLen = 144 * bitrate * 1000 / samplerate + padding;
     else
-      frameLen = 52 * stereo * bitrate * 1000 / samplerate + padding;
+      frameLen = 72 * bitrate * 1000 / samplerate + padding;
 
     printf("frame %i: MP%i layer %i, %i Hz, %ikbps, %s, length=%i, protect %s\n",
 	   numFrames, version, layer, samplerate, bitrate,
@@ -169,7 +169,7 @@ void printMP3Headers(FILE *f)
 
   putchar('\n');
 
-  length = numFrames*1152/samplerate;
+  length = numFrames*(sampleRate > 3200 ? 1152 : 576)/samplerate;
 
   printf("Number of frames: %i\n", numFrames);
   printf("Average bitrate: %i\n", bitrateSum/numFrames);
