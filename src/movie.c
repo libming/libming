@@ -385,11 +385,16 @@ SWFMovie_remove(SWFMovie movie , SWFDisplayItem item)
 	SWFDisplayItem_remove(item);
 }
 
-
 void
 SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream stream)
 {
-	SWFBlock block = SWFSoundStream_getStreamHead(stream, movie->rate);
+	SWFMovie_setSoundStreamAt(movie, stream, 0);
+}
+
+void
+SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip)
+{
+	SWFBlock block = SWFSoundStream_getStreamHead(stream, movie->rate, skip);
 
 	if ( block != NULL )
 	{

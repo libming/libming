@@ -69,7 +69,7 @@ void
 SWFMovieClip_setSoundStream(SWFMovieClip clip,
 														SWFSoundStream sound, float rate)
 {
-	SWFBlock block = SWFSoundStream_getStreamHead(sound, rate);
+	SWFBlock block = SWFSoundStream_getStreamHead(sound, rate, 0);
 	
 	if ( block != NULL )
 	{

@@ -2374,13 +2374,27 @@ PHP_FUNCTION(swfmovie_setFrames)
 
 PHP_FUNCTION(swfmovie_streamMp3)
 {
-  zval **zfile;
+  zval **zfile, **zskip;
+  float skip;
   SWFSoundStream sound;
   SWFInput input;
   SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 //fprintf(stderr, "newSWFSoundStream_fromInput %x %d\n", newSWFSoundStream_fromInput, getpid()); sleep(30);
-  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zfile) == FAILURE)
+  switch (ZEND_NUM_ARGS()) {
+  case 1:
+  	if(zend_get_parameters_ex(1, &zfile) == FAILURE)
+		WRONG_PARAM_COUNT;
+	skip = 0;
+	break;
+  case 2:
+	if(zend_get_parameters_ex(2, &zfile, &zskip) == FAILURE)
+		 WRONG_PARAM_COUNT;
+	convert_to_double_ex(zskip);
+	skip = Z_DVAL_PP(zskip);
+	break;
+  default:
     WRONG_PARAM_COUNT;
+  }
 
   if(Z_TYPE_PP(zfile) != IS_RESOURCE)
   {
@@ -2392,7 +2406,7 @@ PHP_FUNCTION(swfmovie_streamMp3)
     input = getInput(zfile TSRMLS_CC);
 
   sound = newSWFSoundStream_fromInput(input);
-  SWFMovie_setSoundStream(movie, sound);
+  SWFMovie_setSoundStream(movie, sound, skip);
   RETURN_LONG(SWFSoundStream_getFrames(sound));
 }
 

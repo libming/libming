@@ -55,7 +55,7 @@ SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 
 void destroySWFSoundStream(SWFSoundStream sound);
 
-SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream sound, float frameRate);
+SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream sound, float frameRate, float skip);
 
 SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream sound);
 

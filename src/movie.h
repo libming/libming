@@ -57,6 +57,9 @@ SWFMovie_protect(SWFMovie movie);
 void
 SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
 
+void
+SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream sound, float skip);
+
 SWFSoundInstance
 SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 

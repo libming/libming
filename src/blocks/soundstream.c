@@ -55,6 +55,31 @@ struct SWFSoundStreamBlock_s
 int
 nextMP3Frame(SWFInput input);
 
+void skipMP3(SWFSoundStream stream, float skip) 
+{
+	int frameSize;
+	int skipFrames, l;
+	
+	if(skipFrames <= 0)
+		return;
+	
+	if ( stream->sampleRate > 32000 )
+		frameSize = 1152;
+	else
+	        frameSize = 576;
+		 
+	skipFrames = (int)floor((skip  / frameSize) / stream->sampleRate);
+
+	while(skipFrames > 0) {
+		l = nextMP3Frame(stream->input);
+		if (l < 0) {
+			printf("no more frames to skip \n");
+			break;
+		}
+		--skipFrames;
+		stream->start += l;
+	}
+}
 
 int
 completeSWFSoundStream(SWFBlock block)
@@ -169,12 +194,12 @@ int SWFSoundStream_getFrames(SWFSoundStream stream)
 #define MP3_CHANNEL_MONO		 0x000000C0
 
 SWFBlock
-SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
+SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 {
 	SWFOutput out = newSizedSWFOutput(6);
 	SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD);
 	SWFInput input = stream->input;
-
+	
 	int rate, channels, flags, start = 0;
 
 	/* get 4-byte header, bigendian */
@@ -234,9 +259,11 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate)
 		SWF_SOUNDSTREAM_MP3_COMPRESSED | rate | SWF_SOUNDSTREAM_16BITS | channels;
 
 	stream->flags = flags;
-
+	
 	stream->samplesPerFrame = (int)floor(stream->sampleRate / frameRate);
-
+	
+	skipMP3(stream, skip);
+	
 	SWFOutput_writeUInt8(out, flags & 0x0f); /* preferred mix format.. (?) */
 	SWFOutput_writeUInt8(out, flags);
 	SWFOutput_writeUInt16(out, stream->samplesPerFrame);
