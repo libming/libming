@@ -1,3 +1,7 @@
+2002-08-05 20:56  opaque_ndst
+
+	* src/blocks/loadfont.c: code moved to font.c
+
 2002-07-22 22:37  opaque_ndst
 
 	* ming.h, mingpp.h, src/blocklist.c, src/blocklist.h,
