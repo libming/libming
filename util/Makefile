@@ -6,11 +6,13 @@ BINDIR = $(PREFIX)/lib/libming/bin
 
 INCLUDES	+= -I.. 
 
+PAGER ?= less
+
 ## Needs to be placed after variable defs but before rules
 include ../Rules.make
 
 all:
-	cat README
+	$(PAGER) README
 
 all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp \
 	png2dbl gif2dbl gif2mask listaction raw2adpcm png2swf makeswf
