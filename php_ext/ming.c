@@ -2992,6 +2992,9 @@ PHP_FUNCTION(swftextfield_addString)
 
 zend_module_entry ming_module_entry =
   {
+#ifdef STANDARD_MODULE_HEADER
+    STANDARD_MODULE_HEADER,
+#endif
     "ming",
     ming_functions,
     PHP_MINIT(ming), /* module init function */
