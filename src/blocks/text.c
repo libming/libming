@@ -425,12 +425,11 @@ SWFText_scaledMoveTo(SWFText text, int x, int y)
 /* glyph codes changed to (correct) character codes by Raff */
 
 void
-SWFText_addString(SWFText text, const char* string, int* advance)
+SWFText_addWideString(SWFText text, const unsigned short* widestring,
+											int len, int* advance)
 {
 	SWFTextRecord textRecord = text->currentRecord;
 	SWFFont font = textRecord->font.font;
-	unsigned short* widestring;
-	int len;
 
 	if ( font == NULL )
 		SWF_error("font must be set before calling addString");
@@ -441,11 +440,34 @@ SWFText_addString(SWFText text, const char* string, int* advance)
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
 
-	len = UTF8ExpandString(string, &widestring);
+	textRecord->advance = advance;
+	textRecord->strlen = len;
+	textRecord->string = malloc(sizeof(unsigned short) * len);
+	memcpy(textRecord->string, widestring, sizeof(unsigned short) * len);
+}
 
+
+void
+SWFText_addString(SWFText text, const char* string, int* advance)
+{
+	unsigned short* widestring;
+	int len = UTF8ExpandString(string, &widestring);
+
+	SWFTextRecord textRecord = text->currentRecord;
+	SWFFont font = textRecord->font.font;
+
+	if ( font == NULL )
+		SWF_error("font must be set before calling addString");
+
+	/* marginally sloppy to tack on a new record,
+		 but I don't want to deal with concats */
+
+	if ( textRecord == NULL || textRecord->string != NULL )
+		textRecord = SWFText_addTextRecord(text);
+
+	textRecord->advance = advance;
 	textRecord->strlen = len;
 	textRecord->string = widestring;
-	textRecord->advance = advance;
 }
 
 
@@ -635,12 +657,13 @@ SWFText_resolveCodes(SWFText text)
 
 			for ( i=0; i<len; ++i )
 			{
+				SWFRect glyphBounds;
 				int minX, maxX, minY, maxY;
 
 				int code =
 					SWFFontCharacter_getGlyphCode(fontchar, textRecord->string[i]);
 
-				SWFRect glyphBounds = SWFFont_getGlyphBounds(font, code);
+				glyphBounds = SWFFont_getGlyphBounds(font, code);
 
 				SWFRect_getBounds(glyphBounds, &minX, &maxX, &minY, &maxY);
 

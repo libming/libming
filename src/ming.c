@@ -42,6 +42,13 @@ int Ming_init()
 }
 
 
+void
+Ming_cleanup()
+{
+	Ming_cleanupFonts();
+}
+
+
 void Ming_setScale(float scale)
 {
 	Ming_scale = scale;

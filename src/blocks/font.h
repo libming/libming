@@ -33,6 +33,7 @@ typedef struct SWFFontCharacter_s *SWFFontCharacter;
 #include "browserfont.h"
 #include "text.h"
 
+#define SWF_FONT_HASLAYOUT    (1<<7)
 #define SWF_FONT_UNICODE      (1<<6)
 #define SWF_FONT_SHIFTJIS     (1<<5)
 #define SWF_FONT_ANSI         (1<<4)

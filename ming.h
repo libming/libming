@@ -223,25 +223,51 @@ float SWFFont_getLeading(SWFFont font);
 
 typedef struct SWFText_s *SWFText;
 
-SWFText newSWFText();
-SWFText newSWFText2();
-void destroySWFText(SWFText text);
+SWFText
+newSWFText();
 
-void SWFText_setFont(SWFText text, void *font);
-void SWFText_setHeight(SWFText text, float height);
-void SWFText_moveTo(SWFText text, float x, float y);
-void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-void SWFText_addString(SWFText text, const char *string, int *advance);
-void SWFText_setSpacing(SWFText text, float spacing);
+SWFText
+newSWFText2();
 
-float SWFText_getStringWidth(SWFText text, const char *string);
+void
+destroySWFText(SWFText text);
+
+void
+SWFText_setFont(SWFText text, void *font);
+
+void
+SWFText_setHeight(SWFText text, float height);
+
+void
+SWFText_moveTo(SWFText text, float x, float y);
+
+void
+SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
+
+void
+SWFText_addString(SWFText text, const char *string, int *advance);
+
+void
+SWFText_addWideString(SWFText text, const unsigned short* string,
+		      int strlen, int* advance);
+
+void
+SWFText_setSpacing(SWFText text, float spacing);
+
+float
+SWFText_getStringWidth(SWFText text, const char *string);
 
 /* XXX */
 #define SWFText_getWidth SWFText_getStringWidth
 
-float SWFText_getAscent(SWFText text);
-float SWFText_getDescent(SWFText text);
-float SWFText_getLeading(SWFText text);
+float
+SWFText_getAscent(SWFText text);
+
+float
+SWFText_getDescent(SWFText text);
+
+float
+SWFText_getLeading(SWFText text);
 
 /* deprecated: */
 #define SWFText_setXY(t,x,y) SWFText_moveTo((t),(x),(y))

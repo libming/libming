@@ -69,7 +69,11 @@ void
 SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
 
 void
-SWFText_addString(SWFText text, const char *string, int *advance);
+SWFText_addString(SWFText text, const char* string, int* advance);
+
+void
+SWFText_addWideString(SWFText text, const unsigned short* string,
+		      int strlen, int* advance);
 
 void
 SWFText_setScaledSpacing(SWFText text, int spacing);

@@ -118,26 +118,28 @@ completeSWFFontCharacter(SWFBlock block)
 {
 	SWFFontCharacter inst = (SWFFontCharacter)block;
 	SWFFont font = inst->font;
-	int size, i;
-	int charmap_len;
+	int size = 0;
+	int i;
 
 	// get charcodes from text records, translate into local code map
 	SWFFontCharacter_resolveTextCodes(inst);
 
-	/* 2 bytes id, 2 bytes flags, 1 byte name length, 2 bytes nGlyphs,
-		 2*(nGlyphs+1) bytes offsets, nGlyphs bytes character map: */
-
-	if ( font->flags & SWF_FONT_WIDECODES )
-		charmap_len = 2 * inst->nGlyphs;
-	else
-		charmap_len = inst->nGlyphs;
-
-	size = 9 + strlen(font->name) + 2*inst->nGlyphs + charmap_len;
+	size += 2; // character id
+	size += 2; // flags
+	size += 1; // name length
+	size += strlen(font->name); // font name
+	size += 2; // nglyphs
+	size += 2 * (inst->nGlyphs + 1); // offset table
 
 	/* get length of each glyph from its output buffer */
 
 	for ( i=0; i<inst->nGlyphs; ++i )
 		size += glyphLength(font, inst->codeTable[i]);
+
+	if ( font->flags & SWF_FONT_WIDECODES )
+		size += 2 * inst->nGlyphs;
+	else
+		size += inst->nGlyphs;
 
 	if ( size > 65500 )
 	{
@@ -160,7 +162,7 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 	methodWriteUInt16(CHARACTERID(inst), method, data);
 
-	method(inst->flags & SWF_FONT_WIDEOFFSETS ? 8 : 0, data); /* main flags */
+	method(inst->flags, data); /* main flags */
 	method(0, data);																					/* more flags */
 	method(strlen(font->name), data);
 
@@ -175,7 +177,7 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 	for ( i=0; i<=inst->nGlyphs; ++i )
 	{
-		if ( font->flags & SWF_FONT_WIDEOFFSETS )
+		if ( inst->flags & SWF_FONT_WIDEOFFSETS )
 			methodWriteUInt32(offset, method, data);
 		else
 			methodWriteUInt16(offset, method, data);
@@ -199,7 +201,7 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 	
 	/* write glyph to code map */
 
-	if ( font->flags & SWF_FONT_WIDECODES )
+	if ( inst->flags & SWF_FONT_WIDECODES )
 	{
 		for ( i=0; i<inst->nGlyphs; ++i )
 			methodWriteUInt16(font->glyphToCode[inst->codeTable[i]], method, data);
@@ -293,7 +295,7 @@ newSWFFontCharacter(SWFFont font)
 	CHARACTERID(inst) = ++SWF_gNumCharacters;
 
 	inst->font = font;
-	inst->flags = font->flags;
+	inst->flags = font->flags & (~SWF_FONT_HASLAYOUT) & (~SWF_FONT_WIDEOFFSETS);
 
 	inst->nGlyphs = 0;
 	inst->codeTable = NULL;
@@ -520,8 +522,7 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 		text = text->next;
 	}
 
-	// translate codeTable's char codes into glyph codes so we include the
-	// right glyphs
+	// translate codeTable's char codes into glyph codes
 
 	for ( i=0; i<font->nGlyphs; ++i )
 	{
@@ -605,8 +606,11 @@ SWFFont_getScaledUTF8StringWidth(SWFFont font, const char* string)
 {
 	unsigned short* widestr;
 	int len = UTF8ExpandString(string, &widestr);
+	int width = SWFFont_getScaledStringWidth(font, widestr, len);
 
-	return SWFFont_getScaledStringWidth(font, widestr, len);
+	free(widestr);
+
+	return width;
 }
 
 
@@ -640,26 +644,24 @@ SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short c)
 
 
 SWFRect
-SWFFont_getGlyphBounds(SWFFont font, unsigned short c)
+SWFFont_getGlyphBounds(SWFFont font, unsigned short glyphcode)
 {
-	int code = SWFFont_findGlyphCode(font, c);
+	if ( glyphcode >= font->nGlyphs )
+		SWF_error("SWFFont_getGlyphBounds: glyphcode >= nGlyphs");
 
-	if ( code >= 0 )
-		return &font->bounds[code];
-
-	return NULL;
+	return &font->bounds[glyphcode];
 }
 
 
 int
-SWFFont_getCharacterAdvance(SWFFont font, unsigned short c)
+SWFFont_getCharacterAdvance(SWFFont font, unsigned short glyphcode)
 {
 	if ( font->advances )
 	{
-		int code = SWFFont_findGlyphCode(font, c);
+		if ( glyphcode >= font->nGlyphs )
+			SWF_error("SWFFont_getCharacterAdvance: glyphcode >= nGlyphs");
 
-		if ( code >= 0 )
-			return font->advances[code];
+		return font->advances[glyphcode];
 	}
 
 	return 0;
@@ -667,38 +669,29 @@ SWFFont_getCharacterAdvance(SWFFont font, unsigned short c)
 
 
 int
-SWFFont_getCharacterKern(SWFFont font, unsigned short c1, unsigned short c2)
+SWFFont_getCharacterKern(SWFFont font,
+												 unsigned short code1, unsigned short code2)
 {
 	int j = font->kernCount;
-	int kern = 0;
-	int g1, g2;
 
 	if( !font->kernTable )
 		return 0;
 
-	g1 = SWFFont_findGlyphCode(font, c1);
-
-	if ( g1 == -1 )
-		return 0;
-
-	g2 = SWFFont_findGlyphCode(font, c2);
-
-	if ( g2 == -1 )
-		return 0;
+	if ( code1 >= font->nGlyphs || code2 >= font->nGlyphs )
+		SWF_error("SWFFont_getCharacterKern: glyphcode >= nGlyphs");
 
 	// XXX - kernTable should be sorted to make this faster
 
 	while ( --j >= 0 )
 	{
-		if ( g1 == font->kernTable[j].code1 &&
-				 g2 == font->kernTable[j].code2 )
+		if ( code1 == font->kernTable[j].code1 &&
+				 code2 == font->kernTable[j].code2 )
 		{
-			kern += font->kernTable[j].adjustment;
-			break;
+			return font->kernTable[j].adjustment;
 		}
 	}
 
-	return kern;
+	return 0;
 }
 
 
@@ -863,6 +856,7 @@ loadSWFFontFromFile(FILE *file)
 		font->flags |= SWF_FONT_ISBOLD;
 */
 
+	font->flags = flags; // XXX - ???
 	font->flags |= SWF_FONT_SHIFTJIS;
 
 	fgetc(file); /* "reserved" */
@@ -880,9 +874,9 @@ loadSWFFontFromFile(FILE *file)
 	font->nGlyphs = nGlyphs;
 
 	font->bounds = malloc(nGlyphs * sizeof(struct SWFRect_s));
-	font->glyphOffset = malloc(nGlyphs * sizeof(byte*));
-	font->glyphToCode = malloc(nGlyphs * sizeof(unsigned char));
-	font->advances = malloc(nGlyphs * sizeof(int));
+	font->glyphOffset = malloc(nGlyphs * sizeof(*font->glyphOffset));
+	font->glyphToCode = malloc(nGlyphs * sizeof(*font->glyphToCode));
+	font->advances = malloc(nGlyphs * sizeof(*font->advances));
 
 	if ( flags & SWF_LOAD_FONT_WIDEOFFSETS )
 	{

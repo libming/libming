@@ -31,7 +31,15 @@ extern float Ming_scale;
 extern int Ming_cubicThreshold;
 extern int SWF_versionNum;
 
-int Ming_init();
+
+/* call before and after using Ming code */
+
+int
+Ming_init();
+
+void
+Ming_cleanup()
+
 
 /* Change the scale, the scale, change it, yeah.  default is 20. */
 
