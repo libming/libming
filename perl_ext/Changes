@@ -1,5 +1,13 @@
 Revision history for Perl extension SWF.
 
+0.09-dev  Sun Sep 23
+          - added SWF::Constants (this makes using SWF easier but it 
+            changes interface a bit :( Now you need to say, for example:
+            
+                    use SWF::Constants ':Button';
+
+          - Splitted the SWF.xs - it's now easier to maintain and debug
+
 0.01b  Fri Aug 10
 	- updated the CVS version
 	- fixed DESTROY
