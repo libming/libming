@@ -23,7 +23,7 @@ SWF::Bitmap - Bitmap class
 =head1 SYNOPSIS
 
  use SWF::Bitmap;
- my $bitmap = new SWF::Bitmap();
+ my $bitmap = new SWF::Bitmap('filename');
 
 
 =head1 DESCRIPTION
@@ -34,9 +34,9 @@ SWF::Bitmap enables you to add JPG and DBL files.
 
 =over 4
 
-=item new SWF::Bitmap();
+=item new SWF::Bitmap($file);
 
-Creates a new Bitmap object.
+Creates a new Bitmap object using $file.
 
 =item $bitmap->getWidth();
 
