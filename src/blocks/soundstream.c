@@ -132,7 +132,7 @@ SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 
 	block->stream = stream;
 	block->length = 0;
-
+	block->numFrames = 0;
 	/* see how many frames we can put in this block,
 		 see how big they are */
 
@@ -206,37 +206,29 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	
 	int rate, channels, flags, start = 0;
 
-	/* get 4-byte header, bigendian */
+	/* 
+	 * skip stream until first MP3 header which starts with 0xffe 
+	 */
 	flags = SWFInput_getChar(input);
-
-	if ( flags == EOF )
-		return NULL;
-
-	/* XXX - fix this mad hackery */
-
-	if ( flags == 'I' &&
-			 SWFInput_getChar(input) == 'D' &&
-			 SWFInput_getChar(input) == '3' )
-	{
-		start = 2;
-
-		do
-		{
-			++start;
+	while(flags != EOF) {
+		if((flags & 0xff) == 0xff) {
 			flags = SWFInput_getChar(input);
-		}
-		while(flags != 0xFF && flags != EOF);
+			if(flags == EOF)
+				return NULL;
+			if((flags & 0xe0) == 0xe0)
+				break;
+		} else
+			flags = SWFInput_getChar(input);
+		
+		start++;
 	}
-
-	if ( flags == EOF )
-		return NULL;
-
-	SWFInput_seek(input, -1, SEEK_CUR);
+	
+	SWFInput_seek(input, -2, SEEK_CUR);
 	flags = SWFInput_getUInt32_BE(input);
+	if(flags == EOF)
+		return NULL;
 
 	SWFInput_seek(input, start, SEEK_SET);
-
-	stream->start = start;
 
 	if ( (flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC )
 		return NULL;
