@@ -33,7 +33,9 @@ all: dynamic
 # saveFP and restFP on OS X can be retrieved as such:
 # ar -x /usr/lib/libcc_dynamic.a lib/macosx-fpsave.o
 
-dynamic: ${OFILES}
+dynamic: $(SHAREDLIB)
+
+$(SHAREDLIB): $(OFILES)
 	cd blocks && $(MAKE)
 	cd actioncompiler && $(MAKE)
 	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o $(SHAREDLIB)
@@ -41,7 +43,9 @@ dynamic: ${OFILES}
 	ln -fs $(SHAREDLIB) ../libming.so
 	ln -fs $(SHAREDLIB) ../libming.so.$(MAJOR_VERSION)
 
-static: ${OFILES}
+static: libming.a
+
+libming.a: $(OFILES)
 	cd blocks && $(MAKE)
 	cd actioncompiler && $(MAKE)
 	ar r libming.a blocks/*.o ${OFILES} ${COMPILEROFILES}
