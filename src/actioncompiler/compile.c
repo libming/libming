@@ -33,7 +33,7 @@
 
 
 static int nConstants = {0}, maxConstants = {0}, sizeConstants = {0};
-static char **constants;
+static char **constants = NULL;
 
 /* XXX - temp hack until we check at compile time */
 
