@@ -30,13 +30,13 @@ SWFMorph_new(package="SWF::Morph")
 
 
 void
-destroySWFMorph(block)
-	SWF::Block	block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+destroySWFMorph(morph)
+	SWF::Morph	morph
         ALIAS:
         SWF::Morph::DESTROY = 1
         CODE:
         S_DEBUG(2, fprintf(stderr, "Morph DESTROY CALLED\n"));
-        destroySWFMorph(block);
+        destroySWFMorph(morph);
 
 
 SWF::Shape
