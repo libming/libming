@@ -148,6 +148,24 @@ void SWFShape_movePen(SWFShape shape, float dx, float dy)
 			 (int)rint(dy*Ming_scale));
 }
 
+float SWFShape_getPenX(SWFShape shape)
+{
+	return (float)(SWFShape_getScaledPenX(shape)/Ming_scale);
+}
+
+float SWFShape_getPenY(SWFShape shape)
+{
+	return (float)(SWFShape_getScaledPenY(shape)/Ming_scale);
+}
+
+
+
+void SWFShape_getPen(SWFShape shape, float* penX, float* penY)
+{
+        *penX = (float)(SWFShape_getScaledPenX(shape)/ Ming_scale);
+        *penY = (float)(SWFShape_getScaledPenY(shape)/ Ming_scale);
+}
+
 
 void SWFShape_drawLineTo(SWFShape shape, float x, float y)
 {
