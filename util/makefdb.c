@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "blocktypes.h"
 #include "read.h"
@@ -27,13 +28,20 @@ void printDefineFont2(FILE *f, int length)
   int flags, namelen, i, reserved;
   char name[264];
   FILE *out;
+  int wide = 0;
 
   readUInt16(f); /* font id */
 
   flags = readUInt8(f);
 
-  if(flags & FONTINFO2_WIDECODES)
+  if(flags & FONTINFO2_WIDECODES) {
+#if 1
+    wide = 1;
+    warning("Sorry, wide code fonts not supported.");
+#else
     error("Sorry, wide code fonts not supported.");
+#endif
+  }
 
   if(!(flags & FONTINFO2_HASLAYOUT))
     error("Hrm.  I was expecting some layout info."); 
@@ -45,12 +53,12 @@ void printDefineFont2(FILE *f, int length)
   for(i=0; i<namelen; ++i)
     name[i] = (unsigned char)readUInt8(f);
 
-  if (flags & FONTINFO2_BOLD)
+  if(flags & FONTINFO2_BOLD)
   {
     name[i++] = '-';
     name[i++] = 'B';
   }
-  if (flags & FONTINFO2_ITALIC)
+  if(flags & FONTINFO2_ITALIC)
   {
     name[i++] = '-';
     name[i++] = 'I';
@@ -85,6 +93,12 @@ void printDefineFont2(FILE *f, int length)
     fputc(fgetc(f), out); /* prolly faster buffered, eh? */
 
   fclose(out);
+
+  if(wide)
+  {
+    printf("Removing %s\n", name);
+    unlink(name);
+  }
 }
 
 int main(int argc, char *argv[])

@@ -9,6 +9,7 @@ typedef unsigned char boolean;
 #define false (boolean)0
 
 void error(char *s, ...);
+void warning(char *s, ...);
 char *indent();
 void byteAlign();
 int readBits(FILE *f, int number);

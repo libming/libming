@@ -20,6 +20,15 @@ void error(char *s, ...)
   assert(0);
 }
 
+void warning(char *s, ...)
+{
+  va_list ap;
+  va_start(ap, s);
+  vprintf(s, ap);
+  va_end(ap);
+  putchar('\n');
+}
+
 char *indent()
 {
   int i;
