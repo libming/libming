@@ -79,6 +79,7 @@ WriteMakefile(
     },
     'MYEXTLIB'     => $MING_DIR . '/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
+    'LIBS'         => [ "-lz" ],
 );
 
 
