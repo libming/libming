@@ -1,3 +1,16 @@
+2003-08-06 17:20  erich
+
+	* util/raw2adpcm.c: fix for gcc 3.3.x, (multiline string)
+	* src/actioncompiler/swf4compiler.flex
+	  src/actioncompiler/swf5compiler.flex: fixed for changes in newer
+	  flex - unput() is not accessible there, added wrapper do_unput()
+	* ming.i: update to follow recent changes (me and jtissler)
+	* py_ext/ming.py: add compression level optional argument (jtissler)
+	* py_ext/shape.py: reflect web page (jtissler)
+
+2003-* multiple
+	* didn't update the changelog.
+
 2003-04-10 04:40  peterdd
 
 	* src/blocks/morph.c: fixed a bug that slipped in with rev.1.9	
