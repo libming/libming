@@ -283,11 +283,11 @@ scanJpegFile(SWFInput input)
 				length += skipJpegBlock(input) + 2;
 				break;
 
-			case JPEG_SOF1:
 			case JPEG_SOF2:
 				SWF_error("Only baseline (frame 0) jpegs are supported!");
 
 			case JPEG_SOF0:
+			case JPEG_SOF1:
 				/*
 				if ( finishedEncoding )
 					SWF_error("Found second SOF in Jpeg file!");
