@@ -506,9 +506,9 @@ SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int lev
 	else SWFOutput_writeUInt8 (headerbuffer, 'F');
 	SWFOutput_writeUInt8 (headerbuffer, 'W');
 	SWFOutput_writeUInt8 (headerbuffer, 'S');
-	// if compression = flash version 6
-	if (level >= 0 && movie->version < 6) SWFOutput_writeUInt8 (headerbuffer, 6);
-	else SWFOutput_writeUInt8 (headerbuffer, movie->version);
+
+	SWFOutput_writeUInt8 (headerbuffer, movie->version);
+
 	// Movie length
 	SWFOutput_writeUInt32(headerbuffer, swflength);
 
