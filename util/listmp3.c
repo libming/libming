@@ -42,7 +42,7 @@ int mp2l23_bitrate_table[] = { 0,    8,  16,  24,  32,  40,  48,  56,
 
 int mp1_samplerate_table[] = { 44100, 48000, 32000 };
 int mp2_samplerate_table[] = { 22050, 24000, 16000 }; /* is this right?? */
-int mp25_samplerate_table[] = { 11025, 12000, 8000 }; /* less samples in > versions? */
+int mp25_samplerate_table[] = { 11025, 12000, 8000 }; /* fewer samples?? */
 
 #define MP3_PADDING          0x00000200 /* if set, add an extra slot - 4 bytes
 					   for layer 1, 1 byte for 2+3 */
@@ -154,7 +154,10 @@ void printMP3Headers(FILE *f)
     if(layer == 1)
       padding <<= 2;
 
-    frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
+    if(version == 1)
+      frameLen = 144 * bitrate * 1000 / samplerate + padding;
+    else
+      frameLen = 52 * stereo * bitrate * 1000 / samplerate + padding;
 
     printf("frame %i: MP%i layer %i, %i Hz, %ikbps, %s, length=%i, protect %s\n",
 	   numFrames, version, layer, samplerate, bitrate,

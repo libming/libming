@@ -1598,7 +1598,10 @@ void printMP3Headers(FILE *f, int length)
     if(layer == 1)
       padding <<= 2;
 
-    frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
+    if(version == 1)
+      frameLen = 144 * bitrate * 1000 / samplerate + padding;
+    else
+      frameLen = 72 * channels * bitrate * 1000 / samplerate + padding;
 
     println("frame %i: MP%i layer %i, %i Hz, %ikbps, %s, length=%i, protect %s",
 	   frameNum, version, layer, samplerate, bitrate,
