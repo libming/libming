@@ -18,6 +18,7 @@
 */
 
 #include <math.h>
+
 #include "font.h"
 #include "method.h"
 
@@ -30,6 +31,9 @@ int completeSWFFont(SWFBlock block)
   int size, i;
 
   SWFFont_resolveTextList(font);
+
+  /* 2 bytes id, 2 bytes flags, 1 byte name length, 2 bytes nGlyphs,
+     2*(nGlyphs+1) bytes offsets, nGlyphs bytes character map: */
 
   size = 9 + strlen(font->name) + 3*font->nGlyphs;
 
@@ -66,7 +70,7 @@ void writeSWFFontToMethod(SWFBlock block,
   offset = (font->nGlyphs+1)*(font->flags & SWF_FONT_WIDEOFFSETS ? 4 : 2);
 
   /* write offset table for glyphs */
-  for(i=0; i<font->nGlyphs; ++i)
+  for(i=0; i<=font->nGlyphs; ++i)
   {
     if(font->flags & SWF_FONT_WIDEOFFSETS)
       methodWriteUInt32(offset, method, data);
