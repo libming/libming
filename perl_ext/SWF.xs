@@ -843,7 +843,7 @@ SWFShape_drawFontGlyph(shape, font, c, size=0)
         int c
         int size
         ALIAS:
-        SWF::Shape::drawGlyph = 1
+        SWF::Shape::drawSizedGlyph = 1
 
 void
 SWFShape_drawArc(shape, r, startAngle, endAngle)

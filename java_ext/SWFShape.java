@@ -81,7 +81,7 @@ public class SWFShape extends SWFObject implements SWFShapeI {
     public void	drawCircle (float r)
         { iDrawCircle (handle, r); }
 
-    public void	drawGlyph (SWFFontI font, int c, int size)
+    public void	drawGlyph (SWFFontI font, int c)
 	throws SWFException
     { 
 	font.eval(); 

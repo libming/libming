@@ -110,7 +110,7 @@ class SWFShape <SWFBase
 	end
 
 	def drawGlyph(font, char, size=0)
-		SWFShape_drawGlyph(@this, font.this, char[0], size) #ord(char[0]))
+		SWFShape_drawSizedGlyph(@this, font.this, char[0], size) #ord(char[0]))
 	end
 
 	def addSolidFill(r, g, b, a=0xff)

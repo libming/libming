@@ -2230,8 +2230,8 @@ PHP_FUNCTION(swfshape_drawglyph)
 
   convert_to_string_ex(c);
 
-  SWFShape_drawGlyph(getShape(getThis()),
-					 getFont(*font), Z_STRVAL_PP(c)[0], size);
+  SWFShape_drawSizedGlyph(getShape(getThis()),
+						  getFont(*font), Z_STRVAL_PP(c)[0], size);
 }
 
 /* }}} */
