@@ -1,7 +1,7 @@
+# $Id$
+
 use ExtUtils::MakeMaker;
-
 use Cwd qw(abs_path cwd);
-
 use strict;
 
 my @DEFAULT_DIR = qw(.. ./src);
@@ -17,6 +17,7 @@ my @do_clean = qw {
     Boot.xsh
     t/config.pl
     t/gradient.swf
+    SWF/MyConfig.pm
 };
 
 for(@do_clean) { unlink $_ }
@@ -71,7 +72,7 @@ WriteMakefile(
     ( $] <  5.005 ? () :
       (
        ABSTRACT   => 'Perl interface to Ming -  a library for generating SWF ("Flash") format movies.',
-       AUTHOR     => 'Soheil Seyfaie <soheil@users.sourceforge.net>',
+       AUTHOR     => 'Soheil Seyfaie (soheil at users.sourceforge.net)',
       )
     ),
     clean   => {
@@ -82,9 +83,16 @@ WriteMakefile(
     'LIBS'         => [ "-lz" ],
 );
 
+sub MY::install {
+    my $self = shift;
+    write_myconfig_file($self->{INSTALLSITEARCH});
 
-
-
+    for (qw(ming.h libming.a)){
+	$self->{PM}->{"$MING_DIR/$_"} = '$(INST_ARCHLIB)' . "/auto/SWF/include/$_";
+    }
+    $self->{PM}->{'perl_swf.h'} = '$(INST_ARCHLIB)' . "/auto/SWF/include/perl_swf.h";
+    return $self->MM::install;
+}
 
 sub ming_is_compiled{
     return undef unless (-e "$MING_DIR/libming.a");
@@ -151,6 +159,25 @@ sub get_ming_version{
     return undef;
 }
 
+sub write_myconfig_file{
+    my $dir = shift;
+    local *FH;
+    open FH, ">SWF/MyConfig.pm" or die "can't open MyConfig $!";
+    print FH<<EOConf;
+#
+# SWF Configuration
+#
+
+package SWF::MyConfig;
+
+%Conf = (
+	 INSTALLSITEARCH => '$dir',
+	 );
+1;
+EOConf
+
+}
+
 sub write_bootxs (){
     local *FH;
     open FH, ">Boot.xsh" or die "can't open Boot.xsh $!";
@@ -161,13 +188,15 @@ sub write_bootxs (){
     close FH;
 }
 
+# We don't really need this function anymore. 
+# We may add $dir to INC of WriteMakefile()
 sub write_swf_h {
     my $dir = shift;
     local *FH;
     open FH, ">SWF.h" or die "can't open SWF.h $!";
     print FH <<EOF;
 /* ====================================================================
- * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
@@ -187,7 +216,7 @@ sub write_config_test {
     open FH, ">t/config.pl" or die "can't open t/config.pl $!";
     print FH <<EOF;
 # ====================================================================
-# Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+# Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 #  ====================================================================
