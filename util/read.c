@@ -17,7 +17,7 @@ void error(char *s, ...)
   vprintf(s, ap);
   va_end(ap);
   putchar('\n');
-  assert(0);
+  exit(-1);
 }
 
 void warning(char *s, ...)
