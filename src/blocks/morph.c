@@ -68,12 +68,12 @@ completeSWFMorphBlock(SWFBlock block)
 	SWFOutput_writeUInt32(out, 0); /* shape2 offset, patched in below.. */
 
 	SWFShape_getFills(shape1, &fills1, &nFills1);
-	SWFShape_getFills(shape1, &fills2, &nFills2);
+	SWFShape_getFills(shape2, &fills2, &nFills2);
 
 	SWFOutput_writeMorphFillStyles(out, fills1, nFills1, fills2, nFills2);
 
 	SWFShape_getLines(shape1, &lines1, &nLines1);
-	SWFShape_getLines(shape1, &lines2, &nLines2);
+	SWFShape_getLines(shape2, &lines2, &nLines2);
 
 	SWFOutput_writeMorphLineStyles(out, lines1, nLines1, lines2, nLines2);
 
