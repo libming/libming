@@ -70,12 +70,15 @@ typedef enum
   SWFACTION_MODULO                  = 0x3F,
   SWFACTION_NEW                     = 0x40,
   SWFACTION_VAR                     = 0x41,
-  SWFACTION_MAKEHASH                = 0x43,
+  SWFACTION_INITARRAY               = 0x42,
+  SWFACTION_INITOBJECT              = 0x43,
   SWFACTION_TYPEOF                  = 0x44,
+  SWFACTION_ENUMERATE               = 0x46,
   SWFACTION_NEWADD                  = 0x47,
   SWFACTION_NEWLESSTHAN             = 0x48,
   SWFACTION_NEWEQUAL                = 0x49,
   SWFACTION_DUP                     = 0x4C,
+  SWFACTION_SWAP                    = 0x4D,
   SWFACTION_GETMEMBER               = 0x4E,
   SWFACTION_SETMEMBER               = 0x4F,
   SWFACTION_INCREMENT               = 0x50,
@@ -88,13 +91,10 @@ typedef enum
   SWFACTION_SHIFTRIGHT              = 0x64,
   SWFACTION_SHIFTRIGHT2             = 0x65,
 
+  SWFACTION_SETREGISTER             = 0x87,
   SWFACTION_DECLARENAMES            = 0x88,
   SWFACTION_WITH                    = 0x94,
-  SWFACTION_DEFINEFUNCTION          = 0x9B,
-
-  SWFACTION_ITERATE                 = 0x46, /* ??? */
-
-  SWFACTION_SETREGISTER             = 0x87  /* ??? */
+  SWFACTION_DEFINEFUNCTION          = 0x9B
 
 } Action;
 
