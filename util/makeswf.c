@@ -35,8 +35,7 @@
  * - Change command line to:
  *	makeswf [-o <outputfile>] [-p] <input> ...
  * 
- * - Accept compression level as parameter.
- * - Accept -v for versioning and credits.
+ * - Accept -V for versioning and credits.
  *
  */
 
@@ -86,6 +85,7 @@ usage (char *me, int ex)
 	fprintf(stderr, " -s <width>x<height>\n");
 	fprintf(stderr, " -r <frame_rate>\n");
 	fprintf(stderr, " -v <output_version>\n");
+	fprintf(stderr, " -c <compression_level>\n");
 	fprintf(stderr, " -I <includedir>\n");
 	fprintf(stderr, " -D <macro>[=<def>]>\n");
 	fprintf(stderr, " -i <library.swf>:<sym>[,<sym>]>\n");
@@ -162,6 +162,7 @@ main (int argc, char **argv)
 		{"dont-preprocess", 0, 0, 'p'},
 		{"frame-rate", 1, 0, 'r'},
 		{"version", 1, 0, 'v'},
+		{"compression", 1, 0, 'c'},
 		{"includepath", 1, 0, 'I'},
 		{"define", 1, 0, 'D'},
 		{"size", 1, 0, 's'},
@@ -187,9 +188,9 @@ main (int argc, char **argv)
 		char buf [1024];
 
 #ifdef HAVE_GETOPT_LONG
-		c = getopt_long (argc, argv, "ps:r:D:I:v:i:", opts, &opts_idx);
+		c = getopt_long (argc, argv, "ps:r:D:I:v:c:i:", opts, &opts_idx);
 #else
-		c = getopt (argc, argv, "ps:r:D:I:v:i:");
+		c = getopt (argc, argv, "ps:r:D:I:v:i:c:");
 #endif
 		if (c == -1) break;
 
@@ -208,6 +209,17 @@ main (int argc, char **argv)
 				if ( sscanf(optarg, "%d", &swfversion) != 1 )
 				{
 					usage(argv[0], 1);
+				}
+				break;
+			case 'c':
+				if ( sscanf(optarg, "%d", &swfcompression) != 1 )
+				{
+					usage(argv[0], 1);
+				}
+				if ( swfcompression < -1 || swfcompression > 9 )
+				{
+					fprintf(stderr, "Compression level must be in the range -1..9\n");
+					exit(1);
 				}
 				break;
 			case 'r':
@@ -447,6 +459,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.14  2004/11/10 14:00:46  strk
+ * Added support for specifying output compression level
+ *
  * Revision 1.13  2004/11/09 12:48:12  strk
  * Added -v flag in usage string (already supported but not documented)
  *
