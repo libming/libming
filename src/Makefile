@@ -6,7 +6,7 @@ CC = gcc -g -Wall
 LIBDIR = /usr/local/lib
 
 OFILES = movie.o displaylist.o blocklist.o position.o movieclip.o \
-	 shape_util.o text_util.o fill.o ming.o
+	 shape_util.o shape_cubic.o text_util.o fill.o ming.o
 
 COMPILEROFILES = actioncompiler/compile.o \
 		 actioncompiler/swf4compiler.tab.o \
