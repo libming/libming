@@ -259,7 +259,7 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 }
 
 SWFFont
-SWFTextField_getFont(SWFTextField field)
+SWFTextField_getUnresolvedFont(SWFTextField field)
 {	if((!field->isBrowserFont) && (!field->isFontChar))
 		return field->font.font;
 	return NULL;
@@ -275,6 +275,7 @@ SWFTextField_addChars(SWFTextField field, char *string)
 			field->embeds, (field->embedlen + len) * 2);
 		for(n = 0 ; n < len  ; n++)
 			field->embeds[field->embedlen++] = string[n];
+		field->flags |= SWFTEXTFIELD_USEFONT;
 	}
 }
 
@@ -321,7 +322,7 @@ SWFTextField_setVariableName(SWFTextField field, char *name)
 void
 SWFTextField_addString(SWFTextField field, char *string)
 {
-	int l;
+	int l, n;
 
 	for ( l=0; string[l]!='\0'; ++l )
 	{
@@ -338,6 +339,14 @@ SWFTextField_addString(SWFTextField field, char *string)
 		field->string = strdup(string);
 
 	resetBounds(field);
+
+	if((field->flags & SWFTEXTFIELD_USEFONT) && !field->isBrowserFont &&
+	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	{	field->embeds = (unsigned short *)realloc(
+			field->embeds, (field->embedlen + l) * 2);
+		for(n = 0 ; n < l  ; n++)
+			field->embeds[field->embedlen++] = string[n];
+	}
 }
 
 

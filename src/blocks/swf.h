@@ -528,6 +528,7 @@ void destroySWFButton(SWFBlock block);
 
 void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
+void SWFButton_setMenu(SWFButton button, int flag);
 
 SWFBlock newSWFButtonCXform(SWFButton button, SWFCXform *cXforms);
 SWFBlock newSWFButtonSound(SWFButton button, SWFSound sound);

@@ -61,6 +61,8 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
 
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 
+void SWFButton_setMenu(SWFButton button, int flag);
+
 SWFSoundInstance
 SWFButton_addSound(SWFButton button, SWFSound sound, byte flag);
 

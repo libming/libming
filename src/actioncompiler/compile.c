@@ -274,9 +274,9 @@ int bufferConcat(Buffer a, Buffer b)
 		return 0;
 
 	if(b)
-		len = bufferWriteDataAndPush(a, b);
-
-	destroyBuffer(b);
+	{	len = bufferWriteDataAndPush(a, b);
+		destroyBuffer(b);
+	}
 
 	return len;
 }

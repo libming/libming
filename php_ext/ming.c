@@ -435,6 +435,7 @@ static zend_function_entry swfbutton_functions[] = {
   PHP_FALIAS(setdown,                swfbutton_setDown,         NULL)
   PHP_FALIAS(setaction,              swfbutton_setAction,       NULL)
   PHP_FALIAS(addshape,               swfbutton_addShape,        NULL)
+  PHP_FALIAS(setmenu,                swfbutton_setMenu,         NULL)
   PHP_FALIAS(addaction,              swfbutton_addAction,       NULL)
   { NULL, NULL, NULL }
 };
@@ -566,6 +567,22 @@ PHP_FUNCTION(swfbutton_addShape)
   convert_to_long_ex(flags);
 
   SWFButton_addShape(button, character, Z_LVAL_PP(flags));
+}
+
+/* }}} */
+/* {{{ proto void swfbutton_setMenu(int flag)
+	enable track as menu button behaviour */
+
+PHP_FUNCTION(swfbutton_setMenu)
+{
+	zval **zflag;
+	SWFButton button = getButton(getThis() TSRMLS_CC);
+	if(ZEND_NUM_ARGS() != 1 ||
+	  zend_get_parameters_ex(1, &zflag) == FAILURE)
+		WRONG_PARAM_COUNT;	
+	convert_to_long_ex(zflag);
+	
+	SWFButton_setMenu(button, Z_LVAL_PP(zflag));
 }
 
 /* }}} */
@@ -1589,7 +1606,7 @@ PHP_FUNCTION(swfmovie_init)
   zval **version;
   SWFMovie movie;
   int ret;
-
+//fprintf(stderr, "SWFMovie_output %x %d\n", SWFMovie_output, getpid()); sleep(30);
   if(ZEND_NUM_ARGS() == 1)
   {
     if(zend_get_parameters_ex(1, &version) == FAILURE)
@@ -1732,7 +1749,6 @@ PHP_FUNCTION(swfmovie_output)
 			
 	break;
   }
-
   RETURN_LONG(SWFMovie_output(movie, &phpByteOutputMethod, NULL, limit));
 }
 
@@ -3480,6 +3496,186 @@ PHP_MINIT_FUNCTION(ming)
   zend_register_internal_class(&text_class_entry TSRMLS_CC);
   zend_register_internal_class(&textfield_class_entry TSRMLS_CC);
   zend_register_internal_class(&font_class_entry TSRMLS_CC);
+/*
+   +----------------------------------------------------------------------+
+   | PHP Version 4                                                        |
+   +----------------------------------------------------------------------+
+   | Copyright (c) 1997-2002 The PHP Group                                |
+   +----------------------------------------------------------------------+
+   | This source file is subject to version 2.01 of the PHP license,      |
+   | that is bundled with this package in the file LICENSE, and is        |
+   | available at through the world-wide-web at                           |
+   | http://www.php.net/license/2_01.txt.                                 |
+   | If you did not receive a copy of the PHP license and are unable to   |
+   | obtain it through the world-wide-web, please send a note to          |
+   | license@php.net so we can mail you a copy immediately.               |
+   +----------------------------------------------------------------------+
+   | Author: dave@opaque.net                                              |
+   +----------------------------------------------------------------------+
+*/
+
+/* $Id$ */
+
+#ifndef _PHP_MING_H
+#define _PHP_MING_H
+
+#if HAVE_MING
+
+extern zend_module_entry ming_module_entry;
+#define ming_module_ptr &ming_module_entry
+
+#include <ming.h>
+
+PHP_RINIT_FUNCTION(ming);
+PHP_MINIT_FUNCTION(ming);
+PHP_MINFO_FUNCTION(ming);
+
+PHP_FUNCTION(swfbitmap_init);
+PHP_FUNCTION(swfbitmap_getWidth);
+PHP_FUNCTION(swfbitmap_getHeight);
+
+PHP_FUNCTION(swffill_init);
+PHP_FUNCTION(swffill_moveTo);
+PHP_FUNCTION(swffill_scaleTo);
+PHP_FUNCTION(swffill_rotateTo);
+PHP_FUNCTION(swffill_skewXTo);
+PHP_FUNCTION(swffill_skewYTo);
+
+PHP_FUNCTION(swfgradient_init);
+PHP_FUNCTION(swfgradient_addEntry);
+
+PHP_FUNCTION(swfshape_init);
+PHP_FUNCTION(swfshape_addfill);
+PHP_FUNCTION(swfshape_setrightfill);
+PHP_FUNCTION(swfshape_setleftfill);
+PHP_FUNCTION(swfshape_setline);
+PHP_FUNCTION(swfshape_movepento);
+PHP_FUNCTION(swfshape_movepen);
+PHP_FUNCTION(swfshape_drawlineto);
+PHP_FUNCTION(swfshape_drawline);
+PHP_FUNCTION(swfshape_drawcurveto);
+PHP_FUNCTION(swfshape_drawcurve);
+PHP_FUNCTION(swfshape_drawglyph);
+PHP_FUNCTION(swfshape_drawarc);
+PHP_FUNCTION(swfshape_drawcircle);
+PHP_FUNCTION(swfshape_drawcubic);
+PHP_FUNCTION(swfshape_drawcubicto);
+
+PHP_FUNCTION(swfmovie_init);
+PHP_FUNCTION(swfmovie_output);
+PHP_FUNCTION(swfmovie_saveToFile);
+PHP_FUNCTION(swfmovie_save);
+PHP_FUNCTION(swfmovie_add);
+PHP_FUNCTION(swfmovie_remove);
+PHP_FUNCTION(swfmovie_nextFrame);
+PHP_FUNCTION(swfmovie_labelFrame);
+PHP_FUNCTION(swfmovie_setBackground);
+PHP_FUNCTION(swfmovie_setRate);
+PHP_FUNCTION(swfmovie_setDimension);
+PHP_FUNCTION(swfmovie_setFrames);
+PHP_FUNCTION(swfmovie_Protect);
+PHP_FUNCTION(swfmovie_streamMp3);
+PHP_FUNCTION(swfmovie_addExport);
+PHP_FUNCTION(swfmovie_writeExports);
+
+PHP_FUNCTION(swfsprite_init);
+PHP_FUNCTION(swfsprite_add);
+PHP_FUNCTION(swfsprite_remove);
+PHP_FUNCTION(swfsprite_nextFrame);
+PHP_FUNCTION(swfsprite_labelFrame);
+PHP_FUNCTION(swfsprite_setFrames);
+
+PHP_FUNCTION(swffont_init);
+PHP_FUNCTION(swffont_getWidth);
+PHP_FUNCTION(swffont_getUTF8Width);
+/*PHP_FUNCTION(swffont_getWideWidth);*/
+PHP_FUNCTION(swffont_getAscent);
+PHP_FUNCTION(swffont_getDescent);
+PHP_FUNCTION(swffont_getLeading);
+/*PHP_FUNCTION(swffont_addChars);*/
+PHP_FUNCTION(swffont_getShape);
+
+PHP_FUNCTION(swftext_init);
+PHP_FUNCTION(swftext_setFont);
+PHP_FUNCTION(swftext_setHeight);
+PHP_FUNCTION(swftext_setSpacing);
+PHP_FUNCTION(swftext_setColor);
+PHP_FUNCTION(swftext_moveTo);
+PHP_FUNCTION(swftext_addString);
+PHP_FUNCTION(swftext_addUTF8String);
+/*PHP_FUNCTION(swftext_addWideString);*/
+PHP_FUNCTION(swftext_getWidth);
+PHP_FUNCTION(swftext_getUTF8Width);
+/*PHP_FUNCTION(swftext_getWideWidth);*/
+PHP_FUNCTION(swftext_getAscent);
+PHP_FUNCTION(swftext_getDescent);
+PHP_FUNCTION(swftext_getLeading);
+
+PHP_FUNCTION(swftextfield_init);
+PHP_FUNCTION(swftextfield_setFont);
+PHP_FUNCTION(swftextfield_setBounds);
+PHP_FUNCTION(swftextfield_align);
+PHP_FUNCTION(swftextfield_setHeight);
+PHP_FUNCTION(swftextfield_setLeftMargin);
+PHP_FUNCTION(swftextfield_setRightMargin);
+PHP_FUNCTION(swftextfield_setMargins);
+PHP_FUNCTION(swftextfield_setIndentation);
+PHP_FUNCTION(swftextfield_setLineSpacing);
+PHP_FUNCTION(swftextfield_setColor);
+PHP_FUNCTION(swftextfield_setName);
+PHP_FUNCTION(swftextfield_addString);
+PHP_FUNCTION(swftextfield_setPadding);
+PHP_FUNCTION(swftextfield_addChars);
+
+PHP_FUNCTION(swfdisplayitem_move);
+PHP_FUNCTION(swfdisplayitem_moveTo);
+PHP_FUNCTION(swfdisplayitem_scale);
+PHP_FUNCTION(swfdisplayitem_scaleTo);
+PHP_FUNCTION(swfdisplayitem_rotate);
+PHP_FUNCTION(swfdisplayitem_rotateTo);
+PHP_FUNCTION(swfdisplayitem_skewX);
+PHP_FUNCTION(swfdisplayitem_skewXTo);
+PHP_FUNCTION(swfdisplayitem_skewY);
+PHP_FUNCTION(swfdisplayitem_skewYTo);
+PHP_FUNCTION(swfdisplayitem_setMatrix);
+PHP_FUNCTION(swfdisplayitem_setDepth);
+PHP_FUNCTION(swfdisplayitem_setRatio);
+PHP_FUNCTION(swfdisplayitem_addColor);
+PHP_FUNCTION(swfdisplayitem_multColor);
+PHP_FUNCTION(swfdisplayitem_setName);
+PHP_FUNCTION(swfdisplayitem_addAction);
+PHP_FUNCTION(swfdisplayitem_remove);
+PHP_FUNCTION(swfdisplayitem_setMaskLevel);
+PHP_FUNCTION(swfdisplayitem_endMask);
+
+PHP_FUNCTION(swfbutton_init);
+PHP_FUNCTION(swfbutton_setHit);
+PHP_FUNCTION(swfbutton_setOver);
+PHP_FUNCTION(swfbutton_setUp);
+PHP_FUNCTION(swfbutton_setDown);
+PHP_FUNCTION(swfbutton_setAction);
+PHP_FUNCTION(swfbutton_addShape);
+PHP_FUNCTION(swfbutton_addAction);
+PHP_FUNCTION(swfbutton_addSound);
+
+PHP_FUNCTION(swfbutton_keypress);
+
+PHP_FUNCTION(swfaction_init);
+
+PHP_FUNCTION(swfmorph_init);
+PHP_FUNCTION(swfmorph_getShape1);
+PHP_FUNCTION(swfmorph_getShape2);
+
+PHP_FUNCTION(ming_setCubicThreshold);
+PHP_FUNCTION(ming_setScale);
+PHP_FUNCTION(ming_useSWFVersion);
+PHP_FUNCTION(ming_useConstants);
+
+#else
+#define ming_module_ptr NULL
+#endif /* HAVE_MING */
+#define phpext_ming_ptr ming_module_ptr
+#endif  /* _PHP_MING_H */
   zend_register_internal_class(&displayitem_class_entry TSRMLS_CC);
   zend_register_internal_class(&movie_class_entry TSRMLS_CC);
   zend_register_internal_class(&button_class_entry TSRMLS_CC);

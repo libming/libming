@@ -43,6 +43,8 @@ struct SWFButton_s
 {
 	struct SWFCharacter_s character;
 
+	int menuflag;
+
 	int nRecords;
 	ButtonRecord *records;
 
@@ -128,8 +130,12 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags)
 	SWFButton_addRecord(button, newSWFButtonRecord(flags, character, 0, m));
 }
 
+void SWFButton_setMenu(SWFButton button, int flag)
+{
+	button->menuflag = flag;
+}
 
-void writeSWFButtonToMethod(SWFBlock block,
+void writeSWFButtonToMethod(SWFBlock block, 
 					SWFByteOutputMethod method, void *data)
 {
 	int i;
@@ -157,11 +163,12 @@ int completeSWFButton(SWFBlock block)
 	SWFButton button = (SWFButton)block;
 	ButtonRecord record;
 	SWFOutput out = newSWFOutput();
-	int i, length = 0;
+	int i, length = 0, layer;
 	char *offset;
+	extern SWF_versionNum;
 
 	SWFOutput_writeUInt16(out, CHARACTERID(button));
-	SWFOutput_writeUInt8(out, 0); /* XXX - track as menu item. ??? */
+	SWFOutput_writeUInt8(out, button->menuflag);
 
 	/* fill in offset later */
 	offset = SWFOutput_getCurPos(out);
@@ -172,7 +179,9 @@ int completeSWFButton(SWFBlock block)
 		record = button->records[i];
 		SWFOutput_writeUInt8(out, record->flags);
 		SWFOutput_writeUInt16(out, CHARACTERID(record->character));
-		SWFOutput_writeUInt16(out, record->layer);
+		layer = record->layer;
+		if(layer == 0 && SWF_versionNum >= 5) layer = i+1;
+		SWFOutput_writeUInt16(out, layer);
 		SWFOutput_writeMatrix(out, record->matrix);
 		SWFOutput_writeUInt8(out, 0); /* blank CXForm */
 	}
@@ -239,6 +248,7 @@ newSWFButton()
 	BLOCK(button)->complete = completeSWFButton;
 	BLOCK(button)->dtor = destroySWFButton;
 
+	button->menuflag = 0;
 	button->nRecords = 0;
 	button->records = NULL;
 	button->nActions = 0;

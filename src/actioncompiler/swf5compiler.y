@@ -80,6 +80,8 @@ Buffer bf, bc;
 %token DEQ "/="
 %token MEQ "*="
 %token SEQ "-="
+%token AEQ "&="
+%token OEQ "|="
 
 %token SHL "<<"
 %token SHR ">>"
@@ -1017,7 +1019,7 @@ expr
 
 	| '~' expr %prec UMINUS
 		{ $$ = $2;
-		  bufferWriteInt($2, 0xffff);
+		  bufferWriteInt($2, 0xffffffff);
 		  bufferWriteOp($2, SWFACTION_BITWISEXOR); }
 
 	| '!' expr

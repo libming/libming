@@ -273,9 +273,9 @@ SWFTextRecord_getNextRecord(SWFTextRecord record)
 
 
 SWFFont
-SWFTextRecord_getFont(SWFTextRecord record)
+SWFTextRecord_getUnresolvedFont(SWFTextRecord record)
 {
-	if ( !record->isBrowserFont )
+	if ( !record->isBrowserFont && !record->isResolved )
 		return record->font.font;
 	
 	return NULL;
@@ -542,7 +542,7 @@ SWFText_addString(SWFText text, const char* string, int* advance)
 	int i;
 	
 	for ( i = 0; i < len; ++i )
-		widestring[i] = string[i];
+		widestring[i] = string[i] & 0xff;
 
 	SWFText_addWideString(text, widestring, len, advance);
 }

@@ -82,6 +82,10 @@ ID       [a-zA-Z_][a-zA-Z0-9_]*
 
 %%
 
+0x[0-9a-fA-F]+	{ count();	swf5lval.intVal = strtoul(yytext, NULL, 0);
+					return INTEGER;		}
+0[0-7]+			{ count();	swf5lval.intVal = strtoul(yytext, NULL, 0);
+					return INTEGER;		}
 {DIGIT}+		{ count();	swf5lval.intVal = atoi(yytext);
 					return INTEGER;		}
 {DIGIT}+"."{DIGIT}*	{ count();	swf5lval.doubleVal = atof(yytext);
@@ -242,6 +246,8 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 "/="			{ count();	return DEQ; }
 "+="			{ count();	return IEQ; }
 "-="			{ count();	return SEQ; }
+"&="			{ count();	return AEQ; }
+"|="			{ count();	return OEQ; }
 "<<"			{ count();	return SHL; }
 ">>"			{ count();	return SHR; }
 ">>>"			{ count();	return SHR2; }
@@ -272,6 +278,7 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 "."			{ count();	return '.'; }
 "?"			{ count();	return '?'; }
 ":"			{ count();	return ':'; }
+"~"			{ count();	return '~'; }
 
 "\n"			{ count();	strcpy(szLine, yytext + 1);
 					countline();	yyless(1);	}

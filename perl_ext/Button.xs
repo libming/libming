@@ -79,3 +79,8 @@ SWFButton_addAction(button, action, flags=SWFBUTTON_MOUSEUP)
         int             flags
         ALIAS:
         SWF::Button::setAction = 1
+
+void
+SWFButton_setMenu(button, flag=1)
+	SWF::Button	button
+	int flag;

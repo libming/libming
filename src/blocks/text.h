@@ -119,7 +119,7 @@ SWFTextRecord
 SWFTextRecord_getNextRecord(SWFTextRecord record);
 
 SWFFont
-SWFTextRecord_getFont(SWFTextRecord record);
+SWFTextRecord_getUnresolvedFont(SWFTextRecord record);
 
 void
 SWFTextRecord_setFontCharacter(SWFTextRecord record, SWFFontCharacter font);

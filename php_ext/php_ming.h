@@ -157,6 +157,7 @@ PHP_FUNCTION(swfbutton_setUp);
 PHP_FUNCTION(swfbutton_setDown);
 PHP_FUNCTION(swfbutton_setAction);
 PHP_FUNCTION(swfbutton_addShape);
+PHP_FUNCTION(swfbutton_setMenu);
 PHP_FUNCTION(swfbutton_addAction);
 PHP_FUNCTION(swfbutton_addSound);
 

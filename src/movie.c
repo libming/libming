@@ -184,7 +184,7 @@ SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
 
 	while ( record != NULL )
 	{
-		SWFFont font = SWFTextRecord_getFont(record);
+		SWFFont font = SWFTextRecord_getUnresolvedFont(record);
 		int i;
 
 		if ( font != NULL )
@@ -203,7 +203,7 @@ SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
 			if ( i == movie->nFonts )
 			{
 				movie->fonts = realloc(movie->fonts,
-															 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
+														 sizeof(SWFFontCharacter) * (movie->nFonts + 1));
 
 				fontchar = newSWFFontCharacter(font);
 				movie->fonts[movie->nFonts++] = fontchar;
@@ -211,7 +211,7 @@ SWFMovie_resolveTextFonts(SWFMovie movie, SWFText text)
 				SWFMovie_addBlock(movie, (SWFBlock)fontchar);
 			}
 		}
-
+	
 		record = SWFTextRecord_getNextRecord(record);
 	}
 }
@@ -221,7 +221,7 @@ SWFMovie_resolveTextfieldFont(SWFMovie movie, SWFTextField field)
 {
 	// given a font used for a text field, add it to the movie
 	SWFFontCharacter fontchar;
-	SWFFont font = SWFTextField_getFont(field);
+	SWFFont font = SWFTextField_getUnresolvedFont(field);
 	int i;
 	if ( font != NULL )
 	{
@@ -506,7 +506,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int leve
 	SWFBlock backgroundBlock;
 	unsigned long compresslength, i;
 	char *compress;
-//fprintf(stderr, "SWFMovie_output %x %d\n", SWFMovie_output, getpid()); sleep(30);
+
 	if ( movie->nExports > 0 )
 		SWFMovie_writeExports(movie);
 

@@ -82,6 +82,6 @@ void SWFTextField_setLength(SWFTextField field, int length);
 
 void SWFTextField_setFontCharacter(SWFTextField field, SWFFontCharacter fontchar);
 void SWFTextField_addChars(SWFTextField field, char *string);
-SWFFont SWFTextField_getFont(SWFTextField field);
+SWFFont SWFTextField_getUnresolvedFont(SWFTextField field);
 
 #endif /* SWF_DEFINEEDITTEXT_H_INCLUDED */
