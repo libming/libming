@@ -30,14 +30,14 @@ SWFText_new(package="SWF::Text")
 
 
 void
-destroySWFText(block)
-        SWF::Block      block = (SWF__Block) SvIV((SV*)SvRV(ST(0)));
+destroySWFText(text)
+        SWF::Text	text
         ALIAS:
         SWF::Text::DESTROY = 1
 	CODE:
         S_DEBUG(2, fprintf(stderr, "Text DESTROY CALLED\n"));
 	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
-        destroySWFText(block);
+        destroySWFText(text);
 
 
 void
