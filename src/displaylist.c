@@ -116,13 +116,17 @@ int SWFDisplayItem_getDepth(SWFDisplayItem item)
 
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
 {
+  item->depth = depth;
+
+  checkBlock(item);
+
   if((item->flags & ITEM_NEW) == 0)
   {
     /* warn.. */
     return;
   }
-  
-  item->depth = depth;
+
+  SWFPlaceObject2Block_setDepth(item->block, depth);
 }
 
 static inline void checkBlock(SWFDisplayItem item)
@@ -224,6 +228,20 @@ void SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 
   /* item->block is never null when ITEM_NEW set */
   SWFPlaceObject2Block_setName(item->block, name);
+}
+
+void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel)
+{
+  checkBlock(item);
+
+  if((item->flags & ITEM_NEW) == 0)
+  {
+    /* warn.. */
+    return;
+  }
+
+  /* item->block is never null when ITEM_NEW set */
+  SWFPlaceObject2Block_setMaskLevel(item->block, masklevel);
 }
 
 void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio)
