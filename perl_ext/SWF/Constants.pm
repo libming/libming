@@ -1,10 +1,9 @@
 # ====================================================================
-# Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+# Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 # ====================================================================
 
-# $Author$
 # $Id$
 
 package SWF::Constants;
@@ -22,7 +21,7 @@ SWF::Constants - Constants defined in ming
 =head1 SYNOPSIS
 
  use SWF::Constants 'SWFBUTTON_MOUSEUP'; # import SWFBUTTON_MOUSEUP
- use SWF::Constans ':Button';            # import all constants for SWF::Button
+ use SWF::Constants ':Button';           # import all constants for SWF::Button
 
 
 =head1 DESCRIPTION
@@ -94,17 +93,16 @@ This tag imports constants most commonly used by SWF::TextField.
     SWFTEXTFIELD_ALIGN_JUSTIFY
     SWFTEXTFIELD_HTML
     SWFTEXTFIELD_HASLENGTH
-
-
+    SWFTEXTFIELD_USEFONT
+    SWFTEXTFIELD_AUTOSIZE
 
 
 =head1 AUTHOR
 
-Soheil Seyfaie (soheil@netcom.ca).
+Soheil Seyfaie (soheil at users.sourceforge.net).
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Shape, SWF::Movie, .
-
+SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text
 
 =cut
