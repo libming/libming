@@ -36,6 +36,8 @@ my @SWF_MODULES = qw {
     MovieClip
     Shape
     Sound
+	SoundInstance
+	SoundStream
     Text
     TextField
 };

@@ -502,7 +502,11 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 
 		if ( item->block != NULL )
 			SWFBlockList_addBlock(blocklist, (SWFBlock)item->block);
-
+		if(((SWFBlock)character)->type == SWF_DEFINEBUTTON2)
+		{	SWFCharacter buttonsound = getButtonSound(character);
+			if(buttonsound)
+				SWFBlockList_addBlock(blocklist, (SWFBlock)buttonsound);
+		}
 		item->flags = 0;
 		item->block = NULL;
 

@@ -5,7 +5,6 @@
  * ====================================================================
  *
  * $Author$
- * $Id$
  */
 
 
@@ -17,37 +16,34 @@
 #include "perl_swf.h"
 
 
-MODULE = SWF::Sound       PACKAGE = SWF::Sound            PREFIX = SWFSound_
+MODULE = SWF::SoundStream       PACKAGE = SWF::SoundStream            PREFIX = SWFSoundStream_
 PROTOTYPES: ENABLE
 
 
-SWF::Sound
-SWFSound_new(package="SWF::Sound", filename, flags=0)
+SWF::SoundStream
+SWFSoundStream_new(package="SWF::SoundStream", filename)
        char *package
        char *filename
-       int flags
        PREINIT:
        FILE    *f;
        CODE:
        if (items < 1)
-           fprintf(stderr, "SWF::Sound called with one argument\n\n");
+           fprintf(stderr, "SWF::SoundStream called with one argument\n\n");
        if (!(f = fopen(filename, "rb"))) {
                fprintf(stderr, "Unable to open %s\n", filename);
                ST(0) = &sv_undef;
        } else {
-               RETVAL = newSWFSound(f, flags);
+               RETVAL = newSWFSoundStream(f);
                ST(0) = sv_newmortal();
                sv_setref_pv(ST(0), package, (void*)RETVAL);
        }
 
 void
-destroySWFSound(sound)
-	SWF::Sound	sound
+destroySWFSoundStream(sound)
+	SWF::SoundStream	sound
         ALIAS:
-        SWF::Sound::DESTROY = 1
+        SWF::SoundStream::DESTROY = 1
         CODE:
-        S_DEBUG(2, fprintf(stderr, "Sound DESTROY CALLED\n"));
-        destroySWFSound(sound);
-
-
+        S_DEBUG(2, fprintf(stderr, "SoundStream DESTROY CALLED\n"));
+        destroySWFSoundStream(sound);
 

@@ -80,6 +80,19 @@ SWFButton_addAction(button, action, flags=SWFBUTTON_MOUSEUP)
         ALIAS:
         SWF::Button::setAction = 1
 
+
+SWF::SoundInstance
+SWFButton_addSound(button, sound, flags)
+	SWF::Button	button
+	SWF::Sound	sound
+    int             flags
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFButton_addSound(button, sound, flags);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::SoundInstance", (void*)RETVAL);
+
+
 void
 SWFButton_setMenu(button, flag=1)
 	SWF::Button	button

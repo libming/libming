@@ -79,6 +79,8 @@ PHP_FUNCTION(swfmovie_Protect);
 PHP_FUNCTION(swfmovie_streamMp3);
 PHP_FUNCTION(swfmovie_addExport);
 PHP_FUNCTION(swfmovie_writeExports);
+PHP_FUNCTION(swfmovie_startSound);
+PHP_FUNCTION(swfmovie_stopSound);
 
 PHP_FUNCTION(swfsprite_init);
 PHP_FUNCTION(swfsprite_add);
@@ -86,6 +88,8 @@ PHP_FUNCTION(swfsprite_remove);
 PHP_FUNCTION(swfsprite_nextFrame);
 PHP_FUNCTION(swfsprite_labelFrame);
 PHP_FUNCTION(swfsprite_setFrames);
+PHP_FUNCTION(swfsprite_startSound);
+PHP_FUNCTION(swfsprite_stopSound);
 
 PHP_FUNCTION(swffont_init);
 PHP_FUNCTION(swffont_getWidth);
@@ -168,6 +172,13 @@ PHP_FUNCTION(swfaction_init);
 PHP_FUNCTION(swfmorph_init);
 PHP_FUNCTION(swfmorph_getShape1);
 PHP_FUNCTION(swfmorph_getShape2);
+
+PHP_FUNCTION(swfsound_init);
+
+PHP_FUNCTION(swfsoundinstance_noMultiple);
+PHP_FUNCTION(swfsoundinstance_loopInPoint);
+PHP_FUNCTION(swfsoundinstance_loopOutPoint);
+PHP_FUNCTION(swfsoundinstance_loopCount);
 
 PHP_FUNCTION(ming_setCubicThreshold);
 PHP_FUNCTION(ming_setScale);

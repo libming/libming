@@ -36,6 +36,8 @@ typedef struct SWFSound_s *SWFSound;
 #define SWF_SOUND_NOT_COMPRESSED   (0<<4)
 #define SWF_SOUND_ADPCM_COMPRESSED (1<<4)
 #define SWF_SOUND_MP3_COMPRESSED   (2<<4)
+#define SWF_SOUND_NOT_COMPRESSED_LE (3<<4)
+#define SWF_SOUND_NELLY_COMPRESSED (6<<4)
 
 #define SWF_SOUND_RATE             0x0c
 #define SWF_SOUND_5KHZ             (0<<2)

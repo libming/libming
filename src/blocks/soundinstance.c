@@ -103,10 +103,10 @@ int completeSWFSoundInstance(SWFBlock block)
 	flags = sound->flags;
 
 	return 3 /* (sound id + flags) */ +
-		(flags & SWF_SOUNDINFO_HASINPOINT) ? 4 : 0 +
-		(flags & SWF_SOUNDINFO_HASOUTPOINT) ? 4 : 0 +
-		(flags & SWF_SOUNDINFO_HASLOOPS) ? 2 : 0 +
-		(flags & SWF_SOUNDINFO_HASENVELOPE) ? (1 + 8*sound->numEnvPoints) : 0;
+		((flags & SWF_SOUNDINFO_HASINPOINT) ? 4 : 0) +
+		((flags & SWF_SOUNDINFO_HASOUTPOINT) ? 4 : 0) +
+		((flags & SWF_SOUNDINFO_HASLOOPS) ? 2 : 0) +
+		((flags & SWF_SOUNDINFO_HASENVELOPE) ? (1 + 8*sound->numEnvPoints) : 0);
 }
 
 
@@ -134,6 +134,12 @@ SWFSoundInstance newSWFSoundInstance(SWFSound sound)
 	return instance;
 }
 
+void
+destroySWFSoundInstance(SWFBlock inst)
+{
+	destroySWFBlock(inst);
+}
+
 
 SWFSoundInstance newSWFSoundInstance_stop(SWFSound sound)
 {
@@ -150,6 +156,27 @@ SWFSoundInstance newSWFSoundInstance_startNoMultiple(SWFSound sound)
 	return instance;
 }
 
+void SWFSoundInstance_setNoMultiple(SWFSoundInstance instance)
+{
+	instance->flags |= SWF_SOUNDINFO_SYNCNOMULTIPLE;
+}
+
+void SWFSoundInstance_setLoopInPoint(SWFSoundInstance instance, unsigned int point)
+{
+	instance->flags |= SWF_SOUNDINFO_HASINPOINT;
+	instance->inPoint = point;	
+}
+
+void SWFSoundInstance_setLoopOutPoint(SWFSoundInstance instance, unsigned int point)
+{
+	instance->flags |= SWF_SOUNDINFO_HASOUTPOINT;
+	instance->outPoint = point;	
+}
+void SWFSoundInstance_setLoopCount(SWFSoundInstance instance, int count)
+{
+	instance->flags |= SWF_SOUNDINFO_HASLOOPS;
+	instance->numLoops = count;
+}
 
 /*
  * Local variables:

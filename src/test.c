@@ -297,7 +297,7 @@ void testShape(SWFMovie movie)
 void testMp3(SWFMovie movie)
 {
   FILE *f;
-  SWFSound sound;
+  SWFSoundStream sound;
 
   if(!(f = fopen("test.mp3", "rb")))
   {
@@ -305,10 +305,61 @@ void testMp3(SWFMovie movie)
     exit(1);
   }
 
-  sound = newSWFSound(f);
+  sound = newSWFSoundStream(f);
 
   SWFMovie_setSoundStream(movie, sound);
   SWFMovie_setNumberOfFrames(movie, 200);
+}
+
+/* }}} */
+/* {{{ testSound1 */
+
+void testSound1(SWFMovie movie)
+{
+  FILE *f;
+  SWFSound sound;
+
+  if(!(f = fopen("/tmp/sounds/rooster.au", "rb")))
+  {
+    printf("Couldn't find test.mp3 file\n");
+    exit(1);
+  }
+
+  sound = newSWFSound(f, SWF_SOUND_11KHZ);
+
+  SWFMovie_startSound(movie, sound);
+  SWFMovie_setNumberOfFrames(movie, 40);
+}
+
+/* }}} */
+/* {{{ testSound2 */
+
+void testSound2(SWFMovie movie)
+{
+  FILE *f;
+  SWFSound sound;
+  SWFShape shape;
+  SWFButton button;
+  SWFFill f1;
+
+  shape = newSWFShape();
+  f1 = SWFShape_addSolidFill(shape, 0xff, 0, 0, 0xff);
+  SWFShape_setRightFill(shape, f1);
+  SWFShape_drawLine(shape, 100, 0);
+  SWFShape_drawLine(shape, -50, 80);
+  SWFShape_drawLine(shape, -50, -80);
+  button = newSWFButton();
+  SWFButton_addShape(button, shape, SWFBUTTON_UP|SWFBUTTON_DOWN|SWFBUTTON_OVER|SWFBUTTON_HIT);
+
+  if(!(f = fopen("/tmp/sounds/rooster.au", "rb")))
+  {
+    printf("Couldn't find test.mp3 file\n");
+    exit(1);
+  }
+
+  sound = newSWFSound(f, SWF_SOUND_11KHZ);
+  SWFButton_addSound(button, sound, 2);
+  SWFMovie_add(movie, button);
 }
 
 /* }}} */
@@ -333,13 +384,14 @@ int main(int argc, char *argv[])
   //testDrawCharacter(m);
   //testMorph(m);
   //testShape(m);
-  testText(m);
+  //testText(m);
+  testSound2(m);
   //testDBL(m);
   //testJpeg(m);
   //testJpegAlpha(m);
   //testMp3(m);
 
-  length = SWFMovie_output(m, fileOutputMethod, f);
+  length = SWFMovie_output(m, fileOutputMethod, f, 0);
   destroySWFMovie(m);
 
   printf("%i bytes written\n", length);

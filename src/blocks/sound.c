@@ -46,7 +46,8 @@ getMP3Size(SWFInput input);
 static int
 soundDataSize(SWFSound sound)
 {
-	if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED)
+	if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED ||
+		 (sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_NOT_COMPRESSED_LE)
 	{
 		int sampleCount = SWFInput_length(sound->input);
 

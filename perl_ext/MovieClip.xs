@@ -70,3 +70,19 @@ destroySWFMovieClip(clip)
 	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));
         destroySWFMovieClip(clip);
 
+SWF::SoundInstance
+SWFMovieClip_startSound(movieclip, sound) 
+	SWF::MovieClip movieclip
+	SWF::Sound sound
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFMovieClip_startSound(movieclip, sound);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::SoundInstance", (void*)RETVAL);
+
+void
+SWFMovieClip_stopSound(movieclip, sound)
+	SWF::MovieClip movieclip
+	SWF::Sound sound
+	CODE:
+	SWFMovieClip_stopSound(movieclip, sound);

@@ -265,6 +265,11 @@ newSWFButton()
 	return button;
 }
 
+SWFButtonSound
+getButtonSound(SWFButton button)
+{
+	return button->sounds;
+}
 
 SWFSoundInstance
 SWFButton_addSound(SWFButton button, SWFSound sound, byte flag)
@@ -276,10 +281,11 @@ SWFButton_addSound(SWFButton button, SWFSound sound, byte flag)
 	{
 		button->sounds = newSWFButtonSound(button);
 
-		SWFCharacter_addDependency((SWFCharacter)button,
-															 (SWFCharacter)button->sounds);
+//		SWFCharacter_addDependency((SWFCharacter)button->sounds,
+//															 (SWFCharacter)button);
 	}
 
+	SWFCharacter_addDependency((SWFCharacter)button, (SWFCharacter)sound);
 	return SWFButtonSound_setSound(button->sounds, sound, flag);
 }
 
@@ -291,6 +297,10 @@ destroySWFButtonSound(SWFBlock buttonSound)
 }
 
 
+/* NOTE: at least F5 and F6 do not write an extra 0 style byte if there is
+   no sound for a particular transition
+   the docs say otherwise 
+ */
 void
 writeSWFButtonSoundToMethod(SWFBlock block,
 														SWFByteOutputMethod method, void *data)
@@ -303,7 +313,10 @@ writeSWFButtonSoundToMethod(SWFBlock block,
 	for ( i=0; i<4; ++i )
 	{
 		SWFSoundInstance sound = buttonSound->sounds[i];
-		writeSWFSoundInstanceToMethod((SWFBlock)sound, method, data);
+		if(sound)
+			writeSWFSoundInstanceToMethod((SWFBlock)sound, method, data);
+		else
+			methodWriteUInt16(0, method, data);
 	}
 }
 
@@ -318,7 +331,10 @@ completeSWFButtonSound(SWFBlock block)
 	for ( i=0; i<4; ++i )
 	{
 		SWFSoundInstance sound = buttonSound->sounds[i];
-		size += completeSWFSoundInstance((SWFBlock)sound);
+		if(sound)
+			size += completeSWFSoundInstance((SWFBlock)sound);
+		else
+			size += 2;
 	}
 
 	return size;
@@ -353,16 +369,16 @@ newSWFButtonSound(SWFButton button)
 SWFSoundInstance
 SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags)
 {
-	if ( flags == SWFBUTTON_UP )
+	if ( flags == SWFBUTTON_OVERUPTOIDLE )
 		return (sounds->sounds[0] = newSWFSoundInstance(sound));
 
-	else if ( flags == SWFBUTTON_OVER )
+	else if ( flags == SWFBUTTON_IDLETOOVERUP )
 		return (sounds->sounds[1] = newSWFSoundInstance(sound));
 
-	else if ( flags == SWFBUTTON_DOWN )
+	else if ( flags == SWFBUTTON_OVERUPTOOVERDOWN )
 		return (sounds->sounds[2] = newSWFSoundInstance(sound));
 
-	else if ( flags == SWFBUTTON_HIT )
+	else if ( flags == SWFBUTTON_OVERDOWNTOOVERUP )
 		return (sounds->sounds[3] = newSWFSoundInstance(sound));
 
 	else

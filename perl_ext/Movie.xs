@@ -141,10 +141,20 @@ SWFMovie_setSoundStream(movie, sound)
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
 	SWFMovie_setSoundStream(movie, sound);
-/*
-*void
-*SWFMovie_startSound(movie) 
-*
-*void
-*SWFMovie_stopSound(movie)
-*/
+
+SWF::SoundInstance
+SWFMovie_startSound(movie, sound) 
+	SWF::Movie movie
+	SWF::Sound sound
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFMovie_startSound(movie, sound);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::SoundInstance", (void*)RETVAL);
+
+void
+SWFMovie_stopSound(movie, sound)
+	SWF::Movie movie
+	SWF::Sound sound
+	CODE:
+	SWFMovie_stopSound(movie, sound);

@@ -20,6 +20,8 @@ SWF::MovieClip                                  T_PTROBJ
 SWF::Morph                                      T_PTROBJ
 SWF::TextField					T_PTROBJ
 SWF::Sound					T_PTROBJ
+SWF::SoundStream					T_PTROBJ
+SWF::SoundInstance					T_PTROBJ
 
 INPUT
 T_PTRINT

@@ -53,6 +53,8 @@ static SWFButton getButton(zval *id TSRMLS_DC);
 static SWFAction getAction(zval *id TSRMLS_DC);
 static SWFMorph getMorph(zval *id TSRMLS_DC);
 static SWFMovieClip getSprite(zval *id TSRMLS_DC);
+static SWFSound getSound(zval *id TSRMLS_DC);
+static SWFSoundInstance getSoundInstance(zval *id TSRMLS_DC);
 
 /* {{{ proto void ming_setcubicthreshold (int threshold)
 	Set cubic threshold (?) */
@@ -128,6 +130,8 @@ static int le_swfactionp;
 static int le_swfmorphp;
 static int le_swfspritep;
 static int le_swfinputp;
+static int le_swfsoundp;
+static int le_swfsoundinstancep;
 
 zend_class_entry movie_class_entry;
 zend_class_entry shape_class_entry;
@@ -142,6 +146,8 @@ zend_class_entry button_class_entry;
 zend_class_entry action_class_entry;
 zend_class_entry morph_class_entry;
 zend_class_entry sprite_class_entry;
+zend_class_entry sound_class_entry;
+zend_class_entry soundinstance_class_entry;
 
 /* {{{ internal function SWFgetProperty
  */
@@ -200,6 +206,10 @@ SWFCharacter getCharacter(zval *id TSRMLS_DC)
     return (SWFCharacter)getSprite(id TSRMLS_CC);
   else if(Z_OBJCE_P(id) == &bitmap_class_entry)
     return (SWFCharacter)getBitmap(id TSRMLS_CC);
+  else if(Z_OBJCE_P(id) == &sound_class_entry)
+    return (SWFCharacter)getSound(id TSRMLS_CC);
+//  else if(Z_OBJCE_P(id) == &soundinstance_class_entry)
+//    return (SWFCharacter)getSoundInstance(id TSRMLS_CC);
   else
     php_error(E_ERROR, "called object is not an SWFCharacter");
 	return NULL;
@@ -437,6 +447,7 @@ static zend_function_entry swfbutton_functions[] = {
   PHP_FALIAS(addshape,               swfbutton_addShape,        NULL)
   PHP_FALIAS(setmenu,                swfbutton_setMenu,         NULL)
   PHP_FALIAS(addaction,              swfbutton_addAction,       NULL)
+  PHP_FALIAS(addsound,               swfbutton_addSound,        NULL)
   { NULL, NULL, NULL }
 };
 
@@ -624,6 +635,39 @@ PHP_FUNCTION(swfbutton_addAction)
   convert_to_long_ex(flags);
 
   SWFButton_addAction(button, action, Z_LVAL_PP(flags));
+}
+
+/* }}} */
+/* {{{ proto SWFSoundInstance * swfbutton_addASound(SWFSound sound, int flags)
+   associates a sound with a button transition
+	NOTE: the transitions are all wrong _UP, _OVER, _DOWN _HIT  */
+
+PHP_FUNCTION(swfbutton_addSound)
+{
+  zval **zsound, **flags;
+  SWFButton button = getButton(getThis() TSRMLS_CC);
+  SWFSound sound;
+  SWFSoundInstance item;
+  int ret;
+
+  if(ZEND_NUM_ARGS() != 2 ||
+     zend_get_parameters_ex(2, &zsound, &flags) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zsound);
+  sound = getSound(*zsound TSRMLS_CC);
+
+  convert_to_long_ex(flags);
+
+  item = SWFButton_addSound(button, sound, Z_LVAL_PP(flags));
+
+  if(item != NULL)
+  {
+    /* try and create a soundinstance object */
+    ret = zend_list_insert(item, le_swfsoundinstancep);
+    object_init_ex(return_value, &soundinstance_class_entry);
+    add_property_resource(return_value, "soundinstance", ret);
+  }
 }
 
 /* }}} */
@@ -1578,6 +1622,170 @@ PHP_FUNCTION(swfmorph_getShape2)
 /* }}} */
 
 /* }}} */
+
+/* {{{ SWFSound */
+
+static zend_function_entry swfsound_functions[] = {
+  PHP_FALIAS(swfsound,         swfsound_init,             NULL)
+  { NULL, NULL, NULL }
+};
+
+/* {{{ internal function SWFSound getSound(zval *id)
+   Returns the Sound object in zval *id */
+
+SWFSound getSound(zval *id TSRMLS_DC)
+{
+  void *sound = SWFgetProperty(id, "sound", 5, le_swfsoundp TSRMLS_CC);
+
+  if(!sound)
+    php_error(E_ERROR, "called object is not an SWFSound!");
+
+  return (SWFSound)sound;
+}
+
+/* }}} */
+/* {{{ proto class swfsound_init(string filename, int flags)
+   Returns a new SWFSound object from given file */
+
+PHP_FUNCTION(swfsound_init)
+{
+  FILE *file;
+  zval **zfile, **zflags;
+  SWFSound sound;
+  SWFInput input;
+  int flags;
+  int ret;
+
+  if(ZEND_NUM_ARGS() == 1)
+  {
+    if(zend_get_parameters_ex(1, &zfile) == FAILURE)
+      WRONG_PARAM_COUNT;
+    flags = 0;
+  }
+  else if(ZEND_NUM_ARGS() == 2)
+  {
+    if(zend_get_parameters_ex(2, &zfile, &zflags) == FAILURE)
+      WRONG_PARAM_COUNT;
+    convert_to_long_ex(zflags);
+    flags = Z_LVAL_PP(zflags);
+  }
+  else
+    WRONG_PARAM_COUNT;
+
+  if(Z_TYPE_PP(zfile) != IS_RESOURCE)
+  {
+    convert_to_string_ex(zfile);
+    input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+    zend_list_addref(zend_list_insert(input, le_swfinputp));
+  }
+  else
+    input = getInput(zfile TSRMLS_CC);
+
+  sound = newSWFSound_fromInput(input, flags);
+
+  ret = zend_list_insert(sound, le_swfsoundp);
+
+  object_init_ex(getThis(), &sound_class_entry);
+  add_property_resource(getThis(), "sound", ret);
+  zend_list_addref(ret);
+}
+static void destroy_SWFSound_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+  destroySWFBlock((SWFBlock)resource->ptr);
+}
+
+/* }}} */
+
+/* }}} */
+
+/* should handle envelope functions */
+/* {{{ SWFSoundInstance */
+
+static zend_function_entry swfsoundinstance_functions[] = {
+  PHP_FALIAS(nomultiple,     swfsoundinstance_noMultiple,    NULL)
+  PHP_FALIAS(loopinpoint,    swfsoundinstance_loopInPoint,   NULL)
+  PHP_FALIAS(loopoutpoint,   swfsoundinstance_loopOutPoint,  NULL)
+  PHP_FALIAS(loopcount,      swfsoundinstance_loopCount,     NULL)
+  { NULL, NULL, NULL }
+};
+
+/* {{{ internal function SWFSoundInstance getSoundInstance(zval *id)
+   Returns the SoundInstance object in zval *id */
+
+SWFSoundInstance getSoundInstance(zval *id TSRMLS_DC)
+{
+  void *inst = SWFgetProperty(id, "soundinstance", 13, le_swfsoundinstancep TSRMLS_CC);
+
+  if(!inst)
+    php_error(E_ERROR, "called object is not an SWFSoundInstance!");
+
+  return (SWFSoundInstance)inst;
+}
+
+/* }}} */
+/* {{{ swfsoundinstance_nomultiple */
+
+PHP_FUNCTION(swfsoundinstance_noMultiple)
+{
+  SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  SWFSoundInstance_setNoMultiple(inst);
+}
+
+/* }}} */
+/* {{{ swfsoundinstance_loopinpoint(point) */
+
+PHP_FUNCTION(swfsoundinstance_loopInPoint)
+{
+  zval **zpoint;
+  SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
+
+  if((ZEND_NUM_ARGS() != 1) || zend_get_parameters_ex(1, &zpoint) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(zpoint);
+
+  SWFSoundInstance_setLoopInPoint(inst, Z_LVAL_PP(zpoint));
+}
+
+/* }}} */
+/* {{{ swfsoundinstance_loopoutpoint(point) */
+
+PHP_FUNCTION(swfsoundinstance_loopOutPoint)
+{
+  zval **zpoint;
+  SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
+
+  if((ZEND_NUM_ARGS() != 1) || zend_get_parameters_ex(1, &zpoint) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(zpoint);
+
+  SWFSoundInstance_setLoopOutPoint(inst, Z_LVAL_PP(zpoint));
+}
+
+/* }}} */
+/* {{{ swfsoundinstance_loopcount(point) */
+
+PHP_FUNCTION(swfsoundinstance_loopCount)
+{
+  zval **zcount;
+  SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
+
+  if((ZEND_NUM_ARGS() != 1) || zend_get_parameters_ex(1, &zcount) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(zcount);
+
+  SWFSoundInstance_setLoopCount(inst, Z_LVAL_PP(zcount));
+}
+
+/* }}} */
+
+/* }}} */
 /* {{{ SWFMovie */
 
 static zend_function_entry swfmovie_functions[] = {
@@ -1596,6 +1804,8 @@ static zend_function_entry swfmovie_functions[] = {
   PHP_FALIAS(streammp3,         swfmovie_streamMp3,         NULL)
   PHP_FALIAS(addexport,         swfmovie_addExport,         NULL)
   PHP_FALIAS(writeexports,      swfmovie_writeExports,      NULL)
+  PHP_FALIAS(startsound,        swfmovie_startSound,        NULL)
+  PHP_FALIAS(stopsound,         swfmovie_stopSound,         NULL)
   { NULL, NULL, NULL }
 };
 
@@ -1917,7 +2127,7 @@ PHP_FUNCTION(swfmovie_setFrames)
 PHP_FUNCTION(swfmovie_streamMp3)
 {
   zval **zfile;
-  SWFSound sound;
+  SWFSoundStream sound;
   SWFInput input;
   SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
@@ -1933,7 +2143,7 @@ PHP_FUNCTION(swfmovie_streamMp3)
   else
     input = getInput(zfile TSRMLS_CC);
 
-  sound = newSWFSound_fromInput(input);
+  sound = newSWFSoundStream_fromInput(input);
   SWFMovie_setSoundStream(movie, sound);
 }
 
@@ -1972,8 +2182,56 @@ PHP_FUNCTION(swfmovie_writeExports)
 }
 
 /* }}} */
+/* {{{ SWFSoundInstance swfmovie_startsound */
+
+PHP_FUNCTION(swfmovie_startSound)
+{
+  zval **zsound;
+  int ret;
+  SWFSound sound;
+  SWFSoundInstance item;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zsound) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zsound);
+  sound = (SWFSound)getSound(*zsound TSRMLS_CC);
+
+  item = SWFMovie_startSound(movie, sound);
+
+  if(item != NULL)
+  {
+    /* try and create a soundinstance object */
+    ret = zend_list_insert(item, le_swfsoundinstancep);
+    object_init_ex(return_value, &soundinstance_class_entry);
+    add_property_resource(return_value, "soundinstance", ret);
+  }
+}
 
 /* }}} */
+/* {{{ void swfmovie_stopsound */
+
+PHP_FUNCTION(swfmovie_stopSound)
+{
+  zval **zsound;
+  SWFSound sound;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zsound) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zsound);
+  sound = (SWFSound)getSound(*zsound TSRMLS_CC);
+
+  SWFMovie_stopSound(movie, sound);
+
+}
+
+/* }}} */
+
+/* }}} */
+
 /* {{{ SWFShape */
 
 static zend_function_entry swfshape_functions[] = {
@@ -2570,6 +2828,8 @@ static zend_function_entry swfsprite_functions[] = {
   PHP_FALIAS(nextframe,          swfsprite_nextFrame,         NULL)
   PHP_FALIAS(labelframe,         swfsprite_labelFrame,        NULL)
   PHP_FALIAS(setframes,          swfsprite_setFrames,         NULL)
+  PHP_FALIAS(startsound,         swfsprite_startSound,         NULL)
+  PHP_FALIAS(stopsound,          swfsprite_stopSound,         NULL)
   { NULL, NULL, NULL }
 };
 
@@ -2697,6 +2957,53 @@ PHP_FUNCTION(swfsprite_setFrames)
   convert_to_long_ex(frames);
 
   SWFMovieClip_setNumberOfFrames(sprite, Z_LVAL_PP(frames));
+}
+
+/* }}} */
+/* {{{ SWFSoundInstance swfsprite_startsound */
+
+PHP_FUNCTION(swfsprite_startSound)
+{
+  zval **zsound;
+  int ret;
+  SWFSound sound;
+  SWFSoundInstance item;
+  SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zsound) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zsound);
+  sound = (SWFSound)getSound(*zsound TSRMLS_CC);
+
+  item = SWFMovieClip_startSound(sprite, sound);
+
+  if(item != NULL)
+  {
+    /* try and create a displayitem object */
+    ret = zend_list_insert(item, le_swfsoundinstancep);
+    object_init_ex(return_value, &soundinstance_class_entry);
+    add_property_resource(return_value, "soundinstance", ret);
+  }
+}
+
+/* }}} */
+/* {{{ void swfsprite_stopsound */
+
+PHP_FUNCTION(swfsprite_stopSound)
+{
+  zval **zsound;
+  SWFSound sound;
+  SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zsound) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zsound);
+  sound = (SWFSound)getSound(*zsound TSRMLS_CC);
+
+  SWFMovieClip_stopSound(sprite, sound);
+
 }
 
 /* }}} */
@@ -3457,6 +3764,21 @@ PHP_MINIT_FUNCTION(ming)
   CONSTANT("SWFACTION_KEYUP",             SWFACTION_KEYUP);
   CONSTANT("SWFACTION_DATA",              SWFACTION_DATA);
 
+  /* flags for SWFSound */
+  CONSTANT("SWF_SOUND_NOT_COMPRESSED",    SWF_SOUND_NOT_COMPRESSED);
+  CONSTANT("SWF_SOUND_ADPCM_COMPRESSED",  SWF_SOUND_ADPCM_COMPRESSED);
+  CONSTANT("SWF_SOUND_MP3_COMPRESSED",    SWF_SOUND_MP3_COMPRESSED);
+  CONSTANT("SWF_SOUND_NOT_COMPRESSED_LE", SWF_SOUND_NOT_COMPRESSED_LE);
+  CONSTANT("SWF_SOUND_NELLY_COMPRESSED",  SWF_SOUND_NELLY_COMPRESSED);
+  CONSTANT("SWF_SOUND_5KHZ",              SWF_SOUND_5KHZ);
+  CONSTANT("SWF_SOUND_11KHZ",             SWF_SOUND_11KHZ);
+  CONSTANT("SWF_SOUND_22KHZ",             SWF_SOUND_22KHZ);
+  CONSTANT("SWF_SOUND_44KHZ",             SWF_SOUND_44KHZ);
+  CONSTANT("SWF_SOUND_8BITS",             SWF_SOUND_8BITS);
+  CONSTANT("SWF_SOUND_16BITS",            SWF_SOUND_16BITS);
+  CONSTANT("SWF_SOUND_MONO",              SWF_SOUND_MONO);
+  CONSTANT("SWF_SOUND_STEREO",            SWF_SOUND_STEREO);
+
   le_swfmoviep = zend_register_list_destructors_ex(destroy_SWFMovie_resource, NULL, "SWFMovie", module_number);
   le_swfshapep = zend_register_list_destructors_ex(destroy_SWFShape_resource, NULL, "SWFShape", module_number);
   le_swffillp = zend_register_list_destructors_ex(destroy_SWFFill_resource, NULL, "SWFFill", module_number);
@@ -3473,6 +3795,8 @@ PHP_MINIT_FUNCTION(ming)
   le_swfactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFAction", module_number);
 
   le_swfinputp = zend_register_list_destructors_ex(destroy_SWFInput_resource, NULL, "SWFInput", module_number);
+  le_swfsoundp = zend_register_list_destructors_ex(destroy_SWFSound_resource, NULL, "SWFSound", module_number);
+  le_swfsoundinstancep = zend_register_list_destructors_ex(NULL, NULL, "SWFSoundInstance", module_number);
 
   INIT_CLASS_ENTRY(shape_class_entry, "swfshape", swfshape_functions);
   INIT_CLASS_ENTRY(fill_class_entry, "swffill", swffill_functions);
@@ -3489,6 +3813,8 @@ PHP_MINIT_FUNCTION(ming)
   INIT_CLASS_ENTRY(action_class_entry, "swfaction", swfaction_functions);
   INIT_CLASS_ENTRY(morph_class_entry, "swfmorph", swfmorph_functions);
   INIT_CLASS_ENTRY(sprite_class_entry, "swfsprite", swfsprite_functions);
+  INIT_CLASS_ENTRY(sound_class_entry, "swfsound", swfsound_functions);
+  INIT_CLASS_ENTRY(soundinstance_class_entry, "swfsoundinstance", swfsoundinstance_functions);
 
   zend_register_internal_class(&shape_class_entry TSRMLS_CC);
   zend_register_internal_class(&fill_class_entry TSRMLS_CC);
@@ -3497,192 +3823,14 @@ PHP_MINIT_FUNCTION(ming)
   zend_register_internal_class(&text_class_entry TSRMLS_CC);
   zend_register_internal_class(&textfield_class_entry TSRMLS_CC);
   zend_register_internal_class(&font_class_entry TSRMLS_CC);
-/*
-   +----------------------------------------------------------------------+
-   | PHP Version 4                                                        |
-   +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2002 The PHP Group                                |
-   +----------------------------------------------------------------------+
-   | This source file is subject to version 2.01 of the PHP license,      |
-   | that is bundled with this package in the file LICENSE, and is        |
-   | available at through the world-wide-web at                           |
-   | http://www.php.net/license/2_01.txt.                                 |
-   | If you did not receive a copy of the PHP license and are unable to   |
-   | obtain it through the world-wide-web, please send a note to          |
-   | license@php.net so we can mail you a copy immediately.               |
-   +----------------------------------------------------------------------+
-   | Author: dave@opaque.net                                              |
-   +----------------------------------------------------------------------+
-*/
-
-/* $Id$ */
-
-#ifndef _PHP_MING_H
-#define _PHP_MING_H
-
-#if HAVE_MING
-
-extern zend_module_entry ming_module_entry;
-#define ming_module_ptr &ming_module_entry
-
-#include <ming.h>
-
-PHP_RINIT_FUNCTION(ming);
-PHP_MINIT_FUNCTION(ming);
-PHP_MINFO_FUNCTION(ming);
-
-PHP_FUNCTION(swfbitmap_init);
-PHP_FUNCTION(swfbitmap_getWidth);
-PHP_FUNCTION(swfbitmap_getHeight);
-
-PHP_FUNCTION(swffill_init);
-PHP_FUNCTION(swffill_moveTo);
-PHP_FUNCTION(swffill_scaleTo);
-PHP_FUNCTION(swffill_rotateTo);
-PHP_FUNCTION(swffill_skewXTo);
-PHP_FUNCTION(swffill_skewYTo);
-
-PHP_FUNCTION(swfgradient_init);
-PHP_FUNCTION(swfgradient_addEntry);
-
-PHP_FUNCTION(swfshape_init);
-PHP_FUNCTION(swfshape_addfill);
-PHP_FUNCTION(swfshape_setrightfill);
-PHP_FUNCTION(swfshape_setleftfill);
-PHP_FUNCTION(swfshape_setline);
-PHP_FUNCTION(swfshape_movepento);
-PHP_FUNCTION(swfshape_movepen);
-PHP_FUNCTION(swfshape_drawlineto);
-PHP_FUNCTION(swfshape_drawline);
-PHP_FUNCTION(swfshape_drawcurveto);
-PHP_FUNCTION(swfshape_drawcurve);
-PHP_FUNCTION(swfshape_drawglyph);
-PHP_FUNCTION(swfshape_drawarc);
-PHP_FUNCTION(swfshape_drawcircle);
-PHP_FUNCTION(swfshape_drawcubic);
-PHP_FUNCTION(swfshape_drawcubicto);
-
-PHP_FUNCTION(swfmovie_init);
-PHP_FUNCTION(swfmovie_output);
-PHP_FUNCTION(swfmovie_saveToFile);
-PHP_FUNCTION(swfmovie_save);
-PHP_FUNCTION(swfmovie_add);
-PHP_FUNCTION(swfmovie_remove);
-PHP_FUNCTION(swfmovie_nextFrame);
-PHP_FUNCTION(swfmovie_labelFrame);
-PHP_FUNCTION(swfmovie_setBackground);
-PHP_FUNCTION(swfmovie_setRate);
-PHP_FUNCTION(swfmovie_setDimension);
-PHP_FUNCTION(swfmovie_setFrames);
-PHP_FUNCTION(swfmovie_Protect);
-PHP_FUNCTION(swfmovie_streamMp3);
-PHP_FUNCTION(swfmovie_addExport);
-PHP_FUNCTION(swfmovie_writeExports);
-
-PHP_FUNCTION(swfsprite_init);
-PHP_FUNCTION(swfsprite_add);
-PHP_FUNCTION(swfsprite_remove);
-PHP_FUNCTION(swfsprite_nextFrame);
-PHP_FUNCTION(swfsprite_labelFrame);
-PHP_FUNCTION(swfsprite_setFrames);
-
-PHP_FUNCTION(swffont_init);
-PHP_FUNCTION(swffont_getWidth);
-PHP_FUNCTION(swffont_getUTF8Width);
-/*PHP_FUNCTION(swffont_getWideWidth);*/
-PHP_FUNCTION(swffont_getAscent);
-PHP_FUNCTION(swffont_getDescent);
-PHP_FUNCTION(swffont_getLeading);
-/*PHP_FUNCTION(swffont_addChars);*/
-PHP_FUNCTION(swffont_getShape);
-
-PHP_FUNCTION(swftext_init);
-PHP_FUNCTION(swftext_setFont);
-PHP_FUNCTION(swftext_setHeight);
-PHP_FUNCTION(swftext_setSpacing);
-PHP_FUNCTION(swftext_setColor);
-PHP_FUNCTION(swftext_moveTo);
-PHP_FUNCTION(swftext_addString);
-PHP_FUNCTION(swftext_addUTF8String);
-/*PHP_FUNCTION(swftext_addWideString);*/
-PHP_FUNCTION(swftext_getWidth);
-PHP_FUNCTION(swftext_getUTF8Width);
-/*PHP_FUNCTION(swftext_getWideWidth);*/
-PHP_FUNCTION(swftext_getAscent);
-PHP_FUNCTION(swftext_getDescent);
-PHP_FUNCTION(swftext_getLeading);
-
-PHP_FUNCTION(swftextfield_init);
-PHP_FUNCTION(swftextfield_setFont);
-PHP_FUNCTION(swftextfield_setBounds);
-PHP_FUNCTION(swftextfield_align);
-PHP_FUNCTION(swftextfield_setHeight);
-PHP_FUNCTION(swftextfield_setLeftMargin);
-PHP_FUNCTION(swftextfield_setRightMargin);
-PHP_FUNCTION(swftextfield_setMargins);
-PHP_FUNCTION(swftextfield_setIndentation);
-PHP_FUNCTION(swftextfield_setLineSpacing);
-PHP_FUNCTION(swftextfield_setColor);
-PHP_FUNCTION(swftextfield_setName);
-PHP_FUNCTION(swftextfield_addString);
-PHP_FUNCTION(swftextfield_setPadding);
-PHP_FUNCTION(swftextfield_addChars);
-
-PHP_FUNCTION(swfdisplayitem_move);
-PHP_FUNCTION(swfdisplayitem_moveTo);
-PHP_FUNCTION(swfdisplayitem_scale);
-PHP_FUNCTION(swfdisplayitem_scaleTo);
-PHP_FUNCTION(swfdisplayitem_rotate);
-PHP_FUNCTION(swfdisplayitem_rotateTo);
-PHP_FUNCTION(swfdisplayitem_skewX);
-PHP_FUNCTION(swfdisplayitem_skewXTo);
-PHP_FUNCTION(swfdisplayitem_skewY);
-PHP_FUNCTION(swfdisplayitem_skewYTo);
-PHP_FUNCTION(swfdisplayitem_setMatrix);
-PHP_FUNCTION(swfdisplayitem_setDepth);
-PHP_FUNCTION(swfdisplayitem_setRatio);
-PHP_FUNCTION(swfdisplayitem_addColor);
-PHP_FUNCTION(swfdisplayitem_multColor);
-PHP_FUNCTION(swfdisplayitem_setName);
-PHP_FUNCTION(swfdisplayitem_addAction);
-PHP_FUNCTION(swfdisplayitem_remove);
-PHP_FUNCTION(swfdisplayitem_setMaskLevel);
-PHP_FUNCTION(swfdisplayitem_endMask);
-
-PHP_FUNCTION(swfbutton_init);
-PHP_FUNCTION(swfbutton_setHit);
-PHP_FUNCTION(swfbutton_setOver);
-PHP_FUNCTION(swfbutton_setUp);
-PHP_FUNCTION(swfbutton_setDown);
-PHP_FUNCTION(swfbutton_setAction);
-PHP_FUNCTION(swfbutton_addShape);
-PHP_FUNCTION(swfbutton_addAction);
-PHP_FUNCTION(swfbutton_addSound);
-
-PHP_FUNCTION(swfbutton_keypress);
-
-PHP_FUNCTION(swfaction_init);
-
-PHP_FUNCTION(swfmorph_init);
-PHP_FUNCTION(swfmorph_getShape1);
-PHP_FUNCTION(swfmorph_getShape2);
-
-PHP_FUNCTION(ming_setCubicThreshold);
-PHP_FUNCTION(ming_setScale);
-PHP_FUNCTION(ming_useSWFVersion);
-PHP_FUNCTION(ming_useConstants);
-
-#else
-#define ming_module_ptr NULL
-#endif /* HAVE_MING */
-#define phpext_ming_ptr ming_module_ptr
-#endif  /* _PHP_MING_H */
   zend_register_internal_class(&displayitem_class_entry TSRMLS_CC);
   zend_register_internal_class(&movie_class_entry TSRMLS_CC);
   zend_register_internal_class(&button_class_entry TSRMLS_CC);
   zend_register_internal_class(&action_class_entry TSRMLS_CC);
   zend_register_internal_class(&morph_class_entry TSRMLS_CC);
   zend_register_internal_class(&sprite_class_entry TSRMLS_CC);
+  zend_register_internal_class(&sound_class_entry TSRMLS_CC);
+  zend_register_internal_class(&soundinstance_class_entry TSRMLS_CC);
 
   return SUCCESS;
 }

@@ -29,6 +29,8 @@ typedef SWFAction          SWF__Action;
 typedef SWFMorph           SWF__Morph;
 typedef SWFTextField       SWF__TextField;
 typedef SWFSound           SWF__Sound;
+typedef SWFSoundInstance   SWF__SoundInstance;
+typedef SWFSoundStream     SWF__SoundStream;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef
