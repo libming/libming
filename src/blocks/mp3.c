@@ -149,3 +149,9 @@ int nextMP3Frame(SWFInput input)
 
   return frameLen;
 }
+
+
+int getMP3Size(SWFInput input)
+{
+  return 0; // XXX
+}
