@@ -178,7 +178,10 @@ print FH <<'EOF';
 	warn "Test $test_no: wanted '$want', got '$got'\n";
 	ok(1);
     }
-
+    sub skip_test {
+	print "1..0\n";
+	exit;
+    }
 }
 
 EOF
