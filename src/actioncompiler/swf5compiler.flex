@@ -183,9 +183,6 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 {ID}			{ count();	swf5lval.str = strdup(yytext);
 					return IDENTIFIER;	}
 
-\/{ID}			{ count();	swf5lval.str = strdup(yytext);
-					return IDENTIFIER;	}
-
 \"(\\.|[^\\"])*\"	{ count();	swf5lval.str = strdup(yytext+1);
 					swf5lval.str[strlen(swf5lval.str)-1]=0;
 					return STRING;		}

@@ -93,6 +93,7 @@ int bufferWriteConstants(Buffer out);
 
 /* write data to buffer */
 int bufferWriteOp(Buffer out, int data);
+int bufferWritePushOp(Buffer out);
 int bufferWriteU8(Buffer out, int data);
 int bufferWriteS16(Buffer out, int data);
 int bufferWriteData(Buffer out, byte *buffer, int bytes);

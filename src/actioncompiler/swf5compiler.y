@@ -117,7 +117,7 @@ Buffer bf, bc;
 %type <action> void_function_call, function_call, method_call
 %type <action> assign_stmt, assign_stmts, assign_stmts_opt
 %type <action> expr, expr_or_obj, objexpr, expr_opt, obj_ref
-%type <action> emptybraces, level, init_vars, init_var, primary
+%type <action> emptybraces, level, init_vars, init_var, primary, lvalue_expr
 %type <lval> lvalue
 
 %type <exprlist> expr_list, objexpr_list, formals_list
@@ -652,21 +652,6 @@ void_function_call
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_REMOVECLIP); }
 
-	/* getURL2(url, window, [method]) */
-	| GETURL '(' expr ',' expr ')'
-		{ $$ = $3;
-		  bufferConcat($$, $5);
-		  bufferWriteOp($$, SWFACTION_GETURL2);
-		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, GETURL_METHOD_NOSEND); }
-
-	| GETURL '(' expr ',' expr ',' GETURL_METHOD ')'
-		{ $$ = $3;
-		  bufferConcat($$, $5);
-		  bufferWriteOp($$, SWFACTION_GETURL2);
-		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, $7); }
-
 	| GETURL1 '(' STRING ',' STRING ')'
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GETURL);
@@ -819,7 +804,7 @@ anon_function_decl
 	;
 
 method_call
-	: expr '.' identifier '(' expr_list ')'
+	: lvalue_expr '.' identifier '(' expr_list ')'
 		{ $$ = $5.buffer;
 		  bufferWriteInt($$, $5.count);
 		  bufferConcat($$, $1);
@@ -827,7 +812,7 @@ method_call
 		  bufferWriteOp($$, SWFACTION_CALLMETHOD);
 		  free($3); }
 
-	| expr '[' expr ']' '(' expr_list ')'
+	| lvalue_expr '[' expr ']' '(' expr_list ')'
 		{ $$ = $6.buffer;
 		  bufferWriteInt($$, $6.count);
 		  bufferConcat($$, $1);
@@ -883,6 +868,28 @@ double
 	;
 */
 
+/* resolves an lvalue into a buffer */
+lvalue_expr
+	: lvalue
+		{ if($1.obj)
+		  {
+		    $$ = $1.obj;
+
+		    if($1.ident)
+		      bufferConcat($$, $1.ident);
+		    else
+		      bufferConcat($$, $1.memexpr);
+
+		    bufferWriteOp($$, SWFACTION_GETMEMBER);
+		  }
+		  else
+		  {
+		    $$ = $1.ident;
+		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
+		  }
+		}
+	;
+
 /* lvalue - things you can assign to */
 lvalue
 	: identifier
@@ -892,13 +899,13 @@ lvalue
 		  $$.obj = 0;
 		  $$.memexpr = 0; }
 
-	| expr '.' identifier %prec '.'
+	| lvalue_expr '.' identifier %prec '.'
 		{ $$.obj = $1;
 		  $$.ident = newBuffer();
 		  bufferWriteString($$.ident, $3, strlen($3)+1);
 		  $$.memexpr = 0; }
 
-	| expr '[' expr ']' %prec '.'
+	| lvalue_expr '[' expr ']' %prec '.'
 		{ $$.obj = $1;
 		  $$.memexpr = $3;
 		  $$.ident = 0; }
@@ -1095,24 +1102,7 @@ primary
 
 	| method_call
 
-	| lvalue
-		{ if($1.obj)
-		  {
-		    $$ = $1.obj;
-
-		    if($1.ident)
-		      bufferConcat($$, $1.ident);
-		    else
-		      bufferConcat($$, $1.memexpr);
-
-		    bufferWriteOp($$, SWFACTION_GETMEMBER);
-		  }
-		  else
-		  {
-		    $$ = $1.ident;
-		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		  }
-		}
+	| lvalue_expr
 
 	| incdecop lvalue %prec "++"
 		{ if($2.obj)

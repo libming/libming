@@ -167,7 +167,17 @@ void bufferCheckSize(Buffer out, int bytes)
     unsigned char *newbuf = realloc(out->buffer, out->buffersize+new);
 
     if(newbuf != out->buffer)
+    {
+      int pushd;
+
+      if(out->pushloc)
+	pushd = out->pos - out->pushloc;
+
       out->pos = newbuf+num;
+
+      if(out->pushloc)
+	out->pushloc = out->pos - pushd;
+    }
 
     out->buffer = newbuf;
     out->buffersize += new;
@@ -252,11 +262,15 @@ int bufferConcat(Buffer a, Buffer b)
 int bufferWriteOp(Buffer out, int data)
 {
   bufferWriteU8(out, data);
+  out->pushloc = NULL;
 
-  if(data == SWFACTION_PUSHDATA)
-    out->pushloc = out->pos;
-  else
-    out->pushloc = NULL;
+  return 1;
+}
+
+int bufferWritePushOp(Buffer out)
+{
+  bufferWriteU8(out, SWFACTION_PUSHDATA);
+  out->pushloc = out->pos;
 
   return 1;
 }
@@ -295,7 +309,12 @@ int bufferWriteHardString(Buffer out, byte *string, int length)
 
 int bufferWriteConstantString(Buffer out, byte *string, int length)
 {
-  int n = addConstant(string);
+  int n;
+
+  if(SWF_versionNum < 5)
+    return -1;
+
+  n = addConstant(string);
 
   if(n == -1)
   {
@@ -311,20 +330,30 @@ int bufferWriteConstantString(Buffer out, byte *string, int length)
 
 int bufferWriteString(Buffer out, byte *string, int length)
 {
-  int len = 0;
-  int l;
-
-  if(out->pushloc == NULL || SWF_versionNum < 5)
+  if(SWF_versionNum < 5)
   {
-    len = 3;
-    bufferWriteOp(out, SWFACTION_PUSHDATA);
-    bufferWriteS16(out, 0);
+    bufferWritePushOp(out);
+    bufferWriteS16(out, length+1);
+    bufferWriteU8(out, PUSH_STRING);
+    bufferWriteHardString(out, string, length);
+
+    return 4 + length;
   }
+  else
+  {
+    int l;
 
-  l = bufferWriteConstantString(out, string, length);
-  bufferPatchPushLength(out, l);
+    if(out->pushloc == NULL)
+    {
+      bufferWritePushOp(out);
+      bufferWriteS16(out, 0);
+    }
 
-  return len + l;
+    l = bufferWriteConstantString(out, string, length);
+
+    bufferPatchPushLength(out, l);
+    return l;
+  }
 }
 
 int bufferWriteInt(Buffer out, int i)
@@ -335,7 +364,7 @@ int bufferWriteInt(Buffer out, int i)
   if(out->pushloc == NULL || SWF_versionNum < 5)
   {
     len = 3;
-    bufferWriteOp(out, SWFACTION_PUSHDATA);
+    bufferWritePushOp(out);
     bufferWriteS16(out, 5);
   }
   else
@@ -369,7 +398,7 @@ int bufferWriteDouble(Buffer out, double d)
   if(out->pushloc == NULL || SWF_versionNum < 5)
   {
     len = 3;
-    bufferWriteOp(out, SWFACTION_PUSHDATA);
+    bufferWritePushOp(out);
     bufferWriteS16(out, 9);
   }
   else
@@ -410,7 +439,7 @@ int bufferWriteNull(Buffer out)
   if(out->pushloc == NULL || SWF_versionNum < 5)
   {
     len = 3;
-    bufferWriteOp(out, SWFACTION_PUSHDATA);
+    bufferWritePushOp(out);
     bufferWriteS16(out, 1);
   }
   else
@@ -428,7 +457,7 @@ int bufferWriteBoolean(Buffer out, int val)
   if(out->pushloc == NULL || SWF_versionNum < 5)
   {
     len = 3;
-    bufferWriteOp(out, SWFACTION_PUSHDATA);
+    bufferWritePushOp(out);
     bufferWriteS16(out, 2);
   }
   else
@@ -447,7 +476,7 @@ int bufferWriteRegister(Buffer out, int num)
   if(out->pushloc == NULL || SWF_versionNum < 5)
   {
     len = 3;
-    bufferWriteOp(out, SWFACTION_PUSHDATA);
+    bufferWritePushOp(out);
     bufferWriteS16(out, 2);
   }
   else
