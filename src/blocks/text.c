@@ -297,6 +297,31 @@ SWFText_getScaledStringWidth(SWFText text, const char *string)
 	SWFFont font;
 	int height = text->currentRecord->height;
 	unsigned short* widestr;
+	int len = strlen(string);
+	int n;
+
+	widestr = (unsigned short *)malloc(2 * len);
+	for(n = 0 ; n < len ; n++)
+		widestr[n] = (unsigned char)string[n];
+
+	if ( text->currentRecord->isResolved )
+		font = SWFFontCharacter_getFont(text->currentRecord->font.fontchar);
+	else
+		font = text->currentRecord->font.font;
+
+	if ( text->currentRecord->isBrowserFont )
+		return 0;
+	else
+		return SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
+// freeing string ?
+}
+
+int
+SWFText_getScaledUTF8StringWidth(SWFText text, const char *string)
+{
+	SWFFont font;
+	int height = text->currentRecord->height;
+	unsigned short* widestr;
 	int len = UTF8ExpandString(string, &widestr);
 
 	if ( text->currentRecord->isResolved )
@@ -307,7 +332,29 @@ SWFText_getScaledStringWidth(SWFText text, const char *string)
 	if ( text->currentRecord->isBrowserFont )
 		return 0;
 	else
-		return SWFFont_getScaledStringWidth(font, widestr, len) * height / 1024;
+		return SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
+// freeing string ?
+}
+
+int
+SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string)
+{
+	SWFFont font;
+	int height = text->currentRecord->height;
+	int len;
+
+	for(len = 0 ; *string ; len++)
+		;
+	if ( text->currentRecord->isResolved )
+		font = SWFFontCharacter_getFont(text->currentRecord->font.fontchar);
+	else
+		font = text->currentRecord->font.font;
+
+	if ( text->currentRecord->isBrowserFont )
+		return 0;
+	else
+		return SWFFont_getScaledWideStringWidth(font, string, len) * height / 1024;
+// freeing string ?
 }
 
 

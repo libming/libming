@@ -81,6 +81,9 @@ SWFMovie_labelFrame(SWFMovie movie, char *label);
 void
 SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name);
 
+void
+SWFMovie_writeExports(SWFMovie movie);
+
 int
 SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 

@@ -810,75 +810,83 @@ SWFShape_drawScaledGlyph(SWFShape shape,
 
 	int startX = shape->xpos;
 	int startY = shape->ypos;
+	int style;
 
 	byteAlign();
 
-	if ( readBits(f, 4) != 1 ) /* fill bits */
+	if ( readBitsP(f, 4) != 1 ) /* fill bits */
 		SWF_error("SWFShape_drawGlyph: bad file format (was expecting fill bits = 1)");
 
-	if ( readBits(f, 4) != 0 ) /* line bits */
+	if ( readBitsP(f, 4) > 1 ) /* line bits */
 		SWF_error("SWFShape_drawGlyph: bad file format (was expecting line bits = 0)");
 
 	/* now we get to parse the shape commands.	Oh boy.
 		 the first one will be a non-edge block- grab the moveto loc */
 
-	readBits(f, 6); /* type 0, etc. */
+	readBitsP(f, 6); /* type 0, etc. */
 
-	moveBits = readBits(f, 5);
-	x = startX + readSBits(f, moveBits);
-	y = startY + readSBits(f, moveBits);
+	moveBits = readBitsP(f, 5);
+	x = startX + readSBitsP(f, moveBits);
+	y = startY + readSBitsP(f, moveBits);
 
 	SWFShape_moveScaledPenTo(shape, x*size/1024, y*size/1024);
 
-	if ( readBits(f, 1) != 1 ) /* fill1 = 1 */
-		SWF_error("SWFShape_drawGlyph: bad file format (was expecting fill1 = 1)");
+	if ( style & 1 )
+		if ( readBitsP(f, 1) != 0 ) /* fill0 = 0 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting fill0 = 0)");
+	if ( style & 2 )
+		if ( readBitsP(f, 1) != 1 ) /* fill1 = 1 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting fill1 = 1)");
+	if ( style & 4 )
+		if ( readBitsP(f, 1) != 0 ) /* line = 1 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting line = 0)");
 
 	/* translate the glyph's shape records into drawing commands */
 
 	for ( ;; )
 	{
-		if ( readBits(f, 1) == 0 )
+		if ( readBitsP(f, 1) == 0 )
 		{
 			/* it's a moveTo or a shape end */
 
-			if ( readBits(f, 5) == 0 )
+			if ( readBitsP(f, 5) == 0 )
 				break;
 
-			moveBits = readBits(f, 5);
-			x = startX + readSBits(f, moveBits);
-			y = startY + readSBits(f, moveBits);
+			moveBits = readBitsP(f, 5);
+			x = startX + readSBitsP(f, moveBits);
+			y = startY + readSBitsP(f, moveBits);
 
 			SWFShape_moveScaledPenTo(shape, x*size/1024, y*size/1024);
 
 			continue;
 		}
 
-		straight = readBits(f, 1);
-		numBits = readBits(f, 4)+2;
+		straight = readBitsP(f, 1);
+		numBits = readBitsP(f, 4)+2;
 
 		if ( straight==1 )
 		{
-			if ( readBits(f, 1) ) /* general line */
+			if ( readBitsP(f, 1) ) /* general line */
 			{
-				x += readSBits(f, numBits);
-				y += readSBits(f, numBits);
+				x += readSBitsP(f, numBits);
+				y += readSBitsP(f, numBits);
 			}
 			else
 			{
-				if ( readBits(f, 1) ) /* vert = 1 */
-					y += readSBits(f, numBits);
+				if ( readBitsP(f, 1) ) /* vert = 1 */
+					y += readSBitsP(f, numBits);
 				else
-					x += readSBits(f, numBits);
+					x += readSBitsP(f, numBits);
 			}
 
 			SWFShape_drawScaledLineTo(shape, x*size/1024, y*size/1024);
 		}
 		else
 		{
-			int controlX = readSBits(f, numBits);
-			int controlY = readSBits(f, numBits);
-			int anchorX = readSBits(f, numBits);
-			int anchorY = readSBits(f, numBits);
+			int controlX = readSBitsP(f, numBits);
+			int controlY = readSBitsP(f, numBits);
+			int anchorX = readSBitsP(f, numBits);
+			int anchorY = readSBitsP(f, numBits);
 
 			SWFShape_drawScaledCurveTo(shape,
 				 (x+controlX)*size/1024,

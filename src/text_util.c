@@ -52,6 +52,20 @@ SWFText_getStringWidth(SWFText text, const unsigned char *string)
 
 
 float
+SWFText_getUTF8StringWidth(SWFText text, const unsigned char *string)
+{
+	return SWFText_getScaledUTF8StringWidth(text, string)/Ming_scale;
+}
+
+
+float
+SWFText_getWideStringWidth(SWFText text, const unsigned short *string)
+{
+	return SWFText_getScaledWideStringWidth(text, string)/Ming_scale;
+}
+
+
+float
 SWFText_getAscent(SWFText text)
 {
 	return SWFText_getScaledAscent(text)/Ming_scale;
@@ -75,7 +89,21 @@ SWFText_getLeading(SWFText text)
 float
 SWFFont_getStringWidth(SWFFont font, const unsigned char *string)
 {
+	return SWFFont_getScaledStringWidth(font, string) / Ming_scale;
+}
+
+
+float
+SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string)
+{
 	return SWFFont_getScaledUTF8StringWidth(font, string) / Ming_scale;
+}
+
+
+float
+SWFFont_getWideStringWidth(SWFFont font, const unsigned short *string, int len)
+{
+	return SWFFont_getScaledWideStringWidth(font, string, len) / Ming_scale;
 }
 
 
@@ -147,6 +175,13 @@ void
 SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing)
 {
 	SWFTextField_setScaledLineSpacing(field, (int)rint(Ming_scale*lineSpacing));
+}
+
+
+void
+SWFTextField_setPadding(SWFTextField field, float padding)
+{
+	SWFTextField_setScaledPadding(field, (int)rint(Ming_scale*padding));
 }
 
 

@@ -893,6 +893,8 @@ lvalue_expr
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		  }
 		}
+	| function_call
+	| method_call
 	;
 
 /* lvalue - things you can assign to */

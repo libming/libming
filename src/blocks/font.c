@@ -41,6 +41,13 @@ struct kernInfo
 	short adjustment;
 };
 
+struct kernInfo16
+{
+	unsigned short code1;
+	unsigned short code2;
+	short adjustment;
+};
+
 struct textList
 {
 	struct textList* next;
@@ -87,7 +94,10 @@ struct SWFFont_s
 	// font's kern table, if one is defined
 	// XXX - should be sorted for faster lookups
 	unsigned short kernCount;
-	struct kernInfo* kernTable;
+	union
+	{	struct kernInfo* k;
+		struct kernInfo16* w;
+	} kernTable;
 };
 
 
@@ -123,7 +133,7 @@ completeSWFFontCharacter(SWFBlock block)
 	SWFFontCharacter inst = (SWFFontCharacter)block;
 	SWFFont font = inst->font;
 	int size = 0;
-	int i;
+	int i, nbits;
 
 	// get charcodes from text records, translate into local code map
 	SWFFontCharacter_resolveTextCodes(inst);
@@ -151,6 +161,16 @@ completeSWFFontCharacter(SWFBlock block)
 		inst->flags |= SWF_FONT_WIDEOFFSETS;
 	}
 
+	if( inst->flags & SWF_FONT_HASLAYOUT )
+	{	
+		size += 8;	// ascent, descent, leading, 0 kern pairs
+		size += 2 * inst->nGlyphs;	// width table
+		for(i = 0 ; i < inst->nGlyphs ; i++)
+		{
+			nbits = SWFRect_numBits(font->bounds + inst->codeTable[i]);
+			size += (nbits+7) >> 3;
+		}
+	}
 	return size;
 }
 
@@ -161,6 +181,7 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 {
 	SWFFontCharacter inst = (SWFFontCharacter)block;
 	SWFFont font = inst->font;
+	SWFOutput bounds;
 	int offset, i;
 	byte *p, *s;
 
@@ -215,6 +236,24 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 		for ( i=0; i<inst->nGlyphs; ++i )
 			method((byte)font->glyphToCode[inst->codeTable[i]], data);
 	}
+
+	/* write font layout */
+	if (inst->flags & SWF_FONT_HASLAYOUT )
+	{	methodWriteUInt16(font->ascent, method, data);
+		methodWriteUInt16(font->descent, method, data);
+		methodWriteUInt16(font->leading, method, data);
+		for ( i=0; i<inst->nGlyphs; ++i )
+			methodWriteUInt16(font->advances[inst->codeTable[i]], method, data);
+		bounds = newSWFOutput();
+		for ( i=0; i<inst->nGlyphs; ++i )
+		{	SWFOutput_writeRect(bounds, font->bounds + inst->codeTable[i]);
+			SWFOutput_byteAlign(bounds);
+		}
+		SWFOutput_writeToMethod(bounds, method, data);
+		destroySWFOutput(bounds);
+		methodWriteUInt16(0, method, data);		/* no kerning */
+	}
+			
 }
 
 
@@ -261,8 +300,8 @@ destroySWFFont(SWFBlock block)
 	if ( font->name != NULL )
 		free(font->name);
 
-	if ( font->kernTable != NULL )
-		free(font->kernTable);
+	if ( font->kernTable.k != NULL )	// union of pointers ...
+		free(font->kernTable.k);
 
 	if ( font->glyphOffset != NULL )
 		free(font->glyphOffset);
@@ -347,7 +386,7 @@ newSWFFontCharacter(SWFFont font)
 	CHARACTERID(inst) = ++SWF_gNumCharacters;
 
 	inst->font = font;
-	inst->flags = (unsigned char)(font->flags & (~SWF_FONT_HASLAYOUT) & (~SWF_FONT_WIDEOFFSETS));
+	inst->flags = (unsigned char)(font->flags & /*(~SWF_FONT_HASLAYOUT) &*/ (~SWF_FONT_WIDEOFFSETS));
 
 	inst->nGlyphs = 0;
 	inst->codeTable = NULL;
@@ -499,6 +538,13 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 	++font->nGlyphs;
 }
 
+void
+SWFFontCharacter_addChars(SWFFontCharacter font, char *string)
+{
+	while(*string)
+		SWFFontCharacter_addCharToTable(font, (unsigned char) *string++);
+}
+
 
 SWFFont
 SWFFontCharacter_getFont(SWFFontCharacter font)
@@ -606,7 +652,7 @@ SWFFontCharacter_getNGlyphs(SWFFontCharacter font)
 
 
 int
-SWFFont_getScaledStringWidth(SWFFont font,
+SWFFont_getScaledWideStringWidth(SWFFont font,
 														 const unsigned short* string, int len)
 {
 	/* return length of given string in whatever units these are we're using */
@@ -628,7 +674,7 @@ SWFFont_getScaledStringWidth(SWFFont font,
 		// looking in kernTable
 		// XXX - kernTable should be sorted to make this faster
 
-		if ( i < len-1 && font->kernTable )
+		if ( i < len-1 && font->kernTable.k )
 		{
 			glyph2 = SWFFont_findGlyphCode(font, string[i+1]);
 
@@ -637,15 +683,26 @@ SWFFont_getScaledStringWidth(SWFFont font,
 
 			j = font->kernCount;
 
-			while ( --j >= 0 )
-			{
-				if ( glyph == font->kernTable[j].code1 &&
-						 glyph2 == font->kernTable[j].code2 )
+			if(font->flags & SWF_FONT_WIDECODES)
+				while ( --j >= 0 )
 				{
-					width += font->kernTable[j].adjustment;
-					break;
+					if ( glyph == font->kernTable.w[j].code1 &&
+							 glyph2 == font->kernTable.w[j].code2 )
+					{
+						width += font->kernTable.w[j].adjustment;
+						break;
+					}
 				}
-			}
+			else
+				while ( --j >= 0 )
+				{
+					if ( glyph == font->kernTable.k[j].code1 &&
+							 glyph2 == font->kernTable.k[j].code2 )
+					{
+						width += font->kernTable.k[j].adjustment;
+						break;
+					}
+				}
 		}
 	}
 
@@ -654,11 +711,26 @@ SWFFont_getScaledStringWidth(SWFFont font,
 
 
 int
+SWFFont_getScaledStringWidth(SWFFont font, const char* string)
+{
+	unsigned short* widestr;
+	int len = strlen(string);
+	int n, width;
+	widestr = malloc(2 * len);
+	for(n = 0 ; n < len ; n++)
+		widestr[n] = (unsigned char)string[n];
+	width = SWFFont_getScaledWideStringWidth(font, widestr, len);
+	free(widestr);
+
+	return width;
+}
+
+int
 SWFFont_getScaledUTF8StringWidth(SWFFont font, const char* string)
 {
 	unsigned short* widestr;
 	int len = UTF8ExpandString(string, &widestr);
-	int width = SWFFont_getScaledStringWidth(font, widestr, len);
+	int width = SWFFont_getScaledWideStringWidth(font, widestr, len);
 
 	free(widestr);
 
@@ -726,7 +798,7 @@ SWFFont_getCharacterKern(SWFFont font,
 {
 	int j = font->kernCount;
 
-	if( !font->kernTable )
+	if( !font->kernTable.k )
 		return 0;
 
 	if ( code1 >= font->nGlyphs || code2 >= font->nGlyphs )
@@ -734,14 +806,24 @@ SWFFont_getCharacterKern(SWFFont font,
 
 	// XXX - kernTable should be sorted to make this faster
 
-	while ( --j >= 0 )
-	{
-		if ( code1 == font->kernTable[j].code1 &&
-				 code2 == font->kernTable[j].code2 )
+	if(font->flags & SWF_FONT_WIDECODES)
+		while ( --j >= 0 )
 		{
-			return font->kernTable[j].adjustment;
+			if ( code1 == font->kernTable.w[j].code1 &&
+					 code2 == font->kernTable.w[j].code2 )
+			{
+				return font->kernTable.w[j].adjustment;
+			}
 		}
-	}
+	else
+		while ( --j >= 0 )
+		{
+			if ( code1 == font->kernTable.k[j].code1 &&
+					 code2 == font->kernTable.k[j].code2 )
+			{
+				return font->kernTable.k[j].adjustment;
+			}
+		}
 
 	return 0;
 }
@@ -873,6 +955,14 @@ readKernInfo(FILE *file, struct kernInfo *kern)
 	kern->adjustment = readSInt16(file);
 }
 
+static void
+readKernInfo16(FILE *file, struct kernInfo16 *kern)
+{
+	kern->code1 = readUInt16(file);
+	kern->code2 = readUInt16(file);
+	kern->adjustment = readSInt16(file);
+}
+
 
 SWFFont
 loadSWFFontFromFile(FILE *file)
@@ -909,6 +999,7 @@ loadSWFFontFromFile(FILE *file)
 */
 
 	font->flags = flags; // XXX - ???
+// new rules... SWF6 said to require unicode, no ansi, no shiftjis
 	font->flags |= SWF_FONT_SHIFTJIS;
 
 	fgetc(file); /* "reserved" */
@@ -1014,17 +1105,209 @@ loadSWFFontFromFile(FILE *file)
 		font->kernCount = readUInt16(file);
 
 		if ( font->kernCount > 0 )
-			font->kernTable = malloc(sizeof(struct kernInfo) * font->kernCount);
+			if(font->flags & SWF_FONT_WIDECODES)
+				font->kernTable.w = malloc(sizeof(struct kernInfo16) * font->kernCount);
+			else
+				font->kernTable.k = malloc(sizeof(struct kernInfo) * font->kernCount);
 		else
 			font->kernTable = NULL;
 
-		for ( i=0; i<font->kernCount; ++i )
-			readKernInfo(file, &(font->kernTable[i]));
+		if(font->flags & SWF_FONT_WIDECODES)
+			for ( i=0; i<font->kernCount; ++i )
+				readKernInfo16(file, &(font->kernTable.w[i]));
+		else
+			for ( i=0; i<font->kernCount; ++i )
+				readKernInfo(file, &(font->kernTable.k[i]));
 	}
 
 	return font;
 }
 
+
+
+/* retrieve glyph shape of a font */
+#include <stdio.h>
+#include <stdarg.h>
+/* basic IO */
+
+struct out
+{	char *buf, *ptr;
+	int len;
+};
+
+static void oprintf(struct out *op, char *fmt, ...)
+{	va_list ap;
+	char buf[256];
+	int d, l;
+	
+	va_start(ap, fmt);
+	l = vsprintf(buf, fmt, ap);
+	while((d = op->ptr - op->buf) + l >= op->len-1)
+	{	op->buf = (char *) realloc(op->buf, op->len += 100);
+		op->ptr = op->buf + d;
+	}
+	for(d = 0 ; d < l ; d++)
+		*op->ptr++ = buf[d];
+}
+
+static int readBitsP(byte **p, int number)
+{
+	byte *ptr = *p;
+	int ret = buffer;
+
+	if(number == bufbits)
+	{
+		ret = buffer;
+		bufbits = 0;
+		buffer = 0;
+	}
+	else if(number > bufbits)
+	{
+		number -= bufbits;
+
+		while(number>8)
+		{
+			ret <<= 8;
+			ret += *ptr++;
+			number -= 8;
+		}
+
+		buffer = *ptr++;
+
+		if(number>0)
+		{
+			ret <<= number;
+			bufbits = 8-number;
+			ret += buffer >> (8-number);
+			buffer &= (1<<bufbits)-1;
+		}
+	}
+	else
+	{
+		ret = buffer >> (bufbits-number);
+		bufbits -= number;
+		buffer &= (1<<bufbits)-1;
+	}
+
+	*p = ptr;
+	return ret;
+}
+
+static int readSBitsP(byte **p, int number)
+{
+	int num = readBitsP(p, number);
+
+	if(num & (1<<(number-1)))
+		return num - (1<<number);
+	else
+		return num;
+}
+
+// return a malloc'ed string describing the glyph shape
+char *
+SWFFont_getShape(SWFFont font, unsigned short c)
+{
+	byte *p = SWFFont_findGlyph(font, c);
+	byte **f = &p;
+	struct out o;
+	int moveBits, x, y;
+	int straight, numBits;
+	int startX = 0;
+	int startY = 0;
+	int style;
+
+	o.len = 0;
+	o.ptr = o.buf = (char *)malloc(1);
+
+	byteAlign();
+
+	if ( readBitsP(f, 4) != 1 ) /* fill bits */
+		SWF_error("SWFFont_getShape: bad file format (was expecting fill bits = 1)");
+
+	if ( readBitsP(f, 4) > 1 ) /* line bits */
+		SWF_error("SWFFont_getShape: bad file format (was expecting line bits = 0)");
+
+	/* now we get to parse the shape commands.	Oh boy.
+		 the first one will be a non-edge block- grab the moveto loc */
+
+	readBitsP(f, 2); /* type 0, newstyles */
+	style = readBitsP(f, 3);
+	readBitsP(f, 1);
+	moveBits = readBitsP(f, 5);
+	x = startX + readSBitsP(f, moveBits);
+	y = startY + readSBitsP(f, moveBits);
+
+	oprintf(&o, "moveto %d,%d\n", x, y);
+
+	if ( style & 1 )
+		if ( readBitsP(f, 1) != 0 ) /* fill0 = 0 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting fill0 = 0)");
+	if ( style & 2 )
+		if ( readBitsP(f, 1) != 1 ) /* fill1 = 1 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting fill1 = 1)");
+	if ( style & 4 )
+		if ( readBitsP(f, 1) != 0 ) /* line = 1 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting line = 0)");
+
+	/* translate the glyph's shape records into drawing commands */
+
+	for ( ;; )
+	{
+		if ( readBitsP(f, 1) == 0 )
+		{
+			/* it's a moveTo or a shape end */
+
+			if ( readBitsP(f, 5) == 0 )
+				break;
+
+			moveBits = readBitsP(f, 5);
+			x = startX + readSBitsP(f, moveBits);
+			y = startY + readSBitsP(f, moveBits);
+
+			oprintf(&o, "moveto %d,%d\n", x, y);
+
+			continue;
+		}
+
+		straight = readBitsP(f, 1);
+		numBits = readBitsP(f, 4)+2;
+
+		if ( straight==1 )
+		{
+			if ( readBitsP(f, 1) ) /* general line */
+			{
+				x += readSBitsP(f, numBits);
+				y += readSBitsP(f, numBits);
+			}
+			else
+			{
+				if ( readBitsP(f, 1) ) /* vert = 1 */
+					y += readSBitsP(f, numBits);
+				else
+					x += readSBitsP(f, numBits);
+			}
+
+			oprintf(&o, "lineto %d,%d\n", x, y);
+		}
+		else
+		{
+			int controlX = readSBitsP(f, numBits);
+			int controlY = readSBitsP(f, numBits);
+			int anchorX = readSBitsP(f, numBits);
+			int anchorY = readSBitsP(f, numBits);
+
+			oprintf(&o, "curveto %d,%d %d,%d\n",
+				 x+controlX, y+controlY,
+				 x+controlX+anchorX, y+controlY+anchorY);
+
+			x += controlX + anchorX;
+			y += controlY + anchorY;
+		}
+	}
+
+	*o.ptr = 0;
+	return o.buf;
+}
 
 /*
  * Local variables:

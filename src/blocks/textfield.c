@@ -131,6 +131,16 @@ completeSWFTextField(SWFBlock block)
 	SWFOutput_writeUInt8(out, field->b);
 	SWFOutput_writeUInt8(out, field->a);
 
+// fix flags here...
+	if(!field->isBrowserFont)
+		if(!field->font.fontchar)
+			SWF_error("no font given for textfield\n");
+		else if((SWFFont_getFlags(SWFFontCharacter_getFont(field->font.fontchar)) & SWF_FONT_HASLAYOUT) == 0 ||
+				SWFFontCharacter_getNGlyphs(field->font.fontchar) == 0)
+			field->flags &= ~SWFTEXTFIELD_USEFONT;
+	if(field->string && *field->string)
+		field->flags |= SWFTEXTFIELD_HASTEXT;
+
 	if ( field->flags & SWFTEXTFIELD_HASLENGTH )
 		SWFOutput_writeUInt16(out, field->length);
 
@@ -142,7 +152,8 @@ completeSWFTextField(SWFBlock block)
 	SWFOutput_writeUInt16(out, field->lineSpacing);
 
 	SWFOutput_writeString(out, field->varName);
-	SWFOutput_writeString(out, field->string);
+	if ( field->flags & SWFTEXTFIELD_HASTEXT )
+		SWFOutput_writeString(out, field->string);
 
 	/*
 		XXX - if font is a real font, do we need to talk to it?
@@ -232,6 +243,14 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 		field->font.browserFont = (SWFBrowserFont)font;
 		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
 	}
+}
+
+
+void
+SWFTextField_addChars(SWFTextField field, char *string)
+{
+	if((!field->isBrowserFont) && field->font.fontchar)
+		SWFFontCharacter_addChars(field->font.fontchar, string);
 }
 
 

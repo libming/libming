@@ -62,11 +62,14 @@ byte
 SWFFont_getFlags(SWFFont font);
 
 int
-SWFFont_getScaledStringWidth(SWFFont font,
+SWFFont_getScaledWideStringWidth(SWFFont font,
 			     const unsigned short* string, int len);
 
 int
 SWFFont_getScaledUTF8StringWidth(SWFFont font, const char* string);
+
+int
+SWFFont_getScaledStringWidth(SWFFont font, const char* string);
 
 short
 SWFFont_getScaledAscent(SWFFont font);
@@ -98,6 +101,9 @@ destroySWFFontCharacter(SWFBlock block);
 void
 SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
 			     unsigned short start, unsigned short end);
+
+void
+SWFFontCharacter_addChars(SWFFontCharacter font, char *string);
 
 SWFFont
 SWFFontCharacter_getFont(SWFFontCharacter font);

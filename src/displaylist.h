@@ -70,6 +70,8 @@ void SWFDisplayItem_setName(SWFDisplayItem item, const char *name);
 
 void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel);
 
+void SWFDisplayItem_endMask(SWFDisplayItem item);
+
 void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio);
 
 void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform);

@@ -233,16 +233,21 @@ void destroySWFBrowserFont(SWFBlock block);
 typedef void *SWFTextField;
 
 #define SWFTEXTFIELD_ONMASK  0x2085 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x38FF /* off bits */
+#define SWFTEXTFIELD_OFFMASK 0x3BFF /* off bits */
 
+#define SWFTEXTFIELD_HASFONT   (1<<0)	/* font and size given */
 #define SWFTEXTFIELD_HASLENGTH (1<<1)
+#define SWFTEXTFIELD_HASCOLOR  (1<<2)
 #define SWFTEXTFIELD_NOEDIT    (1<<3)
 #define SWFTEXTFIELD_PASSWORD  (1<<4)
 #define SWFTEXTFIELD_MULTILINE (1<<5)
 #define SWFTEXTFIELD_WORDWRAP  (1<<6)
+#define SWFTEXTFIELD_HASTEXT   (1<<7)	/* initial text present */
+#define SWFTEXTFIELD_USEFONT   (1<<8)
+#define SWFTEXTFIELD_HTML      (1<<9)
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
-#define SWFTEXTFIELD_HTML      (1<<9) /* 0x0200 */
+#define SWFTEXTFIELD_HASLAYOUT (1<<13)	/* align, margin, lspace, indent */
 
 typedef enum
 {
@@ -268,6 +273,7 @@ void SWFTextField_setScaledLeftMargin(SWFTextField field, int leftMargin);
 void SWFTextField_setScaledRightMargin(SWFTextField field, int rightMargin);
 void SWFTextField_setScaledIndentation(SWFTextField field, int indentation);
 void SWFTextField_setScaledLineSpacing(SWFTextField field, int lineSpacing);
+void SWFTextField_setScaledpadding(SWFTextField field, int padding);
 void SWFTextField_setAlignment(SWFTextField field,
 			       SWFTextFieldAlignment alignment);
 void SWFTextField_setLength(SWFTextField field, int length);

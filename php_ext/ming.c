@@ -36,6 +36,7 @@ static zend_function_entry ming_functions[] = {
   PHP_FALIAS(ming_setscale,           ming_setScale,           NULL)
   PHP_FALIAS(ming_useswfversion,      ming_useSWFVersion,      NULL)
   PHP_FALIAS(swfbutton_keypress,      swfbutton_keypress,      NULL)
+  PHP_FALIAS(ming_useconstants,		  ming_useConstants,       NULL)
   { NULL, NULL, NULL }
 };
 
@@ -95,6 +96,21 @@ PHP_FUNCTION(ming_useSWFVersion)
   convert_to_long_ex(num);
 
   Ming_useSWFVersion(Z_LVAL_PP(num));
+}
+/* }}} */
+
+/* {{{ proto void ming_useconstants(int use)
+	Use constant pool (?) */ 
+PHP_FUNCTION(ming_useConstants)
+{
+  zval **num;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &num) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(num);
+
+  Ming_useConstants(Z_LVAL_PP(num));
 }
 /* }}} */
 
@@ -637,6 +653,9 @@ static zend_function_entry swfdisplayitem_functions[] = {
   PHP_FALIAS(multcolor,    swfdisplayitem_multColor,   NULL)
   PHP_FALIAS(setname,      swfdisplayitem_setName,     NULL)
   PHP_FALIAS(addaction,    swfdisplayitem_addAction,   NULL)
+  PHP_FALIAS(remove,       swfdisplayitem_remove,      NULL)
+  PHP_FALIAS(setmasklevel, swfdisplayitem_setMaskLevel,NULL)
+  PHP_FALIAS(endmask,      swfdisplayitem_endMask,     NULL)
   { NULL, NULL, NULL }
 };
 
@@ -996,6 +1015,52 @@ PHP_FUNCTION(swfdisplayitem_addAction)
 }
 
 /* }}} */
+/* {{{ swfdisplayitem_remove */
+
+PHP_FUNCTION(swfdisplayitem_remove)
+{
+  zval **zchar;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  SWFDisplayItem_remove(item);
+}
+/* }}} */
+
+/* {{{ proto void swfdisplayitem_setMaskLevel(int level)
+   defines a MASK layer at level */
+
+PHP_FUNCTION(swfdisplayitem_setMaskLevel)
+{
+  zval **level;
+
+  if(ZEND_NUM_ARGS() != 1 ||
+	 zend_get_parameters_ex(1, &level) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(level);
+
+  SWFDisplayItem_setMaskLevel(getDisplayItem(getThis() TSRMLS_CC), Z_LVAL_PP(level));
+}
+
+/* }}} */
+/* {{{ proto void swfdisplayitem_endMask()
+   another way of defining a MASK layer */
+
+PHP_FUNCTION(swfdisplayitem_endMask)
+{
+  zval **zchar;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  SWFDisplayItem_endMask(item);
+}
+
+/* }}} */
 
 /* }}} */
 /* {{{ SWFFill */
@@ -1144,9 +1209,13 @@ PHP_FUNCTION(swffill_skewYTo)
 static zend_function_entry swffont_functions[] = {
   PHP_FALIAS(swffont,          swffont_init,              NULL)
   PHP_FALIAS(getwidth,         swffont_getWidth,          NULL)
+  PHP_FALIAS(getutf8width,     swffont_getUTF8Width,      NULL)
+/*  PHP_FALIAS(getwidewidth,     swffont_getWideWidth,      NULL)*/
   PHP_FALIAS(getascent,        swffont_getAscent,         NULL)
   PHP_FALIAS(getdescent,       swffont_getDescent,        NULL)
   PHP_FALIAS(getleading,       swffont_getLeading,        NULL)
+/*  PHP_FALIAS(addchars,         swffont_addChars,          NULL)*/
+  PHP_FALIAS(getshape,         swffont_getShape,          NULL)
   { NULL, NULL, NULL }
 };
 
@@ -1223,6 +1292,45 @@ PHP_FUNCTION(swffont_getWidth)
 }
 
 /* }}} */
+/* {{{ proto int swffont_getUTF8Width(string)
+   Calculates the width of the given string in this font at full height */
+
+PHP_FUNCTION(swffont_getUTF8Width)
+{
+  zval **zstring;
+  float width;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  width = SWFFont_getUTF8StringWidth(getFont(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+  RETURN_DOUBLE(width);
+}
+
+/* }}} */
+// not sure about 0 bytes !!!!!!!!!
+/* {{{ proto int swffont_getWideWidth(string)
+   Calculates the width of the given string in this font at full height */
+/*
+PHP_FUNCTION(swffont_getWideWidth)
+{
+  zval **zstring;
+  float width;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  width = SWFFont_getWideStringWidth(getFont(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+  RETURN_DOUBLE(width);
+}
+*/
+/* }}} */
 /* {{{ proto int swffont_getAscent(void)
    Returns the ascent of the font, or 0 if not available */
 
@@ -1256,6 +1364,43 @@ PHP_FUNCTION(swffont_getLeading)
     WRONG_PARAM_COUNT;
 
   RETURN_DOUBLE(SWFFont_getLeading(getFont(getThis() TSRMLS_CC)));
+}
+
+/* }}} */
+/* {{{ proto void swffont_addChars(string)
+   adds characters to a font required within textfields */
+/*
+PHP_FUNCTION(swffont_addChars)
+{
+  zval **zstring;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  SWFFont_addChars(getFont(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+}
+*/
+/* }}} */
+/* {{{ proto char *swffont_getShape(code)
+   Returns the glyph shape of a char as a text string */
+
+PHP_FUNCTION(swffont_getShape)
+{
+  zval **zcode;
+  char *result;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zcode) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_long_ex(zcode);
+
+  result = SWFFont_getShape(getFont(getThis() TSRMLS_CC), Z_LVAL_PP(zcode));
+  RETVAL_STRING(result, 1);
+  free(result);
+
 }
 
 /* }}} */
@@ -1432,6 +1577,8 @@ static zend_function_entry swfmovie_functions[] = {
   PHP_FALIAS(setdimension,      swfmovie_setDimension,      NULL)
   PHP_FALIAS(setframes,         swfmovie_setFrames,         NULL)
   PHP_FALIAS(streammp3,         swfmovie_streamMp3,         NULL)
+  PHP_FALIAS(addexport,         swfmovie_addExport,         NULL)
+  PHP_FALIAS(writeexports,      swfmovie_writeExports,      NULL)
   { NULL, NULL, NULL }
 };
 
@@ -1757,6 +1904,40 @@ PHP_FUNCTION(swfmovie_streamMp3)
 
   sound = newSWFSound_fromInput(input);
   SWFMovie_setSoundStream(movie, sound);
+}
+
+/* }}} */
+/* {{{ swfmovie_addexport */
+
+PHP_FUNCTION(swfmovie_addExport)
+{
+  zval **zchar, **zname;
+  int ret;
+  SWFBlock block;
+  SWFDisplayItem item;
+  char *name;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &zchar, &zname) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_object_ex(zchar);
+  convert_to_string_ex(zname);
+
+  block = (SWFBlock)getCharacter(*zchar TSRMLS_CC);
+
+  SWFMovie_addExport(movie, block,  Z_STRVAL_PP(zname));
+
+}
+
+/* }}} */
+/* {{{ swfmovie_writeexports */
+			
+PHP_FUNCTION(swfmovie_writeExports)
+{
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  SWFMovie_writeExports(movie);
 }
 
 /* }}} */
@@ -2500,7 +2681,11 @@ static zend_function_entry swftext_functions[] = {
   PHP_FALIAS(setcolor,               swftext_setColor,          NULL)
   PHP_FALIAS(moveto,                 swftext_moveTo,            NULL)
   PHP_FALIAS(addstring,              swftext_addString,         NULL)
+  PHP_FALIAS(addutf8string,          swftext_addUTF8String,     NULL)
+/*  PHP_FALIAS(addwidestring,          swftext_addWideString,     NULL)*/
   PHP_FALIAS(getwidth,               swftext_getWidth,          NULL)
+  PHP_FALIAS(getutf8width,           swftext_getUTF8Width,      NULL)
+/*  PHP_FALIAS(getwidewidth,           swftext_getWideWidth,      NULL)*/
   PHP_FALIAS(getascent,              swftext_getAscent,         NULL)
   PHP_FALIAS(getdescent,             swftext_getDescent,        NULL)
   PHP_FALIAS(getleading,             swftext_getLeading,        NULL)
@@ -2667,6 +2852,42 @@ PHP_FUNCTION(swftext_addString)
 }
 
 /* }}} */
+/* {{{ proto void swftext_addUTF8String(string text)
+   Writes the given text into this SWFText object at the current pen position,
+   using the current font, height, spacing, and color */
+
+PHP_FUNCTION(swftext_addUTF8String)
+{
+  zval **s;
+  SWFText text = getText(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &s) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(s);
+
+  SWFText_addUTF8String(text, Z_STRVAL_PP(s), NULL);
+}
+
+/* }}} */
+/* {{{ proto void swftext_addWideString(string text)
+   Writes the given text into this SWFText object at the current pen position,
+   using the current font, height, spacing, and color */
+/*
+PHP_FUNCTION(swftext_addWideString)
+{
+  zval **s;
+  SWFText text = getText(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &s) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(s);
+
+  SWFText_addWideString(text, Z_STRVAL_PP(s), NULL);
+}
+*/
+/* }}} */
 /* {{{ proto float swftext_getWidth(string str)
    Calculates the width of the given string in this text objects current font and size */
 
@@ -2685,6 +2906,44 @@ PHP_FUNCTION(swftext_getWidth)
   RETURN_DOUBLE(width);
 }
 
+/* }}} */
+/* {{{ proto double swftext_getUTF8Width(string)
+   calculates the width of the given string in this text objects current font and size */
+
+PHP_FUNCTION(swftext_getUTF8Width)
+{
+  zval **zstring;
+  int width;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  width = SWFText_getUTF8StringWidth(getText(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+  RETURN_DOUBLE(width);
+}
+
+/* }}} */
+/* {{{ proto double swftext_getWideWidth(string)
+   calculates the width of the given string in this text objects current font and size */
+/*
+PHP_FUNCTION(swftext_getWideWidth)
+{
+  zval **zstring;
+  int width;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  width = SWFText_getWideStringWidth(getText(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
+
+  RETURN_DOUBLE(width);
+}
+*/
 /* }}} */
 /* {{{ proto float swftext_getAscent(void)
    Returns the ascent of the current font at its current size, or 0 if not available */
@@ -2737,9 +2996,11 @@ static zend_function_entry swftextfield_functions[] = {
   PHP_FALIAS(setmargins,        swftextfield_setMargins,      NULL)
   PHP_FALIAS(setindentation,    swftextfield_setIndentation,  NULL)
   PHP_FALIAS(setlinespacing,    swftextfield_setLineSpacing,  NULL)
+  PHP_FALIAS(setpadding,        swftextfield_setPadding,      NULL)
   PHP_FALIAS(setcolor,          swftextfield_setColor,        NULL)
   PHP_FALIAS(setname,           swftextfield_setName,         NULL)
   PHP_FALIAS(addstring,         swftextfield_addString,       NULL)
+  PHP_FALIAS(addchars,          swftextfield_addChars,        NULL)
   { NULL, NULL, NULL }
 };
 
@@ -2944,6 +3205,23 @@ PHP_FUNCTION(swftextfield_setLineSpacing)
 }
 
 /* }}} */
+/* {{{ proto void swftextfield_setPadding(float padding)
+   Sets the padding of this textfield */
+
+PHP_FUNCTION(swftextfield_setPadding)
+{
+  zval **padding;
+  SWFTextField field = getTextField(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &padding) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_double_ex(padding);
+
+  SWFTextField_setPadding(field, Z_DVAL_PP(padding));
+}
+
+/* }}} */
 /* {{{ proto void swftextfield_setColor(int r, int g, int b [, int a])
    Sets the color of this textfield */
 
@@ -3011,6 +3289,24 @@ PHP_FUNCTION(swftextfield_addString)
 }
 
 /* }}} */
+/* {{{ proto void swftextfield_addChars(string)
+   adds characters to a font that will be available within a textfield */
+
+PHP_FUNCTION(swftextfield_addChars)
+{
+  zval **zstring;
+  SWFTextField field = getTextField(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(zstring);
+
+  SWFTextField_addChars(field, Z_STRVAL_PP(zstring));
+
+}
+
+/* }}} */
 
 /* }}} */
 
@@ -3058,8 +3354,8 @@ void php_ming_error(char *msg, ...)
   va_start(args, msg);
   vsnprintf(buffer, ERROR_BUFSIZE, msg, args);
   va_end(args);
-
-  php_error(E_ERROR, buffer);
+// item to discuss: error level
+  php_error(E_WARNING, buffer);
 }
 
 PHP_RINIT_FUNCTION(ming)
@@ -3110,6 +3406,7 @@ PHP_MINIT_FUNCTION(ming)
   CONSTANT("SWFTEXTFIELD_DRAWBOX",        SWFTEXTFIELD_DRAWBOX);
   CONSTANT("SWFTEXTFIELD_NOSELECT",       SWFTEXTFIELD_NOSELECT);
   CONSTANT("SWFTEXTFIELD_HTML",           SWFTEXTFIELD_HTML);
+  CONSTANT("SWFTEXTFIELD_USEFONT",        SWFTEXTFIELD_USEFONT);
 
   /* flags for SWFTextField_align */
   CONSTANT("SWFTEXTFIELD_ALIGN_LEFT",     SWFTEXTFIELD_ALIGN_LEFT);

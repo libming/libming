@@ -77,6 +77,8 @@ PHP_FUNCTION(swfmovie_setDimension);
 PHP_FUNCTION(swfmovie_setFrames);
 PHP_FUNCTION(swfmovie_Protect);
 PHP_FUNCTION(swfmovie_streamMp3);
+PHP_FUNCTION(swfmovie_addExport);
+PHP_FUNCTION(swfmovie_writeExports);
 
 PHP_FUNCTION(swfsprite_init);
 PHP_FUNCTION(swfsprite_add);
@@ -87,9 +89,13 @@ PHP_FUNCTION(swfsprite_setFrames);
 
 PHP_FUNCTION(swffont_init);
 PHP_FUNCTION(swffont_getWidth);
+PHP_FUNCTION(swffont_getUTF8Width);
+/*PHP_FUNCTION(swffont_getWideWidth);*/
 PHP_FUNCTION(swffont_getAscent);
 PHP_FUNCTION(swffont_getDescent);
 PHP_FUNCTION(swffont_getLeading);
+/*PHP_FUNCTION(swffont_addChars);*/
+PHP_FUNCTION(swffont_getShape);
 
 PHP_FUNCTION(swftext_init);
 PHP_FUNCTION(swftext_setFont);
@@ -98,7 +104,11 @@ PHP_FUNCTION(swftext_setSpacing);
 PHP_FUNCTION(swftext_setColor);
 PHP_FUNCTION(swftext_moveTo);
 PHP_FUNCTION(swftext_addString);
+PHP_FUNCTION(swftext_addUTF8String);
+/*PHP_FUNCTION(swftext_addWideString);*/
 PHP_FUNCTION(swftext_getWidth);
+PHP_FUNCTION(swftext_getUTF8Width);
+/*PHP_FUNCTION(swftext_getWideWidth);*/
 PHP_FUNCTION(swftext_getAscent);
 PHP_FUNCTION(swftext_getDescent);
 PHP_FUNCTION(swftext_getLeading);
@@ -116,6 +126,8 @@ PHP_FUNCTION(swftextfield_setLineSpacing);
 PHP_FUNCTION(swftextfield_setColor);
 PHP_FUNCTION(swftextfield_setName);
 PHP_FUNCTION(swftextfield_addString);
+PHP_FUNCTION(swftextfield_setPadding);
+PHP_FUNCTION(swftextfield_addChars);
 
 PHP_FUNCTION(swfdisplayitem_move);
 PHP_FUNCTION(swfdisplayitem_moveTo);
@@ -134,6 +146,9 @@ PHP_FUNCTION(swfdisplayitem_addColor);
 PHP_FUNCTION(swfdisplayitem_multColor);
 PHP_FUNCTION(swfdisplayitem_setName);
 PHP_FUNCTION(swfdisplayitem_addAction);
+PHP_FUNCTION(swfdisplayitem_remove);
+PHP_FUNCTION(swfdisplayitem_setMaskLevel);
+PHP_FUNCTION(swfdisplayitem_endMask);
 
 PHP_FUNCTION(swfbutton_init);
 PHP_FUNCTION(swfbutton_setHit);
@@ -156,6 +171,7 @@ PHP_FUNCTION(swfmorph_getShape2);
 PHP_FUNCTION(ming_setCubicThreshold);
 PHP_FUNCTION(ming_setScale);
 PHP_FUNCTION(ming_useSWFVersion);
+PHP_FUNCTION(ming_useConstants);
 
 #else
 #define ming_module_ptr NULL

@@ -468,8 +468,7 @@ int printActionRecord(Buffer f)
 
     case SWFACTION_CONSTANTPOOL:
     {
-      int i, n = readUInt8(f);
-      readUInt8(f);
+      int i, n = readUInt16(f);
       print("declare dictionary:");
 
       for(i=0; i<n; ++i)

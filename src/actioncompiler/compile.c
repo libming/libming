@@ -104,6 +104,12 @@ void bufferPatchPushLength(Buffer buffer, int len)
 }
 
 
+static useConstants = 1;
+void Ming_useConstants(flag)
+{	useConstants = flag;
+}
+
+
 int addConstant(char *s)
 {
 	int i;
@@ -333,7 +339,10 @@ int bufferWriteConstantString(Buffer out, byte *string, int length)
 	if(SWF_versionNum < 5)
 		return -1;
 
-	n = addConstant(string);
+	if(useConstants)
+		n = addConstant(string);
+	else
+		n = -1;
 
 	if(n == -1)
 	{

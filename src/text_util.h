@@ -31,6 +31,10 @@ void SWFText_moveTo(SWFText text, float x, float y);
 
 float SWFText_getStringWidth(SWFText text, const unsigned char *string);
 
+float SWFText_getUTF8StringWidth(SWFText text, const unsigned char *string);
+
+float SWFText_getWideStringWidth(SWFText text, const unsigned short *string);
+
 float SWFText_getAscent(SWFText text);
 
 float SWFText_getDescent(SWFText text);
@@ -38,6 +42,10 @@ float SWFText_getDescent(SWFText text);
 float SWFText_getLeading(SWFText text);
 
 float SWFFont_getStringWidth(SWFFont font, const unsigned char *string);
+
+float SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string);
+
+float SWFFont_getWideStringWidth(SWFFont font, const unsigned short *string, int len);
 
 float SWFFont_getAscent(SWFFont font);
 
@@ -58,5 +66,7 @@ void SWFTextField_setRightMargin(SWFTextField field, float rightMargin);
 void SWFTextField_setIndentation(SWFTextField field, float indentation);
 
 void SWFTextField_setLineSpacing(SWFTextField field, float lineSpacing);
+
+void SWFTextField_setPadding(SWFTextField field, float padding);
 
 #endif /* MING_TEXT_UTIL_H_INCLUDED */

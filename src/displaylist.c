@@ -47,6 +47,7 @@ struct SWFDisplayItem_s
 	SWFCharacter character;
 	SWFPosition position;
 	SWFMatrix matrix;
+	struct SWFDisplayList_s *list;
 };
 
 struct SWFDisplayList_s
@@ -144,6 +145,8 @@ SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 		list->head = item;
 
 	list->tail = item;
+	// back pointer for endmask
+	item->list = list;
 	return item;
 }
 
@@ -372,6 +375,14 @@ SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel)
 
 	/* item->block is never null when ITEM_NEW set */
 	SWFPlaceObject2Block_setMaskLevel(item->block, masklevel);
+}
+
+
+void
+SWFDisplayItem_endMask(SWFDisplayItem item)
+{
+	checkBlock(item);
+	SWFPlaceObject2Block_setMaskLevel(item->block, item->list->depth);
 }
 
 

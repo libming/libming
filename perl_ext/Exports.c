@@ -52,6 +52,7 @@ static char *SWF_TextField_tag[] = {
      "SWFTEXTFIELD_ALIGN_JUSTIFY",
      "SWFTEXTFIELD_HTML",
      "SWFTEXTFIELD_HASLENGTH",
+     "SWFTEXTFIELD_USEFONT",
      NULL,
 };
 

@@ -59,6 +59,12 @@ destroySWFCharacter(SWFBlock block)
 void
 SWFCharacter_addDependency(SWFCharacter character, SWFCharacter dependency)
 {
+#if 1
+	int n;
+	for(n = 0 ; n < character->nDependencies ; n++)
+		if(character->dependencies[n] == dependency)
+			return;
+#endif
 	character->dependencies =
 		realloc(character->dependencies,
 						sizeof(SWFCharacter) * (character->nDependencies + 1));

@@ -34,7 +34,7 @@ static void byteAlign()
 	}
 }
 
-static int readBits(byte **p, int number)
+static int readBitsP(byte **p, int number)
 {
 	byte *ptr = *p;
 	int ret = buffer;
@@ -77,9 +77,9 @@ static int readBits(byte **p, int number)
 	return ret;
 }
 
-static int readSBits(byte **p, int number)
+static int readSBitsP(byte **p, int number)
 {
-	int num = readBits(p, number);
+	int num = readBitsP(p, number);
 
 	if(num & (1<<(number-1)))
 		return num - (1<<number);

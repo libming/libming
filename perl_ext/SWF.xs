@@ -47,6 +47,11 @@ Ming_useSWFVersion(version)
     ALIAS:
         SWF::setVersion = 1
 
+void
+Ming_useConstants(flag)
+	int flag
+	CODE:
+		Ming_useConstants(flag);
 
 
 

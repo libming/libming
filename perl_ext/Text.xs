@@ -73,6 +73,18 @@ SWFText_addString(text, string, advance=NULL)
 	char *		string
 	int *		advance
 	
+void
+SWFText_addUTF8String(text, string, advance=NULL)
+	SWF::Text	text
+	char *		string
+	int *		advance
+
+void
+SWFText_addWideString(text, string, strlen, advance=NULL)
+	SWF::Text	text
+	char *		string
+	int			strlen
+	int *		advance
 
 void
 SWFText_setSpacing(text, spacing)
@@ -85,6 +97,16 @@ SWFText_getStringWidth(text, string)
 	char *		string
         ALIAS:
         SWF::Text::getWidth = 1
+
+int
+SWFText_getUTF8StringWidth(text, string)
+	SWF::Text text
+	char *	string
+
+int
+SWFText_getWideStringWidth(text, string)
+	SWF::Text text
+	char *	string
 
 short
 SWFText_getAscent(text)

@@ -84,6 +84,12 @@ SWFText_setScaledSpacing(SWFText text, int spacing);
 int
 SWFText_getScaledStringWidth(SWFText text, const char *string);
 
+int
+SWFText_getScaledUTF8StringWidth(SWFText text, const char *string);
+
+int
+SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string);
+
 short
 SWFText_getScaledAscent(SWFText text);
 

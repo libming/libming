@@ -90,6 +90,11 @@ SWFTextField_setHeight(field, height)
 	int	height
 
 void
+SWFTextField_setPadding(field, padding)
+	SWF::TextField	field
+	int	padding
+
+void
 SWFTextField_setMargin(field, left, right)
 	SWF::TextField	field
 	int	left
@@ -125,3 +130,10 @@ SWFTextField_setAlignment(field, alignment)
 	int	alignment
         ALIAS:
         SWF::TextField::align =  1
+
+void
+SWFTextField_addChars(field, string)
+	SWF::TextField	field
+	char *	string
+
+

@@ -114,7 +114,10 @@ SWFMovie_addExport(movie, block, name)
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
 	SWFMovie_addExport(movie, block, name);
-	
+
+void
+SWFMovie_writeExports(movie)
+	SWF::Movie movie
 
 SWF::DisplayItem
 SWFMovie_add(movie, block)

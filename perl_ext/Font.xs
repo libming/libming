@@ -60,6 +60,16 @@ SWFFont_getStringWidth(font, string)
         ALIAS:
         SWF::Font::getWidth = 1
 
+int
+SWFFont_getUTF8StringWidth(font, string)
+	SWF::Font	font
+	char *	string
+
+int
+SWFFont_getWideStringWidth(font, string)
+	SWF::Font	font
+	char *	string
+
 short
 SWFFont_getAscent(font)
 	SWF::Font	font
@@ -71,3 +81,15 @@ SWFFont_getDescent(font)
 short
 SWFFont_getLeading(font)
 	SWF::Font	font
+
+void
+SWFFont_addChars(font, string)
+	SWF::Font font
+	char *  string
+
+char *
+SWFFont_getShape(font, code)
+	SWF::Font font
+	int code;
+	CLEANUP:
+		free(RETVAL);

@@ -26,6 +26,9 @@ SWFDisplayItem_setMaskLevel(item, masklevel)
 	SWF::DisplayItem item
 	int masklevel
 
+void
+SWFDisplayItem_endMask(item)
+	SWF::DisplayItem item
 
 void 
 SWFDisplayItem_addAction(item, action, flags)
