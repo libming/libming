@@ -345,11 +345,18 @@ int printActionRecord(Buffer f)
       println("Branch Always %i", readSInt16(f));
       break;
     case SWFACTION_GETURL2:
-      switch(readUInt8(f))
       {
-        case 0: println("Get URL2 (Don't send)"); break;
-        case 1: println("Get URL2 (GET)"); break;
-        case 2: println("Get URL2 (POST)"); break;
+	int flags = readUInt8(f);
+
+	char *op = (flags & 0x80) ? "Get URL2 (loadvariables)" : "Get URL2";
+	char *tgt = (flags & 0x40) ? " into target" : "";
+
+	switch(flags & 0x03)
+	{
+          case 0: println("%s%s (Don't send)", op, tgt); break;
+          case 1: println("%s%s (GET)", op, tgt); break;
+          case 2: println("%s%s (POST)", op, tgt); break;
+	}
       }
       break;
     case SWFACTION_BRANCHIFTRUE:
@@ -489,8 +496,11 @@ int printActionRecord(Buffer f)
       print(name);
       putchar('(');
 
-      printf("%s", readString(f));
-      --n;
+      if(n > 0)
+      {
+	printf("%s", readString(f));
+	--n;
+      }
 
       for(; n>0; --n)
 	printf(", %s", readString(f));

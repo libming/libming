@@ -7,13 +7,34 @@
 #include "action.h"
 #include "compiler.tab.h" /* defines token types */
 
+#include "../blocks/error.h" /* for SWF_error */
+
 int yydebug;
 char *lexBuffer = NULL;
 int lexBufferLen = 0;
 
 static int  sLineNumber = 0;
 static char szLine[1024];
+static char msgbufs[2][1024] = {0}, *msgline = {0};
 static int  column = 0;
+
+void parseInit(char *script)
+{
+  lexBuffer = script;
+  lexBufferLen = strlen(script);
+  sLineNumber = 0;
+  msgline = msgbufs;
+}
+
+void countline()
+{
+  if(sLineNumber != 0)
+    msgline[column] = 0;
+
+  ++sLineNumber;
+  column = 0;
+  msgline = msgbufs[sLineNumber & 1];
+}
 
 /* Function prototypes */
 int  yywrap();
@@ -94,6 +115,11 @@ stop		{ count();	return STOP;		}
 toggleQuality	{ count();	return TOGGLEQUALITY;	}
 stopSounds	{ count();	return STOPSOUNDS;	}
 
+loadVariables		{ count();	return LOADVARIABLES;	}
+loadMovie		{ count();	return LOADMOVIE;	}
+loadVariablesNum	{ count();	return LOADVARIABLESNUM;	}
+loadMovieNum		{ count();	return LOADMOVIENUM;	}
+
   /* assembler ops */
 dup			{ count();	return DUP; }
 swap			{ count();	return SWAP; }
@@ -154,6 +180,8 @@ branchiftrue		{ count();	return BRANCHIFTRUE; }
 geturl2			{ count();	return GETURL2; }
 post			{ count();	return POST; }
 get			{ count();	return GET; }
+POST			{ count();	return POST; }
+GET			{ count();	return GET; }
 
 
 r\:{DIGIT}+		{ count();	yylval.str = strdup(yytext+2);
@@ -229,11 +257,10 @@ r\:{DIGIT}+		{ count();	yylval.str = strdup(yytext+2);
 "?"			{ count();	return '?'; }
 ":"			{ count();	return ':'; }
 
-"\n"			{ count();	column = 0;
-					strcpy(szLine, yytext + 1);
-					++sLineNumber;	yyless(1);	}
+"\n"			{ count();	strcpy(szLine, yytext + 1);
+					countline();	yyless(1);	}
 
-.			printf( "Unrecognized character: %s\n", yytext );
+.			SWF_error("Unrecognized character: %s\n", yytext);
 
 %%
 
@@ -254,7 +281,8 @@ int ColumnNumber(void)
 
 char *LineText(void)
 {
-   return (szLine);
+  msgline[column] = 0;
+  return msgline;
 }
 
 void comment(void)
@@ -268,14 +296,16 @@ loop:
    // end of the comment character
    while ((c = input()) != '*' && c != 0)
    {
+      if(column < 1023)
+         msgline[column] = c;
+
       ++column;
 
       // keep the line number in synch
       if (c == '\n')
       {
          // start the output (matches the algorithim in the lexx above)
-         column = 0;
-         ++sLineNumber;
+	 countline();
       }
 
       if (yydebug) putchar(c);
@@ -308,6 +338,10 @@ void comment1(void)
    while ((c = input()) != '\n' && c != 0)
    {
       if (yydebug) putchar(c);
+
+      if(column < 1023)
+         msgline[column] = c;
+
       ++column;
    };
 
@@ -315,34 +349,52 @@ void comment1(void)
    if (c == '\n')
    {
       if (yydebug) putchar(c);
-      column = 0;
-      ++sLineNumber;
+
+      countline();
    }
 }
 
 void count(void)
 {
+   int n;
+
    // Count the characters to maintain the current column position
    if (yytext[0] == '\n')
    {
-      column = 0;
       if (yydebug) printf("\n");
    }
    else
    {
       if (yydebug) printf("%s", yytext);
 
+      for(n=0; n<yyleng; ++n, ++column)
+      {
+	if(column < 1023)
+	  msgline[column] = yytext[n];
+      }
+
       //-- keep writing the stuff to standard output
-      column += yyleng;
+      //column += yyleng;
    }
+}
+
+void printprog()
+{
+  if(sLineNumber)
+    SWF_warn("\n%s", msgbufs[(sLineNumber-1)&1]);
+
+  if(column < 1023)
+    msgline[column] = 0;
+
+  SWF_warn("\n%s", msgline);
 }
 
 void warning(char *msg)
 {
    // print a warning message
-   printf("\n%s", LineText());
-   printf("\n%*s", ColumnNumber(), "^");
-   printf("\nLine %4.4d:  Reason: '%s' \n", LineNumber(), msg);
+   printprog();
+   SWF_warn("\n%*s", ColumnNumber(), "^");
+   SWF_warn("\nLine %4.4d:  Reason: '%s' \n", LineNumber(), msg);
 }
 
 void yyerror(char *msg)
@@ -350,14 +402,14 @@ void yyerror(char *msg)
    // report a error
    if (strlen(yytext))
    {
-      printf("\n%s", LineText());
-      printf("\n%*s", ColumnNumber(), "^");
-      printf("\nLine %4.4d:  Reason: '%s' \n", LineNumber(), msg);
+      printprog();
+      SWF_warn("\n%*s", ColumnNumber(), "^");
+      SWF_error("\nLine %4.4d:  Reason: '%s' \n", LineNumber(), msg);
    }
    else
    {
-      printf("\n%*s", 0, "^");
-      printf("\nLine %d: Reason: 'Unexpected EOF found while looking for input.'\n", LineNumber());
+//    printf("\n%*s", 0, "^");
+      SWF_error("\nLine %d: Reason: 'Unexpected EOF found while looking for input.'\n", LineNumber());
    }
 }
 

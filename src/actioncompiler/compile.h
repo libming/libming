@@ -110,4 +110,7 @@ char *stringConcat(char *a, char *b);
 /* resolve magic number standins to relative offsets */
 void bufferResolveJumps(Buffer out);
 
+/* rather than setting globals... */
+void parseInit(char *string);
+
 #endif /* COMPILE_H_INCLUDED */

@@ -45,7 +45,8 @@
   STRINGEQ, STRINGLENGTH, SUBSTRING, GETVARIABLE, SETVARIABLE,
   SETTARGETEXPRESSION,  DUPLICATECLIP, REMOVECLIP, STARTDRAGMOVIE,
   STOPDRAGMOVIE, STRINGLESSTHAN, MBLENGTH, MBSUBSTRING, MBORD, MBCHR,
-  BRANCHALWAYS, BRANCHIFTRUE, GETURL2, POST, GET
+  BRANCHALWAYS, BRANCHIFTRUE, GETURL2, POST, GET,
+  LOADVARIABLES, LOADMOVIE, LOADVARIABLESNUM, LOADMOVIENUM
 
 %token NULLVAL
 %token <intVal> INTEGER
@@ -103,16 +104,18 @@
 %type <action> program, code
 %type <action> stmt, stmts
 %type <action> if_stmt, iter_stmt, cont_stmt, break_stmt, return_stmt
+%type <action> with_stmt
 %type <action> switch_stmt, switch_cases, switch_case
 %type <action> anon_function_decl, function_decl, function_decls
 %type <action> void_function_call, function_call, method_call
 %type <action> assign_stmt, assign_stmts, assign_stmts_opt
-%type <action> expr, objexpr, expr_opt, pf_expr
-%type <action> emptybraces
+%type <action> expr, objexpr, expr_opt, pf_expr, obj_ref
+%type <action> emptybraces, level, init_vars, init_var
 
 %type <exprlist> expr_list, objexpr_list, formals_list
 
 %type <op> assignop, incdecop
+%type <getURLMethod> urlmethod
 
 %type <str> identifier
 
@@ -180,6 +183,16 @@ stmt
 	| break_stmt
 	| switch_stmt
 	| return_stmt
+	| with_stmt
+	;
+
+with_stmt
+	: WITH '(' expr ')' '{' stmts '}'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_WITH);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($6));
+		  bufferConcat($$, $6); }
 	;
 
 return_stmt
@@ -326,10 +339,16 @@ identifier
 	| GETURL2	{ $$ = strdup("getURL2"); }
 	| POST	{ $$ = strdup("post"); }
 	| GET	{ $$ = strdup("get"); }
+	| LOADVARIABLES	{ $$ = strdup("loadvariables"); }
+	| LOADMOVIE	{ $$ = strdup("loadmovie"); }
 	;
 
 formals_list
-	: identifier
+	: /* empty */
+		{ $$.buffer = newBuffer();
+		  $$.count = 0; }
+
+	| identifier
 		{ $$.buffer = newBuffer();
 		  bufferWriteHardString($$.buffer, $1, strlen($1)+1);
 		  $$.count = 1; }
@@ -351,6 +370,24 @@ function_decl
 		  bufferConcat($$, $4.buffer);
 		  bufferWriteS16($$, bufferLength($6));
 		  bufferConcat($$, $6); }
+	;
+
+obj_ref
+	: identifier
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  free($1); }
+
+	| expr '.' identifier
+		{ $$ = $1;
+		  bufferWriteString($$, $3, strlen($3)+1);
+		  bufferWriteU8($$, SWFACTION_GETMEMBER);
+		  free($3); }
+
+	| expr '[' expr ']'
+		{ $$ = $1;
+		  bufferConcat($$, $3);
+		  bufferWriteU8($$, SWFACTION_GETMEMBER); }
 	;
 
 iter_stmt
@@ -394,8 +431,64 @@ iter_stmt
                   bufferConcat($$, $5);
                 }
 
-	| FOR '(' identifier IN expr ')' stmt
-		{ }
+	| FOR '(' identifier IN obj_ref ')' stmt
+		{ Buffer b2, b3;
+		  int tmp;
+
+		  $$ = $5;
+		  bufferWriteU8($$, SWFACTION_ENUMERATE);	
+
+		  b2 = newBuffer();
+		  bufferWriteSetRegister(b2, 0);
+		  bufferWriteU8(b2, SWFACTION_PUSHDATA);
+		  bufferWriteS16(b2, 1);
+		  bufferWriteU8(b2, 2);
+		  bufferWriteU8(b2, SWFACTION_NEWEQUALS);
+		  bufferWriteU8(b2, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteS16(b2, 2);
+
+		  b3 = newBuffer();
+		  bufferWriteString(b3, $3, strlen($3)+1);
+		  bufferWriteRegister(b3, 0);
+		  bufferWriteU8(b3, SWFACTION_SETVARIABLE);
+		  bufferConcat(b3, $7);
+		  bufferWriteS16(b2, bufferLength(b3) + 5);
+		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
+		  bufferConcat($$, b2);
+		  bufferConcat($$, b3);
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, -tmp); }
+
+	| FOR '(' VAR identifier IN obj_ref ')' stmt
+		{ Buffer b2, b3;
+		  int tmp;
+
+		  $$ = $6;
+		  bufferWriteU8($$, SWFACTION_ENUMERATE);	
+
+		  b2 = newBuffer();
+		  bufferWriteSetRegister(b2, 0);
+		  bufferWriteU8(b2, SWFACTION_PUSHDATA);
+		  bufferWriteS16(b2, 1);
+		  bufferWriteU8(b2, 2);
+		  bufferWriteU8(b2, SWFACTION_NEWEQUALS);
+		  bufferWriteU8(b2, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteS16(b2, 2);
+		  // add size later
+
+		  b3 = newBuffer();
+		  bufferWriteString(b3, $4, strlen($4)+1);
+		  bufferWriteRegister(b3, 0);
+		  bufferWriteU8(b3, SWFACTION_VAREQUALS);
+		  bufferConcat(b3, $8);
+		  bufferWriteS16(b2, bufferLength(b3) + 5);
+		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
+		  bufferConcat($$, b2);
+		  bufferConcat($$, b3);
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, -tmp); }
 	;
 
 assign_stmts_opt
@@ -419,6 +512,34 @@ break_stmt
 		  bufferWriteS16($$, MAGIC_BREAK_NUMBER); }
 	;
 
+urlmethod
+	: /* empty */		{ $$ = GETURL_METHOD_NOSEND; }
+
+	| ',' GET		{ $$ = GETURL_METHOD_GET; }
+
+	| ',' POST		{ $$ = GETURL_METHOD_POST; }
+
+	| ',' STRING		{ if(strcmp($2, "GET") == 0)
+				    $$ = GETURL_METHOD_GET;
+				  else if(strcmp($2, "POST") == 0)
+				    $$ = GETURL_METHOD_POST; }
+	;
+
+level
+	: INTEGER
+		{ char *lvlstring = malloc(12*sizeof(char));
+		  sprintf(lvlstring, "_level%d", $1);
+		  $$ = newBuffer();
+		  bufferWriteString($$, lvlstring, strlen(lvlstring)+1);
+		  free(lvlstring); }
+
+	| expr
+		{ $$ = newBuffer();
+		  bufferWriteString($$, "_level", 7);
+		  bufferConcat($$, $1);
+		  bufferWriteU8($$, SWFACTION_STRINGCONCAT); }
+	;
+
 void_function_call
 	: IDENTIFIER '(' expr_list ')'
 		{ $$ = $3.buffer;
@@ -431,6 +552,34 @@ void_function_call
 	| TRACE '(' expr ')'
 		{ $$ = $3;
 		  bufferWriteU8($$, SWFACTION_TRACE); }
+
+	| LOADVARIABLES '(' expr ',' expr urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0xc0+$6); }
+
+	| LOADMOVIE '(' expr ',' expr urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0x40+$6); }
+
+	| LOADVARIABLESNUM '(' expr ',' level urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0x80+$6); }
+
+	| LOADMOVIENUM '(' expr ',' level urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, $6); }
 
 	/* v3 actions */
 	| NEXTFRAME '(' ')'
@@ -500,6 +649,10 @@ function_call
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $7);
 		  bufferWriteU8($$, SWFACTION_SUBSTRING); }
+
+	| TYPEOF '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_TYPEOF); }
 	;
 
 expr_list
@@ -887,6 +1040,26 @@ expr
 		  bufferConcat($1, $3); }
 	;
 
+init_vars
+	: init_var
+
+	| init_vars ',' init_var
+		{ $$ = $1;
+		  bufferConcat($$, $3); }
+	;
+
+init_var
+	: identifier '=' expr
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  bufferConcat($$, $3);
+		  bufferWriteU8($$, SWFACTION_VAREQUALS); }
+
+	| identifier
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  bufferWriteU8($$, SWFACTION_VAR); }
+	;
 
 assign_stmt
 	: ASM '{'
@@ -894,16 +1067,8 @@ assign_stmt
 	  opcode_list '}'
 		{ $$ = asmBuffer; }
 
-	| VAR identifier '=' expr
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferConcat($$, $4);
-		  bufferWriteU8($$, SWFACTION_VAREQUALS); }
-
-	| VAR identifier
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteU8($$, SWFACTION_VAR); }
+	| VAR init_vars
+		{ $$ = $2; }
 
 	| void_function_call
 

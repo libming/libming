@@ -60,14 +60,23 @@ int bufferWriteConstants(Buffer out)
 {
   int i, len=2;
 
+  if(nConstants == 0)
+    return 0;
+
   bufferWriteU8(out, SWFACTION_CONSTANTPOOL);
   bufferWriteS16(out, 0); /* length */
   bufferWriteS16(out, nConstants);
 
   for(i=0; i<nConstants; ++i)
+  {
     len += bufferWriteHardString(out, constants[i], strlen(constants[i])+1);
+    free(constants[i]);
+  }
+
+  nConstants = 0;
 
   bufferPatchLength(out, len);
+
   return len+3;
 }
 

@@ -23,8 +23,7 @@ SWFAction compileSWFActionCode(char *script)
 
   /* yydebug = 1; */
 
-  lexBuffer = script;
-  lexBufferLen = strlen(script);
+  parseInit(script);
 
   if(yyparse((void *)&b) != 0)
     return NULL;

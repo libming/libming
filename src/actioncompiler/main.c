@@ -1,5 +1,6 @@
 
-#include<stdio.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #include "compile.h"
 
@@ -17,11 +18,38 @@ extern int lexBufferLen;
 int yyparse(void *b);
 void printDoAction(Buffer f, int length);
 
+#include "../blocks/error.h"
+
+void (*SWF_error)(char *msg, ...);
+void (*SWF_warn)(char *msg, ...);
+
+void print_error(char *msg, ...)
+{
+  va_list args;
+
+  va_start(args, msg);
+  vprintf(msg, args);
+  va_end(args);
+  exit(0);
+}
+
+void print_warn(char *msg, ...)
+{
+  va_list args;
+
+  va_start(args, msg);
+  vprintf(msg, args);
+  va_end(args);
+}
+
 int main(int argc, char *argv[])
 {
   FILE *f;
   Buffer b;
   int size = 0;
+
+  SWF_error = print_error;
+  SWF_warn = print_warn;
 
   lexBuffer = malloc(BUFFER_INC);
   lexBufferLen = 0;
@@ -48,6 +76,7 @@ int main(int argc, char *argv[])
   }
 
   lexBufferLen += size;
+  parseInit(lexBuffer);
 
   yyparse((void *)&b);
 
