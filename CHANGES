@@ -1,6 +1,11 @@
 
 MING HISTORY
 
+4.12.01
+	Moved php wrapper over to input foo, allowing bitmaps/mp3s from
+	  streams/urls/processes/whatever
+	Changed bitmap/mp3 constructors to read strings as data, not filenames
+
 4.11.01
 	Added SWFInput object for abstracting file/buffer inputs
 	Added automagic shape wrapping for bitmaps in SWFMovie_add()
