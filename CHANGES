@@ -1,6 +1,17 @@
 
 MING HISTORY
 
+5.7.01
+	Got silly placeobject2 stuff working.
+	Added clip events
+
+5.6.01
+	Added Jon Ribbens' fix for output code
+	Added Jonathan Shore's Java wrapper code
+
+4.22.01
+	Fixed linestyle scaling
+
 4.12.01
 	Moved php wrapper over to input foo, allowing bitmaps/mp3s from
 	  streams/urls/processes/whatever

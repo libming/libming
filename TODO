@@ -1,23 +1,31 @@
 
 Stuff what to do (not in order):
 
-* SWFText_addString splits buffer into 127 (255?) character chunks
+* make leading/linespacing terminology consistent btwn text/textfield
 
+* set size of drawGlyph
+
+* gNumCharacters is being preserved across sessions! Argh!
+
+* Add swf5 compiler and assembler
+
+* Add masks
+
+* Change SWFButton::addShape to SWFButton::add and have it return a displayitem
+
+* proofread Damien Seguy's PHP docs
+
+* SWFText_addString splits buffer into 127 (255?) character chunks
 
 * add $m->getStreamLength
 
-
-* SWFText should recognise \n and advance the y pos
-
-
-* Add filehandle args to php SWFBitmap constructor
-
+* SWFText should recognise \n and advance the y pos?
 
 * Comment the new universal ming.h
 
-
 * Add ButtonSound to button, access to button shape matrices and cxforms
 
+* Update swftophp (including SWFTEXTFIELD_HTML)
 
 * Add Sound
 
@@ -25,7 +33,6 @@ Stuff what to do (not in order):
 
 
 * Read fonts from TTF/PS
-
 
 * Make importable blocks
 
@@ -82,10 +89,4 @@ Stuff what to do (not in order):
 
 * Allow buffer-at-a-time output
 
-  fput'ing each byte is probably slowing us down a lot
-
-
-* make a java wrapper
-
-  so those jsp e-commerce solutions people can pay me (and you) the fat
-  consulting dollars to make their web sites all flashified
+  fput'ing each byte is probably slowing us down a lot..?
