@@ -63,9 +63,20 @@ void SWFPosition_moveTo(SWFPosition position, float x, float y);
 float SWFPosition_getRotation(SWFPosition position);
 float SWFPosition_getX(SWFPosition position);
 float SWFPosition_getY(SWFPosition position);
+
+void
+SWFPosition_getXY(SWFPosition position, float* outX, float* outY);
+
 float SWFPosition_getXScale(SWFPosition position);
 float SWFPosition_getYScale(SWFPosition position);
+
+void
+SWFPosition_getXYScale(SWFPosition position, float* outXScale, float* outYScale);
+
 float SWFPosition_getXSkew(SWFPosition position);
 float SWFPosition_getYSkew(SWFPosition position);
+
+void
+SWFPosition_getXYSkew(SWFPosition position, float* outXSkew, float* outYSkew);
 
 #endif /* MING_POSITION_H_INCLUDED */

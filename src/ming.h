@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 
-#include "libming.h"
 #include "movie.h"
 #include "displaylist.h"
 #include "fill.h"
