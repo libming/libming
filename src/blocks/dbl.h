@@ -20,6 +20,8 @@
 #ifndef SWF_DBL_H_INCLUDED
 #define SWF_DBL_H_INCLUDED
 
+typedef struct _swfDBLBitmap *SWFDBLBitmap;
+
 #include <stdio.h>
 #include "bitmap.h"
 #include "input.h"
@@ -30,7 +32,6 @@ struct _swfDBLBitmap
   SWFInput input;
   int length;
 };
-typedef struct _swfDBLBitmap *SWFDBLBitmap;
 
 #define SWFDBLBITMAP_SIZE sizeof(struct _swfDBLBitmap)
 

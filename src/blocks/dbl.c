@@ -46,12 +46,11 @@ void writeSWFDBLBitmapToMethod(SWFBlock block,
     method(SWFInput_getChar(dbl->input), data);
 }
 
-SWFDBLBitmap newSWFDBLBitmap(FILE *f)
+SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input)
 {
   SWFDBLBitmap dbl;
   int version;
   int width, height;
-  SWFInput input = newSWFInput_file(f);
 
   dbl = calloc(1, SWFDBLBITMAP_SIZE);
 
@@ -86,35 +85,38 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f)
   if(version == 'l')
   {
     /* wow, I'm an idiot. */
-    dbl->length = SWFInput_getChar(input);
-    dbl->length <<= 8;
-    dbl->length += SWFInput_getChar(input);
-    dbl->length <<= 8;
-    dbl->length += SWFInput_getChar(input);
-    dbl->length <<= 8;
-    dbl->length += SWFInput_getChar(input);
+    dbl->length = SWFInput_getUInt32_BE(input);
     dbl->length += 2; /* character id */
   }
   else
   {
-    dbl->length = SWFInput_getChar(input);
-    dbl->length <<= 8;
-    dbl->length += SWFInput_getChar(input);
+    dbl->length = SWFInput_getUInt16_BE(input);
     dbl->length += 2; /* character id */
   }
 
   /* d'oh!  forgot to get the width and height! */
 
-  fgetc(f); /* format */
-  width = SWFInput_getChar(input);
-  width += SWFInput_getChar(input)<<8;
-  height = SWFInput_getChar(input);
-  height += SWFInput_getChar(input)<<8;
+  SWFInput_getChar(input); /* format */
+  width = SWFInput_getUInt16(input);
+  height = SWFInput_getUInt16(input);
 
   /* roll back to beginning of dbl data */
   SWFInput_seek(input, -5, SEEK_CUR);
 
   CHARACTER(dbl)->bounds = newSWFRect(0, width, 0, height);
 
+  return dbl;
+}
+
+void destroySWFDBLBitmap_andInputs(SWFBlock block)
+{
+  destroySWFInput(((SWFDBLBitmap)block)->input);
+  destroySWFJpegBitmap(block);
+}
+
+SWFDBLBitmap newSWFDBLBitmap(FILE *f)
+{
+  SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput(newSWFInput_file(f));
+  BLOCK(dbl)->dtor = destroySWFDBLBitmap_andInputs;
   return dbl;
 }
