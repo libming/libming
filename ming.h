@@ -19,10 +19,11 @@
 
 #include <stdio.h>
 
-#define MING_VERSION        0.2a
-#define MING_VERSION_TEXT  "#MING_VERSION"
+#define MING_VERSION        0.2-pre-a
+#define MING_VERSION_TEXT  "0.2-pre-a"
 
 int Ming_init();
+
 
 /* sets the threshold error for drawing cubic beziers.  Lower is more
    accurate, hence larger file size. */
@@ -524,8 +525,10 @@ void SWFShape_drawCircle(SWFShape shape, float r);
 
 
 /* draw character c from font font into shape shape at size size */
-void SWFShape_drawGlyph(SWFShape shape,
-			SWFFont font, unsigned char c, int size);
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
+
+void SWFShape_drawSizedGlyph(SWFShape shape,
+			     SWFFont font, unsigned char c, int size);
 
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */

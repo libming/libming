@@ -230,8 +230,13 @@ void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
 			   (int)rint(anchordy*Ming_scale));
 }
 
-void SWFShape_drawGlyph(SWFShape shape,
-			SWFFont font, unsigned char c, int size)
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c)
+{
+  SWFShape_drawScaledGlyph(shape, font, c, 1024);
+}
+
+void SWFShape_drawSizedGlyph(SWFShape shape,
+			     SWFFont font, unsigned char c, int size)
 {
   if(size == 0)
     SWFShape_drawScaledGlyph(shape, font, c, 1024);

@@ -70,8 +70,10 @@ void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
 void SWFShape_movePenTo(SWFShape shape, float x, float y);
 void SWFShape_movePen(SWFShape shape, float dx, float dy);
 
-void SWFShape_drawGlyph(SWFShape shape,
-			SWFFont font, unsigned char c, int size);
+void SWFShape_drawSizedGlyph(SWFShape shape,
+			     SWFFont font, unsigned char c, int size);
+
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 /* deprecated: */
 
