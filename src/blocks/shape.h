@@ -31,6 +31,7 @@
 #include "fillstyle.h"
 #include "linestyle.h"
 #include "rect.h"
+#include "font.h"
 
 #define SWF_SHAPE_NEWSTYLEFLAG	 (1<<4)
 #define SWF_SHAPE_LINESTYLEFLAG	 (1<<3)
@@ -113,29 +114,31 @@ SWFShape newSWFShape();
 void destroySWFShape(SWFBlock block);
 void SWFShape_addStyleHeader(SWFShape shape);
 
-void SWFShape_movePenTo(SWFShape shape, int x, int y);
-void SWFShape_movePen(SWFShape shape, int x, int y);
+int SWFShape_getScaledPenX(SWFShape shape);
+int SWFShape_getScaledPenY(SWFShape shape);
 
-int SWFShape_getPenX(SWFShape shape);
-int SWFShape_getPenY(SWFShape shape);
+void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y);
+void SWFShape_moveScaledPen(SWFShape shape, int x, int y);
 
-void SWFShape_drawLineTo(SWFShape shape, int x, int y);
-void SWFShape_drawLine(SWFShape shape, int dx, int dy);
-void SWFShape_drawCurveTo(SWFShape shape,
-			  int controlx, int controly,
-			  int anchorx, int anchory);
-void SWFShape_drawCurve(SWFShape shape,
-			int controldx, int controldy,
-			int anchordx, int anchordy);
+void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y);
+void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy);
+void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
+				int anchorx, int anchory);
+void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
+			      int anchordx, int anchordy);
+
+
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c);
+
 
 /* deprecated: */
 
 #define SWFShape_moveTo SWFShape_movePenTo
 #define SWFShape_moveToRelative SWFShape_movePen
-#define SWFShape_lineTo SWFShape_drawLineTo
-#define SWFShape_lineToRelative SWFShape_drawLine
-#define SWFShape_curveTo SWFShape_drawCurveTo
-#define SWFShape_curveToRelative SWFShape_drawCurve
+#define SWFShape_lineTo SWFShape_drawScaledLineTo
+#define SWFShape_lineToRelative SWFShape_drawScaledLine
+#define SWFShape_curveTo SWFShape_drawScaledCurveTo
+#define SWFShape_curveToRelative SWFShape_drawScaledCurve
 
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,

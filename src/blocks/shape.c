@@ -67,8 +67,7 @@ void destroySWFShape(SWFBlock block)
 }
 SWFShape newSWFShape()
 {
-  SWFShape shape = (SWFShape)malloc(SHAPE_SIZE);
-  memset(shape, 0, SHAPE_SIZE);
+  SWFShape shape = calloc(1, SHAPE_SIZE);
 
   BLOCK(shape)->writeBlock = writeSWFShapeBlockToMethod;
   BLOCK(shape)->complete = completeSWFShapeBlock;
@@ -77,6 +76,10 @@ SWFShape newSWFShape()
   CHARACTERID(shape) = ++SWF_gNumCharacters;
   shape->out = newSWFOutput();
   CHARACTER(shape)->bounds = newSWFRect(0,0,0,0);
+
+  shape->records = NULL;
+  shape->lines = NULL;
+  shape->fills = NULL;
 
   SWFOutput_writeUInt8(shape->out, 0); /* space for nFillBits, nLineBits */
 
@@ -149,32 +152,20 @@ inline ShapeRecord newShapeRecord(SWFShape shape, shapeRecordType type)
   {
     case SHAPERECORD_STATECHANGE:
     {
-      StateChangeRecord stateChange =
-	(StateChangeRecord)malloc(sizeof(struct _stateChangeRecord));
-
-      memset(stateChange, 0, sizeof(struct _stateChangeRecord));
-      shape->records[shape->nRecords].record.stateChange = stateChange;
-
+      StateChangeRecord change = calloc(1, sizeof(struct _stateChangeRecord));
+      shape->records[shape->nRecords].record.stateChange = change;
       break;
     }
     case SHAPERECORD_LINETO:
     {
-      LineToRecord lineTo =
-	(LineToRecord)malloc(sizeof(struct _lineToRecord));
-
-      memset(lineTo, 0, sizeof(struct _lineToRecord));
+      LineToRecord lineTo = calloc(1, sizeof(struct _lineToRecord));
       shape->records[shape->nRecords].record.lineTo = lineTo;
-
       break;
     }
     case SHAPERECORD_CURVETO:
     {
-      CurveToRecord curveTo =
-	(CurveToRecord)malloc(sizeof(struct _curveToRecord));
-
-      memset(curveTo, 0, sizeof(struct _curveToRecord));
+      CurveToRecord curveTo = calloc(1, sizeof(struct _curveToRecord));
       shape->records[shape->nRecords].record.curveTo = curveTo;
-
       break;
     }
   }
@@ -310,11 +301,11 @@ void SWFShape_writeShapeRecord(SWFShape shape, ShapeRecord record)
 
 
 /* x,y relative to shape origin */
-void SWFShape_drawLineTo(SWFShape shape, int x, int y)
+void SWFShape_drawScaledLineTo(SWFShape shape, int x, int y)
 {
-  SWFShape_drawLine(shape, x-shape->xpos, y-shape->ypos);
+  SWFShape_drawScaledLine(shape, x-shape->xpos, y-shape->ypos);
 }
-void SWFShape_drawLine(SWFShape shape, int dx, int dy)
+void SWFShape_drawScaledLine(SWFShape shape, int dx, int dy)
 {
   ShapeRecord record;
 
@@ -336,17 +327,14 @@ void SWFShape_drawLine(SWFShape shape, int dx, int dy)
 		       shape->xpos, shape->ypos, shape->lineWidth);
 }
 
-void SWFShape_drawCurveTo(SWFShape shape,
-			  int controlx, int controly,
-			  int anchorx, int anchory)
+void SWFShape_drawScaledCurveTo(SWFShape shape, int controlx, int controly,
+				int anchorx, int anchory)
 {
-  SWFShape_drawCurve(shape,
-		     controlx-shape->xpos, controly-shape->ypos,
-		     anchorx-controlx, anchory-controly);
+  SWFShape_drawScaledCurve(shape, controlx-shape->xpos, controly-shape->ypos,
+			   anchorx-controlx, anchory-controly);
 }
 
-void SWFShape_drawCurve(SWFShape shape,
-			int controldx, int controldy,
+void SWFShape_drawScaledCurve(SWFShape shape, int controldx, int controldy,
 			int anchordx, int anchordy)
 {
   ShapeRecord record;
@@ -385,9 +373,9 @@ static int SWFShape_addLineStyle(SWFShape shape, unsigned short width,
 				 byte r, byte g, byte b, byte a)
 {
   if(shape->nLines%STYLE_INCREMENT == 0)
-    shape->lines = (SWFLineStyle *)realloc(shape->lines,
-					    (shape->nLines+STYLE_INCREMENT) *
-					    sizeof(SWFLineStyle));
+    shape->lines = realloc(shape->lines,
+			   (shape->nLines+STYLE_INCREMENT) *
+			   sizeof(SWFLineStyle));
 
   shape->lines[shape->nLines] = newSWFLineStyle(width, r, g, b, a);
 
@@ -459,9 +447,9 @@ static SWFFillStyle addFillStyle(SWFShape shape, SWFFillStyle fill)
   }
 
   if(shape->nFills%STYLE_INCREMENT == 0)
-    shape->fills = (SWFFillStyle *)realloc(shape->fills,
-					   (shape->nFills+STYLE_INCREMENT) *
-					   sizeof(SWFFillStyle));
+    shape->fills = realloc(shape->fills,
+			   (shape->nFills+STYLE_INCREMENT) *
+			   sizeof(SWFFillStyle));
 
   fill->idx = shape->nFills+1;
   shape->fills[shape->nFills] = fill;
@@ -473,7 +461,7 @@ static SWFFillStyle addFillStyle(SWFShape shape, SWFFillStyle fill)
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
 					byte r, byte g, byte b, byte a)
 {
-  SWFFillStyle fill = (SWFFillStyle)malloc(FILLSTYLE_SIZE);
+  SWFFillStyle fill = calloc(1, FILLSTYLE_SIZE);
 
   fill->type = SWF_FILL_SOLID;
   fill->data.solid.r = r;
@@ -488,7 +476,7 @@ SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
 SWFFillStyle SWFShape_addGradientFillStyle(SWFShape shape,
 					   SWFGradient gradient, byte flags)
 {
-  SWFFillStyle fill = (SWFFillStyle)malloc(FILLSTYLE_SIZE);
+  SWFFillStyle fill = calloc(1, FILLSTYLE_SIZE);
 
   if(flags == SWF_FILL_RADIAL_GRADIENT)
     fill->type = SWF_FILL_RADIAL_GRADIENT;
@@ -504,7 +492,7 @@ SWFFillStyle SWFShape_addGradientFillStyle(SWFShape shape,
 SWFFillStyle SWFShape_addBitmapFillStyle(SWFShape shape,
 					 SWFBitmap bitmap, byte flags)
 {
-  SWFFillStyle fill = (SWFFillStyle)malloc(FILLSTYLE_SIZE);
+  SWFFillStyle fill = calloc(1, FILLSTYLE_SIZE);
 
   if(flags == SWF_FILL_CLIPPED_BITMAP)
     fill->type = SWF_FILL_CLIPPED_BITMAP;
@@ -561,7 +549,7 @@ void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 
 
 /* move pen relative to shape origin */
-void SWFShape_moveTo(SWFShape shape, int x, int y)
+void SWFShape_moveScaledPenTo(SWFShape shape, int x, int y)
 {
   ShapeRecord record;
 
@@ -583,17 +571,114 @@ void SWFShape_moveTo(SWFShape shape, int x, int y)
   }
 }
 
-void SWFShape_moveToRelative(SWFShape shape, int x, int y)
+void SWFShape_moveScaledPen(SWFShape shape, int x, int y)
 {
-  SWFShape_moveTo(shape, shape->xpos+x, shape->ypos+y);
+  SWFShape_moveScaledPenTo(shape, shape->xpos+x, shape->ypos+y);
 }
 
-int SWFShape_getPenX(SWFShape shape)
+int SWFShape_getScaledPenX(SWFShape shape)
 {
   return shape->xpos;
 }
 
-int SWFShape_getPenY(SWFShape shape)
+int SWFShape_getScaledPenY(SWFShape shape)
 {
   return shape->ypos;
+}
+
+
+/* yes, this is a total hack. */
+
+#include "read.c"
+
+void SWFShape_drawGlyph(SWFShape shape, SWFFont font, int c)
+{
+  byte *p = SWFFont_findCharacterGlyph(font, c);
+  byte **f = &p;
+
+  int moveBits, x, y;
+  int straight, numBits;
+
+  /* moveTos in the record are absolute, but we want to draw from the current
+     location. grr. */
+
+  int startX = shape->xpos;
+  int startY = shape->ypos;
+
+  byteAlign();
+
+  if(readBits(f, 4) != 1) /* fill bits */
+    error("SWFShape_drawCharacter: was expecting fill bits = 1");
+
+  if(readBits(f, 4) != 0) /* line bits */
+    error("SWFShape_drawCharacter: was expecting line bits = 0");
+
+  /* now we get to parse the shape commands.  Oh boy. */
+
+  /* the first one will be a non-edge block- grab the moveto loc */
+
+  readBits(f, 6); /* type 0, etc. */
+
+  moveBits = readBits(f, 5);
+  x = readSBits(f, moveBits);
+  y = readSBits(f, moveBits);
+
+  SWFShape_moveScaledPenTo(shape, x+startX, y+startY);
+
+  if(readBits(f, 1) != 1) /* fill1 = 1 */
+    error("SWFShape_drawCharacter says: oops.  Was expecting fill1 = 1.");
+
+  /* we could just dump the rest if we had access to the shape's output buffer,
+     but this isn't that hard.. */
+
+  /* oh, and we aren't storing compiled shape bytes any more, anyway.. */
+
+  for(;;)
+  {
+    if(readBits(f, 1) == 0)
+    {
+      /* it's a moveTo or a shape end */
+
+      if(readBits(f, 5) == 0)
+	break;
+
+      moveBits = readBits(f, 5);
+      x = readSBits(f, moveBits);
+      y = readSBits(f, moveBits);
+
+      SWFShape_moveScaledPenTo(shape, x+startX, y+startY);
+      continue;
+    }
+
+    straight = readBits(f, 1);
+    numBits = readBits(f, 4)+2;
+
+    if(straight==1)
+    {
+      if(readBits(f, 1)) /* general line */
+      {
+	x = readSBits(f, numBits);
+	y = readSBits(f, numBits);
+
+	SWFShape_drawScaledLine(shape, x, y);
+      }
+      else
+	if(readBits(f, 1)) /* vert = 1 */
+	  SWFShape_drawScaledLine(shape, 0, readSBits(f, numBits));
+	else
+	  SWFShape_drawScaledLine(shape, readSBits(f, numBits), 0);
+    }
+    else
+    {
+      int controlX = readSBits(f, numBits);
+      int controlY = readSBits(f, numBits);
+      int anchorX = readSBits(f, numBits);
+      int anchorY = readSBits(f, numBits);
+
+      SWFShape_drawScaledCurve(shape, controlX, controlY, anchorX, anchorY);
+    }
+  }
+
+  /* no idea where the pen was left */
+  SWFShape_moveScaledPenTo(shape, startX, startY);
 }
