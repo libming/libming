@@ -399,15 +399,16 @@ add_imports()
 		char *spec = import_specs[i];
 		char *file = strtok(spec, ":");
 		char *sym;
+		char unchecked = 0;
 
    		if ( -1 == stat(file, &statbuf) )
 		{
-			fprintf(stderr, "Skipping imports from '%s': %s\n",
-				file, strerror(errno));
-			continue;
+			unchecked = 1;
 		}
 
-		printf("Importing symbols from %s:", file);
+		printf("Importing symbols from ");
+		if ( unchecked ) printf("[UNAVAILABLE] ");
+		printf("%s:", file);
 		fflush(stdout);
 		while ((sym=strtok(NULL, ",")))
 		{
@@ -432,6 +433,10 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.10  2004/09/29 10:07:29  strk
+ * ImportAssets executed even if import file is not found on filesystem.
+ * A warning is issued in that case.
+ *
  * Revision 1.9  2004/09/28 14:39:50  strk
  * Forced imported assets inclusion by mean of instantiation.
  * Symbols are instantiated inside a __shared_assets clip, which in turn
