@@ -20,13 +20,13 @@
 /* $Id$ */
 
 #include <stdlib.h>
-#include "../../config.h"
 #include "dbl.h"
 #include "block.h"
 #include "method.h"
 #include "error.h"
 #include "input.h"
 
+#include "ming_config.h"
 
 struct SWFDBLBitmap_s
 {

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "../../config.h"
+#include "ming_config.h"
 
 #if USE_PNG
 #include <png.h>

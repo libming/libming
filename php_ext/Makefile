@@ -3,6 +3,7 @@ include ../config.make
 prefix=`php-config --prefix`
 
 DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
+CFLAGS = -I../src
 
 CFILES = ming.c
 

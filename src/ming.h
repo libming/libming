@@ -38,7 +38,7 @@ extern "C" {
 #define MING_VERSION_TEXT  "0.9"
 
 /* do we enable gif / png functions? */
-#include "config.h"
+#include "ming_config.h"
 
 
 /***** Type definitions - avoid cyclic dependencies ****/

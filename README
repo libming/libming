@@ -47,7 +47,7 @@ no fancy autoconf nonsense here, just raw old-fashioned Makefiles.
     $ cd ming
 
    Decide whether you want to include gif or png image format
-   handling in Ming, then adjust the config.h, config.make,
+   handling in Ming, then adjust the ming_config.h, config.make,
    and Makefile to suit your system.
 
     $ vi <the appropriate files>

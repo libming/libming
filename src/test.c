@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../ming.h"
+#include "ming.h"
 
 #define WIDTH 320
 #define HEIGHT 240

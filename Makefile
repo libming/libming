@@ -14,7 +14,8 @@ install: install-common install-dynamic #install-static
 install-common:
 	install -d ${LIBDIR}
 	install -d ${INCLUDEDIR}
-	install -m 0644 ming.h ${INCLUDEDIR}
+	install -m 0644 src/ming.h ${INCLUDEDIR}
+	install -m 0644 src/ming_config.h ${INCLUDEDIR}
 	install -m 0644 mingpp.h ${INCLUDEDIR}
 
 install-dynamic: dynamic

@@ -22,7 +22,7 @@
 #include <math.h>
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "ming_config.h"
 #endif
 
 #include "php.h"

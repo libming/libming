@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../ming/ming.h"
+#include "ming.h"
 
 void usage()
 {
