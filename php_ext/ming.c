@@ -196,12 +196,15 @@ static SWFInput getInput(zval **zfile)
   SWFInput input;
 
   file = (FILE *)zend_fetch_resource(zfile, -1, "File-Handle", &type, 3,
-				     le_fopen, le_socket, popen);
+				     le_fopen, le_socket, le_popen);
 
   if(type == le_socket)
     input = newSWFInput_sock(*(int *)file);
   else
+  {
     input = newSWFInput_file(file);
+    zend_list_addref((*zfile)->value.lval);
+  }
 
   zend_list_addref(zend_list_insert(input, le_swfinputp));
 
@@ -277,7 +280,6 @@ static zend_function_entry swfbitmap_functions[] = {
 PHP_FUNCTION(swfbitmap_init)
 {
   zval **zfile, **zmask = NULL;
-  FILE *file, *mask;
   SWFBitmap bitmap;
   SWFInput input, maskinput;
   int ret, type;
@@ -313,7 +315,7 @@ PHP_FUNCTION(swfbitmap_init)
       zend_list_addref(zend_list_insert(maskinput, le_swfinputp));
     }
     else
-      mask = getInput(zmask);
+      maskinput = getInput(zmask);
 
     bitmap = newSWFJpegWithAlpha_fromInput(input, maskinput);
   }
@@ -3008,9 +3010,7 @@ PHP_MINIT_FUNCTION(ming)
   CONSTANT("SWFTEXTFIELD_WORDWRAP",       SWFTEXTFIELD_WORDWRAP);
   CONSTANT("SWFTEXTFIELD_DRAWBOX",        SWFTEXTFIELD_DRAWBOX);
   CONSTANT("SWFTEXTFIELD_NOSELECT",       SWFTEXTFIELD_NOSELECT);
-#ifdef SWFTEXTFIELD_HTML
   CONSTANT("SWFTEXTFIELD_HTML",           SWFTEXTFIELD_HTML);
-#endif
 
   /* flags for SWFTextField_align */
   CONSTANT("SWFTEXTFIELD_ALIGN_LEFT",     SWFTEXTFIELD_ALIGN_LEFT);
