@@ -137,7 +137,20 @@ SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 	return (SWFBlock)block;
 }
 
-
+int SWFSoundStream_getFrames(SWFSoundStream stream)
+{	int n, frameSize;
+	
+	if ( stream->sampleRate > 32000 )
+		frameSize = 1152;
+	else
+		frameSize = 576;
+	n = 0;
+	while(nextMP3Frame(stream->input) > 0)
+		n++;
+	SWFSoundStream_rewind(stream);
+	return n * frameSize / stream->samplesPerFrame;
+}
+	
 #define MP3_FRAME_SYNC			 0xFFE00000
 
 #define MP3_VERSION					 0x00180000
