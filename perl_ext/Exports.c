@@ -100,6 +100,7 @@ void export_cv(SV *class, SV *caller, char *sub)
     gv = gv_fetchpv(form("%_::%s", caller, sub), TRUE, SVt_PVCV); 
     GvCV(gv) = perl_get_cv(form("%_::%s", class, sub), TRUE); 
     GvIMPORTED_CV_on(gv); 
+    GvMULTI_on(gv);
 } 
 
 static void my_import(SV *pclass, SV *caller, SV *sv)
