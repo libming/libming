@@ -1,3 +1,8 @@
+2002-09-05 01:37  erich
+
+	* perl_ext/Makefile.PL: added "-lz" so it links the zlib as well
+	my perl scripts now work again, with perl 5.8.0
+
 2002-09-03 20:25  opaque_ndst
 
 	* src/blocks/: block.c, blocktypes.h, font.c, font.h: made SWFFont
