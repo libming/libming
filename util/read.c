@@ -173,7 +173,7 @@ char *readString(FILE *f)
 
   while((c=(char)readUInt8(f)) != '\0')
   {
-    if(len<buflen-1)
+    if(len >= buflen-2)
     {
       buf = (char *)realloc(buf, sizeof(char)*(buflen+256));
       buflen += 256;
@@ -267,11 +267,12 @@ void dumpBuffer(unsigned char *buf, int length)
   for(;; ++l)
   {
     printf("%03x0: ", l);
+
     for(i=0; i<16; ++i)
     {
       if(i==8) putchar(' ');
 
-      printf("%02x ", buf[8*l+i]);
+      printf("%02x ", buf[16*l+i]);
       ++j;
 
       if(j==length)
@@ -294,8 +295,8 @@ void dumpBuffer(unsigned char *buf, int length)
     {
       if(k==8) putchar(' ');
 
-      if((buf[8*l+k] > 31) && (buf[8*l+k] < 128))
-	putchar(buf[8*l+k]);
+      if((buf[16*l+k] > 31) && (buf[16*l+k] < 128))
+	putchar(buf[16*l+k]);
       else
 	putchar('.');
     }
@@ -305,6 +306,7 @@ void dumpBuffer(unsigned char *buf, int length)
     if(j==length)
       break;
   }
+
   putchar('\n');
   putchar('\n');
 }
