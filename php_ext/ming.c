@@ -250,7 +250,7 @@ static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
 }
 
 /* not sure about the date to enter here.... */
-#if (ZEND_MODULE_API_NO > 20020429)
+#if (ZEND_MODULE_API_NO >= 20020429)
 
 static SWFInput getInput(zval **zfile TSRMLS_DC)
 {
