@@ -10,6 +10,7 @@
 package SWF::Action;
 use SWF ();
 
+$SWF::Action::VERSION = $SWF::VERSION;
 1;
 
 __END__
