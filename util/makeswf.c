@@ -331,7 +331,8 @@ main (int argc, char **argv)
 			continue;
 		}
 
-		printf("Compiling code from %s... ", filename);
+		printf("Compiling `%s' into frame %d... ",
+			filename, compiledfiles+1);
 		fflush(stdout);
 		lastcompilefailed=0;
 		ac = compileSWFActionCode(code);
@@ -476,6 +477,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.16  2005/03/28 08:08:52  strk
+ * Added frame layout printing.
+ *
  * Revision 1.15  2005/03/22 13:41:30  strk
  * Changed calling interface:
  * 	- all arguments are source files
