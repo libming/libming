@@ -1,3 +1,22 @@
+2003-01-07 21:54  whamann
+
+	* perl_ext/Constants.xs, php_ext/ming.c, src/blocks/textfield.h,
+	src/blocks/swf.h: 
+	new constant SWFTEXTFIELD_AUTOSIZE
+
+2003-01-07 21:25  whamann
+
+	* perl_ext/Button.xs, php_ext/ming.c, php_ext/php_ming.h,
+	src/actioncompiler/compile.c, src/actioncompiler/swf5compiler.flex,
+	src/actioncompiler/swf5compiler.y, src/movie.c,
+	src/blocks/button.c, src/blocks/button.h, src/blocks/swf.h,
+	src/blocks/text.c, src/blocks/text.h, src/blocks/textfield.c,
+	src/blocks/textfield.h: 
+	assorted changes: font handling - got rid of two annoying segfaults
+	button - support "track as menu" behaviour compiler - finished
+	things like ~ or &= ops compiler - if (...) { .... } else {
+	/*empty*/ } no longer crashes
+
 2003-01-04 19:44  soheil
 
 	* perl_ext/Morph.xs: Added refcnt of SWF::Shape
