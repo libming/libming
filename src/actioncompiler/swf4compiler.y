@@ -50,6 +50,8 @@
 %token POSTURL
 %token SUBSTR
 
+%token GETPROPERTY
+
 /* v3 functions */
 %token NEXTFRAME
 %token PREVFRAME
@@ -58,8 +60,12 @@
 %token TOGGLEQUALITY
 %token STOPSOUNDS
 %token GOTOFRAME
+%token GOTOANDPLAY
 %token FRAMELOADED
 %token SETTARGET
+
+/* high level functions */
+%token TELLTARGET
 
 /* these three are strdup'ed in compiler.flex, so free them here */
 %token <str> STRING
@@ -215,6 +221,44 @@ if_stmt
 		  bufferWriteS16($$, bufferLength($9));
 		  bufferConcat($$, $9); }			  /* ..here */
 
+	| IF '(' FRAMELOADED '(' expr ')' ')' stmt ELSE stmt
+		{ $$ = $5;
+		  bufferWriteU8($$, SWFACTION_WAITFORFRAMEEXPRESSION);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($10)+5);
+		  bufferConcat($$, $10);			  /* ..here */
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($8));
+		  bufferConcat($$, $8); }
+
+	| IF '(' FRAMELOADED '(' expr ')' ')' stmt
+		{ $$ = $5;
+		  bufferWriteU8($$, SWFACTION_WAITFORFRAMEEXPRESSION);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, 5);
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);	  /* ..here */
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($8));	  /* ..and then out */
+		  bufferConcat($$, $8); }
+
+	/* make this case cleaner.. */
+	| IF '(' '!' FRAMELOADED '(' expr ')' ')' stmt
+		{ $$ = $6;
+		  bufferWriteU8($$, SWFACTION_WAITFORFRAMEEXPRESSION);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
+		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($9));
+		  bufferConcat($$, $9); }			  /* ..here */
+
 	| IF '(' expr ')' stmt ELSE stmt
 		{ bufferWriteU8($3, SWFACTION_BRANCHIFTRUE);
 		  bufferWriteS16($3, 2);
@@ -343,6 +387,13 @@ void_function_call
 		  bufferWriteU8($$, SWFACTION_STOPDRAGMOVIE); }
 
 	| CALLFRAME '(' variable ')'
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $3, strlen($3)+1);
+		  bufferWriteU8($$, SWFACTION_CALLFRAME);
+		  bufferWriteS16($$, 0);
+		  free($3); }
+
+	| CALLFRAME '(' STRING ')'
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $3, strlen($3)+1);
 		  bufferWriteU8($$, SWFACTION_CALLFRAME);
@@ -482,6 +533,12 @@ void_function_call
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 0); } /* XXX - and stop */
 
+	| GOTOANDPLAY '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_GOTOEXPRESSION);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 1); } /* XXX - and play */
+
 	| SETTARGET '(' STRING ')'
 		{ $$ = newBuffer();
 		  bufferWriteU8($$, SWFACTION_SETTARGET);
@@ -492,6 +549,31 @@ void_function_call
 	| SETTARGET '(' expr ')'
 		{ $$ = $3;
 		  bufferWriteU8($$, SWFACTION_SETTARGETEXPRESSION); }
+
+	| TELLTARGET '(' STRING ')' stmt
+		{ $$ = newBuffer();
+			/* SetTarget(STRING) */
+		  bufferWriteU8($$, SWFACTION_SETTARGET);
+		  bufferWriteS16($$, strlen($3)+1);
+		  bufferWriteHardString($$, $3, strlen($3)+1);
+			/* stmt */
+		  bufferConcat($$, $5);
+			/* SetTarget('') */
+		  bufferWriteU8($$, SWFACTION_SETTARGET);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0);
+		  free($3); }
+
+	| TELLTARGET '(' expr ')' stmt
+		{ $$ = $3;
+			/* SetTarget(expr) */
+		  bufferWriteU8($$, SWFACTION_SETTARGETEXPRESSION); 
+			/* stmt */
+		  bufferConcat($$, $5);
+			/* SetTarget('') */
+		  bufferWriteU8($$, SWFACTION_SETTARGET);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0); }
 	;
 
 function_call
@@ -533,6 +615,13 @@ function_call
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $7);
 		  bufferWriteU8($$, SWFACTION_SUBSTRING); }
+
+	| GETPROPERTY '(' expr ',' STRING ')'
+		{ $$ = newBuffer();
+		  bufferConcat($$, $3);
+		  bufferWriteGetProperty($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
+		  free($5); }
 	;
 
 pf_expr

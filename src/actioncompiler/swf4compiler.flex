@@ -117,6 +117,8 @@ loadMovie	{ count();	return LOADMOVIE;	}
 loadVariables	{ count();	return LOADVARIABLES;	}
 substr		{ count();	return SUBSTR;	}
 
+getProperty	{ count();	return GETPROPERTY;	}
+
   /* getURL2 methods */
 post		{ count();	swf4lval.getURLMethod = GETURL_METHOD_POST;
 				return GETURL_METHOD;	}
@@ -134,8 +136,12 @@ stop		{ count();	return STOP;		}
 toggleQuality	{ count();	return TOGGLEQUALITY;	}
 stopSounds	{ count();	return STOPSOUNDS;	}
 gotoFrame	{ count();	return GOTOFRAME;	}
+gotoAndPlay	{ count();	return GOTOANDPLAY;	}
 frameLoaded	{ count();	return FRAMELOADED;	}
 setTarget	{ count();	return SETTARGET;	}
+
+  /* high level functions */
+tellTarget	{ count();	return TELLTARGET;	}
 
 
 this			{ count();      return THIS;	}
