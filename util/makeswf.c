@@ -1,4 +1,7 @@
 /*
+ * makeswf - a command line actionscript compiler
+ *
+ * Copyleft (g) 2003 strk@keybit.net
  *
  * Intro
  * -----
@@ -39,6 +42,7 @@
  * - Accept output version as parameter.
  * - Accept compression level as parameter.
  * - Accept -v for versioning and credits.
+ *
  */
 
 #include <stdio.h>
@@ -55,10 +59,6 @@
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
 #endif
-
-/*
- * Copyleft (g) 2003 strk@keybit.net
- */
 
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
@@ -300,6 +300,9 @@ preprocess (char *file, char *out)
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.2  2004/04/29 08:06:48  strk
+ * moved copyright notice on top
+ *
  * Revision 1.1  2004/04/26 09:12:13  strk
  * Added simple commandline actionscript compiler.
  *
