@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -21,116 +21,164 @@
 
 #include "character.h"
 #include "blocktypes.h"
+#include "morph.h"
 
 
-void SWFCharacterInit(SWFCharacter character)
+void
+SWFCharacterInit(SWFCharacter character)
 {
-  SWFBlockInit((SWFBlock)character);
+	SWFBlockInit((SWFBlock)character);
 
-  character->id = 0;
-  character->bounds = NULL;
+	character->id = 0;
+	character->bounds = NULL;
 
-  character->dependencies = NULL;
-  character->nDependencies = 0;
-  character->getDependencies = NULL;
+	character->dependencies = NULL;
+	character->nDependencies = 0;
+
+	character->isFinished = FALSE;
 }
 
 
-void destroySWFCharacter(SWFCharacter character)
+void
+destroySWFCharacter(SWFBlock block)
 {
-  SWFCharacter_clearDependencies(character);
+	SWFCharacter character = (SWFCharacter)block;
 
-  if(character->bounds != NULL)
-    destroySWFRect(character->bounds);
+	if ( character->dependencies != NULL )
+		free(character->dependencies);
 
-  destroySWFBlock((SWFBlock)character);
+	if ( character->bounds != NULL )
+		destroySWFRect(character->bounds);
+
+	// destroySWFBlock((SWFBlock)character);
+
+	free(character);
 }
 
 
-void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency)
+void
+SWFCharacter_addDependency(SWFCharacter character, SWFCharacter dependency)
 {
-  character->dependencies = realloc(character->dependencies,
-				    sizeof(SWFBlock) *
-				    (character->nDependencies+1));
+	character->dependencies =
+		realloc(character->dependencies,
+						sizeof(SWFCharacter) * (character->nDependencies + 1));
 
-  character->dependencies[character->nDependencies] = dependency;
-  ++character->nDependencies;
+	character->dependencies[character->nDependencies] = dependency;
+	++character->nDependencies;
 }
 
 
 void SWFCharacter_setID(SWFCharacter character, int id)
 {
-  character->id = id;
+	character->id = id;
 }
 
 
 int SWFCharacter_getID(SWFCharacter character)
 {
-  return character->id;
+	return character->id;
+}
+
+
+BOOL
+SWFCharacter_getDependencies(SWFCharacter character,
+														 SWFCharacter** depsPtr, int* nDepsPtr)
+{
+	int i;
+	int nDeps = *nDepsPtr;
+	SWFCharacter* deps = *depsPtr;
+
+	if ( BLOCK(character)->type == SWF_DEFINEMORPHSHAPE )
+		character = (SWFCharacter)SWFMorph_getShape1((SWFMorph)character);
+
+	for ( i = 0; i < character->nDependencies; ++i )
+	{
+		SWFCharacter c = character->dependencies[i];
+
+		if ( !SWFBlock_isDefined((SWFBlock)c) )
+		{
+			deps = realloc(deps, sizeof(SWFCharacter) * (nDeps + 1));
+			deps[nDeps] = c;
+			++nDeps;
+		}
+	}
+
+	if ( nDeps == *nDepsPtr )
+		return FALSE;
+
+	*depsPtr = deps;
+	*nDepsPtr = nDeps;
+
+	return TRUE;
 }
 
 
 int
-SWFCharacter_getDependencies(SWFCharacter character, SWFBlock** outBlocks)
+SWFCharacter_getScaledWidth(SWFCharacter character)
 {
-  if ( character->getDependencies == NULL )
-  {
-    *outBlocks = character->dependencies;
-    return character->nDependencies;
-  }
-  else
-    return character->getDependencies(character, outBlocks);
+	return SWFRect_getWidth(character->bounds);
 }
 
 
-void SWFCharacter_clearDependencies(SWFCharacter character)
+int
+SWFCharacter_getScaledHeight(SWFCharacter character)
 {
-  character->nDependencies = 0;
-
-  if(character->dependencies != NULL)
-    sec_free((void**)&character->dependencies);
-
+	return SWFRect_getHeight(character->bounds);
 }
 
 
-int SWFCharacter_getScaledWidth(SWFCharacter character)
+SWFRect
+SWFCharacter_getBounds(SWFCharacter character)
 {
-  return SWFRect_getWidth(character->bounds);
-}
-
-
-int SWFCharacter_getScaledHeight(SWFCharacter character)
-{
-  return SWFRect_getHeight(character->bounds);
-}
-
-
-SWFRect SWFCharacter_getBounds(SWFCharacter character)
-{
-  return character->bounds;
+	return character->bounds;
 }
 
 
 /* rather, should it go on the display list..
-   character is a bit of a sloppy category now */
+	 "character" is a bit of a sloppy category now */
 
-int SWFBlock_isCharacter(SWFBlock block)
+BOOL
+SWFBlock_isCharacter(SWFBlock block)
 {
-  SWFBlocktype type = block->type;
+	SWFBlocktype type = block->type;
 
-  if(type == SWF_DEFINETEXT    || type == SWF_DEFINETEXT2      ||
-     type == SWF_DEFINESHAPE   || type == SWF_DEFINESHAPE2     ||
-     type == SWF_DEFINESHAPE3  || type == SWF_DEFINEMORPHSHAPE ||
-     type == SWF_DEFINESPRITE  || type == SWF_DEFINEBUTTON     ||
-     type == SWF_DEFINEBUTTON2 || type == SWF_DEFINETEXT2      ||
-     type == SWF_DEFINEBITS ||
-     type == SWF_DEFINEBITSJPEG2 ||
-     type == SWF_DEFINEBITSJPEG3 ||
-     type == SWF_DEFINELOSSLESS ||
-     type == SWF_DEFINELOSSLESS2 ||
-     type == SWF_DEFINEFONT || type == SWF_DEFINEFONT2 ||
-     type == SWF_DEFINEEDITTEXT)
-    return TRUE;
-  else
-    return FALSE;
+	if ( type == SWF_DEFINETEXT		 || type == SWF_DEFINETEXT2			 ||
+			 type == SWF_DEFINESHAPE	 || type == SWF_DEFINESHAPE2		 ||
+			 type == SWF_DEFINESHAPE3	 || type == SWF_DEFINEMORPHSHAPE ||
+			 type == SWF_DEFINESPRITE	 || type == SWF_DEFINEBUTTON		 ||
+			 type == SWF_DEFINEBUTTON2 || type == SWF_DEFINETEXT2			 ||
+			 type == SWF_DEFINEBITS ||
+			 type == SWF_DEFINEBITSJPEG2 ||
+			 type == SWF_DEFINEBITSJPEG3 ||
+			 type == SWF_DEFINELOSSLESS ||
+			 type == SWF_DEFINELOSSLESS2 ||
+			 type == SWF_DEFINEFONT || type == SWF_DEFINEFONT2 ||
+			 type == SWF_DEFINEEDITTEXT )
+	{
+		return TRUE;
+	}
+	else
+		return FALSE;
 }
+
+
+void
+SWFCharacter_setFinished(SWFCharacter character)
+{
+	character->isFinished = TRUE;
+}
+
+
+BOOL
+SWFCharacter_isFinished(SWFCharacter character)
+{
+	return character->isFinished;
+}
+
+
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */

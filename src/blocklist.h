@@ -22,7 +22,6 @@
 
 typedef struct SWFBlockList_s *SWFBlockList;
 
-#include "libming.h"
 #include "blocks/block.h"
 #include "blocks/sprite.h"
 

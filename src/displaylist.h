@@ -23,8 +23,6 @@
 typedef struct SWFDisplayItem_s *SWFDisplayItem;
 typedef struct SWFDisplayList_s *SWFDisplayList;
 
-#include "libming.h"
-
 #include "blocklist.h"
 #include "position.h"
 

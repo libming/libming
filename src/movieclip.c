@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,126 +22,146 @@
 
 #include "movieclip.h"
 #include "blocks/sprite.h"
+#include "blocks/shape.h"
+#include "blocks/morph.h"
+#include "blocks/button.h"
+#include "blocks/text.h"
 
 struct SWFMovieClip_s
 {
-  struct SWFSprite_s sprite;
+	struct SWFSprite_s sprite;
 
-  SWFBlockList blockList;
-  SWFDisplayList displayList;
-  unsigned short nFrames;
+	SWFBlockList blockList;
+	SWFDisplayList displayList;
+	unsigned short nFrames;
 };
 
 
-void destroySWFMovieClip(SWFMovieClip clip)
+void
+destroySWFMovieClip(SWFMovieClip clip)
 {
-  destroySWFBlockList(clip->blockList);
-  destroySWFDisplayList(clip->displayList);
-  destroySWFSprite((SWFBlock)clip);
+	destroySWFBlockList(clip->blockList);
+	destroySWFDisplayList(clip->displayList);
+	destroySWFSprite((SWFBlock)clip);
 }
 
 
-SWFMovieClip newSWFMovieClip()
+SWFMovieClip
+newSWFMovieClip()
 {
-  SWFMovieClip clip = (SWFMovieClip)newSWFSprite();
-  clip = realloc(clip, sizeof(struct SWFMovieClip_s));
+	SWFMovieClip clip = (SWFMovieClip)newSWFSprite();
+	clip = realloc(clip, sizeof(struct SWFMovieClip_s));
 
-  clip->blockList = newSWFBlockList();
-  clip->displayList = newSWFSpriteDisplayList();
-  return clip;
+	clip->blockList = newSWFBlockList();
+	clip->displayList = newSWFSpriteDisplayList();
+
+	return clip;
 }
 
 
-void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
+void
+SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
 {
-  SWFSprite_setNumberOfFrames((SWFSprite)clip, totalFrames);
+	SWFSprite_setNumberOfFrames((SWFSprite)clip, totalFrames);
 }
 
 
-void SWFMovieClip_addBlock(SWFMovieClip movie, SWFBlock block)
+void
+SWFMovieClip_setSoundStream(SWFMovieClip clip,
+														SWFSoundStream sound, float rate)
 {
-  SWFBlockList_addBlock(movie->blockList, block);
+	SWFBlock block = SWFSoundStream_getStreamHead(sound, rate);
+	
+	if ( block != NULL )
+	{
+		SWFBlockList_addBlock(clip->blockList, block);
+		SWFDisplayList_setSoundStream(clip->displayList, sound);
+	}
 }
 
 
-void SWFMovieClip_setSoundStream(SWFMovieClip clip,
-				 SWFSoundStream sound, float rate)
+SWFSoundInstance
+SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound)
 {
-  SWFBlock block = SWFSoundStream_getStreamHead(sound, rate);
-  
-  if ( block != NULL )
-  {
-    SWFMovieClip_addBlock(clip, block);
-    SWFDisplayList_setSoundStream(clip->displayList, sound);
-  }
+	SWFSoundInstance inst = newSWFSoundInstance(sound);
+
+	SWFCharacter_addDependency((SWFCharacter)clip, (SWFCharacter)sound);
+	SWFBlockList_addBlock(clip->blockList, (SWFBlock)inst);
+
+	return inst;
 }
 
 
-SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound)
+void
+SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound)
 {
-  SWFSoundInstance inst = newSWFSoundInstance(sound);
+	SWFCharacter_addDependency((SWFCharacter)clip, (SWFCharacter)sound);
 
-  if(!SWFBlock_isDefined((SWFBlock)sound))
-    SWFMovieClip_addBlock(clip, (SWFBlock)sound);
-
-  SWFMovieClip_addBlock(clip, (SWFBlock)inst);
-
-  return inst;
+	SWFBlockList_addBlock(clip->blockList,
+												(SWFBlock)newSWFSoundInstance_stop(sound));
 }
 
 
-void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound)
+SWFDisplayItem
+SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 {
-  SWFSoundInstance inst = newSWFSoundInstance_stop(sound);
+	if ( SWFBlock_getType(block) == SWF_DEFINEBITS ||
+			 SWFBlock_getType(block) == SWF_DEFINEBITSJPEG2 ||
+			 SWFBlock_getType(block) == SWF_DEFINEBITSJPEG3 ||
+			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
+			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS2 )
+	{
+		block = (SWFBlock)newSWFShapeFromBitmap((SWFBitmap)block);
+	}
 
-  SWFCharacter_addDependency((SWFCharacter)clip, (SWFBlock)sound);
-  SWFMovieClip_addBlock(clip, (SWFBlock)inst);
+	if ( SWFBlock_isCharacter(block) )
+	{
+		SWFCharacter_getDependencies((SWFCharacter)block,
+																 &CHARACTER(clip)->dependencies,
+																 &CHARACTER(clip)->nDependencies);
+
+		SWFCharacter_addDependency((SWFCharacter)clip, (SWFCharacter)block);
+
+		SWFCharacter_setFinished((SWFCharacter)block);
+
+		return SWFDisplayList_add(clip->displayList, (SWFCharacter)block);
+	}
+	else
+	{
+		/* XXX - make sure it's a legit block for a sprite */
+		SWFBlockList_addBlock(clip->blockList, block);
+	}
+
+	return NULL;
 }
 
 
-SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
+void
+SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item)
 {
-  if ( SWFBlock_isCharacter(block) )
-  {
-    /* movie clip aquires dependencies from character */
-    SWFBlock *deps;
-    int i, nDeps = SWFCharacter_getDependencies((SWFCharacter)block, &deps);
-
-    if ( nDeps > 0 )
-    {
-      for ( i=0; i<nDeps; ++i )
-	SWFCharacter_addDependency((SWFCharacter)clip, deps[i]);
-
-      SWFCharacter_clearDependencies((SWFCharacter)block);
-    }
-
-    SWFCharacter_addDependency((SWFCharacter)clip, block);
-
-    return SWFDisplayList_add(clip->displayList, (SWFCharacter)block);
-  }
-  else
-    /* XXX - make sure it's a legit block for a sprite */
-    SWFBlockList_addBlock(clip->blockList, block);
-
-  return NULL;
+	SWFDisplayItem_remove(item);
 }
 
 
-void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item)
+void
+SWFMovieClip_labelFrame(SWFMovieClip clip, char *label)
 {
-  SWFDisplayItem_remove(item);
+	SWFSprite_addBlock((SWFSprite)clip, (SWFBlock)newSWFFrameLabelBlock(label));
 }
 
 
-void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label)
+void
+SWFMovieClip_nextFrame(SWFMovieClip clip)
 {
-  SWFSprite_addBlock((SWFSprite)clip, (SWFBlock)newSWFFrameLabelBlock(label));
+	SWFDisplayList_writeBlocks(clip->displayList, clip->blockList);
+	SWFBlockList_addToSprite(clip->blockList, (SWFSprite)clip);
+	SWFSprite_addBlock((SWFSprite)clip, newSWFShowFrameBlock());
 }
 
 
-void SWFMovieClip_nextFrame(SWFMovieClip clip)
-{
-  SWFDisplayList_writeBlocks(clip->displayList, clip->blockList);
-  SWFBlockList_addToSprite(clip->blockList, (SWFSprite)clip);
-  SWFSprite_addBlock((SWFSprite)clip, newSWFShowFrameBlock());
-}
+/*
+ * Local variables:
+ * tab-width: 2
+ * c-basic-offset: 2
+ * End:
+ */

@@ -1,6 +1,6 @@
 /*
     Ming, an SWF output library
-    Copyright (C) 2001  Opaque Industries - http://www.opaque.net/
+    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -59,36 +59,39 @@ struct SWFDisplayList_s
 };
 
 
-void destroySWFDisplayItem(SWFDisplayItem item)
+void
+destroySWFDisplayItem(SWFDisplayItem item)
 {
-	if(item->position)
+	if ( item->position )
 		destroySWFPosition(item->position);
 
-	if(item->matrix)
+	if ( item->matrix )
 		destroySWFMatrix(item->matrix);
 
 	/* character is freed in blocklist */
 
-	sec_free((void**)&item);
+	free(item);
 }
 
 
-void destroySWFDisplayList(SWFDisplayList list)
+void
+destroySWFDisplayList(SWFDisplayList list)
 {
 	SWFDisplayItem item = list->head, next;
 
-	while(item != NULL)
+	while ( item != NULL )
 	{
 		next = item->next;
 		destroySWFDisplayItem(item);
 		item = next;
 	}
 
-	sec_free((void**)&list);
+	free(list);
 }
 
 
-SWFDisplayList newSWFDisplayList()
+SWFDisplayList
+newSWFDisplayList()
 {
 	SWFDisplayList list = malloc(sizeof(struct SWFDisplayList_s));
 
@@ -102,7 +105,8 @@ SWFDisplayList newSWFDisplayList()
 }
 
 
-SWFDisplayList newSWFSpriteDisplayList()
+SWFDisplayList
+newSWFSpriteDisplayList()
 {
 	SWFDisplayList list = malloc(sizeof(struct SWFDisplayList_s));
 
@@ -116,7 +120,8 @@ SWFDisplayList newSWFSpriteDisplayList()
 }
 
 
-SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
+SWFDisplayItem
+SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 {
 	SWFDisplayItem item = malloc(sizeof(struct SWFDisplayItem_s));
 
@@ -133,7 +138,7 @@ SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 	SWFPlaceObject2Block_setCharacter(item->block, character);
 	SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
 
-	if(list->tail)
+	if ( list->tail )
 		list->tail->next = item;
 	else
 		list->head = item;
@@ -143,41 +148,46 @@ SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 }
 
 
-void SWFDisplayItem_remove(SWFDisplayItem item)
+void
+SWFDisplayItem_remove(SWFDisplayItem item)
 {
 	item->flags |= ITEM_REMOVED;
 }
 
 
-static void checkBlock(SWFDisplayItem item)
+static void
+checkBlock(SWFDisplayItem item)
 {
-	if(item->block == NULL)
+	if ( item->block == NULL )
 		item->block = newSWFPlaceObject2Block(item->depth);
 
-	if((item->flags & ITEM_NEW) == 0)
+	if ( (item->flags & ITEM_NEW) == 0 )
 		SWFPlaceObject2Block_setMove(item->block);
 }
 
 
-SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item)
+SWFCharacter
+SWFDisplayItem_getCharacter(SWFDisplayItem item)
 {
 	return item->character;
 }
 
 
-int SWFDisplayItem_getDepth(SWFDisplayItem item)
+int
+SWFDisplayItem_getDepth(SWFDisplayItem item)
 {
 	return item->depth;
 }
 
 
-void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
+void
+SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
 {
 	item->depth = depth;
 
 	checkBlock(item);
 
-	if((item->flags & ITEM_NEW) == 0)
+	if ( (item->flags & ITEM_NEW) == 0 )
 	{
 		/* warn.. */
 		return;
@@ -187,7 +197,8 @@ void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
 }
 
 
-void SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
+void
+SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
 {
 	checkBlock(item);
 	SWFPosition_move(item->position, x, y);
@@ -195,7 +206,8 @@ void SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
 }
 
 
-void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
+void
+SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
 {
 	checkBlock(item);
 	SWFPosition_moveTo(item->position, x, y);
@@ -203,22 +215,19 @@ void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
 }
 
 
-void SWFDisplayItem_getPosition(SWFDisplayItem item, float *x, float *y)
+void
+SWFDisplayItem_getPosition(SWFDisplayItem item, float *x, float *y)
 {
 	// returns the current position of this display item into the provided
 	// pointers, respects NULL values
 
 	checkBlock(item);
-
-	if(x != NULL) 
-		*x = SWFPosition_getX(item->position);
-
-	if(y != NULL)
-		*y = SWFPosition_getY(item->position);
+	SWFPosition_getXY(item->position, x, y);
 }
 
 
-void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees)
+void
+SWFDisplayItem_rotate(SWFDisplayItem item, float degrees)
 {
 	checkBlock(item);
 	SWFPosition_rotate(item->position, degrees);
@@ -226,7 +235,8 @@ void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees)
 }
 
 
-void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees)
+void
+SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees)
 {
 	checkBlock(item);
 	SWFPosition_rotateTo(item->position, degrees);
@@ -234,19 +244,21 @@ void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees)
 }
 
 
-void SWFDisplayItem_getRotation(SWFDisplayItem item, float *degrees)
+void
+SWFDisplayItem_getRotation(SWFDisplayItem item, float *degrees)
 {
 	// returns the current rotation of this display item into the given
 	// pointer, respects NULL value
 
 	checkBlock(item);
 
-	if(degrees != NULL)
+	if ( degrees != NULL )
 		*degrees = SWFPosition_getRotation(item->position);
 }
 
 
-void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale)
+void
+SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale)
 {
 	checkBlock(item);
 	SWFPosition_scaleXY(item->position, xScale, yScale);
@@ -254,7 +266,8 @@ void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale)
 }
 
 
-void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale)
+void
+SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale)
 {
 	checkBlock(item);
 	SWFPosition_scaleXYTo(item->position, xScale, yScale);
@@ -262,22 +275,19 @@ void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale)
 }
 
 
-void SWFDisplayItem_getScale(SWFDisplayItem item, float *xScale, float *yScale)
+void
+SWFDisplayItem_getScale(SWFDisplayItem item, float *xScale, float *yScale)
 {
 	// returns the current x- and y-scale of this display item into the given
 	// pointers, respects NULL values
 
 	checkBlock(item);
-
-	if(xScale != NULL)
-		*xScale = SWFPosition_getXScale(item->position);
-
-	if(yScale != NULL)
-		*yScale = SWFPosition_getYScale(item->position);
+	SWFPosition_getXYScale(item->position, xScale, yScale);
 }
 
 
-void SWFDisplayItem_skewX(SWFDisplayItem item, float x)
+void
+SWFDisplayItem_skewX(SWFDisplayItem item, float x)
 {
 	checkBlock(item);
 	SWFPosition_skewX(item->position, x);
@@ -285,7 +295,8 @@ void SWFDisplayItem_skewX(SWFDisplayItem item, float x)
 }
 
 
-void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x)
+void
+SWFDisplayItem_skewXTo(SWFDisplayItem item, float x)
 {
 	checkBlock(item);
 	SWFPosition_skewXTo(item->position, x);
@@ -293,7 +304,8 @@ void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x)
 }
 
 
-void SWFDisplayItem_skewY(SWFDisplayItem item, float y)
+void
+SWFDisplayItem_skewY(SWFDisplayItem item, float y)
 {
 	checkBlock(item);
 	SWFPosition_skewY(item->position, y);
@@ -301,7 +313,8 @@ void SWFDisplayItem_skewY(SWFDisplayItem item, float y)
 }
 
 
-void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
+void
+SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
 {
 	checkBlock(item);
 	SWFPosition_skewYTo(item->position, y);
@@ -309,24 +322,20 @@ void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
 }
 
 
-void SWFDisplayItem_getSkew(SWFDisplayItem item, float *xSkew, 
-														float *ySkew)
+void
+SWFDisplayItem_getSkew(SWFDisplayItem item, float *xSkew, float *ySkew)
 {
 	// returns the current x- and y-skew of this display item into the given
 	// pointers, respects NULL values
 
 	checkBlock(item);
-
-	if(xSkew != NULL)
-		*xSkew = SWFPosition_getXSkew(item->position);
-
-	if(ySkew != NULL)
-		*ySkew = SWFPosition_getYSkew(item->position);
+	SWFPosition_getXYSkew(item->position, xSkew, ySkew);
 }
 
 
-void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b,
-						float c, float d, float x, float y)
+void
+SWFDisplayItem_setMatrix(SWFDisplayItem item,
+												 float a, float b, float c, float d, float x, float y)
 {
 	checkBlock(item);
 	SWFPosition_setMatrix(item->position, a, b, c, d, x, y);
@@ -334,11 +343,12 @@ void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b,
 }
 
 
-void SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
+void
+SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 {
 	checkBlock(item);
 
-	if((item->flags & ITEM_NEW) == 0)
+	if ( (item->flags & ITEM_NEW) == 0 )
 	{
 		/* warn.. */
 		return;
@@ -349,11 +359,12 @@ void SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 }
 
 
-void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel)
+void
+SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel)
 {
 	checkBlock(item);
 
-	if((item->flags & ITEM_NEW) == 0)
+	if ( (item->flags & ITEM_NEW) == 0 )
 	{
 		/* warn.. */
 		return;
@@ -364,41 +375,45 @@ void SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel)
 }
 
 
-void SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio)
+void
+SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio)
 {
 	checkBlock(item);
 	SWFPlaceObject2Block_setRatio(item->block, (int)rint(ratio*65535));
 }
 
 
-void SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform)
+void
+SWFDisplayItem_setCXform(SWFDisplayItem item, SWFCXform cXform)
 {
 	checkBlock(item);
 	SWFPlaceObject2Block_setCXform(item->block, cXform);
 }
 
 
-void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
-				int r, int g, int b, int a)
+void
+SWFDisplayItem_setColorAdd(SWFDisplayItem item,	int r, int g, int b, int a)
 {
 	checkBlock(item);
 	SWFPlaceObject2Block_setColorAdd(item->block, r, g, b, a);
 }
 
 
-void SWFDisplayItem_setColorMult(SWFDisplayItem item,
-				 float r, float g, float b, float a)
+void
+SWFDisplayItem_setColorMult(SWFDisplayItem item,
+														float r, float g, float b, float a)
 {
 	checkBlock(item);
 	SWFPlaceObject2Block_setColorMult(item->block, r, g, b, a);
 }
 
 
-void SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags)
+void
+SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags)
 {
 	checkBlock(item);
 
-	if((item->flags & ITEM_NEW) == 0)
+	if ( (item->flags & ITEM_NEW) == 0 )
 	{
 		/* warn.. */
 		return;
@@ -409,13 +424,15 @@ void SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags)
 }
 
 
-void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream)
+void
+SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream)
 {
 	list->soundStream = stream;
 }
 
 
-void SWFDisplayList_rewindSoundStream(SWFDisplayList list)
+void
+SWFDisplayList_rewindSoundStream(SWFDisplayList list)
 {
 	// XXX - this is a hack, should be replaced..
 
@@ -424,27 +441,28 @@ void SWFDisplayList_rewindSoundStream(SWFDisplayList list)
 }
 
 
-void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
+void
+SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 {
 	SWFDisplayItem item = list->head, last = NULL, next;
 	SWFCharacter character;
 
-	if(list->soundStream)
+	if ( list->soundStream )
 	{
 		SWFBlock stream = SWFSoundStream_getStreamBlock(list->soundStream);
 
-		if(stream)
+		if ( stream )
 			SWFBlockList_addBlock(blocklist, stream);
 	}
 
-	while(item != NULL)
+	while ( item != NULL )
 	{
 		character = item->character;
 
-		if ( character != NULL )
-			SWFBlockList_resolveCharacterDependencies(blocklist, character);
+		//		if ( character != NULL )
+		//			SWFBlockList_resolveCharacterDependencies(blocklist, character);
 
-		if(item->flags & ITEM_REMOVED)
+		if ( item->flags & ITEM_REMOVED )
 		{
 			if(item == list->head)
 				list->head = item->next;
@@ -464,14 +482,14 @@ void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 			continue;
 		}
 
-		if(character != NULL &&
-			 !SWFBlock_isDefined((SWFBlock)character) &&
-			 !list->isSprite)
+		if ( character != NULL &&
+				 !SWFBlock_isDefined((SWFBlock)character) &&
+				 !list->isSprite )
 		{
 			SWFBlockList_addBlock(blocklist, (SWFBlock)character);
 		}
 
-		if(item->block != NULL)
+		if ( item->block != NULL )
 			SWFBlockList_addBlock(blocklist, (SWFBlock)item->block);
 
 		item->flags = 0;

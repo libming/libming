@@ -49,60 +49,74 @@ struct SWFCharacter_s
      adds them to the movie */
 
   int nDependencies;
-  SWFBlock *dependencies;
+  SWFCharacter *dependencies;
 
-  /* a morph needs to acquire dependencies from its shapes.
-     this is weird, but the easiest way I can think of to do this. */
+  /* We shouldn't allow users to modify characters after they've been added
+     to a container- movie, sprite, or button. */
 
-  int (*getDependencies)(SWFCharacter character, SWFBlock** outBlocks);
+  BOOL isFinished;
 };
 
 
 /* initialize character values to something sane */
 
-void SWFCharacterInit(SWFCharacter character);
+void
+SWFCharacterInit(SWFCharacter character);
 
 
 /* destroy this character */
 
-void destroySWFCharacter(SWFCharacter character);
+void
+destroySWFCharacter(SWFBlock block);
 
 
 /* marks the given block as a dependency of the character- that is,
    we should define the block before defining the character */
 
-void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency);
+void
+SWFCharacter_addDependency(SWFCharacter character, SWFCharacter dependency);
 
 
 /* returns the character's dependency list */
 
-int
-SWFCharacter_getDependencies(SWFCharacter character, SWFBlock** outBlocks);
-
-
-/* clears the character's dependecy list */
-
-void SWFCharacter_clearDependencies(SWFCharacter character);
+BOOL
+SWFCharacter_getDependencies(SWFCharacter character,
+			     SWFCharacter** depsPtr, int* nDepsPtr);
 
 
 /* returns the scaled (i.e., in twips) width of the character */
 
-int SWFCharacter_getScaledWidth(SWFCharacter character);
+int
+SWFCharacter_getScaledWidth(SWFCharacter character);
 
 
 /* returns the scaled (i.e., in twips) height of the character */
 
-int SWFCharacter_getScaledHeight(SWFCharacter character);
+int
+SWFCharacter_getScaledHeight(SWFCharacter character);
 
 
 /* returns the character's SWFRect bounds object */
 
-SWFRect SWFCharacter_getBounds(SWFCharacter character);
+SWFRect
+SWFCharacter_getBounds(SWFCharacter character);
 
 
-/* returns non-zero if the given block is a character type */
+/* returns TRUE if the given block is a character type, else FALSE */
 
-int SWFBlock_isCharacter(SWFBlock block);
+BOOL
+SWFBlock_isCharacter(SWFBlock block);
 
+
+/* notify the character that it's been added to a container */
+
+void
+SWFCharacter_setFinished(SWFCharacter character);
+
+
+/* returns TRUE if the character has been added to a container */
+
+BOOL
+SWFCharacter_isFinished(SWFCharacter character);
 
 #endif /* SWF_CHARACTER_H_INCLUDED */
