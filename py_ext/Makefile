@@ -6,7 +6,7 @@ PYLIBDIR = /usr/local/lib/python2.0
 
 all:
 
-mingcmodule.so: ming_wrap.o
+mingcmodule.so: ming_wrap.o ../libming.a
 	gcc -g -Wall -L .. -shared -o mingcmodule.so ming_wrap.o  -lming
 
 mingc.pyd: ming_wrap.o
