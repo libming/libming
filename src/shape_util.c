@@ -39,7 +39,7 @@ float SWFCharacter_getHeight(SWFCharacter character)
 void SWFShape_setLine(SWFShape shape, unsigned short width,
 		      byte r, byte g, byte b, byte a)
 {
-  SWFShape_setLineStyle(shape, width, r, g, b, a);
+  SWFShape_setLineStyle(shape, Ming_scale*width, r, g, b, a);
 }
 
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a)
