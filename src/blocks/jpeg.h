@@ -20,6 +20,8 @@
 #ifndef SWF_JPEG_H_INCLUDED
 #define SWF_JPEG_H_INCLUDED
 
+typedef struct _swfJpegBitmap *SWFJpegBitmap;
+
 #include <stdio.h>
 #include "bitmap.h"
 #include "input.h"
@@ -30,7 +32,6 @@ struct _swfJpegBitmap
   SWFInput input;
   int length;
 };
-typedef struct _swfJpegBitmap *SWFJpegBitmap;
 
 #define SWFJPEGBITMAP_SIZE sizeof(struct _swfJpegBitmap)
 
