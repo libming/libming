@@ -570,12 +570,11 @@ void printDefineBitsLossless(FILE *f, int length)
   putchar('\n');
   println("zlib-compressed image data:");
 
-  /*
   {
     unsigned char *data, *buffer;
     long size = width*height;
     long bufsize = start+length-fileOffset;
-    int i;
+    int i, res;
 
     buffer = malloc(bufsize);
 
@@ -583,21 +582,22 @@ void printDefineBitsLossless(FILE *f, int length)
       buffer[i] = readUInt8(f);
 
     if(format == 3)
-      size += tablesize*3;
+      size += tablesize*4;
     else
-      size *= 3;
+      size *= 4;
 
     data = malloc(size);
 
-    if(uncompress(data, &size, buffer, bufsize) != Z_OK)
-      error("Couldn't uncompress bits!");
+    /*
+    if((res = uncompress(data, &size, buffer, bufsize)) != Z_OK)
+      error("Couldn't uncompress bits! (err: %i)\n", res);
 
     dumpBuffer(data, size);
+    */
   }
-  */
 
-  //  skipBytes(f, start+length-fileOffset);
-  dumpBytes(f, start+length-fileOffset);
+  skipBytes(f, start+length-fileOffset);
+  //  dumpBytes(f, start+length-fileOffset);
 }
 
 void printDoAction(FILE *f, int length);
@@ -651,6 +651,18 @@ int printActionRecord(FILE *f)
       break;
     case SWFACTION_INT:
       println("Int");
+      break;
+    case SWFACTION_POP:
+      println("Pop");
+      break;
+    case SWFACTION_SWAP:
+      println("Swap");
+      break;
+    case SWFACTION_INITOBJECT:
+      println("Init Object");
+      break;
+    case SWFACTION_INITARRAY:
+      println("Init Array");
       break;
     case SWFACTION_GETVARIABLE:
       println("Get Variable");
@@ -755,7 +767,7 @@ int printActionRecord(FILE *f)
 	    println("Push type 3- ??");
 	    break;
 	  case 4: 
-	    println("Push type 4 (%i)- ??", readUInt8(f));
+	    println("Push Register %i", readUInt8(f));
 	    break;
 	  case 5:
 	    if(readUInt8(f))
@@ -838,69 +850,75 @@ int printActionRecord(FILE *f)
     case SWFACTION_VAR:
       println("Var");
       break;
+    case SWFACTION_VAREQUALS:
+      println("Var Assign");
+      break;
     case SWFACTION_CALLFUNCTION:
-      println("call function");
+      println("Call Function");
       break;
     case SWFACTION_RETURN:
-      println("return");
+      println("Return");
       break;
     case SWFACTION_MODULO:
-      println("modulo");
+      println("Modulo");
       break;
     case SWFACTION_NEW:
-      println("new");
+      println("New");
       break;
     case SWFACTION_TYPEOF:
-      println("typeof");
+      println("Typeof");
       break;
     case SWFACTION_NEWADD:
-      println("new add");
+      println("New Add");
       break;
     case SWFACTION_NEWLESSTHAN:
-      println("new less than");
+      println("New Less Than");
       break;
     case SWFACTION_NEWEQUAL:
-      println("new equals");
+      println("New Equals");
       break;
     case SWFACTION_DUP:
-      println("dup");
+      println("Dup");
       break;
     case SWFACTION_GETMEMBER:
-      println("get member");
+      println("Get Member");
       break;
     case SWFACTION_SETMEMBER:
-      println("set member");
+      println("Set Member");
       break;
     case SWFACTION_INCREMENT:
-      println("increment");
+      println("Increment");
+      break;
+    case SWFACTION_DECREMENT:
+      println("Decrement");
       break;
     case SWFACTION_CALLMETHOD:
-      println("call method");
+      println("Call Method");
       break;
     case SWFACTION_BITWISEAND:
-      println("bitwise and");
+      println("Bitwise And");
       break;
     case SWFACTION_BITWISEOR:
-      println("bitwise or");
+      println("Bitwise Or");
       break;
     case SWFACTION_BITWISEXOR:
-      println("bitwise xor");
+      println("Bitwise Xor");
       break;
     case SWFACTION_SHIFTLEFT:
-      println("shift left");
+      println("Shift Left");
       break;
     case SWFACTION_SHIFTRIGHT:
-      println("shift right");
+      println("Shift Right");
       break;
     case SWFACTION_SHIFTRIGHT2:
-      println("shift right 2");
+      println("Shift Right 2");
       break;
 
     case SWFACTION_DECLARENAMES:
     {
       int i, n = readUInt8(f);
       readUInt8(f);
-      print("declare dictionary:");
+      print("Declare Dictionary:");
 
       for(i=0; i<n; ++i)
 	printf(" %s%c", dictionary[i]=readString(f), (i<n-1)?',':'\n');
@@ -909,7 +927,7 @@ int printActionRecord(FILE *f)
     }
     case SWFACTION_WITH:
     {
-      println("with");
+      println("With");
 
       ++gIndent;
       printDoAction(f, readUInt16(f));
@@ -924,9 +942,16 @@ int printActionRecord(FILE *f)
 
       print("function %s(", name);
 
-      for(; n>0; --n)
-	printf(" %s%c", readString(f), (n>1)?',':')');
+      if(n>0)
+      {
+	printf("%s", readString(f));
+	--n;
+      }
 
+      for(; n>0; --n)
+	printf(", %s", readString(f));
+
+      putchar(')');
       putchar('\n');
 
       ++gIndent;
@@ -936,12 +961,12 @@ int printActionRecord(FILE *f)
       break;
     }
 
-    case SWFACTION_ITERATE:
-      println("iterate ?");
+    case SWFACTION_ENUMERATE:
+      println("Enumerate");
       break;
 
     case SWFACTION_SETREGISTER:
-      println("set register %i ??", readUInt8(f));
+      println("Set Register %i", readUInt8(f));
       break;
 
     default:
@@ -1241,11 +1266,10 @@ void printDefineFont2(FILE *f, int length)
   for(i=0; i<=nGlyphs; ++i)
   {
     if(flags & FONTINFO2_WIDEOFFSETS)
-      off = readUInt32(f);
+      offset[i] = readUInt32(f)-4*nGlyphs-2;
     else
-      off = readUInt16(f);
+      offset[i] = readUInt16(f)-2*nGlyphs-2;
 
-    offset[i] = off-nGlyphs*4-2;
     println("Offset%i: %i", i, offset[i]);
   }
 
