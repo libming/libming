@@ -418,7 +418,11 @@ void SWFText_resolveCodes(SWFText text)
     }
 
     /* record type 0 */
-    l = strlen(textRecord->string);
+    if(textRecord->string != NULL)
+      l = strlen(textRecord->string);
+    else
+      l = 0;
+
     assert(l<128);
 
     SWFOutput_writeUInt8(out, l);
