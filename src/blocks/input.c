@@ -84,6 +84,16 @@ SWFInput_getSInt16(SWFInput input)
 
 
 unsigned long
+SWFInput_getUInt24_BE(SWFInput input)
+{
+       unsigned long num = SWFInput_getChar(input) << 16;
+       num += SWFInput_getChar(input) << 8;
+       num += SWFInput_getChar(input);
+       return num;
+}
+
+
+unsigned long
 SWFInput_getUInt32(SWFInput input)
 {
 	unsigned long num = SWFInput_getChar(input);
