@@ -215,12 +215,12 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 "/="			{ count();	return DEQ; }
 "+="			{ count();	return IEQ; }
 "-="			{ count();	return SEQ; }
-"<<"			{ count();	return SHIFTLEFT; }
-">>"			{ count();	return SHIFTRIGHT; }
-">>>"			{ count();	return SHIFTRIGHT2; }
-"<<="			{ count();	return SHIFTLEFTEQ; }
-">>="			{ count();	return SHIFTRIGHTEQ; }
-">>>="			{ count();	return SHIFTRIGHT2EQ; }
+"<<"			{ count();	return SHL; }
+">>"			{ count();	return SHR; }
+">>>"			{ count();	return SHR2; }
+"<<="			{ count();	return SHLEQ; }
+">>="			{ count();	return SHREQ; }
+">>>="			{ count();	return SHR2EQ; }
 
 "<"			{ count();	return '<'; }
 ">"			{ count();	return '>'; }
