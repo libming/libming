@@ -19,6 +19,7 @@ SWF::Action                                     T_PTROBJ
 SWF::MovieClip                                  T_PTROBJ
 SWF::Morph                                      T_PTROBJ
 SWF::TextField					T_PTROBJ
+SWF::Sound					T_PTROBJ
 
 INPUT
 T_PTRINT
