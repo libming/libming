@@ -1,0 +1,25 @@
+byte						T_U_CHAR
+#FILE *                  			T_IN
+int *						T_PTRINT
+float						T_FLOAT
+SWF::Shape					T_PTROBJ
+SWF::Movie                                      T_PTROBJ
+SWF::Font					T_PTROBJ
+SWF::Text					T_PTROBJ
+SWF::Fill                                       T_PTROBJ
+SWF::FillStyle                                  T_PTROBJ
+SWF::Block					T_PTROBJ
+SWF::DisplayItem                                T_PTROBJ
+SWF::Gradient					T_PTROBJ
+SWF::Bitmap                                     T_PTROBJ
+SWF::Button                                     T_PTROBJ
+SWF::Character                                  T_PTROBJ
+SWF::Action                                     T_PTROBJ
+#SWF::Sprite                                     T_PTROBJ
+SWF::MovieClip                                  T_PTROBJ
+SWF::Morph                                      T_PTROBJ
+SWF::TextField					T_PTROBJ
+
+INPUT
+T_PTRINT
+        $var = (int *)SvIV($arg)
