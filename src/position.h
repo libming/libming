@@ -22,9 +22,23 @@
 #ifndef MING_POSITION_H_INCLUDED
 #define MING_POSITION_H_INCLUDED
 
+#include "blocks/matrix.h"
+
+struct SWFPosition_s
+{
+	float x;
+	float y;
+	float xScale;
+	float yScale;
+	float xSkew;
+	float ySkew;
+	float rot;
+	SWFMatrix matrix;
+};
+
+
 typedef struct SWFPosition_s *SWFPosition;
 
-#include "blocks/matrix.h"
 
 void destroySWFPosition(SWFPosition position);
 SWFPosition newSWFPosition(SWFMatrix matrix);

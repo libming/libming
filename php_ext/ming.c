@@ -724,6 +724,13 @@ static zend_function_entry swfdisplayitem_functions[] = {
   PHP_FALIAS(remove,       swfdisplayitem_remove,      NULL)
   PHP_FALIAS(setmasklevel, swfdisplayitem_setMaskLevel,NULL)
   PHP_FALIAS(endmask,      swfdisplayitem_endMask,     NULL)
+  PHP_FALIAS(get_x,        swfdisplayitem_getX,        NULL)
+  PHP_FALIAS(get_y,        swfdisplayitem_getY,        NULL)
+  PHP_FALIAS(get_xscale,   swfdisplayitem_getXScale,   NULL)
+  PHP_FALIAS(get_yscale,   swfdisplayitem_getYScale,   NULL)
+  PHP_FALIAS(get_xskew,    swfdisplayitem_getXSkew,    NULL)
+  PHP_FALIAS(get_yskew,    swfdisplayitem_getYSkew,    NULL)
+  PHP_FALIAS(get_rot,      swfdisplayitem_getRot,      NULL)
   { NULL, NULL, NULL }
 };
 
@@ -1129,7 +1136,104 @@ PHP_FUNCTION(swfdisplayitem_endMask)
 }
 
 /* }}} */
+/* {{{ swfdisplayitem_getX */
 
+PHP_FUNCTION(swfdisplayitem_getX)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_x(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
+/* {{{ swfdisplayitem_getY */
+
+PHP_FUNCTION(swfdisplayitem_getY)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_y(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
+/* {{{ swfdisplayitem_getXScale */
+
+PHP_FUNCTION(swfdisplayitem_getXScale)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_xScale(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
+/* {{{ swfdisplayitem_getYScale */
+
+PHP_FUNCTION(swfdisplayitem_getYScale)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_yScale(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
+/* {{{ swfdisplayitem_getXSkew */
+
+PHP_FUNCTION(swfdisplayitem_getXSkew)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_xSkew(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
+/* {{{ swfdisplayitem_getYSkew */
+
+PHP_FUNCTION(swfdisplayitem_getYSkew)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_ySkew(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
+/* {{{ swfdisplayitem_getRot */
+
+PHP_FUNCTION(swfdisplayitem_getRot)
+{
+  float ret;
+  SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
+
+  if(ZEND_NUM_ARGS() != 0)
+    WRONG_PARAM_COUNT;
+
+  ret = SWFDisplayItem_get_rot(item);
+  RETURN_DOUBLE(ret);
+}
+/* }}} */
 /* }}} */
 /* {{{ SWFFill */
 

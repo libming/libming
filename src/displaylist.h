@@ -20,11 +20,31 @@
 #ifndef MING_DISPLAYLIST_H_INCLUDED
 #define MING_DISPLAYLIST_H_INCLUDED
 
-typedef struct SWFDisplayItem_s *SWFDisplayItem;
-typedef struct SWFDisplayList_s *SWFDisplayList;
+#include "blocks/placeobject.h"
+#include "blocks/character.h"
+#include "blocks/matrix.h"
 
 #include "blocklist.h"
 #include "position.h"
+
+typedef struct SWFDisplayItem_s *SWFDisplayItem;
+typedef struct SWFDisplayList_s *SWFDisplayList;
+
+
+struct SWFDisplayItem_s
+{
+	SWFDisplayItem next;
+
+	int flags;
+	int depth;
+	SWFPlaceObject2Block block;
+
+	SWFCharacter character;
+	SWFPosition position;
+	SWFMatrix matrix;
+	struct SWFDisplayList_s *list;
+};
+
 
 #include "blocks/cxform.h"
 #include "blocks/action.h"
@@ -96,6 +116,19 @@ void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale,
 
 void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, 
                             float * ySkew);
+
+/*
+ * Methods for reading position data
+ *  - added by David McNab <david@rebirthing.co.nz>
+ */
+
+float SWFDisplayItem_get_x(SWFDisplayItem item);
+float SWFDisplayItem_get_y(SWFDisplayItem item);
+float SWFDisplayItem_get_xScale(SWFDisplayItem item);
+float SWFDisplayItem_get_yScale(SWFDisplayItem item);
+float SWFDisplayItem_get_xSkew(SWFDisplayItem item);
+float SWFDisplayItem_get_ySkew(SWFDisplayItem item);
+float SWFDisplayItem_get_rot(SWFDisplayItem item);
 
 
 /* display list */

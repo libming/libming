@@ -244,6 +244,50 @@ class SWFDisplayItem(SWFBase):
     def remove(self):
         mingc.SWFDisplayItem_remove(self.this)
 
+    # methods to retrieve item position data
+    # added by David McNab <david@rebirthing.co.nz>
+    def get_x(self):
+        """
+        Returns the display item's current x position
+        """
+        return mingc.SWFDisplayItem_get_x(self.this)
+
+    def get_y(self):
+        """
+        Returns the display item's current y position
+        """
+        return mingc.SWFDisplayItem_get_y(self.this)
+
+    def get_xScale(self):
+        """
+        Returns the display item's current x scale
+        """
+        return mingc.SWFDisplayItem_get_xScale(self.this)
+
+    def get_yScale(self):
+        """
+        Returns the display item's current y scale
+        """
+        return mingc.SWFDisplayItem_get_yScale(self.this)
+
+    def get_xSkew(self):
+        """
+        Returns the display item's current x skew
+        """
+        return mingc.SWFDisplayItem_get_xSkew(self.this)
+
+    def get_ySkew(self):
+        """
+        Returns the display item's current y skew
+        """
+        return mingc.SWFDisplayItem_get_ySkew(self.this)
+
+    def get_rot(self):
+        """
+        Returns the display item's current rotation (in degrees)
+        """
+        return mingc.SWFDisplayItem_get_rot(self.this)
+
 
 class SWFMovie(SWFBase):
 

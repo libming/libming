@@ -21,12 +21,14 @@
 /* not used? #include <string.h> */
 #include <math.h>
 
-#include "displaylist.h"
-
 /* not used? #include "blocks/blocktypes.h" */
 #include "blocks/placeobject.h"
 #include "blocks/character.h"
 #include "blocks/matrix.h"
+
+#include "displaylist.h"
+#include "position.h"
+
 
 #define ITEM_NEW						(1<<0)
 #define ITEM_REMOVED				(1<<1)
@@ -35,20 +37,6 @@
 #define ITEM_RATIOCHANGED		(1<<4)
 
 #define ITEM_CHANGED	(ITEM_TRANSFORMED|ITEM_CXFORMCHANGED|ITEM_RATIOCHANGED|ITEM_NEW)
-
-struct SWFDisplayItem_s
-{
-	SWFDisplayItem next;
-
-	int flags;
-	int depth;
-	SWFPlaceObject2Block block;
-
-	SWFCharacter character;
-	SWFPosition position;
-	SWFMatrix matrix;
-	struct SWFDisplayList_s *list;
-};
 
 struct SWFDisplayList_s
 {
@@ -434,6 +422,47 @@ SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags)
 	SWFPlaceObject2Block_addAction(item->block, action, flags);
 }
 
+/*
+ * Methods for reading position data
+ *  - added by David McNab <david@rebirthing.co.nz>
+ */
+
+float SWFDisplayItem_get_x(SWFDisplayItem item)
+{
+  float x;
+  x = SWFPosition_getX(item->position);
+  return x;
+}
+
+float SWFDisplayItem_get_y(SWFDisplayItem item)
+{
+  return SWFPosition_getY(item->position);
+}
+
+float SWFDisplayItem_get_xScale(SWFDisplayItem item)
+{
+  return SWFPosition_getXScale(item->position);
+}
+
+float SWFDisplayItem_get_yScale(SWFDisplayItem item)
+{
+  return SWFPosition_getYScale(item->position);
+}
+
+float SWFDisplayItem_get_xSkew(SWFDisplayItem item)
+{
+  return SWFPosition_getXSkew(item->position);
+}
+
+float SWFDisplayItem_get_ySkew(SWFDisplayItem item)
+{
+  return SWFPosition_getYSkew(item->position);
+}
+
+float SWFDisplayItem_get_rot(SWFDisplayItem item)
+{
+  return SWFPosition_getRotation(item->position);
+}
 
 void
 SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream)

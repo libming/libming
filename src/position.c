@@ -23,18 +23,6 @@
 #include "ming.h"
 #include "position.h"
 
-struct SWFPosition_s
-{
-	float x;
-	float y;
-	float xScale;
-	float yScale;
-	float xSkew;
-	float ySkew;
-	float rot;
-	SWFMatrix matrix;
-};
-
 
 void destroySWFPosition(SWFPosition position)
 {

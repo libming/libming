@@ -159,6 +159,13 @@ PHP_FUNCTION(swfdisplayitem_addAction);
 PHP_FUNCTION(swfdisplayitem_remove);
 PHP_FUNCTION(swfdisplayitem_setMaskLevel);
 PHP_FUNCTION(swfdisplayitem_endMask);
+PHP_FUNCTION(swfdisplayitem_getX);
+PHP_FUNCTION(swfdisplayitem_getY);
+PHP_FUNCTION(swfdisplayitem_getXScale);
+PHP_FUNCTION(swfdisplayitem_getYScale);
+PHP_FUNCTION(swfdisplayitem_getXSkew);
+PHP_FUNCTION(swfdisplayitem_getYSkew);
+PHP_FUNCTION(swfdisplayitem_getRot);
 
 PHP_FUNCTION(swfbutton_init);
 PHP_FUNCTION(swfbutton_setHit);
