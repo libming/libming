@@ -1646,8 +1646,15 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_GETMEMBER:
 	listItem(t->left, SWFACTION_GETMEMBER);
-	putchar('.');
-	listItem(t->right, SWFACTION_GETMEMBER);
+	if(t->right->type == 'i')
+	{	putchar('[');
+		listItem(t->right, SWFACTION_GETMEMBER);
+		putchar(']');
+	}
+	else
+	{	putchar('.');
+		listItem(t->right, SWFACTION_GETMEMBER);
+	}
 	break;
 
       case SWFACTION_SETMEMBER:
