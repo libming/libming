@@ -77,7 +77,7 @@ void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned char c);
 
 /* deprecated: */
 
-#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c,0)
+#define SWFShape_drawFontGlyph(s,f,c) SWFShape_drawGlyph(s,f,c)
 
 
 #endif /* MING_SHAPE_H_INCLUDED */
