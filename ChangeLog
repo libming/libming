@@ -1,3 +1,13 @@
+2002-08-14 04:31  opaque_ndst
+
+	* src/blocks/text.c: fixed unitialized memory problem causing buggy
+	advance lists
+
+2002-08-14 04:30  opaque_ndst
+
+	* src/actioncompiler/compile.c: fixed stupid typo causing crashing
+	on compilation
+
 2002-08-13 06:13  opaque_ndst
 
 	* src/ming.h: added missing semicolon
