@@ -271,7 +271,8 @@ static struct swfile *openswf(SWFInput input)
 
 		z.next_in = (unsigned char *)malloc(z.avail_in = len - 8);
 		SWFInput_read(input, z.next_in, z.avail_in);
-		destroySWFInput(input);
+		// caller will do, leave it here for double memory consumption
+		//destroySWFInput(input);
 		zbuf = z.next_out = (unsigned char *)malloc(z.avail_out = res->fsize - 8);
 		inflateInit(&z);
 		inflate(&z, Z_FINISH);
@@ -347,7 +348,7 @@ static TAG readtag_sprite(TAG tp)
 static int idoffset = {0}, maxid = {0};
 static int change_id(TAG tp)
 {	int val = readint2((BITS) tp);
-	if(val)
+	if(val != 0 && val != 65535)
 	{	val += idoffset;
 		if(val > maxid)
 			maxid = val;
@@ -866,14 +867,15 @@ static void definemorphshape(TAG tp)
 	{	alignbits(tp);
 		morphlinestyle(tp);
 	}
-	for(n = 0 ; tp->datptr < endp ; n++)
+/*	for(n = 0 ; tp->datptr < endp ; n++)
 	{	alignbits(tp);
 		shaperecord(tp, bits_req(fcnt), bits_req(lcnt), 3);
 	}
 	for( ; n > 0 ; --n)
 	{	alignbits(tp);
 		shaperecord(tp, bits_req(fcnt), bits_req(lcnt), 3);
-	}
+	}*/
+	shape(tp, 3);
 }
 
 static void definetext(TAG tp, int lev)
@@ -1176,7 +1178,8 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 			free(tp->datbuf);
 		free(tp);
 	} while(type);
-	
+	if(swf->compressed)
+		destroySWFInput(swf->input);	
 	SWF_gNumCharacters = maxid + 1;
 	CHARACTERID(clip) = SWF_gNumCharacters++;
 	return clip;
