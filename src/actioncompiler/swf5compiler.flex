@@ -276,6 +276,8 @@ r\:{DIGIT}+		{ count();	swf5lval.str = strdup(yytext+2);
 ">="			{ count();	return GE; }
 "==" 			{ count();	return EQ; }
 "!=" 			{ count();	return NE; }
+"===" 			{ count();	return EEQ; }
+"!==" 			{ count();	return NEE; }
 "&&" 			{ count();	return LAN; }
 "||" 			{ count();	return LOR; }
 "*="			{ count();	return MEQ; }

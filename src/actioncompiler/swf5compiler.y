@@ -73,6 +73,8 @@ Buffer bf, bc;
 %token <str> IDENTIFIER
 
 %token EQ "=="
+%token EEQ "==="
+%token NEE "!=="
 %token LE "<="
 %token GE ">="
 %token NE "!="
@@ -104,7 +106,7 @@ Buffer bf, bc;
 %right '=' "*=" "/=" "%=" "+=" "-=" "&=" "|=" "^=" ">>=" ">>>=" "<<="
 %right '?' ':'
 %left "&&" "||"
-%left "==" "!="
+%left "==" "!=" "===" "!=="
 %left '<' '>' "<=" ">="
 %left '&' '|' '^'
 %left "<<" ">>" ">>>"
@@ -1202,9 +1204,18 @@ expr
 		{ bufferConcat($1, $3);
 		  bufferWriteOp($1, SWFACTION_NEWEQUALS); }
 
+	| expr "===" expr
+		{ bufferConcat($1, $3);
+		  bufferWriteOp($1, SWFACTION_STRICTEQ); }
+
 	| expr "!=" expr
 		{ bufferConcat($1, $3);
 		  bufferWriteOp($1, SWFACTION_NEWEQUALS);
+		  bufferWriteOp($1, SWFACTION_LOGICALNOT); }
+
+	| expr "!==" expr
+		{ bufferConcat($1, $3);
+		  bufferWriteOp($1, SWFACTION_STRICTEQ); 
 		  bufferWriteOp($1, SWFACTION_LOGICALNOT); }
 
 	| expr "<<" expr
