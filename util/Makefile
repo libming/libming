@@ -28,8 +28,8 @@ decompile.o: action.h
 listswf_nd: blocktypes.o decompile.o read.o listswf.c
 	${CC} -DNODECOMPILE listswf.c blocktypes.o decompile.o read.o -o listswf -lm -lz
 
-listaction: blocktypes.o decompile.o read.o listswf.c
-	${CC} -DNODECOMPILE listswf.c blocktypes.o decompile.o read.o -o listswf -lm
+listaction: blocktypes.o read.o listswf.c
+	${CC} -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
 
 swftophp: blocktypes.o decompile.o read.o swftophp.c
 	${CC} swftophp.c blocktypes.o decompile.o read.o -o swftophp -lm
