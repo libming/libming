@@ -33,8 +33,7 @@ clean:
 	for i in $(DIRS); do (cd $$i && $(MAKE) clean); done
 	if [ -f perl_ext/Makefile ] ; then cd perl_ext; $(MAKE) clean; fi
 	rm -f test.o test test.exe *.core *~
-	rm -f $(SHAREDLIB) 
-	rm -f libming.a libming.so
+	rm -f libming.a libming.so*
 
 distclean: clean
 	rm -Rf Rules.make config.make autom4te.cache \
