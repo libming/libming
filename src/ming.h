@@ -706,8 +706,8 @@ SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 
 /***** SWFPrebuiltClip ****/
-SWFPrebuiltClip SWFPrebuiltClip_fromFile(const char *filename);
-SWFPrebuiltClip SWFPrebuiltClip_fromInput(SWFInput input);
+SWFPrebuiltClip newSWFPrebuiltClip_fromFile(const char *filename);
+SWFPrebuiltClip newSWFPrebuiltClip_fromInput(SWFInput input);
 
 /***** SWFMovie *****/
 
