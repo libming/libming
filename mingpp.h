@@ -47,6 +47,8 @@ extern "C"
   #define SWFSoundStream  c_SWFSoundStream
   #define SWFInput        c_SWFInput
 
+  #define SWFSound  c_SWFSound // added by minguts
+
   #include <src/ming.h>
 
   #undef SWFShape
@@ -67,6 +69,7 @@ extern "C"
   #undef SWFButton
   #undef SWFSoundStream
   #undef SWFInput
+  #undef SWFSound // added by minguts
 }
 
 #define SWF_DECLAREONLY(classname) \
@@ -267,6 +270,29 @@ class SWFSoundStream
 };
 
 
+/*  SWFSound class added by minguts */
+
+class SWFSound
+{
+ public:
+  c_SWFSound sound;
+
+  SWFSound(FILE *file, int flags)
+    { this->sound = newSWFSound(file, flags); }
+
+  SWFSound(SWFInput *input, int flags)
+    { this->sound = newSWFSound_fromInput(input->input, flags); }
+
+  SWFSound(char *filename, int flags)
+    { this->sound = newSWFSound(fopen(filename, "rb"), flags); }
+
+  virtual ~SWFSound()
+    { destroySWFSound(this->sound); }
+  SWF_DECLAREONLY(SWFSound);
+  SWFSound();
+};
+
+
 /*  SWFMovie  */
 
 class SWFMovie
@@ -328,6 +354,11 @@ class SWFMovie
     Ming_setSWFCompression(oldlevel);
     return result;
   }
+
+  void startSound(SWFSound *sound) // added by minguts
+    { SWFMovie_startSound(this->movie, sound->sound); } // added by minguts
+  void stopSound(SWFSound *sound) // added by minguts
+    { SWFMovie_stopSound(this->movie, sound->sound); } // added by minguts
 
   SWF_DECLAREONLY(SWFMovie);
 };
@@ -802,6 +833,10 @@ class SWFButton : public SWFCharacter
 
   void setMenu(int flag=0)
     { SWFButton_setMenu(this->button, flag); }
+
+  void addSound(SWFSound *sound, int flags) // added by minguts
+    { SWFButton_addSound(this->button, sound->sound, flags); } // added by minguts
+
   SWF_DECLAREONLY(SWFButton);
 };
 
