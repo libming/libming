@@ -126,6 +126,12 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags)
 
 	m = newSWFMatrix(0, 0, 0, 0, 0, 0);
 
+	SWFCharacter_getDependencies((SWFCharacter)character,
+									 &CHARACTER(button)->dependencies,
+									 &CHARACTER(button)->nDependencies);
+
+	SWFCharacter_addDependency((SWFCharacter)button, (SWFCharacter)character);
+
 	SWFCharacter_setFinished(character);
 	SWFButton_addRecord(button, newSWFButtonRecord(flags, character, 0, m));
 }
