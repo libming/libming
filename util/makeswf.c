@@ -152,6 +152,9 @@ main (int argc, char **argv)
    {
     {"dont-preprocess", 0, 0, 'p'},
     {"frame-rate", 1, 0, 'r'},
+    {"version", 1, 0, 'v'},
+    {"includepath", 1, 0, 'I'},
+    {"define", 1, 0, 'D'},
     {"size", 1, 0, 's'},
     {0, 0, 0, 0}
    };
@@ -171,9 +174,9 @@ main (int argc, char **argv)
 		char buf [256];
 
 #ifdef HAVE_GETOPT_LONG
-		c = getopt_long (argc, argv, "ps:r:", opts, &opts_idx);
+		c = getopt_long (argc, argv, "ps:r:D:I:v:", opts, &opts_idx);
 #else
-		c = getopt (argc, argv, "ps:r:D:I:");
+		c = getopt (argc, argv, "ps:r:D:I:v:");
 #endif
 		if (c == -1) break;
 
@@ -184,6 +187,12 @@ main (int argc, char **argv)
 				break;
 			case 's':
 				if ( sscanf(optarg, "%dx%d", &width, &height) != 2 )
+				{
+					usage(argv[0], 1);
+				}
+				break;
+			case 'v':
+				if ( sscanf(optarg, "%d", &swfversion) != 1 )
 				{
 					usage(argv[0], 1);
 				}
@@ -212,26 +221,30 @@ main (int argc, char **argv)
    argv+=optind;
    argc-=optind;
 
-   if ( argc < 2 ) usage(me, 1);
+	if ( argc < 2 ) usage(me, 1);
 
-   outputfile = argv[0];
-   if ( ! stat(outputfile, &statbuf) )
-   {
-   }
+	outputfile = argv[0];
+	if ( ! stat(outputfile, &statbuf) )
+	{
+	}
 
-   if ( Ming_init() )
-   {
-      fprintf(stderr, "Ming initialization error\n");
-      exit(1);
-   }
-   Ming_setWarnFunction(compileError);
-   Ming_setErrorFunction(compileError);
-   Ming_useSWFVersion(swfversion);
-   Ming_setSWFCompression(swfcompression);
+	if ( Ming_init() )
+	{
+		fprintf(stderr, "Ming initialization error\n");
+		exit(1);
+	}
+	Ming_setWarnFunction(compileError);
+	Ming_setErrorFunction(compileError);
+	Ming_useSWFVersion(swfversion);
+	Ming_setSWFCompression(swfcompression);
 
-   mo = newSWFMovie();
-   SWFMovie_setDimension(mo, (float)width, (float)height);
-   SWFMovie_setRate(mo, framerate);
+	mo = newSWFMovie();
+	SWFMovie_setDimension(mo, (float)width, (float)height);
+	SWFMovie_setRate(mo, framerate);
+
+	printf("Output file name: %s\n", outputfile);
+	printf("Output compression level: %d\n", swfcompression);
+	printf("Output SWF version: %d\n", swfversion);
 
 	for ( i=1; i<argc; i++ )
 	{
@@ -246,10 +259,13 @@ main (int argc, char **argv)
 
 		if ( dopreprocess )
 		{
+			printf("Preprocessing %s... ", argv[i]);
+			fflush(stdout);
 			sprintf(ppfile, "%s.pp", argv[i]);
 			if ( ! preprocess(argv[i], ppfile, cppargs) ) continue;
 			//unlink(ppfile);
 			filename = ppfile;
+			printf("done.\n");
 		}
 		if ( ! (code=readfile(filename)) )
 		{
@@ -335,6 +351,10 @@ preprocess (char *file, char *out, char *cppargs)
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.7  2004/09/28 06:59:29  strk
+ * Added -v switch to set output version.
+ * Added notice about output configuration.
+ *
  * Revision 1.6  2004/09/25 08:23:05  strk
  * Added -C to cpp call
  *
