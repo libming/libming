@@ -7,7 +7,7 @@
 #include "compile.h"
 #include "action.h"
 #include "blocks/error.h"
-#include "swf5compiler.tab.h" /* defines token types */
+#include "swf5compiler.h" /* defines token types */
 
 static int swf5debug;
 

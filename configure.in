@@ -5,8 +5,10 @@ VERSION=0.3beta1
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_CONFIG_HEADER(ming_config.h)
 
+AM_MAINTAINER_MODE
+
 AC_PROG_LIBTOOL
-AM_PROG_CC_STDC
+AC_PROG_CC
 AC_PROG_YACC
 AM_PROG_LEX
 
@@ -40,4 +42,4 @@ AM_CONDITIONAL(WITH_PHP, false)
 
 
 AC_OUTPUT(Makefile src/Makefile src/actioncompiler/Makefile 
-	src/blocks/Makefile util/Makefile py_ext/Makefile)
+	src/blocks/Makefile util/Makefile c++_ext/Makefile)

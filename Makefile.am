@@ -1,10 +1,4 @@
-AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip 1.4d
-
-if WITH_CXX
-CXX_SUBDIR = c++_ext
-else
-CXX_SUBDIR = 
-endif
+AUTOMAKE_OPTIONS = foreign
 
 if WITH_PYTHON
 PYTHON_SUBDIR = py_ext
@@ -30,24 +24,22 @@ else
 PHP_SUBDIR =
 endif
 
-COMMON_SUBDIRS = src util
+COMMON_SUBDIRS = src util c++_ext
 
-SUBDIRS = $(COMMON_SUBDIRS) $(CXX_SUBDIR) $(PYTHON_SUBDIR) $(RUBY_SUBDIR) $(PERL_SUBDIR) $(PHP_SUBDIR)
+noinst_HEADERS = mingpp.h
 
-DIST_SUBDIRS = $(COMMON_SUBDIRS) py_ext
+SUBDIRS = $(COMMON_SUBDIRS) $(PYTHON_SUBDIR) $(RUBY_SUBDIR) $(PERL_SUBDIR) $(PHP_SUBDIR)
 
-EXTRA_DIST = ming.i CREDITS CHANGES autogen.sh LICENSE
+DIST_SUBDIRS = $(COMMON_SUBDIRS)
 
-include_HEADERS = ming.h
+java_files = $(shell sed s,^,java_ext/, $(top_srcdir)/java_ext/MANIFEST)
+perl_files = $(shell sed s,^,perl_ext/, $(top_srcdir)/perl_ext/MANIFEST)
+php_files = $(shell sed s,^,php_ext/, $(top_srcdir)/php_ext/MANIFEST)
+py_files = $(shell sed s,^,py_ext/, $(top_srcdir)/py_ext/MANIFEST)
+rb_files = $(shell sed s,^,rb_ext/, $(top_srcdir)/rb_ext/MANIFEST)
+tcl_files = $(shell sed s,^,tcl_ext/, $(top_srcdir)/tcl_ext/MANIFEST)
 
-dist-hook:
-	cp -a perl_ext $(distdir)
-	cp -a php_ext $(distdir)
-	cp -a c++_ext $(distdir)
-	cp -a rb_ext $(distdir)
-	for i in `find $(distdir) -name "CVS" -type d`; do rm -Rf $$i; done
+EXTRA_DIST = ming.i CREDITS autogen.sh LICENSE \
+	$(java_files) $(perl_files) $(py_files) \
+	$(php_files) $(rb_files) $(tcl_files)
 
-all-dist:
-	$(MAKE) dist
-	$(MAKE) dist-bzip2
-	$(MAKE) dist-zip

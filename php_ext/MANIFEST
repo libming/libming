@@ -1,0 +1,10 @@
+Makefile
+Makefile.in
+README
+config.m4
+make_module.sh
+ming-dev.c
+ming-streams.c
+ming.c
+ming.dsp
+php_ming.h
