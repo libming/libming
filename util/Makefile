@@ -9,7 +9,7 @@ BINDIR = ${PREFIX}/lib/libming/bin
 all:
 	cat README
 
-all_binaries: listswf listfdb makefdb listjpeg swftophp png2dbl gif2dbl \
+all_binaries: listswf listfdb makefdb listjpeg swftoperl swftophp png2dbl gif2dbl \
 	gif2mask listaction raw2adpcm
 
 clean:
@@ -21,6 +21,7 @@ clean:
 		  listjpeg listjpeg.exe \
 		  listmp3 listmp3.exe \
 		  makefdb makefdb.exe \
+		  swftoperl swftoperl.exe \
 		  swftophp swftophp.exe \
 		  png2dbl png2dbl.exe \
 		  gif2dbl gif2dbl.exe \
@@ -40,8 +41,14 @@ listswf_nd: blocktypes.o decompile.o read.o listswf.c
 listaction: blocktypes.o read.o listswf.c
 	${CC} -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction -lm
 
+swftoperl: blocktypes.o decompile.o read.o swftoperl.c
+	${CC} swftoperl.c blocktypes.o decompile.o read.o -o swftoperl -lm
+
 swftophp: blocktypes.o decompile.o read.o swftophp.c
 	${CC} swftophp.c blocktypes.o decompile.o read.o -o swftophp -lm
+
+swftopython: 
+	echo " swftopython: still not written"
 
 makefdb: blocktypes.o makefdb.c read.o
 	${CC} makefdb.c read.o blocktypes.o -o makefdb
