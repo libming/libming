@@ -83,6 +83,11 @@ struct SWFMovie_s
 	byte r;
 	byte g;
 	byte b;
+
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
 };
 
 
@@ -117,6 +122,10 @@ destroySWFMovie(SWFMovie movie)
 	if (movie->imports)
 		free(movie->imports);
 
+#if TRACK_ALLOCS
+	ming_gc_remove_node(movie->gcnode);
+#endif
+
 	free(movie);
 }
 
@@ -146,6 +155,10 @@ newSWFMovieWithVersion(int version)
 	movie->r = 0xff;
 	movie->g = 0xff;
 	movie->b = 0xff;
+
+#if TRACK_ALLOCS
+	movie->gcnode = ming_gc_add_node(movie, destroySWFMovie);
+#endif
 
 	return movie;
 }
