@@ -89,7 +89,10 @@ typedef enum
   SWF_STARTSOUND                = 15,
   SWF_SYNCFRAME			= 29,
   SWF_DEFINEVIDEOSTREAM		= 60,
-  SWF_VIDEOFRAME		= 61
+  SWF_VIDEOFRAME		= 61,
+// these are pseudo definitions that do not correspond to actual swf file tags
+  SWF_PREBUILTCLIP = 254,
+  SWF_PREBUILT = 255
 } SWFBlocktype;
 
 #endif /* SWF_BLOCKTYPES_H_INCLUDED */

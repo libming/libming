@@ -76,6 +76,7 @@ typedef struct SWFFill_s *SWFFill;
 typedef struct SWFMovieClip_s *SWFMovieClip;
 typedef struct SWFMovie_s *SWFMovie;
 typedef struct SWFVideoStream_s *SWFVideoStream;
+typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
 
 /***** General Ming functions *****/
 
@@ -704,6 +705,9 @@ void SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip
 SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 
+/***** SWFPrebuiltClip ****/
+SWFPrebuiltClip SWFPrebuiltClip_fromFile(const char *filename);
+SWFPrebuiltClip SWFPrebuiltClip_fromInput(SWFInput input);
 
 /***** SWFMovie *****/
 

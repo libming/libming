@@ -72,6 +72,8 @@ completeSWFBlock(SWFBlock block)
 		block->completed = TRUE;
 	}
 
+	if (block->type == SWF_PREBUILT)
+		return block->length;
 	if ( block->length > 62 ||
 			 block->type == SWF_DEFINELOSSLESS ||
 			 block->type == SWF_DEFINELOSSLESS2 )
@@ -99,21 +101,23 @@ writeSWFBlockToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 
 	/* write header */
 
-	if ( length > 62 ||
+	if(type == SWF_PREBUILTCLIP)
+		type = SWF_DEFINESPRITE;
+	if ( type == SWF_PREBUILT )
+		;
+	else if ( length > 62 ||
 			 type == SWF_DEFINELOSSLESS ||
 			 type == SWF_DEFINELOSSLESS2 )
 	{
 		/* yep, a definebitslossless block has to be long form, even if it's
 			 under 63 bytes.. */
-
 		method((unsigned char)(((type&0x03)<<6) + 0x3f), data);
 		method((unsigned char)((type>>2) & 0xff), data);
 		methodWriteUInt32(length, method, data);
 		length += 6;
 	}
 	else
-	{
-		methodWriteUInt16(length + ((type)<<6), method, data);
+	{	methodWriteUInt16(length + ((type)<<6), method, data);
 		length += 2;
 	}
 

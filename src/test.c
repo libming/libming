@@ -258,6 +258,38 @@ void testText(SWFMovie movie)
 }
 
 /* }}} */
+/* {{{ testLoadSWF */
+
+/* to test renumbering, some other tags must be present, e.g. text */
+void testLoadSWF(SWFMovie movie)
+{
+  SWFFont f = loadSWFFontFromFile(fopen("test.fdb","rb"));
+  SWFText t = newSWFText();
+  SWFDisplayItem d;
+
+  SWFPrebuiltClip clip;
+
+  if(f == NULL)
+  {
+    printf("font def file not found!\n");
+    exit(1);
+  }
+
+  SWFText_setFont(t, f);
+  SWFText_setHeight(t, 24);
+  SWFText_setColor(t, 0, 0, 0, 0xff);
+  SWFText_setSpacing(t, 0);
+  SWFText_addString(t, "blargghghgghghgh", NULL);
+
+  d = SWFMovie_add(movie, (SWFCharacter)t);
+  SWFDisplayItem_move(d, 10, 100);
+
+  clip = SWFPrebuiltClip_fromFile("import.swf");
+  d = SWFMovie_add(movie, (SWFCharacter)clip);
+  SWFDisplayItem_move(d, 10, 100);
+}
+
+/* }}} */
 /* {{{ testShape */
 
 void testShape(SWFMovie movie)
@@ -434,9 +466,10 @@ int main(int argc, char *argv[])
   //testJpegAlpha(m);
   //testMp3(m);
   //testImport(m);
-  testImportFont(m);
+  //testImportFont(m);
+  testLoadSWF(m);
 
-  length = SWFMovie_output(m, fileOutputMethod, f, -1);
+  length = SWFMovie_output(m, fileOutputMethod, f);
   destroySWFMovie(m);
 
   printf("%i bytes written\n", length);
