@@ -70,13 +70,14 @@ Ming_collectGarbage()
 	ptr=firstnode;
 	while(ptr)
 	{
-		/*
-		 * The destructor will destroy the NODE from the
-		 * list, so we get to the next before calling it
-		 */
-		ptr1 = ptr->next;
 		ptr->dtor(ptr->ptr);
-		ptr=ptr1;
+		/*
+		 * the node destructor might destory other
+		 * objects in the list, so we better always
+		 * start from the firstnode 
+		 */
+		ptr=firstnode;
+			
 	}
 }
 
