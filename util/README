@@ -1,21 +1,62 @@
-These are various tools useful in development of ming.  None are
-particularly user friendly.  All take one command line argument, a file
-name.  listswf and listfdb aren't very smart about checking for the end of
-the file, so you should pipe it through a pager..
+TOOLS FOR MING
 
+  These are various tools useful in development of ming.  None are
+  particularly user friendly.  All take one command line argument, a file
+  name.  listswf and listfdb aren't very smart about checking for the end of
+  the file, so you should pipe it through a pager.. 
+  (Peter L.: What does the orig. author mean with "should pipe it through a pager"?)
+  
+try "make <name>"  name is the program you want to build.
+
+make swftoperl
+make all_binaries
+
+general tools:
   bindump - show file data in hex and binary
   hexdump - show file data in hex
-  listswf - swf format disassembler
-  listfdb - show contents of fdb font file
-  listmp3 - show frame header info in an mp3 file
-  listjpeg - show frame header info in a jpeg file
-  makefdb - rip fdb font definition files out of a generator template file
-  swftophp - attempt to make a php/ming script out of an swf file
 
-  try "make <name>" where name is the program you want to build
+  (comment by Peter L.:)  Who need this? standard hexdump (e.g. in package util-linux on linux(suse7.2)) is much more powerful
+  and there are many hex-programs for win.
+  
+list tools:
+  listswf    - swf format disassembler
+  listaction - show actionscript in the swf
+  listfdb    - show contents of fdb font file
+  listmp3    - show frame header info in mp3 files
+  listjpeg   - show frame header info in jpeg files
 
-How do you make a generator template file?  Write some text in a flash movie
-using MM Flash, under "save as.." select "Generator Template".  Feed that
-file into makefdb, and it'll save every font def'n found therein into a file
-<font>.fdb.  If you don't save as a template, it won't write the entire glyph
-set out, only the letters you've actually used..  See, it's smart that way.
+swfto... converter:  
+  swftoperl   - attempt to make a perl/ming script out of an swf file
+                Look at swftoperl.html
+  swftophp    - attempt to make a php/ming script out of an swf file
+  swftopython - a todo for pythonfriends :-) not done yet.
+  
+  idea: only one sourcefile for listswf, swftoperl, swftophp, swftopython.
+  because all are similiar. So all 4 programs can profit from changes in one source.
+  
+  prerequisite: all ming-wrappers (php,perl,python) are nearly at the same developmentstatus.
+  (currently not synchronized)
+   
+fonts:
+  makefdb - rip fdb font definition files out of a swf or generator template file
+  	    
+	swf maybe not contain all characters (for saving filesize), 
+	but generator template files contain all. (right?)
+	
+	How do you make a generator template file?  Write some text in a flash movie
+	using MM Flash(4,5,..?), under "save as.." select "Generator Template".  Feed that
+	file into makefdb, and it'll save every font def'n found therein into a file
+	<font>.fdb.  If you don't save as a template, it won't write the entire glyph
+	set out, only the letters you've actually used..  See, it's smart that way.
+
+graphics:
+  png2dbl  - convert a png-file to dbl
+  gif2dbl  - convert a gif-file to dbl
+  gif2mask - convert a gif image to an alpha mask 
+  
+  There is a software named auto-trace (http://autotrace.sourceforge.net), that can vectorize a bitmap (*.bmp,*.pbm,..)
+  and save it to swf (using ming) only using SWFShapes. Then just "swfto... swffile" and  .. smile. 
+   
+sound:
+  raw2adpcm - convert a raw(pcm?) soundfile to a adpcm-coded soundfile (smaller size than raw)
+
