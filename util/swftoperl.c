@@ -1107,55 +1107,95 @@ void printPlaceObject(FILE *f, int length)
   }
 }
 
-#define PLACE_RESERVED		(1<<7)
-#define PLACE_HASCLIP           (1<<6)
-#define PLACE_HASNAME		(1<<5)
-#define PLACE_HASRATIO		(1<<4)
-#define PLACE_HASCXFORM		(1<<3)
-#define PLACE_HASMATRIX		(1<<2)
-#define PLACE_HASCHARACTER	(1<<1)
-#define PLACE_HASMOVE		(1<<0)
+#define PLACE_HAS_ACTION    (1<<7)
+#define PLACE_HAS_MASK      (1<<6)
+#define PLACE_HAS_NAME      (1<<5)
+#define PLACE_HAS_RATIO     (1<<4)
+#define PLACE_HAS_CXFORM    (1<<3)
+#define PLACE_HAS_MATRIX    (1<<2)
+#define PLACE_HAS_CHARACTER (1<<1)
+#define PLACE_HAS_MOVE      (1<<0)
 
-void printPlaceObject2(FILE *f)
-{
-  int flags = readUInt8(f);
-  int depth = readUInt16(f);
+void printPlaceObject2(FILE *f){
+	int flags = readUInt8(f);
+	int depth = readUInt16(f);
+	int l;
 
-  if(flags & PLACE_HASCHARACTER)
-  {
-    if(movieclip == 0)
-      printf("\t$i%i = $m->add($s%i);\n", depth, readUInt16(f));
-    else
-      printf("\t$j%i = $s%i->add($s%i);\n", depth, movieclip, readUInt16(f));
-  }
+	if(flags & PLACE_HAS_CHARACTER){
+		if(movieclip == 0){
+			printf("\t$i%i = $m->add($s%i);\n", depth, readUInt16(f));
+		}
+		else {
+			printf("\t$j%i = $s%i->add($s%i);\n", depth, movieclip, readUInt16(f));
+		}
+	}
 
-  if(flags & PLACE_HASMATRIX)
-  {
-    struct Matrix m;
-    readMatrix(f, &m);
-    printTransform(&m, (movieclip==0)?'i':'j', depth);
-  }
+	if(flags & PLACE_HAS_MATRIX){
+		struct Matrix m;
+		readMatrix(f, &m);
+		printTransform(&m, (movieclip==0)?'i':'j', depth);
+	}
 
-  if(flags & PLACE_HASCXFORM)
-  {
-    struct CXForm c;
-    readCXForm(f, &c, true);
-    printCXForm(&c, (movieclip==0)?'i':'j', depth);
-  }
+	if(flags & PLACE_HAS_CXFORM){
+		struct CXForm c;
+		readCXForm(f, &c, true);
+		printCXForm(&c, (movieclip==0)?'i':'j', depth);
+	}
 
-  if(flags & PLACE_HASRATIO)
-    printf("\t$%c%i->setRatio(%f);\n",
-	   (movieclip==0)?'i':'j', depth, (float)readUInt16(f)/(1<<16));
+	if(flags & PLACE_HAS_RATIO){
+		printf("\t$%c%i->setRatio(%f);\n",(movieclip==0)?'i':'j', depth, (float)readUInt16(f)/(1<<16));
+	}
 
-  if(flags & PLACE_HASNAME)
-    printf("\t$%c%i->setName('%s');\n",
-	   (movieclip==0)?'i':'j', depth, readString(f));
+	if(flags & PLACE_HAS_NAME){
+		printf("\t$%c%i->setName('%s');\n",(movieclip==0)?'i':'j', depth, readString(f));
+	}
 
-  if(flags & PLACE_HASCLIP)
-    //printf("\t# clipDepth (%i) not implemented \n", readUInt16(f));
-    /*added by Peter*/
-    printf("\t$%c%i->setMaskLevel(%i);\n", (movieclip==0)?'i':'j', depth, readUInt16(f));
+	if(flags & PLACE_HAS_MASK){
+		//printf("\t# clipDepth (%i) not implemented \n", readUInt16(f));
+		/*added by Peter*/
+		printf("\t$%c%i->setMaskLevel(%i);\n", (movieclip==0)?'i':'j', depth, readUInt16(f));
+	}
+
+	if(flags & PLACE_HAS_ACTION){
+		printf("#Mystery number: %04x\n", readUInt16(f));
+
+		flags = readUInt16(f);
+		//printf("#Clip flags: %04x\n", flags);
+		printf("\t$%c%i->addAction(new SWF::Action(\"\n", (movieclip==0)?'i':'j', depth);
+
+#define PLACEACTION_ONLOAD      (1<<0)
+#define PLACEACTION_ENTERFRAME  (1<<1)
+#define PLACEACTION_UNLOAD      (1<<2)
+#define PLACEACTION_MOUSEMOVE   (1<<3)
+#define PLACEACTION_MOUSEDOWN   (1<<4)
+#define PLACEACTION_MOUSEUP     (1<<5)
+#define PLACEACTION_KEYDOWN     (1<<6)
+#define PLACEACTION_KEYUP       (1<<7)
+#define PLACEACTION_DATA        (1<<8)
+
+		while((flags = readUInt16(f)) != 0){
+			//printf("//flags: %04x\n", flags);
+
+			switch(flags){
+				case PLACEACTION_ONLOAD: printf("onClipEvent(load){\n");  break;
+				case PLACEACTION_ENTERFRAME:printf("onClipEvent(enterFrame){\n"); break;
+				case PLACEACTION_UNLOAD: printf("onClipEvent(unload){\n"); break;
+				case PLACEACTION_MOUSEMOVE: printf("onClipEvent(mouseMove){\n"); break;
+				case PLACEACTION_MOUSEDOWN: printf("onClipEvent(mouseDown){\n"); break;
+				case PLACEACTION_MOUSEUP: printf("onClipEvent(mouseUp){\n"); break;
+				case PLACEACTION_KEYDOWN: printf("onClipEvent(keyDown){\n"); break;
+				case PLACEACTION_KEYUP: printf("onClipEvent(keyUp){\n"); break;
+				case PLACEACTION_DATA: printf("onClipEvent(data){\n"); break;
+				default: printf("// unknown clipEvent: %04x\n", flags);
+			}
+			l = readUInt32(f);
+			decompileAction(f, l, 0);
+			printf("}\n");
+		}
+		printf("));\n");
+	}
 }
+
 
 void printRemoveObject(FILE *f)
 {
@@ -1399,22 +1439,22 @@ void printMovieClip(FILE *f, int length)
 
     switch(type)
     {
-      case PLACEOBJECT:		printPlaceObject(f, l);	        break;
-      case PLACEOBJECT2:	printPlaceObject2(f);		break;
-      case REMOVEOBJECT:	printRemoveObject(f);		break;
-      case REMOVEOBJECT2:	printRemoveObject2(f);		break;
-      case FRAMELABEL:		printFrameLabel(f);		break;
-      case DOACTION:		printDoAction(f, l);	        break;
-      case SHOWFRAME:           printf("\t$s%i->nextFrame();  # end of clip frame %i \n\n", movieclip, ++frame); break;
-      case END:                 putchar('\n');                  break;
+      case PLACEOBJECT:    printPlaceObject(f, l); break;
+      case PLACEOBJECT2:   printPlaceObject2(f); break;
+      case REMOVEOBJECT:   printRemoveObject(f); break;
+      case REMOVEOBJECT2:  printRemoveObject2(f); break;
+      case FRAMELABEL:     printFrameLabel(f); break;
+      case DOACTION:       printDoAction(f, l); break;
+      case SHOWFRAME:      printf("\t$s%i->nextFrame();  # end of clip frame %i \n\n", movieclip, ++frame); break;
+      case END:            putchar('\n'); break;
       /*
-      case SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
-      case SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
-      case SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, l);    break;
+      case SOUNDSTREAMHEAD:  printSoundStreamHead(f, 1);     break;
+      case SOUNDSTREAMHEAD2: printSoundStreamHead(f, 2);     break;
+      case SOUNDSTREAMBLOCK: printSoundStreamBlock(f, l);    break;
       */
       default:
-	printf("\t# %s, %i bytes \n", blockName(type), l);
-	silentSkipBytes(f, l);
+        printf("\t# %s, %i bytes \n", blockName(type), l);
+        silentSkipBytes(f, l);
     }
   }
 
@@ -1422,15 +1462,15 @@ void printMovieClip(FILE *f, int length)
 }
 /* peter: Constants with numbers added by peter for testing */
 #define SWFTEXTFIELD_HASLENGTH (1<<1)
-#define SWFTEXTFIELD_2	 (1<<2)
+#define SWFTEXTFIELD_2         (1<<2)
 #define SWFTEXTFIELD_NOEDIT    (1<<3)
 #define SWFTEXTFIELD_PASSWORD  (1<<4)
 #define SWFTEXTFIELD_MULTILINE (1<<5)
 #define SWFTEXTFIELD_WORDWRAP  (1<<6)
-#define SWFTEXTFIELD_7	 (1<<7)
-#define SWFTEXTFIELD_8	 (1<<8)
-#define SWFTEXTFIELD_9	 (1<<9)
-#define SWFTEXTFIELD_10	 (1<<10)
+#define SWFTEXTFIELD_7         (1<<7)
+#define SWFTEXTFIELD_8         (1<<8)
+#define SWFTEXTFIELD_9         (1<<9)
+#define SWFTEXTFIELD_10        (1<<10)
 #define SWFTEXTFIELD_DRAWBOX   (1<<11)
 #define SWFTEXTFIELD_NOSELECT  (1<<12)
 
@@ -1630,11 +1670,10 @@ int main(int argc, char *argv[])
   printf("# Change this to your needs. If you installed perl-ming global you don't need this.\n");
   printf("#use lib(\"/home/peter/mystuff/lib/site_perl\");\n\n");
   
-  printf("# We imported all because our converter is not so clever to select only needed. ;-)\n");
+  printf("# We import all because our converter is not so clever to select only needed. ;-)\n");
   printf("use SWF qw(:ALL);\n"); 
   printf("# Just copy from a sample, needed to use Constants like SWFFILL_RADIAL_GRADIENT\n");
   printf("use SWF::Constants qw(:Text :Button :DisplayItem :Fill);\n\n");
-  printf("# Default scale in Ming is 20 (=1 Pixel), but this converter writes values in TWIPS (= 1/20 Pixel) , so we must take care of it!\n");
   printf("SWF::setScale(1);\n");
   printf("SWF::setVersion(%i);\n", m.version);
   printf("\t$m = new SWF::Movie();\n\n");
@@ -1659,33 +1698,33 @@ int main(int argc, char *argv[])
     {
       case DEFINESHAPE3:
       case DEFINESHAPE2:
-      case DEFINESHAPE:		printShape(f, length, type);    break;
-      case SETBACKGROUNDCOLOR:	printSetBackgroundColor(f);	break;
-      case SHOWFRAME:           printf("  $m->nextFrame();  # end of frame %i\n", ++frame); break;
-      case PLACEOBJECT2:	printPlaceObject2(f);		break;
-      case REMOVEOBJECT2:	printRemoveObject2(f);		break;
-      case DOACTION:		printDoAction(f, length);	break;
-      case DEFINESPRITE:        printMovieClip(f, length);         break;
-      case DEFINEBUTTON:        printDefineButton(f, length);   break;
-      case DEFINEBUTTON2:       printDefineButton2(f, length);  break;
-      case FRAMELABEL:		printFrameLabel(f);		break;
+      case DEFINESHAPE:       printShape(f, length, type); break;
+      case SETBACKGROUNDCOLOR: printSetBackgroundColor(f); break;
+      case SHOWFRAME:         printf("  $m->nextFrame();  # end of frame %i\n", ++frame); break;
+      case PLACEOBJECT2:      printPlaceObject2(f); break;
+      case REMOVEOBJECT2:     printRemoveObject2(f); break;
+      case DOACTION:          printDoAction(f, length); break;
+      case DEFINESPRITE:      printMovieClip(f, length); break;
+      case DEFINEBUTTON:      printDefineButton(f, length); break;
+      case DEFINEBUTTON2:     printDefineButton2(f, length); break;
+      case FRAMELABEL:        printFrameLabel(f); break;
       case DEFINETEXT:
-      case DEFINETEXT2:		printDefineText(f, type);	break;
-      case TEXTFIELD:           printTextField(f, length);      break;
-      case DEFINEMORPHSHAPE:	printMorphShape(f, length);	break; 
-      case PLACEOBJECT:		printPlaceObject(f, length);	break;
-      case REMOVEOBJECT:	printRemoveObject(f);		break;
+      case DEFINETEXT2:       printDefineText(f, type); break;
+      case TEXTFIELD:         printTextField(f, length); break;
+      case DEFINEMORPHSHAPE:   printMorphShape(f, length); break;
+      case PLACEOBJECT:       printPlaceObject(f, length); break;
+      case REMOVEOBJECT:      printRemoveObject(f); break;
 
-      //case DEFINEFONT:		printDefineFont(f, length);	break;
-      case DEFINEFONT2:		printDefineFont2(f, length);	break;
-      /*case DEFINEFONTINFO:	printFontInfo(f, length);	break;
-      case DEFINESOUND:         printDefineSound(f, length);    break;
-      case SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
-      case SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
-      case SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, length); break;
-      case JPEGTABLES:          printJpegStream(f, length);     break;
+      //case DEFINEFONT:       printDefineFont(f, length); break;
+      case DEFINEFONT2:       printDefineFont2(f, length); break;
+      /*case DEFINEFONTINFO:   printFontInfo(f, length); break;
+      case DEFINESOUND:        printDefineSound(f, length); break;
+      case SOUNDSTREAMHEAD:    printSoundStreamHead(f, 1); break;
+      case SOUNDSTREAMHEAD2:   printSoundStreamHead(f, 2); break;
+      case SOUNDSTREAMBLOCK:   printSoundStreamBlock(f, length); break;
+      case JPEGTABLES:         printJpegStream(f, length); break;
       case DEFINEBITS:
-      case DEFINEBITSJPEG2:     printDefineBitsJpeg(f,length);  break;
+      case DEFINEBITSJPEG2:    printDefineBitsJpeg(f,length);  break;
 
       case DEFINEBITSJPEG3:
 	*/
