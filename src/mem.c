@@ -2,17 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG_MEM 1
+#define DEBUG_MEM 0
+#define CHECK_NODES 1
 
 typedef struct NODE_T
 {
+#if CHECK_NODES
+	struct NODE_T *self;
+#endif
 	struct NODE_T *next;
 	struct NODE_T *prev;
 	void *data;
 }
 NODE;
 
-#define NODHDRSZ (sizeof(NODE *)*2)
+#define NODHDRSZ (sizeof(NODE)-sizeof(void *))
 
 static NODE *firstnode = NULL;
 static NODE *lastnode = NULL;
@@ -43,6 +47,9 @@ ming_calloc(size_t nmemb, size_t size)
 	} else {
 		lastnode->next = node;
 	}
+#if CHECK_NODES
+	node->self = node;
+#endif
 
 	node->next = NULL;
 	lastnode = node;
@@ -82,6 +89,10 @@ ming_malloc(size_t size)
 		node, &(node->data));
 #endif
 
+#if CHECK_NODES
+	node->self = node;
+#endif
+
 	return &(node->data);
 
 }
@@ -90,6 +101,7 @@ void *
 ming_realloc(void *oldptr, size_t size)
 {
 	NODE *node, *oldnode, *prev, *next;
+	void *ret;
 
 #if DEBUG_MEM
 	fprintf(stderr, "ming_realloc(%p, %d)\n", oldptr, size);
@@ -104,8 +116,18 @@ ming_realloc(void *oldptr, size_t size)
 	}
 
 	oldnode = oldptr-NODHDRSZ;
+
+#if CHECK_NODES
+	if ( oldnode->self != oldnode )
+	{
+		fprintf(stderr, "WARN! ming_realloc(): corrupted node (node:%p,self:%p)\n", oldnode, oldnode->self);
+		return realloc(oldptr, size);
+	}
+#endif
+
 	prev = oldnode->prev;
 	next = oldnode->next;
+
 
 	node = realloc(oldnode, size+NODHDRSZ);
 	if ( ! node )
@@ -130,6 +152,10 @@ ming_realloc(void *oldptr, size_t size)
 		else lastnode = node;
 	}
 
+#if CHECK_NODES
+	node->self = node;
+#endif
+
 #if DEBUG_MEM
 	fprintf(stderr, "ming_realloc(%p, %d) allocates %p, returns %p\n", oldptr, size, node, &(node->data));
 #endif
@@ -146,6 +172,15 @@ ming_free(void *ptr)
 
 #if DEBUG_MEM
 	fprintf(stderr, "ming_free(%p) brings to node %p\n", ptr, node);
+#endif
+
+
+#if CHECK_NODES
+	if ( node->self != node )
+	{
+		fprintf(stderr, "WARN! ming_free: corrupted node (node:%p,self:%p)\n", node, node->self);
+		return;
+	}
 #endif
 
 	if ( node->next )
@@ -216,6 +251,10 @@ ming_strdup(const char *s)
 	fprintf(stderr, "ming_strdup(%p) allocates %p, returns %p\n", s, node, ret);
 #endif
 
+#if CHECK_NODES
+	node->self = node;
+#endif
+
 	return ret;
 }
 
@@ -253,6 +292,10 @@ ming_strndup(const char *s, size_t size)
 
 #if DEBUG_MEM
 	fprintf(stderr, "ming_strndup(%p, %d) allocates %p, returns %p\n", s, size, node, ret);
+#endif
+
+#if CHECK_NODES
+	node->self = node;
 #endif
 
 	return ret;
