@@ -655,16 +655,18 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
     {
       if(readBits(f, 1)) /* general line */
       {
-	x = readSBits(f, numBits);
-	y = readSBits(f, numBits);
-
-	SWFShape_drawScaledLine(shape, x*size/1024, y*size/1024);
+	x += readSBits(f, numBits);
+	y += readSBits(f, numBits);
       }
       else
+      {
 	if(readBits(f, 1)) /* vert = 1 */
-	  SWFShape_drawScaledLine(shape, 0, readSBits(f, numBits)*size/1024);
+	  y += readSBits(f, numBits);
 	else
-	  SWFShape_drawScaledLine(shape, readSBits(f, numBits)*size/1024, 0);
+	  x += readSBits(f, numBits);
+      }
+
+      SWFShape_drawScaledLineTo(shape, x*size/1024, y*size/1024);
     }
     else
     {
@@ -673,9 +675,14 @@ void SWFShape_drawScaledGlyph(SWFShape shape,
       int anchorX = readSBits(f, numBits);
       int anchorY = readSBits(f, numBits);
 
-      SWFShape_drawScaledCurve(shape,
-			       controlX*size/1024, controlY*size/1024,
-			       anchorX*size/1024, anchorY*size/1024);
+      SWFShape_drawScaledCurveTo(shape,
+				 (x+controlX)*size/1024,
+				 (y+controlY)*size/1024,
+				 (x+controlX+anchorX)*size/1024,
+				 (y+controlY+anchorY)*size/1024);
+
+      x += controlX + anchorX;
+      y += controlY + anchorY;
     }
   }
 
