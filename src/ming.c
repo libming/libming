@@ -53,10 +53,6 @@ void
 Ming_cleanup()
 {
 	Ming_cleanupFonts();
-	/* TODO: destroy all dangling objects */
-#if WRAP_MEMORY_MANAGEMENT
-	ming_garbage_collect();
-#endif
 }
 
 
