@@ -1,11 +1,9 @@
 This list should always be empty:
 
-	1- add SWFShape_drawCubic and SWFShape_drawCubicTo ????
-	2- add SWF::Constants
-	3- Split SWF.xs 
-	4- Add SWF::TextField metyhod pod
-	5- test under mod_perl (check $m->out)
-	6- Make sure all open files are closed (e.g. Bitmap)
+	- add SWFShape_drawCubic and SWFShape_drawCubicTo ????
+	- Add SWF::TextField method pod
+	- test under mod_perl (check $m->out)
+	- Make sure all open files are closed (e.g. Bitmap)
 
 
 This is wish list:
