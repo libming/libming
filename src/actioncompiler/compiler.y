@@ -43,10 +43,11 @@
   SETMEMBER, SHIFTLEFT, SHIFTRIGHT, SHIFTRIGHT2, VAREQUALS, OLDADD, SUBTRACT,
   MULTIPLY, DIVIDE, OLDEQUALS, OLDLESSTHAN, LOGICALAND, LOGICALOR, NOT,
   STRINGEQ, STRINGLENGTH, SUBSTRING, GETVARIABLE, SETVARIABLE,
-  SETTARGETEXPRESSION,  DUPLICATECLIP, REMOVECLIP, STARTDRAGMOVIE,
-  STOPDRAGMOVIE, STRINGLESSTHAN, MBLENGTH, MBSUBSTRING, MBORD, MBCHR,
+  SETTARGETEXPRESSION,  DUPLICATEMOVIECLIP, REMOVEMOVIECLIP,
+  STRINGLESSTHAN, MBLENGTH, MBSUBSTRING, MBORD, MBCHR,
   BRANCHALWAYS, BRANCHIFTRUE, GETURL2, POST, GET,
-  LOADVARIABLES, LOADMOVIE, LOADVARIABLESNUM, LOADMOVIENUM
+  LOADVARIABLES, LOADMOVIE, LOADVARIABLESNUM, LOADMOVIENUM,
+  CALLFRAME, STARTDRAG, STOPDRAG, GOTOFRAME, SETTARGET
 
 %token NULLVAL
 %token <intVal> INTEGER
@@ -118,6 +119,7 @@
 %type <getURLMethod> urlmethod
 
 %type <str> identifier
+%type <str> sprite, sprite_path, sprite_expr
 
 %type <len> opcode, opcode_list, push_item, with, push_list
 
@@ -325,10 +327,10 @@ identifier
 	| GETVARIABLE	{ $$ = strdup("getvariable"); }
 	| SETVARIABLE	{ $$ = strdup("setvariable"); }
 	| SETTARGETEXPRESSION	{ $$ = strdup("settargetexpression"); }
-	| DUPLICATECLIP	{ $$ = strdup("duplicateclip"); }
-	| REMOVECLIP	{ $$ = strdup("removeclip"); }
-	| STARTDRAGMOVIE	{ $$ = strdup("startdragmovie"); }
-	| STOPDRAGMOVIE	{ $$ = strdup("stopdragmovie"); }
+	| DUPLICATEMOVIECLIP	{ $$ = strdup("duplicatemovieclip"); }
+	| REMOVEMOVIECLIP	{ $$ = strdup("removemovieclip"); }
+	| STARTDRAG	{ $$ = strdup("startdrag"); }
+	| STOPDRAG	{ $$ = strdup("stopdrag"); }
 	| STRINGLESSTHAN	{ $$ = strdup("stringlessthan"); }
 	| MBLENGTH	{ $$ = strdup("mblength"); }
 	| MBSUBSTRING	{ $$ = strdup("mbsubstring"); }
@@ -412,28 +414,37 @@ iter_stmt
 		  bufferResolveJumps($$); }
 
 	| FOR '(' assign_stmts_opt ';' expr_opt ';' assign_stmts_opt ')' stmt
-                { if (!$5)
-                    $5 = newBuffer();
-                  else {
-                    bufferWriteU8($5, SWFACTION_LOGICALNOT);
-                    bufferWriteU8($5, SWFACTION_BRANCHIFTRUE);
-                    bufferWriteS16($5, 2);
-                    bufferWriteS16($5, bufferLength($9)+bufferLength($7)+5);
-                  }
-                  bufferConcat($5, $9);
-                  bufferConcat($5, $7);
-                  bufferWriteU8($5, SWFACTION_BRANCHALWAYS);
-                  bufferWriteS16($5, 2);
-                  bufferWriteS16($5, -(bufferLength($5)+2));
-                  bufferResolveJumps($5);
-
+		{
 		  if($3)
-		  {
 		    $$ = $3;
-		    bufferConcat($$, $5);
+		  else
+		    $$ = newBuffer();
+
+		  if($7)
+		  {
+                    bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+                    bufferWriteS16($$, 2);
+                    bufferWriteS16($$, bufferLength($7));
 		  }
 		  else
-		    $$ = $5;
+		    $7 = newBuffer();
+
+		  if($5)
+		  {
+		    bufferConcat($7, $5);
+                    bufferWriteU8($7, SWFACTION_LOGICALNOT);
+                    bufferWriteU8($7, SWFACTION_BRANCHIFTRUE);
+                    bufferWriteS16($7, 2);
+                    bufferWriteS16($7, bufferLength($9)+5);
+                  }
+
+                  bufferConcat($7, $9);
+                  bufferWriteU8($7, SWFACTION_BRANCHALWAYS);
+                  bufferWriteS16($7, 2);
+                  bufferWriteS16($7, -(bufferLength($7)+2));
+                  bufferResolveJumps($7);
+
+                  bufferConcat($$, $7);
                 }
 
 	| FOR '(' identifier IN obj_ref ')' stmt
@@ -545,6 +556,7 @@ level
 		  bufferWriteU8($$, SWFACTION_STRINGCONCAT); }
 	;
 
+
 void_function_call
 	: IDENTIFIER '(' expr_list ')'
 		{ $$ = $3.buffer;
@@ -565,13 +577,6 @@ void_function_call
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 0xc0+$6); }
 
-	| LOADMOVIE '(' expr ',' expr urlmethod ')'
-		{ $$ = $3;
-		  bufferConcat($$, $5);
-		  bufferWriteU8($$, SWFACTION_GETURL2);
-		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, 0x40+$6); }
-
 	| LOADVARIABLESNUM '(' expr ',' level urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
@@ -579,12 +584,84 @@ void_function_call
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 0x80+$6); }
 
+	| LOADMOVIE '(' expr ',' expr urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0x40+$6); }
+
 	| LOADMOVIENUM '(' expr ',' level urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, $6); }
+
+	| CALLFRAME '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_CALLFRAME);
+		  bufferWriteS16($$, 0); }
+
+	/* startDrag(target, lock, [left, right, top, bottom]) */
+	| STARTDRAG '(' expr ',' expr ')'
+		{ $$ = newBuffer();
+		  bufferWriteString($$, "0", 2); /* no constraint */
+		  bufferConcat($$, $5);
+		  bufferConcat($$, $3);
+		  bufferWriteU8($$, SWFACTION_STARTDRAGMOVIE); }
+
+	| STARTDRAG '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
+		{ $$ = newBuffer();
+		  bufferConcat($$, $7);
+		  bufferConcat($$, $11);
+		  bufferConcat($$, $9);
+		  bufferConcat($$, $13);
+		  bufferWriteString($$, "1", 2); /* has constraint */
+		  bufferConcat($$, $5);
+		  bufferConcat($$, $3);
+		  bufferWriteU8($$, SWFACTION_STARTDRAGMOVIE); }
+
+	| STOPDRAG '(' ')' /* no args */
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_STOPDRAGMOVIE); }
+
+	/* duplicateMovieClip(target, new, depth) */
+	| DUPLICATEMOVIECLIP '(' expr ',' expr ',' expr ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferConcat($$, $7);
+		  bufferWriteInt($$, 16384); /* magic number */
+		  bufferWriteU8($$, SWFACTION_ADD);
+		  bufferWriteU8($$, SWFACTION_DUPLICATECLIP); }
+
+	| REMOVEMOVIECLIP '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_REMOVECLIP); }
+
+	/* getURL2(url, window, [method]) */
+	| GETURL '(' expr ',' expr ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, GETURL_METHOD_NOSEND); }
+
+	| GETURL '(' expr ',' expr ',' GETURL_METHOD ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteU8($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, $7); }
+
+	| GETURL1 '(' STRING ',' STRING ')'
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_GETURL);
+		  bufferWriteS16($$, strlen($3) + strlen($5) + 2);
+		  bufferWriteHardString($$, $3, strlen($3));
+		  bufferWriteU8($$, 0);
+		  bufferWriteHardString($$, $5, strlen($5));
+		  bufferWriteU8($$, 0); }
 
 	/* v3 actions */
 	| NEXTFRAME '(' ')'
@@ -606,7 +683,44 @@ void_function_call
 	| STOPSOUNDS '(' ')'
 		{ $$ = newBuffer();
 		  bufferWriteU8($$, SWFACTION_STOPSOUNDS); }
+
+	| TOGGLEQUALITY '(' ')'
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_TOGGLEQUALITY); }
+
+	| GOTOFRAME '(' INTEGER ')'
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_GOTOFRAME);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, $3); }
+
+	| GOTOFRAME '(' STRING ')'
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_GOTOLABEL);
+		  bufferWriteS16($$, strlen($3)+1);
+		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  free($3); }
+
+	| GOTOFRAME '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_GOTOEXPRESSION);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 0); } /* XXX - and stop */
+
+	| SETTARGET '(' STRING ')'
+		{ $$ = newBuffer();
+		  bufferWriteU8($$, SWFACTION_SETTARGET);
+		  bufferWriteS16($$, strlen($3)+1);
+		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  free($3); }
+
+	| SETTARGET '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteU8($$, SWFACTION_SETTARGETEXPRESSION); }
+
+
 	;
+
 
 function_call
 	: IDENTIFIER '(' expr_list ')'
@@ -659,6 +773,7 @@ function_call
 		{ $$ = $3;
 		  bufferWriteU8($$, SWFACTION_TYPEOF); }
 	;
+
 
 expr_list
 	: /* empty */
@@ -776,8 +891,8 @@ assignop
 	;
 
 incdecop
-	: "++"	{ $$ = SWFACTION_INCREMENT; }
-	| "--"	{ $$ = SWFACTION_DECREMENT; }
+	: "++"		{ $$ = SWFACTION_INCREMENT; }
+	| "--"		{ $$ = SWFACTION_DECREMENT; }
 	;
 
 incdecop_expr
@@ -834,6 +949,49 @@ double
 	;
 */
 
+sprite_path
+	: '/'
+		{ $$ = strdup("/"); }
+
+	| ".." '/'
+		{ $$ = strdup("../"); }
+
+	| sprite_path ".." '/'
+		{ $$ = $1;
+		  $$ = stringConcat($$, strdup("../")); }
+
+	| sprite_path IDENTIFIER '/'
+		{ $$ = $1;
+		  $$ = stringConcat($$, $2); /* frees $2 */
+		  $$ = stringConcat($$, strdup("/")); }
+	;
+
+sprite
+	: '/'
+		{ $$ = strdup("/"); }
+
+	| ".."
+		{ $$ = strdup(".."); }
+
+	| sprite_path ".."
+		{ $$ = $1;
+		  $$ = stringConcat($$, strdup("..")); }
+
+	| '.' '/' IDENTIFIER
+		{ $$ = $3; }
+
+	| sprite_path IDENTIFIER
+		{ $$ = $1;
+		  $$ = stringConcat($$, $2); }
+	;
+
+sprite_expr
+	: sprite ':' IDENTIFIER
+		{ $$ = $1;
+		  $$ = stringConcat($$, strdup(":"));
+		  $$ = stringConcat($$, $3); }
+	;
+
 /* these leave a value on the stack */
 expr
 	: function_call
@@ -843,6 +1001,10 @@ expr
 	| method_call
 
 	| incdecop_expr
+
+	| sprite_expr /* for flash 4 compatibility */
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1); }
 
 	| NEW identifier
 		{ $$ = newBuffer();
@@ -1361,8 +1523,8 @@ opcode
 	| SETVARIABLE		{ $$ = bufferWriteU8(asmBuffer, SWFACTION_SETVARIABLE); }
 	| SETTARGETEXPRESSION	{ $$ = bufferWriteU8(asmBuffer, SWFACTION_SETTARGETEXPRESSION); }
 	| CONCAT		{ $$ = bufferWriteU8(asmBuffer, SWFACTION_STRINGCONCAT); }
-	| DUPLICATECLIP		{ $$ = bufferWriteU8(asmBuffer, SWFACTION_DUPLICATECLIP); }
-	| REMOVECLIP		{ $$ = bufferWriteU8(asmBuffer, SWFACTION_REMOVECLIP); }
+	| DUPLICATEMOVIECLIP	{ $$ = bufferWriteU8(asmBuffer, SWFACTION_DUPLICATECLIP); }
+	| REMOVEMOVIECLIP	{ $$ = bufferWriteU8(asmBuffer, SWFACTION_REMOVECLIP); }
 	| TRACE			{ $$ = bufferWriteU8(asmBuffer, SWFACTION_TRACE); }
 	| STRINGLESSTHAN	{ $$ = bufferWriteU8(asmBuffer, SWFACTION_STRINGCOMPARE); }
 	| RANDOM		{ $$ = bufferWriteU8(asmBuffer, SWFACTION_RANDOM); }
