@@ -209,29 +209,19 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	/* 
 	 * skip stream until first MP3 header which starts with 0xffe 
 	 */
-	flags = SWFInput_getChar(input);
-	while(flags != EOF) {
-		if((flags & 0xff) == 0xff) {
-			flags = SWFInput_getChar(input);
-			if(flags == EOF)
-				return NULL;
-			if((flags & 0xe0) == 0xe0)
-				break;
-		} else
-			flags = SWFInput_getChar(input);
-		
-		start++;
-	}
-	
-	SWFInput_seek(input, -2, SEEK_CUR);
+
 	flags = SWFInput_getUInt32_BE(input);
 	if(flags == EOF)
 		return NULL;
-
-	SWFInput_seek(input, start, SEEK_SET);
-
-	if ( (flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC )
-		return NULL;
+	
+	while((flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC)
+	{
+		SWFInput_seek(input, -3, SEEK_CUR);
+		start++;
+		flags = SWFInput_getUInt32_BE(input);
+		if(flags == EOF)
+			return NULL;
+	}
 
 	if ( (flags & MP3_CHANNEL) == MP3_CHANNEL_MONO )
 		channels = SWF_SOUNDSTREAM_MONO;
