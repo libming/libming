@@ -213,17 +213,18 @@ SWFShape
 newSWFShapeFromBitmap(SWFBitmap bitmap, int flag)
 {
 	SWFShape shape = newSWFShape();
+	SWFFillStyle fill;
+	int width, height;
 
 	if ( flag != SWFFILL_TILED_BITMAP && flag != SWFFILL_CLIPPED_BITMAP)
 	{
 		SWF_error("Invalid bitmap fill flag");
 	}
 
-	SWFFillStyle fill =
-		SWFShape_addBitmapFillStyle(shape, bitmap, flag);
+	fill = SWFShape_addBitmapFillStyle(shape, bitmap, flag);
 
-	int width = SWFBitmap_getWidth(bitmap);
-	int height = SWFBitmap_getHeight(bitmap);
+	width = SWFBitmap_getWidth(bitmap);
+	height = SWFBitmap_getHeight(bitmap);
 
 	SWFShape_setRightFillStyle(shape, fill);
 
