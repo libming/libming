@@ -82,6 +82,10 @@ By default, SWF doesn't import other SWF classes. You may, however, instruct SWF
 
 Sets scale to $scale.
 
+=item SWF::setVersion($version);
+
+Sets SWF version. Only versions 4 and 5 are currently supported. 
+
 =back
 
 =head1 AUTHOR
