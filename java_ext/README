@@ -43,7 +43,7 @@ NOTES
 
 The Java class heirarchy and methods closely mirror the PHP and python
 interfaces. I've added some additional convenience functions and new
-functionality (nothing substantial at the moment).
+functionality.
 
 Also, have separated the implementation from the interface definition.  This
 makes browsing the API easier and also allows for other implementations.
@@ -60,3 +60,23 @@ deal.  Just be aware that interfaces (identified with an "I" suffix) are
 used most of the time.
 
 
+EXTENDED API
+------------
+
+If you are interested in more advanced functionality, we have a not-yet 
+publicly available high-level API built on top of this.  Currently includes
+the following:
+
+  - supports wide variety of image formats (ming only supports jpeg and dbl)
+  - timeline & animation classes
+  - text and object align to arbitrary paths (and path animation)
+  - movie (mpeg, qt, avi, etc) to flash (in progress)
+  - others
+
+Please contact me if you would like more information about this.
+
+
+CONTACT
+-------
+
+Jonathan Shore <jshore@e-shuppan.com>

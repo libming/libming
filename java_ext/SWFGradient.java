@@ -16,6 +16,8 @@
 
 
 
+import SWFGradientI;
+
 
 
 //
@@ -28,6 +30,7 @@
 public class SWFGradient extends SWFObject implements SWFGradientI {
 
     public SWFGradient ()
+	throws SWFException
     {
 	setHandle (nNew ()); 
     }

@@ -15,6 +15,7 @@
 //
 
 
+
 import SWFObjectI;
 import SWFFontI;
 
@@ -31,6 +32,7 @@ public interface SWFTextI extends SWFObjectI {
     
     public void		setFont (SWFFontI font) throws SWFException;
     public void		setColor (int r, int g, int b, int alpha);
+    public void		setColor (SWFColor color);
 
     public void		addString (String text);
 

@@ -17,6 +17,8 @@
 
 
 
+
+
 //
 //  SWFException Class
 //      exception from swf generation or rendering
@@ -27,7 +29,10 @@
 public class SWFException extends Exception {
 
     public SWFException (String err)
-        { this.err = err; }
+	throws SWFException
+    { 
+	this.err = err; 
+    }
 
     public String toString ()
         { return "SWF: " + err; }

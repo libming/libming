@@ -16,6 +16,7 @@
 
 
 
+
 import SWFObjectI;
 import SWFShapeI;
 
@@ -31,8 +32,8 @@ import SWFShapeI;
 //
 public interface SWFMorphI extends SWFObjectI {
     
-    public SWFShapeI	getShape1 ();
-    public SWFShapeI	getShape2 ();
+    public SWFShapeI	getShape1 ()	throws SWFException;
+    public SWFShapeI	getShape2 ()	throws SWFException;
 };
 
 

@@ -16,8 +16,15 @@
 
 
 
+
 import SWFObjectI;
+import SWFObject;
 import SWFBitmapI;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+
 
 
 
@@ -31,15 +38,17 @@ import SWFBitmapI;
 public class SWFBitmap extends SWFObject implements SWFBitmapI {
     
     public SWFBitmap (String filename)
+	throws SWFException
     {
 	if (filename.endsWith (".dbl") || filename.endsWith (".DBL"))
 	    setHandle (nNewDblBitmap (filename));
 	else
 	    setHandle (nNewJpegBitmap (filename));
     }
-
+    
 
     public SWFBitmap (String filename, String alphamask)
+	throws SWFException
     {
 	setHandle (nNewJpegWithAlpha (filename, alphamask));
     }
@@ -48,7 +57,7 @@ public class SWFBitmap extends SWFObject implements SWFBitmapI {
     protected void finalize()
 	throws Throwable
     {
-	nDestroy (handle);
+	// nDestroy (handle);
 	super.finalize();
     }
 
@@ -63,6 +72,7 @@ public class SWFBitmap extends SWFObject implements SWFBitmapI {
 
     protected native int	nNewDblBitmap (String filename);	
     protected native int	nNewJpegBitmap (String filename);	
+    protected native int	nNewDataBitmap (byte[] data);	
     protected native int	nNewJpegWithAlpha (String filename, String alpha);
     protected native void	nDestroy (int handle);	
 

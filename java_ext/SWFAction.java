@@ -15,6 +15,8 @@
 //
 
 
+import SWFActionI;
+
 
 
 //
@@ -27,6 +29,7 @@
 public class SWFAction extends SWFObject implements SWFActionI {
     
     public SWFAction (String script)
+	throws SWFException
     {
 	setHandle (nNew (script));
     }

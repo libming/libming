@@ -16,6 +16,7 @@
 
 
 
+
 import SWFObjectI;
 import SWFDisplayItemI;
 
@@ -32,7 +33,10 @@ import SWFDisplayItemI;
 public class SWFMovieClip extends SWFObject implements SWFMovieClipI {
     
     public SWFMovieClip ()
-        { setHandle (nNew()); }
+	throws SWFException
+    { 
+	setHandle (nNew()); 
+    }
 
     public void	setFrames (int nframes)
         { nSetFrames (handle, nframes); }
@@ -43,10 +47,10 @@ public class SWFMovieClip extends SWFObject implements SWFMovieClipI {
 	throws SWFException
     { 
 	object.eval();
+	preserve (object);
 	SWFDisplayItemI i = 
 	    new SWFDisplayItem (nAdd (handle, object.getHandle()));
-	if (object.shifted())
-	    i.move (object.getXOffset(), object.getYOffset());
+	object.getMatrix().apply (i);
 
 	return i; 
     }

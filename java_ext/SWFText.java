@@ -15,8 +15,10 @@
 //
 
 
+
 import SWFObjectI;
 import SWFFontI;
+import SWFException;
 
 
 //
@@ -29,6 +31,7 @@ import SWFFontI;
 public class SWFText extends SWFObject implements SWFTextI {
     
     public SWFText ()
+	throws SWFException
     { 
 	setHandle (nNew()); 
     }
@@ -44,9 +47,16 @@ public class SWFText extends SWFObject implements SWFTextI {
 
     public void	setFont (SWFFontI font) 
 	throws SWFException
-        { font.eval(); nSetFont (handle, font.getHandle()); }
+    { 
+	font.eval(); 
+	nSetFont (handle, font.getHandle());
+	preserve (font);
+    }
+
     public void	setColor (int r, int g, int b, int alpha)
         { nSetColor (handle, r,g,b, alpha); }
+    public void	setColor (SWFColor color)
+        { nSetColor (handle, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()); }
 
     public void	addString (String text)
         { nAddString (handle, text); }

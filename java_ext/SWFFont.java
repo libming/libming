@@ -16,6 +16,7 @@
 
 
 
+
 import SWFObjectI;
 import SWFFontI;
 
@@ -31,6 +32,7 @@ import SWFFontI;
 public class SWFFont extends SWFObject implements SWFFontI {
     
     public SWFFont (String font)
+	throws SWFException
     {
 	if (font.endsWith (".fdb")) {
 	    setHandle (nNewFileFont (font));

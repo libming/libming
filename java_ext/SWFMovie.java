@@ -35,7 +35,10 @@ import SWFDisplayItem;
 public class SWFMovie extends SWFObject implements SWFMovieI {
 
     public SWFMovie ()
-        { setHandle (nNew()); }
+	throws SWFException
+    { 
+	setHandle (nNew()); 
+    }
 
     public void	setScale (float scale)
         { nSetScale (scale); }
@@ -60,10 +63,10 @@ public class SWFMovie extends SWFObject implements SWFMovieI {
 	throws SWFException
     { 
 	object.eval();
+	preserve (object);
 	SWFDisplayItemI i = 
 	    new SWFDisplayItem (nAdd (handle, object.getHandle()));
-	if (object.shifted())
-	    i.move (object.getXOffset(), object.getYOffset());
+	object.getMatrix().apply (i);
 
 	return i; 
     }

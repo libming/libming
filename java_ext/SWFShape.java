@@ -17,6 +17,7 @@
 
 
 import SWFShapeI;
+import SWFColor;
 
 
 
@@ -29,13 +30,25 @@ import SWFShapeI;
 //
 public class SWFShape extends SWFObject implements SWFShapeI {
 
+    public final static float PI = 3.1415926f;
+
     // public methods
     
     public SWFShape (int handle)
-        { super (handle); }
+	throws SWFException
+    { 
+	super (handle); 
+	this.lwidth = 1;
+	this.color = SWFColor.identity();
+    }
 
     public SWFShape ()
-        { setHandle (nNew()); }
+    	throws SWFException
+    { 
+	setHandle (nNew()); 
+	this.lwidth = 1;
+	this.color = SWFColor.identity();
+    }
 
 
     public void	movePen (float x, float y)
@@ -64,35 +77,92 @@ public class SWFShape extends SWFObject implements SWFShapeI {
 
 
     public void	drawArc (float r, float startAngle, float endAngle)
-        { nDrawArc (handle, r, startAngle, endAngle); }
+        { iDrawArc (handle, r, startAngle, endAngle); }
     public void	drawCircle (float r)
-        { nDrawCircle (handle, r); }
+        { iDrawCircle (handle, r); }
+
     public void	drawGlyph (SWFFontI font, int c)
 	throws SWFException
-        { font.eval(); nDrawGlyph (handle, font.getHandle(), c); }
+    { 
+	font.eval(); 
+	nDrawGlyph (handle, font.getHandle(), c); 
+	preserve (font);
+    }
 
 
     public void	end ()
         { nEnd (handle); }
 
 
+    // color & line thickness
+
     public void	setLine (short width, int r, int g, int b, int alpha)
-        { nSetLine (handle, width, r,g,b, alpha); }
+    { 
+	lwidth = width;
+	color = new SWFColor(r,g,b, alpha);
+	nSetLine (handle, width, r,g,b,alpha); 
+    }
+
+    public void	setLine (short width, SWFColor color)
+    { 
+	lwidth = width;
+	this.color = color;
+	nSetLine (handle, width, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()); 
+    }
+
+    public void	setLine (short width)
+    { 
+	lwidth = width;
+	setLine (width, color);
+    }
+
+    public void	setColor (SWFColor color)
+    { 
+	this.color = color;
+	setLine (lwidth, color);
+    }
+
+
+    // fills
+
     public SWFFillI addBitmapFill (SWFBitmapI bitmap, int flags)
 	throws SWFException
-        { bitmap.eval(); return new SWFFill (nAddBitmapFill (handle, bitmap.getHandle(), (short)flags)); }
+    { 
+	bitmap.eval(); 
+	preserve (bitmap);
+	return new SWFFill (nAddBitmapFill (handle, bitmap.getHandle(), (short)flags)); 
+    }
+
     public SWFFillI addGradientFill (SWFGradientI gradient, int flags)
 	throws SWFException
-        { gradient.eval(); return new SWFFill (nAddGradientFill (handle, gradient.getHandle(), (short)flags)); }
+    { 
+	gradient.eval(); 
+	preserve (gradient);
+	return new SWFFill (nAddGradientFill (handle, gradient.getHandle(), (short)flags)); 
+    }
+
     public SWFFillI addSolidFill (int r, int g, int b, int alpha)
+	throws SWFException
         { return new SWFFill (nAddSolidFill (handle, r,g,b, alpha)); }
+    public SWFFillI addSolidFill (SWFColor color)
+	throws SWFException
+        { return new SWFFill (nAddSolidFill (handle, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())); }
 
     public void	setLeftFill (SWFFillI fill)
 	throws SWFException
-        { fill.eval(); nSetLeftFill (handle, fill.getHandle()); }
+    { 
+	fill.eval();
+	preserve (fill);
+	nSetLeftFill (handle, fill.getHandle()); 
+    }
+
     public void	setRightFill (SWFFillI fill)
 	throws SWFException
-        { fill.eval(); nSetRightFill (handle, fill.getHandle()); }
+    { 
+	fill.eval(); 
+	preserve (fill);
+	nSetRightFill (handle, fill.getHandle()); 
+    }
 
 
     protected void finalize()
@@ -102,6 +172,34 @@ public class SWFShape extends SWFObject implements SWFShapeI {
 	super.finalize();
     }
 
+
+    // internal stuff
+
+    
+    protected void iDrawCircle (int handle, float r)
+    {
+	final float a = r * (float)Math.tan (PI/8);
+	final float b = r * (float)Math.sin (PI/4);
+
+	movePen (r, 0);
+	drawCurve (0, -a, b-r, -b+a);
+	drawCurve (-b+a, b-r, -a, 0);
+	drawCurve (-a, 0, a-b, r-b);
+	drawCurve (b-r, b-a, 0, a);
+	drawCurve (0,a, r-b, b-a);
+	drawCurve (b-a,r-b,a,0);
+	drawCurve (a,0,b-a,b-r);
+	drawCurve (r-b,a-b,0,-a);
+	movePen (-r, 0);
+    }
+
+
+    protected void iDrawArc (int handle, float r, float startAngle, float endAngle)
+    {
+	nDrawArc (handle,r,startAngle,endAngle);
+    }
+    
+    
 
     // native stuff
 
@@ -135,6 +233,12 @@ public class SWFShape extends SWFObject implements SWFShapeI {
 
     protected native void	nSetLeftFill (int handle, int Hfill);
     protected native void	nSetRightFill (int handle, int Hfill);
+
+
+    // variables
+
+    protected short		lwidth;
+    protected SWFColor		color;
 };
 
 

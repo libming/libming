@@ -15,6 +15,7 @@
 //
 
 
+
 import SWFObjectI;
 import SWFFontI;
 
@@ -31,6 +32,7 @@ import SWFFontI;
 public class SWFTextField extends SWFObject implements SWFTextFieldI {
 
     public SWFTextField ()
+	throws SWFException
     {
 	setHandle (nNew());
     }
@@ -57,9 +59,16 @@ public class SWFTextField extends SWFObject implements SWFTextFieldI {
 
     public void	setFont (SWFFontI font)
 	throws SWFException
-        { font.eval(); nSetFont (handle, font.getHandle()); }
+    { 
+	font.eval(); 
+	nSetFont (handle, font.getHandle()); 
+	preserve (font);
+    }
+
     public void	setColor (int r, int g, int b, int alpha)
         { nSetColor (handle, r,g,b, alpha); }
+    public void	setColor (SWFColor color)
+        { nSetColor (handle, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()); }
 
     public void	addString (String text)
         { nAddString (handle, text); }

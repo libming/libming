@@ -16,7 +16,9 @@
 
 
 
+
 import SWFObjectI;
+import SWFDisplayItemI;
 
 
 
@@ -34,7 +36,10 @@ import SWFObjectI;
 public class SWFDisplayItem extends SWFObject implements SWFDisplayItemI {
 
     public SWFDisplayItem (int handle)
-        { super (handle); }
+	throws SWFException
+    { 
+	super (handle); 
+    }
     
     public void	rotate (float degrees)
         { nRotate (handle, degrees); }

@@ -16,6 +16,7 @@
 
 
 
+
 import SWFObjectI;
 import SWFShape;
 
@@ -31,12 +32,15 @@ import SWFShape;
 //
 public class SWFMorph extends SWFObject implements SWFMorphI {
 
-    public SWFMorph ()
-        { setHandle (nNew()); }
+    public SWFMorph () 
+	throws SWFException
+    { 
+	setHandle (nNew()); 
+    }
     
-    public SWFShapeI getShape1 ()
+    public SWFShapeI getShape1 () throws SWFException
         { return new SWFShape (nGetShape1 (handle)); }
-    public SWFShapeI getShape2 ()
+    public SWFShapeI getShape2 () throws SWFException
         { return new SWFShape (nGetShape2 (handle)); }
 
 

@@ -18,6 +18,8 @@
 
 import SWFObjectI;
 import SWFFontI;
+import SWFButtonI;
+
 
 
 //
@@ -30,6 +32,7 @@ import SWFFontI;
 public class SWFButton extends SWFObject implements SWFButtonI {
     
     public SWFButton ()
+	throws SWFException
     {
 	setHandle (nNew());
     }
@@ -37,7 +40,7 @@ public class SWFButton extends SWFObject implements SWFButtonI {
     protected void finalize()
 	throws Throwable
     {
-	nDestroy (handle);
+	// nDestroy (handle);
 	super.finalize();
     }
 

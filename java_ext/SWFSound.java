@@ -17,6 +17,7 @@
 
 
 
+
 //
 //  SWFSound Class
 //	create mp3 based sound stream
@@ -27,7 +28,10 @@
 public class SWFSound extends SWFObject implements SWFSoundI {
     
     public SWFSound (String file)
-        { setHandle (nNew (file)); }
+	throws SWFException
+    { 
+	setHandle (nNew (file)); 
+    }
 
     protected native int nNew (String file);
 };

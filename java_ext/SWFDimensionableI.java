@@ -1,10 +1,9 @@
 //
 // Description:
-//    SWFGradient Interface
+//    SWFDimensionable Interface
 //
 // Authors:
 //    Jonathan Shore <jshore@e-shuppan.com>
-//    Based on php wrapper developed by <dave@opaque.net>
 //
 // Copyright:
 //    Copyright 2001 E-Publishing Group Inc.  Permission is granted to use or
@@ -21,19 +20,19 @@ import SWFObjectI;
 
 
 //
-//  SWFGradient Interface
-//	gradient
+//  SWFDimensionable Interface
+//      super-interface to all interfaces / classes which have dimension
 //
 //  Notes
-//    -	this object is not instantiated by the user rather is generated
-//	when a gradient fill is specified on a path-based entity.
+//    - 
 //
-public interface SWFGradientI extends SWFObjectI {
+public interface SWFDimensionableI extends SWFObjectI {
     
-    public void	addEntry (float ratio, int r, int g, int b, int alpha);
-
+    public float	getWidth ();
+    public float	getHeight ();
 };
 
 
 
     
+

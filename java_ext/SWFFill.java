@@ -16,6 +16,7 @@
 
 
 
+
 import SWFObject;
 
 
@@ -31,7 +32,10 @@ import SWFObject;
 public class SWFFill extends SWFObject implements SWFFillI {
 
     public SWFFill (int handle)
-        { super (handle); }
+	throws SWFException
+    { 
+	super (handle); 
+    }
 
 
     public void	skewX (float skew)

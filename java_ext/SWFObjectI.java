@@ -11,8 +11,14 @@
 //    modify this code provided that the original copyright notice is included.
 //
 //    This software is distributed with no warranty of liability, merchantability,
-//    or fitness for a specific purpose.
+//    or fitness for any specific purpose.
 //
+
+
+
+
+import SWFException;
+import SWFMatrix;
 
 
 
@@ -39,13 +45,12 @@ public interface SWFObjectI {
 
     public void		eval() throws SWFException;
 
-    public void		setXOffset (float offset);
-    public void		setYOffset (float offset);
-    public void		setOffset (float dx, float dy);
+    public Object	getProperty (String name)			throws SWFException;
+    public void		setProperty (String name, Object value);
 
-    public float	getXOffset ();
-    public float	getYOffset ();
+    public float	getFloatProperty (String name)			throws SWFException;
+    public void		setFloatProperty (String name, float value);
 
-    public boolean	shifted ();
-    
+    public void		setMatrix (SWFMatrix mat);
+    public SWFMatrix	getMatrix ();
 };

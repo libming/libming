@@ -16,6 +16,15 @@
 
 
 
+import SWFException;
+import SWFObjectI;
+import SWFMatrix;
+
+import java.util.Hashtable;
+import java.util.Vector;
+
+
+
 
 //
 //  SWFObject Class
@@ -24,9 +33,8 @@
 //  Notes
 //    - keeps underlying SWF entity handle, and adjustments
 //
-//    - dx and dy are kept so that an object creation function can specify a
-//	relative offset when being contained by a movie, movie-clip, etc.  This
-//	is especially useful if you want to use center coordinates.
+//    - a translation / rotation / skew matrix is kept so that objects can
+//	be created with specific offset, rotation, etc
 //
 //    - eval() is provided so that the object can be adjusted or rendered just
 //	prior to being added to a parent container (as in MC.add(object))
@@ -34,19 +42,23 @@
 public class SWFObject implements SWFObjectI {
 
     public SWFObject ()
+	throws SWFException
     {
 	initialize();
 	this.handle = 0;
-	this.dx = 0.0f;
-	this.dy = 0.0f;
+	this.matrix = null;
+	this.props = null;
+	this.preserve = null;
     }
 
     public SWFObject (int handle)
+	throws SWFException
     {
 	initialize();
 	this.handle = handle;
-	this.dx = 0.0f;
-	this.dy = 0.0f;
+	this.matrix = null;
+	this.props = null;
+	this.preserve = null;
     }
 
 
@@ -64,42 +76,97 @@ public class SWFObject implements SWFObjectI {
     public void eval() throws SWFException
         { }
 
-    // offset functions
 
-    public void setXOffset (float dx)
-        { this.dx = dx; }
+    // matrix functions
 
-    public void setYOffset (float dy)
-        { this.dy = dy; }
+    public void setMatrix (SWFMatrix matrix)
+    { 
+	this.matrix = matrix; 
+    }
 
-    public void setOffset (float dx, float dy)
-        { this.dx = dx; this.dy = dy; }
-
-    public float getXOffset ()
-        { return dx; }
-
-    public float getYOffset ()
-        { return dy; }
-
-    public boolean shifted ()
-        { return (dx != 0.0f) || (dy != 0.0f); }
-
-
-    // initializer
-
-    public static void initialize ()
+    public SWFMatrix getMatrix ()
     {
-	if (initialized) return;
-        System.loadLibrary ("jswf");
-	initialized = false;
+	if (matrix == null)
+	    return SWFMatrix.identity();
+	else
+	    return matrix;
+    }
+
+
+    // property functions
+
+    public Object getProperty (String name)
+	throws SWFException
+    {
+	if (props == null)
+	    throw new SWFException ("SWFObject::getProperty: no properties, trying: " + name);
+	else
+	    return props.get (name);
+    }
+
+    public void setProperty (String name, Object value)
+    {
+	if (props == null)
+	    props = new Hashtable();
+
+	props.put (name, value);
+    }
+
+    
+    public float getFloatProperty (String name)
+	throws SWFException
+    {
+	Object o = getProperty (name);
+	if (o == null)
+	    throw new SWFException ("SWFObject::getProperty: unknown property: " + name);
+	else
+	    return ((Float)o).floatValue();
+    }
+
+    
+    public void setFloatProperty (String name, float v)
+    {
+	setProperty (name, new Float (v));
+    }
+	
+
+
+    // initializer & GC related
+
+    public static synchronized void initialize ()
+	throws SWFException
+    {
+	if (initialized) 
+	    return;
+	else
+	    initialized = true;
+
+	try
+            { System.loadLibrary ("jswf"); }
+
+	catch (UnsatisfiedLinkError e)
+	{
+	    String msg = e.getMessage();
+	    if (msg.indexOf ("already loaded") < 0)
+		throw new SWFException ("native loading: " + msg);
+	}
+    }
+
+
+    public void preserve (SWFObjectI obj)
+    {
+	if (preserve == null)
+	    preserve = new Vector();
+	preserve.add (obj);
     }
 
 
     // variables
 
-    protected int	handle;
-    protected float	dx;
-    protected float	dy;
+    protected int		handle;
+    protected SWFMatrix		matrix;
+    protected Hashtable		props;
+    protected Vector		preserve;
 
-    protected static boolean initialized = false;
+    protected static boolean	initialized = false;
 };
