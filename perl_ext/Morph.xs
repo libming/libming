@@ -1,10 +1,10 @@
 /* ====================================================================
- * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ * Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
  *
- * $Author$
+ * Author: soheil 
  * $Id$
  */
 
@@ -42,7 +42,23 @@ destroySWFMorph(morph)
 SWF::Shape
 SWFMorph_getShape1(morph)
 	SWF::Morph	morph
+	PREINIT:
+	SV *sv;
+	CODE:
+        sv = (SV*)SvRV(ST(0));
+	RETVAL = SWFMorph_getShape1(morph);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Shape", (void*)RETVAL);
+	swf_stash_refcnt_inc(sv, (SV*)SvRV(ST(0)));	
 
 SWF::Shape
 SWFMorph_getShape2(morph)
 	SWF::Morph	morph
+	PREINIT:
+	SV *sv;
+	CODE:
+        sv = (SV*)SvRV(ST(0));
+	RETVAL = SWFMorph_getShape2(morph);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Shape", (void*)RETVAL);
+	swf_stash_refcnt_inc(sv, (SV*)SvRV(ST(0)));
