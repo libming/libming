@@ -81,6 +81,11 @@ SWFMovie_labelFrame(movie, label)
 	SWF::Movie	movie
 	char *	label
 
+void
+SWFMovie_namedAnchor(movie, label)
+	SWF::Movie	movie
+	char *	label
+
 int 
 SWFMovie_xs_output(movie, compresslevel=-1)
 	SWF::Movie movie

@@ -164,6 +164,17 @@ newSWFFrameLabelBlock(const char *string)
 
 
 SWFOutputBlock
+newSWFNamedAnchorBlock(const char *string)
+{
+	SWFOutput out = newSizedSWFOutput(strlen(string)+2);
+	SWFOutput_writeString(out, (byte*)string);
+	SWFOutput_writeUInt8(out, 1);
+
+	return newSWFOutputBlock(out, SWF_FRAMELABEL);
+}
+
+
+SWFOutputBlock
 newSWFExportBlock(SWFExports exports, int nExports)
 {
 	int n, sum;

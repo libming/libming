@@ -2203,6 +2203,7 @@ static zend_function_entry swfmovie_functions[] = {
   PHP_FALIAS(swfmovie,          swfmovie_init,              NULL)
   PHP_FALIAS(nextframe,         swfmovie_nextFrame,         NULL)
   PHP_FALIAS(labelframe,        swfmovie_labelFrame,        NULL)
+  PHP_FALIAS(namedanchor,       swfmovie_namedAnchor,       NULL)
   PHP_FALIAS(add,               swfmovie_add,               NULL)
   PHP_FALIAS(remove,            swfmovie_remove,            NULL)
   PHP_FALIAS(output,            swfmovie_output,            NULL)
@@ -2363,6 +2364,21 @@ PHP_FUNCTION(swfmovie_labelFrame)
   convert_to_string_ex(label);
 
   SWFMovie_labelFrame(getMovie(getThis() TSRMLS_CC), Z_STRVAL_PP(label));
+}
+
+/* }}} */
+/* {{{ swfmovie_namedanchor */
+
+PHP_FUNCTION(swfmovie_namedAnchor)
+{
+  zval **label;
+
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &label) == FAILURE)
+    WRONG_PARAM_COUNT;
+
+  convert_to_string_ex(label);
+
+  SWFMovie_namedAnchor(getMovie(getThis() TSRMLS_CC), Z_STRVAL_PP(label));
 }
 
 /* }}} */

@@ -732,6 +732,7 @@ void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
 void SWFMovie_nextFrame(SWFMovie movie);
 void SWFMovie_labelFrame(SWFMovie movie, const char *label);
+void SWFMovie_namedAnchor(SWFMovie movie, const char *label);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 int SWFMovie_save(SWFMovie movie, const char *filename);

@@ -77,6 +77,7 @@ PHP_FUNCTION(swfmovie_add);
 PHP_FUNCTION(swfmovie_remove);
 PHP_FUNCTION(swfmovie_nextFrame);
 PHP_FUNCTION(swfmovie_labelFrame);
+PHP_FUNCTION(swfmovie_namedAnchor);
 PHP_FUNCTION(swfmovie_setBackground);
 PHP_FUNCTION(swfmovie_setRate);
 PHP_FUNCTION(swfmovie_setDimension);

@@ -473,6 +473,12 @@ SWFMovie_labelFrame(SWFMovie movie, const char *label)
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFFrameLabelBlock(label));
 }
 
+void
+SWFMovie_namedAnchor(SWFMovie movie, const char *label)
+{
+	SWFMovie_addBlock(movie, (SWFBlock)newSWFNamedAnchorBlock(label));
+}
+
 /* old outputfunction without possible compression */
 /*
 int
