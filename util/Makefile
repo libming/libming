@@ -31,7 +31,7 @@ clean:
 		  png2dbl png2dbl.exe \
 		  gif2dbl gif2dbl.exe \
 		  raw2adpcm raw2adpcm.exe \
-		  gif2mask gif2mask.exe core
+		  gif2mask gif2mask.exe makeswf makeswf.exe core
 
 #.o: .c .h
 
@@ -77,7 +77,7 @@ png2swf: png2swf.c
 	$(CC) $(CFLAGS) $(LDFLAGS) png2swf.c -o png2swf ../libming.a $(LIBS)
 
 makeswf: makeswf.c makeswf.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -lming -L../ -o $@ $<
+	$(CC) $(CFLAGS) $(LDFLAGS) -lming -o $@ $<
 
 install: all_binaries
 	install -d $(BINDIR)
