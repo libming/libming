@@ -1,0 +1,24 @@
+=head1 SUPPORT
+
+=over 3
+
+=item MAILNG LIST
+
+For comments, questions, bug-reports, announcements, etc., send mail
+to ming-fun list: I<ming-fun@opaque.net>.
+
+To subscribe to this list visit: I<http://www.opaque.net/mailman/listinfo.cgi/ming-fun>
+
+=back
+
+=head1 REPORTING BUG
+
+=over 3
+
+=item Please make sure to include the following:
+
+- Perl version (output of C<perl -v> or C<perl -V>)
+
+- Your perl-ming version (Output of C<perl -MSWF -e 'print "$SWF::VERSION\n";'>)
+
+=back
