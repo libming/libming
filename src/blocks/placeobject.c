@@ -60,11 +60,11 @@ int completeSWFPlaceObject2Block(SWFBlock block)
   if(place->ratio != -1)
     SWFOutput_writeUInt16(out, place->ratio);
 
-  if(place->name != NULL)
-    SWFOutput_writeString(out, place->name);
-
   if(place->masklevel != -1)
     SWFOutput_writeUInt16(out, place->masklevel);
+
+  if(place->name != NULL)
+    SWFOutput_writeString(out, place->name);
 
   if(place->nActions != 0)
   {
@@ -147,6 +147,12 @@ void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block, const char *name)
 void SWFPlaceObject2Block_setRatio(SWFPlaceObject2Block block, int ratio)
 {
   block->ratio = ratio;
+}
+
+void SWFPlaceObject2Block_setDepth(SWFPlaceObject2Block block,
+				       int depth)
+{
+  block->depth = depth;
 }
 
 void SWFPlaceObject2Block_setMaskLevel(SWFPlaceObject2Block block,
