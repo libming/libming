@@ -1,3 +1,17 @@
+2003-01-04 19:44  soheil
+
+	* perl_ext/Morph.xs: Added refcnt of SWF::Shape
+
+2003-01-04 18:00  soheil
+
+	* perl_ext/t/: png.t, sound.t: No. of tests is printed after
+	skip_test();
+
+2003-01-04 17:57  soheil
+
+	* perl_ext/t/filljpeg.t: No. of tests is now printed after
+	skip_test();
+
 2002-12-21 15:20  whamann
 
 	* win32/libming.dsp: 
