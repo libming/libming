@@ -10,7 +10,7 @@
 #ifndef SWF_COMPILER_ACTION_H_INCLUDED
 #define SWF_COMPILER_ACTION_H_INCLUDED
 
-#include "ming.h"
+//#include "ming.h"
 
 enum
 {
@@ -77,7 +77,7 @@ enum
 /* v5 actions */
   SWFACTION_DELETEVAR               = 0x3A,
   SWFACTION_DELETE                  = 0x3B,
-  SWFACTION_VAREQUALS               = 0x3C,
+  SWFACTION_VAREQUALS               = 0x3C, // DEFINELOCAL actually
   SWFACTION_CALLFUNCTION            = 0x3D,
   SWFACTION_RETURN                  = 0x3E,
   SWFACTION_MODULO                  = 0x3F,
