@@ -324,7 +324,7 @@ static int setH263StreamDimension(SWFVideoStream stream)
 
 static int setScreenStreamDimension(SWFVideoStream stream) 
 {
-	unsigned int ui16;
+	unsigned int ui16 = 0;
 	int ic;
 	
 	ic = SWFInput_getChar(stream->input);
