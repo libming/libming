@@ -9,8 +9,10 @@ OFILES = movie.o displaylist.o blocklist.o position.o movieclip.o \
 	 shape_util.o text_util.o fill.o ming.o
 
 COMPILEROFILES = actioncompiler/compile.o \
-		 actioncompiler/compiler.tab.o \
-		 actioncompiler/lex.yy.o \
+		 actioncompiler/swf4compiler.tab.o \
+		 actioncompiler/lex.swf4.o \
+		 actioncompiler/swf5compiler.tab.o \
+		 actioncompiler/lex.swf5.o \
 		 actioncompiler/compileaction.o \
 		 actioncompiler/assembler.o
 
