@@ -139,7 +139,7 @@ void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b)
 }
 
 
-void SWFMovie_Protect(SWFMovie movie)
+void SWFMovie_protect(SWFMovie movie)
 {
   SWFMovie_addBlock(movie, newSWFProtectBlock());
 }
@@ -169,69 +169,70 @@ void SWFMovie_addExport(SWFMovie movie, SWFBlock block, char *name)
 }
 
 
-/* from displaylist.c */
-void resolveDependencies(SWFCharacter character, SWFBlockList list);
-
 void SWFMovie_writeExports(SWFMovie movie)
 {
   int n;
+  SWFBlock exports;
 
-  if(movie->nExports == 0)
+  if ( movie->nExports == 0 )
     return;
 
-  for(n=0; n<movie->nExports; ++n)
+  for ( n=0; n<movie->nExports; ++n )
   {
     SWFBlock b = movie->exports[n].block;
 
-    if(SWFBlock_isCharacter && !SWFBlock_isDefined(b))
+    if ( SWFBlock_isCharacter(b) && !SWFBlock_isDefined(b) )
     {
-      resolveDependencies((SWFCharacter)b, movie->blockList);
+      SWFBlockList_resolveCharacterDependencies(movie->blockList, (SWFCharacter)b);
       completeSWFBlock(b);
       SWFMovie_addBlock(movie, b);
     }
   }
 
-  SWFMovie_addBlock(movie,
-		    (SWFBlock)newSWFExportBlock(movie->exports, movie->nExports));
+  exports = (SWFBlock)newSWFExportBlock(movie->exports, movie->nExports);
+
+  SWFMovie_addBlock(movie, exports);
 
   destroySWFExports(movie);
 }
 
 
-SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
+SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFCharacter character)
 {
-  if(block == NULL)
+  SWFBlock block = (SWFBlock)character;
+
+  if ( character == NULL )
     return NULL;
 
   /* if they're trying to add a raw bitmap, we'll be nice and turn
      it into a shape */
 
-  if(SWFBlock_getType(block) == SWF_DEFINEBITS ||
-     SWFBlock_getType(block) == SWF_DEFINEBITSJPEG2 ||
-     SWFBlock_getType(block) == SWF_DEFINEBITSJPEG3 ||
-     SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
-     SWFBlock_getType(block) == SWF_DEFINELOSSLESS2)
+  if ( SWFBlock_getType(block) == SWF_DEFINEBITS ||
+       SWFBlock_getType(block) == SWF_DEFINEBITSJPEG2 ||
+       SWFBlock_getType(block) == SWF_DEFINEBITSJPEG3 ||
+       SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
+       SWFBlock_getType(block) == SWF_DEFINELOSSLESS2 )
   {
     SWFShape shape = newSWFShape();
 
     SWFFill fill =
       SWFShape_addBitmapFill(shape, (SWFBitmap)block, SWF_FILL_TILED_BITMAP);
 
-    float width = SWFCharacter_getWidth((SWFCharacter)block);
-    float height = SWFCharacter_getHeight((SWFCharacter)block);
+    float width = SWFCharacter_getWidth(character);
+    float height = SWFCharacter_getHeight(character);
 
     SWFShape_setRightFill(shape, fill);
 
     /* bitmap's bounds aren't scaled, so drawCharacterBounds won't work */
-    SWFShape_drawLine(shape, Ming_scale*width, 0);
-    SWFShape_drawLine(shape, 0, Ming_scale*height);
-    SWFShape_drawLine(shape, -Ming_scale*width, 0);
-    SWFShape_drawLine(shape, 0, -Ming_scale*height);
+    SWFShape_drawLine(shape, Ming_scale * width, 0);
+    SWFShape_drawLine(shape, 0, Ming_scale * height);
+    SWFShape_drawLine(shape, -Ming_scale * width, 0);
+    SWFShape_drawLine(shape, 0, -Ming_scale * height);
 
     block = (SWFBlock)shape;
   }
 
-  if(SWFBlock_isCharacter(block))
+  if ( SWFBlock_isCharacter(block) )
   {
     return SWFDisplayList_add(movie->displayList, (SWFCharacter)block);
   }
@@ -248,15 +249,39 @@ void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item)
 }
 
 
-void SWFMovie_setSoundStream(SWFMovie movie, SWFSound sound)
+void SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream stream)
 {
-  SWFBlock block = SWFSound_getStreamHead(sound, movie->rate);
+  SWFBlock block = SWFSoundStream_getStreamHead(stream, movie->rate);
 
   if(block != NULL)
   {
     SWFMovie_addBlock(movie, block);
-    SWFDisplayList_setSoundStream(movie->displayList, sound);
+    SWFDisplayList_setSoundStream(movie->displayList, stream);
   }
+}
+
+
+SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound)
+{
+  SWFSoundInstance inst = newSWFSoundInstance(sound);
+
+  if(!SWFBlock_isDefined((SWFBlock)sound))
+    SWFMovie_addBlock(movie, (SWFBlock)sound);
+
+  SWFMovie_addBlock(movie, (SWFBlock)inst);
+
+  return inst;
+}
+
+
+void SWFMovie_stopSound(SWFMovie movie, SWFSound sound)
+{
+  SWFSoundInstance inst = newSWFSoundInstance_stop(sound);
+
+  if(!SWFBlock_isDefined((SWFBlock)sound))
+    SWFMovie_addBlock(movie, (SWFBlock)sound);
+
+  SWFMovie_addBlock(movie, (SWFBlock)inst);
 }
 
 

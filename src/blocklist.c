@@ -70,10 +70,10 @@ SWFBlockList newSWFBlockList()
 
 void SWFBlockList_addBlock(SWFBlockList list, SWFBlock block)
 {
-  if(SWFBlock_isDefined(block))
+  if ( SWFBlock_isDefined(block) )
     return;
 
-  if(list->nBlocks%SWFBLOCKLIST_INCREMENT == 0)
+  if ( list->nBlocks%SWFBLOCKLIST_INCREMENT == 0 )
   {
     list->blocks = realloc(list->blocks,
 			   (list->nBlocks+SWFBLOCKLIST_INCREMENT) *
@@ -121,4 +121,32 @@ int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
     size += writeSWFBlockToMethod(list->blocks[i].block, method, data);
 
   return size;
+}
+
+
+void
+SWFBlockList_resolveCharacterDependencies(SWFBlockList list,
+																					SWFCharacter character)
+{
+	SWFBlock *deps;
+	int i, nDeps;
+
+	if ( (nDeps = SWFCharacter_getDependencies(character, &deps)) > 0 )
+	{
+		for ( i=0; i<nDeps; ++i )
+		{
+			SWFBlock block = deps[i];
+
+			if ( !SWFBlock_isDefined(block) )
+			{
+				if ( SWFBlock_isCharacter(block) )
+					SWFBlockList_resolveCharacterDependencies(list, (SWFCharacter)block);
+
+				SWFBlockList_addBlock(list, block);
+				SWFBlock_setDefined(block);
+			}
+		}
+
+		SWFCharacter_clearDependencies(character);
+	}
 }

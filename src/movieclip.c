@@ -64,11 +64,12 @@ void SWFMovieClip_addBlock(SWFMovieClip movie, SWFBlock block)
 }
 
 
-void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate)
+void SWFMovieClip_setSoundStream(SWFMovieClip clip,
+				 SWFSoundStream sound, float rate)
 {
-  SWFBlock block = SWFSound_getStreamHead(sound, rate);
+  SWFBlock block = SWFSoundStream_getStreamHead(sound, rate);
   
-  if(block != NULL)
+  if ( block != NULL )
   {
     SWFMovieClip_addBlock(clip, block);
     SWFDisplayList_setSoundStream(clip->displayList, sound);
@@ -76,25 +77,46 @@ void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSound sound, float rate)
 }
 
 
+SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound)
+{
+  SWFSoundInstance inst = newSWFSoundInstance(sound);
+
+  if(!SWFBlock_isDefined((SWFBlock)sound))
+    SWFMovieClip_addBlock(clip, (SWFBlock)sound);
+
+  SWFMovieClip_addBlock(clip, (SWFBlock)inst);
+
+  return inst;
+}
+
+
+void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound)
+{
+  SWFSoundInstance inst = newSWFSoundInstance_stop(sound);
+
+  SWFCharacter_addDependency((SWFCharacter)clip, (SWFBlock)sound);
+  SWFMovieClip_addBlock(clip, (SWFBlock)inst);
+}
+
+
 SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 {
-  if(SWFBlock_isCharacter(block))
+  if ( SWFBlock_isCharacter(block) )
   {
     /* movie clip aquires dependencies from character */
     SWFBlock *deps;
-    int i, nDeps = SWFCharacter_getNDependencies((SWFCharacter)block);
+    int i, nDeps = SWFCharacter_getDependencies((SWFCharacter)block, &deps);
 
-    if(nDeps > 0)
+    if ( nDeps > 0 )
     {
-      deps = SWFCharacter_getDependencies((SWFCharacter)block);
-
-      for(i=0; i<nDeps; ++i)
+      for ( i=0; i<nDeps; ++i )
 	SWFCharacter_addDependency((SWFCharacter)clip, deps[i]);
 
       SWFCharacter_clearDependencies((SWFCharacter)block);
     }
 
     SWFCharacter_addDependency((SWFCharacter)clip, block);
+
     return SWFDisplayList_add(clip->displayList, (SWFCharacter)block);
   }
   else

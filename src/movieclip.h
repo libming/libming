@@ -26,6 +26,7 @@ typedef struct SWFMovieClip_s *SWFMovieClip;
 
 #include "libming.h"
 #include "displaylist.h"
+#include "blocks/soundinstance.h"
 
 void destroySWFMovieClip(SWFMovieClip clip);
 
@@ -42,6 +43,10 @@ void SWFMovieClip_nextFrame(SWFMovieClip clip);
 void SWFMovieClip_labelFrame(SWFMovieClip clip, char *label);
 
 void SWFMovie_setSoundStream(SWFMovieClip movie, SWFSound sound, float rate);
+
+SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
+
+void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 
 int SWFMovieClip_output(SWFMovieClip clip, SWFByteOutputMethod method, void *data);
 

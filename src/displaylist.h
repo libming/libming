@@ -31,15 +31,8 @@ typedef struct SWFDisplayList_s *SWFDisplayList;
 #include "blocks/cxform.h"
 #include "blocks/action.h"
 #include "blocks/character.h"
+#include "blocks/sound.h"
 #include "blocks/soundstream.h"
-
-#define ITEM_NEW            (1<<0)
-#define ITEM_REMOVED        (1<<1)
-#define ITEM_TRANSFORMED    (1<<2)
-#define ITEM_CXFORMCHANGED  (1<<3)
-#define ITEM_RATIOCHANGED   (1<<4)
-
-#define ITEM_CHANGED  (ITEM_TRANSFORMED|ITEM_CXFORMCHANGED|ITEM_RATIOCHANGED|ITEM_NEW)
 
 
 /* display item */
@@ -66,6 +59,8 @@ void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
 
 void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
 			      float c, float d, float x, float y);
+
+SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item);
 
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
 
@@ -117,7 +112,7 @@ SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter shape);
 
 void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist);
 
-void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSound sound);
+void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream);
 
 void SWFDisplayList_rewindSoundStream(SWFDisplayList list);
 

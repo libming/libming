@@ -40,4 +40,8 @@ int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
 
 void destroySWFBlockList(SWFBlockList list);
 
+void
+SWFBlockList_resolveCharacterDependencies(SWFBlockList list,
+					  SWFCharacter character);
+
 #endif /* MING_BLOCKLIST_H_INCLUDED */

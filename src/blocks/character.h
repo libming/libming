@@ -54,8 +54,7 @@ struct SWFCharacter_s
   /* a morph needs to acquire dependencies from its shapes.
      this is weird, but the easiest way I can think of to do this. */
 
-  SWFBlock *(*getDependencies)(SWFCharacter character);
-  int (*getNDependencies)(SWFCharacter character);
+  int (*getDependencies)(SWFCharacter character, SWFBlock** outBlocks);
 };
 
 
@@ -77,12 +76,8 @@ void SWFCharacter_addDependency(SWFCharacter character, SWFBlock dependency);
 
 /* returns the character's dependency list */
 
-SWFBlock *SWFCharacter_getDependencies(SWFCharacter character);
-
-
-/* returns the size of the character's dependency list */
-
-int SWFCharacter_getNDependencies(SWFCharacter character);
+int
+SWFCharacter_getDependencies(SWFCharacter character, SWFBlock** outBlocks);
 
 
 /* clears the character's dependecy list */

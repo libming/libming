@@ -33,7 +33,6 @@ void SWFCharacterInit(SWFCharacter character)
   character->dependencies = NULL;
   character->nDependencies = 0;
   character->getDependencies = NULL;
-  character->getNDependencies = NULL;
 }
 
 
@@ -73,21 +72,16 @@ int SWFCharacter_getID(SWFCharacter character)
 }
 
 
-SWFBlock *SWFCharacter_getDependencies(SWFCharacter character)
+int
+SWFCharacter_getDependencies(SWFCharacter character, SWFBlock** outBlocks)
 {
-  if(character->getDependencies != NULL)
-    return character->getDependencies(character);
-  else
-    return character->dependencies;
-}
-
-
-int SWFCharacter_getNDependencies(SWFCharacter character)
-{
-  if(character->getNDependencies != NULL)
-    return character->getNDependencies(character);
-  else
+  if ( character->getDependencies == NULL )
+  {
+    *outBlocks = character->dependencies;
     return character->nDependencies;
+  }
+  else
+    return character->getDependencies(character, outBlocks);
 }
 
 
