@@ -302,7 +302,11 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_STRINGEQ:
     case SWFACTION_STRINGCONCAT:
     case SWFACTION_STRINGCOMPARE:
-      return newTree(pop(), type, pop());
+	{
+      Stack right = pop();
+      Stack left = pop();
+      return newTree(left, type, right);
+	}
 
     case SWFACTION_SETVARIABLE:
     {
@@ -356,12 +360,30 @@ static Stack readActionRecord(FILE *f)
 
     /* three-arg */
     case SWFACTION_SETPROPERTY:
-      return newTree(newTree(pop(), type, pop()),
-		     SWFACTION_SETVARIABLE, pop());
+	{
+	  Stack value = pop();
+	  Stack property = pop();
+	  Stack target = pop();
+
+      if(property->type == 's')
+      {
+	Stack new = newProperty(atoi(property->data.string));
+	destroy(property);
+	property = new;
+      }
+	
+      return newTree(newTree(target, type, property),
+		     SWFACTION_SETVARIABLE, value);
+	}
 
     case SWFACTION_MBSUBSTRING:
     case SWFACTION_SUBSTRING:
-      return newTree(pop(), type, newTree(pop(), type, pop()));
+	{
+	  Stack s3 = pop();
+	  Stack s2 = pop();
+	  Stack s1 = pop();
+      return newTree(s1, type, newTree(s2, type, s3));
+	}
 
     case SWFACTION_DUPLICATECLIP:
     {
@@ -417,10 +439,16 @@ static Stack readActionRecord(FILE *f)
 
       if(intVal(constraint) == 0)
 	return newTree(constraint, type, newTree(lockmouse, type, target));
-      else
-	return newTree(newTree(newTree(pop(), type, pop()), type,
-			       newTree(pop(), type, pop())), type,
+      else {
+		Stack p4 = pop();
+		Stack p3 = pop();
+		Stack p2 = pop();
+		Stack p1 = pop();
+
+	return newTree(newTree(newTree(p1, type, p2), type,
+			       newTree(p3, type, p4)), type,
 		       newTree(lockmouse, type, target));
+	  }
     }
 
     case SWFACTION_PUSHDATA:
@@ -495,7 +523,10 @@ static Stack readActionRecord(FILE *f)
 
     case SWFACTION_GETURL2:
     {
-      Stack s = newTree(pop(), type, pop());
+	  Stack target = pop();
+	  Stack url = pop();
+
+      Stack s = newTree(url, type, target);
       Stack t = newTreeBase((Stack)readUInt8(f), type, s);
       t->offset = s->offset;
       return t;
@@ -623,7 +654,12 @@ static Stack readActionRecord(FILE *f)
       return newTree(pop(), type, NULL);
 
     case SWFACTION_VAREQUALS:
-      return newTree(pop(), type, pop());
+	{
+      Stack right = pop();
+      Stack left = pop();
+
+      return newTree(left, type, right);
+	}
 
     case SWFACTION_DELETE:
       return newTree(pop(), type, NULL);
@@ -673,10 +709,21 @@ static Stack readActionRecord(FILE *f)
     case SWFACTION_BITWISEOR:
     case SWFACTION_BITWISEXOR:
     case SWFACTION_GETMEMBER:
-      return newTree(pop(), type, pop());
+	{
+      Stack right = pop();
+      Stack left = pop();
+
+      return newTree(left, type, right);
+	}
 
     case SWFACTION_SETMEMBER:
-      return newTree(pop(), type, newTree(pop(), type, pop()));
+	{
+      Stack p3 = pop();
+      Stack p2 = pop();
+      Stack p1 = pop();
+
+      return newTree(p1, type, newTree(p2, type, p3));
+	}
 
     case SWFACTION_CALLMETHOD:
     {
