@@ -223,6 +223,9 @@ class SWFDisplayItem(SWFBase):
     def skewYTo(self, y):
         mingc.SWFDisplayItem_skewYTo(self.this, y)
 
+    def setMatrix(self, a, b, c, d, x, y):
+        mingc.SWFDisplayItem_setMatrix(self.this, a, b, c, d, x, y)
+
     def setName(self, name):
         mingc.SWFDisplayItem_setName(self.this, name)
 
