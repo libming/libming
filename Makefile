@@ -8,3 +8,5 @@ config.log Rules.make config.make: config.status Rules.make.in config.make.in
 config.status: 
 	./configure
 
+maintainer-clean: distclean
+	rm -f configure
