@@ -229,7 +229,7 @@ void SWFText_setFont(SWFText text, SWFFont font);
 void SWFText_setHeight(SWFText text, float height);
 void SWFText_moveTo(SWFText text, float x, float y);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
-void SWFText_addString(SWFText text, const char *string, float *advance);
+void SWFText_addString(SWFText text, const char *string, int *advance);
 void SWFText_setSpacing(SWFText text, float spacing);
 
 float SWFText_getStringWidth(SWFText text, const char *string);
