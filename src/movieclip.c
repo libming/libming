@@ -35,7 +35,6 @@ SWFMovieClip newSWFMovieClip()
 
   clip->blockList = newSWFBlockList();
   clip->displayList = newSWFSpriteDisplayList();
-  clip->totalFrames = 1;
   return clip;
 }
 void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
