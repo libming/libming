@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <math.h>
 
 #include "blocktypes.h"
 #include "action.h"
@@ -585,58 +586,69 @@ void printDefineBitsJpeg3(FILE *f, int length)
 
 void printDefineBitsLossless(FILE *f, int length)
 {
-  int format, start = fileOffset;
-  int width, height, tablesize;
+	int format, start = fileOffset;
+	int width, height, tablesize, bpp;
 
-  println("Bitmap id: %i", readUInt16(f));
+	println("Bitmap id: %i", readUInt16(f));
 
-  print("Format: ");
-  switch(format = readUInt8(f))
-  {
-    case 3: puts("8 bpp\n"); break;
-    case 4: puts("16 bpp\n"); break;
-    case 5: puts("32 bpp\n"); break;
-    default: error("unknown bit format: %i", format); break;
-  }
+	format = readUInt8(f);
+	width = readUInt16(f);
+	height = readUInt16(f);
 
-  println("Width: %i", width = readUInt16(f));
-  println("Height: %i", height = readUInt16(f));
+	switch(format)
+	{
+		case 3:
+			tablesize = readUInt8(f)+1;
+			bpp = 8;
+			break;
+		case 4:
+			tablesize = readUInt16(f)+1;
+			bpp = 16;
+			break;
+		case 5:
+			tablesize = readUInt32(f)+1;
+			bpp = 32;
+			break;
+		default:
+			error("unknown bit format: %i", format);
+			return;
+	}
 
-  if(format == 3)
-    println("Number of palette entries: %i", tablesize = readUInt8(f)+1);
+	println("Format: %d bpp", bpp);
+	println("Width: %i", width);
+	println("Height: %i", height);
+	println("Number of palette entries: %i", tablesize);
 
-  putchar('\n');
-  println("zlib-compressed image data:");
+#if 0
+	println("zlib-compressed image data:");
+	{
+		unsigned char *data, *buffer;
+		long size = width*height;
+		long bufsize = start+length-fileOffset;
+		int i;
+		//int res;
 
-  {
-    unsigned char *data, *buffer;
-    long size = width*height;
-    long bufsize = start+length-fileOffset;
-    int i;
-    //int res;
+		buffer = malloc(bufsize);
 
-    buffer = malloc(bufsize);
+		for(i=0; i<bufsize; ++i)
+			buffer[i] = readUInt8(f);
 
-    for(i=0; i<bufsize; ++i)
-      buffer[i] = readUInt8(f);
+		if(format == 3) size += tablesize*4;
+		else size *= 4;
 
-    if(format == 3)
-      size += tablesize*4;
-    else
-      size *= 4;
+		data = malloc(size);
 
-    data = malloc(size);
+		/*
+		if((res = uncompress(data, &size, buffer, bufsize)) != Z_OK)
+			error("Couldn't uncompress bits! (err: %i)\n", res);
 
-    /*
-    if((res = uncompress(data, &size, buffer, bufsize)) != Z_OK)
-      error("Couldn't uncompress bits! (err: %i)\n", res);
+		dumpBuffer(data, size);
+		*/
+	}
+#endif
 
-    dumpBuffer(data, size);
-    */
-  }
-
-  skipBytes(f, start+length-fileOffset);
-  //  dumpBytes(f, start+length-fileOffset);
+	skipBytes(f, start+length-fileOffset);
+	//  dumpBytes(f, start+length-fileOffset);
 }
 
 void printDoAction(FILE *f, int length);
@@ -1642,14 +1654,14 @@ void printMP3Headers(FILE *f, int length)
       case MP3_VERSION_1:  version = 1; break;
       case MP3_VERSION_2:  version = 2; break;
       case MP3_VERSION_25: version = 25; break;
-      default: error("unknown MP3 version!");
+      default: error("unknown MP3 version!"); return;
     }
     switch(flags & MP3_LAYER)
     {
       case MP3_LAYER_1: layer = 1; break;
       case MP3_LAYER_2: layer = 2; break;
       case MP3_LAYER_3: layer = 3; break;
-      default: error("unknown MP3 layer!");
+      default: error("unknown MP3 layer!"); return;
     }
 
     if(version == 1)
@@ -1662,7 +1674,7 @@ void printMP3Headers(FILE *f, int length)
       else if(layer == 2)
 	bitrate = mp1l2_bitrate_table[bitrate_idx];
 
-      else if(layer == 3)
+      else // if(layer == 3)
 	bitrate = mp1l3_bitrate_table[bitrate_idx];
     }
     else

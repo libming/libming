@@ -406,7 +406,10 @@ static Stack readActionRecord(FILE *f)
 	  level->data.tree->left = NULL;
 	}
 	else
+	{
 	  error("magic number 0x4000 not found in duplicateClip target level!");
+          return NULL;
+	}
 
 	destroyStack(level);
       }
@@ -1057,7 +1060,10 @@ static void listAssign(Stack s)
     else if(right->data.tree->action == SWFACTION_DIVIDE)
       op = " /= ";
     else
+    {
       error("Unexpected operation in listAssign!");
+      return;
+    }
 
     if(rleft->type == 't' &&
        rleft->data.tree->action == SWFACTION_GETVARIABLE &&
