@@ -1,6 +1,6 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
-CC = gcc -g -Wall -I. #-fPIC -ggdb
+CC = gcc -g -Wall -I. ${CFLAGS} #-fPIC -ggdb
 LDFLAGS = -lm -lz # -ldmalloc
 
 LIBDIR = /usr/local/lib
@@ -36,7 +36,7 @@ all: dynamic
 dynamic: ${OFILES}
 	cd blocks && make
 	cd actioncompiler && make
-	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} blocks/*.o -shared -o libming.so
+	${CC} ${OFILES} ${COMPILEROFILES} ${LDFLAGS} ${EXTRA_LIBS} blocks/*.o -shared -o libming.so
 	cp libming.so ..
 
 static: ${OFILES}

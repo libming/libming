@@ -1,6 +1,6 @@
 #CC = gcc -g -pg -a	# profiling flags
 #CC = gcc -O5
-CC = gcc -g -Wall -I.. -I. #-fPIC -ggdb
+CC = gcc -g -Wall -I.. -I. ${CFLAGS} #-fPIC -ggdb
 
 DEBUG = --debug
 
