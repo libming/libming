@@ -20,6 +20,7 @@ int yylex();
 enum
 {
   PUSH_STRING = 0,
+  PUSH_PROPERTY = 1,
   PUSH_NULL = 3,
   PUSH_REGISTER = 4,
   PUSH_BOOLEAN = 5,
@@ -64,9 +65,12 @@ struct _buffer
   byte *pos;
   int buffersize;
   int free;
+  byte *pushloc;
 };
 
 #define BUFFER_SIZE sizeof(struct _buffer)
+
+void checkByteOrder();
 
 /* This is the only function needs be visible: */
 SWFAction compileSWFActionCode(char *script);
@@ -88,6 +92,7 @@ int addConstant(char *s);
 int bufferWriteConstants(Buffer out);
 
 /* write data to buffer */
+int bufferWriteOp(Buffer out, int data);
 int bufferWriteU8(Buffer out, int data);
 int bufferWriteS16(Buffer out, int data);
 int bufferWriteData(Buffer out, byte *buffer, int bytes);
@@ -111,6 +116,10 @@ char *stringConcat(char *a, char *b);
 void bufferResolveJumps(Buffer out);
 
 /* rather than setting globals... */
-void parseInit(char *string);
+void swf4ParseInit(char *string, int debug);
+void swf5ParseInit(char *string, int debug);
+
+int swf4parse(void *b);
+int swf5parse(void *b);
 
 #endif /* COMPILE_H_INCLUDED */
