@@ -1,3 +1,24 @@
+2002-08-13 06:13  opaque_ndst
+
+	* src/ming.h: added missing semicolon
+
+2002-08-13 06:13  opaque_ndst
+
+	* src/: font_util.c, font_util.h: functions to let ming keep fonts
+	across process lifetime
+
+2002-08-13 06:11  opaque_ndst
+
+	* src/Makefile: added font_util.o
+
+2002-08-13 06:11  opaque_ndst
+
+	* src/ming.c: added font_util.h include
+
+2002-08-13 06:10  opaque_ndst
+
+	* src/: blocklist.c, movie.c, blocks/font.c: fixed memory leaks
+
 2002-08-13 05:35  opaque_ndst
 
 	* src/blocks/text.c: fixed bug with calling getScaledStringWidth
