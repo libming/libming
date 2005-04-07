@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "blocks/blocktypes.h"
 #include "decompile.h"
 #include "parser.h"
 #include "read.h"
 
 extern struct Movie m;
+extern SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
+void silentSkipBytes(FILE *f, int length);
 
 #define PAR_BEGIN(block) \
 	struct block *parserrec;\
@@ -624,14 +627,6 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
 	  parserrec->OffsetTable.UI16[i] = readUInt16 (f);
 	}
     }
-  if (parserrec->FontFlagsWideOffsets)
-    {
-      parserrec->OffsetTable.UI32 = readUInt32 (f);
-    }
-  else
-    {
-      parserrec->OffsetTable.UI16 = readUInt16 (f);
-    }
   parserrec->GlyphShapeTable = (SWF_SHAPE *)
     malloc (parserrec->NumGlyphs * sizeof (SWF_SHAPE));
   for (i = 0; i < parserrec->NumGlyphs; i++)
@@ -731,7 +726,7 @@ parseSWF_DEFINESOUND (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINESPRITE (FILE * f, int length)
 {
-  int block, type, splength, blockstart, nextFrame, i;
+  int block, type, splength, blockstart, nextFrame;
   int numblocks, start;
   PAR_BEGIN (SWF_DEFINESPRITE);
 
@@ -767,7 +762,7 @@ parseSWF_DEFINESPRITE (FILE * f, int length)
 	  parserrec->Tags[numblocks++]=blockParse(f,splength,type);
 	  if( ftell(f) != nextFrame ) {
 	    printf(" Sprite Stream out of sync...\n");
-	    printf(" %d but expecting %d\n", ftell(f),nextFrame);
+	    printf(" %ld but expecting %d\n", ftell(f),nextFrame);
 	    fseek(f,blockstart,SEEK_SET);
 	    silentSkipBytes (f, (nextFrame-ftell(f)));
 	    fileOffset=ftell(f);

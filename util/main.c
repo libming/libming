@@ -16,7 +16,7 @@
 //decompression
 #include <zlib.h>
 
-#include "blocktypes.h"
+#include "blocks/blocktypes.h"
 #include "action.h"
 #include "read.h"
 #include "parser.h"

@@ -11,12 +11,9 @@
   setvar     a = a+1
 */
 
-#define _GNU_SOURCE
-
 #include <assert.h>
 
 #include <stdlib.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -25,90 +22,7 @@
 #include "read.h"
 #include "action.h"
 
-/*
- * Start Package 
- *
- * A package to build up a string that can be returned to the caller
- */
-
-static int strsize=0;
-static int strmaxsize=0;
-static char *dcstr=NULL;
-static char *dcptr=NULL;
-
-#define DCSTRSIZE 1024
-
-void
-dcinit()
-{
-	strsize=0;
-	strmaxsize=DCSTRSIZE;
-	dcstr=malloc(DCSTRSIZE);
-	dcptr=dcstr;
-}
-
-void
-dcchkstr(int size)
-{
-	if( (strsize+size) > strmaxsize ) {
-		dcstr=realloc(dcstr,strmaxsize+DCSTRSIZE);
-		strmaxsize+=DCSTRSIZE;
-		dcptr=dcstr+strsize;
-	}
-
-}
-
-void
-dcputs(const char *s)
-{
-	int len=strlen(s);
-	dcchkstr(len);
-	strcat(dcptr,s);
-	dcptr+=len;
-	strsize+=len;
-}
-
-void
-dcputchar(char c)
-{
-dcchkstr(1);
-
-*dcptr++=c;
-*dcptr='\000';
-strsize++;
-}
-
-int
-dcprintf(char *format, ...)
-{
-	char *s;
-	size_t size;
-
-	va_list args;
-	va_start(args,format);
-
-	vasprintf(&s,format,args);
-	dcputs(s);
-	size=strlen(s);
-	free(s);
-	return size;
-}
-
-char *
-dcgetstr()
-{
-	char *ret;
-	ret = dcstr;
-	dcstr=NULL;
-	strmaxsize=0;
-	return ret;
-}
-
-#define puts(s) dcputs(s)
-#define putchar(c) dcputchar(c)
-#define printf dcprintf
-
-/* End Package */
+#define puts(s) fputs((s),stdout)
 
 static int gIndent;
 
@@ -934,7 +848,7 @@ static Stack readActionRecord(FILE *f)
     }
 
     default:
-      printf("Unknown Action: 0x%02X\n", type); fflush(stdout);
+      printf("Unknown Action: 0x%02X\n", type);
       dumpBytes(f, length);
       putchar('\n');
       assert(0);
@@ -2167,13 +2081,11 @@ void decompile4Action(FILE *f, int length, int indent)
   }
 }
 
-char *
-decompile5Action(FILE *f, int length, int indent)
+void decompile5Action(FILE *f, int length, int indent)
 {
   Stack *statements = NULL;
   int n;
 
-  dcinit();
   gIndent = indent;
 
   n = readStatements(f, length, &statements);
@@ -2199,7 +2111,6 @@ decompile5Action(FILE *f, int length, int indent)
 
     assert(0);
   }
-  return dcgetstr();
 }
 
 static void resolveOffsets(Stack *statements, int nStatements)

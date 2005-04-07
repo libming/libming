@@ -21,7 +21,6 @@ int readSInt16(FILE *f);
 int readUInt32(FILE *f);
 int readSInt32(FILE *f);
 char *readString(FILE *f);
-char *readSizedString(FILE *f,int size);
 double readDouble(FILE *f);
 void dumpBytes(FILE *f, int length);
 

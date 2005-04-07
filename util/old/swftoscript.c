@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /* convert everything to objects, resolve dependencies, etc.. */
 
@@ -6,22 +5,61 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#include <string.h>
+#include <limits.h>
+#include <errno.h>
+
+//open()
+#include <fcntl.h>
+
+//fstat()
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+//decompression
+#include <zlib.h>
 
 #include "blocktypes.h"
 #include "action.h"
 #include "read.h"
 #include "decompile.h"
 
-#include "swftophp.h"
+#include "swftoscript.h"
 
 #ifndef M_PI
   #define M_PI 3.14159265358979f
 #endif
 
-void skipBytes(FILE *f, int length);
-//char *blockName(int);
+char *filename;
+char tmp_name[PATH_MAX];
+FILE *tempfile;
 
-static m_version = {0};
+void skipBytes(FILE *f, int length);
+void silentSkipBytes(FILE *f, int length);
+//char *blockName(int);
+void printSoundInstance(FILE *f, int id, int soundid);
+
+static char *modNamePrefix()
+{
+#ifdef SWFPERL
+	return "SWF::";
+#endif
+#ifdef SWFPHP
+	return "SWF";
+#endif
+}
+
+#ifdef SWFPERL
+#define COMMSTART "#"
+#define COMMEND   ""
+#endif
+#ifdef SWFPHP
+#define COMMSTART "/* "
+#define COMMEND   "*/"
+#endif
+
+static int m_version = {0};
 void decompileAction(FILE *f, int length, int indent)
 {	if(m_version >= 5)
 		decompile5Action(f, length, indent);
@@ -171,7 +209,7 @@ void printGradient(struct Gradient *g)
 {
   int i;
 
-  printf("\t$g = new SWFGradient();\n");
+  printf("\t$g = new %sGradient();\n",modNamePrefix());
 
   for(i=0; i<g->nGradients; ++i)
   {
@@ -260,7 +298,7 @@ void readFillStyle(FILE *f, struct FillStyle *s, Blocktype shapeType, int isMorp
     error("Unknown fill type: %i\n", type);
 }
 
-void printTransform(struct Matrix *m, char ch, int num, int always)
+void printTransform(struct Matrix *m, char ch, int num)
 {
   float a = m->xScale, b = m->rot0, c = m->rot1, d = m->yScale;
 
@@ -300,7 +338,7 @@ void printTransform(struct Matrix *m, char ch, int num, int always)
   if(yScale > 1.0-TOLERANCE && yScale < 1.0+TOLERANCE)
     yScale = 1.0;
 
-  if((xScale != 1.0) || (yScale != 1.0) || always)
+  if(xScale != 1.0 || yScale != 1.0)
   {
     if(xScale == yScale)
       printf("\t$%c%i->scaleTo(%f);\n", ch, num, xScale);
@@ -347,10 +385,10 @@ void printFillStyle(struct FillStyle *s, int id, int num, int isMorph)
   if(isMorph)
   {
     if(s->type == 0x40 || s->type == 0x41)
-      printTransform(&(s->matrix2), 'f', num, 0);
+      printTransform(&(s->matrix2), 'f', num);
   }
   else
-    printTransform(&(s->matrix), 'f', num, 0);
+    printTransform(&(s->matrix), 'f', num);
 }
 
 void readFillStyleArray(FILE *f, struct Shape *shape, int isMorph)
@@ -495,7 +533,8 @@ int readShapeRec(FILE *f, struct Shape *shape)
 void printFillChange(int id, struct Shape *shape, int fillNum, int side)
 {
   if(fillNum == 0)
-    printf("\t$s%i->set%sFill(0);\n", id, side==0 ? "Left" : "Right");
+    /*no fill*/
+    printf("\t$s%i->set%sFill();\n", id, side==0 ? "Left" : "Right");
 
   else if(shape->fills.fill[fillNum-1].type == 0)
   {
@@ -504,58 +543,56 @@ void printFillChange(int id, struct Shape *shape, int fillNum, int side)
     printf(");\n");
   }
 
-  else
+  else {
     printf("\t$s%i->set%sFill($f%i);\n", id, side==0 ? "Left" : "Right",
 	   fillNum);
+  }
 }
 
-void printShapeRec(struct Shape *shape, struct ShapeRecord *s, int id)
-{
-  switch(s->type)
-  {
-    case SHAPERECORD_END:
-      return;
+void printShapeRec(struct Shape *shape, struct ShapeRecord *s, int id){
+	switch(s->type){
+		
+		case SHAPERECORD_END:
+			return;
+		
+		case SHAPERECORD_STATECHANGE:
+			if(s->data.change.movetox != 0 || s->data.change.movetoy != 0){
+				printf("\t$s%i->movePenTo(%i, %i);\n", id, \
+					s->data.change.movetox, \
+					s->data.change.movetoy);
+			}
+      if(s->data.change.fill0 != -1){
+				printFillChange(id, shape, s->data.change.fill0, 0);
+			}
+      if(s->data.change.fill1 != -1){
+				printFillChange(id, shape, s->data.change.fill1, 1);
+			}
+      if(s->data.change.line != -1){
+				if(s->data.change.line == 0){
+					printf("\t$s%i->setLine(0);\n", id);
+				}
+				else{
+					struct LineStyle *line = &(shape->lines.line[s->data.change.line-1]);
+					printf("\t$s%i->setLine(%i, ", id, line->width);
+					printRGBA(&(line->color));
+					printf(");\n");
+				}
+			}
+			break;
 
-    case SHAPERECORD_STATECHANGE:
+		case SHAPERECORD_LINE:
+			printf("\t$s%i->drawLine(%i, %i);\n", id, s->data.line.x, s->data.line.y);
+			break;
 
-      if(s->data.change.movetox != 0 || s->data.change.movetoy != 0)
-	printf("\t$s%i->movePenTo(%i, %i);\n", id,
-	       s->data.change.movetox, s->data.change.movetoy);
+		case SHAPERECORD_CURVE:
+			printf("\t$s%i->drawCurve(%i, %i, %i, %i);\n", id,
+				s->data.curve.controlx, s->data.curve.controly,
+				s->data.curve.anchorx, s->data.curve.anchory);
+			break;
 
-      if(s->data.change.fill0 != -1)
-	printFillChange(id, shape, s->data.change.fill0, 0);
-
-      if(s->data.change.fill1 != -1)
-	printFillChange(id, shape, s->data.change.fill1, 1);
-
-      if(s->data.change.line != -1)
-      {
-	if(s->data.change.line == 0)
-	  printf("\t$s%i->setLine(0);\n", id);
-	else
-	{
-	  struct LineStyle *line = &(shape->lines.line[s->data.change.line-1]);
-
-	  printf("\t$s%i->setLine(%i, ", id, line->width);
-	  printRGBA(&(line->color));
-	  printf(");\n");
+		default:
+			error("Bad shape type: %i!\n", s->type);
 	}
-      }
-      break;
-
-    case SHAPERECORD_LINE:
-      printf("\t$s%i->drawLine(%i, %i);\n", id, s->data.line.x, s->data.line.y);
-      break;
-
-    case SHAPERECORD_CURVE:
-      printf("\t$s%i->drawCurve(%i, %i, %i, %i);\n", id,
-	     s->data.curve.controlx, s->data.curve.controly,
-	     s->data.curve.anchorx, s->data.curve.anchory);
-      break;
-
-    default:
-      error("Bad shape type: %i!\n", s->type);
-  }
 }
 
 void printDefineShape(struct Shape *shape, int id, int isMorph)
@@ -598,8 +635,8 @@ void printShape(FILE *f, int length, int shapeType)
     printShapeRec(f, &lineBits, &fillBits, 2);
   */
 
-  printf("\n\t/* -- Shape %i -- */\n", id);
-  printf("\t$s%i = new SWFShape();\n", id);
+  printf("\n\t" COMMSTART " Shape %i " COMMEND "\n", id);
+  printf("\t$s%i = new %sShape();\n", id, modNamePrefix());
 
   printDefineShape(&shape, id, 0);
 }
@@ -611,8 +648,8 @@ void printMorphShape(FILE *f, int length)
   struct Shape shape1, shape2;
   int id = readUInt16(f);
 
-  printf("\n\t/* -- Shape %i -- */\n", id);
-  printf("\t$s%i = new SWFMorph();\n", id);
+  printf("\n\t" COMMSTART " Morph %i " COMMEND "\n", id);
+  printf("\t$s%i = new %sMorph();\n", id, modNamePrefix());
 
   readRect(f, &r); /* bounds 1 */
   readRect(f, &r); /* bounds 2 */
@@ -637,9 +674,9 @@ void printMorphShape(FILE *f, int length)
   while(fileOffset < here+offset &&
 	readShapeRec(f, &shape1)) ;
 
-  printf("\n\t$s0 = $s%i->getShape1();\n", id);
+  printf("\n\t$s%i_1 = $s%i->getShape1();\n", id, id);
 
-  printDefineShape(&shape1, 0, 0);
+  printDefineShape(&shape1, id, 0);
 
   byteAlign();
 
@@ -648,9 +685,9 @@ void printMorphShape(FILE *f, int length)
   while(fileOffset < start+length &&
 	readShapeRec(f, &shape2)) ;
 
-  printf("\n\t$s0 = $s%i->getShape2();\n", id);
+  printf("\n\t$s%i_2 = $s%i->getShape2();\n", id, id);
 
-  printDefineShape(&shape1, 0, 1);
+  printDefineShape(&shape1, id, 1);
 }
 
 /* JPEG stream markers: */
@@ -671,7 +708,6 @@ void printMorphShape(FILE *f, int length)
 #define JPEG_SOF1 0xC1
 #define JPEG_SOF2 0xC2
 #define JPEG_SOS  0xDA
-/*
 void printJpegStream(FILE *f, int length)
 {
   int end = fileOffset+length;
@@ -717,17 +753,36 @@ void printDefineBitsJpeg(FILE *f, int length)
   printf("%sBitmap id: %i\n", indent(), readUInt16(f));
   printJpegStream(f, length-2);
 }
-*/
-void printDefineBitsLossless(FILE *f)
+
+void mkBitmap(FILE *f, int length, int id, int format, int width, int height, int csize)
 {
-/*
-  id = readUInt16(f);
-  format = readUInt8(f);	 format = 3, 4, 5 -> 2^format bpp
-  width = readUInt16(f);
-  height = readUInt16(f);
+  char buf[1024];
+  FILE *b;
+  int s;
+
+  /* WARNING! length seems to be the uncompressed length, not the compressed length */
+  sprintf(buf,"bitmap%d.gz",id);
+  b=fopen(buf,"w");
+  while(length>0) {
+	  s=fread(buf,1,1024,f);
+	  fwrite(buf,1,s,b);
+	  length-=s;
+  }
+  fclose(b);
+}
+
+void printDefineBitsLossless(FILE *f, int length)
+{
+  int id, format, width, height, colorTableSize;
+
+  id = readUInt16(f);length-=2;
+  printf("\t$b%i = new %sBitmap(fopen(\"bitmap%d\",\"r\") );\n",id, modNamePrefix(),id);
+  format = readUInt8(f);length-=1;   /*	 format = 3, 4, 5 -> 2^format bpp */
+  width = readUInt16(f);length-=2;
+  height = readUInt16(f);length-=2;
   if(format == 3)
-  colorTableSize = readUInt8(f)-1;
-*/
+    colorTableSize = readUInt8(f)-1;length-=1;
+  mkBitmap(f, length, id, format, width, height, colorTableSize);
 }
 
 /*
@@ -966,31 +1021,91 @@ int printButtonRecord(FILE *f, int recordType, int id)
   }
   printf(");\n");
 
-  printf("\t/* button character transforms not implemented, sorry. */\n");
+  printf("\t# Button character transforms not implemented, sorry.\n");
 
   if(recordType == 2)
   {
     struct CXForm s;
     readCXForm(f, &s, true);
-    printf("\t/* button cxforms not implemented, either.. */\n");
+    printf("\t# Button cxforms not implemented, either.. \n");
   }
 
   return 1;
 }
+
+
+void printDefineButtonSound(FILE *f, int length){
+	int i;
+	int id = readUInt16(f);
+
+	for(i=0;i<4;i++){
+		int soundid = readUInt16(f);
+		if (soundid != 0){
+			printf("\t$si%i_%i = $s%i->addSound($snd%i,",id,i,id,soundid);
+			switch(i){
+				case 0:	 printf("SWFBUTTON_UP);\n"); break;
+				case 1:	 printf("SWFBUTTON_OVER);\n"); break;
+				case 2:	 printf("SWFBUTTON_DOWN);\n"); break;
+				default: printf("SWFBUTTON_HIT);\n");
+			}	
+			printSoundInstance(f,id,soundid);		
+		}
+	}
+}
+
+#define SWFSOUNDINFO_SYNCSTOPSOUND  (1<<5)
+#define SWFSOUNDINFO_SYNCNOMULTIPLE (1<<4)
+#define SWFSOUNDINFO_HASENVELOPE    (1<<3)
+#define SWFSOUNDINFO_HASLOOPS       (1<<2)
+#define SWFSOUNDINFO_HASOUTPOINT    (1<<1)
+#define SWFSOUNDINFO_HASINPOINT     (1<<0)
+
+void printSoundInstance(FILE *f, int id, int soundid){
+  int e,point,left,right;
+	int flags = readUInt8(f);
+
+	if (flags & SWFSOUNDINFO_SYNCSTOPSOUND){
+		printf("\t# stopsound??");
+	}
+	if (flags & SWFSOUNDINFO_SYNCNOMULTIPLE){
+		printf("\t$si->setNoMultiple();\n");
+	}
+	if(flags & SWFSOUNDINFO_HASINPOINT){
+		int inpoint = readUInt32(f);
+		printf("\t$si->setInPoint(%i);\n", inpoint);
+	}
+	if(flags & SWFSOUNDINFO_HASOUTPOINT){
+		int outpoint = readUInt32(f);
+		printf("\t$si->setOutPoint(%i);\n", outpoint);               
+	}
+	if(flags & SWFSOUNDINFO_HASLOOPS){
+		int loopcount = readUInt16(f);
+		printf("\t$si->setLoops(%i);\n", loopcount);
+	}
+	if(flags & SWFSOUNDINFO_HASENVELOPE) {
+		int envpoints = readUInt8(f);
+		for (e=0; e<envpoints;e++){
+			point = readUInt32(f);
+			left  = readUInt16(f);
+			left  = readUInt16(f);
+			printf("\t$si->addEnvelopePoint(%i,%i,%i);\n", point,left,right);
+		}
+	}
+} 
 
 void printDefineButton(FILE *f, int length)
 {
   int offset = fileOffset;
   int id = readUInt16(f);
 
-  printf("\n\t/* -- Shape %i -- */\n", id);
-  printf("\t$s%i = new SWFButton();\n", id);
+  printf("\n\t" COMMSTART " Button %i " COMMEND "\n", id);
+  printf("\t$s%i = new %sButton();\n", id, modNamePrefix());
 
   while(printButtonRecord(f, 1, id)) ;
 
-  printf("\t$a = new SWFAction(\"\n\n");
+  printf("\t$a = new %sAction(\"\n", modNamePrefix());
   decompileAction(f, length-(fileOffset-offset), 0);
-  printf("\t\");\n");
+  printf("\");\n");
   printf("\t$s%i->setAction($a);\n", id);
 }
 
@@ -1000,14 +1115,14 @@ int printButton2ActionCondition(FILE *f, int end, int id)
   int condition = readUInt16(f);
   int notFirst = 0;
 
-  printf("\t$a = new SWFAction(\"\n\n");
+  printf("\t$a = new %sAction(\"\n", modNamePrefix());
 
   if(offset == 0)
-    decompileAction(f, end-fileOffset, 0);
+    {decompileAction(f, end-fileOffset, 0);}
   else
-    decompileAction(f, offset-4, 0);
+    {decompileAction(f, offset-4, 0);}
 
-  printf("\t\");\n");
+  printf("\");\n");
   printf("\t$s%i->addAction($a, ", id);
 
   if(condition & 0xfe00)
@@ -1062,11 +1177,10 @@ void printDefineButton2(FILE *f, int length)
   int id = readUInt16(f);
   int flags = readUInt8(f);
 
-  printf("\n\t/* -- Shape %i -- */\n", id);
-  printf("\t$s%i = new SWFButton();\n", id);
+  printf("\n\t" COMMSTART " Button2 %i " COMMEND "\n", id);
+  printf("\t$s%i = new %sButton();\n", id, modNamePrefix() );
 
-  if(flags)
-    printf("\t/* button should be tracked as menu item (whatever that means..) */\n");
+  if(flags){printf("\t$s%i->setMenu();\n",id);}
 
   offset = readUInt16(f);
 
@@ -1102,68 +1216,110 @@ void printPlaceObject(FILE *f, int length)
 
   readMatrix(f, &m);
 
-  if(sprite == 0)
+  if(movieclip == 0)
     printf("\t$i%i = $m->add($s%i);\n", depth, id);
   else
-    printf("\t$j%i = $s%i->add($s%i);\n", depth, sprite, id);
+    printf("\t$j%i = $s%i->add($s%i);\n", depth, movieclip, id);
 
-  printTransform(&m, (sprite==0)?'i':'j', depth, 0);
+  printTransform(&m, (movieclip==0)?'i':'j', depth);
 
   if(fileOffset < start+length)
   {
     struct CXForm c;
     readCXForm(f, &c, false);
-    printCXForm(&c, (sprite==0)?'i':'j', depth);
+    printCXForm(&c, (movieclip==0)?'i':'j', depth);
   }
 }
 
-#define PLACE_RESERVED		(1<<7)
-#define PLACE_HASCLIP           (1<<6)
-#define PLACE_HASNAME		(1<<5)
-#define PLACE_HASRATIO		(1<<4)
-#define PLACE_HASCXFORM		(1<<3)
-#define PLACE_HASMATRIX		(1<<2)
-#define PLACE_HASCHARACTER	(1<<1)
-#define PLACE_HASMOVE		(1<<0)
+#define PLACE_HAS_ACTION    (1<<7)
+#define PLACE_HAS_MASK      (1<<6)
+#define PLACE_HAS_NAME      (1<<5)
+#define PLACE_HAS_RATIO     (1<<4)
+#define PLACE_HAS_CXFORM    (1<<3)
+#define PLACE_HAS_MATRIX    (1<<2)
+#define PLACE_HAS_CHARACTER (1<<1)
+#define PLACE_HAS_MOVE      (1<<0)
 
-void printPlaceObject2(FILE *f)
-{
-  int flags = readUInt8(f);
-  int depth = readUInt16(f);
+void printPlaceObject2(FILE *f){
+	int flags = readUInt8(f);
+	int depth = readUInt16(f);
+	int l;
 
-  if(flags & PLACE_HASCHARACTER)
-  {
-    if(sprite == 0)
-      printf("\t$i%i = $m->add($s%i);\n", depth, readUInt16(f));
-    else
-      printf("\t$j%i = $s%i->add($s%i);\n", depth, sprite, readUInt16(f));
-  }
-// if it has a matrix but no character, always show xform !!!
-  if(flags & PLACE_HASMATRIX)
-  {
-    struct Matrix m;
-    readMatrix(f, &m);
-    printTransform(&m, (sprite==0)?'i':'j', depth, !(flags & PLACE_HASCHARACTER));
-  }
+	if(flags & PLACE_HAS_CHARACTER){
+		if(movieclip == 0){
+			printf("\t$i%i = $m->add($s%i);\n", depth, readUInt16(f));
+		}
+		else {
+			printf("\t$j%i = $s%i->add($s%i);\n", depth, movieclip, readUInt16(f));
+		}
+	}
 
-  if(flags & PLACE_HASCXFORM)
-  {
-    struct CXForm c;
-    readCXForm(f, &c, true);
-    printCXForm(&c, (sprite==0)?'i':'j', depth);
-  }
+	if(flags & PLACE_HAS_MATRIX){
+		struct Matrix m;
+		readMatrix(f, &m);
+		printTransform(&m, (movieclip==0)?'i':'j', depth);
+	}
 
-  if(flags & PLACE_HASRATIO)
-    printf("\t$%c%i->setRatio(%f);\n",
-	   (sprite==0)?'i':'j', depth, (float)readUInt16(f)/(1<<16));
+	if(flags & PLACE_HAS_CXFORM){
+		struct CXForm c;
+		readCXForm(f, &c, true);
+		printCXForm(&c, (movieclip==0)?'i':'j', depth);
+	}
 
-  if(flags & PLACE_HASNAME)
-    printf("\t$%c%i->setName('%s');\n",
-	   (sprite==0)?'i':'j', depth, readString(f));
+	if(flags & PLACE_HAS_RATIO){
+		printf("\t$%c%i->setRatio(%f);\n",(movieclip==0)?'i':'j', depth, (float)readUInt16(f)/(1<<16));
+	}
 
-  if(flags & PLACE_HASCLIP)
-    printf("\t/* clipDepth (%i) not implemented */\n", readUInt16(f));
+	if(flags & PLACE_HAS_NAME){
+		printf("\t$%c%i->setName('%s');\n",(movieclip==0)?'i':'j', depth, readString(f));
+	}
+
+	if(flags & PLACE_HAS_MASK){
+		//printf("\t# clipDepth (%i) not implemented \n", readUInt16(f));
+		/*added by Peter*/
+		printf("\t$%c%i->setMaskLevel(%i);\n", (movieclip==0)?'i':'j', depth, readUInt16(f));
+	}
+
+	if(flags & PLACE_HAS_ACTION){
+		printf(COMMSTART "Mystery number: %04x" COMMEND "\n", readUInt16(f));
+
+		flags = readUInt16(f);
+		//printf("#Clip flags: %04x\n", flags);
+		printf("\t$%c%i->addAction(new %sAction(\"\n", (movieclip==0)?'i':'j', depth, modNamePrefix() );
+
+#define PLACEACTION_ONLOAD      (1<<0)
+#define PLACEACTION_ENTERFRAME  (1<<1)
+#define PLACEACTION_UNLOAD      (1<<2)
+#define PLACEACTION_MOUSEMOVE   (1<<3)
+#define PLACEACTION_MOUSEDOWN   (1<<4)
+#define PLACEACTION_MOUSEUP     (1<<5)
+#define PLACEACTION_KEYDOWN     (1<<6)
+#define PLACEACTION_KEYUP       (1<<7)
+#define PLACEACTION_DATA        (1<<8)
+
+		while((flags = readUInt16(f)) != 0){
+			//printf("//flags: %04x\n", flags);
+
+			switch(flags){
+				case PLACEACTION_ONLOAD: printf("onClipEvent(load){\n");  break;
+				case PLACEACTION_ENTERFRAME:printf("onClipEvent(enterFrame){\n"); break;
+				case PLACEACTION_UNLOAD: printf("onClipEvent(unload){\n"); break;
+				case PLACEACTION_MOUSEMOVE: printf("onClipEvent(mouseMove){\n"); break;
+				case PLACEACTION_MOUSEDOWN: printf("onClipEvent(mouseDown){\n"); break;
+				case PLACEACTION_MOUSEUP: printf("onClipEvent(mouseUp){\n"); break;
+				case PLACEACTION_KEYDOWN: printf("onClipEvent(keyDown){\n"); break;
+				case PLACEACTION_KEYUP: printf("onClipEvent(keyUp){\n"); break;
+				case PLACEACTION_DATA: printf("onClipEvent(data){\n"); break;
+				default: printf("// unknown clipEvent: %04x\n", flags);
+			}
+			l = readUInt32(f);
+			decompileAction(f, l, 0);
+			printf("}\n");
+		}
+		printf("\"));\n");
+	}
 }
+
 
 void printRemoveObject(FILE *f)
 {
@@ -1171,18 +1327,18 @@ void printRemoveObject(FILE *f)
 
   readUInt16(f); /* id */
 
-  if(sprite == 0)
+  if(movieclip == 0)
     printf("\t$m->remove($i%i);\n", readUInt16(f));
   else
-    printf("\t$s%i->remove($j%i);\n", sprite, readUInt16(f));
+    printf("\t$s%i->remove($j%i);\n", movieclip, readUInt16(f));
 }
 
 void printRemoveObject2(FILE *f)
 {
-  if(sprite == 0)
+  if(movieclip == 0)
     printf("\t$m->remove($i%i);\n", readUInt16(f));
   else
-    printf("\t$s%i->remove($j%i);\n", sprite, readUInt16(f));
+    printf("\t$s%i->remove($j%i);\n", movieclip, readUInt16(f));
 }
 
 void printSetBackgroundColor(FILE *f)
@@ -1195,20 +1351,101 @@ void printSetBackgroundColor(FILE *f)
 
 void printFrameLabel(FILE *f)
 {
-  if(sprite == 0)
+  if(movieclip == 0)
     printf("\t$m->labelFrame('%s');\n", readString(f));
   else
-    printf("\t$s%i->labelFrame('%s');\n", sprite, readString(f));
+    printf("\t$s%i->labelFrame('%s');\n", movieclip, readString(f));
 }
 
 #define FONTINFO2_HASLAYOUT		(1<<7)
 #define FONTINFO2_SHIFTJIS		(1<<6)
 #define FONTINFO2_UNICODE		(1<<5)
 #define FONTINFO2_ANSI			(1<<4)
-#define FONTINFO2_WIDEOFFSETS	        (1<<3)
+#define FONTINFO2_WIDEOFFSETS	(1<<3)
 #define FONTINFO2_WIDECODES		(1<<2)
 #define FONTINFO2_ITALIC		(1<<1)
 #define FONTINFO2_BOLD			(1<<0)
+
+void printDefineFont(FILE *f, int length) { 
+	printf("\t# DefineFont, %i bytes \n", length);
+	silentSkipBytes(f, length);
+}
+
+void printDefineFont2(FILE *f, int length)
+{
+  int flags, namelen, i, reserved;
+  char name[264];
+  FILE *out;
+  int wide = 0;
+
+  int id = readUInt16(f); /* font id */
+
+  flags = readUInt8(f);
+
+  if(flags & FONTINFO2_WIDECODES) {
+#if 1
+    wide = 1;
+    warning("Sorry, wide code fonts not supported.");
+#else
+    error("Sorry, wide code fonts not supported.");
+#endif
+  }
+
+  if(!(flags & FONTINFO2_HASLAYOUT)){ 
+	//error("Hrm.  I was expecting some layout info.");  
+	fprintf(stderr,"Hrm. I was expecting some layout info!\n"); 
+  }
+  
+  reserved = readUInt8(f); /* "reserved" */
+
+  namelen = readUInt8(f);
+  for(i=0; i<namelen; ++i){ 
+  	name[i] = (unsigned char)readUInt8(f);
+  	if (name[i] == ' ') {name[i] = '_';}
+  }
+
+  if(flags & FONTINFO2_BOLD)
+  {
+    name[i++] = '-';
+    name[i++] = 'B';
+  }
+  if(flags & FONTINFO2_ITALIC)
+  {
+    name[i++] = '-';
+    name[i++] = 'I';    
+  }
+
+  name[i++] = '.';
+  name[i++] = 'f';
+  name[i++] = 'd';
+  name[i++] = 'b';
+  name[i] = '\0';
+  printf("\t$f%i = new %sFont(\"%s\" );  # This file should exist.  \n", id, modNamePrefix() , name);
+
+  /* writing fontdatabase */
+  fprintf(stderr,"Writing %s, %i bytes\n", name, length+2);
+  if((out=fopen(name,"wb"))==NULL) {error("Couldn't open output file!"); }
+
+  fputc('f', out);
+  fputc('d', out);
+  fputc('b', out);
+  fputc('0', out);
+  fputc(flags, out);
+  fputc(reserved, out);
+  fputc(namelen, out);
+
+  for(i=0; i<namelen; ++i) {fputc(name[i], out); }
+  length -= namelen + 5;
+  /*for(; length>0; --length) { fputc(fgetc(f), out);  }*/
+  for(; length>0; --length) { fputc(readUInt8(f), out); }
+  fclose(out);
+
+  if(wide)
+  {
+    printf("Removing %s\n", name);
+    unlink(name);
+  }
+}
 
 #define FONTINFO_RESERVED	(1<<6 | 1<<7)
 #define FONTINFO_UNICODE	(1<<5)
@@ -1232,35 +1469,24 @@ int printTextRecord(FILE *f, int glyphBits, int advanceBits, int type)
   int flags = readUInt8(f);
   struct RGBA rgba;
 
-  if(flags == 0)
-    return 0;
-
+  if(flags == 0) {return 0; }
   if(flags & TEXTRECORD_STATECHANGE)
   {
-    if(flags & TEXTRECORD_HASFONT)
-      fontid = readUInt16(f); /* fontid */
+    if(flags & TEXTRECORD_HASFONT) {fontid = readUInt16(f); /* fontid */ }
 
     if(flags & TEXTRECORD_HASCOLOR)
     {
-      if(type == DEFINETEXT2)
-	readRGBA(f, &rgba);
-      else
-	readRGB(f, &rgba);
+      if(type == DEFINETEXT2) {readRGBA(f, &rgba);}
+      else {readRGB(f, &rgba);}
     }
 
-    if(flags & TEXTRECORD_HASXOFF)
-      readSInt16(f); /* x offset */
-
-    if(flags & TEXTRECORD_HASYOFF)
-      readSInt16(f); /* y offset */
-
-    if(flags & TEXTRECORD_HASFONT)
-      readUInt16(f); /* font height */
+    if(flags & TEXTRECORD_HASXOFF) {readSInt16(f); /* x offset */ }
+    if(flags & TEXTRECORD_HASYOFF) {readSInt16(f); /* y offset */ }
+    if(flags & TEXTRECORD_HASFONT) {readUInt16(f); /* font height */ }
   }
   else /* it's a text entry */
   {
     numGlyphs = flags & TEXTRECORD_NUMGLYPHS;
-
     for(i=0; i<numGlyphs; ++i)
     {
       readBits(f, glyphBits); /* glyph index */
@@ -1278,7 +1504,7 @@ void printDefineText(FILE *f, Blocktype type) /* type 2 allows transparency */
   struct Rect r;
   struct Matrix m;
 
-  printf("\t$s%i = new SWFShape();  /* empty shape for text, for now */\n", id);
+  printf("\t$s%i = new %sShape();  # Empty shape for text, for now \n", id, modNamePrefix() );
 
   readRect(f, &r);
   byteAlign();
@@ -1298,31 +1524,32 @@ void silentSkipBytes(FILE *f, int length)
 
 void printDoAction(FILE *f, int length)
 {
-  if(sprite == 0)
+  if(movieclip == 0)
   {
-    printf("\t$m->add(new SWFAction(\"\n\n");
+    printf("\t$m->add(new %sAction(\"\n", modNamePrefix() );
     decompileAction(f, length, 0);
-    printf("\t\"));\n");
+    printf("\"));\n");
   }
   else
   {
-    printf("\t$s%i->add(new SWFAction(\"\n\n", sprite);
+    printf("\t$s%i->add(new %sAction(\"\n", movieclip, modNamePrefix() );
     decompileAction(f, length, 0);
-    printf("\t\"));\n");
+    printf("\"));\n");
   }
 }
 
-void printSprite(FILE *f, int length)
+void printMovieClip(FILE *f, int length)
 {
   int start = fileOffset;
   int block, type, l;
   int nFrames, frame = 0;
 
-  sprite = readUInt16(f);
+  movieclip = readUInt16(f);
   nFrames = readUInt16(f);
 
-  printf("\n\t/* -- Shape %i -- */\n", sprite);
-  printf("\t$s%i = new SWFSprite();  /* (%i frames) */\n", sprite, nFrames);
+  // Sprite heisst jetzt MovieClip! names changed
+  printf("\n\t" COMMSTART " MovieClip %i " COMMEND "\n", movieclip);
+  printf("\t$s%i = new %sMovieClip();  # %i frames\n", movieclip, modNamePrefix(), nFrames);
 
   while(fileOffset < start+length)
   {
@@ -1336,40 +1563,45 @@ void printSprite(FILE *f, int length)
 
     switch(type)
     {
-      case PLACEOBJECT:		printPlaceObject(f, l);	        break;
-      case PLACEOBJECT2:	printPlaceObject2(f);		break;
-      case REMOVEOBJECT:	printRemoveObject(f);		break;
-      case REMOVEOBJECT2:	printRemoveObject2(f);		break;
-      case FRAMELABEL:		printFrameLabel(f);		break;
-      case DOACTION:		printDoAction(f, l);	        break;
-      case SHOWFRAME:           printf("\t$s%i->nextFrame();  /* (end of sprite frame %i) */\n\n", sprite, frame++); break;
-      case END:                 putchar('\n');                  break;
+      case PLACEOBJECT:    printPlaceObject(f, l); break;
+      case PLACEOBJECT2:   printPlaceObject2(f); break;
+      case REMOVEOBJECT:   printRemoveObject(f); break;
+      case REMOVEOBJECT2:  printRemoveObject2(f); break;
+      case FRAMELABEL:     printFrameLabel(f); break;
+      case DOACTION:       printDoAction(f, l); break;
+      case SHOWFRAME:      printf("\t$s%i->nextFrame();  # end of clip frame %i \n\n", movieclip, ++frame); break;
+      case END:            putchar('\n'); break;
       /*
-      case SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
-      case SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
-      case SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, l);    break;
+      case SOUNDSTREAMHEAD:  printSoundStreamHead(f, 1);     break;
+      case SOUNDSTREAMHEAD2: printSoundStreamHead(f, 2);     break;
+      case SOUNDSTREAMBLOCK: printSoundStreamBlock(f, l);    break;
       */
       default:
-	printf("\t/* %s, %i bytes */\n", blockName(type), l);
-	silentSkipBytes(f, l);
+        printf("\t# %s, %i bytes \n", blockName(type), l);
+        silentSkipBytes(f, l);
     }
   }
 
-  sprite = 0;
+  movieclip = 0;
 }
+/* peter: Constants with numbers added by peter for testing */
+#define SWFTEXTFIELD_HASLENGTH (1<<1)
+#define SWFTEXTFIELD_2         (1<<2)
+#define SWFTEXTFIELD_NOEDIT    (1<<3)
+#define SWFTEXTFIELD_PASSWORD  (1<<4)
+#define SWFTEXTFIELD_MULTILINE (1<<5)
+#define SWFTEXTFIELD_WORDWRAP  (1<<6)
+#define SWFTEXTFIELD_7         (1<<7)
+#define SWFTEXTFIELD_8         (1<<8)
+#define SWFTEXTFIELD_9         (1<<9)
+#define SWFTEXTFIELD_10        (1<<10)
+#define SWFTEXTFIELD_DRAWBOX   (1<<11)
+#define SWFTEXTFIELD_NOSELECT  (1<<12)
 
-#define TEXTFIELD_HASLENGTH (1<<1)
-#define TEXTFIELD_NOEDIT    (1<<3)
-#define TEXTFIELD_PASSWORD  (1<<4)
-#define TEXTFIELD_MULTILINE (1<<5)
-#define TEXTFIELD_WORDWRAP  (1<<6)
-#define TEXTFIELD_DRAWBOX   (1<<11)
-#define TEXTFIELD_NOSELECT  (1<<12)
-
-#define TEXTFIELD_JUSTIFY_LEFT    0
-#define TEXTFIELD_JUSTIFY_RIGHT   1
-#define TEXTFIELD_JUSTIFY_CENTER  2
-#define TEXTFIELD_JUSTIFY_JUSTIFY 3
+#define SWFTEXTFIELD_ALIGN_LEFT    0
+#define SWFTEXTFIELD_ALIGN_RIGHT   1
+#define SWFTEXTFIELD_ALIGN_CENTER  2
+#define SWFTEXTFIELD_ALIGN_JUSTIFY 3
 
 void printTextField(FILE *f, int length)
 {
@@ -1383,100 +1615,141 @@ void printTextField(FILE *f, int length)
 
   flags=readUInt16(f);
 
-  printf("\n\t$s%i = new SWFTextField(", id);
+  printf("\n\t$s%i = new %sTextField(", id, modNamePrefix() );
 
-  if(flags & TEXTFIELD_HASLENGTH)
+  if(flags & SWFTEXTFIELD_HASLENGTH)
   {
-    puts("TEXTFIELD_HASLENGTH");
+    printf("SWFTEXTFIELD_HASLENGTH");
     notFirst = 1;
   }
-  if(flags & TEXTFIELD_NOEDIT)
-  {
-    printf("%sTEXTFIELD_NOEDIT", notFirst?" | ":"");
+  if(flags & SWFTEXTFIELD_NOEDIT)
+  { 
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_NOEDIT");
     notFirst = 1;
   }
-  if(flags & TEXTFIELD_PASSWORD)
+  if(flags & SWFTEXTFIELD_PASSWORD)
   {
-    printf("%sTEXTFIELD_PASSWORD", notFirst?" | ":"");
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_PASSWORD");
     notFirst = 1;
   }
-  if(flags & TEXTFIELD_MULTILINE)
+  if(flags & SWFTEXTFIELD_MULTILINE)
   {
-    printf("%sTEXTFIELD_MULTILINE", notFirst?" | ":"");
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_MULTILINE");
     notFirst = 1;
   }
-  if(flags & TEXTFIELD_WORDWRAP)
+  if(flags & SWFTEXTFIELD_WORDWRAP)
   {
-    printf("%sTEXTFIELD_WORDWRAP", notFirst?" | ":"");
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_WORDWRAP");
     notFirst = 1;
   }
-  if(flags & TEXTFIELD_DRAWBOX)
+  if(flags & SWFTEXTFIELD_DRAWBOX)
   {
-    printf("%sTEXTFIELD_DRAWBOX", notFirst?" | ":"");
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_DRAWBOX");
     notFirst = 1;
   }
-  if(flags & TEXTFIELD_NOSELECT)
+  if(flags & SWFTEXTFIELD_NOSELECT)
   {
-    printf("%sTEXTFIELD_NOSELECT", notFirst?" | ":"");
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_NOSELECT");
     notFirst = 1;
   }
+/* peter test */
+/*  
+  if(flags & SWFTEXTFIELD_2)
+  {
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_2");
+    notFirst = 1;
+  }
+  if(flags & SWFTEXTFIELD_7)
+  {
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_7");
+    notFirst = 1;
+  }  
+  if(flags & SWFTEXTFIELD_8)
+  {
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_8");
+    notFirst = 1;
+  }
+  if(flags & SWFTEXTFIELD_9)
+  {
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_9");
+    notFirst = 1;
+  }  
+  if(flags & SWFTEXTFIELD_10)
+  {
+    if (notFirst) { printf(" | ");}
+    printf("SWFTEXTFIELD_10");
+    notFirst = 1;
+  }
+*/
+/*end peter test */  
 
-  puts(");\n");
+  printf(");\n");
 
   printf("\t$s%i->setBounds(%i, %i);\n", id, r.xMax, r.yMax);
 
-  printf("\t$s%i->setFont(new SWFFont('_serif')); /* temp hack, should be $f%i */\n", id, readUInt16(f));
+  printf("\t$s%i->setFont($f%i);\n", id, readUInt16(f));
   printf("\t$s%i->setHeight(%i);\n", id, readUInt16(f));
 
   readRGBA(f, &c);
   printf("\t$s%i->setColor(0x%02x, 0x%02x, 0x%02x, 0x%02x);\n", id, c.r, c.g, c.b, c.a);
 
-  if(flags & TEXTFIELD_HASLENGTH)
+  if(flags & SWFTEXTFIELD_HASLENGTH)
     printf("\t$s%i->setLength(%i);\n", id, readUInt16(f));
 
   printf("\t$s%i->align(", id);
 
   switch(num = readUInt8(f))
   {
-    case TEXTFIELD_JUSTIFY_LEFT:    puts("TEXTFIELD_JUSTIFY_LEFT");    break;
-    case TEXTFIELD_JUSTIFY_RIGHT:   puts("TEXTFIELD_JUSTIFY_RIGHT");   break;
-    case TEXTFIELD_JUSTIFY_CENTER:  puts("TEXTFIELD_JUSTIFY_CENTER");  break;
-    case TEXTFIELD_JUSTIFY_JUSTIFY: puts("TEXTFIELD_JUSTIFY_JUSTIFY"); break;
+    case SWFTEXTFIELD_ALIGN_LEFT:    printf("SWFTEXTFIELD_ALIGN_LEFT");    break;
+    case SWFTEXTFIELD_ALIGN_RIGHT:   printf("SWFTEXTFIELD_ALIGN_RIGHT");   break;
+    case SWFTEXTFIELD_ALIGN_CENTER:  printf("SWFTEXTFIELD_ALIGN_CENTER");  break;
+    case SWFTEXTFIELD_ALIGN_JUSTIFY: printf("SWFTEXTFIELD_ALIGN_JUSTIFY"); break;
     default: error("unexpected justification: %i\n", num);
   }
 
-  puts(");\n");
+  printf(");\n");
 
   if((num = readUInt16(f)) != 0)
-    printf("\t$s%i->setLeftMargin(%i);\n", id, num);
+    {printf("\t$s%i->setLeftMargin(%i);\n", id, num);}
 
   if((num = readUInt16(f)) != 0)
-    printf("\t$s%i->setRightMargin(%i);\n", id, num);
+    {printf("\t$s%i->setRightMargin(%i);\n", id, num);}
 
   if((num = readUInt16(f)) != 0)
-    printf("\t$s%i->setIndentation(%i);\n", id, num);
+    {printf("\t$s%i->setIndentation(%i);\n", id, num);}
 
   if((num = readUInt16(f)) != 40)
-    printf("\t$s%i->setLineSpacing(%i);\n", id, num);
+    {printf("\t$s%i->setLineSpacing(%i);\n", id, num);}
 
   string = readString(f);
 
   if(string[0] != '\0')
-    printf("\t$s%i->setName('%s');\n", id, string);
+    {printf("\t$s%i->setName('%s');\n", id, string);}
 
   if(fileOffset<end)
   {
     string = readString(f);
 
     if(string[0] != '\0')
-      printf("\t$s%i->addString('%s');\n", id, string);
+      {printf("\t$s%i->addString('%s');\n", id, string);}
   }
 
   if(fileOffset<end)
   {
-    puts("/* extra garbage (i.e., we goofed):\n");
+    printf("# extra garbage (i.e., we goofed in printTextField):\n");
+    puts("print STDERR <<'DUMP;'");
     dumpBytes(f, end-fileOffset);
-    puts("*/\n");
+    puts("DUMP\n");
   }
 }
 
@@ -1490,44 +1763,147 @@ void skipBytes(FILE *f, int length)
     readUInt8(f);
 }
 
-int main(int argc, char *argv[])
+/*
+ * Compressed swf-files have a 8 Byte uncompressed header and a
+ * zlib-compressed body. 
+ */
+int
+cws2fws(FILE *f, uLong outsize)
 {
-  struct Movie m;
-  FILE *f;
+
+	struct stat statbuffer;
+	int insize;
+	int err,tmp_fd;
+	Byte *inbuffer,*outbuffer;
+
+	sprintf(tmp_name, "swftoscriptXXXXXX");
+	
+	tmp_fd = mkstemp(tmp_name);
+	if ( tmp_fd == -1 )
+	{
+		error("Couldn't create tempfile.\n");
+	}
+
+	tempfile = fdopen(tmp_fd, "w");
+	if ( ! tempfile )
+	{
+		error("fdopen: %s", strerror(errno));
+	}
+
+
+	if( stat(filename, &statbuffer) == -1 )
+	{
+		error("stat() failed on input file");
+	}
+	
+	insize = statbuffer.st_size-8;
+	inbuffer = malloc(insize);
+	if(!inbuffer){ error("malloc() failed"); }
+	fread(inbuffer,insize,1,f);
+	
+	/* We don't trust the value in the swfheader. */
+	outbuffer=NULL;
+	do{
+		outbuffer = realloc(outbuffer, outsize);	
+		if (!outbuffer) { error("malloc(%lu) failed",outsize); }
+		
+		err=uncompress(outbuffer,&outsize,inbuffer,insize);
+		switch(err){
+			case Z_MEM_ERROR:
+				error("Not enough memory.\n");
+				break;
+			case Z_BUF_ERROR:
+				fprintf(stderr,"resizing outbuffer..\n");
+				outsize*=2;
+				continue;
+			case Z_DATA_ERROR:
+				error("Data corrupted. Couldn't uncompress.\n");
+				break;
+			case Z_OK:
+				break;
+			default:
+				error("Unknown returnvalue of uncompress:%i\n",
+					err);
+				break;
+		}
+	} while(err == Z_BUF_ERROR);
+ 
+	fwrite(outbuffer, 1, outsize, tempfile);
+	rewind(tempfile);
+	return (int)outsize;
+}
+
+
+int main(int argc, char *argv[])
+{	
+	struct Movie m;
+	FILE *f;
+	char first;
   int block, type, length, frame = 0, noactions = 0;
+	int compressed= 0;
+	
+	if(argc == 3 && strcmp(argv[1], "-a") == 0)
+	{	noactions = 1;
+		--argc;
+		++argv;
+	}
+	filename= argv[1];
+	
+	if(argc<2) {
+		error("Give me a filename.\n\n\tswftoperl myflash..swf >myflash.pl");
+	}
 
-  if(argc == 3 && strcmp(argv[1], "-a") == 0)
-  {	noactions = 1;
-	--argc;
-	++argv;
-  }
+	if(!(f = fopen(filename,"rb"))){
+		error("Sorry, can't seem to read that file.\n");
+	}
+	
+	first=readUInt8(f);
+	compressed=(first==('C'))?1:0;
+	if(!((first=='C' || first=='F') && readUInt8(f)=='W' && readUInt8(f)=='S')){
+		error("Doesn't look like a swf file to me..\n");
+	}
+	m.version = readUInt8(f);
+	m.size = readUInt32(f);
+	
+	if(compressed){
+		int unzipped=cws2fws(f, m.size);
+		if (m.size!=(unzipped+8)){
+			warning("m.size: %i != %i+8  Maybe wrong value in swfheader.\n",m.size, unzipped+8);
+		}
+		fclose(f);
+		f=tempfile;
+		rewind(f);
+	}	
 
-  if(argc<2)
-    error("Give me a filename.\n");
+	readRect(f, &(m.frame));
 
-  if(!(f = fopen(argv[1],"rb")))
-    error("Sorry, can't seem to read that file.\n");
+	m.rate = readUInt8(f)/256.0+readUInt8(f);
+	m.nFrames = readUInt16(f);
 
-  if(!(readUInt8(f)=='F' && readUInt8(f)=='W' && readUInt8(f)=='S'))
-    error("Doesn't look like a swf file to me..\n");
+#ifdef SWFPHP
+	printf("<?php\n");
+#endif
+#ifdef SWFPERL
+	printf("#!/usr/bin/perl -w\n");
+	printf("# Generated by swftoperl converter included with ming. Have fun. \n\n");
+	printf("# Change this to your needs. If you installed perl-ming global you don't need this.\n");
+	printf("#use lib(\"/home/peter/mystuff/lib/site_perl\");\n\n");
 
-  m.version = m_version = readUInt8(f);
-  m.size = readUInt32(f);
+	printf("# We import all because our converter is not so clever to select only needed. ;-)\n");
+	printf("use SWF qw(:ALL);\n"); 
+	printf("# Just copy from a sample, needed to use Constants like SWFFILL_RADIAL_GRADIENT\n");
+	printf("use SWF::Constants qw(:Text :Button :DisplayItem :Fill);\n\n");
+	printf("SWF::setScale(1);\n");
+	printf("SWF::setVersion(%i);\n", m.version);
+#endif
+	printf("\t$m = new %sMovie();\n\n", modNamePrefix() );
+	printf("\t$m->setRate(%f);\n", m.rate);
+	printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
+	printf("\t$m->setFrames(%i);\n", m.nFrames);
 
-  readRect(f, &(m.frame));
-
-  m.rate = readUInt8(f)/256.0+readUInt8(f);
-  m.nFrames = readUInt16(f);
-
-  printf("<?php\n");
-  printf("\t$m = new SWFMovie();\n");
-  printf("\t$m->setRate(%f);\n", m.rate);
-  printf("\t$m->setDimension(%i, %i);\n", m.frame.xMax, m.frame.yMax);
-  printf("\t$m->setFrames(%i);\n", m.nFrames);
-
-  if(noactions)
-	m_version = 0;
-
+  if(noactions){ m_version = 0; }
+	else { m_version = m.version; }
+	
   for(;;)
   {
     block = readUInt16(f);
@@ -1545,38 +1921,43 @@ int main(int argc, char *argv[])
     {
       case DEFINESHAPE3:
       case DEFINESHAPE2:
-      case DEFINESHAPE:		printShape(f, length, type);    break;
-      case SETBACKGROUNDCOLOR:	printSetBackgroundColor(f);	break;
-      case SHOWFRAME:           printf("\t$m->nextFrame();  /* (end of frame %i) */\n\n", frame++); break;
-      case PLACEOBJECT2:	printPlaceObject2(f);		break;
-      case REMOVEOBJECT2:	printRemoveObject2(f);		break;
-      case DOACTION:		printDoAction(f, length);	break;
-      case DEFINESPRITE:        printSprite(f, length);         break;
-      case DEFINEBUTTON:        printDefineButton(f, length);   break;
-      case DEFINEBUTTON2:       printDefineButton2(f, length);  break;
-      case FRAMELABEL:		printFrameLabel(f);		break;
+      case DEFINESHAPE:       printShape(f, length, type); break;
+      case SETBACKGROUNDCOLOR: printSetBackgroundColor(f); break;
+      case SHOWFRAME:         printf("\t$m->nextFrame();  # end of frame %i\n", ++frame); break;
+      case PLACEOBJECT2:      printPlaceObject2(f); break;
+      case REMOVEOBJECT2:     printRemoveObject2(f); break;
+      case DOACTION:          printDoAction(f, length); break;
+      case DEFINESPRITE:      printMovieClip(f, length); break;
+      case DEFINEBUTTON:      printDefineButton(f, length); break;
+      case DEFINEBUTTON2:     printDefineButton2(f, length); break;
+      case DEFINEBUTTONSOUND: printDefineButtonSound(f, length); break;
+      case FRAMELABEL:        printFrameLabel(f); break;
       case DEFINETEXT:
-      case DEFINETEXT2:		printDefineText(f, type);	break;
-      case TEXTFIELD:           printTextField(f, length);      break;
-      case DEFINEMORPHSHAPE:	printMorphShape(f, length);	break; 
-      case PLACEOBJECT:		printPlaceObject(f, length);	break;
-      case REMOVEOBJECT:	printRemoveObject(f);		break;
-	/*
-      case DEFINEFONT:		printDefineFont(f, length);	break;
-      case DEFINEFONT2:		printDefineFont2(f, length);	break;
-      case DEFINEFONTINFO:	printFontInfo(f, length);	break;
-      case DEFINESOUND:         printDefineSound(f, length);    break;
-      case SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
-      case SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
-      case SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, length); break;
-      case JPEGTABLES:          printJpegStream(f, length);     break;
-      case DEFINEBITS:
-      case DEFINEBITSJPEG2:     printDefineBitsJpeg(f,length);  break;
+      case DEFINETEXT2:       printDefineText(f, type); break;
+      case TEXTFIELD:         printTextField(f, length); break;
+      case DEFINEMORPHSHAPE:  printMorphShape(f, length); break;
+      case PLACEOBJECT:       printPlaceObject(f, length); break;
+      case REMOVEOBJECT:      printRemoveObject(f); break;
 
-      case DEFINEBITSJPEG3:
-	*/
+      case DEFINEFONT:        printDefineFont(f, length); break;
+      case DEFINEFONT2:       printDefineFont2(f, length); break;
+/*
+      case DEFINEFONTINFO:    printFontInfo(f, length); break;
+      case DEFINESOUND:       printDefineSound(f, length); break;
+      case SOUNDSTREAMHEAD:   printSoundStreamHead(f, 1); break;
+      case SOUNDSTREAMHEAD2:  printSoundStreamHead(f, 2); break;
+      case SOUNDSTREAMBLOCK:  printSoundStreamBlock(f, length); break;
+ */
+      case JPEGTABLES:        printJpegStream(f, length); break;
+      case DEFINEBITS:
+      case DEFINEBITSJPEG2:  printDefineBitsJpeg(f,length);  break;
+      case DEFINELOSSLESS:   printDefineBitsLossless(f,length);  break;
+
+			/*
+			case DEFINEBITSJPEG3:
+			*/
       default:
-	printf("\t/* %s, %i bytes */\n", blockName(type), length);
+	printf("\t" COMMSTART "Top level parser: %s, %i bytes " COMMEND "\n", blockName(type), length);
 	silentSkipBytes(f, length);
     }
   }
@@ -1585,14 +1966,27 @@ int main(int argc, char *argv[])
 
   if(fileOffset < m.size)
   {
-    printf("/* extra garbage (i.e., we messed up):\n");
+    printf(COMMSTART " extra garbage (i.e., we messed up in main): \n");
     dumpBytes(f, m.size-fileOffset);
-    printf("\n*/\n");
+    printf("\n" COMMEND "\n");
   }
 
+#ifdef SWFPHP
   printf("\n\theader('Content-type: application/x-shockwave-flash');\n");
   printf("\t$m->output();\n");
+#endif
+#ifdef SWFPERL
+  printf("\t#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
+  printf("\t$m->output(%i);\n",(compressed)?'9':'0');
+  printf("\t$m->save(\".swf\",%i);\n",(compressed)?'9':'0');
+#endif
+#ifdef SWFPHP
   printf("?>");
-
+#endif
+	
+	fclose(f);
+	if (compressed){
+		unlink(tmp_name);
+	}
   exit(0);
 }

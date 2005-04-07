@@ -27,6 +27,8 @@
 
 #include "action.h"
 
+typedef unsigned char byte;
+
 struct _stack;
 
 struct _tree
@@ -56,4 +58,4 @@ struct _stack
 typedef struct _stack *Stack;
 
 void decompile4Action(FILE *f, int length, int indent);
-char *decompile5Action(FILE *f, int length, int indent);
+void decompile5Action(FILE *f, int length, int indent);
