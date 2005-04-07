@@ -109,8 +109,8 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
       printf ("RotateSkew0 %f ", matrix->RotateSkew0);
       printf ("RotateSkew1 %f\n", matrix->RotateSkew1);
     }
-  printf ("   TranslateX %6d ", matrix->TranslateX);
-  printf ("TranslateY %6d\n", matrix->TranslateY);
+  printf ("   TranslateX %6ld ", matrix->TranslateX);
+  printf ("TranslateY %6ld\n", matrix->TranslateY);
 }
 
 void
@@ -217,9 +217,9 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	{
 	  /* A Curved Edge Record */
 	  printf ("  Curved EdgeRecord: %d", shaperec->CurvedEdge.NumBits);
-	  printf (" Control(%d,%d)", shaperec->CurvedEdge.ControlDeltaX,
+	  printf (" Control(%ld,%ld)", shaperec->CurvedEdge.ControlDeltaX,
 		  shaperec->CurvedEdge.ControlDeltaY);
-	  printf (" Anchor(%d,%d)\n", shaperec->CurvedEdge.AnchorDeltaX,
+	  printf (" Anchor(%ld,%ld)\n", shaperec->CurvedEdge.AnchorDeltaX,
 		  shaperec->CurvedEdge.AnchorDeltaY);
 	}
     }
@@ -241,19 +241,19 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
       printf (" StateMoveTo: %d\n", shaperec->StyleChange.StateMoveTo);
 
       if (shaperec->StyleChange.StateLineStyle) {
-	  printf (" LineStyle: %d\n", shaperec->StyleChange.LineStyle);
+	  printf (" LineStyle: %ld\n", shaperec->StyleChange.LineStyle);
       }
       if (shaperec->StyleChange.StateFillStyle1) {
-	  printf (" FillStyle1: %d\n", shaperec->StyleChange.FillStyle1);
+	  printf (" FillStyle1: %ld\n", shaperec->StyleChange.FillStyle1);
       }
       if (shaperec->StyleChange.StateFillStyle0) {
-	  printf (" FillStyle0: %d\n", shaperec->StyleChange.FillStyle0);
+	  printf (" FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
       }
       if (shaperec->StyleChange.StateMoveTo)
 	{
 	  printf (" MoveBits: %d ", shaperec->StyleChange.MoveBits);
-	  printf (" MoveDeltaX: %d ", shaperec->StyleChange.MoveDeltaX);
-	  printf (" MoveDeltaY: %d\n", shaperec->StyleChange.MoveDeltaY);
+	  printf (" MoveDeltaX: %ld ", shaperec->StyleChange.MoveDeltaX);
+	  printf (" MoveDeltaY: %ld\n", shaperec->StyleChange.MoveDeltaY);
 	}
     }
 }
@@ -291,70 +291,70 @@ outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
 void
 outputSWF_CHARACTERSET (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_CHARACTERSET);
+  //OUT_BEGIN (SWF_CHARACTERSET);
 
 }
 
 void
 outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBITS);
+  //OUT_BEGIN (SWF_DEFINEBITS);
 
 }
 
 void
 outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBITSJPEG2);
+  //OUT_BEGIN (SWF_DEFINEBITSJPEG2);
 
 }
 
 void
 outputSWF_DEFINEBITSJPEG3 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBITSJPEG3);
+  //OUT_BEGIN (SWF_DEFINEBITSJPEG3);
 
 }
 
 void
 outputSWF_DEFINEBITSPTR (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBITSPTR);
+  //OUT_BEGIN (SWF_DEFINEBITSPTR);
 
 }
 
 void
 outputSWF_DEFINEBUTTON (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBUTTON);
+  //OUT_BEGIN (SWF_DEFINEBUTTON);
 
 }
 
 void
 outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBUTTON2);
+  //OUT_BEGIN (SWF_DEFINEBUTTON2);
 
 }
 
 void
 outputSWF_DEFINEBUTTONCXFORM (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBUTTONCXFORM);
+  //OUT_BEGIN (SWF_DEFINEBUTTONCXFORM);
 
 }
 
 void
 outputSWF_DEFINEBUTTONSOUND (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBUTTONSOUND);
+  //OUT_BEGIN (SWF_DEFINEBUTTONSOUND);
 
 }
 
 void
 outputSWF_DEFINECOMMANDOBJ (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINECOMMANDOBJ);
+  //OUT_BEGIN (SWF_DEFINECOMMANDOBJ);
 
 }
 
@@ -411,7 +411,7 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEFONT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEFONT);
+  //OUT_BEGIN (SWF_DEFINEFONT);
 
 }
 
@@ -461,28 +461,28 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEFONTINFO (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEFONTINFO);
+  //OUT_BEGIN (SWF_DEFINEFONTINFO);
 
 }
 
 void
 outputSWF_DEFINELOSSLESS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINELOSSLESS);
+  //OUT_BEGIN (SWF_DEFINELOSSLESS);
 
 }
 
 void
 outputSWF_DEFINELOSSLESS2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINELOSSLESS2);
+  //OUT_BEGIN (SWF_DEFINELOSSLESS2);
 
 }
 
 void
 outputSWF_DEFINEMORPHSHAPE (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEMORPHSHAPE);
+  //OUT_BEGIN (SWF_DEFINEMORPHSHAPE);
 
 }
 
@@ -521,49 +521,49 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINESOUND);
+  //OUT_BEGIN (SWF_DEFINESOUND);
 
 }
 
 void
 outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINESPRITE);
+  //OUT_BEGIN (SWF_DEFINESPRITE);
 
 }
 
 void
 outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINETEXT);
+  //OUT_BEGIN (SWF_DEFINETEXT);
 
 }
 
 void
 outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINETEXT2);
+  //OUT_BEGIN (SWF_DEFINETEXT2);
 
 }
 
 void
 outputSWF_DEFINETEXTFORMAT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINETEXTFORMAT);
+  //OUT_BEGIN (SWF_DEFINETEXTFORMAT);
 
 }
 
 void
 outputSWF_DEFINEVIDEO (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEVIDEO);
+  //OUT_BEGIN (SWF_DEFINEVIDEO);
 
 }
 
 void
 outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEVIDEOSTREAM);
+  //OUT_BEGIN (SWF_DEFINEVIDEOSTREAM);
 
 }
 
@@ -582,7 +582,7 @@ outputSWF_ACTION (struct SWF_ACTIONRECORD *act)
 void
 outputSWF_DOACTION (SWF_Parserstruct * pblock)
 {
-  int i;
+  //int i;
   OUT_BEGIN (SWF_DOACTION);
 
   /*
@@ -597,147 +597,147 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 void
 outputSWF_ENABLEDEBUGGER (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_ENABLEDEBUGGER);
+  //OUT_BEGIN (SWF_ENABLEDEBUGGER);
 
 }
 
 void
 outputSWF_END (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_END);
+  //OUT_BEGIN (SWF_END);
 
 }
 
 void
 outputSWF_EXPORTASSETS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_EXPORTASSETS);
+  //OUT_BEGIN (SWF_EXPORTASSETS);
 
 }
 
 void
 outputSWF_FONTREF (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_FONTREF);
+  //OUT_BEGIN (SWF_FONTREF);
 
 }
 
 void
 outputSWF_FRAMELABEL (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_FRAMELABEL);
+  //OUT_BEGIN (SWF_FRAMELABEL);
 
 }
 
 void
 outputSWF_FRAMETAG (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_FRAMETAG);
+  //OUT_BEGIN (SWF_FRAMETAG);
 
 }
 
 void
 outputSWF_FREEALL (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_FREEALL);
+  //OUT_BEGIN (SWF_FREEALL);
 
 }
 
 void
 outputSWF_FREECHARACTER (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_FREECHARACTER);
+  //OUT_BEGIN (SWF_FREECHARACTER);
 
 }
 
 void
 outputSWF_GENCOMMAND (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_GENCOMMAND);
+  //OUT_BEGIN (SWF_GENCOMMAND);
 
 }
 
 void
 outputSWF_IMPORTASSETS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_IMPORTASSETS);
+  //OUT_BEGIN (SWF_IMPORTASSETS);
 
 }
 
 void
 outputSWF_JPEGTABLES (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_JPEGTABLES);
+  //OUT_BEGIN (SWF_JPEGTABLES);
 
 }
 
 void
 outputSWF_NAMECHARACTER (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_NAMECHARACTER);
+  //OUT_BEGIN (SWF_NAMECHARACTER);
 
 }
 
 void
 outputSWF_PATHSAREPOSTSCRIPT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_PATHSAREPOSTSCRIPT);
+  //OUT_BEGIN (SWF_PATHSAREPOSTSCRIPT);
 
 }
 
 void
 outputSWF_PLACEOBJECT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_PLACEOBJECT);
+  //OUT_BEGIN (SWF_PLACEOBJECT);
 
 }
 
 void
 outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_PLACEOBJECT2);
+  //OUT_BEGIN (SWF_PLACEOBJECT2);
 
 }
 
 void
 outputSWF_PREBUILT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_PREBUILT);
+  //OUT_BEGIN (SWF_PREBUILT);
 
 }
 
 void
 outputSWF_PREBUILTCLIP (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_PREBUILTCLIP);
+  //OUT_BEGIN (SWF_PREBUILTCLIP);
 
 }
 
 void
 outputSWF_PROTECT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_PROTECT);
+  //OUT_BEGIN (SWF_PROTECT);
 
 }
 
 void
 outputSWF_REMOVEOBJECT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_REMOVEOBJECT);
+  //OUT_BEGIN (SWF_REMOVEOBJECT);
 
 }
 
 void
 outputSWF_REMOVEOBJECT2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_REMOVEOBJECT2);
+  //OUT_BEGIN (SWF_REMOVEOBJECT2);
 
 }
 
 void
 outputSWF_SERIALNUMBER (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SERIALNUMBER);
+  //OUT_BEGIN (SWF_SERIALNUMBER);
 
 }
 
@@ -753,49 +753,49 @@ outputSWF_SETBACKGROUNDCOLOR (SWF_Parserstruct * pblock)
 void
 outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SHOWFRAME);
+  //OUT_BEGIN (SWF_SHOWFRAME);
 
 }
 
 void
 outputSWF_SOUNDSTREAMBLOCK (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
+  //OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
 
 }
 
 void
 outputSWF_SOUNDSTREAMHEAD (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SOUNDSTREAMHEAD);
+  //OUT_BEGIN (SWF_SOUNDSTREAMHEAD);
 
 }
 
 void
 outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SOUNDSTREAMHEAD2);
+  //OUT_BEGIN (SWF_SOUNDSTREAMHEAD2);
 
 }
 
 void
 outputSWF_STARTSOUND (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_STARTSOUND);
+  //OUT_BEGIN (SWF_STARTSOUND);
 
 }
 
 void
 outputSWF_SYNCFRAME (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SYNCFRAME);
+  //OUT_BEGIN (SWF_SYNCFRAME);
 
 }
 
 void
 outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_VIDEOFRAME);
+  //OUT_BEGIN (SWF_VIDEOFRAME);
 
 }
 
