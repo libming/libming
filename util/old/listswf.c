@@ -653,7 +653,7 @@ void printDefineBitsLossless(FILE *f, int length)
 
 void printDoAction(FILE *f, int length);
 
-char *dictionary[256];
+char *dictionary[65536];
 
 int printActionRecord(FILE *f)
 {
