@@ -9,6 +9,9 @@
 #include "read.h"
 #include "decompile.h"
 
+/* Not really used, but needed for linking during the transition */
+#include "parser.h"
+struct Movie m;
 
 #ifdef NODECOMPILE
 #define decompileAction(f,l,n) printDoAction((f),(l))

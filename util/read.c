@@ -12,11 +12,13 @@ int lastIndent = 0;
 
 void error(char *s, ...)
 {
+  fflush(stdout);
   va_list ap;
   va_start(ap, s);
   vprintf(s, ap);
   va_end(ap);
   putchar('\n');
+  fflush(stdout);
   exit(-1);
 }
 
@@ -173,6 +175,44 @@ char *readString(FILE *f)
 
   while((c=(char)readUInt8(f)) != '\0')
   {
+    if(len >= buflen-2)
+    {
+      buf = (char *)realloc(buf, sizeof(char)*(buflen+256));
+      buflen += 256;
+      p = buf+len;
+    }
+
+    switch(c)
+    {
+      case '\n':
+	*(p++) = '\\';	*(p++) = 'n';	++len;	break;
+      case '\t':
+	*(p++) = '\\';	*(p++) = 't';	++len;	break;
+      case '\r':
+	*(p++) = '\\';	*(p++) = 'r';	++len;	break;
+      default:
+	*(p++) = c;
+    }
+
+    ++len;
+  }
+
+  *p = 0;
+
+  return buf;
+}
+
+char *readSizedString(FILE *f,int size)
+{
+  int len = 0, buflen = 256, i;
+  char c, *buf, *p;
+
+  buf = (char *)malloc(sizeof(char)*buflen);
+  p = buf;
+
+  for(i=0;i<size;i++)
+  {
+    c=(char)readUInt8(f);
     if(len >= buflen-2)
     {
       buf = (char *)realloc(buf, sizeof(char)*(buflen+256));

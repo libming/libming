@@ -11,14 +11,6 @@ struct Matrix
   int y;
 };
 
-struct Rect
-{
-  int xMin;
-  int xMax;
-  int yMin;
-  int yMax;
-};
-
 struct RGBA
 {
   int r;
@@ -147,13 +139,4 @@ struct Shape
   byte fillBits;
   short lineOffset;
   short fillOffset;
-};
-
-struct Movie
-{
-  int version;
-  int size; /* in bytes */
-  struct Rect frame;
-  float rate;
-  int nFrames;
 };

@@ -58,4 +58,8 @@ struct _stack
 typedef struct _stack *Stack;
 
 void decompile4Action(FILE *f, int length, int indent);
+#ifdef NEWUTILS
+char *decompile5Action(FILE *f, int length, int indent);
+#else
 void decompile5Action(FILE *f, int length, int indent);
+#endif

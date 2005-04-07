@@ -25,7 +25,12 @@
 #include "read.h"
 #include "decompile.h"
 
+/* Not really used, but needed for linking during the transition */
+#include "parser.h"
+struct Movie m;
+
 #include "swftoscript.h"
+
 
 #ifndef M_PI
   #define M_PI 3.14159265358979f

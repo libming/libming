@@ -1,50 +1,113 @@
 
-#include "blocktypes.h"
+#include "blocks/blocktypes.h"
+#include "parser.h"
 
-const char *blockName(int header)
+struct SWFBlock
 {
-  switch(header)
-  {
-    case 2:  return "DefineShape";	       	break;
-    case 22: return "DefineShape2";	       	break;
-    case 32: return "DefineShape3";		break;
-    case 46: return "DefineMorphShape";		break;
-    case 6:  return "DefineBits";	        break;
-    case 21: return "DefineBitsJPEG2";		break;
-    case 35: return "DefineBitsJPEG3";		break;
-    case 20: return "DefineBitsLossless";	break;
-    case 36: return "DefineBitsLossless2";	break;
-    case 8:  return "JPEGTables";		break;
-    case 7:  return "DefineButton";		break;
-    case 34: return "DefineButton2";		break;
-    case 23: return "DefineButtonCxForm";	break;
-    case 17: return "DefineButtonSound";	break;
-    case 10: return "DefineFont";		break;
-    case 48: return "DefineFont2";		break;
-    case 13: return "DefineFontInfo";		break;
-    case 11: return "DefineText";		break;
-    case 33: return "DefineText2";		break;
-    case 14: return "DefineSound";	        break;
-    case 19: return "SoundStreamBlock";		break;
-    case 18: return "SoundStreamHead";		break;
-    case 45: return "SoundStreamHead2";		break;
-    case 39: return "DefineSprite";		break;
-    case 4:  return "PlaceObject";		break;
-    case 26: return "PlaceObject2";		break;
-    case 5:  return "RemoveObject";		break;
-    case 28: return "RemoveObject2";		break;
-    case 1:  return "ShowFrame";		break;
-    case 9:  return "SetBackgroundColor";	break;
-    case 43: return "FrameLabel";		break;
-    case 24: return "Protect";			break;
-    case 15: return "StartSound";	        break;
-    case 0:  return "End";		        break;
-    case 12: return "DoAction"; 	        break;
-    case 37: return "TextField";                break;
-    case 56: return "LibrarySymbol";            break;
-    case 57: return "ImportAssets";             break;
-    case 58: return "Password";                 break;
+  SWFBlocktype type;
+  char *name;
+  SWFParseFunc parser;
+};
 
-    default: return "Unknown block type";	break;
-  }
+#define BlockType( block ) \
+{ block, #block, parse##block, }
+
+static struct SWFBlock blocks[] = {
+  BlockType (SWF_CHARACTERSET),
+  BlockType (SWF_DEFINEBITS),
+  BlockType (SWF_DEFINEBITSJPEG2),
+  BlockType (SWF_DEFINEBITSJPEG3),
+  BlockType (SWF_DEFINEBITSPTR),
+  BlockType (SWF_DEFINEBUTTON),
+  BlockType (SWF_DEFINEBUTTON2),
+  BlockType (SWF_DEFINEBUTTONCXFORM),
+  BlockType (SWF_DEFINEBUTTONSOUND),
+  BlockType (SWF_DEFINECOMMANDOBJ),
+  BlockType (SWF_DEFINEEDITTEXT),
+  BlockType (SWF_DEFINEFONT),
+  BlockType (SWF_DEFINEFONT2),
+  BlockType (SWF_DEFINEFONTINFO),
+  BlockType (SWF_DEFINELOSSLESS),
+  BlockType (SWF_DEFINELOSSLESS2),
+  BlockType (SWF_DEFINEMORPHSHAPE),
+  BlockType (SWF_DEFINESHAPE),
+  BlockType (SWF_DEFINESHAPE2),
+  BlockType (SWF_DEFINESHAPE3),
+  BlockType (SWF_DEFINESOUND),
+  BlockType (SWF_DEFINESPRITE),
+  BlockType (SWF_DEFINETEXT),
+  BlockType (SWF_DEFINETEXT2),
+  BlockType (SWF_DEFINETEXTFORMAT),
+  BlockType (SWF_DEFINEVIDEO),
+  BlockType (SWF_DEFINEVIDEOSTREAM),
+  BlockType (SWF_DOACTION),
+  BlockType (SWF_ENABLEDEBUGGER),
+  BlockType (SWF_END),
+  BlockType (SWF_EXPORTASSETS),
+  BlockType (SWF_FONTREF),
+  BlockType (SWF_FRAMELABEL),
+  BlockType (SWF_FRAMETAG),
+  BlockType (SWF_FREEALL),
+  BlockType (SWF_FREECHARACTER),
+  BlockType (SWF_GENCOMMAND),
+  BlockType (SWF_IMPORTASSETS),
+  BlockType (SWF_JPEGTABLES),
+  BlockType (SWF_NAMECHARACTER),
+  BlockType (SWF_PATHSAREPOSTSCRIPT),
+  BlockType (SWF_PLACEOBJECT),
+  BlockType (SWF_PLACEOBJECT2),
+  BlockType (SWF_PREBUILT),
+  BlockType (SWF_PREBUILTCLIP),
+  BlockType (SWF_PROTECT),
+  BlockType (SWF_REMOVEOBJECT),
+  BlockType (SWF_REMOVEOBJECT2),
+  BlockType (SWF_SERIALNUMBER),
+  BlockType (SWF_SETBACKGROUNDCOLOR),
+  BlockType (SWF_SHOWFRAME),
+  BlockType (SWF_SOUNDSTREAMBLOCK),
+  BlockType (SWF_SOUNDSTREAMHEAD),
+  BlockType (SWF_SOUNDSTREAMHEAD2),
+  BlockType (SWF_STARTSOUND),
+  BlockType (SWF_SYNCFRAME),
+  BlockType (SWF_VIDEOFRAME),
+};
+
+static int numBlocks = sizeof (blocks) / sizeof (struct SWFBlock);
+
+const char *
+blockName (SWFBlocktype header)
+{
+  int i;
+
+  if (header < 0 || header > numBlocks)
+    return "Invalid Block Type";
+
+  for (i = 0; i < numBlocks; i++)
+    {
+      if (blocks[i].type == header)
+	{
+	  return blocks[i].name;
+	}
+    }
+  return "Confused Block Type";	/* Should never get here */
+
+}
+
+SWF_Parserstruct *
+blockParse (FILE *f, int length, SWFBlocktype header)
+{
+  int i;
+
+  if (header < 0 || header > numBlocks)
+    return NULL;
+
+  for (i = 0; i < numBlocks; i++)
+    {
+      if (blocks[i].type == header)
+	{
+	  return blocks[i].parser(f,length);
+	}
+    }
+  return NULL;
+
 }
