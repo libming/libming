@@ -4,6 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include <limits.h>
+#include <errno.h>
 
 //open()
 #include <fcntl.h>
@@ -40,82 +41,89 @@ void readRect(FILE *f, struct Rect *s)
   byteAlign();
 
   nBits = readBits(f, 5);
+warning("readRect: nBits: %d", nBits);
   s->xMin = readSBits(f, nBits);
   s->xMax = readSBits(f, nBits);
   s->yMin = readSBits(f, nBits);
   s->yMax = readSBits(f, nBits);
 }
 
-/* Compressed swf-files have a 8 Byte uncompressed header and a zlib-compressed body. 
-*/
+/*
+ * Compressed swf-files have a 8 Byte uncompressed header and a
+ * zlib-compressed body. 
+ */
 int
-cws2fws (FILE * f, uLong outsize)
+cws2fws(FILE *f, uLong outsize)
 {
 
-  struct stat statbuffer;
-  int insize;
-  int err, tmp_fd;
-  Byte *inbuffer, *outbuffer;
+	struct stat statbuffer;
+	int insize;
+	size_t s;
+	int err,tmp_fd;
+	Byte *inbuffer,*outbuffer;
 
-  sprintf(tmp_name, "swftoXXXXXX");
-
-  tmp_fd = mkstemp(tmp_name);
-  if ( tmp_fd == -1 )
-    {
-	error("Couldn't create tempfile.\n");
-    }
-  if ((tempfile = fdopen (tmp_fd, "w")) < 0)
-    {
-      error ("Couldn't open tempfile.\n");
-    }
-  if (stat (filename, &statbuffer) == -1)
-    {
-      error ("stat() failed");
-    }
-
-  insize = statbuffer.st_size - 8;
-  inbuffer = malloc (insize);
-  if (!inbuffer)
-    {
-      error ("malloc() failed");
-    }
-  fread (inbuffer, insize, 1, f);
-
-  /* We don't trust the value in the swfheader. */
-  do
-    {
-      outbuffer = malloc (outsize);
-      if (!outbuffer)
+	sprintf(tmp_name, "swftoscriptXXXXXX");
+	
+	tmp_fd = mkstemp(tmp_name);
+	if ( tmp_fd == -1 )
 	{
-	  error ("malloc(%lu) failed", outsize);
+		error("Couldn't create tempfile.\n");
 	}
 
-      err = uncompress (outbuffer, &outsize, inbuffer, insize);
-      switch (err)
+	tempfile = fdopen(tmp_fd, "w+");
+	if ( ! tempfile )
 	{
-	case Z_MEM_ERROR:
-	  error ("Not enough memory.\n");
-	  break;
-	case Z_BUF_ERROR:
-	  fprintf (stderr, "resizing outbuffer..\n");
-	  break;
-	case Z_DATA_ERROR:
-	  error ("Data corrupted. Couldn't uncompress.\n");
-	  break;
-	case Z_OK:
-	  break;
-	default:
-	  error ("Unknown returnvalue of uncompress:%i\n", err);
+		error("fdopen: %s", strerror(errno));
 	}
-      free (outbuffer);
-      outsize *= 2;
-    }
-  while (err == Z_BUF_ERROR);
-  outsize /= 2;
 
-  fwrite (outbuffer, 1, outsize, tempfile);
-  rewind (tempfile);
-  return (int) outsize;
+
+	if( stat(filename, &statbuffer) == -1 )
+	{
+		error("stat() failed on input file");
+	}
+	
+	insize = statbuffer.st_size-8;
+	inbuffer = malloc(insize);
+	if(!inbuffer){ error("malloc() failed"); }
+	if ( ! fread(inbuffer, insize, 1, f) )
+	{
+		error("Error reading input file");
+	}
+	
+	/* We don't trust the value in the swfheader. */
+	outbuffer=NULL;
+	do{
+		outbuffer = realloc(outbuffer, outsize);	
+		if (!outbuffer) { error("malloc(%lu) failed",outsize); }
+		
+		err=uncompress(outbuffer,&outsize,inbuffer,insize);
+		switch(err){
+			case Z_MEM_ERROR:
+				error("Not enough memory.\n");
+				break;
+			case Z_BUF_ERROR:
+				fprintf(stderr,"resizing outbuffer..\n");
+				outsize*=2;
+				continue;
+			case Z_DATA_ERROR:
+				error("Data corrupted. Couldn't uncompress.\n");
+				break;
+			case Z_OK:
+				break;
+			default:
+				error("Unknown returnvalue of uncompress:%i\n",
+					err);
+				break;
+		}
+	} while(err == Z_BUF_ERROR);
+ 
+	if ( outsize != fwrite(outbuffer, 1, outsize, tempfile) )
+	{
+		error("Error writing uncompressed");
+	}
+
+	rewind(tempfile);
+	return (int)outsize;
 }
 
 struct Movie m;
@@ -155,26 +163,26 @@ main (int argc, char *argv[])
     {
       error ("Doesn't look like a swf file to me..\n");
     }
-  m.version = readUInt8 (f);
-  m.size = readUInt32 (f);
 
-  if (compressed)
-    {
-      int unzipped = cws2fws (f, m.size);
-      if (m.size != (unzipped + 8))
+	m.version = readUInt8 (f);
+	m.size = readUInt32 (f);
+
+	if (compressed)
 	{
-	  warning ("m.size: %i != %i+8  Maybe wrong value in swfheader.\n",
-		   m.size, unzipped + 8);
+		int unzipped = cws2fws (f, m.size);
+		if (m.size != (unzipped + 8))
+		{
+			warning ("m.size: %i != %i+8  Maybe wrong value in swfheader.\n", m.size, unzipped + 8);
+		}
+		fclose (f);
+		f = tempfile;
+		rewind(f);
 	}
-      fclose (f);
-      f = tempfile;
-      rewind (f);
-    }
 
-  readRect (f, &(m.frame));
+	readRect (f, &(m.frame));
 
-  m.rate = readUInt8 (f) / 256.0 + readUInt8 (f);
-  m.nFrames = readUInt16 (f);
+	m.rate = readUInt8 (f) / 256.0 + readUInt8 (f);
+	m.nFrames = readUInt16 (f);
 
 
   if (noactions)
