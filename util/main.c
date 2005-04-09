@@ -21,6 +21,9 @@
 #include "action.h"
 #include "read.h"
 #include "parser.h"
+#include "outputdecl.h"
+
+SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
 
 char *filename;
 char tmp_name[PATH_MAX];
@@ -41,7 +44,6 @@ void readRect(FILE *f, struct Rect *s)
   byteAlign();
 
   nBits = readBits(f, 5);
-warning("readRect: nBits: %d", nBits);
   s->xMin = readSBits(f, nBits);
   s->xMax = readSBits(f, nBits);
   s->yMin = readSBits(f, nBits);
@@ -58,7 +60,6 @@ cws2fws(FILE *f, uLong outsize)
 
 	struct stat statbuffer;
 	int insize;
-	size_t s;
 	int err,tmp_fd;
 	Byte *inbuffer,*outbuffer;
 
@@ -134,7 +135,7 @@ main (int argc, char *argv[])
   SWF_Parserstruct *blockp;
   FILE *f;
   char first;
-  int block, type, blockstart, length, frame = 0, noactions = 0, nextFrame=0;
+  int block, type, blockstart, length, noactions = 0, nextFrame=0;
   int compressed = 0;
 
   if (argc == 3 && strcmp (argv[1], "-a") == 0)
@@ -184,17 +185,16 @@ main (int argc, char *argv[])
 	m.rate = readUInt8 (f) / 256.0 + readUInt8 (f);
 	m.nFrames = readUInt16 (f);
 
+	if (noactions)
+	{
+		m_version = 0;
+	}
+	else
+	{
+		m_version = m.version;
+	}
 
-  if (noactions)
-    {
-      m_version = 0;
-    }
-  else
-    {
-      m_version = m.version;
-    }
-
-  outputHeader(&m);
+	outputHeader(&m);
 
   for (;;)
     {
@@ -207,7 +207,9 @@ main (int argc, char *argv[])
       length = block & ((1 << 6) - 1);
 
       if (length == 63)		/* it's a long block. */
-	length = readUInt32 (f);
+	{
+		length = readUInt32 (f);
+	}
 
       if (type == 0 || fileOffset >= m.size)
 	break;
@@ -228,7 +230,7 @@ main (int argc, char *argv[])
 
        if( ftell(f) != nextFrame ) {
 	       printf(" Stream out of sync...\n");
-	       printf(" %d but expecting %d\n", ftell(f),nextFrame);
+	       printf(" %ld but expecting %d\n", ftell(f),nextFrame);
 	       fseek(f,blockstart,SEEK_SET);
 	       silentSkipBytes (f, (nextFrame-ftell(f)));
 	       fileOffset=ftell(f);
