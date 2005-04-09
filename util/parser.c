@@ -113,7 +113,14 @@ parseSWF_CLIPEVENTFLAGS (FILE * f, struct SWF_CLIPEVENTFLAGS *cflags)
     cflags->ClipEventKeyPress = readBits (f, 1);
     cflags->ClipEventDragOut = readBits (f, 1);
     cflags->Reserved2 = readBits (f, 8);
+  } else {
+    cflags->Reserved = 0;
+    cflags->ClipEventConstruct = 0;
+    cflags->ClipEventKeyPress = 0;
+    cflags->ClipEventDragOut = 0;
+    cflags->Reserved2 = 0;
   }
+ 
 
   return cflags->ClipEventKeyUp|cflags->ClipEventKeyDown|cflags->ClipEventMouseUp|cflags->ClipEventMouseDown|cflags->ClipEventMouseMove|cflags->ClipEventUnload|cflags->ClipEventEnterFrame|cflags->ClipEventLoad|cflags->ClipEventDragOver|cflags->ClipEventRollOut|cflags->ClipEventRollOver|cflags->ClipEventReleaseOutside|cflags->ClipEventRelease|cflags->ClipEventPress|cflags->ClipEventInitialize|cflags->ClipEventData|cflags->ClipEventConstruct|cflags->ClipEventKeyPress|cflags->ClipEventDragOut;
 }
