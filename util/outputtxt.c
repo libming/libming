@@ -800,8 +800,22 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 }
 
 void
+printRect(struct Rect *r)
+{
+	printf("(%i,%i)x(%i,%i)", r->xMin, r->xMax, r->yMin, r->yMax);
+}
+
+void
 outputHeader (struct Movie *m)
 {
+	printf("File size: %i\n", m->size);
+
+	printf("Frame size: ");
+	printRect(&(m->frame));
+	putchar('\n');
+
+	printf("Frame rate: %f / sec.\n", m->rate);
+	printf("Total frames: %i\n", m->nFrames);
 }
 
 void
