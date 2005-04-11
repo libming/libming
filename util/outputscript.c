@@ -1030,7 +1030,7 @@ outputSWF_SETBACKGROUNDCOLOR (SWF_Parserstruct * pblock)
 void
 outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_SHOWFRAME);
+  //OUT_BEGIN (SWF_SHOWFRAME);
 
   printf ("\t%s();  # end of %sframe %d\n",
 	  methodcall (spritenum?spritename:"m", "nextFrame"),

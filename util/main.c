@@ -63,7 +63,7 @@ cws2fws(FILE *f, uLong outsize)
 	int err,tmp_fd;
 	Byte *inbuffer,*outbuffer;
 
-	sprintf(tmp_name, "swftoscriptXXXXXX");
+	sprintf(tmp_name, "/tmp/swftoscriptXXXXXX");
 	
 	tmp_fd = mkstemp(tmp_name);
 	if ( tmp_fd == -1 )
@@ -138,6 +138,7 @@ main (int argc, char *argv[])
   int block, type, blockstart, length, noactions = 0, nextFrame=0;
   int compressed = 0;
 
+  setbuf(stdout,NULL);
   if (argc == 3 && strcmp (argv[1], "-a") == 0)
     {
       noactions = 1;

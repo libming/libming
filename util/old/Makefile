@@ -5,7 +5,7 @@ LDFLAGS += -L../.. -lming $(LIBS) -Wl,-rpath,../..
 
 PAGER ?= less
 
-BINARIES = listswf swftoperl swftophp 
+BINARIES = listswf listaction listswf_d swftoperl swftophp 
 
 all: $(BINARIES)
 
@@ -19,7 +19,7 @@ clean:
 	cd ..; $(MAKE) static
 
 listswf_d: blocktypes.o decompile.o read.o listswf.c ../../libming.so
-	$(CC) $(CFLAGS) $(LDFLAGS) listswf.c blocktypes.o decompile.o read.o -o listswf 
+	$(CC) $(CFLAGS) $(LDFLAGS) listswf.c blocktypes.o decompile.o read.o -o listswf_d
 
 listswf: blocktypes.o decompile.o read.o listswf.c ../../libming.so
 	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE listswf.c blocktypes.o decompile.o read.o -o listswf 

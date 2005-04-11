@@ -12,6 +12,8 @@
 
 #ifdef NODECOMPILE
 #define decompileAction(f,l,n) printDoAction((f),(l))
+#else
+#define decompileAction(f,l,n) decompile5Action((f),(l),(n))
 #endif
 
 /*#define decompileAction(f,l) dumpBytes((f),(l))*/

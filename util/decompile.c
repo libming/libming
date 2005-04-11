@@ -130,6 +130,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
 			     Branchtype type, int indent);
 static Stack negateExpression(Stack s);
 static void destroyStack(Stack s);
+void showStack(Stack s);
 static void destroyTree(Tree t);
 
 char **dictionary;
@@ -272,6 +273,16 @@ static Stack newProperty(Property prop)
   return s;
 }
 
+static Stack newStackArray(Stack *stkp)
+{
+  Stack s = newStack();
+
+  s->type = 'S';
+  s->data.sptr = stkp;
+
+  return s;
+}
+
 static Stack pop()
 {
   Stack s = stack;
@@ -322,6 +333,24 @@ static Property getSetProperty(int prop)
     case SWF_SETPROPERTY_SOUNDBUFFERTIME: return PROPERTY_SOUNDBUFTIME;
     default: return -1;
   }
+}
+
+static int getInteger(Stack s)
+{
+	if( s->type != 'i' ) error("getInteger() not an interger");
+	return s->data.inum;
+}
+
+static const char *getString(Stack s)
+{
+	if( s->type != 's' ) error("getString() not an string");
+	return s->data.string;
+}
+
+static Stack *getStackArray(Stack s)
+{
+	if( s->type != 'S' ) error("getStackArray() not a Stack Array");
+	return s->data.sptr;
 }
 
 static Stack readActionRecord(FILE *f)
@@ -393,6 +422,9 @@ static Stack readActionRecord(FILE *f)
 	/* copy tree to register so we can use it on getregister */
 	/* and remove the register bit so we don't loop endlessly */
 	reg0 = newTree(left, type, right->data.tree->right);
+
+	/* Unlink from the tree we are about to destroy */
+	right->data.tree->right=NULL;
 	destroyStack(right);
 
 	return NULL;
@@ -589,13 +621,13 @@ static Stack readActionRecord(FILE *f)
     }
 
     case SWFACTION_GOTOFRAME:
-      return newTreeBase((Stack)readUInt16(f), type, NULL);
+      return newTreeBase(newInteger(readUInt16(f)), type, NULL);
 
     case SWFACTION_GETURL:
     {
       char *url = readString(f);
       char *target = readString(f);
-      return newTreeBase((Stack)url, type, (Stack)target);
+      return newTreeBase(newString(url), type, newString(target));
     }
 
     case SWFACTION_GETURL2:
@@ -604,25 +636,25 @@ static Stack readActionRecord(FILE *f)
 	  Stack url = pop();
 
       Stack s = newTree(url, type, target);
-      Stack t = newTreeBase((Stack)readUInt8(f), type, s);
+      Stack t = newTreeBase(newInteger(readUInt8(f)), type, s);
       t->offset = s->offset;
       return t;
     }
 
     case SWFACTION_WAITFORFRAMEEXPRESSION:
-      return newTreeBase((Stack)readUInt8(f), type, NULL);
+      return newTreeBase(newInteger(readUInt8(f)), type, NULL);
 
     case SWFACTION_GOTOEXPRESSION:
     {
       Stack s = pop();
-      Stack t = newTreeBase(s, type, (Stack)readUInt8(f));
+      Stack t = newTreeBase(s, type, newInteger(readUInt8(f)));
       t->offset = s->offset;
       return t;
     }
 
     case SWFACTION_SETTARGET:
     case SWFACTION_GOTOLABEL:
-      return newTreeBase((Stack)readString(f), type, NULL);
+      return newTreeBase(newString(readString(f)), type, NULL);
 
     /* branches */
     case SWFACTION_BRANCHIFTRUE:
@@ -651,6 +683,9 @@ static Stack readActionRecord(FILE *f)
 	else
 	{
 	  push(newTree(s->data.tree->left, SWFACTION_LOGICALAND, NULL));
+
+	  /* Unlink from the tree we are about to destroy */
+	  s->data.tree->left=NULL;
 	  destroyStack(s);
 	}
 
@@ -712,19 +747,19 @@ static Stack readActionRecord(FILE *f)
 	  break;
       }
 
-      t = newTreeBase(s, SWFACTION_BRANCHIFTRUE, (Stack)offset);
+      t = newTreeBase(s, SWFACTION_BRANCHIFTRUE, newInteger(offset));
 
       t->offset = s->offset;
       return t;
     }
 
     case SWFACTION_BRANCHALWAYS:
-      return newTreeBase(NULL, type, (Stack)readSInt16(f));
+      return newTreeBase(NULL, type, newInteger(readSInt16(f)));
 
     case SWFACTION_WAITFORFRAME:
 	{
-	  Stack left = (Stack)readUInt16(f);
-	  Stack right = (Stack)readUInt8(f);
+	  Stack left = newInteger(readUInt16(f));
+	  Stack right = newInteger(readUInt8(f));
       return newTreeBase(left, type, right);
 	}
 
@@ -766,7 +801,7 @@ static Stack readActionRecord(FILE *f)
       else
 	off = nargs->offset;
 
-      last = newTreeBase((Stack)intVal(nargs), type, last);
+      last = newTreeBase(newInteger(intVal(nargs)), type, last);
 
       t = newTreeBase(name, type, last);
       t->offset = off;
@@ -830,7 +865,7 @@ static Stack readActionRecord(FILE *f)
       else
 	off = nargs->offset;
 
-      last = newTreeBase((Stack)intVal(nargs), type, last);
+      last = newTreeBase(newInteger(intVal(nargs)), type, last);
 
       t = newTree(name, type, newTree(object, type, last));
       t->offset = off;
@@ -859,7 +894,7 @@ static Stack readActionRecord(FILE *f)
 
       int n = readStatements(f, size, &statements);
 
-      return newTree(pop(), type, newTreeBase((Stack)n, type, (Stack)statements));
+      return newTree(pop(), type, newTreeBase(newInteger(n), type, newStackArray(statements)));
     }
     case SWFACTION_DEFINEFUNCTION:
     {
@@ -868,14 +903,14 @@ static Stack readActionRecord(FILE *f)
 
       char *name = readString(f);
 
-      tree = newTreeBase((Stack)name, type, NULL);
+      tree = newTreeBase(newString(name), type, NULL);
       nargs = readUInt16(f);
 
       p = tree;
 
       for(; nargs>0; --nargs)
       {
-	p->data.tree->right = newTreeBase((Stack)readString(f), type, NULL);
+	p->data.tree->right = newTreeBase(newString(readString(f)), type, NULL);
 	p = p->data.tree->right;
       }
 
@@ -883,7 +918,7 @@ static Stack readActionRecord(FILE *f)
 
       n = readStatements(f, size, &statements);
 
-      return newTree(tree, type, newTreeBase((Stack)n, type, (Stack)statements));
+      return newTree(tree, type, newTreeBase(newInteger(n), type, newStackArray(statements)));
     }
 
     case SWFACTION_ENUMERATE:
@@ -897,7 +932,7 @@ static Stack readActionRecord(FILE *f)
 	error("Unexpected length (!=1) in setregister");
 
       s = pop();
-      t = newTreeBase((Stack)readUInt8(f), type, s);
+      t = newTreeBase(newInteger(readUInt8(f)), type, s);
       t->offset = s->offset;
       return t;
     }
@@ -916,8 +951,8 @@ static Stack readActionRecord(FILE *f)
 	values[i] = pop();
       }
 
-      return newTreeBase((Stack)nEntries, type,
-			 newTreeBase((Stack)names, type, (Stack)values));
+      return newTreeBase(newInteger(nEntries), type,
+			 newTreeBase(newStackArray(names), type, newStackArray(values)));
     }
 
     case SWFACTION_INITARRAY:
@@ -930,7 +965,7 @@ static Stack readActionRecord(FILE *f)
       for(i=0; i<nEntries; ++i)
 	values[i] = pop();
 
-      return newTreeBase((Stack)nEntries, type, (Stack)values);
+      return newTreeBase(newInteger(nEntries), type, newStackArray(values));
     }
 
     default:
@@ -1067,14 +1102,14 @@ static void listNot(Stack s, Action parent)
     }
     else if(t->action == SWFACTION_LOGICALNOT)
     {
-      listItem(s->data.tree->left, parent);
+      listItem(t->left, parent);
       return;
     }
     else if(t->action == SWFACTION_EQUAL)
     {
-      listItem(s->data.tree->left, SWFACTION_EQUAL);
+      listItem(t->left, SWFACTION_EQUAL);
       printf(" != ");
-      listItem(s->data.tree->right, SWFACTION_EQUAL);
+      listItem(t->right, SWFACTION_EQUAL);
       return;
     }
   }
@@ -1226,15 +1261,16 @@ static void listArithmetic(Stack s, Action parent)
   /* leave out spaces around op if either side's just a constant or variable */
   /* but not if op is divide and right side starts w/ '/' */
   isShort = !(t->action == SWFACTION_DIVIDE &&
+	      right &&
 	      right->type == 't' &&
 	      right->data.tree->action == SWFACTION_GETVARIABLE &&
 	      right->data.tree->left->data.string[0] == '/') &&
             (left->type == 's' ||
 	     (left->type == 't' &&
 	      left->data.tree->action == SWFACTION_GETVARIABLE) ||
-	     right->type == 's' ||
-	     (right->type == 't' &&
-	      right->data.tree->action == SWFACTION_GETVARIABLE));
+	     (right && right->type == 's') ||
+	     (right && (right->type == 't' &&
+	      right->data.tree->action == SWFACTION_GETVARIABLE)));
 
   switch(t->action)
   {
@@ -1310,6 +1346,8 @@ static void listArithmetic(Stack s, Action parent)
 static void listItem(Stack s, Action parent)
 {
   Tree t;
+
+  if( !s ) return;
 
   if(s->type == 's')
   {
@@ -1573,22 +1611,22 @@ static void listItem(Stack s, Action parent)
 	break;
 
       case SWFACTION_GOTOFRAME:
-	printf("gotoFrame(%i)", (int)t->left);
+	printf("gotoFrame(%i)", getInteger(t->left));
 	break;
 
       case SWFACTION_GETURL:
       {
-	printf("getURL(%s, %s)", (char *)t->left, (char *)t->right);
+	printf("getURL(%s, %s)", getString(t->left), getString(t->right));
 	break;
       }
 
       case SWFACTION_WAITFORFRAMEEXPRESSION:
-	printf("Wait For Frame Expression, skip %i", (int)t->left);
+	printf("Wait For Frame Expression, skip %i", getInteger(t->left));
 	break;
 
       case SWFACTION_GETURL2:
       {
-	int type = (int)t->left;
+	int type = getInteger(t->left);
 
 	puts("getURL2(");
 	listItem(t->right->data.tree->left, SWFACTION_GETURL2);
@@ -1616,7 +1654,7 @@ static void listItem(Stack s, Action parent)
 	listItem(t->left, SWFACTION_GOTOEXPRESSION);
         putchar(')');
 
-	if((int)t->right == 1)
+	if(getInteger(t->right) == 1)
 	  puts(";\nplay()");
 	break;
 
@@ -1625,26 +1663,28 @@ static void listItem(Stack s, Action parent)
 	  puts("setTarget(this)");
 	else
 	  printf("setTarget('%s')", (char *)t->left);
+	free(t->left);
+	t->left=NULL;
 	break;
 
       case SWFACTION_GOTOLABEL:
-	printf("gotoFrame('%s')", (char *)t->left);
+	printf("gotoFrame('%s')", getString(t->left));
 	break;
 
 	/* branches - shouldn't see these (but is good for debugging) */
       case SWFACTION_BRANCHIFTRUE:
 	puts("if(");
 	listItem(t->left, SWFACTION_BRANCHIFTRUE);
-	printf(") branch %i", (int)t->right);
+	printf(") branch %i", getInteger(t->right));
 	break;
 
       case SWFACTION_BRANCHALWAYS:
-	printf("branch %i", (int)t->right);
+	printf("branch %i", getInteger(t->right));
 	break;
 
       case SWFACTION_WAITFORFRAME:
-	printf("Wait for frame %i ", (int)t->left);
-	printf(" else skip %i", (int)t->right);
+	printf("Wait for frame %i ", getInteger(t->left));
+	printf(" else skip %i", getInteger(t->right));
 	break;
 
 
@@ -1674,7 +1714,7 @@ static void listItem(Stack s, Action parent)
 	putchar('(');
 
 	t = t->right->data.tree;
-	nargs = (int)t->left;
+	nargs = getInteger(t->left);
 
 	for(i=0; i<nargs; ++i)
 	{
@@ -1766,7 +1806,7 @@ static void listItem(Stack s, Action parent)
 	putchar('(');
 
 	t = t->right->data.tree->right->data.tree;
-	nargs = (int)t->left;
+	nargs = getInteger(t->left);
 
 	for(i=0; i<nargs; ++i)
 	{
@@ -1788,8 +1828,8 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_WITH:
       {
-	int n = (int)t->right->data.tree->left;
-	Stack *statements = (Stack *)t->right->data.tree->right;
+	int n = getInteger(t->right->data.tree->left);
+	Stack *statements = getStackArray(t->right->data.tree->right);
 
 	puts("with(");
 	puts((char *)t->left->data.tree);
@@ -1801,14 +1841,14 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_DEFINEFUNCTION:
       {
-	int n = (int)t->right->data.tree->left;
-	Stack *statements = (Stack *)t->right->data.tree->right;
+	int n = getInteger(t->right->data.tree->left);
+	Stack *statements = getStackArray(t->right->data.tree->right);
 
 	int first = 1;
 	Stack args = t->left->data.tree->right;
 
 	puts("function ");
-	puts((char *)t->left->data.tree->left);
+	puts(getString(t->left->data.tree->left));
 	putchar('(');
 
 	while(args != NULL)
@@ -1817,7 +1857,7 @@ static void listItem(Stack s, Action parent)
 	    puts(", ");
 
 	  first = 0;
-	  puts((char *)args->data.tree->left);
+	  puts(getString(args->data.tree->left));
 	  args = args->data.tree->right;
 	}
 
@@ -1836,7 +1876,8 @@ static void listItem(Stack s, Action parent)
       case SWFACTION_SETREGISTER:
       {
 	/* XXX - shouldn't ever see this.. */
-	int n = (int)t->left;
+	int n = getInteger(t->left);
+	t->left=NULL;
 	puts("(_tmp");
 	putchar('0'+n);
 	puts(" = ");
@@ -1853,9 +1894,9 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_INITOBJECT:
       {
-	int i, nEntries = (int)t->left;
-	Stack *names = (Stack *)t->right->data.tree->left;
-	Stack *values = (Stack *)t->right->data.tree->right;
+	int i, nEntries = getInteger(t->left);
+	Stack *names = getStackArray(t->right->data.tree->left);
+	Stack *values = getStackArray(t->right->data.tree->right);
 
 	puts("{ ");
 
@@ -1876,8 +1917,8 @@ static void listItem(Stack s, Action parent)
 
       case SWFACTION_INITARRAY:
       {
-	int i, nEntries = (int)t->left;
-	Stack *values = (Stack *)t->right;
+	int i, nEntries = getInteger(t->left);
+	Stack *values = getStackArray(t->right);
 
 	puts("[ ");
 
@@ -2000,9 +2041,10 @@ static Stack negateExpression(Stack s)
   return newTree(s, SWFACTION_LOGICALNOT, NULL);
 }
 
-void showStack()
+void showStack(Stack s)
 {
-  Stack s = stack;
+  if( s == NULL )
+	s = stack;
 
   while(s != NULL &&
 	(s->type != 't' || s->data.tree->action != SWFACTION_DEFINEFUNCTION))
@@ -2042,7 +2084,7 @@ int readStatements(FILE *f, int length, Stack **slist)
       wasNull = 1;
 
     /*
-    showStack();
+    showStack(NULL);
     putchar('\n');
     */
   }
@@ -2173,6 +2215,9 @@ decompile5Action(FILE *f, int length, int indent)
   Stack *statements = NULL;
   int n;
 
+  if( length == 0 )
+	  return NULL;
+
   dcinit();
   gIndent = indent;
 
@@ -2214,16 +2259,16 @@ static void resolveOffsets(Stack *statements, int nStatements)
     if(t->action == SWFACTION_BRANCHIFTRUE ||
        t->action == SWFACTION_BRANCHALWAYS)
     {
-      int offset = (int)t->right + statements[i+1]->offset;
+      int offset = getInteger(t->right) + statements[i+1]->offset;
 
-      if((int)t->right == 0)
+      if(getInteger(t->right) == 0)
       {
-	/* don't know why this would happen, but it does.. */
-	t->right = (Stack)i;
-	statements[i]->target = i;
+	/* offset == 0 means jump to the next instruction */
+	t->right = newInteger(i+1);
+	statements[i]->target = i+1;
 	continue;
       }
-      else if((int)t->right > 0)
+      else if(getInteger(t->right) > 0)
       {
 	for(j=i+2; j<nStatements; ++j)
 	{
@@ -2252,7 +2297,7 @@ static void resolveOffsets(Stack *statements, int nStatements)
 	  error("couldn't find (backward) target offset!");
       }
 
-      t->right = (Stack)j;
+      t->right = newInteger(j);
       statements[j]->target = i;
     }
   }
@@ -2327,7 +2372,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
     }
 
     /* it's a conditional branch */
-    offset = (int)t->right;
+    offset = getInteger(t->right);
 
     if(offset < start || offset > stop)
       error("stmt %i: branch target (%i) outside scope (%i,%i)!",
@@ -2353,7 +2398,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
     }
 
     if(statements[offset-1]->data.tree->action == SWFACTION_BRANCHALWAYS &&
-       (int)statements[offset-1]->data.tree->right == i)
+       getInteger(statements[offset-1]->data.tree->right) == i)
     {
       /* it's a while loop */
       putchar('\n');
@@ -2394,7 +2439,7 @@ static void untangleBranches(Stack *statements, int start, int stop,
     {
       /* got an else */
       hasElse = 1;
-      end = (int)statements[offset-1]->data.tree->right;
+      end = getInteger(statements[offset-1]->data.tree->right);
     }
     else
     {
@@ -2447,12 +2492,12 @@ static void untangleBranches(Stack *statements, int start, int stop,
       if(statements[offset]->data.tree->action != SWFACTION_BRANCHIFTRUE)
 	break;
 
-      newOff = (int)statements[offset]->data.tree->right;
+      newOff = getInteger(statements[offset]->data.tree->right);
 
       /* make sure we're still in this if's else bit */
 
       if(statements[newOff-1]->data.tree->action != SWFACTION_BRANCHALWAYS ||
-	 (int)statements[newOff-1]->data.tree->right != end)
+	 getInteger(statements[newOff-1]->data.tree->right) != end)
 	break;
 
       i = offset;

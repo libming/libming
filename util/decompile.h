@@ -48,6 +48,8 @@ struct _stack
     double dnum;
     Tree tree;
     Property prop;
+    int *iptr;
+    struct _stack **sptr;
   } data;
 
   int offset;
