@@ -2244,6 +2244,7 @@ decompile5Action(FILE *f, int length, int indent)
 
     assert(0);
   }
+  free(statements);
   return dcgetstr();
 }
 

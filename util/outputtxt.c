@@ -824,12 +824,16 @@ outputTrailer ()
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp)
+outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
 {
   int i;
 
   if (type < 0 || type > numOutputs)
     return;
+
+  printf( "\nOffset: %d (%8.8x)\n", offset, offset );
+  printf( "Block type: %d (%s)\n", type, blockName(type) );
+  printf( "Block length: %d\n", length );
 
   for (i = 0; i < numOutputs; i++)
     {

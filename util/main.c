@@ -50,6 +50,8 @@ void readRect(FILE *f, struct Rect *s)
   s->yMax = readSBits(f, nBits);
 }
 
+struct Movie m;
+
 /*
  * Compressed swf-files have a 8 Byte uncompressed header and a
  * zlib-compressed body. 
@@ -118,6 +120,13 @@ cws2fws(FILE *f, uLong outsize)
 		}
 	} while(err == Z_BUF_ERROR);
  
+	/* Rebuild the header so the file offsets will be right */
+	fputc('F',tempfile);
+	fputc('W',tempfile);
+	fputc('S',tempfile);
+	fputc(m.version,tempfile);
+	fwrite(&m.size,sizeof(int),1,tempfile);
+
 	if ( outsize != fwrite(outbuffer, 1, outsize, tempfile) )
 	{
 		error("Error writing uncompressed");
@@ -127,15 +136,13 @@ cws2fws(FILE *f, uLong outsize)
 	return (int)outsize;
 }
 
-struct Movie m;
-
 int
 main (int argc, char *argv[])
 {
   SWF_Parserstruct *blockp;
   FILE *f;
   char first;
-  int block, type, blockstart, length, noactions = 0, nextFrame=0;
+  int block, type, blockstart, blockoffset, length, noactions = 0, nextFrame=0;
   int compressed = 0;
 
   setbuf(stdout,NULL);
@@ -178,7 +185,7 @@ main (int argc, char *argv[])
 		}
 		fclose (f);
 		f = tempfile;
-		rewind(f);
+	        fseek(f,8,SEEK_SET);
 	}
 
 	readRect (f, &(m.frame));
@@ -199,6 +206,7 @@ main (int argc, char *argv[])
 
   for (;;)
     {
+      blockoffset = fileOffset;
       /*
       printf ("Block offset: %d\n", fileOffset);
       */
@@ -223,7 +231,7 @@ main (int argc, char *argv[])
 
        blockp=blockParse(f,length,type);
        if( blockp ) {
-	       outputBlock( type, blockp );
+	       outputBlock( type, blockp, blockoffset, length );
 	       free(blockp);
        } else {
 	       printf("Error parsing block\n");

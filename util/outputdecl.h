@@ -70,4 +70,4 @@ extern void outputSWF_SYNCFRAME(SWF_Parserstruct *pblock);
 extern void outputSWF_VIDEOFRAME(SWF_Parserstruct *pblock);
 extern void outputHeader(struct Movie *m);
 extern void outputTrailer(void);
-extern void outputBlock(int type, SWF_Parserstruct *blockp);
+extern void outputBlock(int type, SWF_Parserstruct *blockp, int offset, int lenght);
