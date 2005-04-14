@@ -1,5 +1,5 @@
 
-#include "blocktypes.h"
+#include "blocks/blocktypes.h"
 
 const char *blockName(int header)
 {

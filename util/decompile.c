@@ -133,7 +133,7 @@ static void destroyStack(Stack s);
 void showStack(Stack s);
 static void destroyTree(Tree t);
 
-char **dictionary;
+char **dictionary=NULL;
 Stack reg0;
 
 static int
@@ -2228,6 +2228,7 @@ decompile5Action(FILE *f, int length, int indent)
   n = readStatements(f, length, &statements);
   /* listStatements(statements, n); */
   decompileStatements(statements, n);
+  /* listStatements(statements, n); */
 
   if(stack != NULL)
   {

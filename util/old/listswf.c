@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <math.h>
 
-#include "blocktypes.h"
+#include "blocks/blocktypes.h"
 #include "action.h"
 #include "read.h"
 #include "decompile.h"
@@ -13,15 +13,16 @@
 #ifdef NODECOMPILE
 #define decompileAction(f,l,n) printDoAction((f),(l))
 #else
-#define decompileAction(f,l,n) decompile5Action((f),(l),(n))
+#define decompileAction(f,l,n) printDecompiledAction((f),(l),(n))
 #endif
 
 /*#define decompileAction(f,l) dumpBytes((f),(l))*/
 
 #define puts(s) fputs((s),stdout)
 
-/* char *blockName(Blocktype type); */
+/* char *blockName(SWFBlocktype type); */
 void skipBytes(FILE *f, int length);
+extern const char *blockName(int header);
 
 #define INDENT_LEVEL 3
 
@@ -161,7 +162,7 @@ void printGradient(FILE *f, int shapeType)
     print("Grad[%i]: ratio=%i, ", i, readUInt8(f));
     puts("color=");
 
-    if(shapeType==DEFINESHAPE3)
+    if(shapeType==SWF_DEFINESHAPE3)
       printRGBA(f);
     else
       printRGB(f);
@@ -203,17 +204,17 @@ void printLineStyleArray(FILE *f, int shapeType)
     print("LineStyle %i: ", i+1);
     printf("width=%i ", readUInt16(f));
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
       printf("width2=%i ", readUInt16(f));
 
     puts("color=");
 
-    if(shapeType==DEFINESHAPE3 || shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINESHAPE3 || shapeType==SWF_DEFINEMORPHSHAPE)
       printRGBA(f);
     else
       printRGB(f);
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
     {
       puts("color2=");
       printRGBA(f);
@@ -233,12 +234,12 @@ void printFillStyle(FILE *f, int shapeType)
   {
     print("color=");
 
-    if(shapeType==DEFINESHAPE3 || shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINESHAPE3 || shapeType==SWF_DEFINEMORPHSHAPE)
       printRGBA(f);
     else
       printRGB(f);
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
     {
       print("color2=");
       printRGBA(f);
@@ -253,7 +254,7 @@ void printFillStyle(FILE *f, int shapeType)
     printMatrix(f);
     --gIndent;
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
     {
       println("Matrix2:");
       ++gIndent;
@@ -263,7 +264,7 @@ void printFillStyle(FILE *f, int shapeType)
 
     println("Gradient (linear):");
     ++gIndent;
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
       printMorphGradient(f);
     else
       printGradient(f, shapeType);
@@ -276,7 +277,7 @@ void printFillStyle(FILE *f, int shapeType)
     printMatrix(f);
     --gIndent;
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
     {
       println("Matrix2:");
       ++gIndent;
@@ -286,7 +287,7 @@ void printFillStyle(FILE *f, int shapeType)
 
     println("Gradient (radial):");
     ++gIndent;
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
       printMorphGradient(f);
     else
       printGradient(f, shapeType);
@@ -300,7 +301,7 @@ void printFillStyle(FILE *f, int shapeType)
     printMatrix(f);
     --gIndent;
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
     {
       println("Bitmap matrix:");
       ++gIndent;
@@ -316,7 +317,7 @@ void printFillStyle(FILE *f, int shapeType)
     printMatrix(f);
     --gIndent;
 
-    if(shapeType==DEFINEMORPHSHAPE)
+    if(shapeType==SWF_DEFINEMORPHSHAPE)
     {
       println("Bitmap matrix:");
       ++gIndent;
@@ -429,7 +430,7 @@ int printShapeRec(FILE *f, int *lineBits, int *fillBits, int shapeType)
   return 1;
 }
 
-void printShape(FILE *f, int length, Blocktype type)
+void printShape(FILE *f, int length, SWFBlocktype type)
 {
   int start = fileOffset;
   int fillBits, lineBits;
@@ -482,8 +483,8 @@ void printMorphShape(FILE *f, int length)
 
   here = fileOffset;
 
-  printFillStyleArray(f, DEFINEMORPHSHAPE);
-  printLineStyleArray(f, DEFINEMORPHSHAPE);
+  printFillStyleArray(f, SWF_DEFINEMORPHSHAPE);
+  printLineStyleArray(f, SWF_DEFINEMORPHSHAPE);
 
   fillBits = readBits(f, 4);
   lineBits = readBits(f, 4);
@@ -491,7 +492,7 @@ void printMorphShape(FILE *f, int length)
   putchar('\n');
   println("Shape1:");
   while(fileOffset < here+offset)
-    printShapeRec(f, &lineBits, &fillBits, DEFINESHAPE3);
+    printShapeRec(f, &lineBits, &fillBits, SWF_DEFINESHAPE3);
 
   byteAlign();
 
@@ -502,7 +503,7 @@ void printMorphShape(FILE *f, int length)
   putchar('\n');
   println("Shape2:");
   while(fileOffset < start+length)
-    printShapeRec(f, &lineBits, &fillBits, DEFINESHAPE3);
+    printShapeRec(f, &lineBits, &fillBits, SWF_DEFINESHAPE3);
 }
 
 /* JPEG stream markers: */
@@ -655,7 +656,7 @@ void printDefineBitsLossless(FILE *f, int length)
 
 void printDoAction(FILE *f, int length);
 
-char *dictionary[65536];
+static char *dictionary[65536];
 
 int printActionRecord(FILE *f)
 {
@@ -1050,6 +1051,14 @@ int printActionRecord(FILE *f)
   }
   return 1;
 }
+
+#ifndef NODECOMPILE
+void printDecompiledAction(FILE *f, int l, int n)
+{
+	char *as = decompile5Action(f, l, n);
+	puts(as);
+}
+#endif
 
 void printDoAction(FILE *f, int length)
 {
@@ -1846,16 +1855,16 @@ void printSprite(FILE *f, int length)
 
     switch(type)
     {
-      case PLACEOBJECT:		printPlaceObject(f, l);	break;
-      case PLACEOBJECT2:	printPlaceObject2(f, l);	break;
-      case REMOVEOBJECT:	printRemoveObject(f);		break;
-      case REMOVEOBJECT2:	printRemoveObject2(f);		break;
-      case FRAMELABEL:		printFrameLabel(f);		break;
-      case DOACTION:		decompileAction(f, l, 0);       break;
-      case SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
-      case SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
-      case SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, l);    break;
-      default:			if(l>0) dumpBytes(f, l);	break;
+      case SWF_PLACEOBJECT:		printPlaceObject(f, l);		break;
+      case SWF_PLACEOBJECT2:		printPlaceObject2(f, l);	break;
+      case SWF_REMOVEOBJECT:		printRemoveObject(f);		break;
+      case SWF_REMOVEOBJECT2:		printRemoveObject2(f);		break;
+      case SWF_FRAMELABEL:		printFrameLabel(f);		break;
+      case SWF_DOACTION:		decompileAction(f, l, 0);       break;
+      case SWF_SOUNDSTREAMHEAD: 	printSoundStreamHead(f, 1);     break;
+      case SWF_SOUNDSTREAMHEAD2:	printSoundStreamHead(f, 2);     break;
+      case SWF_SOUNDSTREAMBLOCK:	printSoundStreamBlock(f, l);    break;
+      default:			if(l>0) dumpBytes(f, l);		break;
     }
 
     --gIndent;
@@ -2037,39 +2046,39 @@ int main(int argc, char *argv[])
 
     switch(type)
     {
-      case DEFINESPRITE:        printSprite(f, length);         break;
-      case DEFINESHAPE3:
-      case DEFINESHAPE2:
-      case DEFINESHAPE:         printShape(f, length, type);	break;
-      case PLACEOBJECT:		printPlaceObject(f, length);	break;
-      case PLACEOBJECT2:	printPlaceObject2(f, length);	break;
-      case REMOVEOBJECT:	printRemoveObject(f);		break;
-      case REMOVEOBJECT2:	printRemoveObject2(f);		break;
-      case SETBACKGROUNDCOLOR:	printSetBackgroundColor(f);	break;
-      case FRAMELABEL:		printFrameLabel(f);		break;
-      case DEFINEMORPHSHAPE:	printMorphShape(f, length);	break; 
-      case DEFINEFONT:		printDefineFont(f, length);	break;
-      case DEFINEFONT2:		printDefineFont2(f, length);	break;
-      case DEFINEFONTINFO:	printFontInfo(f, length);	break;
-      case DEFINETEXT:		printDefineText(f, length, 1);	break;
-      case DEFINETEXT2:		printDefineText(f, length, 2);	break;
-      case DOACTION:		decompileAction(f, length, 0);	break;
-      case DEFINESOUND:         printDefineSound(f, length);    break;
-      case SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
-      case SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
-      case SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, length); break;
-      case DEFINEBUTTON:        printDefineButton(f, length);   break;
-      case DEFINEBUTTON2:       printDefineButton2(f, length);  break;
-      case JPEGTABLES:          printJpegStream(f, length);     break;
-      case DEFINEBITS:
-      case DEFINEBITSJPEG2:     printDefineBitsJpeg(f,length);  break;
-      case DEFINEBITSJPEG3:     printDefineBitsJpeg3(f,length); break;
-      case DEFINELOSSLESS:
-      case DEFINELOSSLESS2:	printDefineBitsLossless(f,length); break;
-      case TEXTFIELD:		printTextField(f, length);	break;
-      case LIBRARYSYMBOL:	printLibrarySymbol(f, length);	break;
-      case PASSWORD:		printPassword(f, length);	break;
-      case IMPORTASSETS:	printImportAssets(f, length);   break;
+      case SWF_DEFINESPRITE:        printSprite(f, length);         break;
+      case SWF_DEFINESHAPE3:
+      case SWF_DEFINESHAPE2:
+      case SWF_DEFINESHAPE:         printShape(f, length, type);	break;
+      case SWF_PLACEOBJECT:		printPlaceObject(f, length);	break;
+      case SWF_PLACEOBJECT2:	printPlaceObject2(f, length);	break;
+      case SWF_REMOVEOBJECT:	printRemoveObject(f);		break;
+      case SWF_REMOVEOBJECT2:	printRemoveObject2(f);		break;
+      case SWF_SETBACKGROUNDCOLOR:	printSetBackgroundColor(f);	break;
+      case SWF_FRAMELABEL:		printFrameLabel(f);		break;
+      case SWF_DEFINEMORPHSHAPE:	printMorphShape(f, length);	break; 
+      case SWF_DEFINEFONT:		printDefineFont(f, length);	break;
+      case SWF_DEFINEFONT2:		printDefineFont2(f, length);	break;
+      case SWF_DEFINEFONTINFO:	printFontInfo(f, length);	break;
+      case SWF_DEFINETEXT:		printDefineText(f, length, 1);	break;
+      case SWF_DEFINETEXT2:		printDefineText(f, length, 2);	break;
+      case SWF_DOACTION:		decompileAction(f, length, 0);	break;
+      case SWF_DEFINESOUND:         printDefineSound(f, length);    break;
+      case SWF_SOUNDSTREAMHEAD:     printSoundStreamHead(f, 1);     break;
+      case SWF_SOUNDSTREAMHEAD2:    printSoundStreamHead(f, 2);     break;
+      case SWF_SOUNDSTREAMBLOCK:    printSoundStreamBlock(f, length); break;
+      case SWF_DEFINEBUTTON:        printDefineButton(f, length);   break;
+      case SWF_DEFINEBUTTON2:       printDefineButton2(f, length);  break;
+      case SWF_JPEGTABLES:          printJpegStream(f, length);     break;
+      case SWF_DEFINEBITS:
+      case SWF_DEFINEBITSJPEG2:     printDefineBitsJpeg(f,length);  break;
+      case SWF_DEFINEBITSJPEG3:     printDefineBitsJpeg3(f,length); break;
+      case SWF_DEFINELOSSLESS:
+      case SWF_DEFINELOSSLESS2:	printDefineBitsLossless(f,length); break;
+      case SWF_DEFINEEDITTEXT:	printTextField(f, length);	break;
+      case SWF_EXPORTASSETS:	printLibrarySymbol(f, length);	break;
+      case SWF_ENABLEDEBUGGER:	printPassword(f, length);	break;
+      case SWF_IMPORTASSETS:	printImportAssets(f, length);   break;
 
       default:                  dumpBytes(f, length);	        break;
     }
