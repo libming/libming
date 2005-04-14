@@ -5,7 +5,7 @@ LDFLAGS += -L.. -lming $(LIBS) -Wl,-rpath,..
 
 PAGER ?= less
 
-BINARIES = listswf2 listswf2_d swftoperl2 swftophp2 swftopython
+BINARIES = listswf2_d swftoperl2 swftophp2 swftopython
 
 OLDBINARIES = listswf listfdb makefdb listjpeg swftoperl swftophp \
 	listaction raw2adpcm makeswf listmp3 
@@ -26,11 +26,11 @@ clean:
 ../libming.a:
 	cd ..; $(MAKE) static
 
-listswf2_d: main.o blocktypes.o decompile2.o read.o parser.o outputtxt.o ../libming.so
-	$(CC) $(CFLAGS) $(LDFLAGS) main.o blocktypes.o parser.o decompile2.o read.o outputtxt.o -o listswf2_d
+listswf2_d: main.o blocktypes.o decompile2.o read.o parser.o outputtxt.c ../libming.so
+	$(CC) $(CFLAGS) $(LDFLAGS) main.o blocktypes.o parser.o decompile2.o read.o outputtxt.c -o listswf2_d
 
-listswf2: main.o blocktypes.o decompile2.o read.o parser.o outputtxt.o ../libming.so
-	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE main.o blocktypes.o parser.o decompile2.o read.o outputtxt.o -o listswf2
+listswf2: main.o blocktypes.o decompile2.o read.o parser.o outputtxt.c ../libming.so
+	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE main.o blocktypes.o parser.o decompile2.o read.o outputtxt.c -o listswf2
 
 swftoperl2: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming.so
 	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftoperl2
