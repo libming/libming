@@ -2,6 +2,11 @@
 #include "parser.h"
 #include "swfoutput.h"
 
+extern const char *blockName (SWFBlocktype header);
+#ifdef NODECOMPILE
+extern const char *actionName (SWFActiontype header);
+#endif
+
 /*
  * This file contains output functions that can display the different SWF block
  * types in a human readable format.
@@ -567,7 +572,7 @@ outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 
 }
 
-#if 0
+#ifdef NODECOMPILE
 void
 outputSWF_ACTION (struct SWF_ACTIONRECORD *act)
 {
@@ -582,15 +587,16 @@ outputSWF_ACTION (struct SWF_ACTIONRECORD *act)
 void
 outputSWF_DOACTION (SWF_Parserstruct * pblock)
 {
-  //int i;
-  OUT_BEGIN (SWF_DOACTION);
+	OUT_BEGIN (SWF_DOACTION);
+#ifdef NODECOMPILE
+	int i;
 
-  /*
-     printf(" %d Actions\n", sblock->numActions);
-     for(i=0;i<sblock->numActions;i++)
-     outputSWF_ACTION(&sblock->Actions[i]);
-   */
-  printf (" %s\n", sblock->AScript);
+	printf(" %d Actions\n", sblock->numActions);
+	for(i=0;i<sblock->numActions;i++)
+	outputSWF_ACTION(&sblock->Actions[i]);
+#else
+	printf (" %s\n", sblock->AScript);
+#endif
 
 }
 
