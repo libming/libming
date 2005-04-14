@@ -1,6 +1,6 @@
 include ../../Makefile.config
 
-CFLAGS += -I../.. -I../../src
+CFLAGS += -I.. -I../.. -I../../src
 LDFLAGS += -L../.. -lming $(LIBS) -Wl,-rpath,../..
 
 PAGER ?= less
