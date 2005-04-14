@@ -1,2 +1,6 @@
 .AppleDouble
 ming_wrap.c
+Makefile.config
+libming.so.*
+config.log
+config.status
