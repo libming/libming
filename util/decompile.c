@@ -1832,7 +1832,11 @@ static void listItem(Stack s, Action parent)
 	Stack *statements = getStackArray(t->right->data.tree->right);
 
 	puts("with(");
-	puts((char *)t->left->data.tree);
+	if ( t->left->data.tree->left->type != 's' ) {
+		printf("[bogus(%c)]", t->left->data.tree->left->type);
+	} else {
+		puts(t->left->data.tree->left->data.string);
+	}
 	puts(")\n{\n");
 	decompileStatements(statements, n);
 	puts("}");
