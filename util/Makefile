@@ -35,10 +35,10 @@ listswf2: main.o blocktypes.o decompile2.o read.o parser.o outputtxt.c ../libmin
 swftoperl2: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming.so
 	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftoperl2
 
-swftophp2: main.o blocktypes.o decompile2.o read.o parser.o swftoscript.c ../libming.so
+swftophp2: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming.so
 	$(CC) -DSWFPHP $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftophp2
 
-swftopython: main.o blocktypes.o decompile2.o read.o parser.o swftoscript.c ../libming.so
+swftopython: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming.so
 	$(CC) -DSWFPYTHON $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftopython
 
 parser.o: parser.c
