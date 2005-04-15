@@ -878,7 +878,7 @@ static void definetext(TAG tp, int lev)
 	int nglyphbits, nadvancebits;
 	int n, nglyphs, chcode, dx;
 	int hasfont, hascolor, hasyoffset, hasxoffset;
-	unsigned short font, height;
+	unsigned short font=0, height;
 	signed short xoffs, yoffs;
 			
 	textid = change_id(tp);
@@ -975,7 +975,7 @@ static void definebutton(TAG tp)
 
 static void cxform(TAG tp, int alpha)
 {	int hasadd, hasmult, nbits;
-	int ra, ga, ba, aa, rm, gm, bm, am;
+	int ra, ga, ba, aa, rm, gm, bm, am=0;
 	hasadd = getbits((BITS) tp, 1);
 	hasmult = getbits((BITS) tp, 1);
 	nbits = getbits((BITS) tp, 4);
@@ -1029,7 +1029,8 @@ static void definebutton2(TAG tp)
 }
 
 static void definetextfield(TAG tp)
-{	short textid, fontid;
+{
+	short textid, fontid=0;
 	int haslength, noedit, password, multiline, wordwrap, drawbox, noselect, html, usefont;
 	int hascolor, haslayout, hastext, hasfont;
 	
@@ -1055,7 +1056,7 @@ static void definetextfield(TAG tp)
 	if(hasfont)
 		fontid = change_id(tp);
 	if(verbose)
-	{	printf("font %d ", fontid);
+	{	if ( fontid ) printf("font %d ", fontid);
 		if(noedit) printf("noedit ");
 		if(password) printf("password ");
 		if(multiline) printf("multiline ");
