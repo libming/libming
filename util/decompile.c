@@ -23,7 +23,6 @@
 
 #include "decompile.h"
 #include "read.h"
-#include "action.h"
 
 /*
  * Start Package 
@@ -1086,7 +1085,8 @@ static void listLessThan(Stack s, negateFlag negate)
   }
 }
 
-static void listNot(Stack s, Action parent)
+static void
+listNot(Stack s, Action parent)
 {
   /* check for !<, !=, !! */
   /* put variable on left */
@@ -1251,7 +1251,8 @@ static void listAssign(Stack s)
   listItem(right, SWFACTION_SETVARIABLE);
 }
 
-static void listArithmetic(Stack s, Action parent)
+static void
+listArithmetic(Stack s, Action parent)
 {
   int isShort, parens = 0;
   const char *op;
@@ -1343,39 +1344,53 @@ static void listArithmetic(Stack s, Action parent)
     putchar(')');
 }
 
-static void listItem(Stack s, Action parent)
+static void
+listItem(Stack s, Action parent)
 {
-  Tree t;
+	Tree t;
 
-  if( !s ) return;
+	if( !s ) {
+		fprintf(stderr, "listItem called on NULL stack item\n");
+		return;
+	}
 
-  if(s->type == 's')
-  {
-    if(parent == SWFACTION_GETVARIABLE ||
-       parent == SWFACTION_SETVARIABLE ||
-       parent == SWFACTION_GETPROPERTY ||
-       parent == SWFACTION_SETPROPERTY ||
-       parent == SWFACTION_GETMEMBER ||
-       parent == SWFACTION_SETMEMBER ||
-       parent == SWFACTION_DUPLICATECLIP ||
-       parent == SWFACTION_NEW ||
-       parent == SWFACTION_VAR ||
-       parent == SWFACTION_VAREQUALS ||
-       parent == SWFACTION_CALLMETHOD ||
-       parent == SWFACTION_CALLFUNCTION ||
-       isNum(s->data.string))
-      puts(s->data.string);
-    else
-    {
-      putchar('\'');
-      puts(s->data.string);
-      putchar('\'');
-    }
-  }
-  else if(s->type == 'p')
-  {
-    listProperty(s->data.prop);
-  }
+	fprintf(stderr, "listItem called with stack type %c - parent %x",
+		s->type, parent);
+	if ( s->next )
+	{
+		fprintf(stderr, " - next type %c", s->next->type);
+	}
+	fprintf(stderr, "\n");
+
+	if(s->type == 's')
+	{
+		if(parent == SWFACTION_GETVARIABLE ||
+			parent == SWFACTION_SETVARIABLE ||
+			parent == SWFACTION_GETPROPERTY ||
+			parent == SWFACTION_SETPROPERTY ||
+			parent == SWFACTION_GETMEMBER ||
+			parent == SWFACTION_SETMEMBER ||
+			parent == SWFACTION_DUPLICATECLIP ||
+			parent == SWFACTION_NEW ||
+			parent == SWFACTION_VAR ||
+			parent == SWFACTION_VAREQUALS ||
+			parent == SWFACTION_CALLMETHOD ||
+			parent == SWFACTION_CALLFUNCTION ||
+			isNum(s->data.string))
+		{
+			puts(s->data.string);
+		}
+		else
+		{
+			putchar('\'');
+			puts(s->data.string);
+			putchar('\'');
+		}
+	}
+	else if(s->type == 'p')
+	{
+		listProperty(s->data.prop);
+	}
   else if(s->type == 'd')
   {
     /* XXX - should prolly check for integerness, too */
