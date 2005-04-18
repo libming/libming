@@ -5,7 +5,7 @@ LDFLAGS += -L.. -lming $(LIBS) -Wl,-rpath,..
 
 PAGER ?= less
 
-BINARIES = listswf2_d swftoperl2 swftophp2 swftopython
+BINARIES = listswf2_d swftoperl2 swftophp2 swftopython makeswf
 
 OLDBINARIES = listswf listfdb makefdb listjpeg swftoperl swftophp \
 	listaction raw2adpcm makeswf listmp3 
