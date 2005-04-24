@@ -272,7 +272,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
 ac_unique_file="ming.i"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX PYTHON SHLIBLDFLAGS SHLIBEXT EXTRA_OBJS EXTRA_BINS GIFLIB PNGLIB MATHLIB ZLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX PYTHON SHLIBLDFLAGS SHLIBEXT EXTRA_OBJS EXTRA_BINS GIFLIB PNGLIB MATHLIB ZLIB SHORT_SHLIBEXT NOVAR_SHLIBEXT LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -3050,14 +3050,24 @@ fi
 
 OS=`uname -s`
 if test "$OS" = "Darwin"; then
-	SHLIBEXT ="\$(MING_VER).dynlib"
-	SHLIBLDFLAGS="-dynamiclib -compatibility_version \$(MINOR_VERSION) \
-		-current_version \$(MAJOR_VERSION)"
+	SHLIBEXT=".\$(MING_VER).dylib"
+	SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
+	NOVAR_SHLIBEXT=".dylib"
+	SHLIBLDFLAGS="-dynamiclib \
+		-compatibility_version \
+		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+		-current_version \
+		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+		-install_name \$(libdir)/\$(SHAREDLIB)"
 	CFLAGS="$CFLAGS -fno-common"
 else
 	SHLIBLDFLAGS="-shared"
 	SHLIBEXT=".so.\$(MING_VER)"
+	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
+	NOVAR_SHLIBEXT=".so"
 fi
+
+
 
 
 
@@ -3703,6 +3713,8 @@ s,@GIFLIB@,$GIFLIB,;t t
 s,@PNGLIB@,$PNGLIB,;t t
 s,@MATHLIB@,$MATHLIB,;t t
 s,@ZLIB@,$ZLIB,;t t
+s,@SHORT_SHLIBEXT@,$SHORT_SHLIBEXT,;t t
+s,@NOVAR_SHLIBEXT@,$NOVAR_SHLIBEXT,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF

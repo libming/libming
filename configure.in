@@ -40,13 +40,21 @@ fi
  
 OS=`uname -s`
 if test "$OS" = "Darwin"; then
-	SHLIBEXT ="\$(MING_VER).dynlib"
-	SHLIBLDFLAGS="-dynamiclib -compatibility_version \$(MINOR_VERSION) \
-		-current_version \$(MAJOR_VERSION)"
+	SHLIBEXT=".\$(MING_VER).dylib"
+	SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
+	NOVAR_SHLIBEXT=".dylib"
+	SHLIBLDFLAGS="-dynamiclib \
+		-compatibility_version \
+		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+		-current_version \
+		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+		-install_name \$(libdir)/\$(SHAREDLIB)"
 	CFLAGS="$CFLAGS -fno-common"
 else
 	SHLIBLDFLAGS="-shared"
 	SHLIBEXT=".so.\$(MING_VER)"
+	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
+	NOVAR_SHLIBEXT=".so"
 fi
 
 AC_SUBST(SHLIBLDFLAGS)
@@ -57,6 +65,8 @@ AC_SUBST(GIFLIB)
 AC_SUBST(PNGLIB)
 AC_SUBST(MATHLIB)
 AC_SUBST(ZLIB)
+AC_SUBST(SHORT_SHLIBEXT)
+AC_SUBST(NOVAR_SHLIBEXT)
 
 
 AC_CONFIG_HEADER(src/ming_config.h)

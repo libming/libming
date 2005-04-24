@@ -3,8 +3,8 @@ include ../Makefile.config
 DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
 CFLAGS = -I../src
 
-php_ming.so: ming.o ../libming.a
-	${CC} ${CFLAGS} -shared -fPIC ming.o ../libming.a -o php_ming.so ${EXTRA_LIBS}
+php_ming$(NOVAR_SHLIBEXT): ming.o ../libming.a
+	${CC} ${CFLAGS} -shared -fPIC ming.o ../libming.a -o php_ming$(NOVAR_SHLIBEXT) ${EXTRA_LIBS}
 
 ming.o: ming.c
 	${CC} ${CFLAGS} -fPIC ${DEFINES} -c ming.c -I. -I../src -I.. `php-config --includes`
@@ -13,9 +13,9 @@ ming.o: ming.c
 	cd ..; $(MAKE) static
 
 clean:
-	rm -f php_ming.so ming.o
+	rm -f php_ming$(NOVAR_SHLIBEXT) ming.o
 
-install: php_ming.so
+install: php_ming$(NOVAR_SHLIBEXT)
 	install -d `php-config --extension-dir`
-	install php_ming.so `php-config --extension-dir`
-	echo "Don't forget to add 'extension=php_ming.so' to php.ini!"
+	install php_ming$(NOVAR_SHLIBEXT) `php-config --extension-dir`
+	echo "Don't forget to add 'extension=php_ming$(NOVAR_SHLIBEXT)' to php.ini!"

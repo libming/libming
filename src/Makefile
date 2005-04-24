@@ -34,8 +34,8 @@ $(SHAREDLIB): $(OFILES)
 	cd actioncompiler && $(MAKE)
 	$(CC) $(OFILES) $(COMPILEROFILES) $(LDFLAGS) $(EXTRA_LIBS) blocks/*.o $(SHLIBLDFLAGS) -o $(SHAREDLIB)
 	cp $(SHAREDLIB) ..
-	ln -fs $(SHAREDLIB) ../libming.so
-	ln -fs $(SHAREDLIB) ../libming.so.$(MAJOR_VERSION)
+	ln -fs $(SHAREDLIB) ../libming$(NOVAR_SHLIBEXT)
+	ln -fs $(SHAREDLIB) ../libming$(SHORT_SHLIBEXT)
 
 static: libming.a
 
@@ -49,7 +49,7 @@ libming.a: $(OFILES)
 clean:
 	cd blocks && $(MAKE) clean
 	cd actioncompiler && $(MAKE) clean
-	rm -f *.o libming.a $(SHAREDLIB) libming.so test test.exe core *.core
+	rm -f *.o libming.a $(SHAREDLIB) libming$(NOVAR_SHLIBEXT) test test.exe core *.core
 
 # breaks on bsd:
 #.c.o: .c .h

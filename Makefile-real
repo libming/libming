@@ -21,7 +21,7 @@ install-man:
 
 install-dynamic: dynamic
 	install -c -m 0644 $(SHAREDLIB) $(libdir)/$(SHAREDLIB)
-	(cd $(libdir) && ln -fs $(SHAREDLIB) libming.so.0 && ln -fs libming.so.0 libming.so)
+	(cd $(libdir) && ln -fs $(SHAREDLIB) libming$(SHORT_SHLIBEXT) && ln -fs libming$(SHORT_SHLIBEXT) libming$(NOVAR_SHLIBEXT))
 
 install-static: static
 	install -c -m 0644 libming.a $(libdir)/
@@ -36,7 +36,7 @@ clean:
 	for i in $(DIRS); do (cd $$i && $(MAKE) clean); done
 	if [ -f perl_ext/Makefile ] ; then cd perl_ext; $(MAKE) clean; fi
 	rm -f test.o test test.exe *.core *~
-	rm -f libming.a libming.so*
+	rm -f libming.a libming*$(NOVAR_SHLIBEXT)*
 
 distclean: clean
 	rm -Rf Rules.make config.make Makefile.config autom4te.cache \
