@@ -67,6 +67,7 @@ extern void outputSWF_SOUNDSTREAMHEAD(SWF_Parserstruct *pblock);
 extern void outputSWF_SOUNDSTREAMHEAD2(SWF_Parserstruct *pblock);
 extern void outputSWF_STARTSOUND(SWF_Parserstruct *pblock);
 extern void outputSWF_SYNCFRAME(SWF_Parserstruct *pblock);
+extern void outputSWF_INITACTION(SWF_Parserstruct *pblock);
 extern void outputSWF_VIDEOFRAME(SWF_Parserstruct *pblock);
 extern void outputHeader(struct Movie *m);
 extern void outputTrailer(void);

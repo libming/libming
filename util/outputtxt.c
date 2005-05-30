@@ -1,10 +1,12 @@
 #include "blocks/blocktypes.h"
+#include "action.h"
 #include "parser.h"
+#include "decompile.h"
 #include "swfoutput.h"
 
 extern const char *blockName (SWFBlocktype header);
 #ifdef NODECOMPILE
-extern const char *actionName (SWFActiontype header);
+extern const char *actionName (Action header);
 #endif
 
 /*
@@ -72,6 +74,7 @@ static struct SWFOutput outputs[] = {
   {SWF_SOUNDSTREAMHEAD2, outputSWF_SOUNDSTREAMHEAD2},
   {SWF_STARTSOUND, outputSWF_STARTSOUND},
   {SWF_SYNCFRAME, outputSWF_SYNCFRAME},
+  {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
 };
 
@@ -117,6 +120,27 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
   printf ("   TranslateX %6ld ", matrix->TranslateX);
   printf ("TranslateY %6ld\n", matrix->TranslateY);
 }
+
+void
+outputSWF_BUTTONRECORD (SWF_BUTTONRECORD *brec)
+{
+  printf (" BUTTONRECORD: ");
+  printf ("  ButtonStateHitTest: %d ", brec->ButtonStateHitTest);
+  printf ("  ButtonStateDown: %d ", brec->ButtonStateDown);
+  printf ("  ButtonStateOver: %d ", brec->ButtonStateOver);
+  printf ("  ButtonStateUp: %d\n", brec->ButtonStateUp);
+  printf ("  CharacterID: %d\n", brec->CharacterId);
+  printf ("  PlaceDepth: %d\n", brec->PlaceDepth);
+}
+
+void
+outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
+{
+  printf (" BUTTONCONDACTION: ");
+  printf ("  CondActionSize: %d ", bcarec->CondActionSize);
+  printf ("\n");
+}
+
 
 void
 outputSWF_GRADIENTRECORD (SWF_GRADIENTRECORD * gradientrec, char *gname)
@@ -267,6 +291,7 @@ void
 outputSWF_SHAPE (SWF_SHAPE * shape, char *name)
 {
   int i;
+  printf (" %s\n", name );
   printf (" NumFillBits: %d\n", shape->NumFillBits);
   printf (" NumLineBits: %d\n", shape->NumLineBits);
   for (i = 0; i < shape->NumShapeRecords; i++)
@@ -288,6 +313,40 @@ outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
     {
       outputSWF_SHAPERECORD (&(shape->ShapeRecords[i]),name);
     }
+}
+
+void
+outputSWF_GLYPHENTRY (SWF_GLYPHENTRY *gerec)
+{
+	printf("   GlyphIndex[0] = %4.4lx ", gerec->GlyphIndex[0] );
+	printf("   GlyphAdvance[0] = %4.4lx\n", gerec->GlyphAdvance[0] );
+}
+
+void
+outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
+{
+  int i;
+  printf (" TEXTRECORD: ");
+  printf ("  TextRecordType: %d ", trec->TextRecordType);
+  printf ("  StyleFlagsReserved: %d ", trec->StyleFlagsReserved);
+  printf ("  StyleFlagHasFont: %d ", trec->StyleFlagHasFont);
+  printf ("  StyleFlagHasColor: %d ", trec->StyleFlagHasColor);
+  printf ("  StyleFlagHasYOffset: %d ", trec->StyleFlagHasYOffset);
+  printf ("  StyleFlagHasXOffset: %d\n", trec->StyleFlagHasXOffset);
+  if( trec->StyleFlagHasFont )
+    printf ("  FontID: %d\n", trec->FontID);
+  if( trec->StyleFlagHasColor ) {
+    outputSWF_RGBA(&trec->TextColor, "" );
+  }
+  if( trec->StyleFlagHasYOffset || trec->StyleFlagHasXOffset ) {
+    printf ("  XOffset: %d ", trec->XOffset);
+    printf ("  YOffset: %d\n", trec->YOffset);
+  }
+  if( trec->StyleFlagHasFont )
+    printf ("  TextHeight: %d\n", trec->TextHeight);
+  printf ("  GlyphCount: %d\n", trec->GlyphCount);
+  for(i=0;i<trec->GlyphCount;i++)
+	  outputSWF_GLYPHENTRY( &(trec->GlyphEntries[i]) );
 }
 
 
@@ -338,7 +397,18 @@ outputSWF_DEFINEBUTTON (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEBUTTON2);
+  OUT_BEGIN (SWF_DEFINEBUTTON2);
+  int i;
+
+  printf (" CharacterID: %d\n", sblock->Buttonid);
+  printf (" TrackAsMenu: %d\n", sblock->TrackAsMenu);
+  printf (" ActionOffset: %d\n", sblock->ActionOffset);
+  for(i=0;i<sblock->numCharacters;i++) {
+	  outputSWF_BUTTONRECORD( &(sblock->Characters[i]) );
+  }
+  for(i=0;i<sblock->numActions;i++) {
+	  outputSWF_BUTTONCONDACTION( &(sblock->Actions[i]) );
+  }
 
 }
 
@@ -461,6 +531,36 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
       printf (" CodeTableOffset: %x\n", sblock->CodeTableOffset.UI16);
     }
 
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    {
+	char shapename[32];
+	sprintf(shapename,"Shape[%3.3d]",i);
+	outputSWF_SHAPE (&(sblock->GlyphShapeTable[i]), shapename);
+    }
+
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    {
+	printf (" CodeTable[%3.3d]: %x\n", i,
+		  sblock->CodeTable[i]);
+    }
+
+  if( sblock->FontFlagsHasLayout ) {
+    printf (" FontAscent: %d\n", sblock->FontAscent);
+    printf (" FontDecent: %d\n", sblock->FontDecent);
+    printf (" FontLeading: %d\n", sblock->FontLeading);
+    for (i = 0; i < sblock->NumGlyphs; i++)
+      {
+	printf (" FontAdvanceTable[%3.3d]: %x\n", i,
+		  sblock->FontAdvanceTable[i]);
+      }
+    printf (" FontBoundsable: (not used)\n");
+    for (i = 0; i < sblock->NumGlyphs; i++)
+      {
+	outputSWF_RECT (&(sblock->FontBoundsTable[i]));
+      }
+    printf (" KerningCount: %d\n", sblock->KerningCount);
+  }
+
 }
 
 void
@@ -540,15 +640,36 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINETEXT);
+  OUT_BEGIN (SWF_DEFINETEXT);
+  int i;
+
+  printf(" CharacterID: %d\n", sblock->CharacterID );
+  outputSWF_RECT( &sblock->TextBounds );
+  outputSWF_MATRIX( &sblock->TextMatrix, "" );
+  printf(" GlyphBits: %d\n", sblock->GlyphBits );
+  printf(" AdvanceBits: %d\n", sblock->AdvanceBits );
+  printf(" TextRecords: %d\n", sblock->numTextRecords );
+  for(i=0;i<sblock->numTextRecords;i++) {
+	  outputSWF_TEXTRECORD(&(sblock->TextRecords[i]), 1 );
+  }
 
 }
 
 void
 outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINETEXT2);
+  OUT_BEGIN (SWF_DEFINETEXT2);
+  int i;
 
+  printf(" CharacterID: %d\n", sblock->CharacterID );
+  outputSWF_RECT( &sblock->TextBounds );
+  outputSWF_MATRIX( &sblock->TextMatrix, "" );
+  printf(" GlyphBits: %d\n", sblock->GlyphBits );
+  printf(" AdvanceBits: %d\n", sblock->AdvanceBits );
+  printf(" TextRecords: %d\n", sblock->numTextRecords );
+  for(i=0;i<sblock->numTextRecords;i++) {
+	  outputSWF_TEXTRECORD(&(sblock->TextRecords[i]), 2 );
+  }
 }
 
 void
@@ -574,12 +695,14 @@ outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 
 #ifdef NODECOMPILE
 void
-outputSWF_ACTION (struct SWF_ACTIONRECORD *act)
+outputSWF_ACTION (SWF_ACTION *act)
 {
-  printf ("  Action: %s\n", actionName (act->ActionCode));
-  if (act->ActionCode >= 0x80)
+  struct SWF_ACTIONRECORD *action = (struct SWF_ACTIONRECORD *)act;
+
+  printf ("  Action: %x %s\n", action->ActionCode, actionName (action->ActionCode));
+  if (action->ActionCode >= 0x80)
     {
-      printf ("  Length: %d\n", act->Length);
+      printf ("  Length: %d\n", action->Length);
     }
 }
 #endif
@@ -593,9 +716,9 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 
 	printf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
-	outputSWF_ACTION(&sblock->Actions[i]);
+	outputSWF_ACTION(&(sblock->Actions[i]));
 #else
-	printf (" %s\n", sblock->AScript);
+	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions));
 #endif
 
 }
@@ -617,7 +740,14 @@ outputSWF_END (SWF_Parserstruct * pblock)
 void
 outputSWF_EXPORTASSETS (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_EXPORTASSETS);
+  OUT_BEGIN (SWF_EXPORTASSETS);
+  int i;
+  printf (" num assets: %d\n", sblock->Count );
+  for (i = 0; i < sblock->Count; i++)
+    {
+	printf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
+		  sblock->Names[i]);
+    }
 
 }
 
@@ -701,8 +831,31 @@ outputSWF_PLACEOBJECT (SWF_Parserstruct * pblock)
 void
 outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_PLACEOBJECT2);
+  OUT_BEGIN (SWF_PLACEOBJECT2);
 
+  printf(" PlaceFlagHasClipActions %d\n", sblock->PlaceFlagHasClipActions);
+  printf(" PlaceFlagHasClipDepth %d\n", sblock->PlaceFlagHasClipDepth);
+  printf(" PlaceFlagHasName %d\n", sblock->PlaceFlagHasName);
+  printf(" PlaceFlagHasRatio %d\n", sblock->PlaceFlagHasRatio);
+  printf(" PlaceFlagHasColorTransform %d\n", sblock->PlaceFlagHasColorTransform);
+  printf(" PlaceFlagHasMatrix %d\n", sblock->PlaceFlagHasMatrix);
+  printf(" PlaceFlagHasCharacter %d\n", sblock->PlaceFlagHasCharacter);
+  printf(" PlaceFlagMove %d\n", sblock->PlaceFlagMove);
+  printf(" Depth %d\n", sblock->Depth);
+  if( sblock->PlaceFlagHasCharacter )
+	  printf( " CharacterId: %d\n", sblock->CharacterId );
+  if( sblock->PlaceFlagHasMatrix )
+	outputSWF_MATRIX (&(sblock->Matrix), "");
+/*
+  if( sblock->PlaceFlagHasColorTransform )
+	outputSWF_CXFORMWITHALPHA (&(sblock->ColorTransform), "");
+*/
+  if( sblock->PlaceFlagHasRatio )
+	  printf( " Ratio: %d\n", sblock->Ratio );
+  if( sblock->PlaceFlagHasName )
+	  printf( " Name: %s\n", sblock->Name );
+  if( sblock->PlaceFlagHasClipDepth )
+	  printf( " ClipDepth: %d\n", sblock->ClipDepth );
 }
 
 void
@@ -799,6 +952,21 @@ outputSWF_SYNCFRAME (SWF_Parserstruct * pblock)
 }
 
 void
+outputSWF_INITACTION (SWF_Parserstruct * pblock)
+{
+	OUT_BEGIN (SWF_INITACTION);
+#ifdef NODECOMPILE
+	int i;
+
+	printf(" %d Actions\n", sblock->numActions);
+	for(i=0;i<sblock->numActions;i++)
+	outputSWF_ACTION(&(sblock->Actions[i]));
+#else
+	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions));
+#endif
+
+}
+void
 outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 {
   //OUT_BEGIN (SWF_VIDEOFRAME);
@@ -814,6 +982,7 @@ printRect(struct Rect *r)
 void
 outputHeader (struct Movie *m)
 {
+	printf("File version: %i\n", m->version);
 	printf("File size: %i\n", m->size);
 
 	printf("Frame size: ");

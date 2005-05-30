@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "blocks/blocktypes.h"
+#include "action.h"
 #include "decompile.h"
 #include "parser.h"
 #include "read.h"
@@ -76,6 +77,85 @@ parseSWF_MATRIX (FILE * f, struct SWF_MATRIX *matrix)
   matrix->TranslateY = readSBits (f, matrix->NTranslateBits);
 }
 
+int
+parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
+{
+  byteAlign ();
+
+  brec->ButtonReserved = readBits (f, 4);
+  brec->ButtonStateHitTest = readBits (f, 1);
+  brec->ButtonStateDown = readBits (f, 1);
+  brec->ButtonStateOver = readBits (f, 1);
+  brec->ButtonStateUp = readBits (f, 1);
+  if( brec->ButtonStateHitTest == 0 &&
+      brec->ButtonStateDown == 0 &&
+      brec->ButtonStateOver == 0 &&
+      brec->ButtonStateUp == 0 )
+	  return 0;
+  brec->CharacterId = readUInt16 (f);
+  brec->PlaceDepth = readUInt16 (f);
+  parseSWF_MATRIX (f, &brec->PlaceMatrix);
+  if( level > 1 )
+  	parseSWF_CXFORMWITHALPHA (f, &brec->ColorTransform);
+
+  return 1;
+}
+
+void
+parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
+{
+  int end;
+
+  byteAlign ();
+
+  end = fileOffset;
+  bcarec->CondActionSize = readUInt16 (f);
+  end += bcarec->CondActionSize;
+  bcarec->CondIdleToOverDown = readBits (f, 1);
+  bcarec->CondOutDownToIdle = readBits (f, 1);
+  bcarec->CondOutDownToOverDown = readBits (f, 1);
+  bcarec->CondOverDownToOutDown = readBits (f, 1);
+  bcarec->CondOverDownToOverUp = readBits (f, 1);
+  bcarec->CondOverUpToOverDown = readBits (f, 1);
+  bcarec->CondOverUpToIdle = readBits (f, 1);
+  bcarec->CondIdleToOverUp = readBits (f, 1);
+  bcarec->CondKeyPress = readBits (f, 7);
+  bcarec->CondOverDownToIdle = readBits (f, 1);
+
+  bcarec->Actions =
+    (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
+  bcarec->numActions = 0;
+  while ( parseSWF_ACTIONRECORD (f, &(bcarec->Actions[bcarec->numActions++]) ) ) {
+      bcarec->Actions = (SWF_ACTION *) realloc (bcarec->Actions,
+							 (bcarec->
+							  numActions +
+							  1) *
+							 sizeof
+							 (SWF_ACTION));
+    }
+
+}
+
+void
+parseSWF_CXFORM (FILE * f, struct SWF_CXFORM *cxform)
+{
+  byteAlign ();
+
+  cxform->HasAddTerms = readBits (f, 1);
+  cxform->HasMultTerms = readBits (f, 1);
+  cxform->Nbits = readBits (f, 4);
+  if( cxform->HasMultTerms ) {
+    cxform->RedMultTerm = readBits(f, cxform->Nbits );
+    cxform->GreenMultTerm = readBits(f, cxform->Nbits );
+    cxform->BlueMultTerm = readBits(f, cxform->Nbits );
+  }
+  if( cxform->HasAddTerms ) {
+    cxform->RedAddTerm = readBits(f, cxform->Nbits );
+    cxform->GreenAddTerm = readBits(f, cxform->Nbits );
+    cxform->BlueAddTerm = readBits(f, cxform->Nbits );
+  }
+}
+
 void
 parseSWF_CXFORMWITHALPHA (FILE * f, struct SWF_CXFORMWITHALPHA *cxform)
 {
@@ -84,6 +164,84 @@ parseSWF_CXFORMWITHALPHA (FILE * f, struct SWF_CXFORMWITHALPHA *cxform)
   cxform->HasAddTerms = readBits (f, 1);
   cxform->HasMultTerms = readBits (f, 1);
   cxform->Nbits = readBits (f, 4);
+  if( cxform->HasMultTerms ) {
+    cxform->RedMultTerm = readBits(f, cxform->Nbits );
+    cxform->GreenMultTerm = readBits(f, cxform->Nbits );
+    cxform->BlueMultTerm = readBits(f, cxform->Nbits );
+    cxform->AlphaMultTerm = readBits(f, cxform->Nbits );
+  }
+  if( cxform->HasAddTerms ) {
+    cxform->RedAddTerm = readBits(f, cxform->Nbits );
+    cxform->GreenAddTerm = readBits(f, cxform->Nbits );
+    cxform->BlueAddTerm = readBits(f, cxform->Nbits );
+    cxform->AlphaAddTerm = readBits(f, cxform->Nbits );
+  }
+}
+
+void
+parseSWF_GLYPHENTRY (FILE * f, SWF_GLYPHENTRY *gerec, int glyphbits, int advancebits)
+{
+  int i;
+
+  gerec->GlyphIndex = malloc((glyphbits+31)/32 * sizeof(UI32) );
+  for( i=0; glyphbits; i++ ) {
+	  if( glyphbits > 32 ) {
+	  	gerec->GlyphIndex[i] = readBits(f, 32);
+	  	glyphbits -= 32;
+  	} else {
+	 	gerec->GlyphIndex[i] = readBits(f, glyphbits);
+	 	glyphbits = 0;
+  	}
+  }
+
+  gerec->GlyphAdvance = malloc((advancebits+31)/32 * sizeof(UI32) );
+  for( i=0; advancebits; i++ ) {
+	  if( advancebits > 32 ) {
+	  	gerec->GlyphAdvance[i] = readBits(f, 32);
+	  	advancebits -= 32;
+  	} else {
+	 	gerec->GlyphAdvance[i] = readBits(f, advancebits);
+	 	advancebits = 0;
+  	}
+  }
+}
+
+int
+parseSWF_TEXTRECORD (FILE * f, struct SWF_TEXTRECORD *brec, int glyphbits, int advancebits, int level)
+{
+  int i;
+
+  byteAlign ();
+
+  brec->TextRecordType = readBits (f, 1);
+  brec->StyleFlagsReserved = readBits (f, 3);
+  brec->StyleFlagHasFont = readBits (f, 1);
+  brec->StyleFlagHasColor = readBits (f, 1);
+  brec->StyleFlagHasYOffset = readBits (f, 1);
+  brec->StyleFlagHasXOffset = readBits (f, 1);
+  if( brec->TextRecordType == 0 )
+	  return 0;
+  if( brec->StyleFlagHasFont )
+    brec->FontID = readUInt16 (f);
+  if( brec->StyleFlagHasColor ) {
+    if( level > 1 )
+	    parseSWF_RGBA(f, &brec->TextColor );
+    else
+	    parseSWF_RGB(f, &brec->TextColor );
+  }
+  if( brec->StyleFlagHasXOffset )
+    brec->XOffset = readSInt16 (f);
+  if( brec->StyleFlagHasYOffset )
+    brec->YOffset = readSInt16 (f);
+  if( brec->StyleFlagHasFont )
+    brec->TextHeight = readUInt16 (f);
+  brec->GlyphCount = readUInt8 (f);
+  brec->GlyphEntries = malloc(brec->GlyphCount * sizeof(SWF_GLYPHENTRY) );
+  byteAlign ();
+  for(i=0;i<brec->GlyphCount;i++)
+	  parseSWF_GLYPHENTRY(f, &(brec->GlyphEntries[i]), glyphbits, advancebits );
+
+  return 1;
 }
 
 int
@@ -128,7 +286,7 @@ parseSWF_CLIPEVENTFLAGS (FILE * f, struct SWF_CLIPEVENTFLAGS *cflags)
 int
 parseSWF_CLIPACTIONRECORD (FILE * f, struct SWF_CLIPACTIONRECORD *carec)
 {
-  int length;
+  int length,end;
   byteAlign ();
 
   if( parseSWF_CLIPEVENTFLAGS( f, &(carec->EventFlag) ) == 0 )
@@ -140,7 +298,21 @@ parseSWF_CLIPACTIONRECORD (FILE * f, struct SWF_CLIPACTIONRECORD *carec)
   } else {
 	length = carec->ActionRecordSize;
   }
-  carec->Actions = decompile5Action (f, length, 1);
+  end = fileOffset + length;
+  /* carec->Actions = decompile5Action (f, length, 1); */
+  carec->Actions =
+    (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
+  carec->numActions = 0;
+
+  while ( fileOffset < end ) {
+      parseSWF_ACTIONRECORD (f, &(carec->Actions[carec->numActions++]) );
+      carec->Actions = (SWF_ACTION *) realloc (carec->Actions,
+							 (carec->
+							  numActions +
+							  1) *
+							 sizeof
+							 (SWF_ACTION));
+    }
 
   return 1;
 }
@@ -172,19 +344,26 @@ parseSWF_CLIPACTIONS (FILE * f, struct SWF_CLIPACTIONS *clipact)
 }
 
 void
-parseSWF_GRADIENTRECORD (FILE * f, struct SWF_GRADIENTRECORD *gradientrec)
+parseSWF_GRADIENTRECORD (FILE * f, struct SWF_GRADIENTRECORD *gradientrec, int level)
 {
   gradientrec->Ratio = readUInt8 (f);
-  parseSWF_RGBA (f, &gradientrec->Color);
+  if (level < 3)
+     parseSWF_RGB (f, &gradientrec->Color);
+  else
+     parseSWF_RGBA (f, &gradientrec->Color);
 }
 
 void
-parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient)
+parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient, int level)
 {
   int i;
   gradient->NumGradients = readUInt8 (f);
+  if( gradient->NumGradients > 8 ) {
+	  fprintf(stderr,"Something is out of sync!!!\nNumGradient %d\n", gradient->NumGradients );
+	  exit(1);
+  }
   for (i = 0; i < gradient->NumGradients; i++)
-    parseSWF_GRADIENTRECORD (f, &(gradient->GradientRecords[i]));
+    parseSWF_GRADIENTRECORD (f, &(gradient->GradientRecords[i]), level);
 }
 
 
@@ -313,7 +492,7 @@ parseSWF_FILLSTYLE (FILE * f, SWF_FILLSTYLE * fillstyle, int level)
     case 0x10:			/* Linear Gradient Fill */
     case 0x12:			/* Radial Gradient Fill */
       parseSWF_MATRIX (f, &fillstyle->GradientMatrix);
-      parseSWF_GRADIENT (f, &fillstyle->Gradient);
+      parseSWF_GRADIENT (f, &fillstyle->Gradient, level);
       break;
     case 0x40:			/* Repeating Bitmap Fill */
     case 0x41:			/* Clipped Bitmap Fill */
@@ -429,6 +608,317 @@ parseSWF_SHAPEWITHSTYLE (FILE * f, SWF_SHAPEWITHSTYLE * shape, int level)
     }
 }
 
+/* Parse Action types */
+
+#define ACT_BEGIN(acttype) \
+	struct acttype *act;\
+	act=(struct acttype *)action; \
+	act->Length = readUInt16(f);
+
+#define ACT_BEGIN_NOLEN(acttype) \
+	struct acttype *act;\
+	act=(struct acttype *)action;
+
+int
+parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
+{
+	if( (action->SWF_ACTIONRECORD.ActionCode = readUInt8(f)) == SWFACTION_END )
+		return 0;
+	/*
+	 * Actions without the high bit set take no additional
+	 * arguments, so we are done for these types.
+	 */
+	if( !(action->SWF_ACTIONRECORD.ActionCode&0x80) )
+		return 1;
+
+	action->SWF_ACTIONRECORD.Length = 0; /* make valgrind happy */
+	/*
+	 * Actions with the high bit set take additional
+	 * arguments, so we have to parse each on uniquely.
+	 */
+	switch( action->SWF_ACTIONRECORD.ActionCode ) {
+		/* v3 actions */
+	case SWFACTION_GOTOFRAME:
+		{
+		ACT_BEGIN(SWF_ACTIONGOTOFRAME)
+		act->Frame = readUInt16(f);
+		break;
+		}
+	case SWFACTION_GETURL:
+		{
+		ACT_BEGIN(SWF_ACTIONGETURL)
+		act->UrlString = readString(f);
+		act->TargetString = readString(f);
+		break;
+		}
+	case SWFACTION_WAITFORFRAME:
+		{
+		ACT_BEGIN(SWF_ACTIONWAITFORFRAME)
+		act->Frame = readUInt16(f);
+		act->SkipCount = readUInt8(f);
+		break;
+		}
+	case SWFACTION_SETTARGET:
+		{
+		ACT_BEGIN(SWF_ACTIONSETTARGET)
+		act->TargetName = readString(f);
+		break;
+		}
+	case SWFACTION_GOTOLABEL:
+		{
+		ACT_BEGIN(SWF_ACTIONGOTOLABEL)
+		act->FrameLabel = readString(f);
+		break;
+		}
+
+
+		/* v4 actions */
+	case SWFACTION_PUSH:
+		{
+		ACT_BEGIN(SWF_ACTIONPUSH)
+		struct SWF_ACTIONPUSHPARAM *param;
+		int end = fileOffset + act->Length;
+
+  		act->Params = (struct SWF_ACTIONPUSHPARAM *) calloc (1, sizeof (struct SWF_ACTIONPUSHPARAM));
+  		act->NumParam = 0;
+  		while ( fileOffset < end ) {
+			param = &(act->Params[act->NumParam++]);
+			param->Type = readUInt8(f);
+			switch( param->Type ) {
+			case 0: /* STRING */
+				param->String = readString(f);
+				break;
+			case 1: /* FLOAT */
+				param->Float = readUInt32(f);
+				break;
+			case 2: /* NULL */
+			case 3: /* Undefined */
+				break;
+			case 4: /* Register */
+				param->RegisterNumber = readUInt8(f);
+				break;
+			case 5: /* BOOLEAN */
+				param->Boolean = readUInt8(f);
+				break;
+			case 6: /* DOUBLE */
+				param->Double = readDouble(f);
+				break;
+			case 7: /* INTEGER */
+				param->Integer = readSInt32(f);
+				break;
+			case 8: /* CONSTANT8 */
+				param->Constant8 = readUInt8(f);
+				break;
+			case 9: /* CONSTANT16 */
+				param->Constant16 = readUInt16(f);
+				break;
+			default:
+				printf("Unknown data type to push %x\n", param->Type );
+				exit(1);
+			}
+      			act->Params = (struct SWF_ACTIONPUSHPARAM *) realloc (act->Params,
+							 (act->NumParam + 1) *
+							 sizeof (struct SWF_ACTIONPUSHPARAM));
+    }
+		break;
+		}
+	case SWFACTION_LOGICALNOT:
+		{
+		ACT_BEGIN_NOLEN(SWF_ACTIONNOT)
+		act->Boolean = readUInt32(f);
+		break;
+		}
+	case SWFACTION_CALLFRAME:
+		{
+		ACT_BEGIN(SWF_ACTIONCALL)
+		readUInt16(f);
+		break;
+		}
+	case SWFACTION_JUMP:
+		{
+		ACT_BEGIN(SWF_ACTIONJUMP)
+		act->BranchOffset = readUInt16(f);
+		break;
+		}
+	case SWFACTION_IF:
+		{
+		ACT_BEGIN(SWF_ACTIONIF)
+		act->BranchOffset = readUInt16(f);
+		break;
+		}
+	case SWFACTION_GETURL2:
+		{
+		ACT_BEGIN(SWF_ACTIONGETURL2)
+		act->SendVarsMethod = readBits(f,2);
+		act->Reserved = readBits(f,4);
+		act->LoadTargetFlag = readBits(f,1);
+		act->LoadVariableFlag = readBits(f,1);
+		break;
+		}
+	case SWFACTION_GOTOFRAME2:
+		{
+		ACT_BEGIN(SWF_ACTIONGOTOFRAME2)
+		act->Reserved = readBits(f,6);
+		act->SceneBiasFlag = readBits(f,1);
+		act->PlayFlag = readBits(f,1);
+		if( act->SceneBiasFlag ) {
+			act->SceneBias = readUInt16(f);
+		}
+		break;
+		}
+	case SWFACTION_WAITFORFRAME2:
+		{
+		ACT_BEGIN(SWF_ACTIONWAITFORFRAME2)
+		act->SkipCount = readUInt8(f);
+		break;
+		}
+
+
+		/* v5 actions */
+	case SWFACTION_CONSTANTPOOL:
+		{
+		ACT_BEGIN(SWF_ACTIONCONSTANTPOOL)
+		int i;
+		act->Count = readUInt16(f);
+		act->ConstantPool = malloc(act->Count*sizeof(char *));
+		for(i=0;i<act->Count;i++) {
+			act->ConstantPool[i] = readString(f);
+		}
+		break;
+		}
+	case SWFACTION_DEFINEFUNCTION:
+		{
+		ACT_BEGIN(SWF_ACTIONDEFINEFUNCTION)
+		int i, end2;
+		act->FunctionName = readString(f);
+		act->NumParams = readSInt16(f);
+		act->Params = (STRING *)malloc(act->NumParams*sizeof(char *));
+		for(i=0;i<act->NumParams;i++) {
+			act->Params[i] = readString(f);
+			/* printf("Read %s\n", act->ConstantPool[i] ); */
+		}
+		act->CodeSize = readSInt16(f);
+		end2 = fileOffset + act->CodeSize;
+		act->Actions = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->numActions = 0;
+		while ( fileOffset < end2 ) {
+			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
+			act->Actions = (struct SWF_ACTIONRECORD *) realloc (act->Actions,
+							 (act->numActions + 1) *
+							 sizeof (SWF_ACTION));
+		    }
+		break;
+		}
+	case SWFACTION_WITH:
+		{
+		ACT_BEGIN(SWF_ACTIONWITH)
+		act->WithBlock = readString(f);
+		break;
+		}
+	case SWFACTION_STOREREGISTER:
+		{
+		ACT_BEGIN(SWF_ACTIONSTOREREGISTER)
+		act->Register = readUInt8(f);
+		break;
+		}
+
+
+		/* v6 actions */
+
+		/* v7 actions */
+	case SWFACTION_DEFINEFUNCTION2:
+		{
+		ACT_BEGIN(SWF_ACTIONDEFINEFUNCTION2)
+		int i, end2;
+		act->FunctionName = readString(f);
+		act->NumParams = readSInt16(f);
+		act->RegisterCount = readSInt8(f);
+		act->PreloadParentFlag = readBits(f,1);
+		act->PreloadRootFlag = readBits(f,1);
+		act->SuppressSuperFlag = readBits(f,1);
+		act->PreloadSuperFlag = readBits(f,1);
+		act->SuppressArgumentsFlag = readBits(f,1);
+		act->PreloadArgumentsFlag = readBits(f,1);
+		act->SuppressThisFlag = readBits(f,1);
+		act->PreloadThisFlag = readBits(f,1);
+		act->Reserved = readBits(f,7);
+		act->PreloadGlobalFlag = readBits(f,1);
+		act->Params = (struct REGISTERPARAM *)malloc(act->NumParams*sizeof(struct REGISTERPARAM));
+		for(i=0;i<act->NumParams;i++) {
+			act->Params[i].Register = readUInt8(f);
+			act->Params[i].ParamName = readString(f);
+		}
+		act->CodeSize = readSInt16(f);
+		end2 = fileOffset + act->CodeSize;
+		act->Actions = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->numActions = 0;
+		while ( fileOffset < end2 ) {
+			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
+			act->Actions = (struct SWF_ACTIONRECORD *) realloc (act->Actions,
+							 (act->numActions + 1) *
+							 sizeof (SWF_ACTION));
+		    }
+		break;
+		}
+	case SWFACTION_TRY:
+		{
+		ACT_BEGIN(SWF_ACTIONTRY)
+		int end2;
+		act->Reserved = readBits(f,5);
+		act->CatchInRegisterFlag = readBits(f,1);
+		act->FinallyBlockFlag = readBits(f,1);
+		act->CatchBlockFlag = readBits(f,1);
+		act->TrySize = readSInt16(f);
+		act->CatchSize = readSInt16(f);
+		act->FinallySize = readSInt16(f);
+		if( act->CatchInRegisterFlag == 0 ) {
+			act->CatchName = readString(f);
+		} else {
+			act->CatchRegister = readUInt8(f);
+		}
+
+		/* Try Body */
+		end2 = fileOffset + act->TrySize;
+		act->TryActs = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->numTryActs = 0;
+		while ( fileOffset < end2 ) {
+			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->TryActs[act->numTryActs++]) );
+			act->TryActs = (struct SWF_ACTIONRECORD *) realloc (act->TryActs,
+							 (act->numTryActs + 1) *
+							 sizeof (SWF_ACTION));
+		    }
+
+		/* Catch Body */
+		end2 = fileOffset + act->CatchSize;
+		act->CatchActs = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->numCatchActs = 0;
+		while ( fileOffset < end2 ) {
+			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->CatchActs[act->numCatchActs++]) );
+			act->CatchActs = (struct SWF_ACTIONRECORD *) realloc (act->CatchActs,
+							 (act->numCatchActs + 1) *
+							 sizeof (SWF_ACTION));
+		    }
+
+		/* Finally Body */
+		end2 = fileOffset + act->FinallySize;
+		act->FinallyActs = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->numFinallyActs = 0;
+		while ( fileOffset < end2 ) {
+			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->FinallyActs[act->numFinallyActs++]) );
+			act->FinallyActs = (struct SWF_ACTIONRECORD *) realloc (act->FinallyActs,
+							 (act->numFinallyActs + 1) *
+							 sizeof (SWF_ACTION));
+		    }
+		break;
+		}
+	default:
+		printf("Not parsing action %x length %x\n", action->SWF_ACTIONRECORD.ActionCode, action->SWF_ACTIONRECORD.Length );
+		peekBytes(f,100);
+		exit(1);
+	}
+	return 1;
+}
+
 /* Parse Block types */
 
 SWF_Parserstruct *
@@ -445,8 +935,11 @@ SWF_Parserstruct *
 parseSWF_DEFINEBITS (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBITS);
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parserrec->JPEGDataSize = end-fileOffset;
+  parserrec->JPEGData = readBytes(f,end-fileOffset);
 
   PAR_END;
 }
@@ -455,8 +948,11 @@ SWF_Parserstruct *
 parseSWF_DEFINEBITSJPEG2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBITSJPEG2);
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parserrec->JPEGDataSize = end-fileOffset;
+  parserrec->JPEGData = readBytes(f,end-fileOffset);
 
   PAR_END;
 }
@@ -465,8 +961,14 @@ SWF_Parserstruct *
 parseSWF_DEFINEBITSJPEG3 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBITSJPEG3);
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parserrec->AlphaDataOffset = readUInt32 (f);
+  parserrec->JPEGData = readBytes(f,parserrec->AlphaDataOffset);
+  parserrec->AlphaDataSize = end-fileOffset;
+  parserrec->BitmapAlphaData = readBytes(f,end-fileOffset);
+
 
   PAR_END;
 }
@@ -495,8 +997,44 @@ SWF_Parserstruct *
 parseSWF_DEFINEBUTTON2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBUTTON2);
+  int stop;
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  byteAlign();
+
+  parserrec->Buttonid = readUInt16 (f);
+  parserrec->ReservedFlags = readBits (f, 7);
+  parserrec->TrackAsMenu = readBits (f, 1);
+  stop = fileOffset;
+  parserrec->ActionOffset = readUInt16 (f);
+  if( parserrec->ActionOffset )
+    stop += parserrec->ActionOffset;
+  else
+    stop = end;
+  parserrec->numCharacters = 0;
+  parserrec->Characters =
+    (SWF_BUTTONRECORD *) calloc (1, sizeof (SWF_BUTTONRECORD));
+
+  while ( fileOffset < stop-1 ) {
+    parseSWF_BUTTONRECORD (f, &(parserrec->Characters[parserrec->numCharacters++]), 2 );
+    parserrec->Characters = (SWF_BUTTONRECORD *) realloc (parserrec->Characters,
+							 (parserrec->numCharacters + 1) *
+							 sizeof
+							 (SWF_BUTTONRECORD));
+    }
+
+  parserrec->CharacterEndFlag = readUInt8 (f);
+
+  parserrec->numActions = 0;
+  parserrec->Actions =
+    (SWF_BUTTONCONDACTION *) calloc (1, sizeof (SWF_BUTTONCONDACTION));
+  while( fileOffset < end ) {
+    parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]) );
+    parserrec->Actions = (SWF_BUTTONCONDACTION *) realloc (parserrec->Actions,
+							 (parserrec->numActions + 1) *
+							 sizeof
+							 (SWF_BUTTONCONDACTION));
+    }
 
   PAR_END;
 }
@@ -589,8 +1127,21 @@ SWF_Parserstruct *
 parseSWF_DEFINEFONT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEFONT);
+  UI16  firstOffset;
+  int i;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->FontID = readUInt16 (f);
+  firstOffset = readUInt16 (f);
+  parserrec->OffsetTable = (UI16 *)malloc((firstOffset/2) * sizeof( UI16 ) );
+  parserrec->OffsetTable[0] = firstOffset;
+  for(i=1;i<firstOffset/2;i++) {
+  	parserrec->OffsetTable[i] = readUInt16 (f);
+  }
+  parserrec->GlyphShapeTable = (SWF_SHAPE *)malloc(firstOffset/2 * sizeof( SWF_SHAPE ) );
+  for(i=0;i<firstOffset/2;i++) {
+  	parseSWF_SHAPE(f, &(parserrec->GlyphShapeTable[i]), 1 );
+  }
+
 
   PAR_END;
 }
@@ -634,12 +1185,74 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
 	  parserrec->OffsetTable.UI16[i] = readUInt16 (f);
 	}
     }
+
+  if (parserrec->FontFlagsWideOffsets)
+    {
+	parserrec->CodeTableOffset.UI32 = readUInt32 (f);
+    }
+  else
+    {
+	parserrec->CodeTableOffset.UI16 = readUInt16 (f);
+    }
+
   parserrec->GlyphShapeTable = (SWF_SHAPE *)
     malloc (parserrec->NumGlyphs * sizeof (SWF_SHAPE));
   for (i = 0; i < parserrec->NumGlyphs; i++)
     {
       parseSWF_SHAPE (f, &parserrec->GlyphShapeTable[i], 3);
     }
+
+  parserrec->CodeTable =
+	(int *) malloc (parserrec->NumGlyphs * sizeof (int));
+  if (parserrec->FontFlagsWideCodes)
+    {
+      for (i = 0; i < parserrec->NumGlyphs; i++)
+	{
+	  parserrec->CodeTable[i] = readUInt16 (f);
+	}
+    }
+  else
+    {
+      for (i = 0; i < parserrec->NumGlyphs; i++)
+	{
+	  parserrec->CodeTable[i] = readUInt8 (f);
+	}
+    }
+
+  if( parserrec->FontFlagsHasLayout ) {
+	  parserrec->FontAscent = readSInt16(f);
+	  parserrec->FontDecent = readSInt16(f);
+	  parserrec->FontLeading = readSInt16(f);
+	  /* FontAdvanceTable */
+	  parserrec->FontAdvanceTable =
+	     (SI16 *) malloc (parserrec->NumGlyphs * sizeof (SI16));
+	  for (i = 0; i < parserrec->NumGlyphs; i++)
+	  {
+	    parserrec->FontAdvanceTable[i] = readSInt16 (f);
+	  }
+	  /* FontBoundsTable */
+	  parserrec->FontBoundsTable =
+	     (SWF_RECT *) malloc (parserrec->NumGlyphs * sizeof (SWF_RECT));
+	  for (i = 0; i < parserrec->NumGlyphs; i++)
+	  {
+	    parseSWF_RECT (f, &(parserrec->FontBoundsTable[i]));
+	  }
+	  parserrec->KerningCount = readUInt16(f);
+	  /* FontKerningTable */
+	  parserrec->FontKerningTable =
+	     (struct SWF_KERNINGRECORD *) malloc (parserrec->KerningCount * sizeof (struct SWF_KERNINGRECORD));
+	  for (i = 0; i < parserrec->KerningCount; i++)
+	  {
+	    if( parserrec->FontFlagsWideCodes ) {
+		parserrec->FontKerningTable[i].FontKerningCode1 = readUInt16 (f);
+		parserrec->FontKerningTable[i].FontKerningCode2 = readUInt16 (f);
+	    } else {
+		parserrec->FontKerningTable[i].FontKerningCode1 = readUInt8 (f);
+		parserrec->FontKerningTable[i].FontKerningCode2 = readUInt8 (f);
+	    }
+	    parserrec->FontKerningTable[i].FontKerningADjustment = readSInt16 (f);
+	  }
+  }
 
   PAR_END;
 }
@@ -648,8 +1261,30 @@ SWF_Parserstruct *
 parseSWF_DEFINEFONTINFO (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEFONTINFO);
+  int i, end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->FontID = readUInt16 (f);
+  parserrec->FontNameLen = readUInt8 (f);
+  parserrec->FontName = readSizedString (f, parserrec->FontNameLen);
+  byteAlign ();
+  parserrec->FontFlagsReserved = readBits (f, 2);
+  parserrec->FontFlagsSmallText = readBits (f, 1);
+  parserrec->FontFlagsShiftJIS = readBits (f, 1);
+  parserrec->FontFlagsANSI = readBits (f, 1);
+  parserrec->FontFlagsItalic = readBits (f, 1);
+  parserrec->FontFlagsBold = readBits (f, 1);
+  parserrec->FontFlagsWideCodes = readBits (f, 1);
+  if( parserrec->FontFlagsWideCodes )
+	  parserrec->nGlyph = end-(fileOffset/2);
+  else
+	  parserrec->nGlyph = end-fileOffset;
+
+  parserrec->CodeTable = (UI16 *)malloc(parserrec->nGlyph*sizeof(UI16));
+  for(i=0;i<parserrec->nGlyph;i++)
+  if( parserrec->FontFlagsWideCodes )
+	  parserrec->CodeTable[i] = readUInt16(f);
+  else
+	  parserrec->CodeTable[i] = readUInt8(f);
 
   PAR_END;
 }
@@ -658,8 +1293,16 @@ SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINELOSSLESS);
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parserrec->BitmapFormat = readUInt8 (f);
+  parserrec->BitmapWidth = readUInt16 (f);
+  parserrec->BitmapHeight = readUInt16 (f);
+  if( parserrec->BitmapFormat == 3 /* 8-bit */ ) {
+      parserrec->BitmapColorTableSize = readUInt8 (f);
+  }
+  parserrec->ZlibBitmapData = readBytes (f,end-fileOffset);
 
   PAR_END;
 }
@@ -669,7 +1312,7 @@ parseSWF_DEFINELOSSLESS2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINELOSSLESS2);
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
 
   PAR_END;
 }
@@ -786,7 +1429,23 @@ parseSWF_DEFINETEXT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINETEXT);
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parseSWF_RECT (f, &(parserrec->TextBounds));
+  parseSWF_MATRIX (f, &(parserrec->TextMatrix));
+  parserrec->GlyphBits = readUInt8 (f);
+  parserrec->AdvanceBits = readUInt8 (f);
+
+  parserrec->TextRecords =
+    (SWF_TEXTRECORD *) calloc (1, sizeof (SWF_TEXTRECORD));
+  parserrec->numTextRecords = 0;
+  while ( parseSWF_TEXTRECORD (f, &(parserrec->TextRecords[parserrec->numTextRecords++]), parserrec->GlyphBits, parserrec->AdvanceBits, 1 ) ) {
+      parserrec->TextRecords = (SWF_TEXTRECORD *) realloc (parserrec->TextRecords,
+							 (parserrec->
+							  numTextRecords +
+							  1) *
+							 sizeof
+							 (SWF_TEXTRECORD));
+    }
 
   PAR_END;
 }
@@ -796,7 +1455,23 @@ parseSWF_DEFINETEXT2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINETEXT2);
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parseSWF_RECT (f, &(parserrec->TextBounds));
+  parseSWF_MATRIX (f, &(parserrec->TextMatrix));
+  parserrec->GlyphBits = readUInt8 (f);
+  parserrec->AdvanceBits = readUInt8 (f);
+
+  parserrec->TextRecords =
+    (SWF_TEXTRECORD *) calloc (1, sizeof (SWF_TEXTRECORD));
+  parserrec->numTextRecords = 0;
+  while ( parseSWF_TEXTRECORD (f, &(parserrec->TextRecords[parserrec->numTextRecords++]), parserrec->GlyphBits, parserrec->AdvanceBits, 2 ) ) {
+      parserrec->TextRecords = (SWF_TEXTRECORD *) realloc (parserrec->TextRecords,
+							 (parserrec->
+							  numTextRecords +
+							  1) *
+							 sizeof
+							 (SWF_TEXTRECORD));
+    }
 
   PAR_END;
 }
@@ -835,8 +1510,22 @@ SWF_Parserstruct *
 parseSWF_DOACTION (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DOACTION);
+  int end = fileOffset + length;
 
-  parserrec->AScript = decompile5Action (f, length, 1);
+  parserrec->Actions =
+    (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
+  parserrec->numActions = 0;
+  while ( fileOffset < end ) {
+      parseSWF_ACTIONRECORD (f, &(parserrec->Actions[parserrec->numActions++]) );
+      parserrec->Actions = (SWF_ACTION *) realloc (parserrec->Actions,
+							 (parserrec->
+							  numActions +
+							  1) *
+							 sizeof
+							 (SWF_ACTION));
+    }
+
+  /* parserrec->AScript = decompile5Action (f, length, 1); */
 
   PAR_END;
 }
@@ -863,8 +1552,14 @@ SWF_Parserstruct *
 parseSWF_EXPORTASSETS (FILE * f, int length)
 {
   PAR_BEGIN (SWF_EXPORTASSETS);
-
-  parserrec->chid = readUInt16 (f);
+  int i;
+  parserrec->Count = readUInt16 (f);
+  parserrec->Tags = (UI16 *)malloc(parserrec->Count*sizeof(UI16));
+  parserrec->Names = (STRING *)malloc(parserrec->Count*sizeof(char *));
+  for(i=0;i<parserrec->Count;i++) {
+	parserrec->Tags[i] = readUInt16(f);
+	parserrec->Names[i] = readString(f);
+  }
 
   PAR_END;
 }
@@ -943,8 +1638,10 @@ SWF_Parserstruct *
 parseSWF_JPEGTABLES (FILE * f, int length)
 {
   PAR_BEGIN (SWF_JPEGTABLES);
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->JPEGDataSize = end-fileOffset;
+  parserrec->JPEGData = readBytes(f,end-fileOffset);
 
   PAR_END;
 }
@@ -1114,7 +1811,18 @@ parseSWF_SOUNDSTREAMHEAD (FILE * f, int length)
 {
   PAR_BEGIN (SWF_SOUNDSTREAMHEAD);
 
-  parserrec->chid = readUInt16 (f);
+  byteAlign ();
+  parserrec->Reserved = readBits (f, 4);
+  parserrec->PlaybackSoundRate = readBits (f, 2);
+  parserrec->PlaybackSoundSize = readBits (f, 1);
+  parserrec->PlaybackSoundType = readBits (f, 1);
+  parserrec->StreamSoundCompression = readBits (f, 4);
+  parserrec->StreamSoundRate = readBits (f, 2);
+  parserrec->StreamSoundSize = readBits (f, 1);
+  parserrec->StreamSoundType = readBits (f, 1);
+  parserrec->StreamSoundSampleCount = readUInt16 (f);
+  if( parserrec->StreamSoundCompression == 2 /* MP3 */ )
+    parserrec->LatencySeek = readUInt16 (f);
 
   PAR_END;
 }
@@ -1124,7 +1832,18 @@ parseSWF_SOUNDSTREAMHEAD2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_SOUNDSTREAMHEAD2);
 
-  parserrec->chid = readUInt16 (f);
+  byteAlign ();
+  parserrec->Reserved = readBits (f, 4);
+  parserrec->PlaybackSoundRate = readBits (f, 2);
+  parserrec->PlaybackSoundSize = readBits (f, 1);
+  parserrec->PlaybackSoundType = readBits (f, 1);
+  parserrec->StreamSoundCompression = readBits (f, 4);
+  parserrec->StreamSoundRate = readBits (f, 2);
+  parserrec->StreamSoundSize = readBits (f, 1);
+  parserrec->StreamSoundType = readBits (f, 1);
+  parserrec->StreamSoundSampleCount = readUInt16 (f);
+  if( parserrec->StreamSoundCompression == 2 /* MP3 */ )
+    parserrec->LatencySeek = readUInt16 (f);
 
   PAR_END;
 }
@@ -1145,6 +1864,31 @@ parseSWF_SYNCFRAME (FILE * f, int length)
   PAR_BEGIN (SWF_SYNCFRAME);
 
   parserrec->chid = readUInt16 (f);
+
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_INITACTION (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_INITACTION);
+  int end = fileOffset + length;
+
+  parserrec->SpriteId = readUInt16 (f);
+  parserrec->Actions =
+    (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
+  parserrec->numActions = 0;
+  while ( fileOffset < end ) {
+      parseSWF_ACTIONRECORD (f, &(parserrec->Actions[parserrec->numActions++]) );
+      parserrec->Actions = (SWF_ACTION *) realloc (parserrec->Actions,
+							 (parserrec->
+							  numActions +
+							  1) *
+							 sizeof
+							 (SWF_ACTION));
+    }
+
+  /* parserrec->AScript = decompile5Action (f, length, 1); */
 
   PAR_END;
 }

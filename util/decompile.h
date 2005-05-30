@@ -26,6 +26,7 @@
 */
 
 #include "action.h"
+#include "swftypes.h"
 
 struct _stack;
 
@@ -57,5 +58,4 @@ struct _stack
 };
 typedef struct _stack *Stack;
 
-void decompile4Action(FILE *f, int length, int indent);
-char *decompile5Action(FILE *f, int length, int indent);
+char *decompile5Action(int n, SWF_ACTION *actions);

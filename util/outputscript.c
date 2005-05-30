@@ -1,5 +1,6 @@
 #include <math.h>
 #include "blocks/blocktypes.h"
+#include "decompile.h"
 #include "parser.h"
 #include "swfoutput.h"
 
@@ -106,6 +107,7 @@ static struct SWFOutput outputs[] = {
   {SWF_SOUNDSTREAMHEAD2, outputSWF_SOUNDSTREAMHEAD2},
   {SWF_STARTSOUND, outputSWF_STARTSOUND},
   {SWF_SYNCFRAME, outputSWF_SYNCFRAME},
+  {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
 };
 
@@ -831,7 +833,7 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DOACTION);
 
   printf ("\t%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
-	  newobj (NULL, "Action"), sblock->AScript);
+	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions));
 }
 
 void
@@ -1071,6 +1073,15 @@ outputSWF_SYNCFRAME (SWF_Parserstruct * pblock)
 {
   //OUT_BEGIN (SWF_SYNCFRAME);
 
+}
+
+void
+outputSWF_INITACTION (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_INITACTION);
+
+  printf ("\t%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
+	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions));
 }
 
 void
