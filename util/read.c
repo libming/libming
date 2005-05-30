@@ -165,6 +165,20 @@ double readDouble(FILE *f)
   return *((double *)data);
 }
 
+char *readBytes(FILE *f,int size)
+{
+  int i;
+  char *buf;
+
+  buf = (char *)malloc(sizeof(char)*size);
+
+  for(i=0;i<size;i++)
+  {
+    buf[i]=(char)readUInt8(f);
+  }
+
+  return buf;
+}
 char *readString(FILE *f)
 {
   int len = 0, buflen = 256;
@@ -240,13 +254,16 @@ char *readSizedString(FILE *f,int size)
   return buf;
 }
 
-void dumpBytes(FILE *f, int length)
+void _dumpBytes(FILE *f, int length, int restore)
 {
-  int j=0, i, k, l=0;
+  int j=0, i, k, l=0, offset;
   unsigned char buf[16];
 
   if(length<=0)
     return;
+
+  if(restore) 
+	  offset = ftell(f);
 
   putchar('\n');
 
@@ -293,7 +310,25 @@ void dumpBytes(FILE *f, int length)
   }
   putchar('\n');
   putchar('\n');
+
+  if(restore) {
+	fseek(f,offset, SEEK_SET);
+  	fileOffset = offset;
+	}
+
 }
+
+void dumpBytes(FILE *f, int length)
+{
+	_dumpBytes(f, length, 0 );
+}
+
+void peekBytes(FILE *f, int length)
+{
+	_dumpBytes(f, length, 1 );
+}
+
+  int j=0, i, k, l=0;
 
 void dumpBuffer(unsigned char *buf, int length)
 {

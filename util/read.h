@@ -20,10 +20,12 @@ int readUInt16(FILE *f);
 int readSInt16(FILE *f);
 int readUInt32(FILE *f);
 int readSInt32(FILE *f);
+char *readBytes(FILE *f,int size);
 char *readString(FILE *f);
 char *readSizedString(FILE *f,int size);
 double readDouble(FILE *f);
 void dumpBytes(FILE *f, int length);
+void peekBytes(FILE *f, int length);
 
 void dumpBuffer(unsigned char *buf, int length);
 
