@@ -51,6 +51,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_FREECHARACTER),
   BlockType (SWF_GENCOMMAND),
   BlockType (SWF_IMPORTASSETS),
+  BlockType (SWF_INITACTION),
   BlockType (SWF_JPEGTABLES),
   BlockType (SWF_NAMECHARACTER),
   BlockType (SWF_PATHSAREPOSTSCRIPT),
@@ -79,9 +80,6 @@ blockName (SWFBlocktype header)
 {
   int i;
 
-  if (header < 0 || header > numBlocks)
-    return "Invalid Block Type";
-
   for (i = 0; i < numBlocks; i++)
     {
       if (blocks[i].type == header)
@@ -97,9 +95,6 @@ SWF_Parserstruct *
 blockParse (FILE *f, int length, SWFBlocktype header)
 {
   int i;
-
-  if (header < 0 || header > numBlocks)
-    return NULL;
 
   for (i = 0; i < numBlocks; i++)
     {
