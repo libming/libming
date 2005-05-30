@@ -718,7 +718,7 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(&(sblock->Actions[i]));
 #else
-	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions));
+	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
 
 }
@@ -962,7 +962,7 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(&(sblock->Actions[i]));
 #else
-	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions));
+	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
 
 }

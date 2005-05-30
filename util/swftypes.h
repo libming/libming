@@ -329,7 +329,9 @@ struct SWF_ACTIONDEFINEFUNCTION {
 struct SWF_ACTIONWITH {
 	UI8	ActionCode;
 	UI16	Length;
-	STRING	WithBlock;
+	UI16	Size;
+	int	numActions;
+	struct SWF_ACTIONRECORD *Actions;
 };
 
 struct SWF_ACTIONSTOREREGISTER {

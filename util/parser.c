@@ -907,7 +907,17 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 	case SWFACTION_WITH:
 		{
 		ACT_BEGIN(SWF_ACTIONWITH)
-		act->WithBlock = readString(f);
+		int end;
+		act->Size = readUInt16(f);
+		end = fileOffset + act->Size;
+		act->Actions = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->numActions = 0;
+		while ( fileOffset < end ) {
+			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
+			act->Actions = (struct SWF_ACTIONRECORD *) realloc (act->Actions,
+							 (act->numActions + 1) *
+							 sizeof (SWF_ACTION));
+		    }
 		break;
 		}
 	case SWFACTION_STOREREGISTER:

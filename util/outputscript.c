@@ -833,7 +833,7 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DOACTION);
 
   printf ("\t%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
-	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions));
+	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions,0));
 }
 
 void
@@ -1081,7 +1081,7 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_INITACTION);
 
   printf ("\t%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
-	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions));
+	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions,0));
 }
 
 void

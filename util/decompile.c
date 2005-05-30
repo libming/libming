@@ -362,7 +362,7 @@ static Stack readActionRecord(SWF_ACTION *action)
 {
   int length = 0, type = action->SWF_ACTIONRECORD.ActionCode;
 
-  printf("Action %x\n", type );
+  fprintf(stderr,"Action %x\n", type );
   switch(type)
   {
     case SWFACTION_POP:
@@ -580,6 +580,7 @@ static Stack readActionRecord(SWF_ACTION *action)
 	{
 	  case 0: /* string */
 	    s = newString(param->String);
+	    fprintf(stderr,"Pushing %s\n", param->String );
 	    break;
 	  case 1: /* float */
 	    s = newProperty(getSetProperty(param->Float));
@@ -769,10 +770,12 @@ static Stack readActionRecord(SWF_ACTION *action)
       t->offset = s->offset;
       return t;
     }
+#endif
 
     case SWFACTION_JUMP:
-      return newTreeBase(NULL, type, newInteger(readSInt16(f)));
-#endif
+      ACT_BEGIN( SWF_ACTIONJUMP )
+      return newTreeBase(NULL, type, newInteger(act->BranchOffset));
+      ACT_END
 
     case SWFACTION_WAITFORFRAME:
       ACT_BEGIN( SWF_ACTIONWAITFORFRAME )
@@ -903,56 +906,52 @@ static Stack readActionRecord(SWF_ACTION *action)
       return NULL;
     ACT_END
 
-#ifdef XXXSTU
     case SWFACTION_WITH:
-    {
+      ACT_BEGIN( SWF_ACTIONWITH )
       Stack *statements;
-      int size = readUInt16(f);
-
-      int n = readStatements(f, size, &statements);
+      int n;
+      fprintf(stderr,"WTIH has %d statements ", act->numActions );
+      n = readStatements(act->numActions, (SWF_ACTION *)act->Actions, &statements);
+      fprintf(stderr,"and %d stack items\n", n );
 
       return newTree(pop(), type, newTreeBase(newInteger(n), type, newStackArray(statements)));
-    }
+      ACT_END
+
     case SWFACTION_DEFINEFUNCTION:
-    {
+      ACT_BEGIN( SWF_ACTIONDEFINEFUNCTION )
       Stack tree, p, *statements;
-      int nargs, size, n;
+      int i, n;
 
-      char *name = readString(f);
-
-      tree = newTreeBase(newString(name), type, NULL);
-      nargs = readUInt16(f);
+      tree = newTreeBase(newString(act->FunctionName), type, NULL);
 
       p = tree;
 
-      for(; nargs>0; --nargs)
+      for(i=0; i<act->NumParams; i++)
       {
-	p->data.tree->right = newTreeBase(newString(readString(f)), type, NULL);
+	p->data.tree->right = newTreeBase(newString(act->Params[i]), type, NULL);
 	p = p->data.tree->right;
       }
 
-      size = readUInt16(f);
-
-      n = readStatements(f, size, &statements);
+      n = readStatements(act->numActions, (SWF_ACTION *)act->Actions, &statements);
 
       return newTree(tree, type, newTreeBase(newInteger(n), type, newStackArray(statements)));
-    }
+      ACT_END
 
     case SWFACTION_ENUMERATE:
       return newTree(pop(), type, NULL);
 
     case SWFACTION_STOREREGISTER:
-    {
+      ACT_BEGIN( SWF_ACTIONSTOREREGISTER )
       Stack s, t;
 
       if(length != 1)
 	error("Unexpected length (!=1) in setregister");
 
       s = pop();
-      t = newTreeBase(newInteger(readUInt8(f)), type, s);
+      t = newTreeBase(newInteger(act->Register), type, s);
       t->offset = s->offset;
       return t;
-    }
+      ACT_END
 
     case SWFACTION_INITOBJECT:
     {
@@ -984,11 +983,9 @@ static Stack readActionRecord(SWF_ACTION *action)
 
       return newTreeBase(newInteger(nEntries), type, newStackArray(values));
     }
-#endif
 
     default:
       fprintf(stderr,"Unknown Action: 0x%02X\n", type); fflush(stdout);
-      assert(0);
       return NULL;
   }
 }
@@ -1371,6 +1368,7 @@ listItem(Stack s, Action parent)
 		return;
 	}
 
+	/*
 	fprintf(stderr, "listItem called with stack type %c - parent %x",
 		s->type, parent);
 	if ( s->next )
@@ -1378,6 +1376,7 @@ listItem(Stack s, Action parent)
 		fprintf(stderr, " - next type %c", s->next->type);
 	}
 	fprintf(stderr, "\n");
+	*/
 
 	if(s->type == 's')
 	{
@@ -2013,10 +2012,8 @@ static int isStatement(Stack s)
     case SWFACTION_CALLFRAME:
     case SWFACTION_GOTOFRAME2:
 
-      /*
     case SWFACTION_CALLFUNCTION:
     case SWFACTION_CALLMETHOD:
-      */
 
     case SWFACTION_DEFINELOCAL2:
     case SWFACTION_DEFINELOCAL:
@@ -2093,21 +2090,20 @@ void showStack(Stack s)
 int readStatements(int numacts, SWF_ACTION *action, Stack **slist)
 {
   Stack s, start = stack, *statements;
-  int i, n, off;
+  int i, n;
   int wasNull = 0;
 
   /* XXX - should use our own stack here? */
+  fprintf(stderr,"readStatements(%d actions)\n", numacts );
 
   for(i=0;i<numacts;i++)
   {
-    off = fileOffset;
-
     if((s = readActionRecord(&(action[i]))) != NULL)
     {
       push(s);
 
       if(s->offset == 0)
-	s->offset = off;
+	s->offset = i;
 
       wasNull = 0;
     }
@@ -2131,6 +2127,8 @@ int readStatements(int numacts, SWF_ACTION *action, Stack **slist)
     s = s->next;
   }
 
+  fprintf(stderr,"%d actions %d items on stack\n", numacts, n );
+
   /* load statements from stack into array */
 
   *slist = statements = (Stack *)malloc((n+1)*sizeof(Stack));
@@ -2142,7 +2140,7 @@ int readStatements(int numacts, SWF_ACTION *action, Stack **slist)
   s = newStack();
   statements[n] = s;
 
-  s->offset = fileOffset;
+  s->offset = numacts;
 
   if(wasNull)
     --s->offset;
@@ -2172,7 +2170,7 @@ void decompileStatements(Stack *statements, int n)
 }
 
 char *
-decompile5Action(int n, SWF_ACTION *actions)
+decompile5Action(int n, SWF_ACTION *actions,int indent)
 {
   Stack *statements = NULL;
 

@@ -58,4 +58,4 @@ struct _stack
 };
 typedef struct _stack *Stack;
 
-char *decompile5Action(int n, SWF_ACTION *actions);
+char *decompile5Action(int n, SWF_ACTION *actions,int indent);
