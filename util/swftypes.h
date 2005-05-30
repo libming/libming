@@ -89,6 +89,8 @@ struct SWF_ACTIONGOTOLABEL {
 /* v4 actions */
 
 struct SWF_ACTIONPUSHPARAM {
+	UI8	ActionCode;
+	UI16	Length;
 	UI8	Type;
 	union {
 		STRING	String;
@@ -323,7 +325,7 @@ struct SWF_ACTIONDEFINEFUNCTION {
 	STRING	*Params;
 	WORD	CodeSize;
 	int	numActions;
-	struct SWF_ACTIONRECORD *Actions;
+	union SWF_ACTION *Actions;
 };
 
 struct SWF_ACTIONWITH {
@@ -331,7 +333,7 @@ struct SWF_ACTIONWITH {
 	UI16	Length;
 	UI16	Size;
 	int	numActions;
-	struct SWF_ACTIONRECORD *Actions;
+	union SWF_ACTION *Actions;
 };
 
 struct SWF_ACTIONSTOREREGISTER {
@@ -386,7 +388,7 @@ struct SWF_ACTIONDEFINEFUNCTION2 {
 	struct REGISTERPARAM	*Params;
 	UI16	CodeSize;
 	int	numActions;
-	struct SWF_ACTIONRECORD *Actions;
+	union SWF_ACTION *Actions;
 };
 
 struct SWF_ACTIONTRY {
@@ -402,11 +404,11 @@ struct SWF_ACTIONTRY {
 	STRING	CatchName;
 	UI8	CatchRegister;
 	int	numTryActs;
-	struct SWF_ACTIONRECORD *TryActs;
+	union SWF_ACTION *TryActs;
 	int	numCatchActs;
-	struct SWF_ACTIONRECORD *CatchActs;
+	union SWF_ACTION *CatchActs;
 	int	numFinallyActs;
-	struct SWF_ACTIONRECORD *FinallyActs;
+	union SWF_ACTION *FinallyActs;
 };
 
 typedef union SWF_ACTION {
