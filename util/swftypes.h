@@ -698,6 +698,49 @@ typedef union SWF_SHAPERECORD {
 	SWF_CURVEDEDGERECORD	CurvedEdge;
 } SWF_SHAPERECORD;
 
+typedef struct SWF_MORPHLINESTYLE {
+	UI16		StartWidth;
+	UI16		EndWidth;
+	SWF_RGBA	StartColor;
+	SWF_RGBA	EndColor;
+} SWF_MORPHLINESTYLE;
+
+typedef struct SWF_MORPHLINESTYLES {
+	UI8	LineStyleCount;
+	UI16	LineStyleCountExtended;
+	SWF_MORPHLINESTYLE	*LineStyles;
+} SWF_MORPHLINESTYLES;
+
+typedef struct SWF_MORPHGRADIENTRECORD {
+	UI8		StartRatio;
+	SWF_RGBA	StartColor;
+	UI8		EndRatio;
+	SWF_RGBA	EndColor;
+} SWF_MORPHGRADIENTRECORD;
+
+typedef struct SWF_MORPHGRADIENT {
+	UI8	NumGradients;
+	SWF_MORPHGRADIENTRECORD	GradientRecords[8];
+} SWF_MORPHGRADIENT;
+
+typedef struct SWF_MORPHFILLSTYLE {
+	UI8		FillStyleType;
+	SWF_RGBA	StartColor;
+	SWF_RGBA	EndColor;
+	SWF_MATRIX	StartGradientMatrix;
+	SWF_MATRIX	EndGradientMatrix;
+	SWF_MORPHGRADIENT	Gradient;
+	UI16		BitmapId;
+	SWF_MATRIX	StartBitmapMatrix;
+	SWF_MATRIX	EndBitmapMatrix;
+} SWF_MORPHFILLSTYLE;
+
+typedef struct SWF_MORPHFILLSTYLES {
+	UI8	FillStyleCount;
+	UI16	FillStyleCountExtended;
+	SWF_MORPHFILLSTYLE	*FillStyles;
+} SWF_MORPHFILLSTYLES;
+
 typedef struct SWF_SHAPE {
 	UI8	NumFillBits:4;
 	UI8	NumLineBits:4;
@@ -914,11 +957,23 @@ struct SWF_DEFINELOSSLESS
 struct SWF_DEFINELOSSLESS2
 {
   UI16 CharacterID;
+  UI8  BitmapFormat;
+  UI16 BitmapWidth;
+  UI16 BitmapHeight;
+  UI8  BitmapColorTableSize;
+  UI8  *ZlibBitmapData;
 };
 
 struct SWF_DEFINEMORPHSHAPE
 {
-  int chid;
+  UI16 CharacterID;
+  SWF_RECT StartBounds;
+  SWF_RECT EndBounds;
+  UI32 Offset;
+  SWF_MORPHFILLSTYLES MorphFillStyles;
+  SWF_MORPHLINESTYLES MorphLineStyles;
+  SWF_SHAPE StartEdges;
+  SWF_SHAPE EndEdges;
 };
 
 struct SWF_DEFINESHAPE
@@ -944,7 +999,13 @@ struct SWF_DEFINESHAPE3
 
 struct SWF_DEFINESOUND
 {
-  int chid;
+  UI16 SoundId;
+  UI8  SoundFormat:4;
+  UI8  SoundRate:2;
+  UI8  SoundSize:1;
+  UI8  SoundType:1;
+  UI32  SoundSampleCount;
+  UI8  *SoundData;
 };
 
 struct SWF_DEFINESPRITE

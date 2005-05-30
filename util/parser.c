@@ -554,6 +554,101 @@ parseSWF_LINESTYLEARRAY (FILE * f, SWF_LINESTYLEARRAY * linestyle, int level)
 }
 
 void
+parseSWF_MORPHLINESTYLE (FILE * f, SWF_MORPHLINESTYLE * linestyle)
+{
+  linestyle->StartWidth = readUInt16 (f);
+  linestyle->EndWidth = readUInt16 (f);
+  parseSWF_RGBA (f, &linestyle->StartColor);
+  parseSWF_RGBA (f, &linestyle->EndColor);
+}
+
+void
+parseSWF_MORPHLINESTYLES (FILE * f, SWF_MORPHLINESTYLES * linestyle)
+{
+  int count, i;
+
+  linestyle->LineStyleCount = readUInt8 (f);
+  count = linestyle->LineStyleCount;
+  if (linestyle->LineStyleCount == 0xff)
+    {
+      linestyle->LineStyleCountExtended = readUInt16 (f);
+      count = linestyle->LineStyleCountExtended;
+    }
+  linestyle->LineStyles =
+    (SWF_MORPHLINESTYLE *) malloc (count * sizeof (SWF_MORPHLINESTYLE));
+  for (i = 0; i < count; i++)
+    {
+      parseSWF_MORPHLINESTYLE (f, &(linestyle->LineStyles[i]));
+    }
+}
+
+void
+parseSWF_MORPHGRADIENTRECORD (FILE * f, struct SWF_MORPHGRADIENTRECORD *gradientrec)
+{
+  gradientrec->StartRatio = readUInt8 (f);
+  parseSWF_RGBA (f, &gradientrec->StartColor);
+  gradientrec->EndRatio = readUInt8 (f);
+  parseSWF_RGBA (f, &gradientrec->EndColor);
+}
+
+void
+parseSWF_MORPHGRADIENT (FILE * f, struct SWF_MORPHGRADIENT *gradient)
+{
+  int i;
+  gradient->NumGradients = readUInt8 (f);
+  if( gradient->NumGradients > 8 ) {
+	  fprintf(stderr,"Something is out of sync!!!\nNumGradient %d\n", gradient->NumGradients );
+	  exit(1);
+  }
+  for (i = 0; i < gradient->NumGradients; i++)
+    parseSWF_MORPHGRADIENTRECORD (f, &(gradient->GradientRecords[i]));
+}
+void
+parseSWF_MORPHFILLSTYLE (FILE * f, SWF_MORPHFILLSTYLE * fillstyle )
+{
+  fillstyle->FillStyleType = readUInt8 (f);
+  switch (fillstyle->FillStyleType)
+    {
+    case 0x00:			/* Solid Fill */
+	parseSWF_RGBA (f, &fillstyle->StartColor);
+	parseSWF_RGBA (f, &fillstyle->EndColor);
+      break;
+    case 0x10:			/* Linear Gradient Fill */
+    case 0x12:			/* Radial Gradient Fill */
+      parseSWF_MATRIX (f, &fillstyle->StartGradientMatrix);
+      parseSWF_MATRIX (f, &fillstyle->EndGradientMatrix);
+      parseSWF_MORPHGRADIENT (f, &fillstyle->Gradient);
+      break;
+    case 0x40:			/* Repeating Bitmap Fill */
+    case 0x41:			/* Clipped Bitmap Fill */
+    case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
+    case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
+      fillstyle->BitmapId = readUInt16 (f);
+      parseSWF_MATRIX (f, &fillstyle->StartBitmapMatrix);
+      parseSWF_MATRIX (f, &fillstyle->EndBitmapMatrix);
+      break;
+    }
+}
+void
+parseSWF_MORPHFILLSTYLES (FILE * f, SWF_MORPHFILLSTYLES * fillstyle )
+{
+  int count, i;
+  fillstyle->FillStyleCount = readUInt8 (f);
+  count = fillstyle->FillStyleCount;
+  if (fillstyle->FillStyleCount == 0xff)
+    {
+      fillstyle->FillStyleCountExtended = readUInt16 (f);
+      count = fillstyle->FillStyleCountExtended;
+    }
+  fillstyle->FillStyles =
+    (SWF_MORPHFILLSTYLE *) calloc (count, sizeof (SWF_MORPHFILLSTYLE));
+  for (i = 0; i < count; i++)
+    {
+      parseSWF_MORPHFILLSTYLE (f, &(fillstyle->FillStyles[i]));
+    }
+}
+
+void
 parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level)
 {
   int fillBits, lineBits;
@@ -1311,8 +1406,16 @@ SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINELOSSLESS2);
+  int end = fileOffset + length;
 
   parserrec->CharacterID = readUInt16 (f);
+  parserrec->BitmapFormat = readUInt8 (f);
+  parserrec->BitmapWidth = readUInt16 (f);
+  parserrec->BitmapHeight = readUInt16 (f);
+  if( parserrec->BitmapFormat == 3 /* 8-bit */ ) {
+      parserrec->BitmapColorTableSize = readUInt8 (f);
+  }
+  parserrec->ZlibBitmapData = readBytes (f,end-fileOffset);
 
   PAR_END;
 }
@@ -1322,7 +1425,14 @@ parseSWF_DEFINEMORPHSHAPE (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEMORPHSHAPE);
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->CharacterID = readUInt16 (f);
+  parseSWF_RECT (f, &(parserrec->StartBounds));
+  parseSWF_RECT (f, &(parserrec->EndBounds));
+  parserrec->Offset = readUInt32 (f);
+  parseSWF_MORPHFILLSTYLES (f, &(parserrec->MorphFillStyles));
+  parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles));
+  parseSWF_SHAPE (f, &(parserrec->StartEdges),0);
+  parseSWF_SHAPE (f, &(parserrec->EndEdges),0);
 
   PAR_END;
 }
@@ -1367,8 +1477,16 @@ SWF_Parserstruct *
 parseSWF_DEFINESOUND (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINESOUND);
+  int end = fileOffset + length;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->SoundId = readUInt16 (f);
+  byteAlign ();
+  parserrec->SoundFormat = readBits (f, 4);
+  parserrec->SoundRate = readBits (f, 2);
+  parserrec->SoundSize = readBits (f, 1);
+  parserrec->SoundType = readBits (f, 1);
+  parserrec->SoundSampleCount = readUInt32 (f);
+  parserrec->SoundData = readBytes (f, end-fileOffset);
 
   PAR_END;
 }
