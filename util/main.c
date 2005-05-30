@@ -243,6 +243,7 @@ main (int argc, char *argv[])
 	       fseek(f,blockstart,SEEK_SET);
 	       silentSkipBytes (f, (nextFrame-ftell(f)));
 	       fileOffset=ftell(f);
+	       exit(1);
        }
     }
 
