@@ -64,3 +64,10 @@ Erich Schubert
 
 Jim Tittsler (jtittsler)
     bug fixes and updates
+
+Sandro Santilli <strk@keybit.net>
+    command line actionscript compiler, autoconf build system,
+    bug fixes and actionscript compiler enhancements.
+
+Stuart Anderson <anderson@netsweng.com>
+    utils code duplication merge: swf2script code.
