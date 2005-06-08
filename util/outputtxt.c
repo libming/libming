@@ -540,8 +540,16 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 
   for (i = 0; i < sblock->NumGlyphs; i++)
     {
-	printf (" CodeTable[%3.3d]: %x\n", i,
-		  sblock->CodeTable[i]);
+	if( sblock->FontFlagsWideCodes )
+	  {
+		printf (" CodeTable[%3.3d]: %4.4x\n", i,
+		  	sblock->CodeTable[i]);
+	  }
+	else
+	  {
+		printf (" CodeTable[%3.3d]: %2.2x\n", i,
+		  	sblock->CodeTable[i]);
+	  }
     }
 
   if( sblock->FontFlagsHasLayout ) {
