@@ -641,7 +641,10 @@ outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINESPRITE);
+  OUT_BEGIN (SWF_DEFINESPRITE);
+  printf(" SpriteId: %d\n", sblock->SpriteId );
+  printf(" FrameCount: %d\n", sblock->FrameCount );
+  printf(" BlockCount: %d\n", sblock->BlockCount );
 
 }
 
@@ -804,7 +807,15 @@ outputSWF_GENCOMMAND (SWF_Parserstruct * pblock)
 void
 outputSWF_IMPORTASSETS (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_IMPORTASSETS);
+  OUT_BEGIN (SWF_IMPORTASSETS);
+  int i;
+  printf (" URL: %s\n", sblock->URL );
+  printf (" num assets: %d\n", sblock->Count );
+  for (i = 0; i < sblock->Count; i++)
+    {
+	printf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
+		  sblock->Names[i]);
+    }
 
 }
 

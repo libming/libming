@@ -814,7 +814,7 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
       			act->Params = (struct SWF_ACTIONPUSHPARAM *) realloc (act->Params,
 							 (act->NumParam + 1) *
 							 sizeof (struct SWF_ACTIONPUSHPARAM));
-    }
+    		}
 		break;
 		}
 	case SWFACTION_LOGICALNOT:
@@ -894,11 +894,11 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		}
 		act->CodeSize = readSInt16(f);
 		end2 = fileOffset + act->CodeSize;
-		act->Actions = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numActions = 0;
 		while ( fileOffset < end2 ) {
 			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
-			act->Actions = (struct SWF_ACTIONRECORD *) realloc (act->Actions,
+			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
 							 (act->numActions + 1) *
 							 sizeof (SWF_ACTION));
 		    }
@@ -910,11 +910,11 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		int end;
 		act->Size = readUInt16(f);
 		end = fileOffset + act->Size;
-		act->Actions = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numActions = 0;
 		while ( fileOffset < end ) {
 			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
-			act->Actions = (struct SWF_ACTIONRECORD *) realloc (act->Actions,
+			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
 							 (act->numActions + 1) *
 							 sizeof (SWF_ACTION));
 		    }
@@ -955,11 +955,11 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		}
 		act->CodeSize = readSInt16(f);
 		end2 = fileOffset + act->CodeSize;
-		act->Actions = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numActions = 0;
 		while ( fileOffset < end2 ) {
 			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
-			act->Actions = (struct SWF_ACTIONRECORD *) realloc (act->Actions,
+			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
 							 (act->numActions + 1) *
 							 sizeof (SWF_ACTION));
 		    }
@@ -984,33 +984,33 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 
 		/* Try Body */
 		end2 = fileOffset + act->TrySize;
-		act->TryActs = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->TryActs = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numTryActs = 0;
 		while ( fileOffset < end2 ) {
 			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->TryActs[act->numTryActs++]) );
-			act->TryActs = (struct SWF_ACTIONRECORD *) realloc (act->TryActs,
+			act->TryActs = (union SWF_ACTION *) realloc (act->TryActs,
 							 (act->numTryActs + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 
 		/* Catch Body */
 		end2 = fileOffset + act->CatchSize;
-		act->CatchActs = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->CatchActs = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numCatchActs = 0;
 		while ( fileOffset < end2 ) {
 			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->CatchActs[act->numCatchActs++]) );
-			act->CatchActs = (struct SWF_ACTIONRECORD *) realloc (act->CatchActs,
+			act->CatchActs = (union SWF_ACTION *) realloc (act->CatchActs,
 							 (act->numCatchActs + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 
 		/* Finally Body */
 		end2 = fileOffset + act->FinallySize;
-		act->FinallyActs = (struct SWF_ACTIONRECORD *) calloc (1, sizeof (SWF_ACTION));
+		act->FinallyActs = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numFinallyActs = 0;
 		while ( fileOffset < end2 ) {
 			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->FinallyActs[act->numFinallyActs++]) );
-			act->FinallyActs = (struct SWF_ACTIONRECORD *) realloc (act->FinallyActs,
+			act->FinallyActs = (union SWF_ACTION *) realloc (act->FinallyActs,
 							 (act->numFinallyActs + 1) *
 							 sizeof (SWF_ACTION));
 		    }
@@ -1756,8 +1756,15 @@ SWF_Parserstruct *
 parseSWF_IMPORTASSETS (FILE * f, int length)
 {
   PAR_BEGIN (SWF_IMPORTASSETS);
-
-  parserrec->chid = readUInt16 (f);
+  int i;
+  parserrec->URL = readString (f);
+  parserrec->Count = readUInt16 (f);
+  parserrec->Tags = (UI16 *)malloc(parserrec->Count*sizeof(UI16));
+  parserrec->Names = (STRING *)malloc(parserrec->Count*sizeof(char *));
+  for(i=0;i<parserrec->Count;i++) {
+	parserrec->Tags[i] = readUInt16(f);
+	parserrec->Names[i] = readString(f);
+  }
 
   PAR_END;
 }

@@ -1,3 +1,8 @@
+2005-06-09 18:30  anderson
+
+	* util/: outputtxt.c, parser.c, swftypes.h: Fix many warnings,
+	  Implemenent IMPORTASSET and output more info for DEFINESPRITE.
+
 2005-06-08 13:15  anderson
 
 	* util/outputtxt.c: Format the CodeTable output of DEFINEFONT2

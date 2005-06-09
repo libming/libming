@@ -1113,7 +1113,10 @@ struct SWF_GENCOMMAND
 
 struct SWF_IMPORTASSETS
 {
-  int chid;
+  STRING URL;
+  UI16	Count;
+  UI16 *Tags;
+  STRING *Names;
 };
 
 struct SWF_JPEGTABLES
