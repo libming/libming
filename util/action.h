@@ -1,6 +1,8 @@
 #ifndef SWF_ACTION_H_INCLUDED
 #define SWF_ACTION_H_INCLUDED
 
+#include "swftypes.h"
+
 typedef enum
 {
   SWFACTION_END        = 0x00,
@@ -163,4 +165,7 @@ typedef enum
 
 #define DUPCLIP_NUMBER           0x4000
 
+/* action.c */
+extern const char *actionName(Action header);
+extern void outputSWF_ACTION(SWF_ACTION *act);
 #endif /* SWF_ACTION_H_INCLUDED */

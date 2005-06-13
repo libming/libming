@@ -5,9 +5,6 @@
 #include "swfoutput.h"
 
 extern const char *blockName (SWFBlocktype header);
-#ifdef NODECOMPILE
-extern const char *actionName (Action header);
-#endif
 
 /*
  * This file contains output functions that can display the different SWF block
@@ -136,11 +133,82 @@ outputSWF_BUTTONRECORD (SWF_BUTTONRECORD *brec)
 void
 outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
 {
+#ifdef NODECOMPILE
+  int i;
+#endif
   printf (" BUTTONCONDACTION: ");
-  printf ("  CondActionSize: %d ", bcarec->CondActionSize);
+  printf ("  CondActionSize: %d\n", bcarec->CondActionSize);
+  printf ("  CondIdleToOverDown: %d ", bcarec->CondIdleToOverDown);
+  printf ("  CondOutDownToIdle: %d ", bcarec->CondOutDownToIdle);
+  printf ("  CondOutDownToOverDown: %d ", bcarec->CondOutDownToOverDown);
+  printf ("  CondOverDownToOutDown: %d ", bcarec->CondOverDownToOutDown);
+  printf ("  CondOverDownToOverUp: %d ", bcarec->CondOverDownToOverUp);
+  printf ("  CondOverUpToOverDown: %d ", bcarec->CondOverUpToOverDown);
+  printf ("  CondOverUpToIdle: %d ", bcarec->CondOverUpToIdle);
+  printf ("  CondIdleToOverUp: %d ", bcarec->CondIdleToOverUp);
+  printf ("  CondKeyPress: %d ", bcarec->CondKeyPress);
+  printf ("  CondOverDownToIdle: %d ", bcarec->CondOverDownToIdle);
   printf ("\n");
+#ifdef NODECOMPILE
+  printf(" %d Actions\n", bcarec->numActions);
+  for(i=0;i<bcarec->numActions;i++)
+  outputSWF_ACTION(&(bcarec->Actions[i]));
+#else
+  printf (" %s\n", decompile5Action(bcarec->numActions,bcarec->Actions,0));
+#endif
 }
 
+void
+outputSWF_CLIPEVENTFLAGS (SWF_CLIPEVENTFLAGS * clipevflags )
+{
+  printf ("  ClipEventKeyUp: %d ", clipevflags->ClipEventKeyUp);
+  printf ("  ClipEventKeyDown: %d ", clipevflags->ClipEventKeyDown);
+  printf ("  ClipEventMouseUp: %d ", clipevflags->ClipEventMouseUp);
+  printf ("  ClipEventMouseDown: %d ", clipevflags->ClipEventMouseDown);
+  printf ("  ClipEventMouseMove: %d ", clipevflags->ClipEventMouseMove);
+  printf ("  ClipEventUnload: %d ", clipevflags->ClipEventUnload);
+  printf ("  ClipEventEnterFrame: %d ", clipevflags->ClipEventEnterFrame);
+  printf ("  ClipEventLoad: %d ", clipevflags->ClipEventLoad);
+  printf ("  ClipEventDragOver: %d ", clipevflags->ClipEventDragOver);
+  printf ("  ClipEventRollOut: %d ", clipevflags->ClipEventRollOut);
+  printf ("  ClipEventRollOver: %d ", clipevflags->ClipEventRollOver);
+  printf ("  ClipEventReleaseOutside: %d ", clipevflags->ClipEventReleaseOutside);
+  printf ("  ClipEventRelease: %d ", clipevflags->ClipEventRelease);
+  printf ("  ClipEventPress: %d ", clipevflags->ClipEventPress);
+  printf ("  ClipEventInitialize: %d ", clipevflags->ClipEventInitialize);
+  printf ("  ClipEventData: %d ", clipevflags->ClipEventData);
+  printf ("  ClipEventConstruct: %d ", clipevflags->ClipEventConstruct);
+  printf ("  ClipEventKeyPress: %d ", clipevflags->ClipEventKeyPress);
+  printf ("  ClipEventDragOut: %d ", clipevflags->ClipEventDragOut);
+}
+
+void
+outputSWF_CLIPACTIONRECORD (SWF_CLIPACTIONRECORD * carec )
+{
+#ifdef NODECOMPILE
+  int i;
+#endif
+  outputSWF_CLIPEVENTFLAGS (&carec->EventFlag);
+  printf(" %ld ActionRecordSize\n", carec->ActionRecordSize);
+  printf(" %d KeyCode\n", carec->KeyCode);
+#ifdef NODECOMPILE
+  printf(" %d Actions\n", carec->numActions);
+  for(i=0;i<carec->numActions;i++)
+     outputSWF_ACTION(&(carec->Actions[i]));
+#else
+  printf (" %s\n", decompile5Action(carec->numActions,carec->Actions,0));
+#endif
+}
+
+void
+outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions )
+{
+  int i;
+  outputSWF_CLIPEVENTFLAGS (&clipactions->AllEventFlags);
+  printf(" %d NumClipRecords\n", clipactions->NumClipRecords);
+  for(i=0;i<clipactions->NumClipRecords;i++)
+    outputSWF_CLIPACTIONRECORD(&(clipactions->ClipActionRecords[i]));
+}
 
 void
 outputSWF_GRADIENTRECORD (SWF_GRADIENTRECORD * gradientrec, char *gname)
@@ -704,20 +772,6 @@ outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 
 }
 
-#ifdef NODECOMPILE
-void
-outputSWF_ACTION (SWF_ACTION *act)
-{
-  struct SWF_ACTIONRECORD *action = (struct SWF_ACTIONRECORD *)act;
-
-  printf ("  Action: %x %s\n", action->ActionCode, actionName (action->ActionCode));
-  if (action->ActionCode >= 0x80)
-    {
-      printf ("  Length: %d\n", action->Length);
-    }
-}
-#endif
-
 void
 outputSWF_DOACTION (SWF_Parserstruct * pblock)
 {
@@ -875,6 +929,8 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 	  printf( " Name: %s\n", sblock->Name );
   if( sblock->PlaceFlagHasClipDepth )
 	  printf( " ClipDepth: %d\n", sblock->ClipDepth );
+  if( sblock->PlaceFlagHasClipActions )
+	outputSWF_CLIPACTIONS (&(sblock->ClipActions));
 }
 
 void

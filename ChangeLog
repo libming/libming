@@ -1,3 +1,9 @@
+2005-06-13 10:15  anderson
+
+	* util/outputtxt.c: Add output for CLIPACTIONs
+	* util/action.c: Move outputSWF_ACTION here, and provied more detailed
+	  out on a few actions.
+
 2005-06-09 18:30  anderson
 
 	* util/: outputtxt.c, parser.c, swftypes.h: Fix many warnings,
