@@ -3,6 +3,8 @@ include ../Makefile.config
 CFLAGS += -I.. -I../src 
 LDFLAGS += -L.. -lming $(LIBS)
 
+UTILOBJ = action.o blocktypes.o decompile2.o main.o parser.o read.o
+
 PAGER ?= less
 
 BINARIES = listswf2 listswf2_d swftoperl2 swftophp2 swftopython makeswf
@@ -26,20 +28,20 @@ clean:
 ../libming.a:
 	cd ..; $(MAKE) static
 
-listswf2_d: main.o blocktypes.o decompile2.o read.o parser.o outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) main.o blocktypes.o parser.o decompile2.o read.o outputtxt.c -o listswf2_d
+listswf2_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listswf2_d
 
-listswf2: main.o action.o blocktypes.o decompile2.o read.o parser.o outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE main.o action.o blocktypes.o parser.o decompile2.o read.o outputtxt.c -o listswf2
+listswf2: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listswf2
 
-swftoperl2: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftoperl2
+swftoperl2: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftoperl2
 
-swftophp2: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPHP $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftophp2
+swftophp2: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) -DSWFPHP $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftophp2
 
-swftopython: main.o blocktypes.o decompile2.o read.o parser.o outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPYTHON $(CFLAGS) $(LDFLAGS) outputscript.c main.o blocktypes.o parser.o decompile2.o read.o -o swftopython
+swftopython: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) -DSWFPYTHON $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftopython
 
 parser.o: parser.c
 	$(CC) $(CFLAGS) -c parser.c
