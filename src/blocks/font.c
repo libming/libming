@@ -497,8 +497,10 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 	if ( font->nGlyphs % CODETABLE_INCREMENT == 0 )
 	{
 		font->codeTable = (unsigned short*) realloc(font->codeTable,
-															(font->nGlyphs + CODETABLE_INCREMENT) *
-															sizeof(unsigned short));
+			(font->nGlyphs + CODETABLE_INCREMENT) *
+				sizeof(unsigned short));
+		memset(font->codeTable+font->nGlyphs, 0,
+			CODETABLE_INCREMENT*sizeof(unsigned short));
 	}
 
 	// keep list sorted
