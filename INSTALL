@@ -1,10 +1,7 @@
 
 Installing Ming
 
-Last updated 2nd February 2004.
-
-Unfortunately we haven't made Ming use autoconf yet.  If you'd like
-to help with this, please let us know!
+Last updated 9th August 2005.
 
   Unpack the Ming source tarball and go into the uncompressed
   directory.
@@ -23,8 +20,8 @@ to help with this, please let us know!
 
    1. Compile the main Ming library
 
+      $ ./configure
       $ make
-      $ make static
 
    2. Compile the PHP module
 
@@ -62,6 +59,7 @@ to help with this, please let us know!
 
   (You may need python 1.5.2 or higher)
 
+      $ ./configure
       $ make static
       $ cd py_ext
       $ make mingcmodule.so
@@ -77,6 +75,25 @@ to help with this, please let us know!
   ****
 
   Read the README file in the perl_ext subdirectory.
+
+
+  C/C++
+  *****
+
+  1. Compile the library
+      $ ./configure
+      $ make
+
+  2. Install (you usually need to be root to do this)
+      $ make install
+
+  By default it puts headers into /usr/local/include and libraries
+  into /usr/local/lib. Do ./configure --help to see how to set
+  an alternative location.
+
+  By the way, the c++_ext subdirectory contains information and a
+  test file, but there is no additional makefile or installation
+  required to use C++.
 
 
 USING MING:
