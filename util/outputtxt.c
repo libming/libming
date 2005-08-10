@@ -1078,7 +1078,7 @@ outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
 {
   int i;
 
-  if (type < 0 || type > numOutputs)
+  if (type < 0)
     return;
 
   printf( "\nOffset: %d (%8.8x)\n", offset, offset );
@@ -1092,5 +1092,6 @@ outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
 	  return outputs[i].output (blockp);
 	}
     }
+  printf("Unknown block type %d\n", type );
   return;
 }
