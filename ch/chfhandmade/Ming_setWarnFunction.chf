@@ -1,0 +1,10 @@
+void Ming_setWarnFunction(void *func)
+    void *fptr;
+
+    fptr = dlsym(_Chming_handle, "Ming_setWarnFunction_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return;
+    }
+    dlrunfun(fptr, NULL, Ming_setWarnFunction, NULL);
+}

@@ -1,0 +1,22 @@
+###################################################################### 
+#
+# Makefile fo building the dynamically loaded lib libming.dl
+# 
+###################################################################### 
+
+###################################################################### 
+# Windows Specific Variables
+###################################################################### 
+
+OBJ    = obj
+IFLAGS = -I ../include 
+# If libgif or libpng is not available, remove it from the following line
+LFLAGS = ../../win32/release/libming.lib ../../zlib/zlib.lib ../../libpng/libpng.lib  ../../libgif/libgif.lib
+
+CFLAGS = /MD /nologo
+
+
+###################################################################### 
+# Include Make.inc
+###################################################################### 
+include Make.inc

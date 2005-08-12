@@ -1,0 +1,12 @@
+int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level) {
+    void *fptr;
+    int retval;
+
+    fptr = dlsym(_Chming_handle, "SWFMovie_output_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return -1;
+    }
+    dlrunfun(fptr, &retval, SWFMovie_output, movie, method, data, level);
+    return retval;
+}
