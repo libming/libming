@@ -57,6 +57,11 @@ else
 	NOVAR_SHLIBEXT=".so"
 fi
 
+MACHINE=`uname -m`
+if test "$MACHINE" = "x86_64"; then
+	CFLAGS="$CFLAGS -fPIC"
+fi
+
 AC_SUBST(SHLIBLDFLAGS)
 AC_SUBST(SHLIBEXT)
 AC_SUBST(EXTRA_OBJS)
