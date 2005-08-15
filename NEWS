@@ -1,0 +1,15 @@
+Changes since 0.3beta1
+
+        * C# support
+        * Garbage collection support
+        * C++ / PHP / Java extensions fixes
+        * Autotools / configure support
+        * New Fromswf() function - include external SWFs as MovieClip
+		- is this exported (can't find in ming.h) ?
+	* Command line actionscript compiler
+	* Decompiler redesign
+        * Fixes and cleanups all over the place
+
+0.3beta1 - 2004-02-02
+
+0.2a - ???
