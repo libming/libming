@@ -167,5 +167,5 @@ typedef enum
 
 /* action.c */
 extern const char *actionName(Action header);
-extern void outputSWF_ACTION(SWF_ACTION *act);
+extern void outputSWF_ACTION(int n,SWF_ACTION *act);
 #endif /* SWF_ACTION_H_INCLUDED */

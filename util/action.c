@@ -30,6 +30,41 @@ outputSWFACTION_CONSTANTPOOL (SWF_ACTION *act)
 }
 
 void
+outputSWFACTION_STOREREGISTER (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONSTOREREGISTER);
+
+  printf ("  Length: %d\n", sact->Length);
+  printf ("  Register: %d\n", sact->Register);
+}
+
+void
+outputSWFACTION_IF (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONIF);
+  int i;
+
+  printf ("  Length: %d\n", sact->Length);
+  printf ("  BranchOffset: %d\n", sact->BranchOffset);
+  printf ("  %d Action\n", sact->numActions);
+  printf ("  ****IF-begin\n");
+  for(i=0;i<sact->numActions;i++)
+  {
+	outputSWF_ACTION (i,&(sact->Actions[i]));
+  }
+  printf ("  ****IF-end\n");
+}
+
+void
+outputSWFACTION_JUMP (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONJUMP);
+
+  printf ("  Length: %d\n", sact->Length);
+  printf ("  BranchOffset: %d\n", sact->BranchOffset);
+}
+
+void
 outputSWFACTION_WITH (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONWITH);
@@ -37,11 +72,63 @@ outputSWFACTION_WITH (SWF_ACTION *act)
 
   printf ("  Length: %d\n", sact->Length);
   printf ("  Size: %d\n", sact->Size);
+  printf ("  ****WITH-begin\n");
   for(i=0;i<sact->numActions;i++)
   {
-	outputSWF_ACTION (&(sact->Actions[i]));
+	outputSWF_ACTION (i,&(sact->Actions[i]));
   }
+  printf ("  ****WITH-end\n");
 }
+
+void
+outputSWFACTION_DEFINEFUNCTION (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION);
+  int i;
+
+  printf ("  Length: %d\n", sact->Length);
+  printf ("  Name: %s\n", sact->FunctionName);
+  printf ("  NumParams: %d\n", sact->NumParams);
+  for(i=0;i<sact->NumParams;i++)
+  {
+	printf("    [%2.2d] %s\n", i,
+			sact->Params[i] );
+  }
+  printf ("  CodeSize: %d\n", sact->CodeSize);
+  printf ("  %d Action\n", sact->numActions);
+  printf ("  ****FUN-begin\n");
+  for(i=0;i<sact->numActions;i++)
+  {
+	outputSWF_ACTION (i,&(sact->Actions[i]));
+  }
+  printf ("  ****FUN-end\n");
+}
+
+void
+outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION2);
+  int i;
+
+  printf ("  Length: %d\n", sact->Length);
+  printf ("  Name: %s\n", sact->FunctionName);
+  printf ("  NumParams: %d\n", sact->NumParams);
+  for(i=0;i<sact->NumParams;i++)
+  {
+	printf("    [%2.2d] %d %s\n", i,
+			sact->Params[i].Register,
+			sact->Params[i].ParamName );
+  }
+  printf ("  CodeSize: %d\n", sact->CodeSize);
+  printf ("  %d Action\n", sact->numActions);
+  printf ("  ****FUN2-begin\n");
+  for(i=0;i<sact->numActions;i++)
+  {
+	outputSWF_ACTION (i,&(sact->Actions[i]));
+  }
+  printf ("  ****FUN2-end\n");
+}
+
 
 void
 outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
@@ -71,7 +158,7 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   		printf ("  Double: %g\n", act->Double);
 		break;
 	  case 7: /* INTEGER */
-  		printf ("  Integer: %d\n", act->Integer);
+  		printf ("  Integer: %ld\n", act->Integer);
 		break;
 	  case 8: /* CONSTANT8 */
   		printf ("  Constant: %d %s\n", act->Constant8, pool[act->Constant8]);
@@ -145,8 +232,8 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_CHR),
   ActionType (SWFACTION_MBORD),
   ActionType (SWFACTION_MBCHR),
-  ActionType (SWFACTION_JUMP),
-  ActionType (SWFACTION_IF),
+  ActionTypeLong (SWFACTION_JUMP),
+  ActionTypeLong (SWFACTION_IF),
   ActionType (SWFACTION_CALLFRAME),
   ActionType (SWFACTION_GETVARIABLE),
   ActionType (SWFACTION_SETVARIABLE),
@@ -167,7 +254,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_CALLFUNCTION),
   ActionType (SWFACTION_CALLMETHOD),
   ActionTypeLong (SWFACTION_CONSTANTPOOL),
-  ActionType (SWFACTION_DEFINEFUNCTION),
+  ActionTypeLong (SWFACTION_DEFINEFUNCTION),
   ActionType (SWFACTION_DEFINELOCAL),
   ActionType (SWFACTION_DEFINELOCAL2),
   ActionType (SWFACTION_DELETE),
@@ -199,7 +286,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_PUSHDUP),
   ActionType (SWFACTION_RETURN),
   ActionType (SWFACTION_STACKSWAP),
-  ActionType (SWFACTION_STOREREGISTER),
+  ActionTypeLong (SWFACTION_STOREREGISTER),
   /* v6 actions */
   ActionType (SWFACTION_INSTANCEOF),
   ActionType (SWFACTION_ENUMERATE2),
@@ -207,7 +294,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_GREATER),
   ActionType (SWFACTION_STRINGGREATER),
   /* v7 actions */
-  ActionType (SWFACTION_DEFINEFUNCTION2),
+  ActionTypeLong (SWFACTION_DEFINEFUNCTION2),
   ActionType (SWFACTION_EXTENDS),
   ActionType (SWFACTION_CASTOP),
   ActionType (SWFACTION_IMPLEMENTSOP),
@@ -234,7 +321,7 @@ actionName (Action header)
 }
 
 void
-outputSWF_ACTION (SWF_ACTION *act)
+outputSWF_ACTION (int n, SWF_ACTION *act)
 {
   struct SWF_ACTIONRECORD *action = (struct SWF_ACTIONRECORD *)act;
   int i;
@@ -243,7 +330,8 @@ outputSWF_ACTION (SWF_ACTION *act)
     {
       if (actions[i].type == action->ActionCode)
       {
-  	printf ("  Action: %x %s\n", action->ActionCode, actionName (action->ActionCode));
+  	printf ("  Action: %d %s\n", n, actionName (action->ActionCode));
+  	printf ("  Offset: %x\n", action->Offset );
   	if (actions[i].func != NULL )
   	{
 	  	actions[i].func(act);

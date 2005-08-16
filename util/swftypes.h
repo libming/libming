@@ -26,6 +26,7 @@ typedef double		DOUBLE;	/* 64-bit IEEE double-precision little endian double val
 struct SWF_ACTIONRECORD {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 };
 
 /* v3 actions */
@@ -33,12 +34,14 @@ struct SWF_ACTIONRECORD {
 struct SWF_ACTIONGOTOFRAME {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	WORD	Frame;
 };
 
 struct SWF_ACTIONGETURL {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	STRING	UrlString;
 	STRING	TargetString;
 };
@@ -70,6 +73,7 @@ struct SWF_ACTIONSTOPSOUNDS {
 struct SWF_ACTIONWAITFORFRAME {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	WORD	Frame;
 	BYTE	SkipCount;
 };
@@ -77,12 +81,14 @@ struct SWF_ACTIONWAITFORFRAME {
 struct SWF_ACTIONSETTARGET {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	STRING	TargetName;
 };
 
 struct SWF_ACTIONGOTOLABEL {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	STRING	FrameLabel;
 };
 
@@ -91,6 +97,7 @@ struct SWF_ACTIONGOTOLABEL {
 struct SWF_ACTIONPUSHPARAM {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI8	Type;
 	union {
 		STRING	String;
@@ -107,6 +114,7 @@ struct SWF_ACTIONPUSHPARAM {
 struct SWF_ACTIONPUSH {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI16	NumParam;
 	struct SWF_ACTIONPUSHPARAM *Params;
 };
@@ -203,18 +211,23 @@ struct SWF_ACTIONMBASCIITOCHAR {
 struct SWF_ACTIONJUMP {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	WORD	BranchOffset;
 };
 
 struct SWF_ACTIONIF {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	WORD	BranchOffset;
+	int	numActions;
+	union SWF_ACTION *Actions;
 };
 
 struct SWF_ACTIONCALL {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 };
 
 struct SWF_ACTIONGETVARIABLE {
@@ -228,6 +241,7 @@ struct SWF_ACTIONSETVARIABLE {
 struct SWF_ACTIONGETURL2 {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	union {
 		struct {
 			UI8	SendVarsMethod:2;
@@ -242,6 +256,7 @@ struct SWF_ACTIONGETURL2 {
 struct SWF_ACTIONGOTOFRAME2 {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	union {
 		struct {
 			UI8	Reserved:6;
@@ -284,6 +299,7 @@ struct SWF_ACTIONENDDRAG {
 struct SWF_ACTIONWAITFORFRAME2 {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI8	SkipCount;
 };
 
@@ -313,6 +329,7 @@ struct SWF_ACTIONCALLMETHOD {
 struct SWF_ACTIONCONSTANTPOOL {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI16	Count;
 	STRING	*ConstantPool;
 };
@@ -320,6 +337,7 @@ struct SWF_ACTIONCONSTANTPOOL {
 struct SWF_ACTIONDEFINEFUNCTION {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	STRING	FunctionName;
 	WORD	NumParams;
 	STRING	*Params;
@@ -331,6 +349,7 @@ struct SWF_ACTIONDEFINEFUNCTION {
 struct SWF_ACTIONWITH {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI16	Size;
 	int	numActions;
 	union SWF_ACTION *Actions;
@@ -339,6 +358,7 @@ struct SWF_ACTIONWITH {
 struct SWF_ACTIONSTOREREGISTER {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI8	Register;
 };
 
@@ -372,6 +392,7 @@ struct REGISTERPARAM {
 struct SWF_ACTIONDEFINEFUNCTION2 {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	STRING	FunctionName;
 	UI16	NumParams;
 	UI8	RegisterCount;
@@ -394,6 +415,7 @@ struct SWF_ACTIONDEFINEFUNCTION2 {
 struct SWF_ACTIONTRY {
 	UI8	ActionCode;
 	UI16	Length;
+	UI16	Offset;
 	UI8	Reserved:5;
 	UI8	CatchInRegisterFlag:1;
 	UI8	FinallyBlockFlag:1;

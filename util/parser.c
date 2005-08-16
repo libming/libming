@@ -125,9 +125,9 @@ parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
   bcarec->Actions =
     (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
   bcarec->numActions = 0;
-  while ( parseSWF_ACTIONRECORD (f, &(bcarec->Actions[bcarec->numActions++]) ) ) {
+  while ( parseSWF_ACTIONRECORD (f, &(bcarec->numActions), bcarec->Actions) ) {
       bcarec->Actions = (SWF_ACTION *) realloc (bcarec->Actions,
-							 (bcarec->
+							 (++bcarec->
 							  numActions +
 							  1) *
 							 sizeof
@@ -305,9 +305,9 @@ parseSWF_CLIPACTIONRECORD (FILE * f, struct SWF_CLIPACTIONRECORD *carec)
   carec->numActions = 0;
 
   while ( fileOffset < end ) {
-      parseSWF_ACTIONRECORD (f, &(carec->Actions[carec->numActions++]) );
+      parseSWF_ACTIONRECORD (f, &(carec->numActions), carec->Actions);
       carec->Actions = (SWF_ACTION *) realloc (carec->Actions,
-							 (carec->
+							 (++carec->
 							  numActions +
 							  1) *
 							 sizeof
@@ -715,21 +715,28 @@ parseSWF_SHAPEWITHSTYLE (FILE * f, SWF_SHAPEWITHSTYLE * shape, int level)
 	act=(struct acttype *)action;
 
 int
-parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
+parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 {
+	int thisaction = *thisactionp;
+	SWF_ACTION *action = &(actions[thisaction]);
+	//fprintf(stderr,"ACTION[%d] Offset %d\n", thisaction, fileOffset );
+
+	action->SWF_ACTIONRECORD.Offset = fileOffset; /* remember where it came from */
 	if( (action->SWF_ACTIONRECORD.ActionCode = readUInt8(f)) == SWFACTION_END )
 		return 0;
 	/*
 	 * Actions without the high bit set take no additional
 	 * arguments, so we are done for these types.
 	 */
-	if( !(action->SWF_ACTIONRECORD.ActionCode&0x80) )
+	if( !(action->SWF_ACTIONRECORD.ActionCode&0x80) ) {
+		action->SWF_ACTIONRECORD.Length = 1; /* Fill in the size for later use */
 		return 1;
+	}
 
 	action->SWF_ACTIONRECORD.Length = 0; /* make valgrind happy */
 	/*
 	 * Actions with the high bit set take additional
-	 * arguments, so we have to parse each on uniquely.
+	 * arguments, so we have to parse each one uniquely.
 	 */
 	switch( action->SWF_ACTIONRECORD.ActionCode ) {
 		/* v3 actions */
@@ -821,6 +828,7 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		{
 		ACT_BEGIN_NOLEN(SWF_ACTIONNOT)
 		act->Boolean = readUInt32(f);
+		fprintf(stderr,"NOT param: %d\n", act->Boolean );
 		break;
 		}
 	case SWFACTION_CALLFRAME:
@@ -838,7 +846,47 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 	case SWFACTION_IF:
 		{
 		ACT_BEGIN(SWF_ACTIONIF)
+		int i,j,k, curroffset;
 		act->BranchOffset = readUInt16(f);
+		/*
+		 * Set curroffset to point to the next action so that an
+		 * offset of zero matches it.
+		 */
+		curroffset=(action->SWF_ACTIONRECORD.Offset-actions[0].SWF_ACTIONRECORD.Offset)+
+			    action->SWF_ACTIONRECORD.Length+3; /* Action + Length bytes not included in the length */
+		if( act->BranchOffset < 0 ) {
+			/*
+			 * We are branching to records that we already have in the array. Just
+			 * allocate new space for the if clause, and copy the records there, and then
+			 * fix the count of records in actions[], and put this record at the new
+			 * end of actions[].
+			 */
+		    for(i=0;i<=thisaction;i++) {
+			if( (actions[i].SWF_ACTIONRECORD.Offset-actions[0].SWF_ACTIONRECORD.Offset) == curroffset+act->BranchOffset ) break;
+		    }
+		    if( i>=thisaction ) {
+			    fprintf(stderr,"Failed to find branch target!!!\n");
+			    exit(2);
+		    }
+		    act->numActions = thisaction-i;
+		    act->Actions = (union SWF_ACTION *) calloc (act->numActions, sizeof (SWF_ACTION));
+		    for(j=i,k=0;j<thisaction;j++,k++)
+			    act->Actions[k] = actions[j];
+		    *thisactionp = i;
+		} else {
+			/*
+			 * We are branching to records not yet parsed. Just handle this in the
+			 * same manner used for with, try, etc.
+			 */
+		    act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
+		    act->numActions = 0;
+		    while ( (fileOffset-actions[0].SWF_ACTIONRECORD.Offset) < curroffset+act->BranchOffset ) {
+			parseSWF_ACTIONRECORD (f, &(act->numActions), (SWF_ACTION *)act->Actions);
+			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
+							 (++act->numActions + 1) *
+							 sizeof (SWF_ACTION));
+		    }
+		}
 		break;
 		}
 	case SWFACTION_GETURL2:
@@ -897,9 +945,9 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numActions = 0;
 		while ( fileOffset < end2 ) {
-			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
+			parseSWF_ACTIONRECORD (f, &(act->numActions), (SWF_ACTION *)act->Actions);
 			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
-							 (act->numActions + 1) *
+							 (++act->numActions + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 		break;
@@ -913,9 +961,9 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numActions = 0;
 		while ( fileOffset < end ) {
-			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
+			parseSWF_ACTIONRECORD (f, &(act->numActions), (SWF_ACTION *)act->Actions);
 			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
-							 (act->numActions + 1) *
+							 (++act->numActions + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 		break;
@@ -958,9 +1006,9 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numActions = 0;
 		while ( fileOffset < end2 ) {
-			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->Actions[act->numActions++]) );
+			parseSWF_ACTIONRECORD (f, &(act->numActions), (SWF_ACTION *)act->Actions);
 			act->Actions = (union SWF_ACTION *) realloc (act->Actions,
-							 (act->numActions + 1) *
+							 (++act->numActions + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 		break;
@@ -987,9 +1035,9 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		act->TryActs = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numTryActs = 0;
 		while ( fileOffset < end2 ) {
-			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->TryActs[act->numTryActs++]) );
+			parseSWF_ACTIONRECORD (f, &(act->numTryActs), (SWF_ACTION *)act->TryActs);
 			act->TryActs = (union SWF_ACTION *) realloc (act->TryActs,
-							 (act->numTryActs + 1) *
+							 (++act->numTryActs + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 
@@ -998,9 +1046,9 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		act->CatchActs = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numCatchActs = 0;
 		while ( fileOffset < end2 ) {
-			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->CatchActs[act->numCatchActs++]) );
+			parseSWF_ACTIONRECORD (f, &(act->numCatchActs), (SWF_ACTION *)act->CatchActs);
 			act->CatchActs = (union SWF_ACTION *) realloc (act->CatchActs,
-							 (act->numCatchActs + 1) *
+							 (++act->numCatchActs + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 
@@ -1009,9 +1057,9 @@ parseSWF_ACTIONRECORD(FILE * f, SWF_ACTION *action)
 		act->FinallyActs = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
 		act->numFinallyActs = 0;
 		while ( fileOffset < end2 ) {
-			parseSWF_ACTIONRECORD (f, (SWF_ACTION *)&(act->FinallyActs[act->numFinallyActs++]) );
+			parseSWF_ACTIONRECORD (f, &(act->numFinallyActs), (SWF_ACTION *)act->FinallyActs);
 			act->FinallyActs = (union SWF_ACTION *) realloc (act->FinallyActs,
-							 (act->numFinallyActs + 1) *
+							 (++act->numFinallyActs + 1) *
 							 sizeof (SWF_ACTION));
 		    }
 		break;
@@ -1644,9 +1692,9 @@ parseSWF_DOACTION (FILE * f, int length)
     (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
   parserrec->numActions = 0;
   while ( fileOffset < end ) {
-      parseSWF_ACTIONRECORD (f, &(parserrec->Actions[parserrec->numActions++]) );
+      parseSWF_ACTIONRECORD (f, &(parserrec->numActions), parserrec->Actions );
       parserrec->Actions = (SWF_ACTION *) realloc (parserrec->Actions,
-							 (parserrec->
+							 (++parserrec->
 							  numActions +
 							  1) *
 							 sizeof
@@ -2014,9 +2062,9 @@ parseSWF_INITACTION (FILE * f, int length)
     (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
   parserrec->numActions = 0;
   while ( fileOffset < end ) {
-      parseSWF_ACTIONRECORD (f, &(parserrec->Actions[parserrec->numActions++]) );
+      parseSWF_ACTIONRECORD (f, &(parserrec->numActions), parserrec->Actions);
       parserrec->Actions = (SWF_ACTION *) realloc (parserrec->Actions,
-							 (parserrec->
+							 (++parserrec->
 							  numActions +
 							  1) *
 							 sizeof

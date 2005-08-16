@@ -152,7 +152,7 @@ outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
 #ifdef NODECOMPILE
   printf(" %d Actions\n", bcarec->numActions);
   for(i=0;i<bcarec->numActions;i++)
-  outputSWF_ACTION(&(bcarec->Actions[i]));
+  outputSWF_ACTION(i,&(bcarec->Actions[i]));
 #else
   printf (" %s\n", decompile5Action(bcarec->numActions,bcarec->Actions,0));
 #endif
@@ -194,7 +194,7 @@ outputSWF_CLIPACTIONRECORD (SWF_CLIPACTIONRECORD * carec )
 #ifdef NODECOMPILE
   printf(" %d Actions\n", carec->numActions);
   for(i=0;i<carec->numActions;i++)
-     outputSWF_ACTION(&(carec->Actions[i]));
+     outputSWF_ACTION(i,&(carec->Actions[i]));
 #else
   printf (" %s\n", decompile5Action(carec->numActions,carec->Actions,0));
 #endif
@@ -300,20 +300,27 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
 void
 outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 {
-  printf (" ShapeRecord:\n");
   if (shaperec->EndShape.TypeFlag)
     {
       /* An Edge Record */
       if (shaperec->StraightEdge.StraightEdge == 1)
 	{
 	  /* A Straight Edge Record */
-	  printf ("  Straight EdgeRecord: %d\n",
+	  printf (" Straight EdgeRecord: (%d)",
 		  shaperec->StraightEdge.NumBits);
+	  if( shaperec->StraightEdge.GeneralLineFlag ) {
+		  printf(" - (%ld, %ld)\n",shaperec->StraightEdge.DeltaX,shaperec->StraightEdge.DeltaY);
+	  } else {
+	  	if( shaperec->StraightEdge.VertLineFlag ) 
+		  printf(" - (0, %ld)\n",shaperec->StraightEdge.VLDeltaY);
+		else
+		  printf(" - (%ld, 0)\n",shaperec->StraightEdge.VLDeltaX);
+	  }
 	}
       else
 	{
 	  /* A Curved Edge Record */
-	  printf ("  Curved EdgeRecord: %d", shaperec->CurvedEdge.NumBits);
+	  printf (" Curved EdgeRecord: %d", shaperec->CurvedEdge.NumBits);
 	  printf (" Control(%ld,%ld)", shaperec->CurvedEdge.ControlDeltaX,
 		  shaperec->CurvedEdge.ControlDeltaY);
 	  printf (" Anchor(%ld,%ld)\n", shaperec->CurvedEdge.AnchorDeltaX,
@@ -781,9 +788,9 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 
 	printf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
-	outputSWF_ACTION(&(sblock->Actions[i]));
+	outputSWF_ACTION(i,&(sblock->Actions[i]));
 #else
-	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
+	printf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
 
 }
@@ -1035,9 +1042,9 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 
 	printf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
-	outputSWF_ACTION(&(sblock->Actions[i]));
+	outputSWF_ACTION(i,&(sblock->Actions[i]));
 #else
-	printf (" %s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
+	printf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
 
 }

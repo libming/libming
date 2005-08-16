@@ -16,7 +16,7 @@ extern void parseSWF_LINESTYLE(FILE *f, SWF_LINESTYLE *linestyle, int level);
 extern void parseSWF_LINESTYLEARRAY(FILE *f, SWF_LINESTYLEARRAY *linestyle, int level);
 extern void parseSWF_SHAPE(FILE *f, SWF_SHAPE *shape, int level);
 extern void parseSWF_SHAPEWITHSTYLE(FILE *f, SWF_SHAPEWITHSTYLE *shape, int level);
-extern int parseSWF_ACTIONRECORD(FILE *f, SWF_ACTION *action);
+extern int parseSWF_ACTIONRECORD(FILE *f, int *this, SWF_ACTION *action);
 extern SWF_Parserstruct *parseSWF_CHARACTERSET(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEBITS(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEBITSJPEG2(FILE *f, int length);
