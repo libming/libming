@@ -7,7 +7,8 @@ UTILOBJ = action.o blocktypes.o decompile2.o main.o parser.o read.o
 
 PAGER ?= less
 
-BINARIES = listswf2 listswf2_d swftoperl2 swftophp2 swftopython makeswf
+BINARIES = listswf2 listswf2_d swftoperl2 swftophp2 swftopython makeswf \
+	listaction2 listaction2_d
 
 OLDBINARIES = listswf listfdb makefdb listjpeg swftoperl swftophp \
 	listaction raw2adpcm makeswf listmp3 
@@ -33,6 +34,12 @@ listswf2_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
 
 listswf2: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listswf2
+
+listaction2_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listaction2_d
+
+listaction2: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listaction2
 
 swftoperl2: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
 	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftoperl2

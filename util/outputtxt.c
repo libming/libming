@@ -1088,6 +1088,10 @@ outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
   if (type < 0)
     return;
 
+#if defined(ACTIONONLY)
+  if( type != SWF_DOACTION && type != SWF_INITACTION ) return;
+#endif
+
   printf( "\nOffset: %d (%8.8x)\n", offset, offset );
   printf( "Block type: %d (%s)\n", type, blockName(type) );
   printf( "Block length: %d\n", length );
