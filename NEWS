@@ -9,6 +9,7 @@ Changes since 0.3beta1
 	* Command line actionscript compiler
 	* Decompiler redesign
         * Fixes and cleanups all over the place
+	* Case-sensitive actionscript compiler
 
 0.3beta1 - 2004-02-02
 
