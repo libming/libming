@@ -136,6 +136,7 @@ outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
 #ifdef NODECOMPILE
   int i;
 #endif
+#if !defined(ACTIONONLY)
   printf (" BUTTONCONDACTION: ");
   printf ("  CondActionSize: %d\n", bcarec->CondActionSize);
   printf ("  CondIdleToOverDown: %d ", bcarec->CondIdleToOverDown);
@@ -149,6 +150,7 @@ outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
   printf ("  CondKeyPress: %d ", bcarec->CondKeyPress);
   printf ("  CondOverDownToIdle: %d ", bcarec->CondOverDownToIdle);
   printf ("\n");
+#endif
 #ifdef NODECOMPILE
   printf(" %d Actions\n", bcarec->numActions);
   for(i=0;i<bcarec->numActions;i++)
@@ -188,9 +190,11 @@ outputSWF_CLIPACTIONRECORD (SWF_CLIPACTIONRECORD * carec )
 #ifdef NODECOMPILE
   int i;
 #endif
+#if !defined(ACTIONONLY)
   outputSWF_CLIPEVENTFLAGS (&carec->EventFlag);
   printf(" %ld ActionRecordSize\n", carec->ActionRecordSize);
   printf(" %d KeyCode\n", carec->KeyCode);
+#endif
 #ifdef NODECOMPILE
   printf(" %d Actions\n", carec->numActions);
   for(i=0;i<carec->numActions;i++)
@@ -204,8 +208,10 @@ void
 outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions )
 {
   int i;
+#if !defined(ACTIONONLY)
   outputSWF_CLIPEVENTFLAGS (&clipactions->AllEventFlags);
   printf(" %d NumClipRecords\n", clipactions->NumClipRecords);
+#endif
   for(i=0;i<clipactions->NumClipRecords;i++)
     outputSWF_CLIPACTIONRECORD(&(clipactions->ClipActionRecords[i]));
 }
@@ -475,12 +481,14 @@ outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEBUTTON2);
   int i;
 
+#if !defined(ACTIONONLY)
   printf (" CharacterID: %d\n", sblock->Buttonid);
   printf (" TrackAsMenu: %d\n", sblock->TrackAsMenu);
   printf (" ActionOffset: %d\n", sblock->ActionOffset);
   for(i=0;i<sblock->numCharacters;i++) {
 	  outputSWF_BUTTONRECORD( &(sblock->Characters[i]) );
   }
+#endif
   for(i=0;i<sblock->numActions;i++) {
 	  outputSWF_BUTTONCONDACTION( &(sblock->Actions[i]) );
   }
@@ -913,6 +921,7 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_PLACEOBJECT2);
 
+#if !defined(ACTIONONLY)
   printf(" PlaceFlagHasClipActions %d\n", sblock->PlaceFlagHasClipActions);
   printf(" PlaceFlagHasClipDepth %d\n", sblock->PlaceFlagHasClipDepth);
   printf(" PlaceFlagHasName %d\n", sblock->PlaceFlagHasName);
@@ -936,6 +945,7 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 	  printf( " Name: %s\n", sblock->Name );
   if( sblock->PlaceFlagHasClipDepth )
 	  printf( " ClipDepth: %d\n", sblock->ClipDepth );
+#endif
   if( sblock->PlaceFlagHasClipActions )
 	outputSWF_CLIPACTIONS (&(sblock->ClipActions));
 }
@@ -1089,7 +1099,10 @@ outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
     return;
 
 #if defined(ACTIONONLY)
-  if( type != SWF_DOACTION && type != SWF_INITACTION ) return;
+  if( type != SWF_DOACTION &&
+      type != SWF_INITACTION &&
+      type != SWF_DEFINEBUTTON2 &&
+      type != SWF_PLACEOBJECT2 ) return;
 #endif
 
   printf( "\nOffset: %d (%8.8x)\n", offset, offset );
