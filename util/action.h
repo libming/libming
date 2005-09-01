@@ -97,7 +97,6 @@ typedef enum
   SWFACTION_SHIFTLEFT               = 0x63,
   SWFACTION_SHIFTRIGHT              = 0x64,
   SWFACTION_SHIFTRIGHT2             = 0x65,
-  SWFACTION_STRICTEQ                = 0x66,
 
   SWFACTION_STOREREGISTER           = 0x87,
   SWFACTION_CONSTANTPOOL            = 0x88,

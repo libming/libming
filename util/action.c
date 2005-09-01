@@ -137,7 +137,7 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
-  		printf ("  String: %s\n", act->String);
+  		printf ("  String: '%s'\n", act->String);
 		break;
 	  case 1: /* FLOAT */
   		printf ("  Float: %f\n", act->Float);

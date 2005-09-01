@@ -41,12 +41,14 @@ typedef struct _tree *Tree;
 struct _stack
 {
   struct _stack *next;
-  char type; /* (s)tring, (t)ree, (p)roperty, (b)ranch, (i), (d) */
+  char type; /* (s)tring, (t)ree, (p)roperty, (b)ranch, (i)nt, (d)ouble, (r)register */
+  char seenit;
   union
   {
     const char *string;
     int inum;
     double dnum;
+    int reg;
     Tree tree;
     Property prop;
     int *iptr;
