@@ -652,6 +652,13 @@ SWFMovie_save(SWFMovie movie, const char *filename)
 }
 
 int
+SWFMovie_output_to_stream(SWFMovie movie, FILE *fp)
+{
+    return SWFMovie_output(movie,fileOutputMethod,fp);
+}
+
+
+int
 completeSWFImportCharacter(SWFBlock block)
 {	block->type = SWF_UNUSEDBLOCK;
 	return -2;

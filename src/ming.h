@@ -736,6 +736,7 @@ void SWFMovie_namedAnchor(SWFMovie movie, const char *label);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 int SWFMovie_save(SWFMovie movie, const char *filename);
+int SWFMovie_output_to_stream(SWFMovie movie, FILE *fp);
 
   /* deprecated */
   /*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/

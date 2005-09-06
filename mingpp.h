@@ -401,7 +401,7 @@ class SWFMovie
   int output(int level=-1)
   {
     int oldlevel = Ming_setSWFCompression(level);
-    int ret = SWFMovie_output(this->movie, fileOutputMethod, stdout);
+    int ret = SWFMovie_output_to_stream(this->movie, stdout);
     Ming_setSWFCompression(oldlevel);
     return ret;
   }
@@ -409,9 +409,7 @@ class SWFMovie
   int save(const char *filename, int level=-1)
   {
     int oldlevel = Ming_setSWFCompression(level);
-    FILE *fp = fopen(filename, "wb");
-    const int result = SWFMovie_output(this->movie, fileOutputMethod, fp);
-    fclose(fp);
+    int result = SWFMovie_save(this->movie,filename);
     Ming_setSWFCompression(oldlevel);
     return result;
   }
