@@ -12,9 +12,9 @@ int lastIndent = 0;
 
 void error(char *s, ...)
 {
-  fflush(stdout);
   va_list ap;
   va_start(ap, s);
+  fflush(stdout);
   vprintf(s, ap);
   va_end(ap);
   putchar('\n');
@@ -256,7 +256,7 @@ char *readSizedString(FILE *f,int size)
 
 void _dumpBytes(FILE *f, int length, int restore)
 {
-  int j=0, i, k, l=0, offset;
+  int j=0, i, k, l=0, offset=0;
   unsigned char buf[16];
 
   if(length<=0)
