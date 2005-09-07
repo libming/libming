@@ -403,7 +403,7 @@ struct SWF_ACTIONPUSHPARAM * peek()
 /* End Package */
 
 static int gIndent;
-char * decompileActions(int n, SWF_ACTION *actions,int indent);
+void decompileActions(int n, SWF_ACTION *actions,int indent);
 char * decompile5Action(int n, SWF_ACTION *actions,int indent);
 
 /******************************************************************************/
@@ -1409,7 +1409,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
     }
 }
 
-char *
+void
 decompileActions(int n, SWF_ACTION *actions, int indent)
 {
   int i, svindent;
