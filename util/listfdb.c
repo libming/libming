@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "blocktypes.h"
+#include "blocks/blocktypes.h"
 #include "action.h"
 
 #define error(x)	{puts(x); exit(1);}

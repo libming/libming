@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "blocktypes.h"
+#include "blocks/blocktypes.h"
 #include "read.h"
 
 void readRect(FILE *f)
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 
     switch(type)
     {
-      case DEFINEFONT2:
+      case SWF_DEFINEFONT2:
 	    printf("Found DefineFont2 block at offset %i\n", offset);
 	    printf("Block length: %i\n", length);
       	printDefineFont2(f, length);
