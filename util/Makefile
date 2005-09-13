@@ -3,15 +3,12 @@ include ../Makefile.config
 CFLAGS += -I.. -I../src 
 LDFLAGS += -L.. -lming $(LIBS)
 
-UTILOBJ = action.o blocktypes.o decompile2.o main.o parser.o read.o
+UTILOBJ = action.o blocktypes.o decompile.o main.o parser.o read.o
 
 PAGER ?= less
 
-BINARIES = listswf2 listswf2_d swftoperl2 swftophp2 swftopython makeswf \
-	listaction2 listaction2_d
-
-OLDBINARIES = listswf listfdb makefdb listjpeg swftoperl swftophp \
-	listaction raw2adpcm makeswf listmp3 
+BINARIES = listswf listswf_d swftoperl swftophp swftopython makeswf \
+	listaction listaction_d listfdb makefdb listjpeg raw2adpcm makeswf listmp3
 
 BINARIES += $(EXTRA_BINS)
 
@@ -29,23 +26,23 @@ clean:
 ../libming.a:
 	cd ..; $(MAKE) static
 
-listswf2_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listswf2_d
+listswf_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listswf_d
 
-listswf2: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listswf2
+listswf: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listswf
 
-listaction2_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listaction2_d
+listaction_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listaction_d
 
-listaction2: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listaction2
+listaction: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listaction
 
-swftoperl2: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftoperl2
+swftoperl: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftoperl
 
-swftophp2: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPHP $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftophp2
+swftophp: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) -DSWFPHP $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftophp
 
 swftopython: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
 	$(CC) -DSWFPYTHON $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftopython
@@ -53,8 +50,8 @@ swftopython: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
 parser.o: parser.c
 	$(CC) $(CFLAGS) -c parser.c
 
-decompile2.o: decompile.c
-	$(CC) $(CFLAGS) -c decompile.c -o decompile2.o
+decompile.o: decompile.c
+	$(CC) $(CFLAGS) -c decompile.c -o decompile.o
 
 makefdb: blocktypes.o makefdb.c read.o ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) makefdb.c read.o -o makefdb
