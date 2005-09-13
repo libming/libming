@@ -66,7 +66,7 @@ void printMP3Headers(FILE *f)
 {
   unsigned long flags;
   int frameLen, numFrames = 0;
-  int bitrate, bitrate_idx, samplerate, samplerate_idx;
+  int bitrate=0, bitrate_idx, samplerate=0, samplerate_idx;
   int version, layer, channels, padding;
   int bitrateSum = 0;
   int length;
