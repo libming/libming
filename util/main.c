@@ -29,7 +29,7 @@ char *filename;
 char tmp_name[PATH_MAX];
 FILE *tempfile;
 
-static int m_version = { 0 };
+int verbose = 0;
 
 void silentSkipBytes(FILE *f, int length)
 {
@@ -142,13 +142,13 @@ main (int argc, char *argv[])
   SWF_Parserstruct *blockp;
   FILE *f;
   char first;
-  int block, type, blockstart, blockoffset, length, noactions = 0, nextFrame=0;
+  int block, type, blockstart, blockoffset, length, nextFrame=0;
   int compressed = 0;
 
   setbuf(stdout,NULL);
-  if (argc == 3 && strcmp (argv[1], "-a") == 0)
+  if (argc == 3 && strcmp (argv[1], "-v") == 0)
     {
-      noactions = 1;
+      verbose = 1;
       --argc;
       ++argv;
     }
@@ -192,15 +192,6 @@ main (int argc, char *argv[])
 
 	m.rate = readUInt8 (f) / 256.0 + readUInt8 (f);
 	m.nFrames = readUInt16 (f);
-
-	if (noactions)
-	{
-		m_version = 0;
-	}
-	else
-	{
-		m_version = m.version;
-	}
 
 	outputHeader(&m);
 

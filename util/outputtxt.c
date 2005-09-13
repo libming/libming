@@ -6,6 +6,8 @@
 
 extern const char *blockName (SWFBlocktype header);
 
+extern int verbose;
+
 /*
  * This file contains output functions that can display the different SWF block
  * types in a human readable format.
@@ -82,22 +84,22 @@ static int numOutputs = sizeof (outputs) / sizeof (struct SWFOutput);
 void
 outputSWF_RGBA (SWF_RGBA * rgb, char *pname)
 {
-  printf (" RGBA: ");
-  printf (" Red:   %3d ", rgb->red);
-  printf (" Green: %3d ", rgb->green);
-  printf (" Blue:  %3d ", rgb->blue);
-  printf (" Alpha  %3d\n", rgb->alpha);
+  printf (" RGBA: (");
+  printf ("%2x,", rgb->red);
+  printf ("%2x,", rgb->green);
+  printf ("%2x,", rgb->blue);
+  printf ("%2x)\n", rgb->alpha);
 }
 
 void
 outputSWF_RECT (SWF_RECT * rect)
 {
   printf (" RECT: ");
-  printf (" Nbits: %2d ", rect->Nbits);
-  printf (" Xmin: %6ld ", rect->Xmin);
-  printf (" Xmax: %6ld ", rect->Xmax);
-  printf (" Ymin: %6ld ", rect->Ymin);
-  printf (" Ymax: %6ld\n", rect->Ymax);
+  printf (" (%ld,", rect->Xmin);
+  printf ("%ld)x", rect->Ymin);
+  printf ("(%ld,", rect->Xmax);
+  printf ("%ld)", rect->Ymax);
+  printf (":%d\n", rect->Nbits);
 }
 
 void
@@ -263,6 +265,8 @@ void
 outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray, char *name)
 {
   int count, i;
+
+  if( !verbose ) return;
   printf (" FillStyleArray: ");
   printf (" FillStyleCount: %6d ", fillstylearray->FillStyleCount);
   printf (" FillStyleCountExtended: %6d\n",
@@ -288,7 +292,10 @@ outputSWF_LINESTYLE (SWF_LINESTYLE * fillstyle, char *name, int i)
 void
 outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
 {
+
   int count, i;
+
+  if( !verbose ) return;
   printf (" LineStyleArray: ");
   printf (" LineStyleCount: %6d ", linestylearray->LineStyleCount);
   printf (" LineStyleCountExtended: %6d\n",
@@ -341,27 +348,27 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	  printf ("  ENDSHAPE\n");
 	  return;
 	}
-      printf ("  StyleChangeRecord:\n");
-      printf ("   StateNewStyles: %d", shaperec->StyleChange.StateNewStyles);
+      printf (" StyleChangeRecord:\n");
+      printf ("  StateNewStyles: %d", shaperec->StyleChange.StateNewStyles);
       printf (" StateLineStyle: %d ", shaperec->StyleChange.StateLineStyle);
       printf (" StateFillStyle1: %d\n",
 	      shaperec->StyleChange.StateFillStyle1);
-      printf ("   StateFillStyle0: %d",
+      printf ("  StateFillStyle0: %d",
 	      shaperec->StyleChange.StateFillStyle0);
       printf (" StateMoveTo: %d\n", shaperec->StyleChange.StateMoveTo);
 
       if (shaperec->StyleChange.StateLineStyle) {
-	  printf (" LineStyle: %ld\n", shaperec->StyleChange.LineStyle);
+	  printf ("   LineStyle: %ld\n", shaperec->StyleChange.LineStyle);
       }
       if (shaperec->StyleChange.StateFillStyle1) {
-	  printf (" FillStyle1: %ld\n", shaperec->StyleChange.FillStyle1);
+	  printf ("   FillStyle1: %ld\n", shaperec->StyleChange.FillStyle1);
       }
       if (shaperec->StyleChange.StateFillStyle0) {
-	  printf (" FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
+	  printf ("   FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
       }
       if (shaperec->StyleChange.StateMoveTo)
 	{
-	  printf (" MoveBits: %d ", shaperec->StyleChange.MoveBits);
+	  printf ("   MoveBits: %d ", shaperec->StyleChange.MoveBits);
 	  printf (" MoveDeltaX: %ld ", shaperec->StyleChange.MoveDeltaX);
 	  printf (" MoveDeltaY: %ld\n", shaperec->StyleChange.MoveDeltaY);
 	}
@@ -1105,9 +1112,10 @@ outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
       type != SWF_PLACEOBJECT2 ) return;
 #endif
 
-  printf( "\nOffset: %d (%8.8x)\n", offset, offset );
+  printf( "\nOffset: %d (0x%4.4x)\n", offset, offset );
   printf( "Block type: %d (%s)\n", type, blockName(type) );
   printf( "Block length: %d\n", length );
+  printf( "\n" );
 
   for (i = 0; i < numOutputs; i++)
     {

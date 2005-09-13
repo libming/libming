@@ -1,9 +1,11 @@
 #include "action.h"
 #include "parser.h"
 
+extern int verbose;
+
 typedef void (*outputfunc) (SWF_ACTION *act);
 
-char **pool;
+STRING *pool;
 
 struct SWFActionName
 {
@@ -15,17 +17,25 @@ struct SWFActionName
 #define OUT_BEGIN(block) \
 	        struct block *sact = (struct block *)act;
 
+static int indent = 1;
+
+#define INDENT {int idt;for(idt=0;idt<indent;idt++)printf("  ");}
+
 void
 outputSWFACTION_CONSTANTPOOL (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONCONSTANTPOOL);
   int i;
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("Length: %d\n", sact->Length);
+  }
   pool=sact->ConstantPool;
   for(i=0;i<sact->Count;i++)
   {
-	  printf ("    [%3.3d] %s\n", i, sact->ConstantPool[i] );
+	  INDENT;
+	  printf ("   [%3.3d] %s\n", i, sact->ConstantPool[i] );
   }
 }
 
@@ -34,7 +44,11 @@ outputSWFACTION_STOREREGISTER (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONSTOREREGISTER);
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+  INDENT;
   printf ("  Register: %d\n", sact->Register);
 }
 
@@ -44,15 +58,26 @@ outputSWFACTION_IF (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONIF);
   int i;
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+  INDENT;
   printf ("  BranchOffset: %d\n", sact->BranchOffset);
+  INDENT;
   printf ("  %d Action\n", sact->numActions);
-  printf ("  ****IF-begin\n");
+  if( verbose ) {
+      INDENT;
+      printf ("  ****IF-begin\n");
+  }
   for(i=0;i<sact->numActions;i++)
   {
 	outputSWF_ACTION (i,&(sact->Actions[i]));
   }
-  printf ("  ****IF-end\n");
+  if( verbose ) {
+      INDENT;
+      printf ("  ****IF-end\n");
+  }
 }
 
 void
@@ -60,7 +85,11 @@ outputSWFACTION_JUMP (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONJUMP);
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+  INDENT;
   printf ("  BranchOffset: %d\n", sact->BranchOffset);
 }
 
@@ -70,14 +99,24 @@ outputSWFACTION_WITH (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONWITH);
   int i;
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+  INDENT;
   printf ("  Size: %d\n", sact->Size);
-  printf ("  ****WITH-begin\n");
+  if( verbose )
+      INDENT;
+      printf ("  ****WITH-begin\n");
+  indent++;
   for(i=0;i<sact->numActions;i++)
   {
 	outputSWF_ACTION (i,&(sact->Actions[i]));
   }
-  printf ("  ****WITH-end\n");
+  if( verbose )
+      INDENT;
+      printf ("  ****WITH-end\n");
+  indent--;
 }
 
 void
@@ -86,22 +125,36 @@ outputSWFACTION_DEFINEFUNCTION (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION);
   int i;
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+  INDENT;
   printf ("  Name: %s\n", sact->FunctionName);
+  INDENT;
   printf ("  NumParams: %d\n", sact->NumParams);
   for(i=0;i<sact->NumParams;i++)
   {
-	printf("    [%2.2d] %s\n", i,
+        INDENT;
+	printf("   [%2.2d] %s\n", i,
 			sact->Params[i] );
   }
+  INDENT;
   printf ("  CodeSize: %d\n", sact->CodeSize);
+  INDENT;
   printf ("  %d Action\n", sact->numActions);
-  printf ("  ****FUN-begin\n");
+  if( verbose ) {
+      INDENT;
+      printf ("  ****FUN-begin\n");
+  }
   for(i=0;i<sact->numActions;i++)
   {
 	outputSWF_ACTION (i,&(sact->Actions[i]));
   }
-  printf ("  ****FUN-end\n");
+  if( verbose ) {
+      INDENT;
+      printf ("  ****FUN-end\n");
+  }
 }
 
 void
@@ -110,23 +163,37 @@ outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION2);
   int i;
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+  INDENT;
   printf ("  Name: %s\n", sact->FunctionName);
+  INDENT;
   printf ("  NumParams: %d\n", sact->NumParams);
   for(i=0;i<sact->NumParams;i++)
   {
-	printf("    [%2.2d] %d %s\n", i,
+        INDENT;
+	printf("   [%2.2d] %d %s\n", i,
 			sact->Params[i].Register,
 			sact->Params[i].ParamName );
   }
+  INDENT;
   printf ("  CodeSize: %d\n", sact->CodeSize);
+  INDENT;
   printf ("  %d Action\n", sact->numActions);
-  printf ("  ****FUN2-begin\n");
+  if( verbose ) {
+      INDENT;
+      printf ("  ****FUN2-begin\n");
+  }
   for(i=0;i<sact->numActions;i++)
   {
 	outputSWF_ACTION (i,&(sact->Actions[i]));
   }
-  printf ("  ****FUN2-end\n");
+  if( verbose ) {
+      INDENT;
+      printf ("  ****FUN2-end\n");
+  }
 }
 
 
@@ -161,10 +228,10 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   		printf ("  Integer: %ld\n", act->Integer);
 		break;
 	  case 8: /* CONSTANT8 */
-  		printf ("  Constant: %d %s\n", act->Constant8, pool[act->Constant8]);
+  		printf ("  Constant: %d \"%s\"\n", act->Constant8, pool[act->Constant8]);
 		break;
 	  case 9: /* CONSTANT16 */
-  		printf ("  Constant: %d %s\n", act->Constant16, pool[act->Constant16]);
+  		printf ("  Constant: %d \"%s\"\n", act->Constant16, pool[act->Constant16]);
 		break;
 	  default: 
   		printf ("  Unknown type: %d\n", act->Type);
@@ -178,10 +245,12 @@ outputSWFACTION_PUSH (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONPUSH);
   int i;
 
-  printf ("  Length: %d\n", sact->Length);
+  if( verbose )
+      printf ("  Length: %d\n", sact->Length);
   for(i=0;i<sact->NumParam;i++)
   {
-	  printf ("    [%3.3d] ", i );
+	  INDENT;
+	  printf ("   [%3.3d] ", i );
 	  outputSWFACTION_PUSHPARAM(&(sact->Params[i]));
   }
 }
@@ -330,15 +399,24 @@ outputSWF_ACTION (int n, SWF_ACTION *act)
     {
       if (actions[i].type == action->ActionCode)
       {
-  	printf ("  Action: %d %s\n", n, actionName (action->ActionCode));
-  	printf ("  Offset: %x\n", action->Offset );
+	INDENT;
+	if( verbose )
+  	    printf ("  Action: %d ", n );
+  	printf ("  %s\n", actionName (action->ActionCode));
+	if( verbose ) {
+	    INDENT;
+  	    printf ("  Offset: %x\n", action->Offset );
+	}
   	if (actions[i].func != NULL )
   	{
 	  	actions[i].func(act);
   	} else {
   		if (action->ActionCode >= 0x80)
   		{
-        		printf ("  Length: %d\n", action->Length);
+			if( verbose ) {
+				INDENT;
+				printf ("  Length: %d\n", action->Length);
+			}
   		}
   	}
       }
