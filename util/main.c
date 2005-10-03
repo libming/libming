@@ -156,7 +156,7 @@ main (int argc, char *argv[])
 
   if (argc < 2)
     {
-      error ("Give me a filename.\n\n\tswftoperl myflash..swf >myflash.pl");
+      error ("Give me a filename.");
     }
 
   if (!(f = fopen (filename, "rb")))
