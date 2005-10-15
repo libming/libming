@@ -8,7 +8,8 @@ UTILOBJ = action.o blocktypes.o decompile.o main.o parser.o read.o
 PAGER ?= less
 
 BINARIES = listswf listswf_d swftoperl swftophp swftopython makeswf \
-	listaction listaction_d listfdb makefdb listjpeg raw2adpcm listmp3
+	   listaction listaction_d listfdb makefdb listjpeg raw2adpcm \
+	   listmp3 gif2dbl gif2mask
 
 BINARIES += $(EXTRA_BINS)
 
