@@ -485,8 +485,8 @@ outputSWF_DEFINEBUTTON (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEBUTTON2);
   int i;
+  OUT_BEGIN (SWF_DEFINEBUTTON2);
 
 #if !defined(ACTIONONLY)
   printf (" CharacterID: %d\n", sblock->Buttonid);
@@ -741,8 +741,8 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINETEXT);
   int i;
+  OUT_BEGIN (SWF_DEFINETEXT);
 
   printf(" CharacterID: %d\n", sblock->CharacterID );
   outputSWF_RECT( &sblock->TextBounds );
@@ -759,8 +759,8 @@ outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINETEXT2);
   int i;
+  OUT_BEGIN (SWF_DEFINETEXT2);
 
   printf(" CharacterID: %d\n", sblock->CharacterID );
   outputSWF_RECT( &sblock->TextBounds );
@@ -797,10 +797,12 @@ outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 void
 outputSWF_DOACTION (SWF_Parserstruct * pblock)
 {
-	OUT_BEGIN (SWF_DOACTION);
 #ifdef NODECOMPILE
 	int i;
+#endif
+	OUT_BEGIN (SWF_DOACTION);
 
+#ifdef NODECOMPILE
 	printf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(i,&(sblock->Actions[i]));
@@ -827,8 +829,9 @@ outputSWF_END (SWF_Parserstruct * pblock)
 void
 outputSWF_EXPORTASSETS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_EXPORTASSETS);
   int i;
+  OUT_BEGIN (SWF_EXPORTASSETS);
+
   printf (" num assets: %d\n", sblock->Count );
   for (i = 0; i < sblock->Count; i++)
     {
@@ -883,8 +886,9 @@ outputSWF_GENCOMMAND (SWF_Parserstruct * pblock)
 void
 outputSWF_IMPORTASSETS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_IMPORTASSETS);
   int i;
+  OUT_BEGIN (SWF_IMPORTASSETS);
+
   printf (" URL: %s\n", sblock->URL );
   printf (" num assets: %d\n", sblock->Count );
   for (i = 0; i < sblock->Count; i++)
@@ -1053,10 +1057,12 @@ outputSWF_SYNCFRAME (SWF_Parserstruct * pblock)
 void
 outputSWF_INITACTION (SWF_Parserstruct * pblock)
 {
-	OUT_BEGIN (SWF_INITACTION);
 #ifdef NODECOMPILE
 	int i;
+#endif
+	OUT_BEGIN (SWF_INITACTION);
 
+#ifdef NODECOMPILE
 	printf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(i,&(sblock->Actions[i]));

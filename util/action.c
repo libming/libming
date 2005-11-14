@@ -24,8 +24,8 @@ static int indent = 1;
 void
 outputSWFACTION_CONSTANTPOOL (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONCONSTANTPOOL);
   int i;
+  OUT_BEGIN(SWF_ACTIONCONSTANTPOOL);
 
   if( verbose ) {
       INDENT;
@@ -55,8 +55,8 @@ outputSWFACTION_STOREREGISTER (SWF_ACTION *act)
 void
 outputSWFACTION_IF (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONIF);
   int i;
+  OUT_BEGIN(SWF_ACTIONIF);
 
   if( verbose ) {
       INDENT;
@@ -96,8 +96,8 @@ outputSWFACTION_JUMP (SWF_ACTION *act)
 void
 outputSWFACTION_WITH (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONWITH);
   int i;
+  OUT_BEGIN(SWF_ACTIONWITH);
 
   if( verbose ) {
       INDENT;
@@ -122,8 +122,8 @@ outputSWFACTION_WITH (SWF_ACTION *act)
 void
 outputSWFACTION_DEFINEFUNCTION (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION);
   int i;
+  OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION);
 
   if( verbose ) {
       INDENT;
@@ -160,8 +160,8 @@ outputSWFACTION_DEFINEFUNCTION (SWF_ACTION *act)
 void
 outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION2);
   int i;
+  OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION2);
 
   if( verbose ) {
       INDENT;
@@ -204,10 +204,10 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
-  		printf ("  String: '%s'\n", act->String);
+  		printf ("  String: '%s'\n", act->p.String);
 		break;
 	  case 1: /* FLOAT */
-  		printf ("  Float: %f\n", act->Float);
+  		printf ("  Float: %f\n", act->p.Float);
 		break;
 	  case 2: /* NULL */
   		printf ("  NULL: \n" );
@@ -216,22 +216,22 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   		printf ("  undefiend:\n" );
 		break;
 	  case 4: /* Register */
-  		printf ("  Register: %d\n", (int)act->RegisterNumber);
+  		printf ("  Register: %d\n", (int)act->p.RegisterNumber);
 		break;
 	  case 5: /* BOOLEAN */
-  		printf ("  Boolean: %d\n", act->Boolean);
+  		printf ("  Boolean: %d\n", act->p.Boolean);
 		break;
 	  case 6: /* DOUBLE */
-  		printf ("  Double: %g\n", act->Double);
+  		printf ("  Double: %g\n", act->p.Double);
 		break;
 	  case 7: /* INTEGER */
-  		printf ("  Integer: %ld\n", act->Integer);
+  		printf ("  Integer: %ld\n", act->p.Integer);
 		break;
 	  case 8: /* CONSTANT8 */
-  		printf ("  Constant: %d \"%s\"\n", act->Constant8, pool[act->Constant8]);
+  		printf ("  Constant: %d \"%s\"\n", act->p.Constant8, pool[act->p.Constant8]);
 		break;
 	  case 9: /* CONSTANT16 */
-  		printf ("  Constant: %d \"%s\"\n", act->Constant16, pool[act->Constant16]);
+  		printf ("  Constant: %d \"%s\"\n", act->p.Constant16, pool[act->p.Constant16]);
 		break;
 	  default: 
   		printf ("  Unknown type: %d\n", act->Type);
@@ -242,8 +242,8 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
 void
 outputSWFACTION_PUSH (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONPUSH);
   int i;
+  OUT_BEGIN(SWF_ACTIONPUSH);
 
   if( verbose )
       printf ("  Length: %d\n", sact->Length);

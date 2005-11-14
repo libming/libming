@@ -108,7 +108,7 @@ struct SWF_ACTIONPUSHPARAM {
 		SI32	Integer;
 		UI8	Constant8;
 		UI16	Constant16;
-	};
+	} p;
 };
 
 struct SWF_ACTIONPUSH {
@@ -248,9 +248,9 @@ struct SWF_ACTIONGETURL2 {
 			UI8	Reserved:4;
 			UI8	LoadTargetFlag:1;
 			UI8	LoadVariableFlag:1;
-		};
+		} FlagBits;
 		UI8	Flags;
-	};
+	} f;
 };
 
 struct SWF_ACTIONGOTOFRAME2 {
@@ -262,9 +262,9 @@ struct SWF_ACTIONGOTOFRAME2 {
 			UI8	Reserved:6;
 			UI8	SceneBiasFlag:1;
 			UI8	PlayFlag:1;
-		};
+		} FlagBits;
 		UI8	Flags;
-	};
+	} f;
 	UI16	SceneBias;
 };
 

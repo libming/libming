@@ -136,9 +136,9 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
-                t=malloc(strlen(act->String)+3); /* 2 '"'s and a NULL */
+                t=malloc(strlen(act->p.String)+3); /* 2 '"'s and a NULL */
 		strcpy(t,"\"");
-		strcat(t,act->String);
+		strcat(t,act->p.String);
 		strcat(t,"\"");
   		return t;
 	  case 2: /* NULL */
@@ -146,41 +146,41 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
 	  case 3: /* Undefined */
   		return "undefiend";
 	  case 4: /* REGISTER */
-		if( regs[act->RegisterNumber] &&
-		    regs[act->RegisterNumber]->Type != 4 &&
-		    regs[act->RegisterNumber]->Type != 7 )
-  		    return getName(regs[act->RegisterNumber]);
+		if( regs[act->p.RegisterNumber] &&
+		    regs[act->p.RegisterNumber]->Type != 4 &&
+		    regs[act->p.RegisterNumber]->Type != 7 )
+  		    return getName(regs[act->p.RegisterNumber]);
 		else
                     t=malloc(4); /* Rdd */
-  		    sprintf(t,"R%d", act->RegisterNumber );
+  		    sprintf(t,"R%d", act->p.RegisterNumber );
   		    return t;
 	  case 5: /* BOOLEAN */
-		if( act->Boolean )
+		if( act->p.Boolean )
 			return "true";
 		else
 			return "false";
 	  case 6: /* DOUBLE */
                 t=malloc(10); /* big enough? */
-  		sprintf(t,"%g", act->Double );
+  		sprintf(t,"%g", act->p.Double );
   		return t;
 	  case 7: /* INTEGER */
                 t=malloc(10); /* 32-bit decimal */
-  		sprintf(t,"%ld", act->Integer );
+  		sprintf(t,"%ld", act->p.Integer );
   		return t;
 	  case 8: /* CONSTANT8 */
-                t=malloc(strlen(pool[act->Constant8])+3); /* 2 '"'s and a NULL */
+                t=malloc(strlen(pool[act->p.Constant8])+3); /* 2 '"'s and a NULL */
 		strcpy(t,"\"");
-		strcat(t,pool[act->Constant8]);
+		strcat(t,pool[act->p.Constant8]);
 		strcat(t,"\"");
   		return t;
 	  case 9: /* CONSTANT16 */
-                t=malloc(strlen(pool[act->Constant16])+3); /* 2 '"'s and a NULL */
+                t=malloc(strlen(pool[act->p.Constant16])+3); /* 2 '"'s and a NULL */
 		strcpy(t,"\"");
-		strcat(t,pool[act->Constant16]);
+		strcat(t,pool[act->p.Constant16]);
 		strcat(t,"\"");
   		return t;
 	  case 10: /* VARIABLE */
-  		return act->String;
+  		return act->p.String;
 	  default: 
   		printf ("  Can't get string for type: %d\n", act->Type);
 		break;
@@ -196,13 +196,13 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
-                t=malloc(strlen(act->String)+3); 
+                t=malloc(strlen(act->p.String)+3); 
 		/*
 		strcpy(t,"\"");
-		strcat(t,act->String);
+		strcat(t,act->p.String);
 		strcat(t,"\"");
 		*/
-		strcpy(t,act->String);
+		strcpy(t,act->p.String);
 		if(strlen(t)) /* Not a zero length string */
   			return t;
 		else
@@ -210,19 +210,19 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
 #if 0
 	  case 4: /* REGISTER */
                 t=malloc(4); /* Rdd */
-  		sprintf(t,"R%d", act->RegisterNumber );
+  		sprintf(t,"R%d", act->p.RegisterNumber );
   		return t;
 #endif
 	  case 8: /* CONSTANT8 */
-                t=malloc(strlen(pool[act->Constant8])+1);
-		strcpy(t,pool[act->Constant8]);
+                t=malloc(strlen(pool[act->p.Constant8])+1);
+		strcpy(t,pool[act->p.Constant8]);
 		if(strlen(t)) /* Not a zero length string */
   			return t;
 		else
   			return "_this";
 	  case 9: /* CONSTANT16 */
-                t=malloc(strlen(pool[act->Constant16])+1);
-		strcpy(t,pool[act->Constant16]);
+                t=malloc(strlen(pool[act->p.Constant16])+1);
+		strcpy(t,pool[act->p.Constant16]);
 		if(strlen(t)) /* Not a zero length string */
   			return t;
 		else
@@ -241,11 +241,11 @@ getInt(struct SWF_ACTIONPUSHPARAM *act)
 	  case 2: /* NULL */
   		return 0;
 	  case 4: /* REGISTER */
-  		return getInt(regs[act->RegisterNumber]);
+  		return getInt(regs[act->p.RegisterNumber]);
 	  case 6: /* DOUBLE */
-  		return (int)act->Double;
+  		return (int)act->p.Double;
 	  case 7: /* INTEGER */
-  		return act->Integer;
+  		return act->p.Integer;
 	  default: 
   		printf ("  Can't get int for type: %d\n", act->Type);
 		break;
@@ -291,7 +291,7 @@ newVar(char *var)
 
 	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
 	v->Type=10; /* VARIABLE */
-	v->String = var;
+	v->p.String = var;
 	return v;
 }
 
@@ -302,9 +302,9 @@ newVar2(char *var,char *var2)
 
 	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
 	v->Type=10; /* VARIABLE */
-	v->String = malloc(strlen(var)+strlen(var2)+1);
-	strcpy(v->String,var);
-	strcat(v->String,var2);
+	v->p.String = malloc(strlen(var)+strlen(var2)+1);
+	strcpy(v->p.String,var);
+	strcat(v->p.String,var2);
 	return v;
 }
 
@@ -315,10 +315,10 @@ newVar3(char *var,char *var2, char *var3)
 
 	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
 	v->Type=10; /* VARIABLE */
-	v->String = malloc(strlen(var)+strlen(var2)+strlen(var3)+1);
-	strcpy(v->String,var);
-	strcat(v->String,var2);
-	strcat(v->String,var3);
+	v->p.String = malloc(strlen(var)+strlen(var2)+strlen(var3)+1);
+	strcpy(v->p.String,var);
+	strcat(v->p.String,var2);
+	strcat(v->p.String,var3);
 	return v;
 }
 
@@ -368,7 +368,7 @@ pushvar2( struct SWF_ACTIONPUSHPARAM *var, struct SWF_ACTIONPUSHPARAM *mem)
 	strcpy(vname,varname);
 	strcat(vname,".");
 	strcat(vname,memname);
-	var->String = vname;
+	var->p.String = vname;
 	var->Type = 10; /* VARIABLE */
 	t->type = 'v';
 	t->val = var;
@@ -480,12 +480,12 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   {
 	  case 0: /* STRING */
 		if( wantstring )
-  		  printf ("\"%s\"", act->String);
+  		  printf ("\"%s\"", act->p.String);
 		else
-  		  printf ("%s", act->String);
+  		  printf ("%s", act->p.String);
 		break;
 	  case 1: /* FLOAT */
-  		printf ("%f", act->Float);
+  		printf ("%f", act->p.Float);
 		break;
 	  case 2: /* NULL */
   		printf ("NULL" );
@@ -494,35 +494,35 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   		printf ("undefiend" );
 		break;
 	  case 4: /* Register */
-		if( regs[act->RegisterNumber] ) {
+		if( regs[act->p.RegisterNumber] ) {
   		  printf ("%s", getName(act));
 		} else {
-  		  printf ("R%d", (int)act->RegisterNumber);
+  		  printf ("R%d", (int)act->p.RegisterNumber);
 		}
 		break;
 	  case 5: /* BOOLEAN */
-  		printf ("  %d\n", act->Boolean);
+  		printf ("  %d\n", act->p.Boolean);
 		break;
 	  case 6: /* DOUBLE */
-  		printf ("%g", act->Double);
+  		printf ("%g", act->p.Double);
 		break;
 	  case 7: /* INTEGER */
-  		printf ("%ld", act->Integer);
+  		printf ("%ld", act->p.Integer);
 		break;
 	  case 8: /* CONSTANT8 */
 		if( wantstring )
-  		  printf ("\"%s\"", pool[act->Constant8]);
+  		  printf ("\"%s\"", pool[act->p.Constant8]);
 		else
-  		  printf ("%s", pool[act->Constant8]);
+  		  printf ("%s", pool[act->p.Constant8]);
 		break;
 	  case 9: /* CONSTANT16 */
 		if( wantstring )
-  		  printf ("\"%s\"", pool[act->Constant16]);
+  		  printf ("\"%s\"", pool[act->p.Constant16]);
 		else
-  		  printf ("%s", pool[act->Constant16]);
+  		  printf ("%s", pool[act->p.Constant16]);
 		break;
 	  case 10: /* VARIABLE */
-  		printf ("%s", act->String);
+  		printf ("%s", act->p.String);
 		break;
 	  default: 
   		printf ("  Unknown type: %d\n", act->Type);
@@ -707,8 +707,8 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 void
 decompilePUSH (SWF_ACTION *act)
 {
-  OUT_BEGIN(SWF_ACTIONPUSH);
   int i;
+  OUT_BEGIN(SWF_ACTIONPUSH);
 
   SanityCheck(SWF_PUSH,
 		act->SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
@@ -770,8 +770,8 @@ decompileDECREMENT(int n, SWF_ACTION *actions,int maxn)
     push(var);
     if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
         (var->Type == 4 /* Register */) &&
-        (actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->RegisterNumber) ) {
-	    regs[var->RegisterNumber] = var; /* Do the STOREREGISTER here */
+        (actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->p.RegisterNumber) ) {
+	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
 	    return 1; /* Eat the StoreRegister that follows */
     }
 
@@ -794,8 +794,8 @@ decompileINCREMENT(int n, SWF_ACTION *actions,int maxn)
     push(var);
     if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
         (var->Type == 4 /* Register */) &&
-        (actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->RegisterNumber) ) {
-	    regs[var->RegisterNumber] = var; /* Do the STOREREGISTER here */
+        (actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->p.RegisterNumber) ) {
+	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
 	    return 1; /* Eat the StoreRegister that follows */
     }
 
@@ -829,7 +829,7 @@ decompileNEWOBJECT(int n, SWF_ACTION *actions,int maxn)
     strcpy(t,"new ");
     strcat(t,objname);
     strcat(t,"()");
-    obj->String=t;
+    obj->p.String=t;
     obj->Type=0; /* STRING */
     numparams = getInt(pop());
     for(i=0;i<numparams;i++) {
@@ -973,8 +973,8 @@ decompileDEFINELOCAL2(int n, SWF_ACTION *actions,int maxn)
 int
 decompileIF(int n, SWF_ACTION *actions,int maxn)
 {
-    OUT_BEGIN2(SWF_ACTIONIF);
     int i=0;
+    OUT_BEGIN2(SWF_ACTIONIF);
 
     /*
      * IF is used in various way to implement different types
@@ -1101,9 +1101,9 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
 int
 decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
 {
-    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
-    struct SWF_ACTIONPUSHPARAM *name = NULL;
     int i;
+    struct SWF_ACTIONPUSHPARAM *name = NULL;
+    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
 
     INDENT
     puts("function ");
@@ -1157,9 +1157,9 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
 int
 decompileDEFINEFUNCTION2(int n, SWF_ACTION *actions,int maxn)
 {
-    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION2);
-    struct SWF_ACTIONPUSHPARAM *name = NULL;
     int i;
+    struct SWF_ACTIONPUSHPARAM *name = NULL;
+    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION2);
 
     INDENT
     /*
@@ -1227,16 +1227,16 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     meth=pop();
     obj=pop();
     nparam=pop();
-    printf("/* %ld params */\n",nparam->Integer);
+    printf("/* %ld params */\n",nparam->p.Integer);
 
     INDENT
     puts(getName(obj));
     puts(".");
     puts(getName(meth));
     puts("(");
-    for(i=0;i<nparam->Integer;i++) {
+    for(i=0;i<nparam->p.Integer;i++) {
         puts(getString(pop()));
-	if( nparam->Integer > i+1 ) puts(",");
+	if( nparam->p.Integer > i+1 ) puts(",");
     }
     puts(");\n");
     push(newVar("funcret"));
@@ -1261,9 +1261,9 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     //decompilePUSHPARAM(meth,0);
     puts(getName(meth));
     puts("(");
-    for(i=0;i<nparam->Integer;i++) {
+    for(i=0;i<nparam->p.Integer;i++) {
     	puts(getString(pop()));
-	if( nparam->Integer > i+1 ) puts(",");
+	if( nparam->p.Integer > i+1 ) puts(",");
     }
     puts(");\n");
 

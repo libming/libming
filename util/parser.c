@@ -719,6 +719,7 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 {
 	int thisaction = *thisactionp;
 	SWF_ACTION *action = &(actions[thisaction]);
+
 	//fprintf(stderr,"ACTION[%d] Offset %d\n", thisaction, fileOffset );
 
 	action->SWF_ACTIONRECORD.Offset = fileOffset; /* remember where it came from */
@@ -777,10 +778,11 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		/* v4 actions */
 	case SWFACTION_PUSH:
 		{
-		ACT_BEGIN(SWF_ACTIONPUSH)
+		int end;
 		struct SWF_ACTIONPUSHPARAM *param;
-		int end = fileOffset + act->Length;
+		ACT_BEGIN(SWF_ACTIONPUSH)
 
+		end = fileOffset + act->Length;
   		act->Params = (struct SWF_ACTIONPUSHPARAM *) calloc (1, sizeof (struct SWF_ACTIONPUSHPARAM));
   		act->NumParam = 0;
   		while ( fileOffset < end ) {
@@ -788,31 +790,31 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 			param->Type = readUInt8(f);
 			switch( param->Type ) {
 			case 0: /* STRING */
-				param->String = readString(f);
+				param->p.String = readString(f);
 				break;
 			case 1: /* FLOAT */
-				param->Float = readUInt32(f);
+				param->p.Float = readUInt32(f);
 				break;
 			case 2: /* NULL */
 			case 3: /* Undefined */
 				break;
 			case 4: /* Register */
-				param->RegisterNumber = readUInt8(f);
+				param->p.RegisterNumber = readUInt8(f);
 				break;
 			case 5: /* BOOLEAN */
-				param->Boolean = readUInt8(f);
+				param->p.Boolean = readUInt8(f);
 				break;
 			case 6: /* DOUBLE */
-				param->Double = readDouble(f);
+				param->p.Double = readDouble(f);
 				break;
 			case 7: /* INTEGER */
-				param->Integer = readSInt32(f);
+				param->p.Integer = readSInt32(f);
 				break;
 			case 8: /* CONSTANT8 */
-				param->Constant8 = readUInt8(f);
+				param->p.Constant8 = readUInt8(f);
 				break;
 			case 9: /* CONSTANT16 */
-				param->Constant16 = readUInt16(f);
+				param->p.Constant16 = readUInt16(f);
 				break;
 			default:
 				printf("Unknown data type to push %x\n", param->Type );
@@ -845,8 +847,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		}
 	case SWFACTION_IF:
 		{
-		ACT_BEGIN(SWF_ACTIONIF)
 		int i,j,k, curroffset;
+		ACT_BEGIN(SWF_ACTIONIF)
+
 		act->BranchOffset = readUInt16(f);
 		/*
 		 * Set curroffset to point to the next action so that an
@@ -892,19 +895,19 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 	case SWFACTION_GETURL2:
 		{
 		ACT_BEGIN(SWF_ACTIONGETURL2)
-		act->SendVarsMethod = readBits(f,2);
-		act->Reserved = readBits(f,4);
-		act->LoadTargetFlag = readBits(f,1);
-		act->LoadVariableFlag = readBits(f,1);
+		act->f.FlagBits.SendVarsMethod = readBits(f,2);
+		act->f.FlagBits.Reserved = readBits(f,4);
+		act->f.FlagBits.LoadTargetFlag = readBits(f,1);
+		act->f.FlagBits.LoadVariableFlag = readBits(f,1);
 		break;
 		}
 	case SWFACTION_GOTOFRAME2:
 		{
 		ACT_BEGIN(SWF_ACTIONGOTOFRAME2)
-		act->Reserved = readBits(f,6);
-		act->SceneBiasFlag = readBits(f,1);
-		act->PlayFlag = readBits(f,1);
-		if( act->SceneBiasFlag ) {
+		act->f.FlagBits.Reserved = readBits(f,6);
+		act->f.FlagBits.SceneBiasFlag = readBits(f,1);
+		act->f.FlagBits.PlayFlag = readBits(f,1);
+		if( act->f.FlagBits.SceneBiasFlag ) {
 			act->SceneBias = readUInt16(f);
 		}
 		break;
@@ -920,8 +923,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		/* v5 actions */
 	case SWFACTION_CONSTANTPOOL:
 		{
-		ACT_BEGIN(SWF_ACTIONCONSTANTPOOL)
 		int i;
+		ACT_BEGIN(SWF_ACTIONCONSTANTPOOL)
+
 		act->Count = readUInt16(f);
 		act->ConstantPool = malloc(act->Count*sizeof(char *));
 		for(i=0;i<act->Count;i++) {
@@ -931,8 +935,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		}
 	case SWFACTION_DEFINEFUNCTION:
 		{
-		ACT_BEGIN(SWF_ACTIONDEFINEFUNCTION)
 		int i, end2;
+		ACT_BEGIN(SWF_ACTIONDEFINEFUNCTION)
+
 		act->FunctionName = readString(f);
 		act->NumParams = readSInt16(f);
 		act->Params = (STRING *)malloc(act->NumParams*sizeof(char *));
@@ -954,8 +959,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		}
 	case SWFACTION_WITH:
 		{
-		ACT_BEGIN(SWF_ACTIONWITH)
 		int end;
+		ACT_BEGIN(SWF_ACTIONWITH)
+
 		act->Size = readUInt16(f);
 		end = fileOffset + act->Size;
 		act->Actions = (union SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
@@ -971,6 +977,7 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 	case SWFACTION_STOREREGISTER:
 		{
 		ACT_BEGIN(SWF_ACTIONSTOREREGISTER)
+
 		act->Register = readUInt8(f);
 		break;
 		}
@@ -981,8 +988,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		/* v7 actions */
 	case SWFACTION_DEFINEFUNCTION2:
 		{
-		ACT_BEGIN(SWF_ACTIONDEFINEFUNCTION2)
 		int i, end2;
+		ACT_BEGIN(SWF_ACTIONDEFINEFUNCTION2)
+
 		act->FunctionName = readString(f);
 		act->NumParams = readSInt16(f);
 		act->RegisterCount = readSInt8(f);
@@ -1015,8 +1023,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		}
 	case SWFACTION_TRY:
 		{
-		ACT_BEGIN(SWF_ACTIONTRY)
 		int end2;
+		ACT_BEGIN(SWF_ACTIONTRY)
+
 		act->Reserved = readBits(f,5);
 		act->CatchInRegisterFlag = readBits(f,1);
 		act->FinallyBlockFlag = readBits(f,1);
@@ -1087,8 +1096,8 @@ parseSWF_CHARACTERSET (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEBITS (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINEBITS);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINEBITS);
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->JPEGDataSize = end-fileOffset;
@@ -1100,8 +1109,8 @@ parseSWF_DEFINEBITS (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEBITSJPEG2 (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINEBITSJPEG2);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINEBITSJPEG2);
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->JPEGDataSize = end-fileOffset;
@@ -1113,8 +1122,8 @@ parseSWF_DEFINEBITSJPEG2 (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEBITSJPEG3 (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINEBITSJPEG3);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINEBITSJPEG3);
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->AlphaDataOffset = readUInt32 (f);
@@ -1149,9 +1158,9 @@ parseSWF_DEFINEBUTTON (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEBUTTON2 (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINEBUTTON2);
   int stop;
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINEBUTTON2);
 
   byteAlign();
 
@@ -1279,9 +1288,9 @@ parseSWF_DEFINEEDITTEXT (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEFONT (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINEFONT);
-  UI16  firstOffset;
   int i;
+  UI16  firstOffset;
+  PAR_BEGIN (SWF_DEFINEFONT);
 
   parserrec->FontID = readUInt16 (f);
   firstOffset = readUInt16 (f);
@@ -1413,8 +1422,8 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEFONTINFO (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINEFONTINFO);
   int i, end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINEFONTINFO);
 
   parserrec->FontID = readUInt16 (f);
   parserrec->FontNameLen = readUInt8 (f);
@@ -1445,8 +1454,8 @@ parseSWF_DEFINEFONTINFO (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINELOSSLESS);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINELOSSLESS);
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->BitmapFormat = readUInt8 (f);
@@ -1463,8 +1472,8 @@ parseSWF_DEFINELOSSLESS (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS2 (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINELOSSLESS2);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINELOSSLESS2);
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->BitmapFormat = readUInt8 (f);
@@ -1534,8 +1543,8 @@ parseSWF_DEFINESHAPE3 (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINESOUND (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DEFINESOUND);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINESOUND);
 
   parserrec->SoundId = readUInt16 (f);
   byteAlign ();
@@ -1685,8 +1694,8 @@ parseSWF_DEFINEVIDEOSTREAM (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DOACTION (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_DOACTION);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_DOACTION);
 
   parserrec->Actions =
     (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
@@ -1727,8 +1736,9 @@ parseSWF_END (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_EXPORTASSETS (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_EXPORTASSETS);
   int i;
+  PAR_BEGIN (SWF_EXPORTASSETS);
+
   parserrec->Count = readUInt16 (f);
   parserrec->Tags = (UI16 *)malloc(parserrec->Count*sizeof(UI16));
   parserrec->Names = (STRING *)malloc(parserrec->Count*sizeof(char *));
@@ -1803,8 +1813,9 @@ parseSWF_GENCOMMAND (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_IMPORTASSETS (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_IMPORTASSETS);
   int i;
+  PAR_BEGIN (SWF_IMPORTASSETS);
+
   parserrec->URL = readString (f);
   parserrec->Count = readUInt16 (f);
   parserrec->Tags = (UI16 *)malloc(parserrec->Count*sizeof(UI16));
@@ -1820,8 +1831,8 @@ parseSWF_IMPORTASSETS (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_JPEGTABLES (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_JPEGTABLES);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_JPEGTABLES);
 
   parserrec->JPEGDataSize = end-fileOffset;
   parserrec->JPEGData = readBytes(f,end-fileOffset);
@@ -2054,8 +2065,8 @@ parseSWF_SYNCFRAME (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_INITACTION (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_INITACTION);
   int end = fileOffset + length;
+  PAR_BEGIN (SWF_INITACTION);
 
   parserrec->SpriteId = readUInt16 (f);
   parserrec->Actions =
