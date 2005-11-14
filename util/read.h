@@ -1,7 +1,6 @@
 #ifndef SWF_READ_H_INCLUDED
 #define SWF_READ_H_INCLUDED
 
-extern int gIndent;
 extern int fileOffset;
 
 typedef unsigned char boolean;

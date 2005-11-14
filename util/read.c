@@ -6,10 +6,6 @@
 
 int fileOffset = 0;
 
-int gIndent = 0;
-char indentBuf[256];
-int lastIndent = 0;
-
 void error(char *s, ...)
 {
   va_list ap;
@@ -29,26 +25,6 @@ void warning(char *s, ...)
   vprintf(s, ap);
   va_end(ap);
   putchar('\n');
-}
-
-char *indent()
-{
-  int i;
-
-  if(gIndent>63)
-    error("indent level > 63!");
-
-  if(lastIndent != gIndent)
-  {
-    for(i=0; i<3*gIndent; ++i)
-      indentBuf[i] = ' ';
-
-    indentBuf[i] = '\0';
-
-    lastIndent = gIndent;
-  }
-
-  return indentBuf;
 }
 
 int buffer;
