@@ -16,6 +16,6 @@ clean:
 	rm -f php_ming$(NOVAR_SHLIBEXT) ming.o
 
 install: php_ming$(NOVAR_SHLIBEXT)
-	install -d `php-config --extension-dir`
-	install php_ming$(NOVAR_SHLIBEXT) `php-config --extension-dir`
+	install -d $(DESTDIR)`php-config --extension-dir`
+	install php_ming$(NOVAR_SHLIBEXT) $(DESTDIR)`php-config --extension-dir`
 	echo "Don't forget to add 'extension=php_ming$(NOVAR_SHLIBEXT)' to php.ini!"
