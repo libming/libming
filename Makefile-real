@@ -29,7 +29,10 @@ install-static: static
 utils:
 	(cd util && make)
 
-dynamic static:
+dynamic:
+	(cd src && $(MAKE) $@ CFLAGS="$(CFLAGS) $(SHCFLAGS)")
+
+static:
 	(cd src && $(MAKE) $@)
 
 clean:

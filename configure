@@ -1215,7 +1215,8 @@ fi
 
  
 OS=`uname -s`
-if test "$OS" = "Darwin"; then
+case "$OS" in
+"Darwin")
 	SHLIBEXT=".\$(MING_VER).dylib"
 	SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
 	NOVAR_SHLIBEXT=".dylib"
@@ -1226,17 +1227,26 @@ if test "$OS" = "Darwin"; then
 		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
 		-install_name \$(libdir)/\$(SHAREDLIB)"
 	CFLAGS="$CFLAGS -fno-common"
-else
+	;;
+"Linux")
+	SHLIBLDFLAGS="-shared -Wl,-soname,libming.so.\$(MAJOR_VERSION)"
+	SHLIBEXT=".so.\$(MING_VER)"
+	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
+	NOVAR_SHLIBEXT=".so"
+	SHCFLAGS="-fPIC"
+	;;
+*)
 	SHLIBLDFLAGS="-shared"
 	SHLIBEXT=".so.\$(MING_VER)"
 	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
 	NOVAR_SHLIBEXT=".so"
-fi
+esac
 
 MACHINE=`uname -m`
 if test "$MACHINE" = "x86_64"; then
 	CFLAGS="$CFLAGS -fPIC"
 fi
+
 
 
 
@@ -1390,6 +1400,7 @@ s%@CXX@%$CXX%g
 s%@PYTHON@%$PYTHON%g
 s%@SHLIBLDFLAGS@%$SHLIBLDFLAGS%g
 s%@SHLIBEXT@%$SHLIBEXT%g
+s%@SHCFLAGS@%$SHCFLAGS%g
 s%@EXTRA_OBJS@%$EXTRA_OBJS%g
 s%@EXTRA_BINS@%$EXTRA_BINS%g
 s%@GIFLIB@%$GIFLIB%g
