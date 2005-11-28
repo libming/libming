@@ -29,7 +29,7 @@ all: dynamic
 
 dynamic: $(SHAREDLIB)
 
-$(SHAREDLIB): $(OFILES)
+$(SHAREDLIB): $(OFILES) $(COMPILEROFILES)
 	cd blocks && $(MAKE)
 	cd actioncompiler && $(MAKE)
 	$(CC) $(OFILES) $(COMPILEROFILES) $(LDFLAGS) $(EXTRA_LIBS) blocks/*.o $(SHLIBLDFLAGS) -o $(SHAREDLIB)
@@ -39,7 +39,7 @@ $(SHAREDLIB): $(OFILES)
 
 static: libming.a
 
-libming.a: $(OFILES)
+libming.a: $(OFILES) $(COMPILEROFILES)
 	cd blocks && $(MAKE)
 	cd actioncompiler && $(MAKE)
 	ar r libming.a blocks/*.o ${OFILES} ${COMPILEROFILES}
