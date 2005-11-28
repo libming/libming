@@ -12,7 +12,7 @@ build:
 
 
 install:
-	$(PYTHON) setup.py install
+	$(PYTHON) setup.py install $(PREFIX)
 
 test.swf:
 	$(PYTHON) shape.py
