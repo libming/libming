@@ -26,6 +26,7 @@ EXTRA_BINS=
 
 if test -n "${GIFLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
+	EXTRA_BINS="$EXTRA_BINS gif2dbl gif2mask"
 	AC_DEFINE(USE_GIF)
 	AC_DEFINE(USE_ZLIB)
 fi
