@@ -1190,6 +1190,7 @@ EXTRA_BINS=
 
 if test -n "${GIFLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
+	EXTRA_BINS="$EXTRA_BINS gif2dbl gif2mask"
 	cat >> confdefs.h <<\EOF
 #define USE_GIF 1
 EOF
