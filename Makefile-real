@@ -43,4 +43,4 @@ clean:
 
 distclean: clean
 	rm -Rf Rules.make config.make Makefile.config autom4te.cache \
-		config.log config.status src/ming_config.h
+		config.log config.status src/ming_config.h src/ming.h

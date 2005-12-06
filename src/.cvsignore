@@ -1,4 +1,5 @@
 .AppleDouble
 test2.c
 ming_config.h
+ming.h
 libming.so.*
