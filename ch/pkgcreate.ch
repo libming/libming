@@ -151,7 +151,7 @@ if (dlopen("c/libming.dl", RTLD_LAZY) == NULL) {
     exit(-1);
 }
 
-mv -f c/libming.dl $cwd/$pkgname/dl
+mv -f c/libming.dl "$cwd/$pkgname/dl"
 
 echo package $pkgname created successfully!
 

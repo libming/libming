@@ -3,9 +3,9 @@ PACKAGE = chming
 create:
 	ch ./pkgcreate.ch
 install:
-	ch ./pkginstall.ch $(PACKAGE)
+	ch pkginstall.ch $(PACKAGE)
 uninstall:
-	ch ./pkginstall.ch -u $(PACKAGE)
+	ch pkginstall.ch -u $(PACKAGE)
 rmpkg:
 	rm -rf $(PACKAGE)
 clean:
