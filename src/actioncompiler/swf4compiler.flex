@@ -64,7 +64,10 @@ static void unescape(char *buf)
 		w++;
 		r++;
 	}
-	*w++ = *r++;
+	else
+	{
+		*w++ = *r++;
+	}
   }
   *w='\0';
 }
