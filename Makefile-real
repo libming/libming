@@ -1,6 +1,6 @@
 include Makefile.config
 
-DIRS = src util py_ext php_ext 
+DIRS = src util py_ext
 
 all: dynamic utils static
 
