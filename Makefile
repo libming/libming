@@ -1,4 +1,6 @@
 
+RELEASE=rel-not-set
+
 RULES = all install install-static install-dynamic \
 	dynamic static clean distclean
 
@@ -13,3 +15,17 @@ config.status:
 
 maintainer-clean: distclean
 	rm -f configure
+
+#
+# Make release tarballs. Note, the license on the php & java extension
+# doesn't sit well with some distros (not DFSG compatible), so we'll
+# just packages them seperately to make things convenient.
+#
+release:
+	cvs export -d ming-$(RELEASE) -D now ming
+	tar czvf ming-java-$(RELEASE).tar.gz ming-$(RELEASE)/java_ext
+	rm -rf ming-$(RELEASE)/java_ext
+	tar czvf ming-php-$(RELEASE).tar.gz ming-$(RELEASE)/php_ext
+	rm -rf ming-$(RELEASE)/php_ext
+	tar czvf ming-$(RELEASE).tar.gz ming-$(RELEASE)
+	rm -rf ming-$(RELEASE)
