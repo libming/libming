@@ -131,11 +131,11 @@ completeSWFPlaceObject2Block(SWFBlock block)
 	if ( place->ratio != -1 )
 		SWFOutput_writeUInt16(out, place->ratio);
 
-	if ( place->masklevel != -1 )
-		SWFOutput_writeUInt16(out, place->masklevel);
-
 	if ( place->name != NULL )
 		SWFOutput_writeString(out, (byte*)place->name);
+
+	if ( place->masklevel != -1 )
+		SWFOutput_writeUInt16(out, place->masklevel);
 
 	if ( place->nActions != 0 )
 	{
