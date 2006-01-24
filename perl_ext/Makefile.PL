@@ -48,7 +48,7 @@ foreach my $dir (@DEFAULT_DIR) {
     $ming_version = get_ming_version($dir);
 
     if( $ming_version ){
-      $MING_DIR = $absdir;
+      $MING_DIR = $abs_dir;
 			print STDERR $MING_DIR."\n";
       last;
     }
