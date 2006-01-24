@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 use Cwd qw(abs_path cwd);
 use strict;
 
-my @DEFAULT_DIR = qw(../src);
+my @DEFAULT_DIR = qw(..);
 
 my @do_clean = qw {
     SWF.h
@@ -39,16 +39,16 @@ my @SWF_MODULES = qw {
 
 my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
 
+#$MING_DIR is not the src-dir
 my ($MING_DIR, $ming_version);
 
-foreach my $src_dir (@DEFAULT_DIR) {
-		print STDERR "Testing $src_dir:\n";
-    next unless -d $src_dir;
-    my $abs_src_dir = abs_path($src_dir);
-    $ming_version = get_ming_version($src_dir);
+foreach my $dir (@DEFAULT_DIR) {
+    next unless -d $dir;
+    my $abs_dir = abs_path($dir);
+    $ming_version = get_ming_version($dir);
 
     if( $ming_version ){
-      $MING_DIR = $src_dir;
+      $MING_DIR = $absdir;
 			print STDERR $MING_DIR."\n";
       last;
     }
@@ -60,9 +60,9 @@ ask_ming_dir() unless ($MING_DIR);
 print "\nUsing ming version $ming_version in the ". abs_path($MING_DIR) ." directory.\n\n";
 compile() unless ming_is_compiled();
 # 2006/01/24 (peterdd) now we can look into ming_config.h to get some info.
-my $libs=get_mingconfig($MING_DIR."/ming_config.h");
-write_swf_h($MING_DIR);
-write_config_test ($MING_DIR);
+my $libs=get_mingconfig($MING_DIR."/src/ming_config.h");
+write_swf_h($MING_DIR."/src/");
+write_config_test ($MING_DIR."/src/");
 write_bootxs();
 
 
@@ -85,19 +85,19 @@ WriteMakefile(
 );
 
 sub MY::install {
-    my $self = shift;
-    write_myconfig_file($self->{INSTALLSITEARCH});
+	my $self = shift;
+	write_myconfig_file($self->{INSTALLSITEARCH});
 
-    for (qw(ming.h libming.a)){
-	$self->{PM}->{"$MING_DIR/$_"} = '$(INST_ARCHLIB)' . "/auto/SWF/include/$_";
-    }
-    $self->{PM}->{'perl_swf.h'} = '$(INST_ARCHLIB)' . "/auto/SWF/include/perl_swf.h";
-    return $self->MM::install;
+	for (qw(ming.h libming.a)){
+		$self->{PM}->{"$MING_DIR/$_"} = '$(INST_ARCHLIB)' . "/auto/SWF/include/$_";
+	}
+	$self->{PM}->{'perl_swf.h'} = '$(INST_ARCHLIB)' . "/auto/SWF/include/perl_swf.h";
+	return $self->MM::install;
 }
 
 sub ming_is_compiled{
-    return undef unless (-e "$MING_DIR/libming.a");
-    return 1;
+	return undef unless (-e "$MING_DIR/libming.a");
+	return 1;
 }
 
 sub compile{
@@ -139,7 +139,7 @@ sub get_ming_version{
 	my $d = shift;
 	my $filename = shift || "configure.in";
 
-	my $file = "$d/../$filename";
+	my $file = "$d/$filename";
 	print "Checking $file\n";
 
 	return undef unless (-e $file);
@@ -212,7 +212,7 @@ sub write_bootxs (){
 # We don't really need this function anymore. 
 # We may add $dir to INC of WriteMakefile()
 sub write_swf_h {
-    my $dir = shift;
+    my $srcdir = shift;
     local *FH;
     open FH, ">SWF.h" or die "can't open SWF.h $!";
     print FH <<EOF;
@@ -223,8 +223,8 @@ sub write_swf_h {
  * ====================================================================
  */
 
-#include "$dir/ming.h"
-#include "$dir/libming.h"
+#include "$srcdir/ming.h"
+#include "$srcdir/libming.h"
 EOF
     close FH;
 }
