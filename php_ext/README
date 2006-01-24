@@ -1,3 +1,9 @@
+
+Jan 2006: The module in php5 is more current than this file. You can use it
+by building php with --enable-ming.
+
+
+
 You can use the Makefile here to try and build ming as a php module- just
 run "make" and then "make install".  And as the make install command tells
 you, you'll have to add "extension=php_ming.so" to your php.ini file, or
