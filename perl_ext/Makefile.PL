@@ -4,13 +4,7 @@ use ExtUtils::MakeMaker;
 use Cwd qw(abs_path cwd);
 use strict;
 
-my @DEFAULT_DIR = qw(.. ../src);
-
-my $is_soheil;
-#$is_soheil = (defined($ENV{USER}) && ($ENV{USER} eq "soheil"));
-#$Verbose=1 if $is_soheil;
-
-
+my @DEFAULT_DIR = qw(../src);
 
 my @do_clean = qw {
     SWF.h
@@ -23,24 +17,24 @@ my @do_clean = qw {
 for(@do_clean) { unlink $_ }
 
 my @SWF_MODULES = qw {
-    Action
-    Bitmap
-    Button
-    Constants
-    DisplayItem
-    Fill
-    Font
-    Gradient
-    Morph
-    Movie
-    MovieClip
-    Shape
-    Sound
+	Action
+	Bitmap
+	Button
+	Constants
+	DisplayItem
+	Fill
+	Font
+	Gradient
+	Morph
+	Movie
+	MovieClip
+	Shape
+	Sound
 	SoundInstance
 	SoundStream
-    Text
-    TextField
-    VideoStream
+	Text
+	TextField
+	VideoStream
 };
 
 my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
@@ -48,26 +42,29 @@ my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OB
 my ($MING_DIR, $ming_version);
 
 foreach my $src_dir (@DEFAULT_DIR) {
+		print STDERR "Testing $src_dir:\n";
     next unless -d $src_dir;
     my $abs_src_dir = abs_path($src_dir);
-    print "    Trying $abs_src_dir ... " if $is_soheil;
     $ming_version = get_ming_version($src_dir);
 
     if( $ming_version ){
-	$MING_DIR = $src_dir;
-        print "Yes\n" if $is_soheil;
-	last;
+      $MING_DIR = $src_dir;
+			print STDERR $MING_DIR."\n";
+      last;
     }
-    print "No\n" if $is_soheil;
 }
 
 ask_ming_dir() unless ($MING_DIR);
 
+
 print "\nUsing ming version $ming_version in the ". abs_path($MING_DIR) ." directory.\n\n";
 compile() unless ming_is_compiled();
+# 2006/01/24 (peterdd) now we can look into ming_config.h to get some info.
+my $libs=get_mingconfig($MING_DIR."/ming_config.h");
 write_swf_h($MING_DIR);
 write_config_test ($MING_DIR);
 write_bootxs();
+
 
 WriteMakefile(
     'NAME'	   => 'SWF',
@@ -83,7 +80,8 @@ WriteMakefile(
     },
     'MYEXTLIB'     => $MING_DIR . '/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
-    'LIBS'         => [ "-lz" ],
+    #'LIBS'         => [ "-lz" ],
+		'LIBS'         => [ $libs ],
 );
 
 sub MY::install {
@@ -106,7 +104,8 @@ sub compile{
     print "Compiling ming ...\n";
     my $cur_dir = cwd;
     chdir $MING_DIR;
-    system "make static";
+    system "./configure";
+		system "make static";
     chdir $cur_dir;
 }
 
@@ -120,46 +119,65 @@ ming before, please download it from http://www.opaque.net (Please read the
 README file).
 
 EOF
-       print "Please tell me where I can find your Ming src (type q to quit): ";
-       my $src_dir = prompt("", "");
-       exit(0) if $src_dir eq "q";
-       if(-d $src_dir) {
-	   $ming_version = get_ming_version($src_dir);
-	   if( $ming_version && version_supported($ming_version) ){
-	       $MING_DIR = $src_dir;
-	       last;
-	   }
+		print "Please tell me where I can find your Ming src (type q to quit): ";
+		my $src_dir = prompt("", "");
+		exit(0) if $src_dir eq "q";
+		if(-d $src_dir) {
+			$ming_version = get_ming_version($src_dir);
+			if( $ming_version && version_supported($ming_version) ){
+				$MING_DIR = $src_dir;
+				last;
+			}
+		}
+		else {
+			print "Can't stat '$src_dir'\n";
+		}
 	}
-	else {
-	    print "Can't stat `$src_dir'\n";
-	}
-    }
 }
 
 sub get_ming_version{
-    my $d = shift;
-    my $filename = shift || "ming.h";
+	my $d = shift;
+	my $filename = shift || "configure.in";
 
-    my $file = "$d/$filename";
-    print "Checking $file\n" if $is_soheil;
+	my $file = "$d/../$filename";
+	print "Checking $file\n";
 
-    return undef unless (-e $file);
+	return undef unless (-e $file);
+	#print "File exists\n";
 
-    #print "File exists\n";
+	local *FH;
+	open FH, "$file" or die "can't open $file $!";
 
-    local *FH;
-    open FH, "$file" or die "can't open $file $!";
+	my ($version,$majorversion,$minorversion,$microversion);
+	foreach my $i (<FH>) {
+		if($i =~ /^MAJOR_VERSION=/) { $i =~ s/^MAJOR_VERSION=(.*)/$1/; chomp($majorversion=$i);}
+		elsif($i =~ /^MINOR_VERSION=/) { $i =~ s/^MINOR_VERSION=(.*)/$1/; chomp($minorversion=$i);}
+		elsif($i =~ /^MICRO_VERSION=/) { $i =~ s/^MICRO_VERSION=(.*)/$1/; chomp($microversion=$i);}
+	}
+	close(FH);
+	$version=$majorversion.'.'.$minorversion.'.'.$microversion;
+	print "SWF::VERSION = $version\n";
+	if ($version eq "") {return undef;}
+	else {return $version;}
+	close(FH);
+	return undef;
+}
 
-    my $version;
-    while(<FH>) {
-	next unless /^#define/;
-	next unless s/^#define\s+MING_VERSION\s+(.*)/$1/;
-	chomp($version=$_);
-	print "MING VERSION = $version\n" if $is_soheil;
-        return $version;
-    }
-    close(FH);
-    return undef;
+# peterdd: Someone should provide a better approach to detect the needed libs
+sub get_mingconfig{
+	 my $file=shift;
+   my $lib="";
+	 print "Checking ming config $file :\n";
+	 open(FH, "$file") or die "can't open $file $!";
+	 while(<FH>){
+      next unless /^#define/;
+			if (/USE_ZLIB/ and /1$/) {$lib.=" -lz"};
+			if (/USE_GIF/ and /1$/) {$lib.=" -lungif"};
+			if (/USE_PNG/ and /1$/) {$lib.=" -lpng"};
+	 }
+	 close(FH);
+	 return $lib;
+	 
 }
 
 sub write_myconfig_file{
