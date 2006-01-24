@@ -17,7 +17,7 @@ maintainer-clean: distclean
 	rm -f configure
 
 Changelog::
-	cvs2cl --accum
+	cvs2cl --accum -I ChangeLog
 #
 # Make release tarballs. Note, the license on the php & java extension
 # doesn't sit well with some distros (not DFSG compatible), so we'll
