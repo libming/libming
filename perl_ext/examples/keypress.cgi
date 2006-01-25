@@ -1,20 +1,20 @@
 #!/usr/bin/perl
 use strict;
 
-use SWF qw(Sprite Action Shape);
-use SWF::TextField qw(:Text);
-use SWF::Button qw(:Button);
+#use lib("/home/peter/ming3/lib/perl5/site_perl");
+
+$|=1;
+use SWF qw(Action Shape TextField Button);
+use SWF::Constants qw(:Text :Button);
 
 SWF::setScale(1.0);
 SWF::setVersion(4);
 
-########## ADD path to your test.fdb file #######################
-my $fdb_file = '/PATH/TO/test.fdb';
-
-print "Content-type: application/x-shockwave-flash\n\n";
+# Add path to your *.fdb file
+my $fdb_file = '../common/_sans.fdb';
 
 # sprite has one letter per frame */
-my  $p = new SWF::Sprite;
+my  $p = new SWF::MovieClip;
 $p->add(new SWF::Action("stop();"));
 
 my $chars = "abcdefghijklmnopqrstuvwxyz".
@@ -28,7 +28,7 @@ for($n=0; $n<length($chars); ++$n)
     my $c = substr($chars, $n, 1);
 
     $p->remove($i) if(defined($i));
-    my $t = new SWF::TextField();
+    my $t = new SWF::TextField(SWFTEXTFIELD_DRAWBOX);
     $t->setFont($f);
     $t->setHeight(240);
     $t->setBounds(600,240);
@@ -72,5 +72,14 @@ $i->setName('char');
 $i->moveTo(0,80);
 
 $m->add($b);
-$m->output();
+
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
 
