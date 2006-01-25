@@ -18,5 +18,8 @@ Movie.c
 MovieClip.c
 Shape.c
 Sound.c
+SoundInstance.c
+SoundStream.c
 Text.c
 TextField.c
+VideoStream.c
