@@ -8,7 +8,7 @@ $|=1;
 SWF::setScale(1);
 
 # where are the fontfiles?
-my $dir = './';
+my $dir = '../common/';
 my $font= '_sans.fdb';
 
 my $string = "ming!";
