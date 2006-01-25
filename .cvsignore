@@ -4,3 +4,6 @@ Makefile.config
 libming.so.*
 config.log
 config.status
+*.tar.gz
+autom4te.cache
+config.cache
