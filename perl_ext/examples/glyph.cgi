@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 
-use lib("/home/peter/ming3/lib/perl5/site_perl");
+#use lib("/home/peter/ming3/lib/perl5/site_perl");
 
 $|=1;
 
