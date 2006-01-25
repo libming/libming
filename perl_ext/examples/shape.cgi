@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 use strict;
 
-#use lib qw(/home/soheil/ming/SWF/blib/arch /home/soheil/ming/SWF/blib/lib);
+#use lib("/home/peter/ming3/lib/perl5/site_perl");
 
-use SWF qw(:ALL);
-#use SWF qw(Shape Movie);
-
-print "Content-type: application/x-shockwave-flash\n\n";
+$|=1;
+use SWF qw(Movie Shape);
 
 SWF::setScale(1.0);
 
@@ -23,4 +21,13 @@ $m->setDimension(6400, 4800);
 $m->setRate(12.0);
 $m->add($s);
 $m->nextFrame();
-$m->output();
+
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
