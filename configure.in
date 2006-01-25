@@ -4,6 +4,8 @@ MAJOR_VERSION=0
 MINOR_VERSION=3
 MICRO_VERSION=0beta1
 
+MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_PATH_PROG(PYTHON, python)
@@ -46,7 +48,7 @@ fi
 OS=`uname -s`
 case "$OS" in
 "Darwin")
-	SHLIBEXT=".\$(MING_VER).dylib"
+	SHLIBEXT=".\$(MING_VERSION).dylib"
 	SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
 	NOVAR_SHLIBEXT=".dylib"
 	SHLIBLDFLAGS="-dynamiclib \
@@ -59,14 +61,14 @@ case "$OS" in
 	;;
 "Linux")
 	SHLIBLDFLAGS="-shared -Wl,-soname,libming.so.\$(MAJOR_VERSION)"
-	SHLIBEXT=".so.\$(MING_VER)"
+	SHLIBEXT=".so.\$(MING_VERSION)"
 	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
 	NOVAR_SHLIBEXT=".so"
 	SHCFLAGS="-fPIC"
 	;;
 *)
 	SHLIBLDFLAGS="-shared"
-	SHLIBEXT=".so.\$(MING_VER)"
+	SHLIBEXT=".so.\$(MING_VERSION)"
 	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
 	NOVAR_SHLIBEXT=".so"
 esac
@@ -90,7 +92,8 @@ AC_SUBST(NOVAR_SHLIBEXT)
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
+AC_SUBST(MING_VERSION)
 
 AC_CONFIG_HEADER(src/ming_config.h)
 
-AC_OUTPUT(Makefile.config src/ming.h)
+AC_OUTPUT(Makefile.config src/ming.h util/ming-config)

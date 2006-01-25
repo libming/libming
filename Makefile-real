@@ -44,3 +44,33 @@ clean:
 distclean: clean
 	rm -Rf Rules.make config.make Makefile.config autom4te.cache \
 		config.log config.status src/ming_config.h src/ming.h
+
+maintainer-clean: distclean
+	rm -f configure
+
+Changelog::
+	cvs2cl --accum -I ChangeLog
+
+#
+# Make release tarballs. Note, the license on the php & java extension
+# doesn't sit well with some distros (not DFSG compatible), so we'll
+# just packages them seperately to make things convenient.
+#
+release:
+	cvs export -d ming-$(MING_VERSION) -D now ming
+	tar czvf ming-ch-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/ch
+	rm -rf ming-$(MING_VERSION)/ch
+	tar czvf ming-rb-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/rb_ext
+	rm -rf ming-$(MING_VERSION)/rb_ext
+	tar czvf ming-py-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/py_ext
+	rm -rf ming-$(MING_VERSION)/py_ext
+	tar czvf ming-tcl-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/tcl_ext
+	rm -rf ming-$(MING_VERSION)/tcl_ext
+	tar czvf ming-perl-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/perl_ext
+	rm -rf ming-$(MING_VERSION)/perl_ext
+	tar czvf ming-java-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/java_ext
+	rm -rf ming-$(MING_VERSION)/java_ext
+	tar czvf ming-php-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/php_ext
+	rm -rf ming-$(MING_VERSION)/php_ext
+	tar czvf ming-$(MING_VERSION).tar.gz ming-$(MING_VERSION)
+	rm -rf ming-$(MING_VERSION)

@@ -7,9 +7,9 @@ UTILOBJ = action.o blocktypes.o decompile.o main.o parser.o read.o
 
 PAGER ?= less
 
-BINARIES = listswf listswf_d swftoperl swftophp swftopython makeswf \
-	   listaction listaction_d listfdb makefdb listjpeg raw2adpcm \
-	   listmp3 
+BINARIES = listswf listswf_d swftoperl swftophp swftopython \
+	makeswf listaction listaction_d listfdb makefdb listjpeg raw2adpcm \
+	listmp3 
 
 BINARIES += $(EXTRA_BINS)
 
@@ -78,3 +78,4 @@ makeswf: makeswf.c makeswf.h ../libming$(NOVAR_SHLIBEXT)
 install: $(BINARIES)
 	install -d $(bindir)
 	install -m 0755 $(BINARIES) $(bindir)
+	install -m 0755 ming-config $(bindir)

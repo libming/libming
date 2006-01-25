@@ -1,0 +1,42 @@
+#!/bin/sh
+prefix=@prefix@
+
+usage()
+{
+    cat <<EOF
+Usage: ming-config [OPTIONS]
+Options:
+     [--help]
+     [--version]
+     [--libs]
+     [--cflags]
+EOF
+    exit $1
+}
+if test $# -eq 0; then
+  usage 1 1>&2
+fi
+
+while test $# -gt 0; do
+
+	case $1 in
+	    --help)
+		usage 0
+		;;
+	    --version)
+		echo "@MING_VERSION@"
+		;;
+	    --cflags)
+		echo -I@includedir@
+		;;
+	    --libs)
+		echo -L@libdir@ -lming
+		;;
+	    *)
+		usage 1 1>&2
+		;;
+	esac
+	shift
+
+done
+
