@@ -1,15 +1,17 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 use strict;
 
-# Were you looking for thw worst perl script?
-# Congradulations! you found it.
+#use lib("/home/peter/ming3/lib/perl5/site_perl");
 
-use SWF (:ALL);
+use SWF qw(:ALL);
+$|=1;
+SWF::setScale(1);
+
+# where are the fontfiles?
+my $dir = './';
+my $font= '_sans.fdb';
 
 my $string = "ming!";
-my $dir = '/home/soheil/src/ming-0.0.9/examples/common/';
-
-print "Content-type: application/x-shockwave-flash\n\n";
 
 my $loc = {};
 my $i1 = { r      => 0xff, 
@@ -47,18 +49,16 @@ my $i3 = { r      => 0xff,
 
 
 
-my  $f = new SWF::Font($dir."test.fdb");
+my  $f = new SWF::Font($dir.$font);
 my $m = new SWF::Movie();
 $m->setRate(24.0);
 $m->setDimension(2400, 1600);
-$m->setBackground(0xff, 0xff, 0xff);
+$m->setBackground(0xff, 0xff, 0x0);
 
 
 
 sub text{
     my $j = shift;
-
-    #print STDERR "Enetrnig TEXT\n";
 
     my $t = new SWF::Text();
     $t->setFont($f);
@@ -76,13 +76,11 @@ sub text{
     $i->scale($j->{scale}, $j->{scale});
 
     $j->{item} = $i;
-#    $j->{text} = $t;
     return $j;
 }
 
 sub step{
     my $j = shift;
-    #print STDERR "Enetrnig STEP\n";
     my $oldrot = $j->{rot};
     $j->{rot} = 19*($j->{rot})/20;
     $j->{x} = (19*$j->{x} + 1200)/20;
@@ -108,4 +106,13 @@ for(my $i=1; $i<=100; ++$i){
     $m->nextFrame();
 }
 
-$m->output();
+
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
