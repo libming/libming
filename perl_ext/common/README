@@ -1,0 +1,6 @@
+The files in this directory are used by 
+	build tests (../t/*)
+	examples (../examples/*)
+
+This directory is temporary. There should be one common
+directory for ming and all wrappers
