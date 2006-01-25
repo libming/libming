@@ -1,13 +1,15 @@
 #!/usr/bin/perl
 use strict;
 
-use SWF (':ALL');
+use lib("/home/peter/ming3/lib/perl5/site_perl");
+
+$|=1;
+
+use SWF qw(:ALL);
 SWF::setScale(1.0);
 
-########## ADD path to your test.fdb file #######################
-my $filename = '/PATH/TO/test.fdb';
-
-print "Content-type: application/x-shockwave-flash\n\n";
+# Add path to your *.fdb file
+my $filename = '../common/_sans.fdb';
 
 
 my $s = new SWF::Shape();
@@ -42,4 +44,13 @@ $m->setDimension(3000,2000);
 $m->setRate(12.0);
 my $i = $m->add($s);
 $i->moveTo(1500-$f->getWidth("!#%*@")/2, 1000+$f->getAscent()/2);
-$m->output();
+
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
