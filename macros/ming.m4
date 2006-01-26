@@ -4,6 +4,16 @@
 # This macro uses ming-config, which was
 # not available as for Ming 0.3beta1
 #
+#
+#
+# Use: 
+#	AC_PATH_MING
+#
+# Provides:
+#	MING_CFLAGS
+#	MING_LIBS
+#	MAKESWF
+#
 
 AC_DEFUN([AC_PATH_MING],
 [
@@ -27,8 +37,12 @@ AC_DEFUN([AC_PATH_MING],
 	if test x"$MING_CONFIG" != "x"; then
 		MING_CFLAGS=`$MING_CONFIG --cflags`
 		MING_LIBS=`$MING_CONFIG --libs`
+		MING_PATH=`$MING_CONFIG --bindir`
+		AC_PATH_PROG([MAKESWF], [makeswf], , [$PATH:$MING_PATH])
 	fi
+
 
 	AC_SUBST(MING_CFLAGS)
 	AC_SUBST(MING_LIBS)
+	AC_SUBST(MAKESWF)
 ])
