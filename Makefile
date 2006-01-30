@@ -1,6 +1,6 @@
 
 RULES = all install install-static install-dynamic \
-	dynamic static clean distclean ChangeLog \
+	dynamic static clean distclean Changelog \
 	release maintainer-clean
 
 $(RULES): Makefile.config
