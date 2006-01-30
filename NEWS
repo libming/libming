@@ -1,4 +1,4 @@
-Changes since 0.3beta1
+0.3beta2 - 2006-01-30
 
         * C# support
         * Garbage collection support
@@ -9,6 +9,8 @@ Changes since 0.3beta1
 	* Decompiler redesign
         * Fixes and cleanups all over the place
 	* Case-sensitive actionscript compiler
+	* Language bindings are now split out into seperate tarballs
+	* New utils based on common code and new parsing framework
 
 0.3beta1 - 2004-02-02
 
