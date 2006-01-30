@@ -1,3 +1,123 @@
+2006-01-30 07:13  anderson
+
+	* Makefile: The target is Changelog (lower 'l', not ChangeLog (cap
+	  'L') so it always runs, and noesn't think the file already exists
+
+2006-01-30 07:09  anderson
+
+	* NEWS, TODO: Update docs
+
+2006-01-26 15:55  strk
+
+	* macros/ming.m4: Added 'makeswf' detection code and usage docs
+
+2006-01-26 15:43  strk
+
+	* util/ming-config.in: Added --bindir
+
+2006-01-25 14:19  peterdd
+
+	* perl_ext/.cvsignore: added SoundInstance.c SoundStream.c
+	  VideoStream.c
+
+2006-01-25 05:43  strk
+
+	* macros/ming.m4: Added m4 macro for client code use
+
+2006-01-25 05:22  strk
+
+	* .cvsignore, py_ext/.cvsignore, util/.cvsignore: Updated cvsignore
+	  files
+
+2006-01-25 05:06  strk
+
+	* Makefile, Makefile-real, Makefile.config.in, configure,
+	  configure.in, util/Makefile, util/ming-config.in: Added
+	  ming-config script for client applications use.  Changed MING_VER
+	  to MING_VERSION.  Moved maintainer-clean, ChangeLog and release
+	  rules from Makefile to Makefile.real having it use MING_VERSION.
+
+2006-01-25 03:26  peterdd
+
+	* perl_ext/examples/glyph.cgi: fix typo
+
+2006-01-25 02:47  peterdd
+
+	* perl_ext/examples/shape.cgi: fixed
+
+2006-01-25 02:41  peterdd
+
+	* perl_ext/examples/keypress.cgi: fixed
+
+2006-01-25 02:14  peterdd
+
+	* perl_ext/SWF/VideoStream.pm: added stub for documentation of
+	  VideoStream
+
+2006-01-25 01:49  peterdd
+
+	* perl_ext/examples/video.cgi: a videostream example
+
+2006-01-25 01:26  peterdd
+
+	* perl_ext/examples/sound.cgi: included Constants
+
+2006-01-25 01:10  peterdd
+
+	* perl_ext/examples/textfield.cgi: add a textfield example
+
+2006-01-25 00:52  peterdd
+
+	* perl_ext/common/_sans.fdb: arial like font for build tests and
+	  examples
+
+2006-01-25 00:47  peterdd
+
+	* perl_ext/common/README: add
+
+2006-01-25 00:45  peterdd
+
+	* perl_ext/common/beep.wav: file for build tests and examples
+
+2006-01-24 23:32  peterdd
+
+	* perl_ext/examples/glyph.cgi: fixed
+
+2006-01-24 23:22  peterdd
+
+	* perl_ext/examples/morph.cgi: fixed and improved
+
+2006-01-24 23:07  peterdd
+
+	* perl_ext/examples/sprite.cgi: fixed
+
+2006-01-24 22:49  peterdd
+
+	* perl_ext/examples/: animation.cgi, text.cgi: comment out my
+	  libpath
+
+2006-01-24 22:48  peterdd
+
+	* perl_ext/examples/text.cgi: fixed and improved
+
+2006-01-24 22:17  peterdd
+
+	* perl_ext/examples/animation.cgi: fixed and improved
+
+2006-01-24 18:32  peterdd
+
+	* perl_ext/Makefile.PL: fixing paths
+
+2006-01-24 18:29  peterdd
+
+	* perl_ext/Makefile.PL: fixing paths
+
+2006-01-24 18:03  peterdd
+
+	* perl_ext/Makefile.PL: a first step: take mingversion from global
+	  ../configure.in, use of ../src/ming_config.h for detection of
+	  optional libs
+
 2006-01-24 09:52  anderson
 
 	* Makefile: Don't record changes to ChangeLog itself
