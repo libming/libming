@@ -72,5 +72,6 @@ release:
 	rm -rf ming-$(MING_VERSION)/java_ext
 	tar czvf ming-php-$(MING_VERSION).tar.gz ming-$(MING_VERSION)/php_ext
 	rm -rf ming-$(MING_VERSION)/php_ext
+	rm -rf ming-$(MING_VERSION)/util/old
 	tar czvf ming-$(MING_VERSION).tar.gz ming-$(MING_VERSION)
 	rm -rf ming-$(MING_VERSION)
