@@ -9,7 +9,7 @@ PAGER ?= less
 
 BINARIES = listswf listswf_d swftoperl swftophp swftopython \
 	makeswf listaction listaction_d listfdb makefdb listjpeg raw2adpcm \
-	listmp3 
+	listmp3 dbl2png
 
 BINARIES += $(EXTRA_BINS)
 
@@ -62,6 +62,9 @@ gif2mask: gif2mask.c ../libming$(NOVAR_SHLIBEXT)
 
 png2dbl: png2dbl.c ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) png2dbl.c -o png2dbl
+
+dbl2png: dbl2png.c ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) $(LDFLAGS) dbl2png.c -o dbl2png
 
 gif2dbl: gif2dbl.c ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) gif2dbl.c -o gif2dbl 
