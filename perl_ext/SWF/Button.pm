@@ -77,15 +77,24 @@ Adds $action object (see SWF::Action). Valid FLAGs are:
 
 SWFBUTTON_MOUSEUP is the default value of FLAG.
 
+=item $button->setMenu(0|1);
+
+Parameter is 0 (off) or 1(on).
+Can be used for a slight different behavior of buttons.
+
 =back
 
 =head1 AUTHOR
 
-Soheil Seyfaie (soheil@netcom.ca).
+wrapper written by
+
+Soheil Seyfaie   (soheil at users dot sourceforge dot net)
+Peter Liscovius (peterdd at users dot sourceforge dot net)
+
+and many others.
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Shape, SWF::Movie, .
-
+SWF, SWF::Action, SWF::Shape, SWF::Movie, SWF::MovieClip
 
 =cut
