@@ -41,11 +41,22 @@ void
 Ming_setScale(scale)
     float scale
 
+float
+Ming_getScale()
+
+void 
+Ming_setCubicThreshold(num)
+    int num
+		
 void 
 Ming_useSWFVersion(version)
     int version
     ALIAS:
         SWF::setVersion = 1
+
+int
+Ming_setSWFCompression(level);
+    int level
 
 void
 Ming_useConstants(flag)
