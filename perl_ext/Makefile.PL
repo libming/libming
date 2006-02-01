@@ -124,7 +124,7 @@ EOF
 		exit(0) if $src_dir eq "q";
 		if(-d $src_dir) {
 			$ming_version = get_ming_version($src_dir);
-			if( $ming_version && version_supported($ming_version) ){
+			if($ming_version){
 				$MING_DIR = $src_dir;
 				last;
 			}
@@ -159,8 +159,6 @@ sub get_ming_version{
 	print "SWF::VERSION = $version\n";
 	if ($version eq "") {return undef;}
 	else {return $version;}
-	close(FH);
-	return undef;
 }
 
 # peterdd: Someone should provide a better approach to detect the needed libs
