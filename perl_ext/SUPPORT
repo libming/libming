@@ -2,16 +2,21 @@
 
 =over 3
 
-=item MAILNG LIST
+=item MAILING LIST
 
-For comments, questions, bug-reports, announcements, etc., send mail
-to ming-fun list: I<ming-fun@opaque.net>.
+For comments, questions about using ming send mail to the 
+ming-users list: I<ming-users@lists.sourceforge.net>
 
-To subscribe to this list visit: I<http://www.opaque.net/mailman/listinfo.cgi/ming-fun>
+
+For bug-reports and patches, announcements and development discussion send 
+mail to I<ming-devr@lists.sourceforge.net>
+
 
 =back
 
 =head1 REPORTING BUG
+
+For bug-reports there is a bugtracker on sourceforge: I<http://sourceforge.net/tracker/?group_id=18365>
 
 =over 3
 
