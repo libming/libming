@@ -31,7 +31,7 @@ SWF::TextField - SWF TextField class
 
 Unlike SWF::Text objects, TextFields cannot be rotated, scaled non-proportionally, or skewed. However, TextFields can be used as form entries and they can use browser-defined fonts. 
 
-==head1 NOTES:
+=head1 NOTES:
 
     TextField is implemented into Flash since Flash3. 
     Most of features for TextFields are available since Flash4.

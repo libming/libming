@@ -39,6 +39,6 @@ SWF::VideoStream - SWF Video class
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text
+SWF, SWF::Action, SWF::Movie, SWF::Sound, SWF::Sprite
 
 =cut

@@ -117,6 +117,7 @@ This tag imports constants most commonly used by SWF::TextField.
     SWFTEXTFIELD_USEFONT
     SWFTEXTFIELD_AUTOSIZE
 
+=back
 
 =head1 AUTHOR
 

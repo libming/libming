@@ -46,6 +46,8 @@ Return width of bitmap in pixels.
 
 Return height of bitmap in pixels.
 
+=back
+
 =head1 AUTHOR
 
 Soheil Seyfaie (soheil@netcom.ca).
