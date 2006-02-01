@@ -14,27 +14,28 @@ INSTALLATION:
 
 Read these instructions all the way through before you start!
 
-1.  Make sure you have downloaded Ming ( http://www.opaque.net/ming). If
+1.  Make sure you have downloaded Ming ( http://sourceforge.net/projects/ming ). If
     you haven't compiled Ming, it will be compiled during SWF.pm installation
     process (step 3 below).
 
-2.  Unpack the tar file. Under Unix type:
+2.  Unpack the tar file. (If you are reading this you have probably done this. :-))
+    Under Unix type:
 
-	zcat SWF-xxxx.tar.gz | tar xvf -
+    tar xvzf ming-perl-XXX.tar.gz
 
 3.  Compile:
 
-	a.  cd SWF-xxx
+	a.  cd ming-perl-XXX/perl-ext
 	b.  perl Makefile.PL
 	c.  make
-        d.  make test (optional but recommended)
+	d.  make test (optional but recommended)
 	e.  make install
 
-    During step (b), Makefile.PL will try to find your Ming distribution. 
-    If it fails, you will be asked to provide the Ming directory.
+	During step (b), Makefile.PL will try to find your Ming distribution. 
+	If it fails, you will be asked to provide the Ming directory.
 
-    If you want to install SWF into your home directory, replace step (b)
-    with:
+	If you want to install SWF into your home directory, replace step (b)
+	with:
 
 	b. perl Makefile.PL PREFIX=/path/to/your/directory
 
@@ -42,9 +43,14 @@ Read these instructions all the way through before you start!
     PERLIASH (you can write it more succinctly in Perl). These examples were
     created from PHP examples in the Ming distribution.
 
+5.  After install there is too some (still incomplete) documentation accessible by manpages.
+    E.g. type 
+		
+		man SWF
+		or
+		man SWF::Shape 
 
-
-
+		Hint: The KDE file and web browser Konqueror formats manpages automatic as nice HTML-files.
 
 COPYRIGHT INFO
 --------------
@@ -57,7 +63,9 @@ COPYRIGHT INFO
 
 AUTHOR:
 _______
+
 Soheil Seyfaie
 soheil at users.sourceforge.net
 
-
+and many others 
+(see http://sourceforge.net/projects/ming/ )
