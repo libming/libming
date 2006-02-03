@@ -112,6 +112,8 @@ enum
   SWFACTION_SHIFTRIGHT              = 0x64,
   SWFACTION_SHIFTRIGHT2             = 0x65,
   SWFACTION_STRICTEQ                = 0x66,
+  SWFACTION_GREATERTHEN             = 0x67,/*not used yet*/
+  SWFACTION_STRING_GREATERTHEN      = 0x68,/*not used yet*/
   SWFACTION_EXTENDS                 = 0x69,
   SWFACTION_CONSTANTPOOL            = 0x88,
   SWFACTION_TRY                     = 0x8f,

@@ -180,6 +180,12 @@ int printActionRecord(Buffer f)
     case SWFACTION_LESSTHAN:
       println("Less Than");
       break;
+    case SWFACTION_GREATERTHEN:
+      println("Greater Than");
+      break;
+    case SWFACTION_STRING_GREATERTHEN:
+      println("String Greater than");
+      break;
     case SWFACTION_LOGICALAND:
       println("And");
       break;
