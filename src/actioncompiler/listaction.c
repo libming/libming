@@ -575,6 +575,9 @@ int printActionRecord(Buffer f)
 	case SWFACTION_EXTENDS:
 		println("extends");
 		break;
+	case SWFACTION_CASTOBJECT:
+		println("cast object");
+		break;
     
 
     default:
