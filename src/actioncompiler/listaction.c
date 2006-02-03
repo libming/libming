@@ -567,6 +567,14 @@ int printActionRecord(Buffer f)
 	  }
       break;
 	}
+
+/* f7 actions */
+	case SWFACTION_IMPLEMENTS:
+		println("implements");
+		break;
+	case SWFACTION_EXTENDS:
+		println("extends");
+		break;
     
 
     default:
