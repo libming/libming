@@ -587,14 +587,13 @@ int printActionRecord(Buffer f)
 	case SWFACTION_DEFINEFUNCTION2:
 		println(" FIXME: DefineFunction2 dump");
 		break;
-    }
 
     
 
-    default:
-      println("Unknown Action: %02X", type);
-      dumpBytes(f, length);
-  }
+	default:
+		println("Unknown Action: %02X", type);
+		dumpBytes(f, length);
+  } // of switch
 
   return 1;
 }
