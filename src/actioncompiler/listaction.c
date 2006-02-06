@@ -584,6 +584,11 @@ int printActionRecord(Buffer f)
 	case SWFACTION_CASTOBJECT:
 		println("cast object");
 		break;
+	case SWFACTION_DEFINEFUNCTION2:
+		println(" FIXME: DefineFunction2 dump");
+		break;
+    }
+
     
 
     default:

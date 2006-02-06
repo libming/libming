@@ -116,6 +116,7 @@ enum
   SWFACTION_STRING_GREATERTHEN      = 0x68,/*not used yet*/
   SWFACTION_EXTENDS                 = 0x69,
   SWFACTION_CONSTANTPOOL            = 0x88,
+  SWFACTION_DEFINEFUNCTION2         = 0x8e,/*not used yet*/
   SWFACTION_TRY                     = 0x8f,
   SWFACTION_WITH                    = 0x94,
   SWFACTION_DEFINEFUNCTION          = 0x9B,
