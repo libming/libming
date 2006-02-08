@@ -57,7 +57,7 @@ SWFAction compileSWFActionCode(const char *script)
 
 	if(b)
 	{
-		SWFOutput_writeBuffer(output, (char*) b->buffer, bufferLength(b));
+		SWFOutput_writeBuffer(output, b->buffer, bufferLength(b));
 		destroyBuffer(b);
 	}
 

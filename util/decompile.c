@@ -12,7 +12,7 @@
 #include "action.h"
 #include "swftypes.h"
 
-unsigned char **pool;
+char **pool;
 struct SWF_ACTIONPUSHPARAM *regs[256];
 
 static char *getName(struct SWF_ACTIONPUSHPARAM *act);

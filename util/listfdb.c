@@ -348,7 +348,7 @@ void printDefineFont2(FILE *f)
 {
   int flags, nGlyphs, namelen, off, i, fillBits, lineBits;
   int here = fileOffset;
-  int *offset;
+  unsigned int *offset;
 
   flags = readUInt8(f);
 

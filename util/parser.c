@@ -1101,7 +1101,7 @@ parseSWF_DEFINEBITS (FILE * f, int length)
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->JPEGDataSize = end-fileOffset;
-  parserrec->JPEGData = readBytes(f,end-fileOffset);
+  parserrec->JPEGData = (UI8 *)readBytes(f,end-fileOffset);
 
   PAR_END;
 }
@@ -1114,7 +1114,7 @@ parseSWF_DEFINEBITSJPEG2 (FILE * f, int length)
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->JPEGDataSize = end-fileOffset;
-  parserrec->JPEGData = readBytes(f,end-fileOffset);
+  parserrec->JPEGData = (UI8 *)readBytes(f,end-fileOffset);
 
   PAR_END;
 }
@@ -1127,9 +1127,9 @@ parseSWF_DEFINEBITSJPEG3 (FILE * f, int length)
 
   parserrec->CharacterID = readUInt16 (f);
   parserrec->AlphaDataOffset = readUInt32 (f);
-  parserrec->JPEGData = readBytes(f,parserrec->AlphaDataOffset);
+  parserrec->JPEGData = (UI8 *)readBytes(f,parserrec->AlphaDataOffset);
   parserrec->AlphaDataSize = end-fileOffset;
-  parserrec->BitmapAlphaData = readBytes(f,end-fileOffset);
+  parserrec->BitmapAlphaData = (UI8 *)readBytes(f,end-fileOffset);
 
 
   PAR_END;
@@ -1464,7 +1464,7 @@ parseSWF_DEFINELOSSLESS (FILE * f, int length)
   if( parserrec->BitmapFormat == 3 /* 8-bit */ ) {
       parserrec->BitmapColorTableSize = readUInt8 (f);
   }
-  parserrec->ZlibBitmapData = readBytes (f,end-fileOffset);
+  parserrec->ZlibBitmapData = (UI8 *)readBytes (f,end-fileOffset);
 
   PAR_END;
 }
@@ -1482,7 +1482,7 @@ parseSWF_DEFINELOSSLESS2 (FILE * f, int length)
   if( parserrec->BitmapFormat == 3 /* 8-bit */ ) {
       parserrec->BitmapColorTableSize = readUInt8 (f);
   }
-  parserrec->ZlibBitmapData = readBytes (f,end-fileOffset);
+  parserrec->ZlibBitmapData = (UI8 *)readBytes (f,end-fileOffset);
 
   PAR_END;
 }
@@ -1553,7 +1553,7 @@ parseSWF_DEFINESOUND (FILE * f, int length)
   parserrec->SoundSize = readBits (f, 1);
   parserrec->SoundType = readBits (f, 1);
   parserrec->SoundSampleCount = readUInt32 (f);
-  parserrec->SoundData = readBytes (f, end-fileOffset);
+  parserrec->SoundData = (UI8 *)readBytes (f, end-fileOffset);
 
   PAR_END;
 }
@@ -1835,7 +1835,7 @@ parseSWF_JPEGTABLES (FILE * f, int length)
   PAR_BEGIN (SWF_JPEGTABLES);
 
   parserrec->JPEGDataSize = end-fileOffset;
-  parserrec->JPEGData = readBytes(f,end-fileOffset);
+  parserrec->JPEGData = (UI8 *)readBytes(f,end-fileOffset);
 
   PAR_END;
 }

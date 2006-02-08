@@ -83,7 +83,7 @@ struct pngdata readDBL(FILE *fp)
     if (verbose) 
     {
       printf("image has PALETTE\npalette size=%d\n",png.num_palette+1);
-      printf("size %d x %d\n", png.width, png.height);
+      printf("size %d x %d\n", (int)png.width, (int)png.height);
     }
   }
   else
@@ -95,7 +95,7 @@ struct pngdata readDBL(FILE *fp)
     readsize=outsize-5 ;
     if(verbose)
     {
-     printf("size %d x %d\n", png.width, png.height);
+     printf("size %d x %d\n", (int)png.width, (int)png.height);
     }
    }
   }

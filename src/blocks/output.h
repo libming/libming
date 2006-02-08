@@ -84,7 +84,7 @@ void SWFOutput_writeUInt32(SWFOutput out, long data);
 
 void SWFOutput_writeSInt32(SWFOutput out, long data);
 
-void SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes);
+void SWFOutput_writeBuffer(SWFOutput out, unsigned char *buffer, int bytes);
 
 
 /* number of bits required to store num */

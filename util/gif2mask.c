@@ -18,7 +18,7 @@ void error(char *msg)
 unsigned char *readGif(char *fileName, int *length)
 {
   GifFileType *file;
-  char *bits;
+  unsigned char *bits;
   unsigned char colorMap[256];
   unsigned char *data;
   int i, nColors, size;
@@ -64,7 +64,7 @@ void usage()
 int main(int argc, char *argv[])
 {
   int len, size;
-  long outsize;
+  unsigned long outsize;
   char *outfile;
   unsigned char *data, *outdata;
   FILE *mask;

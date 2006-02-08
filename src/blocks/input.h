@@ -12,7 +12,7 @@
 
 #include "ming.h"
 
-int SWFInput_read(SWFInput input, char* buffer, int count);
+int SWFInput_read(SWFInput input, unsigned char* buffer, int count);
 
 int SWFInput_getChar(SWFInput input);
 int SWFInput_getUInt16(SWFInput input);

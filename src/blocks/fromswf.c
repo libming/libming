@@ -235,7 +235,7 @@ struct swfile
 	unsigned char (*readc)();
 
 	char *name;	
-	char vers[4];
+	unsigned char vers[4];
 	int fsize;
 	
 	char rect[9];

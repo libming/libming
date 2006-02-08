@@ -350,11 +350,13 @@ int swf5wrap()
 
 static void countline()
 {
-  if(sLineNumber != 0)
-   if(column < 1023)
+  if(sLineNumber != 0) {
+   if(column < 1023) {
     msgline[column] = 0;
-   else
+   } else {
     msgline[1023] = 0;
+   }
+  }
 
   ++sLineNumber;
   column = 0;

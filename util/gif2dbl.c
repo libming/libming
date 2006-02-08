@@ -50,7 +50,7 @@ unsigned char *readGif(char *fileName, int *length, int *bytesPerColor)
 {
   GifFileType *file;
   ColorMapObject *colorMap;
-  char *bits;
+  unsigned char *bits;
   unsigned char *data;
   unsigned char *p;
   int i, nColors, size, alpha, bgColor, alignedWidth;
@@ -203,7 +203,7 @@ void usage()
 int main(int argc, char *argv[])
 {
   int len, size, bytesPerColor;
-  long outsize;
+  unsigned long outsize;
   char *outfile;
   unsigned char *data, *outdata;
   FILE *dbl;

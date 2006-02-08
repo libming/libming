@@ -119,9 +119,9 @@ SWFInput_getUInt32_BE(SWFInput input)
 
 
 int
-SWFInput_read(SWFInput input, char* buffer, int count)
+SWFInput_read(SWFInput input, unsigned char* buffer, int count)
 {
-	return input->read(input, (unsigned char*) buffer, count);
+	return input->read(input, buffer, count);
 }
 
 

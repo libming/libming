@@ -331,7 +331,7 @@ SWFOutput_writeSInt32(SWFOutput out, long data)
 
 
 void
-SWFOutput_writeBuffer(SWFOutput out, char *buffer, int bytes)
+SWFOutput_writeBuffer(SWFOutput out, unsigned char *buffer, int bytes)
 {
 	SWFOutput_checkSize(out, bytes);
 	memcpy(out->pos, buffer, bytes);

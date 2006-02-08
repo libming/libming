@@ -12,7 +12,7 @@ typedef unsigned long	SB32;	/* Signed bit value */
 typedef unsigned long	UB32;	/* Unsigned bit value */
 typedef float		FB32;	/* Signed fixed-point bit value */
 
-typedef unsigned char	*STRING;/* String */
+typedef char	*STRING;/* String */
 
 typedef UI8 LANGCODE;
 typedef UI8 BYTE;

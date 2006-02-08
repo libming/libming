@@ -50,11 +50,11 @@ int
 readGif(GifFileType *file, dblData result)
 {	
 	ColorMapObject *colorMap;
-	char *bits;
+	unsigned char *bits;
 	unsigned char *data;
 	unsigned char *p;
 	int i, nColors, size, alpha, bgColor, alignedWidth, bytesPerColor;
-	long outsize;
+	unsigned long outsize;
 
 	if(DGifSlurp(file) != GIF_OK)
 	//	error("Error slurping file");
@@ -221,7 +221,7 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(const char *fileName)
 	return ret;
 }
 
-static int gifReadFunc(GifFileType *gif, char *buf, int len)
+static int gifReadFunc(GifFileType *gif, unsigned char *buf, int len)
 {	SWFInput input = gif->UserData;
 	return SWFInput_read(input, buf, len);
 }

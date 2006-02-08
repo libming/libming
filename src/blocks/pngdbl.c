@@ -43,7 +43,7 @@ static png_structp openPngFromFile(FILE *fp)
 	return result;
 }
 
-static int pngReadFunc(png_structp png, char *buf, int len)
+static int pngReadFunc(png_structp png, unsigned char *buf, int len)
 {	SWFInput input = (SWFInput) png->io_ptr;
 	return SWFInput_read(input, buf, len);
 }
@@ -52,7 +52,7 @@ png_structp openPngFromInput(SWFInput input)
 {	unsigned char header[8];
 	png_structp result;
 	
-	if(SWFInput_read(input, (char *)header, 8) != 8)
+	if(SWFInput_read(input, header, 8) != 8)
 		return NULL;
 	if(!png_check_sig(header, 8))
 		return NULL;
