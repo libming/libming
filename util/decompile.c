@@ -12,7 +12,7 @@
 #include "action.h"
 #include "swftypes.h"
 
-char **pool;
+static char **pool;
 struct SWF_ACTIONPUSHPARAM *regs[256];
 
 static char *getName(struct SWF_ACTIONPUSHPARAM *act);
@@ -22,7 +22,8 @@ dumpRegs()
 {
 int i;
 for(i=0;i<6;i++)
-	printf("reg[%d] %s\n", i, getName(regs[i]));
+	if( regs[i] )
+		printf("reg[%d] %s\n", i, getName(regs[i]));
 }
 
 /*
@@ -1430,6 +1431,8 @@ decompile5Action(int n, SWF_ACTION *actions,int indent)
 
   if( n == 1 )
 	  return NULL;
+
+  pool = NULL;
 
   dcinit();
 

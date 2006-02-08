@@ -5,7 +5,7 @@ extern int verbose;
 
 typedef void (*outputfunc) (SWF_ACTION *act);
 
-STRING *pool;
+static STRING *pool = NULL;
 
 struct SWFActionName
 {
