@@ -2,7 +2,7 @@
 #include <stdarg.h>
 
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 #include "libming.h"
 
 #define print(x)	{fputs(x,stdout);}

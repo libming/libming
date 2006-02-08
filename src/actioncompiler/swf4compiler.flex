@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 #include "blocks/error.h"
 #include "swf4compiler.tab.h" /* defines token types */
 

@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 
 #define YYPARSE_PARAM buffer
 
@@ -189,11 +189,11 @@ if_stmt
 		  bufferWriteS16($$, atoi($5));
 		  free($5);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($10)+5);
 		  bufferConcat($$, $10);			  /* ..here */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($8));
 		  bufferConcat($$, $8); }
@@ -205,10 +205,10 @@ if_stmt
 		  bufferWriteS16($$, atoi($5));
 		  free($5);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, 5);
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);	  /* ..here */
+		  bufferWriteU8($$, SWFACTION_JUMP);	  /* ..here */
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($8));	  /* ..and then out */
 		  bufferConcat($$, $8); }
@@ -221,34 +221,34 @@ if_stmt
 		  bufferWriteS16($$, atoi($6));
 		  free($6);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($9));
 		  bufferConcat($$, $9); }			  /* ..here */
 
 	| IF '(' FRAMELOADED '(' expr ')' ')' stmt ELSE stmt
 		{ $$ = $5;
-		  bufferWriteU8($$, SWFACTION_WAITFORFRAMEEXPRESSION);
+		  bufferWriteU8($$, SWFACTION_WAITFORFRAME2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($10)+5);
 		  bufferConcat($$, $10);			  /* ..here */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($8));
 		  bufferConcat($$, $8); }
 
 	| IF '(' FRAMELOADED '(' expr ')' ')' stmt
 		{ $$ = $5;
-		  bufferWriteU8($$, SWFACTION_WAITFORFRAMEEXPRESSION);
+		  bufferWriteU8($$, SWFACTION_WAITFORFRAME2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, 5);
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);	  /* ..here */
+		  bufferWriteU8($$, SWFACTION_JUMP);	  /* ..here */
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($8));	  /* ..and then out */
 		  bufferConcat($$, $8); }
@@ -256,20 +256,20 @@ if_stmt
 	/* make this case cleaner.. */
 	| IF '(' '!' FRAMELOADED '(' expr ')' ')' stmt
 		{ $$ = $6;
-		  bufferWriteU8($$, SWFACTION_WAITFORFRAMEEXPRESSION);
+		  bufferWriteU8($$, SWFACTION_WAITFORFRAME2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($9));
 		  bufferConcat($$, $9); }			  /* ..here */
 
 	| IF '(' expr ')' stmt ELSE stmt
-		{ bufferWriteU8($3, SWFACTION_BRANCHIFTRUE);
+		{ bufferWriteU8($3, SWFACTION_IF);
 		  bufferWriteS16($3, 2);
 		  bufferWriteS16($3, bufferLength($7)+5);
 		  bufferConcat($3, $7);
-		  bufferWriteU8($3, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($3, SWFACTION_JUMP);
 		  bufferWriteS16($3, 2);
 		  bufferWriteS16($3, bufferLength($5));
 		  bufferConcat($3, $5);
@@ -277,7 +277,7 @@ if_stmt
 
 	| IF '(' expr ')' stmt
 		{ bufferWriteU8($3, SWFACTION_LOGICALNOT);
-		  bufferWriteU8($3, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteU8($3, SWFACTION_IF);
 		  bufferWriteS16($3, 2);
 		  bufferWriteS16($3, bufferLength($5));
 		  bufferConcat($3, $5);
@@ -317,22 +317,22 @@ iter_stmt
 		  bufferWriteS16($$, atoi($6));
 		  free($6);
 		  bufferWriteU8($$, 1);		/* if not loaded, jump to.. */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($9)+5);
 		  bufferConcat($$, $9);				  /* ..here */
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2)); }
 
 	| WHILE '(' expr ')' stmt
                 { $$ = $3;
 		  bufferWriteU8($$, SWFACTION_LOGICALNOT);
-		  bufferWriteU8($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteU8($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5)+5);
 		  bufferConcat($$, $5);
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
 		  bufferResolveJumps($$); }
@@ -340,7 +340,7 @@ iter_stmt
 	| DO stmt WHILE '(' expr ')'
 		{ $$ = $2;
 		  bufferConcat($$, $5);
-		  bufferWriteU8($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteU8($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
 		  bufferResolveJumps($$); }
@@ -350,13 +350,13 @@ iter_stmt
                     $5 = newBuffer();
                   else {
                     bufferWriteU8($5, SWFACTION_LOGICALNOT);
-                    bufferWriteU8($5, SWFACTION_BRANCHIFTRUE);
+                    bufferWriteU8($5, SWFACTION_IF);
                     bufferWriteS16($5, 2);
                     bufferWriteS16($5, bufferLength($9)+bufferLength($7)+5);
                   }
                   bufferConcat($5, $9);
                   bufferConcat($5, $7);
-                  bufferWriteU8($5, SWFACTION_BRANCHALWAYS);
+                  bufferWriteU8($5, SWFACTION_JUMP);
                   bufferWriteS16($5, 2);
                   bufferWriteS16($5, -(bufferLength($5)+2));
                   bufferResolveJumps($5);
@@ -374,7 +374,7 @@ assign_stmts_opt
 cont_stmt
 	: CONTINUE ';'
 		{ $$ = newBuffer();
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, MAGIC_CONTINUE_NUMBER); }
 	;
@@ -382,7 +382,7 @@ cont_stmt
 break_stmt
 	: BREAK ';'
 		{ $$ = newBuffer();
-		  bufferWriteU8($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, MAGIC_BREAK_NUMBER); }
 	;
@@ -390,7 +390,7 @@ break_stmt
 void_function_call
 	: STOPDRAG '(' ')' /* no args */
 		{ $$ = newBuffer();
-		  bufferWriteU8($$, SWFACTION_STOPDRAGMOVIE); }
+		  bufferWriteU8($$, SWFACTION_ENDDRAG); }
 
 	| CALLFRAME '(' variable ')'
 		{ $$ = newBuffer();
@@ -472,7 +472,7 @@ void_function_call
 		  bufferWriteString($$, "0", 2); /* no constraint */
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $3);
-		  bufferWriteU8($$, SWFACTION_STARTDRAGMOVIE); }
+		  bufferWriteU8($$, SWFACTION_STARTDRAG); }
 
 	| STARTDRAG '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
 		{ $$ = newBuffer();
@@ -483,7 +483,7 @@ void_function_call
 		  bufferWriteString($$, "1", 2); /* has constraint */
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $3);
-		  bufferWriteU8($$, SWFACTION_STARTDRAGMOVIE); }
+		  bufferWriteU8($$, SWFACTION_STARTDRAG); }
 
 	/* duplicateClip(target, new, depth) */
 	| DUPLICATECLIP '(' expr ',' expr ',' expr ')'
@@ -535,13 +535,13 @@ void_function_call
 
 	| GOTOFRAME '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteU8($$, SWFACTION_GOTOEXPRESSION);
+		  bufferWriteU8($$, SWFACTION_GOTOFRAME2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 0); } /* XXX - and stop */
 
 	| GOTOANDPLAY '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteU8($$, SWFACTION_GOTOEXPRESSION);
+		  bufferWriteU8($$, SWFACTION_GOTOFRAME2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 1); } /* XXX - and play */
 
@@ -554,7 +554,7 @@ void_function_call
 
 	| SETTARGET '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteU8($$, SWFACTION_SETTARGETEXPRESSION); }
+		  bufferWriteU8($$, SWFACTION_SETTARGET2); }
 
 	| TELLTARGET '(' STRING ')' stmt
 		{ $$ = newBuffer();
@@ -573,7 +573,7 @@ void_function_call
 	| TELLTARGET '(' expr ')' stmt
 		{ $$ = $3;
 			/* SetTarget(expr) */
-		  bufferWriteU8($$, SWFACTION_SETTARGETEXPRESSION); 
+		  bufferWriteU8($$, SWFACTION_SETTARGET2); 
 			/* stmt */
 		  bufferConcat($$, $5);
 			/* SetTarget('') */
@@ -589,11 +589,11 @@ function_call
 
 	| TIME '(' ')'
 		{ $$ = newBuffer();
-		  bufferWriteU8($$, SWFACTION_GETTIMER); }
+		  bufferWriteU8($$, SWFACTION_GETTIME); }
 
 	| RANDOM '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteU8($$, SWFACTION_RANDOM); }
+		  bufferWriteU8($$, SWFACTION_RANDOMNUMBER); }
 
 	| LENGTH '(' expr ')'
 		{ $$ = $3;
@@ -713,8 +713,8 @@ rhs_expr
 
 	| "++" lhs_expr
 		{ $$ = $2;
-		  bufferWriteU8($$, SWFACTION_DUP);
-		  bufferWriteU8($$, SWFACTION_DUP);
+		  bufferWriteU8($$, SWFACTION_PUSHDUP);
+		  bufferWriteU8($$, SWFACTION_PUSHDUP);
 		  bufferWriteU8($$, SWFACTION_GETVARIABLE);
 		  bufferWriteString($$, "1", 2);
 		  bufferWriteU8($$, SWFACTION_ADD);
@@ -738,8 +738,8 @@ rhs_expr
 
 	| "--" lhs_expr
 		{ $$ = $2;
-		  bufferWriteU8($$, SWFACTION_DUP);
-		  bufferWriteU8($$, SWFACTION_DUP);
+		  bufferWriteU8($$, SWFACTION_PUSHDUP);
+		  bufferWriteU8($$, SWFACTION_PUSHDUP);
 		  bufferWriteU8($$, SWFACTION_GETVARIABLE);
 		  bufferWriteString($$, "1", 2);
 		  bufferWriteU8($$, SWFACTION_SUBTRACT);
@@ -758,7 +758,7 @@ rhs_expr
 	| lhs_expr '=' rhs_expr /* assign and leave copy on stack */
 		{ $$ = $1;
 		  bufferConcat($$, $3);
-		  bufferWriteU8($$, SWFACTION_DUP);
+		  bufferWriteU8($$, SWFACTION_PUSHDUP);
 		  bufferWriteU8($$, SWFACTION_SETVARIABLE); }
 
 	| rhs_expr '*' rhs_expr
@@ -838,11 +838,11 @@ rhs_expr
 		  bufferWriteU8($1, SWFACTION_LOGICALOR); }
 
 	| rhs_expr '?' rhs_expr ':' rhs_expr
-		{ bufferWriteU8($1, SWFACTION_BRANCHIFTRUE);
+		{ bufferWriteU8($1, SWFACTION_IF);
 		  bufferWriteS16($1, 2);
 		  bufferWriteS16($1, bufferLength($5)+5);
 		  bufferConcat($1, $5);
-		  bufferWriteU8($1, SWFACTION_BRANCHALWAYS);
+		  bufferWriteU8($1, SWFACTION_JUMP);
 		  bufferWriteS16($1, 2);
 		  bufferWriteS16($1, bufferLength($3));
 		  bufferConcat($1, $3); }

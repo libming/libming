@@ -28,7 +28,7 @@
 #include "blocks/output.h"
 #include "blocks/action.h"
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 
 
 SWFAction compileSWFActionCode(const char *script)

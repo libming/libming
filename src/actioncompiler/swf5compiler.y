@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 #include "assembler.h"
 
 #define YYPARSE_PARAM buffer
@@ -299,11 +299,11 @@ assign_stmts
 if_stmt
 	: IF '(' expr ')' stmt ELSE stmt
 		{ $$ = $3;
-		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($7)+5);
 		  bufferConcat($$, $7);
-		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5));
 		  bufferConcat($$, $5); }
@@ -311,7 +311,7 @@ if_stmt
 	| IF '(' expr ')' stmt		%prec NOELSE
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
-		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5));
 		  bufferConcat($$, $5); }
@@ -543,11 +543,11 @@ iter_stmt
 	: while_init '(' expr ')' stmt
                 { $$ = $3;
 		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
-		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5)+5);
 		  bufferConcat($$, $5);
-		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
 		  bufferResolveJumps($$);
@@ -560,7 +560,7 @@ iter_stmt
 			}
 			else
 				$$ = $5;
-		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, -(bufferLength($$)+2));
 		  bufferResolveJumps($$);
@@ -575,7 +575,7 @@ iter_stmt
 
 		  if($7)
 		  {
-                    bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
+                    bufferWriteOp($$, SWFACTION_JUMP);
                     bufferWriteS16($$, 2);
                     bufferWriteS16($$, bufferLength($7));
 		  }
@@ -586,13 +586,13 @@ iter_stmt
 		  {
 		    bufferConcat($7, $5);
                     bufferWriteOp($7, SWFACTION_LOGICALNOT);
-                    bufferWriteOp($7, SWFACTION_BRANCHIFTRUE);
+                    bufferWriteOp($7, SWFACTION_IF);
                     bufferWriteS16($7, 2);
                     bufferWriteS16($7, bufferLength($10)+5);
                   }
 
                   bufferConcat($7, $10);
-                  bufferWriteOp($7, SWFACTION_BRANCHALWAYS);
+                  bufferWriteOp($7, SWFACTION_JUMP);
                   bufferWriteS16($7, 2);
                   bufferWriteS16($7, -(bufferLength($7)+2));
                   bufferResolveJumps($7);
@@ -610,11 +610,11 @@ iter_stmt
 
 		  b2 = newBuffer();
 		  bufferWriteSetRegister(b2, 0);
-		  bufferWriteOp(b2, SWFACTION_PUSHDATA);
+		  bufferWriteOp(b2, SWFACTION_PUSH);
 		  bufferWriteS16(b2, 1);
 		  bufferWriteU8(b2, 2);
-		  bufferWriteOp(b2, SWFACTION_NEWEQUALS);
-		  bufferWriteOp(b2, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp(b2, SWFACTION_EQUALS2);
+		  bufferWriteOp(b2, SWFACTION_IF);
 		  bufferWriteS16(b2, 2);
 
 		  b3 = newBuffer();
@@ -627,7 +627,7 @@ iter_stmt
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
 		  bufferConcat($$, b2);
-		  bufferWriteOp(b3, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp(b3, SWFACTION_JUMP);
 		  bufferWriteS16(b3, 2);
 		  bufferWriteS16(b3, -tmp);
 		  bufferResolveJumps(b3);
@@ -644,23 +644,23 @@ iter_stmt
 
 		  b2 = newBuffer();
 		  bufferWriteSetRegister(b2, 0);
-		  bufferWriteOp(b2, SWFACTION_PUSHDATA);
+		  bufferWriteOp(b2, SWFACTION_PUSH);
 		  bufferWriteS16(b2, 1);
 		  bufferWriteU8(b2, 2);
-		  bufferWriteOp(b2, SWFACTION_NEWEQUALS);
-		  bufferWriteOp(b2, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp(b2, SWFACTION_EQUALS2);
+		  bufferWriteOp(b2, SWFACTION_IF);
 		  bufferWriteS16(b2, 2);
 		  // add size later
 
 		  b3 = newBuffer();
 		  bufferWriteString(b3, $4, strlen($4)+1);
 		  bufferWriteRegister(b3, 0);
-		  bufferWriteOp(b3, SWFACTION_VAREQUALS);
+		  bufferWriteOp(b3, SWFACTION_DEFINELOCAL);
 		  bufferConcat(b3, $8);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
 		  bufferConcat($$, b2);
-		  bufferWriteOp(b3, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp(b3, SWFACTION_JUMP);
 		  bufferWriteS16(b3, 2);
 		  bufferWriteS16(b3, -tmp);
 		  bufferResolveJumps(b3);
@@ -681,7 +681,7 @@ cont_stmt
 		{ if(chkctx(CTX_CONTINUE) < 0)
 			swf5error("continue outside loop");
 		  $$ = newBuffer();
-		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, MAGIC_CONTINUE_NUMBER); }
 	;
@@ -695,7 +695,7 @@ break_stmt
 		  $$ = newBuffer();
 		  if(tmp)	/* break out of a for .. in */
 			bufferWriteOp($$, SWFACTION_POP);
-		  bufferWriteOp($$, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, MAGIC_BREAK_NUMBER); }
 	;
@@ -761,7 +761,7 @@ void_function_call
 		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		  bufferWriteString($$, $4, strlen($4)+1);
 		  free($4);
-		  bufferWriteOp($$, SWFACTION_DELETEVAR);
+		  bufferWriteOp($$, SWFACTION_DELETE);
 		  bufferWriteOp($$, SWFACTION_POP); }
 
 	| DELETE lvalue_expr '[' expr ']'
@@ -769,7 +769,7 @@ void_function_call
 		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		  bufferConcat($$, $4);
 		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		  bufferWriteOp($$, SWFACTION_DELETEVAR); 
+		  bufferWriteOp($$, SWFACTION_DELETE); 
 		  bufferWriteOp($$, SWFACTION_POP); }
 
 	| TRACE '(' expr_or_obj ')'
@@ -782,7 +782,7 @@ void_function_call
 		  printf("void_function_call: GETURL '(' expr ')'\n");
 #endif
 		  $$ = $3;
-		  bufferWriteOp($$, SWFACTION_PUSHDATA);
+		  bufferWriteOp($$, SWFACTION_PUSH);
 		  bufferWriteS16($$, 2); bufferWriteS16($$, 0); // two 0 bytes	
 		  bufferWriteOp($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
@@ -838,7 +838,7 @@ void_function_call
 		  bufferWriteString($$, "0", 2); /* no constraint */
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_STARTDRAGMOVIE); }
+		  bufferWriteOp($$, SWFACTION_STARTDRAG); }
 
 	| STARTDRAG '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
 		{ $$ = newBuffer();
@@ -849,11 +849,11 @@ void_function_call
 		  bufferWriteString($$, "1", 2); /* has constraint */
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_STARTDRAGMOVIE); }
+		  bufferWriteOp($$, SWFACTION_STARTDRAG); }
 
 	| STOPDRAG '(' ')' /* no args */
 		{ $$ = newBuffer();
-		  bufferWriteOp($$, SWFACTION_STOPDRAGMOVIE); }
+		  bufferWriteOp($$, SWFACTION_ENDDRAG); }
 
 	/* duplicateMovieClip(target, new, depth) */
 	| DUPLICATEMOVIECLIP '(' expr ',' expr ',' expr ')'
@@ -917,7 +917,7 @@ void_function_call
 
 	| GOTOFRAME '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteOp($$, SWFACTION_GOTOEXPRESSION);
+		  bufferWriteOp($$, SWFACTION_GOTOFRAME2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, 0); } /* XXX - and stop */
 
@@ -930,7 +930,7 @@ void_function_call
 
 	| SETTARGET '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteOp($$, SWFACTION_SETTARGETEXPRESSION); }
+		  bufferWriteOp($$, SWFACTION_SETTARGET2); }
 
 
 	;
@@ -966,12 +966,12 @@ function_call
 		{ $$ = $2;
 		  bufferWriteString($$, $4, strlen($4)+1);
 		  free($4);
-		  bufferWriteOp($$, SWFACTION_DELETEVAR); }
+		  bufferWriteOp($$, SWFACTION_DELETE); }
 
 	| DELETE lvalue_expr '[' expr ']'
 		{ $$ = $2;
 		  bufferConcat($$, $4);
-		  bufferWriteOp($$, SWFACTION_DELETEVAR);  }
+		  bufferWriteOp($$, SWFACTION_DELETE);  }
 
 	| EVAL '(' expr ')'
 		{ $$ = $3;
@@ -979,11 +979,11 @@ function_call
 
 	| GETTIMER '(' ')'
 		{ $$ = newBuffer();
-		  bufferWriteOp($$, SWFACTION_GETTIMER); }
+		  bufferWriteOp($$, SWFACTION_GETTIME); }
 
 	| RANDOM '(' expr ')'
 		{ $$ = $3;
-		  bufferWriteOp($$, SWFACTION_RANDOM); }
+		  bufferWriteOp($$, SWFACTION_RANDOMNUMBER); }
 
 	| LENGTH '(' expr_or_obj ')'
 		{ $$ = $3;
@@ -1090,7 +1090,7 @@ objexpr_list
 	;
 
 assignop
-	: "+="		{ $$ = SWFACTION_NEWADD; }
+	: "+="		{ $$ = SWFACTION_ADD2; }
 	| "-="		{ $$ = SWFACTION_SUBTRACT; }
 	| "*="		{ $$ = SWFACTION_MULTIPLY; }
 	| "/="		{ $$ = SWFACTION_DIVIDE; }
@@ -1188,8 +1188,8 @@ expr
 
 	| expr "||" expr
 		{ $$ = $1;
-		  bufferWriteOp($$, SWFACTION_DUP);
-		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp($$, SWFACTION_PUSHDUP);
+		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($3)+1);
 		  bufferWriteOp($$, SWFACTION_POP);
@@ -1197,9 +1197,9 @@ expr
 
 	| expr "&&" expr
 		{ $$ = $1;
-		  bufferWriteOp($$, SWFACTION_DUP);
+		  bufferWriteOp($$, SWFACTION_PUSHDUP);
 		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
-		  bufferWriteOp($$, SWFACTION_BRANCHIFTRUE);
+		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($3)+1);
 		  bufferWriteOp($$, SWFACTION_POP);
@@ -1223,7 +1223,7 @@ expr
 	| expr '+' expr
 		{ $$ = $1;
 		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_NEWADD); }
+		  bufferWriteOp($$, SWFACTION_ADD2); }
 
 	| expr '-' expr
 		{ $$ = $1;
@@ -1248,40 +1248,40 @@ expr
 	| expr '<' expr
 		{ $$ = $1;
 		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_NEWLESSTHAN); }
+		  bufferWriteOp($$, SWFACTION_LESS2); }
 
 	| expr '>' expr
 		{ $$ = $3;
 		  bufferConcat($$, $1);
-		  bufferWriteOp($$, SWFACTION_NEWLESSTHAN); }
+		  bufferWriteOp($$, SWFACTION_LESS2); }
 
 	| expr "<=" expr
 		{ $$ = $3;
 		  bufferConcat($$, $1);
-		  bufferWriteOp($$, SWFACTION_NEWLESSTHAN);
+		  bufferWriteOp($$, SWFACTION_LESS2);
 		  bufferWriteOp($$, SWFACTION_LOGICALNOT); }
 
 	| expr ">=" expr
 		{ bufferConcat($1, $3);
-		  bufferWriteOp($1, SWFACTION_NEWLESSTHAN);
+		  bufferWriteOp($1, SWFACTION_LESS2);
 		  bufferWriteOp($1, SWFACTION_LOGICALNOT); }
 
 	| expr "==" expr
 		{ bufferConcat($1, $3);
-		  bufferWriteOp($1, SWFACTION_NEWEQUALS); }
+		  bufferWriteOp($1, SWFACTION_EQUALS2); }
 
 	| expr "===" expr
 		{ bufferConcat($1, $3);
-		  bufferWriteOp($1, SWFACTION_STRICTEQ); }
+		  bufferWriteOp($1, SWFACTION_STRICTEQUALS); }
 
 	| expr "!=" expr
 		{ bufferConcat($1, $3);
-		  bufferWriteOp($1, SWFACTION_NEWEQUALS);
+		  bufferWriteOp($1, SWFACTION_EQUALS2);
 		  bufferWriteOp($1, SWFACTION_LOGICALNOT); }
 
 	| expr "!==" expr
 		{ bufferConcat($1, $3);
-		  bufferWriteOp($1, SWFACTION_STRICTEQ); 
+		  bufferWriteOp($1, SWFACTION_STRICTEQUALS); 
 		  bufferWriteOp($1, SWFACTION_LOGICALNOT); }
 
 	| expr "<<" expr
@@ -1297,11 +1297,11 @@ expr
 		  bufferWriteOp($1, SWFACTION_SHIFTRIGHT2); }
 
 	| expr '?' expr ':' expr
-		{ bufferWriteOp($1, SWFACTION_BRANCHIFTRUE);
+		{ bufferWriteOp($1, SWFACTION_IF);
 		  bufferWriteS16($1, 2);
 		  bufferWriteS16($1, bufferLength($5)+5);
 		  bufferConcat($1, $5);
-		  bufferWriteOp($1, SWFACTION_BRANCHALWAYS);
+		  bufferWriteOp($1, SWFACTION_JUMP);
 		  bufferWriteS16($1, 2);
 		  bufferWriteS16($1, bufferLength($3));
 		  bufferConcat($1, $3); }
@@ -1324,9 +1324,9 @@ expr
 		  else /* just ident */
 		  {
 		    $$ = $3;
-		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);
 		    bufferConcat($$, $1.ident);
-		    bufferWriteOp($$, SWFACTION_SWAP);
+		    bufferWriteOp($$, SWFACTION_STACKSWAP);
 		    bufferWriteOp($$, SWFACTION_SETVARIABLE);
 		  }
 /* tricky case missing here: lvalue ASSIGN expr */
@@ -1352,7 +1352,7 @@ expr_or_obj
 		  bufferWriteInt($$, 0);
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
-		  bufferWriteOp($$, SWFACTION_NEW); }
+		  bufferWriteOp($$, SWFACTION_NEWOBJECT); }
 
 	| NEW IDENTIFIER '(' expr_list ')'
 		{
@@ -1363,7 +1363,7 @@ expr_or_obj
 		  bufferWriteInt($$, $4.count);
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
-		  bufferWriteOp($$, SWFACTION_NEW); }
+		  bufferWriteOp($$, SWFACTION_NEWOBJECT); }
 
 	| NEW lvalue_expr '.' IDENTIFIER
 		{
@@ -1440,9 +1440,9 @@ primary
 		    if($2.ident)	// expr . identifier
 		    {
 		      $$ = $2.obj;
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, a */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, a */
 		      bufferWriteBuffer($$, $2.ident);        /* a, a, i */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a */
 		      bufferConcat($$, $2.ident);             /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER);
 		      bufferWriteOp($$, $1);
@@ -1455,10 +1455,10 @@ primary
 		      $$ = $2.memexpr;			      /* i */
 		      bufferConcat($$, $2.obj);		      /* i, a */
 		      bufferWriteSetRegister($$, 0);	/* ($2.memexpr can use reg0) */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, i, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, i, i */
 		      bufferWriteRegister($$, 0);	      /* a, i, i, a */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		      bufferWriteOp($$, $1);		      /* a, i, a[i]+1 */
 		      bufferWriteSetRegister($$, 0);
@@ -1472,9 +1472,9 @@ primary
 		    bufferWriteBuffer($$, $2.ident);
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		    bufferWriteOp($$, $1);
-		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);
 		    bufferConcat($$, $2.ident);
-		    bufferWriteOp($$, SWFACTION_SWAP);
+		    bufferWriteOp($$, SWFACTION_STACKSWAP);
 		    bufferWriteOp($$, SWFACTION_SETVARIABLE);
 		  }
 		}
@@ -1485,11 +1485,11 @@ primary
 		    if($1.ident)
 		    {
 		      $$ = $1.obj;	                      /* a */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, a */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, a */
 		      bufferWriteBuffer($$, $1.ident);        /* a, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, a.i */
 		      bufferWriteSetRegister($$, 0);
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a.i, a */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a.i, a */
 		      bufferConcat($$, $1.ident);             /* a.i, a, i */
 		      bufferWriteRegister($$, 0);             /* a.i, a, i, a.i */
 		      bufferWriteOp($$, $2);		      /* a.i, a, i, a.i+1 */
@@ -1500,10 +1500,10 @@ primary
 		      $$ = $1.memexpr;
 		      bufferConcat($$, $1.obj);               /* i, a */
 		      bufferWriteSetRegister($$, 0);
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, i, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, i, i */
 		      bufferWriteRegister($$, 0);             /* a, i, i, a */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		      bufferWriteSetRegister($$, 0);
 		      bufferWriteOp($$, $2);		      /* a, i, a[i]+1 */
@@ -1516,10 +1516,10 @@ primary
 		    $$ = newBuffer();
 		    bufferWriteBuffer($$, $1.ident);
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);
 		    bufferWriteOp($$, $2);
 		    bufferConcat($$, $1.ident);
-		    bufferWriteOp($$, SWFACTION_SWAP);
+		    bufferWriteOp($$, SWFACTION_STACKSWAP);
 		    bufferWriteOp($$, SWFACTION_SETVARIABLE);
 		  }
 		}
@@ -1561,13 +1561,13 @@ primary
 		    if($1.ident)
 		    {
 		      $$ = $1.obj;			      /* a */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, a */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, a */
 		      bufferWriteBuffer($$, $1.ident);	      /* a, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, a.i */
 		      bufferConcat($$, $3);		      /* a, a.i, v */
 		      bufferWriteOp($$, $2);		      /* a, a.i+v */
 		      bufferConcat($$, $1.ident);	      /* a, a.i+v, i */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a.i+v */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a.i+v */
 		      bufferWriteSetRegister($$, 0);
 		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a.i = a.i+v */
 		      bufferWriteRegister($$, 0);
@@ -1577,10 +1577,10 @@ primary
 		      $$ = $1.memexpr;			      /* i */
 		      bufferConcat($$, $1.obj);		      /* i, a */
 		      bufferWriteSetRegister($$, 0);
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, i, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, i, i */
 		      bufferWriteRegister($$, 0);	      /* a, i, i, a */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		      bufferConcat($$, $3);		      /* a, i, a[i], v */
 		      bufferWriteOp($$, $2);		      /* a, i, a[i]+v */
@@ -1592,7 +1592,7 @@ primary
 		  else
 		  {
 		    $$ = $1.ident;
-		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		    bufferConcat($$, $3);
 		    bufferWriteOp($$, $2);
@@ -1617,13 +1617,13 @@ init_var
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
 		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_VAREQUALS); }
+		  bufferWriteOp($$, SWFACTION_DEFINELOCAL); }
 
 	| identifier
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
-		  bufferWriteOp($$, SWFACTION_VAR); }
+		  bufferWriteOp($$, SWFACTION_DEFINELOCAL2); }
 	;
 
 assign_stmt
@@ -1651,12 +1651,12 @@ assign_stmt
 		    if($2.ident)
 		    {
 		      $$ = $2.obj;		              /* a */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, a */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, a */
 		      bufferWriteBuffer($$, $2.ident);	      /* a, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, a.i */
 		      bufferWriteOp($$, $1);		      /* a, a.i+1 */
 		      bufferConcat($$, $2.ident);	      /* a, a.i+1, i */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a.i+1 */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a.i+1 */
 		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a.i = a.i+1 */
 		    }
 		    else
@@ -1665,10 +1665,10 @@ assign_stmt
 		      $$ = $2.memexpr;			      /* i */
 		      bufferConcat($$, $2.obj);		      /* i, a */
 		      bufferWriteSetRegister($$, 0);
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, i, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, i, i */
 		      bufferWriteRegister($$, 0);	      /* a, i, i, a */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		      bufferWriteOp($$, $1);		      /* a, i, a[i]+1 */
 		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+1 */
@@ -1677,7 +1677,7 @@ assign_stmt
 		  else
 		  {
 		    $$ = $2.ident;
-		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		    bufferWriteOp($$, $1);
 		    bufferWriteOp($$, SWFACTION_SETVARIABLE);
@@ -1690,12 +1690,12 @@ assign_stmt
 		    if($1.ident)
 		    {
 		      $$ = $1.obj;			      /* a */
-		      bufferWriteOp($$, SWFACTION_DUP);       /* a, a */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);       /* a, a */
 		      bufferWriteBuffer($$, $1.ident);	      /* a, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, a.i */
 		      bufferWriteOp($$, $2);                  /* a, a.i+1 */
 		      bufferConcat($$, $1.ident);             /* a, a.i+1, i */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a.i+1 */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a.i+1 */
 		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a.i = a.i+1 */
 		    }
 		    else
@@ -1704,10 +1704,10 @@ assign_stmt
 		      $$ = $1.memexpr;	/* i */
 		      bufferConcat($$, $1.obj);		      /* i, a */
 		      bufferWriteSetRegister($$, 0);
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
-		      bufferWriteOp($$, SWFACTION_DUP);       /* a, i, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);       /* a, i, i */
 		      bufferWriteRegister($$, 0);             /* a, i, i, a */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		      bufferWriteOp($$, $2);                  /* a, i, a[i]+1 */
 		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a[i] = a[i]+1 */
@@ -1716,7 +1716,7 @@ assign_stmt
 		  else
 		  {
 		    $$ = $1.ident;
-		    bufferWriteOp($$, SWFACTION_DUP);	
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);	
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		    bufferWriteOp($$, $2);
 		    bufferWriteOp($$, SWFACTION_SETVARIABLE);
@@ -1750,13 +1750,13 @@ assign_stmt
 		    if($1.ident)
 		    {
 		      $$ = $1.obj;			      /* a */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, a */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, a */
 		      bufferWriteBuffer($$, $1.ident);	      /* a, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, a.i */
 		      bufferConcat($$, $3);		      /* a, a.i, v */
 		      bufferWriteOp($$, $2);		      /* a, a.i+v */
 		      bufferConcat($$, $1.ident);	      /* a, a.i+v, i */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a.i+v */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a.i+v */
 		      bufferWriteOp($$, SWFACTION_SETMEMBER); /* a.i = a.i+v */
 		    }
 		    else
@@ -1764,10 +1764,10 @@ assign_stmt
 		      $$ = $1.memexpr;			      /* i */
 		      bufferConcat($$, $1.obj);		      /* i, a */
 		      bufferWriteSetRegister($$, 0);
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i */
-		      bufferWriteOp($$, SWFACTION_DUP);	      /* a, i, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i */
+		      bufferWriteOp($$, SWFACTION_PUSHDUP);	      /* a, i, i */
 		      bufferWriteRegister($$, 0);	      /* a, i, i, a */
-		      bufferWriteOp($$, SWFACTION_SWAP);      /* a, i, a, i */
+		      bufferWriteOp($$, SWFACTION_STACKSWAP);      /* a, i, a, i */
 		      bufferWriteOp($$, SWFACTION_GETMEMBER); /* a, i, a[i] */
 		      bufferConcat($$, $3);		      /* a, i, a[i], v */
 		      bufferWriteOp($$, $2);		      /* a, i, a[i]+v */
@@ -1777,7 +1777,7 @@ assign_stmt
 		  else
 		  {
 		    $$ = $1.ident;
-		    bufferWriteOp($$, SWFACTION_DUP);
+		    bufferWriteOp($$, SWFACTION_PUSHDUP);
 		    bufferWriteOp($$, SWFACTION_GETVARIABLE);
 		    bufferConcat($$, $3);
 		    bufferWriteOp($$, $2);
@@ -1829,7 +1829,7 @@ push_list
 
 opcode
 	: PUSH 			{ $$ = bufferWriteOp(asmBuffer,
-						     SWFACTION_PUSHDATA);
+						     SWFACTION_PUSH);
 				  $$ += bufferWriteS16(asmBuffer, 0); }
 	  push_list		{ $$ = $<len>2 + $3;
 				  bufferPatchLength(asmBuffer, $3); }
@@ -1838,7 +1838,7 @@ opcode
 
 	| SETREGISTER REGISTER
 				{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_SETREGISTER);
+						     SWFACTION_STOREREGISTER);
 				  $$ += bufferWriteS16(asmBuffer, 1);
 				  $$ += bufferWriteU8(asmBuffer,
 						      (char)atoi($2)); }
@@ -1858,11 +1858,11 @@ opcode
 	| MODULO		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_MODULO); }
 	| ADD			{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_NEWADD); }
+						     SWFACTION_ADD2); }
 	| LESSTHAN		{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_NEWLESSTHAN); }
+						     SWFACTION_LESS2); }
 	| EQUALS		{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_NEWEQUALS); }
+						     SWFACTION_EQUALS2); }
 	| INC			{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_INCREMENT); }
 	| DEC			{ $$ = bufferWriteOp(asmBuffer, 
@@ -1876,7 +1876,7 @@ opcode
 	| DELETE		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_DELETE); }
 	| NEW			{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_NEW); }
+						     SWFACTION_NEWOBJECT); }
 	| INITARRAY		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_INITARRAY); }
 	| INITOBJECT		{ $$ = bufferWriteOp(asmBuffer, 
@@ -1892,7 +1892,7 @@ opcode
 	| SHIFTRIGHT2		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_SHIFTRIGHT2); }
 	| VAR			{ $$ = bufferWriteOp(asmBuffer, 
-						     SWFACTION_VAR); }
+						     SWFACTION_DEFINELOCAL2); }
 	/* f4 ops */
 	| OLDADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }
 	| SUBTRACT		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SUBTRACT); }
@@ -1907,32 +1907,32 @@ opcode
 	| STRINGLENGTH		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGLENGTH); }
 	| SUBSTRING		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SUBSTRING); }
 	| INT			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_INT); }
-	| DUP			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_DUP); }
-	| SWAP			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SWAP); }
+	| DUP			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_PUSHDUP); }
+	| SWAP			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STACKSWAP); }
 	| POP			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_POP); }
 	| GETVARIABLE		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_GETVARIABLE); }
 	| SETVARIABLE		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SETVARIABLE); }
-	| SETTARGETEXPRESSION	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SETTARGETEXPRESSION); }
+	| SETTARGETEXPRESSION	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SETTARGET2); }
 	| CONCAT		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGCONCAT); }
 	| DUPLICATEMOVIECLIP	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_DUPLICATECLIP); }
 	| REMOVEMOVIECLIP	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_REMOVECLIP); }
 	| TRACE			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_TRACE); }
 	| STRINGLESSTHAN	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGCOMPARE); }
-	| RANDOM		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_RANDOM); }
+	| RANDOM		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_RANDOMNUMBER); }
 	| MBLENGTH		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBLENGTH); }
 	| ORD			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ORD); }
 	| CHR			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_CHR); }
-	| GETTIMER		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_GETTIMER); }
+	| GETTIMER		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_GETTIME); }
 	| MBSUBSTRING		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBSUBSTRING); }
 	| MBORD			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBORD); }
 	| MBCHR			{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBCHR); }
 
 	/* with args */
-	| BRANCHALWAYS STRING	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_BRANCHALWAYS);
+	| BRANCHALWAYS STRING	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_JUMP);
 				  $$ += bufferWriteS16(asmBuffer, 2);
 				  $$ += bufferBranchTarget(asmBuffer, $2); }
 
-	| BRANCHIFTRUE STRING	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_BRANCHIFTRUE);
+	| BRANCHIFTRUE STRING	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_IF);
 				  $$ += bufferWriteS16(asmBuffer, 2);
 				  $$ += bufferBranchTarget(asmBuffer, $2); }
 	;

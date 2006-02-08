@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include "action.h"
+#include "actiontypes.h"
 #include "compile.h"
 #include "libming.h"
 
@@ -180,10 +180,10 @@ int printActionRecord(Buffer f)
     case SWFACTION_LESSTHAN:
       println("Less Than");
       break;
-    case SWFACTION_GREATERTHEN:
+    case SWFACTION_GREATER:
       println("Greater Than");
       break;
-    case SWFACTION_STRING_GREATERTHEN:
+    case SWFACTION_STRINGGREATER:
       println("String Greater than");
       break;
     case SWFACTION_LOGICALAND:
@@ -216,7 +216,7 @@ int printActionRecord(Buffer f)
     case SWFACTION_SETVARIABLE:
       println("Set Variable");
       break;
-    case SWFACTION_SETTARGETEXPRESSION:
+    case SWFACTION_SETTARGET2:
       println("Set Target Expression");
       break;
     case SWFACTION_STRINGCONCAT:
@@ -237,16 +237,16 @@ int printActionRecord(Buffer f)
     case SWFACTION_TRACE:
       println("Trace");
       break;
-    case SWFACTION_STARTDRAGMOVIE:
+    case SWFACTION_STARTDRAG:
       println("Start Drag Movie");
       break;
-    case SWFACTION_STOPDRAGMOVIE:
+    case SWFACTION_ENDDRAG:
       println("Stop Drag Movie");
       break;
     case SWFACTION_STRINGCOMPARE:
       println("String Compare");
       break;
-    case SWFACTION_RANDOM:
+    case SWFACTION_RANDOMNUMBER:
       println("Random");
       break;
     case SWFACTION_MBLENGTH:
@@ -258,7 +258,7 @@ int printActionRecord(Buffer f)
     case SWFACTION_CHR:
       println("Chr");
       break;
-    case SWFACTION_GETTIMER:
+    case SWFACTION_GETTIME:
       println("Get Timer");
       break;
     case SWFACTION_MBSUBSTRING:
@@ -293,7 +293,7 @@ int printActionRecord(Buffer f)
       break;
 
     /* ops with args */
-    case SWFACTION_PUSHDATA:
+    case SWFACTION_PUSH:
     {
       int type;
       int start = fileOffset;
@@ -350,10 +350,10 @@ int printActionRecord(Buffer f)
       println("Get URL \"%s\" target \"%s\"", url, readString(f));
       break;
     }
-    case SWFACTION_WAITFORFRAMEEXPRESSION:
+    case SWFACTION_WAITFORFRAME2:
       println("Wait For Frame Expression, skip %i\n", readUInt8(f));
       break;
-    case SWFACTION_BRANCHALWAYS:
+    case SWFACTION_JUMP:
       println("Branch Always %i", readSInt16(f));
       break;
     case SWFACTION_GETURL2:
@@ -371,14 +371,14 @@ int printActionRecord(Buffer f)
 	}
       }
       break;
-    case SWFACTION_BRANCHIFTRUE:
+    case SWFACTION_IF:
       println("Branch If True %i", readSInt16(f));
       break;
     case SWFACTION_CALLFRAME:
       println("Call Frame");
       dumpBytes(f, length);
       break;
-    case SWFACTION_GOTOEXPRESSION:
+    case SWFACTION_GOTOFRAME2:
       print("Goto Expression");
       if(readUInt8(f) == 1)
 	printf(" and Play\n");
@@ -405,10 +405,10 @@ int printActionRecord(Buffer f)
     case SWFACTION_DELETE:
       println("Delete");
       break;
-    case SWFACTION_VAR:
+    case SWFACTION_DEFINELOCAL2:
       println("Var");
       break;
-    case SWFACTION_VAREQUALS:
+    case SWFACTION_DEFINELOCAL:
       println("Var assign");
       break;
     case SWFACTION_INITARRAY:
@@ -426,25 +426,25 @@ int printActionRecord(Buffer f)
     case SWFACTION_MODULO:
       println("modulo");
       break;
-    case SWFACTION_NEW:
+    case SWFACTION_NEWOBJECT:
       println("new");
       break;
     case SWFACTION_TYPEOF:
       println("typeof");
       break;
-    case SWFACTION_NEWADD:
+    case SWFACTION_ADD2:
       println("new add");
       break;
-    case SWFACTION_NEWLESSTHAN:
+    case SWFACTION_LESS2:
       println("new less than");
       break;
-    case SWFACTION_NEWEQUALS:
+    case SWFACTION_EQUALS2:
       println("new equals");
       break;
-    case SWFACTION_DUP:
-      println("dup");
+    case SWFACTION_PUSHDUP:
+      println("pushdup");
       break;
-    case SWFACTION_SWAP:
+    case SWFACTION_STACKSWAP:
       println("swap");
       break;
     case SWFACTION_GETMEMBER:
@@ -530,7 +530,7 @@ int printActionRecord(Buffer f)
       println("enumerate");
       break;
 
-    case SWFACTION_SETREGISTER:
+    case SWFACTION_STOREREGISTER:
       println("set register %i", readUInt8(f));
       break;
 
@@ -538,10 +538,10 @@ int printActionRecord(Buffer f)
     case SWFACTION_INSTANCEOF:
       println("instanceof");
       break;
-    case SWFACTION_STRICTEQ:
+    case SWFACTION_STRICTEQUALS:
       println("strict_equals");
       break;
-    case SWFACTION_ENUM2:
+    case SWFACTION_ENUMERATE2:
       println("enum2");
       break;
     case SWFACTION_TRY:
@@ -575,13 +575,13 @@ int printActionRecord(Buffer f)
 	}
 
 /* f7 actions */
-	case SWFACTION_IMPLEMENTS:
+	case SWFACTION_IMPLEMENTSOP:
 		println("implements");
 		break;
 	case SWFACTION_EXTENDS:
 		println("extends");
 		break;
-	case SWFACTION_CASTOBJECT:
+	case SWFACTION_CASTOP:
 		println("cast object");
 		break;
 	case SWFACTION_DEFINEFUNCTION2:

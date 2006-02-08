@@ -22,7 +22,7 @@
 #include <string.h>
 #include "assembler.h"
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 #include "libming.h"
 
 
@@ -95,8 +95,8 @@ bufferPatchTargets(Buffer buffer)
 	{
 		if ( output[i] & 0x80 ) /* then it's a multibyte instruction */
 		{
-			if ( output[i] == SWFACTION_BRANCHALWAYS ||
-					 output[i] == SWFACTION_BRANCHIFTRUE )
+			if ( output[i] == SWFACTION_JUMP ||
+					 output[i] == SWFACTION_IF )
 			{
 				int target, offset;
 

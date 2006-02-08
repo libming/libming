@@ -28,7 +28,7 @@
 
 #include "libming.h"
 #include "compile.h"
-#include "action.h"
+#include "actiontypes.h"
 #include "blocks/error.h"
 
 
@@ -236,7 +236,7 @@ int bufferWriteBuffer(Buffer a, Buffer b)
 	return 0;
 }
 
-/* if a's last op and b's first op are both PUSHDATA, concat into one op */
+/* if a's last op and b's first op are both PUSH, concat into one op */
 
 int bufferWriteDataAndPush(Buffer a, Buffer b)
 {
@@ -245,7 +245,7 @@ int bufferWriteDataAndPush(Buffer a, Buffer b)
 	byte *data = b->buffer;
 	int length = b->pos - b->buffer;
 
-	if(a->pushloc && (b->buffer[0] == SWFACTION_PUSHDATA) && SWF_versionNum > 4)
+	if(a->pushloc && (b->buffer[0] == SWFACTION_PUSH) && SWF_versionNum > 4)
 	{
 		pushd = (b->buffer[1] & 0xff) | ((b->buffer[2] & 0xff) << 8);
 		bufferPatchPushLength(a, pushd);
@@ -262,7 +262,7 @@ int bufferWriteDataAndPush(Buffer a, Buffer b)
 		bufferWriteU8(a, data[i]);
 
 	if(a->pushloc &&
-		 (b->buffer[0] == SWFACTION_PUSHDATA) && (b->pushloc == b->buffer+1))
+		 (b->buffer[0] == SWFACTION_PUSH) && (b->pushloc == b->buffer+1))
 		; /* b is just one pushdata, so do nothing.. */
 	else if(b->pushloc)
 		a->pushloc = a->pos - pushd;
@@ -297,7 +297,7 @@ int bufferWriteOp(Buffer out, int data)
 
 int bufferWritePushOp(Buffer out)
 {
-	bufferWriteU8(out, SWFACTION_PUSHDATA);
+	bufferWriteU8(out, SWFACTION_PUSH);
 	out->pushloc = out->pos;
 
 	return 1;
@@ -526,7 +526,7 @@ int bufferWriteRegister(Buffer out, int num)
 
 int bufferWriteSetRegister(Buffer out, int num)
 {
-	bufferWriteU8(out, SWFACTION_SETREGISTER);
+	bufferWriteU8(out, SWFACTION_STOREREGISTER);
 	bufferWriteS16(out, 1);
 	bufferWriteU8(out, num);
 	return 4;
@@ -613,7 +613,7 @@ void bufferResolveJumps(Buffer out)
 	{
 		if(*p & 0x80) /* then it's a multibyte instruction */
 		{
-			if(*p == SWFACTION_BRANCHALWAYS)
+			if(*p == SWFACTION_JUMP)
 			{
 	p += 3; /* plus instruction plus two-byte length */
 
@@ -664,18 +664,18 @@ void bufferResolveSwitch(Buffer buffer, struct switchcases *slp)
 			scp->actlen += 5;
 		if(scp->cond)
 		{	scp->condlen = bufferLength(scp->cond) + 8;
-			bufferWriteOp(buffer, SWFACTION_DUP);
+			bufferWriteOp(buffer, SWFACTION_PUSHDUP);
 			bufferConcat(buffer, scp->cond);
-			bufferWriteOp(buffer, SWFACTION_NEWEQUALS);
+			bufferWriteOp(buffer, SWFACTION_EQUALS2);
 			bufferWriteOp(buffer, SWFACTION_LOGICALNOT);
-			bufferWriteOp(buffer, SWFACTION_BRANCHIFTRUE);
+			bufferWriteOp(buffer, SWFACTION_IF);
 			bufferWriteS16(buffer, 2);
 			bufferWriteS16(buffer, scp->actlen);
 		}
 		else
 			scp->condlen = 0;
 		bufferConcat(buffer, scp->action);
-		bufferWriteOp(buffer, SWFACTION_BRANCHALWAYS);
+		bufferWriteOp(buffer, SWFACTION_JUMP);
 		bufferWriteS16(buffer, 2);
 		bufferWriteS16(buffer, scp->isbreak ? MAGIC_BREAK_NUMBER : 0);
 		if(!scp->cond)
@@ -718,7 +718,7 @@ int bufferWriteSetProperty(Buffer out, char *string)
 {
 	int property = lookupSetProperty(string);
 
-	bufferWriteU8(out, SWFACTION_PUSHDATA);
+	bufferWriteU8(out, SWFACTION_PUSH);
 	bufferWriteS16(out, 5);
 	bufferWriteU8(out, PUSH_PROPERTY);
 	bufferWriteS16(out, 0);
@@ -729,7 +729,7 @@ int bufferWriteSetProperty(Buffer out, char *string)
 
 int bufferWriteWTHITProperty(Buffer out)
 {
-	bufferWriteU8(out, SWFACTION_PUSHDATA);
+	bufferWriteU8(out, SWFACTION_PUSH);
 	bufferWriteS16(out, 5);
 	bufferWriteU8(out, PUSH_PROPERTY);
 	bufferWriteS16(out, 0);
@@ -770,7 +770,7 @@ int bufferWriteGetProperty(Buffer out, char *string)
 {
 	const char *property = lookupGetProperty(string);
 
-	bufferWriteU8(out, SWFACTION_PUSHDATA);
+	bufferWriteU8(out, SWFACTION_PUSH);
 	bufferWriteS16(out, strlen(property)+2);
 	bufferWriteU8(out, PUSH_STRING);
 
