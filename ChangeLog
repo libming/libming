@@ -1,7 +1,98 @@
-2006-01-30 07:13  anderson
+2006-02-06 21:36  strk
+
+	* src/actioncompiler/listaction.c: Fixed default out of switch
+
+2006-02-06 01:46  strk
+
+	* src/actioncompiler/: action.h, listaction.c: Added
+	  SWFACTION_DEFINEFUNCTION2 - dump of it is unimplemented
+
+2006-02-03 23:51  strk
+
+	* src/actioncompiler/: action.h, listaction.c: Added GREATERTHEN
+	  (0x67) and STRING_GREATERTHEN (0x68) opcodes
+
+2006-02-03 16:44  strk
+
+	* src/actioncompiler/: action.h, listaction.c: Added
+	  SWFACTION_ACSTOBJECT (0x2b)
+
+2006-02-03 16:41  strk
+
+	* src/actioncompiler/action.h: Fixed SWFACTION_IMPLEMENTS
+	  (0x2b=>0x2c)
+
+2006-02-03 16:39  strk
+
+	* src/actioncompiler/: action.h, listaction.c: Added
+	  SWFACTION_IMPLEMENTS (0x2C) and SWFACTION_EXTENDS (0x69)
+
+2006-02-01 17:13  peterdd
+
+	* perl_ext/SWF/: Bitmap.pm, Constants.pm, Sound.pm, TextField.pm,
+	  VideoStream.pm: fixing pod errors
+
+2006-02-01 16:49  peterdd
+
+	* perl_ext/SWF/Button.pm: added setMenu in documentation
+
+2006-02-01 16:44  peterdd
+
+	* perl_ext/SUPPORT: links to mailing lists updated
+
+2006-02-01 07:49  peterdd
+
+	* perl_ext/SWF.pm: update of documentation, version set to 0.3beta2
+	  (still hardcoded here)
+
+2006-02-01 07:47  peterdd
+
+	* perl_ext/SWF.xs: added getScale, setCubicThreshold(num),
+	  setSWFCompression(level)
+
+2006-02-01 07:45  peterdd
+
+	* perl_ext/Makefile.PL: removed a call to unexistent function
+
+2006-02-01 07:42  peterdd
+
+	* perl_ext/README: update for release
+
+2006-01-30 22:07  anderson
+
+	* php_ext/ming.c: Mostly just trivial reformatting to eliminate the
+	  diff noise when compared against the upstream file. This leaves
+	  just the interesting stuff that needs to be manually resolved.
+	  NB: it looks like PHP 4.3 and 4.4 are missing the new APIs unless
+	  they have been recently added upstream. I know PHP4 is frozen for
+	  maintainace but it is still useful for OS providors to be able to
+	  get a patch for PHP4 that goes with Ming 0.3.0.
+
+2006-01-30 15:53  anderson
+
+	* Makefile-real: prune the old utilities from the release tarballs.
+
+2006-01-30 15:52  anderson
+
+	* util/: Makefile, dbl2png.c: Add a new dbl2png utility from
+	  Albrecht Kleine <kleine@ak.sax.de>
+
+2006-01-30 13:25  anderson
+
+	* configure: Set the MICRO version to beta2
+
+2006-01-30 13:16  anderson
+
+	* configure.in: Set the version to beta2
+
+2006-01-30 13:13  anderson
 
 	* Makefile: The target is Changelog (lower 'l', not ChangeLog (cap
 	  'L') so it always runs, and noesn't think the file already exists
+
+2006-01-30 13:09  anderson
+
+	* NEWS, TODO: Update docs
 
 2006-01-30 07:09  anderson
 
