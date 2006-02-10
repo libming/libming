@@ -176,7 +176,7 @@ struct pngdata readPNG(FILE *fp)
 
     for(i=0; i<(int)png.num_palette; ++i)
       png.palette[i].red = png.palette[i].green = png.palette[i].blue = 
-	(png_byte) (i*255)/(png.num_palette-1);
+	(png_byte) ( (i*255)/(png.num_palette-1) );
   }
 
 
