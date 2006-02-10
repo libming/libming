@@ -337,6 +337,22 @@ push(struct SWF_ACTIONPUSHPARAM *val)
 	Stack = t;
 }
 
+
+void
+pushdup()
+{
+	struct _stack *t;
+#ifdef DEBUG
+	printf("*pushdup*\n");
+#endif
+	t = calloc(1,sizeof(Stack));
+	t->type = Stack->type;
+	t->val =  Stack->val;
+	t->next = Stack;
+	Stack = t;
+}
+
+
 void
 pushvar(struct SWF_ACTIONPUSHPARAM *val)
 {
@@ -399,6 +415,20 @@ struct SWF_ACTIONPUSHPARAM * peek()
 #endif
 	if( Stack == NULL ) error("Stack blown!!");
 	return Stack->val;
+}
+
+void
+stackswap()
+{
+#ifdef DEBUG
+	printf("*stackswap*\n");
+#endif
+	struct SWF_ACTIONPUSHPARAM *p = peek();		/* peek() includes error handling */
+	char type = Stack->type;
+	Stack->type = Stack->next->type;
+	Stack->val  = Stack->next->val;
+	Stack->next->type = type;
+	Stack->next->val  = p;
 }
 
 /* End Package */
@@ -721,6 +751,24 @@ decompilePUSH (SWF_ACTION *act)
   }
 }
 
+void
+decompilePUSHDUP (SWF_ACTION *act)
+{
+  SanityCheck(SWF_PUSHDUP,
+		act->SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP,
+		"not a PUSHDUP")
+  pushdup();
+}
+
+void
+decompileSTACKSWAP (SWF_ACTION *act)
+{
+  SanityCheck(SWF_STACKSWAP,
+		act->SWF_ACTIONRECORD.ActionCode == SWFACTION_STACKSWAP,
+		"not a STACKSWAP")
+  stackswap();
+}
+
 int
 decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
 {
@@ -784,11 +832,11 @@ decompileINCREMENT(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *var;
 
-    SanityCheck(SWF_INCREMENT,
-		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
-		"INCREMENT not preceeded by PUSH")
- 
+//    SanityCheck(SWF_INCREMENT,
+//		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
+//		"INCREMENT not preceeded by PUSH")
     INDENT
+
     var=pop();
     decompilePUSHPARAM(var,0);
     puts("++;\n");
@@ -799,7 +847,6 @@ decompileINCREMENT(int n, SWF_ACTION *actions,int maxn)
 	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
 	    return 1; /* Eat the StoreRegister that follows */
     }
-
     return 0;
 }
 
@@ -891,11 +938,13 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn)
     INDENT
     val = pop();
     var = pop();
+    if (strcmp(getName(val),getName(var)))
+    {
     puts(getName(var));
     printf(" = " );
     puts(getName(val));
     puts(";\n");
-
+    }
     return 0;
 }
 
@@ -1311,6 +1360,14 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_PUSH:
         decompilePUSH(&actions[n]);
+	return 0;
+
+      case SWFACTION_PUSHDUP:
+        decompilePUSHDUP(&actions[n]);
+	return 0;
+
+      case SWFACTION_STACKSWAP:
+        decompileSTACKSWAP(&actions[n]);	
 	return 0;
 
       case SWFACTION_SETPROPERTY:
