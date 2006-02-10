@@ -1,6 +1,8 @@
 
-Jan 2006: The module in php5 is more current than this file. You can use it
-by building php with --enable-ming.
+Feb 2006: This ming.c will work with PHP4, and not PHP5 or higher. It
+is provided here for those that are not able to upgrade to PHP5 yet.
+
+- Stuart
 
 
 
