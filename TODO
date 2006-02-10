@@ -39,6 +39,9 @@ Stuff what to do (not in order):
   ..so you can center text 'n' stuff.
   It exists in the c code, but there's no SWFRect in the php interface
 
+* Produce good quality API documentation, using something like doxygen
+
+* Produce thorough API tests, testign each interface from each language binding.
 
 Wishlist items:
 
