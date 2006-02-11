@@ -1,4 +1,5 @@
-int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int level) {
+int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data){
+    //, int level) {
     void *fptr;
     int retval;
 
@@ -7,6 +8,6 @@ int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data, int 
         fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
         return -1;
     }
-    dlrunfun(fptr, &retval, SWFMovie_output, movie, method, data, level);
+    dlrunfun(fptr, &retval, SWFMovie_output, movie, method, data); //, level);
     return retval;
 }

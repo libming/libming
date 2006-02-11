@@ -55,6 +55,6 @@ int main(int argc, char *argv[])
    SWFMovie_add(movie, (SWFBlock)compileSWFActionCode("gotoFrame(1); play();"));
    SWFMovie_nextFrame(movie);
 
-   SWFMovie_save(movie, "action.swf", 0);
+   SWFMovie_save(movie, "action.swf");
    return 0;
 }

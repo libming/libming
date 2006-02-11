@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
       SWFMovie_nextFrame(m);
    }
 
-   SWFMovie_save(m, "cxform.swf", 0);
+   SWFMovie_save(m, "cxform.swf");
 
    fclose(file_bitmap); /* Do not close earlier or an error will happen */
    return 0;

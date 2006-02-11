@@ -12,7 +12,7 @@ OBJ    = obj
 IFLAGS = -I ../../src
 
 # If libgif or libpng is not available, remove it from the following line
-LFLAGS = ../../win32/release/libming.lib ../../zlib/zlib.lib ../../libpng/libpng.lib ../../libgif/libgif.lib
+LFLAGS = ../../win32/release/libming.lib ../../zlib/zlib.lib ../../libpng/libpng.lib #../../libgif/libgif.lib
 
 CFLAGS = /MD /nologo
 

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
    timeline= SWFMovie_add(movie,(SWFBlock) b);
    SWFDisplayItem_moveTo(timeline,160.00, 120.00);
    SWFMovie_nextFrame(movie);
-   SWFMovie_save(movie, "button.swf", 0);
+   SWFMovie_save(movie, "button.swf");
 
    return 0;
 }

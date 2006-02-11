@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
    SWFMovie_add(m, (SWFBlock) shape);
 
-   SWFMovie_save(m, "jpegfill.swf", 0);
+   SWFMovie_save(m, "jpegfill.swf");
 
    fclose(file_bitmap); /* Do not close earlier or an error will happen */
    return 0;

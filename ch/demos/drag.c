@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
    SWFDisplayItem_moveTo(timeline, 160,120);
    SWFMovie_nextFrame(movie);
 
-   SWFMovie_save(movie, "drag.swf", 0);
+   SWFMovie_save(movie, "drag.swf");
 
    return 0;
 }

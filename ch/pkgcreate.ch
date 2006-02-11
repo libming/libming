@@ -1,5 +1,5 @@
 #!/bin/ch
-/* For creating Ch Ming 1.0, May 2, 2005
+/* For creating Ch Ming 1.0, Feb 10, 2006
 
     this script does the following:
     + Copies headers from <MING_HOME>/src/include to ./chming/include subfolder
@@ -51,6 +51,7 @@ if ((info.vermajor*100+ info.verminor*10 +  info.vermicro) < 501) {
    exit(-1);
 }
 
+
 echo Cleaning up existing directories and create new ones ...
 if (!access(pkgname, F_OK))
   rm -rf $pkgname
@@ -59,9 +60,12 @@ if (!access(pkgname, F_OK))
 echo create $pkgname directories
 mkdir $pkgname
 mkdir $pkgname/dl $pkgname/lib $pkgname/include $pkgname/demos $pkgname/bin
+if(access("chfcreate", R_OK)) {
+   mkdir chfcreate
+}
 
 echo Copying header files ...
-cp -f ../src/ming.h     $pkgname/include
+cp -f ../src/ming.h  	       $pkgname/include
 cp -f ../src/ming_config.h     $pkgname/include
 
 // if the original package doesn't have the modiciation for Ch
@@ -80,9 +84,11 @@ if(`grep LOAD_CHDL $pkgname/include/ming.h` == NULL)
 }
 
 echo Copying demo programs ...
-cp -fr demos/*   $pkgname/demos
-cp -f ../src/test.c   $pkgname/demos
+cp -fr demos/*        $pkgname/demos
 chmod 755 $pkgname/demos/*.c*
+if(!access(stradd(pkgname, "/demos/CVS"), R_OK)) {
+   rm -rf $pkgname/demos/CVS
+}
 
 //echo copying DLLs ...
 #if defined(_WIN32_)

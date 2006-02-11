@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
    SWFMovie_nextFrame(movie);
 
-   SWFMovie_save(movie, "gradient.swf", 0);
+   SWFMovie_save(movie, "gradient.swf");
 
    return 0;
 }

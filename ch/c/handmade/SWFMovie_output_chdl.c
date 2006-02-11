@@ -10,7 +10,7 @@ EXPORTCH int SWFMovie_output_chdl(void *varg) {
     SWFMovie movie;
     SWFByteOutputMethod method;
     void *data;
-    int level;
+  //  int level;
     int retval;
 
     Ch_VaStart(interp, ap, varg);
@@ -22,8 +22,8 @@ EXPORTCH int SWFMovie_output_chdl(void *varg) {
        method = (SWFByteOutputMethod)fileOutputMethod_funarg;
     }
     data = Ch_VaArg(interp, ap, void *);
-    level = Ch_VaArg(interp, ap, int);
-    retval = SWFMovie_output(movie, method, data, level);
+    /* level = Ch_VaArg(interp, ap, int); */
+    retval = SWFMovie_output(movie, method, data); //, level);
     Ch_VaEnd(interp, ap);
     return retval;
 }

@@ -18,7 +18,9 @@ System Requirements
     Ch is available from http://www.softintegration.com.
 (2) It has been tested and works with Ming version 0.3 beta 1 or above. 
     It might work with lower version without guarantee. For Windows, the 
-    release version of the Ming library must be built.
+    release version of the Ming library must be built. For Unix, either
+    static or shared versions of the Ming library can be used. With 
+    shared, the library must be installed.
 (3) the dependant ZLIB binary library for Ming is required
 (4) the dependant GIF binary library for Ming is optional 
 (5) the dependant PNG binary library for Ming is optional

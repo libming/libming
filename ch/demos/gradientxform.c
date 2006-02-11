@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
       SWFMovie_nextFrame(movie);
    }
 
-   SWFMovie_save(movie, "gradientxform.swf", 0);
+   SWFMovie_save(movie, "gradientxform.swf");
 
    return 0;
 }
