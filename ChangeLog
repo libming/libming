@@ -1,11 +1,72 @@
-2006-02-06 21:36  strk
+2006-02-10 22:44  anderson
+
+	* ch/: pkgcreate.ch, readme.txt, c/Makefile.win,
+	  c/handmade/SWFMovie_output_chdl.c,
+	  chfhandmade/SWFMovie_output.chf, demos/action.c, demos/button.c,
+	  demos/cxform.c, demos/drag.c, demos/gradient.c,
+	  demos/gradientxform.c, demos/jpegfill.c, demos/png.c: Updated to
+	  0.3 from Stephen Nestinger
+
+2006-02-10 16:12  akleine
+
+	* util/decompile.c: added two more stack operations: dup and swap
+
+2006-02-10 11:52  akleine
+
+	* util/png2dbl.c: bugfix in cast op:  makes work *.dbl files from
+	  GRAY images
+
+2006-02-10 10:05  anderson
+
+	* php_ext/: README, README.PHP4, README.PHP5: Try to be more clear
+	  about the PHP4/PHP5 support
+
+2006-02-10 09:28  anderson
+
+	* TODO: Add more item that need to be done
+
+2006-02-09 11:17  strk
+
+	* NEWS: updated
+
+2006-02-08 17:59  anderson
+
+	* src/actiontypes.h: The new unified definition of action type
+	  values
+
+2006-02-08 17:48  anderson
+
+	* src/actioncompiler/action.h, src/actioncompiler/assembler.c,
+	  src/actioncompiler/compile.c, src/actioncompiler/compileaction.c,
+	  src/actioncompiler/listaction.c, src/actioncompiler/main.c,
+	  src/actioncompiler/swf4compiler.flex,
+	  src/actioncompiler/swf4compiler.y,
+	  src/actioncompiler/swf5compiler.flex,
+	  src/actioncompiler/swf5compiler.y, util/action.h: Unify remaining
+	  definitions of action values
+
+2006-02-08 14:28  anderson
+
+	* util/: action.c, decompile.c: Oops. There are 2 pools in use.
+	  Make them static so they don't interfere with each other
+
+2006-02-08 14:18  anderson
+
+	* Makefile.config.in: Set up LDFLAGS also
+
+2006-02-08 14:09  anderson
+
+	* src/actioncompiler/compileaction.c,
+	  src/actioncompiler/swf5compiler.flex, src/blocks/fromswf.c,
+	  src/blocks/gifdbl.c, src/blocks/input.c, src/blocks/input.h,
+	  src/blocks/output.c, src/blocks/output.h, src/blocks/pngdbl.c,
+	  util/dbl2png.c, util/decompile.c, util/gif2dbl.c,
+	  util/gif2mask.c, util/listfdb.c, util/parser.c, util/swftypes.h:
+	  Clean up some more compiler warnings
+
+2006-02-06 15:36  strk
 
 	* src/actioncompiler/listaction.c: Fixed default out of switch
-
-2006-02-06 01:46  strk
-
-	* src/actioncompiler/: action.h, listaction.c: Added
-	  SWFACTION_DEFINEFUNCTION2 - dump of it is unimplemented
 
 2006-02-03 23:51  strk
 
