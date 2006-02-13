@@ -808,9 +808,9 @@ decompileDECREMENT(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *var;
 
-    SanityCheck(SWF_DECREMENT,
-		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
-		"DECREMENT not preceeded by PUSH")
+//    SanityCheck(SWF_DECREMENT,
+//		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
+//		"DECREMENT not preceeded by PUSH")
  
     INDENT
     var=pop();
@@ -876,13 +876,16 @@ decompileNEWOBJECT(int n, SWF_ACTION *actions,int maxn)
     t = malloc(strlen(objname)+7); /* 'new '+'()'+'\000' */
     strcpy(t,"new ");
     strcat(t,objname);
-    strcat(t,"()");
+    strcat(t,"(");
     obj->p.String=t;
     obj->Type=0; /* STRING */
     numparams = getInt(pop());
     for(i=0;i<numparams;i++) {
 	    arg=pop();
+	    strcat(t,getName(arg));
+	    if (i<numparams-1) strcat(t,",");
     }
+    strcat(t,")");
     pushvar(obj);
 
     return 0;
