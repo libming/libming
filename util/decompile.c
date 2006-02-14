@@ -431,6 +431,36 @@ stackswap()
 	Stack->next->val  = p;
 }
 
+
+struct SWF_ACTIONPUSHPARAM *
+newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final)
+{
+	struct SWF_ACTIONPUSHPARAM *v;
+	int i;
+	
+	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
+	v->p.String = malloc(1000+strlen(var)+strlen(var2)+strlen(var3)
+				 +strlen(var4)+strlen(final));
+	v->Type=10; /* VARIABLE */
+	strcpy(v->p.String,var);
+	strcat(v->p.String,var2);
+	strcat(v->p.String,var3);
+	strcat(v->p.String,var4);
+	for(i=0;i<pop_counter;i++) 
+	{
+	 char *pops=getString(pop());
+	 
+	 if ( strlen(v->p.String)+ 1 + strlen(pops) <1000)
+	 {
+	  strcat(v->p.String,pops);
+	  if( i < pop_counter-1 ) 
+	   strcat(v->p.String,",");
+	 }
+	}
+	strcat(v->p.String,final);
+	return v;
+}
+
 /* End Package */
 
 static int gIndent;
@@ -1271,7 +1301,7 @@ int
 decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *meth, *obj, *nparam;
-    int i;
+/*    int i;*/
 
     SanityCheck(SWF_CALLMETHOD,
 		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
@@ -1283,6 +1313,7 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     printf("/* %ld params */\n",nparam->p.Integer);
 
     INDENT
+#if 0
     puts(getName(obj));
     puts(".");
     puts(getName(meth));
@@ -1294,6 +1325,9 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     puts(");\n");
     push(newVar("funcret"));
 
+#else
+    push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
+#endif
     return 0;
 }
 
