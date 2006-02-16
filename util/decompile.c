@@ -38,7 +38,7 @@ static char *dcstr=NULL;
 static char *dcptr=NULL;
 
 #define DCSTRSIZE 1024
-
+#define PARAM_STRSIZE 512
 void
 dcinit()
 {
@@ -437,10 +437,10 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 {
 	struct SWF_ACTIONPUSHPARAM *v;
 	int i;
+	int slen=strlen(var)+strlen(var2)+strlen(var3)+strlen(var4)+strlen(final);
 	
 	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
-	v->p.String = malloc(1000+strlen(var)+strlen(var2)+strlen(var3)
-				 +strlen(var4)+strlen(final));
+	v->p.String = malloc(PARAM_STRSIZE+slen);
 	v->Type=10; /* VARIABLE */
 	strcpy(v->p.String,var);
 	strcat(v->p.String,var2);
@@ -449,8 +449,7 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 	for(i=0;i<pop_counter;i++) 
 	{
 	 char *pops=getString(pop());
-	 
-	 if ( strlen(v->p.String)+ 1 + strlen(pops) <1000)
+	 if ( strlen(v->p.String)+ 2 + strlen(pops) < PARAM_STRSIZE+slen)
 	 {
 	  strcat(v->p.String,pops);
 	  if( i < pop_counter-1 ) 
@@ -898,12 +897,13 @@ int
 decompileNEWOBJECT(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *obj, *arg;
-    int i,numparams;
+    int i,numparams,slen;
     char *t,*objname;
 
     obj = pop();
     objname = getName(obj);
-    t = malloc(strlen(objname)+7); /* 'new '+'()'+'\000' */
+    slen = strlen(objname);
+    t = malloc(slen + PARAM_STRSIZE + 7); /* 'new '+'()'+'\000' */
     strcpy(t,"new ");
     strcat(t,objname);
     strcat(t,"(");
@@ -911,9 +911,15 @@ decompileNEWOBJECT(int n, SWF_ACTION *actions,int maxn)
     obj->Type=0; /* STRING */
     numparams = getInt(pop());
     for(i=0;i<numparams;i++) {
+	    char *pops;    
 	    arg=pop();
-	    strcat(t,getName(arg));
-	    if (i<numparams-1) strcat(t,",");
+	    pops=getName(arg);
+	    if ( strlen(t) + 2 + strlen(pops) < (slen + PARAM_STRSIZE + 7) )
+	    {
+	     strcat(t,pops);
+	     if (i<numparams-1) 
+	      strcat(t,",");
+	    }
     }
     strcat(t,")");
     pushvar(obj);
@@ -1335,7 +1341,7 @@ int
 decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *meth, *nparam;
-    int i;
+/*    int i;*/
 
     SanityCheck(SWF_CALLMETHOD,
 		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
@@ -1345,6 +1351,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     nparam=pop();
 
     INDENT
+#if 0
     //decompilePUSHPARAM(meth,0);
     puts(getName(meth));
     puts("(");
@@ -1355,6 +1362,10 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     puts(");\n");
 
     return 1;
+#else
+    push(newVar_N("","",getName(meth),"(", nparam->p.Integer,")"));
+    return 0;
+#endif
 }
 
 int
