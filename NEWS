@@ -2,7 +2,7 @@
 
 	* Fixed libpng-less builds
 
-0.3beta3 - ?
+0.3.0 - 2006-02-15
 
 	* Fixed bug in empty case: statements
 	* Updated ch language bindings
