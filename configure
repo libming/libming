@@ -1255,7 +1255,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 MAJOR_VERSION=0
 MINOR_VERSION=3
-MICRO_VERSION=0
+MICRO_VERSION=0beta2
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
@@ -3043,7 +3043,7 @@ fi
 
 if test -n "${PNGLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
-	EXTRA_BINS="$EXTRA_BINS png2dbl png2swf"
+	EXTRA_BINS="$EXTRA_BINS png2dbl png2swf dbl2png"
 	cat >>confdefs.h <<\_ACEOF
 #define USE_PNG 1
 _ACEOF

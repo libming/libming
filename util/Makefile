@@ -9,7 +9,7 @@ PAGER ?= less
 
 BINARIES = listswf listswf_d swftoperl swftophp swftopython \
 	makeswf listaction listaction_d listfdb makefdb listjpeg raw2adpcm \
-	listmp3 dbl2png
+	listmp3 
 
 BINARIES += $(EXTRA_BINS)
 
