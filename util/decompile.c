@@ -949,8 +949,13 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     var = pop();
     obj = newVar(getName(pop()));
     decompilePUSHPARAM(obj,0);
-    puts(".");
+    if (var->Type == 7 || var->Type == 10)			/* initial approach only */
+     puts("[");
+    else
+     puts(".");
     decompilePUSHPARAM(var,0);
+    if (var->Type == 7 || var->Type == 10)
+     puts("]");
     printf(" = " );
     decompilePUSHPARAM(val,0);
     puts(";\n");
@@ -1369,6 +1374,15 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+decompileINITARRAY(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *nparam;
+    nparam=pop();
+    push(newVar_N("","","","[", nparam->p.Integer,"]"));
+    return 0;
+}
+ 
+int
 decompileAction(int n, SWF_ACTION *actions,int maxn)
 {
     if( n > maxn ) error("Action overflow!!");
@@ -1480,6 +1494,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_WITH:
         decompileWITH(n, actions, maxn);
 	return 0;
+
+      case SWFACTION_INITARRAY:
+        return decompileINITARRAY(n, actions, maxn);
 
       case SWFACTION_DEFINEFUNCTION:
 	return decompileDEFINEFUNCTION(n, actions, maxn);
