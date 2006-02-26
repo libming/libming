@@ -637,6 +637,11 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	      left=pop();
 	      push(newVar3(getString(left),"/",getString(right)));
 	      break;
+      case SWFACTION_MODULO:
+	      right=pop();
+	      left=pop();
+	      push(newVar3(getString(left),"%",getString(right)));
+	      break;
 
       default:
 	printf("Unhandled Arithmetic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
@@ -957,7 +962,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     if (var->Type == 7 || var->Type == 10)
      puts("]");
     printf(" = " );
-    decompilePUSHPARAM(val,0);
+    decompilePUSHPARAM(val,1);
     puts(";\n");
 
     return 0;
@@ -986,7 +991,8 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn)
     {
     puts(getName(var));
     printf(" = " );
-    puts(getName(val));
+    /*puts(getName(val));*/
+    decompilePUSHPARAM(val,1);
     puts(";\n");
     }
     return 0;
@@ -1514,6 +1520,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_SUBTRACT:
       case SWFACTION_MULTIPLY:
       case SWFACTION_DIVIDE:
+      case SWFACTION_MODULO:
         return decompileArithmeticOp(n, actions, maxn);
 
       case SWFACTION_POP:
