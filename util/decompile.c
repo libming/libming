@@ -524,6 +524,20 @@ decompileSTOP (SWF_ACTION *act)
 }
 
 void
+decompileNEXTFRAME (SWF_ACTION *act)
+{
+  INDENT
+  printf("nextFrame();\n");
+}
+
+void
+decompilePREVFRAME (SWF_ACTION *act)
+{
+  INDENT
+  printf("prevFrame();\n");
+}
+
+void
 decompileGETURL (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONGETURL);
@@ -838,6 +852,40 @@ decompileTRACE(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+decompileGETTIME(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     puts("getTimer();\n");
+     return 1;
+    }
+    else
+    {
+     push(newVar("getTimer()"));
+     return 0;
+    }
+}
+
+int
+decompileRANDOMNUMBER(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     puts("random(");
+     decompilePUSHPARAM(pop(),0);
+     puts(");\n");
+     return 1;
+    }
+    else
+    {
+     push(newVar_N("","","random","(", 1,")"));
+     return 0;
+    }
+}
+
+int
 decompileDECREMENT(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *var;
@@ -962,7 +1010,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     if (var->Type == 7 || var->Type == 10)
      puts("]");
     printf(" = " );
-    decompilePUSHPARAM(val,1);
+    decompilePUSHPARAM(val,0);	/* FIXME: 0 or 1 this needs more attention */
     puts(";\n");
 
     return 0;
@@ -992,7 +1040,7 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn)
     puts(getName(var));
     printf(" = " );
     /*puts(getName(val));*/
-    decompilePUSHPARAM(val,1);
+    decompilePUSHPARAM(val,0);	/* FIXME: 0 or 1 this needs more attention */
     puts(";\n");
     }
     return 0;
@@ -1344,6 +1392,13 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
 
 #else
     push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call method and throw away any result */
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
 #endif
     return 0;
 }
@@ -1375,9 +1430,31 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     return 1;
 #else
     push(newVar_N("","",getName(meth),"(", nparam->p.Integer,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
     return 0;
 #endif
 }
+
+int
+decompileINT(int n, SWF_ACTION *actions,int maxn)
+{
+    push(newVar_N("","","int","(", 1,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
+    return 0;
+}
+
 
 int
 decompileINITARRAY(int n, SWF_ACTION *actions,int maxn)
@@ -1442,7 +1519,21 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileSETPROPERTY(n, actions, maxn);
 	return 0;
 
+      case SWFACTION_NEXTFRAME:
+        decompileNEXTFRAME(&actions[n]);
+        return 0;
 
+      case SWFACTION_PREVFRAME:
+        decompilePREVFRAME(&actions[n]);
+        return 0;
+
+
+      case SWFACTION_RANDOMNUMBER:
+        return decompileRANDOMNUMBER(n, actions, maxn);
+
+      case SWFACTION_GETTIME:
+        return decompileGETTIME(n, actions, maxn);
+        
       case SWFACTION_TRACE:
         decompileTRACE(n, actions, maxn);
 	return 0;
@@ -1486,16 +1577,14 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	return 0;
 
       case SWFACTION_JUMP:
-        decompileJUMP(n, actions, maxn);
-	return 0;
+        return decompileJUMP(n, actions, maxn);
 
       case SWFACTION_RETURN:
         decompileRETURN(n, actions, maxn);
 	return 0;
 
       case SWFACTION_IF:
-        decompileIF(n, actions, maxn);
-	return 0;
+        return decompileIF(n, actions, maxn);
 
       case SWFACTION_WITH:
         decompileWITH(n, actions, maxn);
@@ -1527,11 +1616,23 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	pop();
         return 0;
 
-      case SWFACTION_EQUALS2:
-      case SWFACTION_LOGICALNOT:
+      case SWFACTION_INT:
+        return decompileINT(n, actions, maxn);
+
+      case SWFACTION_LESSTHAN:
+      case SWFACTION_LOGICALAND:
+      case SWFACTION_LOGICALOR:
+      case SWFACTION_STRINGEQ:
+      case SWFACTION_STRINGCOMPARE:
       case SWFACTION_LESS2:
+      case SWFACTION_EQUALS2:
+      case SWFACTION_STRICTEQUALS:
+      case SWFACTION_BITWISEAND:
+      case SWFACTION_BITWISEOR:
+      case SWFACTION_BITWISEXOR:
+      case SWFACTION_GREATER:
+      case SWFACTION_LOGICALNOT:
         return decompileLogicalOp(n, actions, maxn);
-	return 0;
 
       default:
 	outputSWF_ACTION(n,&actions[n]);
