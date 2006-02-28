@@ -1072,6 +1072,11 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
     	return 0;
     }
 
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP
+	|| actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP ) 
+	    /* Probably the end of a switch{}, so skip it */
+    	return 1;
+    
     error("Unhandled JUMP");
     return 0;
 }
@@ -1184,14 +1189,18 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
      * Any other use of IF must be a real if()
      */
     if( isLogicalOp(n-1, actions, maxn) ) {
+    	    int has_else= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
+                  (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
+    	    int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
             INDENT
 	    puts("if( ");
-	    /* Eat a LogicNOT that is part of the If */
-	    /* decompileLogicalOp(n-2, actions, maxn); */
+	    if ( !has_lognot && has_else) 
+	     puts("!(");
 	    puts(getName(pop()));
+	    if ( !has_lognot && has_else)
+	     puts(")");
 	    puts(" ) {\n");
-            if ( (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
-                  sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 ) {
+            if ( has_else ) {
 	      /* There is an else clause also! */
               decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	      puts("} else {\n");
@@ -1214,7 +1223,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 			actions[n+1].SWF_ACTIONRECORD.Offset+
 			sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)
 			*/;
-              decompileActions(i+1, &actions[n+1],gIndent+1);
+              decompileActions(i  , &actions[n+1],gIndent+1);
 	    } else {
 	      /* It's a simple if() {} */
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
