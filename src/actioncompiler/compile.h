@@ -13,6 +13,11 @@
 #include "ming.h"
 
 typedef struct _buffer *Buffer;
+typedef struct _package *Package;
+#define MAX_PACKAGE_SIZE 1024
+
+/* compiled classes */
+Package packages;
 
 /* shut up bison.simple */
 void yyerror(char *msg);
@@ -21,6 +26,24 @@ int yylex();
 #ifndef max
   #define max(x,y)	(((x)>(y))?(x):(y))
 #endif
+
+typedef enum
+{
+	PRELOAD_THIS = 1,
+	SUPPRESS_THIS = 2,
+	PRELOAD_ARGUMENTS = 4,
+	SUPPRESS_ARGUMENTS = 8,
+	PRELOAD_SUPER = 16,
+	SUPPRESS_SUPER = 32
+} SWFDefineFunction2Flags;
+
+enum SWFPackageType
+{
+	NO_PACKAGE,
+	PACKAGE_CLASS,
+	PACKAGE_EXTENDS,
+	PACKAGE_INTERFACE
+};
 
 enum
 {
@@ -77,6 +100,20 @@ struct _buffer
 
 #define BUFFER_SIZE sizeof(struct _buffer)
 
+struct _package
+{
+	char *path;
+	char *name;
+	char *ns;
+	enum SWFPackageType type;
+	struct _package *head;
+	struct _package *tail;
+	struct _package *next;
+	struct _package *prev;
+};
+
+#define PACKAGE_SIZE sizeof(struct _package)
+
 struct switchcase
 {	Buffer cond, action;
 	int condlen, actlen, isbreak;
@@ -94,9 +131,10 @@ enum ctx
 	CTX_LOOP,
 	CTX_FOR_IN,
 	CTX_SWITCH,
-
 	CTX_BREAK,
-	CTX_CONTINUE
+	CTX_CONTINUE,
+	CTX_CLASS,
+	CTX_INTERFACE
 };
 
 void addctx(enum ctx val);
@@ -162,5 +200,17 @@ void swf5ParseInit(const char *string, int debug);
 
 int swf4parse(void *b);
 int swf5parse(void *b);
+
+void bufferWriteDefineFunction2(Buffer out, char *func_name, Buffer args, Buffer code, 
+															 int flags, int num_flags);
+Package newPackage(char *path, enum SWFPackageType type);
+void destroyPackage(Package p);
+void printPackage(Package p);
+void addPackage(char *path);
+void destroyPackages();
+int packageCount(void);
+int packageExists(char *path);
+int packageExistsByName(char *name);
+Package packageByName(char *name);
 
 #endif /* SWF_COMPILE_H_INCLUDED */
