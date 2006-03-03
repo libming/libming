@@ -631,6 +631,7 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
               decompilePUSHPARAM(peek(),0);
 	      break;
 	      */
+      case SWFACTION_ADD:
       case SWFACTION_ADD2:
 	      right=pop();
 	      left=pop();
@@ -685,6 +686,9 @@ isLogicalOp(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_GETMEMBER:
       */
         return 1;
+      case SWFACTION_PUSHDUP:
+        if (n>0)
+      	 return isLogicalOp(n-1,actions,maxn);	/* depends on predecessor operation */
       default:
         return 0;
     }
@@ -1192,6 +1196,8 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
     	    int has_else= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
                   (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
     	    int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
+	    if (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
+	      puts("\n/* perhaps: if ( cond_a || cond_b ) */\n");
             INDENT
 	    puts("if( ");
 	    if ( !has_lognot && has_else) 
@@ -1457,6 +1463,7 @@ decompileINT(int n, SWF_ACTION *actions,int maxn)
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
      /* call function and throw away any result */
+     INDENT
      puts(getName(pop()));
      puts(";\n");
      return 1;
@@ -1464,6 +1471,36 @@ decompileINT(int n, SWF_ACTION *actions,int maxn)
     return 0;
 }
 
+int
+decompileREMOVECLIP(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    puts("removeMovieClip(");
+    puts(getName(pop()));
+    puts(");\n");
+    return 0;
+}
+
+int 
+decompileDUPLICATECLIP(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    struct SWF_ACTIONPUSHPARAM *a, *b;
+
+    INDENT
+    a = pop();
+    b = pop();
+
+    puts("duplicateMovieClip(");
+    puts(getString(pop()));
+    puts(",");
+    puts(getString(b));
+    puts(",");
+    puts(getString(a));
+    puts(");\n");
+    return 0;
+
+}
 
 int
 decompileINITARRAY(int n, SWF_ACTION *actions,int maxn)
@@ -1613,7 +1650,8 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_CALLMETHOD:
         return decompileCALLMETHOD(n, actions, maxn);
-
+        
+      case SWFACTION_ADD:
       case SWFACTION_ADD2:
       case SWFACTION_SUBTRACT:
       case SWFACTION_MULTIPLY:
@@ -1627,6 +1665,12 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_INT:
         return decompileINT(n, actions, maxn);
+
+      case SWFACTION_REMOVECLIP:
+	return decompileREMOVECLIP(n, actions, maxn);
+
+      case SWFACTION_DUPLICATECLIP:
+	return decompileDUPLICATECLIP(n, actions, maxn);
 
       case SWFACTION_LESSTHAN:
       case SWFACTION_LOGICALAND:
