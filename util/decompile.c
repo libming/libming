@@ -30,14 +30,16 @@ for(i=0;i<6;i++)
  * Start Package 
  *
  * A package to build up a string that can be returned to the caller
+ * ak/2006: Extended for temporary swichting to a 2nd buffer
  */
+#define USE_LIB 1
 
 static int strsize=0;
 static int strmaxsize=0;
 static char *dcstr=NULL;
 static char *dcptr=NULL;
 
-#define DCSTRSIZE 1024
+#define DCSTRSIZE 10240
 #define PARAM_STRSIZE 512
 void
 dcinit()
@@ -105,7 +107,32 @@ dcgetstr()
 	return ret;
 }
 
-#if 1
+struct strbufinfo
+{
+  int size;
+  char *str;
+  char *ptr;
+};
+
+
+struct strbufinfo setTempString(void)
+{
+  struct strbufinfo current;
+  current.size=strsize;
+  current.str=dcstr;
+  current.ptr=dcptr;
+  dcinit();
+  return current;
+}
+void setOrigString(struct strbufinfo old)
+{
+   free(dcstr);				/* not needed anymore */
+   strsize=old.size;
+   dcstr=old.str;
+   dcptr=old.ptr;
+}
+
+#if USE_LIB
 #define puts(s) dcputs(s)
 #define putchar(c) dcputchar(c)
 #define printf dcprintf
@@ -545,6 +572,24 @@ decompileGETURL (SWF_ACTION *act)
   INDENT
   printf("getUrl(\"%s\",%s);\n", sact->UrlString, sact->TargetString);
 }
+int
+decompileGETURL2 (SWF_ACTION *act)
+{
+    struct SWF_ACTIONPUSHPARAM *a;
+
+    OUT_BEGIN(SWF_ACTIONGETURL2);
+    INDENT
+    a = pop();
+    if (sact->f.FlagBits.SendVarsMethod)
+     puts("loadVars(");
+    else
+     puts("getUrl(");
+    puts(getString(pop()));
+    puts(",");
+    puts(getString(a));
+    puts(");\n");
+    return 0;
+}
 
 static void
 decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
@@ -695,6 +740,20 @@ isLogicalOp(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+isStoreOp(int n, SWF_ACTION *actions,int maxn)
+{
+    switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+    {
+      case SWFACTION_STOREREGISTER:
+      case SWFACTION_SETVARIABLE:
+      case SWFACTION_SETMEMBER:
+        return 1;
+      default:
+        return 0;
+    }
+}
+
+int
 decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *left, *right;
@@ -756,13 +815,19 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 	        return 0;
 	      }
       case SWFACTION_BITWISEAND:
-	      puts("BITAND");
+	      right=pop();
+	      left=pop();
+	      push(newVar3(getString(left),"&",getString(right)));
 	      break;
       case SWFACTION_BITWISEOR:
-	      puts("BITOR");
+	      right=pop();
+	      left=pop();
+	      push(newVar3(getString(left),"|",getString(right)));
 	      break;
       case SWFACTION_BITWISEXOR:
-	      puts("BITXOR");
+	      right=pop();
+	      left=pop();
+	      push(newVar3(getString(left),"^",getString(right)));
 	      break;
       case SWFACTION_GREATER:
 	      puts("GREATER");
@@ -942,11 +1007,10 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
     OUT_BEGIN2(SWF_ACTIONSTOREREGISTER);
 
     INDENT
-    printf("R%d = ", sact->Register );
+//    printf("R%d = ", sact->Register );
     regs[sact->Register] = peek();
-    puts(getName(regs[sact->Register]));
-    puts(";\n");
-
+//    puts(getName(regs[sact->Register]));
+//    puts(";\n");
     return 0;
 }
 
@@ -1081,7 +1145,8 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	    /* Probably the end of a switch{}, so skip it */
     	return 1;
     
-    error("Unhandled JUMP");
+    /*  error("Unhandled JUMP");*/
+    puts("\n/* Unhandled JUMP, perhaps beginning of 'for' loop */\n" );
     return 0;
 }
 
@@ -1209,6 +1274,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
             if ( has_else ) {
 	      /* There is an else clause also! */
               decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+              INDENT
 	      puts("} else {\n");
 
 	      /*
@@ -1264,6 +1330,7 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
 int
 decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
 {
+#if 0
     int i;
     struct SWF_ACTIONPUSHPARAM *name = NULL;
     OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
@@ -1313,6 +1380,42 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
 	regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]  = name; /* Do the STOREREGISTER here */
     	return 2;
     }
+#else
+    int i;
+    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
+    struct strbufinfo origbuf;
+    INDENT
+    #if 0
+    printf("/* function followed by OP %x */\n", actions[n+1].SWF_ACTIONRECORD.ActionCode);
+    #endif
+    #if USE_LIB
+    if (isStoreOp(n+1, actions,maxn))
+      origbuf=setTempString();	/* switch to a temporary string buffer */
+    #endif
+    puts("function ");
+    if (sact->FunctionName) puts(sact->FunctionName);
+    puts(" (");
+    for(i=0;i<sact->NumParams;i++) {
+	puts(sact->Params[i]);
+	if( sact->NumParams > i+1 ) puts(",");
+    }
+    puts(") {\n");
+    INDENT
+    decompileActions(sact->numActions, sact->Actions,gIndent+1);
+    INDENT
+    if (isStoreOp(n+1, actions,maxn))
+    {
+     puts("}");
+     #if USE_LIB
+      push (newVar(dcgetstr()));			/* push func body for later assignment */
+      setOrigString(origbuf);				/* switch back to orig buffer */
+     #else
+      push (newVar("/* see function code above */"));	/* workaround only if LIB is not in use */
+     #endif
+    }
+    else
+     puts("}\n");
+#endif
 
     return 0;
 }
@@ -1543,6 +1646,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_STOP:
         decompileSTOP(&actions[n]);
+	return 0;
+
+      case SWFACTION_GETURL2:
+        decompileGETURL2(&actions[n]);
 	return 0;
 
       case SWFACTION_GETURL:
