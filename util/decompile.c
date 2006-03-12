@@ -172,7 +172,7 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
 	  case 2: /* NULL */
   		return "null";
 	  case 3: /* Undefined */
-  		return "undefiend";
+  		return "undefined";
 	  case 4: /* REGISTER */
 		if( regs[act->p.RegisterNumber] &&
 		    regs[act->p.RegisterNumber]->Type != 4 &&
@@ -517,6 +517,15 @@ decompileCONSTANTPOOL (SWF_ACTION *act)
 }
 
 void
+decompileGOTOLABEL (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONGOTOLABEL);
+
+  INDENT
+  printf("gotoLabel(%s);\n", sact->FrameLabel);
+}
+
+void
 decompileGOTOFRAME (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONGOTOFRAME);
@@ -610,7 +619,7 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   		printf ("NULL" );
 		break;
 	  case 3: /* Undefined */
-  		printf ("undefiend" );
+  		printf ("undefined" );
 		break;
 	  case 4: /* Register */
 		if( regs[act->p.RegisterNumber] ) {
@@ -649,6 +658,20 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   }
 }
 
+int
+isStoreOp(int n, SWF_ACTION *actions,int maxn)
+{
+    switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+    {
+      case SWFACTION_STOREREGISTER:
+      case SWFACTION_SETVARIABLE:
+      case SWFACTION_SETMEMBER:
+        return 1;
+      default:
+        return 0;
+    }
+}
+
 /*
 int
 isArithmeticOp(int n, SWF_ACTION *actions,int maxn)
@@ -680,12 +703,23 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_ADD2:
 	      right=pop();
 	      left=pop();
-	      push(newVar3(getString(left),"+",getString(right)));
+	      /* see examples like 3*(6+1) vs. 3*6+1 
+	         but if no other arithmetics follows on stack,
+	         e.g. because storing the result we don't need neither'(' nor ')' . 
+	         To do: store operator type on stack for better decision
+	       */ 
+	      if (isStoreOp(n+1, actions,maxn) )
+	       push(newVar3(getString(left),"+",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"+",getString(right),0,")"));
 	      break;
       case SWFACTION_SUBTRACT:
 	      right=pop();
 	      left=pop();
-	      push(newVar3(getString(left),"-",getString(right)));
+	      if (isStoreOp(n+1	, actions,maxn) )
+		push(newVar3(getString(left),"-",getString(right)));	      
+	      else
+		push(newVar_N("(",getString(left),"-",getString(right),0,")"));
 	      break;
       case SWFACTION_MULTIPLY:
 	      right=pop();
@@ -731,23 +765,20 @@ isLogicalOp(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_GETMEMBER:
       */
         return 1;
-      case SWFACTION_PUSHDUP:
-        if (n>0)
-      	 return isLogicalOp(n-1,actions,maxn);	/* depends on predecessor operation */
       default:
         return 0;
     }
 }
-
-int
-isStoreOp(int n, SWF_ACTION *actions,int maxn)
+int 
+isLogicalOp2(int n, SWF_ACTION *actions,int maxn)
 {
     switch(actions[n].SWF_ACTIONRECORD.ActionCode)
     {
-      case SWFACTION_STOREREGISTER:
-      case SWFACTION_SETVARIABLE:
-      case SWFACTION_SETMEMBER:
-        return 1;
+      case SWFACTION_LOGICALNOT:
+      case SWFACTION_PUSHDUP:
+      case SWFACTION_IF:
+       return 1;
+
       default:
         return 0;
     }
@@ -814,7 +845,7 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 		push(newVar3(getString(left),"===",getString(right)));
 	        return 0;
 	      }
-      case SWFACTION_BITWISEAND:
+      case SWFACTION_BITWISEAND:			/* To do: move to Arithmetics..? */
 	      right=pop();
 	      left=pop();
 	      push(newVar3(getString(left),"&",getString(right)));
@@ -1257,24 +1288,18 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
     /*
      * Any other use of IF must be a real if()
      */
+#if 0
     if( isLogicalOp(n-1, actions, maxn) ) {
-    	    int has_else= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
-                  (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
-    	    int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
-	    if (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
-	      puts("\n/* perhaps: if ( cond_a || cond_b ) */\n");
             INDENT
 	    puts("if( ");
-	    if ( !has_lognot && has_else) 
-	     puts("!(");
+	    /* Eat a LogicNOT that is part of the If */
+	    /* decompileLogicalOp(n-2, actions, maxn); */
 	    puts(getName(pop()));
-	    if ( !has_lognot && has_else)
-	     puts(")");
 	    puts(" ) {\n");
-            if ( has_else ) {
+            if ( (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
+                  sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 ) {
 	      /* There is an else clause also! */
               decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-              INDENT
 	      puts("} else {\n");
 
 	      /*
@@ -1295,7 +1320,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 			actions[n+1].SWF_ACTIONRECORD.Offset+
 			sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)
 			*/;
-              decompileActions(i  , &actions[n+1],gIndent+1);
+              decompileActions(i+1, &actions[n+1],gIndent+1);
 	    } else {
 	      /* It's a simple if() {} */
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
@@ -1306,7 +1331,97 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
     }
 
     SanityCheck(SWF_IF, 0, "IF type not recognized")
+#else	/* 2006 NEW stuff comes here */
+    {
+    	    int has_else= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
+                  (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
+    	    int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
+	    int has_chain=0;
+            /* does it continue any other condition sequence ? 
+               Something like: if (x>2 && 7>y || callme(123) || false) { this(); } else { that(); }
+            */
+	    if ( isLogicalOp2(n-1, actions, maxn) &&
+	    	 ( (isLogicalOp2(n-2, actions, maxn) && has_else) || 
+	    	    actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ))
+	    {
+	     /* continued with || or && and else clause is present */
+	    }
+	    else
+	    {  
+	     if (  actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
+	           actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP &&
+	     	   actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF     )
+	     {
+	      /* continued with && */
+	     }
+	     else
+	     {
+	      INDENT
+	      puts("if( ");
+	     }
+	    }
+	    
+	    puts(getName(pop()));	/* the condition itself */
+	     
+	    /* is it followed by another condition ? */
+	    if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP  )
+	    {
+	     puts(" || ");
+	     has_chain=1;		/* i.e. do NOT write '}' below */
+	    }
+	    else
+	    {
+	     if (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
+  	    	 actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP )  
+  	      {
+	       puts(" && ");
+	       has_chain=1;
+	      }
+	      else
+               puts(" ) {\n");
+            }
+            if ( has_else ) {
+	      /* There is an else clause also!
+	         In general we expect a LOGICALNOT before,
+	         but if missing we exchange if-part with else-part
+	       */
+	     if  (has_lognot)
+	     {
+              decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+              INDENT
+	      puts("} else {\n");
+	     }	      
+	      /*
+	       * Count the number of action records that are part of
+	       * the else clause, and then decompile only that many.
+	       */
+	      for(i=0;
+	          (actions[(n+1)+i].SWF_ACTIONRECORD.Offset <
+		  (actions[n+1].SWF_ACTIONRECORD.Offset+
+		   sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)) &&
+		  (i<(maxn-(n+1)));
+		  i++)
+		;
+               decompileActions(i  , &actions[n+1],gIndent+1);
 
+	      if  (!has_lognot)		/* the missing if-part just NOW */
+	      {
+		INDENT
+		puts ("} else {\n");
+		decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+	      }
+	    } else {
+	      /* It's a simple if() {} */
+              decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	    }
+	    if ( !has_chain )		/* standalone condition or last in a chain */
+	    {
+	      INDENT
+	      puts("}\n");
+	    }
+	    return i;
+    }
+#endif
     return 0;
 }
 
@@ -1380,7 +1495,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
 	regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]  = name; /* Do the STOREREGISTER here */
     	return 2;
     }
-#else
+#else	/* 2006 NEW stuff comes here */
     int i;
     OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
     struct strbufinfo origbuf;
@@ -1632,6 +1747,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileCONSTANTPOOL(&actions[n]);
 	return 0;
 
+      case SWFACTION_GOTOLABEL:
+        decompileGOTOLABEL(&actions[n]);
+        return 0;
+
       case SWFACTION_GOTOFRAME:
         decompileGOTOFRAME(&actions[n]);
 	return 0;
@@ -1830,3 +1949,4 @@ decompile5Action(int n, SWF_ACTION *actions,int indent)
 
   return dcgetstr();
 }
+
