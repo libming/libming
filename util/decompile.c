@@ -939,9 +939,10 @@ decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
 int
 decompileTRACE(int n, SWF_ACTION *actions,int maxn)
 {
-    SanityCheck(SWF_TRACE,
-		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
-		"TRACE not preceeded by PUSH")
+//    SanityCheck(SWF_TRACE,
+//		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
+//		"TRACE not preceeded by PUSH")
+// One never can expect this ^^^^^^^^^^^^^^  Try: trace(callme(123));
     INDENT
     /* Could there be more than one push for this? */
     puts("trace(");
@@ -1163,6 +1164,8 @@ decompileADD2(int n, SWF_ACTION *actions,int maxn)
 int
 decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 {
+    int i=0,j=0;
+    struct SWF_ACTIONIF *sact=NULL;
     INDENT
     if( isLogicalOp(n+1, actions, maxn) ||
         ( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) &&
@@ -1175,10 +1178,56 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	|| actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP ) 
 	    /* Probably the end of a switch{}, so skip it */
     	return 1;
-    
-    /*  error("Unhandled JUMP");*/
-    puts("\n/* Unhandled JUMP, perhaps beginning of 'for' loop */\n" );
-    return 0;
+
+    /* ak,2006 */
+      for(i=0;(actions[(n+1)+i].SWF_ACTIONRECORD.Offset <
+	(actions[n+1].SWF_ACTIONRECORD.Offset+actions[n ].SWF_ACTIONJUMP.BranchOffset))
+	 && n+1+i<maxn; i++)
+      {
+	 #if 0
+	 printf("/* for PART3 OP 0x%x */\n",actions[n+1+i].SWF_ACTIONRECORD.ActionCode)
+	 #endif
+	 ;
+      }
+      if (i)
+      {
+       for (j=0; n+j+i<maxn; j++)
+       {
+	 #if 0
+	 printf("/* FOR part2 OP 0x%x */\n",actions[n+i+j].SWF_ACTIONRECORD.ActionCode)
+	 // at least one should push on stack
+	 #endif
+	 ;
+	 if (actions[n+i+j].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
+	 {
+	  sact = (struct SWF_ACTIONIF *)&(actions[n+i+j]);
+	  /* chk whether last jump does lead us back to start of loop */
+	  if (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP
+	   && sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset+
+	      sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.Offset==
+	      actions[n].SWF_ACTIONRECORD.Offset )
+	  {
+	   break;
+	  }
+	  else
+	   sact=NULL;
+         }
+       }
+      }
+      if (sact)
+      {
+	puts("while(");
+	decompileActions(j-1 , &actions[n+1+i  ] ,gIndent);
+	puts(getName(pop()));
+	puts("){         /* original FOR loop rewritten to WHILE */\n");
+	decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+	decompileActions(i , &actions[n+1], gIndent+1 );
+	INDENT
+	puts("};\n");
+	return i+j; 
+      }
+  error("Unhandled JUMP");
+  return 0;
 }
 
 int
@@ -1348,8 +1397,11 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	    }
 	    else
 	    {  
-	     if (  actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-	           actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP &&
+	     if (  actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT 
+	     	 && (
+	             actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
+	           ||actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT 
+	           ) &&
 	     	   actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF     )
 	     {
 	      /* continued with && */
@@ -1608,8 +1660,9 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     meth=pop();
     obj=pop();
     nparam=pop();
+#if 0
     printf("/* %ld params */\n",nparam->p.Integer);
-
+#endif
     INDENT
 #if 0
     puts(getName(obj));
@@ -1678,6 +1731,51 @@ int
 decompileINT(int n, SWF_ACTION *actions,int maxn)
 {
     push(newVar_N("","","int","(", 1,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     INDENT
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
+    return 0;
+}
+
+int
+decompileTOSTRING(int n, SWF_ACTION *actions,int maxn)
+{
+    push(newVar_N("","","String","(", 1,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     INDENT
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
+    return 0;
+}
+
+int
+decompileTONUMBER(int n, SWF_ACTION *actions,int maxn)
+{
+    push(newVar_N("","","Number","(", 1,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     INDENT
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
+    return 0;
+}
+
+int
+decompileSTRINGCONCAT(int n, SWF_ACTION *actions,int maxn)
+{
+    push(newVar_N("","","concat","(", 2,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
      /* call function and throw away any result */
@@ -1891,6 +1989,15 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_INT:
         return decompileINT(n, actions, maxn);
+
+      case SWFACTION_TOSTRING:
+        return decompileTOSTRING(n, actions, maxn);
+
+      case SWFACTION_TONUMBER:
+	return decompileTONUMBER(n, actions, maxn);
+
+      case SWFACTION_STRINGCONCAT:
+	return decompileSTRINGCONCAT(n, actions, maxn);
 
       case SWFACTION_REMOVECLIP:
 	return decompileREMOVECLIP(n, actions, maxn);
