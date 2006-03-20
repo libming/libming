@@ -1165,7 +1165,8 @@ int
 decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 {
     int i=0,j=0;
-    struct SWF_ACTIONIF *sact=NULL;
+    OUT_BEGIN2(SWF_ACTIONJUMP);
+    struct SWF_ACTIONIF *sactif=NULL;
     INDENT
     if( isLogicalOp(n+1, actions, maxn) ||
         ( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) &&
@@ -1174,10 +1175,12 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
     	return 0;
     }
 
-    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP
-	|| actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP ) 
-	    /* Probably the end of a switch{}, so skip it */
-    	return 1;
+    /* Probably the end of a switch{}, so skip it */
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	return 1;
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) 
+	if (actions[n+1].SWF_ACTIONJUMP.BranchOffset==0)
+	  return 1;
 
     /* ak,2006 */
       for(i=0;(actions[(n+1)+i].SWF_ACTIONRECORD.Offset <
@@ -1200,33 +1203,44 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	 ;
 	 if (actions[n+i+j].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
 	 {
-	  sact = (struct SWF_ACTIONIF *)&(actions[n+i+j]);
+	  sactif = (struct SWF_ACTIONIF *)&(actions[n+i+j]);
 	  /* chk whether last jump does lead us back to start of loop */
-	  if (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP
-	   && sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset+
-	      sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.Offset==
+	  if (sactif->Actions[sactif->numActions-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP
+	   && sactif->Actions[sactif->numActions-1].SWF_ACTIONJUMP.BranchOffset+
+	      sactif->Actions[sactif->numActions-1].SWF_ACTIONJUMP.Offset==
 	      actions[n].SWF_ACTIONRECORD.Offset )
 	  {
 	   break;
 	  }
 	  else
-	   sact=NULL;
+	   sactif=NULL;
          }
        }
       }
-      if (sact)
+      if (sactif)
       {
 	puts("while(");
-	decompileActions(j-1 , &actions[n+1+i  ] ,gIndent);
+	decompileActions(j-1, &actions[n+1+i], gIndent);
 	puts(getName(pop()));
 	puts("){         /* original FOR loop rewritten to WHILE */\n");
-	decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-	decompileActions(i , &actions[n+1], gIndent+1 );
+	decompileActions(sactif->numActions-1, sactif->Actions,gIndent+1);
+	decompileActions(i, &actions[n+1], gIndent+1);
 	INDENT
 	puts("};\n");
 	return i+j; 
       }
-  error("Unhandled JUMP");
+  if (sact->BranchOffset>0)
+  {
+   puts("break;        /*------*/\n");
+  }
+  else
+  {
+   if (sact->BranchOffset<0)
+   {
+    puts("continue;     /*------*/\n");
+   }
+  }
+  /* error("Unhandled JUMP"); */
   return 0;
 }
 
@@ -1319,19 +1333,37 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 
     /*
      * while() loops have a JUMP at the end of the if clause that jumps backwards
+       But also "continue" statements could jump backwards.
      */
     if( isLogicalOp(n-1, actions, maxn) &&
         ( (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
            sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset < 0) ) {
 	    dumpRegs();
             INDENT
+	/* if on a level >0 we can check for any outer loop 
+	   To do: get the level on a better way than using gIndent */
+	if (gIndent	
+	  && actions[maxn].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP
+	  && actions[maxn].SWF_ACTIONJUMP.Offset+actions[maxn].SWF_ACTIONJUMP.BranchOffset==
+	      sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.Offset+sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)
+	{      
+	    /* this jump leads from a block to start of a loop on outer block:
+	       it is an 'if' later followed by last action 'continue' */
+	    puts("if ( ");
+	    puts(getName(pop()));
+	    puts(" ) {\n");
+	    decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	}
+	else
+	{
 	    puts("while( ");
 	    puts(getName(pop()));
 	    puts(" ) {\n");
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-            INDENT
-	    puts("}\n");
-	    return 0;
+	}
+	INDENT
+	puts("}\n");
+	return 0;
     }
 
     /*
@@ -1382,7 +1414,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
     SanityCheck(SWF_IF, 0, "IF type not recognized")
 #else	/* 2006 NEW stuff comes here */
     {
-    	    int has_else= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
+    	    int has_else_or_break= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
                   (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
     	    int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
 	    int has_chain=0;
@@ -1390,7 +1422,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
                Something like: if (x>2 && 7>y || callme(123) || false) { this(); } else { that(); }
             */
 	    if ( isLogicalOp2(n-1, actions, maxn) &&
-	    	 ( (isLogicalOp2(n-2, actions, maxn) && has_else) || 
+	    	 ( (isLogicalOp2(n-2, actions, maxn) && has_else_or_break) || 
 	    	    actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ))
 	    {
 	     /* continued with || or && and else clause is present */
@@ -1432,37 +1464,60 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	      else
                puts(" ) {\n");
             }
-            if ( has_else ) {
+            if ( has_else_or_break )
+            {
+	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
+	               sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset;
+ 	      if (! (has_lognot
+ 	       && actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_EQUALS2 
+ 	       && actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH
+ 	       && actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
+	       && limit > actions[maxn-1].SWF_ACTIONRECORD.Offset+actions[maxn-1].SWF_ACTIONRECORD.Length
+	       )
+	      {
+	      /* the jump leads outside this limit, so it is a simple 'if'
+	         with a 'break' at the end, there is NO else clause.
+		 But as long switch(){} statements are written as sequence of 
+		 if-else-if-else we have to suppress this kind of 'break'.
+	       */  
+		decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	      }
+	      else
+	      {
 	      /* There is an else clause also!
-	         In general we expect a LOGICALNOT before,
-	         but if missing we exchange if-part with else-part
-	       */
-	     if  (has_lognot)
-	     {
-              decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-              INDENT
-	      puts("} else {\n");
-	     }	      
-	      /*
 	       * Count the number of action records that are part of
 	       * the else clause, and then decompile only that many.
 	       */
 	      for(i=0;
-	          (actions[(n+1)+i].SWF_ACTIONRECORD.Offset <
-		  (actions[n+1].SWF_ACTIONRECORD.Offset+
-		   sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)) &&
-		  (i<(maxn-(n+1)));
+	          actions[n+1+i].SWF_ACTIONRECORD.Offset < limit && i+n+1<maxn;
 		  i++)
-		;
-               decompileActions(i  , &actions[n+1],gIndent+1);
-
+		{
+		 #if 0
+		 printf("/* ELSE OP 0x%x at %d*/\n",actions[n+1+i].SWF_ACTIONRECORD.ActionCode,
+		 actions[n+1+i].SWF_ACTIONRECORD.Offset)
+		 #endif
+	 	 ;
+		}  
+	      /* In general we expect a LOGICALNOT before,
+	         but if missing we exchange if-part with else-part
+	       */
+	      if  (has_lognot)
+	      {
+               decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+               INDENT
+	       puts("} else {\n");
+	      }	      
+              decompileActions(i  , &actions[n+1],gIndent+1);
 	      if  (!has_lognot)		/* the missing if-part just NOW */
 	      {
 		INDENT
 		puts ("} else {\n");
 		decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	      }
-	    } else {
+	     }
+	    } 
+	    else 
+	    {
 	      /* It's a simple if() {} */
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	    }
@@ -1833,7 +1888,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
     if( n > maxn ) error("Action overflow!!");
 
 #ifdef DEBUG
-    printf("ACTION[%3.3d]: %s\n", n, actionName(actions[n].SWF_ACTIONRECORD.ActionCode));
+    printf("%d:\tACTION[%3.3d]: %s\n",actions[n].SWF_ACTIONRECORD.Offset, n, actionName(actions[n].SWF_ACTIONRECORD.ActionCode));
 #endif
 
     switch(actions[n].SWF_ACTIONRECORD.ActionCode)
