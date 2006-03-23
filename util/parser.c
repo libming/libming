@@ -875,6 +875,7 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 		    act->Actions = (union SWF_ACTION *) calloc (act->numActions, sizeof (SWF_ACTION));
 		    for(j=i,k=0;j<thisaction;j++,k++)
 			    act->Actions[k] = actions[j];
+		    actions[i]=*((SWF_ACTION *)act);	/* added by ak,2006 */
 		    *thisactionp = i;
 		} else {
 			/*

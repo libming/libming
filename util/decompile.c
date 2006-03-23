@@ -1330,6 +1330,19 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	    puts(");");
 	    return 0;
     }
+    /* ak,2006
+     * lots of "do {} while()" have simply a CONDITIONED JUMP back at the end of the loop
+     */
+    if( actions[n].SWF_ACTIONJUMP.BranchOffset < 0 ) 
+    {
+	INDENT
+	puts("do {                  /* 2nd type */\n");
+	decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	puts("} while( ");
+	puts(getName(pop()));
+	puts(");\n");
+	return 0;
+    }
 
     /*
      * while() loops have a JUMP at the end of the if clause that jumps backwards
