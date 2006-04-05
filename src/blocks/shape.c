@@ -813,6 +813,9 @@ SWFShape_moveScaledPenTo(SWFShape shape, int x, int y)
 				shape->records[0].type == SHAPERECORD_STATECHANGE) )
 	{
 		SWFRect_setBounds(SWFCharacter_getBounds(CHARACTER(shape)), x, x, y, y);
+	} else
+	{
+		SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)), x, y, 0);
 	}
 }
 
