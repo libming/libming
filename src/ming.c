@@ -31,7 +31,7 @@
 int SWF_versionNum = 5;
 int SWF_compression = -1;
 
-float Ming_scale = 20.0;
+float Ming_scale = 1.0;
 int Ming_cubicThreshold = 10000;
 
 
@@ -43,7 +43,7 @@ int Ming_init()
 	SWF_versionNum = 5;
 
 	Ming_cubicThreshold = 10000;
-	Ming_scale = 20.0;
+	Ming_scale = 1.0;
 
 	return 0;
 }
