@@ -1,3 +1,18 @@
+2006-04-06 02:8  vapour
+
+	* Updated files to say 0.4.0-beta
+
+2006-04-05 17:49  vapour
+
+	* Improved Matrix handling code.  Added	SWFDisplayItem_getMatrix(),
+	  SWFPosition_getMatrix(), SWFMatrix_getScaleX(), SWFMatrix_getRotate0(),
+	  SWFMatrix_getRotate1(), SWFMatrix_getScaleY(), SWFMatrix_getTranslateX(),
+	  and SWFMatrix_getTranslateY() functions.
+
+2006-04-05 12:41  vapour
+
+	* Removed the hard coded scaling of bitmaps to 20x.
+
 2006-02-15 09:27  anderson
 
 	* configure: Change to 0.3.0 final release
@@ -1805,7 +1820,7 @@
 2004-04-14 22:18  krechert
 
 	* src/blocks/soundstream.c: * soundstream: bug fix #855471 thanks
-	to Stéphane Corthésy * soundstream: bug fix #877479 thanks to Denis
+	to St?phane Corth?sy * soundstream: bug fix #877479 thanks to Denis
 	Malinovsky
 
 2004-04-13 23:44  krechert

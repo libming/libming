@@ -1,7 +1,7 @@
 
 MING THE MODULE
 
-Last updated 2nd February 2004.
+Last updated 6th April 2006.
 
 Ming is a Flash (SWF) output library.  It can be used from PHP, Perl,
 Ruby, Python, C, C++, Java, and probably more on the way.
@@ -9,8 +9,7 @@ Ruby, Python, C, C++, Java, and probably more on the way.
 It comprises a lot of Flash functionality, including features of Flash 6.
 
 Specifically, it lets you create: shapes (including morphs), text, sprites
-(aka movie clips), buttons, and actions in flash movies, plus new features
-in the 0.3 series release.
+(aka movie clips), buttons, and actions in flash movies, plus more.
 
 The goal for Ming is to abstract away all of the mundane specifics of the
 SWF file format.

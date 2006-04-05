@@ -1,13 +1,13 @@
 
 Installing Ming
 
-Last updated 9th August 2005.
+Last updated 6th April 2006.
 
   Unpack the Ming source tarball and go into the uncompressed
   directory.
 
-    $ gunzip ming-0.3beta1.tar.gz
-    $ tar xfp ming-0.3beta1.tar
+    $ gunzip ming-0.4.0-beta.tar.gz
+    $ tar xfp ming-0.4.0-beta.tar
     $ cd ming
 
 
