@@ -230,11 +230,10 @@ newSWFShapeFromBitmap(SWFBitmap bitmap, int flag)
 
 	SWFShape_setRightFillStyle(shape, fill);
 
-	// XXX - scale shouldn't be hardcoded! (here, or in newSWFBitmapFillStyle)
-	SWFShape_drawScaledLine(shape, width * 20, 0);
-	SWFShape_drawScaledLine(shape, 0, height * 20);
-	SWFShape_drawScaledLine(shape, -width * 20, 0);
-	SWFShape_drawScaledLine(shape, 0, -height * 20);
+	SWFShape_drawScaledLine(shape, width, 0);
+	SWFShape_drawScaledLine(shape, 0, height);
+	SWFShape_drawScaledLine(shape, -width, 0);
+	SWFShape_drawScaledLine(shape, 0, -height);
 
 	return shape;
 }

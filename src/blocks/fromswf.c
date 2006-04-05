@@ -158,7 +158,7 @@ static void rect(BITS bp)
 	ymin = getbits(bp, nbits);
 	ymax = getbits(bp, nbits);
 	if(verbose)
-		printf("rect %.2f,%.2f %.2f,%.2f\n", xmin/20., ymin/20., xmax/20., ymax/20.);
+		printf("rect %.2f,%.2f %.2f,%.2f\n", xmin/Ming_scale, ymin/Ming_scale, xmax/Ming_scale, ymax/Ming_scale);
 }
 /* matrix */
 static void matrix(BITS bp)
