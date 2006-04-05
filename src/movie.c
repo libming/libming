@@ -138,7 +138,7 @@ newSWFMovieWithVersion(int version)
 	movie->version = version;
 	movie->blockList = newSWFBlockList();
 	movie->displayList = newSWFDisplayList();
-	movie->bounds = newSWFRect(0, 320*20, 0, 240*20);
+	movie->bounds = newSWFRect(0, 320, 0, 240);
 	movie->rate = 12.0;
 	movie->totalFrames = 1;
 	movie->nFrames = 0;
