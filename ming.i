@@ -103,6 +103,7 @@ void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
 void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
 void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
+SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
 void SWFDisplayItem_setMatrix(SWFDisplayItem item, float a, float b,
 			      float c, float d, float x, float y);
 
@@ -135,6 +136,7 @@ void SWFFill_rotate(SWFFill fill, float degrees);
 void SWFFill_rotateTo(SWFFill fill, float degrees);
 void SWFFill_move(SWFFill fill, float x, float y);
 void SWFFill_moveTo(SWFFill fill, float x, float y);
+SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 void SWFFill_setMatrix(SWFFill fill, float a, float b,
 		       float c, float d, float x, float y);
 
@@ -222,6 +224,12 @@ SWFMatrix newSWFMatrix(int a, int b, int c, int d, int x, int y);
 void destroySWFMatrix(SWFMatrix matrix);
 SWFMatrix SWFMatrix_set(SWFMatrix m,
 			float a, float b, float c, float d, float x, float y);
+float SWFMatrix_getScaleX(SWFMatrix m);
+float SWFMatrix_getRotate0(SWFMatrix m);
+float SWFMatrix_getRotate1(SWFMatrix m);
+float SWFMatrix_getScaleY(SWFMatrix m);
+int SWFMatrix_getTranslateX(SWFMatrix m);
+int SWFMatrix_getTranslateY(SWFMatrix m);
 */
 
   /* SWFFillStyle */
