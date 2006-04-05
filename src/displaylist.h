@@ -70,6 +70,8 @@ float SWFDisplayItem_get_xSkew(SWFDisplayItem item);
 float SWFDisplayItem_get_ySkew(SWFDisplayItem item);
 float SWFDisplayItem_get_rot(SWFDisplayItem item);
 
+SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
+
 
 /* display list */
 

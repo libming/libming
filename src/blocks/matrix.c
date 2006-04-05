@@ -73,6 +73,48 @@ SWFMatrix_set(SWFMatrix m, float a, float b, float c, float d, int x, int y)
 }
 
 
+float
+SWFMatrix_getScaleX(SWFMatrix m)
+{
+	return m->scaleX;
+}
+
+
+float
+SWFMatrix_getRotate0(SWFMatrix m)
+{
+	return m->rotate0;
+}
+
+
+float
+SWFMatrix_getRotate1(SWFMatrix m)
+{
+	return m->rotate1;
+}
+
+
+float
+SWFMatrix_getScaleY(SWFMatrix m)
+{
+	return m->scaleY;
+}
+
+
+int
+SWFMatrix_getTranslateX(SWFMatrix m)
+{
+	return m->translateX;
+}
+
+
+int
+SWFMatrix_getTranslateY(SWFMatrix m)
+{
+	return m->translateY;
+}
+
+
 void
 SWFMatrix_clearTranslate(SWFMatrix m)
 {

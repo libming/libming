@@ -179,6 +179,12 @@ SWFMatrix SWFMatrix_set(SWFMatrix m,
 void SWFMatrix_clearTranslate(SWFMatrix m);
 void SWFMatrix_clearTransform(SWFMatrix m);
 
+float SWFMatrix_getScaleX(SWFMatrix m);
+float SWFMatrix_getRotate0(SWFMatrix m);
+float SWFMatrix_getRotate1(SWFMatrix m);
+float SWFMatrix_getScaleY(SWFMatrix m);
+int SWFMatrix_getTranslateX(SWFMatrix m);
+int SWFMatrix_getTranslateY(SWFMatrix m);
 
   /* SWFFont */
 

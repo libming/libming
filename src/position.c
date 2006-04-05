@@ -205,6 +205,13 @@ SWFPosition_setMatrix(SWFPosition p,
 }
 
 
+SWFMatrix
+SWFPosition_getMatrix(SWFPosition p)
+{
+	return p->matrix;
+}
+
+
 float
 SWFPosition_getRotation(SWFPosition position)
 {

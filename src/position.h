@@ -43,7 +43,7 @@ struct SWFPosition_s
 	SWFMatrix matrix;
 };
 
-
+SWFMatrix SWFPosition_getMatrix(SWFPosition p);
 float SWFPosition_getRotation(SWFPosition position);
 float SWFPosition_getX(SWFPosition position);
 float SWFPosition_getY(SWFPosition position);

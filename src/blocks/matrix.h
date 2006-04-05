@@ -49,6 +49,18 @@ void SWFMatrix_clearTransform(SWFMatrix m);
 
 void SWFMatrix_clearTranslate(SWFMatrix m);
 
+float SWFMatrix_getScaleX(SWFMatrix m);
+
+float SWFMatrix_getRotate0(SWFMatrix m);
+
+float SWFMatrix_getRotate1(SWFMatrix m);
+
+float SWFMatrix_getScaleY(SWFMatrix m);
+
+int SWFMatrix_getTranslateX(SWFMatrix m);
+
+int SWFMatrix_getTranslateY(SWFMatrix m);
+
 void SWFMatrix_leftMultiply(SWFMatrix ma, SWFMatrix mb);
 
 void SWFMatrix_moveTo(SWFMatrix matrix, int x, int y);

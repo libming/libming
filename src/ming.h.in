@@ -88,7 +88,7 @@ void Ming_collectGarbage();
    accurate, hence larger file size. */
 void Ming_setCubicThreshold(int num);
 
-/* sets the overall scale, default is 20 */
+/* sets the overall scale, default is 1 */
 void Ming_setScale(float scale);
 float Ming_getScale();
 
@@ -115,6 +115,13 @@ typedef void (*SWFByteOutputMethod)(byte b, void *data);
 
 
 /***** SWFMatrix *****/
+
+float SWFMatrix_getScaleX(SWFMatrix m);
+float SWFMatrix_getRotate0(SWFMatrix m);
+float SWFMatrix_getRotate1(SWFMatrix m);
+float SWFMatrix_getScaleY(SWFMatrix m);
+int SWFMatrix_getTranslateX(SWFMatrix m);
+int SWFMatrix_getTranslateY(SWFMatrix m);
 
 
 /***** SWFInput *****/
@@ -565,6 +572,7 @@ void SWFPosition_scaleYTo(SWFPosition position, float y);
 void SWFPosition_scaleXY(SWFPosition position, float x, float y);
 void SWFPosition_scaleXYTo(SWFPosition position, float x, float y);
 
+SWFMatrix SWFPosition_getMatrix(SWFPosition p);
 void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
 			   float x, float y);
 
@@ -593,6 +601,7 @@ void SWFDisplayItem_getRotation(SWFDisplayItem item, float * degrees);
 void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, float * yScale);
 void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, float * ySkew);
 
+SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
 void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
 			      float c, float d, float x, float y);
 

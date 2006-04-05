@@ -191,6 +191,14 @@ SWFDisplayItem_setDepth(SWFDisplayItem item, int depth)
 }
 
 
+SWFMatrix
+SWFDisplayItem_getMatrix(SWFDisplayItem item)
+{
+	checkBlock(item);
+	return item->matrix;
+}
+
+
 void
 SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
 {
