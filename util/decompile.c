@@ -784,6 +784,145 @@ isLogicalOp2(int n, SWF_ACTION *actions,int maxn)
     }
 }
 
+
+#define RESETCOUNTER_TO_1 99999
+int
+stackVal(int n, SWF_ACTION *actions)
+{
+    switch((actions[n]).SWF_ACTIONRECORD.ActionCode)
+    {
+      case SWFACTION_END:
+      case SWFACTION_NEXTFRAME:
+      case SWFACTION_PREVFRAME:
+      case SWFACTION_PLAY:
+      case SWFACTION_STOP:
+      case SWFACTION_LOGICALNOT:
+      case SWFACTION_WITH:
+      case SWFACTION_JUMP:
+      case SWFACTION_CONSTANTPOOL:
+      case SWFACTION_IF:
+      case SWFACTION_STOREREGISTER:
+      case SWFACTION_STACKSWAP:
+      case SWFACTION_DECREMENT:
+      case SWFACTION_INCREMENT:
+      case SWFACTION_RANDOMNUMBER:
+      case SWFACTION_DUPLICATECLIP:
+      case SWFACTION_TOSTRING:
+      case SWFACTION_TONUMBER:
+      case SWFACTION_ORD:
+      case SWFACTION_CHR:
+      case SWFACTION_MBORD:
+      case SWFACTION_MBCHR:
+      case SWFACTION_INT:
+      case SWFACTION_GETVARIABLE:
+      case SWFACTION_GOTOLABEL:
+      case SWFACTION_GOTOFRAME:
+      case SWFACTION_TOGGLEQUALITY:
+      case SWFACTION_TRY:
+      case SWFACTION_THROW:
+      case SWFACTION_ENDDRAG:
+      case SWFACTION_STOPSOUNDS:
+      case SWFACTION_STRINGLENGTH:
+      case SWFACTION_MBLENGTH:
+      case SWFACTION_CASTOP:
+      case SWFACTION_TYPEOF:
+      case SWFACTION_DELETE:
+      case SWFACTION_DELETE2 :
+      case SWFACTION_GETURL :
+      case SWFACTION_WAITFORFRAME :
+      case SWFACTION_WAITFORFRAME2 :
+      case SWFACTION_CALLFRAME :
+      case SWFACTION_GOTOFRAME2 :
+      case SWFACTION_TARGETPATH :
+        return 0;
+
+      case SWFACTION_ADD:
+      case SWFACTION_ADD2:
+      case SWFACTION_SUBTRACT:
+      case SWFACTION_MULTIPLY:
+      case SWFACTION_DIVIDE:
+      case SWFACTION_MODULO:
+      case SWFACTION_BITWISEAND:
+      case SWFACTION_BITWISEOR:
+      case SWFACTION_BITWISEXOR:
+      case SWFACTION_LESSTHAN:
+      case SWFACTION_LOGICALAND:
+      case SWFACTION_LOGICALOR:
+      case SWFACTION_STRINGEQ:
+      case SWFACTION_STRINGCOMPARE:
+      case SWFACTION_LESS2:
+      case SWFACTION_EQUALS2:
+      case SWFACTION_STRICTEQUALS:
+      case SWFACTION_GREATER:
+      case SWFACTION_STRINGGREATER:
+      case SWFACTION_STRINGCONCAT:
+      case SWFACTION_SETPROPERTY:
+      case SWFACTION_REMOVECLIP:
+      case SWFACTION_RETURN:
+      case SWFACTION_POP:
+      case SWFACTION_TRACE:
+      case SWFACTION_SHIFTLEFT:
+      case SWFACTION_SHIFTRIGHT:
+      case SWFACTION_SHIFTRIGHT2:
+      case SWFACTION_EQUAL:
+      case SWFACTION_INSTANCEOF:
+      case SWFACTION_ENUMERATE :
+      case SWFACTION_ENUMERATE2 :
+      case SWFACTION_EXTENDS :
+      case SWFACTION_IMPLEMENTSOP :
+      case SWFACTION_GETPROPERTY:
+      case SWFACTION_SETTARGET:
+      case SWFACTION_SETTARGET2:
+      case SWFACTION_DEFINELOCAL2:
+      case SWFACTION_INITOBJECT:
+        return -1;
+
+      case SWFACTION_SETVARIABLE:
+      case SWFACTION_SUBSTRING:
+      case SWFACTION_MBSUBSTRING:
+      case SWFACTION_GETMEMBER:
+      case SWFACTION_DEFINELOCAL:
+      case SWFACTION_GETURL2:
+        return -2;
+
+      case SWFACTION_STARTDRAG:
+      case SWFACTION_SETMEMBER:
+      case SWFACTION_NEWMETHOD:
+        return -3;
+              
+      case SWFACTION_PUSH:
+	return (actions[n]).SWF_ACTIONPUSH.NumParam;
+
+      case SWFACTION_INITARRAY:
+      case SWFACTION_NEWOBJECT:
+      case SWFACTION_CALLMETHOD:
+      case SWFACTION_CALLFUNCTION:
+	return RESETCOUNTER_TO_1;
+
+      case SWFACTION_PUSHDUP:
+      case SWFACTION_GETTIME:
+      case SWFACTION_DEFINEFUNCTION:
+      case SWFACTION_DEFINEFUNCTION2:
+	return 1;
+
+      default:
+       printf("/* found undef stack op %x */",(actions[n]).SWF_ACTIONRECORD.ActionCode);
+	return 0;
+    }
+}
+
+int stackBalance (int n, SWF_ACTION *actions)
+{
+  int i, s=0;
+  for(i=0;i<n;i++) 
+  {
+   int z=stackVal(i, actions);
+   s= z==RESETCOUNTER_TO_1 ? 1 : s+z;
+  }
+  return s;  
+}
+
+
 int
 decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 {
@@ -1427,10 +1566,64 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
     SanityCheck(SWF_IF, 0, "IF type not recognized")
 #else	/* 2006 NEW stuff comes here */
     {
-    	    int has_else_or_break= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
+    	   int has_else_or_break= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
                   (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
-    	    int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
-	    int has_chain=0;
+    	   int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
+	   int has_chain=0;
+	   int else_action_cnt=0;
+	   int sbi,sbe;
+
+	   /* before emitting any "if"/"else" characters let's check 
+	      for a ternary operation  cond?a:b 
+	   */
+	   if (has_else_or_break)
+	   {
+	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
+	               sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset;
+	      /* Count the number of action records that are part of
+	       * the else clause, and then decompile only that many.
+	       */
+	      for(else_action_cnt=0;
+	          actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset < limit && else_action_cnt+n+1<maxn;
+		  else_action_cnt++)
+		{
+		 #if 0
+		 printf("/* ELSE OP 0x%x at %d*/\n",actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
+		 actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset)
+		 #endif
+	 	 ;
+		}  
+	   }
+	   i=else_action_cnt;						// =return value
+	   sbi=stackBalance (sact->numActions-1,sact->Actions);
+	   sbe=stackBalance (else_action_cnt,&actions[n+1]);
+	   if (sbi==1 && sbe==1)
+	   {
+	     #if 0
+	       puts("/* ****Found ternary ternary operation  \"cond ? a : b\"    **** */\n");
+	       printf("If   Actions=%d\n",sact->numActions-1);
+	       printf("Else Actions=%d\n",else_action_cnt);
+	     #endif
+	       struct strbufinfo origbuf;
+	       #if USE_LIB
+		origbuf=setTempString();	/* switch to a temporary string buffer */
+	       #endif
+	       puts(getName(pop()));
+	       puts(" ? ");
+	       decompileActions(else_action_cnt  , &actions[n+1],0);
+	       puts(getName(pop()));
+	       puts(" : ");
+	       decompileActions(sact->numActions-1, sact->Actions,0);
+	       puts(getName(pop()));
+	       #if USE_LIB
+		push (newVar(dcgetstr()));	/* push for later assignment */
+		setOrigString(origbuf);		/* switch back to orig buffer */
+	       #else
+		push (newVar("/* ternary op: see code above */"));
+	       #endif
+	   } 
+	   else
+	   {
             /* does it continue any other condition sequence ? 
                Something like: if (x>2 && 7>y || callme(123) || false) { this(); } else { that(); }
             */
@@ -1497,22 +1690,8 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	      }
 	      else
 	      {
-	      /* There is an else clause also!
-	       * Count the number of action records that are part of
-	       * the else clause, and then decompile only that many.
-	       */
-	      for(i=0;
-	          actions[n+1+i].SWF_ACTIONRECORD.Offset < limit && i+n+1<maxn;
-		  i++)
-		{
-		 #if 0
-		 printf("/* ELSE OP 0x%x at %d*/\n",actions[n+1+i].SWF_ACTIONRECORD.ActionCode,
-		 actions[n+1+i].SWF_ACTIONRECORD.Offset)
-		 #endif
-	 	 ;
-		}  
-	      /* In general we expect a LOGICALNOT before,
-	         but if missing we exchange if-part with else-part
+	      /* There is an else clause also! 
+	         (action counter is set above)
 	       */
 	      if  (has_lognot)
 	      {
@@ -1520,7 +1699,8 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
                INDENT
 	       puts("} else {\n");
 	      }	      
-              decompileActions(i  , &actions[n+1],gIndent+1);
+
+              decompileActions(else_action_cnt  , &actions[n+1],gIndent+1);
 	      if  (!has_lognot)		/* the missing if-part just NOW */
 	      {
 		INDENT
@@ -1539,7 +1719,8 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	      INDENT
 	      puts("}\n");
 	    }
-	    return i;
+	 }
+	return i;
     }
 #endif
     return 0;
