@@ -23,7 +23,7 @@ install-dynamic: dynamic
 	install -c -m 0644 $(SHAREDLIB) $(libdir)/$(SHAREDLIB)
 	(cd $(libdir) && ln -fs $(SHAREDLIB) libming$(SHORT_SHLIBEXT) && ln -fs libming$(SHORT_SHLIBEXT) libming$(NOVAR_SHLIBEXT))
 
-install-static: static
+install-static: install-common static
 	install -c -m 0644 libming.a $(libdir)/
 
 utils:
