@@ -20,6 +20,7 @@ AC_CHECK_LIB(gif, PrintGifError,
 AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="")
 
 AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
+AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
 
 AC_CHECK_FUNC(sin, MATHLIB="", [
         AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
