@@ -6,6 +6,13 @@ MICRO_VERSION=0-beta
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
+dnl Tell configure to look in the config subdirectory
+dnl for config.guess, config.sub, etc
+AC_CONFIG_AUX_DIR(config)
+
+dnl GNU recommended way to determine host variables (OS, etc)
+AC_CANONICAL_HOST
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_PATH_PROG(PYTHON, python)
