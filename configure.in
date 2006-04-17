@@ -52,33 +52,38 @@ if test -n "${PNGLIB}"; then
 	AC_DEFINE(USE_ZLIB)
 fi
 
- 
-OS=`uname -s`
-case "$OS" in
-"Darwin")
-	SHLIBEXT=".\$(MING_VERSION).dylib"
-	SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
-	NOVAR_SHLIBEXT=".dylib"
-	SHLIBLDFLAGS="-dynamiclib \
-		-compatibility_version \
-		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
-		-current_version \
-		\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
-		-install_name \$(libdir)/\$(SHAREDLIB)"
-	CFLAGS="$CFLAGS -fno-common"
-	;;
-"Linux")
-	SHLIBLDFLAGS="-shared -Wl,-soname,libming.so.\$(MAJOR_VERSION)"
-	SHLIBEXT=".so.\$(MING_VERSION)"
-	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
-	NOVAR_SHLIBEXT=".so"
-	SHCFLAGS="-fPIC"
-	;;
-*)
-	SHLIBLDFLAGS="-shared"
-	SHLIBEXT=".so.\$(MING_VERSION)"
-	SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
-	NOVAR_SHLIBEXT=".so"
+
+case "${host_os}" in
+	*darwin*)
+		SHLIBEXT=".\$(MING_VERSION).dylib"
+		SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
+		NOVAR_SHLIBEXT=".dylib"
+		SHLIBLDFLAGS="-dynamiclib \
+			-compatibility_version \
+			\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+			-current_version \
+			\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+			-install_name \$(libdir)/\$(SHAREDLIB)"
+		CFLAGS="$CFLAGS -fno-common"
+		;;
+	*linux*)
+		SHLIBLDFLAGS="-shared -Wl,-soname,libming.so.\$(MAJOR_VERSION)"
+		SHLIBEXT=".so.\$(MING_VERSION)"
+		SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
+		NOVAR_SHLIBEXT=".so"
+		SHCFLAGS="-fPIC"
+		;;
+	mingw*)
+
+		SHLIBLDFLAGS="-shared -Wl,-soname,libming.dll"
+		SHLIBEXT=".dll"
+		NOVAR_SHLIBEXT=".dll"
+		;;
+	*)
+		SHLIBLDFLAGS="-shared"
+		SHLIBEXT=".so.\$(MING_VERSION)"
+		SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
+		NOVAR_SHLIBEXT=".so"
 esac
 
 MACHINE=`uname -m`
