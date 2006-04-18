@@ -15,6 +15,7 @@ AC_CANONICAL_HOST
 
 AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_INSTALL
 AC_PATH_PROG(PYTHON, python)
 
 AC_CHECK_LIB(gif, PrintGifError,
@@ -73,8 +74,14 @@ case "${host_os}" in
 		NOVAR_SHLIBEXT=".so"
 		SHCFLAGS="-fPIC"
 		;;
+	*solaris*)
+ 		SHLIBLDFLAGS="-shared -Wl"
+		SHLIBEXT=".so.\$(MING_VERSION)"
+		SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
+		NOVAR_SHLIBEXT=".so"
+ 		SHCFLAGS="-fPIC"
+		;;
 	mingw*)
-
 		SHLIBLDFLAGS="-shared -Wl,-soname,libming.dll"
 		SHLIBEXT=".dll"
 		NOVAR_SHLIBEXT=".dll"
