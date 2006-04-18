@@ -7,11 +7,11 @@ all: dynamic utils static
 install: install-common install-dynamic install-utils install-static install-man
 
 install-common:
-	install -d $(libdir)
-	install -d $(includedir)
-	install -c -m 0644 src/ming.h $(includedir)
-	install -c -m 0644 src/ming_config.h $(includedir)
-	install -c -m 0644 mingpp.h $(includedir)
+	$(INSTALL) -d $(libdir)
+	$(INSTALL) -d $(includedir)
+	$(INSTALL_HEADER) src/ming.h $(includedir)
+	$(INSTALL_HEADER) src/ming_config.h $(includedir)
+	$(INSTALL_HEADER) mingpp.h $(includedir)
 
 install-utils:
 	(cd util && make install)
@@ -20,11 +20,11 @@ install-man:
 	(cd man && make install)
 
 install-dynamic: dynamic
-	install -c -m 0644 $(SHAREDLIB) $(libdir)/$(SHAREDLIB)
+	$(INSTALL_DATA) $(SHAREDLIB) $(libdir)/$(SHAREDLIB)
 	(cd $(libdir) && ln -fs $(SHAREDLIB) libming$(SHORT_SHLIBEXT) && ln -fs libming$(SHORT_SHLIBEXT) libming$(NOVAR_SHLIBEXT))
 
 install-static: install-common static
-	install -c -m 0644 libming.a $(libdir)/
+	$(INSTALL_DATA) libming.a $(libdir)/
 
 utils:
 	(cd util && make)

@@ -28,5 +28,5 @@ listaction: blocktypes.o read.o listswf.c ../../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE listswf.c blocktypes.o read.o -o listaction 
 
 install: $(BINARIES)
-	install -d $(bindir)
-	install -m 0755 $(BINARIES) $(bindir)
+	$(INSTALL) -d $(bindir)
+	$(INSTALL_PROGRAM) -m 0755 $(BINARIES) $(bindir)

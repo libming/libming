@@ -79,6 +79,6 @@ makeswf: makeswf.c makeswf.h ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< 
 
 install: $(BINARIES)
-	install -d $(bindir)
-	install -m 0755 $(BINARIES) $(bindir)
-	install -m 0755 ming-config $(bindir)
+	$(INSTALL) -d $(bindir)
+	$(INSTALL_PROGRAM) -m 0755 $(BINARIES) $(bindir)
+	$(INSTALL_PROGRAM) -m 0755 ming-config $(bindir)
