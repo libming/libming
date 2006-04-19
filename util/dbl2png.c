@@ -127,7 +127,14 @@ struct pngdata readDBL(FILE *fp)
    error("memory allocation");
   }
 
+#ifdef HAVE_LIBZ
+  /* uncompress the data */
   i=uncompress (png.data, &datsize, data, readsize );
+#endif
+#ifndef HAVE_LIBZ
+  /* No zlib, so we can't uncompress the data */
+  i = -3;  // Try and indication compression failure.  -3 should == Z_DATA_ERROR and I'm not sure which error to indicate ;)
+#endif
   if (i)
   {
    printf("uncompress call result = %d\n",i);

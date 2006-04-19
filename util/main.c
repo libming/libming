@@ -98,8 +98,15 @@ cws2fws(FILE *f, uLong outsize)
 	do{
 		outbuffer = realloc(outbuffer, outsize);	
 		if (!outbuffer) { error("malloc(%lu) failed",outsize); }
-		
+
+#ifdef HAVE_LIBZ
+		/* uncompress the data */
 		err=uncompress(outbuffer,&outsize,inbuffer,insize);
+#endif
+#ifndef HAVE_LIBZ
+		/* No zlib, so we can't uncompress the data */
+		err = -10;  // Try and indication compression failure.  -10 should tell people have have a closer look. :)
+#endif
 		switch(err){
 			case Z_MEM_ERROR:
 				error("Not enough memory.\n");
