@@ -66,8 +66,14 @@ cws2fws(FILE *f, uLong outsize)
 	Byte *inbuffer,*outbuffer;
 
 	sprintf(tmp_name, "/tmp/swftoscriptXXXXXX");
-	
+
+#ifdef HAVE_MKSTEMP
 	tmp_fd = mkstemp(tmp_name);
+#endif
+#ifndef HAVE_MKSTEMP
+	tmp_fd = open(tmp_name, O_RDWR | O_CREAT | O_TRUNC , 0600);
+#endif
+
 	if ( tmp_fd == -1 )
 	{
 		error("Couldn't create tempfile.\n");
