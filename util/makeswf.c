@@ -136,12 +136,17 @@ compileError(const char *fmt, ...)
     * This is a GNU extension.
     * Dunno how to handle errors here.
     */
+#ifdef HAVE_VASPRINTF
    if ( ! vasprintf(&msg, fmt, ap) )
    {
       fprintf(stderr, "vasnprintf allocated 0 bytes\n");
       va_end(ap);
       return;
    }
+#endif
+#ifndef HAVE_VASPRINTF
+   fprintf(stderr, "Some kind of error occurred, but the error handler isn't working properly on this platform\n");
+#endif
    va_end(ap);
 
    memcpy(lastcompilemessage, msg, MAXERRORMSG-1);
@@ -477,6 +482,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.17  2006/04/19 11:38:01  vapour
+ * Added liberal use of ifdefs to avoid vasprintf on the platforms that don't have it.  I make no guarantees of the functional integrity on them now. ;(
+ *
  * Revision 1.16  2005/03/28 08:08:52  strk
  * Added frame layout printing.
  *

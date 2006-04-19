@@ -90,7 +90,13 @@ dcprintf(char *format, ...)
 	va_list args;
 	va_start(args,format);
 
+#ifdef HAVE_VASPRINTF
 	vasprintf(&s,format,args);
+#endif
+#ifndef HAVE_VASPRINTF
+	fprintf(stderr, "Error: no vasprintf() on this platform\n");
+#endif
+
 	dcputs(s);
 	size=strlen(s);
 	free(s);
