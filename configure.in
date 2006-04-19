@@ -34,7 +34,8 @@ AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
 
 dnl Windows has the zlib library named zdll instead.
 dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should make MinGW work again)
-AC_CHECK_LIB(zdll, compress2, [AC_DEFINE(HAVE_LIBZ), ZLIB="-lzdll"], ZLIB="")
+AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
+AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
 
 dnl Check if the vasprintf function exists on this platform
 dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
