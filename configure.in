@@ -18,6 +18,7 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PATH_PROG(PYTHON, python)
 
+dnl Check for the gif library
 AC_CHECK_LIB(gif, PrintGifError,
 	GIFLIB="-lgif", [
 	AC_CHECK_LIB(ungif, PrintGifError,
@@ -25,10 +26,19 @@ AC_CHECK_LIB(gif, PrintGifError,
 		GIFLIB="")]
 )
 
+dnl Check for the png library
 AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="")
 
+dnl Check for the zlib library
 AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
-AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
+
+dnl Windows has the zlib library named zdll instead.
+dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should make MinGW work again)
+AC_CHECK_LIB(zdll, compress2, [AC_DEFINE(HAVE_LIBZ), ZLIB="-lzdll"], ZLIB="")
+
+dnl Check if the vasprintf function exists on this platform
+dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
+AC_CHECK_FUNCS(vasprintf)
 
 AC_CHECK_FUNC(sin, MATHLIB="", [
         AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
