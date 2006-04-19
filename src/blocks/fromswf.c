@@ -274,9 +274,14 @@ static struct swfile *openswf(SWFInput input)
 		// caller will do, leave it here for double memory consumption
 		//destroySWFInput(input);
 		zbuf = z.next_out = (unsigned char *)malloc(z.avail_out = res->fsize - 8);
+#ifdef HAVE_LIBZ
 		inflateInit(&z);
 		inflate(&z, Z_FINISH);
 		inflateEnd(&z);
+#endif
+#ifndef HAVE_LIBZ
+		printf("The SWF to be opened is compressed, but we can't uncompress it (no zlib compiled into this version of Ming).\n");
+#endif
 		input = newSWFInput_allocedBuffer(zbuf, z.next_out-zbuf);
 	}
 	res->input = input;

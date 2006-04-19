@@ -226,9 +226,15 @@ int main(int argc, char *argv[])
 
   outdata = malloc(outsize = (int)floor(size*1.01+12));
 
+#ifdef HAVE_LIBZ
   /* zlib-compress the gif data */
-
   compress2(outdata, &outsize, data+6, size-6, 9);
+#endif
+#ifndef HAVE_LIBZ
+  /* No zlib, so just copy the data to the result location */
+  memcpy(outdata, data+6, size-6);
+  outsize = size-6;
+#endif
 
   /* dump to outfile */
 

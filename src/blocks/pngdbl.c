@@ -278,13 +278,21 @@ static int readPNG(png_structp png_ptr, dblData result)
 						png.color_type == PNG_COLOR_TYPE_RGB_ALPHA;
 
 	result->data = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
-	/* compress the RGB color table (if present) and image data one block */
-  
-	compress2(result->data, (uLongf *) &outsize, data, alignedsize, 9);
-	free(data);
-	result->length = outsize;
 
+#ifdef HAVE_LIBZ
+	/* compress the RGB color table (if present) and image data one block */
+	compress2(result->data, (uLongf *) &outsize, data, alignedsize, 9);
+	result->length = outsize;
+#endif
+#ifndef HAVE_LIBZ
+	/* No zlib, so just copy the data to the result location */
+	memcpy(result->data, data, alignedsize);
+	result->length = alignedsize;
+#endif
+
+	free(data);
 	free(png.data);
+
 	return 1;
 }
 

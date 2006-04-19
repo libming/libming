@@ -607,11 +607,16 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 
 	if (level >= 0)
 	{
+#ifdef HAVE_LIBZ
 		status = compress2 ( (Bytef*) SWFOutput_getBuffer(swfbuffer)+8, &compresslength, SWFOutput_getBuffer(tempbuffer), SWFOutput_getLength(tempbuffer), level);
 		if (status == Z_OK) {
 			SWFOutput_truncate(swfbuffer, compresslength+8);
 			destroySWFOutput(tempbuffer);
 		} else SWF_error("compression failed");
+#endif
+#ifndef HAVE_LIBZ
+		SWF_error("No zlib library installed in Ming, so compression has failed");
+#endif
 	}
 	return swfbuffer;
 }

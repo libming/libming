@@ -191,15 +191,21 @@ readGif(GifFileType *file, dblData result)
 
 	result->data = malloc(outsize = (int)floor(size*1.01+12));
 
-  /* zlib-compress the gif data */
-
+#ifdef HAVE_LIBZ
+	/* zlib-compress the gif data */
 	compress2(result->data, &outsize, data, size, 9);
-	free(data);
-
 	result->length = outsize;
+#endif
+#ifndef HAVE_LIBZ
+	/* No zlib, so just copy the data to the result location */
+	memcpy(result->data, data, size);
+	result->length = size;
+#endif
+
+	free(data);
 	return 1;
 }
-	
+
 /*
  *	giflib provides
  *	DGifOpenFileName - use for open from file

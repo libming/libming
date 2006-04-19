@@ -275,9 +275,16 @@ void writeDBL(FILE *f, struct pngdata png)
 
   outdata = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
   
+#ifdef HAVE_LIBZ
   /* compress the RGB color table (if present) and image data one block */
-  
   compress2(outdata, &outsize, data, alignedsize, 9);
+  outsize = alignedsize;
+#endif
+#ifndef HAVE_LIBZ
+  /* No zlib, so just copy the data to the result location */
+  memcpy(outdata, data, alignedsize);
+  outsize = alignedsize;
+#endif
 
   /* write the remaining file size */
 
