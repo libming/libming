@@ -1,10 +1,10 @@
+AC_INIT(ming.i)
+
 MAJOR_VERSION=0
 MINOR_VERSION=4
 MICRO_VERSION=0-beta
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
-
-AC_INIT(ming.i, MING_VERSION, "ming-devr@lists.sourceforge.net", "ming")
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
