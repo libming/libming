@@ -1,10 +1,10 @@
-AC_INIT(ming.i)
-
 MAJOR_VERSION=0
 MINOR_VERSION=4
 MICRO_VERSION=0-beta
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
+
+AC_INIT(ming.i, MING_VERSION, "ming-devr@lists.sourceforge.net", "ming")
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
@@ -18,20 +18,18 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PATH_PROG(PYTHON, python)
 
-dnl Check if the X libraries are installed (needed for libungif)
+dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
 
 dnl Check for the gif or ungif libraries
-dnl Solaris needs -lX11 on the linker line for this to work
-AC_CHECK_LIB(gif, PrintGifError,
-	GIFLIB="-lgif", [
-	AC_CHECK_LIB(ungif, PrintGifError,
-		GIFLIB="-lungif",
-		GIFLIB="", "-lX11")], "-lX11"
-)
+AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", GIFLIB="")
+dnl MinGW check for libungif
+AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
+dnl Solaris needs -lX11 on the linker line for ungif to work
+AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
 
 dnl Check for the png library
-dnl Solaris needs -lm on the linker line
+dnl Solaris needs -lm on the linker line, and other platforms aren't bothered having it there. :)
 AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="", "-lm")
 
 dnl Check for the zlib library
