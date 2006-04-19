@@ -1,7 +1,7 @@
 
 Installing Ming
 
-Last updated 6th April 2006.
+Last updated 20th April 2006.
 
   Unpack the Ming source tarball and go into the uncompressed
   directory.
@@ -80,11 +80,15 @@ Last updated 6th April 2006.
   C/C++
   *****
 
-  1. Compile the library
+  1. If you're using a development snapshot rather than a stable
+     release then,
+      $ sh autogen.sh
+
+  2. Compile the library
       $ ./configure
       $ make
 
-  2. Install (you usually need to be root to do this)
+  3. Install (you usually need to be root to do this)
       $ make install
 
   By default it puts headers into /usr/local/include and libraries
