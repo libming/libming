@@ -32,7 +32,7 @@ dynamic: $(SHAREDLIB)
 $(SHAREDLIB): $(OFILES)
 	cd blocks && $(MAKE) CFLAGS="$(CFLAGS) -I.."
 	cd actioncompiler && $(MAKE) CFLAGS="$(CFLAGS) -I.."
-	$(CC) $(OFILES) $(COMPILEROFILES) $(LDFLAGS) $(EXTRA_LIBS) blocks/*.o $(SHLIBLDFLAGS) -o $(SHAREDLIB)
+	$(CC) $(OFILES) blocks/*.o $(COMPILEROFILES) $(LDFLAGS) $(EXTRA_LIBS) $(SHLIBLDFLAGS) -o $(SHAREDLIB)
 	cp $(SHAREDLIB) ..
 	ln -fs $(SHAREDLIB) ../libming$(NOVAR_SHLIBEXT)
 	ln -fs $(SHAREDLIB) ../libming$(SHORT_SHLIBEXT)
