@@ -28,25 +28,25 @@ clean:
 	cd ..; $(MAKE) static
 
 listswf_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listswf_d
+	$(CC) $(CFLAGS) outputtxt.c $(UTILOBJ) $(LDFLAGS) -o listswf_d
 
 listswf: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listswf
+	$(CC) $(CFLAGS) -DNODECOMPILE outputtxt.c $(UTILOBJ) $(LDFLAGS) -o listswf
 
 listaction_d: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) $(UTILOBJ) outputtxt.c -o listaction_d
+	$(CC) $(CFLAGS) -DACTIONONLY outputtxt.c $(UTILOBJ) $(LDFLAGS) -o listaction_d
 
 listaction: $(UTILOBJ) outputtxt.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) -DACTIONONLY $(LDFLAGS) -DNODECOMPILE $(UTILOBJ) outputtxt.c -o listaction
+	$(CC) $(CFLAGS) -DACTIONONLY -DNODECOMPILE  outputtxt.c $(UTILOBJ) $(LDFLAGS) -o listaction
 
 swftoperl: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPERL $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftoperl
+	$(CC) -DSWFPERL $(CFLAGS) outputscript.c $(UTILOBJ) $(LDFLAGS) -o swftoperl
 
 swftophp: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPHP $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftophp
+	$(CC) -DSWFPHP $(CFLAGS) outputscript.c $(UTILOBJ) $(LDFLAGS) -o swftophp
 
 swftopython: $(UTILOBJ) outputscript.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) -DSWFPYTHON $(CFLAGS) $(LDFLAGS) outputscript.c $(UTILOBJ) -o swftopython
+	$(CC) -DSWFPYTHON $(CFLAGS) outputscript.c $(UTILOBJ) $(LDFLAGS) -o swftopython
 
 parser.o: parser.c
 	$(CC) $(CFLAGS) -c parser.c
@@ -55,25 +55,25 @@ decompile.o: decompile.c
 	$(CC) $(CFLAGS) -c decompile.c -o decompile.o
 
 makefdb: blocktypes.o makefdb.c read.o ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) makefdb.c read.o -o makefdb
+	$(CC) $(CFLAGS) makefdb.c $(LDFLAGS) read.o -o makefdb
 
 gif2mask: gif2mask.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) gif2mask.c -o gif2mask 
+	$(CC) $(CFLAGS) gif2mask.c $(LDFLAGS) -o gif2mask 
 
 png2dbl: png2dbl.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) png2dbl.c -o png2dbl
+	$(CC) $(CFLAGS) png2dbl.c $(LDFLAGS) -o png2dbl
 
 dbl2png: dbl2png.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) dbl2png.c -o dbl2png
+	$(CC) $(CFLAGS) dbl2png.c $(LDFLAGS) -o dbl2png
 
 gif2dbl: gif2dbl.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) gif2dbl.c -o gif2dbl 
+	$(CC) $(CFLAGS) gif2dbl.c $(LDFLAGS) -o gif2dbl 
 
 raw2adpcm: raw2adpcm.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) raw2adpcm.c -o raw2adpcm 
+	$(CC) $(CFLAGS) raw2adpcm.c $(LDFLAGS) -o raw2adpcm 
 
 png2swf: png2swf.c ../libming$(NOVAR_SHLIBEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) png2swf.c -o png2swf 
+	$(CC) $(CFLAGS) png2swf.c $(LDFLAGS) -o png2swf 
 
 makeswf: makeswf.c makeswf.h ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< 
