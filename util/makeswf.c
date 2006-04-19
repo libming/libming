@@ -63,7 +63,12 @@
 #include <limits.h>
 #include <ming.h>
 #include "makeswf.h"
-#ifdef HAVE_GETOPT_H
+#ifdef HAVE_GETOPT
+#include <getopt.h>
+#endif
+
+// Cheating, but it works (not sure why the above ifdef for getopt isn't)
+#ifdef _WIN32
 #include <getopt.h>
 #endif
 
@@ -394,7 +399,7 @@ readfile (char *file)
       perror("readfile");
       return NULL;
    }
-   bzero(ret, size+1);
+   memset(ret, '\0', size+1);
    fread(ret, 1, size, fd);
    fclose(fd);
 
@@ -482,6 +487,10 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.18  2006/04/19 13:16:56  vapour
+ * + Forced use of getopt on Windows.
+ * + Changed to use memset rather than bzero.  bzero not on MinGW.
+ *
  * Revision 1.17  2006/04/19 11:38:01  vapour
  * Added liberal use of ifdefs to avoid vasprintf on the platforms that don't have it.  I make no guarantees of the functional integrity on them now. ;(
  *
