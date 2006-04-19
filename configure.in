@@ -18,22 +18,27 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PATH_PROG(PYTHON, python)
 
-dnl Check for the gif library
+dnl Check if the X libraries are installed (needed for libungif)
+AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
+
+dnl Check for the gif or ungif libraries
+dnl Solaris needs -lX11 on the linker line for this to work
 AC_CHECK_LIB(gif, PrintGifError,
 	GIFLIB="-lgif", [
 	AC_CHECK_LIB(ungif, PrintGifError,
 		GIFLIB="-lungif",
-		GIFLIB="")]
+		GIFLIB="", "-lX11")], "-lX11"
 )
 
 dnl Check for the png library
-AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="")
+dnl Solaris needs -lm on the linker line
+AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="", "-lm")
 
 dnl Check for the zlib library
 AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
 
-dnl Windows has the zlib library named zdll instead.
-dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should make MinGW work again)
+dnl Windows has the zlib library, but its named zdll instead
+dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should allow MinGW to work)
 AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
 AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
 
@@ -67,7 +72,6 @@ if test -n "${PNGLIB}"; then
 	AC_DEFINE(USE_PNG)
 	AC_DEFINE(USE_ZLIB)
 fi
-
 
 case "${host_os}" in
 	*darwin*)
@@ -121,6 +125,7 @@ AC_SUBST(EXTRA_BINS)
 AC_SUBST(GIFLIB)
 AC_SUBST(PNGLIB)
 AC_SUBST(MATHLIB)
+AC_SUBST(XLIB)
 AC_SUBST(ZLIB)
 AC_SUBST(SHORT_SHLIBEXT)
 AC_SUBST(NOVAR_SHLIBEXT)
