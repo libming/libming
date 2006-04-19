@@ -42,6 +42,9 @@ dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
 dnl Also check for the presence of the mkstemp function (it's not on MinGW)
 AC_CHECK_FUNCS(vasprintf mkstemp)
 
+dnl Check for various getopt functions
+AC_CHECK_FUNCS(getopt getopt_long)
+
 AC_CHECK_FUNC(sin, MATHLIB="", [
         AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
 		AC_ERROR([I can't find sin() function !!!])]
