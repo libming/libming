@@ -39,7 +39,8 @@ AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
 
 dnl Check if the vasprintf function exists on this platform
 dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
-AC_CHECK_FUNCS(vasprintf)
+dnl Also check for the presence of the mkstemp function (it's not on MinGW)
+AC_CHECK_FUNCS(vasprintf mkstemp)
 
 AC_CHECK_FUNC(sin, MATHLIB="", [
         AC_CHECK_LIB(m, sin, MATHLIB="-lm", [
