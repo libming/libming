@@ -72,6 +72,45 @@
 #include <getopt.h>
 #endif
 
+#ifndef HAVE_VASPRINTF
+/* Workaround for the lack of vasprintf()
+ * As found on: http://unixpapa.com/incnote/stdio.html
+ * Seems to be Public Domain
+ */
+int
+vasprintf(char **ret, const char *format, va_list ap)
+{
+	va_list ap2;
+	int len = 100;        /* First guess at the size */
+	if ((*ret = (char *) malloc(len)) == NULL)
+	{
+		return -1;
+	}
+	while (1)
+	{
+		int nchar;
+		va_copy(ap2, ap);
+		nchar= vsnprintf(*ret, len, format, ap2);
+		if (nchar > -1 && nchar < len)
+		{
+			return nchar;
+		}
+		if (nchar > len)
+		{
+			len= nchar+1;
+		} else
+		{
+			len*= 2;
+		}
+		if ((*ret = (char *) realloc(*ret, len)) == NULL)
+		{
+			free(*ret);
+			return -1;
+		}
+	}
+}
+#endif
+
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
 
@@ -141,17 +180,12 @@ compileError(const char *fmt, ...)
     * This is a GNU extension.
     * Dunno how to handle errors here.
     */
-#ifdef HAVE_VASPRINTF
    if ( ! vasprintf(&msg, fmt, ap) )
    {
       fprintf(stderr, "vasnprintf allocated 0 bytes\n");
       va_end(ap);
       return;
    }
-#endif
-#ifndef HAVE_VASPRINTF
-   fprintf(stderr, "Some kind of error occurred, but the error handler isn't working properly on this platform\n");
-#endif
    va_end(ap);
 
    memcpy(lastcompilemessage, msg, MAXERRORMSG-1);
@@ -487,6 +521,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.19  2006/04/21 13:55:42  vapour
+ * Added vasprintf() function from http://unixpapa.com/incnote/stdio.html, for those platforms missing it.
+ *
  * Revision 1.18  2006/04/19 13:16:56  vapour
  * + Forced use of getopt on Windows.
  * + Changed to use memset rather than bzero.  bzero not on MinGW.
