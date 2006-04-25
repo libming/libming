@@ -1230,11 +1230,11 @@ function_call
 		{
 			if(packageExistsByName($1))
 		  {
+	 			Package p = packageByName($1);
 #ifdef DEBUG
 			printf("cast: %s '(' expr_list ')'\n", $1);
 #endif
 	  		// found a package: cast.
-	 			Package p = packageByName($1);
 	  		if($3.count != 1)
 	  			swf5error("wrong param count for cast.");
 	 		  $$ = newBuffer();
@@ -2270,15 +2270,15 @@ opcode
 
 void writeImplements(Buffer out, Package package, Package impl)
 {
-	if(impl == NULL || package == NULL)
-		return;
-	
 	char buf[1024];
 	char bufimpl[1024];
 	int cnt = 0;
 	int i;
 	Package p;
 	
+	if(impl == NULL || package == NULL)
+		return;
+		
 	strcpy(buf, "_global.");
 	strcat(buf, package->ns);
 	

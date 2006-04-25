@@ -548,23 +548,25 @@ void lower(char *s)
 static enum ctx *ctx_stack = {0};
 static int ctx_count = {0}, ctx_len = {0};
 void addctx(enum ctx val)
-{	if(ctx_count >= ctx_len)
+{
+	int n;
+	if(ctx_count >= ctx_len)
 		ctx_stack = (enum ctx*) realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
 	ctx_stack[ctx_count++] = val;
 
 	printf("stack is now:\n");
-	int n;
 	for(n = ctx_count; n-- > 0;)	
 	{
 		printf("=> %d\n", ctx_stack[n]);
 	}
 }
 void delctx(enum ctx val)
-{	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
+{
+	int n;
+	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
 		SWF_error("consistency check in delctx");
 	
 	printf("stack is now:\n");
-	int n;
 	for(n = ctx_count; n-- > 0;)	
 	{
 		printf("=> %d\n", ctx_stack[n]);
@@ -572,7 +574,8 @@ void delctx(enum ctx val)
 }
 
 int chkctx(enum ctx val)
-{	int n, ret = 0;
+{
+	int n, ret = 0;
 
 	switch(val)
 	{	case CTX_CLASS:
@@ -906,11 +909,11 @@ void destroyPackage(Package p)
 
 void printPackage(Package p)
 {
+	char buf[2048];
+
 	if(p == NULL)
 		return;
-	
-	char buf[2048];
-	
+
 	strcpy(buf, "");
 	if(p->name != NULL)
 	{
