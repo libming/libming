@@ -1,6 +1,9 @@
 Stuff to do BEFORE 0.4 is out (important)
 
 * actioncompiler: 'this' isn't handled correctly (AS2 support attempt)
+  This won't compile (while compiles with 0.3 branch) :
+
+	"function getName() { return this.name; }"
 
 Stuff what to do (not in order):
 
