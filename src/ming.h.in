@@ -83,6 +83,7 @@ typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
 int Ming_init();
 void Ming_cleanup();
 void Ming_collectGarbage();
+void Ming_useConstants(int flag);
 
 /* sets the threshold error for drawing cubic beziers.  Lower is more
    accurate, hence larger file size. */
@@ -525,6 +526,7 @@ void SWFButton_setMenu(SWFButton button, int flag);
 
 /****** SWFVideo ******/
 
+void destroySWFVideoStream(SWFBlock stream);
 SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
 SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
 SWFVideoStream newSWFVideoStream(void);
@@ -584,6 +586,22 @@ void SWFPosition_moveTo(SWFPosition position, float x, float y);
 
 
 /***** SWFDisplayItem *****/
+
+SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item);
+void SWFDisplayItem_endMask(SWFDisplayItem item);
+
+/*
+ * Methods for reading position data
+ *  - added by David McNab <david@rebirthing.co.nz>
+ */
+
+float SWFDisplayItem_get_x(SWFDisplayItem item);
+float SWFDisplayItem_get_y(SWFDisplayItem item);
+float SWFDisplayItem_get_xScale(SWFDisplayItem item);
+float SWFDisplayItem_get_yScale(SWFDisplayItem item);
+float SWFDisplayItem_get_xSkew(SWFDisplayItem item);
+float SWFDisplayItem_get_ySkew(SWFDisplayItem item);
+float SWFDisplayItem_get_rot(SWFDisplayItem item);
 
 void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
 void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
@@ -715,11 +733,14 @@ SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 
 /***** SWFPrebuiltClip ****/
+
+void destroySWFPrebuiltClip(SWFPrebuiltClip clip);
 SWFPrebuiltClip newSWFPrebuiltClip_fromFile(const char *filename);
 SWFPrebuiltClip newSWFPrebuiltClip_fromInput(SWFInput input);
 
 /***** SWFMovie *****/
 
+void SWFMovie_writeExports(SWFMovie movie);
 SWFMovie newSWFMovie();
 SWFMovie newSWFMovieWithVersion(int version);
 void destroySWFMovie(SWFMovie movie);
