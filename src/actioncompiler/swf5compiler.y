@@ -76,7 +76,7 @@ void writePackages(Buffer out, char *package);
 
 %token TRY THROW CATCH FINALLY
 %token IMPORT DYNAMIC INTRINSIC CLASS INTERFACE EXTENDS IMPLEMENTS
-%token PUBLIC PRIVATE STATIC THIS
+%token PUBLIC PRIVATE STATIC 
 
 %token NULLVAL
 %token <intVal> INTEGER
@@ -1871,12 +1871,6 @@ primary
 		{ $$ = newBuffer();
 		  bufferWriteNull($$); }
 	
-	| THIS
-		{ $$ = newBuffer();
-			bufferWriteRegister($$, 1);
-			bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		}
-		
 	| STRING
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);

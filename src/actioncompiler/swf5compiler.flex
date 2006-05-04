@@ -246,7 +246,6 @@ end			{ count();	return END;		}
 }
 
 <AS_V6>{
-this					{ count();	return THIS; }
 import				{ count();	return IMPORT; }
 dynamic				{ count();	return DYNAMIC; }
 intrinsic			{ count();	return INTRINSIC; }
