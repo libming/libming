@@ -171,29 +171,32 @@ printCompileMessage()
 static void 
 compileError(const char *fmt, ...)
 {
-   char *msg;
-   va_list ap;
+	char *msg;
+	va_list ap;
+	size_t msglen;
 
-   va_start (ap, fmt);
+	va_start (ap, fmt);
 
-   /*
-    * This is a GNU extension.
-    * Dunno how to handle errors here.
-    */
-   if ( ! vasprintf(&msg, fmt, ap) )
-   {
-      fprintf(stderr, "vasnprintf allocated 0 bytes\n");
-      va_end(ap);
-      return;
-   }
-   va_end(ap);
+	/*
+	 * This is a GNU extension.
+	 * Dunno how to handle errors here.
+	 */
+	if ( ! vasprintf(&msg, fmt, ap) )
+	{
+		fprintf(stderr, "vasnprintf allocated 0 bytes\n");
+		va_end(ap);
+		return;
+	}
+	va_end(ap);
 
-   memcpy(lastcompilemessage, msg, MAXERRORMSG-1);
-   free(msg);
-   lastcompilemessage[MAXERRORMSG-1] = '\0';
-   lastcompilefailed = 1;
+	msglen = strlen(msg);
+	if ( msglen > MAXERRORMSG-1 ) msglen = MAXERRORMSG-1;
+	memcpy(lastcompilemessage, msg, msglen);
+	free(msg);
+	lastcompilemessage[MAXERRORMSG-1] = '\0';
+	lastcompilefailed = 1;
 
-   return;
+	return;
 }
 
 
@@ -521,6 +524,9 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.20  2006/05/04 22:28:40  strk
+ * fixed read past end of allocated memory in error handler
+ *
  * Revision 1.19  2006/04/21 13:55:42  vapour
  * Added vasprintf() function from http://unixpapa.com/incnote/stdio.html, for those platforms missing it.
  *
