@@ -33,12 +33,11 @@ dnl Solaris needs -lm on the linker line, and other platforms aren't bothered ha
 AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="", "-lm")
 
 dnl Check for the zlib library
-AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
-
-dnl Windows has the zlib library, but its named zdll instead
-dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should allow MinGW to work)
-AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
-AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
+AC_CHECK_LIB(z, compress2,
+	ZLIB="-lz",
+	dnl Windows has the zlib library, but its named zdll instead
+	AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
+)
 
 dnl Check if the vasprintf function exists on this platform
 dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
@@ -57,18 +56,20 @@ AC_CHECK_FUNC(sin, MATHLIB="", [
 EXTRA_OBJS=
 EXTRA_BINS=
 
+if test -n "${ZLIB}"; then
+	AC_DEFINE(USE_ZLIB)
+fi
+
 if test -n "${GIFLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
 	EXTRA_BINS="$EXTRA_BINS gif2dbl gif2mask"
 	AC_DEFINE(USE_GIF)
-	AC_DEFINE(USE_ZLIB)
 fi
 
 if test -n "${PNGLIB}"; then
 	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
 	EXTRA_BINS="$EXTRA_BINS png2dbl png2swf dbl2png"
 	AC_DEFINE(USE_PNG)
-	AC_DEFINE(USE_ZLIB)
 fi
 
 case "${host_os}" in
