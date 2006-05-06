@@ -14,8 +14,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "ming_config.h"
+
 //decompression
+#ifdef USE_ZLIB
 #include <zlib.h>
+#endif
 
 #include "blocks/blocktypes.h"
 #include "action.h"
@@ -105,13 +109,13 @@ cws2fws(FILE *f, uLong outsize)
 		outbuffer = realloc(outbuffer, outsize);	
 		if (!outbuffer) { error("malloc(%lu) failed",outsize); }
 
-#ifdef HAVE_LIBZ
+#ifdef USE_ZLIB
 		/* uncompress the data */
 		err=uncompress(outbuffer,&outsize,inbuffer,insize);
-#endif
-#ifndef HAVE_LIBZ
+#else // ndef USE_ZLIB
 		/* No zlib, so we can't uncompress the data */
-		err = -10;  // Try and indication compression failure.  -10 should tell people have have a closer look. :)
+		error("No zlib support compiled in, "
+			"cannot read compressed SWF");
 #endif
 		switch(err){
 			case Z_MEM_ERROR:

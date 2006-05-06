@@ -25,6 +25,7 @@
 #include <zlib.h>
 
 #include "ming.h"
+#include "ming_config.h"
 
 #include "movie.h"
 #include "shape_util.h"
@@ -538,7 +539,10 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 SWFOutput
 SWFMovie_toOutput(SWFMovie movie, int level)
 {
-	int swflength, status;
+	int swflength;
+#if USE_ZLIB
+	int status;
+#endif
 	SWFOutput header, tempbuffer=0, buffer, swfbuffer;
 	SWFBlock backgroundBlock;
 	unsigned long compresslength;
@@ -571,8 +575,17 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	swflength += 8 + SWFOutput_getLength(header);
 
 	// compression level check
+#if USE_ZLIB
 	if (level < -1) level = -1;
 	if (level >  9) level = 9;
+#else
+	if ( level != -1 )
+	{
+		SWF_warn("No zlib support compiled in, "
+			"cannot generate compressed output");
+		level = -1; 
+	}
+#endif
 
 	// reserve output buffer
 	if(level >= 0)
@@ -605,19 +618,16 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	// fill swfbuffer with blocklist
 	SWFBlockList_writeBlocksToMethod(movie->blockList, SWFOutputMethod, buffer);
 
+#if USE_ZLIB
 	if (level >= 0)
 	{
-#ifdef HAVE_LIBZ
 		status = compress2 ( (Bytef*) SWFOutput_getBuffer(swfbuffer)+8, &compresslength, SWFOutput_getBuffer(tempbuffer), SWFOutput_getLength(tempbuffer), level);
 		if (status == Z_OK) {
 			SWFOutput_truncate(swfbuffer, compresslength+8);
 			destroySWFOutput(tempbuffer);
 		} else SWF_error("compression failed");
-#endif
-#ifndef HAVE_LIBZ
-		SWF_error("No zlib library installed in Ming, so compression has failed");
-#endif
 	}
+#endif // ndef USE_ZLIB
 	return swfbuffer;
 }
 

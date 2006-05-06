@@ -1,3 +1,9 @@
+2006-05-06 Sandro Santilli <strk@keybit.net>
+
+	* util/makeswf.c: added handling for Ming warnings.
+	* src/movie.c: fixed support for systems w/out zlib.
+	* util/main.c: fixed support for systems w/out zlib.
+
 2006-05-05 18:08  strk
 
 	* configure.in (1.33): Fixed zlib detection macros. Removed

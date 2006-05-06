@@ -164,6 +164,19 @@ printCompileMessage()
    }
 }
 
+static void 
+warningHandler(const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start (ap, fmt);
+
+	vfprintf(stderr, fmt, ap);
+	putc('\n', stderr);
+
+	va_end(ap);
+}
+
 /* 
  * This is here to handle line number reporting
  * due to preprocessor scrambling of it
@@ -333,7 +346,7 @@ main (int argc, char **argv)
 		fprintf(stderr, "Ming initialization error\n");
 		exit(1);
 	}
-	Ming_setWarnFunction(compileError);
+	Ming_setWarnFunction(warningHandler);
 	Ming_setErrorFunction(compileError);
 	Ming_useSWFVersion(swfversion);
 	Ming_setSWFCompression(swfcompression);
@@ -524,6 +537,10 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.21  2006/05/06 10:38:37  strk
+ * Fixed support for builds w/out zlib in SWF_output and listswf.
+ * Added handler for Ming's warning in command line compiler
+ *
  * Revision 1.20  2006/05/04 22:28:40  strk
  * fixed read past end of allocated memory in error handler
  *
