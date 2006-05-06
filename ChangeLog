@@ -1,5 +1,6 @@
 2006-05-06 Sandro Santilli <strk@keybit.net>
 
+	* util/action.c: fixed compiler warning 
 	* util/makeswf.c: added handling for Ming warnings.
 	* src/movie.c: fixed support for systems w/out zlib.
 	* util/main.c: fixed support for systems w/out zlib.

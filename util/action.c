@@ -405,7 +405,7 @@ outputSWF_ACTION (int n, SWF_ACTION *act)
   	printf ("  %s\n", actionName (action->ActionCode));
 	if( verbose ) {
 	    INDENT;
-  	    printf ("  Offset: %x\n", action->Offset );
+  	    printf ("  Offset: %lx\n", action->Offset );
 	}
   	if (actions[i].func != NULL )
   	{
