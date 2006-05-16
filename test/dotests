@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+
+sub doswftest($$)
+{
+local($test,$testprog)=@_;
+
+$testswf = "./$test.swf";
+$testref = "./$test.ref";
+
+print "executing $testprog\n";
+if( ! -r $testprog ) {
+	printf  STDERR "$test failed. $testprog does not exist\n";
+	return 0;
+}
+if( ! -x $testprog ) {
+	printf  STDERR "$test failed. $testprog not executable\n";
+	return 0;
+}
+if( -r $testswf ) {
+	system("rm -f $testswf");
+}
+
+system($testprog);
+
+if( ! -r $testswf ) {
+	printf  STDERR "$test failed. $testswf not created\n";
+	return 0;
+}
+if( ! -r $testref ) {
+	printf  STDERR "$test failed. $testref does not exist\n";
+	return 0;
+}
+if( system("listswf $testswf | diff - $testref >/dev/null 2>&1") ) {
+	printf  STDERR "$test failed. problem comparing against $testref\n";
+	return 0;
+}
+return 1;
+}
+
+
+open(TESTLIST,"<TestList") || die "Can't find test list";
+while(<TESTLIST>) {
+	@test = split(':');
+	if( $test[1] eq "swf" ) {
+		$test = $test[0];
+		$testexe = "./".$test[0];
+		$testphp = "./".$test[0].".php";
+		$testpl = "./".$test[0].".pl";
+		$testpy = "./".$test[0].".py";
+		doswftest($test,$testexe);
+		doswftest($test,$testphp);
+		doswftest($test,$testpl);
+		doswftest($test,$testpy);
+	} else {
+		print STDERR "Don't know how to handle test type ".$test[1]."\n";
+	
+	}
+}
+close(TESTLIST);
