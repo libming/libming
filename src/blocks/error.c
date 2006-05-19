@@ -45,7 +45,7 @@ error_default(const char *msg, ...)
 	va_start(args, msg);
 	vprintf(msg, args);
 	va_end(args);
-	exit(0);
+	exit(EXIT_FAILURE);
 }
 
 
