@@ -38,7 +38,7 @@ static:
 clean:
 	for i in $(DIRS); do (cd $$i && $(MAKE) clean); done
 	if [ -f perl_ext/Makefile ] ; then cd perl_ext; $(MAKE) clean; fi
-	rm -f test.o test test.exe *.core *~
+	rm -f test.o test.exe *.core *~
 	rm -f libming libming.a libming*$(NOVAR_SHLIBEXT)*
 
 distclean: clean
