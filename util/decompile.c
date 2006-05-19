@@ -2030,6 +2030,21 @@ decompileINT(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+decompileCHR(int n, SWF_ACTION *actions,int maxn)
+{
+    push(newVar_N("","","chr","(", 1,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     INDENT
+     puts(getName(pop()));
+     puts(";\n");
+     return 1;
+    }
+    return 0;
+}
+
+int
 decompileTOSTRING(int n, SWF_ACTION *actions,int maxn)
 {
     push(newVar_N("","","String","(", 1,")"));
@@ -2273,6 +2288,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_POP:
 	pop();
         return 0;
+
+      case SWFACTION_CHR:
+        return decompileCHR(n, actions, maxn);
 
       case SWFACTION_INT:
         return decompileINT(n, actions, maxn);
