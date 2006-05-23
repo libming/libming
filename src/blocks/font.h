@@ -45,8 +45,8 @@
 
 struct SWFFont_s
 {
-	// even though SWFFont isn't represented in the SWF file,
-	// this lets us call destroySWFBlock(font)
+	/* even though SWFFont isn't represented in the SWF file, */
+	/* this lets us call destroySWFBlock(font) */
 	struct SWFBlock_s block;
 
 	byte *name;
@@ -54,34 +54,34 @@ struct SWFFont_s
 
 	int nGlyphs;
 
-	// map from glyphs to char codes, loaded from fdb file
+	/* map from glyphs to char codes, loaded from fdb file */
 	unsigned short* glyphToCode; 
 
-	// list of pointers to glyph shapes
+	/* list of pointers to glyph shapes */
 	byte** glyphOffset;
 
-	// shape table, mapped in from file
+	/* shape table, mapped in from file */
 	byte* shapes;
 
-	// glyph metrics
+	/* glyph metrics */
 	short* advances;
 	struct SWFRect_s* bounds;
 
-	// map from char codes to glyphs, constructed from glyphToCode map
-	// XXX - would be nice if this was in the fdb..
+	/* map from char codes to glyphs, constructed from glyphToCode map */
+	/* xxx - would be nice if this was in the fdb.. */
 	union
 	{
 		byte* charMap;
-		unsigned short** wideMap; // array of 256 arrays of 256 shorts
+		unsigned short** wideMap; /* array of 256 arrays of 256 shorts */
 	} codeToGlyph;
 
-	// font metrics
+	/* font metrics */
 	short ascent;
 	short descent;
 	short leading;
 
-	// font's kern table, if one is defined
-	// XXX - should be sorted for faster lookups
+	/* font's kern table, if one is defined */
+	/* XXX - should be sorted for faster lookups */
 	unsigned short kernCount;
 	union
 	{	struct kernInfo* k;

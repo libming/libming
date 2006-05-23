@@ -33,7 +33,7 @@
 
 typedef enum
 {
-  SWF_UNUSEDBLOCK               = -1, // tell ming to skip this
+  SWF_UNUSEDBLOCK               = -1, /* tell ming to skip this */
 
   SWF_CHARACTERSET		= 51,
   SWF_DEFINEBITS                =  6,
@@ -91,7 +91,7 @@ typedef enum
   SWF_INITACTION				= 59,
   SWF_DEFINEVIDEOSTREAM		= 60,
   SWF_VIDEOFRAME		= 61,
-// these are pseudo definitions that do not correspond to actual swf file tags
+/* these are pseudo definitions that do not correspond to actual swf file tags */
   SWF_PREBUILTCLIP = 254,
   SWF_PREBUILT = 255
 } SWFBlocktype;

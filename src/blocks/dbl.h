@@ -47,7 +47,7 @@ struct SWFDBLBitmapData_s
 	unsigned char format, format2;
 	unsigned short width, height;
 	unsigned char *data;
-	// SWFInput input;
+	/* SWFInput input; */
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
