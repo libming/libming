@@ -1,0 +1,16 @@
+#!/bin/sh
+
+for f in *.pm SWF/*.pm
+do
+	file=`basename $f .pm`
+	dir=`dirname $f`
+	echo "making HTML for $f"
+	if [ "x$dir" != "x." ]
+	then
+		pod2html --infile=$f --outfile=../docs/perl/$dir::$file.html
+		pod2man $f ../docs/perlman/$dir::$file.3pm
+	else
+		pod2html --infile=$f --outfile=../docs/perl/$file.html
+		pod2man $f ../docs/perlman/$file.3pm
+	fi
+done
