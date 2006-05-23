@@ -106,9 +106,12 @@ destroySWFExports(SWFMovie movie)
 	movie->exports = NULL;
 }
 
-
+/*
+ * destroy a SWFMovie
+ * This function destroys a SWFMovie and frees the memmory associated with it
+ */
 void
-destroySWFMovie(SWFMovie movie)
+destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 {
 	destroySWFBlockList(movie->blockList);
 	destroySWFDisplayList(movie->displayList);
@@ -130,9 +133,12 @@ destroySWFMovie(SWFMovie movie)
 	free(movie);
 }
 
-
+/*
+ * create a new SWFMovie
+ * This function creates a new SWFMovie with the specified version.
+ */
 SWFMovie
-newSWFMovieWithVersion(int version)
+newSWFMovieWithVersion(int version /* Flash version */)
 {
 	SWFMovie movie = (SWFMovie) malloc(sizeof(struct SWFMovie_s));
 
@@ -164,23 +170,35 @@ newSWFMovieWithVersion(int version)
 	return movie;
 }
 
-
+/*
+ * create a new SWFMovie
+ * This function creates a new SWFMovie with the default version.
+ */
 SWFMovie
 newSWFMovie()
 {
 	return newSWFMovieWithVersion(SWF_versionNum);
 }
 
-
+/*
+ * set the frame rate of a movie
+ * This function sets the frame rate for the movie.
+ */
 void
-SWFMovie_setRate(SWFMovie movie, float rate)
+SWFMovie_setRate(SWFMovie movie /* movie to adjust */,
+	float rate	/* new frame rate */)
 {
 	movie->rate = rate;
 }
 
-
+/*
+ * set the dimensions of a movie
+ * This function sets the dimensions for the movie.
+ */
 void
-SWFMovie_setDimension(SWFMovie movie, float width, float height)
+SWFMovie_setDimension(SWFMovie movie /* movie to adjust */,
+	float width	/* new width of the movie */,
+	float height	/* new height of the movie */)
 {
 	if ( movie->bounds != NULL )
 		free(movie->bounds);
@@ -189,9 +207,16 @@ SWFMovie_setDimension(SWFMovie movie, float width, float height)
 														 0, (int)rint(Ming_scale*height));
 }
 
-
+/*
+ * set the frame count of a movie
+ * This function sets the frame count for the movie. If the number of
+ * frames specified here exceeds the number of frame created when adding
+ * content to the movie, then blank frames will be added to the movie to
+ * pad it to the specified frame count.
+ */
 void
-SWFMovie_setNumberOfFrames(SWFMovie movie, int totalFrames)
+SWFMovie_setNumberOfFrames(SWFMovie movie /* movie to adjust */,
+	int totalFrames	/* new frame count */)
 {
 	movie->totalFrames = totalFrames;
 }
@@ -480,8 +505,8 @@ SWFMovie_namedAnchor(SWFMovie movie, const char *label)
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFNamedAnchorBlock(label));
 }
 
+#if 0
 /* old outputfunction without possible compression */
-/*
 int
 SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 {
@@ -534,7 +559,7 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 
         return length;
 }
-*/
+#endif
 
 SWFOutput
 SWFMovie_toOutput(SWFMovie movie, int level)

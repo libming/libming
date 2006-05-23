@@ -35,7 +35,10 @@ float Ming_scale = 20.0;
 int Ming_cubicThreshold = 10000;
 
 
-/* module-wide initialization.	return non-zero if error. */
+/*
+ * module-wide initialization.
+ * returns non-zero if error.
+ */
 
 int Ming_init()
 {
@@ -55,50 +58,72 @@ Ming_cleanup()
 	Ming_cleanupFonts();
 }
 
-
-void Ming_setScale(float scale)
-{
-	Ming_scale = scale;
-}
-
 /*
  * Set output compression level.
- * Return previous value.
+ * This function sets the value of the compression level to be used when
+ * generating output. The level should be a value between 1 and 9 inclusive
+ * and corresponds to compression levels used by libz.
+ * Returns previous value.
  */ 
 int
-Ming_setSWFCompression(int level)
+Ming_setSWFCompression(int level /* new compression level */)
 {
 	int oldlevel = SWF_compression;
 	SWF_compression = level;
 	return oldlevel;
 }
 
+/*
+ * Set the global scaling factor
+ */
+void Ming_setScale(float scale /* New scaling factor */)
+{
+	Ming_scale = scale;
+}
 
+/*
+ * Get the global scaling factor
+ * returns the current global scaling factor
+ */
 float Ming_getScale()
 {
 	return Ming_scale;
 }
 
-
-void Ming_setCubicThreshold(int num)
+/*
+ * Set the threshold used when approximating cubic quadratic shapes.
+ */
+void Ming_setCubicThreshold(int num /* New threshold value */)
 {
 	Ming_cubicThreshold = num;
 }
 
-
-void Ming_setWarnFunction(void (*warn)(const char *msg, ...))
+/*
+ * Set the function that gets called when a warning occurs within the library
+ * This function sets function to be called when a warning occurs within the
+ * library. The default function prints the warning message to stdout.
+ */
+void Ming_setWarnFunction(void (*warn)(const char *msg, ...)/* new warning function */)
 {
 	setSWFWarnFunction(warn);
 }
 
-
-void Ming_setErrorFunction(void (*error)(const char *msg, ...))
+/*
+ * Set the function that gets called when an error occurs within the library
+ * This function sets function to be called when an error occurs within the
+ * library. The default function prints the error mesage to stdout and exits.
+ */
+void Ming_setErrorFunction(void (*error)(const char *msg, ...)/* new error function */)
 {
 	setSWFErrorFunction(error);
 }
 
-
-void Ming_useSWFVersion(int version)
+/*
+ * set the version of SWF to produce on output
+ * This function set the version of SWF to be produced by the library. Only
+ * versions 4 through 7 inclusive are supported at this time.
+ */
+void Ming_useSWFVersion(int version /* Flash version */)
 {
 	if(version < 4 || version > 7)
 		SWF_error("Only SWF versions 4 to 7 are currently supported!\n");
