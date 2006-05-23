@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::DisplayItem - SWF DisplayItem class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::DisplayItem - SWF DisplayItem class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use SWF::DisplayItem;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::DisplayItem is used for animation. To create an SWF::DisplayItem object, you may use either <a href="/SWF/Movie.html#add">add in the SWF::Movie manpage</a> or <a href="/SWF/Sprite.html#add">add in the SWF::Sprite manpage</a> method.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_moveto">$displayItem-&gt;moveTo($x, $y);</a></strong>
+
+<dd>
+<p>Move $displayItem to ($x, $y) in global co-ordinates.</p>
+</dd>
+</li>
+<dt><strong><a name="item_move">$displayItem-&gt;move($x, $y);</a></strong>
+
+<dd>
+<p>Displace $displayItem by ($x, $y)</p>
+</dd>
+</li>
+<dt><strong><a name="item_scaleto">$displayItem-&gt;scaleTo($x [,$y]);</a></strong>
+
+<dd>
+<p>Set $displyItem scale to $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.</p>
+</dd>
+</li>
+<dt><strong><a name="item_scale">$displayItem-&gt;scale($x [,$y]);</a></strong>
+
+<dd>
+<p>Multiply $displyItem scale by $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.</p>
+</dd>
+</li>
+<dt><strong><a name="item_rotateto">$displayItem-&gt;rotateTo($degrees);</a></strong>
+
+<dd>
+<p>Set $displayItem rotation to $degrees.</p>
+</dd>
+</li>
+<dt><strong><a name="item_rotate">$displayItem-&gt;rotate($degrees);</a></strong>
+
+<dd>
+<p>Rotate $displayItem by $degrees.</p>
+</dd>
+</li>
+<dt><strong><a name="item_skewx">$displayItem-&gt;skewX($x);</a></strong>
+
+<dd>
+<p>Add $x to the current x-skew.</p>
+</dd>
+</li>
+<dt><strong><a name="item_skewxto">$displayItem-&gt;skewXTo($x);</a></strong>
+
+<dd>
+<p>Set x-skew to $x. 1.0 is 45-degree forward slant. More is more forwad while less is more backward.</p>
+</dd>
+</li>
+<dt><strong><a name="item_skewy">$displayItem-&gt;skewY($y);</a></strong>
+
+<dd>
+<p>Add $y to the current y-skew.</p>
+</dd>
+</li>
+<dt><strong><a name="item_skewyto">$displayItem-&gt;skewYTo($y);</a></strong>
+
+<dd>
+<p>Set y-skew to $y. 1.0 is 45-degree upward slant. More is more upward while less is more downward.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setdepth">$displayItem-&gt;setDepth($depth);</a></strong>
+
+<dd>
+<p>Set Z-order of $displayItem to $depth.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setratio">$displayItem-&gt;setRatio($ratio);</a></strong>
+
+<dd>
+<p>Useful for SWF::Morph. Sets $displayItem ratio to $ratio.</p>
+</dd>
+</li>
+<dt><strong><a name="item_addcolor">$displayItem-&gt;addColor($r, $g, $b [,$a]);</a></strong>
+
+<dd>
+<p>Add RGB color to the $displayItem's color transform. Default value of $a is 1.0</p>
+</dd>
+</li>
+<dt><strong><a name="item_multcolor">$displayItem-&gt;multColor($r, $g, $b [,$a]);</a></strong>
+
+<dd>
+<p>Multiplies the $displayItem's color transform by the given values. Default value of $a is 1.0</p>
+</dd>
+</li>
+<dt><strong><a name="item_setname">$displayItem-&gt;setName($name);</a></strong>
+
+<dd>
+<p>Set $displayItem's name to $name (used for targetting with SWF::Action).</p>
+</dd>
+</li>
+<dt><strong><a name="item_remove">$displayItem-&gt;remove();</a></strong>
+
+<dd>
+<p>Remove $displayItem from the movie display list.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getposition">($x, $y) = $displayItem-&gt;getPosition(();</a></strong>
+
+<dd>
+<p>Returns displace coordinates of $displayitem.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getrotation">$degrees = $displayItem-&gt;getRotation();</a></strong>
+
+<dd>
+<p>Returns rotation of $displayItem.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getscale">($x, $y) = $displayItem-&gt;getScale();</a></strong>
+
+<dd>
+<p>Returns scale of $displayItem in x- and y-direction.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getskew">($x, $y) = $displayItem-&gt;getSkew();</a></strong>
+
+<dd>
+<p>Returns x- and y-skew of $displayItem.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getdepth">$depth = $displayItem-&gt;getDepth();</a></strong>
+
+<dd>
+<p>Returns Z-order of $displayItem.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setmask">$displayItem-&gt;setMask($level);</a></strong>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Soheil Seyfaie (soheil AT users.sourceforge.net).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Button, SWF::Shape, SWF::Movie, .</p>
+
+</body>
+
+</html>

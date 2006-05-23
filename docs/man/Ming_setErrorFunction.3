@@ -1,0 +1,19 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "Ming_setErrorFunction" 3 "23 May 2006" "c2man ming.c"
+.SH "NAME"
+Ming_setErrorFunction \- Set the function that gets called when an error occurs within the library
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void Ming_setErrorFunction(void (*error)(const char *msg,...));
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "void (*error)(const char *msg,...)"
+New error function.
+.SH "DESCRIPTION"
+This function sets function to be called when an error occurs within the
+library. The default function prints the error mesage to stdout and exits.

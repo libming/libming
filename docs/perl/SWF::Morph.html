@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::Morph - SWF Morph Class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::Morph - SWF Morph Class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use SWF::Morph;
+ my $morph = new SWF::Morph();</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::Morph twist from one shape to another.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_morph">new SWF::Morph();</a></strong>
+
+<dd>
+<p>Returns an SWF::Morph object.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getshapes">($shape1, $shape2) = $morph-&gt;getShapes();</a></strong>
+
+<dd>
+<p>Returns two SWF::Shape objects. The first one ($shape1) is the morph's starting shape while $shape2 is its final shape. You may also use <a href="#item_getshape1">getShape1()</a> and <a href="#item_getshape2">getShape2()</a> methods to get a handle of these shapes.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getshape1">$shape1 = $morph-&gt;getShape1();</a></strong>
+
+<dd>
+<p>Returns the morph's starting shape.</p>
+</dd>
+</li>
+<dt><strong><a name="item_getshape2">$shape2 = $morph-&gt;getShape2();</a></strong>
+
+<dd>
+<p>Returns the morph's final shape.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Soheil Seyfaie (<a href="mailto:soheil@netcom.ca">soheil@netcom.ca</a>)</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Button, SWF::DisplayItem, SWF::Shape, SWF::Sprite, SWF::Movie, .</p>
+
+</body>
+
+</html>

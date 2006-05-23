@@ -1,0 +1,32 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFMovie_setNumberOfFrames - set the frame count of a movie</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFMovie_setNumberOfFrames - set the frame count of a movie
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFMovie_setNumberOfFrames
+(
+	SWFMovie movie,
+	int totalFrames
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFMovie movie<dd>
+Movie to adjust.
+<dt>
+int totalFrames<dd>
+New frame count.
+</dl>
+<h1>DESCRIPTION</h1>
+This function sets the frame count for the movie. If the number of
+frames specified here exceeds the number of frame created when adding
+content to the movie, then blank frames will be added to the movie to
+pad it to the specified frame count.
+
+</body>

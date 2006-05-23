@@ -1,0 +1,328 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::Movie - SWF Movie class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<pre>
+        SWF::Movie - SWF Movie class</pre>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::Movie;</pre>
+<pre>
+        $m = new SWF::Movie();
+        $m = new SWF::MovieWithVersion(version);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::Movie is the root object of your flashfile. It contains all your other objects you want in your movie.
+Ming supports many Flash4 and Flash5 features and some of Flash MX(Flash6).</p>
+<p>The SWF::Movie object contains information like the flashversion, the size, the frames per second, the background color. Except that, the SWF::Movie behaves like 
+a SWF::MovieClip. It only cannot be added to another SWF::Movie or SWF::MovieClip. ;-)</p>
+<p>Notice: The version of your flashmovie can be set by the object SWF. See SWF for more details.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_add"><code>add(SWFObject)</code></a></strong>
+
+<dd>
+<p>Add an instance of a SWF-object to your current frame. The returnvalue is a SWF::DisplayItem.</p>
+</dd>
+<dd>
+<pre>
+        Possible SWF-objects are:
+        
+        SWF::Action
+        SWF::MovieClip
+        SWF::Shape
+        SWF::Sound
+        SWF::Text
+        SWF::TextField
+        
+        $m-&gt;add($shape); # possible, but not more accessible for us
+        $shape_1 = m-&gt;add($shape); # good instance</pre>
+</dd>
+</li>
+<dt><strong><a name="item_addexport">addExport(SWF::Block, name)</a></strong>
+
+<dd>
+<p>??? what this method is good for ???</p>
+</dd>
+</li>
+<dt><strong><a name="item_remove"><code>remove(SWF::DisplayItem)</code></a></strong>
+
+<dd>
+<p>Removes the given instance from the current and following frames of the main timeline.</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;remove($shape_i);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_nextframe"><code>nextFrame()</code></a></strong>
+
+<dd>
+<p>Finish a frame of the main timeline. New  added objects will be added in the next frame.</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;nextFrame();</pre>
+</dd>
+</li>
+<dt><strong><a name="item_setframes"><code>setFrames(int)</code></a></strong>
+
+<dd>
+<p>Preset the number of frames of the main timeline. n not used frames before finishing the movie will filled with n <a href="#item_nextframe"><code>nextFrame()</code></a> statements.
+If you inserted more <a href="#item_nextframe"><code>nextFrame()</code></a> commands than you set with <a href="#item_setframes"><code>setFrames()</code></a> the <a href="#item_setframes"><code>setFrames()</code></a> will be ignored.</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;setFrames(100);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_setbackground"><code>setBackground(red,green,blue)</code></a></strong>
+
+<dd>
+<p>Set the background in red, green, blue values. Possible value are 0..255 or hexvalues 0x0..0xff.</p>
+</dd>
+<dd>
+<pre>
+        $m-setBackground(0xff,0x99,0x00); # orange bg
+        $m-setBackground(0,200,255)       # green bg</pre>
+</dd>
+<dd>
+<p>A transparency level isn't available I asume. (In Flash MX/F6?). A transparent background can be set in the HTML-code for Internet Explorer. Please 
+inform the Authors if that is available for nonIE-browsers.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setdimension"><code>setDimension(x,y)</code></a></strong>
+
+<dd>
+<p>Set the dimension in pixel.</p>
+</dd>
+<dd>
+<pre>
+        #We should implement this in ming c-lib!!
+        #min: (0.0,0.0)   # ;-)
+        #max: (?,?)
+        #default: (0.0?,0.0?)
+        #Behavior when values &lt;min: ming sets it to min
+        #Behavior when values &gt;max: ming sets it to max
+        
+        $m-&gt;setDimension(200,100);
+        $m-&gt;setDimension(123.45,67.89);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_setrate"><code>setRate(int)</code></a></strong>
+
+<dd>
+<p>Set the playing speed in frames/second.</p>
+</dd>
+<dd>
+<pre>
+        #We should implement this in ming c-lib!!
+        #min: 0
+        #max: ?
+        #default: ?
+        #Behavior when value &lt;min: ming sets it to min
+        #Behavior when value &gt;max: ming sets it to max
+        
+        $m-&gt;setRate(30);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_protect"><code>protect()</code></a></strong>
+
+<dd>
+<p>A feature that prevents only flashnewbies from importing your movie into Macromedias Flash authoring tools. It cannot protect your content from being loaded by 
+other flashmovies, deleting of the protection with a hexeditor or disassembling with tools.</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;protect();</pre>
+</dd>
+</li>
+<dt><strong><a name="item_setsoundstream"><code>setSoundStream(SWF::Sound)</code></a></strong>
+
+<dd>
+<p>Puts an SWF::Sound object as streaming sound into the main timeline.</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;setSoundStream($sound);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_streammp3"><code>streamMp3(filename)</code></a></strong>
+
+<dd>
+<p>Simplifies the setSoundStream(). You only need the filename.</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;(&quot;iloveyou.mp3&quot;);</pre>
+</dd>
+<dd>
+<p>Hint: If you want to reuse this sound/mp3 later in this movie, create a reusable SWF::Sound object and then put it into setSoundstream().</p>
+</dd>
+</li>
+<dt><strong><a name="item_labelframe"><code>labelFrame(string)</code></a></strong>
+
+<dd>
+<p>Gives the current frame a label that can be used by actionscript as anchor. Then you don't have to count your <a href="#item_nextframe"><code>nextFrame()</code></a> lines anymore. :-)</p>
+</dd>
+<dd>
+<pre>
+        $m-&gt;labelFrame(&quot;win&quot;);</pre>
+</dd>
+<dd>
+<pre>
+        #max characters of a label??? 
+        #What happen if we put there a big string?? 
+        #Which characters are allowed??</pre>
+</dd>
+</li>
+<dt><strong><a name="item_output">output([int compresslevel])</a></strong>
+
+<dd>
+<p>Writes the SWF::Movie to stdout. This is normally used for webservers/cgi-scripts. 
+Don't forget to send the ``Content-Type:''-lines before writing out the movie.</p>
+</dd>
+<dd>
+<p>The parameter compresslevel is optional. compresslevel between 0 and 9. Higher values will be interpreted as 9. Values smaller 0
+mean no compression. By default the SWF::Movie will be send without compression.</p>
+</dd>
+<dd>
+<p>Notice: compression available since Flash MX(Flash 6). Ming does not check this for you if you write flash4 or flash5 movies.</p>
+</dd>
+</li>
+<dt><strong><a name="item_save">save(filename [, int compresslevel])</a></strong>
+
+<dd>
+<pre>
+
+Save the SWF::Movie to a file.</pre>
+</dd>
+<dd>
+<p>The parameter compresslevel is optional. compresslevel between 0 and 9. Higher values will be interpreted as 9. Values smaller 0 
+mean no compression. By default the SWF::Movie will be saved without compression.</p>
+</dd>
+<dd>
+<p>Notice: compression available since Flash MX(Flash 6). Ming does not check this for you if you write flash4 or flash5 movies.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p>3 examples: a regular minimal SWF::Movie, one with all methods and a more interesting.</p>
+<dl>
+<dt><strong><a name="item_minimal_empty_example">minimal empty example</a></strong>
+
+<dd>
+<pre>
+        #!/usr/bin/perl -w
+        use SWF::Movie;
+        
+        $m = new SWF::Movie();
+        $m-&gt;nextFrame();
+        $m-&gt;save(&quot;emptyminimal.swf&quot;);</pre>
+</dd>
+<dt><strong><a name="item_full_empty_examples">full empty examples</a></strong>
+
+<dd>
+<pre>
+        #!/usr/bin/perl -w
+        use SWF::Movie;
+        
+        $m = new SWF::Movie();
+        $m-&gt;setVersion(4);
+        $m-&gt;setBackground(0xff,0xcc,0x0);
+        $m-&gt;setDimension(200,100);
+        $m-&gt;protect();
+        $m-&gt;setRate(30);
+        $m-&gt;setFrames(10); # ming fills it automatic with frames
+        
+        $m-&gt;nextFrame()
+        $m-&gt;save(&quot;empty.swf&quot;);</pre>
+</dd>
+<dt><strong><a name="item_streaming_example">streaming example</a></strong>
+
+<dd>
+<pre>
+        #!/usr/bin/perl -w
+        
+        use SWF(&quot;Shape&quot;);
+        SWF::setVersion(6);
+        
+        $m = new SWF::Movie();
+        $m-&gt;setBackground(0xff,0xcc,0x0);
+        $m-&gt;setDimension(200,100);
+        $m-&gt;setFrames(10);
+        $m-&gt;streamMp3(&quot;forever.mp3&quot;);
+        
+        $s= new SWF::Shape();
+        $s-&gt;setLine(40,0xff,0xff,0);
+        $s-&gt;setRightFill(0xff,0,0); 
+        $s-&gt;drawLine(50,0);
+        $s-&gt;drawLine(0,20);
+        $s-&gt;drawLineTo(0,0);
+        
+        $s_1= $m-&gt;add($s);
+        $s_2= $m-&gt;add($s);
+        $s_1-&gt;move(50,40);
+        $s_2-&gt;move(10,40);
+        for($i=1;$i&lt;5;$i++) {
+                $m-&gt;nextFrame();
+                $s_2-&gt;move(0,10);
+        }
+        $m-&gt;nextFrame();
+        print &quot;Content-type: application/x-shockwave-flash\n\n&quot;;</pre>
+</dd>
+<dd>
+<pre>
+        $m-&gt;output(9); # with compression level 9 (since flash6)</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Soheil Seyfaie (soheil at users.sourceforge.net).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text</p>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::TextField - SWF TextField class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes_">NOTES:</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::TextField - SWF TextField class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::TextField;
+        $textfield = new SWF::TextField([flags]);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Unlike SWF::Text objects, TextFields cannot be rotated, scaled non-proportionally, or skewed. However, TextFields can be used as form entries and they can use browser-defined fonts.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes_">NOTES:</a></h1>
+<pre>
+    TextField is implemented into Flash since Flash3. 
+    Most of features for TextFields are available since Flash4.
+    Simple HTML-tags in TextField are possible since Flash5.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_textfield">new SWF::TextField([flags]);</a></strong>
+
+<dd>
+<p>Creates a TextField object whose behaviour is dictated by <code>flags</code> (see also SWF::Constants):</p>
+</dd>
+<dd>
+<pre>
+  SWFTEXTFIELD_NOEDIT:        Non-editable Textfiled
+  SWFTEXTFIELD_PASSWORD:      Obscure user input with astricts.
+  SWFTEXTFIELD_DRAWBOX:       Draw a border around TextField
+  SWFTEXTFIELD_MULTILINE:     TextFiels may contain multiple lines
+  SWFTEXTFIELD_WORDWRAP:      Warp text when text reaches TextField border
+  SWFTEXTFIELD_NOSELECT:      TextField is not selected when user clicks on it
+  SWFTEXTFIELD_ALIGN_LEFT:    Align text to the left
+  SWFTEXTFIELD_ALIGN_RIGHT:   Align text to the right
+  SWFTEXTFIELD_ALIGN_CENTER:  Align text to the center
+  SWFTEXTFIELD_ALIGN_JUSTIFY: Justify text
+  SWFTEXTFIELD_HTML:          Add HTML markup string
+  SWFTEXTFIELD_HASLENGTH:     
+  SWFTEXTFIELD_USEFONT:       Want to embed font
+  SWFTEXTFIELD_AUTOSIZE:</pre>
+</dd>
+<dd>
+<p>Flags may be combined with the bitwise OR operation. For example:</p>
+</dd>
+<dd>
+<pre>
+    my $t = new SWF::TextField(SWFTEXTFIELD_MULTILINE | SWFTEXTFIELD_WORDWRAP);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_addstring">$textfield-&gt;<code>addString($string)</code></a></strong>
+
+<dd>
+<p>Add $string to TextField. Text is appended to the existing text.</p>
+</dd>
+</li>
+<dt><strong><a name="item_align">$textfield-&gt;<code>align(alignment)</code></a></strong>
+
+<dd>
+<p>Set the alignment of the text in the textfield. Possible values are</p>
+</dd>
+<dd>
+<pre>
+        SWFTEXTFIELD_ALIGN_LEFT
+        SWFTEXTFIELD_ALIGN_RIGHT
+        SWFTEXTFIELD_ALIGN_CENTER
+        SWFTEXTFIELD_ALIGN_JUSTIFY
+        
+By default a SWF::TextField ist left aligned.</pre>
+</dd>
+</li>
+<dt><strong><a name="item_setbounds">$textfield-&gt;setBounds(width, height)</a></strong>
+
+<dd>
+<p>Sets the width and height of the textfield.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setcolor">$textfield-&gt;setColor(red, green, blue [, alpha])</a></strong>
+
+<dd>
+<p>Set the color of the text. An 8 bit value for each parameter. You can use 
+the hex or decimal notation. Even mixed.
+</p>
+</dd>
+<dd>
+<pre>
+
+        $tf-&gt;setColor(0xcc,0,0x33);
+        $tf-&gt;setColor(204,0,51,255);</pre>
+</dd>
+</li>
+<dt><strong><a name="item_setfont">$textfield-&gt;<code>setFont($font)</code></a></strong>
+
+<dd>
+<p>Sets an SWF::Font object -$font- to be used in the TextField.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setpadding">$textfield-&gt;<code>setPadding(padding)</code></a></strong>
+
+<dd>
+<p>Set TextField padding.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setheight">$textfield-&gt;<code>setHeight(height)</code></a></strong>
+
+<dd>
+<p>Set the height of font in your textfield.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setindentation">$textfield-&gt;<code>setIndentation(indentation)</code></a></strong>
+
+<dd>
+<p>Set the indentation of the first line of a paragraph.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setleftmargin">$textfield-&gt;<code>setLeftMargin(left)</code></a></strong>
+
+<dd>
+<p>Sets the left margin of the textfield.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setrightmargin">$textfield-&gt;<code>setRightMargin(right)</code></a></strong>
+
+<dd>
+<p>Sets the right margin of the textfield.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setmargins">$textfield-&gt;setMargins(left, right)</a></strong>
+
+<dd>
+<p>Sets left and right margins of $textfield.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setlinespacing">$textfield-&gt;<code>setLineSpacing(linespacing)</code></a></strong>
+
+<dd>
+<p>Sets the space between lines.</p>
+</dd>
+</li>
+<dt><strong><a name="item_setname">$textfield-&gt;<code>setName($name)</code></a></strong>
+
+<dd>
+<p>Assigns a name to the TextField which could be used to reference the TextField within ActionScript.</p>
+</dd>
+</li>
+<dt><strong><a name="item_addchars">$textfield-&gt;<code>addChars(string)</code></a></strong>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Soheil Seyfaie (soheil at users.sourceforge.net).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text</p>
+
+</body>
+
+</html>

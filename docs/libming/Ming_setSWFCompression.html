@@ -1,0 +1,26 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>Ming_setSWFCompression - Set output compression level.</title>
+</header>
+<body>
+<h1>NAME</h1>
+Ming_setSWFCompression - Set output compression level.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+int Ming_setSWFCompression(int level);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+int level<dd>
+New compression level.
+</dl>
+<h1>DESCRIPTION</h1>
+This function sets the value of the compression level to be used when
+generating output. The level should be a value between 1 and 9 inclusive
+and corresponds to compression levels used by libz.
+<h1>RETURNS</h1>
+Previous value.
+
+</body>
