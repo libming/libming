@@ -466,7 +466,7 @@ struct SWF_ACTIONPUSHPARAM * pop()
 #ifdef DEBUG
 	printf("*pop*\n");
 #endif
-	if( Stack == NULL ) error("Stack blown!!");
+	if( Stack == NULL ) error("Stack blown!! - pop");
 	t=Stack;
 	Stack=t->next;
 	ret=t->val;
@@ -478,7 +478,7 @@ struct SWF_ACTIONPUSHPARAM * peek()
 #ifdef DEBUG
 	printf("*peek*\n");
 #endif
-	if( Stack == NULL ) error("Stack blown!!");
+	if( Stack == NULL ) error("Stack blown!! - peek");
 	return Stack->val;
 }
 
@@ -519,6 +519,9 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 	  strcat(v->p.String,pops);
 	  if( i < pop_counter-1 ) 
 	   strcat(v->p.String,",");
+	 }
+	 else {
+		fprintf(stderr,"Some string overflowed something in newVar_N()??????\n");
 	 }
 	}
 	strcat(v->p.String,final);
@@ -1490,6 +1493,19 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	    return 0;
     }
 
+    if( (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
+        (actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
+        (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER) &&
+        (actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) ) {
+	    /* It's really a class definition */
+            INDENT
+	    puts(" {\n");
+            decompileActions(sact->numActions, sact->Actions,gIndent+1);
+            INDENT
+	    puts("}\n");
+	    return 0;
+    }
+
     /*
      * do {} while() loops have a JUMP at the end of the if clause
      * that points to a JUMP above the IF statement.
@@ -2358,6 +2374,8 @@ decompile5Action(int n, SWF_ACTION *actions,int indent)
   dcinit();
 
   decompileActions(n, actions, indent);
+
+  if( Stack != NULL ) fprintf(stderr,"Stuff left on the stack at the end of a block of actions!?!?!?\n");
 
   return dcgetstr();
 }
