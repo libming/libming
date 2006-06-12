@@ -1041,7 +1041,9 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 	      push(newVar3(getString(left),"^",getString(right)));
 	      break;
       case SWFACTION_GREATER:
-	      puts("GREATER");
+	      right=pop();
+	      left=pop();
+	      push(newVar3(getString(left),">",getString(right)));
 	      break;
       case SWFACTION_LOGICALNOT:
 	      if( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE &&
