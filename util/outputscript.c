@@ -730,7 +730,7 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINESHAPE);
   sprintf (name, "s%d", sblock->ShapeID);
 
-  printf ("\n\t/*  Shape %d */\n", sblock->ShapeID);
+  printf ("\n\t#  Shape %d \n", sblock->ShapeID);
   printf ("\t%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
