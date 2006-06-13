@@ -275,6 +275,7 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 /***** SWFFont *****/
 
 SWFFont newSWFFont();
+/* pull font definition from fdb (font def block) file */
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFFont font);
 
