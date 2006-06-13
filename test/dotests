@@ -37,9 +37,18 @@ if( system("listswf $testswf | diff - $testref >/dev/null 2>&1") ) {
 return 1;
 }
 
+sub dotestset($)
+{
+local($depth) = @_;
 
-open(TESTLIST,"<TestList") || die "Can't find test list";
-while(<TESTLIST>) {
+local %test;
+
+local $TESTLIST;
+
+print "dotestset depth $depth\n";
+
+open($TESTLIST,"<TestList") || die "Can't find test list";
+while(<$TESTLIST>) {
 	@test = split(':');
 	if( $test[1] eq "swf" ) {
 		$test = $test[0];
@@ -48,12 +57,21 @@ while(<TESTLIST>) {
 		$testpl = "./".$test[0].".pl";
 		$testpy = "./".$test[0].".py";
 		doswftest($test,$testexe);
-		doswftest($test,$testphp);
+		#doswftest($test,$testphp);
 		doswftest($test,$testpl);
 		doswftest($test,$testpy);
+	} elsif ( $test[1] eq "dir" ) {
+		print "doing tests in ".$test[0]."\n";
+		chdir $test[0] || die "Can't cd to ".$test[0]."\n";
+		dotestset($depth+1);
+		chdir ".." || die "Can't cd ..";
+		print "done in ".$test[0]."\n";
 	} else {
 		print STDERR "Don't know how to handle test type ".$test[1]."\n";
-	
 	}
 }
+print "End of loop for depth $depth\n";
 close(TESTLIST);
+}
+
+dotestset(0);
