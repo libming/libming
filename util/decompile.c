@@ -1958,9 +1958,12 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     struct SWF_ACTIONPUSHPARAM *meth, *obj, *nparam;
 /*    int i;*/
 
+/*
+Maybe check that the top of the stack holds a variable?
     SanityCheck(SWF_CALLMETHOD,
 		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
 		"CALLMETHOD not preceeded by PUSH")
+*/
     
     meth=pop();
     obj=pop();
@@ -2146,6 +2149,21 @@ decompileINITARRAY(int n, SWF_ACTION *actions,int maxn)
     push(newVar_N("","","","[", nparam->p.Integer,"]"));
     return 0;
 }
+
+int
+decompileEXTENDS(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *baseclass;
+
+    baseclass=pop();
+    printf("class ");
+    puts(getName(pop()));
+    printf(" extends ");
+    puts(getName(baseclass));
+    printf(" {\n");
+
+    return 0;
+}
  
 int
 decompileAction(int n, SWF_ACTION *actions,int maxn)
@@ -2226,6 +2244,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         
       case SWFACTION_TRACE:
         decompileTRACE(n, actions, maxn);
+	return 0;
+
+      case SWFACTION_EXTENDS:
+        decompileEXTENDS(n, actions, maxn);
 	return 0;
 
       case SWFACTION_NEWOBJECT:
