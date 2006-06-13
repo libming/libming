@@ -1104,7 +1104,8 @@ outputTrailer ()
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
+outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
+		int offset, int length)
 {
   int i;
 

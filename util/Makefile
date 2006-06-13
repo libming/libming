@@ -8,7 +8,7 @@ UTILOBJ = action.o blocktypes.o decompile.o main.o parser.o read.o
 PAGER ?= less
 
 BINARIES = listswf listswf_d swftoperl swftophp swftopython \
-	makeswf listaction listaction_d listfdb makefdb listjpeg raw2adpcm \
+	makeswf listaction listaction_d listfdb makefdb makefdb2 listjpeg raw2adpcm \
 	listmp3 
 
 BINARIES += $(EXTRA_BINS)
@@ -53,6 +53,9 @@ parser.o: parser.c
 
 decompile.o: decompile.c
 	$(CC) $(CFLAGS) -c decompile.c -o decompile.o
+
+makefdb2: outputfdb.c $(UTILOBJ) ../libming$(NOVAR_SHLIBEXT)
+	$(CC) $(CFLAGS) $< $(UTILOBJ) $(LDFLAGS) -o $@
 
 makefdb: blocktypes.o makefdb.c read.o ../libming$(NOVAR_SHLIBEXT)
 	$(CC) $(CFLAGS) makefdb.c $(LDFLAGS) read.o -o makefdb

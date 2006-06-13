@@ -786,7 +786,7 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   printf ("\t%s();  # %d frames\n",
 		  newobj (spritename, "MovieClip"), sblock->FrameCount);
   for(i=0;i<sblock->BlockCount;i++) {
-	  outputBlock( sblock->tagTypes[i], sblock->Tags[i], 0, 0 );
+	  outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
   }
   spritenum = 0;
 
@@ -1140,7 +1140,8 @@ outputTrailer ()
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp, int offset, int length)
+outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
+		int offset, int length)
 {
   int i;
 
