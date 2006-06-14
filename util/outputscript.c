@@ -1102,6 +1102,10 @@ outputHeader (struct Movie *m)
 	printf ("#!/usr/bin/php\n");
   }
   printf ("<?php\n");
+  if( m->version == 5 ) 
+  	printf ("%s();\n\n", newobj ("m", "Movie"));
+  else
+  	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
 #endif
 #ifdef SWFPERL
   printf ("#!/usr/bin/perl -w\n");
@@ -1117,21 +1121,23 @@ outputHeader (struct Movie *m)
   printf
     ("# Just copy from a sample, needed to use Constants like SWFFILL_RADIAL_GRADIENT\n");
   printf ("use SWF::Constants qw(:Text :Button :DisplayItem :Fill);\n\n");
-  printf ("SWF::setScale(1);\n");
+  if( m->version == 5 ) 
+  	printf ("%s();\n\n", newobj ("m", "Movie"));
+  else
+  	printf ("$m = %s(%d);\n\n", "SWF::Movie::newSWFMovieWithVersion", m->version);
 #endif
 #ifdef SWFPYTHON
   printf ("#!/usr/bin/python\n");
   printf ("from ming import *\n\n");
+  if( m->version != 5 ) 
+	printf ("Ming_useSWFVersion(%d);\n\n", m->version);
+  printf ("%s();\n\n", newobj ("m", "Movie"));
 #endif
-  if( m->version == 5 ) 
-  	printf ("%s();\n\n", newobj ("m", "Movie"));
-  else
-  	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
   if( m->rate != 12.0 ) 
   	printf ("%s(%f);\n", methodcall ("m", "setRate"), m->rate);
   if( m->frame.xMax != 6400 || m->frame.yMax != 4800 )
-  	printf ("%s(%i, %i);\n", methodcall ("m", "setDimension"),
-			m->frame.xMax, m->frame.yMax);
+  	printf ("%s(%f, %f);\n", methodcall ("m", "setDimension"),
+			m->frame.xMax/20.0, m->frame.yMax/20.0);
   if( m->nFrames != 1 )
   	printf ("%s(%i);\n", methodcall ("m", "setFrames"), m->nFrames);
 }
@@ -1155,11 +1161,7 @@ outputTrailer (struct Movie *m)
  		printf ("%s();\n", methodcall ("m", "output"));
 	}
   } else {
-	if( m->version > 5 ) {
- 		printf ("%s(\"%s\",%i);\n", methodcall ("m", "save"), swftargetfile, 9);
-	} else {
- 		printf ("%s(\"%s\");\n", methodcall ("m", "save"), swftargetfile);
-	}
+ 	printf ("%s(\"%s\");\n", methodcall ("m", "save"), swftargetfile);
   }
 #ifdef SWFPHP
   printf ("?>\n");
