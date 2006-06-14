@@ -57,7 +57,7 @@ while(<$TESTLIST>) {
 		$testpl = "./".$test[0].".pl";
 		$testpy = "./".$test[0].".py";
 		doswftest($test,$testexe);
-		#doswftest($test,$testphp);
+		doswftest($test,$testphp);
 		doswftest($test,$testpl);
 		doswftest($test,$testpy);
 	} elsif ( $test[1] eq "dir" ) {
