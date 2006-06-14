@@ -32,6 +32,7 @@ SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
 char *filename;
 char tmp_name[PATH_MAX];
 FILE *tempfile;
+char *swftargetfile=NULL;
 
 int verbose = 0;
 
@@ -153,6 +154,11 @@ cws2fws(FILE *f, uLong outsize)
 	return (int)outsize;
 }
 
+static void usage(char *prog)
+{
+	fprintf(stderr,"%s: [-v] inputfile [swftargetfile]\n", prog);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -163,22 +169,39 @@ main (int argc, char *argv[])
   int compressed = 0;
 
   setbuf(stdout,NULL);
-  if (argc == 3 && strcmp (argv[1], "-v") == 0)
-    {
-      verbose = 1;
-      --argc;
-      ++argv;
-    }
-  filename = argv[1];
-
-  if (argc < 2)
-    {
-      error ("Give me a filename.");
-    }
-
+  switch( argc ) {
+	  case 2:
+		filename = argv[1];
+		break;
+	  case 3:
+  		if (strcmp (argv[1], "-v") == 0) {
+			verbose = 1;
+			filename = argv[2];
+		} else {
+			filename = argv[1];
+			swftargetfile = argv[2];
+		}
+		break;
+	  case 4:
+  		if (strcmp (argv[1], "-v") != 0) {
+			usage(argv[0]);
+			exit(1);
+		}
+		verbose = 1;
+		filename = argv[2];
+		swftargetfile = argv[3];
+		break;
+	  case 0:
+	  case 1:
+	 default:
+		usage(argv[0]);
+		exit(1);
+  }
   if (!(f = fopen (filename, "rb")))
     {
-      error ("Sorry, can't seem to read that file.\n");
+      fprintf(stderr,"Sorry, can't seem to read the file '%s'\n",filename);
+      usage(argv[0]);
+      exit(1);
     }
 
   first = readUInt8 (f);
@@ -264,7 +287,7 @@ main (int argc, char *argv[])
       printf ("\n\n");
     }
 
-  outputTrailer();
+  outputTrailer(&m);
 
   fclose (f);
   if (compressed)

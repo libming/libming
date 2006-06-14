@@ -1099,7 +1099,7 @@ outputHeader (struct Movie *m)
 }
 
 void
-outputTrailer ()
+outputTrailer (struct Movie *m)
 {
 }
 

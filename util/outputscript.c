@@ -4,6 +4,8 @@
 #include "parser.h"
 #include "swfoutput.h"
 
+extern char *swftargetfile;
+
 /*
  * This file contains output functions that can convert the different SWF block
  * types into libming API calls that can recreate the block. Because the Ming
@@ -1096,6 +1098,9 @@ void
 outputHeader (struct Movie *m)
 {
 #ifdef SWFPHP
+  if( swftargetfile != NULL ) {
+	printf ("#!/usr/bin/php\n");
+  }
   printf ("<?php\n");
 #endif
 #ifdef SWFPERL
@@ -1115,6 +1120,7 @@ outputHeader (struct Movie *m)
   printf ("SWF::setScale(1);\n");
 #endif
 #ifdef SWFPYTHON
+  printf ("#!/usr/bin/python\n");
   printf ("from ming import *\n\n");
 #endif
   if( m->version == 5 ) 
@@ -1131,23 +1137,32 @@ outputHeader (struct Movie *m)
 }
 
 void
-outputTrailer ()
+outputTrailer (struct Movie *m)
 {
+  if( swftargetfile == NULL ) {
 #ifdef SWFPHP
-  printf ("\n\theader('Content-type: application/x-shockwave-flash');\n");
+	printf ("\n\theader('Content-type: application/x-shockwave-flash');\n");
 #endif
 #ifdef SWFPERL
-  printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
+	printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
 #endif
 #ifdef SWFPYTHON
-  printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
+	printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
 #endif
-#if 0
-  printf ("$m->output(%i);\n", (compressed) ? '9' : '0');
-  printf ("$m->save(\"$0.swf\",%i);\n", (compressed) ? '9' : '0');
-#endif
+	if( m->version > 5 ) {
+ 		printf ("%s(%i);\n", methodcall ("m", "output"), 9);
+	} else {
+ 		printf ("%s();\n", methodcall ("m", "output"));
+	}
+  } else {
+	if( m->version > 5 ) {
+ 		printf ("%s(\"%s\",%i);\n", methodcall ("m", "save"), swftargetfile, 9);
+	} else {
+ 		printf ("%s(\"%s\");\n", methodcall ("m", "save"), swftargetfile);
+	}
+  }
 #ifdef SWFPHP
-  printf ("?>");
+  printf ("?>\n");
 #endif
 }
 
