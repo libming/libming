@@ -33,8 +33,8 @@
 #define NEWOP     "new"
 #endif
 #ifdef SWFPYTHON
-#define COMMSTART "/* "
-#define COMMEND   "*/"
+#define COMMSTART "# "
+#define COMMEND   ""
 #define VAR       ""
 #define MEMBER    "."
 #define OBJPREF   "SWF"
@@ -48,7 +48,7 @@ static char spritename[64];
 
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
-	printf( "\n\t" COMMSTART " " #block " " COMMEND "\n");
+	printf( "\n" COMMSTART " " #block " " COMMEND "\n");
 
 static struct SWFOutput outputs[] = {
   {SWF_CHARACTERSET, outputSWF_CHARACTERSET},
@@ -143,10 +143,10 @@ newobj (char *varname, char *obj)
 void
 outputSWF_RGBA (SWF_RGBA * color, char *pname)
 {
-  printf ("\t" VAR "%s_red   = 0x%2.2x;\n", pname, color->red);
-  printf ("\t" VAR "%s_green = 0x%2.2x;\n", pname, color->green);
-  printf ("\t" VAR "%s_blue  = 0x%2.2x;\n", pname, color->blue);
-  printf ("\t" VAR "%s_alpha = 0x%2.2x;\n", pname, color->alpha);
+  printf ("" VAR "%s_red   = 0x%2.2x;\n", pname, color->red);
+  printf ("" VAR "%s_green = 0x%2.2x;\n", pname, color->green);
+  printf ("" VAR "%s_blue  = 0x%2.2x;\n", pname, color->blue);
+  printf ("" VAR "%s_alpha = 0x%2.2x;\n", pname, color->alpha);
 }
 
 void
@@ -187,7 +187,7 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 #define TOLERANCE 0.02
 
   if (skew < -TOLERANCE || skew > TOLERANCE)
-    printf ("\t$%s->skewXTo(%f);\n", fname, skew);
+    printf ("$%s->skewXTo(%f);\n", fname, skew);
 
   if (xScale > 1.0 - TOLERANCE && xScale < 1.0 + TOLERANCE)
     xScale = 1.0;
@@ -198,17 +198,17 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
   if (xScale != 1.0 || yScale != 1.0)
     {
       if (xScale == yScale)
-	printf ("\t%s(%f);\n", methodcall (fname, "scaleTo"), xScale);
+	printf ("%s(%f);\n", methodcall (fname, "scaleTo"), xScale);
       else
-	printf ("\t%s(%f, %f);\n", methodcall (fname, "scaleTo"), xScale,
+	printf ("%s(%f, %f);\n", methodcall (fname, "scaleTo"), xScale,
 		yScale);
     }
 
   if (angle < -TOLERANCE || angle > TOLERANCE)
-    printf ("\t%s(%f);\n", methodcall (fname, "rotateTo"), angle);
+    printf ("%s(%f);\n", methodcall (fname, "rotateTo"), angle);
 
   if (matrix->TranslateX != 0 || matrix->TranslateY != 0)
-    printf ("\t%s(%ld, %ld);\n", methodcall (fname, "moveTo"),
+    printf ("%s(%ld, %ld);\n", methodcall (fname, "moveTo"),
 	    matrix->TranslateX, matrix->TranslateY);
 }
 
@@ -221,9 +221,9 @@ void
 outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *gname)
 {
   int i;
-  printf ("\t%s();\n", newobj (gname, "Gradient"));
+  printf ("%s();\n", newobj (gname, "Gradient"));
   for (i = 0; i < gradient->NumGradients; i++)
-    printf ("\t%s(%f,0x%2.2x,0x%2.2x,0x%2.2x,0x%2.2x);\n",
+    printf ("%s(%f,0x%2.2x,0x%2.2x,0x%2.2x,0x%2.2x);\n",
 	    methodcall (gname, "addEntry"),
 	    (gradient->GradientRecords[i].Ratio / 255.0),
 	    gradient->GradientRecords[i].Color.red,
@@ -243,7 +243,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
     case 0x00:			/* Solid Fill */
       sprintf (fname, "%s_f%d", parentname, i);
       outputSWF_RGBA (&fillstyle->Color, fname);
-      printf ("\t" VAR "%s = %s(" VAR "%s_red, "
+      printf ("" VAR "%s = %s(" VAR "%s_red, "
 	      VAR "%s_green, "
 	      VAR "%s_blue, "
 	      VAR "%s_alpha "
@@ -255,7 +255,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
       sprintf (fname, "%s_f%d", parentname, i);
-      printf ("\t" VAR "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
+      printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
 	      fname, methodcall (parentname, "addFill"), gname);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
@@ -263,7 +263,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
       sprintf (fname, "%s_f%d", parentname, i);
-      printf ("\t" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
+      printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
 	      fname, methodcall (parentname, "addFill"), gname);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
@@ -273,7 +273,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
     case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
       printf (" BitmapID: %d\n", fillstyle->BitmapId);
       sprintf (fname, "%s_f%d", parentname, i);
-      printf ("\t" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
+      printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
 	      fname, methodcall (parentname, "addFill"), gname);
       outputSWF_MATRIX (&fillstyle->BitmapMatrix, fname);
       break;
@@ -290,7 +290,7 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray,
   count = (fillstylearray->FillStyleCount != 0xff) ?
     fillstylearray->FillStyleCount : fillstylearray->FillStyleCountExtended;
 
-  printf ("\t" COMMSTART "%d fillstyle(s)" COMMEND "\n", count);
+  printf ("" COMMSTART "%d fillstyle(s)" COMMEND "\n", count);
 
   for (i = 0; i < count; i++)
     {
@@ -303,7 +303,7 @@ outputSWF_LINESTYLE (SWF_LINESTYLE * linestyle, char *parentname, int i)
 {
   char lname[64];
   sprintf (lname, "%s_l%d", parentname, i);
-  printf ("\t" VAR "%s_width = %d;\n", lname, linestyle->Width);
+  printf ("" VAR "%s_width = %d;\n", lname, linestyle->Width);
   outputSWF_RGBA (&linestyle->Color, lname);
 
 }
@@ -317,7 +317,7 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray,
   count = (linestylearray->LineStyleCount != 0xff) ?
     linestylearray->LineStyleCount : linestylearray->LineStyleCountExtended;
 
-  printf ("\t" COMMSTART "%d linestyles(s)" COMMEND "\n", count);
+  printf ("" COMMSTART "%d linestyles(s)" COMMEND "\n", count);
   for (i = 0; i < count; i++)
     {
       outputSWF_LINESTYLE (&(linestylearray->LineStyles[i]), parentname, i);
@@ -336,14 +336,14 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	  if (shaperec->StraightEdge.GeneralLineFlag)
 	    {
 	      /* The general case */
-	      printf ("\t%s(%ld, %ld);\n", methodcall (parentname, "drawLine"),
+	      printf ("%s(%ld, %ld);\n", methodcall (parentname, "drawLine"),
 		      shaperec->StraightEdge.DeltaX,
 		      shaperec->StraightEdge.DeltaY);
 	    }
 	  else
 	    {
 	      /* The Horizontal or Verticle case */
-	      printf ("\t%s(%ld, %ld);\n", methodcall (parentname, "drawLine"),
+	      printf ("%s(%ld, %ld);\n", methodcall (parentname, "drawLine"),
 		      shaperec->StraightEdge.VLDeltaX,
 		      shaperec->StraightEdge.VLDeltaY);
 	    }
@@ -351,7 +351,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
       else
 	{
 	  /* A Curved Edge Record */
-	  printf ("\t%s(%ld, %ld, %ld, %ld);\n",
+	  printf ("%s(%ld, %ld, %ld, %ld);\n",
 		  methodcall (parentname, "drawCurve"),
 		  shaperec->CurvedEdge.ControlDeltaX,
 		  shaperec->CurvedEdge.ControlDeltaY,
@@ -372,7 +372,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	  printf (" StateLineStyle: %ld\n", shaperec->StyleChange.LineStyle);
 	  if (shaperec->StyleChange.LineStyle == 0)
 	    {
-	      printf ("\t%s(0);\n", methodcall (parentname, "setLine"));
+	      printf ("%s(0);\n", methodcall (parentname, "setLine"));
 	    }
 	  else
 	    {
@@ -380,7 +380,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	       * We use the variable names that were output by
 	       * outputSWF_LINESTYLE()
 	       */
-	      printf ("\t%s(" VAR "%s_l%ld_width, " VAR "%s_l%ld_red, "
+	      printf ("%s(" VAR "%s_l%ld_width, " VAR "%s_l%ld_red, "
 		      VAR "%s_l%ld_green, " VAR "%s_l%ld_blue, "
 		      VAR "%s_l%ld_alpha);\n",
 		      methodcall (parentname, "setLine"),
@@ -393,7 +393,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	}
       if (shaperec->StyleChange.StateFillStyle1)
 	{
-	  printf ("\t%s(", methodcall (parentname, "setRightFill"));
+	  printf ("%s(", methodcall (parentname, "setRightFill"));
 	  if (shaperec->StyleChange.FillStyle1)
 	    {
 /* This is supposed tocome from the parent SHAPE record
@@ -423,7 +423,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	}
       if (shaperec->StyleChange.StateMoveTo)
 	{
-	  printf ("\t%s(%ld, %ld);\n", methodcall (parentname, "movePenTo"),
+	  printf ("%s(%ld, %ld);\n", methodcall (parentname, "movePenTo"),
 		  shaperec->StyleChange.MoveDeltaX,
 		  shaperec->StyleChange.MoveDeltaY);
 	}
@@ -532,7 +532,7 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEEDITTEXT);
 
   sprintf (tname, "s%d", sblock->CharacterID);
-  printf ("\t%s(", newobj (tname, "TextField"));
+  printf ("%s(", newobj (tname, "TextField"));
   if (sblock->HasText)
     {
       printf ("SWFTEXTFIELD_HASTEXT");
@@ -617,18 +617,18 @@ if( sblock->HasLayout ) {
     }
   printf (");\n");
 
-  printf ("\t%s(%ld, %ld);\n", methodcall (tname, "setBounds"),
+  printf ("%s(%ld, %ld);\n", methodcall (tname, "setBounds"),
 	  sblock->Bounds.Xmax, sblock->Bounds.Ymax);
   if (sblock->HasFont)
     {
-      printf ("\t%s(" VAR "f%d);\n", methodcall (tname, "setFont"),
+      printf ("%s(" VAR "f%d);\n", methodcall (tname, "setFont"),
 	      sblock->FontID);
-      printf ("\t%s(%d);\n", methodcall (tname, "setHeight"),
+      printf ("%s(%d);\n", methodcall (tname, "setHeight"),
 	      sblock->FontHeight);
     }
   if (sblock->HasTextColor)
     {
-      printf ("\t%s(0x%02x, 0x%02x, 0x%02x, 0x%02x);\n",
+      printf ("%s(0x%02x, 0x%02x, 0x%02x, 0x%02x);\n",
 	      methodcall (tname, "setColor"),
 	      sblock->TextColor.red,
 	      sblock->TextColor.green,
@@ -636,12 +636,12 @@ if( sblock->HasLayout ) {
     }
   if (sblock->HasMaxLength)
     {
-      printf ("\t%s(%d);\n", methodcall (tname, "setLength"),
+      printf ("%s(%d);\n", methodcall (tname, "setLength"),
 	      sblock->MaxLength);
     }
   if (sblock->HasLayout)
     {
-      printf ("\t%s(", methodcall (tname, "align"));
+      printf ("%s(", methodcall (tname, "align"));
       switch (sblock->Align)
 	{
 	case 0:
@@ -658,20 +658,20 @@ if( sblock->HasLayout ) {
 	  break;
 	}
       printf (");\n");
-      printf ("\t%s(%d);\n", methodcall (tname, "setLeftMargin"),
+      printf ("%s(%d);\n", methodcall (tname, "setLeftMargin"),
 	      sblock->LeftMargin);
-      printf ("\t%s(%d);\n", methodcall (tname, "setRightMargin"),
+      printf ("%s(%d);\n", methodcall (tname, "setRightMargin"),
 	      sblock->RightMargin);
-      printf ("\t%s(%d);\n", methodcall (tname, "setIndention"),
+      printf ("%s(%d);\n", methodcall (tname, "setIndention"),
 	      sblock->Indent);
-      printf ("\t%s(%d);\n", methodcall (tname, "setLineSpacing"),
+      printf ("%s(%d);\n", methodcall (tname, "setLineSpacing"),
 	      sblock->Leading);
     }
-  printf ("\t%s('%s');\n", methodcall (tname, "setName"),
+  printf ("%s('%s');\n", methodcall (tname, "setName"),
 	  sblock->VariableName);
   if (sblock->HasText)
     {
-      printf ("\t%s('%s');\n", methodcall (tname, "addString"),
+      printf ("%s('%s');\n", methodcall (tname, "addString"),
 	      sblock->InitialText);
     }
 
@@ -691,7 +691,7 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEFONT2);
 
   sprintf (fname, "f%d", sblock->FontID);
-  printf ("\t%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+  printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
 
 }
 
@@ -731,7 +731,7 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
   sprintf (name, "s%d", sblock->ShapeID);
 
   printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
-  printf ("\t%s();\n", newobj (name, "Shape"));
+  printf ("%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
    * sure it will come up with the same answer.
@@ -756,7 +756,7 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
   sprintf (name, "s%d", sblock->ShapeID);
 
   printf ("\n\t/*  Shape %d */\n", sblock->ShapeID);
-  printf ("\t%s();\n", newobj (name, "Shape"));
+  printf ("%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
    * sure it will come up with the same answer.
@@ -783,7 +783,7 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   spframenum = 1;
   sprintf(spritename,"sp%d",sblock->SpriteId);
   printf ("\n\t" COMMSTART "  MovieClip %d " COMMEND "\n", sblock->SpriteId);
-  printf ("\t%s();  # %d frames\n",
+  printf ("%s();  # %d frames\n",
 		  newobj (spritename, "MovieClip"), sblock->FrameCount);
   for(i=0;i<sblock->BlockCount;i++) {
 	  outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
@@ -832,7 +832,7 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DOACTION);
 
-  printf ("\t%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
+  printf ("%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
 	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions,0));
 }
 
@@ -869,7 +869,7 @@ outputSWF_FRAMELABEL (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_FRAMELABEL);
 
-  printf ("\t%s(\'%s\');\n",
+  printf ("%s(\'%s\');\n",
 	  methodcall (spritenum?spritename:"m", "lableFrame"), sblock->Name );
 
 }
@@ -946,7 +946,7 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   if( sblock->PlaceFlagHasCharacter ) {
       printf(COMMSTART " PlaceFlagHasCharacter " COMMEND "\n");
     sprintf(cname, "s%d", sblock->CharacterId );
-    printf ("\t%s(" VAR "%s);\n", methodcall (spritename, "add"),
+    printf ("%s(" VAR "%s);\n", methodcall (spritename, "add"),
 	      cname);
   }
   if( sblock->PlaceFlagHasMatrix ) {
@@ -997,7 +997,7 @@ void
 outputSWF_REMOVEOBJECT (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_REMOVEOBJECT);
-  printf ("\t%s(" VAR "c%d);\n",
+  printf ("%s(" VAR "c%d);\n",
 	  methodcall (spritenum?spritename:"m", "remove"), sblock->CharacterId);
 
 }
@@ -1006,7 +1006,7 @@ void
 outputSWF_REMOVEOBJECT2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_REMOVEOBJECT2);
-  printf ("\t%s(" VAR "i%d);\n",
+  printf ("%s(" VAR "i%d);\n",
 	  methodcall (spritenum?spritename:"m", "remove"), sblock->Depth);
 
 }
@@ -1023,7 +1023,7 @@ outputSWF_SETBACKGROUNDCOLOR (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_SETBACKGROUNDCOLOR);
 
-  printf ("\t%s(0x%02x, 0x%02x, 0x%02x);\n",
+  printf ("%s(0x%02x, 0x%02x, 0x%02x);\n",
 	  methodcall ("m", "setBackground"), sblock->rgb.red,
 	  sblock->rgb.green, sblock->rgb.blue);
 
@@ -1034,7 +1034,7 @@ outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 {
   //OUT_BEGIN (SWF_SHOWFRAME);
 
-  printf ("\t%s();  # end of %sframe %d\n",
+  printf ("%s();  # end of %sframe %d\n",
 	  methodcall (spritenum?spritename:"m", "nextFrame"),
 	  spritenum?"clip ":"",
 	  spritenum?spframenum++:framenum++);
@@ -1080,7 +1080,7 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_INITACTION);
 
-  printf ("\t%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
+  printf ("%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
 	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions,0));
 }
 
@@ -1114,11 +1114,20 @@ outputHeader (struct Movie *m)
   printf ("use SWF::Constants qw(:Text :Button :DisplayItem :Fill);\n\n");
   printf ("SWF::setScale(1);\n");
 #endif
-  printf ("\t%s(%d);\n\n", newobj ("m", "Movie"), m->version);
-  printf ("\t%s(%f);\n", methodcall ("m", "setRate"), m->rate);
-  printf ("\t%s(%i, %i);\n", methodcall ("m", "setDimension"), m->frame.xMax,
-	  m->frame.yMax);
-  printf ("\t%s(%i);\n", methodcall ("m", "setFrames"), m->nFrames);
+#ifdef SWFPYTHON
+  printf ("from ming import *\n\n");
+#endif
+  if( m->version == 5 ) 
+  	printf ("%s();\n\n", newobj ("m", "Movie"));
+  else
+  	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
+  if( m->rate != 12.0 ) 
+  	printf ("%s(%f);\n", methodcall ("m", "setRate"), m->rate);
+  if( m->frame.xMax != 6400 || m->frame.yMax != 4800 )
+  	printf ("%s(%i, %i);\n", methodcall ("m", "setDimension"),
+			m->frame.xMax, m->frame.yMax);
+  if( m->nFrames != 1 )
+  	printf ("%s(%i);\n", methodcall ("m", "setFrames"), m->nFrames);
 }
 
 void
@@ -1128,11 +1137,14 @@ outputTrailer ()
   printf ("\n\theader('Content-type: application/x-shockwave-flash');\n");
 #endif
 #ifdef SWFPERL
-  printf ("\t#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
+  printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
+#endif
+#ifdef SWFPYTHON
+  printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
 #endif
 #if 0
-  printf ("\t$m->output(%i);\n", (compressed) ? '9' : '0');
-  printf ("\t$m->save(\"$0.swf\",%i);\n", (compressed) ? '9' : '0');
+  printf ("$m->output(%i);\n", (compressed) ? '9' : '0');
+  printf ("$m->save(\"$0.swf\",%i);\n", (compressed) ? '9' : '0');
 #endif
 #ifdef SWFPHP
   printf ("?>");
