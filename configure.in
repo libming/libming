@@ -17,6 +17,7 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PATH_PROG(PYTHON, python)
+AC_PATH_PROG(PERL, perl)
 
 dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")

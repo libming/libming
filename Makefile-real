@@ -75,3 +75,6 @@ release:
 	rm -rf ming-$(MING_VERSION)/util/old
 	tar czvf ming-$(MING_VERSION).tar.gz ming-$(MING_VERSION)
 	rm -rf ming-$(MING_VERSION)
+
+check:
+	(cd test && $(MAKE) check)

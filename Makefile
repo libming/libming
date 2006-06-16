@@ -1,7 +1,7 @@
 
 RULES = all install install-static install-dynamic \
 	dynamic static clean distclean Changelog \
-	release maintainer-clean
+	release maintainer-clean check
 
 $(RULES): Makefile.config
 	$(MAKE) -f Makefile-real $@
