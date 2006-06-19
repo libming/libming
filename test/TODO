@@ -1,0 +1,21 @@
+(1)
+
+For each binding provide a 'builder' module.
+The builder is an executable file that takes
+two arguments (input filename and output filename)
+and generates the latter from the former, making
+sure to use the not-yet-installed ming library.
+
+For the 'C' binding this work would likely be better
+done by libtool, to take architecture differences into
+account. Other binding would probably be simpler.
+
+(2)
+
+Rewrite the 'dotest' executable in portable shell,
+making use of the 'builder' modules.
+
+(3)
+
+Tweek the Makefile to invoke the 'dotest' executable
+only with bindings enabled at configure time.
