@@ -17,7 +17,7 @@ install-utils:
 	(cd util && make install)
 
 install-man:
-	(cd man && make install)
+	(cd docs/man && make install)
 
 install-dynamic: dynamic
 	$(INSTALL_DATA) $(SHAREDLIB) $(libdir)/$(SHAREDLIB)
