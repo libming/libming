@@ -12,21 +12,10 @@
 #include "assembler.h"
 
 #define YYPARSE_PARAM buffer
-/*#define DEBUG 1*/
+//#define DEBUG 1
 
 Buffer bf, bc;
 
-extern int SWF_versionNum;
-
-static int num_classes = 0;
-Package extends;
-Package interfaces;
-	
-char currentClass[1024];
-void writeConstructor(Buffer out, Package package, Buffer args, int num_args, Buffer code);
-void writeImplements(Buffer out, Package package, Package impl);
-void writePackage(Buffer out, char *package);
-void writePackages(Buffer out, char *package);
 %}
 
 %union
@@ -38,9 +27,7 @@ void writePackages(Buffer out, char *package);
   int intVal;
   int len;
   double doubleVal;
-	Package imports;
-	Package interface;
-	
+
   struct
   {
     Buffer buffer;
@@ -75,8 +62,6 @@ void writePackages(Buffer out, char *package);
 %token CALLFRAME STARTDRAG STOPDRAG GOTOFRAME SETTARGET 
 
 %token TRY THROW CATCH FINALLY
-%token IMPORT DYNAMIC INTRINSIC CLASS INTERFACE EXTENDS IMPLEMENTS
-%token PUBLIC PRIVATE STATIC 
 
 %token NULLVAL
 %token <intVal> INTEGER
@@ -161,11 +146,6 @@ void writePackages(Buffer out, char *package);
 
 %type <len> opcode opcode_list push_item with push_list
 
-%type <imports> imports
-%type <str> import package class_init class_extends
-%type <interface> class_implements
-%type <action> interface_decl
-
 /*
 %type <intVal> integer
 %type <doubleVal> double
@@ -177,24 +157,11 @@ void writePackages(Buffer out, char *package);
 program
 	: { bf = newBuffer();
 		bc = newBuffer();
-		extends = NULL;
-		interfaces = NULL;
 	} code
 		{ Buffer b = newBuffer();
 		  bufferWriteConstants(b);
-		  bufferConcat(b, bc);
 		  bufferConcat(b, bf);
-		  *((Buffer *)buffer) = b; }
-	| { bf = newBuffer();
-			bc = newBuffer();
-			extends = NULL;
-			interfaces = NULL;
-		} 
-		imports code
-		{ Buffer b = newBuffer();
-		  bufferWriteConstants(b);
 		  bufferConcat(b, bc);
-		  bufferConcat(b, bf);
 		  *((Buffer *)buffer) = b; }
 	| /* nothing */ { Buffer b = newBuffer(); *((Buffer *)buffer) = b; }
 	;
@@ -207,170 +174,10 @@ code
 anycode
 	: stmt
 		{ bufferConcat(bc, $1); }
-	| imports
-		{
-		}
-	| class_decl
-		{
-			delctx(CTX_CLASS);
-		}
-	| interface_decl
-		{
-			delctx(CTX_INTERFACE);
-		}
-	| public_private function_decl
-		{ bufferConcat(bf, $2); }
-	;
-
-imports
-	: import
-		{
-			addPackage(strdup($1));
-		}
-	| imports import
-		{
-			addPackage(strdup($2));
-		}
-	;
-		
-import
-	: IMPORT package ';'
-		{
-			$$ = $2;
-		}
-	;
-
-static_init
-	: STATIC
-	| /* empty */
-	;
-	
-public_private
-	: PUBLIC static_init
-	| PRIVATE static_init
-	| static_init
-	| /* empty */
-	;
-	
-interface_code
-	: function_decl
+	| function_decl
 		{ bufferConcat(bf, $1); }
-	| interface_code function_decl
-		{ bufferConcat(bf, $2); }
-	| /* empty */
-	;
-	
-interface_init
-	: INTERFACE package
-		{
-			addctx(CTX_INTERFACE);
-			strcpy(currentClass, $2);
-			num_classes++;
-			addPackage($2);
-			// register package
-			writePackages(bc, $2);
-		}
-	;
-	
-interface_decl
-	: interface_init '{' interface_code '}'
-		{
-			$$ = newBuffer();
-		}
-	;
-	
-class_decl
-	: class_init '{' code '}'
-	| DYNAMIC class_init '{' code '}'
-	| INTRINSIC class_init '{' code '}'
-	| DYNAMIC INTRINSIC class_init '{' code '}'
-	;
-	
-class_init
-	: CLASS package class_extends class_implements
-		{
-			char buf[1024];
-							
-			num_classes++;
-			
-			addctx(CTX_CLASS);
-			
-			addPackage($2);
-			
-			// save classname
-			strcpy(currentClass, $2);
-			
-			// register package
-			writePackages(bc, $2);
-			  		
-			// check extends
-			if($3 != NULL)
-			{
-				if(packageExistsByName($3))
-				{
-					extends = newPackage($3, PACKAGE_EXTENDS);
-				}
-				else
-				{
-					sprintf(buf, "superclass '%s' not found!", $3);
-					swf5error(buf);
-				}
-			}
-			
-			// check implements
-			if($4)
-			{
-				$4 = $4->head;
-				interfaces = $4;
-			}
-			$$ = $2;
-		}
 	;
 
-class_extends 
-	: EXTENDS package
-		{
-			$$ = $2;
-		}
-	| /* empty */
-		{	$$ = NULL;
-		}
-	;
-	
-class_implements
-	: IMPLEMENTS package
-		{ $$ = newPackage($2, PACKAGE_INTERFACE); }
-		
-	| class_implements ',' package
-		{ Package p = newPackage($3, PACKAGE_INTERFACE);
-			p->prev = $$;
-			p->head = $$->head;
-			$$->next = p;
-			$$ = $$->next;
-		}
-	| /* empty */
-		{ $$ = NULL;
-		}
-	;
-	
-package
-	: identifier
-		{
-			$$ = $1;
-		}
-	| package '.' identifier
-		{
-			$$ = $1;
-			strcat($$, ".");
-			strcat($$, $3);
-		}
-	| package '.' '*'
-		{
-			$$ = $1;
-			strcat($$, ".*");
-		}
-	;
-	
 stmts
 	: stmt
                 { $$ = $1; }
@@ -672,114 +479,17 @@ function_init
 
 function_decl
 	: function_init identifier '(' formals_list ')' stmt
-		{
-			Package p;
-			char buf[1024];
-			int flags = PRELOAD_THIS | PRELOAD_SUPER;
-			int nflags = 2;
-			$$ = newBuffer();
-					
-			if(chkctx(CTX_CLASS) == CTX_INTERFACE)
-			{
-				if(SWF_versionNum < 6)
-					swf5error("interface not supported for SWF versions < 7.");
-					
-				if($6 != NULL)
-					swf5error("interface methods can't have statements.");
-					
-				if(packageExistsByName(currentClass))
-				{
-					p = packageByName(currentClass);
-					if(p == NULL)
-					{
-						swf5error("no such class.");
-					}
-					
-					strcpy(buf, "_global.");
-					strcat(buf, p->ns);
-					strcat(buf, ".");
-					strcat(buf, p->name);
-										
-					bufferWriteString($$, buf, strlen(buf) + 1);
-					bufferWriteDefineFunction2($$, NULL, $4.buffer, $6, nflags, flags);
-					bufferWriteOp($$, SWFACTION_SETVARIABLE);
-					
-					strcpy(buf, "");
-					sprintf(buf, "_local%d", num_classes);
-					bufferWriteString($$, buf, strlen(buf) + 1);
-					
-					strcpy(buf, "_global.");
-					strcat(buf, p->ns);
-					strcat(buf, ".");
-					strcat(buf, p->name);					
-					strcat(buf, ".prototype");
-					
-					bufferWriteString($$, buf, strlen(buf) + 1);
-					bufferWriteOp($$, SWFACTION_GETVARIABLE);
-					bufferWriteOp($$, SWFACTION_DEFINELOCAL);
-				} 
-			}
-			else if(chkctx(CTX_CLASS) == CTX_CLASS)
-			{				
-				if(packageExistsByName($2))
-				{
-					printf("constructor\n");
-					writeConstructor($$, packageByName($2), $4.buffer, $4.count, $6);
-				}
-				else
-				{
-					char buf[1024];
-					char bufitoa[20];
-					
-		  		sprintf(bufitoa, "%d", num_classes);
-					strcpy(buf, "_local");
-					strcat(buf, bufitoa);
-					
-					if(SWF_versionNum > 6)
-					{
-						bufferWriteString($$, buf, strlen(buf)+1);
-						bufferWriteOp($$, SWFACTION_GETVARIABLE);
-						bufferWriteString($$, $2, strlen($2)+1);
-						bufferWriteDefineFunction2($$, NULL, $4.buffer, $6, nflags, flags);
-						bufferWriteOp($$, SWFACTION_SETMEMBER);
-					}
-					else
-					{
-						bufferWriteString($$, buf, strlen(buf)+1);
-						bufferWriteOp($$, SWFACTION_GETVARIABLE);
-						bufferWriteString($$, $2, strlen($2)+1);
-					  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
-					  bufferWriteS16($$, bufferLength($4.buffer) + 5);
-					  bufferWriteU8($$, 0); /* empty function name */
-					  bufferWriteS16($$, $4.count);
-					  bufferConcat($$, $4.buffer);
-					  bufferWriteS16($$, bufferLength($6));
-					  bufferConcat($$, $6);
-					 	bufferWriteOp($$, SWFACTION_SETMEMBER);
-					}
-				}
-			}
-			else
-			{
-				if(SWF_versionNum > 6)
-				{
-					bufferWriteDefineFunction2($$, $2, $4.buffer, $6, 2, PRELOAD_THIS | PRELOAD_SUPER);
-				}
-				else
-				{
-				  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
-				  bufferWriteS16($$, strlen($2) +
-						     bufferLength($4.buffer) + 5);
-				  bufferWriteHardString($$, (byte*) $2, strlen($2)+1);
-				  bufferWriteS16($$, $4.count);
-				  bufferConcat($$, $4.buffer);
-				  bufferWriteS16($$, bufferLength($6));
-				  bufferConcat($$, $6);
-				}
-			}
+		{ $$ = newBuffer();
+		  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
+		  bufferWriteS16($$, strlen($2) +
+				     bufferLength($4.buffer) + 5);
+		  bufferWriteHardString($$, (byte*) $2, strlen($2)+1);
+		  bufferWriteS16($$, $4.count);
+		  bufferConcat($$, $4.buffer);
+		  bufferWriteS16($$, bufferLength($6));
+		  bufferConcat($$, $6);
 		  delctx(CTX_FUNCTION);
-		  free($2); 
-		 }
+		  free($2); }
 	;
 
 inpart
@@ -1022,7 +732,7 @@ void_function_call
 	: identifier '(' expr_list ')'
 		{
 #ifdef DEBUG
-			printf("void_function_call: IDENTIFIER '(' expr_list ')'\n");
+		  printf("void_function_call: IDENTIFIER '(' expr_list ')'\n");
 #endif
 		  $$ = $3.buffer;
 		  bufferWriteInt($$, $3.count);
@@ -1225,48 +935,18 @@ void_function_call
 
 	;
 
+
 function_call
 	: IDENTIFIER '(' expr_list ')'
 		{
-			if(packageExistsByName($1))
-		  {
-	 			Package p = packageByName($1);
 #ifdef DEBUG
-			printf("cast: %s '(' expr_list ')'\n", $1);
+		  printf("function_call: %s '(' expr_list ')'\n", $1);
 #endif
-	  		// found a package: cast.
-	  		if($3.count != 1)
-	  			swf5error("wrong param count for cast.");
-	 		  $$ = newBuffer();
-				bufferWriteString($$, p->path, strlen(p->path)+1);
-				bufferWriteOp($$, SWFACTION_GETVARIABLE); 
-	 		  bufferConcat($$, $3.buffer);				
-				bufferWriteOp($$, SWFACTION_CASTOP);
-				free($1);
-		  }
-			else if(chkctx(CTX_CLASS) == CTX_CLASS)
-		  {
-#ifdef DEBUG
-				printf("class_method_call: %s '(' expr_list ')'\n", $1);
-#endif
-			  $$ = $3.buffer;
-			  bufferWriteInt($$, $3.count);
-			  bufferWriteString($$, $1, strlen($1)+1);
-			  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
-			  free($1);
-		  }
-		  else
-		  {
-#ifdef DEBUG
-				printf("function_call: %s '(' expr_list ')'\n", $1);
-#endif
-			  $$ = $3.buffer;
-			  bufferWriteInt($$, $3.count);
-			  bufferWriteString($$, $1, strlen($1)+1);
-			  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
-			  free($1);
-			} 
-		}
+		  $$ = $3.buffer;
+		  bufferWriteInt($$, $3.count);
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
+		  free($1); }
 
 	| TARGETPATH '(' IDENTIFIER ')'
 		{ $$ = newBuffer();
@@ -1491,7 +1171,7 @@ lvalue
 
 expr
 	: primary
-		
+
 	| '-' expr %prec UMINUS
 		{ $$ = $2;
 		  bufferWriteInt($2, -1);
@@ -1751,7 +1431,7 @@ expr_or_obj
 
 primary
 	: anon_function_decl
-	
+
 	| lvalue_expr
 
 	| incdecop lvalue %prec "++"
@@ -1870,7 +1550,7 @@ primary
 	| NULLVAL
 		{ $$ = newBuffer();
 		  bufferWriteNull($$); }
-	
+
 	| STRING
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
@@ -1955,9 +1635,6 @@ assign_stmt
 	| VAR init_vars
 		{ $$ = $2; }
 
-	| public_private VAR init_vars
-		{ $$ = $3; }
-		
 	| void_function_call
 
 	| function_call
@@ -2261,172 +1938,4 @@ opcode
 	;
 
 %%
-
-void writeImplements(Buffer out, Package package, Package impl)
-{
-	char buf[1024];
-	char bufimpl[1024];
-	int cnt = 0;
-	int i;
-	Package p;
-	
-	if(impl == NULL || package == NULL)
-		return;
-		
-	strcpy(buf, "_global.");
-	strcat(buf, package->ns);
-	
-	impl = impl->head;
-	
-	do
-	{		
-		p = packageByName(impl->name);
-		if(p != NULL)
-		{
-			strcpy(bufimpl, "_global.");
-			strcat(bufimpl, p->path);
-			bufferWriteString(out, bufimpl, strlen(bufimpl) + 1);
-			bufferWriteOp(out, SWFACTION_GETVARIABLE);
-			cnt++;
-#ifdef DEBUG
-				printf("class %s implements %s\n", buf, bufimpl);
-#endif
-		}		
-		impl = impl->next;
-	}	while(impl != NULL);
-
-	bufferWriteInt(out, cnt);
-	
-	bufferWriteString(out, buf, strlen(buf));
-	bufferWriteOp(out, SWFACTION_GETVARIABLE);
-	bufferWriteString(out, package->name, strlen(package->name) + 1);
-	bufferWriteOp(out, SWFACTION_GETMEMBER);	
-	bufferWriteOp(out, SWFACTION_IMPLEMENTSOP);
-}
-
-void writeConstructor(Buffer out, Package package, Buffer args, int num_args, Buffer code)
-{
-	char buf[1024];
-	char loc[100];
-	int flags = PRELOAD_THIS | PRELOAD_SUPER;
-	int num_flags = 2;
-	int i;
-	Buffer b, c;
-	Package pack;
-	
-	printf("enter\n");
-	
-	if(package == NULL)
-		swf5error("package is NULL!");
-	printPackage(package);
-	
-	sprintf(buf, "%d", num_classes);
-	strcpy(loc, "_local");
-	strcat(loc, buf);
-	
-	strcpy(buf, "_global.");
-	strcat(buf, package->ns);
-	
-	bufferWriteString(out, buf, strlen(buf)+1);		
-	bufferWriteOp(out, SWFACTION_GETVARIABLE); 
-	bufferWriteString(out, package->name, strlen(package->name)+1);	 
-	bufferWriteDefineFunction2(out, NULL, args, code, flags, num_flags);
-	bufferWriteSetRegister(out, 0);	
-	bufferWriteOp(out, SWFACTION_SETMEMBER); 
-	
-	// EXTENDS
-	if(extends != NULL)
-	{
-		pack = packageByName(extends->path);
-		if(pack != NULL)
-		{
-			b = newBuffer();
-			bufferWriteRegister(b, 0);		
-			bufferWriteString(b, pack->path, strlen(pack->path)+1);
-			bufferWriteOp(b, SWFACTION_GETVARIABLE); 
-			bufferWriteOp(b, SWFACTION_EXTENDS);	
-			bufferConcat(out, b);
-		}
-		else
-		{
-			swf5error("extends not defined.");
-		}
-	}
-	
-	strcat(buf, ".");
-	strcat(buf, package->name);
-	
-	// set a local variable to prototype
-	bufferWriteString(out, loc, strlen(loc)+1); 
-	bufferWriteString(out, buf, strlen(buf)+1);		
-	bufferWriteOp(out, SWFACTION_GETVARIABLE); 
-
-	strcpy(loc, "prototype");
-	bufferWriteString(out, loc, strlen(loc)+1);
-  bufferWriteOp(out, SWFACTION_GETMEMBER);
-  
-  bufferWriteOp(out, SWFACTION_DEFINELOCAL);
-  
-  if(interfaces != NULL)
-  {
-  	writeImplements(out, package, interfaces);
-  }
-}
-
-void writePackage(Buffer out, char *package)
-{
-	char buf[1024];
-	char *obj = "Object";
-	Buffer b, c;
-	
-	b = newBuffer();
-	c = newBuffer();
-	strcpy(buf, "_global.");
-	strcat(buf, package);
-	bufferWriteString(b, buf, strlen(buf)+1);
-	bufferWriteInt(b, 0);
-	bufferWriteString(b, obj, strlen(obj)+1);
-	bufferWriteOp(b, SWFACTION_NEWOBJECT);
-	
-	bufferWriteOp(b, SWFACTION_SETVARIABLE);
-	
-	bufferWriteString(c, package, strlen(package)+1);
-	bufferWriteOp(c, SWFACTION_GETVARIABLE);
-	bufferWriteOp(c, SWFACTION_LOGICALNOT);
-	
-	bufferWriteOp(c, SWFACTION_LOGICALNOT);
-	bufferWriteOp(c, SWFACTION_IF);
-	bufferWriteS16(c, 2);
-	bufferWriteS16(c, bufferLength(b));
-	
-	bufferConcat(out, c);
-	bufferConcat(out, b);
-}
-
-void writePackages(Buffer out, char *package)
-{
-	char buf[1024];
-	int i;
-	Package p = packageByName(package);
-	
-	printf("writing package %s\n", package);
-	/* dots in classname? */
-	if(strrchr(package, '.') != NULL)
-	{
-		strcpy(buf, "");
-		for(i = 0; i < strlen(package); i++)
-		{
-			if(package[i] == '.')
-			{
-				writePackage(out, buf);
-			}
-			strncat(buf, &package[i], 1);
-		}
-	}
-	else if(p != NULL)
-	{
-		writePackage(out, p->path);
-	}
-
-}
 

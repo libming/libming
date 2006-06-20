@@ -246,16 +246,6 @@ end			{ count();	return END;		}
 }
 
 <AS_V6>{
-import				{ count();	return IMPORT; }
-dynamic				{ count();	return DYNAMIC; }
-intrinsic			{ count();	return INTRINSIC; }
-class					{ count();	return CLASS; }
-interface			{ count();	return INTERFACE; }
-extends				{ count();	return EXTENDS; }
-implements		{ count();	return IMPLEMENTS; }
-public				{ count();	return PUBLIC; }
-private				{ count();	return PRIVATE; }
-static				{ count();	return STATIC; }
 try			{ count(); return TRY; }
 catch			{ count(); return CATCH; }
 throw			{ count(); return THROW; }
@@ -263,7 +253,6 @@ finally			{ count(); return FINALLY; }
 "===" 			{ count(); return EEQ; }
 "!==" 			{ count(); return NEE; }
 }
-
 
 <asm>r\:{DIGIT}+	{ count(); swf5lval.str = strdup(yytext+2);
 				return REGISTER; }

@@ -541,68 +541,26 @@ void lower(char *s)
 	}
 }
 
-
 /* this code will eventually help to pop extra values off the
  stack and make sure that continue and break address the proper
  context
  */
 static enum ctx *ctx_stack = {0};
 static int ctx_count = {0}, ctx_len = {0};
-
-#if DEBUG
-static void dump_stack()
-{
-	int n;
-	printf("stack is now:\n");
-	for(n = ctx_count; n-- > 0;)	
-	{
-		printf("=> %d\n", ctx_stack[n]);
-	}
-}
-#endif
-
 void addctx(enum ctx val)
-{
-	if(ctx_count >= ctx_len)
+{	if(ctx_count >= ctx_len)
 		ctx_stack = (enum ctx*) realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
 	ctx_stack[ctx_count++] = val;
-
-#if DEBUG
-	dump_stack();
-#endif
 }
 void delctx(enum ctx val)
-{
-	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
+{	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
 		SWF_error("consistency check in delctx");
-	
-#if DEBUG
-	dump_stack();
-#endif
 }
 
 int chkctx(enum ctx val)
-{
-	int n, ret = 0;
-
+{	int n, ret = 0;
 	switch(val)
-	{	case CTX_CLASS:
-			for(n = 0; n < ctx_count ; n++ )
-			{
-				switch(ctx_stack[n])
-				{	
-					case CTX_CLASS:
-						return CTX_CLASS;
-					case CTX_INTERFACE:
-						return CTX_INTERFACE;
-					case CTX_FUNCTION:
-						return CTX_FUNCTION;
-					default: ; /* computers are stupid */
-				}
-			}
-			return -1;
-		 
-		case CTX_FUNCTION:
+	{	case CTX_FUNCTION:
 			for(n = ctx_count ; --n >= 0 ; )
 				switch(ctx_stack[n])
 				{	case CTX_SWITCH:
@@ -611,10 +569,6 @@ int chkctx(enum ctx val)
 						break;
 					case CTX_FUNCTION:
 						return ret;
-					case CTX_CLASS:
-						return CTX_CLASS;
-					case CTX_INTERFACE:
-						return CTX_INTERFACE;
 					default: ; /* computers are stupid */
 				}
 			return -1;
@@ -823,261 +777,6 @@ int bufferWriteGetProperty(Buffer out, char *string)
 	return 4 + bufferWriteData(out, (byte*) property, strlen(property)+1);
 }
 
-void bufferWriteDefineFunction2(Buffer out, char *func_name, Buffer args, Buffer code, int flags, int num_flags)
-{
-	Buffer c;
-	char buf[1024];
-	int num_args = 0, i;
-	char *p = (char *) args->buffer;
-	
-	strcpy(buf, "");
-		
-	// REGISTERPARAM records
-	c = newBuffer();
-	for(i = 0; i < bufferLength(args); i++)
-	{
-		if(p[i] == '\0')
-		{
-			bufferWriteU8(c, 0);
-			bufferWriteHardString(c, buf, strlen(buf)+1);	
-			strcpy(buf, "");
-			num_args++;
-		}
-		else
-		 strncat(buf, &p[i], 1);
-	}
-
-  bufferWriteOp(out, SWFACTION_DEFINEFUNCTION2);
-
-	if(func_name == NULL)
-	{
-		printf("adding SWF_DEFINEFUNCTION2 %d %d %d\n", num_args, bufferLength(args), bufferLength(code));
-		bufferWriteS16(out, bufferLength(c) + 8);
-		bufferWriteU8(out, 0); 											/* empty function name */
-	}
-	else
-	{
-		printf("adding SWF_DEFINEFUNCTION2 %s %d %d %d\n", func_name, num_args, bufferLength(args), bufferLength(code));
-		bufferWriteS16(out, bufferLength(c) + strlen(func_name) + 1 + 8);
-		bufferWriteHardString(out, func_name, strlen(func_name)+1);	 
-	}
-  bufferWriteS16(out, num_args);							/* number of params */
-  bufferWriteU8(out, num_flags);  						/* register count */
- 	bufferWriteS16(out, flags); 								/* flags */	
- 	bufferConcat(out, c);
-  bufferWriteS16(out, bufferLength(code));		/* code size */
-  bufferConcat(out, code);
-}
-
-Package newPackage(char *path, enum SWFPackageType type)
-{
-	int i;
-	Package p = (Package)malloc(PACKAGE_SIZE);
-	p->type = type;
-	p->path = (char *)malloc(strlen(path) + 1);
-	strcpy(p->path, path);
-
-	/* dots in classname? */
-	if(strrchr(path, '.') == NULL)
-	{
-		p->name = (char *)malloc(strlen(path) + 1);
-		strcpy(p->name, path);
-		p->ns = "";
-	}
-	else
-	{
-		char *tmp = strrchr(path, '.');
-		p->name = (char *)malloc(strlen(&tmp[1]) + 1);
-		strcpy(p->name, &tmp[1]);
-		
-		p->ns = (char *) malloc(strlen(path) - strlen(p->name));
-		strcpy(p->ns, "");
-		for(i = 0; i < strlen(path) - strlen(p->name) - 1; i++)
-		{
-			strncat(p->ns, &path[i], 1);
-		}
-	}
-
-	p->prev = NULL;
-	p->next = NULL;
-	p->head = p;
-			
-	return p;
-}
-
-void destroyPackage(Package p)
-{
-	if(p == NULL)
-		return;
-	free(p->path);
-	free(p->name);
-	free(p->ns);
-	free(p);
-}
-
-void printPackage(Package p)
-{
-	char buf[2048];
-
-	if(p == NULL)
-		return;
-
-	strcpy(buf, "");
-	if(p->name != NULL)
-	{
-		sprintf(buf, "name : %s\n", p->name);
-	}
-	if(p->path != NULL)
-	{
-		sprintf(buf, "%spath: %s\n", buf, p->path);
-	}
-	if(p->ns != NULL)
-	{
-		sprintf(buf, "%sns  : %s\n", buf, p->ns);
-	}
-	printf("%s", buf);
-}
-
-/* add a package */
-void addPackage(char *path)
-{
-	Package p = NULL;
-	
-	if(packageExists(path))
-		return;
-
-	p = newPackage(path, PACKAGE_CLASS);
-	
-	printf("adding package: %s\n", p->path);
-	
-	if(packages == NULL) 
-	{
-		p->prev = NULL;
-		p->next = NULL;
-		p->head = p;
-		packages = p;
-	}
-	else
-	{
-		packages = packages->head;
-		while(packages->next != NULL)
-		{
-			packages = packages->next;
-		}
-		p->prev = packages;
-		p->next = NULL;
-		p->head = packages->head;
-		packages->next = p;
-		packages = packages->next;
-	}
-}
-
-void destroyPackages()
-{
-	packages = packages->head;
-
-	while(packages->next != NULL)
-	{
-		packages = packages->next;
-		free(packages->prev->path);
-		free(packages->prev->name);
-		free(packages->prev);
-	}
-	free(packages->path);
-	free(packages->name);
-	free(packages);
-}
-
-/* number of packages */
-int packageCount()
-{
-	int cnt = 0;
-	
-	if(packages == NULL)
-		return cnt;
-	else
-		cnt = 1;
-		
-	packages = packages->head;
-
-	/* count 'm */
-	while(packages->next != NULL)
-	{
-		packages = packages->next;
-		cnt++;
-	}
-	return cnt;
-}
-
-/* does a package exist? */
-int packageExists(char *path)
-{
-	if(packages == NULL || path == NULL)
-	{
-		return 0;
-	}
-
-	packages = packages->head;
-
-	while(1)
-	{
-		if(strcmp(packages->path, path) == 0)
-			return 1;
-		
-		if(packages->next == NULL)
-			break;
-
-		packages = packages->next;
-	}
-	
-	return 0;
-}
-
-Package packageByName(char *name)
-{
-	if(packageExistsByName(name) == 0)
-	{
-		return NULL;
-	}
-	packages = packages->head;
-	
-	while(1)
-	{
-		if(strcmp(packages->name, name) == 0 || strcmp(packages->path, name) == 0)
-			return packages;
-		
-		if(packages->next == NULL)
-			break;
-
-		packages = packages->next;
-	}	
-	return NULL;
-}
-
-int packageExistsByName(char *name)
-{
-	if(packages == NULL || name == NULL)
-	{
-		return 0;
-	}	
-	if(packageExists(name))
-	{
-		return 1;
-	}
-	packages = packages->head;	
-	while(1)
-	{
-		if(strcmp(packages->name, name) == 0 || strcmp(packages->path, name) == 0)
-			return 1;
-		
-		if(packages->next == NULL)
-			break;
-
-		packages = packages->next;
-	}
-	
-	return 0;
-}
 
 /*
  * Local variables:
