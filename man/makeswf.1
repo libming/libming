@@ -42,5 +42,19 @@ The file is not required to be found at compile time, and
 no check is performed to ensure symbols are therein defined.
 It will be loaded at runtime, so make sure to specify the
 correct runtime path to find it.
+.TP
+\fB\-h\fR 
+Print quick help.
+.TP
+\fB\-V\fR 
+Print version and copyright info.
+.SH PREPROCESSOR
+.B makeswf
+invokes the C preprocessor on each of the given source filenames before
+compiling them. The preprocessed version is named after the source file
+with .pp appended; check this file when looking for line numbers reported
+in syntax errors. 
 .SH AUTHOR
 Written by Sandro Santilli <strk@keybit.net>
+.SH COPYRIGHT
+Code is released under the GNU GPL license.

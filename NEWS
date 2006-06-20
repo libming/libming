@@ -1,5 +1,7 @@
 0.4.0-beta - 2006-??-??
 
+	* makeswf now provides an __SWF_VERSION__ macro for use
+	  in cross-version ActionScript code.
 	* Bitmaps no longer hard coded to 20x scale
 	  (bogus, now hardcoded to 1x scale)
 

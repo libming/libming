@@ -2,7 +2,7 @@
  *
  *  makeswf - a command line actionscript compiler
  *
- *  Copyright (C) 2003 2004 2005 "Sandro Santilli" <strk@keybit.net>
+ *  Copyright (C) 2003 2004 2005 2006 "Sandro Santilli" <strk@keybit.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,9 +28,10 @@
  *  only when coding in pure actionscript, thus probably
  *  only when using the Flash 6 drawing API.
  *
- *  Input files are preprocessed unless you provide
- *  the -p flag (do not use preprocessor). -D can be used to set macros
- *  and -I to add dirs to include search paths.
+ *  Input files are preprocessed 
+ *  -D can be used to set macros and -I to add dirs to include search paths.
+ *  You can skip the preprocessing step using the -p switch, but this
+ *  is undocumented/deprecated.
  *
  *  If you need another kind of preprocessing change the CPP define on
  *  top of this file.
@@ -45,7 +46,8 @@
  *  TODO
  *  ----
  * 
- *  - Accept -V for versioning and credits.
+ *  - Have main ./configure script detect HAVE_GETOPT_LONG and set
+ *    DEFAULT_FLAGS in makeswf.h
  *
  ***************************************************************************/
 
@@ -129,6 +131,8 @@ static char lastcompilemessage[MAXERRORMSG];
 static int lastcompilefailed = 0;
 static char **import_specs;
 static int numimport_specs = 0;
+static int swfversion = DEFSWFVERSION;
+static const char *RCSID = "$Id$";
 SWFMovie mo;
 
 void
@@ -145,6 +149,8 @@ usage (char *me, int ex)
 	fprintf(stderr, " -I <includedir>\n");
 	fprintf(stderr, " -D <macro>[=<def>]>\n");
 	fprintf(stderr, " -i <library.swf>:<sym>[,<sym>]>\n");
+	fprintf(stderr, " -h  Print this help screen\n");
+	fprintf(stderr, " -V  Print version and copyright info\n");
 	exit(ex);
 }
 
@@ -223,7 +229,6 @@ main (int argc, char **argv)
 	struct stat statbuf;
 	int width=640, height=480;    /* default stage size */
 	int i;
-	int swfversion = DEFSWFVERSION;
 	int swfcompression = DEFSWFCOMPRESSION;
 	int dopreprocess = 1; /* use preprocessor by default */
 	int framerate = 12;
@@ -233,13 +238,15 @@ main (int argc, char **argv)
 	{
 		{"dont-preprocess", 0, 0, 'p'},
 		{"frame-rate", 1, 0, 'r'},
-		{"version", 1, 0, 'v'},
+		{"swfversion", 1, 0, 'v'},
 		{"compression", 1, 0, 'c'},
 		{"includepath", 1, 0, 'I'},
 		{"define", 1, 0, 'D'},
 		{"size", 1, 0, 's'},
 		{"output", 1, 0, 'o'},
 		{"import", 1, 0, 'i'},
+		{"version", 1, 0, 'V'},
+		{"help", 1, 0, 'h'},
 		{0, 0, 0, 0}
 	};
 	int opts_idx;
@@ -260,10 +267,11 @@ main (int argc, char **argv)
 	{
 		char buf [1024];
 
+		const char *optstring = "Vhps:r:D:I:v:c:i:o:";
 #ifdef HAVE_GETOPT_LONG
-		c = getopt_long (argc, argv, "ps:r:D:I:v:c:i:o:", opts, &opts_idx);
+		c = getopt_long (argc, argv, optstring, opts, &opts_idx);
 #else
-		c = getopt (argc, argv, "ps:r:D:I:v:i:c:o:");
+		c = getopt (argc, argv, optstring);
 #endif
 		if (c == -1) break;
 
@@ -275,19 +283,19 @@ main (int argc, char **argv)
 			case 's':
 				if ( sscanf(optarg, "%dx%d", &width, &height) != 2 )
 				{
-					usage(argv[0], 1);
+					usage(argv[0], EXIT_FAILURE);
 				}
 				break;
 			case 'v':
 				if ( sscanf(optarg, "%d", &swfversion) != 1 )
 				{
-					usage(argv[0], 1);
+					usage(argv[0], EXIT_FAILURE);
 				}
 				break;
 			case 'c':
 				if ( sscanf(optarg, "%d", &swfcompression) != 1 )
 				{
-					usage(argv[0], 1);
+					usage(argv[0], EXIT_FAILURE);
 				}
 				if ( swfcompression < -1 || swfcompression > 9 )
 				{
@@ -298,7 +306,7 @@ main (int argc, char **argv)
 			case 'r':
 				if ( sscanf(optarg, "%d", &framerate) != 1 )
 				{
-					usage(argv[0], 1);
+					usage(argv[0], EXIT_FAILURE);
 				}
 				break;
 			case 'I':
@@ -327,15 +335,22 @@ main (int argc, char **argv)
 				}
 				strcat(cppargs, buf);
 				break;
+			case 'V':
+				printf("%s\n", RCSID);
+				printf("Copyright (C) 2001-2006 \"Sandro Santilli\" <strk@keybit.net>.\n");
+				printf("Released under the GNU General Public License.\n");
+				exit(EXIT_SUCCESS);
+			case 'h':
+				usage(argv[0], EXIT_SUCCESS);
 			default:
-				usage(argv[0], 1);
+				usage(argv[0], EXIT_FAILURE);
 				break;
 		}
 	}
 	argv+=optind;
 	argc-=optind;
 
-	if ( argc < 1 ) usage(me, 1);
+	if ( argc < 1 ) usage(me, EXIT_FAILURE);
 
 	if ( ! stat(outputfile, &statbuf) )
 	{
@@ -344,7 +359,7 @@ main (int argc, char **argv)
 	if ( Ming_init() )
 	{
 		fprintf(stderr, "Ming initialization error\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	Ming_setWarnFunction(warningHandler);
 	Ming_setErrorFunction(compileError);
@@ -401,7 +416,7 @@ main (int argc, char **argv)
 		{
 			printf("failed:\n"); 
 			printCompileMessage();
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 		else
 		{
@@ -462,7 +477,8 @@ preprocess (char *file, char *out, char *cppargs)
 	char buf[1024];
 	int ret;
 
-	sprintf(buf, "%s %s %s > %s", CPP, cppargs, file, out);
+	sprintf(buf, "%s -D__SWF_VERSION__=%d %s %s > %s", CPP,
+		swfversion, cppargs, file, out);
 	//printf("%s\n", buf);
 
 	ret = system(buf);
@@ -537,6 +553,10 @@ add_imports()
 /*************************************************************8
  *
  * $Log$
+ * Revision 1.22  2006/06/20 22:16:13  strk
+ * makeswf:
+ *   - Added __SWF_VERSION__ macro definition for use in source files
+ *
  * Revision 1.21  2006/05/06 10:38:37  strk
  * Fixed support for builds w/out zlib in SWF_output and listswf.
  * Added handler for Ming's warning in command line compiler
