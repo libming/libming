@@ -541,36 +541,44 @@ void lower(char *s)
 	}
 }
 
+
 /* this code will eventually help to pop extra values off the
  stack and make sure that continue and break address the proper
  context
  */
 static enum ctx *ctx_stack = {0};
 static int ctx_count = {0}, ctx_len = {0};
-void addctx(enum ctx val)
+
+#if DEBUG
+static void dump_stack()
 {
 	int n;
-	if(ctx_count >= ctx_len)
-		ctx_stack = (enum ctx*) realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
-	ctx_stack[ctx_count++] = val;
-
 	printf("stack is now:\n");
 	for(n = ctx_count; n-- > 0;)	
 	{
 		printf("=> %d\n", ctx_stack[n]);
 	}
 }
+#endif
+
+void addctx(enum ctx val)
+{
+	if(ctx_count >= ctx_len)
+		ctx_stack = (enum ctx*) realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
+	ctx_stack[ctx_count++] = val;
+
+#if DEBUG
+	dump_stack();
+#endif
+}
 void delctx(enum ctx val)
 {
-	int n;
 	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
 		SWF_error("consistency check in delctx");
 	
-	printf("stack is now:\n");
-	for(n = ctx_count; n-- > 0;)	
-	{
-		printf("=> %d\n", ctx_stack[n]);
-	}
+#if DEBUG
+	dump_stack();
+#endif
 }
 
 int chkctx(enum ctx val)
