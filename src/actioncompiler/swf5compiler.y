@@ -12,7 +12,7 @@
 #include "assembler.h"
 
 #define YYPARSE_PARAM buffer
-#define DEBUG 1
+/*#define DEBUG 1*/
 
 Buffer bf, bc;
 
