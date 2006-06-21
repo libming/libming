@@ -448,7 +448,6 @@ outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
 	  outputSWF_GLYPHENTRY( &(trec->GlyphEntries[i]) );
 }
 
-
 /* Output Flash Blocks */
 
 void
@@ -668,6 +667,13 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 	outputSWF_RECT (&(sblock->FontBoundsTable[i]));
       }
     printf (" KerningCount: %d\n", sblock->KerningCount);
+    for (i = 0; i < sblock->KerningCount; i++)
+      {
+	printf (" FontKerningTable[%3.3d]: %d,%d %d\n", i,
+		  sblock->FontKerningTable[i].FontKerningCode1,
+		  sblock->FontKerningTable[i].FontKerningCode2,
+		  sblock->FontKerningTable[i].FontKerningAdjustment);
+      }
   }
 
 }
