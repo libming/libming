@@ -978,7 +978,9 @@ outputSWF_PREBUILTCLIP (SWF_Parserstruct * pblock)
 void
 outputSWF_PROTECT (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_PROTECT);
+  OUT_BEGIN (SWF_PROTECT);
+
+  printf(" Password: %s\n", sblock->Password);
 
 }
 

@@ -1194,7 +1194,7 @@ struct SWF_PREBUILTCLIP
 
 struct SWF_PROTECT
 {
-  int chid;
+  STRING Password;
 };
 
 struct SWF_REMOVEOBJECT

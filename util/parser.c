@@ -1937,7 +1937,7 @@ parseSWF_PROTECT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_PROTECT);
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->Password = readBytes (f, length);
 
   PAR_END;
 }
