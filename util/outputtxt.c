@@ -421,6 +421,17 @@ outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
   printf ("  StyleFlagHasColor: %d ", trec->StyleFlagHasColor);
   printf ("  StyleFlagHasYOffset: %d ", trec->StyleFlagHasYOffset);
   printf ("  StyleFlagHasXOffset: %d\n", trec->StyleFlagHasXOffset);
+
+  if ( trec->TextRecordType == 0 )
+  {
+  	/*
+	 * parser doesn't initialize any other
+	 * member when TextRecordType == 0,
+	 * see parseSWF_TEXTRECORD in parser.c
+	 */
+  	return;
+  }
+
   if( trec->StyleFlagHasFont )
     printf ("  FontID: %d\n", trec->FontID);
   if( trec->StyleFlagHasColor ) {
