@@ -5,6 +5,11 @@
 	  in cross-version ActionScript code.
 	* Bitmaps no longer hard coded to 20x scale
 	  (bogus, now hardcoded to 1x scale)
+	* NEW functions: SWFDisplayItem_getMatrix(),
+	  SWFPosition_getMatrix(), SWFMatrix_getScaleX(),
+	  SWFMatrix_getRotate0(), SWFMatrix_getRotate1(),
+	  SWFMatrix_getScaleY(), SWFMatrix_getTranslateX(),
+	  SWFMatrix_getTranslateY(), SWFShape_moveScaledPenTo().
 
 0.3.1 - ?
 
