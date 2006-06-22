@@ -153,7 +153,8 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	movie->version = version;
 	movie->blockList = newSWFBlockList();
 	movie->displayList = newSWFDisplayList();
-	movie->bounds = newSWFRect(0, 320, 0, 240);
+	/* Default movie dimension is hard-coded to 320x240 pixels */
+	movie->bounds = newSWFRect(0, 320*20, 0, 240*20);
 	movie->rate = 12.0;
 	movie->totalFrames = 1;
 	movie->nFrames = 0;
@@ -211,6 +212,7 @@ SWFMovie_setDimension(SWFMovie movie /* movie to adjust */,
 	if ( movie->bounds != NULL )
 		free(movie->bounds);
 	
+	/*printf("Ming_scale: %g, with: %g, height: %g\n", Ming_scale, width, height);*/
 	movie->bounds = newSWFRect(0, (int)rint(Ming_scale*width),
 														 0, (int)rint(Ming_scale*height));
 }
