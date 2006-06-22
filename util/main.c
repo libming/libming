@@ -17,7 +17,7 @@
 #include "ming_config.h"
 
 //decompression
-#ifdef USE_ZLIB
+#ifdef HAVE_ZLIB_H
 #include <zlib.h>
 #endif
 

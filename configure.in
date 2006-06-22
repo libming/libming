@@ -1,14 +1,27 @@
-AC_INIT(ming.i)
 
+AC_INIT(ming, 0.4.0-beta)
+
+dnl Tell configure to look in the config subdirectory
+dnl for config.guess, config.sub, etc
+AC_CONFIG_AUX_DIR(config)
+
+AM_INIT_AUTOMAKE
+
+dnl -- Release version 
 MAJOR_VERSION=0
 MINOR_VERSION=4
 MICRO_VERSION=0-beta
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
-dnl Tell configure to look in the config subdirectory
-dnl for config.guess, config.sub, etc
-AC_CONFIG_AUX_DIR(config)
+dnl -- Version info for libtool
+INTERFACE_CURRENT=4
+INTERFACE_REVISION=0
+INTERFACE_AGE=4
+
+AC_SUBST(INTERFACE_CURRENT)
+AC_SUBST(INTERFACE_REVISION)
+AC_SUBST(INTERFACE_AGE)
 
 dnl GNU recommended way to determine host variables (OS, etc)
 AC_CANONICAL_HOST
@@ -16,8 +29,23 @@ AC_CANONICAL_HOST
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+
 AC_PATH_PROG(PYTHON, python)
+dnl AM_CONDITIONAL(USE_PYTHON, test x"$PYTHON" != x)
+AM_CONDITIONAL(BUILD_PYTHON_EXTENSION, false)
+
 AC_PATH_PROG(PERL, perl)
+dnl AM_CONDITIONAL(USE_PERL, test x"$PERL" != x)
+AM_CONDITIONAL(HAVE_PERL, test x"$PERL" != x)
+AM_CONDITIONAL(BUILD_PERL_EXTENSION, false)
+
+AC_PATH_PROG(PHP, php)
+dnl AM_CONDITIONAL(USE_PHP, test x"$PHP" != x)
+AM_CONDITIONAL(BUILD_PHP_EXTENSION, false)
+
+AC_PROG_YACC
+AM_PROG_LEX
+AC_PROG_LIBTOOL
 
 dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
@@ -39,6 +67,7 @@ AC_CHECK_LIB(z, compress2,
 	dnl Windows has the zlib library, but its named zdll instead
 	AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
 )
+AC_CHECK_HEADERS([zlib.h])
 
 dnl Check if the vasprintf function exists on this platform
 dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
@@ -54,64 +83,24 @@ AC_CHECK_FUNC(sin, MATHLIB="", [
 	)]
 )
 
-EXTRA_OBJS=
-EXTRA_BINS=
+AC_DEFINE(TRACK_ALLOCS, 1, [Define this if you want Ming to track all objects allocations. Ming will mantain a doubly linked list of allocated objects, call Ming_collectGarbage() to get rid of them all])
 
+AM_CONDITIONAL(USE_ZLIB, test x${ZLIB} != x)
 if test -n "${ZLIB}"; then
-	AC_DEFINE(USE_ZLIB)
+	AC_DEFINE([USE_ZLIB], [1], [Use zlib])
 fi
 
+AM_CONDITIONAL(USE_GIF, test x${GIFLIB} != x)
 if test -n "${GIFLIB}"; then
-	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
-	EXTRA_BINS="$EXTRA_BINS gif2dbl gif2mask"
-	AC_DEFINE(USE_GIF)
+	AC_DEFINE(USE_GIF, [1], [Use gif library])
 fi
 
+AM_CONDITIONAL(USE_PNG, test x${PNGLIB} != x)
 if test -n "${PNGLIB}"; then
-	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
-	EXTRA_BINS="$EXTRA_BINS png2dbl png2swf dbl2png"
-	AC_DEFINE(USE_PNG)
+ 	AC_DEFINE(USE_PNG, [1], [Use png library])
 fi
 
-case "${host_os}" in
-	*darwin*)
-		SHLIBEXT=".\$(MING_VERSION).dylib"
-		SHORT_SHLIBEXT=".\$(MAJOR_VERSION).dylib"
-		NOVAR_SHLIBEXT=".dylib"
-		SHLIBLDFLAGS="-dynamiclib \
-			-compatibility_version \
-			\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
-			-current_version \
-			\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
-			-install_name \$(libdir)/\$(SHAREDLIB)"
-		CFLAGS="$CFLAGS -fno-common"
-		;;
-	*linux*)
-		SHLIBLDFLAGS="-shared -Wl,-soname,libming.so.\$(MAJOR_VERSION)"
-		SHLIBEXT=".so.\$(MING_VERSION)"
-		SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
-		NOVAR_SHLIBEXT=".so"
-		SHCFLAGS="-fPIC"
-		;;
-	*solaris*)
- 		SHLIBLDFLAGS="-shared -Wl"
-		SHLIBEXT=".so.\$(MING_VERSION)"
-		SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
-		NOVAR_SHLIBEXT=".so"
- 		SHCFLAGS="-fPIC"
-		;;
-	mingw*)
-		SHLIBLDFLAGS="-shared -Wl,-soname,libming.dll"
-		SHLIBEXT=".dll"
-		NOVAR_SHLIBEXT=".dll"
-		;;
-	*)
-		SHLIBLDFLAGS="-shared"
-		SHLIBEXT=".so.\$(MING_VERSION)"
-		SHORT_SHLIBEXT=".so.\$(MAJOR_VERSION)"
-		NOVAR_SHLIBEXT=".so"
-esac
-
+CFLAGS="$CFLAGS -Wall"
 MACHINE=`uname -m`
 if test "$MACHINE" = "x86_64"; then
 	CFLAGS="$CFLAGS -fPIC"
@@ -120,8 +109,6 @@ fi
 AC_SUBST(SHLIBLDFLAGS)
 AC_SUBST(SHLIBEXT)
 AC_SUBST(SHCFLAGS)
-AC_SUBST(EXTRA_OBJS)
-AC_SUBST(EXTRA_BINS)
 AC_SUBST(GIFLIB)
 AC_SUBST(PNGLIB)
 AC_SUBST(MATHLIB)
@@ -136,4 +123,22 @@ AC_SUBST(MING_VERSION)
 
 AC_CONFIG_HEADER(src/ming_config.h)
 
-AC_OUTPUT(Makefile.config src/ming.h util/ming-config)
+dnl AC_OUTPUT(Makefile.config src/ming.h util/ming-config)
+AC_OUTPUT([
+	docs/Makefile
+	docs/man/Makefile
+	Makefile 
+	src/actioncompiler/Makefile
+	src/blocks/Makefile
+	src/Makefile
+	src/ming.h
+	test/Makefile
+	test/Movie/Dimension/Makefile
+	test/Movie/Makefile
+	test/Movie/new/Makefile
+	test/Movie/NumFrames/Makefile
+	test/Movie/Rate/Makefile
+	util/Makefile
+	util/ming-config
+	test/dotests
+])

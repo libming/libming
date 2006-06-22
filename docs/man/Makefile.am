@@ -1,8 +1,7 @@
-include ../../Makefile.config
+dist_man1_MANS = \
+	makeswf.1
 
-MAN1 = makeswf.1
-
-MAN3 =	\
+dist_man3_MANS =				\
 	destroySWFMovie.3		\
 	Ming_getScale.3			\
 	Ming_init.3			\
@@ -18,8 +17,3 @@ MAN3 =	\
 	SWFMovie_setNumberOfFrames.3	\
 	SWFMovie_setRate.3
 
-install: 
-	$(INSTALL) -d $(mandir)/man1
-	$(INSTALL_DATA) $(MAN1) $(mandir)/man1
-	$(INSTALL) -d $(mandir)/man3
-	$(INSTALL_DATA) $(MAN3) $(mandir)/man3

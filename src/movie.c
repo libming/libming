@@ -19,18 +19,20 @@
 
 /* $Id$ */
 
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <zlib.h>
+#include "ming_config.h"
 
 #include "ming.h"
-#include "ming_config.h"
 
 #include "movie.h"
 #include "shape_util.h"
 #include "blocklist.h"
 #include "displaylist.h"
+
+/*
+ * If we move math.h include *after* block.h
+ * compiler issues errors (?!)
+ */
+#include <math.h>
 
 #include "blocks/block.h"
 #include "blocks/method.h"
@@ -47,6 +49,12 @@
 #include "blocks/soundinstance.h"
 #include "libming.h"
 
+#ifdef HAVE_ZLIB_H
+# include <zlib.h>
+#endif
+
+#include <stdlib.h>
+#include <string.h>
 
 struct SWFMovie_s
 {
