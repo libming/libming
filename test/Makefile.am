@@ -17,8 +17,8 @@ endif
 # Currently, perl is required to run the ./dotest script
 if HAVE_PERL
 
-TESTS_ENVIRONMENT = BINDINGS="$(BINDINGS)" $(PERL)
-TESTS = dotests
+#TESTS_ENVIRONMENT = BINDINGS="$(BINDINGS)" $(PERL)
+#TESTS = dotests
 
 endif 
 

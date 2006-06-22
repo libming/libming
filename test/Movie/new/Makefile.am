@@ -2,6 +2,9 @@ SUBDIRS =
 
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
+TESTS = newSWFMovieTest
+
 EXTRA_DIST = 		\
 	test01.php	\
 	test01.pl	\
@@ -26,23 +29,8 @@ EXTRA_DIST = 		\
 	TestList
 
 check_PROGRAMS = \
-	test01 \
-	test02 \
-	test03 \
-	test04 \
-	test05
+	newSWFMovieTest
 
-test01_SOURCES = test01.c
-test01_LDADD = $(top_builddir)/src/libming.la
+newSWFMovieTest_SOURCES = newSWFMovieTest.c
+newSWFMovieTest_LDADD = $(top_builddir)/src/libming.la
 
-test02_SOURCES = test02.c
-test02_LDADD = $(top_builddir)/src/libming.la
-
-test03_SOURCES = test03.c
-test03_LDADD = $(top_builddir)/src/libming.la
-
-test04_SOURCES = test04.c
-test04_LDADD = $(top_builddir)/src/libming.la
-
-test05_SOURCES = test05.c
-test05_LDADD = $(top_builddir)/src/libming.la

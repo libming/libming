@@ -141,5 +141,4 @@ AC_OUTPUT([
 	macros/Makefile
 	util/Makefile
 	util/ming-config
-	test/dotests
 ])
