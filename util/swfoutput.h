@@ -2,7 +2,7 @@
 
 typedef void (*SWFOutputFunc)(SWF_Parserstruct *);
 
-struct SWFOutput {
+struct SWFBlockOutput {
 	SWFBlocktype	type;
 	SWFOutputFunc	output;
 };

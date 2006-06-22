@@ -52,7 +52,7 @@ static char spritename[64];
 	struct block *sblock = (struct block *)pblock; \
 	printf( "\n" COMMSTART " " #block " " COMMEND "\n");
 
-static struct SWFOutput outputs[] = {
+static struct SWFBlockOutput outputs[] = {
   {SWF_CHARACTERSET, outputSWF_CHARACTERSET},
   {SWF_DEFINEBITS, outputSWF_DEFINEBITS},
   {SWF_DEFINEBITSJPEG2, outputSWF_DEFINEBITSJPEG2},
@@ -113,7 +113,7 @@ static struct SWFOutput outputs[] = {
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
 };
 
-static int numOutputs = sizeof (outputs) / sizeof (struct SWFOutput);
+static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
 
 /* Handle language syntax differnces with these function */
 
