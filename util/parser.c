@@ -1413,7 +1413,7 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
 		parserrec->FontKerningTable[i].FontKerningCode1 = readUInt8 (f);
 		parserrec->FontKerningTable[i].FontKerningCode2 = readUInt8 (f);
 	    }
-	    parserrec->FontKerningTable[i].FontKerningADjustment = readSInt16 (f);
+	    parserrec->FontKerningTable[i].FontKerningAdjustment = readSInt16 (f);
 	  }
   }
 
