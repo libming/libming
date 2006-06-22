@@ -10,7 +10,10 @@ EXTRA_DIST = \
 	TestList
 
 check_PROGRAMS = \
-	test01
+	setNumberOfFramesTest
 
-test01_SOURCES = test01.c
-test01_LDADD = $(top_builddir)/src/libming.la
+TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
+TESTS = setNumberOfFramesTest
+
+setNumberOfFramesTest_SOURCES = setNumberOfFramesTest.c
+setNumberOfFramesTest_LDADD = $(top_builddir)/src/libming.la

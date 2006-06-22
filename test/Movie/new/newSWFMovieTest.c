@@ -9,8 +9,8 @@ main()
 	failures += run_test(newSWFMovie(), "test01");
 	failures += run_test(newSWFMovieWithVersion(4), "test02");
 	failures += run_test(newSWFMovieWithVersion(5), "test03");
-	failures += run_test(newSWFMovieWithVersion(6), "test06");
-	failures += run_test(newSWFMovieWithVersion(7), "test07");
+	failures += run_test(newSWFMovieWithVersion(6), "test04");
+	failures += run_test(newSWFMovieWithVersion(7), "test05");
 
 	return failures;
 }

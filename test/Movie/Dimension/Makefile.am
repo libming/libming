@@ -9,7 +9,10 @@ EXTRA_DIST = \
 	test01.ref	\
 	TestList
 
-check_PROGRAMS = test01
+check_PROGRAMS = setDimensionTest
 
-test01_SOURCES = test01.c
-test01_LDADD = $(top_builddir)/src/libming.la
+TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
+TESTS = setDimensionTest
+
+setDimensionTest_SOURCES = setDimensionTest.c
+setDimensionTest_LDADD = $(top_builddir)/src/libming.la
