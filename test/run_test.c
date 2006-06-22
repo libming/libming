@@ -1,5 +1,7 @@
 #include <limits.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <ming.h>
 
 int
 run_test(SWFMovie m, const char *testname)
@@ -10,6 +12,12 @@ run_test(SWFMovie m, const char *testname)
 	const char* top_builddir=getenv("top_builddir");
 	int ret;
 	char run[1024];
+
+	if ( ! ref || ! top_builddir )
+	{
+		fprintf(stderr, "Please export srcdir and top_builddir vars\n");
+		return 1;
+	}
 
 	sprintf(ref, "%s/%s.ref", refdir, testname);
 	sprintf(output, "%s.swf", testname);

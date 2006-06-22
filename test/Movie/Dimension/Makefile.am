@@ -1,6 +1,6 @@
 SUBDIRS = 
 
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/test
 
 EXTRA_DIST = \
 	test01.php	\
@@ -14,5 +14,5 @@ check_PROGRAMS = setDimensionTest
 TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
 TESTS = setDimensionTest
 
-setDimensionTest_SOURCES = setDimensionTest.c
+setDimensionTest_SOURCES = setDimensionTest.c ../../run_test.c
 setDimensionTest_LDADD = $(top_builddir)/src/libming.la

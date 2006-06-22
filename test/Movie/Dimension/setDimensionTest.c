@@ -1,5 +1,5 @@
 #include <libming.h>
-#include "../../run_test.c";
+#include <run_test.h>
 
 static char *test = "test01";
 

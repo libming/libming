@@ -1,4 +1,6 @@
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/test
 
 EXTRA_DIST =  \
 	test01.php	\
@@ -12,5 +14,5 @@ check_PROGRAMS = setRateTest
 TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
 TESTS = setRateTest
 
-setRateTest_SOURCES = setRateTest.c
+setRateTest_SOURCES = setRateTest.c ../../run_test.c
 setRateTest_LDADD = $(top_builddir)/src/libming.la
