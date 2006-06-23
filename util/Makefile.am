@@ -19,7 +19,7 @@ pngprograms =
 endif
 
 if USE_FREETYPE
-ft2programs = ttf2fft
+ft2programs = ttftofft
 else
 ft2programs =
 endif
@@ -95,9 +95,9 @@ listaction_d_SOURCES = outputtxt.c
 listaction_d_LDADD = libutil.la $(top_builddir)/src/libming.la
 listaction_d_CFLAGS = -DACTIONONLY 
 
-ttf2fft_SOURCES = ttf2fft.c outputswf.c
-ttf2fft_LDADD = libutil.la $(top_builddir)/src/libming.la
-ttf2fft_CFLAGS = -DNODECOMPILE 
+ttftofft_SOURCES = ttftofft.c outputswf.c
+ttftofft_LDADD = libutil.la $(top_builddir)/src/libming.la $(FREETYPE_LIBS)
+ttftofft_CFLAGS = -DNODECOMPILE $(FREETYPE_CFLAGS)
 
 listfdb_SOURCES = listfdb.c
 listfdb_LDADD = $(top_builddir)/src/libming.la
