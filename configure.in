@@ -7,6 +7,8 @@ AC_CONFIG_AUX_DIR(config)
 
 AM_INIT_AUTOMAKE
 
+AM_MAINTAINER_MODE
+
 dnl -- Release version 
 MAJOR_VERSION=0
 MINOR_VERSION=4
@@ -50,6 +52,24 @@ AC_PROG_LIBTOOL
 dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
 
+dnl Check for the freetype library
+AC_ARG_WITH(freetype-config, [  --with-freetype-config=PROG   Use FreeType configuration program PROG], freetype_config=$withval, freetype_config=yes)
+
+if test "$freetype_config" = "yes"; then 
+        AC_PATH_PROG(ft_config,freetype-config,no)
+        if test "$ft_config" = "no"; then
+                AC_MSG_ERROR([You must have freetype installed; see http://www.freetype.org/])
+        fi
+else
+        ft_config="$freetype_config"
+fi
+
+FREETYPE_CFLAGS="`$ft_config --cflags`"
+FREETYPE_LIBS="`$ft_config --libs`"
+
+AC_SUBST(FREETYPE_LIBS)
+AC_SUBST(FREETYPE_CFLAGS)
+
 dnl Check for the gif or ungif libraries
 AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", GIFLIB="")
 dnl MinGW check for libungif
@@ -88,6 +108,11 @@ AC_DEFINE(TRACK_ALLOCS, 1, [Define this if you want Ming to track all objects al
 AM_CONDITIONAL(USE_ZLIB, test x${ZLIB} != x)
 if test -n "${ZLIB}"; then
 	AC_DEFINE([USE_ZLIB], [1], [Use zlib])
+fi
+
+AM_CONDITIONAL(USE_FREETYPE, test x${ft_config} != x)
+if test -n "${ft_config}"; then
+	AC_DEFINE(USE_FREETYPE, [1], [Use freetype library])
 fi
 
 AM_CONDITIONAL(USE_GIF, test x${GIFLIB} != x)

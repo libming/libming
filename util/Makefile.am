@@ -18,6 +18,12 @@ else
 pngprograms =
 endif
 
+if USE_FREETYPE
+ft2programs = ttf2fft
+else
+ft2programs =
+endif
+
 bin_PROGRAMS = \
 	listswf \
 	listswf_d \
@@ -32,6 +38,8 @@ bin_PROGRAMS = \
 	listjpeg \
 	raw2adpcm \
 	listmp3 \
+	listmp3 \
+	$(ft2programs) \
 	$(pngprograms) \
 	$(gifprograms)
 
@@ -86,6 +94,10 @@ listaction_CFLAGS = -DACTIONONLY -DNODECOMPILE
 listaction_d_SOURCES = outputtxt.c
 listaction_d_LDADD = libutil.la $(top_builddir)/src/libming.la
 listaction_d_CFLAGS = -DACTIONONLY 
+
+ttf2fft_SOURCES = ttf2fft.c outputswf.c
+ttf2fft_LDADD = libutil.la $(top_builddir)/src/libming.la
+ttf2fft_CFLAGS = -DNODECOMPILE 
 
 listfdb_SOURCES = listfdb.c
 listfdb_LDADD = $(top_builddir)/src/libming.la
