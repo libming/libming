@@ -320,33 +320,38 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
 }
 
 void
-outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
+outputswfSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, SWFOutput out, int fillBits, int lineBits)
 {
+  SWFOutput_writeBits(out,shaperec->EndShape.TypeFlag,1);
   if (shaperec->EndShape.TypeFlag)
     {
       /* An Edge Record */
+      SWFOutput_writeBits(out,shaperec->StraightEdge.StraightEdge,1);
       if (shaperec->StraightEdge.StraightEdge == 1)
 	{
 	  /* A Straight Edge Record */
-	  printf (" Straight EdgeRecord: (%d)",
-		  shaperec->StraightEdge.NumBits);
+          SWFOutput_writeBits(out,shaperec->StraightEdge.NumBits,4);
+          SWFOutput_writeBits(out,shaperec->StraightEdge.GeneralLineFlag,1);
 	  if( shaperec->StraightEdge.GeneralLineFlag ) {
-		  printf(" - (%ld, %ld)\n",shaperec->StraightEdge.DeltaX,shaperec->StraightEdge.DeltaY);
+          	  SWFOutput_writeSBits(out,shaperec->StraightEdge.DeltaX,shaperec->StraightEdge.NumBits+2);
+          	  SWFOutput_writeSBits(out,shaperec->StraightEdge.DeltaY,shaperec->StraightEdge.NumBits+2);
 	  } else {
-	  	if( shaperec->StraightEdge.VertLineFlag ) 
-		  printf(" - (0, %ld)\n",shaperec->StraightEdge.VLDeltaY);
-		else
-		  printf(" - (%ld, 0)\n",shaperec->StraightEdge.VLDeltaX);
+          	SWFOutput_writeBits(out,shaperec->StraightEdge.VertLineFlag,1);
+	  	if( shaperec->StraightEdge.VertLineFlag )  {
+          	  SWFOutput_writeSBits(out,shaperec->StraightEdge.VLDeltaY,shaperec->StraightEdge.NumBits+2);
+		} else {
+          	  SWFOutput_writeSBits(out,shaperec->StraightEdge.VLDeltaX,shaperec->StraightEdge.NumBits+2);
+		}
 	  }
 	}
       else
 	{
 	  /* A Curved Edge Record */
-	  printf (" Curved EdgeRecord: %d", shaperec->CurvedEdge.NumBits);
-	  printf (" Control(%ld,%ld)", shaperec->CurvedEdge.ControlDeltaX,
-		  shaperec->CurvedEdge.ControlDeltaY);
-	  printf (" Anchor(%ld,%ld)\n", shaperec->CurvedEdge.AnchorDeltaX,
-		  shaperec->CurvedEdge.AnchorDeltaY);
+          SWFOutput_writeBits(out,shaperec->CurvedEdge.NumBits,4);
+          SWFOutput_writeSBits(out,shaperec->CurvedEdge.ControlDeltaX,shaperec->CurvedEdge.NumBits+2);
+          SWFOutput_writeSBits(out,shaperec->CurvedEdge.ControlDeltaY,shaperec->CurvedEdge.NumBits+2);
+          SWFOutput_writeSBits(out,shaperec->CurvedEdge.AnchorDeltaX,shaperec->CurvedEdge.NumBits+2);
+          SWFOutput_writeSBits(out,shaperec->CurvedEdge.AnchorDeltaY,shaperec->CurvedEdge.NumBits+2);
 	}
     }
   else
@@ -354,52 +359,50 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
       /* A Non-Edge Record */
       if (shaperec->EndShape.EndOfShape == 0)
 	{
-	  printf ("  ENDSHAPE\n");
+          SWFOutput_writeBits(out,shaperec->EndShape.EndOfShape,5);
 	  return;
 	}
-      printf (" StyleChangeRecord:\n");
-      printf ("  StateNewStyles: %d", shaperec->StyleChange.StateNewStyles);
-      printf (" StateLineStyle: %d ", shaperec->StyleChange.StateLineStyle);
-      printf (" StateFillStyle1: %d\n",
-	      shaperec->StyleChange.StateFillStyle1);
-      printf ("  StateFillStyle0: %d",
-	      shaperec->StyleChange.StateFillStyle0);
-      printf (" StateMoveTo: %d\n", shaperec->StyleChange.StateMoveTo);
+      SWFOutput_writeBits(out,shaperec->StyleChange.StateNewStyles,1);
+      SWFOutput_writeBits(out,shaperec->StyleChange.StateLineStyle,1);
+      SWFOutput_writeBits(out,shaperec->StyleChange.StateFillStyle1,1);
+      SWFOutput_writeBits(out,shaperec->StyleChange.StateFillStyle0,1);
+      SWFOutput_writeBits(out,shaperec->StyleChange.StateMoveTo,1);
 
-      if (shaperec->StyleChange.StateLineStyle) {
-	  printf ("   LineStyle: %ld\n", shaperec->StyleChange.LineStyle);
-      }
-      if (shaperec->StyleChange.StateFillStyle1) {
-	  printf ("   FillStyle1: %ld\n", shaperec->StyleChange.FillStyle1);
-      }
-      if (shaperec->StyleChange.StateFillStyle0) {
-	  printf ("   FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
-      }
       if (shaperec->StyleChange.StateMoveTo)
 	{
-	  printf ("   MoveBits: %d ", shaperec->StyleChange.MoveBits);
-	  printf (" MoveDeltaX: %ld ", shaperec->StyleChange.MoveDeltaX);
-	  printf (" MoveDeltaY: %ld\n", shaperec->StyleChange.MoveDeltaY);
+          SWFOutput_writeBits(out,shaperec->StyleChange.MoveBits,5);
+          SWFOutput_writeSBits(out,shaperec->StyleChange.MoveDeltaX,shaperec->StyleChange.MoveBits);
+          SWFOutput_writeSBits(out,shaperec->StyleChange.MoveDeltaY,shaperec->StyleChange.MoveBits);
 	}
+      if (shaperec->StyleChange.StateFillStyle0) {
+          SWFOutput_writeBits(out,shaperec->StyleChange.FillStyle0,fillBits);
+      }
+      if (shaperec->StyleChange.StateFillStyle1) {
+          SWFOutput_writeBits(out,shaperec->StyleChange.FillStyle1,fillBits);
+      }
+      if (shaperec->StyleChange.StateLineStyle) {
+          SWFOutput_writeBits(out,shaperec->StyleChange.LineStyle,lineBits);
+      }
     }
 }
 
 void
-outputSWF_SHAPE (SWF_SHAPE * shape, char *name)
+outputswfSWF_SHAPE (SWF_SHAPE * shape, SWFOutput out)
 {
   int i;
-  printf (" %s\n", name );
-  printf (" NumFillBits: %d\n", shape->NumFillBits);
-  printf (" NumLineBits: %d\n", shape->NumLineBits);
+  SWFOutput_writeBits(out,shape->NumFillBits,4);
+  SWFOutput_writeBits(out,shape->NumLineBits,4);
   for (i = 0; i < shape->NumShapeRecords; i++)
     {
-      outputSWF_SHAPERECORD (&(shape->ShapeRecords[i]), name);
+      outputswfSWF_SHAPERECORD (&(shape->ShapeRecords[i]), out,shape->NumFillBits,shape->NumLineBits);
     }
+  SWFOutput_byteAlign(out);
 }
 
 void
 outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
 {
+/*
   int i;
 
   outputSWF_FILLSTYLEARRAY (&(shape->FillStyles),"");
@@ -408,8 +411,9 @@ outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
   printf (" NumLineBits: %d\n", shape->NumLineBits);
   for (i = 0; i < shape->NumShapeRecords; i++)
     {
-      outputSWF_SHAPERECORD (&(shape->ShapeRecords[i]),name);
+      outputswfSWF_SHAPERECORD (&(shape->ShapeRecords[i]),name);
     }
+*/
 }
 
 void
@@ -604,7 +608,7 @@ void
 outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 {
 SWFOutput hdr0,hdr1,glyphdata,hdr3;
-  int size;
+  int i,size;
   OUT_BEGIN (SWF_DEFINEFONT2);
 
 size=	5		/* Initial header through FontNameLen */
@@ -628,35 +632,29 @@ SWFOutput_writeUInt8(hdr1,sblock->FontNameLen);
 SWFOutput_writeBuffer(hdr1,sblock->FontName,sblock->FontNameLen);
 SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
 
-/*
-  for (i = 0; i < sblock->NumGlyphs; i++)
-    {
-      if (sblock->FontFlagsWideOffsets)
-	{
-	  printf (" OffsetTable[%3.3d]: %lx\n", i,
-		  sblock->OffsetTable.UI32[i]);
+  for (i = 0; i < sblock->NumGlyphs; i++) {
+      if (sblock->FontFlagsWideOffsets) {
+	SWFOutput_writeUInt32(hdr1,sblock->OffsetTable.UI32[i]);
 	}
       else
 	{
-	  printf (" OffsetTable[%3.3d]: %x\n", i,
-		  sblock->OffsetTable.UI16[i]);
+	SWFOutput_writeUInt16(hdr1,sblock->OffsetTable.UI16[i]);
 	}
     }
   if (sblock->FontFlagsWideOffsets)
     {
-      printf (" CodeTableOffset: %lx\n", sblock->CodeTableOffset.UI32);
+	SWFOutput_writeUInt32(hdr1,sblock->CodeTableOffset.UI32);
     }
   else
     {
-      printf (" CodeTableOffset: %x\n", sblock->CodeTableOffset.UI16);
+	SWFOutput_writeUInt32(hdr1,sblock->CodeTableOffset.UI16);
     }
 
   for (i = 0; i < sblock->NumGlyphs; i++)
     {
-	char shapename[32];
-	sprintf(shapename,"Shape[%3.3d]",i);
-	outputSWF_SHAPE (&(sblock->GlyphShapeTable[i]), shapename);
+	outputswfSWF_SHAPE (&(sblock->GlyphShapeTable[i]), hdr1);
     }
+/*
 
   for (i = 0; i < sblock->NumGlyphs; i++)
     {
