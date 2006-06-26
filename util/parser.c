@@ -359,7 +359,7 @@ parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient, int level)
   int i;
   gradient->NumGradients = readUInt8 (f);
   if( gradient->NumGradients > 8 ) {
-	  fprintf(stderr,"Something is out of sync!!!\nNumGradient %d\n", gradient->NumGradients );
+	  fprintf(stderr,"Something is out of sync in parseSWF_GRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
 	  exit(1);
   }
   for (i = 0; i < gradient->NumGradients; i++)
@@ -597,7 +597,7 @@ parseSWF_MORPHGRADIENT (FILE * f, struct SWF_MORPHGRADIENT *gradient)
   int i;
   gradient->NumGradients = readUInt8 (f);
   if( gradient->NumGradients > 8 ) {
-	  fprintf(stderr,"Something is out of sync!!!\nNumGradient %d\n", gradient->NumGradients );
+	  fprintf(stderr,"Something is out of sync in parseSWF_MORPHGRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
 	  exit(1);
   }
   for (i = 0; i < gradient->NumGradients; i++)
