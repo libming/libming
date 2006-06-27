@@ -1,6 +1,10 @@
 /* output.h */
 
-typedef void (*SWFOutputFunc)(SWF_Parserstruct *);
+#if !defined(OUTPUTRET)
+#define OUTPUTRET void
+#endif
+
+typedef OUTPUTRET (*SWFOutputFunc)(SWF_Parserstruct *);
 
 struct SWFBlockOutput {
 	SWFBlocktype	type;
