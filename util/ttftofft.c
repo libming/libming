@@ -193,7 +193,7 @@ static FT_Outline_Funcs ft_outl_funcs = {
 };
 
 int
-main()
+main(int argc, char *argv)
 {
 SWF_SHAPE *shape;
 SWF_ENDSHAPERECORD *endrec;
@@ -207,7 +207,7 @@ char *fname;
 int i, j, k, maxcode=0;
 
 /* Do some getopt stuff here */
-fname = "VeraBI.ttf";
+fname = argv[1];
 
 if( FT_Init_FreeType( &library ) ) {
 	fprintf(stderr, "** FreeType initialization failed\n");
