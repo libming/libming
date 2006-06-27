@@ -25,7 +25,7 @@
 #include "action.h"
 #include "read.h"
 #include "parser.h"
-#include "outputdecl.h"
+#include "swfoutput.h"
 
 SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
 
