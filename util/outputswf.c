@@ -5,6 +5,7 @@
 #include "action.h"
 #include "parser.h"
 #include "decompile.h"
+#define OUTPUTRET SWFOutput
 #include "swfoutput.h"
 #include "libming.h"
 
@@ -26,6 +27,7 @@ static FILE *outf;
 	struct block *sblock = (struct block *)pblock;
 
 static struct SWFBlockOutput outputs[] = {
+/* Add these back at they are converted 
   {SWF_CHARACTERSET, outputSWF_CHARACTERSET},
   {SWF_DEFINEBITS, outputSWF_DEFINEBITS},
   {SWF_DEFINEBITSJPEG2, outputSWF_DEFINEBITSJPEG2},
@@ -38,7 +40,9 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINECOMMANDOBJ, outputSWF_DEFINECOMMANDOBJ},
   {SWF_DEFINEEDITTEXT, outputSWF_DEFINEEDITTEXT},
   {SWF_DEFINEFONT, outputSWF_DEFINEFONT},
+*/
   {SWF_DEFINEFONT2, outputSWF_DEFINEFONT2},
+/*
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
@@ -84,12 +88,14 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SYNCFRAME, outputSWF_SYNCFRAME},
   {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
+*/
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
 
 /* Output basic Flash Types */
 
+#if 0
 void
 outputSWF_RGBA (SWF_RGBA * rgb, char *pname)
 {
@@ -100,11 +106,7 @@ outputSWF_RGBA (SWF_RGBA * rgb, char *pname)
   printf ("%2x)\n", rgb->alpha);
 }
 
-void
-outputSWF_RECT (SWF_RECT * rect)
-{
-  /* This goes away when all of the references to it are gone */
-}
+#endif
 
 void
 outputswfSWF_RECT (SWFOutput out,SWF_RECT * rect)
@@ -116,6 +118,7 @@ outputswfSWF_RECT (SWFOutput out,SWF_RECT * rect)
   SWFOutput_writeSBits(out,rect->Ymax,rect->Nbits);
 }
 
+#if 0
 void
 outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
 {
@@ -325,6 +328,7 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
       outputSWF_LINESTYLE (&(linestylearray->LineStyles[i]),"",0);
     }
 }
+#endif
 
 void
 outputswfSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, SWFOutput out, int fillBits, int lineBits)
@@ -410,6 +414,7 @@ outputswfSWF_SHAPE (SWF_SHAPE * shape)
   return out;
 }
 
+#if 0
 void
 outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
 {
@@ -614,35 +619,26 @@ outputSWF_DEFINEFONT (SWF_Parserstruct * pblock)
   //OUT_BEGIN (SWF_DEFINEFONT);
 
 }
+#endif
 
-void
+SWFOutput
 outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 {
-  SWFOutput hdr0,hdr1,offsettbl,*glyphdata,hdr3;
+  SWFOutput hdr0,hdr1,offsettbl,*glyphdata;
   int i,size, glyphbase;
   OUT_BEGIN (SWF_DEFINEFONT2);
 
-size=	5		/* Initial header through FontNameLen */
-	+(sblock->FontNameLen)	/* FontName */
-	+2;		/* NumGlyphs */
-
-hdr1=newSizedSWFOutput(size);
-SWFOutput_writeUInt16(hdr1,sblock->FontID);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsHasLayout,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsShiftJis,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsSmallText,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsFlagANSI,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsWideOffsets,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsWideCodes,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsFlagsItalics,1);
-SWFOutput_writeBits(hdr1,sblock->FontFlagsFlagsBold,1);
-SWFOutput_writeUInt8(hdr1,sblock->LanguageCode);
-SWFOutput_writeUInt8(hdr1,sblock->FontNameLen);
-SWFOutput_writeBuffer(hdr1,(unsigned char *)sblock->FontName,sblock->FontNameLen);
-SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
-
 
   glyphdata = calloc(sblock->NumGlyphs,sizeof(SWFOutput *));
+  size=0;
+  for (i = 0; i < sblock->NumGlyphs; i++) {
+	glyphdata[i] = outputswfSWF_SHAPE (&(sblock->GlyphShapeTable[i]));
+	size+= SWFOutput_getLength(glyphdata[i]);
+    }
+
+  if( size > 0xffff ) 
+    sblock->FontFlagsWideOffsets=1;
+
   if (sblock->FontFlagsWideOffsets) {
     glyphbase=(sblock->NumGlyphs*4)+2;
     sblock->OffsetTable.UI32[0]=glyphbase;
@@ -653,9 +649,7 @@ SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
     sblock->OffsetTable.UI16[0]=glyphbase;
     }
 
-  for (i = 0; i < sblock->NumGlyphs; i++)
-    {
-	glyphdata[i] = outputswfSWF_SHAPE (&(sblock->GlyphShapeTable[i]));
+  for (i = 0; i < sblock->NumGlyphs; i++) {
         if (sblock->FontFlagsWideOffsets) {
           sblock->OffsetTable.UI32[i]=sblock->CodeTableOffset.UI32;
 	  sblock->CodeTableOffset.UI32=sblock->OffsetTable.UI32[i]+SWFOutput_getLength(glyphdata[i]);
@@ -674,8 +668,31 @@ SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
 	}
     }
 
+  /* Now that we have the glyph data, and it's offset, we can start assembling
+     this block */
+
+  size=	5		/* Initial header through FontNameLen */
+	+(sblock->FontNameLen)	/* FontName */
+	+2;		/* NumGlyphs */
+
+  hdr1=newSizedSWFOutput(size);
+  SWFOutput_writeUInt16(hdr1,sblock->FontID);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsHasLayout,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsShiftJis,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsSmallText,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsFlagANSI,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsWideOffsets,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsWideCodes,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsFlagsItalics,1);
+  SWFOutput_writeBits(hdr1,sblock->FontFlagsFlagsBold,1);
+  SWFOutput_writeUInt8(hdr1,sblock->LanguageCode);
+  SWFOutput_writeUInt8(hdr1,sblock->FontNameLen);
+  SWFOutput_writeBuffer(hdr1,(unsigned char *)sblock->FontName,sblock->FontNameLen);
+  SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
+
   /* Now, copy these parts into the hdr buffer */
   SWFOutput_writeToMethod(offsettbl,SWFOutputMethod,hdr1);
+  destroySWFOutput(offsettbl);
   if (sblock->FontFlagsWideOffsets)
     {
 	SWFOutput_writeUInt32(hdr1,sblock->CodeTableOffset.UI32);
@@ -686,7 +703,9 @@ SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
     }
   for (i = 0; i < sblock->NumGlyphs; i++) {
     SWFOutput_writeToMethod(glyphdata[i],SWFOutputMethod,hdr1);
+    destroySWFOutput(glyphdata[i]);
   }
+  free(glyphdata);
 
   /* Now, resume the normal linear processing this tag */
 
@@ -708,13 +727,20 @@ SWFOutput_writeUInt16(hdr1,sblock->NumGlyphs);
       }
     for (i = 0; i < sblock->NumGlyphs; i++) {
 	outputswfSWF_RECT (hdr1,&(sblock->FontBoundsTable[i]));
+	SWFOutput_byteAlign(hdr1);
       }
     SWFOutput_writeUInt16(hdr1,sblock->KerningCount);
     for (i = 0; i < sblock->KerningCount; i++) {
-      SWFOutput_writeUInt8(hdr1,sblock->FontKerningTable[i].FontKerningCode1);
-      SWFOutput_writeUInt8(hdr1,sblock->FontKerningTable[i].FontKerningCode2);
-      SWFOutput_writeSInt16(hdr1,sblock->FontKerningTable[i].FontKerningAdjustment);
+      if( sblock->FontFlagsWideCodes ) {
+      	SWFOutput_writeUInt16(hdr1,sblock->FontKerningTable[i].FontKerningCode1);
+      	SWFOutput_writeUInt16(hdr1,sblock->FontKerningTable[i].FontKerningCode2);
+      	SWFOutput_writeSInt16(hdr1,sblock->FontKerningTable[i].FontKerningAdjustment);
+      } else {
+      	SWFOutput_writeUInt8(hdr1,sblock->FontKerningTable[i].FontKerningCode1);
+      	SWFOutput_writeUInt8(hdr1,sblock->FontKerningTable[i].FontKerningCode2);
+      	SWFOutput_writeSInt16(hdr1,sblock->FontKerningTable[i].FontKerningAdjustment);
       }
+    }
   }
 
 /* This code really belongs in outputTAGHeader() */
@@ -729,12 +755,13 @@ if(SWFOutput_getLength(hdr1) <= 62 ) {
 	SWFOutput_writeUInt32(hdr0,SWFOutput_getLength(hdr1));
 }
 
-SWFOutput_setNext(hdr0,hdr1);
+SWFOutput_writeToMethod(hdr1,SWFOutputMethod,hdr0);
+destroySWFOutput(hdr1);
 
-SWFOutput_writeToMethod(hdr0,fileOutputMethod,stdout);
-destroySWFOutput(hdr0);
+return hdr0;
 }
 
+#if 0
 void
 outputSWF_DEFINEFONTINFO (SWF_Parserstruct * pblock)
 {
@@ -1157,15 +1184,18 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
   //OUT_BEGIN (SWF_VIDEOFRAME);
 
 }
+#endif
 
-void
-printRect(struct Rect *r)
-{
-	printf("(%i,%i)x(%i,%i)", r->xMin, r->xMax, r->yMin, r->yMax);
-}
+static SWFOutput swfout;
 
 void
 outputHeader (struct Movie *m)
+{
+swfout=newSWFOutput();
+}
+
+void
+outputTrailer (struct Movie *m)
 {
 SWFOutput out;
 
@@ -1174,7 +1204,7 @@ SWFOutput_writeUInt8(out,'F');
 SWFOutput_writeUInt8(out,'W');
 SWFOutput_writeUInt8(out,'S');
 SWFOutput_writeUInt8(out,4);
-SWFOutput_writeUInt32(out,m->size);
+SWFOutput_writeUInt32(out,SWFOutput_getLength(swfout)+23 /*size of header*/);
 SWFOutput_writeBits(out,15,5);
 SWFOutput_writeSBits(out,m->frame.xMin,15);
 SWFOutput_writeSBits(out,m->frame.xMax,15);
@@ -1183,19 +1213,18 @@ SWFOutput_writeSBits(out,m->frame.yMax,15);
 SWFOutput_byteAlign(out);
 SWFOutput_writeUInt16(out,m->rate);
 SWFOutput_writeUInt16(out,m->nFrames);
+fprintf(stderr,"Header size %d\n", SWFOutput_getLength(out));
 SWFOutput_writeToMethod(out,fileOutputMethod,stdout);
+SWFOutput_writeToMethod(swfout,fileOutputMethod,stdout);
+destroySWFOutput(swfout);
 destroySWFOutput(out);
-}
-
-void
-outputTrailer (struct Movie *m)
-{
 }
 
 void
 outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
 		int offset, int length)
 {
+  SWFOutput blkout;
   int i;
 
   if (type < 0)
@@ -1209,7 +1238,9 @@ fprintf(stderr,"Block type %d\n", type );
     {
       if (outputs[i].type == type)
 	{
-	  return outputs[i].output (blockp);
+	  blkout=outputs[i].output (blockp);
+	  SWFOutput_writeToMethod(blkout,SWFOutputMethod,swfout);
+	  destroySWFOutput(blkout);
 	}
     }
   return;

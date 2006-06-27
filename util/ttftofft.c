@@ -13,7 +13,7 @@
 
 #include "blocks/blocktypes.h"
 #include "parser.h"
-#include "outputdecl.h"
+#include "swfoutput.h"
 
 static FT_Library library;
 static FT_Face face;
@@ -62,13 +62,12 @@ return a>b?a:b;
  * Functions to decompose the outlines
  */
 
-static double lastx, lasty;
 static SWF_SHAPE *curshape;
 static int last_x,last_y;
 
 static int
 outl_moveto(
-	FT_Vector *to,
+	const FT_Vector *to,
 	void *unused
 )
 {
@@ -76,8 +75,7 @@ SWF_STYLECHANGERECORD *stylerec;
 int	dx = (int)(to->x*ratio_EM);
 int	dy = -(int)(to->y*ratio_EM);
 
-//printf("moveto(%d,%d)\n",dx,dy);
-
+	//fprintf(stderr,"moveto(%d,%d)\n",dx,dy);
 	curshape->ShapeRecords = (SWF_SHAPERECORD *)realloc(curshape->ShapeRecords, ((curshape->NumShapeRecords+1)*sizeof(SWF_SHAPERECORD)));
 	stylerec=&(curshape->ShapeRecords[curshape->NumShapeRecords++].StyleChange);
 	memset(stylerec,0,sizeof(SWF_SHAPERECORD));
@@ -94,24 +92,13 @@ int	dy = -(int)(to->y*ratio_EM);
 	stylerec->MoveDeltaY=dy;
 	last_x=dx;
 	last_y=dy;
-#if 0
-	double tox, toy;
-	tox = fscale((double)to->x); toy = fscale((double)to->y);
-
-	/* FreeType does not do explicit closepath() */
-	if(curg->lastentry) {
-		g_closepath(curg);
-	}
-	fg_rmoveto(curg, tox, toy);
-	lastx = tox; lasty = toy;
-#endif
 
 	return 0;
 }
 
 static int
 outl_lineto(
-	FT_Vector *to,
+	const FT_Vector *to,
 	void *unused
 )
 {
@@ -121,7 +108,10 @@ int	y = -(int)(to->y*ratio_EM);
 int	dx = x-last_x;
 int	dy = y-last_y;
 
-	//printf("lineto(%d,%d)\n",dx,dy);
+	last_x=x;
+	last_y=y;
+
+	//fprintf(stderr,"lineto(%d,%d)\n",dx,dy);
 	curshape->ShapeRecords = (SWF_SHAPERECORD *)realloc(curshape->ShapeRecords, ((curshape->NumShapeRecords+1)*sizeof(SWF_SHAPERECORD)));
 	linerec=&(curshape->ShapeRecords[curshape->NumShapeRecords++].StraightEdge);
 	memset(linerec,0,sizeof(SWF_SHAPERECORD));
@@ -140,16 +130,14 @@ int	dy = y-last_y;
 		linerec->DeltaX=dx;
 		linerec->DeltaY=dy;
 	}
-	last_x=x;
-	last_y=y;
 
 	return 0;
 }
 
 static int
 outl_conicto(
-	FT_Vector *ctl,
-	FT_Vector *to,
+	const FT_Vector *ctl,
+	const FT_Vector *to,
 	void *unused
 )
 {
@@ -185,13 +173,13 @@ int	dcy = cy-last_y;
 
 static int
 outl_cubicto(
-	FT_Vector *control1,
-	FT_Vector *control2,
-	FT_Vector *to,
+	const FT_Vector *control1,
+	const FT_Vector *control2,
+	const FT_Vector *to,
 	void *unused
 )
 {
-	printf("cubicto(%d,%d)\n",to->x,to->y);
+	fprintf(stderr,"cubicto(%d,%d)\n",(int)to->x,(int)to->y);
 	return 0;
 }
 
@@ -235,7 +223,7 @@ if( (error = FT_New_Face( library, fname, 0, &face )) ) {
 }
 
 m.version = 4;
-m.size = 40;
+m.size = 8000;
 m.frame.xMin = 0;
 m.frame.xMax = 11000;
 m.frame.yMin = 0;
@@ -252,12 +240,9 @@ swffont.FontID = 1;
 swffont.FontName = strdup(face->family_name);
 swffont.FontNameLen=strlen(swffont.FontName);
 
-swffont.FontAscent = (int)(face->ascender*ratio_EM);
-swffont.FontDecent = -(int)(face->descender*ratio_EM);
-swffont.FontLeading = (int)((face->height-face->ascender+face->descender)*ratio_EM);
-
 
 swffont.FontFlagsHasLayout=1;
+swffont.FontFlagsSmallText=1;
 
 /*
 for(i=0; i < face->num_charmaps; i++) {
@@ -276,17 +261,15 @@ if( strstr(face->style_name, "Oblique") )
 
 /* Allocate the buffer space that we will be using */
 
-if( swffont.FontFlagsWideOffsets )
-	swffont.OffsetTable.UI32=(UI32 *)calloc(face->num_glyphs,sizeof(UI32));
-else
-	swffont.OffsetTable.UI16=(UI16 *)calloc(face->num_glyphs,sizeof(UI16));
+/* allocate space for the larger format to be safe */
+swffont.OffsetTable.UI32=(UI32 *)calloc(face->num_glyphs,sizeof(UI32));
 
 swffont.GlyphShapeTable=(SWF_SHAPE *)calloc(face->num_glyphs,sizeof(SWF_SHAPE));
 
 swffont.CodeTable=(int *)calloc(face->num_glyphs,sizeof(int));
 
-swffont.FontAdvanceTable=(int *)calloc(face->num_glyphs,sizeof(SI16));
-swffont.FontBoundsTable=(int *)calloc(face->num_glyphs,sizeof(SWF_RECT));
+swffont.FontAdvanceTable=(SI16 *)calloc(face->num_glyphs,sizeof(SI16));
+swffont.FontBoundsTable=(SWF_RECT *)calloc(face->num_glyphs,sizeof(SWF_RECT));
 
 /* Now, loop through the glyphs and pull out the data for each one */
 
@@ -295,11 +278,13 @@ charcode = FT_Get_First_Char(face, &gindex );
 while ( gindex != 0 ) {
 	swffont.CodeTable[i]=charcode;
 	maxcode=max(maxcode,charcode);
-	shape=&(swffont.GlyphShapeTable[i]);
 	if( FT_Load_Glyph(face, gindex, FT_LOAD_NO_BITMAP|FT_LOAD_NO_SCALE) ) {
 		fprintf(stderr, "Can't load glyph %d, skipped\n", gindex);
                 continue;
                 }
+
+	/* Get the shape info */
+	shape=&(swffont.GlyphShapeTable[i]);
 	shape->NumShapeRecords = 0;
 	shape->ShapeRecords = (SWF_SHAPERECORD *)calloc(1,sizeof(SWF_SHAPERECORD));
 	shape->NumFillBits = 1;
@@ -317,6 +302,9 @@ while ( gindex != 0 ) {
 	endrec->TypeFlag=0;
 	endrec->EndOfShape=0;
 
+	/* Fill in the FontAdvanceTable */
+	swffont.FontAdvanceTable[i] = (int)(face->glyph->advance.x*ratio_EM);
+
 	/* Fill in the FontBoundsTable even though it isn't used */
 	bbox=&(swffont.FontBoundsTable[i]);
 	bbox->Nbits=12;
@@ -331,15 +319,15 @@ while ( gindex != 0 ) {
 }
 swffont.NumGlyphs = i;
 
-/* This is so not right..
-if( swffont.NumGlyphs > 0xffff )
-	swffont.FontFlagsWideOffsets=1;
-*/
+swffont.FontAscent = (int)(face->ascender*ratio_EM);
+swffont.FontDecent = -(int)(face->descender*ratio_EM);
+swffont.FontLeading = (int)((face->height-face->ascender+face->descender)*ratio_EM);
+fprintf(stderr,"FontLeading %d\n", swffont.FontLeading );
 
 if( maxcode > 256 )
 	swffont.FontFlagsWideCodes=1;
 
-/* Now, loop through the kerning information and buil dup ther kerning table */
+/* Now, loop through the kerning information and build up the kerning table */
 
 k=0;
 swffont.FontKerningTable=0;
@@ -350,8 +338,8 @@ for(i=0;i<swffont.NumGlyphs;i++) {
 		if( kern.x == 0 )
 			continue;
 	swffont.FontKerningTable = (struct SWF_KERNINGRECORD *)realloc(swffont.FontKerningTable, (k+1)*sizeof(struct SWF_KERNINGRECORD));
-	swffont.FontKerningTable[k].FontKerningCode1 = i;
-	swffont.FontKerningTable[k].FontKerningCode2 = j;
+	swffont.FontKerningTable[k].FontKerningCode1 = swffont.CodeTable[i];
+	swffont.FontKerningTable[k].FontKerningCode2 = swffont.CodeTable[j];
 	swffont.FontKerningTable[k].FontKerningAdjustment = (int)(kern.x*ratio_EM);
 	k++;
 	}
@@ -366,6 +354,8 @@ if( FT_Done_Face(face) ) {
 if( FT_Done_FreeType(library) ) {
 	fprintf(stderr, "Errors when stopping FreeType, ignored\n");
 }
+
+outputTrailer(&m);
 
 return 0;
 }
