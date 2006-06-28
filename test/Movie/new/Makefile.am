@@ -4,7 +4,6 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/test
 
-TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
 TESTS = newSWFMovieTest
 
 EXTRA_DIST = 		\
@@ -35,4 +34,5 @@ check_PROGRAMS = \
 
 newSWFMovieTest_SOURCES = newSWFMovieTest.c ../../run_test.c
 newSWFMovieTest_LDADD = $(top_builddir)/src/libming.la
+newSWFMovieTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"'
 

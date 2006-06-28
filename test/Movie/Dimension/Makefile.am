@@ -11,8 +11,8 @@ EXTRA_DIST = \
 
 check_PROGRAMS = setDimensionTest
 
-TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
 TESTS = setDimensionTest
 
 setDimensionTest_SOURCES = setDimensionTest.c ../../run_test.c
 setDimensionTest_LDADD = $(top_builddir)/src/libming.la
+setDimensionTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"'

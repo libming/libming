@@ -14,8 +14,8 @@ EXTRA_DIST = \
 check_PROGRAMS = \
 	setNumberOfFramesTest
 
-TESTS_ENVIRONMENT = top_builddir=$(top_builddir)
 TESTS = setNumberOfFramesTest
 
 setNumberOfFramesTest_SOURCES = setNumberOfFramesTest.c ../../run_test.c
 setNumberOfFramesTest_LDADD = $(top_builddir)/src/libming.la
+setNumberOfFramesTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"'
