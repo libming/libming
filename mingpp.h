@@ -364,6 +364,9 @@ class SWFMovie
   SWFMovie()
     { this->movie = newSWFMovie(); }
 
+  SWFMovie(int version)
+    { this->movie = newSWFMovieWithVersion(version); }
+
   virtual ~SWFMovie()
     { destroySWFMovie(this->movie); }
 
