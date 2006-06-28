@@ -8,8 +8,16 @@ run_test(SWFMovie m, const char *testname)
 {
 	char ref[PATH_MAX];
 	char output[PATH_MAX];
+#ifdef TOP_SOURCEDIR
+	const char* refdir=TOP_SOURCEDIR;
+#else
 	const char* refdir=getenv("srcdir");
+#endif
+#ifdef TOP_BUILDDIR
+	const char* top_builddir=TOP_BUILDDIR;
+#else
 	const char* top_builddir=getenv("top_builddir");
+#endif
 	int ret;
 	char run[1024];
 
