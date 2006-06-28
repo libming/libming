@@ -14,7 +14,7 @@ extern char *swftargetfile;
  * difference in syntax can be paramterized so the code in #ifdefs is not
  * a lot of duplicated code.
  */
-#if !defined(SWFPHP) && !defined(SWFPERL) && !defined(SWFPYTHON)
+#if !defined(SWFPHP) && !defined(SWFPERL) && !defined(SWFPYTHON) && !defined(SWFPLUSPLUS)
 #error "You must define SWFPHP or SWFPERL or SWFPYTHON when building this file"
 #endif
 
@@ -41,6 +41,14 @@ extern char *swftargetfile;
 #define MEMBER    "."
 #define OBJPREF   "SWF"
 #define NEWOP     ""
+#endif
+#ifdef SWFPLUSPLUS
+#define COMMSTART "// "
+#define COMMEND   ""
+#define VAR       ""
+#define MEMBER    "->"
+#define OBJPREF   "SWF"
+#define NEWOP     "new"
 #endif
 
 static int framenum = 1;
@@ -785,7 +793,7 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   spframenum = 1;
   sprintf(spritename,"sp%d",sblock->SpriteId);
   printf ("\n\t" COMMSTART "  MovieClip %d " COMMEND "\n", sblock->SpriteId);
-  printf ("%s();  # %d frames\n",
+  printf ("%s(); " COMMSTART " %d frames " COMMEND "\n",
 		  newobj (spritename, "MovieClip"), sblock->FrameCount);
   for(i=0;i<sblock->BlockCount;i++) {
 	  outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
@@ -1036,7 +1044,7 @@ outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 {
   //OUT_BEGIN (SWF_SHOWFRAME);
 
-  printf ("%s();  # end of %sframe %d\n",
+  printf ("%s(); " COMMSTART " end of %sframe %d " COMMEND "\n",
 	  methodcall (spritenum?spritename:"m", "nextFrame"),
 	  spritenum?"clip ":"",
 	  spritenum?spframenum++:framenum++);
@@ -1133,6 +1141,15 @@ outputHeader (struct Movie *m)
 	printf ("Ming_useSWFVersion(%d);\n\n", m->version);
   printf ("%s();\n\n", newobj ("m", "Movie"));
 #endif
+#ifdef SWFPLUSPLUS
+  printf ("#include <mingpp.h>\n");
+  printf ("\n\nmain(){\n");
+  printf ("class SWFMovie *m;\n");
+  if( m->version == 5 ) 
+  	printf ("%s();\n\n", newobj ("m", "Movie"));
+  else
+  	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
+#endif
   if( m->rate != 12.0 ) 
   	printf ("%s(%f);\n", methodcall ("m", "setRate"), m->rate);
   if( m->frame.xMax != 6400 || m->frame.yMax != 4800 )
@@ -1165,6 +1182,9 @@ outputTrailer (struct Movie *m)
   }
 #ifdef SWFPHP
   printf ("?>\n");
+#endif
+#ifdef SWFPLUSPLUS
+  printf ("}\n");
 #endif
 }
 

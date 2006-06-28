@@ -30,6 +30,7 @@ bin_PROGRAMS = \
 	swftophp \
 	swftoperl \
 	swftopython \
+	swftocxx \
 	makeswf \
 	listaction \
 	listaction_d \
@@ -86,6 +87,10 @@ swftoperl_CFLAGS = -DSWFPERL
 swftopython_SOURCES = outputscript.c
 swftopython_LDADD = libutil.la $(top_builddir)/src/libming.la
 swftopython_CFLAGS = -DSWFPYTHON
+
+swftocxx_SOURCES = outputscript.c
+swftocxx_LDADD = libutil.la $(top_builddir)/src/libming.la
+swftocxx_CFLAGS = -DSWFPLUSPLUS
 
 listaction_SOURCES = outputtxt.c
 listaction_LDADD = libutil.la $(top_builddir)/src/libming.la
