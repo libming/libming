@@ -22,6 +22,6 @@ if HAVE_PERL
 
 endif 
 
-check_SCRIPTS = dotests
+#check_SCRIPTS = dotests
 
 EXTRA_DIST = TestList 
