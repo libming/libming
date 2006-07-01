@@ -230,10 +230,11 @@ newSWFShapeFromBitmap(SWFBitmap bitmap, int flag)
 
 	SWFShape_setRightFillStyle(shape, fill);
 
-	SWFShape_drawScaledLine(shape, width, 0);
-	SWFShape_drawScaledLine(shape, 0, height);
-	SWFShape_drawScaledLine(shape, -width, 0);
-	SWFShape_drawScaledLine(shape, 0, -height);
+	// XXX - scale shouldn't be hardcoded! (here, or in newSWFBitmapFillStyle)
+	SWFShape_drawScaledLine(shape, width * 20, 0);
+	SWFShape_drawScaledLine(shape, 0, height * 20);
+	SWFShape_drawScaledLine(shape, -width * 20, 0);
+	SWFShape_drawScaledLine(shape, 0, -height * 20);
 
 	return shape;
 }
@@ -813,9 +814,6 @@ SWFShape_moveScaledPenTo(SWFShape shape, int x, int y)
 				shape->records[0].type == SHAPERECORD_STATECHANGE) )
 	{
 		SWFRect_setBounds(SWFCharacter_getBounds(CHARACTER(shape)), x, x, y, y);
-	} else
-	{
-		SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)), x, y, 0);
 	}
 }
 
