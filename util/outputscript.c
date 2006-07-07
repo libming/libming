@@ -27,7 +27,7 @@ extern char *swftargetfile;
 #define NEWOP     "new"
 #endif
 #ifdef SWFPHP
-#define COMMSTART "/* "
+#define COMMSTART "/*"
 #define COMMEND   "*/"
 #define VAR       "$"
 #define MEMBER    "->"
@@ -35,7 +35,7 @@ extern char *swftargetfile;
 #define NEWOP     "new"
 #endif
 #ifdef SWFPYTHON
-#define COMMSTART "# "
+#define COMMSTART "#"
 #define COMMEND   ""
 #define VAR       ""
 #define MEMBER    "."
@@ -43,7 +43,7 @@ extern char *swftargetfile;
 #define NEWOP     ""
 #endif
 #ifdef SWFPLUSPLUS
-#define COMMSTART "// "
+#define COMMSTART "//"
 #define COMMEND   ""
 #define VAR       ""
 #define MEMBER    "->"
