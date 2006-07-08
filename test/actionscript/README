@@ -1,0 +1,6 @@
+This directory should contain test files for the actionscript compiler.
+There's no framework yet for testing them, but the idea would be
+compiling them using 'makeswf' and then comparing 'listswf' output
+with a provided reference.
+
+--strk; Sat Jul  8 12:38:51 CEST 2006
