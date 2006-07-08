@@ -102,20 +102,22 @@ void Ming_setCubicThreshold(int num /* New threshold value */)
  * Set the function that gets called when a warning occurs within the library
  * This function sets function to be called when a warning occurs within the
  * library. The default function prints the warning message to stdout.
+ * Returns the previously-set warning function.
  */
-void Ming_setWarnFunction(void (*warn)(const char *msg, ...)/* new warning function */)
+SWFMsgFunc Ming_setWarnFunction(SWFMsgFunc warn)
 {
-	setSWFWarnFunction(warn);
+	return setSWFWarnFunction(warn);
 }
 
 /*
  * Set the function that gets called when an error occurs within the library
  * This function sets function to be called when an error occurs within the
  * library. The default function prints the error mesage to stdout and exits.
+ * Returns the previously-set error function.
  */
-void Ming_setErrorFunction(void (*error)(const char *msg, ...)/* new error function */)
+SWFMsgFunc Ming_setErrorFunction(SWFMsgFunc error)
 {
-	setSWFErrorFunction(error);
+	return setSWFErrorFunction(error);
 }
 
 /*

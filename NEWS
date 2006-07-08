@@ -1,10 +1,10 @@
 0.4.0-beta - 2006-??-??
 
+	* Ming_setWarnFunction and Ming_setErrorFunction now return
+	  the previously-set value.
 	* More documentation !
 	* makeswf now provides an __SWF_VERSION__ macro for use
 	  in cross-version ActionScript code.
-	* Bitmaps no longer hard coded to 20x scale
-	  (bogus, now hardcoded to 1x scale)
 	* NEW functions: SWFDisplayItem_getMatrix(),
 	  SWFPosition_getMatrix(), SWFMatrix_getScaleX(),
 	  SWFMatrix_getRotate0(), SWFMatrix_getRotate1(),
