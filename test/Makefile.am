@@ -1,4 +1,4 @@
-SUBDIRS = Movie
+SUBDIRS = Movie actionscript
 
 BINDINGS = c
 
