@@ -54,10 +54,10 @@ CLEANFILES = \
 	lex.swf5.c
 
 lex.swf4.c: $(srcdir)/swf4compiler.flex swf4compiler.tab.h
-	$(LEX) -i -Pswf4 $(srcdir)/swf4compiler.flex
+	$(LEX) -Pswf4 $(srcdir)/swf4compiler.flex
 
 lex.swf5.c: $(srcdir)/swf5compiler.flex swf5compiler.tab.h
-	$(LEX) -i -Pswf5 $(srcdir)/swf5compiler.flex
+	$(LEX) -Pswf5 $(srcdir)/swf5compiler.flex
 
 swf4compiler.tab.c: $(srcdir)/swf4compiler.y
 	bison -p swf4 $(srcdir)/swf4compiler.y
