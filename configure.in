@@ -163,6 +163,7 @@ AC_OUTPUT([
 	test/Movie/new/Makefile
 	test/Movie/NumFrames/Makefile
 	test/Movie/Rate/Makefile
+	test/actionscript/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config
