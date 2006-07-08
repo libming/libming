@@ -1,9 +1,478 @@
-2006-05-06 Sandro Santilli <strk@keybit.net>
+2006-07-07 16:52  anderson
 
-	* util/action.c: fixed compiler warning 
-	* util/makeswf.c: added handling for Ming warnings.
-	* src/movie.c: fixed support for systems w/out zlib.
-	* util/main.c: fixed support for systems w/out zlib.
+	* util/outputscript.c: Remove extra space in comments
+
+2006-07-01 23:41  strk
+
+	* src/blocks/: fillstyle.c, shape.c: Reverted Bitmap scale patch by
+	  Justin (was creating wrong-sized bitmaps)
+
+2006-06-28 22:46  anderson
+
+	* mingpp.h: Add the constructore that accepts the flash version as
+	  a parameter
+
+2006-06-28 16:25  anderson
+
+	* util/: Makefile.am (1.7), outputscript.c (1.15): Add swfotcxx for
+	  producing C++ code
+
+2006-06-28 13:03  strk
+
+	* test/Movie/: Dimension/Makefile.am (1.4), NumFrames/Makefile.am
+	  (1.4), Rate/Makefile.am (1.4), new/Makefile.am (1.4): Pass
+	  TOP_BUILDDIR and TOP_SOURCEDIR to C tests by macros. This way you
+	  can invoke the testers w/out exporting any variable.
+
+2006-06-28 12:52  strk
+
+	* test/run_test.c (1.3): Allowed TOP_BUILDDIR and TOP_SOURCEDIR to
+	  be specified as macros
+
+2006-06-28 12:40  strk
+
+	* test/Makefile.am (1.3): Removed dotests from check_PROGRAMS, it
+	  was obsoleted
+
+2006-06-28 03:07  strk
+
+	* src/ming_config.h.in (1.4): Removed generated file (autoheader in
+	  autogen.sh will generate it)
+
+2006-06-27 18:32  anderson
+
+	* util/ttftofft.c (1.3): ack.. now pass in the file to be processed
+
+2006-06-27 16:50  anderson
+
+	* util/: outputswf.c (1.4), ttftofft.c (1.2): A fully functioning
+	  ttftofft (subject to further testing).
+
+2006-06-27 16:48  anderson
+
+	* util/: outputdecl.h (1.6), swfoutput.h (1.3): Parametrize so that
+	  the output routines can return something other than 'void'.
+	  Initially, this is useful in outputswf.c so we can return the
+	  buffer we built.
+
+2006-06-27 16:47  anderson
+
+	* util/main.c (1.16): Should include swfoutput.h instead of
+	  outputdecl.h
+
+2006-06-27 08:22  anderson
+
+	* util/outputswf.c (1.3): Much closer to working now. All the bits
+	  up to the FontAdvanceTable look good now
+
+2006-06-26 15:53  anderson
+
+	* util/outputswf.c (1.2): Still Work In Progress: but this is now
+	  creating a partial .swf file
+
+2006-06-26 15:52  anderson
+
+	* util/parser.c (1.14): Disambiguate 2 error messages
+
+2006-06-24 00:33  anderson
+
+	* util/Makefile.am (1.6): Fix the program name
+
+2006-06-23 02:50  anderson
+
+	* configure.in (1.38), util/Makefile.am (1.5): Test for the
+	  freetpye library, needed in the utils
+
+2006-06-23 00:55  strk
+
+	* src/movie.c (1.41): Restored hard-coded default movie dimension
+	  to 320x240 *pixels*
+
+2006-06-23 00:51  strk
+
+	* test/: run_test.c (1.2), run_test.h (1.1),
+	  Movie/Dimension/Makefile.am (1.3),
+	  Movie/Dimension/setDimensionTest.c (1.2),
+	  Movie/NumFrames/Makefile.am (1.3),
+	  Movie/NumFrames/setNumberOfFramesTest.c (1.2),
+	  Movie/Rate/Makefile.am (1.3), Movie/Rate/setRateTest.c (1.2),
+	  Movie/new/Makefile.am (1.3), Movie/new/newSWFMovieTest.c (1.3):
+	  Fixed dependencies of unit tests to the run_test.{c,h} files
+
+2006-06-23 00:28  strk
+
+	* test/Movie/: Dimension/Makefile.am (1.2),
+	  Dimension/setDimensionTest.c (1.1), Dimension/test01.c (1.2),
+	  NumFrames/Makefile.am (1.2), NumFrames/setNumberOfFramesTest.c
+	  (1.1), NumFrames/test01.c (1.2), Rate/Makefile.am (1.2),
+	  Rate/setRateTest.c (1.1), Rate/test01.c (1.2),
+	  new/newSWFMovieTest.c (1.2): ported all existing C tests to the
+	  new architecture
+
+2006-06-23 00:09  strk
+
+	* configure.in (1.37), test/Makefile.am (1.2), test/run_test.c
+	  (1.1), test/Movie/new/Makefile.am (1.2),
+	  test/Movie/new/newSWFMovieTest.c (1.1), test/Movie/new/test01.c
+	  (1.2), test/Movie/new/test02.c (1.2), test/Movie/new/test03.c
+	  (1.2), test/Movie/new/test04.c (1.2), test/Movie/new/test05.c
+	  (1.2): Obsoleted use of the dotests perl script, reorganization
+	  of the C test files to be self-contained (only done in Movie/new,
+	  others to come)
+
+2006-06-22 21:55  strk
+
+	* Makefile.am (1.5), configure.in (1.36), macros/Makefile.am (1.1):
+	  Distribute the macros/ dir
+
+2006-06-22 21:47  strk
+
+	* Makefile (1.29), Makefile-real (1.21), Makefile.am (1.4),
+	  Makefile.config.in (1.13), autogen.sh (1.5), configure.in (1.35),
+	  config/config.guess (1.2), config/config.sub (1.2),
+	  docs/Makefile.am (1.1), docs/man/Makefile (1.2),
+	  docs/man/Makefile.am (1.1), src/Makefile (1.34), src/Makefile.am
+	  (1.5), src/ming_config.h.in (1.3), src/movie.c (1.40),
+	  src/actioncompiler/Makefile (1.14),
+	  src/actioncompiler/Makefile.am (1.5), src/blocks/Makefile (1.19),
+	  src/blocks/Makefile.am (1.5), test/Makefile (1.3),
+	  test/Makefile.am (1.1), test/dotests (1.6), test/dotests.in
+	  (1.1), test/Movie/Makefile.am (1.1),
+	  test/Movie/Dimension/Makefile.am (1.1),
+	  test/Movie/Dimension/makefile (1.3),
+	  test/Movie/NumFrames/Makefile.am (1.1),
+	  test/Movie/NumFrames/makefile (1.3), test/Movie/Rate/Makefile.am
+	  (1.1), test/Movie/Rate/makefile (1.3), test/Movie/new/Makefile.am
+	  (1.1), test/Movie/new/makefile (1.3), util/Makefile (1.49),
+	  util/Makefile.am (1.4), util/main.c (1.15): Automake-based build
+	  scripts.
+
+2006-06-22 18:24  strk
+
+	* CREDITS (1.12), AUTHORS (1.1): renamed CREDITS to AUTHORS (the
+	  latter will be required by automake)
+
+2006-06-22 12:18  strk
+
+	* src/actioncompiler/main.c (1.15): Fixed compiler warnings
+
+2006-06-22 08:17  anderson
+
+	* util/: outputswf.c (1.1), ttftofft.c (1.1): work in progress:
+	  This is a new implementation of ttf2fft. This version uses the
+	  freetype library to read the font files, so it should be able to
+	  read a wider range of font formats. This also eliminates the
+	  dependency on an external fft2ttf (from the JGenerator project),
+	  which hasn't been updated in several years. This new tool also
+	  introducts a new output format: SWF.
+
+2006-06-22 07:10  anderson
+
+	* util/: outputscript.c (1.14), outputtxt.c (1.22), swfoutput.h
+	  (1.2): Avoid a name collision with a type in the main library
+
+2006-06-22 04:33  strk
+
+	* util/parser.c (1.13): Fixed typo FontKerningADjustment =>
+	  FontKerningAdjustment
+
+2006-06-22 04:14  anderson
+
+	* util/swftypes.h (1.12): Small typo in membername
+
+2006-06-21 23:59  anderson
+
+	* util/outputtxt.c (1.21): Display the kerning table also
+
+2006-06-21 13:20  strk
+
+	* util/outputtxt.c (1.20): outputSWF_TEXTRECORD: don't use
+	  uninitialized values
+
+2006-06-21 12:14  strk
+
+	* NEWS (1.13): Added new functions
+
+2006-06-21 06:44  anderson
+
+	* util/: outputtxt.c (1.19), parser.c (1.12), swftypes.h (1.11):
+	  Correctly parse the password from a SWF_PROTECT block
+
+2006-06-21 01:22  strk
+
+	* src/actioncompiler/: compile.c (1.26), compile.h (1.15),
+	  swf5compiler.flex (1.32), swf5compiler.y (1.38): Reverted AS2
+	  support patches (too bogus).
+
+2006-06-21 01:06  strk
+
+	* docs/man/makeswf.1 (1.2): Added note about __SWF_VERSION__ macro
+	  definition
+
+2006-06-21 00:25  strk
+
+	* Makefile-real (1.20), NEWS (1.12), docs/man/Makefile (1.1),
+	  docs/man/makeswf.1 (1.1): Merged man/ and docs/man directories
+	  (the latter being the new standard location)
+
+2006-06-21 00:16  strk
+
+	* NEWS (1.11), util/makeswf.c (1.22): makeswf:	 - Added
+	  __SWF_VERSION__ macro definition for use in source files
+
+2006-06-20 22:14  strk
+
+	* src/actioncompiler/swf5compiler.y (1.37): undef DEBUG by default
+
+2006-06-20 22:14  strk
+
+	* src/actioncompiler/compile.c (1.25): Made less verbose by default
+	  (define DEBUG to have stack dumped as before)
+
+2006-06-19 03:23  strk
+
+	* test/TODO (1.1): Wrote down some things to do to make the
+	  testsuite more useful.
+
+2006-06-16 03:31  strk
+
+	* test/: Makefile (1.2), dotests (1.5): Modified dotests to require
+	  a list of bindings to test from command line, only C binding
+	  currently requested by the 'make check' rule.
+
+2006-06-16 03:17  strk
+
+	* Makefile (1.28), Makefile-real (1.19), Makefile.config.in (1.12),
+	  configure.in (1.34), test/Makefile (1.1), test/dotests (1.4):
+	  Added perl executable detection and 'make check' rule. Updated
+	  tests/dotests to return the number of failed tests.
+
+2006-06-14 20:18  anderson
+
+	* test/: Makefile.inc (1.1), Movie/Dimension/makefile (1.2),
+	  Movie/Dimension/test01.php (1.2), Movie/Dimension/test01.pl
+	  (1.2), Movie/Dimension/test01.py (1.1), Movie/NumFrames/makefile
+	  (1.2), Movie/NumFrames/test01.php (1.2),
+	  Movie/NumFrames/test01.pl (1.2), Movie/NumFrames/test01.py (1.1),
+	  Movie/Rate/makefile (1.2), Movie/Rate/test01.php (1.2),
+	  Movie/Rate/test01.pl (1.2), Movie/Rate/test01.py (1.1),
+	  Movie/new/makefile (1.2), Movie/new/test01.php (1.2),
+	  Movie/new/test01.pl (1.2), Movie/new/test01.py (1.1),
+	  Movie/new/test02.php (1.2), Movie/new/test02.pl (1.2),
+	  Movie/new/test02.py (1.1), Movie/new/test03.php (1.2),
+	  Movie/new/test03.pl (1.2), Movie/new/test03.py (1.1),
+	  Movie/new/test04.php (1.2), Movie/new/test04.pl (1.2),
+	  Movie/new/test04.py (1.1), Movie/new/test05.php (1.2),
+	  Movie/new/test05.pl (1.2), Movie/new/test05.py (1.1): Slightly
+	  improved strategy for creating the tests. Now, only the 'C' test
+	  has to be written. The sfwto{php|perl|python} tools will be used
+	  to generate the tests for the other language bindings. This has
+	  the additional benefit of testing those tools more thoroughly so
+	  we ultimately can be sure they are complete. This will also make
+	  it trivial to create the tests for new language bindings.
+
+2006-06-14 20:14  anderson
+
+	* util/outputscript.c (1.13): Handle some unfortunate differences
+	  in the various language bindings
+
+2006-06-14 19:21  anderson
+
+	* util/: main.c (1.14), outputdecl.h (1.5), outputfdb.c (1.2),
+	  outputscript.c (1.12), outputtxt.c (1.18): Fix things up so the
+	  output scripts can either output to stdout as is useful for use
+	  w/ apache, or they can be told to output to a specific file, as
+	  is useful when generating standalone scripts, such as is used int
+	  he test suite.
+
+2006-06-14 19:20  anderson
+
+	* test/dotests (1.3): Reenable the php test
+
+2006-06-14 18:46  anderson
+
+	* util/outputscript.c (1.11): Lots of little fixes ot make
+	  swftopython functional
+
+2006-06-13 22:15  anderson
+
+	* test/: TestList (1.1), dotests (1.2), Movie/TestList (1.1): Add
+	  the ability to traverse a hierarchy of tests
+
+2006-06-13 02:51  strk
+
+	* src/ming.h.in (1.4): Added comment for loadSWFFontFromFile
+
+2006-06-13 02:45  strk
+
+	* util/: Makefile (1.48), main.c (1.13), outputdecl.h (1.4),
+	  outputfdb.c (1.1), outputscript.c (1.10), outputtxt.c (1.17):
+	  Added code to implement makefdb using the new parser-based layout
+	  (makefdb2)
+
+2006-06-13 02:40  anderson
+
+	* util/decompile.c (1.44): rough attempt to decompile the EXTENDS
+	  op. Lots more work needed though
+
+2006-06-13 02:21  anderson
+
+	* util/outputscript.c (1.9): Make the comment be language sensitive
+
+2006-06-13 01:14  strk
+
+	* util/outputscript.c (1.8): Use hash (#) for comments, rather then
+	  /* */
+
+2006-06-13 00:38  anderson
+
+	* util/decompile.c (1.43): Implement the GREATER than action
+
+2006-06-13 00:35  anderson
+
+	* util/decompile.c (1.42): Handle a new construct where a block of
+	  action sis being assigned to a class member
+
+2006-05-23 23:40  anderson
+
+	* docs/perl/index.html (1.1): Fix up the UI to the perl docs
+
+2006-05-23 23:35  anderson
+
+	* docs/index.html (1.2): Fix up the UI to the perl docs
+
+2006-05-23 15:42  anderson
+
+	* docs/index.html (1.1): New top level page for the documentation
+	  section of the website
+
+2006-05-23 14:55  anderson
+
+	* src/: Makefile (1.33), ming.c (1.21), movie.c (1.39): Start the
+	  process of creating a full documentation set for libming
+
+2006-05-23 14:54  anderson
+
+	* perl_ext/mkdoc (1.1): SMall utility for generating documentation
+
+2006-05-23 14:53  anderson
+
+	* docs/: libming/Ming_getScale.html (1.1), libming/Ming_init.html
+	  (1.1), libming/Ming_setCubicThreshold.html (1.1),
+	  libming/Ming_setErrorFunction.html (1.1),
+	  libming/Ming_setSWFCompression.html (1.1),
+	  libming/Ming_setScale.html (1.1),
+	  libming/Ming_setWarnFunction.html (1.1),
+	  libming/Ming_useSWFVersion.html (1.1),
+	  libming/SWFMovie_setDimension.html (1.1),
+	  libming/SWFMovie_setNumberOfFrames.html (1.1),
+	  libming/SWFMovie_setRate.html (1.1), libming/destroySWFMovie.html
+	  (1.1), libming/index.html (1.1), libming/newSWFMovie.html (1.1),
+	  libming/newSWFMovieWithVersion.html (1.1), man/Ming_getScale.3
+	  (1.1), man/Ming_init.3 (1.1), man/Ming_setCubicThreshold.3 (1.1),
+	  man/Ming_setErrorFunction.3 (1.1), man/Ming_setSWFCompression.3
+	  (1.1), man/Ming_setScale.3 (1.1), man/Ming_setWarnFunction.3
+	  (1.1), man/Ming_useSWFVersion.3 (1.1),
+	  man/SWFMovie_setDimension.3 (1.1),
+	  man/SWFMovie_setNumberOfFrames.3 (1.1), man/SWFMovie_setRate.3
+	  (1.1), man/destroySWFMovie.3 (1.1), man/newSWFMovie.3 (1.1),
+	  man/newSWFMovieWithVersion.3 (1.1), perl/SWF.html (1.1),
+	  perl/SWF::Action.html (1.1), perl/SWF::Bitmap.html (1.1),
+	  perl/SWF::Button.html (1.1), perl/SWF::Constants.html (1.1),
+	  perl/SWF::DisplayItem.html (1.1), perl/SWF::Fill.html (1.1),
+	  perl/SWF::Font.html (1.1), perl/SWF::Gradient.html (1.1),
+	  perl/SWF::Morph.html (1.1), perl/SWF::Movie.html (1.1),
+	  perl/SWF::MyConfig.html (1.1), perl/SWF::Shape.html (1.1),
+	  perl/SWF::Sound.html (1.1), perl/SWF::SoundInstance.html (1.1),
+	  perl/SWF::SoundStream.html (1.1), perl/SWF::Sprite.html (1.1),
+	  perl/SWF::Text.html (1.1), perl/SWF::TextField.html (1.1),
+	  perl/SWF::VideoStream.html (1.1), perlman/SWF.3pm (1.1),
+	  perlman/SWF::Action.3pm (1.1), perlman/SWF::Bitmap.3pm (1.1),
+	  perlman/SWF::Button.3pm (1.1), perlman/SWF::Constants.3pm (1.1),
+	  perlman/SWF::DisplayItem.3pm (1.1), perlman/SWF::Fill.3pm (1.1),
+	  perlman/SWF::Font.3pm (1.1), perlman/SWF::Gradient.3pm (1.1),
+	  perlman/SWF::Morph.3pm (1.1), perlman/SWF::Movie.3pm (1.1),
+	  perlman/SWF::MyConfig.3pm (1.1), perlman/SWF::Shape.3pm (1.1),
+	  perlman/SWF::Sound.3pm (1.1), perlman/SWF::SoundInstance.3pm
+	  (1.1), perlman/SWF::SoundStream.3pm (1.1),
+	  perlman/SWF::Sprite.3pm (1.1), perlman/SWF::Text.3pm (1.1),
+	  perlman/SWF::TextField.3pm (1.1), perlman/SWF::VideoStream.3pm
+	  (1.1): Generated Documentation
+
+2006-05-23 03:28  anderson
+
+	* src/blocks/: blocktypes.h (1.13), dbl.h (1.10), font.h (1.18):
+	  Use C style comments instead of C++ style comments
+
+2006-05-19 20:41  akleine
+
+	* util/decompile.c (1.41): added handling of SWFACTION_CHR code
+
+2006-05-19 11:53  strk
+
+	* NEWS (1.10), src/blocks/error.c (1.10): Had default error message
+	  handler exit with EXIT_FAILURE code, rather then with
+	  EXIT_SUCCESS code.
+
+2006-05-19 11:50  strk
+
+	* Makefile-real (1.18): Don't try to remove 'test' on make clean,
+	  it's a directory now!
+
+2006-05-19 11:47  strk
+
+	* NEWS (1.6.2.2), src/blocks/error.c (1.9.2.1): Had default error
+	  message handler exit with EXIT_FAILURE code, rather then with
+	  EXIT_SUCCESS code.
+
+2006-05-16 21:59  anderson
+
+	* test/Movie/NumFrames/: TestList (1.1), makefile (1.1), test01.c
+	  (1.1), test01.php (1.1), test01.pl (1.1), test01.ref (1.1): Basic
+	  tests
+
+2006-05-16 18:03  anderson
+
+	* test/Movie/: Dimension/TestList (1.1), Dimension/makefile (1.1),
+	  Dimension/test01.c (1.1), Dimension/test01.php (1.1),
+	  Dimension/test01.pl (1.1), Dimension/test01.ref (1.1),
+	  Rate/TestList (1.1), Rate/makefile (1.1), Rate/test01.c (1.1),
+	  Rate/test01.php (1.1), Rate/test01.pl (1.1), Rate/test01.ref
+	  (1.1): Add tests for setRate() and setDimension()
+
+2006-05-16 15:35  anderson
+
+	* test/: dotests (1.1), Movie/new/TestList (1.1),
+	  Movie/new/makefile (1.1), Movie/new/test01.c (1.1),
+	  Movie/new/test01.php (1.1), Movie/new/test01.pl (1.1),
+	  Movie/new/test01.ref (1.1), Movie/new/test02.c (1.1),
+	  Movie/new/test02.php (1.1), Movie/new/test02.pl (1.1),
+	  Movie/new/test02.ref (1.1), Movie/new/test03.c (1.1),
+	  Movie/new/test03.php (1.1), Movie/new/test03.pl (1.1),
+	  Movie/new/test03.ref (1.1), Movie/new/test04.c (1.1),
+	  Movie/new/test04.php (1.1), Movie/new/test04.pl (1.1),
+	  Movie/new/test04.ref (1.1), Movie/new/test05.c (1.1),
+	  Movie/new/test05.php (1.1), Movie/new/test05.pl (1.1),
+	  Movie/new/test05.ref (1.1): New testing framework. This is just
+	  the beginning, but it should be enough for people to see the
+	  concept and discuss it. One important feature, is that tests
+	  exists for each language binding for each API.
+
+2006-05-06 12:46  strk
+
+	* ChangeLog (1.67), util/action.c (1.9): Fixed compiler warning
+	  (UI32 printed with format %x => %lx)
+
+2006-05-06 12:38  strk
+
+	* ChangeLog (1.66), src/movie.c (1.38), util/main.c (1.12),
+	  util/makeswf.c (1.21): Fixed support for builds w/out zlib in
+	  SWF_output and listswf.  Added handler for Ming's warning in
+	  command line compiler
+
+2006-05-06 11:33  strk
+
+	* ChangeLog (1.65): Updated
 
 2006-05-05 18:08  strk
 
@@ -151,9 +620,9 @@
 
 2006-04-18 17:36  vapour
 
-	* Makefile-real (1.16), man/Makefile (1.3), php_ext/Makefile
-	  (1.20), util/Makefile (1.46): Updated to use the automatically
-	  determined "platform correct" install script.
+	* Makefile-real (1.16), php_ext/Makefile (1.20), util/Makefile
+	  (1.46): Updated to use the automatically determined "platform
+	  correct" install script.
 
 2006-04-18 17:35  vapour
 
@@ -1335,15 +1804,10 @@
 
 	* Makefile (1.21), Makefile-real (1.7), Makefile.config.in (1.1),
 	  Rules.make.in (1.5), config.make.in (1.3), configure (1.2),
-	  configure.in (1.9), c++_ext/Makefile (1.5), man/Makefile (1.2),
-	  php_ext/Makefile (1.16), src/Makefile (1.27),
-	  src/actioncompiler/Makefile (1.13), src/blocks/Makefile (1.18),
-	  util/Makefile (1.28): Merged Rules.make and config.make into a
-	  single Makefile.config file.
-
-2005-03-27 23:52  strk
-
-	* man/makeswf.1 (1.2): cleanups
+	  configure.in (1.9), c++_ext/Makefile (1.5), php_ext/Makefile
+	  (1.16), src/Makefile (1.27), src/actioncompiler/Makefile (1.13),
+	  src/blocks/Makefile (1.18), util/Makefile (1.28): Merged
+	  Rules.make and config.make into a single Makefile.config file.
 
 2005-03-27 23:40  strk
 
@@ -1352,8 +1816,8 @@
 
 2005-03-27 23:32  strk
 
-	* Makefile-real (1.6), Rules.make.in (1.4), man/Makefile (1.1),
-	  man/makeswf.1 (1.1): Added makeswf manual page.
+	* Makefile-real (1.6), Rules.make.in (1.4): Added makeswf manual
+	  page.
 
 2005-03-26 11:59  whamann
 

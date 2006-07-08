@@ -6,3 +6,6 @@ SUBDIRS =	\
 	test
 
 include_HEADERS = mingpp.h
+
+Changelog:
+	cvs2cl --accum -I ChangeLog
