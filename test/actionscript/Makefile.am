@@ -12,6 +12,8 @@ EXTRA_DIST = 		\
 	Function.ref	\
 	$(AS_TESTS)
 
+CLEANFILES = *.as.pp *.swf
+
 check_PROGRAMS = \
 	ActionScriptTest
 

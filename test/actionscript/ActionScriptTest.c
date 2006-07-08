@@ -47,11 +47,52 @@ static int
 do_tests()
 {
 	int failures=0;
-	const char* all_tests = AS_TESTS;
+	const char *all_tests = AS_TESTS;
+	char testfile[PATH_MAX];
+	const char *from, *to, *end;
+	char *ptr;
 
+	from = all_tests;
+	end = from+strlen(all_tests);
+	do
+	{
+		while (*from && *from == ' ') ++from;
+		if ( ! *from ) break;
+
+		to=strchr(from, ' ');
+		if ( ! to ) to = end;
+
+		size_t len = to-from;
+		if ( len+1 >= PATH_MAX )
+		{
+			fprintf(stderr,
+				"Name of test exceeds PATH_MAX, skipping"
+				" [from: %s]\n", from);
+			from = to;
+			continue;
+		}
+
+		strncpy(testfile, from, len);
+		testfile[len]='\0';
+		/* strip the .as part (if any) */
+		if ( (ptr=strstr(testfile+len-3, ".as")) )
+		{
+			*ptr='\0';
+		}
+
+		printf("Testing %s\n", testfile);
+
+		failures += do_test(testfile);
+
+		from=to;
+
+	} while (from < end);
+
+#if 0
 	printf("Should test all tests (%s), but this is not implemented yet, so I'll test the hard-coded \"Function.as\" one\n", all_tests);
 
 	failures += do_test("Function");
+#endif
 
 	return failures;
 }
