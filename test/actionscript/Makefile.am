@@ -19,5 +19,5 @@ check_PROGRAMS = \
 
 ActionScriptTest_SOURCES = ActionScriptTest.c ../run_test.c ../../util/makeswf_utils.c
 ActionScriptTest_LDADD = $(top_builddir)/src/libming.la
-ActionScriptTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"' -I../../util/ -DAS_TESTS='"$(AS_TESTS)"'
+ActionScriptTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"' -I$(top_srcdir)/util/ -DAS_TESTS='"$(AS_TESTS)"'
 
