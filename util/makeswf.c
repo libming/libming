@@ -46,8 +46,7 @@
  *  TODO
  *  ----
  * 
- *  - Have main ./configure script detect HAVE_GETOPT_LONG and set
- *    DEFAULT_FLAGS in makeswf.h
+ *  - Have main ./configure script detect HAVE_GETOPT_LONG 
  *
  ***************************************************************************/
 
@@ -120,15 +119,10 @@ vasprintf(char **ret, const char *format, va_list ap)
 #define MAXERRORMSG 1024
 
 /* prototypes */
-static char * readfile (char *file);
-static int preprocess (char *file, char *out, char *cppargs);
-static void compileError(const char *fmt, ...);
 static void add_import_spec(char *spec);
 static int add_imports(void);
 
 /* data */
-static char lastcompilemessage[MAXERRORMSG];
-static int lastcompilefailed = 0;
 static char **import_specs;
 static int numimport_specs = 0;
 static int swfversion = DEFSWFVERSION;
@@ -154,22 +148,6 @@ usage (char *me, int ex)
 	exit(ex);
 }
 
-/*
- * Should translate preprocessed file's line number to
- * original file's line number (seems not so easy)
- */
-static void
-printCompileMessage()
-{
-   char *ptr1;
-
-   printf("  %s\n", strtok(lastcompilemessage, "\n"));
-   while  ( (ptr1=strtok(NULL, "\n")) )
-   {
-      printf("  %s\n", ptr1);
-   }
-}
-
 static void 
 warningHandler(const char *fmt, ...)
 {
@@ -183,56 +161,20 @@ warningHandler(const char *fmt, ...)
 	va_end(ap);
 }
 
-/* 
- * This is here to handle line number reporting
- * due to preprocessor scrambling of it
- */
-static void 
-compileError(const char *fmt, ...)
-{
-	char *msg;
-	va_list ap;
-	size_t msglen;
 
-	va_start (ap, fmt);
-
-	/*
-	 * This is a GNU extension.
-	 * Dunno how to handle errors here.
-	 */
-	if ( ! vasprintf(&msg, fmt, ap) )
-	{
-		fprintf(stderr, "vasnprintf allocated 0 bytes\n");
-		va_end(ap);
-		return;
-	}
-	va_end(ap);
-
-	msglen = strlen(msg);
-	if ( msglen > MAXERRORMSG-1 ) msglen = MAXERRORMSG-1;
-	memcpy(lastcompilemessage, msg, msglen);
-	free(msg);
-	lastcompilemessage[MAXERRORMSG-1] = '\0';
-	lastcompilefailed = 1;
-
-	return;
-}
-
+char *cppargs;
+size_t cppargsize = 256;
 
 int
 main (int argc, char **argv)
 {
-	SWFAction ac;
-	char *code;
 	char *outputfile="out.swf";
-	char ppfile[PATH_MAX];        /* preprocessed file */
-	struct stat statbuf;
 	int width=640, height=480;    /* default stage size */
 	int i;
 	int swfcompression = DEFSWFCOMPRESSION;
-	int dopreprocess = 1; /* use preprocessor by default */
 	int framerate = 12;
 	int compiledfiles = 0;
+	struct stat statbuf;
 #ifdef HAVE_GETOPT_LONG
 	struct option opts[] =
 	{
@@ -252,8 +194,6 @@ main (int argc, char **argv)
 	int opts_idx;
 #endif
 	int c;
-	char *cppargs;
-	size_t cppargsize = 256;
 	char *me;
 
 	cppargs = malloc(cppargsize);
@@ -278,7 +218,7 @@ main (int argc, char **argv)
 		switch (c)
 		{
 			case 'p':
-				dopreprocess=0;
+				makeswf_set_dopreprocess(0);
 				break;
 			case 's':
 				if ( sscanf(optarg, "%dx%d", &width, &height) != 2 )
@@ -291,6 +231,7 @@ main (int argc, char **argv)
 				{
 					usage(argv[0], EXIT_FAILURE);
 				}
+				makeswf_set_swfversion(swfversion);
 				break;
 			case 'c':
 				if ( sscanf(optarg, "%d", &swfcompression) != 1 )
@@ -310,14 +251,9 @@ main (int argc, char **argv)
 				}
 				break;
 			case 'I':
-				// yes, you can smash the stack ... 
-				sprintf(buf, " -I%s", optarg);
-				if (strlen(cppargs)+strlen(buf) > cppargsize)
-				{
-					cppargsize *= 2;
-					cppargs = realloc(cppargs, cppargsize);
-				}
-				strcat(cppargs, buf);
+				snprintf(buf, 1023, " -I%s", optarg);
+				buf[1023]='\0';
+				makeswf_append_cpparg(buf);
 				break;
 			case 'i':
 				add_import_spec(optarg);
@@ -352,8 +288,9 @@ main (int argc, char **argv)
 
 	if ( argc < 1 ) usage(me, EXIT_FAILURE);
 
-	if ( ! stat(outputfile, &statbuf) )
+	if ( stat(outputfile, &statbuf) )
 	{
+		// should warn about overriding (-f ?)
 	}
 
 	if ( Ming_init() )
@@ -362,7 +299,7 @@ main (int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	Ming_setWarnFunction(warningHandler);
-	Ming_setErrorFunction(compileError);
+	//Ming_setErrorFunction(compileError);
 	Ming_useSWFVersion(swfversion);
 	Ming_setSWFCompression(swfcompression);
 
@@ -381,48 +318,15 @@ main (int argc, char **argv)
 
 	for ( i=0; i<argc; i++ )
 	{
-		struct stat statbuf;
+		SWFAction ac;
 		char *filename = argv[i];
 
-		if ( -1 == stat(argv[i], &statbuf) )
-		{
-			fprintf(stderr, "Skipping source '%s': %s\n",
-				argv[i], strerror(errno));
-			continue;
-		}
+		ac = makeswf_compile_source(filename);
 
-		if ( dopreprocess )
-		{
-			printf("Preprocessing %s... ", argv[i]);
-			fflush(stdout);
-			sprintf(ppfile, "%s.pp", argv[i]);
-			if ( ! preprocess(argv[i], ppfile, cppargs) ) continue;
-			//unlink(ppfile);
-			filename = ppfile;
-			printf("done.\n");
-		}
-		if ( ! (code=readfile(filename)) )
-		{
-			continue;
-		}
-
-		printf("Compiling `%s' into frame %d... ",
-			filename, compiledfiles+1);
-		fflush(stdout);
-		lastcompilefailed=0;
-		ac = compileSWFActionCode(code);
-		free(code);
-		if ( lastcompilefailed )
-		{
-			printf("failed:\n"); 
-			printCompileMessage();
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			printf("done.\n"); 
-		}
+		printf("Adding %s to frame %d... ", filename, i);
 		SWFMovie_add(mo, (SWFBlock)ac);
+		printf("done.\n"); 
+
 		compiledfiles++;
 		SWFMovie_nextFrame(mo);
 
@@ -442,50 +346,6 @@ main (int argc, char **argv)
 	return 0;
 }
 
-static char *
-readfile (char *file)
-{
-   FILE *fd;
-   struct stat buf;
-   int size;
-   char *ret;
-
-   fd = fopen(file, "r");
-   if ( ! fd )
-   {
-      perror(file);
-      return NULL;
-   }
-   fstat(fileno(fd), &buf);
-   size = buf.st_size;
-   ret = (char *) malloc( size+1 );
-   if ( ! ret ) 
-   {
-      perror("readfile");
-      return NULL;
-   }
-   memset(ret, '\0', size+1);
-   fread(ret, 1, size, fd);
-   fclose(fd);
-
-   return ret;
-}
-
-static int
-preprocess (char *file, char *out, char *cppargs)
-{
-	char buf[1024];
-	int ret;
-
-	sprintf(buf, "%s -D__SWF_VERSION__=%d %s %s > %s", CPP,
-		swfversion, cppargs, file, out);
-	//printf("%s\n", buf);
-
-	ret = system(buf);
-	if ( ret ) return 0;
-
-	return 1;
-}
 
 static void
 add_import_spec(char *spec)
@@ -550,9 +410,12 @@ add_imports()
 	return 1;
 }
 
-/*************************************************************8
+/**************************************************************
  *
  * $Log$
+ * Revision 1.23  2006/07/08 13:47:18  strk
+ * Split makeswf general functionalities in a separate file, for use by unit testers
+ *
  * Revision 1.22  2006/06/20 22:16:13  strk
  * makeswf:
  *   - Added __SWF_VERSION__ macro definition for use in source files
@@ -626,4 +489,4 @@ add_imports()
  * Added -D and -I switched for preprocessor control
  *
  *
- */
+ **************************************************************/

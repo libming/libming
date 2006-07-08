@@ -134,7 +134,7 @@ dbl2png_LDADD = $(top_builddir)/src/libming.la
 gif2dbl_SOURCES = gif2dbl.c
 gif2dbl_LDADD = $(top_builddir)/src/libming.la
 
-makeswf_SOURCES = makeswf.c
+makeswf_SOURCES = makeswf.c makeswf_utils.c
 makeswf_LDADD = $(top_builddir)/src/libming.la
 
 EXTRA_DIST = \
