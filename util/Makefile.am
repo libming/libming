@@ -137,6 +137,8 @@ gif2dbl_LDADD = $(top_builddir)/src/libming.la
 makeswf_SOURCES = makeswf.c makeswf_utils.c
 makeswf_LDADD = $(top_builddir)/src/libming.la
 
+bin_SCRIPTS = ming-config
+
 EXTRA_DIST = \
 	README \
 	bindump.c \
