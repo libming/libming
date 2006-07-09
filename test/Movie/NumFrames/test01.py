@@ -1,8 +1,6 @@
 #!/usr/bin/python
 from ming import *
 
-Ming_setScale(20.0);
-
 m =  SWFMovie();
 
 m.setFrames(2);

@@ -8,9 +8,15 @@ AM_CPPFLAGS = \
 LDADD = $(top_builddir)/src/libming.la
 LIBS=-lstdc++
 
-@HAVE_PERL_TRUE@PERLBINDINGS = perl
-@HAVE_PYTHON_TRUE@PYTHONBINDINGS = python
-@HAVE_PHP_TRUE@PHPBINDINGS = php
+if USE_PERL
+PERLBINDINGS = perl
+endif
+if USE_PYTHON
+PYTHONBINDINGS = python
+endif
+if USE_PHP
+PHPBINDINGS = php
+endif
 BINDINGS = "c cxx $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 
 TESTS_ENVIRONMENT = top_builddir=$(top_builddir) BINDINGS=$(BINDINGS)
