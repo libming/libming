@@ -4,5 +4,3 @@ SUBDIRS = \
 	NumFrames	\
 	Rate 
 
-EXTRA_DIST = TestList
-

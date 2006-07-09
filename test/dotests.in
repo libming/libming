@@ -1,15 +1,20 @@
 #!/usr/bin/perl
 
+# This is currently written in perl, just to be quick, and easy to
+# experiment with. Once the design is stable, this should be re-written
+# in C to be portable to the largest number of platforms.
+
 # $(PERL)
 
 $VERBOSE=1;
 $SRCDIR=$ENV{'srcdir'};
+$TOPDIR=$ENV{'top_builddir'};
 
 sub usage()
 {
 	#print STDERR "BINDINGS=\"<binding> [<binding> ...]\" Usage: $0 <binding> [<binding> ...]\n";
 	print STDERR "Usage: BINDINGS=\"<binding> [<binding> ...]\" $0\n"; #Usage: $0 <binding> [<binding> ...]\n";
-	print STDERR " recognized bindings are: C, PERL, PHP, PYTHON\n";
+	print STDERR " recognized bindings are: C, C++, PERL, PHP, PYTHON\n";
 	exit(1);
 }
 
@@ -22,6 +27,7 @@ if ( ! $SRCDIR )
 }
 
 $do_test_c=0;
+$do_test_cxx=0;
 $do_test_perl=0;
 $do_test_php=0;
 $do_test_python=0;
@@ -38,6 +44,10 @@ while (@BINDINGS)
 	{
 		$do_test_c=1;
 	}
+	elsif ( $arg =~ /^cxx$/i )
+	{
+		$do_test_cxx=1;
+	}
 	elsif ( $arg =~ /^perl$/i )
 	{
 		$do_test_perl=1;
@@ -52,7 +62,7 @@ while (@BINDINGS)
 	}
 	else
 	{
-		print STDERR "Unrecognized binding: $arg\n";
+		print STDERR "Unrecognized binding: '$arg'\n";
 		usage();
 	}
 
@@ -60,6 +70,7 @@ while (@BINDINGS)
 
 if ( $VERBOSE ) {
 	print "Test c: ", $do_test_c, "\n";
+	print "Test C++: ", $do_test_cxx, "\n";
 	print "Test perl: ", $do_test_perl, "\n";
 	print "Test python: ", $do_test_python, "\n";
 	print "Test php: ", $do_test_php, "\n";
@@ -95,6 +106,10 @@ sub doswftest($$$)
 		system("rm -f $testswf");
 	}
 
+	# Set some vaiable to ensure we pick up the just build library & modules
+	$ENV{'LD_LIBRARY_PATH'}=$TOPDIR;
+	$ENV{'PYTHONPATH'}=$TOPDIR."/py_ext/build/lib.linux-i686-2.3";
+	$ENV{'PERL5LIB'}=$TOPDIR."/perl_ext/blib/lib".$TOPDIR."/perl_ext/blib/arch/";
 	# test will be created in CWD, so let's
 	# chdir to target dir
 	chomp($cwd = `pwd`);
@@ -115,7 +130,7 @@ sub doswftest($$$)
 		++$failures;
 		return 0;
 	}
-	if( system("listswf $testswf | diff - $testref") ) {
+	if( system("$TOPDIR/util/listswf $testswf | diff - $testref") ) {
 		printf  STDERR "$test failed. problem comparing against $testref\n";
 		++$failures;
 		return 0;
@@ -147,6 +162,11 @@ sub dotestset($$$)
 				doswftest($testswf, $testref, $testbuilder);
 			}
 
+			if ( $do_test_cxx ) {
+				$testbuilder = $builddir."/".$test."-cxx";
+				doswftest($testswf, $testref, $testbuilder);
+			}
+
 			if ( $do_test_php ) {
 				$testbuilder = $srcdir."/".$test.".php";
 				doswftest($testswf, $testref, $testbuilder);
@@ -158,7 +178,7 @@ sub dotestset($$$)
 			}
 
 			if ( $do_test_python ) {
-				$testpy = $srcdir."/".$test.".py";
+				$testbuilder = $srcdir."/".$test.".py";
 				doswftest($testswf, $testref, $testbuilder);
 			}
 		} elsif ( $test[1] eq "dir" ) {
@@ -176,6 +196,6 @@ sub dotestset($$$)
 	close(TESTLIST);
 }
 
-dotestset(0, $SRCDIR, ".");
+dotestset(0, $SRCDIR, $SRCDIR);
 
 exit $failures;

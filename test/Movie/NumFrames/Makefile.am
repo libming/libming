@@ -1,10 +1,31 @@
 SUBDIRS = 
 
 AM_CPPFLAGS = \
+	-I$(top_srcdir) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/test
 
-EXTRA_DIST = \
+LDADD = $(top_builddir)/src/libming.la
+LIBS=-lstdc++
+
+@HAVE_PERL_TRUE@PERLBINDINGS = perl
+@HAVE_PYTHON_TRUE@PYTHONBINDINGS = python
+@HAVE_PHP_TRUE@PHPBINDINGS = php
+BINDINGS = "c cxx $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
+
+TESTS_ENVIRONMENT = top_builddir=$(top_builddir) BINDINGS=$(BINDINGS)
+
+TESTS = ../../dotests
+
+C_PROGS =		\
+	test01
+
+CXX_PROGS =		\
+	test01-cxx
+
+TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
+
+EXTRA_DIST = 		\
 	test01.php	\
 	test01.pl	\
 	test01.py	\
@@ -12,10 +33,10 @@ EXTRA_DIST = \
 	TestList
 
 check_PROGRAMS = \
-	setNumberOfFramesTest
+	$(TEST_PROGS)
 
-TESTS = setNumberOfFramesTest
+test01_cxx_SOURCES = test01-cxx.C
 
-setNumberOfFramesTest_SOURCES = setNumberOfFramesTest.c ../../run_test.c
-setNumberOfFramesTest_LDADD = $(top_builddir)/src/libming.la
-setNumberOfFramesTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"'
+CLEANFILES = test01.swf
+
+include ../../Makefile.inc
