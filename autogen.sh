@@ -1,21 +1,29 @@
 #!/bin/sh
 
+bail_out()
+{
+	echo 
+	echo "  Something went wrong, bailing out!" 
+	echo 
+	exit 1
+}
+
 echo "Running aclocal -I macros"
-aclocal -I macros || exit 1
+aclocal -I macros || bail_out
 
 echo "Running libtoolize"
-libtoolize --force || exit 1
+libtoolize --force || bail_out
 
 echo "Running autoheader"
-autoheader -f || exit 1
+autoheader -f || bail_out
 
 echo "Running automake -a -c"
-automake -a -c || exit 1
+automake -a -c || bail_out
 
 #autoconf -f
 #./configure --enable-maintainer-mode
 echo "Running autoconf"
-autoconf || exit 1
+autoconf || bail_out
 
 echo 
 echo "  All autostuff worked fine. "
