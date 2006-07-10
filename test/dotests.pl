@@ -120,7 +120,7 @@ sub doswftest($$$)
 	if( !$ENV{'USE_INSTALLED'} ) {
 		$ENV{'LD_LIBRARY_PATH'}=$TOP_BUILDDIR."/src/.libs";
 		$ENV{'PYTHONPATH'}=$TOP_BUILDDIR."/py_ext/build/lib.linux-i686-2.3";
-		$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/lib".$TOP_BUILDDIR."/perl_ext/blib/arch/";
+		$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/lib:".$TOP_BUILDDIR."/perl_ext/blib/arch/";
 	} else {
 		# Try to avoid the autogoo and run the test w/ installed libs
 		if( -x ".libs/".$testbuilder ) {
