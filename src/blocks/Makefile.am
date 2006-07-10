@@ -46,7 +46,7 @@ noinst_HEADERS =	\
 noinst_LTLIBRARIES = libblock.la
 
 if USE_PNG
-PNG_SOURCES=pngdbl.c
+PNG_SOURCE=pngdbl.c
 endif
 
 libblock_la_SOURCES = 	\
@@ -88,5 +88,5 @@ libblock_la_SOURCES = 	\
 	ttffont.c	\
 	utf8.c		\
 	videostream.c	\
-	$(PNG_SOURCES)	
+	$(PNG_SOURCE)
 
