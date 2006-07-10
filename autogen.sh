@@ -11,17 +11,15 @@ bail_out()
 echo "Running aclocal -I macros"
 aclocal -I macros || bail_out
 
-echo "Running libtoolize"
-libtoolize --force || bail_out
+echo "Running libtoolize --automake"
+libtoolize --automake || bail_out
 
-echo "Running autoheader"
+echo "Running autoheader -f"
 autoheader -f || bail_out
 
 echo "Running automake"
 automake || bail_out
 
-#autoconf -f
-#./configure --enable-maintainer-mode
 echo "Running autoconf"
 autoconf || bail_out
 
