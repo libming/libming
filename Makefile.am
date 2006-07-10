@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip 1.4d
+
 SUBDIRS =	\
         src	\
 	util	\
