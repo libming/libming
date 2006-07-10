@@ -117,7 +117,7 @@ sub doswftest($$$)
 	}
 
 	# Set some vaiable to ensure we pick up the just build library & modules
-	if( $ENV{'USE_INSTALLED'} eq "" ) {
+	if( !$ENV{'USE_INSTALLED'} ) {
 		$ENV{'LD_LIBRARY_PATH'}=$TOP_BUILDDIR;
 		$ENV{'PYTHONPATH'}=$TOP_BUILDDIR."/py_ext/build/lib.linux-i686-2.3";
 		$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/lib".$TOP_BUILDDIR."/perl_ext/blib/arch/";
@@ -211,7 +211,7 @@ sub dotestset($$$)
 		}
 	}
 	print "End of loop for depth $depth\n";
-	close(TESTLIST);
+	close($TESTLIST);
 }
 
 dotestset(0, $SRCDIR, $BUILDDIR);
