@@ -45,8 +45,9 @@
  *
  *  TODO
  *  ----
- * 
- *  - Have main ./configure script detect HAVE_GETOPT_LONG 
+ *
+ *  - Write preprocessor output to <output>.as.pp rather then <source>.as.pp
+ *    to have more chances at succeeding (source dir can be unwriteable)
  *
  ***************************************************************************/
 
@@ -63,6 +64,7 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <ming.h>
+#include <ming_config.h>
 #include "makeswf.h"
 #ifdef HAVE_GETOPT
 #include <getopt.h>
@@ -187,8 +189,8 @@ main (int argc, char **argv)
 		{"size", 1, 0, 's'},
 		{"output", 1, 0, 'o'},
 		{"import", 1, 0, 'i'},
-		{"version", 1, 0, 'V'},
-		{"help", 1, 0, 'h'},
+		{"version", 0, 0, 'V'},
+		{"help", 0, 0, 'h'},
 		{0, 0, 0, 0}
 	};
 	int opts_idx;
@@ -413,6 +415,10 @@ add_imports()
 /**************************************************************
  *
  * $Log$
+ * Revision 1.24  2006/07/10 15:30:41  strk
+ * Fixed --help and --version to not require an argument, added TODO item
+ * for non-writeable source dir case.
+ *
  * Revision 1.23  2006/07/08 13:47:18  strk
  * Split makeswf general functionalities in a separate file, for use by unit testers
  *
