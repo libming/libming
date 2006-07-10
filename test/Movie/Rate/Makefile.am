@@ -8,20 +8,7 @@ AM_CPPFLAGS = \
 LDADD = $(top_builddir)/src/libming.la
 LIBS=-lstdc++
 
-if USE_PERL
-PERLBINDINGS = perl
-endif
-if USE_PYTHON
-PYTHONBINDINGS = python
-endif
-if USE_PHP
-PHPBINDINGS = php
-endif
-BINDINGS = "c cxx $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
-
-TESTS_ENVIRONMENT = top_builddir=$(top_builddir) BINDINGS=$(BINDINGS)
-
-TESTS = ../../dotests
+TESTS = dotests
 
 C_PROGS =		\
 	test01
@@ -43,6 +30,6 @@ check_PROGRAMS = \
 
 test01_cxx_SOURCES = test01-cxx.C
 
-CLEANFILES = test01.swf
+CLEANFILES = dotests test01.swf 
 
 include ../../Makefile.inc

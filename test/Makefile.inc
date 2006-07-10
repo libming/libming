@@ -1,5 +1,20 @@
 all: $(TESTS_PROGS)
 
+if USE_PERL
+PERLBINDINGS = perl
+endif
+if USE_PYTHON
+PYTHONBINDINGS = python
+endif
+if USE_PHP
+PHPBINDINGS = php
+endif
+
+# temporarly forced to only thest the C binding, please uncomment
+# only when tests actually pass (we're still testing the framework)
+#BINDINGS = "c cxx $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
+BINDINGS = "c"
+
 #
 # Warning!!!!
 # This is a cheat. Reference results should never be generated using the
@@ -20,3 +35,8 @@ gen: refs $(SWFS)
 	swftopython $$t.swf $$t.swf >$$t.py ;\
 	swftocxx $$t.swf $$t.swf >$$t-cxx.C ;\
 	done
+
+.PHONY: dotests
+dotests: $(top_srcdir)/test/dotests.in 
+	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' $(PERL) $(top_srcdir)/test/dotests.in" > $@
+	chmod +x $@

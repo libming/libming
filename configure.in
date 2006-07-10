@@ -160,7 +160,6 @@ AC_OUTPUT([
 	src/Makefile
 	src/ming.h
 	test/Makefile
-	test/dotests
 	test/Movie/Dimension/Makefile
 	test/Movie/Makefile
 	test/Movie/new/Makefile
