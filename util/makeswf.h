@@ -22,8 +22,11 @@ void makeswf_append_cpparg(const char* buf);
  * Return an SWFAction by compiling code in the given sourcefile.
  *
  * Note that the source code can use the preprocessor, unless
- * preprocessing phase is skipped by a call to makeswf_set_dopreprocess(0)
+ * preprocessing phase is skipped by a call to makeswf_set_dopreprocess(0).
+ *
+ * If the preprocessing step is not skipped, preprocessed file is wrote
+ * into the provided 'ppfile', or <filename>.pp if NULL.
  *
  */
-SWFAction makeswf_compile_source(const char* filename);
+SWFAction makeswf_compile_source(const char* filename, const char* ppfile);
 

@@ -51,9 +51,9 @@ Print version and copyright info.
 .SH PREPROCESSOR
 .B makeswf
 invokes the C preprocessor on each of the given source filenames before
-compiling them. The preprocessed version is named after the source file
-with .pp appended; check this file when looking for line numbers reported
-in syntax errors. 
+compiling them. The preprocessed version is named after the output file
+with ".frame#.pp" appended; check this file when looking for line numbers
+reported in syntax errors. 
 .PP
 An __SWF_VERSION__ macro is automatically provided so that
 ActionScript code can act differently based on target player; it is set

@@ -322,8 +322,10 @@ main (int argc, char **argv)
 	{
 		SWFAction ac;
 		char *filename = argv[i];
+		char ppfile[PATH_MAX];
 
-		ac = makeswf_compile_source(filename);
+		sprintf(ppfile, "%s.frame%d.pp", outputfile, i);
+		ac = makeswf_compile_source(filename, ppfile);
 
 		printf("Adding %s to frame %d... ", filename, i);
 		SWFMovie_add(mo, (SWFBlock)ac);
@@ -415,6 +417,9 @@ add_imports()
 /**************************************************************
  *
  * $Log$
+ * Revision 1.25  2006/07/10 16:11:26  strk
+ * Changed makeswf_compile_source signature to accept path to preprocessor output file. Changed preprocessed file paths to (<output>.frame#.pp) to reduce probability of filesystem permission problems.
+ *
  * Revision 1.24  2006/07/10 15:30:41  strk
  * Fixed --help and --version to not require an argument, added TODO item
  * for non-writeable source dir case.

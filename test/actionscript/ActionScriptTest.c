@@ -17,12 +17,12 @@
 int swfversion=6;
 
 static SWFMovie
-compile(const char* filename)
+compile(const char* filename, const char* ppfile)
 {
 	SWFAction ac;
 	SWFMovie mo = newSWFMovie();
 
-	ac = makeswf_compile_source(filename);
+	ac = makeswf_compile_source(filename, ppfile);
 
 	SWFMovie_add(mo, (SWFBlock)ac);
 	SWFMovie_nextFrame(mo);
@@ -34,11 +34,14 @@ static int
 do_test(const char* name)
 {
 	char source[PATH_MAX];
+	char ppfile[PATH_MAX];
+
+	sprintf(ppfile, "%s.as.pp", name);
 
 	snprintf(source, PATH_MAX, "%s/%s.as", TOP_SOURCEDIR, name);
 	source[PATH_MAX-1] = '\0';
 
-	SWFMovie m = compile(source);
+	SWFMovie m = compile(source, ppfile);
 
 	return run_test(m, name);
 }

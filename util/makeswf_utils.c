@@ -50,7 +50,9 @@
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
 
-#define CPP "cpp -P -C -Wall"
+//#define CPP "cpp -P -C -Wall"
+/* we don't need comments, do we ? */
+#define CPP "cpp -P -Wall"
 #define MAXERRORMSG 1024
 
 /* prototypes */
@@ -88,18 +90,26 @@ makeswf_set_swfversion(int value)
 }
 
 SWFAction
-makeswf_compile_source(const char* filename)
+makeswf_compile_source(const char* filename, const char* ppfile)
 {
 	SWFAction ac;
 	char *code;
-	char ppfile[PATH_MAX];        /* preprocessed file */
+	char ppfile_fallback[PATH_MAX];        /* preprocessed file */
 	SWFMsgFunc old_error_func;
 
 	if ( dopreprocess )
 	{
+		if ( ! ppfile ) 
+		{
+			sprintf(ppfile_fallback, "%s.pp", filename);
+			ppfile = ppfile_fallback;
+		}
+
+		// TODO: make sure ppfile is writable
+
+
 		printf("Preprocessing %s... ", filename);
 		fflush(stdout);
-		sprintf(ppfile, "%s.pp", filename);
 		if ( ! makeswf_preprocess(filename, ppfile) )
 		{
 			return NULL;
@@ -237,6 +247,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.2  2006/07/10 16:11:26  strk
+ * Changed makeswf_compile_source signature to accept path to preprocessor output file. Changed preprocessed file paths to (<output>.frame#.pp) to reduce probability of filesystem permission problems.
+ *
  * Revision 1.1  2006/07/08 13:47:18  strk
  * Split makeswf general functionalities in a separate file, for use by unit testers
  *
