@@ -78,7 +78,7 @@ WriteMakefile(
     clean   => {
         FILES   => "@do_clean",
     },
-    'MYEXTLIB'     => $MING_DIR . '/libming.a',
+    'MYEXTLIB'     => $MING_DIR . '/src/.libs/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
     #'LIBS'         => [ "-lz" ],
 		'LIBS'         => [ $libs ],
@@ -96,7 +96,7 @@ sub MY::install {
 }
 
 sub ming_is_compiled{
-	return undef unless (-e "$MING_DIR/libming.a");
+	return undef unless (-e "$MING_DIR/src/.libs/libming.a");
 	return 1;
 }
 
