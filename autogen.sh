@@ -1,19 +1,22 @@
 #!/bin/sh
 
 echo "Running aclocal"
-aclocal
+aclocal || exit 1
 
 echo "Running libtoolize"
-libtoolize --force
+libtoolize --force || exit 1
 
 echo "Running autoheader"
-autoheader -f
+autoheader -f || exit 1
 
 echo "Running automake -a -c"
-automake -a -c
+automake -a -c || exit 1
 
 #autoconf -f
 #./configure --enable-maintainer-mode
 echo "Running autoconf"
-autoconf
+autoconf || exit 1
 
+echo 
+echo "  All autostuff worked fine. "
+echo 
