@@ -42,6 +42,7 @@ libming_la_LDFLAGS = \
         -no-undefined \
 	$(PNGLIB) \
 	$(GIFLIB) \
+	$(MATHLIB) \
 	$(ZLIB)
 
 libming_la_LIBADD = \
