@@ -99,7 +99,7 @@ sub doswftest($$$)
 	chomp( $pwd = `pwd`);
 
 	# Use absolute paths
-	$testbuilder=$pwd."/".$testbuilder unless ( $testbuilder =~ m@^/@ );
+	$testbuilder="./".$testbuilder unless ( $testbuilder =~ m@^/@ );
 	$testswf=$pwd."/".$testswf unless ( $testswf =~ m@^/@ );
 
 	if( ! -r $testbuilder ) {
@@ -121,6 +121,11 @@ sub doswftest($$$)
 		$ENV{'LD_LIBRARY_PATH'}=$TOP_BUILDDIR;
 		$ENV{'PYTHONPATH'}=$TOP_BUILDDIR."/py_ext/build/lib.linux-i686-2.3";
 		$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/lib".$TOP_BUILDDIR."/perl_ext/blib/arch/";
+	} else {
+		# Try to avoid the autogoo and run the test w/ installed libs
+		if( -x ".libs/".$testbuilder ) {
+			$testbuilder=".libs/".$testbuilder
+		}
 	}
 	# test will be created in CWD, so let's
 	# chdir to target dir
@@ -170,13 +175,13 @@ sub dotestset($$$)
 			$testref = $srcdir."/".$test.".ref";
 
 			if ( $do_test_c ) {
-				$testbuilder = $builddir."/".$test;
+				$testbuilder = $test;
 				#print "TESTBUILDER: $testbuilder\n";
 				doswftest($testswf, $testref, $testbuilder);
 			}
 
 			if ( $do_test_cxx ) {
-				$testbuilder = $builddir."/".$test."-cxx";
+				$testbuilder = $test."-cxx";
 				doswftest($testswf, $testref, $testbuilder);
 			}
 
