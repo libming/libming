@@ -1,7 +1,7 @@
 #!/bin/sh
 
-echo "Running aclocal"
-aclocal || exit 1
+echo "Running aclocal -I macros"
+aclocal -I macros || exit 1
 
 echo "Running libtoolize"
 libtoolize --force || exit 1

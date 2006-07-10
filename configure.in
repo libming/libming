@@ -114,6 +114,9 @@ dnl --------------------------------------------
 AC_PROG_YACC
 AM_PROG_LEX
 AC_PROG_LIBTOOL
+if test x"$LIBTOOL" = x; then
+	AC_MSG_ERROR([could not detect libtool, bailing out])
+fi
 
 dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
