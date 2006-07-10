@@ -32,20 +32,84 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 
+dnl --------------------------------------------
+dnl Check if we should build python extension
+dnl --------------------------------------------
+
 AC_PATH_PROG(PYTHON, python)
-AM_CONDITIONAL(USE_PYTHON, test x"$PYTHON" != x)
 AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHON" != x)
-AM_CONDITIONAL(BUILD_PYTHON_EXTENSION, false)
+
+AC_ARG_ENABLE(
+[python],
+[  --enable-python           Enable build of python extension],
+[case "${enableval}" in
+  yes) python_ext=yes ;;
+   no) python_ext=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-python-ext option]) ;;
+esac],
+python_ext=no)
+
+
+if test x"$python_ext" = xyes; then
+	if test x"$PYTHON" = x; then
+		AC_MSG_ERROR([Can't build python extension, as python executable could not be found])
+	fi
+fi
+
+AM_CONDITIONAL(BUILD_PYTHON_EXTENSION, test x"$python_ext" = xyes)
+
+
+dnl --------------------------------------------
+dnl Check if we should build perl extension
+dnl --------------------------------------------
 
 AC_PATH_PROG(PERL, perl)
-AM_CONDITIONAL(USE_PERL, test x"$PERL" != x)
 AM_CONDITIONAL(HAVE_PERL, test x"$PERL" != x)
-AM_CONDITIONAL(BUILD_PERL_EXTENSION, false)
+
+AC_ARG_ENABLE(
+[perl],
+[  --enable-perl           Enable build of perl extension],
+[case "${enableval}" in
+  yes) perl_ext=yes ;;
+   no) perl_ext=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-perl-ext option]) ;;
+esac], perl_ext=no)
+
+if test x"$perl_ext" = xyes; then
+	if test x"$PERL" = x; then
+		AC_MSG_ERROR([Can't build perl extension, as perl executable could not be found])
+	fi
+fi
+
+AM_CONDITIONAL(BUILD_PERL_EXTENSION, test x"$perl_ext" = xyes)
+
+dnl --------------------------------------------
+dnl Check if we should build php extension
+dnl --------------------------------------------
 
 AC_PATH_PROG(PHP, php)
-AM_CONDITIONAL(USE_PHP, test x"$PHP" != x)
-AM_CONDITIONAL(HAVE_PHP, test x"$PYTHON" != x)
-AM_CONDITIONAL(BUILD_PHP_EXTENSION, false)
+AM_CONDITIONAL(HAVE_PHP, test x"$PHP" != x)
+
+AC_ARG_ENABLE(
+[php],
+[  --enable-php           Enable build of php extension],
+[case "${enableval}" in
+  yes) php_ext=yes ;;
+   no) php_ext=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-php-ext option]) ;;
+esac], php_ext=no)
+
+if test x"$php_ext" = xyes; then
+	if test x"$PHP" = x; then
+		AC_MSG_ERROR([Can't build php extension, as php executable could not be found])
+	fi
+fi
+
+AM_CONDITIONAL(BUILD_PHP_EXTENSION, test x"$php_ext" = xyes)
+
+dnl --------------------------------------------
+dnl Check for required programs
+dnl --------------------------------------------
 
 AC_PROG_YACC
 AM_PROG_LEX
@@ -170,3 +234,48 @@ AC_OUTPUT([
 	util/Makefile
 	util/ming-config
 ])
+
+echo "Config summary: "
+
+if test "$perl_ext" = "xyes"; then
+	echo "  Perl extension enabled"
+else
+	echo "  Perl extension disabled"
+fi
+
+if test "$php_ext" = "xyes"; then
+	echo "  PHP extension enabled"
+else
+	echo "  PHP extension disabled"
+fi
+
+if test "$python_ext" = "xyes"; then
+	echo "  Python extension enabled"
+else
+	echo "  Python extension disabled"
+fi
+
+if test x"$ZLIB" != "x"; then
+	echo "  ZLIB enabled ($ZLIB)"
+else
+	echo "  ZLIB disabled"
+fi
+
+if test x"$ft_config" = "x"; then
+	echo "  Freetype library disabled"
+else
+	echo "  Freetype library enabled ($ft_config)"
+fi
+
+if test x"$GIFLIB" = "x"; then
+	echo "  GIF library disabled"
+else
+	echo "  GIF library enabled ($GIFLIB)"
+fi
+
+if test x"$PNGLIB" = "x"; then
+	echo "  PNG library disabled"
+else
+	echo "  PNG library enabled ($PNGLIB)"
+fi
+

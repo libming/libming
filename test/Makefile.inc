@@ -1,19 +1,16 @@
 all: $(TESTS_PROGS)
 
-if USE_PERL
+if BUILD_PERL_EXTENSION 
 PERLBINDINGS = perl
 endif
-if USE_PYTHON
+if BUILD_PYTHON_EXTENSION 
 PYTHONBINDINGS = python
 endif
-if USE_PHP
+if BUILD_PHP_EXTENSION 
 PHPBINDINGS = php
 endif
 
-# temporarly forced to only thest the C binding, please uncomment
-# only when tests actually pass (we're still testing the framework)
-#BINDINGS = "c cxx $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
-BINDINGS = "c"
+BINDINGS = "c cxx $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 
 #
 # Warning!!!!
