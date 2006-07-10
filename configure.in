@@ -237,19 +237,19 @@ AC_OUTPUT([
 
 echo "Config summary: "
 
-if test "$perl_ext" = "xyes"; then
+if test x"$perl_ext" = "xyes"; then
 	echo "  Perl extension enabled"
 else
 	echo "  Perl extension disabled"
 fi
 
-if test "$php_ext" = "xyes"; then
+if test x"$php_ext" = "xyes"; then
 	echo "  PHP extension enabled"
 else
 	echo "  PHP extension disabled"
 fi
 
-if test "$python_ext" = "xyes"; then
+if test x"$python_ext" = "xyes"; then
 	echo "  Python extension enabled"
 else
 	echo "  Python extension disabled"
