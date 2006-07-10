@@ -5,7 +5,7 @@ dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
 AC_CONFIG_AUX_DIR(config)
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE(ming, 0.4.0-beta)
 
 AM_MAINTAINER_MODE
 
