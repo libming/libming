@@ -24,3 +24,6 @@ trace(test instanceOf Function);
 
 // 'function' is a reserved word
 // trace(test instanceOf function);
+
+// This is the one that failed with tknip patch for AS2 support
+function getName() { return this.name; }
