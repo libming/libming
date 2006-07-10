@@ -34,6 +34,6 @@ gen: refs $(SWFS)
 	done
 
 .PHONY: dotests
-dotests: $(top_srcdir)/test/dotests.in 
-	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' $(PERL) $(top_srcdir)/test/dotests.in" > $@
+dotests: $(top_srcdir)/test/dotests.pl 
+	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
 	chmod +x $@
