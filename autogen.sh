@@ -17,8 +17,8 @@ libtoolize --force || bail_out
 echo "Running autoheader"
 autoheader -f || bail_out
 
-echo "Running automake -a -c"
-automake -a -c || bail_out
+echo "Running automake"
+automake || bail_out
 
 #autoconf -f
 #./configure --enable-maintainer-mode
