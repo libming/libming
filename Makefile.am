@@ -10,8 +10,13 @@
 #
 AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip 1.4d
 
+if BUILD_PERL_EXTENSION
+PERLSUBDIR = perl_ext
+endif
+
 SUBDIRS =	\
         src	\
+	$(PERLSUBDIR) \
 	util	\
 	docs	\
 	macros	\

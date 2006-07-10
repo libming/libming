@@ -226,6 +226,7 @@ AC_OUTPUT([
 	src/blocks/Makefile
 	src/Makefile
 	src/ming.h
+	perl_ext/Makefile
 	test/Makefile
 	test/Movie/Dimension/Makefile
 	test/Movie/Makefile
