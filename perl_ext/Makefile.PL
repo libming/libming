@@ -54,6 +54,7 @@ foreach my $dir (@DEFAULT_DIR) {
     }
 }
 
+$MING_DIR="../";
 ask_ming_dir() unless ($MING_DIR);
 
 
