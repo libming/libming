@@ -21,26 +21,26 @@ my @do_clean = qw {
 
 for(@do_clean) { unlink $_ }
 
-my @SWF_MODULES = qw {
-	Action
-	Bitmap
-	Button
-	Constants
-	DisplayItem
-	Fill
-	Font
-	Gradient
-	Morph
-	Movie
-	MovieClip
-	Shape
-	Sound
-	SoundInstance
-	SoundStream
-	Text
-	TextField
-	VideoStream
-};
+my @SWF_MODULES = (
+	${SRCDIR}.'Action',
+	${SRCDIR}.'/Bitmap',
+	${SRCDIR}.'/Button',
+	${SRCDIR}.'/Constants',
+	${SRCDIR}.'/DisplayItem',
+	${SRCDIR}.'/Fill',
+	${SRCDIR}.'/Font',
+	${SRCDIR}.'/Gradient',
+	${SRCDIR}.'/Morph',
+	${SRCDIR}.'/Movie',
+	${SRCDIR}.'/MovieClip',
+	${SRCDIR}.'/Shape',
+	${SRCDIR}.'/Sound',
+	${SRCDIR}.'/SoundInstance',
+	${SRCDIR}.'/SoundStream',
+	${SRCDIR}.'/Text',
+	${SRCDIR}.'/TextField',
+	${SRCDIR}.'/VideoStream'
+);
 
 my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
 
