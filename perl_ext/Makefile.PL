@@ -71,10 +71,15 @@ write_swf_h($MING_DIR."/src/");
 write_config_test ($MING_DIR."/src/");
 write_bootxs();
 
+sub MY::postamble {
+    return "Makefile.PL: $SRCDIR/Makefile.PL\n".
+    "\tln -s $SRCDIR/Makefile.PL .\n";
+}
+
 
 WriteMakefile(
     'NAME'	   => 'SWF',
-    'VERSION_FROM' => 'SWF.pm',
+    'VERSION_FROM' => $SRCDIR.'/SWF.pm',
     ( $] <  5.005 ? () :
       (
        ABSTRACT   => 'Perl interface to Ming -  a library for generating SWF ("Flash") format movies.',
@@ -187,6 +192,7 @@ sub get_mingconfig{
 sub write_myconfig_file{
     my $dir = shift;
     local *FH;
+    mkdir "SWF";
     open FH, ">SWF/MyConfig.pm" or die "can't open MyConfig $!";
     print FH<<EOConf;
 #
@@ -238,6 +244,7 @@ sub write_config_test {
     my $dir = shift;
     $dir = abs_path($dir);
     unlink ${CONFIG_PL};
+    mkdir "t";
     local *FH;
     open FH, ">${CONFIG_PL}" or die "can't open ${CONFIG_PL} $!";
     print FH <<EOF;
