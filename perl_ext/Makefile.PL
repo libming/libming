@@ -5,6 +5,7 @@ use Cwd qw(abs_path cwd);
 use strict;
 
 my $SRCDIR=$ENV{'srcdir'};
+$SRCDIR="." unless $SRCDIR;
 
 my $CONFIG_PL = ${SRCDIR}.'/t/config.pl';
 
