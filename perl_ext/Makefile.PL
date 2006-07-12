@@ -4,13 +4,17 @@ use ExtUtils::MakeMaker;
 use Cwd qw(abs_path cwd);
 use strict;
 
+my $SRCDIR=$ENV{'srcdir'};
+
+my $CONFIG_PL = ${SRCDIR}.'/t/config.pl';
+
 my @DEFAULT_DIR = qw(..);
 
 my @do_clean = qw {
     SWF.h
     Boot.xsh
-    t/config.pl
-    t/gradient.swf
+    ${CONFIG_PL}
+    ${SRCDIR}/t/gradient.swf
     SWF/MyConfig.pm
 };
 
@@ -106,7 +110,7 @@ sub compile{
     my $cur_dir = cwd;
     chdir $MING_DIR;
     system "./configure";
-		system "make static";
+    system "make";
     chdir $cur_dir;
 }
 
@@ -232,9 +236,9 @@ EOF
 sub write_config_test {
     my $dir = shift;
     $dir = abs_path($dir);
-    unlink "t/config.pl";
+    unlink ${CONFIG_PL};
     local *FH;
-    open FH, ">t/config.pl" or die "can't open t/config.pl $!";
+    open FH, ">${CONFIG_PL}" or die "can't open ${CONFIG_PL} $!";
     print FH <<EOF;
 # ====================================================================
 # Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
