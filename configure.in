@@ -174,6 +174,11 @@ AC_CHECK_FUNC(sin, MATHLIB="", [
 
 AC_DEFINE(TRACK_ALLOCS, 1, [Define this if you want Ming to track all objects allocations. Ming will mantain a doubly linked list of allocated objects, call Ming_collectGarbage() to get rid of them all])
 
+AM_CONDITIONAL(USE_CXX, test x${CXX} != x)
+if test -n "${CXX}"; then
+	AC_DEFINE([USE_CXX], [1], [Use c++])
+fi
+
 AM_CONDITIONAL(USE_ZLIB, test x${ZLIB} != x)
 if test -n "${ZLIB}"; then
 	AC_DEFINE([USE_ZLIB], [1], [Use zlib])
@@ -241,6 +246,11 @@ AC_OUTPUT([
 
 echo "Config summary: "
 
+if test x"$CXX" = "xyes"; then
+	echo "  C++ enabled"
+else
+	echo "  C++ disabled"
+fi
 if test x"$perl_ext" = "xyes"; then
 	echo "  Perl extension enabled"
 else

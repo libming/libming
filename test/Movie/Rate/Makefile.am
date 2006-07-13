@@ -13,8 +13,12 @@ TESTS = dotests
 C_PROGS =		\
 	test01
 
+if USE_CXX
 CXX_PROGS =		\
 	test01-cxx
+
+test01_cxx_SOURCES = test01-cxx.C
+endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
@@ -27,8 +31,6 @@ EXTRA_DIST = 		\
 
 check_PROGRAMS = \
 	$(TEST_PROGS)
-
-test01_cxx_SOURCES = test01-cxx.C
 
 CLEANFILES = dotests test01.swf 
 
