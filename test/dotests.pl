@@ -24,7 +24,7 @@ sub usage()
 {
 	#print STDERR "BINDINGS=\"<binding> [<binding> ...]\" Usage: $0 <binding> [<binding> ...]\n";
 	print STDERR "Usage: BINDINGS=\"<binding> [<binding> ...]\" $0\n"; #Usage: $0 <binding> [<binding> ...]\n";
-	print STDERR " recognized bindings are: C, C++, PERL, PHP, PYTHON\n";
+	print STDERR " recognized bindings are: C, cxx, PERL, PHP, PYTHON\n";
 	exit(1);
 }
 
