@@ -9,15 +9,17 @@ Ming_setWarnFunction - Set the function that gets called when a warning occurs w
 <h1>SYNOPSIS</h1>
 <pre>#include &lt;ming.h&gt;
 
-void Ming_setWarnFunction(void (*warn)(const char *msg,...));
+SWFMsgFunc Ming_setWarnFunction(SWFMsgFunc warn);
 </pre>
 <h1>PARAMETERS</h1>
 <dl><dt>
-void (*warn)(const char *msg,...)<dd>
-New warning function.
+SWFMsgFunc warn<dd>
+Not Documented.
 </dl>
 <h1>DESCRIPTION</h1>
 This function sets function to be called when a warning occurs within the
 library. The default function prints the warning message to stdout.
+<h1>RETURNS</h1>
+The previously-set warning function.
 
 </body>

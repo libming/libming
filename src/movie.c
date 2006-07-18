@@ -231,9 +231,15 @@ SWFMovie_setNumberOfFrames(SWFMovie movie /* movie to adjust */,
 	movie->totalFrames = totalFrames;
 }
 
-
+/*
+ * set the background color for a movie
+ * This function sets the background color for the movie.
+ */
 void
-SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b)
+SWFMovie_setBackground(SWFMovie movie /* movie whose background is being set */,
+	byte r /* red value of background color */,
+	byte g /* green value of background color */,
+	byte b /* blue value og background color */)
 {
 	movie->r = r;
 	movie->g = g;
@@ -241,8 +247,12 @@ SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b)
 }
 
 
+/*
+ * enable edit protections for a movie
+ * This function adds a block that tells flash editors to not edit this movie.
+ */
 void
-SWFMovie_protect(SWFMovie movie)
+SWFMovie_protect(SWFMovie movie /* move to protect */)
 {
 	SWFMovie_addBlock(movie, newSWFProtectBlock());
 }
