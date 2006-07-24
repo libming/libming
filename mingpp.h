@@ -429,6 +429,11 @@ class SWFMovie
 	{ return new SWFFontCharacter(SWFMovie_importFont(this->movie, filename, name)); }
 // )))) end minguts 2004/08/31
 
+  void protect()
+	{
+		SWFMovie_protect(this->movie);
+	}
+
   SWF_DECLAREONLY(SWFMovie);
 };
 

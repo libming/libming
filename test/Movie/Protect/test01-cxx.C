@@ -10,7 +10,7 @@ m = new SWFMovie();
 m->setBackground(0xff, 0xff, 0xff);
 
 // SWF_PROTECT 
-m->Protect();
+m->protect();
 
 // SWF_SHOWFRAME 
 m->nextFrame(); // end of frame 1 
