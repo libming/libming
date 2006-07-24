@@ -1,3 +1,9 @@
+Makefile.in
+Makefile
+.deps
+.libs
+*.la
+*.lo
 .AppleDouble
 lex.swf5.c
 swf5compiler.tab.c

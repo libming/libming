@@ -1,3 +1,9 @@
+Makefile.in
+Makefile
+.deps
+.libs
+*.lo
+*.la
 .AppleDouble
 test2.c
 ming_config.h
