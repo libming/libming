@@ -1,8 +1,12 @@
 Makefile.in
 Makefile
-.libs
 .deps
+.libs
 dotests
 test01
 test01-cxx
 test01.swf
+test02
+test02-cxx
+test03
+test03-cxx

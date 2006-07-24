@@ -1,4 +1,8 @@
 Makefile.in
+Makefile
+dotests
+.deps
+.libs
 test01
 test01-cxx
 test01.swf
