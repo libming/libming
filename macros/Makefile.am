@@ -1,1 +1,3 @@
-EXTRA_DIST = ming.m4
+EXTRA_DIST = \
+	ming.m4 \
+	libtool.m4
