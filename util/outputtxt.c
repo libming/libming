@@ -1017,7 +1017,8 @@ outputSWF_PROTECT (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_PROTECT);
 
-  printf(" Password: %s\n", sblock->Password);
+  if( sblock->Password )
+    printf(" Password: %s\n", sblock->Password);
 
 }
 

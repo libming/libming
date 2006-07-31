@@ -1022,10 +1022,15 @@ outputSWF_PREBUILTCLIP (SWF_Parserstruct * pblock)
 void
 outputSWF_PROTECT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_PROTECT);
+  OUT_BEGIN (SWF_PROTECT);
 
-  printf ("%s();\n",
-	  methodcall ("m", "Protect"));
+  if( sblock->Password == NULL ) {
+  	printf ("%s(NULL);\n",
+	  methodcall ("m", "protect"));
+  } else{
+  	printf ("%s(\"%s\");\n",
+	  methodcall ("m", "protect"),sblock->Password);
+  }
 
 }
 
