@@ -1083,7 +1083,8 @@ outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
 void
 outputSWF_STARTSOUND (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_STARTSOUND);
+  OUT_BEGIN (SWF_STARTSOUND);
+  printf("SWF_STARTSOUND details should be here instead of this message\n");
 
 }
 

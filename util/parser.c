@@ -2071,8 +2071,34 @@ SWF_Parserstruct *
 parseSWF_STARTSOUND (FILE * f, int length)
 {
   PAR_BEGIN (SWF_STARTSOUND);
+  SWF_SOUNDINFO *si;
+  int i;
 
   parserrec->chid = readUInt16 (f);
+  si=&(parserrec->SoundInfo);
+  si->Reserved = readBits (f, 2);
+  si->SyncStop = readBits (f, 1);
+  si->SyncNoMultiple = readBits (f, 1);
+  si->HasEnvelope = readBits (f, 1);
+  si->HasLoops = readBits (f, 1);
+  si->HasOutPoint = readBits (f, 1);
+  si->HasInPoint = readBits (f, 1);
+  if( si->HasInPoint )
+    si->InPoint = readUInt32 (f);
+  if( si->HasOutPoint )
+    si->OutPoint = readUInt32 (f);
+  if( si->HasLoops )
+    si->LoopCount = readUInt16 (f);
+  if( si->HasEnvelope ) {
+    si->EnvPoints = readUInt8 (f);
+    si->EnvelopeRecords =
+    (SWF_SOUNDENVELOPE *) calloc (si->EnvPoints, sizeof (SWF_SOUNDENVELOPE));
+    for(i=0;i<si->EnvPoints;i++) {
+    	si->EnvelopeRecords[i].Pos44 = readUInt32 (f);
+    	si->EnvelopeRecords[i].LeftLevel = readUInt16 (f);
+    	si->EnvelopeRecords[i].RightLevel = readUInt16 (f);
+    	}
+    }
 
   PAR_END;
 }

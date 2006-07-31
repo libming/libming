@@ -824,6 +824,28 @@ typedef struct SWF_TEXTRECORD {
 	SWF_GLYPHENTRY *GlyphEntries;
 } SWF_TEXTRECORD;
 
+typedef struct SWF_SOUNDENVELOPE {
+	UI32	Pos44;
+	UI16	LeftLevel;
+	UI16	RightLevel;
+} SWF_SOUNDENVELOPE;
+
+typedef struct SWF_SOUNDINFO {
+	UI8	Reserved:2;
+	UI8	SyncStop:1;
+	UI8	SyncNoMultiple:1;
+	UI8	HasEnvelope:1;
+	UI8	HasLoops:1;
+	UI8	HasOutPoint:1;
+	UI8	HasInPoint:1;
+	UI32	InPoint;
+	UI32	OutPoint;
+	UI16	LoopCount;
+	UI8	EnvPoints;
+	SWF_SOUNDENVELOPE *EnvelopeRecords;
+} SWF_SOUNDINFO;
+
+
 
 /* Types to represent Blocks */
 
@@ -1279,6 +1301,7 @@ struct SWF_SOUNDSTREAMHEAD2
 struct SWF_STARTSOUND
 {
   int chid;
+  SWF_SOUNDINFO	SoundInfo;
 };
 
 struct SWF_SYNCFRAME
