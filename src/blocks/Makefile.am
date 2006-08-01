@@ -30,6 +30,7 @@ noinst_HEADERS =	\
 	outputblock.h	\
 	output.h	\
 	placeobject.h	\
+	protect.h	\
 	rect.h		\
 	shape.h		\
 	sound.h		\
@@ -75,6 +76,7 @@ libblock_la_SOURCES = 	\
 	mp3.c		\
 	outputblock.c	\
 	output.c	\
+	protect.c	\
 	placeobject.c	\
 	read.c		\
 	rect.c		\

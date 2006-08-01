@@ -249,12 +249,15 @@ SWFMovie_setBackground(SWFMovie movie /* movie whose background is being set */,
 
 /*
  * enable edit protections for a movie
- * This function adds a block that tells flash editors to not edit this movie.
+ * This function adds a block that tells flash editors to require a password
+ * to allow editing of this this movie. The block contains an md5 encoded
+ * password which will be used by the flash editor to allow access to the movie.
  */
 void
-SWFMovie_protect(SWFMovie movie /* move to protect */)
+SWFMovie_protect(SWFMovie movie /* move to protect */,
+		char *password /* mds5 encoded password */)
 {
-	SWFMovie_addBlock(movie, newSWFProtectBlock());
+	SWFMovie_addBlock(movie, newSWFProtect(password));
 }
 
 SWFFontCharacter

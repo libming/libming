@@ -681,6 +681,8 @@ void SWFMovie_setRate(SWFMovie movie, float rate);
 void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 
+void SWFMovie_protect(SWFMovie movie, char *password);
+
 void SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name);
 
 void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b);

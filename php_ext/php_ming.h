@@ -82,7 +82,7 @@ PHP_FUNCTION(swfmovie_setBackground);
 PHP_FUNCTION(swfmovie_setRate);
 PHP_FUNCTION(swfmovie_setDimension);
 PHP_FUNCTION(swfmovie_setFrames);
-PHP_FUNCTION(swfmovie_Protect);
+PHP_FUNCTION(swfmovie_protect);
 PHP_FUNCTION(swfmovie_streamMp3);
 PHP_FUNCTION(swfmovie_addExport);
 PHP_FUNCTION(swfmovie_writeExports);

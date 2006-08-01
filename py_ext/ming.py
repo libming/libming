@@ -298,6 +298,13 @@ class SWFMovie(SWFBase):
     def setNumberOfFrames(self, totalFrames):
         mingc.SWFMovie_setNumberOfFrames(self.this, totalFrames)
 
+    def protect(self, passwd=None):
+        if passwd is None:
+            mingc.SWFMovie_protect(self.this,"")
+        else:
+            mingc.SWFMovie_protect(self.this, passwd)
+
+
     def nextFrame(self):
         mingc.SWFMovie_nextFrame(self.this)
 

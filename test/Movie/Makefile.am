@@ -3,6 +3,6 @@ SUBDIRS = \
 	Dimension	\
 	new		\
 	NumFrames	\
-	Protect	\
+	Protect		\
 	Rate 
 

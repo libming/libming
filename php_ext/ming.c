@@ -2090,6 +2090,7 @@ static zend_function_entry swfmovie_functions[] = {
   PHP_FALIAS(add,               swfmovie_add,               NULL)
   PHP_FALIAS(remove,            swfmovie_remove,            NULL)
   PHP_FALIAS(output,            swfmovie_output,            NULL)
+  PHP_FALIAS(protect,           swfmovie_protect,           NULL)
   PHP_FALIAS(save,              swfmovie_save,              NULL)
   PHP_FALIAS(savetofile,        swfmovie_saveToFile,        NULL)
   PHP_FALIAS(setbackground,     swfmovie_setBackground,     NULL)
@@ -2270,7 +2271,7 @@ PHP_FUNCTION(swfmovie_namedAnchor)
 }
 /* }}} */
 
-/* proto object swfmovie_add(object SWFBlock)
+/* {{{ proto object swfmovie_add(object SWFBlock)
 */
 PHP_FUNCTION(swfmovie_add)
 {
@@ -2416,6 +2417,28 @@ PHP_FUNCTION(swfmovie_saveToFile)
 	  Ming_setSWFCompression(oldval);
   
   RETURN_LONG(out);
+}
+/* }}} */
+
+/* {{{ proto void swfmovie_protect([ string pasword])
+*/
+PHP_FUNCTION(swfmovie_protect)
+{
+  zval **zchar;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  switch(ZEND_NUM_ARGS() ) {
+  case 0:
+    SWFMovie_protect(movie,NULL);
+  	break;
+  case 1:
+	if( zend_get_parameters_ex(1, &zchar) == FAILURE) {
+      WRONG_PARAM_COUNT;
+    }
+    SWFMovie_protect(movie,zchar);
+  default:
+      WRONG_PARAM_COUNT;
+  }
 }
 /* }}} */
 

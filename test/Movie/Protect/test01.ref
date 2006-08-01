@@ -14,7 +14,6 @@ Offset: 25 (0x0019)
 Block type: 24 (SWF_PROTECT)
 Block length: 0
 
- Password: 
 
 Offset: 27 (0x001b)
 Block type: 1 (SWF_SHOWFRAME)

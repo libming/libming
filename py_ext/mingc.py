@@ -636,6 +636,8 @@ SWFMovie_setDimension = _mingc.SWFMovie_setDimension
 
 SWFMovie_setNumberOfFrames = _mingc.SWFMovie_setNumberOfFrames
 
+SWFMovie_protect = _mingc.SWFMovie_protect
+
 SWFMovie_addExport = _mingc.SWFMovie_addExport
 
 SWFMovie_setBackground = _mingc.SWFMovie_setBackground

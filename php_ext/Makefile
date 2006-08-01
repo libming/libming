@@ -3,14 +3,11 @@ include ../Makefile.config
 DEFINES = -DHAVE_MING -DCOMPILE_DL_MING -DZEND_NEW_ERROR_HANDLING
 CFLAGS = -I../src
 
-php_ming$(NOVAR_SHLIBEXT): ming.o ../libming.a
-	${CC} ${CFLAGS} -shared -fPIC ming.o ../libming.a -o php_ming$(NOVAR_SHLIBEXT) ${EXTRA_LIBS}
+php_ming$(NOVAR_SHLIBEXT): ming.o
+	${CC} ${CFLAGS} -shared -fPIC ming.o -L.. -lming -o php_ming$(NOVAR_SHLIBEXT) ${EXTRA_LIBS}
 
 ming.o: ming.c
 	${CC} ${CFLAGS} -fPIC ${DEFINES} -c ming.c -I. -I../src -I.. `php-config --includes`
-
-../libming.a:
-	cd ..; $(MAKE) static
 
 clean:
 	rm -f php_ming$(NOVAR_SHLIBEXT) ming.o

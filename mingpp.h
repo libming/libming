@@ -431,7 +431,12 @@ class SWFMovie
 
   void protect()
 	{
-		SWFMovie_protect(this->movie);
+		SWFMovie_protect(this->movie, NULL);
+	}
+
+  void protect(char *password)
+	{
+		SWFMovie_protect(this->movie,password);
 	}
 
   SWF_DECLAREONLY(SWFMovie);

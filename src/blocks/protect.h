@@ -17,30 +17,28 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* movie.h
- * 
+/* exports.h
+ *
  * $Id$
- * 
+ *
  * Notice: This header file contains declarations of functions and types that
  * are just used internally. All library functions and types that are supposed
  * to be publicly accessable are defined in ./src/ming.h.
  */
 
-#ifndef SWF_MOVIE_H_INCLUDED
-#define SWF_MOVIE_H_INCLUDED
+#ifndef SWF_PROTECT_H_INCLUDED
+#define SWF_PROTECT_H_INCLUDED
 
 #include "ming.h"
+#include "block.h"
+#include "output.h"
 
-void SWFMovie_addBlock(SWFMovie movie, SWFBlock block);
+struct SWFProtect_s
+{
+  struct SWFBlock_s block;
+  SWFOutput out;
+  char *Password;
+};
+typedef struct SWFProtect_s *SWFProtect;
 
-void SWFMovie_writeExports(SWFMovie movie);
-
-/*int
-SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
-
-SWFCharacter SWFMovie_importChar(SWFMovie movie, const char *filename, const char *name);
-
-/* FIXME: This function should go somewhere else */
-int completeSWFImportCharacter(SWFBlock block);
-
-#endif /* SWF_MOVIE_H_INCLUDED */
+#endif /* SWF_PROTECT_H_INCLUDED */

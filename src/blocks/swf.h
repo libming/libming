@@ -490,9 +490,11 @@ SWFOutputBlock newSWFFrameLabelBlock(const char *string);
 SWFBlock newSWFSetBackgroundBlock(byte r, byte g, byte b);
 SWFBlock newSWFShowFrameBlock();
 SWFBlock newSWFEndBlock();
-SWFBlock newSWFProtectBlock();
 SWFOutputBlock newSWFExportBlock(SWFExports exports, int nExports);
 
+  /* SWFProtect */
+
+SWFBlock newSWFProtect(char *);
 
   /* SWFButton */
 

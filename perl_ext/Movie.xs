@@ -69,8 +69,9 @@ SWFMovie_setBackground(movie, r, g, b)
 	int	b
 
 void
-SWFMovie_protect(movie)
+SWFMovie_protect(movie, password=0)
 	SWF::Movie	movie
+	char	*password
 
 void
 SWFMovie_nextFrame(movie)

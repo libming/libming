@@ -5894,6 +5894,32 @@ static PyObject *_wrap_SWFMovie_setRate(PyObject *self, PyObject *args) {
 }
 
 
+static PyObject *_wrap_SWFMovie_protect(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    SWFMovie arg1 = (SWFMovie) 0 ;
+    char *arg2 = NULL ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:SWFMovie_setRate",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, 0, SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        if (!PyString_Check(obj1)) {
+            PyErr_SetString(PyExc_TypeError, "not a string");
+            return NULL;
+        }
+        arg2 = PyString_AsString(obj1);
+	if( strcmp(arg2,"") == 0 ) arg2 = NULL;
+    }
+    SWFMovie_protect(arg1,arg2);
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_SWFMovie_setDimension(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     SWFMovie arg1 = (SWFMovie) 0 ;
@@ -6475,6 +6501,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovie_setRate", _wrap_SWFMovie_setRate, METH_VARARGS },
 	 { (char *)"SWFMovie_setDimension", _wrap_SWFMovie_setDimension, METH_VARARGS },
 	 { (char *)"SWFMovie_setNumberOfFrames", _wrap_SWFMovie_setNumberOfFrames, METH_VARARGS },
+	 { (char *)"SWFMovie_protect", _wrap_SWFMovie_protect, METH_VARARGS },
 	 { (char *)"SWFMovie_addExport", _wrap_SWFMovie_addExport, METH_VARARGS },
 	 { (char *)"SWFMovie_setBackground", _wrap_SWFMovie_setBackground, METH_VARARGS },
 	 { (char *)"SWFMovie_setSoundStream", _wrap_SWFMovie_setSoundStream, METH_VARARGS },

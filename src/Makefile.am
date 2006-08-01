@@ -77,6 +77,7 @@ DOCSRC = \
 	blocks/output.c \
 	blocks/placeobject.c \
 	blocks/pngdbl.c \
+	blocks/protect.c \
 	blocks/read.c \
 	blocks/rect.c \
 	blocks/shape.c \

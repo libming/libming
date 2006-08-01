@@ -167,13 +167,6 @@ newSWFEndBlock()
 }
 
 
-SWFBlock
-newSWFProtectBlock()
-{
-	return newEmptySWFBlock(SWF_PROTECT);
-}
-
-
 SWFBlocktype
 SWFBlock_getType(SWFBlock block)
 {

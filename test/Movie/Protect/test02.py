@@ -8,9 +8,9 @@ m =  SWFMovie();
 m.setBackground(0xff, 0xff, 0xff);
 
 # SWF_PROTECT 
-m.protect();
+m.protect("foobar");
 
 # SWF_SHOWFRAME 
 m.nextFrame(); # end of frame 1 
 
-m.save("test01.swf");
+m.save("test02.swf");
