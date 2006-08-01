@@ -14,7 +14,6 @@ dist_man3_MANS =			\
 	newSWFMovie.3			\
 	newSWFMovieWithVersion.3	\
 	SWFMovie_protect.3		\
-	SWFMovie_protectWithPassword.3	\
 	SWFMovie_setDimension.3		\
 	SWFMovie_setNumberOfFrames.3	\
 	SWFMovie_setRate.3
