@@ -213,7 +213,7 @@ static FT_Outline_Funcs ft_outl_funcs = {
 };
 
 int
-main(int argc, char *argv)
+main(int argc, char *argv[])
 {
 SWF_SHAPE *shape;
 SWF_ENDSHAPERECORD *endrec;
@@ -262,16 +262,45 @@ swffont.FontNameLen=strlen(swffont.FontName);
 
 
 swffont.FontFlagsHasLayout=1;
-swffont.FontFlagsSmallText=1;
 
 /*
 for(i=0; i < face->num_charmaps; i++) {
-                        fprintf(stdout, "found encoding pid=%d eid=%d\n",
+                        fprintf(stderr, "map %d encoding pid=%d eid=%d\n", i,
                                 face->charmaps[i]->platform_id,
                                 face->charmaps[i]->encoding_id);
                 }
 */
-FT_Select_Charmap(face,FT_ENCODING_UNICODE);
+/*
+if( FT_Select_Charmap(face,FT_ENCODING_UNICODE) != 0 ) {
+	fprintf(stderr,"Unable to set find a Unicode encoding!!\n");
+	exit(3);
+	}
+	*/
+
+/* NB: This always uses the first encoding. */
+FT_Set_Charmap(face, face->charmaps[0]);
+
+swffont.FontFlagsSmallText=0;
+swffont.FontFlagsFlagANSI = 1;
+swffont.FontFlagsShiftJis = 0;
+/* Need to figure out if this is UNIcode or ANSI */
+if( face->charmaps[0]->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
+	swffont.FontFlagsSmallText=1;
+	swffont.FontFlagsFlagANSI = 0; 
+	} else if (face->charmaps[0]->platform_id == TT_PLATFORM_MICROSOFT )
+	switch( face->charmaps[0]->encoding_id )
+	{
+	case TT_MS_ID_UNICODE_CS:
+		swffont.FontFlagsSmallText=1;
+		swffont.FontFlagsFlagANSI = 0; 
+		break;
+	case TT_MS_ID_SJIS:
+		swffont.FontFlagsShiftJis = 1;
+		break;
+	default:
+		/* Else assume it's ANSI */
+		swffont.FontFlagsFlagANSI = 1;
+	}
 
 if( strstr(face->style_name, "Bold") )
 	swffont.FontFlagsFlagsBold = 1;
@@ -342,7 +371,6 @@ swffont.NumGlyphs = i;
 swffont.FontAscent = (int)(face->ascender*ratio_EM);
 swffont.FontDecent = -(int)(face->descender*ratio_EM);
 swffont.FontLeading = (int)((face->height-face->ascender+face->descender)*ratio_EM);
-fprintf(stderr,"FontLeading %d\n", swffont.FontLeading );
 
 if( maxcode > 256 )
 	swffont.FontFlagsWideCodes=1;
@@ -351,6 +379,7 @@ if( maxcode > 256 )
 
 k=0;
 swffont.FontKerningTable=0;
+#if 0
 for(i=0;i<swffont.NumGlyphs;i++) {
 	for(j=0;j<swffont.NumGlyphs;j++) {
 		if( FT_Get_Kerning(face, i, j, ft_kerning_unscaled, &kern) )
@@ -364,6 +393,7 @@ for(i=0;i<swffont.NumGlyphs;i++) {
 	k++;
 	}
 }
+#endif
 swffont.KerningCount = k;
 
 outputBlock(SWF_DEFINEFONT2,(SWF_Parserstruct *)&swffont,stdout,26,100);
