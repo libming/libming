@@ -660,9 +660,9 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
     sblock->FontFlagsWideOffsets=1;
 
   if (sblock->FontFlagsWideOffsets) {
-    glyphbase=(sblock->NumGlyphs*4)+2;
-    sblock->OffsetTable.UI32[0]=glyphbase;
+    glyphbase=(sblock->NumGlyphs*4)+4;
     sblock->CodeTableOffset.UI32=glyphbase;
+    sblock->OffsetTable.UI32[0]=glyphbase;
   } else {
     glyphbase=(sblock->NumGlyphs*2)+2;
     sblock->CodeTableOffset.UI16=glyphbase;
