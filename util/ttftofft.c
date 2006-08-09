@@ -95,7 +95,8 @@ SWF_STYLECHANGERECORD *stylerec;
 int	dx = (int)(to->x*ratio_EM);
 int	dy = -(int)(to->y*ratio_EM);
 
-	//fprintf(stderr,"moveto(%d,%d)\n",dx,dy);
+	if( last_x == dx && last_y == dy ) return 0;
+	//fprintf(stderr,"moveto(%d,%d) from(%d,%d)\n",dx,dy,last_x,last_y);
 	curshape->ShapeRecords = (SWF_SHAPERECORD *)realloc(curshape->ShapeRecords, ((curshape->NumShapeRecords+1)*sizeof(SWF_SHAPERECORD)));
 	stylerec=&(curshape->ShapeRecords[curshape->NumShapeRecords++].StyleChange);
 	memset(stylerec,0,sizeof(SWF_SHAPERECORD));
@@ -128,9 +129,7 @@ int	y = -(int)(to->y*ratio_EM);
 int	dx = x-last_x;
 int	dy = y-last_y;
 
-	last_x=x;
-	last_y=y;
-
+	if( dx == 0 && dy == 0 ) return 0;
 	//fprintf(stderr,"lineto(%d,%d)\n",dx,dy);
 	curshape->ShapeRecords = (SWF_SHAPERECORD *)realloc(curshape->ShapeRecords, ((curshape->NumShapeRecords+1)*sizeof(SWF_SHAPERECORD)));
 	linerec=&(curshape->ShapeRecords[curshape->NumShapeRecords++].StraightEdge);
@@ -150,6 +149,9 @@ int	dy = y-last_y;
 		linerec->DeltaX=dx;
 		linerec->DeltaY=dy;
 	}
+
+	last_x=x;
+	last_y=y;
 
 	return 0;
 }
@@ -302,9 +304,12 @@ if( face->charmaps[0]->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
 		swffont.FontFlagsFlagANSI = 1;
 	}
 
-if( strstr(face->style_name, "Bold") )
+swffont.FontFlagsFlagsBold = 0;
+swffont.FontFlagsFlagsItalics = 0;
+if( face->style_flags&FT_STYLE_FLAG_BOLD )
 	swffont.FontFlagsFlagsBold = 1;
-if( strstr(face->style_name, "Oblique") )
+
+if( face->style_flags&FT_STYLE_FLAG_ITALIC )
 	swffont.FontFlagsFlagsItalics = 1;
 
 
@@ -337,9 +342,16 @@ while ( gindex != 0 ) {
 	shape->NumShapeRecords = 0;
 	shape->ShapeRecords = (SWF_SHAPERECORD *)calloc(1,sizeof(SWF_SHAPERECORD));
 	shape->NumFillBits = 1;
+	shape->NumLineBits = 0;
 
 	outline=&(face->glyph->outline);
 	curshape= shape;
+	/*
+	 * reset the last x,y for each glyph. Make it absurdly big so we
+	 * won't accidentally match it in the moveto function above.
+	 */
+	last_x=2000000000;
+	last_y=2000000000;
 	if( FT_Outline_Decompose(outline, &ft_outl_funcs, NULL) ) {
 		fprintf(stderr,"Can't decompose outline for glyph %d\n", gindex);
 		continue;
