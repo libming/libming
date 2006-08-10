@@ -195,13 +195,79 @@ int	dcy = cy-last_y;
 
 static int
 outl_cubicto(
-	const FT_Vector *control1,
-	const FT_Vector *control2,
+	const FT_Vector *ctl1,
+	const FT_Vector *ctl2,
 	const FT_Vector *to,
 	void *unused
 )
 {
-	fprintf(stderr,"cubicto(%d,%d)\n",(int)to->x,(int)to->y);
+SWF_CURVEDEDGERECORD *curverec;
+FT_Vector midpnt;
+int	cx;
+int	cy;
+int	ax;
+int	ay;
+int	dax;
+int	day;
+int	dcx;
+int	dcy;
+
+	/* This is handled by breaking the cubic into 2 conic segments */
+
+	midpnt.x=(ctl1->x+ctl2->x)/2;
+	midpnt.y=(ctl1->y+ctl2->y)/2;
+
+	//fprintf(stderr,"cubicto(%d,%d) via (%d,%d)\n",
+	//	(int)to->x,(int)to->y,
+	//	(int)midpnt.x, (int)midpnt.y);
+
+	curshape->ShapeRecords = (SWF_SHAPERECORD *)realloc(curshape->ShapeRecords, ((curshape->NumShapeRecords+2)*sizeof(SWF_SHAPERECORD)));
+
+	/* First half */
+	curverec=&(curshape->ShapeRecords[curshape->NumShapeRecords++].CurvedEdge);
+	memset(curverec,0,sizeof(SWF_SHAPERECORD));
+	curverec->TypeFlag=1;
+	curverec->StraightFlag=0;
+	cx = (int)(ctl1->x*ratio_EM);
+	cy = -(int)(ctl1->y*ratio_EM);
+	ax = (int)(midpnt.x*ratio_EM);
+	ay = -(int)(midpnt.y*ratio_EM);
+	dax = ax-cx;
+	day = ay-cy;
+	dcx = cx-last_x;
+	dcy = cy-last_y;
+	curverec->NumBits=getMinBitsS( max(max(dax,day),max(dcx,dcy)) );
+	if( curverec->NumBits < 3 ) curverec->NumBits=3;
+	curverec->NumBits-=2;
+	curverec->AnchorDeltaX=dax;
+	curverec->AnchorDeltaY=day;
+	curverec->ControlDeltaX=dcx;
+	curverec->ControlDeltaY=dcy;
+
+	/* Second half */
+	curverec=&(curshape->ShapeRecords[curshape->NumShapeRecords++].CurvedEdge);
+	memset(curverec,0,sizeof(SWF_SHAPERECORD));
+	curverec->TypeFlag=1;
+	curverec->StraightFlag=0;
+	cx = (int)(ctl2->x*ratio_EM);
+	cy = -(int)(ctl2->y*ratio_EM);
+	ax = (int)(to->x*ratio_EM);
+	ay = -(int)(to->y*ratio_EM);
+	dax = ax-cx;
+	day = ay-cy;
+	dcx = cx-last_x;
+	dcy = cy-last_y;
+	curverec->NumBits=getMinBitsS( max(max(dax,day),max(dcx,dcy)) );
+	if( curverec->NumBits < 3 ) curverec->NumBits=3;
+	curverec->NumBits-=2;
+	curverec->AnchorDeltaX=dax;
+	curverec->AnchorDeltaY=day;
+	curverec->ControlDeltaX=dcx;
+	curverec->ControlDeltaY=dcy;
+
+	last_x=ax;
+	last_y=ay;
+
 	return 0;
 }
 
@@ -224,9 +290,12 @@ FT_Error error;
 FT_ULong	charcode;
 FT_UInt	gindex;
 FT_Outline *outline;
-FT_Vector kern;
 char *fname;
-int i, j, k, maxcode=0;
+int i, k, maxcode=0;
+#if 0
+FT_Vector kern;
+int j;
+#endif
 
 /* Do some getopt stuff here */
 fname = argv[1];
@@ -289,7 +358,7 @@ swffont.FontFlagsShiftJis = 0;
 if( face->charmaps[0]->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
 	swffont.FontFlagsSmallText=1;
 	swffont.FontFlagsFlagANSI = 0; 
-	} else if (face->charmaps[0]->platform_id == TT_PLATFORM_MICROSOFT )
+} else if (face->charmaps[0]->platform_id == TT_PLATFORM_MICROSOFT )
 	switch( face->charmaps[0]->encoding_id )
 	{
 	case TT_MS_ID_UNICODE_CS:
@@ -298,6 +367,7 @@ if( face->charmaps[0]->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
 		break;
 	case TT_MS_ID_SJIS:
 		swffont.FontFlagsShiftJis = 1;
+		swffont.FontFlagsFlagANSI = 0; 
 		break;
 	default:
 		/* Else assume it's ANSI */
