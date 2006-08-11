@@ -1,6 +1,473 @@
-2006-07-07 16:52  anderson
+2006-08-11 10:15  anderson
 
-	* util/outputscript.c: Remove extra space in comments
+	* TODO: Additional TODOs
+
+2006-08-10 15:12  anderson
+
+	* util/ttftofft.c: Implement support for cubic curve in glyphs so
+	  it works for .pfb format now as well
+
+2006-08-09 16:53  anderson
+
+	* src/blocks/font.h: A couple of the bits were flipped,which causes
+	  DEFINE_FONT2 blocks to be wrong
+
+2006-08-09 12:50  anderson
+
+	* util/ttftofft.c: several fixes for problem descovered when doing
+	  an exhaustive comparison with fft files created by ttf2fft
+
+2006-08-09 12:41  anderson
+
+	* util/outputswf.c: Need to add the size of a UI32 instead of a
+	  UI16
+
+2006-08-08 22:31  anderson
+
+	* util/ttftofft.c: Figure out the encoding correctly
+
+2006-08-01 03:11  anderson
+
+	* NEWS, mingpp.h, perl_ext/Movie.xs, php_ext/Makefile,
+	  php_ext/ming.c, php_ext/php_ming.h, py_ext/ming.i,
+	  py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py,
+	  src/Makefile.am, src/ming.h.in, src/movie.c, src/movie.h,
+	  src/blocks/Makefile.am, src/blocks/block.c, src/blocks/block.h,
+	  src/blocks/protect.c, src/blocks/protect.h, src/blocks/swf.h,
+	  test/Movie/Makefile.am, test/Movie/Protect/Makefile.am,
+	  test/Movie/Protect/TestList, test/Movie/Protect/test01.c,
+	  test/Movie/Protect/test01.php, test/Movie/Protect/test01.pl,
+	  test/Movie/Protect/test01.py, test/Movie/Protect/test01.ref,
+	  test/Movie/Protect/test02-cxx.C, test/Movie/Protect/test02.c,
+	  test/Movie/Protect/test02.php, test/Movie/Protect/test02.pl,
+	  test/Movie/Protect/test02.py, util/outputscript.c: Add support
+	  for the Protect block
+
+2006-08-01 01:37  anderson
+
+	* docs/: libming/SWFMovie_protect.html,
+	  libming/SWFMovie_protectWithPassword.html, libming/index.html,
+	  man/Makefile.am, man/SWFMovie_protect.3,
+	  man/SWFMovie_protectWithPassword.3: Merge the two protect
+	  function into a single interface
+
+2006-07-31 18:39  anderson
+
+	* util/: outputtxt.c, parser.c, swftypes.h: Parse STARTSOUND block.
+	  Still need to implement the output portion
+
+2006-07-31 18:02  anderson
+
+	* util/: outputscript.c, outputtxt.c, parser.c: Recognize & output
+	  a protect block
+
+2006-07-27 09:49  anderson
+
+	* docs/: libming/SWFMovie_protectWithPassword.html,
+	  libming/index.html, man/Makefile.am,
+	  man/SWFMovie_protectWithPassword.3: Update documentation for the
+	  Protect API
+
+2006-07-24 20:07  strk
+
+	* .cvsignore, docs/.cvsignore, docs/man/.cvsignore: Added and fixed
+	  .cvsignore files
+
+2006-07-24 20:04  strk
+
+	* macros/Makefile.am: distribute libtool.m4
+
+2006-07-24 20:03  strk
+
+	* macros/.cvsignore: updated .cvsignore; distribute libtool.m4
+
+2006-07-24 20:02  strk
+
+	* util/.cvsignore, test/actionscript/.cvsignore: updated .cvsignore
+
+2006-07-24 19:55  strk
+
+	* src/: blocks/.cvsignore, actioncompiler/.cvsignore, .cvsignore:
+	  updated .cvsignore
+
+2006-07-24 19:21  strk
+
+	* test/.cvsignore: Another .cvsignore (it's not last one)
+
+2006-07-24 19:00  strk
+
+	* test/Movie/: .cvsignore, Background/.cvsignore,
+	  Background/Makefile, Background/Makefile.in,
+	  Dimension/.cvsignore, NumFrames/.cvsignore, new/.cvsignore: Do
+	  not include generated Makefiles in repository, added entries in
+	  .cvsignore files
+
+2006-07-24 18:56  strk
+
+	* mingpp.h, src/ming.h.in, test/Movie/Background/Makefile,
+	  test/Movie/Background/Makefile.in, test/Movie/Protect/.cvsignore,
+	  test/Movie/Protect/test01-cxx.C, test/Movie/Protect/test01.ref,
+	  test/Movie/Rate/.cvsignore: Exposed SWFMovie_protect() function.
+	  Mapped to SWFMovie::protect() method in C++ wrapper. Updated C++
+	  wrapper tester for Movie/Protect; updated refs (were empty).
+	  Fixed or added some .cvsignore
+
+2006-07-24 18:39  strk
+
+	* test/Movie/Protect/: .cvsignore, Makefile, Makefile.in: Don't
+	  keep generated files in repository
+
+2006-07-17 20:58  anderson
+
+	* configure.in, docs/libming/Ming_setErrorFunction.html,
+	  docs/libming/Ming_setWarnFunction.html,
+	  docs/libming/SWFMovie_protect.html,
+	  docs/libming/SWFMovie_setBackground.html,
+	  docs/libming/index.html, docs/man/Ming_getScale.3,
+	  docs/man/Ming_init.3, docs/man/Ming_setCubicThreshold.3,
+	  docs/man/Ming_setErrorFunction.3,
+	  docs/man/Ming_setSWFCompression.3, docs/man/Ming_setScale.3,
+	  docs/man/Ming_setWarnFunction.3, docs/man/Ming_useSWFVersion.3,
+	  docs/man/SWFMovie_protect.3, docs/man/SWFMovie_setBackground.3,
+	  docs/man/SWFMovie_setDimension.3,
+	  docs/man/SWFMovie_setNumberOfFrames.3,
+	  docs/man/SWFMovie_setRate.3, docs/man/destroySWFMovie.3,
+	  docs/man/newSWFMovie.3, docs/man/newSWFMovieWithVersion.3,
+	  src/Makefile.am, src/movie.c, test/Movie/Makefile.am,
+	  test/Movie/Background/Makefile,
+	  test/Movie/Background/Makefile.am,
+	  test/Movie/Background/Makefile.in,
+	  test/Movie/Background/TestList,
+	  test/Movie/Background/test01-cxx.C,
+	  test/Movie/Background/test01.c, test/Movie/Background/test01.php,
+	  test/Movie/Background/test01.pl, test/Movie/Background/test01.py,
+	  test/Movie/Background/test01.ref,
+	  test/Movie/Background/test02-cxx.C,
+	  test/Movie/Background/test02.c, test/Movie/Background/test02.php,
+	  test/Movie/Background/test02.pl, test/Movie/Background/test02.py,
+	  test/Movie/Background/test02.ref,
+	  test/Movie/Background/test03-cxx.C,
+	  test/Movie/Background/test03.c, test/Movie/Background/test03.php,
+	  test/Movie/Background/test03.pl, test/Movie/Background/test03.py,
+	  test/Movie/Background/test03.ref, test/Movie/Protect/Makefile,
+	  test/Movie/Protect/Makefile.am, test/Movie/Protect/Makefile.in,
+	  test/Movie/Protect/TestList, test/Movie/Protect/test01-cxx.C,
+	  test/Movie/Protect/test01.c, test/Movie/Protect/test01.php,
+	  test/Movie/Protect/test01.pl, test/Movie/Protect/test01.py,
+	  test/Movie/Protect/test01.ref: Document & test setBackground()
+	  and protect()
+
+2006-07-17 20:49  anderson
+
+	* test/: Makefile.inc, dotests.pl: Fix the binding name for C++
+
+2006-07-17 20:46  anderson
+
+	* util/outputscript.c: Implement the PROTECT block Add
+	  OUT_BEGIN_EMPTY, and use it so we get complete tag names listed
+	  in the scripts
+
+2006-07-13 19:06  anderson
+
+	* configure.in, test/Makefile.inc, test/Movie/Rate/Makefile.am:
+	  First pass at making C++ be optional as well
+
+2006-07-12 12:28  strk
+
+	* perl_ext/Makefile.PL: Added SRCDIR prefix to SWF_MODULES
+
+2006-07-12 07:41  anderson
+
+	* perl_ext/Makefile.PL: Help building in a seperate dir get
+	  further, but this is still not enough
+
+2006-07-12 06:38  strk
+
+	* perl_ext/.cvsignore: Added Makefile.in to .cvsignore
+
+2006-07-12 06:37  strk
+
+	* perl_ext/Makefile.PL: Set SRCDIR to '.' if not found in
+	  environment
+
+2006-07-12 05:27  strk
+
+	* perl_ext/: Makefile.PL, Makefile.am: Get srcdir from environment
+	  (to find t/*).
+
+2006-07-12 05:16  strk
+
+	* perl_ext/Makefile.PL: Hard-coded MING sourc dir (why ask?)
+
+2006-07-10 19:19  anderson
+
+	* Makefile.am, configure.in, perl_ext/Makefile.am: autofoo perl_ext
+
+2006-07-10 18:02  strk
+
+	* Makefile.am: Added notes about automake requirements
+
+2006-07-10 17:26  strk
+
+	* src/Makefile.am: Added missing MATHLIB to libming_la_LDFLAGS
+
+2006-07-10 17:05  strk
+
+	* configure.in: AM_INIT_AUTOMAKE invokation made compatible with
+	  older automake verisions (1.5 ok)
+
+2006-07-10 16:39  strk
+
+	* configure.in: Renamed AC_CONFIG_HEADER to AM_CONFIG_HEADER
+
+2006-07-10 16:37  strk
+
+	* autogen.sh: hanged libtoolize invokation from --force to
+	  --automake
+
+2006-07-10 16:33  strk
+
+	* src/blocks/Makefile.am: Renamed PNG_SOURCES to PNG_SOURCE (to not
+	  clash with standard var names)
+
+2006-07-10 16:24  anderson
+
+	* autogen.sh, config/compile, config/config-ml.in, config/depcomp,
+	  config/install-sh, config/missing, config/symlink-tree,
+	  config/texinfo.tex: Update all of the automake file, and fix
+	  autogen to stop supplying missing ones
+
+2006-07-10 16:17  strk
+
+	* autogen.sh: Be more verbose on error
+
+2006-07-10 16:06  strk
+
+	* autogen.sh, configure.in, macros/libtool.m4: autogen.sh: run
+	  aclocal with the -I macros flag macros/libtool.m4: copied locally
+	  configure.in: bail out if can't detect libtool
+
+2006-07-10 15:04  anderson
+
+	* test/dotests.pl: Typo that was trashing PERL5LIB
+
+2006-07-10 15:04  strk
+
+	* autogen.sh: exit at first failure. advertise final success.
+
+2006-07-10 14:51  anderson
+
+	* test/dotests.pl: Adjust to match the autogoo location of the just
+	  built library
+
+2006-07-10 14:37  strk
+
+	* Makefile.am, src/actioncompiler/Makefile.am: Moved
+	  AUTOMAKE_OPTIONS from src/actioncompiler/Makefile.am to top-level
+	  Makefile.am
+
+2006-07-10 14:36  anderson
+
+	* perl_ext/Makefile.PL: Adjust for where autogoo puts the .a file
+
+2006-07-10 14:02  anderson
+
+	* test/dotests.pl: Fix a perl warning
+
+2006-07-10 14:01  anderson
+
+	* util/: action.c, action.h, blocktypes.c, main.c, output.h,
+	  outputdecl.h, outputscript.c, outputswf.c, outputtxt.c, parser.c,
+	  parser.h, parserdecl.h, swfoutput.h, swftypes.h, ttftofft.c: Add
+	  missing copyright statements
+
+2006-07-10 13:51  strk
+
+	* TODO, test/actionscript/Function.as,
+	  test/actionscript/Function.ref: Added syntax that was failing
+	  with the AS2 constributed patch in our Function.as testcase.
+	  Updated TODO removing that item (we reverted the AS2 patch).
+
+2006-07-10 13:01  strk
+
+	* INSTALL, INSTALL.txt: Renamed INSTALL.txt to INSTALL (standard
+	  name, as required by autotools)
+
+2006-07-10 12:11  strk
+
+	* NEWS, docs/man/makeswf.1, test/actionscript/ActionScriptTest.c,
+	  util/makeswf.c, util/makeswf.h, util/makeswf_utils.c: Changed
+	  makeswf_compile_source signature to accept path to preprocessor
+	  output file. Changed preprocessed file paths to
+	  (<output>.frame#.pp) to reduce probability of filesystem
+	  permission problems.
+
+2006-07-10 11:41  anderson
+
+	* config/: config.guess, config.sub: Update to the 2006-02-23
+	  version in am 1.9.6
+
+2006-07-10 11:30  strk
+
+	* util/makeswf.c: Fixed --help and --version to not require an
+	  argument, added TODO item for non-writeable source dir case.
+
+2006-07-10 11:13  anderson
+
+	* test/dotests.pl: When running against installed libs, avoid the
+	  autogoo stuff that forces you to use the just built libs.
+
+2006-07-10 11:02  strk
+
+	* test/: Makefile.am, Makefile.inc, dotests.in, dotests.pl: Renamed
+	  dotests.in to dotests.pl, added dotests.pl, Makefile.inc,
+	  run_test.c and run_test.h in EXTRA_DIST (test/Makefile.am)
+
+2006-07-10 11:01  anderson
+
+	* configure.in: Small typo that caused the test to always fail
+
+2006-07-10 10:43  strk
+
+	* configure.in, test/Makefile.inc: Removed USE_<binding>
+	  conditionals (we already had the BUILD_<binding>_EXTENSION one
+	  for use).  Added --enable-<binding> configure switch to specify
+	  which one to build.  Added final configuration summary output in
+	  ./configure.
+
+2006-07-10 09:54  anderson
+
+	* test/dotests.in: Check USE_INSTALLED to see if the installed libs
+	  or locally built libs should be used
+
+2006-07-10 06:51  strk
+
+	* configure.in, test/Makefile.inc, test/dotests.in,
+	  test/Movie/Dimension/Makefile.am,
+	  test/Movie/NumFrames/Makefile.am, test/Movie/Rate/Makefile.am,
+	  test/Movie/new/Makefile.am: Moved 'dotests' generation logic in
+	  the test/Makefile.inc file.  Now dotests is "generated" in each
+	  test directory as a wrapper around the dotests.in file. This
+	  allows to call the properl PERL executable and to use a more
+	  flexible interface (ideally we could change dotests.in back to a
+	  command-line parsing script, for easy of manual use).  Subdirs
+	  makefiles are now cleaner and shorter.  Note that BINDINGS is
+	  also detected in a single place (Makefile.inc again) but I've
+	  currently commented out all but C binding, for framework testing
+	  purpose.
+
+2006-07-09 17:57  anderson
+
+	* test/Movie/: Dimension/Makefile.am, NumFrames/Makefile.am,
+	  NumFrames/test01.py, Rate/Makefile.am, new/Makefile.am: Change to
+	  test the USE_lang conditionals
+
+2006-07-09 17:55  anderson
+
+	* configure.in: Re-enable the USE_ conditionals so we can use them
+	  in the tests
+
+2006-07-09 02:48  anderson
+
+	* test/: Makefile.am, Makefile.inc, TestList, dotests.in,
+	  Movie/Makefile.am, Movie/TestList, Movie/Dimension/.cvsignore,
+	  Movie/Dimension/Makefile.am, Movie/Dimension/setDimensionTest.c,
+	  Movie/Dimension/test01-cxx.C, Movie/Dimension/test01.c,
+	  Movie/Dimension/test01.php, Movie/Dimension/test01.pl,
+	  Movie/Dimension/test01.py, Movie/NumFrames/.cvsignore,
+	  Movie/NumFrames/Makefile.am,
+	  Movie/NumFrames/setNumberOfFramesTest.c,
+	  Movie/NumFrames/test01-cxx.C, Movie/NumFrames/test01.c,
+	  Movie/NumFrames/test01.php, Movie/NumFrames/test01.pl,
+	  Movie/NumFrames/test01.py, Movie/Rate/.cvsignore,
+	  Movie/Rate/Makefile.am, Movie/Rate/setRateTest.c,
+	  Movie/Rate/test01-cxx.C, Movie/Rate/test01.c,
+	  Movie/Rate/test01.php, Movie/Rate/test01.pl,
+	  Movie/Rate/test01.py, Movie/new/.cvsignore,
+	  Movie/new/Makefile.am, Movie/new/newSWFMovieTest.c,
+	  Movie/new/test01-cxx.C, Movie/new/test01.c, Movie/new/test01.php,
+	  Movie/new/test01.pl, Movie/new/test01.py, Movie/new/test02-cxx.C,
+	  Movie/new/test02.c, Movie/new/test02.php, Movie/new/test02.pl,
+	  Movie/new/test02.py, Movie/new/test03-cxx.C, Movie/new/test03.c,
+	  Movie/new/test03.php, Movie/new/test03.pl, Movie/new/test03.py,
+	  Movie/new/test04-cxx.C, Movie/new/test04.c, Movie/new/test04.php,
+	  Movie/new/test04.pl, Movie/new/test04.py, Movie/new/test05-cxx.C,
+	  Movie/new/test05.c, Movie/new/test05.php, Movie/new/test05.pl,
+	  Movie/new/test05.py: A significant overhaul. These changes retain
+	  the use of autofoo in each directory, but revert to the use of
+	  dotest as the test harness. Do test still has the ability to
+	  specify which languages to test. It also now tries to make sure
+	  that the locally built libraries get used instead of any that
+	  happen to be on the system.
+
+2006-07-09 02:43  anderson
+
+	* configure.in: Add missing HAVE_* symbols
+
+2006-07-09 02:05  anderson
+
+	* util/Makefile.am: Add bin_SCRIPTS
+
+2006-07-08 19:26  strk
+
+	* test/actionscript/README: Updated with instructions on how to add
+	  tests
+
+2006-07-08 19:19  strk
+
+	* test/actionscript/Makefile.am: Fixed path to util/ dir for builds
+	  in external dir
+
+2006-07-08 18:21  strk
+
+	* test/actionscript/: ActionScriptTest.c, Makefile.am: Test all
+	  files specified with the AS_TESTS define. Added generated files
+	  to CLEANFILES.
+
+2006-07-08 18:04  strk
+
+	* test/actionscript/.cvsignore: Added .cvsignore file
+
+2006-07-08 18:02  strk
+
+	* NEWS: Added note about Automake
+
+2006-07-08 17:59  strk
+
+	* src/actioncompiler/Makefile.am: Removed -i switch from flex
+	  invocation (we need to be case-sensitive!)
+
+2006-07-08 09:49  strk
+
+	* configure.in: Added Makefile of actionscript tests dir
+
+2006-07-08 09:48  strk
+
+	* test/: Makefile.am, actionscript/ActionScriptTest.c,
+	  actionscript/Function.ref, actionscript/Makefile.am: Added
+	  initial ActionScript unit testing support and a first test.
+
+2006-07-08 09:47  strk
+
+	* util/: Makefile.am, makeswf.c, makeswf.h, makeswf_utils.c: Split
+	  makeswf general functionalities in a separate file, for use by
+	  unit testers
+
+2006-07-08 09:10  strk
+
+	* NEWS, src/ming.c, src/ming.h.in, src/blocks/error.c,
+	  src/blocks/error.h: Ming_setWarnFunction() and
+	  Ming_setErrorFunction() now return the previously-set handler.
+	  Message handler function typedef'd to SWFMsgFunc.
+
+2006-07-08 06:40  strk
+
+	* test/actionscript/: Function.as, README: Added directory for
+	  actioncompiler testing
+
+2006-07-08 06:29  strk
+
+	* Makefile.am: Reintroduced "Changelog" rule
 
 2006-07-01 23:41  strk
 
