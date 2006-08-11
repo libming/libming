@@ -39,9 +39,18 @@ Stuff what to do (not in order):
   ..so you can center text 'n' stuff.
   It exists in the c code, but there's no SWFRect in the php interface
 
-* Produce good quality API documentation, using something like doxygen
+* Produce good quality API documentation, pulled from comment embedded in
+  the source.
 
-* Produce thorough API tests, testign each interface from each language binding.
+* Produce thorough API tests, testing each interface from each language binding.
+
+* propagate new features to all language bindings
+
+* Ensure the API is consistant accross all language bindings
+
+* Add additional Font APIs to allow script to detect font properties and make
+  intelligent decsions. Also make sure the usage of Unicode vs ANSI based fonts
+  is rational.
 
 Wishlist items:
 
@@ -83,5 +92,3 @@ Wishlist items:
 * Allow buffer-at-a-time output
 
   fput'ing each byte is probably slowing us down a lot..?
-
-* propagate new features to all language bindings
