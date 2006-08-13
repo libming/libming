@@ -289,6 +289,7 @@ SWF_RECT *bbox;
 FT_Error error;
 FT_ULong	charcode;
 FT_UInt	gindex;
+FT_CharMap charmap = NULL;
 FT_Outline *outline;
 char *fname;
 int i, k, maxcode=0;
@@ -334,13 +335,24 @@ swffont.FontNameLen=strlen(swffont.FontName);
 
 swffont.FontFlagsHasLayout=1;
 
-/*
 for(i=0; i < face->num_charmaps; i++) {
+/*
                         fprintf(stderr, "map %d encoding pid=%d eid=%d\n", i,
                                 face->charmaps[i]->platform_id,
                                 face->charmaps[i]->encoding_id);
-                }
 */
+	if( face->charmaps[i]->platform_id == TT_PLATFORM_MACINTOSH &&
+	    face->charmaps[i]->encoding_id == TT_MAC_ID_ROMAN ) {
+	    	charmap = face->charmaps[i];
+		break;
+		}
+	}
+
+if( charmap == NULL ) {
+	fprintf(stderr, "Unable to find an ANSI charactermap in this font!!!"
+			" I can't continue.\n" );
+	exit(4);
+	}
 /*
 if( FT_Select_Charmap(face,FT_ENCODING_UNICODE) != 0 ) {
 	fprintf(stderr,"Unable to set find a Unicode encoding!!\n");
@@ -348,18 +360,17 @@ if( FT_Select_Charmap(face,FT_ENCODING_UNICODE) != 0 ) {
 	}
 	*/
 
-/* NB: This always uses the first encoding. */
-FT_Set_Charmap(face, face->charmaps[0]);
+FT_Set_Charmap(face, charmap);
 
 swffont.FontFlagsSmallText=0;
 swffont.FontFlagsFlagANSI = 1;
 swffont.FontFlagsShiftJis = 0;
 /* Need to figure out if this is UNIcode or ANSI */
-if( face->charmaps[0]->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
+if( charmap->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
 	swffont.FontFlagsSmallText=1;
 	swffont.FontFlagsFlagANSI = 0; 
-} else if (face->charmaps[0]->platform_id == TT_PLATFORM_MICROSOFT )
-	switch( face->charmaps[0]->encoding_id )
+} else if (charmap->platform_id == TT_PLATFORM_MICROSOFT )
+	switch( charmap->encoding_id )
 	{
 	case TT_MS_ID_UNICODE_CS:
 		swffont.FontFlagsSmallText=1;
