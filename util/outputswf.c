@@ -766,7 +766,6 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 /* This code really belongs in outputTAGHeader() */
 hdr0=newSizedSWFOutput(6);
 
-fprintf(stderr,"Block length %d\n", SWFOutput_getLength(hdr1));
 if(SWFOutput_getLength(hdr1) <= 62 ) {
 	fprintf(stderr,"TAG %x\n",(SWF_DEFINEFONT2<<6)|SWFOutput_getLength(hdr1));
 	SWFOutput_writeUInt16(hdr0,(SWF_DEFINEFONT2<<6)|SWFOutput_getLength(hdr1));
@@ -1233,7 +1232,6 @@ SWFOutput_writeSBits(out,m->frame.yMax,15);
 SWFOutput_byteAlign(out);
 SWFOutput_writeUInt16(out,m->rate);
 SWFOutput_writeUInt16(out,m->nFrames);
-fprintf(stderr,"Header size %d\n", SWFOutput_getLength(out));
 SWFOutput_writeToMethod(out,fileOutputMethod,stdout);
 SWFOutput_writeToMethod(swfout,fileOutputMethod,stdout);
 destroySWFOutput(swfout);
@@ -1251,8 +1249,6 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
     return;
 
   outf = stream;
-
-fprintf(stderr,"Block type %d\n", type );
 
   for (i = 0; i < numOutputs; i++)
     {
