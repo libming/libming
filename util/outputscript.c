@@ -724,6 +724,9 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEFONT2);
 
   sprintf (fname, "f%d", sblock->FontID);
+#ifdef SWFPLUSPLUS
+  printf ("class SWFFont *%s;\n", fname);
+#endif
   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
 
 }
