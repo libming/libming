@@ -1788,6 +1788,12 @@ parseSWF_FRAMELABEL (FILE * f, int length)
 
   parserrec->Name = readString (f);
 
+  // SWF6 named anchor
+  if ( strlen(parserrec->Name)+1 == length-1 )
+  {
+    parserrec->IsAnchor = readUInt8(f); 
+  }
+
   PAR_END;
 }
 

@@ -888,8 +888,10 @@ outputSWF_FONTREF (SWF_Parserstruct * pblock)
 void
 outputSWF_FRAMELABEL (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_FRAMELABEL);
+  OUT_BEGIN (SWF_FRAMELABEL);
 
+  printf (" Name: %s\n", sblock->Name );
+  printf (" IsAnchor: %d\n", sblock->IsAnchor );
 }
 
 void

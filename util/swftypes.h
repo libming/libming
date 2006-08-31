@@ -1153,6 +1153,7 @@ struct SWF_FONTREF
 struct SWF_FRAMELABEL
 {
   STRING	Name;
+  UI8		IsAnchor;
 };
 
 struct SWF_FRAMETAG
