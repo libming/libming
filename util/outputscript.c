@@ -906,7 +906,7 @@ outputSWF_FRAMELABEL (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_FRAMELABEL);
 
   printf ("%s(\'%s\');\n",
-	  methodcall (spritenum?spritename:"m", "lableFrame"), sblock->Name );
+	  methodcall (spritenum?spritename:"m", sblock->IsAnchor?"anchorFrame":"labelFrame"), sblock->Name );
 
 }
 
