@@ -156,7 +156,7 @@ newSWFRemoveObject2Block(int depth)
 SWFOutputBlock
 newSWFFrameLabelBlock(const char *string)
 {
-	SWFOutput out = newSizedSWFOutput(strlen(string)+2);
+	SWFOutput out = newSizedSWFOutput(strlen(string)+1);
 	SWFOutput_writeString(out, (byte*)string);
 
 	return newSWFOutputBlock(out, SWF_FRAMELABEL);
