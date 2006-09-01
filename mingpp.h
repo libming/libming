@@ -401,6 +401,9 @@ class SWFMovie
   void labelFrame(const char *label)
     { SWFMovie_labelFrame(this->movie, label); }
 
+  void namedAnchor(const char *label)
+    { SWFMovie_namedAnchor(this->movie, label); }
+
   int output(int level=-1)
   {
     int oldlevel = Ming_setSWFCompression(level);
