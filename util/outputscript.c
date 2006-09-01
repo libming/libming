@@ -35,7 +35,7 @@ extern char *swftargetfile;
  * a lot of duplicated code.
  */
 #if !defined(SWFPHP) && !defined(SWFPERL) && !defined(SWFPYTHON) && !defined(SWFPLUSPLUS)
-#error "You must define SWFPHP or SWFPERL or SWFPYTHON when building this file"
+#error "You must define SWFPHP or SWFPERL or SWFPYTHON or SWFPLUSPLUS when building this file"
 #endif
 
 #ifdef SWFPERL
@@ -45,6 +45,7 @@ extern char *swftargetfile;
 #define MEMBER    "->"
 #define OBJPREF   "SWF::"
 #define NEWOP     "new"
+#define SQ	"'"
 #endif
 #ifdef SWFPHP
 #define COMMSTART "/*"
@@ -53,6 +54,7 @@ extern char *swftargetfile;
 #define MEMBER    "->"
 #define OBJPREF   "SWF"
 #define NEWOP     "new"
+#define SQ	"'"
 #endif
 #ifdef SWFPYTHON
 #define COMMSTART "#"
@@ -61,6 +63,7 @@ extern char *swftargetfile;
 #define MEMBER    "."
 #define OBJPREF   "SWF"
 #define NEWOP     ""
+#define SQ	"'"
 #endif
 #ifdef SWFPLUSPLUS
 #define COMMSTART "//"
@@ -69,6 +72,7 @@ extern char *swftargetfile;
 #define MEMBER    "->"
 #define OBJPREF   "SWF"
 #define NEWOP     "new"
+#define SQ	"\""
 #endif
 
 static int framenum = 1;
@@ -905,8 +909,8 @@ outputSWF_FRAMELABEL (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_FRAMELABEL);
 
-  printf ("%s(\'%s\');\n",
-	  methodcall (spritenum?spritename:"m", sblock->IsAnchor?"anchorFrame":"labelFrame"), sblock->Name );
+  printf ("%s("SQ"%s"SQ");\n",
+	  methodcall (spritenum?spritename:"m", sblock->IsAnchor?"namedAnchor":"labelFrame"), sblock->Name );
 
 }
 
