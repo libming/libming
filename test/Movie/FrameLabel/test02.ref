@@ -1,0 +1,24 @@
+File version: 5
+File size: 39
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (ff,ff,ff,ff)
+
+Offset: 25 (0x0019)
+Block type: 43 (SWF_FRAMELABEL)
+Block length: 8
+
+ Name: frame0
+ IsAnchor: 1
+
+Offset: 35 (0x0023)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+

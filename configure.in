@@ -238,6 +238,7 @@ AC_OUTPUT([
 	test/Movie/Dimension/Makefile
 	test/Movie/new/Makefile
 	test/Movie/NumFrames/Makefile
+	test/Movie/FrameLabel/Makefile
 	test/Movie/Protect/Makefile
 	test/Movie/Rate/Makefile
 	test/actionscript/Makefile

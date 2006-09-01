@@ -1,4 +1,52 @@
-2006-08-11 10:15  anderson
+2006-09-01 02:12  strk
+
+	* util/outputscript.c: Added SQ macro for string quotes, fixed
+	  labelFrame output (it's called namedAnchor, not anchorFrame) and
+	  make it use the new SQ macro.
+
+2006-09-01 02:08  strk
+
+	* mingpp.h: Added SWFMovie::namedAnchor
+
+2006-09-01 01:56  anderson
+
+	* util/outputscript.c: Fix spelling on 'label' and detect anchors
+
+2006-09-01 01:28  strk
+
+	* test/Movie/Protect/test01-cxx.C: Removed explicit
+	  setBackgroundColor call (should be done the same for .pl, .py and
+	  .php implementation files, but I don't usually build those
+	  bindings myself so I can't test)
+
+2006-09-01 01:22  strk
+
+	* test/Movie/Protect/test02.ref: Added missing ref
+
+2006-09-01 01:22  strk
+
+	* test/Movie/Protect/TestList: fixed typo
+
+2006-08-31 04:48  strk
+
+	* util/: outputtxt.c, parser.c, swftypes.h: Fixed parsing of
+	  SWF_FRAMELABEL (named anchors).  Added SWF_FRAMELABEL block
+	  output.
+
+2006-08-15 10:35  anderson
+
+	* util/outputscript.c: Need to explicitely define variables in C++
+
+2006-08-13 18:11  anderson
+
+	* util/outputswf.c: Remove some debug output
+
+2006-08-13 18:05  anderson
+
+	* util/ttftofft.c: Find an ANSI charactermap, and only work if it
+	  is present
+
+2006-08-11 16:15  anderson
 
 	* TODO: Additional TODOs
 
