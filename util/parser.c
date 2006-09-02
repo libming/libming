@@ -1882,8 +1882,6 @@ parseSWF_PATHSAREPOSTSCRIPT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_PATHSAREPOSTSCRIPT);
 
-  parserrec->chid = readUInt16 (f);
-
   PAR_END;
 }
 
