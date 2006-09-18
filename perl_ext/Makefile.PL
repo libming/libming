@@ -21,26 +21,28 @@ my @do_clean = qw {
 
 for(@do_clean) { unlink $_ }
 
-my @SWF_MODULES = (
-	${SRCDIR}.'Action',
-	${SRCDIR}.'/Bitmap',
-	${SRCDIR}.'/Button',
-	${SRCDIR}.'/Constants',
-	${SRCDIR}.'/DisplayItem',
-	${SRCDIR}.'/Fill',
-	${SRCDIR}.'/Font',
-	${SRCDIR}.'/Gradient',
-	${SRCDIR}.'/Morph',
-	${SRCDIR}.'/Movie',
-	${SRCDIR}.'/MovieClip',
-	${SRCDIR}.'/Shape',
-	${SRCDIR}.'/Sound',
-	${SRCDIR}.'/SoundInstance',
-	${SRCDIR}.'/SoundStream',
-	${SRCDIR}.'/Text',
-	${SRCDIR}.'/TextField',
-	${SRCDIR}.'/VideoStream'
+my @SWF_MODULES_NAMES = (
+        'Action',
+	'Bitmap',
+	'Button',
+	'Constants',
+	'DisplayItem',
+	'Fill',
+	'Font',
+	'Gradient',
+	'Morph',
+	'Movie',
+	'MovieClip',
+	'Shape',
+	'Sound',
+	'SoundInstance',
+	'SoundStream',
+	'Text',
+	'TextField',
+	'VideoStream'
 );
+
+my @SWF_MODULES = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
 
 my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
 
@@ -213,8 +215,8 @@ sub write_bootxs (){
     local *FH;
     open FH, ">Boot.xsh" or die "can't open Boot.xsh $!";
     print FH "BOOT:\n{\n";
-    print FH join "\n", map "extern void boot_SWF__$_(CV *cv);", @SWF_MODULES;;
-    print FH "\n", join "\n", map "callXS(boot_SWF__$_, cv, mark);", @SWF_MODULES;
+    print FH join "\n", map "extern void boot_SWF__$_(CV *cv);", @SWF_MODULES_NAMES;
+    print FH "\n", join "\n", map "callXS(boot_SWF__$_, cv, mark);", @SWF_MODULES_NAMES;
      print FH "\n}\n";
     close FH;
 }
