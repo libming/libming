@@ -261,7 +261,6 @@ struct SWF_ACTIONSETVARIABLE {
 struct SWF_ACTIONGETURL2 {
 	UI8	ActionCode;
 	UI16	Length;
-	UI32	Offset;
 	union {
 		struct {
 			UI8	SendVarsMethod:2;
