@@ -275,6 +275,46 @@ outputSWFACTION_PUSH (SWF_ACTION *act)
   }
 }
 
+void
+outputSWFACTION_GETURL2 (SWF_ACTION *act)
+{
+  int i;
+  OUT_BEGIN(SWF_ACTIONGETURL2);
+
+  if( verbose )
+      printf ("  Length: %d\n", sact->Length);
+  switch( sact->f.FlagBits.SendVarsMethod )
+  {
+  	case 0:
+      		printf ("  Method: none\n");
+  		break;
+  	case 1:
+      		printf ("  Method: GET\n");
+  		break;
+  	case 2:
+      		printf ("  Method: POST\n");
+  		break;
+  }
+  switch( sact->f.FlagBits.LoadTargetFlag )
+  {
+  	case 0:
+      		printf ("  Target: Window\n");
+  		break;
+  	case 1:
+      		printf ("  Target: Sprite\n");
+  		break;
+  }
+  switch( sact->f.FlagBits.LoadVariableFlag )
+  {
+  	case 0:
+      		printf ("  LoadVars: No\n");
+  		break;
+  	case 1:
+      		printf ("  loadVars: Yes\n");
+  		break;
+  }
+}
+
 
 #define ActionType( action ) \
 { action, #action, NULL }
@@ -326,7 +366,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_CALLFRAME),
   ActionType (SWFACTION_GETVARIABLE),
   ActionType (SWFACTION_SETVARIABLE),
-  ActionType (SWFACTION_GETURL2),
+  ActionTypeLong (SWFACTION_GETURL2),
   ActionType (SWFACTION_GOTOFRAME2),
   ActionType (SWFACTION_SETTARGET2),
   ActionType (SWFACTION_GETPROPERTY),
