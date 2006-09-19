@@ -123,12 +123,14 @@ SWFMsgFunc Ming_setErrorFunction(SWFMsgFunc error)
 /*
  * set the version of SWF to produce on output
  * This function set the version of SWF to be produced by the library. Only
- * versions 4 through 7 inclusive are supported at this time.
+ * versions 4 through 8 inclusive are supported at this time.
+ *
+ * Should we really check this ? What about trusting the developer instead ?
  */
 void Ming_useSWFVersion(int version /* Flash version */)
 {
-	if(version < 4 || version > 7)
-		SWF_error("Only SWF versions 4 to 7 are currently supported!\n");
+	if(version < 4 || version > 8)
+		SWF_error("Only SWF versions 4 to 8 are currently supported!\n");
 
 	SWF_versionNum = version;
 
