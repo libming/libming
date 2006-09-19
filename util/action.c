@@ -278,7 +278,6 @@ outputSWFACTION_PUSH (SWF_ACTION *act)
 void
 outputSWFACTION_GETURL2 (SWF_ACTION *act)
 {
-  int i;
   OUT_BEGIN(SWF_ACTIONGETURL2);
 
   if( verbose )
