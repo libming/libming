@@ -310,9 +310,10 @@ outputSWFACTION_GETURL2 (SWF_ACTION *act)
       		printf ("  LoadVars: No\n");
   		break;
   	case 1:
-      		printf ("  loadVars: Yes\n");
+      		printf ("  LoadVars: Yes\n");
   		break;
   }
+  printf ("  Reserved bits: %x\n", sact->f.FlagBits.Reserved);
 }
 
 
