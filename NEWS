@@ -1,5 +1,7 @@
 0.4.0-beta - 2006-??-??
 
+	* Allow output of SWF version 8 
+	* Better SWF parser (utilities).
 	* NEW function: SWFMovie_protectWithPassword()
 	* preprocessor products of 'makeswf' are now named after
 	  output filename and frame# (ie: "out.swf.frame0.pp")
