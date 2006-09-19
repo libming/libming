@@ -207,7 +207,8 @@ main (int argc, char **argv)
 
 	while (1)
 	{
-		char buf [1024];
+#define BUFSIZE 1024
+		char buf [BUFSIZE];
 
 		const char *optstring = "Vhps:r:D:I:v:c:i:o:";
 #ifdef HAVE_GETOPT_LONG
@@ -253,8 +254,8 @@ main (int argc, char **argv)
 				}
 				break;
 			case 'I':
-				snprintf(buf, 1023, " -I%s", optarg);
-				buf[1023]='\0';
+				snprintf(buf, BUFSIZE-1, " -I%s", optarg);
+				buf[BUFSIZE-1]='\0';
 				makeswf_append_cpparg(buf);
 				break;
 			case 'i':
@@ -265,13 +266,9 @@ main (int argc, char **argv)
 				break;
 			case 'D':
 				// yes, you can smash the stack ... 
-				sprintf(buf, " -D%s", optarg);
-				if (strlen(cppargs)+strlen(buf) > cppargsize)
-				{
-					cppargsize *= 2;
-					cppargs = realloc(cppargs, cppargsize);
-				}
-				strcat(cppargs, buf);
+				snprintf(buf, BUFSIZE-1, " -D%s", optarg);
+				buf[BUFSIZE-1]='\0';
+				makeswf_append_cpparg(buf);
 				break;
 			case 'V':
 				printf("%s\n", RCSID);
@@ -417,6 +414,9 @@ add_imports()
 /**************************************************************
  *
  * $Log$
+ * Revision 1.26  2006/09/19 08:50:16  strk
+ * Fixed handling of -D flag
+ *
  * Revision 1.25  2006/07/10 16:11:26  strk
  * Changed makeswf_compile_source signature to accept path to preprocessor output file. Changed preprocessed file paths to (<output>.frame#.pp) to reduce probability of filesystem permission problems.
  *
