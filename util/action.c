@@ -114,6 +114,21 @@ outputSWFACTION_JUMP (SWF_ACTION *act)
 }
 
 void
+outputSWFACTION_WAITFORFRAME (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONWAITFORFRAME);
+
+  if( verbose ) {
+      INDENT;
+      printf ("   Length: %d\n", sact->Length);
+  }
+  INDENT;
+  printf ("   Frame: %d\n", sact->Frame);
+  INDENT;
+  printf ("   SkipCount: %d\n", sact->SkipCount);
+}
+
+void
 outputSWFACTION_WITH (SWF_ACTION *act)
 {
   int i;
@@ -334,7 +349,7 @@ static struct SWFActionName actions[] = {
   /* Actions with additional Data */
   ActionType (SWFACTION_GOTOFRAME),
   ActionType (SWFACTION_GETURL),
-  ActionType (SWFACTION_WAITFORFRAME),
+  ActionTypeLong (SWFACTION_WAITFORFRAME),
   ActionType (SWFACTION_SETTARGET),
   ActionType (SWFACTION_GOTOLABEL),
   /* v4 actions */
