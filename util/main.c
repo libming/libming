@@ -283,15 +283,16 @@ main (int argc, char *argv[])
        blockp=blockParse(f,length,type);
 
        if( ftell(f) != nextFrame ) {
-	       fprintf(stderr, " Stream out of sync...\n");
-	       fprintf(stderr, " %ld but expecting %d\n", ftell(f),nextFrame);
+	       printf(" Stream out of sync after parse of blocktype %d (%s).\n",
+			type, blockName(type));
+	       printf(" %ld but expecting %d\n", ftell(f),nextFrame);
        }
 
        if( blockp ) {
 	       outputBlock( type, blockp, f, blockoffset, length );
 	       free(blockp);
        } else {
-	       printf("Error parsing block\n");
+	       printf("Error parsing block (unknown block type: %d)\n", type);
        }
 
 	fseek(f, nextFrame, SEEK_SET);
