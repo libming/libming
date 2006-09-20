@@ -1207,6 +1207,10 @@ parseSWF_DEFINEBUTTON2 (FILE * f, int length)
     }
 
   parserrec->CharacterEndFlag = readUInt8 (f);
+  if ( parserrec->CharacterEndFlag != 0 )
+  {
+    warning(" CharacterEndFlag in DefineButton2 != 0");
+  }
 
   parserrec->numActions = 0;
   parserrec->Actions =

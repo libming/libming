@@ -283,16 +283,18 @@ main (int argc, char *argv[])
        blockp=blockParse(f,length,type);
 
        if( ftell(f) != nextFrame ) {
-	       printf(" Stream out of sync after parse of blocktype %d (%s).\n",
-			type, blockName(type));
-	       printf(" %ld but expecting %d\n", ftell(f),nextFrame);
+		// will SEEK_SET later, so this is not a critical error
+		warning(" Stream out of sync after parse of blocktype %d (%s)."
+			" %ld but expecting %d.\n",
+			type, blockName(type),
+			ftell(f),nextFrame);
        }
 
        if( blockp ) {
 	       outputBlock( type, blockp, f, blockoffset, length );
 	       free(blockp);
        } else {
-	       printf("Error parsing block (unknown block type: %d)\n", type);
+	       error("Error parsing block (unknown block type: %d)\n", type);
        }
 
 	fseek(f, nextFrame, SEEK_SET);
@@ -303,7 +305,7 @@ main (int argc, char *argv[])
 
   if (fileOffset < m.size)
     {
-      printf ("extra garbage (i.e., we messed up in main): \n");
+      warning ("extra garbage (i.e., we messed up in main): \n");
       dumpBytes (f, m.size - fileOffset);
       printf ("\n\n");
     }
