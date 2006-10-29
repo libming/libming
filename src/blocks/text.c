@@ -511,16 +511,15 @@ SWFText_addWideString(SWFText text, const unsigned short* widestring,
 											int len, int* advance)
 {
 	SWFTextRecord textRecord = text->currentRecord;
-	SWFFont font = textRecord->font.font;
-
-	if ( font == NULL )
-		SWF_error("font must be set before calling addString");
 
 	/* marginally sloppy to tack on a new record,
 		 but I don't want to deal with concats */
 
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
+
+	if ( textRecord->font.font == NULL )
+		SWF_error("font must be set before calling addString");
 
 	textRecord->advance = advance;
 	textRecord->strlen = len;
@@ -536,16 +535,15 @@ SWFText_addUTF8String(SWFText text, const char* string, int* advance)
 	int len = UTF8ExpandString(string, &widestring);
 
 	SWFTextRecord textRecord = text->currentRecord;
-	SWFFont font = textRecord->font.font;
-
-	if ( font == NULL )
-		SWF_error("font must be set before calling addString");
 
 	/* marginally sloppy to tack on a new record,
 		 but I don't want to deal with concats */
 
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
+
+	if ( textRecord->font.font == NULL )
+		SWF_error("font must be set before calling addString");
 
 	textRecord->advance = advance;
 	textRecord->strlen = len;
