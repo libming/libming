@@ -522,6 +522,10 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 	 }
 	 else {
 		fprintf(stderr,"Some string overflowed something in newVar_N()??????\n");
+		while (++i<pop_counter)
+		  getString(pop());
+		printf("/* *** truncated string here: *** */\n");
+		break;
 	 }
 	}
 	strcat(v->p.String,final);
@@ -1029,17 +1033,17 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 	      right=pop();
 	      left=pop();
 	      push(newVar3(getString(left),"&",getString(right)));
-	      break;
+	      return 0;			/* fixed oct-31-06 (old returned 1) */
       case SWFACTION_BITWISEOR:
 	      right=pop();
 	      left=pop();
 	      push(newVar3(getString(left),"|",getString(right)));
-	      break;
+	      return 0;
       case SWFACTION_BITWISEXOR:
 	      right=pop();
 	      left=pop();
 	      push(newVar3(getString(left),"^",getString(right)));
-	      break;
+	      return 0;
       case SWFACTION_GREATER:
 	      right=pop();
 	      left=pop();
