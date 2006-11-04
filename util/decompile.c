@@ -732,10 +732,44 @@ isArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 }
 */
 
+int precedence(int op1,int op2)
+{
+ unsigned char ops[]= { 		// array of opcodes w rising precedence
+	SWFACTION_SETVARIABLE,		// TAKE CARE: array is incomplete
+
+	SWFACTION_BITWISEOR,
+	SWFACTION_BITWISEXOR,
+	SWFACTION_BITWISEAND,
+
+	SWFACTION_EQUALS2,
+	SWFACTION_LESS2,
+	
+	SWFACTION_SHIFTRIGHT,
+	SWFACTION_SHIFTRIGHT2,
+	SWFACTION_SHIFTLEFT,
+
+	SWFACTION_ADD,
+	SWFACTION_ADD2,
+	SWFACTION_SUBTRACT,
+	SWFACTION_MODULO,
+	SWFACTION_DIVIDE,
+	SWFACTION_MULTIPLY,
+	SWFACTION_PUSH
+ };
+ unsigned char* f=memchr(ops,op1,sizeof(ops));
+ unsigned char* s=memchr(ops,op2,sizeof(ops));
+ // fprintf(stderr, "1op=%d 2op=%d  result=%d\n",op1,op2,f>s);
+ // if (!f) fprintf(stderr, "opcode=%d NOT in precedence list\n",op1);
+ // if (!s) fprintf(stderr, "opcode=%d NOT in precedence list\n",op2);
+ return f>s;
+}
+
 int
 decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *left, *right;
+    right=pop();
+    left=pop();
 
     switch(actions[n].SWF_ACTIONRECORD.ActionCode)
     {
@@ -746,42 +780,102 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	      */
       case SWFACTION_ADD:
       case SWFACTION_ADD2:
-	      right=pop();
-	      left=pop();
-	      /* see examples like 3*(6+1) vs. 3*6+1 
-	         but if no other arithmetics follows on stack,
-	         e.g. because storing the result we don't need neither'(' nor ')' . 
-	         To do: store operator type on stack for better decision
-	       */ 
-	      if (isStoreOp(n+1, actions,maxn) )
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
 	       push(newVar3(getString(left),"+",getString(right)));
 	      else
 	       push(newVar_N("(",getString(left),"+",getString(right),0,")"));
 	      break;
       case SWFACTION_SUBTRACT:
-	      right=pop();
-	      left=pop();
-	      if (isStoreOp(n+1	, actions,maxn) )
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
 		push(newVar3(getString(left),"-",getString(right)));	      
 	      else
-		push(newVar_N("(",getString(left),"-",getString(right),0,")"));
+	       push(newVar_N("(",getString(left),"-",getString(right),0,")"));
 	      break;
       case SWFACTION_MULTIPLY:
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),"*",getString(right)));
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"*",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"*",getString(right),0,")"));
 	      break;
       case SWFACTION_DIVIDE:
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),"/",getString(right)));
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"/",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"/",getString(right),0,")"));
 	      break;
       case SWFACTION_MODULO:
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),"%",getString(right)));
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"%",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"%",getString(right),0,")"));
+	      break;
+      case SWFACTION_SHIFTLEFT:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"<<",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"<<",getString(right),0,")"));
+	      break;
+      case SWFACTION_SHIFTRIGHT:
+      	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),">>",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),">>",getString(right),0,")"));
+	      break;
+      case SWFACTION_SHIFTRIGHT2:        
+      	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),">>>",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),">>>",getString(right),0,")"));
+	      break;
+      case SWFACTION_BITWISEAND:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"&",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"&",getString(right),0,")"));
+	      break;
+      case SWFACTION_BITWISEOR:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"|",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"|",getString(right),0,")"));
+	      break;
+      case SWFACTION_BITWISEXOR:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"^",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"^",getString(right),0,")"));
+	      break;
+      case SWFACTION_EQUALS2:							/* including negation */
+	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
+	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF )
+	      {
+      	       if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+2].SWF_ACTIONRECORD.ActionCode))
+	        push(newVar3(getString(left),"!=",getString(right)));
+	       else
+	        push(newVar_N("(",getString(left),"!=",getString(right),0,")"));
+	       return 1; 							/* due negation op */
+	      }
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"==",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"==",getString(right),0,")"));
 	      break;
 
+      case SWFACTION_LESS2:
+	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
+	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) 
+	       {
+      	       if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+2].SWF_ACTIONRECORD.ActionCode))
+	        push(newVar3(getString(left),">=",getString(right)));
+	       else
+	        push(newVar_N("(",getString(left),">=",getString(right),0,")"));
+	       return 1; 							/* due negation op */
+	      } 
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"<",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"<",getString(right),0,")"));
+	      break;
       default:
 	printf("Unhandled Arithmetic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
     }
@@ -968,6 +1062,7 @@ int stackBalance (int n, SWF_ACTION *actions)
 }
 
 
+/* changed stuff moved to decompileArithmeticOp() / ak november 2006 */
 int
 decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 {
@@ -990,32 +1085,6 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_STRINGCOMPARE:
 	      puts("STRINGCOMPARE");
 	      break;
-      case SWFACTION_LESS2:
-	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) {
-	      	right=pop();
-	      	left=pop();
-		push(newVar3(getName(left),"!<",getName(right)));
-	        return 1;
-	      } else {
-	        right=pop();
-	        left=pop();
-		push(newVar3(getName(left),"<",getName(right)));
-	        return 0;
-	      }
-      case SWFACTION_EQUALS2:
-	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) {
-	      	right=pop();
-	      	left=pop();
-		push(newVar3(getName(left),"!=",getString(right)));
-	        return 1;
-	      } else {
-	        right=pop();
-	        left=pop();
-		push(newVar3(getString(left),"==",getString(right)));
-	        return 0;
-	      }
       case SWFACTION_STRICTEQUALS:
 	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
 	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) {
@@ -1029,21 +1098,6 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 		push(newVar3(getString(left),"===",getString(right)));
 	        return 0;
 	      }
-      case SWFACTION_BITWISEAND:			/* To do: move to Arithmetics..? */
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),"&",getString(right)));
-	      return 0;			/* fixed oct-31-06 (old returned 1) */
-      case SWFACTION_BITWISEOR:
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),"|",getString(right)));
-	      return 0;
-      case SWFACTION_BITWISEXOR:
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),"^",getString(right)));
-	      return 0;
       case SWFACTION_GREATER:
 	      right=pop();
 	      left=pop();
@@ -2320,13 +2374,21 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_CALLMETHOD:
         return decompileCALLMETHOD(n, actions, maxn);
-        
+
+      case SWFACTION_SHIFTLEFT:
+      case SWFACTION_SHIFTRIGHT:
+      case SWFACTION_SHIFTRIGHT2:        
       case SWFACTION_ADD:
       case SWFACTION_ADD2:
       case SWFACTION_SUBTRACT:
       case SWFACTION_MULTIPLY:
       case SWFACTION_DIVIDE:
       case SWFACTION_MODULO:
+      case SWFACTION_BITWISEAND:
+      case SWFACTION_BITWISEOR:
+      case SWFACTION_BITWISEXOR:
+      case SWFACTION_EQUALS2:
+      case SWFACTION_LESS2:
         return decompileArithmeticOp(n, actions, maxn);
 
       case SWFACTION_POP:
@@ -2359,12 +2421,8 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_LOGICALOR:
       case SWFACTION_STRINGEQ:
       case SWFACTION_STRINGCOMPARE:
-      case SWFACTION_LESS2:
-      case SWFACTION_EQUALS2:
       case SWFACTION_STRICTEQUALS:
-      case SWFACTION_BITWISEAND:
-      case SWFACTION_BITWISEOR:
-      case SWFACTION_BITWISEXOR:
+
       case SWFACTION_GREATER:
       case SWFACTION_LOGICALNOT:
         return decompileLogicalOp(n, actions, maxn);
