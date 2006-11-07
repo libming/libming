@@ -1,5 +1,10 @@
 #define _GNU_SOURCE
 
+//#define STATEMENT_CLASS  
+//  I have uncommented some buggy class recognition stuff in decompileIF()
+//  to make work simple code lines like:  "if(!a) trace(a);"   - ak, November 2006
+
+
 #include <assert.h>
 
 #include <stdlib.h>
@@ -1104,17 +1109,19 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 	      push(newVar3(getString(left),">",getString(right)));
 	      break;
       case SWFACTION_LOGICALNOT:
+#ifdef STATEMENT_CLASS
 	      if( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE &&
 	          actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
 	          actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ) {
 		      /* It's a class statement  -- skip over both NOTs */
 		      return 1;
 	      }
+#endif
 	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ) {
 		      return 0;
 	      }
 	      push(newVar2("!",getString(pop())));
-	      break;
+	      return 0;
 
       default:
 	printf("Unhandled Logic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
@@ -1538,6 +1545,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
      * here.
      */
 
+#ifdef STATEMENT_CLASS
     if( (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
         (actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
         (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE) &&
@@ -1565,6 +1573,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	    puts("}\n");
 	    return 0;
     }
+#endif
 
     /*
      * do {} while() loops have a JUMP at the end of the if clause
