@@ -5,6 +5,10 @@ main(){
 class SWFMovie *m;
 m = new SWFMovie();
 
+
+// SWF_SETBACKGROUNDCOLOR 
+m->setBackground(0xff, 0xff, 0xff);
+
 // SWF_PROTECT 
 m->protect();
 
