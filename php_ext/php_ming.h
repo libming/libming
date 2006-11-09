@@ -38,7 +38,7 @@
 		char *p;						\
 		php4_fix_funcnames(class_name,functions);		\
 		class_container.name = strdup(class_name);		\
-		p = class_container.name;while(*p) *p++ = tolower(*p);  \
+		p = class_container.name;while(*p) {*p = tolower(*p);p++;}  \
 		class_container.name_length = sizeof(class_name) - 1;	\
 		class_container.builtin_functions = functions;		\
 		class_container.handle_function_call = NULL;		\
