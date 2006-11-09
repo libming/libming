@@ -1,8 +1,96 @@
-2006-09-01 02:12  strk
+2006-11-09 08:35  anderson
 
-	* util/outputscript.c: Added SQ macro for string quotes, fixed
-	  labelFrame output (it's called namedAnchor, not anchorFrame) and
-	  make it use the new SQ macro.
+	* CVSROOT/: loginfo, syncmail: Just include our own version of
+	  syncmail
+
+2006-11-09 08:34  anderson
+
+	* php_ext/php_ming.h: Different version of gcc seem to treat the
+	  post increment differently, so just be explicite about when to
+	  increment.
+
+2006-11-09 07:29  anderson
+
+	* CVSROOT/loginfo: send changes to a list
+
+2006-11-07 11:38  akleine
+
+	* util/decompile.c: 1. bugfix in SWFACTION_LOGICALNOT 2. removed
+	  some buggy class recognition stuff in decompileIF
+
+2006-11-04 10:49  akleine
+
+	* util/decompile.c: 1. added initial operator precedence check 2.
+	  added SWFACTION_SHIFT* operators
+
+2006-10-31 15:02  akleine
+
+	* util/decompile.c: 1. bugfix in bitwise AND, OR, XOR operations 2.
+	  enhanced string overflow error handling in newVar_N (one error
+	  message should be enough)
+
+2006-10-29 06:58  fmk_ca
+
+	* src/blocks/text.c: Fix crash in addString and addUTF8String when
+	  called with undefined font
+
+2006-10-15 14:57  anderson
+
+	* php_ext/: config.m4, ming.c, php_ming.h: Resync w/ the upstream
+	  PHP5 code. Also, add some glue so that the PHP5 code can also be
+	  build for PHP4 as well.
+
+2006-09-20 11:21  strk
+
+	* util/: main.c, parser.c: printf => warning|error, new check for
+	  DefineButton2
+
+2006-09-20 06:29  strk
+
+	* util/action.c: Added outputSWFACTION_WAITFORFRAME
+
+2006-09-20 05:45  strk
+
+	* util/main.c: More verbosity from error messages, all error to
+	  stdout (this is to make it easier to see where the error has been
+	  triggered, by using the same output buffer)
+
+2006-09-19 06:10  strk
+
+	* NEWS: updated
+
+2006-09-19 06:08  strk
+
+	* src/ming.c: Allow setting output version to 8
+
+2006-09-19 04:50  strk
+
+	* util/makeswf.c: Fixed handling of -D flag
+
+2006-09-19 04:44  strk
+
+	* util/action.c: removed unused variable warning
+
+2006-09-19 04:04  strk
+
+	* util/action.c: (outputSWFACTION_GETURL2): added print of Reserved
+	  bits
+
+2006-09-18 15:01  anderson
+
+	* util/action.c: Output details for GETURL2
+
+2006-09-18 15:00  anderson
+
+	* util/swftypes.h: No Offset in GETURL2
+
+2006-09-18 12:51  strk
+
+	* perl_ext/Makefile.PL: cleanups (still doesn't work for me)
+
+2006-09-02 12:06  strk
+
+	* util/parser.c: Fixed parsing of SWF_PATHSAREPOSTSCRIPT block
 
 2006-09-01 02:08  strk
 
