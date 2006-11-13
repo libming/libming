@@ -330,6 +330,34 @@ outputSWFACTION_GETURL2 (SWF_ACTION *act)
   printf ("  Reserved bits: %x\n", sact->f.FlagBits.Reserved);
 }
 
+void
+outputSWFACTION_GOTOFRAME (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONGOTOFRAME);
+
+  if( verbose ) {
+      INDENT;
+      printf ("  Length: %d\n", sact->Length);
+  }
+
+  INDENT;
+  printf ("   Frame: %d\n", sact->Frame);
+}
+
+void
+outputSWFACTION_GOTOFRAME2 (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONGOTOFRAME2);
+
+  if( verbose )
+      printf ("  Length: %d\n", sact->Length);
+
+  printf ("  Reserved bits: %x\n", sact->f.FlagBits.Reserved);
+  printf ("  Scene bias flag: %x\n", sact->f.FlagBits.SceneBiasFlag);
+  printf ("  Play flag : %x\n", sact->f.FlagBits.PlayFlag);
+  printf ("  Scene bias : %u\n", sact->SceneBias);
+}
+
 
 #define ActionType( action ) \
 { action, #action, NULL }
@@ -347,7 +375,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_TOGGLEQUALITY),
   ActionType (SWFACTION_STOPSOUNDS),
   /* Actions with additional Data */
-  ActionType (SWFACTION_GOTOFRAME),
+  ActionTypeLong (SWFACTION_GOTOFRAME),
   ActionType (SWFACTION_GETURL),
   ActionTypeLong (SWFACTION_WAITFORFRAME),
   ActionType (SWFACTION_SETTARGET),
@@ -382,7 +410,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_GETVARIABLE),
   ActionType (SWFACTION_SETVARIABLE),
   ActionTypeLong (SWFACTION_GETURL2),
-  ActionType (SWFACTION_GOTOFRAME2),
+  ActionTypeLong (SWFACTION_GOTOFRAME2),
   ActionType (SWFACTION_SETTARGET2),
   ActionType (SWFACTION_GETPROPERTY),
   ActionType (SWFACTION_SETPROPERTY),
