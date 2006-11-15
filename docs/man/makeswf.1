@@ -37,7 +37,9 @@ Define <macro>.
 The option is passed to the C preprocessor.
 .TP
 \fB\-i\fR <library.swf>:<sym>[,<sym>]>
-Import named symbols from the given SWF file.
+Import named symbols from the given SWF file and store them into a
+.B __shared_assets
+invisible sprite.
 The file is not required to be found at compile time, and
 no check is performed to ensure symbols are therein defined.
 It will be loaded at runtime, so make sure to specify the
