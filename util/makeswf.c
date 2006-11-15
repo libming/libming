@@ -403,6 +403,7 @@ add_imports()
 		printf("\n");
 	}
 
+	SWFMovieClip_nextFrame(mc);
 	di = SWFMovie_add(mo, (SWFBlock)mc);
 	SWFDisplayItem_setName(di, "__shared_assets");
 	ac = compileSWFActionCode("__shared_assets._visible=false;");
@@ -414,6 +415,9 @@ add_imports()
 /**************************************************************
  *
  * $Log$
+ * Revision 1.27  2006/11/15 16:34:48  strk
+ * Fixed import feature to properly set __shared_assets sprite frame count
+ *
  * Revision 1.26  2006/09/19 08:50:16  strk
  * Fixed handling of -D flag
  *
