@@ -1,4 +1,5 @@
 SUBDIRS = \
+	add		\
 	Background	\
 	Dimension	\
 	FrameLabel	\

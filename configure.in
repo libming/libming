@@ -236,6 +236,7 @@ AC_OUTPUT([
 	test/Movie/Makefile
 	test/Movie/Background/Makefile
 	test/Movie/Dimension/Makefile
+	test/Movie/add/Makefile
 	test/Movie/new/Makefile
 	test/Movie/NumFrames/Makefile
 	test/Movie/FrameLabel/Makefile
