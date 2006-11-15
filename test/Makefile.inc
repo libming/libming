@@ -26,7 +26,7 @@ BINDINGS = "c $(CXXBINDINGS) $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 # committing them.
 #
 refs: $(C_PROGS)
-	for t in $(C_PROGS); do ./$$t;listswf $$t.swf >$$t.ref; done
+	for t in $(C_PROGS); do ./$$t; $(top_builddir)/util/listswf $$t.swf >$$t.ref; done
 
 gen: refs $(SWFS)
 	for t in $(C_PROGS); do \
