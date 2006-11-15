@@ -768,10 +768,16 @@ outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 {
+  int i;
   OUT_BEGIN (SWF_DEFINESPRITE);
+
   printf(" SpriteId: %d\n", sblock->SpriteId );
   printf(" FrameCount: %d\n", sblock->FrameCount );
   printf(" BlockCount: %d\n", sblock->BlockCount );
+  for(i=0;i<sblock->BlockCount;i++) {
+       outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
+  }
+
 
 }
 
