@@ -24,6 +24,9 @@
 #include "decompile.h"
 #include "swfoutput.h"
 
+#include <stdio.h>
+#include <stdarg.h>
+
 extern const char *blockName (SWFBlocktype header);
 
 extern int verbose;
@@ -99,57 +102,76 @@ static struct SWFBlockOutput outputs[] = {
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
 
+/* Indented output function */
+
+static unsigned INDENT=0;
+
+static void
+iprintf(const char* fmt, ...)
+{
+	va_list ap;
+	unsigned ii=INDENT;
+
+	/* do intenting */
+	while(ii--) printf("  ");
+
+	va_start (ap, fmt);
+	vprintf(fmt, ap);
+	return;
+}
+
+
 /* Output basic Flash Types */
 
 void
 outputSWF_RGBA (SWF_RGBA * rgb, char *pname)
 {
-  printf (" RGBA: (");
-  printf ("%2x,", rgb->red);
-  printf ("%2x,", rgb->green);
-  printf ("%2x,", rgb->blue);
-  printf ("%2x)\n", rgb->alpha);
+  iprintf (" RGBA: (");
+  iprintf ("%2x,", rgb->red);
+  iprintf ("%2x,", rgb->green);
+  iprintf ("%2x,", rgb->blue);
+  iprintf ("%2x)\n", rgb->alpha);
 }
 
 void
 outputSWF_RECT (SWF_RECT * rect)
 {
-  printf (" RECT: ");
-  printf (" (%ld,", rect->Xmin);
-  printf ("%ld)x", rect->Ymin);
-  printf ("(%ld,", rect->Xmax);
-  printf ("%ld)", rect->Ymax);
-  printf (":%d\n", rect->Nbits);
+  iprintf (" RECT: ");
+  iprintf (" (%ld,", rect->Xmin);
+  iprintf ("%ld)x", rect->Ymin);
+  iprintf ("(%ld,", rect->Xmax);
+  iprintf ("%ld)", rect->Ymax);
+  iprintf (":%d\n", rect->Nbits);
 }
 
 void
 outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
 {
-  printf (" Matrix: ");
+  iprintf (" Matrix: ");
   if (matrix->HasScale)
     {
-      printf ("ScaleX %f ", matrix->ScaleX);
-      printf ("ScaleY %f\n", matrix->ScaleY);
+      iprintf ("ScaleX %f ", matrix->ScaleX);
+      iprintf ("ScaleY %f\n", matrix->ScaleY);
     }
   if (matrix->HasRotate)
     {
-      printf ("RotateSkew0 %f ", matrix->RotateSkew0);
-      printf ("RotateSkew1 %f\n", matrix->RotateSkew1);
+      iprintf ("RotateSkew0 %f ", matrix->RotateSkew0);
+      iprintf ("RotateSkew1 %f\n", matrix->RotateSkew1);
     }
-  printf ("   TranslateX %6ld ", matrix->TranslateX);
-  printf ("TranslateY %6ld\n", matrix->TranslateY);
+  iprintf ("   TranslateX %6ld ", matrix->TranslateX);
+  iprintf ("TranslateY %6ld\n", matrix->TranslateY);
 }
 
 void
 outputSWF_BUTTONRECORD (SWF_BUTTONRECORD *brec)
 {
-  printf (" BUTTONRECORD: ");
-  printf ("  ButtonStateHitTest: %d ", brec->ButtonStateHitTest);
-  printf ("  ButtonStateDown: %d ", brec->ButtonStateDown);
-  printf ("  ButtonStateOver: %d ", brec->ButtonStateOver);
-  printf ("  ButtonStateUp: %d\n", brec->ButtonStateUp);
-  printf ("  CharacterID: %d\n", brec->CharacterId);
-  printf ("  PlaceDepth: %d\n", brec->PlaceDepth);
+  iprintf (" BUTTONRECORD: ");
+  iprintf ("  ButtonStateHitTest: %d ", brec->ButtonStateHitTest);
+  iprintf ("  ButtonStateDown: %d ", brec->ButtonStateDown);
+  iprintf ("  ButtonStateOver: %d ", brec->ButtonStateOver);
+  iprintf ("  ButtonStateUp: %d\n", brec->ButtonStateUp);
+  iprintf ("  CharacterID: %d\n", brec->CharacterId);
+  iprintf ("  PlaceDepth: %d\n", brec->PlaceDepth);
 }
 
 void
@@ -159,51 +181,51 @@ outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
   int i;
 #endif
 #if !defined(ACTIONONLY)
-  printf (" BUTTONCONDACTION: ");
-  printf ("  CondActionSize: %d\n", bcarec->CondActionSize);
-  printf ("  CondIdleToOverDown: %d ", bcarec->CondIdleToOverDown);
-  printf ("  CondOutDownToIdle: %d ", bcarec->CondOutDownToIdle);
-  printf ("  CondOutDownToOverDown: %d ", bcarec->CondOutDownToOverDown);
-  printf ("  CondOverDownToOutDown: %d ", bcarec->CondOverDownToOutDown);
-  printf ("  CondOverDownToOverUp: %d ", bcarec->CondOverDownToOverUp);
-  printf ("  CondOverUpToOverDown: %d ", bcarec->CondOverUpToOverDown);
-  printf ("  CondOverUpToIdle: %d ", bcarec->CondOverUpToIdle);
-  printf ("  CondIdleToOverUp: %d ", bcarec->CondIdleToOverUp);
-  printf ("  CondKeyPress: %d ", bcarec->CondKeyPress);
-  printf ("  CondOverDownToIdle: %d ", bcarec->CondOverDownToIdle);
-  printf ("\n");
+  iprintf (" BUTTONCONDACTION: ");
+  iprintf ("  CondActionSize: %d\n", bcarec->CondActionSize);
+  iprintf ("  CondIdleToOverDown: %d ", bcarec->CondIdleToOverDown);
+  iprintf ("  CondOutDownToIdle: %d ", bcarec->CondOutDownToIdle);
+  iprintf ("  CondOutDownToOverDown: %d ", bcarec->CondOutDownToOverDown);
+  iprintf ("  CondOverDownToOutDown: %d ", bcarec->CondOverDownToOutDown);
+  iprintf ("  CondOverDownToOverUp: %d ", bcarec->CondOverDownToOverUp);
+  iprintf ("  CondOverUpToOverDown: %d ", bcarec->CondOverUpToOverDown);
+  iprintf ("  CondOverUpToIdle: %d ", bcarec->CondOverUpToIdle);
+  iprintf ("  CondIdleToOverUp: %d ", bcarec->CondIdleToOverUp);
+  iprintf ("  CondKeyPress: %d ", bcarec->CondKeyPress);
+  iprintf ("  CondOverDownToIdle: %d ", bcarec->CondOverDownToIdle);
+  iprintf ("\n");
 #endif
 #ifdef NODECOMPILE
-  printf(" %d Actions\n", bcarec->numActions);
+  iprintf(" %d Actions\n", bcarec->numActions);
   for(i=0;i<bcarec->numActions;i++)
   outputSWF_ACTION(i,&(bcarec->Actions[i]));
 #else
-  printf (" %s\n", decompile5Action(bcarec->numActions,bcarec->Actions,0));
+  iprintf (" %s\n", decompile5Action(bcarec->numActions,bcarec->Actions,0));
 #endif
 }
 
 void
 outputSWF_CLIPEVENTFLAGS (SWF_CLIPEVENTFLAGS * clipevflags )
 {
-  printf ("  ClipEventKeyUp: %d ", clipevflags->ClipEventKeyUp);
-  printf ("  ClipEventKeyDown: %d ", clipevflags->ClipEventKeyDown);
-  printf ("  ClipEventMouseUp: %d ", clipevflags->ClipEventMouseUp);
-  printf ("  ClipEventMouseDown: %d ", clipevflags->ClipEventMouseDown);
-  printf ("  ClipEventMouseMove: %d ", clipevflags->ClipEventMouseMove);
-  printf ("  ClipEventUnload: %d ", clipevflags->ClipEventUnload);
-  printf ("  ClipEventEnterFrame: %d ", clipevflags->ClipEventEnterFrame);
-  printf ("  ClipEventLoad: %d ", clipevflags->ClipEventLoad);
-  printf ("  ClipEventDragOver: %d ", clipevflags->ClipEventDragOver);
-  printf ("  ClipEventRollOut: %d ", clipevflags->ClipEventRollOut);
-  printf ("  ClipEventRollOver: %d ", clipevflags->ClipEventRollOver);
-  printf ("  ClipEventReleaseOutside: %d ", clipevflags->ClipEventReleaseOutside);
-  printf ("  ClipEventRelease: %d ", clipevflags->ClipEventRelease);
-  printf ("  ClipEventPress: %d ", clipevflags->ClipEventPress);
-  printf ("  ClipEventInitialize: %d ", clipevflags->ClipEventInitialize);
-  printf ("  ClipEventData: %d ", clipevflags->ClipEventData);
-  printf ("  ClipEventConstruct: %d ", clipevflags->ClipEventConstruct);
-  printf ("  ClipEventKeyPress: %d ", clipevflags->ClipEventKeyPress);
-  printf ("  ClipEventDragOut: %d ", clipevflags->ClipEventDragOut);
+  iprintf ("  ClipEventKeyUp: %d ", clipevflags->ClipEventKeyUp);
+  iprintf ("  ClipEventKeyDown: %d ", clipevflags->ClipEventKeyDown);
+  iprintf ("  ClipEventMouseUp: %d ", clipevflags->ClipEventMouseUp);
+  iprintf ("  ClipEventMouseDown: %d ", clipevflags->ClipEventMouseDown);
+  iprintf ("  ClipEventMouseMove: %d ", clipevflags->ClipEventMouseMove);
+  iprintf ("  ClipEventUnload: %d ", clipevflags->ClipEventUnload);
+  iprintf ("  ClipEventEnterFrame: %d ", clipevflags->ClipEventEnterFrame);
+  iprintf ("  ClipEventLoad: %d ", clipevflags->ClipEventLoad);
+  iprintf ("  ClipEventDragOver: %d ", clipevflags->ClipEventDragOver);
+  iprintf ("  ClipEventRollOut: %d ", clipevflags->ClipEventRollOut);
+  iprintf ("  ClipEventRollOver: %d ", clipevflags->ClipEventRollOver);
+  iprintf ("  ClipEventReleaseOutside: %d ", clipevflags->ClipEventReleaseOutside);
+  iprintf ("  ClipEventRelease: %d ", clipevflags->ClipEventRelease);
+  iprintf ("  ClipEventPress: %d ", clipevflags->ClipEventPress);
+  iprintf ("  ClipEventInitialize: %d ", clipevflags->ClipEventInitialize);
+  iprintf ("  ClipEventData: %d ", clipevflags->ClipEventData);
+  iprintf ("  ClipEventConstruct: %d ", clipevflags->ClipEventConstruct);
+  iprintf ("  ClipEventKeyPress: %d ", clipevflags->ClipEventKeyPress);
+  iprintf ("  ClipEventDragOut: %d ", clipevflags->ClipEventDragOut);
 }
 
 void
@@ -214,15 +236,15 @@ outputSWF_CLIPACTIONRECORD (SWF_CLIPACTIONRECORD * carec )
 #endif
 #if !defined(ACTIONONLY)
   outputSWF_CLIPEVENTFLAGS (&carec->EventFlag);
-  printf(" %ld ActionRecordSize\n", carec->ActionRecordSize);
-  printf(" %d KeyCode\n", carec->KeyCode);
+  iprintf(" %ld ActionRecordSize\n", carec->ActionRecordSize);
+  iprintf(" %d KeyCode\n", carec->KeyCode);
 #endif
 #ifdef NODECOMPILE
-  printf(" %d Actions\n", carec->numActions);
+  iprintf(" %d Actions\n", carec->numActions);
   for(i=0;i<carec->numActions;i++)
      outputSWF_ACTION(i,&(carec->Actions[i]));
 #else
-  printf (" %s\n", decompile5Action(carec->numActions,carec->Actions,0));
+  iprintf (" %s\n", decompile5Action(carec->numActions,carec->Actions,0));
 #endif
 }
 
@@ -232,7 +254,7 @@ outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions )
   int i;
 #if !defined(ACTIONONLY)
   outputSWF_CLIPEVENTFLAGS (&clipactions->AllEventFlags);
-  printf(" %d NumClipRecords\n", clipactions->NumClipRecords);
+  iprintf(" %d NumClipRecords\n", clipactions->NumClipRecords);
 #endif
   for(i=0;i<clipactions->NumClipRecords;i++)
     outputSWF_CLIPACTIONRECORD(&(clipactions->ClipActionRecords[i]));
@@ -241,7 +263,7 @@ outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions )
 void
 outputSWF_GRADIENTRECORD (SWF_GRADIENTRECORD * gradientrec, char *gname)
 {
-  printf (" Ratio: %d\n", gradientrec->Ratio);
+  iprintf (" Ratio: %d\n", gradientrec->Ratio);
   outputSWF_RGBA (&gradientrec->Color, "");
 }
 
@@ -249,8 +271,8 @@ void
 outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *name)
 {
   int i;
-  printf (" Gradient: ");
-  printf (" NumGradients: %d\n", gradient->NumGradients);
+  iprintf (" Gradient: ");
+  iprintf (" NumGradients: %d\n", gradient->NumGradients);
   for (i = 0; i < gradient->NumGradients; i++)
     outputSWF_GRADIENTRECORD (&(gradient->GradientRecords[i]),"");
 }
@@ -259,8 +281,8 @@ outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *name)
 void
 outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *name, int i)
 {
-  printf (" FillStyle: ");
-  printf (" FillStyleType: %x\n", fillstyle->FillStyleType);
+  iprintf (" FillStyle: ");
+  iprintf (" FillStyleType: %x\n", fillstyle->FillStyleType);
   switch (fillstyle->FillStyleType)
     {
     case 0x00:			/* Solid Fill */
@@ -275,7 +297,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *name, int i)
     case 0x41:			/* Clipped Bitmap Fill */
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
     case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
-      printf (" BitmapID: %d\n", fillstyle->BitmapId);
+      iprintf (" BitmapID: %d\n", fillstyle->BitmapId);
       outputSWF_MATRIX (&fillstyle->BitmapMatrix,"");
       break;
     }
@@ -287,9 +309,9 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray, char *name)
   int count, i;
 
   if( !verbose ) return;
-  printf (" FillStyleArray: ");
-  printf (" FillStyleCount: %6d ", fillstylearray->FillStyleCount);
-  printf (" FillStyleCountExtended: %6d\n",
+  iprintf (" FillStyleArray: ");
+  iprintf (" FillStyleCount: %6d ", fillstylearray->FillStyleCount);
+  iprintf (" FillStyleCountExtended: %6d\n",
 	  fillstylearray->FillStyleCountExtended);
   count =
     (fillstylearray->FillStyleCount !=
@@ -304,8 +326,8 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray, char *name)
 void
 outputSWF_LINESTYLE (SWF_LINESTYLE * fillstyle, char *name, int i)
 {
-  printf (" LineStyle: ");
-  printf (" Width: %d\n", fillstyle->Width);
+  iprintf (" LineStyle: ");
+  iprintf (" Width: %d\n", fillstyle->Width);
   outputSWF_RGBA (&fillstyle->Color, "");
 }
 
@@ -316,9 +338,9 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
   int count, i;
 
   if( !verbose ) return;
-  printf (" LineStyleArray: ");
-  printf (" LineStyleCount: %6d ", linestylearray->LineStyleCount);
-  printf (" LineStyleCountExtended: %6d\n",
+  iprintf (" LineStyleArray: ");
+  iprintf (" LineStyleCount: %6d ", linestylearray->LineStyleCount);
+  iprintf (" LineStyleCountExtended: %6d\n",
 	  linestylearray->LineStyleCountExtended);
   count =
     (linestylearray->LineStyleCount !=
@@ -339,24 +361,24 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
       if (shaperec->StraightEdge.StraightEdge == 1)
 	{
 	  /* A Straight Edge Record */
-	  printf (" Straight EdgeRecord: (%d)",
+	  iprintf (" Straight EdgeRecord: (%d)",
 		  shaperec->StraightEdge.NumBits);
 	  if( shaperec->StraightEdge.GeneralLineFlag ) {
-		  printf(" - (%ld, %ld)\n",shaperec->StraightEdge.DeltaX,shaperec->StraightEdge.DeltaY);
+		  iprintf(" - (%ld, %ld)\n",shaperec->StraightEdge.DeltaX,shaperec->StraightEdge.DeltaY);
 	  } else {
 	  	if( shaperec->StraightEdge.VertLineFlag ) 
-		  printf(" - (0, %ld)\n",shaperec->StraightEdge.VLDeltaY);
+		  iprintf(" - (0, %ld)\n",shaperec->StraightEdge.VLDeltaY);
 		else
-		  printf(" - (%ld, 0)\n",shaperec->StraightEdge.VLDeltaX);
+		  iprintf(" - (%ld, 0)\n",shaperec->StraightEdge.VLDeltaX);
 	  }
 	}
       else
 	{
 	  /* A Curved Edge Record */
-	  printf (" Curved EdgeRecord: %d", shaperec->CurvedEdge.NumBits);
-	  printf (" Control(%ld,%ld)", shaperec->CurvedEdge.ControlDeltaX,
+	  iprintf (" Curved EdgeRecord: %d", shaperec->CurvedEdge.NumBits);
+	  iprintf (" Control(%ld,%ld)", shaperec->CurvedEdge.ControlDeltaX,
 		  shaperec->CurvedEdge.ControlDeltaY);
-	  printf (" Anchor(%ld,%ld)\n", shaperec->CurvedEdge.AnchorDeltaX,
+	  iprintf (" Anchor(%ld,%ld)\n", shaperec->CurvedEdge.AnchorDeltaX,
 		  shaperec->CurvedEdge.AnchorDeltaY);
 	}
     }
@@ -365,32 +387,32 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
       /* A Non-Edge Record */
       if (shaperec->EndShape.EndOfShape == 0)
 	{
-	  printf ("  ENDSHAPE\n");
+	  iprintf ("  ENDSHAPE\n");
 	  return;
 	}
-      printf (" StyleChangeRecord:\n");
-      printf ("  StateNewStyles: %d", shaperec->StyleChange.StateNewStyles);
-      printf (" StateLineStyle: %d ", shaperec->StyleChange.StateLineStyle);
-      printf (" StateFillStyle1: %d\n",
+      iprintf (" StyleChangeRecord:\n");
+      iprintf ("  StateNewStyles: %d", shaperec->StyleChange.StateNewStyles);
+      iprintf (" StateLineStyle: %d ", shaperec->StyleChange.StateLineStyle);
+      iprintf (" StateFillStyle1: %d\n",
 	      shaperec->StyleChange.StateFillStyle1);
-      printf ("  StateFillStyle0: %d",
+      iprintf ("  StateFillStyle0: %d",
 	      shaperec->StyleChange.StateFillStyle0);
-      printf (" StateMoveTo: %d\n", shaperec->StyleChange.StateMoveTo);
+      iprintf (" StateMoveTo: %d\n", shaperec->StyleChange.StateMoveTo);
 
       if (shaperec->StyleChange.StateLineStyle) {
-	  printf ("   LineStyle: %ld\n", shaperec->StyleChange.LineStyle);
+	  iprintf ("   LineStyle: %ld\n", shaperec->StyleChange.LineStyle);
       }
       if (shaperec->StyleChange.StateFillStyle1) {
-	  printf ("   FillStyle1: %ld\n", shaperec->StyleChange.FillStyle1);
+	  iprintf ("   FillStyle1: %ld\n", shaperec->StyleChange.FillStyle1);
       }
       if (shaperec->StyleChange.StateFillStyle0) {
-	  printf ("   FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
+	  iprintf ("   FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
       }
       if (shaperec->StyleChange.StateMoveTo)
 	{
-	  printf ("   MoveBits: %d ", shaperec->StyleChange.MoveBits);
-	  printf (" MoveDeltaX: %ld ", shaperec->StyleChange.MoveDeltaX);
-	  printf (" MoveDeltaY: %ld\n", shaperec->StyleChange.MoveDeltaY);
+	  iprintf ("   MoveBits: %d ", shaperec->StyleChange.MoveBits);
+	  iprintf (" MoveDeltaX: %ld ", shaperec->StyleChange.MoveDeltaX);
+	  iprintf (" MoveDeltaY: %ld\n", shaperec->StyleChange.MoveDeltaY);
 	}
     }
 }
@@ -399,9 +421,9 @@ void
 outputSWF_SHAPE (SWF_SHAPE * shape, char *name)
 {
   int i;
-  printf (" %s\n", name );
-  printf (" NumFillBits: %d\n", shape->NumFillBits);
-  printf (" NumLineBits: %d\n", shape->NumLineBits);
+  iprintf (" %s\n", name );
+  iprintf (" NumFillBits: %d\n", shape->NumFillBits);
+  iprintf (" NumLineBits: %d\n", shape->NumLineBits);
   for (i = 0; i < shape->NumShapeRecords; i++)
     {
       outputSWF_SHAPERECORD (&(shape->ShapeRecords[i]), name);
@@ -415,8 +437,8 @@ outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
 
   outputSWF_FILLSTYLEARRAY (&(shape->FillStyles),"");
   outputSWF_LINESTYLEARRAY (&(shape->LineStyles),"");
-  printf (" NumFillBits: %d\n", shape->NumFillBits);
-  printf (" NumLineBits: %d\n", shape->NumLineBits);
+  iprintf (" NumFillBits: %d\n", shape->NumFillBits);
+  iprintf (" NumLineBits: %d\n", shape->NumLineBits);
   for (i = 0; i < shape->NumShapeRecords; i++)
     {
       outputSWF_SHAPERECORD (&(shape->ShapeRecords[i]),name);
@@ -426,21 +448,21 @@ outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
 void
 outputSWF_GLYPHENTRY (SWF_GLYPHENTRY *gerec)
 {
-	printf("   GlyphIndex[0] = %4.4lx ", gerec->GlyphIndex[0] );
-	printf("   GlyphAdvance[0] = %4.4lx\n", gerec->GlyphAdvance[0] );
+	iprintf("   GlyphIndex[0] = %4.4lx ", gerec->GlyphIndex[0] );
+	iprintf("   GlyphAdvance[0] = %4.4lx\n", gerec->GlyphAdvance[0] );
 }
 
 void
 outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
 {
   int i;
-  printf (" TEXTRECORD: ");
-  printf ("  TextRecordType: %d ", trec->TextRecordType);
-  printf ("  StyleFlagsReserved: %d ", trec->StyleFlagsReserved);
-  printf ("  StyleFlagHasFont: %d ", trec->StyleFlagHasFont);
-  printf ("  StyleFlagHasColor: %d ", trec->StyleFlagHasColor);
-  printf ("  StyleFlagHasYOffset: %d ", trec->StyleFlagHasYOffset);
-  printf ("  StyleFlagHasXOffset: %d\n", trec->StyleFlagHasXOffset);
+  iprintf (" TEXTRECORD: ");
+  iprintf ("  TextRecordType: %d ", trec->TextRecordType);
+  iprintf ("  StyleFlagsReserved: %d ", trec->StyleFlagsReserved);
+  iprintf ("  StyleFlagHasFont: %d ", trec->StyleFlagHasFont);
+  iprintf ("  StyleFlagHasColor: %d ", trec->StyleFlagHasColor);
+  iprintf ("  StyleFlagHasYOffset: %d ", trec->StyleFlagHasYOffset);
+  iprintf ("  StyleFlagHasXOffset: %d\n", trec->StyleFlagHasXOffset);
 
   if ( trec->TextRecordType == 0 )
   {
@@ -453,17 +475,17 @@ outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
   }
 
   if( trec->StyleFlagHasFont )
-    printf ("  FontID: %d\n", trec->FontID);
+    iprintf ("  FontID: %d\n", trec->FontID);
   if( trec->StyleFlagHasColor ) {
     outputSWF_RGBA(&trec->TextColor, "" );
   }
   if( trec->StyleFlagHasYOffset || trec->StyleFlagHasXOffset ) {
-    printf ("  XOffset: %d ", trec->XOffset);
-    printf ("  YOffset: %d\n", trec->YOffset);
+    iprintf ("  XOffset: %d ", trec->XOffset);
+    iprintf ("  YOffset: %d\n", trec->YOffset);
   }
   if( trec->StyleFlagHasFont )
-    printf ("  TextHeight: %d\n", trec->TextHeight);
-  printf ("  GlyphCount: %d\n", trec->GlyphCount);
+    iprintf ("  TextHeight: %d\n", trec->TextHeight);
+  iprintf ("  GlyphCount: %d\n", trec->GlyphCount);
   for(i=0;i<trec->GlyphCount;i++)
 	  outputSWF_GLYPHENTRY( &(trec->GlyphEntries[i]) );
 }
@@ -519,9 +541,9 @@ outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEBUTTON2);
 
 #if !defined(ACTIONONLY)
-  printf (" CharacterID: %d\n", sblock->Buttonid);
-  printf (" TrackAsMenu: %d\n", sblock->TrackAsMenu);
-  printf (" ActionOffset: %d\n", sblock->ActionOffset);
+  iprintf (" CharacterID: %d\n", sblock->Buttonid);
+  iprintf (" TrackAsMenu: %d\n", sblock->TrackAsMenu);
+  iprintf (" ActionOffset: %d\n", sblock->ActionOffset);
   for(i=0;i<sblock->numCharacters;i++) {
 	  outputSWF_BUTTONRECORD( &(sblock->Characters[i]) );
   }
@@ -558,30 +580,30 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEEDITTEXT);
 
-  printf (" CharacterID: %d\n", sblock->CharacterID);
+  iprintf (" CharacterID: %d\n", sblock->CharacterID);
   outputSWF_RECT (&(sblock->Bounds));
-  printf (" Flags: ");
-  printf (" HasText: %d ", sblock->HasText);
-  printf (" WordWrap: %d ", sblock->WordWrap);
-  printf (" Multiline: %d ", sblock->Multiline);
-  printf (" Password: %d ", sblock->Password);
-  printf (" ReadOnly: %d\n", sblock->ReadOnly);
-  printf ("        ");
-  printf (" HasTextColor: %d ", sblock->HasTextColor);
-  printf (" HasMaxLength: %d ", sblock->HasMaxLength);
-  printf (" HasFont: %d ", sblock->HasFont);
-  printf (" AutoSize: %d ", sblock->AutoSize);
-  printf (" HasLayout: %d\n", sblock->HasLayout);
-  printf ("        ");
-  printf (" NoSelect: %d ", sblock->NoSelect);
-  printf (" Border: %d ", sblock->Border);
-  printf (" HTML: %d ", sblock->HTML);
-  printf (" UseOutlines: %d\n", sblock->UseOutlines);
+  iprintf (" Flags: ");
+  iprintf (" HasText: %d ", sblock->HasText);
+  iprintf (" WordWrap: %d ", sblock->WordWrap);
+  iprintf (" Multiline: %d ", sblock->Multiline);
+  iprintf (" Password: %d ", sblock->Password);
+  iprintf (" ReadOnly: %d\n", sblock->ReadOnly);
+  iprintf ("        ");
+  iprintf (" HasTextColor: %d ", sblock->HasTextColor);
+  iprintf (" HasMaxLength: %d ", sblock->HasMaxLength);
+  iprintf (" HasFont: %d ", sblock->HasFont);
+  iprintf (" AutoSize: %d ", sblock->AutoSize);
+  iprintf (" HasLayout: %d\n", sblock->HasLayout);
+  iprintf ("        ");
+  iprintf (" NoSelect: %d ", sblock->NoSelect);
+  iprintf (" Border: %d ", sblock->Border);
+  iprintf (" HTML: %d ", sblock->HTML);
+  iprintf (" UseOutlines: %d\n", sblock->UseOutlines);
   if (sblock->HasFont)
     {
-      printf (" Font: ");
-      printf (" FontID: %d ", sblock->FontID);
-      printf (" FontHeight: %d\n", sblock->FontHeight);
+      iprintf (" Font: ");
+      iprintf (" FontID: %d ", sblock->FontID);
+      iprintf (" FontHeight: %d\n", sblock->FontHeight);
     }
   if (sblock->HasTextColor)
     {
@@ -589,17 +611,17 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
     }
   if (sblock->HasLayout)
     {
-      printf (" Layout:: ");
-      printf (" Align: %d ", sblock->Align);
-      printf (" LeftMargin: %d ", sblock->LeftMargin);
-      printf (" RightMargin: %d ", sblock->RightMargin);
-      printf (" Indent: %d ", sblock->Indent);
-      printf (" Leading: %d\n", sblock->Leading);
+      iprintf (" Layout:: ");
+      iprintf (" Align: %d ", sblock->Align);
+      iprintf (" LeftMargin: %d ", sblock->LeftMargin);
+      iprintf (" RightMargin: %d ", sblock->RightMargin);
+      iprintf (" Indent: %d ", sblock->Indent);
+      iprintf (" Leading: %d\n", sblock->Leading);
     }
-  printf (" VariableName: %s\n", sblock->VariableName);
+  iprintf (" VariableName: %s\n", sblock->VariableName);
   if (sblock->HasText)
     {
-      printf (" InitialText: %s\n", sblock->InitialText);
+      iprintf (" InitialText: %s\n", sblock->InitialText);
     }
 }
 
@@ -616,39 +638,39 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_DEFINEFONT2);
 
-  printf (" FontID: %d\n", sblock->FontID);
-  printf (" FontFlagsHasLayout: %d\n", sblock->FontFlagsHasLayout);
-  printf (" FontFlagsShiftJis: %d\n", sblock->FontFlagsShiftJis);
-  printf (" FontFlagsSmallText: %d\n", sblock->FontFlagsSmallText);
-  printf (" FontFlagsFlagANSI: %d\n", sblock->FontFlagsFlagANSI);
-  printf (" FontFlagsWideOffsets: %d\n", sblock->FontFlagsWideOffsets);
-  printf (" FontFlagsWideCodes: %d\n", sblock->FontFlagsWideCodes);
-  printf (" FontFlagsFlagsItalics: %d\n", sblock->FontFlagsFlagsItalics);
-  printf (" FontFlagsFlagsBold: %d\n", sblock->FontFlagsFlagsBold);
-  printf (" LanguageCode: %d\n", sblock->LanguageCode);
-  printf (" FontNameLen: %d\n", sblock->FontNameLen);
-  printf (" FontName: %s\n", sblock->FontName);
-  printf (" NumGlyphs: %d\n", sblock->NumGlyphs);
+  iprintf (" FontID: %d\n", sblock->FontID);
+  iprintf (" FontFlagsHasLayout: %d\n", sblock->FontFlagsHasLayout);
+  iprintf (" FontFlagsShiftJis: %d\n", sblock->FontFlagsShiftJis);
+  iprintf (" FontFlagsSmallText: %d\n", sblock->FontFlagsSmallText);
+  iprintf (" FontFlagsFlagANSI: %d\n", sblock->FontFlagsFlagANSI);
+  iprintf (" FontFlagsWideOffsets: %d\n", sblock->FontFlagsWideOffsets);
+  iprintf (" FontFlagsWideCodes: %d\n", sblock->FontFlagsWideCodes);
+  iprintf (" FontFlagsFlagsItalics: %d\n", sblock->FontFlagsFlagsItalics);
+  iprintf (" FontFlagsFlagsBold: %d\n", sblock->FontFlagsFlagsBold);
+  iprintf (" LanguageCode: %d\n", sblock->LanguageCode);
+  iprintf (" FontNameLen: %d\n", sblock->FontNameLen);
+  iprintf (" FontName: %s\n", sblock->FontName);
+  iprintf (" NumGlyphs: %d\n", sblock->NumGlyphs);
   for (i = 0; i < sblock->NumGlyphs; i++)
     {
       if (sblock->FontFlagsWideOffsets)
 	{
-	  printf (" OffsetTable[%3.3d]: %lx\n", i,
+	  iprintf (" OffsetTable[%3.3d]: %lx\n", i,
 		  sblock->OffsetTable.UI32[i]);
 	}
       else
 	{
-	  printf (" OffsetTable[%3.3d]: %x\n", i,
+	  iprintf (" OffsetTable[%3.3d]: %x\n", i,
 		  sblock->OffsetTable.UI16[i]);
 	}
     }
   if (sblock->FontFlagsWideOffsets)
     {
-      printf (" CodeTableOffset: %lx\n", sblock->CodeTableOffset.UI32);
+      iprintf (" CodeTableOffset: %lx\n", sblock->CodeTableOffset.UI32);
     }
   else
     {
-      printf (" CodeTableOffset: %x\n", sblock->CodeTableOffset.UI16);
+      iprintf (" CodeTableOffset: %x\n", sblock->CodeTableOffset.UI16);
     }
 
   for (i = 0; i < sblock->NumGlyphs; i++)
@@ -662,34 +684,34 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
     {
 	if( sblock->FontFlagsWideCodes )
 	  {
-		printf (" CodeTable[%3.3d]: %4.4x\n", i,
+		iprintf (" CodeTable[%3.3d]: %4.4x\n", i,
 		  	sblock->CodeTable[i]);
 	  }
 	else
 	  {
-		printf (" CodeTable[%3.3d]: %2.2x\n", i,
+		iprintf (" CodeTable[%3.3d]: %2.2x\n", i,
 		  	sblock->CodeTable[i]);
 	  }
     }
 
   if( sblock->FontFlagsHasLayout ) {
-    printf (" FontAscent: %d\n", sblock->FontAscent);
-    printf (" FontDecent: %d\n", sblock->FontDecent);
-    printf (" FontLeading: %d\n", sblock->FontLeading);
+    iprintf (" FontAscent: %d\n", sblock->FontAscent);
+    iprintf (" FontDecent: %d\n", sblock->FontDecent);
+    iprintf (" FontLeading: %d\n", sblock->FontLeading);
     for (i = 0; i < sblock->NumGlyphs; i++)
       {
-	printf (" FontAdvanceTable[%3.3d]: %x\n", i,
+	iprintf (" FontAdvanceTable[%3.3d]: %x\n", i,
 		  sblock->FontAdvanceTable[i]);
       }
-    printf (" FontBoundsable: (not used)\n");
+    iprintf (" FontBoundsable: (not used)\n");
     for (i = 0; i < sblock->NumGlyphs; i++)
       {
 	outputSWF_RECT (&(sblock->FontBoundsTable[i]));
       }
-    printf (" KerningCount: %d\n", sblock->KerningCount);
+    iprintf (" KerningCount: %d\n", sblock->KerningCount);
     for (i = 0; i < sblock->KerningCount; i++)
       {
-	printf (" FontKerningTable[%3.3d]: %d,%d %d\n", i,
+	iprintf (" FontKerningTable[%3.3d]: %d,%d %d\n", i,
 		  sblock->FontKerningTable[i].FontKerningCode1,
 		  sblock->FontKerningTable[i].FontKerningCode2,
 		  sblock->FontKerningTable[i].FontKerningAdjustment);
@@ -731,7 +753,7 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE);
 
-  printf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" ShapeID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),1,"");
 }
@@ -741,7 +763,7 @@ outputSWF_DEFINESHAPE2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE2);
 
-  printf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" ShapeID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),2,"");
 
@@ -752,7 +774,7 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE3);
 
-  printf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" ShapeID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),2,"");
 
@@ -771,13 +793,14 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_DEFINESPRITE);
 
-  printf(" SpriteId: %d\n", sblock->SpriteId );
-  printf(" FrameCount: %d\n", sblock->FrameCount );
-  printf(" BlockCount: %d\n", sblock->BlockCount );
+  iprintf(" SpriteId: %d\n", sblock->SpriteId );
+  iprintf(" FrameCount: %d\n", sblock->FrameCount );
+  iprintf(" BlockCount: %d\n", sblock->BlockCount );
+  ++INDENT;
   for(i=0;i<sblock->BlockCount;i++) {
        outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
   }
-
+  --INDENT;
 
 }
 
@@ -787,12 +810,12 @@ outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_DEFINETEXT);
 
-  printf(" CharacterID: %d\n", sblock->CharacterID );
+  iprintf(" CharacterID: %d\n", sblock->CharacterID );
   outputSWF_RECT( &sblock->TextBounds );
   outputSWF_MATRIX( &sblock->TextMatrix, "" );
-  printf(" GlyphBits: %d\n", sblock->GlyphBits );
-  printf(" AdvanceBits: %d\n", sblock->AdvanceBits );
-  printf(" TextRecords: %d\n", sblock->numTextRecords );
+  iprintf(" GlyphBits: %d\n", sblock->GlyphBits );
+  iprintf(" AdvanceBits: %d\n", sblock->AdvanceBits );
+  iprintf(" TextRecords: %d\n", sblock->numTextRecords );
   for(i=0;i<sblock->numTextRecords;i++) {
 	  outputSWF_TEXTRECORD(&(sblock->TextRecords[i]), 1 );
   }
@@ -805,12 +828,12 @@ outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_DEFINETEXT2);
 
-  printf(" CharacterID: %d\n", sblock->CharacterID );
+  iprintf(" CharacterID: %d\n", sblock->CharacterID );
   outputSWF_RECT( &sblock->TextBounds );
   outputSWF_MATRIX( &sblock->TextMatrix, "" );
-  printf(" GlyphBits: %d\n", sblock->GlyphBits );
-  printf(" AdvanceBits: %d\n", sblock->AdvanceBits );
-  printf(" TextRecords: %d\n", sblock->numTextRecords );
+  iprintf(" GlyphBits: %d\n", sblock->GlyphBits );
+  iprintf(" AdvanceBits: %d\n", sblock->AdvanceBits );
+  iprintf(" TextRecords: %d\n", sblock->numTextRecords );
   for(i=0;i<sblock->numTextRecords;i++) {
 	  outputSWF_TEXTRECORD(&(sblock->TextRecords[i]), 2 );
   }
@@ -846,11 +869,11 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 	OUT_BEGIN (SWF_DOACTION);
 
 #ifdef NODECOMPILE
-	printf(" %d Actions\n", sblock->numActions);
+	iprintf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(i,&(sblock->Actions[i]));
 #else
-	printf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
+	iprintf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
 
 }
@@ -875,10 +898,10 @@ outputSWF_EXPORTASSETS (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_EXPORTASSETS);
 
-  printf (" num assets: %d\n", sblock->Count );
+  iprintf (" num assets: %d\n", sblock->Count );
   for (i = 0; i < sblock->Count; i++)
     {
-	printf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
+	iprintf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
 		  sblock->Names[i]);
     }
 
@@ -896,8 +919,8 @@ outputSWF_FRAMELABEL (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_FRAMELABEL);
 
-  printf (" Name: %s\n", sblock->Name );
-  printf (" IsAnchor: %d\n", sblock->IsAnchor );
+  iprintf (" Name: %s\n", sblock->Name );
+  iprintf (" IsAnchor: %d\n", sblock->IsAnchor );
 }
 
 void
@@ -934,11 +957,11 @@ outputSWF_IMPORTASSETS (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_IMPORTASSETS);
 
-  printf (" URL: %s\n", sblock->URL );
-  printf (" num assets: %d\n", sblock->Count );
+  iprintf (" URL: %s\n", sblock->URL );
+  iprintf (" num assets: %d\n", sblock->Count );
   for (i = 0; i < sblock->Count; i++)
     {
-	printf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
+	iprintf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
 		  sblock->Names[i]);
     }
 
@@ -978,17 +1001,17 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_PLACEOBJECT2);
 
 #if !defined(ACTIONONLY)
-  printf(" PlaceFlagHasClipActions %d\n", sblock->PlaceFlagHasClipActions);
-  printf(" PlaceFlagHasClipDepth %d\n", sblock->PlaceFlagHasClipDepth);
-  printf(" PlaceFlagHasName %d\n", sblock->PlaceFlagHasName);
-  printf(" PlaceFlagHasRatio %d\n", sblock->PlaceFlagHasRatio);
-  printf(" PlaceFlagHasColorTransform %d\n", sblock->PlaceFlagHasColorTransform);
-  printf(" PlaceFlagHasMatrix %d\n", sblock->PlaceFlagHasMatrix);
-  printf(" PlaceFlagHasCharacter %d\n", sblock->PlaceFlagHasCharacter);
-  printf(" PlaceFlagMove %d\n", sblock->PlaceFlagMove);
-  printf(" Depth %d\n", sblock->Depth);
+  iprintf(" PlaceFlagHasClipActions %d\n", sblock->PlaceFlagHasClipActions);
+  iprintf(" PlaceFlagHasClipDepth %d\n", sblock->PlaceFlagHasClipDepth);
+  iprintf(" PlaceFlagHasName %d\n", sblock->PlaceFlagHasName);
+  iprintf(" PlaceFlagHasRatio %d\n", sblock->PlaceFlagHasRatio);
+  iprintf(" PlaceFlagHasColorTransform %d\n", sblock->PlaceFlagHasColorTransform);
+  iprintf(" PlaceFlagHasMatrix %d\n", sblock->PlaceFlagHasMatrix);
+  iprintf(" PlaceFlagHasCharacter %d\n", sblock->PlaceFlagHasCharacter);
+  iprintf(" PlaceFlagMove %d\n", sblock->PlaceFlagMove);
+  iprintf(" Depth %d\n", sblock->Depth);
   if( sblock->PlaceFlagHasCharacter )
-	  printf( " CharacterId: %d\n", sblock->CharacterId );
+	  iprintf( " CharacterId: %d\n", sblock->CharacterId );
   if( sblock->PlaceFlagHasMatrix )
 	outputSWF_MATRIX (&(sblock->Matrix), "");
 /*
@@ -996,11 +1019,11 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 	outputSWF_CXFORMWITHALPHA (&(sblock->ColorTransform), "");
 */
   if( sblock->PlaceFlagHasRatio )
-	  printf( " Ratio: %d\n", sblock->Ratio );
+	  iprintf( " Ratio: %d\n", sblock->Ratio );
   if( sblock->PlaceFlagHasName )
-	  printf( " Name: %s\n", sblock->Name );
+	  iprintf( " Name: %s\n", sblock->Name );
   if( sblock->PlaceFlagHasClipDepth )
-	  printf( " ClipDepth: %d\n", sblock->ClipDepth );
+	  iprintf( " ClipDepth: %d\n", sblock->ClipDepth );
 #endif
   if( sblock->PlaceFlagHasClipActions )
 	outputSWF_CLIPACTIONS (&(sblock->ClipActions));
@@ -1026,7 +1049,7 @@ outputSWF_PROTECT (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_PROTECT);
 
   if( sblock->Password )
-    printf(" Password: %s\n", sblock->Password);
+    iprintf(" Password: %s\n", sblock->Password);
 
 }
 
@@ -1092,7 +1115,7 @@ void
 outputSWF_STARTSOUND (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_STARTSOUND);
-  printf("SWF_STARTSOUND details should be here instead of this message\n");
+  iprintf("SWF_STARTSOUND details should be here instead of this message\n");
 
 }
 
@@ -1112,11 +1135,11 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 	OUT_BEGIN (SWF_INITACTION);
 
 #ifdef NODECOMPILE
-	printf(" %d Actions\n", sblock->numActions);
+	iprintf(" %d Actions\n", sblock->numActions);
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(i,&(sblock->Actions[i]));
 #else
-	printf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
+	iprintf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
 
 }
@@ -1130,21 +1153,21 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 void
 printRect(struct Rect *r)
 {
-	printf("(%i,%i)x(%i,%i)", r->xMin, r->xMax, r->yMin, r->yMax);
+	iprintf("(%i,%i)x(%i,%i)", r->xMin, r->xMax, r->yMin, r->yMax);
 }
 
 void
 outputHeader (struct Movie *m)
 {
-	printf("File version: %i\n", m->version);
-	printf("File size: %i\n", m->size);
+	iprintf("File version: %i\n", m->version);
+	iprintf("File size: %i\n", m->size);
 
-	printf("Frame size: ");
+	iprintf("Frame size: ");
 	printRect(&(m->frame));
 	putchar('\n');
 
-	printf("Frame rate: %f / sec.\n", m->rate);
-	printf("Total frames: %i\n", m->nFrames);
+	iprintf("Frame rate: %f / sec.\n", m->rate);
+	iprintf("Total frames: %i\n", m->nFrames);
 }
 
 void
@@ -1168,10 +1191,11 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
       type != SWF_PLACEOBJECT2 ) return;
 #endif
 
-  printf( "\nOffset: %d (0x%4.4x)\n", offset, offset );
-  printf( "Block type: %d (%s)\n", type, blockName(type) );
-  printf( "Block length: %d\n", length );
-  printf( "\n" );
+  putchar('\n');
+  iprintf( "Offset: %d (0x%4.4x)\n", offset, offset );
+  iprintf( "Block type: %d (%s)\n", type, blockName(type) );
+  iprintf( "Block length: %d\n", length );
+  putchar('\n');
 
   for (i = 0; i < numOutputs; i++)
     {
@@ -1180,6 +1204,6 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
 	  return outputs[i].output (blockp);
 	}
     }
-  printf("Unknown block type %d\n", type );
+  iprintf("Unknown block type %d\n", type );
   return;
 }
