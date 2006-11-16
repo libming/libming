@@ -823,6 +823,9 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   spframenum = 1;
   sprintf(spritename,"sp%d",sblock->SpriteId);
   printf ("\n\t" COMMSTART "  MovieClip %d " COMMEND "\n", sblock->SpriteId);
+#ifdef SWFPLUSPLUS
+  printf ("class SWFMovieClip *%s;\n",spritename);
+#endif
   printf ("%s(); " COMMSTART " %d frames " COMMEND "\n",
 		  newobj (spritename, "MovieClip"), sblock->FrameCount);
   for(i=0;i<sblock->BlockCount;i++) {
@@ -985,13 +988,16 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 
   if( sblock->PlaceFlagHasCharacter ) {
       printf(COMMSTART " PlaceFlagHasCharacter " COMMEND "\n");
-    sprintf(cname, "s%d", sblock->CharacterId );
-    printf ("%s(" VAR "%s);\n", methodcall (spritename, "add"),
+    sprintf(cname, "sp%d", sblock->CharacterId );
+    printf ("%s(" VAR "%s);\n", methodcall ("m", "add"),
 	      cname);
   }
   if( sblock->PlaceFlagHasMatrix ) {
       printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
-      outputSWF_MATRIX (&sblock->Matrix, spritename);
+      printf(COMMSTART " outputSWF_MATRIX is broken, so it is being skipped.. " COMMEND "\n");
+      /*
+      outputSWF_MATRIX (&sblock->Matrix, "m");
+      */
   }
   if( sblock->PlaceFlagHasColorTransform ) {
       printf(COMMSTART " PlaceFlagHasColorTransform " COMMEND "\n");
