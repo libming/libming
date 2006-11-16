@@ -19,10 +19,9 @@ sp1.nextFrame(); # end of clip frame 1
 
 # SWF_PLACEOBJECT2 
 # PlaceFlagHasCharacter 
-sp1.add(s1);
+m.add(sp1);
 # PlaceFlagHasMatrix 
-sp1.scaleTo(0.000000, nan);
-sp1.rotateTo(90.000000);
+# outputSWF_MATRIX is broken, so it is being skipped.. 
 
 # SWF_SHOWFRAME 
 m.nextFrame(); # end of frame 1 

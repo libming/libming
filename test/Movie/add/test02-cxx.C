@@ -10,7 +10,10 @@ m = new SWFMovie();
 m->setBackground(0xff, 0xff, 0xff);
 
 // SWF_DEFINESPRITE 
-SWFSprite* sp1 = new SWFSprite(); // 1 frames 
+
+	//  MovieClip 1 
+class SWFMovieClip *sp1;
+sp1 = new SWFMovieClip(); // 1 frames 
 
 // SWF_SHOWFRAME 
 sp1->nextFrame(); // end of clip frame 1 
@@ -18,7 +21,10 @@ sp1->nextFrame(); // end of clip frame 1
 // SWF_END 
 
 // SWF_PLACEOBJECT2 
+// PlaceFlagHasCharacter 
 m->add(sp1);
+// PlaceFlagHasMatrix 
+// outputSWF_MATRIX is broken, so it is being skipped.. 
 
 // SWF_SHOWFRAME 
 m->nextFrame(); // end of frame 1 
