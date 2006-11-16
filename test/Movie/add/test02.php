@@ -9,7 +9,7 @@ $m->setBackground(0xff, 0xff, 0xff);
 /* SWF_DEFINESPRITE */
 
 	/*  MovieClip 1 */
-$sp1 = new SWFSprite(); /* 1 frames */
+$sp1 = new SWFMovieClip(); /* 1 frames */
 
 /* SWF_SHOWFRAME */
 $sp1->nextFrame(); /* end of clip frame 1 */
