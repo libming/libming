@@ -169,6 +169,7 @@ static int le_swfdisplayitemp;
 static int le_swfbuttonp;
 static int le_swfactionp;
 static int le_swfmorphp;
+static int le_swfmovieclipp;
 static int le_swfspritep;
 static int le_swfinputp;
 static int le_swfsoundp;
@@ -193,6 +194,7 @@ static zend_class_entry *displayitem_class_entry_ptr;
 static zend_class_entry *button_class_entry_ptr;
 static zend_class_entry *action_class_entry_ptr;
 static zend_class_entry *morph_class_entry_ptr;
+static zend_class_entry *movieclip_class_entry_ptr;
 static zend_class_entry *sprite_class_entry_ptr;
 static zend_class_entry *sound_class_entry_ptr;
 #ifdef HAVE_NEW_MING
@@ -253,6 +255,8 @@ static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 		return (SWFCharacter)getButton(id TSRMLS_CC);
 	else if (Z_OBJCE_P(id) == morph_class_entry_ptr)
 		return (SWFCharacter)getMorph(id TSRMLS_CC);
+	else if (Z_OBJCE_P(id) == movieclip_class_entry_ptr)
+		return (SWFCharacter)getSprite(id TSRMLS_CC);
 	else if (Z_OBJCE_P(id) == sprite_class_entry_ptr)
 		return (SWFCharacter)getSprite(id TSRMLS_CC);
 	else if (Z_OBJCE_P(id) == bitmap_class_entry_ptr)
@@ -4194,6 +4198,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry button_class_entry;
 	zend_class_entry action_class_entry;
 	zend_class_entry morph_class_entry;
+	zend_class_entry movieclip_class_entry;
 	zend_class_entry sprite_class_entry;
 	zend_class_entry sound_class_entry;
 #ifdef HAVE_NEW_MING
@@ -4296,6 +4301,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfbuttonp = zend_register_list_destructors_ex(destroy_SWFButton_resource, NULL, "SWFButton", module_number);
 	le_swfactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFAction", module_number);
 	le_swfmorphp = zend_register_list_destructors_ex(destroy_SWFMorph_resource, NULL, "SWFMorph", module_number);
+	le_swfmovieclipp = zend_register_list_destructors_ex(destroy_SWFSprite_resource, NULL, "SWFMovieClip", module_number);
 	le_swfspritep = zend_register_list_destructors_ex(destroy_SWFSprite_resource, NULL, "SWFSprite", module_number);
 	le_swfinputp = zend_register_list_destructors_ex(destroy_SWFInput_resource, NULL, "SWFInput", module_number);
 
@@ -4321,6 +4327,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(button_class_entry, "SWFButton", swfbutton_functions);
 	INIT_CLASS_ENTRY(action_class_entry, "SWFAction", swfaction_functions);
 	INIT_CLASS_ENTRY(morph_class_entry, "SWFMorph", swfmorph_functions);
+	INIT_CLASS_ENTRY(movieclip_class_entry, "SWFMovieClip", swfsprite_functions);
 	INIT_CLASS_ENTRY(sprite_class_entry, "SWFSprite", swfsprite_functions);
 	INIT_CLASS_ENTRY(sound_class_entry, "SWFSound", swfsound_functions);
 #ifdef HAVE_NEW_MING
@@ -4344,6 +4351,7 @@ PHP_MINIT_FUNCTION(ming)
 	button_class_entry_ptr = zend_register_internal_class(&button_class_entry TSRMLS_CC);
 	action_class_entry_ptr = zend_register_internal_class(&action_class_entry TSRMLS_CC);
 	morph_class_entry_ptr = zend_register_internal_class(&morph_class_entry TSRMLS_CC);
+	movieclip_class_entry_ptr = zend_register_internal_class(&movieclip_class_entry TSRMLS_CC);
 	sprite_class_entry_ptr = zend_register_internal_class(&sprite_class_entry TSRMLS_CC);
 	sound_class_entry_ptr = zend_register_internal_class(&sound_class_entry TSRMLS_CC);
 #ifdef HAVE_NEW_MING
