@@ -1,0 +1,29 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_namedAnchor" 3 "21 November 2006" "c2man movie.c"
+.SH "NAME"
+SWFMovie_namedAnchor \- Add a named anchor Frame
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_namedAnchor
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	const char *label
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Movie to which the anchor is added.
+.TP
+.B "const char *label"
+Name to use for the anchor.
+.SH "DESCRIPTION"
+This function adds a named anchor to the movie.

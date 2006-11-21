@@ -254,7 +254,7 @@ SWFMovie_setBackground(SWFMovie movie /* movie whose background is being set */,
  * password which will be used by the flash editor to allow access to the movie.
  */
 void
-SWFMovie_protect(SWFMovie movie /* move to protect */,
+SWFMovie_protect(SWFMovie movie /* movie to protect */,
 		char *password /* mds5 encoded password */)
 {
 	SWFMovie_addBlock(movie, newSWFProtect(password));
@@ -410,8 +410,13 @@ SWFMovie_writeExports(SWFMovie movie)
 }
 
 
+/*
+ * add a block to a movie.
+ * This function adds a block or character to a movie. 
+ */
 SWFDisplayItem
-SWFMovie_add(SWFMovie movie, SWFBlock block)
+SWFMovie_add(SWFMovie movie /* movie to which the block will be added */,
+		SWFBlock block /* block to add to the movie */)
 {
 	if ( block == NULL )
 		return NULL;
@@ -516,14 +521,24 @@ SWFMovie_nextFrame(SWFMovie movie)
 }
 
 
+/*
+ * Add a label Frame
+ * This function adds a labelFrame to the movie.
+ */
 void
-SWFMovie_labelFrame(SWFMovie movie, const char *label)
+SWFMovie_labelFrame(SWFMovie movie /* Movie to which the label is added */,
+	const char *label /* name to use for the label */)
 {
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFFrameLabelBlock(label));
 }
 
+/*
+ * Add a named anchor Frame
+ * This function adds a named anchor to the movie.
+ */
 void
-SWFMovie_namedAnchor(SWFMovie movie, const char *label)
+SWFMovie_namedAnchor(SWFMovie movie /* Movie to which the anchor is added */,
+	const char *label /* name to use for the anchor */)
 {
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFNamedAnchorBlock(label));
 }

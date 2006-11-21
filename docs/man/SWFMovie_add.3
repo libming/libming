@@ -1,29 +1,29 @@
 .\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
 .\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
-.TH "SWFMovie_setRate" 3 "21 November 2006" "c2man movie.c"
+.TH "SWFMovie_add" 3 "21 November 2006" "c2man movie.c"
 .SH "NAME"
-SWFMovie_setRate \- set the frame rate of a movie
+SWFMovie_add \- add a block to a movie.
 .SH "SYNOPSIS"
 .ft B
 #include <ming.h>
 .br
 .sp
-void SWFMovie_setRate
+SWFDisplayItem SWFMovie_add
 .br
 (
 .br
 	SWFMovie movie,
 .br
-	float rate
+	SWFBlock block
 .br
 );
 .ft R
 .SH "PARAMETERS"
 .TP
 .B "SWFMovie movie"
-Movie to adjust.
+Movie to which the block will be added.
 .TP
-.B "float rate"
-New frame rate.
+.B "SWFBlock block"
+Block to add to the movie.
 .SH "DESCRIPTION"
-This function sets the frame rate for the movie.
+This function adds a block or character to a movie.
