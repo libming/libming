@@ -6,6 +6,8 @@ Makefile
 *.la
 .AppleDouble
 test2.c
+libming.pc
+stamp-h1
 ming_config.h
 ming.h
 libming.so.*

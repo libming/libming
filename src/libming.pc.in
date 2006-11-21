@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: ming
+Description: Ming - a SWF output library
+Version: @VERSION@
+Libs: -L${libdir} -lming
+Cflags: -I${includedir}
