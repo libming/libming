@@ -1,3 +1,5 @@
+Oct 2006: This module has been resynced with the PHP5 code, and modified
+to build for PHP4 also. Just use the appropriate version of phpize.
 
 Feb 2006: This ming.c will work with PHP4, and not PHP5 or higher. It
 is provided here for those that are not able to upgrade to PHP5 yet.
