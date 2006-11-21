@@ -8,7 +8,7 @@ MICRO_VERSION=0-beta2
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
-AC_INIT(ming, ${MING_VERSION})
+AC_INIT(ming, 0.4.0-beta2)
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc

@@ -1,5 +1,9 @@
-0.4.0-beta - 2006-??-??
+0.4.0-beta2 - 2006-11-21
 
+	* Preliminary support for building RPM packages
+	* New PHP code that builds for PHP$ and PHP5
+	* Added missing SWFMovieClip class in PHP
+	* New tool, ttftofft, for producing ming formast fonts
 	* Allow output of SWF version 8 
 	* Better SWF parser (utilities).
 	* NEW function: SWFMovie_protectWithPassword()

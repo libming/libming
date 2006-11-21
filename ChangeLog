@@ -1,3 +1,132 @@
+2006-11-21 10:37  anderson
+
+	* .cvsignore, Makefile.am, configure.in, ming.spec.in: Add bits for
+	  building rpms
+
+2006-11-21 10:34  anderson
+
+	* src/: .cvsignore, Makefile.am, libming.pc.in: add bits for
+	  building an rpm
+
+2006-11-21 08:54  anderson
+
+	* test/Movie/FrameLabel/TestList: Describe the 2nd test
+
+2006-11-21 08:53  anderson
+
+	* perl_ext/TextField.xs: Add the UTF variant for TextField
+
+2006-11-21 08:37  anderson
+
+	* docs/libming/Ming_useSWFVersion.html,
+	  docs/libming/SWFMovie_add.html, src/ming.c, src/movie.c,
+	  docs/libming/SWFMovie_labelFrame.html,
+	  docs/libming/SWFMovie_namedAnchor.html,
+	  docs/libming/SWFMovie_protect.html, docs/libming/index.html,
+	  docs/man/Ming_getScale.3, docs/man/Ming_init.3,
+	  docs/man/Ming_setCubicThreshold.3,
+	  docs/man/Ming_setErrorFunction.3,
+	  docs/man/Ming_setSWFCompression.3, docs/man/Ming_setScale.3,
+	  docs/man/Ming_setWarnFunction.3, docs/man/Ming_useSWFVersion.3,
+	  docs/man/SWFMovie_add.3, docs/man/SWFMovie_labelFrame.3,
+	  docs/man/SWFMovie_namedAnchor.3, docs/man/SWFMovie_protect.3,
+	  docs/man/SWFMovie_setBackground.3,
+	  docs/man/SWFMovie_setDimension.3,
+	  docs/man/SWFMovie_setNumberOfFrames.3,
+	  docs/man/SWFMovie_setRate.3, docs/man/destroySWFMovie.3,
+	  docs/man/newSWFMovie.3, docs/man/newSWFMovieWithVersion.3:
+	  Document function which have been added to the test suite
+
+2006-11-21 07:16  anderson
+
+	* mingpp.h: Add SWFMovieClip class
+
+2006-11-16 16:26  anderson
+
+	* test/Movie/add/test02.php: Go with the generated SWFMovieClip now
+	  that the php module has an alias for that class
+
+2006-11-16 16:15  anderson
+
+	* php_ext/ming.c: SWFMovieClip was mis-named SWFMovieSprite. To
+	  preserve some level of compatability, instead of just renaming
+	  everything, add SWFMovieClip as an alias for SWFSprite.
+
+2006-11-16 14:14  anderson
+
+	* util/outputscript.c: Improved generation of add()
+
+2006-11-16 14:14  anderson
+
+	* test/Movie/add/: test01.py, test02-cxx.C, test02.php, test02.pl,
+	  test02.py: Fixed test code. Some hand fixing is still needed 8-(
+
+2006-11-15 18:37  strk
+
+	* test/Makefile.inc: Use 'listswf' from the build tree, not the
+	  installed one (forgive me if that was intended)
+
+2006-11-15 18:36  strk
+
+	* test/Movie/add/test02.ref: updated after fix in outputtxt.c (we
+	  include Sprite tags in output now)
+
+2006-11-15 18:25  strk
+
+	* util/outputtxt.c: added iprintf() function and INDENT global for
+	  indented-print.
+
+2006-11-15 17:54  anderson
+
+	* util/outputtxt.c: Display the contents of a sprite
+
+2006-11-15 16:51  strk
+
+	* test/Movie/add/test01.c: Minor cleanup: use (SWFBlock) for second
+	  argument of SWFMovie_add (urgh)
+
+2006-11-15 16:50  strk
+
+	* configure.in, test/Movie/Makefile.am, test/Movie/add/.cvsignore,
+	  test/Movie/add/Makefile.am, test/Movie/add/TestList,
+	  test/Movie/add/test01-cxx.C, test/Movie/add/test01.c,
+	  test/Movie/add/test01.php, test/Movie/add/test01.pl,
+	  test/Movie/add/test01.py, test/Movie/add/test01.ref,
+	  test/Movie/add/test02-cxx.C, test/Movie/add/test02.c,
+	  test/Movie/add/test02.php, test/Movie/add/test02.pl,
+	  test/Movie/add/test02.py, test/Movie/add/test02.ref: Two simple
+	  tests for SWFMovie_add (add action, add sprite).  Note: swftocxx
+	  does a really bad job in this case, had to manually modify
+	  C++ code for both cases
+
+2006-11-15 11:34  strk
+
+	* util/makeswf.c: Fixed import feature to properly set
+	  __shared_assets sprite frame count
+
+2006-11-15 09:52  strk
+
+	* docs/man/makeswf.1: Improved documentation of the -i flag (import
+	  symbols)
+
+2006-11-13 16:25  strk
+
+	* util/action.c: Added output function for GOTOFRAME and GOTOFRAME2
+	  actions
+
+2006-11-09 09:53  anderson
+
+	* config/: config.guess, config.sub: Updated from newer tools
+
+2006-11-09 09:13  anderson
+
+	* test/Movie/Protect/test01-cxx.C: Sync w/ the C version
+
+2006-11-09 09:09  anderson
+
+	* CVSROOT/: loginfo, syncmail: Found the SF docs for setting this
+	  up the right way
+
 2006-11-09 08:35  anderson
 
 	* CVSROOT/: loginfo, syncmail: Just include our own version of
