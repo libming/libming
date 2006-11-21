@@ -607,6 +607,9 @@ class SWFFont : public SWFBlock
   SWFFont(FILE *file)
     { this->font = loadSWFFontFromFile(file); }
 
+  SWFFont(char *path)
+    { this->font = loadSWFFontFromFile(fopen(path, "rb")); }
+
   SWFFont(const char *name)
   {
     if(strlen(name) > 4 &&
@@ -759,6 +762,39 @@ class SWFSprite : public SWFCharacter
   void labelFrame(char *label)
     { SWFMovieClip_labelFrame(this->clip, label); }
   SWF_DECLAREONLY(SWFSprite);
+};
+
+/*  SWFMovieClip  */
+
+class SWFMovieClip : public SWFCharacter
+{
+ public:
+  c_SWFMovieClip clip;
+
+  SWFMovieClip()
+    { this->clip = newSWFMovieClip(); }
+
+  virtual ~SWFMovieClip()
+    { destroySWFMovieClip(this->clip); }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->clip; }
+
+  void setNumberOfFrames(int nFrames)
+    { SWFMovieClip_setNumberOfFrames(this->clip, nFrames); }
+
+  SWFDisplayItem *add(SWFBlock *character)
+    { return new SWFDisplayItem(SWFMovieClip_add(this->clip, character->getBlock())); }
+
+  void remove(SWFDisplayItem *item)
+    { SWFMovieClip_remove(this->clip, item->item); }
+
+  void nextFrame()
+    { SWFMovieClip_nextFrame(this->clip); }
+
+  void labelFrame(char *label)
+    { SWFMovieClip_labelFrame(this->clip, label); }
+  SWF_DECLAREONLY(SWFMovieClip);
 };
 
 
