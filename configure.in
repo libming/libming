@@ -1,20 +1,22 @@
 
-AC_INIT(ming, 0.4.0-beta)
+dnl -- Release version 
+dnl To avoid colation problems, the 0.4 release shall be 0.4.1
+
+MAJOR_VERSION=0
+MINOR_VERSION=4
+MICRO_VERSION=0-beta2
+
+MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
+
+AC_INIT(ming, ${MING_VERSION})
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
 AC_CONFIG_AUX_DIR(config)
 
-AM_INIT_AUTOMAKE(ming, 0.4.0-beta)
+AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 AM_MAINTAINER_MODE
-
-dnl -- Release version 
-MAJOR_VERSION=0
-MINOR_VERSION=4
-MICRO_VERSION=0-beta
-
-MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
 dnl -- Version info for libtool
 INTERFACE_CURRENT=4
@@ -24,6 +26,7 @@ INTERFACE_AGE=4
 AC_SUBST(INTERFACE_CURRENT)
 AC_SUBST(INTERFACE_REVISION)
 AC_SUBST(INTERFACE_AGE)
+
 
 dnl GNU recommended way to determine host variables (OS, etc)
 AC_CANONICAL_HOST
@@ -231,6 +234,7 @@ AC_OUTPUT([
 	src/blocks/Makefile
 	src/Makefile
 	src/ming.h
+	src/libming.pc
 	perl_ext/Makefile
 	test/Makefile
 	test/Movie/Makefile
@@ -246,6 +250,7 @@ AC_OUTPUT([
 	macros/Makefile
 	util/Makefile
 	util/ming-config
+	ming.spec
 ])
 
 echo "Config summary: "

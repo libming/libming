@@ -24,5 +24,15 @@ SUBDIRS =	\
 
 include_HEADERS = mingpp.h
 
+COPYING: LICENSE
+	ln -s LICENSE COPYING
+
+.PHONY: rpm
+rpm: dist
+	rpmbuild -ta ming-@VERSION@.tar.gz
+
+EXTRA_DIST = ming.spec ming.spec.in COPYING
+DISTCLEANFILES = ming-@VERSION@* ming.spec COPYING
+
 Changelog:
 	cvs2cl --accum -I ChangeLog

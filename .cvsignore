@@ -6,9 +6,14 @@ Makefile.config
 libming.so.*
 config.log
 config.status
+ming.spec
 *.tar.gz
+*.tar.bz2
+*.zip
 autom4te.cache
+aclocal.m4
 config.cache
 libming.a
 libming.so
+libtool
 configure
