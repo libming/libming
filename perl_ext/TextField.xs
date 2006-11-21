@@ -84,6 +84,11 @@ SWFTextField_addString(field, string)
 	char *	string
 
 void
+SWFTextField_addUTF8String(field, string)
+	SWF::TextField	field
+	char *	string
+
+void
 SWFTextField_setHeight(field, height)
 	SWF::TextField	field
 	int	height
@@ -132,6 +137,11 @@ SWFTextField_setAlignment(field, alignment)
 
 void
 SWFTextField_addChars(field, string)
+	SWF::TextField	field
+	char *	string
+
+void
+SWFTextField_addUTF8Chars(field, string)
 	SWF::TextField	field
 	char *	string
 
