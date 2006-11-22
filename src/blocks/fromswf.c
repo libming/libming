@@ -20,8 +20,7 @@
 /* $Id$ */
 
 
-#include <stdlib.h>
-#include <string.h>
+#include "ming_config.h"
 
 #include "libming.h"
 #include "fromswf.h"
@@ -29,6 +28,12 @@
 #include "input.h"
 #include "output.h"
 #include "error.h"
+
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_ZLIB_H
+#include <zlib.h>
+#endif
 
 static void
 writeSWFPrebuiltClipToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
@@ -256,7 +261,6 @@ static void swfseek(struct swfile *sp, int delta)
 {	SWFInput_seek(sp->input, delta, 1);
 }
 
-#include <zlib.h>
 static struct swfile *openswf(SWFInput input)
 {	struct swfile *res = (struct swfile *)malloc(sizeof(struct swfile));
 	SWFInput_read(input, res->vers, 4);
@@ -265,7 +269,9 @@ static struct swfile *openswf(SWFInput input)
 	res->fsize = SWFInput_getUInt32(input);
 	res->compressed = res->vers[0] == 'C';
 	if(res->compressed)
-	{	static z_stream z = {0};
+	{
+#if USE_ZLIB
+		static z_stream z = {0};
 		int len = SWFInput_length(input);
 		unsigned char *zbuf;
 
@@ -274,15 +280,14 @@ static struct swfile *openswf(SWFInput input)
 		// caller will do, leave it here for double memory consumption
 		//destroySWFInput(input);
 		zbuf = z.next_out = (unsigned char *)malloc(z.avail_out = res->fsize - 8);
-#ifdef HAVE_LIBZ
 		inflateInit(&z);
 		inflate(&z, Z_FINISH);
 		inflateEnd(&z);
-#endif
-#ifndef HAVE_LIBZ
-		printf("The SWF to be opened is compressed, but we can't uncompress it (no zlib compiled into this version of Ming).\n");
-#endif
 		input = newSWFInput_allocedBuffer(zbuf, z.next_out-zbuf);
+#else
+		SWF_error("The SWF to be opened is compressed, but we can't uncompress it (no zlib compiled into this version of Ming).\n");
+		return NULL;
+#endif
 	}
 	res->input = input;
 	// setup to read that rect...
@@ -1153,6 +1158,7 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 	int type, todisplay;
 	
 	swf = openswf(input);
+	if ( ! swf ) return NULL;
 	clip = newSWFPrebuiltClip();
 	clip->frames = swf->frames;
 	display = clip->display;
