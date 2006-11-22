@@ -175,7 +175,7 @@ main (int argc, char **argv)
 	int i;
 	int swfcompression = DEFSWFCOMPRESSION;
 	int framerate = 12;
-	int compiledfiles = 0;
+	int usedfiles = 0;
 	struct stat statbuf;
 #ifdef HAVE_GETOPT_LONG
 	struct option opts[] =
@@ -319,21 +319,34 @@ main (int argc, char **argv)
 	{
 		SWFAction ac;
 		char *filename = argv[i];
+		char *ext = strrchr(filename, '.');
 		char ppfile[PATH_MAX];
+		SWFPrebuiltClip builtclip;
 
-		sprintf(ppfile, "%s.frame%d.pp", outputfile, i);
-		ac = makeswf_compile_source(filename, ppfile);
+		if ( ext && ! strcasecmp(ext, ".swf") )
+		{
+			printf("Adding prebuilt clip %s to frame %d... ",
+					filename, i);
+			builtclip = newSWFPrebuiltClip_fromFile(filename);
+			if ( ! builtclip ) exit (1);
+			SWFMovie_add(mo, (SWFBlock)builtclip);
+		}
+		else
+		{
+			sprintf(ppfile, "%s.frame%d.pp", outputfile, i);
+			ac = makeswf_compile_source(filename, ppfile);
+			printf("Adding %s to frame %d... ", filename, i);
+			SWFMovie_add(mo, (SWFBlock)ac);
 
-		printf("Adding %s to frame %d... ", filename, i);
-		SWFMovie_add(mo, (SWFBlock)ac);
+		}
+
 		printf("done.\n"); 
-
-		compiledfiles++;
+		usedfiles++;
 		SWFMovie_nextFrame(mo);
 
 	}
 
-	if ( ! compiledfiles )
+	if ( ! usedfiles )
 	{
 		printf("No valid input files\n");
 		return 1;
@@ -415,6 +428,10 @@ add_imports()
 /**************************************************************
  *
  * $Log$
+ * Revision 1.28  2006/11/22 23:24:26  strk
+ * Experimental support for use of prebuilt clips.
+ * Example: makeswf frame1.as frame2.swf frame3.as ...
+ *
  * Revision 1.27  2006/11/15 16:34:48  strk
  * Fixed import feature to properly set __shared_assets sprite frame count
  *
