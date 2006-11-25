@@ -7,8 +7,9 @@ AM_CPPFLAGS = \
 TESTS = ActionScriptTest
 
 AS_TESTS = \
-	Function.as \
-	ASM0.as
+	Function.as	\
+	ASM0.as		\
+	ASM1.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
