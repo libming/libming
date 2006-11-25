@@ -116,8 +116,11 @@ ID       [$a-zA-Z_][$a-zA-Z0-9_]*
 EXPONENT [eE][-+]?{DIGIT}+
 
 %%
-  if(SWF_versionNum >= 6)
+
+ // Only reset start condition if in INITIAL state
+ if(YY_START == INITIAL && SWF_versionNum >= 6) {
 	BEGIN(AS_V6);
+ }
 
 0x{HEXDIGIT}+		{ count(); swf5lval.intVal = strtoul(yytext, NULL, 0);
 				return INTEGER;	}
