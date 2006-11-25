@@ -7,9 +7,10 @@ To add a new test:
 	2: compile with 'makeswf -o Test.swf Test.as'
 	3: create a .ref with 'listswf Test.swf > Test.ref'
 	4: IMPORTANT: verify that the output is *correct*
-	5: add Test.as to the AS_TESTS variable in Makefile.am
-	6: add Test.as and Test.ref to CVS
-	7: run 'make check' to test the test :)
-	8: commit (Test.as Test.ref Makefile.am)
+	5: add Test.as and Test.ref to CVS
+	6: add Test.as to the AS_TESTS variable in Makefile.am
+	7: run ./autogen.sh && configure
+	8: run 'make check' to test the test :)
+	9: commit (Test.as Test.ref Makefile.am)
 
 --strk; Sun Jul  9 01:25:51 CEST 2006
