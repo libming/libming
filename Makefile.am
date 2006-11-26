@@ -14,9 +14,19 @@ if BUILD_PERL_EXTENSION
 PERLSUBDIR = perl_ext
 endif
 
+if BUILD_PHP_EXTENSION
+PHPSUBDIR = php_ext
+endif
+
+if BUILD_PYTHON_EXTENSION
+PYSUBDIR = py_ext
+endif
+
 SUBDIRS =	\
         src	\
 	$(PERLSUBDIR) \
+	$(PHPSUBDIR) \
+	$(PYSUBDIR) \
 	util	\
 	docs	\
 	macros	\

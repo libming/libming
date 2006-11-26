@@ -1,5 +1,8 @@
 #!/bin/sh
+mkdir tmp
+cp * tmp
+cd tmp
 phpize
-./configure --with-ming=/path/to/ming
+./configure --with-ming
 make
-make install
+#make install

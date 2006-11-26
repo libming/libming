@@ -1,4 +1,6 @@
-include ../Makefile.config
+EXTRA_DIST = Zwiff/README.txt Zwiff/__init__.py Zwiff/setFlags.py \
+		INSTALL README TODO ming.i ming.py ming_wrap.c \
+		mingc.def mingc.py setup.py shape.py MANIFEST
 
 all: build
 	@echo "This Makefile is not yet edited"
