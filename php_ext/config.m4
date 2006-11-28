@@ -10,7 +10,7 @@ PHP_ARG_WITH(ming, for MING support,
 if test "$PHP_MING" != "no"; then
   AC_CHECK_LIB(m, sin)
 
-  for i in $PHP_MING /usr/local /usr; do
+  for i in $PHP_MING ../../src /usr/local /usr; do
     if test -f $i/$PHP_LIBDIR/libming.$SHLIB_SUFFIX_NAME || test -f $i/$PHP_LIBDIR/libming.a; then
       MING_DIR=$i
       break
@@ -21,7 +21,7 @@ if test "$PHP_MING" != "no"; then
     AC_MSG_ERROR(Please reinstall ming distribution. libming.(a|so) not found.)
   fi
 
-  for i in $MING_DIR/include $MING_DIR/include/ming $MING_DIR/ming/include; do
+  for i in ../../src $MING_DIR/include $MING_DIR/include/ming $MING_DIR/ming/include; do
     if test -f $i/ming.h; then
       MING_INC_DIR=$i
     fi
