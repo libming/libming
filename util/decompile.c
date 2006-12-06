@@ -1538,7 +1538,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 {
     int i=0;
     OUT_BEGIN2(SWF_ACTIONIF);
-
+struct strbufinfo origbuf;
     /*
      * IF is used in various way to implement different types
      * of loops. We try to detect these different types of loops
@@ -1640,11 +1640,10 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	puts("}\n");
 	return 0;
     }
-
+#if 0
     /*
      * Any other use of IF must be a real if()
      */
-#if 0
     if( isLogicalOp(n-1, actions, maxn) ) {
             INDENT
 	    puts("if( ");
@@ -1687,14 +1686,14 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
     }
 
     SanityCheck(SWF_IF, 0, "IF type not recognized")
-#else	/* 2006 NEW stuff comes here */
+
+#else	/* a.k. 2006 NEW stuff comes here */
     {
+	   #define SOME_IF_DEBUG 0	/* coders only */
     	   int has_else_or_break= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
                   (sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 )) ? 1:0;
     	   int has_lognot=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) ? 1:0;
-	   int has_chain=0;
-	   int else_action_cnt=0;
-	   int sbi,sbe;
+	   int else_action_cnt=0,is_logor=0,is_logand=0,sbi,sbe;
 
 	   /* before emitting any "if"/"else" characters let's check 
 	      for a ternary operation  cond?a:b 
@@ -1710,7 +1709,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	          actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset < limit && else_action_cnt+n+1<maxn;
 		  else_action_cnt++)
 		{
-		 #if 0
+		 #if SOME_IF_DEBUG
 		 printf("/* ELSE OP 0x%x at %d*/\n",actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
 		 actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset)
 		 #endif
@@ -1722,7 +1721,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	   sbe=stackBalance (else_action_cnt,&actions[n+1]);
 	   if (sbi==1 && sbe==1)
 	   {
-	     #if 0
+	     #if SOME_IF_DEBUG
 	       puts("/* ****Found ternary ternary operation  \"cond ? a : b\"    **** */\n");
 	       printf("If   Actions=%d\n",sact->numActions-1);
 	       printf("Else Actions=%d\n",else_action_cnt);
@@ -1747,54 +1746,43 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	   } 
 	   else
 	   {
-            /* does it continue any other condition sequence ? 
-               Something like: if (x>2 && 7>y || callme(123) || false) { this(); } else { that(); }
-            */
-	    if ( isLogicalOp2(n-1, actions, maxn) &&
-	    	 ( (isLogicalOp2(n-2, actions, maxn) && has_else_or_break) || 
-	    	    actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ))
-	    {
-	     /* continued with || or && and else clause is present */
-	    }
-	    else
-	    {  
-	     if (  actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT 
-	     	 && (
-	             actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
-	           ||actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT 
-	           ) &&
-	     	   actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF     )
-	     {
-	      /* continued with && */
-	     }
-	     else
-	     {
-	      INDENT
-	      puts("if( ");
-	     }
-	    }
-	    
-	    puts(getName(pop()));	/* the condition itself */
-	     
-	    /* is it followed by another condition ? */
-	    if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP  )
-	    {
-	     puts(" || ");
-	     has_chain=1;		/* i.e. do NOT write '}' below */
-	    }
-	    else
-	    {
-	     if (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-  	    	 actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP )  
-  	      {
-	       puts(" && ");
-	       has_chain=1;
-	      }
-	      else
-               puts(" ) {\n");
-            }
-            if ( has_else_or_break )
-            {
+	   /* at this point let's check for conditioned jumps that are NOT 'if':
+	      currently that is code for the locical operations  && and ||
+	   */
+	   if (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
+	     is_logor=1;
+	   if (actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
+	    && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT)
+	     is_logand=1;
+	   if (is_logor || is_logand)    
+	   {
+	    #if SOME_IF_DEBUG
+	      printf("\n/* detected LOGICAL %s: %d actions*/\n",is_logor ? "OR":"AND",sact->numActions);
+	    #endif
+	    #if USE_LIB
+     	      origbuf=setTempString();	/* switch to a temporary string buffer */
+     	    #endif
+	      puts(getName(pop()));	/* get left side of logical or */
+	      puts(is_logor ? " || ":" && ");
+              decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	      puts(getName(pop()));	/* get right side of logical or */
+	    #if USE_LIB
+	      push(newVar(dcgetstr()));
+	      setOrigString(origbuf);	/* switch back to orig buffer */
+	    #else
+	      push (newVar("/* see logical term lines above */")); 
+	    #endif
+	      return 0;
+	   }
+	   /* not it seems we have a found the REAL 'if' statement,
+	      so it's right time to print the "if" just NOW!
+	   */
+	   INDENT
+	   puts("if( ");
+	   puts(getName(pop()));	/* the condition itself */
+	   puts(" ) {\n");
+           if ( has_else_or_break )
+           {
 	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
 	               sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset;
  	      if (! (has_lognot
@@ -1822,7 +1810,6 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
                INDENT
 	       puts("} else {\n");
 	      }	      
-
               decompileActions(else_action_cnt  , &actions[n+1],gIndent+1);
 	      if  (!has_lognot)		/* the missing if-part just NOW */
 	      {
@@ -1837,11 +1824,8 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 	      /* It's a simple if() {} */
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	    }
-	    if ( !has_chain )		/* standalone condition or last in a chain */
-	    {
-	      INDENT
-	      puts("}\n");
-	    }
+	    INDENT
+	    puts("}\n");
 	 }
 	return i;
     }
