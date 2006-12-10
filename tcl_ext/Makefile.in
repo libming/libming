@@ -2,10 +2,10 @@
 CFLAGS += -I.. -I../src -I/usr/include/tcl8.4
 LDFLAGS += -L.. -lming $(LIBS)
 
-all: mingc$(NOVAR_SHLIBEXT)
+all: mingc.so
 
-mingc$(NOVAR_SHLIBEXT): ming_wrap.o
-	$(CC) $(CFLAGS) -fpic -shared -o mingc$(NOVAR_SHLIBEXT) ming_wrap.o $(LDFLAGS)
+mingc.so: ming_wrap.o
+	$(CC) $(CFLAGS) -fpic -shared -o mingc.so ming_wrap.o $(LDFLAGS)
 
 ming_wrap.o: ming_wrap.c
 	$(CC) $(CFLAGS) -fpic -c ming_wrap.c -o ming_wrap.o
