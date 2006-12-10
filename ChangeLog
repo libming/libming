@@ -1,3 +1,94 @@
+2006-12-10 18:20  anderson
+
+	* tcl_ext/: Makefile.am, Makefile.in: Improved autotooling
+
+2006-12-10 14:27  anderson
+
+	* configure.in: Remove dead variables
+
+2006-12-10 13:51  anderson
+
+	* java_ext/: Makefile, native/Makefile: Some preliminary fixes for
+	  the Java extension
+
+2006-12-10 13:49  anderson
+
+	* configure.in, tcl_ext/Makefile.in: z few last tcl fixups
+
+2006-12-10 13:40  anderson
+
+	* tcl_ext/Makefile.in: fix the suffix of the shared lib
+
+2006-12-10 13:32  anderson
+
+	* Makefile.am, configure.in, tcl_ext/Makefile, tcl_ext/Makefile.in:
+	  Add build support for tcl extension
+
+2006-12-10 08:22  akleine
+
+	* util/decompile.c: differ between pre-fixed and post-fixed
+	  increment/decrement operations, currently for simple variables
+	  only. Note: this gives much better results on code lines like
+	  "text= x * (--x);"
+
+2006-12-06 12:34  akleine
+
+	* util/decompile.c: Rewrote parts decompileIF() by a different
+	  approach handling code of conditioned jumps for logical OR and
+	  AND using stack.  (But do not confuse with SWFACTION_LOGICAL...
+	  opcodes.)
+
+2006-11-27 19:55  anderson
+
+	* php_ext/config.m4: Look in the loca src tree first when trying to
+	  find headers
+
+2006-11-26 19:53  anderson
+
+	* ming.i, py_ext/ming.i, py_ext/ming_wrap.c, py_ext/mingc.py,
+	  test/dotests.pl: Eliminate the duplicate ming.i, and move the
+	  good one to the top so other languages can swig it
+
+2006-11-26 18:07  anderson
+
+	* Makefile.am, configure.in, perl_ext/Makefile.am,
+	  php_ext/MANIFEST, php_ext/Makefile, php_ext/Makefile.am,
+	  php_ext/make_module.sh, py_ext/Makefile, py_ext/Makefile.am:
+	  Cause language bindings to build and show up in the dist tarballs
+
+2006-11-25 16:09  strk
+
+	* test/actionscript/: ASM1.as, ASM1.ref, Makefile.am: Added test of
+	  mixing asm{} with AS_V6
+
+2006-11-25 15:43  strk
+
+	* test/actionscript/: ASM0.as, ASM0.ref, Makefile.am, README: Small
+	  test for asm{} block
+
+2006-11-25 15:15  strk
+
+	* src/actioncompiler/swf5compiler.flex: Only reset start condition
+	  if in INITIAL state (fixes asm{} use)
+
+2006-11-22 18:24  strk
+
+	* util/makeswf.c: Experimental support for use of prebuilt clips.
+	  Example: makeswf frame1.as frame2.swf frame3.as ...
+
+2006-11-22 18:17  strk
+
+	* src/blocks/fromswf.c: Proper use of ZLIB-related macros, don't
+	  segfault if ZLIB is not compiled in.
+
+2006-11-21 11:13  anderson
+
+	* NEWS, configure.in: Doc updates for 0.4.0-beta2 snapshot
+
+2006-11-21 10:59  anderson
+
+	* php_ext/: README.PHP4, README.PHP5: Update the comments
+
 2006-11-21 10:37  anderson
 
 	* .cvsignore, Makefile.am, configure.in, ming.spec.in: Add bits for
