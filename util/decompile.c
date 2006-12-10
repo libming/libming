@@ -250,6 +250,9 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
 		strcat(t,pool[act->p.Constant16]);
 		strcat(t,"\"");
   		return t;
+
+	  case 12:
+	  case 11: /* INCREMENTED or DECREMENTED VARIABLE */
 	  case 10: /* VARIABLE */
   		return act->p.String;
 	  default: 
@@ -378,6 +381,7 @@ newVar2(char *var,char *var2)
 	strcat(v->p.String,var2);
 	return v;
 }
+
 
 struct SWF_ACTIONPUSHPARAM *
 newVar3(char *var,char *var2, char *var3)
@@ -699,6 +703,8 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 		else
   		  printf ("%s", pool[act->p.Constant16]);
 		break;
+	  case 12:
+	  case 11: /* INCREMENTED or DECREMENTED VARIABLE */
 	  case 10: /* VARIABLE */
   		printf ("%s", act->p.String);
 		break;
@@ -1234,18 +1240,43 @@ decompileRANDOMNUMBER(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
-decompileDECREMENT(int n, SWF_ACTION *actions,int maxn)
+decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 {
     struct SWF_ACTIONPUSHPARAM *var;
+    char *dblop=is_incr ? "++":"--";
 
-//    SanityCheck(SWF_DECREMENT,
-//		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
-//		"DECREMENT not preceeded by PUSH")
- 
+    if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
+      || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP 
+      || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
+    {			// NEW inc/dec code (akleine, Dec 2006)
+    	var=pop();
+	int is_postop=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)?1:0;
+	if (is_postop)
+	 var = newVar2(getString(var),dblop);
+	else
+	 var = newVar2(dblop,getString(var));
+	if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
+	{
+ 	 var->Type=11;	/* later trigger printing variable inc/dec */
+ 	}
+ 	else
+ 	{
+ 	 var->Type=12;	/* later be quiet, see decompileSETVARIABLE() */
+ 	 if (is_postop)
+ 	 {
+ 	  pop();
+ 	  push(var);	/* will duplicate stacktop */
+ 	 }
+ 	}
+	push(var);
+    }
+    else		// OLD inc dec code (still used for SETMEMBER etc)
+    {
     INDENT
     var=pop();
     decompilePUSHPARAM(var,0);
-    puts("--;\n");
+    puts(dblop);
+    puts(";\n");
     push(var);
     if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
         (var->Type == 4 /* Register */) &&
@@ -1253,29 +1284,6 @@ decompileDECREMENT(int n, SWF_ACTION *actions,int maxn)
 	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
 	    return 1; /* Eat the StoreRegister that follows */
     }
-
-    return 0;
-}
-
-int
-decompileINCREMENT(int n, SWF_ACTION *actions,int maxn)
-{
-    struct SWF_ACTIONPUSHPARAM *var;
-
-//    SanityCheck(SWF_INCREMENT,
-//		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
-//		"INCREMENT not preceeded by PUSH")
-    INDENT
-
-    var=pop();
-    decompilePUSHPARAM(var,0);
-    puts("++;\n");
-    push(var);
-    if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-        (var->Type == 4 /* Register */) &&
-        (actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->p.RegisterNumber) ) {
-	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
-	    return 1; /* Eat the StoreRegister that follows */
     }
     return 0;
 }
@@ -1382,13 +1390,21 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn)
     INDENT
     val = pop();
     var = pop();
-    if (strcmp(getName(val),getName(var)))
+
+    switch (val->Type)
     {
-    puts(getName(var));
-    printf(" = " );
-    /*puts(getName(val));*/
-    decompilePUSHPARAM(val,0);	/* FIXME: 0 or 1 this needs more attention */
-    puts(";\n");
+     default:	puts(getName(var));
+		printf(" = " );
+		/*puts(getName(val));*/
+		decompilePUSHPARAM(val,0);	/* FIXME: 0 or 1 this needs more attention */
+		puts(";\n");
+		break;
+     case 11:	/* simply output variable and inc/dec op */
+		puts(getName(val));
+		puts(";\n");
+		break;
+     case 12:	/* do nothing: inline increment/decrement (using side effect only) */
+     		break;
     }
     return 0;
 }
@@ -1774,7 +1790,7 @@ struct strbufinfo origbuf;
 	    #endif
 	      return 0;
 	   }
-	   /* not it seems we have a found the REAL 'if' statement,
+	   /* it seems we have a found the REAL 'if' statement,
 	      so it's right time to print the "if" just NOW!
 	   */
 	   INDENT
@@ -2330,10 +2346,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	return 0;
 
       case SWFACTION_DECREMENT:
-        return decompileDECREMENT(n, actions, maxn);
+        return decompileINCR_DECR(n, actions, maxn,0);
 
       case SWFACTION_INCREMENT:
-        return decompileINCREMENT(n, actions, maxn);
+        return decompileINCR_DECR(n, actions, maxn,1);
 
       case SWFACTION_STOREREGISTER:
         decompileSTOREREGISTER(n, actions, maxn);
