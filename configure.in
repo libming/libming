@@ -179,7 +179,7 @@ $HOME/include \
 	for i in $tclincdirs_default; do
 	  for suf in 8.3 8.4 ""; do
 	    if test -f $i/tcl$suf/tcl.h; then
-	     TCL_INC_DIR=$i
+	     TCL_INC_DIR=$i/tcl$suf
 	     break
 	    fi
 	  done
@@ -192,6 +192,8 @@ $HOME/include \
 fi
 
 AM_CONDITIONAL(BUILD_TCL_EXTENSION, test x"$tcl_ext" = xyes)
+AC_SUBST(TCL_LIB_DIR)
+AC_SUBST(TCL_INC_DIR)
 
 dnl --------------------------------------------
 dnl Check for required programs

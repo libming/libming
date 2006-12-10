@@ -1,5 +1,5 @@
 
-CFLAGS += -I.. -I../src -I/usr/include/tcl8.4
+CFLAGS += -I.. -I../src -I@TCL_INC_DIR@
 LDFLAGS += -L.. -lming $(LIBS)
 
 all: mingc.so
@@ -14,5 +14,5 @@ ming_wrap.c:
 	swig -I.. -tcl ming.i
 
 clean:
-	rm -f mingc$(NOVAR_SHLIBEXT) core ming_wrap.c ming_wrap.doc *~ *.o 
+	rm -f mingc.so core ming_wrap.c ming_wrap.doc *~ *.o 
 
