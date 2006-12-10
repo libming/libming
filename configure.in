@@ -111,6 +111,89 @@ fi
 AM_CONDITIONAL(BUILD_PHP_EXTENSION, test x"$php_ext" = xyes)
 
 dnl --------------------------------------------
+dnl Check if we should build tcl extension
+dnl --------------------------------------------
+
+AC_PATH_PROG(TCL, tclsh)
+AM_CONDITIONAL(HAVE_TCL, test x"$TCL" != x)
+
+AC_ARG_ENABLE(
+[tcl],
+[  --enable-tcl           Enable build of tcl extension],
+[case "${enableval}" in
+  yes) tcl_ext=yes ;;
+   no) tcl_ext=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-tcl-ext option]) ;;
+esac], tcl_ext=no)
+
+if test x"$tcl_ext" = xyes; then
+	if test x"$TCL" = x; then
+		AC_MSG_ERROR([Can't build tcl extension, as tcl executable could not be found])
+	fi
+
+tcllibdirs_default="\
+$prefix/lib/itcl \
+$prefix/lib \
+$HOME/local/lib \
+$HOME/lib \
+/usr/local/lib \
+/usr/lib64 \
+/usr/lib"
+
+	for i in $tcllibdirs_default; do
+	  for suf in 8.3 8.4 ""; do
+	    if test -f $i/libtcl$suf.so || test -f $i/libtcl$suf.a; then
+	     TCL_LIB_DIR=$i
+	     break
+	    fi
+	  done
+	done
+
+	if test -z "$TCL_LIB_DIR"; then
+	  AC_MSG_ERROR(Unable to find a Tcl library.)
+	fi
+
+tclincdirs_default="\
+/usr/include/tcl-private/generic \
+/usr/include/tk-private/generic \
+/usr/include/itcl-private/generic \
+/usr/include/tcl8.4 \
+/usr/include/tcl8.4/tcl-private/generic \
+/usr/include/tcl8.4/tk-private/generic \
+/usr/include/tcl8.4/itcl-private/generic \
+/usr/include/tcl8.4 \
+/usr/include/tcl8.3/tcl-private/generic \
+/usr/include/tcl8.3/tk-private/generic \
+/usr/include/tcl8.3/itcl-private/generic \
+/usr/include/tcl8.3 \
+/usr/include/tcl8.2/generic \
+$prefix/include/itcl \
+/usr/include/itcl3.1/generic/ \
+$prefix/include \
+$HOME/local/include \
+$HOME/include \
+/usr/local/include \
+/usr/include/tcl \
+/usr/include"
+
+	for i in $tclincdirs_default; do
+	  for suf in 8.3 8.4 ""; do
+	    if test -f $i/tcl$suf/tcl.h; then
+	     TCL_INC_DIR=$i
+	     break
+	    fi
+	  done
+	done
+
+	if test -z "$TCL_INC_DIR"; then
+	  AC_MSG_ERROR(Unable to find a Tcl header.)
+	fi
+
+fi
+
+AM_CONDITIONAL(BUILD_TCL_EXTENSION, test x"$tcl_ext" = xyes)
+
+dnl --------------------------------------------
 dnl Check for required programs
 dnl --------------------------------------------
 
@@ -238,6 +321,7 @@ AC_OUTPUT([
 	perl_ext/Makefile
 	php_ext/Makefile
 	py_ext/Makefile
+	tcl_ext/Makefile
 	test/Makefile
 	test/Movie/Makefile
 	test/Movie/Background/Makefile
@@ -278,6 +362,12 @@ if test x"$python_ext" = "xyes"; then
 	echo "  Python extension enabled"
 else
 	echo "  Python extension disabled"
+fi
+
+if test x"$tcl_ext" = "xyes"; then
+	echo "  Tcl extension enabled"
+else
+	echo "  Tcl extension disabled"
 fi
 
 if test x"$ZLIB" != "x"; then

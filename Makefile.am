@@ -22,11 +22,16 @@ if BUILD_PYTHON_EXTENSION
 PYSUBDIR = py_ext
 endif
 
+if BUILD_TCL_EXTENSION
+TCLSUBDIR = tcl_ext
+endif
+
 SUBDIRS =	\
         src	\
 	$(PERLSUBDIR) \
 	$(PHPSUBDIR) \
 	$(PYSUBDIR) \
+	$(TCLSUBDIR) \
 	util	\
 	docs	\
 	macros	\
