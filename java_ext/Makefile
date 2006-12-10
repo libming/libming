@@ -1,5 +1,5 @@
 
-JAVADIR=/usr/java/sdk
+JAVADIR=/usr
 MINGDIR=..
 
 COMPILE = $(JAVADIR)/bin/javac -sourcepath .

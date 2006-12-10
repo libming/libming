@@ -1,14 +1,16 @@
 
-JAVADIR=/usr/java/sdk
-MINGDIR=../../src
+CXXFLAGS += -I../.. -I../../src -I.
+LDFLAGS += -L../.. -lming $(LIBS)
+
+JAVADIR=/usr
 
 all: libjswf$(NOVAR_SHLIBEXT)
 
 SWFNative.o: SWFNative.cc SWFNative.h
-	g++ -Wall -fpic -c -I. -I$(JAVADIR)/include -I$(JAVADIR)/include/linux -I$(MINGDIR) SWFNative.cc
+	$(CXX) $(CXXFLAGS) -fpic -c -I$(JAVADIR)/include -I$(JAVADIR)/include/linux  SWFNative.cc -o $@
 
 libjswf$(NOVAR_SHLIBEXT): SWFNative.o
-	g++ -Wall -fpic -shared SWFNative.o -L$(MINGDIR) -lming -o $@
+	$(CXX) $(CXXFLAGS) -fpic -shared SWFNative.o $(LDFLAGS) -o $@
 
 clean:
 	rm SWFNative.o libjswf$(NOVAR_SHLIBEXT)
