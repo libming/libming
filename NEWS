@@ -7,6 +7,7 @@
 	* Misc decompiler fixes
 	* makeswf now handles precompiled clips
 	* Make sure the extension source show up in the dist tarballs
+	* compiler fix for asm {} blocks
 
 0.4.0-beta2 - 2006-11-21
 
