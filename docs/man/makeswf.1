@@ -3,14 +3,28 @@
 .SH NAME
 makeswf - actionscript compiler
 .SH SYNOPSIS
-.B makeswf [OPTIONS] <frame.as> ...
+.B makeswf [OPTIONS] <frame_content> ...
 .SH DESCRIPTION
 .B makeswf
-is a command line interface to the Ming library actionscript compiler.
+is a command line interface to the Ming library actionscript compiler, with support for embedding
+prebuilt content.
 .PP
-Bytecode resulting from compilation of each given source file will
+\fBframe_content\fR can be either: an ActionScript source file, a bitmap file (png or jpg), or an SWF file.
+Non-ActionScript input files are currently only recognized by extension (png, jpg, swf). Files with
+other extensions will be assumed to contain ActionScript source code.
+.PP
+Each \fBframe_content\fR will
 be stored in a separate frame of the output.
 .PP
+ActionScript code is preprocessed using \fBcpp\fR before being compiled,
+this allows (among many other things) grouping multiple sourcefiles
+into a single frame by using \fB#include\fR directives. (See 
+.SM
+.B PREPROCESSOR
+below.)
+.PP
+Bitmap content will be stored in a MovieClip named after the corresponding input filename with
+path and extension removed. This allows easy referencing of the content by ActionScript code.
 .SH OPTIONS
 .TP
 \fB\-o\fR <output>
