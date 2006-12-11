@@ -124,6 +124,9 @@ vasprintf(char **ret, const char *format, va_list ap)
 static void add_import_spec(char *spec);
 static int add_imports(void);
 static void embed_image(SWFMovie movie, char *f);
+static void embed_swf(SWFMovie movie, char *f);
+// return pointer to allocated memory (free it)
+static char* base_name(char* filename);
 
 /* data */
 static char **import_specs;
@@ -323,15 +326,12 @@ main (int argc, char **argv)
 		char *filename = argv[i];
 		char *ext = strrchr(filename, '.');
 		char ppfile[PATH_MAX];
-		SWFPrebuiltClip builtclip;
 
 		if ( ext && ! strcasecmp(ext, ".swf") )
 		{
 			printf("Adding prebuilt clip %s to frame %d... ",
 					filename, i);
-			builtclip = newSWFPrebuiltClip_fromFile(filename);
-			if ( ! builtclip ) exit (1);
-			SWFMovie_add(mo, (SWFBlock)builtclip);
+			embed_swf(mo, filename);
 		}
 		else if ( ext && ( ! strcasecmp(ext, ".png") || ! strcasecmp(ext, ".jpg") ) )
 		{
@@ -433,6 +433,21 @@ add_imports()
 	return 1;
 }
 
+static char*
+base_name(char* filename)
+{
+	char *name, *ptr;
+
+	ptr = strrchr(filename, '/');
+
+	if ( ! ptr ) ptr = filename;
+	else if ( ! *++ptr ) ptr = filename;
+	name = strdup(ptr);
+	ptr = strrchr(name, '.');
+	if ( ptr ) *ptr = '\0';
+	return name;
+}
+
 static void
 embed_image(SWFMovie movie, char *f)
 {
@@ -444,8 +459,7 @@ embed_image(SWFMovie movie, char *f)
 	FILE *raster;
 	SWFInput in;
 	int height, width;
-	char *name, *ptr;
-	static int depth=10;
+	char *name;
 
         if (!(raster = fopen (f, "rb")))
         {
@@ -486,26 +500,37 @@ embed_image(SWFMovie movie, char *f)
 
 	it = SWFMovie_add(mo, (SWFBlock)clip);
 
-	// Use file basename (w/out extension)
-	// as the name for the new character
-
-	ptr = strrchr(f, '/');
-	if ( ! ptr ) ptr = f;
-	else if ( ! *++ptr ) ptr = f;
-	name = strdup(ptr);
-	ptr = strrchr(name, '.');
-	if ( ptr ) *ptr = '\0';
+	name = base_name(f);
 
 	SWFDisplayItem_setName(it, name);
-	SWFDisplayItem_setDepth(it, ++depth);
 
-	printf("%s at depth %d\n", name, depth);
+	free(name);
 
+}
+
+static void
+embed_swf(SWFMovie movie, char* filename)
+{
+	SWFPrebuiltClip builtclip;
+	SWFDisplayItem it;
+	char *name;
+
+	builtclip = newSWFPrebuiltClip_fromFile(filename);
+	if ( ! builtclip ) exit (1);
+
+	it = SWFMovie_add(mo, (SWFBlock)builtclip);
+
+	name = base_name(filename);
+	SWFDisplayItem_setName(it, name);
+	free(name);
 }
 
 /**************************************************************
  *
  * $Log$
+ * Revision 1.30  2006/12/11 22:01:29  strk
+ * Use a name for prebuilt clips as well. I can't belive how powerful this tool is getting ;)
+ *
  * Revision 1.29  2006/12/11 20:01:44  strk
  * Allow png or jpg frame contents
  *
