@@ -18,9 +18,15 @@ EXTRA_DIST = SWF/Action.pm SWF/Bitmap.pm SWF/Button.pm SWF/Constants.pm \
 all: Makefile.perl
 	$(MAKE) -f Makefile.perl
 
-Makefile.perl: Makefile.PL
-	srcdir=$(srcdir) $(PERL) $< MAKEFILE=Makefile.perl
+install: Makefile.perl
+	$(MAKE) -f Makefile.perl install
 
-clean-local:
+Makefile.perl: Makefile.PL
+	srcdir=$(srcdir) builddir=$(builddir) $(PERL) $< MAKEFILE=Makefile.perl
+
+clean-local: Makefile.perl
 	$(MAKE) -f Makefile.perl realclean
 	rm -f Makefile.perl
+
+distclean-local:
+	rm -f t/config.pl

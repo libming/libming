@@ -38,6 +38,8 @@ check_PROGRAMS = \
 
 test01_cxx_SOURCES = test01-cxx.C
 test02_cxx_SOURCES = test02-cxx.C
+test01_SOURCES = test01.c
+test02_SOURCES = test02.c
 
 CLEANFILES = dotests test01.swf test02.swf
 

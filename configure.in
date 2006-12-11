@@ -177,8 +177,8 @@ $HOME/include \
 /usr/include"
 
 	for i in $tclincdirs_default; do
-	  for suf in 8.3 8.4 ""; do
-	    if test -f $i/tcl$suf/tcl.h; then
+	  for suf in tcl8.3/ tcl8.4/ tcl/ ""; do
+	    if test -f $i/${suf}tcl.h; then
 	     TCL_INC_DIR=$i/tcl$suf
 	     break
 	    fi
@@ -262,7 +262,7 @@ AC_CHECK_FUNC(sin, MATHLIB="", [
 
 AC_DEFINE(TRACK_ALLOCS, 1, [Define this if you want Ming to track all objects allocations. Ming will mantain a doubly linked list of allocated objects, call Ming_collectGarbage() to get rid of them all])
 
-AM_CONDITIONAL(USE_CXX, test x${CXX} != x)
+AM_CONDITIONAL(USE_CXX, [test x${CXX} != x])
 if test -n "${CXX}"; then
 	AC_DEFINE([USE_CXX], [1], [Use c++])
 fi
@@ -339,7 +339,7 @@ AC_OUTPUT([
 
 echo "Config summary: "
 
-if test x"$CXX" = "xyes"; then
+if test x"$CXX" != x; then
 	echo "  C++ enabled"
 else
 	echo "  C++ disabled"

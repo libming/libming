@@ -6,8 +6,10 @@ use strict;
 
 my $SRCDIR=$ENV{'srcdir'};
 $SRCDIR="." unless $SRCDIR;
+my $BUILDDIR=$ENV{'builddir'};
+$BUILDDIR="." unless $BUILDDIR;
 
-my $CONFIG_PL = ${SRCDIR}.'/t/config.pl';
+my $CONFIG_PL = ${BUILDDIR}.'/t/config.pl';
 
 my @DEFAULT_DIR = qw(..);
 
@@ -15,7 +17,7 @@ my @do_clean = qw {
     SWF.h
     Boot.xsh
     ${CONFIG_PL}
-    ${SRCDIR}/t/gradient.swf
+    ${BUILDDIR}/t/gradient.swf
     SWF/MyConfig.pm
 };
 

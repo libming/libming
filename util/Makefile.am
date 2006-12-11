@@ -142,4 +142,7 @@ bin_SCRIPTS = ming-config
 EXTRA_DIST = \
 	README \
 	bindump.c \
-	hexdump.c 
+	hexdump.c \
+	cws2fws \
+	swftoperl.html \
+	ming.css

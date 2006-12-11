@@ -10,20 +10,30 @@
 #
 AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip 1.4d
 
+additionnal_dist_subdirs = 
+
 if BUILD_PERL_EXTENSION
 PERLSUBDIR = perl_ext
+else
+additionnal_dist_subdirs += perl_ext
 endif
 
 if BUILD_PHP_EXTENSION
 PHPSUBDIR = php_ext
+else
+additionnal_dist_subdirs += php_ext
 endif
 
 if BUILD_PYTHON_EXTENSION
 PYSUBDIR = py_ext
+else
+additionnal_dist_subdirs += py_ext
 endif
 
 if BUILD_TCL_EXTENSION
 TCLSUBDIR = tcl_ext
+else
+additionnal_dist_subdirs += tcl_ext
 endif
 
 SUBDIRS =	\
@@ -37,6 +47,8 @@ SUBDIRS =	\
 	macros	\
 	test
 
+DIST_SUBDIRS = $(SUBDIRS) $(additionnal_dist_subdirs)
+
 include_HEADERS = mingpp.h
 
 COPYING: LICENSE
@@ -46,7 +58,8 @@ COPYING: LICENSE
 rpm: dist
 	rpmbuild -ta ming-@VERSION@.tar.gz
 
-EXTRA_DIST = ming.spec ming.spec.in ming.i COPYING
+EXTRA_DIST = ming.spec ming.spec.in ming.i COPYING LICENSE LICENSE_GPL2 \
+	autogen.sh HISTORY
 DISTCLEANFILES = ming-@VERSION@* ming.spec COPYING
 
 Changelog:

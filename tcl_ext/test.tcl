@@ -1,4 +1,4 @@
-load ./mingc.so mingc
+load ./.libs/mingc.so mingc
 set shape [ newSWFShape ]
 SWFShape_setLine $shape 4 100 0 0 255
 SWFShape_setRightFill $shape [ SWFShape_addSolidFill $shape 255 0 0 255 ]
