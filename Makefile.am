@@ -46,7 +46,7 @@ COPYING: LICENSE
 rpm: dist
 	rpmbuild -ta ming-@VERSION@.tar.gz
 
-EXTRA_DIST = ming.spec ming.spec.in COPYING
+EXTRA_DIST = ming.spec ming.spec.in ming.i COPYING
 DISTCLEANFILES = ming-@VERSION@* ming.spec COPYING
 
 Changelog:
