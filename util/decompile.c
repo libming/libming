@@ -203,14 +203,16 @@ static char *
 getString(struct SWF_ACTIONPUSHPARAM *act)
 {
 	char *t;
-
+#ifdef DEBUG
+	printf("*getString* type=%d\n",act->Type);
+#endif
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
-                t=malloc(strlen(act->p.String)+3); /* 2 '"'s and a NULL */
-		strcpy(t,"\"");
+                t=malloc(strlen(act->p.String)+3+2); /* 2 '\"'s and a NULL */
+		strcpy(t,"\\\"");
 		strcat(t,act->p.String);
-		strcat(t,"\"");
+		strcat(t,"\\\"");
   		return t;
 	  case 2: /* NULL */
   		return "null";
@@ -239,16 +241,16 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
   		sprintf(t,"%ld", act->p.Integer );
   		return t;
 	  case 8: /* CONSTANT8 */
-                t=malloc(strlen(pool[act->p.Constant8])+3); /* 2 '"'s and a NULL */
-		strcpy(t,"\"");
+                t=malloc(strlen(pool[act->p.Constant8])+3+2); /* 2 '\"'s and a NULL */
+		strcpy(t,"\\\"");
 		strcat(t,pool[act->p.Constant8]);
-		strcat(t,"\"");
+		strcat(t,"\\\"");
   		return t;
 	  case 9: /* CONSTANT16 */
-                t=malloc(strlen(pool[act->p.Constant16])+3); /* 2 '"'s and a NULL */
-		strcpy(t,"\"");
+                t=malloc(strlen(pool[act->p.Constant16])+3+2); /* 2 '\"'s and a NULL */
+		strcpy(t,"\\\"");
 		strcat(t,pool[act->p.Constant16]);
-		strcat(t,"\"");
+		strcat(t,"\\\"");
   		return t;
 
 	  case 12:
@@ -402,7 +404,7 @@ push(struct SWF_ACTIONPUSHPARAM *val)
 {
 	struct _stack *t;
 #ifdef DEBUG
-	printf("*push*\n");
+	printf("*push* type=%d\n",val->Type);
 #endif
 	t = calloc(1,sizeof(Stack));
 	t->type = val->Type;
@@ -662,7 +664,7 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   {
 	  case 0: /* STRING */
 		if( wantstring )
-  		  printf ("\"%s\"", act->p.String);
+  		  printf ("\\\"%s\\\"", act->p.String);
 		else
   		  printf ("%s", act->p.String);
 		break;
@@ -693,13 +695,13 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 		break;
 	  case 8: /* CONSTANT8 */
 		if( wantstring )
-  		  printf ("\"%s\"", pool[act->p.Constant8]);
+  		  printf ("\\\"%s\\\"", pool[act->p.Constant8]);
 		else
   		  printf ("%s", pool[act->p.Constant8]);
 		break;
 	  case 9: /* CONSTANT16 */
 		if( wantstring )
-  		  printf ("\"%s\"", pool[act->p.Constant16]);
+  		  printf ("\\\"%s\\\"", pool[act->p.Constant16]);
 		else
   		  printf ("%s", pool[act->p.Constant16]);
 		break;
@@ -1365,7 +1367,10 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     if (var->Type == 7 || var->Type == 10)
      puts("]");
     printf(" = " );
-    decompilePUSHPARAM(val,0);	/* FIXME: 0 or 1 this needs more attention */
+    if (val->Type != 10)			// later it will be a switch{}
+     decompilePUSHPARAM(val,1);
+    else
+     decompilePUSHPARAM(val,0);
     puts(";\n");
 
     return 0;
@@ -1383,7 +1388,7 @@ decompileGETVARIABLE(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
-decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn)
+decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
 {
     struct SWF_ACTIONPUSHPARAM *val, *var;
 
@@ -1391,14 +1396,20 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn)
     val = pop();
     var = pop();
 
+    if (val->Type!=12 && islocalvar)
+     puts("var ");
     switch (val->Type)
     {
      default:	puts(getName(var));
 		printf(" = " );
-		/*puts(getName(val));*/
-		decompilePUSHPARAM(val,0);	/* FIXME: 0 or 1 this needs more attention */
+		decompilePUSHPARAM(val,1);	// for certain types parameter 1 does not care
 		puts(";\n");
 		break;
+     case 10:	puts(getName(var));		// Variable (NEVER as string)
+		printf(" = " );
+		decompilePUSHPARAM(val,0);
+		puts(";\n");
+		break;		
      case 11:	/* simply output variable and inc/dec op */
 		puts(getName(val));
 		puts(";\n");
@@ -1518,23 +1529,9 @@ decompileRETURN(int n, SWF_ACTION *actions,int maxn)
     return 0;
 }
 
-int
-decompileDEFINELOCAL(int n, SWF_ACTION *actions,int maxn)
-{
-    struct SWF_ACTIONPUSHPARAM *val, *var;
-
-    INDENT
-    val = pop();
-    var = pop();
-    puts("var ");
-    puts(getName(var));
-    printf(" = " );
-    puts(getName(val));
-    puts(";\n");
-
-    return 0;
-}
-
+/* 
+decompileDEFINELOCAL() already MOVED TO decompileSETVARIABLE() 
+*/
 int
 decompileDEFINELOCAL2(int n, SWF_ACTION *actions,int maxn)
 {
@@ -2302,7 +2299,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompilePREVFRAME(&actions[n]);
         return 0;
 
-
       case SWFACTION_RANDOMNUMBER:
         return decompileRANDOMNUMBER(n, actions, maxn);
 
@@ -2334,15 +2330,15 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	return 0;
 
       case SWFACTION_SETVARIABLE:
-        decompileSETVARIABLE(n, actions, maxn);
+        decompileSETVARIABLE(n, actions, maxn,0);
 	return 0;
 
       case SWFACTION_DEFINELOCAL:
-        decompileDEFINELOCAL(n, actions, maxn);
+        decompileSETVARIABLE(n, actions, maxn,1);
 	return 0;
 
       case SWFACTION_DEFINELOCAL2:
-        decompileDEFINELOCAL2(n, actions, maxn);
+        decompileDEFINELOCAL2(n, actions, maxn); // FIXME: perhaps move to decompileSETVARIABLE() ??
 	return 0;
 
       case SWFACTION_DECREMENT:
