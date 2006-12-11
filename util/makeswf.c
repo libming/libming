@@ -123,6 +123,7 @@ vasprintf(char **ret, const char *format, va_list ap)
 /* prototypes */
 static void add_import_spec(char *spec);
 static int add_imports(void);
+static void embed_image(SWFMovie movie, char *f);
 
 /* data */
 static char **import_specs;
@@ -134,8 +135,9 @@ SWFMovie mo;
 void
 usage (char *me, int ex)
 {
-	fprintf(stderr, "Usage: %s [OPTIONS] <frame.as> ...\n",
+	fprintf(stderr, "Usage: %s [OPTIONS] <frame_content> ...\n",
 		me);
+	fprintf(stderr, "<frame_content> can be: swf, png, jpg, actionscript code.\n");
 	fprintf(stderr, "Options:\n");
 	fprintf(stderr, " -o <output>\n");
 	fprintf(stderr, " -s <width>x<height>\n");
@@ -331,6 +333,12 @@ main (int argc, char **argv)
 			if ( ! builtclip ) exit (1);
 			SWFMovie_add(mo, (SWFBlock)builtclip);
 		}
+		else if ( ext && ( ! strcasecmp(ext, ".png") || ! strcasecmp(ext, ".jpg") ) )
+		{
+			printf("Adding bitmap %s to frame %d... ",
+					filename, i);
+			embed_image(mo, filename);
+		}
 		else
 		{
 			sprintf(ppfile, "%s.frame%d.pp", outputfile, i);
@@ -425,9 +433,82 @@ add_imports()
 	return 1;
 }
 
+static void
+embed_image(SWFMovie movie, char *f)
+{
+	SWFFill fill;
+	SWFBitmap bm;
+	SWFShape shape;
+	SWFMovieClip clip;
+	SWFDisplayItem it, it2;
+	FILE *raster;
+	SWFInput in;
+	int height, width;
+	char *name, *ptr;
+	static int depth=10;
+
+        if (!(raster = fopen (f, "rb")))
+        {
+                fprintf (stdout, "%s: %s\n", f, strerror (errno));
+		exit(1);
+        }
+
+        if (!(in = newSWFInput_file(raster)))
+        {
+                fprintf (stdout, "Can't create SWFInput from file\n");
+		exit(1);
+        }
+
+        if (!(bm = newSWFBitmap_fromInput (in)))
+        {
+                fprintf (stdout, "Error creating bitmap");
+		exit(1);
+        }
+
+	height = SWFBitmap_getHeight(bm);
+	width = SWFBitmap_getWidth(bm);
+
+
+	shape = newSWFShape();
+  
+	SWFShape_movePenTo(shape, 0, 0);
+
+	fill = SWFShape_addBitmapFill(shape, bm, SWFFILL_CLIPPED_BITMAP);
+	SWFShape_setRightFill(shape, fill);
+	SWFShape_drawLineTo(shape, 0, width);
+	SWFShape_drawLineTo(shape, height, width);
+	SWFShape_drawLineTo(shape, height, 0);
+	SWFShape_drawLineTo(shape, 0, 0);
+
+	clip = newSWFMovieClip();
+	it2 = SWFMovieClip_add(clip, (SWFBlock)shape);
+	SWFMovieClip_nextFrame(clip);
+
+	it = SWFMovie_add(mo, (SWFBlock)clip);
+
+	// Use file basename (w/out extension)
+	// as the name for the new character
+
+	ptr = strrchr(f, '/');
+	if ( ! ptr ) ptr = f;
+	else if ( ! *++ptr ) ptr = f;
+	name = strdup(ptr);
+	ptr = strrchr(name, '.');
+	if ( ptr ) *ptr = '\0';
+
+	SWFDisplayItem_setName(it, name);
+	SWFDisplayItem_setDepth(it, ++depth);
+
+	printf("%s at depth %d\n", name, depth);
+
+}
+
 /**************************************************************
  *
  * $Log$
+ * Revision 1.29  2006/12/11 20:01:44  strk
+ * Allow png or jpg frame contents
+ *
  * Revision 1.28  2006/11/22 23:24:26  strk
  * Experimental support for use of prebuilt clips.
  * Example: makeswf frame1.as frame2.swf frame3.as ...
