@@ -2,19 +2,15 @@ EXTRA_DIST = Zwiff/README.txt Zwiff/__init__.py Zwiff/setFlags.py \
 		INSTALL README TODO ming.py ming_wrap.c \
 		mingc.def mingc.py setup.py shape.py MANIFEST
 
-all: build
-	@echo "This Makefile is not yet edited"
+all:
+	CFLAGS="$(CFLAGS)" $(PYTHON) setup.py build
 
 clean:
 	@rm -Rf test.swf build
 
 
-build:
-	$(PYTHON) setup.py build
-
-
 install:
-	$(PYTHON) setup.py install $(PREFIX)
+	$(PYTHON) setup.py install --prefix $(prefix) --root "$(DESTDIR)"
 
 test.swf:
 	$(PYTHON) shape.py

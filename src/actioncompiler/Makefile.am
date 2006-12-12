@@ -5,9 +5,13 @@ DEBUG = --debug
 
 AM_YFLAGS = -d
 
+# seems that the default is to add BUILT_SOURCES in MAINTAINERCLEANFILES,
+# which is what we want
 BUILT_SOURCES = \
 	swf4compiler.tab.c \
+	swf4compiler.tab.h \
 	swf5compiler.tab.c \
+	swf5compiler.tab.h \
 	lex.swf4.c \
 	lex.swf5.c
 
@@ -20,10 +24,7 @@ libactioncompiler_la_SOURCES = \
 	compileaction.c
 
 nodist_libactioncompiler_la_SOURCES = \
-	swf4compiler.tab.c \
-	swf5compiler.tab.c \
-	lex.swf4.c \
-	lex.swf5.c
+	$(BUILT_SOURCES)
 
 noinst_HEADERS = \
 	assembler.h \
@@ -31,7 +32,7 @@ noinst_HEADERS = \
 
 libactioncompiler_la_LIBADD = $(LEXLIB)
 
-AM_CFLAGS = -I$(srcdir)/..
+AM_CPPFLAGS = -I$(srcdir)/..
 
 noinst_PROGRAMS = test
 test_SOURCES = main.c 
@@ -44,13 +45,8 @@ EXTRA_DIST = \
 	swf5compiler.y
 
 CLEANFILES = \
-	swf4compiler.output \
-	swf4compiler.tab.c \
-	swf4compiler.tab.h \
-	swf5compiler.tab.c \
-	swf5compiler.tab.h \
-	lex.swf4.c \
-	lex.swf5.c
+	swf4compiler.output
+
 
 lex.swf4.c: $(srcdir)/swf4compiler.flex swf4compiler.tab.h
 	$(LEX) -Pswf4 $(srcdir)/swf4compiler.flex

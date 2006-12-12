@@ -1,3 +1,4 @@
+AC_INIT(ming, 0.4.0.beta3)
 
 dnl -- Release version 
 dnl To avoid colation problems, the 0.4 release shall be 0.4.1
@@ -7,8 +8,6 @@ MINOR_VERSION=4
 MICRO_VERSION=0.beta3
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
-
-AC_INIT(ming, 0.4.0.beta3)
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
@@ -91,7 +90,8 @@ dnl Check if we should build php extension
 dnl --------------------------------------------
 
 AC_PATH_PROG(PHP, php)
-AM_CONDITIONAL(HAVE_PHP, test x"$PHP" != x)
+AC_PATH_PROG(PHPIZE, phpize)
+dnl AM_CONDITIONAL(HAVE_PHP, test x"$PHP" != x)
 
 AC_ARG_ENABLE(
 [php],
@@ -103,8 +103,8 @@ AC_ARG_ENABLE(
 esac], php_ext=no)
 
 if test x"$php_ext" = xyes; then
-	if test x"$PHP" = x; then
-		AC_MSG_ERROR([Can't build php extension, as php executable could not be found])
+	if test x"$PHP" = x -o x"$PHPIZE" = x ; then
+		AC_MSG_ERROR([Can't build php extension, as php or phpize executable could not be found])
 	fi
 fi
 

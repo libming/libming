@@ -112,3 +112,13 @@ pkgconfig_DATA = libming.pc
 
 EXTRA_DIST = libming.pc.in
 DISTCLEANFILES = libming.pc
+
+# this is for the php module
+all-local:
+	$(MKDIR_P) lib
+	rm -f lib/libming.so
+	$(LN_S) ../.libs/libming.so lib/libming.so
+
+clean-local:
+	rm -f lib/libming.so
+	rmdir lib

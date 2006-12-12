@@ -10,10 +10,10 @@ curdir = os.getcwd()
 
 print curdir
 
-setup(name = "mingc", version = "0.0.3a",
+setup(name = "mingc", version = "0.0.4.beta3",
       py_modules = ['ming', 'mingc'],
       ext_modules = [Extension("_mingc", ["ming_wrap.c"],
                      include_dirs=['/usr/local/include',os.path.join(os.path.join(curdir, '..'),'src')],
-                     library_dirs=['/usr/local/lib','..'],
+                     library_dirs=['../src/.libs','/usr/local/lib/'],
                      libraries=['ming','z'])])
 

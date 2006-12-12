@@ -13,7 +13,8 @@ EXTRA_DIST = SWF/Action.pm SWF/Bitmap.pm SWF/Button.pm SWF/Constants.pm \
 		typemap examples/action.cgi examples/alphafill.cgi \
 		examples/animation.cgi examples/glyph.cgi examples/jpegfill.cgi \
 		examples/keypress.cgi examples/morph.cgi examples/shape.cgi \
-		examples/sprite.cgi examples/text.cgi
+		examples/sprite.cgi examples/text.cgi \
+		common/_sans.fdb common/README common/beep.wav
 
 all: Makefile.perl
 	$(MAKE) -f Makefile.perl
