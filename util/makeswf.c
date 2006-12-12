@@ -171,6 +171,32 @@ warningHandler(const char *fmt, ...)
 
 char *cppargs;
 size_t cppargsize = 256;
+typedef enum {
+
+	// A prebuilt clip
+	SWF,
+
+	// Any bitmap that can be feed to embed_image
+	BITMAP,
+
+	// ActionScript code
+	AS
+} FileType;
+
+FileType getFileType(char* filename)
+{
+	// TODO: use magic number
+
+	char *ext = strrchr(filename, '.');
+	if ( ! ext ) return AS;
+
+	if ( ! strcasecmp(ext, ".swf") ) return SWF;
+	if ( ! strcasecmp(ext, ".png") ) return BITMAP;
+	if ( ! strcasecmp(ext, ".jpg") ) return BITMAP;
+	if ( ! strcasecmp(ext, ".jpeg") ) return BITMAP;
+
+	return AS;
+}
 
 int
 main (int argc, char **argv)
@@ -324,16 +350,17 @@ main (int argc, char **argv)
 	{
 		SWFAction ac;
 		char *filename = argv[i];
-		char *ext = strrchr(filename, '.');
 		char ppfile[PATH_MAX];
 
-		if ( ext && ! strcasecmp(ext, ".swf") )
+		FileType type = getFileType(filename);
+
+		if ( type == SWF )
 		{
 			printf("Adding prebuilt clip %s to frame %d... ",
 					filename, i);
 			embed_swf(mo, filename);
 		}
-		else if ( ext && ( ! strcasecmp(ext, ".png") || ! strcasecmp(ext, ".jpg") ) )
+		else if ( type == BITMAP )
 		{
 			printf("Adding bitmap %s to frame %d... ",
 					filename, i);
@@ -345,7 +372,6 @@ main (int argc, char **argv)
 			ac = makeswf_compile_source(filename, ppfile);
 			printf("Adding %s to frame %d... ", filename, i);
 			SWFMovie_add(mo, (SWFBlock)ac);
-
 		}
 
 		printf("done.\n"); 
@@ -528,6 +554,11 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.31  2006/12/12 23:36:10  strk
+ * Implement a separate function for detecting the type of frame content.
+ * Take files anding in .jpeg as bitmaps.
+ * (to be improved to use magic number)
+ *
  * Revision 1.30  2006/12/11 22:01:29  strk
  * Use a name for prebuilt clips as well. I can't belive how powerful this tool is getting ;)
  *
