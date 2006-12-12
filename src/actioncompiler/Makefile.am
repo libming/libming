@@ -21,9 +21,7 @@ libactioncompiler_la_SOURCES = \
 	assembler.c \
 	compile.c \
 	listaction.c \
-	compileaction.c
-
-nodist_libactioncompiler_la_SOURCES = \
+	compileaction.c \
 	$(BUILT_SOURCES)
 
 noinst_HEADERS = \
