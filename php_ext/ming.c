@@ -2198,7 +2198,7 @@ PHP_METHOD(swfmovie, labelFrame)
 
 /* {{{ proto void swfmovie::namedanchor()
 */
-PHP_FUNCTION(swfmovie_namedAnchor)
+PHP_METHOD(swfmovie, namedAnchor)
 {
   zval **label;
 
@@ -2214,7 +2214,7 @@ PHP_FUNCTION(swfmovie_namedAnchor)
 
 /* {{{ proto void swfmovie::protect([ string pasword])
 */
-PHP_FUNCTION(swfmovie_protect)
+PHP_METHOD(swfmovie, protect)
 {
   zval **zchar;
   SWFMovie movie = getMovie(getThis() TSRMLS_CC);
