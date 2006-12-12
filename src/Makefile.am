@@ -121,4 +121,4 @@ all-local:
 
 clean-local:
 	rm -f lib/libming.so
-	rmdir lib
+	if test -d lib; then rmdir lib; fi
