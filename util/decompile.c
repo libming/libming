@@ -209,10 +209,10 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
-                t=malloc(strlen(act->p.String)+3+2); /* 2 '\"'s and a NULL */
-		strcpy(t,"\\\"");
+                t=malloc(strlen(act->p.String)+3); /* 2 "'"s and a NULL */
+		strcpy(t,"'");
 		strcat(t,act->p.String);
-		strcat(t,"\\\"");
+		strcat(t,"'");
   		return t;
 	  case 2: /* NULL */
   		return "null";
@@ -241,16 +241,16 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
   		sprintf(t,"%ld", act->p.Integer );
   		return t;
 	  case 8: /* CONSTANT8 */
-                t=malloc(strlen(pool[act->p.Constant8])+3+2); /* 2 '\"'s and a NULL */
-		strcpy(t,"\\\"");
+                t=malloc(strlen(pool[act->p.Constant8])+3); /* 2 "'"s and a NULL */
+		strcpy(t,"'");
 		strcat(t,pool[act->p.Constant8]);
-		strcat(t,"\\\"");
+		strcat(t,"'");
   		return t;
 	  case 9: /* CONSTANT16 */
-                t=malloc(strlen(pool[act->p.Constant16])+3+2); /* 2 '\"'s and a NULL */
-		strcpy(t,"\\\"");
+                t=malloc(strlen(pool[act->p.Constant16])+3); /* 2 '\"'s and a NULL */
+		strcpy(t,"'");
 		strcat(t,pool[act->p.Constant16]);
-		strcat(t,"\\\"");
+		strcat(t,"'");
   		return t;
 
 	  case 12:
@@ -664,7 +664,7 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   {
 	  case 0: /* STRING */
 		if( wantstring )
-  		  printf ("\\\"%s\\\"", act->p.String);
+  		  printf ("'%s'", act->p.String);
 		else
   		  printf ("%s", act->p.String);
 		break;
@@ -695,13 +695,13 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 		break;
 	  case 8: /* CONSTANT8 */
 		if( wantstring )
-  		  printf ("\\\"%s\\\"", pool[act->p.Constant8]);
+  		  printf ("'%s'", pool[act->p.Constant8]);
 		else
   		  printf ("%s", pool[act->p.Constant8]);
 		break;
 	  case 9: /* CONSTANT16 */
 		if( wantstring )
-  		  printf ("\\\"%s\\\"", pool[act->p.Constant16]);
+  		  printf ("'%s'", pool[act->p.Constant16]);
 		else
   		  printf ("%s", pool[act->p.Constant16]);
 		break;
