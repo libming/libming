@@ -177,12 +177,10 @@ $HOME/include \
 /usr/include"
 
 	for i in $tclincdirs_default; do
-	  for suf in tcl8.3/ tcl8.4/ tcl/ ""; do
-	    if test -f $i/${suf}tcl.h; then
-	     TCL_INC_DIR=$i/tcl$suf
+	   if test -f $i/tcl.h; then
+	     TCL_INC_DIR=$i
 	     break
-	    fi
-	  done
+	   fi
 	done
 
 	if test -z "$TCL_INC_DIR"; then
