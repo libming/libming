@@ -1,6 +1,7 @@
 Makefile.in
 Makefile
 dotests
+php.ini
 .deps
 .libs
 test01

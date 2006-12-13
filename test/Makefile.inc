@@ -28,15 +28,20 @@ BINDINGS = "c $(CXXBINDINGS) $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 refs: $(C_PROGS)
 	for t in $(C_PROGS); do ./$$t; $(top_builddir)/util/listswf $$t.swf >$$t.ref; done
 
-gen: refs $(SWFS)
+gen: refs $(SWFS) php.ini
 	for t in $(C_PROGS); do \
-	swftophp $$t.swf $$t.swf >$$t.php ;\
-	swftoperl $$t.swf $$t.swf >$$t.pl ;\
-	swftopython $$t.swf $$t.swf >$$t.py ;\
-	swftocxx $$t.swf $$t.swf >$$t-cxx.C ;\
+	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c.^' >$$t.php ;\
+	$(top_builddir)/util/swftoperl $$t.swf $$t.swf >$$t.pl ;\
+	$(top_builddir)/util/swftopython $$t.swf $$t.swf >$$t.py ;\
+	$(top_builddir)/util/swftocxx $$t.swf $$t.swf >$$t-cxx.C ;\
+	$(top_builddir)/util/swftotcl $$t.swf $$t.swf >$$t.tcl ;\
 	done
 
-.PHONY: dotests
-dotests: $(top_srcdir)/test/dotests.pl 
+.PHONY: dotests php.ini
+dotests: $(top_srcdir)/test/dotests.pl php.ini
 	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
 	chmod +x $@
+
+php.ini: 
+	echo "extension_dir=$(top_builddir)/php_ext/tmp/modules" >php.ini
+	echo "extension=ming.so" >>php.ini
