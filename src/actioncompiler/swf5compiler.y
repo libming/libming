@@ -753,7 +753,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
-		  bufferWriteOp($$, SWFACTION_DELETE); 
+		  bufferWriteOp($$, SWFACTION_DELETE2);
 		  bufferWriteOp($$, SWFACTION_POP); }
 
 	| DELETE lvalue_expr '.' IDENTIFIER
@@ -960,7 +960,7 @@ function_call
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
 		  free($2);
-		  bufferWriteOp($$, SWFACTION_DELETE);  }
+		  bufferWriteOp($$, SWFACTION_DELETE2);  }
 
 	| DELETE lvalue_expr '.' IDENTIFIER
 		{ $$ = $2;
