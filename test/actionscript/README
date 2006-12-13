@@ -9,8 +9,9 @@ To add a new test:
 	4: IMPORTANT: verify that the output is *correct*
 	5: add Test.as and Test.ref to CVS
 	6: add Test.as to the AS_TESTS variable in Makefile.am
-	7: run ./autogen.sh && configure
-	8: run 'make check' to test the test :)
-	9: commit (Test.as Test.ref Makefile.am)
+	7: add Test.ref to the EXTRA_DIST variable in Makefile.am
+	8: run ./autogen.sh && configure
+	9: run 'make check' to test the test :)
+	10: commit (Test.as Test.ref Makefile.am)
 
 --strk; Sun Jul  9 01:25:51 CEST 2006
