@@ -9,12 +9,14 @@ TESTS = ActionScriptTest
 AS_TESTS = \
 	Function.as	\
 	ASM0.as		\
-	ASM1.as
+	ASM1.as		\
+	delete.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
 	ASM1.ref	\
 	ASM0.ref	\
+	delete.ref	\
 	$(AS_TESTS)
 
 CLEANFILES = *.as.pp *.swf
