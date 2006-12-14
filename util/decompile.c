@@ -17,6 +17,8 @@
 #include "action.h"
 #include "swftypes.h"
 
+#define NL "\\\n"
+
 #ifndef HAVE_VASPRINTF
 /* Workaround for the lack of vasprintf()
  * As found on: http://unixpapa.com/incnote/stdio.html
@@ -578,7 +580,7 @@ decompileGOTOLABEL (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONGOTOLABEL);
 
   INDENT
-  printf("gotoLabel(%s);\n", sact->FrameLabel);
+  printf("gotoLabel(%s);" NL, sact->FrameLabel);
 }
 
 void
@@ -587,7 +589,7 @@ decompileGOTOFRAME (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONGOTOFRAME);
 
   INDENT
-  printf("gotoFrame(%d);\n", sact->Frame);
+  printf("gotoFrame(%d);" NL, sact->Frame);
 }
 
 void
@@ -596,7 +598,7 @@ decompileWAITFORFRAME (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONWAITFORFRAME);
 
   INDENT
-  printf("WaitForFrame(%d,%d);\n", sact->Frame,sact->SkipCount);
+  printf("WaitForFrame(%d,%d);" NL, sact->Frame,sact->SkipCount);
 }
 
 void
@@ -604,7 +606,7 @@ decompilePLAY (SWF_ACTION *act)
 {
 
   INDENT
-  printf("play();\n");
+  printf("play();" NL);
 }
 
 void
@@ -612,21 +614,21 @@ decompileSTOP (SWF_ACTION *act)
 {
 
   INDENT
-  printf("stop();\n");
+  printf("stop();" NL);
 }
 
 void
 decompileNEXTFRAME (SWF_ACTION *act)
 {
   INDENT
-  printf("nextFrame();\n");
+  printf("nextFrame();" NL);
 }
 
 void
 decompilePREVFRAME (SWF_ACTION *act)
 {
   INDENT
-  printf("prevFrame();\n");
+  printf("prevFrame();" NL);
 }
 
 void
@@ -635,7 +637,7 @@ decompileGETURL (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONGETURL);
 
   INDENT
-  printf("getUrl(\"%s\",%s);\n", sact->UrlString, sact->TargetString);
+  printf("getUrl(\"%s\",%s);" NL, sact->UrlString, sact->TargetString);
 }
 int
 decompileGETURL2 (SWF_ACTION *act)
@@ -652,7 +654,7 @@ decompileGETURL2 (SWF_ACTION *act)
     puts(getString(pop()));
     puts(",");
     puts(getString(a));
-    puts(");\n");
+    puts(");" NL);
     return 0;
 }
 
@@ -1186,7 +1188,7 @@ decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
     puts(getProperty(getInt(idx)));
     printf(" = " );
     decompilePUSHPARAM(val,0);
-    puts(";\n");
+    puts(";" NL);
 
     return 0;
 }
@@ -1278,7 +1280,7 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
     var=pop();
     decompilePUSHPARAM(var,0);
     puts(dblop);
-    puts(";\n");
+    puts(";" NL);
     push(var);
     if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
         (var->Type == 4 /* Register */) &&
@@ -1299,7 +1301,7 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
 //    printf("R%d = ", sact->Register );
     regs[sact->Register] = peek();
 //    puts(getName(regs[sact->Register]));
-//    puts(";\n");
+//    puts(";" NL);
     return 0;
 }
 
@@ -1371,7 +1373,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
      decompilePUSHPARAM(val,1);
     else
      decompilePUSHPARAM(val,0);
-    puts(";\n");
+    puts(";" NL);
 
     return 0;
 }
@@ -1403,16 +1405,16 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
      default:	puts(getName(var));
 		printf(" = " );
 		decompilePUSHPARAM(val,1);	// for certain types parameter 1 does not care
-		puts(";\n");
+		puts(";" NL);
 		break;
      case 10:	puts(getName(var));		// Variable (NEVER as string)
 		printf(" = " );
 		decompilePUSHPARAM(val,0);
-		puts(";\n");
+		puts(";" NL);
 		break;		
      case 11:	/* simply output variable and inc/dec op */
 		puts(getName(val));
-		puts(";\n");
+		puts(";" NL);
 		break;
      case 12:	/* do nothing: inline increment/decrement (using side effect only) */
      		break;
@@ -1524,7 +1526,7 @@ decompileRETURN(int n, SWF_ACTION *actions,int maxn)
     INDENT
     printf("return ");
     puts(getName(pop()));
-    puts(";\n");
+    puts(";" NL);
 
     return 0;
 }
@@ -1541,7 +1543,7 @@ decompileDEFINELOCAL2(int n, SWF_ACTION *actions,int maxn)
     var = pop();
     puts("var ");
     puts(getName(var));
-    puts(";\n");
+    puts(";" NL);
 
     return 0;
 }
@@ -2054,7 +2056,7 @@ Maybe check that the top of the stack holds a variable?
     {
      /* call method and throw away any result */
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
 #endif
@@ -2092,7 +2094,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     {
      /* call function and throw away any result */
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
     return 0;
@@ -2108,7 +2110,7 @@ decompileINT(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
     return 0;
@@ -2123,7 +2125,7 @@ decompileCHR(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
     return 0;
@@ -2138,7 +2140,7 @@ decompileTOSTRING(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
     return 0;
@@ -2153,7 +2155,7 @@ decompileTONUMBER(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
     return 0;
@@ -2168,7 +2170,7 @@ decompileSTRINGCONCAT(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";\n");
+     puts(";" NL);
      return 1;
     }
     return 0;
