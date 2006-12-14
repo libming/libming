@@ -875,7 +875,7 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DOACTION);
 
-  printf ("%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
+  printf ("%s(%s(\"%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
 	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions,0));
 }
 
