@@ -58,6 +58,6 @@ test03_cxx_SOURCES = test03-cxx.C
 test04_cxx_SOURCES = test04-cxx.C
 test05_cxx_SOURCES = test05-cxx.C
 
-CLEANFILES = dotests test0*.swf
+CLEANFILES = dotests test0*.swf php.ini
 
 include ../../Makefile.inc

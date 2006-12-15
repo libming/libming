@@ -2,7 +2,7 @@ EXTRA_DIST = SWF/Action.pm SWF/Bitmap.pm SWF/Button.pm SWF/Constants.pm \
 		SWF/DisplayItem.pm SWF/Fill.pm SWF/Font.pm SWF/Gradient.pm \
 		SWF/Morph.pm SWF/Movie.pm SWF/Shape.pm SWF/Sound.pm \
 		SWF/SoundInstance.pm SWF/SoundStream.pm SWF/Sprite.pm \
-		SWF/Text.pm SWF/TextField.pm \
+		SWF/Text.pm SWF/TextField.pm SWF/VideoStream.pm \
 		t/00_basic.t t/01_shape.t t/03_movie.t t/button.t t/drag.t \
 		t/fill.t t/filljpeg.t t/gradient.t t/png.t t/sound.t t/sprite.t\
 		Action.xs Bitmap.xs Button.xs CREDITS Changes Constants.xs \
@@ -13,8 +13,10 @@ EXTRA_DIST = SWF/Action.pm SWF/Bitmap.pm SWF/Button.pm SWF/Constants.pm \
 		typemap examples/action.cgi examples/alphafill.cgi \
 		examples/animation.cgi examples/glyph.cgi examples/jpegfill.cgi \
 		examples/keypress.cgi examples/morph.cgi examples/shape.cgi \
-		examples/sprite.cgi examples/text.cgi \
-		common/_sans.fdb common/README common/beep.wav
+		examples/sound.cgi examples/sprite.cgi examples/text.cgi 
+		examples/textfield.cgi examples/video.cgi \
+		common/_sans.fdb common/README common/beep.wav \
+		mkdoc
 
 all: Makefile.perl
 	$(MAKE) -f Makefile.perl

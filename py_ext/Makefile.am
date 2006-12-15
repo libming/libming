@@ -5,9 +5,8 @@ EXTRA_DIST = Zwiff/README.txt Zwiff/__init__.py Zwiff/setFlags.py \
 all:
 	CFLAGS="$(CFLAGS)" $(PYTHON) setup.py build
 
-clean:
-	@rm -Rf test.swf build
-
+clean-local:
+	rm -Rf test.swf build
 
 install:
 	$(PYTHON) setup.py install --prefix $(prefix) --root "$(DESTDIR)"

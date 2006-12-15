@@ -54,7 +54,7 @@ libutil_la_SOURCES =	\
 	parser.c	\
 	read.c 
 
-libutil_la_LDFLAGS = $(MATHLIB) $(ZLIB)
+libutil_la_LIBADD = $(MATHLIB) $(ZLIB)
 
 noinst_HEADERS = \
 	action.h	\
@@ -141,8 +141,12 @@ bin_SCRIPTS = ming-config
 
 EXTRA_DIST = \
 	README \
+	TIPS \
+	TODO \
 	bindump.c \
 	hexdump.c \
 	cws2fws \
 	swftoperl.html \
 	ming.css
+
+DISTCLEANFILES = ming-config

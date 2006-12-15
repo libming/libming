@@ -68,7 +68,8 @@ ask_ming_dir() unless ($MING_DIR);
 
 
 print "\nUsing ming version $ming_version in the ". abs_path($MING_DIR) ." directory.\n\n";
-compile() unless ming_is_compiled();
+#compile() unless ming_is_compiled();
+print "ming library isn't compiled, it is needed for the perl module\n" unless ming_is_compiled();
 # 2006/01/24 (peterdd) now we can look into ming_config.h to get some info.
 my $libs=get_mingconfig($MING_DIR."/src/ming_config.h");
 write_swf_h($MING_DIR."/src/");
@@ -115,6 +116,8 @@ sub ming_is_compiled{
 	return 1;
 }
 
+# unused. At least it should take into account the configure flags by
+# running ./config.status
 sub compile{
     print "Compiling ming ...\n";
     my $cur_dir = cwd;

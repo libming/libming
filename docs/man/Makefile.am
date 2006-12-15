@@ -13,8 +13,11 @@ dist_man3_MANS =			\
 	Ming_useSWFVersion.3		\
 	newSWFMovie.3			\
 	newSWFMovieWithVersion.3	\
+	SWFMovie_add.3			\
+	SWFMovie_labelFrame.3		\
+	SWFMovie_namedAnchor.3		\
 	SWFMovie_protect.3		\
 	SWFMovie_setDimension.3		\
 	SWFMovie_setNumberOfFrames.3	\
-	SWFMovie_setRate.3
-
+	SWFMovie_setBackground.3	\
+	SWFMovie_setRate.3		

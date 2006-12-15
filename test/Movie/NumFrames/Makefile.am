@@ -30,6 +30,6 @@ check_PROGRAMS = \
 
 test01_cxx_SOURCES = test01-cxx.C
 
-CLEANFILES = dotests test01.swf
+CLEANFILES = dotests test01.swf php.ini
 
 include ../../Makefile.inc

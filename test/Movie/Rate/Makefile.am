@@ -32,6 +32,6 @@ EXTRA_DIST = 		\
 check_PROGRAMS = \
 	$(TEST_PROGS)
 
-CLEANFILES = dotests test01.swf 
+CLEANFILES = dotests test01.swf php.ini
 
 include ../../Makefile.inc

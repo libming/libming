@@ -39,15 +39,15 @@ libming_la_SOURCES = 	\
 
 libming_la_LDFLAGS = \
 	-version-info $(INTERFACE_CURRENT):$(INTERFACE_REVISION):$(INTERFACE_AGE) \
-        -no-undefined \
+        -no-undefined 
+
+libming_la_LIBADD = \
+	actioncompiler/libactioncompiler.la \
+	blocks/libblock.la \
 	$(PNGLIB) \
 	$(GIFLIB) \
 	$(MATHLIB) \
 	$(ZLIB)
-
-libming_la_LIBADD = \
-	actioncompiler/libactioncompiler.la \
-	blocks/libblock.la
 
 DOCSRC = \
 	blocks/action.c \
@@ -111,7 +111,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libming.pc
 
 EXTRA_DIST = libming.pc.in
-DISTCLEANFILES = libming.pc
+DISTCLEANFILES = libming.pc ming.h
 
 # this is for the php module
 all-local:
