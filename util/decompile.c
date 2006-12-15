@@ -445,32 +445,6 @@ pushvar(struct SWF_ACTIONPUSHPARAM *val)
 	Stack = t;
 }
 
-void
-pushvar2( struct SWF_ACTIONPUSHPARAM *var, struct SWF_ACTIONPUSHPARAM *mem)
-{
-	struct _stack *t;
-	char *vname, *varname,*memname;
-	int len;
-	varname=getName(var);
-	memname=getString(mem);
-	len = strlen(varname);
-	len+= strlen(memname);
-#ifdef DEBUG
-	printf("*pushvar2*\n");
-#endif
-	t = calloc(1,sizeof(Stack));
-	vname = malloc(len+2);
-	strcpy(vname,varname);
-	strcat(vname,".");
-	strcat(vname,memname);
-	var->p.String = vname;
-	var->Type = 10; /* VARIABLE */
-	t->type = 'v';
-	t->val = var;
-	t->next = Stack;
-	Stack = t;
-}
-
 struct SWF_ACTIONPUSHPARAM * pop()
 {
 	struct _stack *t;
@@ -687,7 +661,7 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 		}
 		break;
 	  case 5: /* BOOLEAN */
-  		printf ("  %d\n", act->p.Boolean);
+  		printf ("%s", act->p.Boolean?"true":"false");
 		break;
 	  case 6: /* DOUBLE */
   		printf ("%g", act->p.Double);
@@ -1342,14 +1316,41 @@ decompileNEWOBJECT(int n, SWF_ACTION *actions,int maxn)
 int
 decompileGETMEMBER(int n, SWF_ACTION *actions,int maxn)
 {
-    struct SWF_ACTIONPUSHPARAM *mem, *var;
+    struct SWF_ACTIONPUSHPARAM *obj, *mem, *var;
+    char *vname, *varname,*memname;
+    int len;
+    
+    mem=pop();
+    var=pop();
+    varname=getName(var);
+    memname=getName(mem);
+    
+#ifdef DEBUG    
+ printf("*getMember* varName %s (type=%d)  memName=%s (type=%d)\n",varname,var->Type, memname,mem->Type);
+#endif
 
-    mem = newVar(getName(pop()));
-    var = newVar(getName(pop()));
-    pushvar2(var,mem);
+    len = strlen(varname)+strlen(memname);
+    if (mem->Type == 7)		/* INTEGER */ /* initial approach only */
+    {
+     vname = malloc(len+3);
+     strcpy(vname,varname);
+     strcat(vname,"[");
+     strcat(vname,memname);
+     strcat(vname,"]");
+    }
+    else
+    {
+     vname = malloc(len+2);
+     strcpy(vname,varname);
+     strcat(vname,".");
+     strcat(vname,memname);
+    } 
+    obj = newVar(vname)	;
+    pushvar(obj);
 
     return 0;
 }
+
 
 int
 decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
