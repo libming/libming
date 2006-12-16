@@ -10,13 +10,15 @@ AS_TESTS = \
 	Function.as	\
 	ASM0.as		\
 	ASM1.as		\
-	delete.as
+	delete.as	\
+	logor.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
 	ASM1.ref	\
 	ASM0.ref	\
 	delete.ref	\
+	logor.ref	\
 	$(AS_TESTS)
 
 CLEANFILES = *.as.pp *.swf
