@@ -1186,24 +1186,15 @@ expr
 		{ $$ = $2;
 		  bufferWriteOp($2, SWFACTION_LOGICALNOT); }
 
-	| expr "||" expr
+	| expr LOR expr
 		{ $$ = $1;
-		  bufferWriteOp($$, SWFACTION_PUSHDUP);
-		  bufferWriteOp($$, SWFACTION_IF);
-		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, bufferLength($3)+1);
-		  bufferWriteOp($$, SWFACTION_POP);
-		  bufferConcat($$, $3); }
+		  bufferConcat($$, $3);
+		  bufferWriteOp($$, SWFACTION_LOGICALOR); }
 
-	| expr "&&" expr
+	| expr LAN expr
 		{ $$ = $1;
-		  bufferWriteOp($$, SWFACTION_PUSHDUP);
-		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
-		  bufferWriteOp($$, SWFACTION_IF);
-		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, bufferLength($3)+1);
-		  bufferWriteOp($$, SWFACTION_POP);
-		  bufferConcat($$, $3); }
+		  bufferConcat($$, $3);
+		  bufferWriteOp($$, SWFACTION_LOGICALAND); }
 
 	| expr '*' expr
 		{ $$ = $1;
