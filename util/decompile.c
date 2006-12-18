@@ -201,6 +201,10 @@ struct _stack {
 
 struct _stack *Stack;
 
+
+/*
+ TODO: add some constants (#define BOOLEAN 5  etc.)
+*/
 static char *
 getString(struct SWF_ACTIONPUSHPARAM *act)
 {
@@ -1324,13 +1328,11 @@ decompileGETMEMBER(int n, SWF_ACTION *actions,int maxn)
     var=pop();
     varname=getName(var);
     memname=getName(mem);
-    
-#ifdef DEBUG    
+#ifdef DEBUG
  printf("*getMember* varName %s (type=%d)  memName=%s (type=%d)\n",varname,var->Type, memname,mem->Type);
 #endif
-
     len = strlen(varname)+strlen(memname);
-    if (mem->Type == 7)		/* INTEGER */ /* initial approach only */
+    if (mem->Type == 7 || mem->Type == 10)		/* INTEGER or VARIABLE */ 
     {
      vname = malloc(len+3);
      strcpy(vname,varname);
@@ -1360,9 +1362,13 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     INDENT
     val = pop();
     var = pop();
-    obj = newVar(getName(pop()));
+    obj = pop();
+#ifdef DEBUG
+ printf("*SETMember* varName %s (type=%d)  objName=%s (type=%d)\n",getName(var),var->Type, getName(obj),obj->Type);
+#endif
+
     decompilePUSHPARAM(obj,0);
-    if (var->Type == 7 || var->Type == 10)			/* initial approach only */
+    if (var->Type == 7 || var->Type == 10)		/* INTEGER or VARIABLE */
      puts("[");
     else
      puts(".");
