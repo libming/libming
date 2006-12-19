@@ -561,14 +561,6 @@ decompileGOTOLABEL (SWF_ACTION *act)
   printf("gotoLabel(%s);" NL, sact->FrameLabel);
 }
 
-void
-decompileGOTOFRAME (SWF_ACTION *act)
-{
-  OUT_BEGIN(SWF_ACTIONGOTOFRAME);
-
-  INDENT
-  printf("gotoFrame(%d);" NL, sact->Frame);
-}
 
 void
 decompileWAITFORFRAME (SWF_ACTION *act)
@@ -708,6 +700,22 @@ isStoreOp(int n, SWF_ACTION *actions,int maxn)
       default:
         return 0;
     }
+}
+
+void
+decompileGOTOFRAME (SWF_ACTION *act,int is_type2)
+{
+  OUT_BEGIN(SWF_ACTIONGOTOFRAME);
+
+  INDENT
+  if (is_type2)
+  {
+   puts("gotoFrame(");
+   decompilePUSHPARAM(pop(),0);
+   puts(");" NL);
+  }
+  else
+  printf("gotoFrame(%d);" NL, sact->Frame);
 }
 
 /*
@@ -981,7 +989,6 @@ stackVal(int n, SWF_ACTION *actions)
       case SWFACTION_WAITFORFRAME :
       case SWFACTION_WAITFORFRAME2 :
       case SWFACTION_CALLFRAME :
-      case SWFACTION_GOTOFRAME2 :
       case SWFACTION_TARGETPATH :
         return 0;
 
@@ -1024,6 +1031,7 @@ stackVal(int n, SWF_ACTION *actions)
       case SWFACTION_SETTARGET2:
       case SWFACTION_DEFINELOCAL2:
       case SWFACTION_INITOBJECT:
+      case SWFACTION_GOTOFRAME2:
         return -1;
 
       case SWFACTION_SETVARIABLE:
@@ -2272,7 +2280,11 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         return 0;
 
       case SWFACTION_GOTOFRAME:
-        decompileGOTOFRAME(&actions[n]);
+        decompileGOTOFRAME(&actions[n],0);
+	return 0;
+
+      case SWFACTION_GOTOFRAME2:
+        decompileGOTOFRAME(&actions[n],1);
 	return 0;
 
       case SWFACTION_WAITFORFRAME:
