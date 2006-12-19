@@ -730,6 +730,8 @@ int precedence(int op1,int op2)
  unsigned char ops[]= { 		// array of opcodes w rising precedence
 	SWFACTION_SETVARIABLE,		// TAKE CARE: array is incomplete
 
+	SWFACTION_LOGICALOR,
+	SWFACTION_LOGICALAND,
 	SWFACTION_BITWISEOR,
 	SWFACTION_BITWISEXOR,
 	SWFACTION_BITWISEAND,
@@ -747,13 +749,16 @@ int precedence(int op1,int op2)
 	SWFACTION_MODULO,
 	SWFACTION_DIVIDE,
 	SWFACTION_MULTIPLY,
+	SWFACTION_LOGICALNOT,
 	SWFACTION_PUSH
  };
  unsigned char* f=memchr(ops,op1,sizeof(ops));
  unsigned char* s=memchr(ops,op2,sizeof(ops));
- // fprintf(stderr, "1op=%d 2op=%d  result=%d\n",op1,op2,f>s);
- // if (!f) fprintf(stderr, "opcode=%d NOT in precedence list\n",op1);
- // if (!s) fprintf(stderr, "opcode=%d NOT in precedence list\n",op2);
+#ifdef DEBUG
+ printf("1op=%d 2op=%d  result=%d\n",op1,op2,f>s);
+ if (!f) printf("opcode=%d NOT in precedence list\n",op1);
+ if (!s) printf("opcode=%d NOT in precedence list\n",op2);
+#endif
  return f>s;
 }
 
@@ -819,6 +824,18 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	       push(newVar3(getString(left),">>>",getString(right)));
 	      else
 	       push(newVar_N("(",getString(left),">>>",getString(right),0,")"));
+	      break;
+      case SWFACTION_LOGICALAND:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"&&",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"&&",getString(right),0,")"));
+	      break;
+      case SWFACTION_LOGICALOR:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"||",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"||",getString(right),0,")"));
 	      break;
       case SWFACTION_BITWISEAND:
 	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
@@ -1065,12 +1082,6 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
     {
       case SWFACTION_LESSTHAN:
 	      puts("LESSTHAN");
-	      break;
-      case SWFACTION_LOGICALAND:
-	      puts("LAND");
-	      break;
-      case SWFACTION_LOGICALOR:
-	      puts("LOR");
 	      break;
       case SWFACTION_STRINGEQ:
 	      puts("STRINGEQ");
@@ -2403,6 +2414,8 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_BITWISEXOR:
       case SWFACTION_EQUALS2:
       case SWFACTION_LESS2:
+      case SWFACTION_LOGICALAND:
+      case SWFACTION_LOGICALOR:
         return decompileArithmeticOp(n, actions, maxn);
 
       case SWFACTION_POP:
@@ -2431,12 +2444,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	return decompileDUPLICATECLIP(n, actions, maxn);
 
       case SWFACTION_LESSTHAN:
-      case SWFACTION_LOGICALAND:
-      case SWFACTION_LOGICALOR:
       case SWFACTION_STRINGEQ:
       case SWFACTION_STRINGCOMPARE:
       case SWFACTION_STRICTEQUALS:
-
       case SWFACTION_GREATER:
       case SWFACTION_LOGICALNOT:
         return decompileLogicalOp(n, actions, maxn);
