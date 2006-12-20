@@ -320,6 +320,8 @@ getInt(struct SWF_ACTIONPUSHPARAM *act)
 
   switch( act->Type ) 
   {
+	  case 1: /* FLOAT -- also used for PROPERTY storing */
+		return ((int)act->p.Float)>>16;
 	  case 2: /* NULL */
   		return 0;
 	  case 4: /* REGISTER */
@@ -340,27 +342,39 @@ getProperty(Property prop)
 {
   switch(prop)
   {
-    case PROPERTY_X:		   return("_x"); break;
+    case SWF_SETPROPERTY_X:
+    /* case PROPERTY_X:*/	   return("_x"); break;
+    case SWF_SETPROPERTY_Y:
     case PROPERTY_Y:		   return("_y"); break;
     case PROPERTY_XMOUSE:	   return("_xMouse"); break;
     case PROPERTY_YMOUSE:	   return("_yMouse"); break;
+    case SWF_SETPROPERTY_XSCALE:
     case PROPERTY_XSCALE:	   return("_xScale"); break;
+    case SWF_SETPROPERTY_YSCALE:
     case PROPERTY_YSCALE:	   return("_yScale"); break;
     case PROPERTY_CURRENTFRAME:	   return("_currentFrame"); break;
     case PROPERTY_TOTALFRAMES:	   return("_totalFrames"); break;
+    case SWF_SETPROPERTY_ALPHA:
     case PROPERTY_ALPHA:	   return("_alpha"); break;
+    case SWF_SETPROPERTY_VISIBILITY:
     case PROPERTY_VISIBLE:	   return("_visible"); break;
     case PROPERTY_WIDTH:	   return("_width"); break;
     case PROPERTY_HEIGHT:	   return("_height"); break;
+    case SWF_SETPROPERTY_ROTATION:
     case PROPERTY_ROTATION:	   return("_rotation"); break;
     case PROPERTY_TARGET:	   return("_target"); break;
     case PROPERTY_FRAMESLOADED:	   return("_framesLoaded"); break;
+    case SWF_SETPROPERTY_NAME:
     case PROPERTY_NAME:		   return("_name"); break;
     case PROPERTY_DROPTARGET:	   return("_dropTarget"); break;
     case PROPERTY_URL:  	   return("_url"); break;
+    case SWF_SETPROPERTY_HIGHQUALITY:
     case PROPERTY_HIGHQUALITY:	   return("_quality"); break;
+    case SWF_SETPROPERTY_SHOWFOCUSRECT:
     case PROPERTY_FOCUSRECT:       return("_focusRect"); break;
+    case SWF_SETPROPERTY_SOUNDBUFFERTIME:
     case PROPERTY_SOUNDBUFTIME:    return("_soundBufTime"); break;
+    case SWF_SETPROPERTY_WTHIT:
     case PROPERTY_WTHIT:	   return("_WTHIT!?"); break;
     default:			   return("unknown property!"); break;
   }
@@ -738,8 +752,8 @@ int precedence(int op1,int op2)
  unsigned char ops[]= { 		// array of opcodes w rising precedence
 	SWFACTION_SETVARIABLE,		// TAKE CARE: array is incomplete
 
-	SWFACTION_LOGICALOR,
-	SWFACTION_LOGICALAND,
+//	SWFACTION_LOGICALOR,
+//	SWFACTION_LOGICALAND,
 	SWFACTION_BITWISEOR,
 	SWFACTION_BITWISEXOR,
 	SWFACTION_BITWISEAND,
@@ -757,7 +771,7 @@ int precedence(int op1,int op2)
 	SWFACTION_MODULO,
 	SWFACTION_DIVIDE,
 	SWFACTION_MULTIPLY,
-	SWFACTION_LOGICALNOT,
+//	SWFACTION_LOGICALNOT,
 	SWFACTION_PUSH
  };
  unsigned char* f=memchr(ops,op1,sizeof(ops));
@@ -983,8 +997,7 @@ stackVal(int n, SWF_ACTION *actions)
       case SWFACTION_MBLENGTH:
       case SWFACTION_CASTOP:
       case SWFACTION_TYPEOF:
-      case SWFACTION_DELETE:
-      case SWFACTION_DELETE2 :
+      case SWFACTION_DELETE2:
       case SWFACTION_GETURL :
       case SWFACTION_WAITFORFRAME :
       case SWFACTION_WAITFORFRAME2 :
@@ -1032,6 +1045,7 @@ stackVal(int n, SWF_ACTION *actions)
       case SWFACTION_DEFINELOCAL2:
       case SWFACTION_INITOBJECT:
       case SWFACTION_GOTOFRAME2:
+      case SWFACTION_DELETE:
         return -1;
 
       case SWFACTION_SETVARIABLE:
@@ -1179,7 +1193,10 @@ decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
     INDENT
     val = pop();
     idx = pop();
-    obj = newVar(getName(pop()));
+    obj = pop();
+#ifdef DEBUG
+ printf("*setProp* objName %s (type=%d) Prop (type=%d) =%x\n",getName(obj),obj->Type, idx->Type,getInt(idx));
+#endif
     decompilePUSHPARAM(obj,0);
     puts(".");
     puts(getProperty(getInt(idx)));
@@ -2256,6 +2273,25 @@ decompileEXTENDS(int n, SWF_ACTION *actions,int maxn)
 
     return 0;
 }
+
+int
+decompileDELETE(int n, SWF_ACTION *actions,int maxn,int is_type2)
+{
+    if (is_type2)
+     push(newVar3("delete(",getName(pop()),")"));
+    else
+     push(newVar_N("delete(",getName(pop()),".",getName(pop()), 0,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call delete() with its args and throw away any result */
+     INDENT
+     puts(getName(pop()));
+     puts(";" NL);
+     return 1;
+    }
+    return 0;
+}
+
  
 int
 decompileAction(int n, SWF_ACTION *actions,int maxn)
@@ -2263,7 +2299,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
     if( n > maxn ) error("Action overflow!!");
 
 #ifdef DEBUG
-    printf("%d:\tACTION[%3.3d]: %s\n",actions[n].SWF_ACTIONRECORD.Offset, n, actionName(actions[n].SWF_ACTIONRECORD.ActionCode));
+    fprintf(stderr,"%d:\tACTION[%3.3d]: %s\n",actions[n].SWF_ACTIONRECORD.Offset, n, actionName(actions[n].SWF_ACTIONRECORD.ActionCode));
 #endif
 
     switch(actions[n].SWF_ACTIONRECORD.ActionCode)
@@ -2433,6 +2469,12 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_POP:
 	pop();
         return 0;
+
+      case SWFACTION_DELETE:
+        return decompileDELETE(n, actions, maxn,0);
+
+      case SWFACTION_DELETE2:
+        return decompileDELETE(n, actions, maxn,1);
 
       case SWFACTION_CHR:
         return decompileCHR(n, actions, maxn);
