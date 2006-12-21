@@ -1909,64 +1909,18 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
-decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
+decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 {
 #if 0
-    int i;
-    struct SWF_ACTIONPUSHPARAM *name = NULL;
-    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
-
-    INDENT
-    puts("function ");
-    /*
-     * If the FunctionName is null, then it is being declared anonymously,
-     * so look for a SETMEMBER to follow which pulls the name off of the stack
-     */
-    if( sact->FunctionName == NULL || *sact->FunctionName == '\000' ) {
-      if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-          (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) ) {
-        name = pop();
-        puts("function ");
-        decompilePUSHPARAM(name,0);
-      } else
-      if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) ) {
-        printf("var R%d = function ", actions[n+1].SWF_ACTIONSTOREREGISTER.Register );
-      } else
-      if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) ) {
-        name = pop();
-        puts("function ");
-        decompilePUSHPARAM(name,0);
-      }
-    } else {
-      puts(sact->FunctionName);
-    }
-    puts("(");
-    for(i=0;i<sact->NumParams;i++) {
-	puts(sact->Params[i]);
-	if( sact->NumParams > i+1 ) puts(",");
-    }
-    puts(")");
-    puts(" {\n");
-    decompileActions(sact->numActions, sact->Actions,gIndent+1);
-    INDENT
-    puts("}\n");
-    if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-        (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) ) {
-	regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]  = name; /* Do the STOREREGISTER here */
-    	return 2;
-    }
-
-    if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-        (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP) ) {
-	regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]  = name; /* Do the STOREREGISTER here */
-    	return 2;
-    }
-#else	/* 2006 NEW stuff comes here */
+// old stuff removed (find it here up to CVS release 1.57)
+#else	/* 2006 NEW stuff by ak comes here:  */
     int i;
     OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
+    struct SWF_ACTIONDEFINEFUNCTION2 *sactv2 = (struct SWF_ACTIONDEFINEFUNCTION2*)sact;
     struct strbufinfo origbuf;
+
     INDENT
-    #if 0
+    #ifdef DEBUG
     printf("/* function followed by OP %x */\n", actions[n+1].SWF_ACTIONRECORD.ActionCode);
     #endif
     #if USE_LIB
@@ -1974,15 +1928,35 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
       origbuf=setTempString();	/* switch to a temporary string buffer */
     #endif
     puts("function ");
-    if (sact->FunctionName) puts(sact->FunctionName);
-    puts(" (");
-    for(i=0;i<sact->NumParams;i++) {
+    if (is_type2)
+    {
+     if (sactv2->FunctionName) puts(sactv2->FunctionName);
+     puts(" (");
+     for(i=0;i<sactv2->NumParams;i++) {
+	puts(sactv2->Params[i].ParamName);
+	if ( sactv2->Params[i].Register)
+	{
+	 printf(" /*=R%d*/ ",sactv2->Params[i].Register);
+	 regs[sactv2->Params[i].Register] = newVar(sactv2->Params[i].ParamName);
+	}
+	if( sactv2->NumParams > i+1 ) puts(",");
+     }
+     puts(") {\n");
+     INDENT
+     decompileActions(sactv2->numActions, sactv2->Actions,gIndent+1);
+    }
+    else
+    {
+     if (sact->FunctionName) puts(sact->FunctionName);
+     puts(" (");
+     for(i=0;i<sact->NumParams;i++) {
 	puts(sact->Params[i]);
 	if( sact->NumParams > i+1 ) puts(",");
+     }
+     puts(") {\n");
+     INDENT
+     decompileActions(sact->numActions, sact->Actions,gIndent+1);
     }
-    puts(") {\n");
-    INDENT
-    decompileActions(sact->numActions, sact->Actions,gIndent+1);
     INDENT
     if (isStoreOp(n+1, actions,maxn))
     {
@@ -1996,69 +1970,8 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn)
     }
     else
      puts("}\n");
-#endif
-
     return 0;
-}
-
-int
-decompileDEFINEFUNCTION2(int n, SWF_ACTION *actions,int maxn)
-{
-    int i;
-    struct SWF_ACTIONPUSHPARAM *name = NULL;
-    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION2);
-
-    INDENT
-    /*
-     * If the FunctionName is null, then it is being declared anonymously,
-     * so look for a SETMEMBER to follow which pulls the name off of the stack
-     */
-    if( sact->FunctionName == NULL || *sact->FunctionName == '\000' ) {
-      if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-          (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) ) {
-        name = pop();
-        puts("function ");
-        decompilePUSHPARAM(name,0);
-      } else
-      if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) ) {
-        printf("var R%d = function ", actions[n+1].SWF_ACTIONSTOREREGISTER.Register );
-      } else
-      if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) ) {
-        name = pop();
-        puts("function ");
-        decompilePUSHPARAM(name,0);
-      }
-    } else {
-      puts(sact->FunctionName);
-    }
-    puts("(");
-    for(i=0;i<sact->NumParams;i++) {
-        /* decompilePUSHPARAM(pop(),0); */
-	    puts(sact->Params[i].ParamName);
-	/* Make a var from this name, and stick it in the register */
-	    if( sact->Params[i].Register)
-		regs[sact->Params[i].Register] = newVar(sact->Params[i].ParamName);
-	if( sact->NumParams > i+1 ) puts(",");
-    }
-    puts(")");
-    puts(" {\n");
-    decompileActions(sact->numActions, sact->Actions,gIndent+1);
-    INDENT
-    puts("}\n");
-
-    if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-        (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) ) {
-	regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]  = name; /* Do the STOREREGISTER here */
-    	return 2;
-    }
-
-    if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-        (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP) ) {
-	regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]  = name; /* Do the STOREREGISTER here */
-    	return 2;
-    }
-
-    return 1;
+#endif
 }
 
 int
@@ -2437,10 +2350,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         return decompileINITARRAY(n, actions, maxn);
 
       case SWFACTION_DEFINEFUNCTION:
-	return decompileDEFINEFUNCTION(n, actions, maxn);
+	return decompileDEFINEFUNCTION(n, actions, maxn,0);
 
       case SWFACTION_DEFINEFUNCTION2:
-	return decompileDEFINEFUNCTION2(n, actions, maxn);
+	return decompileDEFINEFUNCTION(n, actions, maxn,1);
 
       case SWFACTION_CALLFUNCTION:
         return decompileCALLFUNCTION(n, actions, maxn);
