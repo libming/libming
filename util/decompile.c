@@ -85,7 +85,7 @@ static int strmaxsize=0;
 static char *dcstr=NULL;
 static char *dcptr=NULL;
 
-#define DCSTRSIZE 10240
+#define DCSTRSIZE 40960
 #define PARAM_STRSIZE 512
 void
 dcinit()
@@ -1239,23 +1239,6 @@ decompileGETTIME(int n, SWF_ACTION *actions,int maxn)
     }
 }
 
-int
-decompileRANDOMNUMBER(int n, SWF_ACTION *actions,int maxn)
-{
-    INDENT
-    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
-    {
-     puts("random(");
-     decompilePUSHPARAM(pop(),0);
-     puts(");\n");
-     return 1;
-    }
-    else
-    {
-     push(newVar_N("","","random","(", 1,")"));
-     return 0;
-    }
-}
 
 int
 decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
@@ -2058,54 +2041,9 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
-decompileINT(int n, SWF_ACTION *actions,int maxn)
+decompileSingleArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *functionname)
 {
-    push(newVar_N("","","int","(", 1,")"));
-    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
-    {
-     /* call function and throw away any result */
-     INDENT
-     puts(getName(pop()));
-     puts(";" NL);
-     return 1;
-    }
-    return 0;
-}
-
-int
-decompileCHR(int n, SWF_ACTION *actions,int maxn)
-{
-    push(newVar_N("","","chr","(", 1,")"));
-    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
-    {
-     /* call function and throw away any result */
-     INDENT
-     puts(getName(pop()));
-     puts(";" NL);
-     return 1;
-    }
-    return 0;
-}
-
-int
-decompileTOSTRING(int n, SWF_ACTION *actions,int maxn)
-{
-    push(newVar_N("","","String","(", 1,")"));
-    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
-    {
-     /* call function and throw away any result */
-     INDENT
-     puts(getName(pop()));
-     puts(";" NL);
-     return 1;
-    }
-    return 0;
-}
-
-int
-decompileTONUMBER(int n, SWF_ACTION *actions,int maxn)
-{
-    push(newVar_N("","","Number","(", 1,")"));
+    push(newVar_N("","",functionname,"(", 1,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
      /* call function and throw away any result */
@@ -2280,8 +2218,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompilePREVFRAME(&actions[n]);
         return 0;
 
-      case SWFACTION_RANDOMNUMBER:
-        return decompileRANDOMNUMBER(n, actions, maxn);
 
       case SWFACTION_GETTIME:
         return decompileGETTIME(n, actions, maxn);
@@ -2389,17 +2325,23 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_DELETE2:
         return decompileDELETE(n, actions, maxn,1);
 
+      case SWFACTION_ORD:
+        return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"ord");
+
       case SWFACTION_CHR:
-        return decompileCHR(n, actions, maxn);
+        return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"chr");
 
       case SWFACTION_INT:
-        return decompileINT(n, actions, maxn);
+        return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"int");
 
       case SWFACTION_TOSTRING:
-        return decompileTOSTRING(n, actions, maxn);
+        return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"String");     
 
       case SWFACTION_TONUMBER:
-	return decompileTONUMBER(n, actions, maxn);
+	return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"Number");
+
+      case SWFACTION_RANDOMNUMBER:
+	return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"random");
 
       case SWFACTION_STRINGCONCAT:
 	return decompileSTRINGCONCAT(n, actions, maxn);
