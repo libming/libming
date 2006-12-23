@@ -1218,7 +1218,7 @@ decompileTRACE(int n, SWF_ACTION *actions,int maxn)
     /* Could there be more than one push for this? */
     puts("trace(");
     decompilePUSHPARAM(pop(),1);
-    puts(");\n");
+    puts(");" NL);
 
     return 0;
 }
@@ -1229,7 +1229,7 @@ decompileGETTIME(int n, SWF_ACTION *actions,int maxn)
     INDENT
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
-     puts("getTimer();\n");
+     puts("getTimer();" NL);
      return 1;
     }
     else
@@ -1524,22 +1524,22 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	puts("while(");
 	decompileActions(j-1, &actions[n+1+i], gIndent);
 	puts(getName(pop()));
-	puts("){         /* original FOR loop rewritten to WHILE */\n");
+	puts("){         /* original FOR loop rewritten to WHILE */" NL);
 	decompileActions(sactif->numActions-1, sactif->Actions,gIndent+1);
 	decompileActions(i, &actions[n+1], gIndent+1);
 	INDENT
-	puts("};\n");
+	puts("};" NL);
 	return i+j; 
       }
   if (sact->BranchOffset>0)
   {
-   puts("break;        /*------*/\n");
+   puts("break;        /*------*/" NL);
   }
   else
   {
    if (sact->BranchOffset<0)
    {
-    puts("continue;     /*------*/\n");
+    puts("continue;     /*------*/" NL);
    }
   }
   /* error("Unhandled JUMP"); */
@@ -1595,10 +1595,10 @@ struct strbufinfo origbuf;
             INDENT
 	    puts("class ");
 	    decompilePUSHPARAM(newVar(getName(pop())),0);
-	    puts(" {\n");
+	    puts(" {" NL);
             decompileActions(sact->numActions, sact->Actions,gIndent+1);
             INDENT
-	    puts("}\n");
+	    puts("}" NL);
 	    return 0;
     }
 
@@ -1608,10 +1608,10 @@ struct strbufinfo origbuf;
         (actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) ) {
 	    /* It's really a class definition */
             INDENT
-	    puts(" {\n");
+	    puts(" {" NL);
             decompileActions(sact->numActions, sact->Actions,gIndent+1);
             INDENT
-	    puts("}\n");
+	    puts("}" NL);
 	    return 0;
     }
 #endif
@@ -1626,7 +1626,7 @@ struct strbufinfo origbuf;
            sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset) < actions[n].SWF_ACTIONRECORD.Offset) &&
 	isLogicalOp(sact->numActions-2, sact->Actions, maxn) ) {
             INDENT
-	    puts("do {\n");
+	    puts("do {" NL);
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	    puts("while( ");
 	    puts(getName(pop()));
@@ -1639,11 +1639,11 @@ struct strbufinfo origbuf;
     if( actions[n].SWF_ACTIONJUMP.BranchOffset < 0 ) 
     {
 	INDENT
-	puts("do {                  /* 2nd type */\n");
+	puts("do {                  /* 2nd type */ " NL);
 	decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	puts("} while( ");
 	puts(getName(pop()));
-	puts(");\n");
+	puts(");" NL);
 	return 0;
     }
 
@@ -1667,18 +1667,18 @@ struct strbufinfo origbuf;
 	       it is an 'if' later followed by last action 'continue' */
 	    puts("if ( ");
 	    puts(getName(pop()));
-	    puts(" ) {\n");
+	    puts(" ) {" NL);
 	    decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	}
 	else
 	{
 	    puts("while( ");
 	    puts(getName(pop()));
-	    puts(" ) {\n");
+	    puts(" ) {" NL);
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	}
 	INDENT
-	puts("}\n");
+	puts("}" NL);
 	return 0;
     }
 #if 0
@@ -1691,12 +1691,12 @@ struct strbufinfo origbuf;
 	    /* Eat a LogicNOT that is part of the If */
 	    /* decompileLogicalOp(n-2, actions, maxn); */
 	    puts(getName(pop()));
-	    puts(" ) {\n");
+	    puts(" ) {" NL);
             if ( (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
                   sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 ) {
 	      /* There is an else clause also! */
               decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-	      puts("} else {\n");
+	      puts("} else {" NL);
 
 	      /*
 	       * Count the number of action records that are part of
@@ -1722,7 +1722,7 @@ struct strbufinfo origbuf;
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	    }
             INDENT
-	    puts("}\n");
+	    puts("}" NL);
 	    return i;
     }
 
@@ -1751,7 +1751,7 @@ struct strbufinfo origbuf;
 		  else_action_cnt++)
 		{
 		 #if SOME_IF_DEBUG
-		 printf("/* ELSE OP 0x%x at %d*/\n",actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
+		 printf("/* ELSE OP 0x%x at %d*/" NL,actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
 		 actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset)
 		 #endif
 	 	 ;
@@ -1763,7 +1763,7 @@ struct strbufinfo origbuf;
 	   if (sbi==1 && sbe==1)
 	   {
 	     #if SOME_IF_DEBUG
-	       puts("/* ****Found ternary ternary operation  \"cond ? a : b\"    **** */\n");
+	       puts("/* ****Found ternary ternary operation  \"cond ? a : b\"    **** */" NL);
 	       printf("If   Actions=%d\n",sact->numActions-1);
 	       printf("Else Actions=%d\n",else_action_cnt);
 	     #endif
@@ -1798,7 +1798,7 @@ struct strbufinfo origbuf;
 	   if (is_logor || is_logand)    
 	   {
 	    #if SOME_IF_DEBUG
-	      printf("\n/* detected LOGICAL %s: %d actions*/\n",is_logor ? "OR":"AND",sact->numActions);
+	      printf(NL "/* detected LOGICAL %s: %d actions*/" NL, is_logor ? "OR":"AND",sact->numActions);
 	    #endif
 	    #if USE_LIB
      	      origbuf=setTempString();	/* switch to a temporary string buffer */
@@ -1821,7 +1821,7 @@ struct strbufinfo origbuf;
 	   INDENT
 	   puts("if( ");
 	   puts(getName(pop()));	/* the condition itself */
-	   puts(" ) {\n");
+	   puts(" ) {" NL);
            if ( has_else_or_break )
            {
 	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
@@ -1849,13 +1849,13 @@ struct strbufinfo origbuf;
 	      {
                decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
                INDENT
-	       puts("} else {\n");
+	       puts("} else {" NL);
 	      }	      
               decompileActions(else_action_cnt  , &actions[n+1],gIndent+1);
 	      if  (!has_lognot)		/* the missing if-part just NOW */
 	      {
 		INDENT
-		puts ("} else {\n");
+		puts ("} else {" NL);
 		decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	      }
 	     }
@@ -1866,7 +1866,7 @@ struct strbufinfo origbuf;
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	    }
 	    INDENT
-	    puts("}\n");
+	    puts("}" NL);
 	 }
 	return i;
     }
@@ -1883,10 +1883,10 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
     puts("with(");
     decompilePUSHPARAM(pop(),0);
     puts(")");
-    puts(" {\n");
+    puts(" {" NL);
     decompileActions(sact->numActions, sact->Actions,gIndent+1);
     INDENT
-    puts("}\n");
+    puts("}" NL);
 
     return 1;
 }
@@ -1904,7 +1904,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 
     INDENT
     #ifdef DEBUG
-    printf("/* function followed by OP %x */\n", actions[n+1].SWF_ACTIONRECORD.ActionCode);
+    printf("/* function followed by OP %x */" NL, actions[n+1].SWF_ACTIONRECORD.ActionCode);
     #endif
     #if USE_LIB
     if (isStoreOp(n+1, actions,maxn))
@@ -1924,7 +1924,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	}
 	if( sactv2->NumParams > i+1 ) puts(",");
      }
-     puts(") {\n");
+     puts(") {" NL);
      INDENT
      decompileActions(sactv2->numActions, sactv2->Actions,gIndent+1);
     }
@@ -1936,7 +1936,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	puts(sact->Params[i]);
 	if( sact->NumParams > i+1 ) puts(",");
      }
-     puts(") {\n");
+     puts(") {" NL);
      INDENT
      decompileActions(sact->numActions, sact->Actions,gIndent+1);
     }
@@ -1952,7 +1952,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
      #endif
     }
     else
-     puts("}\n");
+     puts("}" NL);
     return 0;
 #endif
 }
@@ -1974,7 +1974,7 @@ Maybe check that the top of the stack holds a variable?
     obj=pop();
     nparam=pop();
 #if 0
-    printf("/* %ld params */\n",nparam->p.Integer);
+    printf("/* %ld params */"  NL,nparam->p.Integer);
 #endif
     INDENT
 #if 0
@@ -1986,7 +1986,7 @@ Maybe check that the top of the stack holds a variable?
         puts(getString(pop()));
 	if( nparam->p.Integer > i+1 ) puts(",");
     }
-    puts(");\n");
+    puts(");" NL);
     push(newVar("funcret"));
 
 #else
@@ -2024,7 +2024,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     	puts(getString(pop()));
 	if( nparam->p.Integer > i+1 ) puts(",");
     }
-    puts(");\n");
+    puts(");" NL);
 
     return 1;
 #else
@@ -2076,7 +2076,7 @@ decompileREMOVECLIP(int n, SWF_ACTION *actions,int maxn)
     INDENT
     puts("removeMovieClip(");
     puts(getName(pop()));
-    puts(");\n");
+    puts(");" NL);
     return 0;
 }
 
@@ -2096,7 +2096,7 @@ decompileDUPLICATECLIP(int n, SWF_ACTION *actions,int maxn)
     puts(getString(b));
     puts(",");
     puts(getString(a));
-    puts(");\n");
+    puts(");" NL);
     return 0;
 
 }
@@ -2120,7 +2120,7 @@ decompileEXTENDS(int n, SWF_ACTION *actions,int maxn)
     puts(getName(pop()));
     printf(" extends ");
     puts(getName(baseclass));
-    printf(" {\n");
+    printf(" {" NL);
 
     return 0;
 }
