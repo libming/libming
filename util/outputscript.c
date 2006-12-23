@@ -168,7 +168,15 @@ newobj (char *varname, char *obj)
   static char buf[256];
 
   if (varname)
+  {
+#ifdef SWFPLUSPLUS
+    // might be worth storing the newly created object in a std::auto_ptr here
+    // as I dubt we're outputting nested scopes anyway..
+    sprintf (buf, OBJPREF "%s* %s = " NEWOP " " OBJPREF "%s", obj, varname, obj);
+#else
     sprintf (buf, VAR "%s = " NEWOP " " OBJPREF "%s", varname, obj);
+#endif
+  }
   else
     sprintf (buf, NEWOP " " OBJPREF "%s", obj);
 
@@ -1188,7 +1196,7 @@ outputHeader (struct Movie *m)
 #ifdef SWFPLUSPLUS
   printf ("#include <mingpp.h>\n");
   printf ("\n\nmain(){\n");
-  printf ("class SWFMovie *m;\n");
+  //printf ("class SWFMovie *m;\n");
   if( m->version == 5 ) 
   	printf ("%s();\n\n", newobj ("m", "Movie"));
   else
