@@ -91,6 +91,7 @@ typedef enum
   SWF_INITACTION				= 59,
   SWF_DEFINEVIDEOSTREAM		= 60,
   SWF_VIDEOFRAME		= 61,
+  SWF_REFLEX			= 777,
 /* these are pseudo definitions that do not correspond to actual swf file tags */
   SWF_PREBUILTCLIP = 254,
   SWF_PREBUILT = 255

@@ -94,3 +94,4 @@ extern SWF_Parserstruct *parseSWF_SOUNDSTREAMHEAD2(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_STARTSOUND(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_SYNCFRAME(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_VIDEOFRAME(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_REFLEX(FILE *f, int length);

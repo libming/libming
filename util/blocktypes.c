@@ -90,6 +90,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_STARTSOUND),
   BlockType (SWF_SYNCFRAME),
   BlockType (SWF_VIDEOFRAME),
+  BlockType (SWF_REFLEX),
 };
 
 static int numBlocks = sizeof (blocks) / sizeof (struct SWFBlock);

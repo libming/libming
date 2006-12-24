@@ -89,6 +89,7 @@ extern OUTPUTRET outputSWF_STARTSOUND(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_SYNCFRAME(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_INITACTION(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_VIDEOFRAME(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_REFLEX(SWF_Parserstruct *pblock);
 extern void outputHeader(struct Movie *m);
 extern void outputTrailer(struct Movie *m);
 extern void outputBlock(int type, SWF_Parserstruct *blockp, FILE *stream, int offset, int lenght);

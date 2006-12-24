@@ -98,6 +98,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SYNCFRAME, outputSWF_SYNCFRAME},
   {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
+  {SWF_REFLEX, outputSWF_REFLEX},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1148,6 +1149,13 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 {
   //OUT_BEGIN (SWF_VIDEOFRAME);
 
+}
+void
+outputSWF_REFLEX (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_REFLEX);
+
+  iprintf(" Reflex: \"%c%c%c\"\n", sblock->rfx[0], sblock->rfx[1], sblock->rfx[2]);
 }
 
 void

@@ -2155,3 +2155,13 @@ parseSWF_VIDEOFRAME (FILE * f, int length)
 
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_REFLEX (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_REFLEX);
+  parserrec->rfx[0] = readUInt8 (f);
+  parserrec->rfx[1] = readUInt8 (f);
+  parserrec->rfx[2] = readUInt8 (f);
+  PAR_END;
+}

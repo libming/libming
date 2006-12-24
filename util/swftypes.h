@@ -1321,6 +1321,10 @@ struct SWF_VIDEOFRAME
   int chid;
 };
 
+struct SWF_REFLEX
+{
+  UI8 rfx[3];
+};
 
 typedef union SWF_Parserstruct
 {
@@ -1382,5 +1386,6 @@ typedef union SWF_Parserstruct
   struct SWF_SYNCFRAME SWF_SYNCFRAME;
   struct SWF_INITACTION SWF_INITACTION;
   struct SWF_VIDEOFRAME SWF_VIDEOFRAME;
+  struct SWF_REFLEX SWF_REFLEX;
 } SWF_Parserstruct;
 #endif /* _SWFTYPES_H_ */
