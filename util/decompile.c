@@ -537,6 +537,47 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 	return v;
 }
 
+// similar to newVar_N(), 
+// but pops 2 items from stack per counter,
+// and second of them we are interested in getName() instead of getString()
+struct SWF_ACTIONPUSHPARAM *
+newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final)
+{
+	struct SWF_ACTIONPUSHPARAM *v;
+	int i;
+	int slen=strlen(var)+strlen(var2)+strlen(var3)+strlen(var4)+strlen(final);
+	
+	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
+	v->p.String = malloc(PARAM_STRSIZE+slen);
+	v->Type=10; /* VARIABLE */
+	strcpy(v->p.String,var);
+	strcat(v->p.String,var2);
+	strcat(v->p.String,var3);
+	strcat(v->p.String,var4);
+	for(i=0;i<pop_counter;i++) 
+	{
+	 char *pops1=getString(pop());
+	 char *pops2=getName  (pop());
+	 if ( strlen(v->p.String)+ 3 + strlen(pops1)+ strlen(pops2) < PARAM_STRSIZE+slen)
+	 {
+	  strcat(v->p.String,pops2);
+	  strcat(v->p.String,":");
+	  strcat(v->p.String,pops1);
+	  if( i < pop_counter-1 ) 
+	   strcat(v->p.String,",");
+	 }
+	 else {
+		fprintf(stderr,"Some string overflowed something in newVar_N()??????\n");
+		while (++i<pop_counter)
+		  getString(pop());
+		printf("/* *** truncated string here: *** */\n");
+		break;
+	 }
+	}
+	strcat(v->p.String,final);
+	return v;
+}
+
 /* End Package */
 
 static int gIndent;
@@ -1208,6 +1249,21 @@ decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+decompileGETPROPERTY(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *idx, *obj;
+
+    INDENT
+    idx = pop();
+    obj = pop();
+#ifdef DEBUG
+ printf("*GETProp* objName %s (type=%d) Prop (type=%d) =%x\n",getName(obj),obj->Type, idx->Type,getInt(idx));
+#endif
+    push( newVar3( getName(obj),".",getProperty(getInt(idx))));
+    return 0;
+}
+
+int
 decompileTRACE(int n, SWF_ACTION *actions,int maxn)
 {
 //    SanityCheck(SWF_TRACE,
@@ -1220,6 +1276,16 @@ decompileTRACE(int n, SWF_ACTION *actions,int maxn)
     decompilePUSHPARAM(pop(),1);
     puts(");" NL);
 
+    return 0;
+}
+
+int
+decompileCALLFRAME(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    puts("call(");
+    decompilePUSHPARAM(pop(),1);
+    puts(");\n");
     return 0;
 }
 
@@ -1875,6 +1941,15 @@ struct strbufinfo origbuf;
 }
 
 int
+decompileINITOBJECT(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *nparam;
+    nparam=pop();
+    push(newVar_N2("","","","{", nparam->p.Integer,"}"));
+    return 0;
+}
+
+int
 decompileWITH(int n, SWF_ACTION *actions,int maxn)
 {
     OUT_BEGIN2(SWF_ACTIONWITH);
@@ -2210,6 +2285,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileSETPROPERTY(n, actions, maxn);
 	return 0;
 
+      case SWFACTION_GETPROPERTY:
+        decompileGETPROPERTY(n, actions, maxn);
+	return 0;
+
       case SWFACTION_NEXTFRAME:
         decompileNEXTFRAME(&actions[n]);
         return 0;
@@ -2218,7 +2297,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompilePREVFRAME(&actions[n]);
         return 0;
 
-
       case SWFACTION_GETTIME:
         return decompileGETTIME(n, actions, maxn);
         
@@ -2226,9 +2304,17 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileTRACE(n, actions, maxn);
 	return 0;
 
+      case SWFACTION_CALLFRAME:
+        decompileCALLFRAME(n, actions, maxn);
+        return 0;
+
       case SWFACTION_EXTENDS:
         decompileEXTENDS(n, actions, maxn);
 	return 0;
+
+      case SWFACTION_INITOBJECT:
+        decompileINITOBJECT(n, actions, maxn);
+	return 0;	        
 
       case SWFACTION_NEWOBJECT:
         decompileNEWOBJECT(n, actions, maxn);
@@ -2342,6 +2428,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_RANDOMNUMBER:
 	return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"random");
+
+      case SWFACTION_STRINGLENGTH:
+      	return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"length");
 
       case SWFACTION_STRINGCONCAT:
 	return decompileSTRINGCONCAT(n, actions, maxn);

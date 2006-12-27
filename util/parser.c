@@ -856,7 +856,7 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 	case SWFACTION_CALLFRAME:
 		{
 		ACT_BEGIN(SWF_ACTIONCALL)
-		readUInt16(f);
+		// readUInt16(f);		/* seems to be an exception: NO reading here */
 		break;
 		}
 	case SWFACTION_JUMP:
