@@ -1283,9 +1283,9 @@ int
 decompileCALLFRAME(int n, SWF_ACTION *actions,int maxn)
 {
     INDENT
-    puts("call(");
+    puts("callFrame(");
     decompilePUSHPARAM(pop(),1);
-    puts(");\n");
+    puts(");" NL);
     return 0;
 }
 
@@ -2410,6 +2410,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_DELETE2:
         return decompileDELETE(n, actions, maxn,1);
+
+      case SWFACTION_TYPEOF:
+        return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"typeof");
 
       case SWFACTION_ORD:
         return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"ord");
