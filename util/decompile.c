@@ -18,6 +18,9 @@
 #include "swftypes.h"
 
 #define NL "\\\n"
+// Note: if you don't want see trailing backslashes
+// later remove it using the sed tool on command line, e.g.:
+//   sed -e s/\\\\$// infile > outfile
 
 #ifndef HAVE_VASPRINTF
 /* Workaround for the lack of vasprintf()
@@ -839,6 +842,12 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
               decompilePUSHPARAM(peek(),0);
 	      break;
 	      */
+      case SWFACTION_INSTANCEOF:
+      	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left)," instanceof ",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left)," instanceof ",getString(right),0,")"));
+	      break;
       case SWFACTION_ADD:
       case SWFACTION_ADD2:
 	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
@@ -1492,6 +1501,13 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
 
     if (val->Type!=12 && islocalvar)
      puts("var ");
+
+    if (gIndent<0)	/* the ENUM workaround:  */
+    {			/* in "for (xx in yy) { }" we need xx, but nothing else */
+     puts(getName(var));
+     return 0;
+    }
+
     switch (val->Type)
     {
      default:	puts(getName(var));
@@ -1640,10 +1656,20 @@ decompileDEFINELOCAL2(int n, SWF_ACTION *actions,int maxn)
     return 0;
 }
 
+int 
+decompileENUMERATE(int n, SWF_ACTION *actions,int maxn,int is_type2)
+{
+ int i=0;
+ while (actions[n+i].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF && i<maxn && i<5)
+   i++;
+ printf("/* a for-var-in  loop should follow below: */" NL);
+ return i-1;		// preserve some code for decompileIF()... 
+} 			// ... and let decompileIF() do all the dirty work ;-)
+
 int
 decompileIF(int n, SWF_ACTION *actions,int maxn)
 {
-    int i=0;
+    int j,i=0;
     OUT_BEGIN2(SWF_ACTIONIF);
 struct strbufinfo origbuf;
     /*
@@ -1681,7 +1707,6 @@ struct strbufinfo origbuf;
 	    return 0;
     }
 #endif
-
     /*
      * do {} while() loops have a JUMP at the end of the if clause
      * that points to a JUMP above the IF statement.
@@ -1738,62 +1763,38 @@ struct strbufinfo origbuf;
 	}
 	else
 	{
+	 /* two important similar loop types below:   a.k. 2006 */
+	 j=0;
+	 while (actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE  && 
+	        actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE2 && j<n && j<5) 
+	   j++;		// check for a pending ENUMERATE
+	 if ((actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE ||
+	      actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE2 ) && 
+	      actions[n-j+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER )
+	 {
+	    struct SWF_ACTIONPUSHPARAM *var;
+	    var = pop();
+	    puts("for ( ");
+	    decompileActions( 2 , sact->Actions,-1);   /* -1 == the ENUM workaround */
+	    puts(" in ");
+	    puts(getName(var));
+	    puts(" ) {" NL);
+            decompileActions(sact->numActions-1-2, &sact->Actions[2],gIndent+1);
+         }
+         else	/* while(){}  as usual */
+	 {
 	    puts("while( ");
 	    puts(getName(pop()));
 	    puts(" ) {" NL);
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+         }
 	}
 	INDENT
 	puts("}" NL);
 	return 0;
     }
 #if 0
-    /*
-     * Any other use of IF must be a real if()
-     */
-    if( isLogicalOp(n-1, actions, maxn) ) {
-            INDENT
-	    puts("if( ");
-	    /* Eat a LogicNOT that is part of the If */
-	    /* decompileLogicalOp(n-2, actions, maxn); */
-	    puts(getName(pop()));
-	    puts(" ) {" NL);
-            if ( (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
-                  sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset > 0 ) {
-	      /* There is an else clause also! */
-              decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-	      puts("} else {" NL);
-
-	      /*
-	       * Count the number of action records that are part of
-	       * the else clause, and then decompile only that many.
-	       */
-	      for(i=0;
-	          (actions[(n+1)+i].SWF_ACTIONRECORD.Offset <
-		  (actions[n+1].SWF_ACTIONRECORD.Offset+
-		   sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)) &&
-		  (i<(maxn-(n+1)));
-		  i++)
-		      /*
-		      printf("[%3.3d] %d %x < %x + %x (%x)\n", i, (maxn-(n+1)),
-			actions[(n+1)+i].SWF_ACTIONRECORD.Offset,
-			actions[n+1].SWF_ACTIONRECORD.Offset,
-			sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset,
-			actions[n+1].SWF_ACTIONRECORD.Offset+
-			sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)
-			*/;
-              decompileActions(i+1, &actions[n+1],gIndent+1);
-	    } else {
-	      /* It's a simple if() {} */
-              decompileActions(sact->numActions, sact->Actions,gIndent+1);
-	    }
-            INDENT
-	    puts("}" NL);
-	    return i;
-    }
-
-    SanityCheck(SWF_IF, 0, "IF type not recognized")
-
+// old stuff removed (find it here up to CVS release 1.62)
 #else	/* a.k. 2006 NEW stuff comes here */
     {
 	   #define SOME_IF_DEBUG 0	/* coders only */
@@ -2368,6 +2369,12 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileWITH(n, actions, maxn);
 	return 0;
 
+      case SWFACTION_ENUMERATE:
+        return decompileENUMERATE(n, actions, maxn,0);
+
+      case SWFACTION_ENUMERATE2 :
+        return decompileENUMERATE(n, actions, maxn,1);
+
       case SWFACTION_INITARRAY:
         return decompileINITARRAY(n, actions, maxn);
 
@@ -2383,6 +2390,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_CALLMETHOD:
         return decompileCALLMETHOD(n, actions, maxn);
 
+      case SWFACTION_INSTANCEOF:
       case SWFACTION_SHIFTLEFT:
       case SWFACTION_SHIFTRIGHT:
       case SWFACTION_SHIFTRIGHT2:        
