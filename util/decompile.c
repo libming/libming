@@ -1,3 +1,23 @@
+/****************************************************************************
+ *
+ *  Copyright (C) 2006,2007 A.Kleine
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ ****************************************************************************/
+
 #define _GNU_SOURCE
 
 //#define STATEMENT_CLASS  
@@ -474,7 +494,11 @@ struct SWF_ACTIONPUSHPARAM * pop()
 #ifdef DEBUG
 	printf("*pop*\n");
 #endif
+#ifdef DEBUGSTACK		/* continue w stack dummy */
+	if( Stack == NULL ) push(newVar("*** INTERNAL STACK ERROR FOUND IN pop() CALL *** "));
+#else
 	if( Stack == NULL ) error("Stack blown!! - pop");
+#endif
 	t=Stack;
 	Stack=t->next;
 	ret=t->val;
@@ -794,29 +818,32 @@ isArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 int precedence(int op1,int op2)
 {
  unsigned char ops[]= { 		// array of opcodes w rising precedence
-	SWFACTION_SETVARIABLE,		// TAKE CARE: array is incomplete
-
-//	SWFACTION_LOGICALOR,
-//	SWFACTION_LOGICALAND,
+//	SWFACTION_SETVARIABLE,		// TAKE CARE: array is incomplete
+//	SWFACTION_TRACE,
+	// missing ops are considered with low precedence
+	SWFACTION_LOGICALOR,
+	SWFACTION_LOGICALAND,
 	SWFACTION_BITWISEOR,
 	SWFACTION_BITWISEXOR,
 	SWFACTION_BITWISEAND,
 
 	SWFACTION_EQUALS2,
+	SWFACTION_GREATER,
+	SWFACTION_LESSTHAN,
 	SWFACTION_LESS2,
 	
 	SWFACTION_SHIFTRIGHT,
 	SWFACTION_SHIFTRIGHT2,
 	SWFACTION_SHIFTLEFT,
-
+	SWFACTION_SUBTRACT,
 	SWFACTION_ADD,
 	SWFACTION_ADD2,
-	SWFACTION_SUBTRACT,
 	SWFACTION_MODULO,
 	SWFACTION_DIVIDE,
 	SWFACTION_MULTIPLY,
-//	SWFACTION_LOGICALNOT,
+	SWFACTION_LOGICALNOT,
 	SWFACTION_PUSH
+
  };
  unsigned char* f=memchr(ops,op1,sizeof(ops));
  unsigned char* s=memchr(ops,op2,sizeof(ops));
@@ -958,8 +985,28 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	      else
 	       push(newVar_N("(",getString(left),"<",getString(right),0,")"));
 	      break;
+
+      case SWFACTION_GREATER:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),">",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),">",getString(right),0,")"));
+	      break;
+      case SWFACTION_LESSTHAN:
+	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"<",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"<",getString(right),0,")"));
+	      break;
+      case SWFACTION_STRINGEQ:
+      	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"==",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"==",getString(right),0,")"));
+	      break;
+
       default:
-	printf("Unhandled Arithmetic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
+	printf("Unhandled Arithmetic/Logic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
     }
    return 0;
 }
@@ -1152,12 +1199,6 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 
     switch(actions[n].SWF_ACTIONRECORD.ActionCode)
     {
-      case SWFACTION_LESSTHAN:
-	      puts("LESSTHAN");
-	      break;
-      case SWFACTION_STRINGEQ:
-	      puts("STRINGEQ");
-	      break;
       case SWFACTION_STRINGCOMPARE:
 	      puts("STRINGCOMPARE");
 	      break;
@@ -1174,11 +1215,7 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 		push(newVar3(getString(left),"===",getString(right)));
 	        return 0;
 	      }
-      case SWFACTION_GREATER:
-	      right=pop();
-	      left=pop();
-	      push(newVar3(getString(left),">",getString(right)));
-	      break;
+
       case SWFACTION_LOGICALNOT:
 #ifdef STATEMENT_CLASS
 	      if( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE &&
@@ -1380,36 +1417,31 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
 int
 decompileNEWOBJECT(int n, SWF_ACTION *actions,int maxn)
 {
-    struct SWF_ACTIONPUSHPARAM *obj, *arg;
-    int i,numparams,slen;
-    char *t,*objname;
-
+    struct SWF_ACTIONPUSHPARAM *obj, *nparam;
     obj = pop();
-    objname = getName(obj);
-    slen = strlen(objname);
-    t = malloc(slen + PARAM_STRSIZE + 7); /* 'new '+'()'+'\000' */
-    strcpy(t,"new ");
-    strcat(t,objname);
-    strcat(t,"(");
-    obj->p.String=t;
-    obj->Type=0; /* STRING */
-    numparams = getInt(pop());
-    for(i=0;i<numparams;i++) {
-	    char *pops;    
-	    arg=pop();
-	    pops=getName(arg);
-	    if ( strlen(t) + 2 + strlen(pops) < (slen + PARAM_STRSIZE + 7) )
-	    {
-	     strcat(t,pops);
-	     if (i<numparams-1) 
-	      strcat(t,",");
-	    }
-    }
-    strcat(t,")");
-    pushvar(obj);
-
+    nparam=pop();
+    push(newVar_N("new ","",getName(obj),"(", nparam->p.Integer,")"));
     return 0;
 }
+
+int
+decompileNEWMETHOD(int n, SWF_ACTION *actions,int maxn)
+{
+    char *t;
+    struct SWF_ACTIONPUSHPARAM *meth, *nparam, *obj;
+    meth = pop();
+    obj = pop();
+    nparam=pop();
+    
+    t=malloc(strlen( getName(obj) ) +2);
+    strcpy(t,getName(obj));
+    strcat(t,".");
+    
+    push(newVar_N("new ",t,getName(meth),"(", nparam->p.Integer,")"));
+    free (t);
+    return 0;
+}
+
 
 int
 decompileGETMEMBER(int n, SWF_ACTION *actions,int maxn)
@@ -1426,7 +1458,7 @@ decompileGETMEMBER(int n, SWF_ACTION *actions,int maxn)
  printf("*getMember* varName %s (type=%d)  memName=%s (type=%d)\n",varname,var->Type, memname,mem->Type);
 #endif
     len = strlen(varname)+strlen(memname);
-    if (mem->Type == 7 || mem->Type == 10)		/* INTEGER or VARIABLE */ 
+    if (mem->Type == 7 || mem->Type == 6 || mem->Type == 10)		/* INTEGER, DOUBLE  or VARIABLE */ 
     {
      vname = malloc(len+3);
      strcpy(vname,varname);
@@ -1462,12 +1494,12 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
 #endif
 
     decompilePUSHPARAM(obj,0);
-    if (var->Type == 7 || var->Type == 10)		/* INTEGER or VARIABLE */
+    if (var->Type == 7 || var->Type == 6 || var->Type == 10)		/* INTEGER, DOUBLE or VARIABLE */
      puts("[");
     else
      puts(".");
     decompilePUSHPARAM(var,0);
-    if (var->Type == 7 || var->Type == 10)
+    if (var->Type == 7 || var->Type == 6 || var->Type == 10)
      puts("]");
     printf(" = " );
     if (val->Type != 10)			// later it will be a switch{}
@@ -1906,6 +1938,7 @@ struct strbufinfo origbuf;
 		 if-else-if-else we have to suppress this kind of 'break'.
 	       */  
 		decompileActions(sact->numActions, sact->Actions,gIndent+1);
+		i=0;			/* found break but no else and thus return 0 */
 	      }
 	      else
 	      {
@@ -1983,14 +2016,14 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
     printf("/* function followed by OP %x */" NL, actions[n+1].SWF_ACTIONRECORD.ActionCode);
     #endif
     #if USE_LIB
-    if (isStoreOp(n+1, actions,maxn))
+    if (isStoreOp(n+1, actions,maxn) || *sact->FunctionName==0)
       origbuf=setTempString();	/* switch to a temporary string buffer */
     #endif
     puts("function ");
     if (is_type2)
     {
      if (sactv2->FunctionName) puts(sactv2->FunctionName);
-     puts(" (");
+     puts("(");
      for(i=0;i<sactv2->NumParams;i++) {
 	puts(sactv2->Params[i].ParamName);
 	if ( sactv2->Params[i].Register)
@@ -2007,7 +2040,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
     else
     {
      if (sact->FunctionName) puts(sact->FunctionName);
-     puts(" (");
+     puts("(");
      for(i=0;i<sact->NumParams;i++) {
 	puts(sact->Params[i]);
 	if( sact->NumParams > i+1 ) puts(",");
@@ -2017,7 +2050,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
      decompileActions(sact->numActions, sact->Actions,gIndent+1);
     }
     INDENT
-    if (isStoreOp(n+1, actions,maxn))
+    if (isStoreOp(n+1, actions,maxn) || *sact->FunctionName==0)
     {
      puts("}");
      #if USE_LIB
@@ -2321,6 +2354,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileNEWOBJECT(n, actions, maxn);
 	return 0;
 
+      case SWFACTION_NEWMETHOD:
+        decompileNEWMETHOD(n, actions, maxn);
+	return 0;
+
       case SWFACTION_GETMEMBER:
         decompileGETMEMBER(n, actions, maxn);
 	return 0;
@@ -2407,6 +2444,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_LESS2:
       case SWFACTION_LOGICALAND:
       case SWFACTION_LOGICALOR:
+      case SWFACTION_GREATER:
+      case SWFACTION_LESSTHAN:
+      case SWFACTION_STRINGEQ:
         return decompileArithmeticOp(n, actions, maxn);
 
       case SWFACTION_POP:
@@ -2452,11 +2492,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_DUPLICATECLIP:
 	return decompileDUPLICATECLIP(n, actions, maxn);
 
-      case SWFACTION_LESSTHAN:
-      case SWFACTION_STRINGEQ:
       case SWFACTION_STRINGCOMPARE:
       case SWFACTION_STRICTEQUALS:
-      case SWFACTION_GREATER:
+
       case SWFACTION_LOGICALNOT:
         return decompileLogicalOp(n, actions, maxn);
 
