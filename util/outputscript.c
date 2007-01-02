@@ -42,6 +42,7 @@ extern char *swftargetfile;
 #define COMMSTART "#"
 #define COMMEND   ""
 #define VAR       "$"
+#define DECLOBJ(x) "" 
 #define MEMBER    "->"
 #define OBJPREF   "SWF::"
 #define NEWOP     "new"
@@ -51,6 +52,7 @@ extern char *swftargetfile;
 #define COMMSTART "/*"
 #define COMMEND   "*/"
 #define VAR       "$"
+#define DECLOBJ(x) "$" 
 #define MEMBER    "->"
 #define OBJPREF   "SWF"
 #define NEWOP     "new"
@@ -60,6 +62,7 @@ extern char *swftargetfile;
 #define COMMSTART "#"
 #define COMMEND   ""
 #define VAR       ""
+#define DECLOBJ(x) ""
 #define MEMBER    "."
 #define OBJPREF   "SWF"
 #define NEWOP     ""
@@ -69,6 +72,7 @@ extern char *swftargetfile;
 #define COMMSTART "//"
 #define COMMEND   ""
 #define VAR       ""
+#define DECLOBJ(x) "SWF" #x "* " 
 #define MEMBER    "->"
 #define OBJPREF   "SWF"
 #define NEWOP     "new"
@@ -188,10 +192,17 @@ newobj (char *varname, char *obj)
 void
 outputSWF_RGBA (SWF_RGBA * color, char *pname)
 {
+#ifdef SWFPLUSPLUS
+  printf ("int %s_red   = 0x%2.2x;\n", pname, color->red);
+  printf ("int %s_green = 0x%2.2x;\n", pname, color->green);
+  printf ("int %s_blue  = 0x%2.2x;\n", pname, color->blue);
+  printf ("int %s_alpha = 0x%2.2x;\n", pname, color->alpha);
+#else
   printf ("" VAR "%s_red   = 0x%2.2x;\n", pname, color->red);
   printf ("" VAR "%s_green = 0x%2.2x;\n", pname, color->green);
   printf ("" VAR "%s_blue  = 0x%2.2x;\n", pname, color->blue);
   printf ("" VAR "%s_alpha = 0x%2.2x;\n", pname, color->alpha);
+#endif
 }
 
 void
@@ -288,7 +299,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
     case 0x00:			/* Solid Fill */
       sprintf (fname, "%s_f%d", parentname, i);
       outputSWF_RGBA (&fillstyle->Color, fname);
-      printf ("" VAR "%s = %s(" VAR "%s_red, "
+      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s_red, "
 	      VAR "%s_green, "
 	      VAR "%s_blue, "
 	      VAR "%s_alpha "
