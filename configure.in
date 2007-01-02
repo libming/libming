@@ -1,11 +1,11 @@
-AC_INIT(ming, 0.4.0.beta3)
+AC_INIT(ming, 0.4.0.beta4)
 
 dnl -- Release version 
 dnl To avoid colation problems, the 0.4 release shall be 0.4.1
 
 MAJOR_VERSION=0
 MINOR_VERSION=4
-MICRO_VERSION=0.beta3
+MICRO_VERSION=0.beta4
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
@@ -317,6 +317,7 @@ AC_OUTPUT([
 	perl_ext/Makefile
 	php_ext/Makefile
 	py_ext/Makefile
+	py_ext/setup.py
 	tcl_ext/Makefile
 	test/Makefile
 	test/Movie/Makefile
