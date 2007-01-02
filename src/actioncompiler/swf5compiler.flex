@@ -246,6 +246,7 @@ branchiftrue		{ count();	return BRANCHIFTRUE; }
 post			{ count();	return POST; }
 get			{ count();	return GET; }
 end			{ count();	return END;		}
+extends			{ count();	return EXTENDS;		}
 }
 
 <AS_V6>{

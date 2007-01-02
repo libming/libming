@@ -63,6 +63,8 @@ Buffer bf, bc;
 
 %token TRY THROW CATCH FINALLY
 
+%token EXTENDS
+
 %token NULLVAL
 %token <intVal> INTEGER
 %token <doubleVal> DOUBLE
@@ -371,6 +373,7 @@ switch_case
 
 
 /* there's GOT to be a better way than this.. */
+/* What is this for exactly ? */
 
 identifier
 	: IDENTIFIER
@@ -452,6 +455,7 @@ identifier
 	| GET	{ $$ = strdup("get"); }
 	| LOADVARIABLES	{ $$ = strdup("loadvariables"); }
 	| LOADMOVIE	{ $$ = strdup("loadmovie"); }
+	| EXTENDS	{ $$ = strdup("extends"); }
 	;
 
 formals_list
@@ -1884,6 +1888,9 @@ opcode
 						     SWFACTION_SHIFTRIGHT2); }
 	| VAR			{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_DEFINELOCAL2); }
+	| EXTENDS		{ $$ = bufferWriteOp(asmBuffer, 
+						     SWFACTION_EXTENDS); }
+
 	/* f4 ops */
 	| OLDADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }
 	| SUBTRACT		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SUBTRACT); }
@@ -1926,6 +1933,7 @@ opcode
 	| BRANCHIFTRUE STRING	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_IF);
 				  $$ += bufferWriteS16(asmBuffer, 2);
 				  $$ += bufferBranchTarget(asmBuffer, $2); }
+
 	;
 
 %%
