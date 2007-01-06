@@ -1355,15 +1355,16 @@ decompileGETTIME(int n, SWF_ACTION *actions,int maxn)
 int
 decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 {
+    int is_postop;
     struct SWF_ACTIONPUSHPARAM *var;
     char *dblop=is_incr ? "++":"--";
 
     if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
       || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP 
       || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
-    {			// NEW inc/dec code (akleine, Dec 2006)
+    {
     	var=pop();
-	int is_postop=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)?1:0;
+	is_postop=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)?1:0;
 	if (is_postop)
 	 var = newVar2(getString(var),dblop);
 	else
@@ -1383,20 +1384,48 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
  	}
 	push(var);
     }
-    else		// OLD inc dec code (still used for SETMEMBER etc)
+    else
     {
-    INDENT
-    var=pop();
-    decompilePUSHPARAM(var,0);
-    puts(dblop);
-    puts(";" NL);
-    push(var);
-    if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-        (var->Type == 4 /* Register */) &&
-        (actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->p.RegisterNumber) ) {
+	if((actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER &&
+	    actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER ) ||
+	   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER &&
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER &&
+	    actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) ||
+	   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) )
+	{		// incr/decr object variables with side effects
+	 var=pop();
+	 is_postop= (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)?1:0;
+	 if (is_postop)
+	  var = newVar2(getString(var),dblop);
+	 else
+	  var = newVar2(dblop,getString(var));
+	 if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) pop();
+	   pop();
+	  pop();
+	  var->Type=12;	// to be quiet later in ...SETMEMBER()
+	  regs[0]=var;	// FIXME: r0 perhaps a ming special
+	  push(var);
+	  push(var);
+	  push(var);
+	  if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) push(var);
+	}
+	else		// fallback to old incr/decr code
+	{
+	 INDENT
+	 var=pop();
+	 decompilePUSHPARAM(var,0);
+	 puts(dblop);
+	 puts(";" NL);
+	 push(var);
+	 if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
+		(var->Type == 4 /* Register */) &&
+		(actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->p.RegisterNumber) ) {
 	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
 	    return 1; /* Eat the StoreRegister that follows */
-    }
+	 }
+	}
     }
     return 0;
 }
@@ -1492,6 +1521,15 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
 #ifdef DEBUG
  printf("*SETMember* varName %s (type=%d)  objName=%s (type=%d)\n",getName(var),var->Type, getName(obj),obj->Type);
 #endif
+    
+    if (obj->Type == 11)				/* simply output variable and inc/dec op */
+    {
+     decompilePUSHPARAM(obj,0);
+     puts(";" NL);
+     return 0;
+    }
+    if (obj->Type == 12)				/* do nothing: inline inc/dec using side effect */
+     return 0;
 
     decompilePUSHPARAM(obj,0);
     if (var->Type == 7 || var->Type == 6 || var->Type == 10)		/* INTEGER, DOUBLE or VARIABLE */
@@ -1777,7 +1815,7 @@ struct strbufinfo origbuf;
     if( isLogicalOp(n-1, actions, maxn) &&
         ( (sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
            sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset < 0) ) {
-	    dumpRegs();
+if(0)	    dumpRegs();
             INDENT
 	/* if on a level >0 we can check for any outer loop 
 	   To do: get the level on a better way than using gIndent */
