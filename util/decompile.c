@@ -20,6 +20,7 @@
 
 #define _GNU_SOURCE
 
+#define DEBUGSTACK
 //#define STATEMENT_CLASS  
 //  I have uncommented some buggy class recognition stuff in decompileIF()
 //  to make work simple code lines like:  "if(!a) trace(a);"   - ak, November 2006
@@ -40,7 +41,7 @@
 #define NL "\\\n"
 // Note: if you don't want see trailing backslashes
 // later remove it using the sed tool on command line, e.g.:
-//   sed -e s/\\\\$// infile > outfile
+//   sed -i s/\\\\$// file
 
 #ifndef HAVE_VASPRINTF
 /* Workaround for the lack of vasprintf()
@@ -495,7 +496,7 @@ struct SWF_ACTIONPUSHPARAM * pop()
 	printf("*pop*\n");
 #endif
 #ifdef DEBUGSTACK		/* continue w stack dummy */
-	if( Stack == NULL ) push(newVar("*** INTERNAL STACK ERROR FOUND IN pop() CALL *** "));
+	if( Stack == NULL ) push(newVar("// *** pop(): INTERNAL STACK ERROR FOUND ***"));
 #else
 	if( Stack == NULL ) error("Stack blown!! - pop");
 #endif
@@ -594,7 +595,7 @@ newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *fina
 	   strcat(v->p.String,",");
 	 }
 	 else {
-		fprintf(stderr,"Some string overflowed something in newVar_N()??????\n");
+		fprintf(stderr,"Some string overflowed something in newVar_N2()??????\n");
 		while (++i<pop_counter)
 		  getString(pop());
 		printf("/* *** truncated string here: *** */\n");
@@ -828,6 +829,8 @@ int precedence(int op1,int op2)
 	SWFACTION_BITWISEAND,
 
 	SWFACTION_EQUALS2,
+	SWFACTION_EQUAL,
+
 	SWFACTION_GREATER,
 	SWFACTION_LESSTHAN,
 	SWFACTION_LESS2,
@@ -954,7 +957,9 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	      else
 	       push(newVar_N("(",getString(left),"^",getString(right),0,")"));
 	      break;
+
       case SWFACTION_EQUALS2:							/* including negation */
+      case SWFACTION_EQUAL:
 	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
 	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF )
 	      {
@@ -1024,6 +1029,7 @@ isLogicalOp(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_STRINGCOMPARE:
       case SWFACTION_LESS2:
       case SWFACTION_EQUALS2:
+      case SWFACTION_EQUAL:
       case SWFACTION_BITWISEAND:
       case SWFACTION_BITWISEOR:
       case SWFACTION_BITWISEXOR:
@@ -1053,28 +1059,16 @@ isLogicalOp2(int n, SWF_ACTION *actions,int maxn)
 }
 
 
-#define RESETCOUNTER_TO_1 99999
 int
 stackVal(int n, SWF_ACTION *actions)
 {
-    switch((actions[n]).SWF_ACTIONRECORD.ActionCode)
+    if (!n) return 0;
+    switch((actions[n-1]).SWF_ACTIONRECORD.ActionCode)
     {
-      case SWFACTION_END:
-      case SWFACTION_NEXTFRAME:
-      case SWFACTION_PREVFRAME:
-      case SWFACTION_PLAY:
-      case SWFACTION_STOP:
       case SWFACTION_LOGICALNOT:
-      case SWFACTION_WITH:
-      case SWFACTION_JUMP:
-      case SWFACTION_CONSTANTPOOL:
-      case SWFACTION_IF:
-      case SWFACTION_STOREREGISTER:
-      case SWFACTION_STACKSWAP:
       case SWFACTION_DECREMENT:
       case SWFACTION_INCREMENT:
       case SWFACTION_RANDOMNUMBER:
-      case SWFACTION_DUPLICATECLIP:
       case SWFACTION_TOSTRING:
       case SWFACTION_TONUMBER:
       case SWFACTION_ORD:
@@ -1083,25 +1077,9 @@ stackVal(int n, SWF_ACTION *actions)
       case SWFACTION_MBCHR:
       case SWFACTION_INT:
       case SWFACTION_GETVARIABLE:
-      case SWFACTION_GOTOLABEL:
-      case SWFACTION_GOTOFRAME:
-      case SWFACTION_TOGGLEQUALITY:
-      case SWFACTION_TRY:
-      case SWFACTION_THROW:
-      case SWFACTION_ENDDRAG:
-      case SWFACTION_STOPSOUNDS:
-      case SWFACTION_STRINGLENGTH:
-      case SWFACTION_MBLENGTH:
-      case SWFACTION_CASTOP:
-      case SWFACTION_TYPEOF:
-      case SWFACTION_DELETE2:
-      case SWFACTION_GETURL :
-      case SWFACTION_WAITFORFRAME :
-      case SWFACTION_WAITFORFRAME2 :
-      case SWFACTION_CALLFRAME :
-      case SWFACTION_TARGETPATH :
-        return 0;
-
+      case SWFACTION_SUBSTRING:
+      case SWFACTION_MBSUBSTRING:
+      case SWFACTION_GETMEMBER:
       case SWFACTION_ADD:
       case SWFACTION_ADD2:
       case SWFACTION_SUBTRACT:
@@ -1118,77 +1096,33 @@ stackVal(int n, SWF_ACTION *actions)
       case SWFACTION_STRINGCOMPARE:
       case SWFACTION_LESS2:
       case SWFACTION_EQUALS2:
+      case SWFACTION_EQUAL:
       case SWFACTION_STRICTEQUALS:
       case SWFACTION_GREATER:
       case SWFACTION_STRINGGREATER:
       case SWFACTION_STRINGCONCAT:
-      case SWFACTION_SETPROPERTY:
-      case SWFACTION_REMOVECLIP:
-      case SWFACTION_RETURN:
-      case SWFACTION_POP:
-      case SWFACTION_TRACE:
       case SWFACTION_SHIFTLEFT:
       case SWFACTION_SHIFTRIGHT:
       case SWFACTION_SHIFTRIGHT2:
-      case SWFACTION_EQUAL:
       case SWFACTION_INSTANCEOF:
-      case SWFACTION_ENUMERATE :
-      case SWFACTION_ENUMERATE2 :
-      case SWFACTION_EXTENDS :
-      case SWFACTION_IMPLEMENTSOP :
-      case SWFACTION_GETPROPERTY:
-      case SWFACTION_SETTARGET:
-      case SWFACTION_SETTARGET2:
-      case SWFACTION_DEFINELOCAL2:
-      case SWFACTION_INITOBJECT:
-      case SWFACTION_GOTOFRAME2:
-      case SWFACTION_DELETE:
-        return -1;
-
-      case SWFACTION_SETVARIABLE:
-      case SWFACTION_SUBSTRING:
-      case SWFACTION_MBSUBSTRING:
-      case SWFACTION_GETMEMBER:
-      case SWFACTION_DEFINELOCAL:
-      case SWFACTION_GETURL2:
-        return -2;
-
-      case SWFACTION_STARTDRAG:
-      case SWFACTION_SETMEMBER:
-      case SWFACTION_NEWMETHOD:
-        return -3;
-              
-      case SWFACTION_PUSH:
-	return (actions[n]).SWF_ACTIONPUSH.NumParam;
-
-      case SWFACTION_INITARRAY:
-      case SWFACTION_NEWOBJECT:
       case SWFACTION_CALLMETHOD:
       case SWFACTION_CALLFUNCTION:
-	return RESETCOUNTER_TO_1;
-
-      case SWFACTION_PUSHDUP:
       case SWFACTION_GETTIME:
-      case SWFACTION_DEFINEFUNCTION:
-      case SWFACTION_DEFINEFUNCTION2:
+      case SWFACTION_GETPROPERTY:
+      case SWFACTION_PUSH:
+      case SWFACTION_DELETE:
+      case SWFACTION_DELETE2:
+      case SWFACTION_MBLENGTH:
+      case SWFACTION_STRINGLENGTH:
+      case SWFACTION_CASTOP:
+      case SWFACTION_TYPEOF:
+      case SWFACTION_PUSHDUP:
 	return 1;
-
       default:
-       printf("/* found undef stack op %x */",(actions[n]).SWF_ACTIONRECORD.ActionCode);
 	return 0;
     }
 }
 
-int stackBalance (int n, SWF_ACTION *actions)
-{
-  int i, s=0;
-  for(i=0;i<n;i++) 
-  {
-   int z=stackVal(i, actions);
-   s= z==RESETCOUNTER_TO_1 ? 1 : s+z;
-  }
-  return s;  
-}
 
 
 /* changed stuff moved to decompileArithmeticOp() / ak november 2006 */
@@ -1402,7 +1336,7 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	 else
 	  var = newVar2(dblop,getString(var));
 	 if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) pop();
-	   pop();
+	  pop();
 	  pop();
 	  var->Type=12;	// to be quiet later in ...SETMEMBER()
 	  regs[0]=var;	// FIXME: r0 perhaps a ming special
@@ -1599,21 +1533,6 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
     }
     return 0;
 }
-
-#if 0
-int
-decompileADD2(int n, SWF_ACTION *actions,int maxn)
-{
-    struct SWF_ACTIONPUSHPARAM *var1, *var3;
-
-    INDENT
-    var3 = pop();
-    var1 = pop();
-    push(newVar3(getString(var1),"+",getString(var3)));
-
-    return 0;
-}
-#endif
 
 int
 decompileJUMP(int n, SWF_ACTION *actions,int maxn)
@@ -1895,8 +1814,11 @@ if(0)	    dumpRegs();
 		}  
 	   }
 	   i=else_action_cnt;						// =return value
-	   sbi=stackBalance (sact->numActions-1,sact->Actions);
-	   sbe=stackBalance (else_action_cnt,&actions[n+1]);
+	   sbi=stackVal (sact->numActions-1,sact->Actions);
+	   sbe=stackVal (else_action_cnt,&actions[n+1]);
+	   #if SOME_IF_DEBUG
+	   printf("sbi=%d   sbe=%d\n", sbi,sbe);
+	   #endif
 	   if (sbi==1 && sbe==1)
 	   {
 	     #if SOME_IF_DEBUG
@@ -2203,6 +2125,21 @@ decompileSingleArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *
 }
 
 int
+decompileSUBSTRING(int n, SWF_ACTION *actions,int maxn)
+{
+    push(newVar_N("","","substr","(", 3,")"));
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+    {
+     /* call function and throw away any result */
+     INDENT
+     puts(getName(pop()));
+     puts(";" NL);
+     return 1;
+    }
+    return 0;
+}
+
+int
 decompileSTRINGCONCAT(int n, SWF_ACTION *actions,int maxn)
 {
     push(newVar_N("","","concat","(", 2,")"));
@@ -2478,6 +2415,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_BITWISEAND:
       case SWFACTION_BITWISEOR:
       case SWFACTION_BITWISEXOR:
+      case SWFACTION_EQUAL:
       case SWFACTION_EQUALS2:
       case SWFACTION_LESS2:
       case SWFACTION_LOGICALAND:
@@ -2520,6 +2458,10 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_STRINGLENGTH:
       	return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"length");
+
+      case SWFACTION_MBSUBSTRING:
+      case SWFACTION_SUBSTRING:
+      	return decompileSUBSTRING(n, actions, maxn);
 
       case SWFACTION_STRINGCONCAT:
 	return decompileSTRINGCONCAT(n, actions, maxn);
@@ -2569,9 +2511,29 @@ decompile5Action(int n, SWF_ACTION *actions,int indent)
   dcinit();
 
   decompileActions(n, actions, indent);
-
+#ifdef DEBUGSTACK
+  if( Stack != NULL && *dcstr) 
+  { 
+   #define BUFFSIZE 40
+   int i=0;
+   char buf[BUFFSIZE];
+   memset(buf, '\0', BUFFSIZE);
+   while (Stack)
+   {
+    getString(pop());
+    i++;
+   }
+   fprintf(stderr,"Stuff (==%d) left on the stack at the end of a block of actions!?!?!?\n",i);
+   strncpy(buf,dcstr,BUFFSIZE-1);
+   for (i=0;i<BUFFSIZE;i++) if (buf[i]=='\n' || buf[i]=='\\' ) buf[i]=' ';
+   if (strlen(buf)==BUFFSIZE-1)
+     fprintf(stderr," Block begins with:   %s ...\n",buf);
+   else
+     fprintf(stderr," Block contents:      %s\n",buf);
+  }
+#else
   if( Stack != NULL ) fprintf(stderr,"Stuff left on the stack at the end of a block of actions!?!?!?\n");
-
+#endif
   return dcgetstr();
 }
 
