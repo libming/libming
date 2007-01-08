@@ -1,3 +1,241 @@
+2007-01-07 17:42  akleine
+
+	* util/decompile.c: 1.Simplified and bugfixed detection of
+	  conditional operator (?:) 2.Added some more stack DEBUG helper
+	  code 3.Added support for opcodes SWFACTION_SUBSTRING,
+	  SWFACTION_MBSUBSTRING and SWFACTION_EQUAL
+
+2007-01-07 11:57  strk
+
+	* src/blocks/blocktypes.h: SWF8 tags added: SWF_FILEATTRIBUTES
+	  (69), SWF_METADATA (77)
+
+2007-01-06 14:52  akleine
+
+	* util/decompile.c: Enhanced prefixed and postfixed
+	  increment/decrement operations, for more complex object variables
+	  with side effects.  Note: this gives much better results on code
+	  lines like y = obj.x * ++obj.x;.  An initial part was added in
+	  CVS release version 1.49, but certainly this stuff needs much
+	  more attention.
+
+2007-01-02 17:48  strk
+
+	* NEWS: Added note about the new 'extends' opcode supported
+
+2007-01-02 17:46  strk
+
+	* configure.in, py_ext/setup.py, py_ext/setup.py.in: Have
+	  py_ext/setup.py generated at configure time to have version
+	  correctly set.  Switch version to 0.4.0.beta4.
+
+2007-01-02 16:06  strk
+
+	* macros/ming.m4: Improved Ming detection macro to provide
+	  MING_VERSION and MING_VERSION_CODE.  Semantic explained in
+	  comments. Copyright assigned to the FSF.
+
+2007-01-02 15:03  strk
+
+	* src/actioncompiler/swf5compiler.flex,
+	  src/actioncompiler/swf5compiler.y,
+	  test/actionscript/ASM_extend.as,
+	  test/actionscript/ASM_extend.ref, test/actionscript/Makefile.am:
+	  Added support for the 'extends' (0x69) opcode (asm-mode) +
+	  testcase for it.
+
+2007-01-02 05:31  strk
+
+	* util/outputscript.c: Added DECLOBJ() to provide variables
+	  declarations (in particular for C++).  Used DECLOBJ macro in
+	  outputSWF_FILLSTYLE fixing C++ output.  Handled C++ output for
+	  outputSWF_RGBA.
+
+2007-01-01 14:50  akleine
+
+	* util/decompile.c: 1. Bugfixes in decompileGETMEMBER,
+	  decompileSETMEMBER, and decompileNEWOBJECT [rewritten using
+	  newVar_N() helper].  This also removes generation of useless
+	  quotemarks like x = 'new Object()'; vs. x = new Object(); 2.
+	  Moved SWFACTION_GREATER, SWFACTION_LESSTHAN into
+	  decompileArithmeticOp(), so now calling precedence check.  3.
+	  Added bugfix in handling anonymous functions used as a function
+	  argument, i.e. script code like x=callme(1, 2, function(){return
+	  3;}, 4); 4. Added support for SWFACTION_NEWMETHOD opcode.  5.
+	  Bugfix in decompileIF preventing too early end inside loops after
+	  a conditioned "break;" was found.
+
+2006-12-29 16:00  akleine
+
+	* util/decompile.c: 1. Added an initial implementation of
+	  enumeration loops:	for( [var] enum in obj ){....}; .  2. Added
+	  support of the "instanceof" operator.
+
+2006-12-27 19:46  akleine
+
+	* util/decompile.c: added support for SWFACTION_TYPEOF, also added
+	  minor bugfix in decompileCALLFRAME()
+
+2006-12-27 18:44  akleine
+
+	* util/: decompile.c, parser.c: added implementation of
+	  SWFACTION_STRINGLENGTH, SWFACTION_INITOBJECT, SWFACTION_CALLFRAME
+	  and initial SWFACTION_GETPROPERTY
+
+2006-12-24 22:57  strk
+
+	* src/blocks/blocktypes.h, util/blocktypes.c, util/outputdecl.h,
+	  util/outputtxt.c, util/parser.c, util/parserdecl.h,
+	  util/swftypes.h: Applied patch by Giuliano Pochini
+	  <giuliano@shiny.it> adding support for dumping the reflex (777)
+	  tag.
+
+2006-12-23 01:57  strk
+
+	* util/outputscript.c: (newobj): when target is C++ properly
+	  declare variables; (outputHeader): don't predeclare SWFMovie
+	  variable, will be done by newobj()
+
+2006-12-23 01:39  strk
+
+	* util/decompile.c: Some more newlines escaping
+
+2006-12-22 18:48  akleine
+
+	* util/decompile.c: Added code for SWFACTION_ORD, also moved
+	  similar build-in function call code (chr,random,int ...) into one
+	  function fitting for all that
+
+2006-12-21 10:39  akleine
+
+	* util/decompile.c: Rewrote decompileDEFINEFUNCTION2() by melting
+	  (and cleaning) with decompileDEFINEFUNCTION()  -- fixing the
+	  'gravity' problem #1
+
+2006-12-20 13:52  akleine
+
+	* util/decompile.c: Added support for SWFACTION_DELETE and
+	  SWFACTION_DELETE2, improved handling of SWF-properties
+
+2006-12-19 11:48  akleine
+
+	* util/decompile.c: implemented missing SWFACTION_GOTOFRAME2
+
+2006-12-19 11:32  akleine
+
+	* util/decompile.c: Adjusted SWFACTION_LOGICALOR and
+	  SWFACTION_LOGICALAND operations according new compiler code
+	  generation style.  (Note: until now old decompiler only emitted
+	  strings either "LAND" or "LOR" - due less of test code)
+
+2006-12-18 16:58  strk
+
+	* src/actioncompiler/swf5compiler.y, test/actionscript/logor.ref:
+	  Use Logical OR and AND tags rather then implement these by mean
+	  of other tags. Note that the logor.as testfile was already
+	  producing *working* code, just a bit bigger then the one that is
+	  output now. This was verified with the MM player.
+
+2006-12-18 16:04  akleine
+
+	* util/decompile.c: once more enhanced decompileGETMEMBER()
+
+2006-12-16 17:42  akleine
+
+	* test/actionscript/: Makefile.am, logor.as, logor.ref: Added test
+	  case for "logical_or" compiler bug just reported at developer
+	  list.  Take care: "make check"  will *fail* until bug is fixed.
+
+2006-12-15 16:54  strk
+
+	* docs/Makefile.am, docs/man/Makefile.am, perl_ext/Makefile.PL,
+	  perl_ext/Makefile.am, php_ext/Makefile.am, py_ext/Makefile.am,
+	  src/Makefile.am, tcl_ext/Makefile.am,
+	  test/Movie/Background/Makefile.am,
+	  test/Movie/Dimension/Makefile.am,
+	  test/Movie/FrameLabel/Makefile.am,
+	  test/Movie/NumFrames/Makefile.am, test/Movie/Protect/Makefile.am,
+	  test/Movie/Rate/Makefile.am, test/Movie/add/Makefile.am,
+	  test/Movie/new/Makefile.am, util/Makefile.am: Patch by Patrice
+	  Dumas <pertusus@free.fr>:
+
+		  * distribute more files
+		  * add some files created by configure to DISTCLEANFILES
+		  * don't recompile ming during Makefile.perl generation
+		  * don't silence the clean rule in py_ext/Makefile.am, and
+	  use clean-local
+		  * put flags linking libraries in LIBADD instead of
+	  LDFLAGS
+		  * add more files in CLEANFILES
+
+2006-12-15 10:26  akleine
+
+	* util/decompile.c: Rewrote decompileGETMEMBER() and added bugfix
+	  in decompilePUSHPARAM() to generate better AS array/object code
+	  like old "dot.7._visible =   1"  now is  "dot[7]._visible =
+	  true;"
+
+2006-12-14 11:05  strk
+
+	* NEWS: Added some news, please add them as we go so it's easier
+	  for whoever puts the release out to find out
+
+2006-12-14 10:59  strk
+
+	* util/outputscript.c: Don't force a newline at start of SWFAction(
+	  ) argument.
+
+2006-12-14 10:58  strk
+
+	* util/decompile.c: Provide an NL macro for encoding a newline
+	  (will escape the newline now, outputting correct C++ code - not
+	  tested with other languages, but I guess escaping a newline is
+	  always fine)
+
+2006-12-13 23:20  strk
+
+	* test/actionscript/: Makefile.am, delete.as, delete.ref: Added
+	  test for delete and delete2 tags
+
+2006-12-13 23:20  strk
+
+	* test/actionscript/README: Updated readme (EXTRA_DIST needs
+	  touching too)
+
+2006-12-13 23:12  strk
+
+	* src/actioncompiler/swf5compiler.y: Fixed 'delete obj' to use
+	  SWFACTION_DELETE2 (0x3b) rather then SWFACTION_DELETE (0x3a),
+	  which should be used for 'delete obj.member' or 'delete
+	  obj[member]'.
+
+2006-12-13 14:36  anderson
+
+	* test/: Makefile.inc, Movie/Background/.cvsignore,
+	  Movie/Background/test01.php, Movie/Background/test02.php,
+	  Movie/Background/test03.php, Movie/Dimension/.cvsignore,
+	  Movie/Dimension/test01.php, Movie/FrameLabel/.cvsignore,
+	  Movie/FrameLabel/test01.php, Movie/FrameLabel/test02.php,
+	  Movie/NumFrames/.cvsignore, Movie/NumFrames/test01.php,
+	  Movie/Protect/.cvsignore, Movie/Protect/test01.php,
+	  Movie/Protect/test02.php, Movie/Rate/.cvsignore,
+	  Movie/Rate/test01.php, Movie/add/.cvsignore,
+	  Movie/add/test01.php, Movie/add/test02.php, Movie/new/.cvsignore,
+	  Movie/new/test01.php, Movie/new/test02.php, Movie/new/test03.php,
+	  Movie/new/test04.php, Movie/new/test05.php: Add a way to ensure
+	  that PHP uses the just build module, instead of the one on the
+	  system
+
+2006-12-13 00:36  strk
+
+	* util/makeswf.c: Implement a separate function for detecting the
+	  type of frame content.  Take files anding in .jpeg as bitmaps.
+	  (to be improved to use magic number)
+
+2006-12-12 23:34  strk
+
+	* src/Makefile.am: MKDIR_P => mkdir_p (dunno why the name changed)
+
 2006-12-12 22:48  strk
 
 	* src/actioncompiler/Makefile.am: Applied patch by Patrice Dumas:
