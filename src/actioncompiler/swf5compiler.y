@@ -16,6 +16,8 @@
 
 Buffer bf, bc;
 
+extern int SWF_versionNum;
+
 %}
 
 %union
@@ -483,17 +485,31 @@ function_init
 
 function_decl
 	: function_init identifier '(' formals_list ')' stmt
-		{ $$ = newBuffer();
-		  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
-		  bufferWriteS16($$, strlen($2) +
-				     bufferLength($4.buffer) + 5);
-		  bufferWriteHardString($$, (byte*) $2, strlen($2)+1);
-		  bufferWriteS16($$, $4.count);
-		  bufferConcat($$, $4.buffer);
-		  bufferWriteS16($$, bufferLength($6));
-		  bufferConcat($$, $6);
-		  delctx(CTX_FUNCTION);
-		  free($2); }
+	{
+		$$ = newBuffer();
+		if(SWF_versionNum > 6)
+		{
+			// TODO: let user control which flags to use ?
+			// Don't preload any variable in registers, or we'll need to track all uses of 
+			// those variables in this function context turning them into register accesses
+			int flags = 0;
+			int num_regs = 0;
+			bufferWriteDefineFunction2($$, $2, $4.buffer, $6, flags, num_regs);
+		}
+		else
+		{
+			bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
+			bufferWriteS16($$, strlen($2) +
+				bufferLength($4.buffer) + 5);
+			bufferWriteHardString($$, (byte*) $2, strlen($2)+1);
+			bufferWriteS16($$, $4.count);
+			bufferConcat($$, $4.buffer);
+			bufferWriteS16($$, bufferLength($6));
+			bufferConcat($$, $6);
+			delctx(CTX_FUNCTION);
+			free($2); // should be done for function2 as well ?
+		}
+	}
 	;
 
 inpart
@@ -1047,15 +1063,29 @@ expr_list
 
 anon_function_decl
 	: function_init '(' formals_list ')' stmt
-		{ $$ = newBuffer();
-		  bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
-		  bufferWriteS16($$, bufferLength($3.buffer) + 5);
-		  bufferWriteU8($$, 0); /* empty function name */
-		  bufferWriteS16($$, $3.count);
-		  bufferConcat($$, $3.buffer);
-		  bufferWriteS16($$, bufferLength($5));
-		  bufferConcat($$, $5);
-		  delctx(CTX_FUNCTION); }
+	{
+		$$ = newBuffer();
+		if(SWF_versionNum > 6)
+		{
+			// TODO: let user control which flags to use ?
+			// Don't preload any variable in registers, or we'll need to track all uses of 
+			// those variables in this function context turning them into register accesses
+			int flags = 0;
+			int num_regs = 0;
+			bufferWriteDefineFunction2($$, NULL, $3.buffer, $5, flags, num_regs);
+		}
+		else
+		{
+			bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
+			bufferWriteS16($$, bufferLength($3.buffer) + 5); /* what's 5 here ? */
+			bufferWriteU8($$, 0); /* empty function name */
+			bufferWriteS16($$, $3.count);
+			bufferConcat($$, $3.buffer);
+			bufferWriteS16($$, bufferLength($5));
+			bufferConcat($$, $5);
+			delctx(CTX_FUNCTION); // should be done for function2 as well ?
+		}
+	}
 	;
 
 method_call

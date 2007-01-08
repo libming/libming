@@ -53,6 +53,16 @@ typedef enum
   GETURL_METHOD_POST   = 2
 } SWFGetUrl2Method;
 
+typedef enum
+{
+	PRELOAD_THIS = 1,
+	SUPPRESS_THIS = 2,
+	PRELOAD_ARGUMENTS = 4,
+	SUPPRESS_ARGUMENTS = 8,
+	PRELOAD_SUPER = 16,
+	SUPPRESS_SUPER = 32
+} SWFDefineFunction2Flags;
+
 #define GETURL_LOADMOVIE 0x40
 #define GETURL_LOADVARIABLES 0x80
 
@@ -148,6 +158,19 @@ int bufferWriteSetRegister(Buffer out, int num);
 int bufferWriteGetProperty(Buffer out, char *string);
 int bufferWriteSetProperty(Buffer out, char *string);
 int bufferWriteWTHITProperty(Buffer out);
+
+/**
+ * @param func_name
+ * 	Function name, NULL for anonymous functions.
+ *
+ * @param num_regs
+ * 	Number of registers.
+ *
+ * @param flags
+ * 	See SWFDefineFunction2Flags enum.
+ */
+void bufferWriteDefineFunction2(Buffer out, char *func_name,
+		Buffer args, Buffer code, int flags, int num_regs);
 
 /* concat b to a, destroy b */
 char *stringConcat(char *a, char *b);
