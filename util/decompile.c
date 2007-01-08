@@ -654,35 +654,6 @@ decompileWAITFORFRAME (SWF_ACTION *act)
   printf("WaitForFrame(%d,%d);" NL, sact->Frame,sact->SkipCount);
 }
 
-void
-decompilePLAY (SWF_ACTION *act)
-{
-
-  INDENT
-  printf("play();" NL);
-}
-
-void
-decompileSTOP (SWF_ACTION *act)
-{
-
-  INDENT
-  printf("stop();" NL);
-}
-
-void
-decompileNEXTFRAME (SWF_ACTION *act)
-{
-  INDENT
-  printf("nextFrame();" NL);
-}
-
-void
-decompilePREVFRAME (SWF_ACTION *act)
-{
-  INDENT
-  printf("prevFrame();" NL);
-}
 
 void
 decompileGETURL (SWF_ACTION *act)
@@ -2110,6 +2081,15 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+decompile_Null_ArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *functionname)
+{
+    INDENT
+    puts(functionname);		// only used for cases w/o return value
+    puts("();" NL);
+    return 0;
+}
+
+int
 decompileSingleArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *functionname)
 {
     push(newVar_N("","",functionname,"(", 1,")"));
@@ -2123,6 +2103,22 @@ decompileSingleArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *
     }
     return 0;
 }
+
+int
+decompileSTARTDRAG(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    puts("startDrag(");
+    decompilePUSHPARAM(pop(),1);
+    puts(",");
+    decompilePUSHPARAM(pop(),0);
+    puts(",");
+    decompilePUSHPARAM(pop(),0);	//
+    puts(");" NL);
+    return 0;
+}
+
+
 
 int
 decompileSUBSTRING(int n, SWF_ACTION *actions,int maxn)
@@ -2262,13 +2258,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileWAITFORFRAME(&actions[n]);
 	return 0;
 
-      case SWFACTION_PLAY:
-        decompilePLAY(&actions[n]);
-	return 0;
-
-      case SWFACTION_STOP:
-        decompileSTOP(&actions[n]);
-	return 0;
 
       case SWFACTION_GETURL2:
         decompileGETURL2(&actions[n]);
@@ -2297,14 +2286,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_GETPROPERTY:
         decompileGETPROPERTY(n, actions, maxn);
 	return 0;
-
-      case SWFACTION_NEXTFRAME:
-        decompileNEXTFRAME(&actions[n]);
-        return 0;
-
-      case SWFACTION_PREVFRAME:
-        decompilePREVFRAME(&actions[n]);
-        return 0;
 
       case SWFACTION_GETTIME:
         return decompileGETTIME(n, actions, maxn);
@@ -2429,6 +2410,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	pop();
         return 0;
 
+      case SWFACTION_STARTDRAG:
+	return decompileSTARTDRAG(n, actions, maxn);
+
       case SWFACTION_DELETE:
         return decompileDELETE(n, actions, maxn,0);
 
@@ -2458,6 +2442,24 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_STRINGLENGTH:
       	return decompileSingleArgBuiltInFunctionCall(n, actions, maxn,"length");
+
+      case SWFACTION_PLAY:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"play");
+
+      case SWFACTION_STOP:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"stop");
+
+      case SWFACTION_NEXTFRAME:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"nextFrame");
+
+      case SWFACTION_PREVFRAME:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"prevFrame");
+
+      case SWFACTION_ENDDRAG:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"stopDrag");
+
+      case SWFACTION_STOPSOUNDS:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"stopAllSounds");      
 
       case SWFACTION_MBSUBSTRING:
       case SWFACTION_SUBSTRING:
