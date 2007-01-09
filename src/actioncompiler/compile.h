@@ -55,12 +55,33 @@ typedef enum
 
 typedef enum
 {
+	/** Bind one register to "this" *
 	PRELOAD_THIS = 1,
+
+	/** No "this" variable accessible by-name *
 	SUPPRESS_THIS = 2,
+
+	/** Bind one register to "arguments" *
 	PRELOAD_ARGUMENTS = 4,
+
+	/** No "argument" variable accessible by-name *
 	SUPPRESS_ARGUMENTS = 8,
+
+	/** Bind one register to "super" *
 	PRELOAD_SUPER = 16,
-	SUPPRESS_SUPER = 32
+
+	/** No "super" variable accessible by-name *
+	SUPPRESS_SUPER = 32,
+
+	/** Bind one register to "_root" */
+	PRELOAD_ROOT = 64,
+
+	/** Bind one register to "_parent" */
+	PRELOAD_PARENT = 128,
+
+	/** Bind one register to "_global" */
+	PRELOAD_GLOBAL = 256
+
 } SWFDefineFunction2Flags;
 
 #define GETURL_LOADMOVIE 0x40
