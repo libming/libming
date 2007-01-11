@@ -2219,7 +2219,31 @@ decompileDELETE(int n, SWF_ACTION *actions,int maxn,int is_type2)
     return 0;
 }
 
- 
+int
+decompileSETTARGET(int n, SWF_ACTION *actions,int maxn,int is_type2)
+{
+    OUT_BEGIN2(SWF_ACTIONSETTARGET);
+    int action_cnt=0;
+    char *name = is_type2 ? getString(pop()) : sact->TargetName;
+    if (*name)
+    {
+     INDENT
+     printf("tellTarget('%s') {" NL,name);
+     while(action_cnt+n<maxn)
+     {
+	if (actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET
+	 || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET2
+	 || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_END) 
+	  break;
+	action_cnt++;
+     }
+     decompileActions(action_cnt,&actions[n+1],gIndent+1);
+     INDENT
+     puts("}" NL);
+    }
+    return action_cnt;
+}
+
 int
 decompileAction(int n, SWF_ACTION *actions,int maxn)
 {
@@ -2475,6 +2499,12 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_LOGICALNOT:
         return decompileLogicalOp(n, actions, maxn);
+
+      case SWFACTION_SETTARGET:
+        return decompileSETTARGET(n, actions, maxn,0);
+
+      case SWFACTION_SETTARGET2:
+        return decompileSETTARGET(n, actions, maxn,1);
 
       default:
 	outputSWF_ACTION(n,&actions[n]);
