@@ -109,7 +109,7 @@ static int strmaxsize=0;
 static char *dcstr=NULL;
 static char *dcptr=NULL;
 
-#define DCSTRSIZE 40960
+#define DCSTRSIZE 409600
 #define PARAM_STRSIZE 512
 void
 dcinit()
@@ -1317,19 +1317,13 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	  if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) push(var);
 	}
 	else		// fallback to old incr/decr code
-	{
-	 INDENT
+	{		// FIXME: this is bad designed for handling side effect code
+	 INDENT		//        like post-incrementing a function argument etc.
 	 var=pop();
 	 decompilePUSHPARAM(var,0);
 	 puts(dblop);
 	 puts(";" NL);
 	 push(var);
-	 if( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER) &&
-		(var->Type == 4 /* Register */) &&
-		(actions[n+1].SWF_ACTIONSTOREREGISTER.Register == var->p.RegisterNumber) ) {
-	    regs[var->p.RegisterNumber] = var; /* Do the STOREREGISTER here */
-	    return 1; /* Eat the StoreRegister that follows */
-	 }
 	}
     }
     return 0;
@@ -1339,13 +1333,25 @@ int
 decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
 {
     OUT_BEGIN2(SWF_ACTIONSTOREREGISTER);
-    regs[sact->Register] = peek();
-#ifdef DEBUGREGISTER
-    INDENT
-    printf("R%d = ", sact->Register );
-    puts(getName(regs[sact->Register]));
-    puts(";" NL);
-#endif
+    struct SWF_ACTIONPUSHPARAM *data=peek();
+
+    if (!regs[sact->Register] || sact->Register==0 )	// ===internal===
+    {
+     regs[sact->Register] = data;
+    }
+    else						// ===user visible level===
+    {
+     if ( regs[sact->Register]->Type==10)		// V7: a named function parameter in register
+     {							// V7: a local var in register
+      char *l=getName(regs[sact->Register]);
+      char *r=getName(data);
+      if (strcmp(l,r))
+      {
+       INDENT
+       printf("%s = %s;" NL,l,r); 
+      }
+     }
+    }
     return 0;
 }
 
@@ -1941,6 +1947,12 @@ int
 decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 {
     int i;
+    int r;
+    int j;
+    int k;
+    int m;
+    struct SWF_ACTIONPUSHPARAM *myregs[ 256 ];
+    
     OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
     struct SWF_ACTIONDEFINEFUNCTION2 *sactv2 = (struct SWF_ACTIONDEFINEFUNCTION2*)sact;
     struct strbufinfo origbuf;
@@ -1957,19 +1969,54 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
     puts("function ");
     if (is_type2)
     {
+     for(j=1;j<sactv2->RegisterCount;j++) 
+     {
+      myregs[j]=regs[j];
+      regs[j]=NULL;
+     }
+     r=1;
+     if (sactv2->PreloadThisFlag)	regs[r++]=newVar("this");
+     if (sactv2->PreloadArgumentsFlag)	regs[r++]=newVar("arguments");
+     if (sactv2->PreloadSuperFlag)	regs[r++]=newVar("super");
+     if (sactv2->PreloadRootFlag)	regs[r++]=newVar("root");
+     if (sactv2->PreloadParentFlag)	regs[r++]=newVar("parent");
+     if (sactv2->PreloadGlobalFlag)	regs[r++]=newVar("global");
+
      puts(sactv2->FunctionName);
      puts("(");
-     for(i=0;i<sactv2->NumParams;i++) {
+     for(i=0,m=0;i<sactv2->NumParams;i++) 
+     {
 	puts(sactv2->Params[i].ParamName);
 	if ( sactv2->Params[i].Register)
 	{
 	 printf(" /*=R%d*/ ",sactv2->Params[i].Register);
 	 regs[sactv2->Params[i].Register] = newVar(sactv2->Params[i].ParamName);
+	 m++;					// do not count 'void' etc
 	}
 	if( sactv2->NumParams > i+1 ) puts(",");
      }
      puts(") {" NL);
+     if (r+m < sactv2->RegisterCount)
+     {
+       INDENT
+       puts("  var ");
+     }
+     for(k=r;r<sactv2->RegisterCount;r++)
+     {
+       if (!regs[r])
+       {
+        char *t=malloc(5); /* Rddd */
+  	sprintf(t,"R%d", r );
+  	puts (t);
+  	if (k++ < sactv2->RegisterCount- m -1)
+  	 puts(", ");
+  	else
+  	 puts(";" NL);
+	regs[r]=newVar(t);
+       }
+     }
      decompileActions(sactv2->numActions, sactv2->Actions,gIndent+1);
+     for(j=1;j<sactv2->RegisterCount;j++) regs[j]=myregs[j];
     }
     else
     {
