@@ -109,7 +109,7 @@ static int strmaxsize=0;
 static char *dcstr=NULL;
 static char *dcptr=NULL;
 
-#define DCSTRSIZE 409600
+#define DCSTRSIZE 40960
 #define PARAM_STRSIZE 512
 void
 dcinit()
@@ -1943,16 +1943,14 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
     return 1;
 }
 
+
+
 int
 decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 {
-    int i;
-    int r;
-    int j;
-    int k;
-    int m;
+    int i,j,k,m,r;
     struct SWF_ACTIONPUSHPARAM *myregs[ 256 ];
-    
+
     OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
     struct SWF_ACTIONDEFINEFUNCTION2 *sactv2 = (struct SWF_ACTIONDEFINEFUNCTION2*)sact;
     struct strbufinfo origbuf;
@@ -1984,6 +1982,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 
      puts(sactv2->FunctionName);
      puts("(");
+     
      for(i=0,m=0;i<sactv2->NumParams;i++) 
      {
 	puts(sactv2->Params[i].ParamName);
@@ -2027,7 +2026,34 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	if( sact->NumParams > i+1 ) puts(",");
      }
      puts(") {" NL);
+     k=0;
+     if (sact->Actions[0].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH)
+     {
+      struct SWF_ACTIONPUSH *sactPush=(struct SWF_ACTIONPUSH *)sact->Actions;
+      for(i=0;i<sactPush->NumParam;i++)
+      {
+       if ((&(sactPush->Params[i]))->Type==4) k++;	/* REGISTER */
+      }
+      if (k)
+      {
+       INDENT
+       puts("  var ");
+       for(i=1;i<=k;i++)
+       {
+	char *t=malloc(5); /* Rddd */
+	sprintf(t,"R%d", i );
+	puts (t);
+	if (i < k)
+	 puts(", ");
+	else
+	 puts(";" NL);
+	regs[i]=newVar(t);
+       }
+      }
+     }
+     for(j=1;j<=k;j++) myregs[j]=regs[j];
      decompileActions(sact->numActions, sact->Actions,gIndent+1);
+     for(j=1;j<=k;j++) regs[j]=myregs[j];
     }
     INDENT
     if (isStoreOp(n+1, actions,maxn) 
