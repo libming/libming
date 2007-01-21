@@ -327,6 +327,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
     case 0x41:			/* Clipped Bitmap Fill */
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
     case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
+      sprintf (gname, "%s_g%d", parentname, i);		/* <-- ad hoc bugfix: akleine, 2007 */
       printf (" BitmapID: %d\n", fillstyle->BitmapId);
       sprintf (fname, "%s_f%d", parentname, i);
       printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
