@@ -328,15 +328,21 @@ void
 SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 {
 	switch( SWFBlock_getType(block))
-	{	case SWF_DEFINESPRITE:
+	{
+		case SWF_DEFINESHAPE:
+		case SWF_DEFINESHAPE2:
+		case SWF_DEFINESHAPE3:
+			/*SWF_warn("Exporting a shape character is not ensured to work");*/
+		case SWF_DEFINESPRITE:
 		case SWF_DEFINEFONT2:
 			movie->exports = (struct SWFExport_s*)realloc(movie->exports,
-														 (movie->nExports+1) * sizeof(struct SWFExport_s));
-
+					(movie->nExports+1) * sizeof(struct SWFExport_s));
 			movie->exports[movie->nExports].block = block;
 			movie->exports[movie->nExports].name = strdup(name);
 			++movie->nExports;
+			break;
 		default:
+			SWF_error("Exporting a character of type %d is not supported", SWFBlock_getType(block));
 			break;
 	}
 }
