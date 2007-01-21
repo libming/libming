@@ -798,7 +798,7 @@ int precedence(int op1,int op2)
 	SWFACTION_BITWISEOR,
 	SWFACTION_BITWISEXOR,
 	SWFACTION_BITWISEAND,
-
+	SWFACTION_STRICTEQUALS,
 	SWFACTION_EQUALS2,
 	SWFACTION_EQUAL,
 
@@ -981,6 +981,25 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	       push(newVar_N("(",getString(left),"==",getString(right),0,")"));
 	      break;
 
+      case SWFACTION_STRINGCOMPARE:
+	      puts("STRINGCOMPARE");
+	      break;
+      case SWFACTION_STRICTEQUALS:
+	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
+	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) {
+      	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"!==",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"!==",getString(right),0,")"));
+	        return 1;							/* due negation op */
+	      } else {
+      	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
+	       push(newVar3(getString(left),"===",getString(right)));
+	      else
+	       push(newVar_N("(",getString(left),"===",getString(right),0,")"));
+	      break;
+	      }
+
       default:
 	printf("Unhandled Arithmetic/Logic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
     }
@@ -1094,34 +1113,9 @@ stackVal(int n, SWF_ACTION *actions)
     }
 }
 
-
-
-/* changed stuff moved to decompileArithmeticOp() / ak november 2006 */
 int
-decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
+decompileLogicalNot(int n, SWF_ACTION *actions,int maxn)
 {
-    struct SWF_ACTIONPUSHPARAM *left, *right;
-
-    switch(actions[n].SWF_ACTIONRECORD.ActionCode)
-    {
-      case SWFACTION_STRINGCOMPARE:
-	      puts("STRINGCOMPARE");
-	      break;
-      case SWFACTION_STRICTEQUALS:
-	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) {
-	      	right=pop();
-	      	left=pop();
-		push(newVar3(getString(left),"!==",getString(right)));
-	        return 1;
-	      } else {
-	        right=pop();
-	        left=pop();
-		push(newVar3(getString(left),"===",getString(right)));
-	        return 0;
-	      }
-
-      case SWFACTION_LOGICALNOT:
 #ifdef STATEMENT_CLASS
 	      if( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE &&
 	          actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
@@ -1130,17 +1124,9 @@ decompileLogicalOp(int n, SWF_ACTION *actions,int maxn)
 		      return 1;
 	      }
 #endif
-	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ) {
-		      return 0;
-	      }
-	      push(newVar2("!",getString(pop())));
-	      return 0;
-
-      default:
-	printf("Unhandled Logic OP %x\n",actions[n].SWF_ACTIONRECORD.ActionCode);
-        return 0;
-    }
-        return 1;
+  if( actions[n+1].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF )
+   push(newVar2("!",getString(pop())));
+  return 0;
 }
 
 void
@@ -1261,14 +1247,13 @@ int
 decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 {
     int is_postop;
-    struct SWF_ACTIONPUSHPARAM *var;
+    struct SWF_ACTIONPUSHPARAM *var=pop();
     char *dblop=is_incr ? "++":"--";
 
     if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
       || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP 
       || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
     {
-    	var=pop();
 	is_postop=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)?1:0;
 	if (is_postop)
 	 var = newVar2(getString(var),dblop);
@@ -1300,7 +1285,6 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
 	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) )
 	{		// incr/decr object variables with side effects
-	 var=pop();
 	 is_postop= (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)?1:0;
 	 if (is_postop)
 	  var = newVar2(getString(var),dblop);
@@ -1316,14 +1300,27 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	  push(var);
 	  if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) push(var);
 	}
-	else		// fallback to old incr/decr code
-	{		// FIXME: this is bad designed for handling side effect code
-	 INDENT		//        like post-incrementing a function argument etc.
-	 var=pop();
-	 decompilePUSHPARAM(var,0);
-	 puts(dblop);
-	 puts(";" NL);
-	 push(var);
+	else
+	{
+	 if(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER &&
+	    regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]->Type==10)
+	 {
+	  var = newVar2(dblop,getString(var));
+	  if (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	   var->Type=11;	// later print inc/dec
+	  else
+	   var->Type=12;	// later be quiet in ..STOREREGISTER()
+	  push(var);
+	 }
+	 else		// fallback to old incr/decr code
+	 {		// FIXME: this is bad designed for handling side effect code
+	  INDENT	//        like post-incrementing a function argument etc.
+	  decompilePUSHPARAM(var,0);
+	  puts(dblop);
+	  puts(";" NL);
+	  push(var);
+	 }
 	}
     }
     return 0;
@@ -1343,12 +1340,20 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
     {
      if ( regs[sact->Register]->Type==10)		// V7: a named function parameter in register
      {							// V7: a local var in register
+      if (data->Type==12)
+       ;						// do nothing
+      else
+      {
       char *l=getName(regs[sact->Register]);
       char *r=getName(data);
       if (strcmp(l,r))
       {
        INDENT
-       printf("%s = %s;" NL,l,r); 
+       if (data->Type==11)
+        printf("%s;" NL,r);
+       else
+        printf("%s = %s;" NL,l,r); 
+      }
       }
      }
     }
@@ -2448,6 +2453,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileRETURN(n, actions, maxn);
 	return 0;
 
+      case SWFACTION_LOGICALNOT:
+        return decompileLogicalNot(n, actions, maxn);
+
       case SWFACTION_IF:
         return decompileIF(n, actions, maxn);
 
@@ -2497,6 +2505,8 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_GREATER:
       case SWFACTION_LESSTHAN:
       case SWFACTION_STRINGEQ:
+      case SWFACTION_STRINGCOMPARE:
+      case SWFACTION_STRICTEQUALS:
         return decompileArithmeticOp(n, actions, maxn);
 
       case SWFACTION_POP:
@@ -2566,12 +2576,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_DUPLICATECLIP:
 	return decompileDUPLICATECLIP(n, actions, maxn);
-
-      case SWFACTION_STRINGCOMPARE:
-      case SWFACTION_STRICTEQUALS:
-
-      case SWFACTION_LOGICALNOT:
-        return decompileLogicalOp(n, actions, maxn);
 
       case SWFACTION_SETTARGET:
         return decompileSETTARGET(n, actions, maxn,0);
