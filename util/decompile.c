@@ -1341,19 +1341,19 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
      if ( regs[sact->Register]->Type==10)		// V7: a named function parameter in register
      {							// V7: a local var in register
       if (data->Type==12)
-       ;						// do nothing
+       data->Type=10;					// do nothing, but only once
       else
       {
-      char *l=getName(regs[sact->Register]);
-      char *r=getName(data);
-      if (strcmp(l,r))
-      {
-       INDENT
-       if (data->Type==11)
-        printf("%s;" NL,r);
-       else
-        printf("%s = %s;" NL,l,r); 
-      }
+       char *l=getName(regs[sact->Register]);
+       char *r=getName(data);
+       if (strcmp(l,r))
+       {
+	INDENT
+	if (data->Type==11)
+	 printf("%s;" NL,r);
+	else
+	 printf("%s = %s;" NL,l,r); 
+       }
       }
      }
     }
@@ -1437,7 +1437,10 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
  printf("*SETMember* varName %s (type=%d)  objName=%s (type=%d)\n",getName(var),var->Type, getName(obj),obj->Type);
 #endif
     if (obj->Type == 12)				/* do nothing: inline inc/dec using side effect */
+    {
+     obj->Type = 10;					/* ...but only once */
      return 0;
+    }
     INDENT    
     if (obj->Type == 11)				/* simply output variable and inc/dec op */
     {
@@ -1483,7 +1486,9 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
     INDENT
     val = pop();
     var = pop();
-
+#ifdef DEBUG
+ printf("*SETVariable* varName %s (type=%d)  valName=%s (type=%d)\n",getName(var),var->Type, getName(val),val->Type);
+#endif
     if (val->Type!=12 && islocalvar)
     {
      puts("var ");
@@ -1512,6 +1517,7 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
 		puts(";" NL);
 		break;
      case 12:	/* do nothing: inline increment/decrement (using side effect only) */
+		val->Type=10;     		// but print next time  e.g. in y=++x;
      		break;
     }
     return 0;
