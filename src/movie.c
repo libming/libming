@@ -148,7 +148,14 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 SWFMovie
 newSWFMovieWithVersion(int version /* Flash version */)
 {
-	SWFMovie movie = (SWFMovie) malloc(sizeof(struct SWFMovie_s));
+	SWFMovie movie;
+
+	if ( version != SWF_versionNum )
+	{
+		Ming_useSWFVersion(version);
+	}
+
+	movie = (SWFMovie) malloc(sizeof(struct SWFMovie_s));
 
 	movie->version = version;
 	movie->blockList = newSWFBlockList();
