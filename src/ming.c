@@ -127,8 +127,20 @@ SWFMsgFunc Ming_setErrorFunction(SWFMsgFunc error)
  */
 void Ming_useSWFVersion(int version /* Flash version */)
 {
+	static int called=0;
+
 	if(version < 4 || version > 8)
 		SWF_error("Only SWF versions 4 to 8 are currently supported!\n");
+
+	if ( called )
+	{
+		SWF_warn("WARNING: changing SWF target version during a run\n"
+			 "         might result in malformed SWF output.\n"
+			 "         You don't have to worry if you're careful about\n"
+			 "         not mixing different version blocks in a movie.\n");
+	}
+
+	called=1;
 
 	SWF_versionNum = version;
 
