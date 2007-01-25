@@ -150,10 +150,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 {
 	SWFMovie movie;
 
-	if ( version != SWF_versionNum )
-	{
-		Ming_useSWFVersion(version);
-	}
+	Ming_useSWFVersion(version);
 
 	movie = (SWFMovie) malloc(sizeof(struct SWFMovie_s));
 

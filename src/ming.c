@@ -132,7 +132,7 @@ void Ming_useSWFVersion(int version /* Flash version */)
 	if(version < 4 || version > 8)
 		SWF_error("Only SWF versions 4 to 8 are currently supported!\n");
 
-	if ( called )
+	if ( called && version != SWF_versionNum )
 	{
 		SWF_warn("WARNING: changing SWF target version during a run\n"
 			 "         might result in malformed SWF output.\n"
