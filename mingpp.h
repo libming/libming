@@ -47,6 +47,7 @@ extern "C"
   #define SWFSoundStream  c_SWFSoundStream
   #define SWFInput        c_SWFInput
   #define SWFSound        c_SWFSound
+  #define SWFVideoStream  c_SWFVideoStream
 
 // begin minguts 2004/08/31 ((((
   #define SWFFontCharacter c_SWFFontCharacter
@@ -78,6 +79,7 @@ extern "C"
   #undef SWFFontCharacter
   #undef SWFPrebuiltClip 
 // )))) end minguts 2004/08/31
+  #undef SWFVideoStream
 }
 
 #define SWF_DECLAREONLY(classname) \
@@ -968,6 +970,38 @@ class SWFButton : public SWFCharacter
     { SWFButton_addSound(this->button, sound->sound, flags); }
 
   SWF_DECLAREONLY(SWFButton);
+};
+
+
+/* SWFVideoStream */
+class SWFVideoStream : public SWFCharacter
+{
+ public:
+  c_SWFVideoStream stream;
+
+  SWFVideoStream()
+    { this->stream = newSWFVideoStream(); }
+
+  SWFVideoStream(const char *path)
+    { this->stream = newSWFVideoStream_fromFile(fopen(path, "rb")); }
+
+  SWFVideoStream(FILE *file)
+    { this->stream = newSWFVideoStream_fromFile(file); }
+
+  virtual ~SWFVideoStream()
+    { destroySWFVideoStream(this->stream); }
+
+  void setDimension(int width, int height)
+    { SWFVideoStream_setDimension(this->stream, width, height); }
+
+  int getNumFrames()
+    { return SWFVideoStream_getNumFrames(this->stream); }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->stream; }
+
+  SWF_DECLAREONLY(SWFVideoStream);
+
 };
 
 #endif /* SWF_MINGPP_H_INCLUDED */
