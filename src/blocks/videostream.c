@@ -399,7 +399,7 @@ int completeSWFVideoStream(SWFBlock block) {
 }
 
 
-void destroySWFVideoStream(SWFBlock stream) {
+void destroySWFVideoStream(SWFVideoStream stream) {
 	destroySWFCharacter((SWFCharacter) stream);
 }
 
