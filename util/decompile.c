@@ -25,6 +25,7 @@
 //  I have uncommented some buggy class recognition stuff in decompileIF()
 //  to make work simple code lines like:  "if(!a) trace(a);"   - ak, November 2006
 
+//  To do: add some free()-calls for allocated blocks
 
 #include <assert.h>
 
@@ -1961,6 +1962,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 {
     int i,j,k,m,r;
     struct SWF_ACTIONPUSHPARAM *myregs[ 256 ];
+    struct _stack *StackSave;    
 
     OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
     struct SWF_ACTIONDEFINEFUNCTION2 *sactv2 = (struct SWF_ACTIONDEFINEFUNCTION2*)sact;
@@ -2025,7 +2027,9 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	regs[r]=newVar(t);
        }
      }
+     StackSave=Stack;
      decompileActions(sactv2->numActions, sactv2->Actions,gIndent+1);
+     Stack=StackSave;
      for(j=1;j<sactv2->RegisterCount;j++) regs[j]=myregs[j];
     }
     else
@@ -2063,7 +2067,9 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
       }
      }
      for(j=1;j<=k;j++) myregs[j]=regs[j];
+     StackSave=Stack;
      decompileActions(sact->numActions, sact->Actions,gIndent+1);
+     Stack=StackSave;
      for(j=1;j<=k;j++) regs[j]=myregs[j];
     }
     INDENT
@@ -2613,13 +2619,19 @@ decompileActions(int n, SWF_ACTION *actions, int indent)
 char *
 decompile5Action(int n, SWF_ACTION *actions,int indent)
 {
-
+int j;
   if( n == 1 )
 	  return NULL;
 
   pool = NULL;
 
   dcinit();
+
+     for(j=0;j<256;j++) regs[j]=0;
+     regs[1] = newVar("R1");
+     regs[2] = newVar("R2");
+     regs[3] = newVar("R3");
+     regs[4] = newVar("R4");
 
   decompileActions(n, actions, indent);
 #ifdef DEBUGSTACK
