@@ -6,5 +6,6 @@ SUBDIRS = \
 	new		\
 	NumFrames	\
 	Protect		\
-	Rate 
+	Rate 		\
+	nextFrame
 
