@@ -160,7 +160,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	/* Default movie dimension is hard-coded to 320x240 pixels */
 	movie->bounds = newSWFRect(0, 320*20, 0, 240*20);
 	movie->rate = 12.0;
-	movie->totalFrames = 1;
+	movie->totalFrames = 0;
 	movie->nFrames = 0;
 
 	movie->nExports = 0;
@@ -565,6 +565,13 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 
 	if ( movie->nExports > 0 )
 		SWFMovie_writeExports(movie);
+
+	/* Add a terminating SHOWFRAME tag if not already there */
+	SWFBlock lastBlock = SWFBlockList_getLastBlockType(movie->blockList);
+	if ( ! lastBlock || SWFBlock_getType(lastBlock) != SWF_SHOWFRAME )
+	{
+		SWFMovie_nextFrame(movie);
+	}
 
 	while ( movie->nFrames < movie->totalFrames )
 		SWFMovie_nextFrame(movie);
