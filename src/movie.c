@@ -530,7 +530,6 @@ SWFMovie_nextFrame(SWFMovie movie)
 	SWFMovie_addBlock(movie, newSWFShowFrameBlock());
 }
 
-
 /*
  * Add a label Frame
  * This function adds a labelFrame to the movie.
@@ -552,62 +551,6 @@ SWFMovie_namedAnchor(SWFMovie movie /* Movie to which the anchor is added */,
 {
 	SWFMovie_addBlock(movie, (SWFBlock)newSWFNamedAnchorBlock(label));
 }
-
-#if 0
-/* old outputfunction without possible compression */
-int
-SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
-{
-        int length;
-        SWFOutput header;
-        SWFBlock backgroundBlock;
-
-        if ( movie->nExports > 0 )
-                SWFMovie_writeExports(movie);
-
-        while ( movie->nFrames < movie->totalFrames )
-                SWFMovie_nextFrame(movie);
-
-        SWFMovie_addBlock(movie, newSWFEndBlock());
-
-        // add five for the setbackground block..
-        length = SWFBlockList_completeBlocks(movie->blockList) + 5;
-
-	
-	//hack
-        SWFDisplayList_rewindSoundStream(movie->displayList);
-
-        header = newSizedSWFOutput(20);
-
-        // figure size, write header
-
-        SWFOutput_writeRect(header, movie->bounds);
-        SWFOutput_writeUInt16(header, (int)floor(movie->rate*256));
-        SWFOutput_writeUInt16(header, movie->nFrames);
-
-        SWFOutput_byteAlign(header);
-        length += 8 + SWFOutput_getLength(header);
-
-        method('F', data);
-        method('W', data);
-        method('S', data);
-        method(movie->version, data);
-        methodWriteUInt32(length, method, data);
-        SWFOutput_writeToMethod(header, method, data);
-
-        destroySWFOutput(header);
-
-        backgroundBlock =
-                (SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
-
-        writeSWFBlockToMethod(backgroundBlock, method, data);
-        SWFBlockList_writeBlocksToMethod(movie->blockList, method, data);
-
-        destroySWFBlock(backgroundBlock);
-
-        return length;
-}
-#endif
 
 SWFOutput
 SWFMovie_toOutput(SWFMovie movie, int level)
