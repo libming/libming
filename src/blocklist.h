@@ -39,6 +39,8 @@ void destroySWFBlockList(SWFBlockList list);
 
 void SWFBlockList_addBlock(SWFBlockList blocklist, SWFBlock block);
 
+SWFBlock SWFBlockList_getLastBlock(SWFBlockList blocklist);
+
 void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite);
 
 int SWFBlockList_completeBlocks(SWFBlockList list);
