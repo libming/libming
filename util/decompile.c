@@ -39,11 +39,6 @@
 #include "action.h"
 #include "swftypes.h"
 
-#define NL "\\\n"
-// Note: if you don't want see trailing backslashes
-// later remove it using the sed tool on command line, e.g.:
-//   sed -i s/\\\\$// file
-
 #ifndef HAVE_VASPRINTF
 /* Workaround for the lack of vasprintf()
  * As found on: http://unixpapa.com/incnote/stdio.html
@@ -87,6 +82,7 @@ static char **pool;
 struct SWF_ACTIONPUSHPARAM *regs[256];
 
 static char *getName(struct SWF_ACTIONPUSHPARAM *act);
+
 
 static void
 dumpRegs()
@@ -209,6 +205,34 @@ void setOrigString(struct strbufinfo old)
 #endif
 
 #define INDENT { int ii=gIndent; while(--ii>=0) { putchar(' '); putchar(' '); } }
+
+/* String used for terminating lines (see println) */
+static const char* newlinestring = "\\\n";
+
+/* Set the newline character. By default it is an escaped NL. */
+void
+setNewLineString(const char* ch)
+{
+	newlinestring = ch;
+}
+
+/* Print a line with a terminating newline, which can be set by
+ * setNewLineString()
+ */
+static void
+println(const char* fmt, ...)
+{
+	char *tmp;
+
+	va_list ap;
+	va_start (ap, fmt);
+	vasprintf (&tmp, fmt, ap);
+
+	dcprintf("%s%s", tmp, newlinestring);
+
+	free(tmp);
+}
+
 
 /* End Package */
 
@@ -642,7 +666,7 @@ decompileGOTOLABEL (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONGOTOLABEL);
 
   INDENT
-  printf("gotoLabel(%s);" NL, sact->FrameLabel);
+  println("gotoLabel(%s);", sact->FrameLabel);
 }
 
 
@@ -652,7 +676,7 @@ decompileWAITFORFRAME (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONWAITFORFRAME);
 
   INDENT
-  printf("WaitForFrame(%d,%d);" NL, sact->Frame,sact->SkipCount);
+  println("WaitForFrame(%d,%d);", sact->Frame,sact->SkipCount);
 }
 
 
@@ -662,7 +686,7 @@ decompileGETURL (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONGETURL);
 
   INDENT
-  printf("getUrl(\"%s\",%s);" NL, sact->UrlString, sact->TargetString);
+  println("getUrl(\"%s\",%s);", sact->UrlString, sact->TargetString);
 }
 int
 decompileGETURL2 (SWF_ACTION *act)
@@ -679,7 +703,7 @@ decompileGETURL2 (SWF_ACTION *act)
     puts(getString(pop()));
     puts(",");
     puts(getString(a));
-    puts(");" NL);
+    println(");");
     return 0;
 }
 
@@ -767,10 +791,10 @@ decompileGOTOFRAME (SWF_ACTION *act,int is_type2)
   {
    puts("gotoFrame(");
    decompilePUSHPARAM(pop(),0);
-   puts(");" NL);
+   println(");");
   }
   else
-  printf("gotoFrame(%d);" NL, sact->Frame);
+  println("gotoFrame(%d);", sact->Frame);
 }
 
 /*
@@ -1181,7 +1205,7 @@ decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
     puts(getProperty(getInt(idx)));
     printf(" = " );
     decompilePUSHPARAM(val,0);
-    puts(";" NL);
+    println(";");
 
     return 0;
 }
@@ -1212,7 +1236,7 @@ decompileTRACE(int n, SWF_ACTION *actions,int maxn)
     /* Could there be more than one push for this? */
     puts("trace(");
     decompilePUSHPARAM(pop(),1);
-    puts(");" NL);
+    println(");");
 
     return 0;
 }
@@ -1223,7 +1247,7 @@ decompileCALLFRAME(int n, SWF_ACTION *actions,int maxn)
     INDENT
     puts("callFrame(");
     decompilePUSHPARAM(pop(),1);
-    puts(");" NL);
+    println(");");
     return 0;
 }
 
@@ -1233,7 +1257,7 @@ decompileGETTIME(int n, SWF_ACTION *actions,int maxn)
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
      INDENT
-     puts("getTimer();" NL);
+     println("getTimer();");
      return 1;
     }
     else
@@ -1319,7 +1343,7 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	  INDENT	//        like post-incrementing a function argument etc.
 	  decompilePUSHPARAM(var,0);
 	  puts(dblop);
-	  puts(";" NL);
+	  println(";");
 	  push(var);
 	 }
 	}
@@ -1351,9 +1375,9 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
        {
 	INDENT
 	if (data->Type==11)
-	 printf("%s;" NL,r);
+	 println("%s;", r);
 	else
-	 printf("%s = %s;" NL,l,r); 
+	 println("%s = %s;",l,r); 
        }
       }
      }
@@ -1446,7 +1470,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     if (obj->Type == 11)				/* simply output variable and inc/dec op */
     {
      decompilePUSHPARAM(obj,0);
-     puts(";" NL);
+     println(";");
      return 0;
     }
 
@@ -1463,7 +1487,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
      decompilePUSHPARAM(val,1);
     else
      decompilePUSHPARAM(val,0);
-    puts(";" NL);
+    println(";");
 
     return 0;
 }
@@ -1506,16 +1530,16 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
      default:	puts(getName(var));
 		printf(" = " );
 		decompilePUSHPARAM(val,1);	// for certain types parameter 1 does not care
-		puts(";" NL);
+		println(";");
 		break;
      case 10:	puts(getName(var));		// Variable (NEVER as string)
 		printf(" = " );
 		decompilePUSHPARAM(val,0);
-		puts(";" NL);
+		println(";");
 		break;		
      case 11:	/* simply output variable and inc/dec op */
 		puts(getName(val));
-		puts(";" NL);
+		println(";");
 		break;
      case 12:	/* do nothing: inline increment/decrement (using side effect only) */
 		val->Type=10;     		// but print next time  e.g. in y=++x;
@@ -1586,24 +1610,24 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	puts("while(");
 	decompileActions(j-1, &actions[n+1+i], gIndent);
 	puts(getName(pop()));
-	puts("){         /* original FOR loop rewritten to WHILE */" NL);
+	println("){         /* original FOR loop rewritten to WHILE */");
 	decompileActions(sactif->numActions-1, sactif->Actions,gIndent+1);
 	decompileActions(i, &actions[n+1], gIndent+1);
 	INDENT
-	puts("};" NL);
+	println("};");
 	return i+j; 
       }
   if (sact->BranchOffset>0)
   {
    INDENT
-   puts("break;        /*------*/" NL);
+   println("break;        /*------*/" );
   }
   else
   {
    if (sact->BranchOffset<0)
    {
     INDENT
-    puts("continue;     /*------*/" NL);
+    println("continue;     /*------*/");
    }
   }
   /* error("Unhandled JUMP"); */
@@ -1616,7 +1640,7 @@ decompileRETURN(int n, SWF_ACTION *actions,int maxn)
     INDENT
     printf("return ");
     puts(getName(pop()));
-    puts(";" NL);
+    println(";");
 
     return 0;
 }
@@ -1633,7 +1657,7 @@ decompileDEFINELOCAL2(int n, SWF_ACTION *actions,int maxn)
     var = pop();
     puts("var ");
     puts(getName(var));
-    puts(";" NL);
+    println(";");
 
     return 0;
 }
@@ -1644,7 +1668,7 @@ decompileENUMERATE(int n, SWF_ACTION *actions,int maxn,int is_type2)
  int i=0;
  while (actions[n+i].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF && i<maxn && i<5)
    i++;
- printf("/* a for-var-in  loop should follow below: */" NL);
+ println("/* a for-var-in  loop should follow below: */" );
  return i-1;		// preserve some code for decompileIF()... 
 } 			// ... and let decompileIF() do all the dirty work ;-)
 
@@ -1669,10 +1693,10 @@ struct strbufinfo origbuf;
             INDENT
 	    puts("class ");
 	    decompilePUSHPARAM(newVar(getName(pop())),0);
-	    puts(" {" NL);
+	    println(" {" );
             decompileActions(sact->numActions, sact->Actions,gIndent+1);
             INDENT
-	    puts("}" NL);
+	    println("}");
 	    return 0;
     }
 
@@ -1682,10 +1706,10 @@ struct strbufinfo origbuf;
         (actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) ) {
 	    /* It's really a class definition */
             INDENT
-	    puts(" {" NL);
+	    println(" {");
             decompileActions(sact->numActions, sact->Actions,gIndent+1);
             INDENT
-	    puts("}" NL);
+	    println("}");
 	    return 0;
     }
 #endif
@@ -1699,7 +1723,7 @@ struct strbufinfo origbuf;
            sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset) < actions[n].SWF_ACTIONRECORD.Offset) &&
 	isLogicalOp(sact->numActions-2, sact->Actions, maxn) ) {
 	    INDENT
-	    puts("do {" NL);
+	    println("do {");
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	    INDENT
 	    puts("while( ");
@@ -1713,12 +1737,12 @@ struct strbufinfo origbuf;
     if( actions[n].SWF_ACTIONJUMP.BranchOffset < 0 ) 
     {
 	INDENT
-	puts("do {                  /* 2nd type */ " NL);
+	println("do {                  /* 2nd type */ ");
 	decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	INDENT
 	puts("} while( ");
 	puts(getName(pop()));
-	puts(");" NL);
+	println(");");
 	return 0;
     }
 
@@ -1742,7 +1766,7 @@ if(0)	    dumpRegs();
 	       it is an 'if' later followed by last action 'continue' */
 	    puts("if ( ");
 	    puts(getName(pop()));
-	    puts(" ) {" NL);
+	    println(" ) {");
 	    decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	}
 	else
@@ -1762,19 +1786,19 @@ if(0)	    dumpRegs();
 	    decompileActions( 2 , sact->Actions,-1);   /* -1 == the ENUM workaround */
 	    puts(" in ");
 	    puts(getName(var));
-	    puts(" ) {" NL);
+	    println(" ) {");
             decompileActions(sact->numActions-1-2, &sact->Actions[2],gIndent+1);
          }
          else	/* while(){}  as usual */
 	 {
 	    puts("while( ");
 	    puts(getName(pop()));
-	    puts(" ) {" NL);
+	    println(" ) {");
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
          }
 	}
 	INDENT
-	puts("}" NL);
+	println("}");
 	return 0;
     }
 #if 0
@@ -1802,7 +1826,7 @@ if(0)	    dumpRegs();
 		  else_action_cnt++)
 		{
 		 #if SOME_IF_DEBUG
-		 printf("/* ELSE OP 0x%x at %d*/" NL,actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
+		 println("/* ELSE OP 0x%x at %d*/",actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
 		 actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset)
 		 #endif
 	 	 ;
@@ -1817,7 +1841,7 @@ if(0)	    dumpRegs();
 	   if (sbi==1 && sbe==1)
 	   {
 	     #if SOME_IF_DEBUG
-	       puts("/* ****Found ternary ternary operation  \"cond ? a : b\"    **** */" NL);
+	       println("/* ****Found ternary ternary operation  \"cond ? a : b\"    **** */");
 	       printf("If   Actions=%d\n",sact->numActions-1);
 	       printf("Else Actions=%d\n",else_action_cnt);
 	     #endif
@@ -1852,7 +1876,8 @@ if(0)	    dumpRegs();
 	   if (is_logor || is_logand)    
 	   {
 	    #if SOME_IF_DEBUG
-	      printf(NL "/* detected LOGICAL %s: %d actions*/" NL, is_logor ? "OR":"AND",sact->numActions);
+	      println("");
+	      println("/* detected LOGICAL %s: %d actions*/", is_logor ? "OR":"AND",sact->numActions);
 	    #endif
 	    #if USE_LIB
      	      origbuf=setTempString();	/* switch to a temporary string buffer */
@@ -1875,7 +1900,7 @@ if(0)	    dumpRegs();
 	   INDENT
 	   puts("if( ");
 	   puts(getName(pop()));	/* the condition itself */
-	   puts(" ) {" NL);
+	   println(" ) {");
            if ( has_else_or_break )
            {
 	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
@@ -1904,13 +1929,13 @@ if(0)	    dumpRegs();
 	      {
                decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
                INDENT
-	       puts("} else {" NL);
+	       println("} else {");
 	      }	      
               decompileActions(else_action_cnt  , &actions[n+1],gIndent+1);
 	      if  (!has_lognot)		/* the missing if-part just NOW */
 	      {
 		INDENT
-		puts ("} else {" NL);
+		println ("} else {" );
 		decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
 	      }
 	     }
@@ -1921,7 +1946,7 @@ if(0)	    dumpRegs();
               decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	    }
 	    INDENT
-	    puts("}" NL);
+	    println("}");
 	 }
 	return i;
     }
@@ -1947,10 +1972,10 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
     puts("with(");
     decompilePUSHPARAM(pop(),0);
     puts(")");
-    puts(" {" NL);
+    println(" {" );
     decompileActions(sact->numActions, sact->Actions,gIndent+1);
     INDENT
-    puts("}" NL);
+    println("}" );
 
     return 1;
 }
@@ -1969,7 +1994,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
     struct strbufinfo origbuf;
 
     #ifdef DEBUG
-    printf("/* function followed by OP %x */" NL, actions[n+1].SWF_ACTIONRECORD.ActionCode);
+    println("/* function followed by OP %x */", actions[n+1].SWF_ACTIONRECORD.ActionCode);
     #endif
     #if USE_LIB
     if (isStoreOp(n+1, actions,maxn) 
@@ -2007,7 +2032,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	}
 	if( sactv2->NumParams > i+1 ) puts(",");
      }
-     puts(") {" NL);
+     println(") {" );
      if (r+m < sactv2->RegisterCount)
      {
        INDENT
@@ -2023,7 +2048,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
   	if (k++ < sactv2->RegisterCount- m -1)
   	 puts(", ");
   	else
-  	 puts(";" NL);
+  	 println(";" );
 	regs[r]=newVar(t);
        }
      }
@@ -2040,7 +2065,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	puts(sact->Params[i]);
 	if( sact->NumParams > i+1 ) puts(",");
      }
-     puts(") {" NL);
+     println(") {" );
      k=0;
      if (sact->Actions[0].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH)
      {
@@ -2061,7 +2086,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
 	if (i < k)
 	 puts(", ");
 	else
-	 puts(";" NL);
+	 println(";" );
 	regs[i]=newVar(t);
        }
       }
@@ -2086,7 +2111,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
      #endif
     }
     else
-     puts("}" NL);
+     println("}" );
     return 0;
 }
 
@@ -2100,7 +2125,7 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     obj=pop();
     nparam=pop();
 #if 0
-    printf("/* %ld params */"  NL,nparam->p.Integer);
+    println("/* %ld params */"  ,nparam->p.Integer);
 #endif
 #if 0
     INDENT
@@ -2112,7 +2137,7 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
         puts(getString(pop()));
 	if( nparam->p.Integer > i+1 ) puts(",");
     }
-    puts(");" NL);
+    println(");" );
     push(newVar("funcret"));
 
 #else
@@ -2122,7 +2147,7 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
      /* call method and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";" NL);
+     println(";" );
      return 1;
     }
 #endif
@@ -2151,7 +2176,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     	puts(getString(pop()));
 	if( nparam->p.Integer > i+1 ) puts(",");
     }
-    puts(");" NL);
+    println(");" );
 
     return 1;
 #else
@@ -2161,7 +2186,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";" NL);
+     println(";" );
      return 1;
     }
     return 0;
@@ -2173,7 +2198,7 @@ decompile_Null_ArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *
 {
     INDENT
     puts(functionname);		// only used for cases w/o return value
-    puts("();" NL);
+    println("();" );
     return 0;
 }
 
@@ -2186,7 +2211,7 @@ decompileSingleArgBuiltInFunctionCall(int n, SWF_ACTION *actions,int maxn,char *
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";" NL);
+     println(";" );
      return 1;
     }
     return 0;
@@ -2202,7 +2227,7 @@ decompileSTARTDRAG(int n, SWF_ACTION *actions,int maxn)
     decompilePUSHPARAM(pop(),0);
     puts(",");
     decompilePUSHPARAM(pop(),0);	//
-    puts(");" NL);
+    println(");" );
     return 0;
 }
 
@@ -2217,7 +2242,7 @@ decompileSUBSTRING(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";" NL);
+     println(";" );
      return 1;
     }
     return 0;
@@ -2232,7 +2257,7 @@ decompileSTRINGCONCAT(int n, SWF_ACTION *actions,int maxn)
      /* call function and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";" NL);
+     println(";" );
      return 1;
     }
     return 0;
@@ -2244,7 +2269,7 @@ decompileREMOVECLIP(int n, SWF_ACTION *actions,int maxn)
     INDENT
     puts("removeMovieClip(");
     puts(getName(pop()));
-    puts(");" NL);
+    println(");" );
     return 0;
 }
 
@@ -2263,7 +2288,7 @@ decompileDUPLICATECLIP(int n, SWF_ACTION *actions,int maxn)
     puts(getString(b));
     puts(",");
     puts(getString(a));
-    puts(");" NL);
+    println(");" );
     return 0;
 }
 
@@ -2286,7 +2311,7 @@ decompileEXTENDS(int n, SWF_ACTION *actions,int maxn)
     puts(getName(pop()));
     printf(" extends ");
     puts(getName(baseclass));
-    printf(" {" NL);
+    println(" {" );
 
     return 0;
 }
@@ -2303,7 +2328,7 @@ decompileDELETE(int n, SWF_ACTION *actions,int maxn,int is_type2)
      /* call delete() with its args and throw away any result */
      INDENT
      puts(getName(pop()));
-     puts(";" NL);
+     println(";" );
      return 1;
     }
     return 0;
@@ -2318,7 +2343,7 @@ decompileSETTARGET(int n, SWF_ACTION *actions,int maxn,int is_type2)
     if (*name)
     {
      INDENT
-     printf("tellTarget('%s') {" NL,name);
+     println("tellTarget('%s') {" ,name);
      while(action_cnt+n<maxn)
      {
 	if (actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET
@@ -2329,7 +2354,7 @@ decompileSETTARGET(int n, SWF_ACTION *actions,int maxn,int is_type2)
      }
      decompileActions(action_cnt,&actions[n+1],gIndent+1);
      INDENT
-     puts("}" NL);
+     println("}" );
     }
     return action_cnt;
 }
