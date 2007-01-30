@@ -156,6 +156,19 @@ static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
 
 /* Handle language syntax differnces with these function */
 
+static void
+init_script()
+{
+	static int initialized = 0;
+	if ( initialized ) return;
+#ifdef SWFPHP
+	setNewLineString("\n");
+#endif
+	initialized = 1;
+
+}
+
+
 char *
 methodcall (char *varname, char *method)
 {
@@ -1260,6 +1273,8 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
 
   if (type < 0)
     return;
+
+  init_script();
 
   for (i = 0; i < numOutputs; i++)
     {
