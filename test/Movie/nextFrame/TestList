@@ -1,1 +1,2 @@
 test01:swf: A two frames movie with missing explicit final call to SWFMovie_nextFrame (ming is expected to syntetize one)
+test02:swf: A two frames movie with explicit final call to SWFMovie_nextFrame 
