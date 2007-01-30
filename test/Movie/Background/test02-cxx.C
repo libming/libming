@@ -2,8 +2,7 @@
 
 
 main(){
-class SWFMovie *m;
-m = new SWFMovie();
+SWFMovie* m = new SWFMovie();
 
 
 // SWF_SETBACKGROUNDCOLOR 
