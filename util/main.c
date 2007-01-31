@@ -271,8 +271,6 @@ main (int argc, char *argv[])
 		length = readUInt32 (f);
 	}
 
-      if (type == 0 || fileOffset >= m.size)
-	break;
 
       /*
        printf ("Found Block: %s, %i bytes\n", blockName (type), length);
@@ -296,8 +294,11 @@ main (int argc, char *argv[])
        } else {
 	       error("Error parsing block (unknown block type: %d)\n", type);
        }
-
-	fseek(f, nextFrame, SEEK_SET);
+       
+       if (type == 0 || fileOffset >= m.size)
+           break;
+	
+       fseek(f, nextFrame, SEEK_SET);
 
     }
 
