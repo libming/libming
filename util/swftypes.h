@@ -1118,7 +1118,14 @@ struct SWF_DEFINEVIDEO
 
 struct SWF_DEFINEVIDEOSTREAM
 {
-  int chid;
+  UI16 CharacterID;
+  UI16 NumFrames;
+  UI16 Width;
+  UI16 Height;
+  UI8 Reserved:5;
+  UI8 VideoFlagsDeblocking:2;
+  UI8 VideoFlagsSmoothing:1;
+  UI8 CodecID;
 };
 
 struct SWF_DOACTION
@@ -1318,7 +1325,9 @@ struct SWF_INITACTION
 
 struct SWF_VIDEOFRAME
 {
-  int chid;
+  UI16 StreamID;
+  UI16 FrameNum;
+  UI8 *VideoData;
 };
 
 struct SWF_REFLEX

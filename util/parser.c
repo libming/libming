@@ -1710,8 +1710,16 @@ SWF_Parserstruct *
 parseSWF_DEFINEVIDEOSTREAM (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEVIDEOSTREAM);
-
-  parserrec->chid = readUInt16 (f);
+  
+  parserrec->CharacterID = readUInt16 (f);
+  parserrec->NumFrames = readUInt16(f);
+  parserrec->Width = readUInt16(f);
+  parserrec->Height = readUInt16(f);
+  byteAlign ();
+  parserrec->Reserved = readBits (f, 5);
+  parserrec->VideoFlagsDeblocking = readBits (f, 2);
+  parserrec->VideoFlagsSmoothing = readBits(f, 1);
+  parserrec->CodecID = readUInt8(f);
 
   PAR_END;
 }
@@ -2149,10 +2157,11 @@ parseSWF_INITACTION (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_VIDEOFRAME (FILE * f, int length)
 {
+  int end = fileOffset + length;
   PAR_BEGIN (SWF_VIDEOFRAME);
-
-  parserrec->chid = readUInt16 (f);
-
+  parserrec->StreamID = readUInt16 (f);
+  parserrec->FrameNum = readUInt16 (f);
+  parserrec->VideoData = (UI8 *)readBytes(f, end - fileOffset);
   PAR_END;
 }
 

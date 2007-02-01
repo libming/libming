@@ -857,8 +857,13 @@ outputSWF_DEFINEVIDEO (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEVIDEOSTREAM);
-
+  OUT_BEGIN (SWF_DEFINEVIDEOSTREAM);
+  iprintf("  CharacterID: %d\n", sblock->CharacterID);
+  iprintf("  NumFrames: %d\n", sblock->NumFrames);
+  iprintf("  Width: %d; Height %d\n", sblock->Width, sblock->Height);
+  iprintf("  Flag deblocking: %x\n", sblock->VideoFlagsDeblocking);
+  iprintf("  Flag smoothing: %x\n", sblock->VideoFlagsSmoothing);
+  iprintf("  Codec ID: %d\n", sblock->CodecID);
 }
 
 void
@@ -1147,8 +1152,9 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 void
 outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_VIDEOFRAME);
-
+  OUT_BEGIN (SWF_VIDEOFRAME);
+  iprintf("  StreamID %i\n", sblock->StreamID);
+  iprintf("  FrameNum %i\n", sblock->FrameNum);
 }
 void
 outputSWF_REFLEX (SWF_Parserstruct * pblock)
