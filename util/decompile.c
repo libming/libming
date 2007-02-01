@@ -1905,11 +1905,15 @@ if(0)	    dumpRegs();
            {
 	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
 	               sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset;
+ 	      int lastopsize=actions[maxn-1].SWF_ACTIONRECORD.Length;
+	      if (actions[maxn-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
+		 lastopsize+=actions[maxn-1].SWF_ACTIONIF.BranchOffset  
+		 +3; /* +3 see parser.c: "Action + Length bytes not included in the length" */
  	      if (! (has_lognot
  	       && actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_EQUALS2 
  	       && actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH
  	       && actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
-	       && limit > actions[maxn-1].SWF_ACTIONRECORD.Offset+actions[maxn-1].SWF_ACTIONRECORD.Length
+	       && limit > actions[maxn-1].SWF_ACTIONRECORD.Offset+lastopsize
 	       )
 	      {
 	      /* the jump leads outside this limit, so it is a simple 'if'
@@ -2360,6 +2364,23 @@ decompileSETTARGET(int n, SWF_ACTION *actions,int maxn,int is_type2)
 }
 
 int
+decompileIMPLEMENTS(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *nparam;
+    int i;
+    INDENT;
+    puts(getName(pop()));
+    printf(" implements ");
+    nparam=pop();
+    for(i=0;i<nparam->p.Integer;i++) 
+    {
+     puts(getName(pop()));
+    }
+    println(" ;");
+    return 0;
+}
+
+int
 decompileAction(int n, SWF_ACTION *actions,int maxn)
 {
     if( n > maxn ) error("Action overflow!!");
@@ -2619,6 +2640,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_SETTARGET2:
         return decompileSETTARGET(n, actions, maxn,1);
+
+      case SWFACTION_IMPLEMENTSOP:
+	return decompileIMPLEMENTS(n, actions, maxn);
 
       default:
 	outputSWF_ACTION(n,&actions[n]);

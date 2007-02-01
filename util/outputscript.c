@@ -164,6 +164,9 @@ init_script()
 #ifdef SWFPHP
 	setNewLineString("\n");
 #endif
+#ifdef SWFPERL
+	setNewLineString("\n");
+#endif
 	initialized = 1;
 
 }
