@@ -49,3 +49,8 @@ Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
+Offset: 45 (0x002d)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

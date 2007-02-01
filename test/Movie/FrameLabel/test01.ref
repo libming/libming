@@ -22,3 +22,8 @@ Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
+Offset: 36 (0x0024)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
