@@ -21,9 +21,6 @@
 
 */
 
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,32 +31,24 @@
 #include "videostream.h"
 #include "libming.h"
 
-#define VIDEOTAG 0x09
-#define AUDIOTAG 0x08
+#include "flv.h"
 
 #define VIDEO_SMOOTHING 0x01 
 #define VIDEO_NO_SMOOTHING 0x0
-
-#define VIDEO_CODEC_H263 0x02
-#define VIDEO_CODEC_SCREEN 0x03
-
-#define FLV_FLAGS_AUDIO 0x04
-#define FLV_FLAGS_VIDEO 0x01
+#define VIDEOFRAME_BLOCK_SIZE 10
 
 struct SWFVideoStream_s
 {
 	struct SWFCharacter_s character;
 	
-	SWFInput input;	
-	
-	int version;
-	int flags;
-	unsigned long start;
+	FLVStream *flv;
+	FLVTag *lastTag;
+		
 	unsigned int numFrames;	
 	unsigned int frame;
 	int width;
 	int height;
-	unsigned short embeded;
+	unsigned short embedded;
 	unsigned char codecId;
 	unsigned char smoothingFlag;
 };
@@ -69,111 +58,68 @@ struct SWFVideoFrame_s
 	struct SWFBlock_s block;
 	
 	SWFVideoStream stream;
-
 	int frameNum;
-	int offset;
-	int length;
-	unsigned char codecId;
-	unsigned char frameType;
+
+	FLVTag tag;
 };
 
 
-struct FLVTag_s
-{
-	int tagType;
-	unsigned long dataSize;
-	unsigned long timeStamp;
-	
-};
 
 int SWFVideoStream_getFrameNumber(SWFVideoFrame frame) 
 {
 	return frame->frameNum;
 }
 
-#define SKIPTAG(input, tag) SWFInput_seek((input), (tag).dataSize + 4, SEEK_CUR)
-
-
-struct FLVTag_s * getNextFLVTag(SWFInput input, struct FLVTag_s *tag) {
-	int ichar;
-	unsigned long ulchar;
-
-	ichar = SWFInput_getChar(input);
-	if(ichar == EOF)
-		return NULL;
-	tag->tagType = ichar;
-
-	ulchar = SWFInput_getUInt24_BE(input);
-	// XXX: check ulchar
-	tag->dataSize = ulchar;
-	
-	ulchar = SWFInput_getUInt24_BE(input);
-	tag->timeStamp = ulchar;
-
-	/*
-	 * 32 Bit reserved
-	 * should be 0 
-	 */
-	ulchar = SWFInput_getUInt32_BE(input);
-	if(ulchar){
-		printf("ulchar %i\n", (int)ulchar);
-		return NULL;
-	}	
-	return tag;
-}
-
-
 int completeSWFVideoFrame(SWFBlock block) 
 {
-	return ((SWFVideoFrame)block)->length + 4;
+	SWFVideoFrame frame = (SWFVideoFrame)block;
+	int len;
+		
+	FLVTag_getPayloadInput(&frame->tag, &len);
+	return len + 4;
 }
 
 void writeSWFVideoFrameToMethod(SWFBlock block, SWFByteOutputMethod method, void *data) 
 {
-		
-	int l, ichar;
-
-	SWFVideoFrame vf;
+	int i, ichar, len;
+	SWFVideoFrame frame = (SWFVideoFrame)block;
 	SWFVideoStream stream;
+	SWFInput input;
 	
 	if(!block)
 		return;
 	
-	vf = (SWFVideoFrame)block;
-	stream = vf->stream;
-	
-	SWFInput_seek(stream->input, vf->offset, SEEK_SET);
+	input = FLVTag_getPayloadInput(&frame->tag, &len);
+	if(input == NULL)
+		return;
+
+	stream = frame->stream;
 	
 	methodWriteUInt16(CHARACTERID(stream),method, data);
-	methodWriteUInt16(vf->frameNum, method, data);
+	methodWriteUInt16(frame->frameNum, method, data);
 
-	
-	for (l = 0; l < vf->length; l++) {
-		ichar = SWFInput_getChar(stream->input);
+	for (i = 0; i < len; i++) {
+		ichar = SWFInput_getChar(input);
 		method(ichar, data);		
-	}	
+	}
 }
 
 SWFBlock
 SWFVideoStream_getVideoFrame(SWFVideoStream stream) {
-	struct FLVTag_s tag;
 	SWFVideoFrame block;
-	int ichar;
 	
-	/*
-	 * if this stream is not a embeded videostream
-	 * there are no frames to return :)
-	 */
-	if(!stream->embeded)
+	if(!stream->embedded)
+	{
+		SWF_warn("SWFVideoStream_getVideoFrame: not an embedded stream");
 		return NULL;
+	}
 	
 	if(stream->frame >= stream->numFrames)
+	{
+		SWF_warn("SWFVideoStream_getVideoFrame: no more frames");
 		return NULL;
+	}
 	
-	if(stream->frame == 0)
-		SWFInput_seek(stream->input, stream->start, SEEK_SET);
-
-
 	block = (SWFVideoFrame) malloc(sizeof(struct SWFVideoFrame_s));
 	SWFBlockInit((SWFBlock)block);
 
@@ -183,53 +129,28 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream) {
 	BLOCK(block)->type = SWF_VIDEOFRAME;
 
 	block->stream = stream;
-	
-	if(!getNextFLVTag(stream->input, &tag)) 
-		return NULL;
-
-	/* TODO: AudioTag */
-	while (tag.tagType != VIDEOTAG) {
-		SKIPTAG(stream->input, tag);
-		if(!getNextFLVTag(stream->input, &tag)) 
+	do {
+		if(FLVStream_nextTag(stream->flv, &block->tag, stream->lastTag))
+		{
+			free(block);	
 			return NULL;
-	}
-		
+		}
+		stream->lastTag = &block->tag;
+	} while (block->tag.tagType != FLV_VIDEOTAG);
 
-	ichar = SWFInput_getChar(stream->input);
-	if(ichar == EOF)
-		return NULL;
-
-	block->codecId = (ichar & 0x0f);
-	block->frameType = (ichar & 0xf0);
 	block->frameNum = stream->frame;	
 	stream->frame++;
-
-	/* screen video needs this extra byte 
-	 * undocumented! 
-	 */
-	if(block->codecId == VIDEO_CODEC_SCREEN) {
-		SWFInput_seek(stream->input, -1, SEEK_CUR);
-		block->offset = SWFInput_tell(stream->input);
-		block->length = tag.dataSize;
-	}
-	else {
-		block->offset = SWFInput_tell(stream->input);
-		block->length = tag.dataSize - 1;
-	}
 		
-	
-	/* seek block->length + UInt32 after VideoTag */
-	SWFInput_seek(stream->input, block->length + 4, SEEK_CUR);
-	
 	return (SWFBlock)block;
 }
 
 		
-static int setH263CustomDimension(SWFVideoStream stream, int flags) 
+static int setH263CustomDimension(SWFVideoStream stream, SWFInput input, int flags) 
 {
 	int ichar, rshift, mask;
 	int (*method) (SWFInput stream);
 
+	SWFInput_seek(input, -1, SEEK_CUR);
 	if(flags == 0) {
 		method = SWFInput_getChar;
 		rshift = 7;
@@ -243,105 +164,104 @@ static int setH263CustomDimension(SWFVideoStream stream, int flags)
 	else
 		return -1;
 	
-	ichar = method(stream->input);
+	ichar = method(input);
 	stream->width = ( (ichar << 1) & mask );
 	
-	ichar = method(stream->input);
+	ichar = method(input);
 	stream->width |= ( (ichar >> rshift) & mask );
 	stream->height = ( (ichar << 1) & mask );
 
-	ichar = method(stream->input);
+	ichar = method(input);
 	stream->height |= ( (ichar >> rshift) & mask );
 	
 	return 0;
 }
 
-static int setH263StreamDimension(SWFVideoStream stream)
+static int setH263StreamDimension(SWFVideoStream stream, FLVTag *tag)
 {
-	struct FLVTag_s tag;
-	int ichar;
-	int flags;
-	
-	SWFInput_seek(stream->input, stream->start, SEEK_SET);
+	SWFInput input;
+	int ichar, flags, len;
 
-	while(getNextFLVTag(stream->input, &tag)) {
-		if(tag.tagType != VIDEOTAG) {
-			SKIPTAG(stream->input, tag);
-			continue;
-		}
-	
-		/* skip:
-		 * videodata-header 1 byte
-		 * pictureStartCode UB[17] 2 byte ( 1 bit remaining )
-		 * Version UB[5] 
-		 * Temporal Reference UB[8]
-		 * Picture Size UB[3] 
-		 * */
-		SWFInput_seek(stream->input, 3, SEEK_CUR);
-		ichar = SWFInput_getUInt16_BE(stream->input);
+	input = FLVTag_getPayloadInput(tag, &len);
+	if(input == NULL)
+		return -1;
+
+	/* skip:
+	 * pictureStartCode UB[17] 2 byte ( 1 bit remaining )
+	 * Version UB[5] 
+	 * Temporal Reference UB[8]
+	 * Picture Size UB[3] 
+	 * */
+	SWFInput_seek(input, 2, SEEK_CUR);
+	ichar = SWFInput_getUInt16_BE(input);
 		
 		/* 3-bit flag */
-		flags = ((0x0003 & ichar) << 1);
+	flags = ((0x0003 & ichar) << 1);
 		
-		ichar = SWFInput_getChar(stream->input);
-		flags |= ((0x80 & ichar) >> 7);
+	ichar = SWFInput_getChar(input);
+	flags |= ((0x80 & ichar) >> 7);
 	
-		switch(flags) {
+	switch(flags) 
+	{
+		case 6:
+			stream->width = 160;
+			stream->height = 120;
+			return 0;
 
-			case 6:
-				stream->width = 160;
-				stream->height = 120;
-				return 0;
+		case 5:
+			stream->width = 320;
+			stream->height = 240;
+			return 0;
 
-			case 5:
-				stream->width = 320;
-				stream->height = 240;
-				return 0;
+		case 4:
+			stream->width = 128;
+			stream->height = 96;
+			return 0;
 
-			case 4:
-				stream->width = 128;
-				stream->height = 96;
-				return 0;
-
-			case 3:
-				stream->width = 176;
-				stream->height = 144;
-				return 0;
+		case 3:
+			stream->width = 176;
+			stream->height = 144;
+			return 0;
 				
-			case 2: 
-				stream->width = 352;
-				stream->height = 288;
-				return 0;
+		case 2: 
+			stream->width = 352;
+			stream->height = 288;
+			return 0;
 
-			default:
-				SWFInput_seek(stream->input, -1, SEEK_CUR);
-				return setH263CustomDimension(stream, flags);
-		}
-						
+		default:
+			return setH263CustomDimension(stream, input, flags);
 	}
 	return -1;
 }				
 
-static int setScreenStreamDimension(SWFVideoStream stream) 
+static int setScreenStreamDimension(SWFVideoStream stream, FLVTag *tag) 
 {
 	unsigned int ui16 = 0;
-	int ic;
+	int ic, len;
+	SWFInput input;
 	
-	ic = SWFInput_getChar(stream->input);
+	input = FLVTag_getPayloadInput(tag, &len);
+	if(input == NULL)
+		return -1;
+	
+	/* special case: skip 1 byte */ 
+	ic  = SWFInput_getChar(input);
+	
+	ic = SWFInput_getChar(input);
 	if(ic >= 0) 
 		ui16 = ic << 8;
 	
-	ic = SWFInput_getChar(stream->input);
+	ic = SWFInput_getChar(input);
 	if(ic >= 0)
 		ui16 |= ic;
 
 	stream->width = ui16 & 0x0fff;
 
-	ic = SWFInput_getChar(stream->input);
+	ic = SWFInput_getChar(input);
 	if(ic >= 0) 
 		ui16 = ic << 8;
 	
-	ic = SWFInput_getChar(stream->input);
+	ic = SWFInput_getChar(input);
 	if(ic >= 0)
 		ui16 |= ic;
 
@@ -349,24 +269,6 @@ static int setScreenStreamDimension(SWFVideoStream stream)
 	
 	return 0;
 
-}
-
-
-static int getNumFrames(SWFVideoStream stream) 
-{
-
-	int numFrames = 0;
-	struct FLVTag_s tag;
-	
-	SWFInput_seek(stream->input, stream->start, SEEK_SET);
-	
-	while(getNextFLVTag(stream->input, &tag)) {
-		if(tag.tagType == VIDEOTAG)
-			numFrames++;
-		SKIPTAG(stream->input, tag);
-	}
-
-	return numFrames;
 }
 
 
@@ -379,7 +281,7 @@ void writeSWFVideoStreamToMethod(SWFBlock block, SWFByteOutputMethod method, voi
 	methodWriteUInt16(stream->width, method, data);
 	methodWriteUInt16(stream->height, method, data);
 	
-	if(stream->embeded) {
+	if(stream->embedded) {
 		method(stream->smoothingFlag, data);
 		method(stream->codecId, data);
 	}
@@ -395,7 +297,7 @@ void writeSWFVideoStreamToMethod(SWFBlock block, SWFByteOutputMethod method, voi
 
 
 int completeSWFVideoStream(SWFBlock block) {
-	return 10;
+	return VIDEOFRAME_BLOCK_SIZE;
 }
 
 
@@ -406,48 +308,42 @@ void destroySWFVideoStream(SWFVideoStream stream) {
 static int setStreamProperties(SWFVideoStream stream) 
 {
 	int ret;
-	struct FLVTag_s tag;
-	unsigned int ichar;
+	FLVTag tag, *tag_p = NULL;
 	
-	stream->numFrames = getNumFrames(stream);
-	
-	SWFInput_seek(stream->input, stream->start, SEEK_SET);
+	stream->numFrames = FLVStream_getNumFrames(stream->flv, FLV_VIDEOTAG);
 
-	
-	while(getNextFLVTag(stream->input, &tag)) {
-		if(tag.tagType == VIDEOTAG)
+	while((ret = FLVStream_nextTag(stream->flv, &tag, tag_p)) == 0) 
+	{
+		if(tag.tagType == FLV_VIDEOTAG)
 			break;
-		SKIPTAG(stream->input, tag);
-	}
 
-	ichar = SWFInput_getChar(stream->input);
-	stream->codecId = (ichar & 0x0f);
+		tag_p = &tag;
+	}
 	
+	if(ret < 0)
+		return -1;
+
+	stream->codecId = tag.hdr.video.codec;	
 	switch (stream->codecId) {
 		case VIDEO_CODEC_H263:
-			ret = setH263StreamDimension(stream);
+			ret = setH263StreamDimension(stream, &tag);
 			stream->smoothingFlag = VIDEO_SMOOTHING;
 			break;
 		case VIDEO_CODEC_SCREEN:
-			ret = setScreenStreamDimension(stream);
+			ret = setScreenStreamDimension(stream, &tag);
 			stream->smoothingFlag = 0;
 			break;
 		default:
-			printf("Unknown Codec %i\n", stream->codecId);
+			SWF_warn("Unknown Codec %x\n", stream->codecId);
 			ret = -1;
 	}
-
-	SWFInput_seek(stream->input, stream->start, SEEK_SET);
 	return ret;
-	
 }
 
 
 SWFVideoStream
 newSWFVideoStream_fromInput(SWFInput input) {
 
-	int ichar;
-	unsigned long ulchar;
 	SWFBlock block;
 	SWFVideoStream stream;
 	
@@ -459,7 +355,6 @@ newSWFVideoStream_fromInput(SWFInput input) {
 		return NULL;
 	block = (SWFBlock)stream;
 	
-	
 	SWFCharacterInit((SWFCharacter)stream);
 	CHARACTERID(stream) = ++SWF_gNumCharacters;
         
@@ -468,52 +363,21 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	block->complete = completeSWFVideoStream;
 	block->dtor = destroySWFVideoStream;
 	
-	stream->input = input;
+	stream->flv = FLVStream_fromInput(input);
+	if(stream->flv == NULL)
+	{
+		free(stream);
+		return NULL;
+	}
+	stream->lastTag = NULL;
 	stream->frame = 0;
-	stream->embeded = 1;
-
-	if(!stream)
-		return NULL;
-
-	ichar = SWFInput_getChar(stream->input);
-	if(ichar == EOF || ichar != 'F')
-		return NULL;
-	
-	ichar = SWFInput_getChar(stream->input);
-	if(ichar == EOF || ichar != 'L')
-		return NULL;
-	
-	ichar = SWFInput_getChar(stream->input);
-	if(ichar == EOF || ichar != 'V')
-		return NULL;
-	
-	/*
-	 * FLV Version 
-	 */
-	ichar = SWFInput_getChar(stream->input);
-	if(ichar != EOF)
-		stream->version = ichar;
-
-	/*
-	 * Audio / Video-Tags persent ? 
-	 */
-	ichar = SWFInput_getChar(stream->input);
-	if(ichar != EOF) 
-		stream->flags = ichar;
-
-	/*
-	 * UI32_BE: DataOffset
-	 * should be 9 for FLV-Version 1
-	 *
-	 * start = DataOffset
-	 * add 4: before first Tag there is a UI32 0
-	 */
-	ulchar = SWFInput_getUInt32_BE(stream->input);
-	stream->start = ulchar + 4;
+	stream->embedded = 1;
 	
 	if (setStreamProperties(stream) < 0)
+	{
+		free(stream);
 		return NULL;
-	
+	}
 	return stream;
 }
 
@@ -524,20 +388,20 @@ SWFVideoStream newSWFVideoStream() {
         if(!stream)
                 return NULL;
         block = (SWFBlock)stream;
-                                                                                                                                             
-        SWFCharacterInit((SWFCharacter)stream);
+        
+	SWFCharacterInit((SWFCharacter)stream);
         CHARACTERID(stream) = ++SWF_gNumCharacters;
-                                                                                                                                             
-        block->type = SWF_DEFINEVIDEOSTREAM;
+        
+	block->type = SWF_DEFINEVIDEOSTREAM;
         block->writeBlock = writeSWFVideoStreamToMethod;
         block->complete = completeSWFVideoStream;
         block->dtor = destroySWFVideoStream;
-                                                                                                                                             
-        stream->input = NULL;
+        
+	stream->flv = NULL;
+	stream->lastTag = NULL;
         stream->frame = 0;
-        stream->embeded = 0;
-	stream->numFrames = 0;
-	stream->start = 0;
+        stream->embedded = 0;
+	stream->numFrames = -1;
 
 	stream->width = VIDEO_DEF_WIDTH;
 	stream->height = VIDEO_DEF_HEIGHT;
@@ -551,7 +415,7 @@ SWFVideoStream newSWFVideoStream_fromFile(FILE *f) {
 }
 
 void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height) {
-	if(!stream->embeded) {
+	if(!stream->embedded) {
 		stream->width = width;
 		stream->height = height;
 	}
@@ -560,8 +424,5 @@ void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height) {
 int SWFVideoStream_getNumFrames(SWFVideoStream stream) {
 	if(!stream)
 		return -1;
-	else if(!stream->embeded)
-		return -1;
-	else
-		return stream->numFrames;
+	return stream->numFrames;
 }
