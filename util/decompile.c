@@ -775,6 +775,7 @@ isStoreOp(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_STOREREGISTER:
       case SWFACTION_SETVARIABLE:
       case SWFACTION_SETMEMBER:
+      case SWFACTION_CASTOP:
         return 1;
       default:
         return 0;
@@ -2123,28 +2124,9 @@ int
 decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *meth, *obj, *nparam;
-/*    int i;*/
-    
     meth=pop();
     obj=pop();
     nparam=pop();
-#if 0
-    println("/* %ld params */"  ,nparam->p.Integer);
-#endif
-#if 0
-    INDENT
-    puts(getName(obj));
-    puts(".");
-    puts(getName(meth));
-    puts("(");
-    for(i=0;i<nparam->p.Integer;i++) {
-        puts(getString(pop()));
-	if( nparam->p.Integer > i+1 ) puts(",");
-    }
-    println(");" );
-    push(newVar("funcret"));
-
-#else
     push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
@@ -2154,7 +2136,6 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
      println(";" );
      return 1;
     }
-#endif
     return 0;
 }
 
@@ -2162,7 +2143,6 @@ int
 decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
 {
     struct SWF_ACTIONPUSHPARAM *meth, *nparam;
-/*    int i;*/
 
     SanityCheck(SWF_CALLMETHOD,
 		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
@@ -2170,20 +2150,6 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     
     meth=pop();
     nparam=pop();
-
-#if 0
-    INDENT
-    //decompilePUSHPARAM(meth,0);
-    puts(getName(meth));
-    puts("(");
-    for(i=0;i<nparam->p.Integer;i++) {
-    	puts(getString(pop()));
-	if( nparam->p.Integer > i+1 ) puts(",");
-    }
-    println(");" );
-
-    return 1;
-#else
     push(newVar_N("","",getName(meth),"(", nparam->p.Integer,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
@@ -2194,7 +2160,6 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
      return 1;
     }
     return 0;
-#endif
 }
 
 int
@@ -2234,8 +2199,6 @@ decompileSTARTDRAG(int n, SWF_ACTION *actions,int maxn)
     println(");" );
     return 0;
 }
-
-
 
 int
 decompileSUBSTRING(int n, SWF_ACTION *actions,int maxn)
@@ -2377,6 +2340,15 @@ decompileIMPLEMENTS(int n, SWF_ACTION *actions,int maxn)
      puts(getName(pop()));
     }
     println(" ;");
+    return 0;
+}
+
+int
+decompileCAST(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *iparam=pop();
+    struct SWF_ACTIONPUSHPARAM *tparam=pop();
+    push(newVar_N( getName(tparam),"(",getName(iparam),"", 0,")")); 
     return 0;
 }
 
@@ -2643,6 +2615,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_IMPLEMENTSOP:
 	return decompileIMPLEMENTS(n, actions, maxn);
+
+      case SWFACTION_CASTOP:
+	return decompileCAST(n, actions, maxn);
 
       default:
 	outputSWF_ACTION(n,&actions[n]);
