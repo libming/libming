@@ -63,8 +63,6 @@ struct SWFVideoFrame_s
 	FLVTag tag;
 };
 
-
-
 int SWFVideoStream_getFrameNumber(SWFVideoFrame frame) 
 {
 	return frame->frameNum;
@@ -104,8 +102,13 @@ void writeSWFVideoFrameToMethod(SWFBlock block, SWFByteOutputMethod method, void
 	}
 }
 
+/*
+ * embedes a video frame in a SWFBlock object
+ * This function reads a video frame for a FLV source and embeds it in a 
+ * SWFBlock object.
+ */
 SWFBlock
-SWFVideoStream_getVideoFrame(SWFVideoStream stream) {
+SWFVideoStream_getVideoFrame(SWFVideoStream stream /* associated video stream */) {
 	SWFVideoFrame block;
 	
 	if(!stream->embedded)
@@ -341,6 +344,12 @@ static int setStreamProperties(SWFVideoStream stream)
 }
 
 
+/* 
+ * create a new SWFVideoSteam object
+ * This function creates a new videostream object from a FLV-file.
+ * Takes a SWFInput object as argument. 
+ * Be aware: You need to keep the SWFInput valid until the movie is generated via save() or output()!
+ */
 SWFVideoStream
 newSWFVideoStream_fromInput(SWFInput input) {
 
@@ -381,7 +390,11 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	return stream;
 }
 
-
+/*
+ * creates a new SWFVideoStream object
+ * This function creates an empty videostream object. This object can be adressed via
+ * ActionScript to connect and display a streamed video (progessive download / rtmp).
+ */
 SWFVideoStream newSWFVideoStream() {
 	SWFBlock block;
 	SWFVideoStream stream = (SWFVideoStream)malloc(sizeof(struct SWFVideoStream_s));
@@ -407,21 +420,41 @@ SWFVideoStream newSWFVideoStream() {
 	stream->height = VIDEO_DEF_HEIGHT;
 	return stream;
 }
+
 	
-
-
-SWFVideoStream newSWFVideoStream_fromFile(FILE *f) {
+/* 
+ * create a new SWFVideoSteam object
+ * This function creates a new videostream object from a FLV-file.
+ * Takes a FILE * as argument. 
+ * Be aware: You need to keep the FILE open until the movie is generated via save() or output()!
+ */
+SWFVideoStream newSWFVideoStream_fromFile(FILE *f /* FILE pointer to a FLV-file */) {
 	return newSWFVideoStream_fromInput(newSWFInput_file(f));
 }
 
-void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height) {
+
+/* 
+ * sets video dimension 
+ * This function set width and height for streamed videos 
+ * Works only _streamed_ videos (progressive download or rtmp)
+ */
+void SWFVideoStream_setDimension(SWFVideoStream stream /* stream object */, 
+				int width, /* width in px */
+				int height /* height in px */) 
+{
 	if(!stream->embedded) {
 		stream->width = width;
 		stream->height = height;
 	}
 }
 
-int SWFVideoStream_getNumFrames(SWFVideoStream stream) {
+
+/*
+ * returns the number of video-frames
+ * This function returns the number of video-frames of a SWFVideoStream.
+ * Works only for embedded streams! 
+ */
+int SWFVideoStream_getNumFrames(SWFVideoStream stream /* Embedded video stream */) {
 	if(!stream)
 		return -1;
 	return stream->numFrames;
