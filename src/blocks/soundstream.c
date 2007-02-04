@@ -220,7 +220,10 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 		start++;
 		flags = SWFInput_getUInt32_BE(input);
 		if(flags == EOF)
+		{
+			destroySWFOutputBlock(block);
 			return NULL;
+		}
 	}
 
 	SWFInput_seek(input, start, SEEK_SET);
