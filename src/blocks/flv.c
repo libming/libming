@@ -47,7 +47,7 @@ static inline int readVideoHdr(FLVStream *flv, FLVTag *tag)
 	ichar = SWFInput_getChar(flv->input);
 	if(ichar == EOF)
 		return -1;
-	//printf("read video %x\n", ichar);	
+	
 	tag->hdr.video.frameType = (0xf0 & ichar);
 	tag->hdr.video.codec = 0x0f & ichar;
 	return 0;
@@ -107,7 +107,7 @@ FLVStream *FLVStream_fromInput(SWFInput input)
 
 	ulchar = SWFInput_getUInt32_BE(input);
 	flv->offset = ulchar + 4;
-
+	flv->stream_start = flv->offset;
 	return flv;
 }
 
@@ -204,5 +204,24 @@ SWFInput FLVTag_getPayloadInput(FLVTag *tag, int *length)
 	}
 
 	return input;
+}
+
+int FLVStream_setStreamOffset(FLVStream *flv, unsigned int msecs)
+{
+	FLVTag tag, *p_tag = NULL;
+	
+	/* reset stream offset */
+	flv->offset = flv->stream_start;	
+	
+	while(FLVStream_nextTag(flv, &tag, p_tag) == 0) 
+	{
+		if(tag.timeStamp >= msecs)
+		{
+			flv->offset = tag.offset;
+			return 0;
+		}
+		p_tag = &tag;
+	}
+	return -1;
 }
 

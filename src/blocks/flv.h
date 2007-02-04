@@ -40,6 +40,7 @@ struct FLVStream_s
 	SWFInput 	input;
 	
 	unsigned int 	offset;
+	unsigned int 	stream_start;
 
 	char 		has_video;
 	char 		has_audio;
@@ -82,4 +83,5 @@ int FLVStream_getNumFrames(FLVStream *flv, int type);
 int FLVStream_nextTag(FLVStream *flv, FLVTag *tag, FLVTag *prev);
 FLVStream *FLVStream_fromInput(SWFInput input);
 SWFInput FLVTag_getPayloadInput(FLVTag *tag, int *length);
+int FLVStream_setStreamOffset(FLVStream *flv, unsigned int msecs);
 #endif
