@@ -527,7 +527,6 @@ newSWFInput_stream(FILE* f)
 	input->eof = SWFInput_stream_eof;
 	input->read = SWFInput_stream_read;
 	input->seek = SWFInput_stream_seek;
-	input->data = (void *)f;
 
 	input->offset = 0;
 	input->length = 0;
