@@ -310,10 +310,11 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
   char fname[64];
   char gname[64];
 
+  sprintf (fname, "%s_f%d", parentname, i);
+
   switch (fillstyle->FillStyleType)
     {
     case 0x00:			/* Solid Fill */
-      sprintf (fname, "%s_f%d", parentname, i);
       outputSWF_RGBA (&fillstyle->Color, fname);
       printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s_red, "
 	      VAR "%s_green, "
@@ -321,33 +322,36 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
 	      VAR "%s_alpha "
 	      "); " COMMSTART "SWFFILL_SOLID" COMMEND "\n",
 	      fname,
-	      methodcall (parentname, "addFill"), fname, fname, fname, fname);
+	      methodcall (parentname, "addSolidFill"), fname, fname, fname, fname);
       break;
     case 0x10:			/* Linear Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      sprintf (fname, "%s_f%d", parentname, i);
-      printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
-	      fname, methodcall (parentname, "addFill"), gname);
+      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
+	      fname, methodcall (parentname, "addGradientFill"), gname);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
     case 0x12:			/* Radial Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      sprintf (fname, "%s_f%d", parentname, i);
-      printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
-	      fname, methodcall (parentname, "addFill"), gname);
+      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
+	      fname, methodcall (parentname, "addGradientFill"), gname);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
     case 0x40:			/* Repeating Bitmap Fill */
     case 0x41:			/* Clipped Bitmap Fill */
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
     case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
-      sprintf (gname, "%s_g%d", parentname, i);		/* <-- ad hoc bugfix: akleine, 2007 */
-      printf (" BitmapID: %d\n", fillstyle->BitmapId);
-      sprintf (fname, "%s_f%d", parentname, i);
-      printf ("" VAR "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
-	      fname, methodcall (parentname, "addFill"), gname);
+      /*
+       * TODO:
+       *  - use SWFFILL_TILED_BITMAP or SWFFILL_CLIPPED_BITMAP where appropriate
+       *  - specially handle a CharacterID of 65535 (it occurs!)
+       */
+      printf (COMMSTART " BitmapID: %d " COMMEND "\n", fillstyle->BitmapId);
+      sprintf (gname, "b%d", fillstyle->BitmapId);
+      outputSWF_GRADIENT (&fillstyle->Gradient, gname);
+      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s,SWFFILL_BITMAP);\n",
+	      fname, methodcall (parentname, "addBitmapFill"), gname);
       outputSWF_MATRIX (&fillstyle->BitmapMatrix, fname);
       break;
     }
@@ -363,7 +367,7 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray,
   count = (fillstylearray->FillStyleCount != 0xff) ?
     fillstylearray->FillStyleCount : fillstylearray->FillStyleCountExtended;
 
-  printf ("" COMMSTART "%d fillstyle(s)" COMMEND "\n", count);
+  printf ("" COMMSTART " %d fillstyle(s)" COMMEND "\n", count);
 
   for (i = 0; i < count; i++)
     {
@@ -544,7 +548,14 @@ outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEBITSJPEG2);
+  char name[64];
+
+  /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
+
+  OUT_BEGIN (SWF_DEFINEBITSJPEG2);
+  printf ("\n\t" COMMSTART "  Bitmap %d (actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  sprintf (name, "b%d", sblock->CharacterID);
+  printf ("%s();\n", newobj (name, "Bitmap"));
 
 }
 
