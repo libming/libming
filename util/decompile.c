@@ -1550,6 +1550,20 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
 }
 
 int
+decompileRETURN(int n, SWF_ACTION *actions,int maxn)
+{
+    struct SWF_ACTIONPUSHPARAM *var=pop();
+    INDENT
+    printf("return ");
+    if (var->Type==4 && var->p.RegisterNumber==0)	/* REGISTER 0 used as helper variable */
+     puts(getName(regs[0]));
+    else
+     puts(getName(var));
+    println(";");
+    return 0;
+}
+
+int
 decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 {
     int i=0,j=0;
@@ -1620,6 +1634,16 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
       }
   if (sact->BranchOffset>0)
   {
+   if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH && n+1==maxn)
+   {	// leaving block @last op with value on stack: a return x;
+     return decompileRETURN(n, actions,maxn);
+   }
+   if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH && n+2 < maxn
+    && actions[n+2].SWF_ACTIONRECORD.Offset == actions[n+1].SWF_ACTIONRECORD.Offset+sact->BranchOffset)
+   {
+	return 1; 	// jump to short to be a 'break': but an internal jump over a push
+   }			// to do: add some control flow analysis
+   
    INDENT
    println("break;        /*------*/" );
   }
@@ -1635,20 +1659,6 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
   return 0;
 }
 
-int
-decompileRETURN(int n, SWF_ACTION *actions,int maxn)
-{
-    INDENT
-    printf("return ");
-    puts(getName(pop()));
-    println(";");
-
-    return 0;
-}
-
-/* 
-decompileDEFINELOCAL() already MOVED TO decompileSETVARIABLE() 
-*/
 int
 decompileDEFINELOCAL2(int n, SWF_ACTION *actions,int maxn)
 {
@@ -2059,6 +2069,12 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
      }
      StackSave=Stack;
      decompileActions(sactv2->numActions, sactv2->Actions,gIndent+1);
+#ifdef DEBUG
+     if (Stack!=StackSave)
+     {
+      println("/* Stack problem in function code above */");
+     }
+#endif
      Stack=StackSave;
      for(j=1;j<sactv2->RegisterCount;j++) regs[j]=myregs[j];
     }
@@ -2099,6 +2115,12 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
      for(j=1;j<=k;j++) myregs[j]=regs[j];
      StackSave=Stack;
      decompileActions(sact->numActions, sact->Actions,gIndent+1);
+#ifdef DEBUG
+     if (Stack!=StackSave)
+     {
+      println("/* Stack problem in function code above */");
+     }
+#endif
      Stack=StackSave;
      for(j=1;j<=k;j++) regs[j]=myregs[j];
     }
