@@ -316,7 +316,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
     {
     case 0x00:			/* Solid Fill */
       outputSWF_RGBA (&fillstyle->Color, fname);
-      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s_red, "
+      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s_red, "
 	      VAR "%s_green, "
 	      VAR "%s_blue, "
 	      VAR "%s_alpha "
@@ -327,14 +327,14 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
     case 0x10:			/* Linear Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
+      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
 	      fname, methodcall (parentname, "addGradientFill"), gname);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
     case 0x12:			/* Radial Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
+      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
 	      fname, methodcall (parentname, "addGradientFill"), gname);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
@@ -348,9 +348,8 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
        *  - specially handle a CharacterID of 65535 (it occurs!)
        */
       printf (COMMSTART " BitmapID: %d " COMMEND "\n", fillstyle->BitmapId);
-      sprintf (gname, "b%d", fillstyle->BitmapId);
-      outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      printf ("" DECLOBJ(FillStyle) "%s = %s(" VAR "%s,SWFFILL_BITMAP);\n",
+      sprintf (gname, "character%d", fillstyle->BitmapId);
+      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_BITMAP);\n",
 	      fname, methodcall (parentname, "addBitmapFill"), gname);
       outputSWF_MATRIX (&fillstyle->BitmapMatrix, fname);
       break;
@@ -380,7 +379,12 @@ outputSWF_LINESTYLE (SWF_LINESTYLE * linestyle, char *parentname, int i)
 {
   char lname[64];
   sprintf (lname, "%s_l%d", parentname, i);
+#ifdef SWFPLUSPLUS
+  printf ("int %s_width = %d;\n", lname, linestyle->Width);
+#else
   printf ("" VAR "%s_width = %d;\n", lname, linestyle->Width);
+#endif
+
   outputSWF_RGBA (&linestyle->Color, lname);
 
 }
@@ -446,7 +450,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 
       if (shaperec->StyleChange.StateLineStyle)
 	{
-	  printf (" StateLineStyle: %ld\n", shaperec->StyleChange.LineStyle);
+	  printf (COMMSTART " StateLineStyle: %ld " COMMEND "\n", shaperec->StyleChange.LineStyle);
 	  if (shaperec->StyleChange.LineStyle == 0)
 	    {
 	      printf ("%s(0);\n", methodcall (parentname, "setLine"));
@@ -485,7 +489,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 
 		  } else {
 */
-	      printf ("$%s_f%ld", parentname,
+	      printf (VAR "%s_f%ld", parentname,
 		      shaperec->StyleChange.FillStyle1 - 1);
 /*
 		  }
@@ -496,7 +500,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	}
       if (shaperec->StyleChange.StateFillStyle0)
 	{
-	  printf (" FillStyle0: %ld\n", shaperec->StyleChange.FillStyle0);
+	  printf (COMMSTART " FillStyle0: %ld " COMMEND "\n", shaperec->StyleChange.FillStyle0);
 	}
       if (shaperec->StyleChange.StateMoveTo)
 	{
@@ -541,20 +545,27 @@ outputSWF_CHARACTERSET (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEBITS);
+  char name[32];
+
+  /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
+
+  OUT_BEGIN (SWF_DEFINEBITS);
+  printf ("\n\t" COMMSTART "  Bits %d (actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  sprintf (name, "character%d", sblock->CharacterID);
+  printf ("%s();\n", newobj (name, "Bitmap"));
 
 }
 
 void
 outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
 {
-  char name[64];
+  char name[32];
 
   /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
 
   OUT_BEGIN (SWF_DEFINEBITSJPEG2);
   printf ("\n\t" COMMSTART "  Bitmap %d (actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
-  sprintf (name, "b%d", sblock->CharacterID);
+  sprintf (name, "character%d", sblock->CharacterID);
   printf ("%s();\n", newobj (name, "Bitmap"));
 
 }
@@ -562,8 +573,14 @@ outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBITSJPEG3 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEBITSJPEG3);
+  char name[32];
 
+  /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
+
+  OUT_BEGIN (SWF_DEFINEBITSJPEG3);
+  printf ("\n\t" COMMSTART "  Bitmap %d (actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  sprintf (name, "character%d", sblock->CharacterID);
+  printf ("%s();\n", newobj (name, "Bitmap"));
 }
 
 void
@@ -615,7 +632,7 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
   char tname[64];
   OUT_BEGIN (SWF_DEFINEEDITTEXT);
 
-  sprintf (tname, "s%d", sblock->CharacterID);
+  sprintf (tname, "character%d", sblock->CharacterID);
   printf ("%s(", newobj (tname, "TextField"));
   if (sblock->HasText)
     {
@@ -813,9 +830,9 @@ outputSWF_DEFINEMORPHSHAPE (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
 {
-  char name[8];
+  char name[32];
   OUT_BEGIN (SWF_DEFINESHAPE);
-  sprintf (name, "s%d", sblock->ShapeID);
+  sprintf (name, "character%d", sblock->ShapeID);
 
   printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
   printf ("%s();\n", newobj (name, "Shape"));
@@ -831,16 +848,26 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESHAPE2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINESHAPE2);
+  char name[32];
+  OUT_BEGIN (SWF_DEFINESHAPE2);
+  sprintf (name, "character%d", sblock->ShapeID);
 
+  printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
+  printf ("%s();\n", newobj (name, "Shape"));
+  /* There doesn't seem to be a way to use this in the API 
+   * it is calculated internal to teh shape object, but I'm not
+   * sure it will come up with the same answer.
+   outputSWF_RECT(&sblock->ShapeBounds);
+   */
+  outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 2, name);
 }
 
 void
 outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
 {
-  char name[8];
+  char name[32];
   OUT_BEGIN (SWF_DEFINESHAPE3);
-  sprintf (name, "s%d", sblock->ShapeID);
+  sprintf (name, "character%d", sblock->ShapeID);
 
   printf ("\n\t/*  Shape %d */\n", sblock->ShapeID);
   printf ("%s();\n", newobj (name, "Shape"));
@@ -868,11 +895,8 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 
   spritenum = sblock->SpriteId;
   spframenum = 1;
-  sprintf(spritename,"sp%d",sblock->SpriteId);
+  sprintf(spritename,"character%d",sblock->SpriteId);
   printf ("\n\t" COMMSTART "  MovieClip %d " COMMEND "\n", sblock->SpriteId);
-#ifdef SWFPLUSPLUS
-  printf ("class SWFMovieClip *%s;\n",spritename);
-#endif
   printf ("%s(); " COMMSTART " %d frames " COMMEND "\n",
 		  newobj (spritename, "MovieClip"), sblock->FrameCount);
   for(i=0;i<sblock->BlockCount;i++) {
@@ -1035,7 +1059,8 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 
   if( sblock->PlaceFlagHasCharacter ) {
       printf(COMMSTART " PlaceFlagHasCharacter " COMMEND "\n");
-    sprintf(cname, "sp%d", sblock->CharacterId );
+    sprintf(cname, "character%d", sblock->CharacterId );
+    /* TODO: assign the return to a DisplayItem (for later handling of removeobject tags) */
     printf ("%s(" VAR "%s);\n", methodcall ("m", "add"),
 	      cname);
   }
