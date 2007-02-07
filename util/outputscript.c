@@ -42,7 +42,7 @@ extern char *swftargetfile;
 #define COMMSTART "#"
 #define COMMEND   ""
 #define VAR       "$"
-#define DECLOBJ(x) "" 
+#define DECLOBJ(x) "$" 
 #define MEMBER    "->"
 #define OBJPREF   "SWF::"
 #define NEWOP     "new"
