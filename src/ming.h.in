@@ -146,11 +146,11 @@ int SWFMatrix_getTranslateY(SWFMatrix m);
 
 /* A generic input object.  Wraps files, buffers and streams; replaces
    standard file funcs */
-
 SWFInput newSWFInput_file(FILE *f);
 SWFInput newSWFInput_stream(FILE *f);
 SWFInput newSWFInput_buffer(unsigned char *buffer, int length);
 SWFInput newSWFInput_allocedBuffer(unsigned char *buffer, int length);
+SWFInput newSWFInput_input(SWFInput in, unsigned int length);
 void destroySWFInput(SWFInput input);
 
 int SWFInput_length(SWFInput input);
@@ -550,7 +550,7 @@ SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
 SWFVideoStream newSWFVideoStream(void);
 void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height);
 int SWFVideoStream_getNumFrames(SWFVideoStream stream);
-
+int SWFVideoStream_hasAudio(SWFVideoStream stream);
 
 
 /***** SWFSprite *****/

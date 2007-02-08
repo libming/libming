@@ -500,6 +500,8 @@ SWFInput_stream_read(SWFInput input, unsigned char* buffer, int count)
 }
 
 
+
+
 static void
 SWFInput_stream_dtor(SWFInput input)
 {
@@ -544,6 +546,124 @@ newSWFInput_stream(FILE* f)
 }
 
 
+struct SWFInputPtr
+{
+	SWFInput input;
+	unsigned int offset;
+};
+
+static int
+SWFInput_input_getChar(SWFInput input)
+{
+	struct SWFInputPtr *ptr;
+ 	int old_offset, result;
+
+	if ( input->offset >= input->length )
+		return EOF;
+		
+	ptr = (struct SWFInputPtr *)input->data;
+	old_offset = SWFInput_tell(ptr->input);
+ 
+	SWFInput_seek(ptr->input, ptr->offset + input->offset, SEEK_SET);
+	result = SWFInput_getChar(ptr->input);
+	input->offset++;
+	SWFInput_seek(ptr->input, old_offset, SEEK_SET);
+
+	return result;
+}
+
+
+static void
+SWFInput_input_seek(SWFInput input, long offset, int whence)
+{
+	if ( whence == SEEK_CUR )
+	{
+		if ( offset >= 0 )
+			input->offset = min(input->length, input->offset + offset);
+		else
+			input->offset = max(0, input->offset + offset);
+	}
+
+	else if ( whence == SEEK_END )
+		input->offset = max(0, input->length - offset);
+
+	else if ( whence == SEEK_SET )
+		input->offset = min(input->length, offset);
+}
+
+
+static int
+SWFInput_input_eof(SWFInput input)
+{
+	return input->offset >= input->length;
+}
+
+static void
+SWFInput_input_dtor(SWFInput input)
+{
+	free(input->data);
+#if TRACK_ALLOCS
+	ming_gc_remove_node(input->gcnode);
+#endif
+	free(input);
+}
+
+
+static int
+SWFInput_input_read(SWFInput input, unsigned char* buffer, int count)
+{
+	int ret;
+	struct SWFInputPtr *ptr;
+	int old_offset;
+
+	if ( count > input->length - input->offset )
+		count = input->length - input->offset;
+
+	ptr = (struct SWFInputPtr *)input->data;
+        old_offset = SWFInput_tell(ptr->input);
+	SWFInput_seek(ptr->input, ptr->offset + input->offset, SEEK_SET);
+
+	ret = SWFInput_read((SWFInput)ptr->input, buffer, count);
+	if(ret != count)
+		SWF_warn("SWFInput_input_read: ret %i, count %i\n", ret, count);
+	input->offset += count;
+
+	SWFInput_seek(ptr->input, old_offset, SEEK_SET);
+
+	return count;
+}
+
+SWFInput
+newSWFInput_input(SWFInput in, unsigned int length)
+{
+	SWFInput input;
+	struct SWFInputPtr *data;
+
+	if(in == NULL)
+		return NULL;
+
+	input = (SWFInput)malloc(sizeof(struct SWFInput_s));
+	input->getChar = SWFInput_input_getChar;
+	input->destroy = SWFInput_input_dtor;
+	input->eof = SWFInput_input_eof;
+	input->read = SWFInput_input_read;
+	input->seek = SWFInput_input_seek;
+	
+	data = (struct SWFInputPtr *)malloc(sizeof(struct SWFInputPtr));
+	data->offset = SWFInput_tell(in);
+	data->input = in;
+
+	input->offset = 0;
+	input->length = length;
+
+	input->data = (void *)data;
+
+#if TRACK_ALLOCS
+	input->gcnode = ming_gc_add_node(input, (dtorfunctype) destroySWFInput);
+#endif
+
+	return input;
+}
 /*
  * Local variables:
  * tab-width: 2
