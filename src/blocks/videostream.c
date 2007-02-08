@@ -339,6 +339,12 @@ static int setStreamProperties(SWFVideoStream stream)
 			ret = setScreenStreamDimension(stream, &tag);
 			stream->smoothingFlag = 0;
 			break;
+		case VIDEO_CODEC_VP6:
+		case VIDEO_CODEC_VP6A:
+		case VIDEO_CODEC_SCREEN2:
+			SWF_warn("setStreamProperties: automatic dimension setting is not working with this codec yet!\n");
+			ret = 0;
+			break;
 		default:
 			SWF_warn("Unknown Codec %x\n", stream->codecId);
 			ret = -1;
