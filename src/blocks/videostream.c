@@ -391,6 +391,8 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	stream->frame = 0;
 	stream->embedded = 1;
 	
+	stream->width = VIDEO_DEF_WIDTH;
+	stream->height = VIDEO_DEF_HEIGHT;
 	if (setStreamProperties(stream) < 0)
 	{
 		free(stream);
