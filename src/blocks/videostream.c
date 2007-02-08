@@ -71,10 +71,13 @@ int SWFVideoStream_getFrameNumber(SWFVideoFrame frame)
 int completeSWFVideoFrame(SWFBlock block) 
 {
 	SWFVideoFrame frame = (SWFVideoFrame)block;
-	int len;
+	SWFInput input;
 		
-	FLVTag_getPayloadInput(&frame->tag, &len);
-	return len + 4;
+	input = FLVTag_getPayloadInput(&frame->tag);
+	if(input == NULL)
+		return 4;
+
+	return SWFInput_length(input) + 4;
 }
 
 void writeSWFVideoFrameToMethod(SWFBlock block, SWFByteOutputMethod method, void *data) 
@@ -87,10 +90,10 @@ void writeSWFVideoFrameToMethod(SWFBlock block, SWFByteOutputMethod method, void
 	if(!block)
 		return;
 	
-	input = FLVTag_getPayloadInput(&frame->tag, &len);
+	input = FLVTag_getPayloadInput(&frame->tag);
 	if(input == NULL)
 		return;
-
+	len = SWFInput_length(input);
 	stream = frame->stream;
 	
 	methodWriteUInt16(CHARACTERID(stream),method, data);
@@ -183,9 +186,9 @@ static int setH263CustomDimension(SWFVideoStream stream, SWFInput input, int fla
 static int setH263StreamDimension(SWFVideoStream stream, FLVTag *tag)
 {
 	SWFInput input;
-	int ichar, flags, len;
+	int ichar, flags;
 
-	input = FLVTag_getPayloadInput(tag, &len);
+	input = FLVTag_getPayloadInput(tag);
 	if(input == NULL)
 		return -1;
 
@@ -240,10 +243,10 @@ static int setH263StreamDimension(SWFVideoStream stream, FLVTag *tag)
 static int setScreenStreamDimension(SWFVideoStream stream, FLVTag *tag) 
 {
 	unsigned int ui16 = 0;
-	int ic, len;
+	int ic;
 	SWFInput input;
 	
-	input = FLVTag_getPayloadInput(tag, &len);
+	input = FLVTag_getPayloadInput(tag);
 	if(input == NULL)
 		return -1;
 	
@@ -458,4 +461,16 @@ int SWFVideoStream_getNumFrames(SWFVideoStream stream /* Embedded video stream *
 	if(!stream)
 		return -1;
 	return stream->numFrames;
+}
+
+/*
+ * returns 1 if embedded video stream has also an audio stream
+ * This functions test if the embedded FLV stream also has audio-data.
+ */
+int SWFVideoStream_hasAudio(SWFVideoStream stream /* Embedded video stream */)
+{
+	if(stream != NULL && stream->flv != NULL && stream->flv->has_audio)
+		return 1;
+	
+	return 0;
 }

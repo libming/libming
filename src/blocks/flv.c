@@ -33,10 +33,9 @@ static inline int readAudioHdr(FLVStream *flv, FLVTag *tag)
 	ichar = SWFInput_getChar(flv->input);
 	if(ichar == EOF)
 		return -1;
-
-	tag->hdr.audio.format = 0xf0 & ichar;
-	tag->hdr.audio.samplingRate = 0xc & ichar;
-	tag->hdr.audio.sampleSize = 0x2 & ichar;
+	tag->hdr.audio.format = (0xf0 & ichar);
+	tag->hdr.audio.samplingRate = (0xc & ichar);
+	tag->hdr.audio.sampleSize = (0x2 & ichar);
 	tag->hdr.audio.channel = 0x1 & ichar;
 	return 0;
 }
@@ -61,6 +60,11 @@ unsigned long FLVStream_skipTagData(FLVStream *flv, FLVTag *tag)
 	SWFInput_seek(flv->input, tag->data + tag->dataSize + 4, SEEK_SET);
 	
 	return SWFInput_tell(flv->input);
+}
+
+void destroyFLVStream(FLVStream *flv)
+{
+	free(flv);
 }
 
 FLVStream *FLVStream_fromInput(SWFInput input)
@@ -169,6 +173,19 @@ int FLVStream_nextTag(FLVStream *flv, FLVTag *tag, FLVTag *prev)
 	return 0;
 }
 
+int FLVStream_nextTagType(FLVStream *flv, FLVTag *tag, FLVTag *prev, int type)
+{
+	
+	while(FLVStream_nextTag(flv, tag, prev) == 0)
+	{
+		if(tag->tagType == type) 
+			return 0;
+		prev = tag;
+	}
+	return -1;
+
+}
+
 int FLVStream_getNumFrames(FLVStream *flv, int type)
 {
 	int numFrames = 0;
@@ -183,8 +200,9 @@ int FLVStream_getNumFrames(FLVStream *flv, int type)
 	return numFrames;
 }
 
-SWFInput FLVTag_getPayloadInput(FLVTag *tag, int *length)
+SWFInput FLVTag_getPayloadInput(FLVTag *tag)
 {
+	int length;
 	if(tag == NULL || tag->stream == NULL)
 		return NULL;
 	
@@ -194,16 +212,16 @@ SWFInput FLVTag_getPayloadInput(FLVTag *tag, int *length)
 	if(tag->tagType == FLV_VIDEOTAG 
 		&& tag->hdr.video.codec == VIDEO_CODEC_SCREEN)
 	{
-		*length = tag->dataSize;
+		length = tag->dataSize;
 		SWFInput_seek(input, tag->data, SEEK_SET);
 	}
 	else /* skip flv-audio/video-data byte */
 	{
-		*length = tag->dataSize - 1;
+		length = tag->dataSize - 1;
 		SWFInput_seek(input, tag->data + 1, SEEK_SET);
 	}
 
-	return input;
+	return newSWFInput_input(input, length);
 }
 
 int FLVStream_setStreamOffset(FLVStream *flv, unsigned int msecs)

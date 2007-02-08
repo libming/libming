@@ -81,7 +81,9 @@ typedef struct FLVStream_s 	FLVStream;
 
 int FLVStream_getNumFrames(FLVStream *flv, int type);
 int FLVStream_nextTag(FLVStream *flv, FLVTag *tag, FLVTag *prev);
+int FLVStream_nextTagType(FLVStream *flv, FLVTag *tag, FLVTag *prev, int type);
 FLVStream *FLVStream_fromInput(SWFInput input);
-SWFInput FLVTag_getPayloadInput(FLVTag *tag, int *length);
+void destroyFLVStream(FLVStream *flv);
+SWFInput FLVTag_getPayloadInput(FLVTag *tag);
 int FLVStream_setStreamOffset(FLVStream *flv, unsigned int msecs);
 #endif
