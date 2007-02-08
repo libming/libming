@@ -1229,16 +1229,10 @@ decompileGETPROPERTY(int n, SWF_ACTION *actions,int maxn)
 int
 decompileTRACE(int n, SWF_ACTION *actions,int maxn)
 {
-//    SanityCheck(SWF_TRACE,
-//		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
-//		"TRACE not preceeded by PUSH")
-// One never can expect this ^^^^^^^^^^^^^^  Try: trace(callme(123));
     INDENT
-    /* Could there be more than one push for this? */
     puts("trace(");
     decompilePUSHPARAM(pop(),1);
     println(");");
-
     return 0;
 }
 
@@ -1276,9 +1270,14 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
     struct SWF_ACTIONPUSHPARAM *var=pop();
     char *dblop=is_incr ? "++":"--";
 
-    if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
+    if(( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
       || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP 
       || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
+      ||
+      ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE
+      &&  actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER
+      &&   actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
+      )
     {
 	is_postop=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)?1:0;
 	if (is_postop)
@@ -1309,7 +1308,11 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER &&
 	    actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) ||
 	   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
-	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER) )
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)  ||
+	   (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
+	    actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
+	    actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER ) )
 	{		// incr/decr object variables with side effects
 	 is_postop= (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)?1:0;
 	 if (is_postop)
@@ -1317,14 +1320,16 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	 else
 	  var = newVar2(dblop,getString(var));
 	 if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) pop();
-	  pop();
-	  pop();
-	  var->Type=12;	// to be quiet later in ...SETMEMBER()
-	  regs[0]=var;	// FIXME: r0 perhaps a ming special
-	  push(var);
-	  push(var);
-	  push(var);
-	  if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) push(var);
+	 if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER ) pop();
+	 pop();
+	 pop();
+	 var->Type=12;	// to be quiet later in ...SETMEMBER()
+	 regs[0]=var;	// FIXME: r0 perhaps a ming special
+	 push(var);
+	 push(var);
+	 push(var);
+	 if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) push(var);
+	 if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER ) push(var);
 	}
 	else
 	{
@@ -1333,10 +1338,20 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	    regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]->Type==10)
 	 {
 	  var = newVar2(dblop,getString(var));
-	  if (actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	  if ((actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP && actions[n-1].SWF_ACTIONPUSH.NumParam==1) ||
+	       actions[n+3].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	  {
 	   var->Type=11;	// later print inc/dec
+	  }
 	  else
+	  {
 	   var->Type=12;	// later be quiet in ..STOREREGISTER()
+	   if (actions[n-1].SWF_ACTIONPUSH.NumParam>1) 
+	   {
+	    pop();
+	    push(var);
+	   }
+	  }
 	  push(var);
 	 }
 	 else		// fallback to old incr/decr code
@@ -1430,7 +1445,8 @@ decompileGETMEMBER(int n, SWF_ACTION *actions,int maxn)
  printf("*getMember* varName %s (type=%d)  memName=%s (type=%d)\n",varname,var->Type, memname,mem->Type);
 #endif
     len = strlen(varname)+strlen(memname);
-    if (mem->Type == 7 || mem->Type == 6 || mem->Type == 10)		/* INTEGER, DOUBLE  or VARIABLE */ 
+    if (mem->Type == 7 || mem->Type == 6 || mem->Type == 10 		/* INTEGER, DOUBLE  or VARIABLE */ 
+     || mem->Type == 4 || mem->Type == 12 )
     {
      vname = malloc(len+3);
      strcpy(vname,varname);
@@ -1476,12 +1492,14 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
     }
 
     decompilePUSHPARAM(obj,0);
-    if (var->Type == 7 || var->Type == 6 || var->Type == 10)		/* INTEGER, DOUBLE or VARIABLE */
+    if (var->Type == 7 || var->Type == 6 || var->Type == 10 		/* INTEGER, DOUBLE or VARIABLE */
+     || var->Type == 4 || var->Type == 12 )
      puts("[");
     else
      puts(".");
     decompilePUSHPARAM(var,0);
-    if (var->Type == 7 || var->Type == 6 || var->Type == 10)
+    if (var->Type == 7 || var->Type == 6 || var->Type == 10
+     || var->Type == 4 || var->Type == 12 )
      puts("]");
     printf(" = " );
     if (val->Type != 10)			// later it will be a switch{}
@@ -1509,9 +1527,12 @@ decompileSETVARIABLE(int n, SWF_ACTION *actions,int maxn,int islocalvar)
 {
     struct SWF_ACTIONPUSHPARAM *val, *var;
 
-    INDENT
     val = pop();
     var = pop();
+    if (val->Type!=12)
+    {
+     INDENT
+    }
 #ifdef DEBUG
  printf("*SETVariable* varName %s (type=%d)  valName=%s (type=%d)\n",getName(var),var->Type, getName(val),val->Type);
 #endif
@@ -1812,9 +1833,6 @@ if(0)	    dumpRegs();
 	println("}");
 	return 0;
     }
-#if 0
-// old stuff removed (find it here up to CVS release 1.62)
-#else	/* a.k. 2006 NEW stuff comes here */
     {
 	   #define SOME_IF_DEBUG 0	/* coders only */
     	   int has_else_or_break= ((sact->Actions[sact->numActions-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) &&
@@ -1965,7 +1983,6 @@ if(0)	    dumpRegs();
 	 }
 	return i;
     }
-#endif
     return 0;
 }
 
@@ -2408,7 +2425,6 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
         decompileWAITFORFRAME(&actions[n]);
 	return 0;
 
-
       case SWFACTION_GETURL2:
         decompileGETURL2(&actions[n]);
 	return 0;
@@ -2485,7 +2501,7 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	return 0;
 
       case SWFACTION_DEFINELOCAL2:
-        decompileDEFINELOCAL2(n, actions, maxn); // FIXME: perhaps move to decompileSETVARIABLE() ??
+        decompileDEFINELOCAL2(n, actions, maxn);
 	return 0;
 
       case SWFACTION_DECREMENT:
