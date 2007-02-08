@@ -33,6 +33,7 @@
 
 #define FLV_VIDEOTAG 		0x09
 #define FLV_AUDIOTAG 		0x08
+#define FLV_SCRIPTTAG 		0x12
 
 struct FLVStream_s
 {

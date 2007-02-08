@@ -144,7 +144,7 @@ int FLVStream_nextTag(FLVStream *flv, FLVTag *tag, FLVTag *prev)
 	ichar = SWFInput_getChar(flv->input);
 	if(ichar == EOF)
 		return -1;
-	if(ichar != FLV_VIDEOTAG && ichar != FLV_AUDIOTAG)
+	if(ichar != FLV_VIDEOTAG && ichar != FLV_AUDIOTAG && ichar != FLV_SCRIPTTAG)
 	{
 		SWF_warn("FLV: stream out of sync!\n");
 		return -1;
