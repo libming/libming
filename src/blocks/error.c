@@ -89,12 +89,7 @@ setSWFErrorFunction(void (*errorfunc)(const char *msg, ...))
 
 
 
-void
-SWF_assert(int c)
-{
-	if ( !c )
-		SWF_error("failed assertion");
-}
+
 
 
 /*
