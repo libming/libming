@@ -215,6 +215,12 @@ SWFInput FLVTag_getPayloadInput(FLVTag *tag)
 		length = tag->dataSize;
 		SWFInput_seek(input, tag->data, SEEK_SET);
 	}
+	else if(tag->tagType == FLV_VIDEOTAG
+                && tag->hdr.video.codec == VIDEO_CODEC_VP6)
+	{
+		length = tag->dataSize - 2;
+		SWFInput_seek(input, tag->data + 2, SEEK_SET);
+	}
 	else /* skip flv-audio/video-data byte */
 	{
 		length = tag->dataSize - 1;
