@@ -311,6 +311,45 @@ void destroySWFVideoStream(SWFVideoStream stream) {
 	destroySWFCharacter((SWFCharacter) stream);
 }
 
+
+static int setVP6Dimension(SWFVideoStream stream, FLVTag *tag)
+{
+	SWFInput input;
+	int ichar;
+	int render_x, render_y;
+
+	input = FLVTag_getPayloadInput(tag);
+	if(input == NULL)
+		return -1;
+
+	
+	ichar = SWFInput_getChar(input);
+	if(ichar == EOF) 
+		return -1;
+
+	if(ichar >> 7)
+	{
+		SWF_warn("setVP6Dimension: first frame is interframe\n");
+		return -1;
+	}
+
+	if(ichar & 1)
+	{
+		SWF_warn("setVP6Dimension: VP60!\n");
+		return -1;
+	}
+
+	ichar = SWFInput_getChar(input);
+	ichar = SWFInput_getChar(input);
+	render_x = SWFInput_getChar(input);
+	render_y = SWFInput_getChar(input);
+
+	stream->width = render_x * 16;
+	stream->height = render_y * 16;	
+	return 0;	
+}
+
+
 static int setStreamProperties(SWFVideoStream stream) 
 {
 	int ret;
@@ -340,6 +379,10 @@ static int setStreamProperties(SWFVideoStream stream)
 			stream->smoothingFlag = 0;
 			break;
 		case VIDEO_CODEC_VP6:
+			setVP6Dimension(stream, &tag);
+			stream->smoothingFlag = VIDEO_SMOOTHING;
+			ret = 0;
+			break;
 		case VIDEO_CODEC_VP6A:
 		case VIDEO_CODEC_SCREEN2:
 			SWF_warn("setStreamProperties: automatic dimension setting is not working with this codec yet!\n");
@@ -364,7 +407,7 @@ newSWFVideoStream_fromInput(SWFInput input) {
 
 	SWFBlock block;
 	SWFVideoStream stream;
-	
+
 	if(!input)
 		return NULL;
 	
