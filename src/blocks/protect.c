@@ -72,7 +72,7 @@ newSWFProtect(char *password)
 	protect->out = newSWFOutput();
 	protect->Password = password;
 
-	return protect;
+	return (SWFBlock)protect;
 }
 
 
