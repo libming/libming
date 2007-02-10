@@ -162,14 +162,9 @@ int bufferWritePushOp(Buffer out);
 int bufferWriteU8(Buffer out, int data);
 int bufferWriteS16(Buffer out, int data);
 int bufferWriteData(Buffer out, const byte *buffer, int bytes);
-int bufferWriteHardString(Buffer out, byte *string, int length);
-int bufferWriteConstantString(Buffer out, byte *string, int length);
-int bufferWriteString(Buffer out, byte *string, int length);
-#ifdef __cplusplus
-/* helper function to avoid many casts */
-inline int bufferWriteString(Buffer out, char *string, int length) {
-	return bufferWriteString(out,(byte*) string, length); }
-#endif
+int bufferWriteHardString(Buffer out, char *string, int length);
+int bufferWriteConstantString(Buffer out, char *string, int length);
+int bufferWriteString(Buffer out, char *string, int length);
 int bufferWriteInt(Buffer out, int i);
 int bufferWriteDouble(Buffer out, double d);
 int bufferWriteNull(Buffer out);

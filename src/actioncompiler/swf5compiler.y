@@ -233,7 +233,7 @@ try_catch_stmt
 									bufferWriteS16($$, bufferLength($2));
 									bufferWriteS16($$, bufferLength($7));
 									bufferWriteS16($$, 0);
-									bufferWriteHardString($$, (byte*)$5, strlen($5)+1);
+									bufferWriteHardString($$, $5, strlen($5)+1);
 									bufferConcat($$, $2);
 									bufferConcat($$, $7);
 								}
@@ -255,7 +255,7 @@ try_catch_stmt
 									bufferWriteS16($$, bufferLength($2));
 									bufferWriteS16($$, bufferLength($7));
 									bufferWriteS16($$, bufferLength($9));
-									bufferWriteHardString($$, (byte*)$5, strlen($5)+1);
+									bufferWriteHardString($$, $5, strlen($5)+1);
 									bufferConcat($$, $2);
 									bufferConcat($$, $7);
 									bufferConcat($$, $9);
@@ -467,13 +467,13 @@ formals_list
 
 	| identifier
 		{ $$.buffer = newBuffer();
-		  bufferWriteHardString($$.buffer, (byte*)$1, strlen($1)+1);
+		  bufferWriteHardString($$.buffer, $1, strlen($1)+1);
 		  $$.count = 1;
 		  free($1); }
 
 	| formals_list ',' identifier
 		{ $$ = $1;
-		  bufferWriteHardString($$.buffer, (byte*)$3, strlen($3)+1);
+		  bufferWriteHardString($$.buffer, $3, strlen($3)+1);
 		  ++$$.count;
 		  free($3); }
 	;
@@ -501,7 +501,7 @@ function_decl
 			bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
 			bufferWriteS16($$, strlen($2) +
 				bufferLength($4.buffer) + 5);
-			bufferWriteHardString($$, (byte*) $2, strlen($2)+1);
+			bufferWriteHardString($$, $2, strlen($2)+1);
 			bufferWriteS16($$, $4.count);
 			bufferConcat($$, $4.buffer);
 			bufferWriteS16($$, bufferLength($6));
@@ -892,9 +892,9 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GETURL);
 		  bufferWriteS16($$, strlen($3) + strlen($5) + 2);
-		  bufferWriteHardString($$, (byte*)$3, strlen($3));
+		  bufferWriteHardString($$, $3, strlen($3));
 		  bufferWriteU8($$, 0);
-		  bufferWriteHardString($$, (byte*)$5, strlen($5));
+		  bufferWriteHardString($$, $5, strlen($5));
 		  bufferWriteU8($$, 0); }
 
 	/* v3 actions */
@@ -932,7 +932,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GOTOLABEL);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
+		  bufferWriteHardString($$, $3, strlen($3)+1);
 		  free($3); }
 
 	| GOTOFRAME '(' expr ')'
@@ -945,7 +945,7 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_SETTARGET);
 		  bufferWriteS16($$, strlen($3)+1);
-		  bufferWriteHardString($$, (byte*)$3, strlen($3)+1);
+		  bufferWriteHardString($$, $3, strlen($3)+1);
 		  free($3); }
 
 	| SETTARGET '(' expr ')'
@@ -1827,7 +1827,7 @@ with
 	;
 
 push_item
-	: STRING		{ $$ = bufferWriteConstantString(asmBuffer,(byte*) $1,
+	: STRING		{ $$ = bufferWriteConstantString(asmBuffer, $1,
 								 strlen($1)+1); }
 
 	| INTEGER		{ bufferWriteU8(asmBuffer, PUSH_INT);

@@ -148,7 +148,7 @@ int bufferWriteConstants(Buffer out)
 
 	for(i=0; i<nConstants; ++i)
 	{
-		len += bufferWriteHardString(out,(byte*) constants[i], strlen(constants[i])+1);
+		len += bufferWriteHardString(out, constants[i], strlen(constants[i])+1);
 		free(constants[i]);
 	}
 
@@ -410,17 +410,17 @@ int bufferWriteS16(Buffer out, int data)
 	return 2;
 }
 
-int bufferWriteHardString(Buffer out, byte *string, int length)
+int bufferWriteHardString(Buffer out, char *string, int length)
 {
 	int i;
 
 	for(i=0; i<length; ++i)
-		bufferWriteU8(out, string[i]);
+		bufferWriteU8(out, (byte)string[i]);
 
 	return length;
 }
 
-int bufferWriteConstantString(Buffer out, byte *string, int length)
+int bufferWriteConstantString(Buffer out, char *string, int length)
 {
 	int n;
 
@@ -449,7 +449,7 @@ int bufferWriteConstantString(Buffer out, byte *string, int length)
 	}
 }
 
-int bufferWriteString(Buffer out, byte *string, int length)
+int bufferWriteString(Buffer out, char *string, int length)
 {
 	if(SWF_versionNum < 5)
 	{
