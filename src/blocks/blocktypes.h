@@ -48,19 +48,25 @@ typedef enum
   SWF_DEFINEEDITTEXT		= 37,
   SWF_DEFINEFONT                = 10,
   SWF_DEFINEFONT2               = 48,
+  SWF_DEFINEFONT3		= 75,  /* SWF_version  >= 8 */
+  SWF_DEFINEFONTALIGNZONES	= 73,  /* SWF_version  >= 8 */
+  SWF_CMSTEXTSETTINGS		= 74,  /* SWF_version  >= 8 */
   SWF_DEFINEFONTINFO            = 13,
   SWF_DEFINELOSSLESS            = 20,
   SWF_DEFINELOSSLESS2           = 36,
   SWF_DEFINEMORPHSHAPE          = 46,
+  SWF_DEFINEMORPHSHAPE2		= 84,  /* SWF_version  >= 8 */
   SWF_DEFINESHAPE               =  2,
   SWF_DEFINESHAPE2              = 22,
   SWF_DEFINESHAPE3              = 32,
+  SWF_DEFINESHAPE4		= 83,  /* SWF_version  >= 8 */
   SWF_DEFINESOUND               = 14,
   SWF_DEFINESPRITE              = 39,
   SWF_DEFINETEXT                = 11,
   SWF_DEFINETEXT2               = 33,
   SWF_DEFINETEXTFORMAT		= 42,
   SWF_DEFINEVIDEO		= 38,
+  SWF_DEFINESCALINGGRID		= 78,  /* SWF_version  >= 8 */
   SWF_DOACTION                  = 12,
   SWF_ENABLEDEBUGGER		= 58,
   SWF_END                       =  0,
@@ -72,11 +78,13 @@ typedef enum
   SWF_FREECHARACTER		=  3,
   SWF_GENCOMMAND		= 49,
   SWF_IMPORTASSETS              = 57,
+  SWF_IMPORTASSETS2		= 71,  /* SWF_version  >= 8 */
   SWF_JPEGTABLES                =  8,
   SWF_NAMECHARACTER		= 40,
   SWF_PATHSAREPOSTSCRIPT	= 25,
   SWF_PLACEOBJECT               =  4,
   SWF_PLACEOBJECT2              = 26,
+  SWF_PLACEOBJECT3		= 70,  /* SWF_version >= 8 */
   SWF_PROTECT                   = 24,
   SWF_REMOVEOBJECT              =  5,
   SWF_REMOVEOBJECT2             = 28,
@@ -88,7 +96,7 @@ typedef enum
   SWF_SOUNDSTREAMHEAD2          = 45,
   SWF_STARTSOUND                = 15,
   SWF_SYNCFRAME			= 29,
-  SWF_INITACTION				= 59,
+  SWF_INITACTION		= 59,
   SWF_DEFINEVIDEOSTREAM		= 60,
   SWF_VIDEOFRAME		= 61,
 
