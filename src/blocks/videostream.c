@@ -422,7 +422,7 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	block->type = SWF_DEFINEVIDEOSTREAM;
 	block->writeBlock = writeSWFVideoStreamToMethod;
 	block->complete = completeSWFVideoStream;
-	block->dtor = destroySWFVideoStream;
+	block->dtor = (destroySWFBlockMethod)destroySWFVideoStream;
 	
 	stream->flv = FLVStream_fromInput(input);
 	if(stream->flv == NULL)
@@ -462,7 +462,7 @@ SWFVideoStream newSWFVideoStream() {
 	block->type = SWF_DEFINEVIDEOSTREAM;
         block->writeBlock = writeSWFVideoStreamToMethod;
         block->complete = completeSWFVideoStream;
-        block->dtor = destroySWFVideoStream;
+        block->dtor = (destroySWFBlockMethod)destroySWFVideoStream;
         
 	stream->flv = NULL;
 	stream->lastTag = NULL;
