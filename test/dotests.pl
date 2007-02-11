@@ -108,9 +108,15 @@ sub doswftest($$$)
 		return 0;
 	}
 	if( ! -x $testbuilder ) {
-		printf  STDERR "$test failed. $testbuilder not executable\n";
-		++$failures;
-		return 0;
+		# This is needed for script objects, as they are present in
+		# the repository (not generated at build time) w/out
+		# the execute bit. Dunno if it's possible to set the 
+		# execute bit automatically.
+		print "Setting execute bit on  $testbuilder in $swfdir\n";
+		system("chmod +x $testbuilder");
+		#printf  STDERR "$test failed. $testbuilder not executable\n";
+		#++$failures;
+		#return 0;
 	}
 	if( -r $testswf ) {
 		system("rm -f $testswf");
