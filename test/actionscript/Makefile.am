@@ -23,7 +23,7 @@ EXTRA_DIST = 		\
 	logor.ref	\
 	$(AS_TESTS)
 
-CLEANFILES = *.as.pp *.swf
+CLEANFILES = *.pp *.swf
 
 check_PROGRAMS = \
 	ActionScriptTest
