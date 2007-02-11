@@ -2031,12 +2031,28 @@ parseSWF_SHOWFRAME (FILE * f, int length)
   PAR_END;
 }
 
+static inline void 
+parseMp3Stream(FILE *f, struct MP3STREAMSOUNDDATA *data)
+{
+  data->SampleCount = readSInt16(f);
+  data->SeekSamples = readSInt16(f);
+}
+
 SWF_Parserstruct *
 parseSWF_SOUNDSTREAMBLOCK (FILE * f, int length)
 {
   int end = fileOffset + length;
   PAR_BEGIN (SWF_SOUNDSTREAMBLOCK);
-  parserrec->StreamData = (UI8 *)readBytes(f, end - fileOffset);
+  switch(m.soundStreamFmt)
+  {
+    case 2:
+      parseMp3Stream(f, &parserrec->StreamData.mp3);
+      parserrec->StreamData.mp3.frames = 
+          (UI8 *)readBytes(f, end - fileOffset);
+      break;
+    default:
+      parserrec->StreamData.data = (UI8 *)readBytes(f, end - fileOffset);
+  }
   PAR_END;
 }
 
@@ -2057,7 +2073,7 @@ parseSWF_SOUNDSTREAMHEAD (FILE * f, int length)
   parserrec->StreamSoundSampleCount = readUInt16 (f);
   if( parserrec->StreamSoundCompression == 2 /* MP3 */ )
     parserrec->LatencySeek = readUInt16 (f);
-
+  m.soundStreamFmt = parserrec->StreamSoundCompression;
   PAR_END;
 }
 
@@ -2078,7 +2094,7 @@ parseSWF_SOUNDSTREAMHEAD2 (FILE * f, int length)
   parserrec->StreamSoundSampleCount = readUInt16 (f);
   if( parserrec->StreamSoundCompression == 2 /* MP3 */ )
     parserrec->LatencySeek = readUInt16 (f);
-
+  m.soundStreamFmt = parserrec->StreamSoundCompression;
   PAR_END;
 }
 

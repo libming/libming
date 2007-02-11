@@ -1272,9 +1272,19 @@ struct SWF_SHOWFRAME
   int chid;
 };
 
+struct MP3STREAMSOUNDDATA
+{
+  UI16 SampleCount;
+  SI16 SeekSamples;
+  UI8 *frames;
+};
+
 struct SWF_SOUNDSTREAMBLOCK
 {
-  UI8 *StreamData;
+  union {
+    struct MP3STREAMSOUNDDATA mp3;
+    UI8 *data;
+  } StreamData;
 };
 
 struct SWF_SOUNDSTREAMHEAD

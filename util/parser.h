@@ -35,6 +35,7 @@ struct Movie
   struct Rect frame;
   float rate;
   int nFrames;
+  int soundStreamFmt;
 };
 
 

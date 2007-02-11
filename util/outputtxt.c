@@ -31,6 +31,7 @@ extern const char *blockName (SWFBlocktype header);
 
 extern int verbose;
 
+extern struct Movie m;
 /*
  * This file contains output functions that can display the different SWF block
  * types in a human readable format.
@@ -1096,11 +1097,18 @@ outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 
 }
 
+
 void
 outputSWF_SOUNDSTREAMBLOCK (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
-
+  if(m.soundStreamFmt == 2)
+  {
+    OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
+    iprintf("  Mp3: SampleCount %i\n", 
+           sblock->StreamData.mp3.SampleCount);
+    iprintf("  Mp3: SeekSamples %i\n", 
+           sblock->StreamData.mp3.SeekSamples);
+  }
 }
 
 void
@@ -1204,6 +1212,7 @@ outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
 
   switch(sblock->StreamSoundCompression)
   {
+    case 0: tmp = "uncompressed"; break;
     case 1: tmp = "ADPCM"; break;
     case 2: tmp = "MP3"; break;
     case 3: tmp = "uncompressed"; break;
