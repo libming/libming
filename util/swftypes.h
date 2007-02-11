@@ -1274,7 +1274,7 @@ struct SWF_SHOWFRAME
 
 struct SWF_SOUNDSTREAMBLOCK
 {
-  int chid;
+  UI8 *StreamData;
 };
 
 struct SWF_SOUNDSTREAMHEAD

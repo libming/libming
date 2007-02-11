@@ -1106,15 +1106,140 @@ outputSWF_SOUNDSTREAMBLOCK (SWF_Parserstruct * pblock)
 void
 outputSWF_SOUNDSTREAMHEAD (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_SOUNDSTREAMHEAD);
+  char *tmp;
 
+  OUT_BEGIN (SWF_SOUNDSTREAMHEAD);
+  switch(sblock->PlaybackSoundRate)
+  {
+    case 0: tmp = "5.5 kHz"; break;
+    case 1: tmp = "11 kHz"; break;
+    case 2: tmp = "22 kHz"; break;
+    case 3: tmp = "44 kHz"; break;
+    default: tmp = "error";
+  }
+  iprintf("  PlaybackSoundRate %s\n", tmp);
+
+  switch(sblock->PlaybackSoundSize)
+  {
+    case 1: tmp = "16 bit"; break;
+    default: tmp = "error";
+  }
+  iprintf("  PlaybackSoundSize %s\n", tmp);
+
+  switch(sblock->PlaybackSoundType)
+  {
+    case 0: tmp = "mono"; break;
+    case 1: tmp = "stereo"; break;
+    default: tmp = "erreor";
+  }
+  iprintf("  PlaybackSoundType %s\n", tmp);
+
+  switch(sblock->StreamSoundCompression)
+  {
+    case 1: tmp = "ADPCM"; break;
+    case 2: tmp = "MP3"; break;
+    default: tmp ="error";
+  }
+  iprintf("  StreamSoundCompression %s\n", tmp);
+
+  switch(sblock->StreamSoundRate)
+  {
+    case 0: tmp = "5.5 kHz"; break;
+    case 1: tmp = "11 kHz"; break;
+    case 2: tmp = "22 kHz"; break;
+    case 3: tmp = "44 kHz"; break;
+    default: tmp = "error";
+  }
+  iprintf("  StreamSoundRate %s\n", tmp);
+
+  switch(sblock->StreamSoundSize)
+  {
+    case 1: tmp = "16 bit"; break;
+    default: tmp = "error";
+  }
+  iprintf("  StreamSoundSize %s\n", tmp);
+
+  switch(sblock->StreamSoundType)
+  {
+    case 0: tmp = "mono"; break;
+    case 1: tmp = "stereo"; break;
+    default: tmp = "erreor";
+  }
+  iprintf("  StreamSoundType %s\n", tmp);
+  iprintf("  StreamSoundSampleCount %i\n", sblock->StreamSoundSampleCount);
+  if(sblock->StreamSoundCompression == 2)
+    iprintf("  LatencySeek %i\n", sblock->LatencySeek);  
 }
 
 void
 outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_SOUNDSTREAMHEAD2);
+  char *tmp;
+  OUT_BEGIN (SWF_SOUNDSTREAMHEAD2);
+  switch(sblock->PlaybackSoundRate)
+  {
+    case 0: tmp = "5.5 kHz"; break;
+    case 1: tmp = "11 kHz"; break;
+    case 2: tmp = "22 kHz"; break;
+    case 3: tmp = "44 kHz"; break;
+    default: tmp = "error";
+  }
+  iprintf("  PlaybackSoundRate %s\n", tmp);
 
+  switch(sblock->PlaybackSoundSize)
+  {
+    case 0: tmp = "8 bit"; break;
+    case 1: tmp = "16 bit"; break;
+    default: tmp = "error";
+  }
+  iprintf("  PlaybackSoundSize %s\n", tmp);
+
+  switch(sblock->PlaybackSoundType)
+  {
+    case 0: tmp = "mono"; break;
+    case 1: tmp = "stereo"; break;
+    default: tmp = "erreor";
+  }
+  iprintf("  PlaybackSoundType %s\n", tmp);
+
+  switch(sblock->StreamSoundCompression)
+  {
+    case 1: tmp = "ADPCM"; break;
+    case 2: tmp = "MP3"; break;
+    case 3: tmp = "uncompressed"; break;
+    case 6: tmp = "Nellymoser"; break;
+    default: tmp ="error";
+  }
+  iprintf("  StreamSoundCompression %s\n", tmp);
+
+  switch(sblock->StreamSoundRate)
+  {
+    case 0: tmp = "5.5 kHz"; break;
+    case 1: tmp = "11 kHz"; break;
+    case 2: tmp = "22 kHz"; break;
+    case 3: tmp = "44 kHz"; break;
+    default: tmp = "error";
+  }
+  iprintf("  StreamSoundRate %s\n", tmp);
+
+  switch(sblock->StreamSoundSize)
+  {
+    case 0: tmp = "8 bit"; break;
+    case 1: tmp = "16 bit"; break;
+    default: tmp = "error";
+  }
+  iprintf("  StreamSoundSize %s\n", tmp);
+
+  switch(sblock->StreamSoundType)
+  {
+    case 0: tmp = "mono"; break;
+    case 1: tmp = "stereo"; break;
+    default: tmp = "erreor";
+  }
+  iprintf("  StreamSoundType %s\n", tmp);
+  iprintf("  StreamSoundSampleCount %i\n", sblock->StreamSoundSampleCount);
+  if(sblock->StreamSoundCompression == 2)
+    iprintf("  LatencySeek %i\n", sblock->LatencySeek);
 }
 
 void

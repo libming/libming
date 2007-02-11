@@ -2034,10 +2034,9 @@ parseSWF_SHOWFRAME (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_SOUNDSTREAMBLOCK (FILE * f, int length)
 {
+  int end = fileOffset + length;
   PAR_BEGIN (SWF_SOUNDSTREAMBLOCK);
-
-  parserrec->chid = readUInt16 (f);
-
+  parserrec->StreamData = (UI8 *)readBytes(f, end - fileOffset);
   PAR_END;
 }
 
