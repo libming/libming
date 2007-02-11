@@ -52,6 +52,7 @@ typedef enum
   SWF_DEFINEFONTALIGNZONES	= 73,  /* SWF_version  >= 8 */
   SWF_CMSTEXTSETTINGS		= 74,  /* SWF_version  >= 8 */
   SWF_DEFINEFONTINFO            = 13,
+  SWF_DEFINEFONTINFO2		= 62,  /* SWF_version  >= 6 */
   SWF_DEFINELOSSLESS            = 20,
   SWF_DEFINELOSSLESS2           = 36,
   SWF_DEFINEMORPHSHAPE          = 46,
@@ -68,8 +69,10 @@ typedef enum
   SWF_DEFINEVIDEO		= 38,
   SWF_DEFINESCALINGGRID		= 78,  /* SWF_version  >= 8 */
   SWF_DOACTION                  = 12,
-  SWF_ENABLEDEBUGGER		= 58,
+  SWF_ENABLEDEBUGGER		= 58,  /* SWF_version  <  6 */ 
   SWF_ENABLEDEBUGGER2		= 64,  /* SWF_version  >= 6 */
+  SWF_SCRIPTLIMITS		= 65,  /* SWF_version  >= 7 */
+  SWF_SETTABINDEX		= 66,  /* SWF_version  >= 7 */
   SWF_END                       =  0,
   SWF_EXPORTASSETS              = 56,
   SWF_FONTREF			= 52,
