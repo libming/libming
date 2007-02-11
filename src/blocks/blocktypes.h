@@ -69,6 +69,7 @@ typedef enum
   SWF_DEFINESCALINGGRID		= 78,  /* SWF_version  >= 8 */
   SWF_DOACTION                  = 12,
   SWF_ENABLEDEBUGGER		= 58,
+  SWF_ENABLEDEBUGGER2		= 64,  /* SWF_version  >= 6 */
   SWF_END                       =  0,
   SWF_EXPORTASSETS              = 56,
   SWF_FONTREF			= 52,
