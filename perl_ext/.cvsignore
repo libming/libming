@@ -2,6 +2,7 @@ SWF.h
 blib
 pm_to_blib
 Makefile.in
+Makefile.perl
 Makefile
 SWF.c
 SWF.bs

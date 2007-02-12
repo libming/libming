@@ -1,3 +1,7 @@
+.deps
+Makefile
+Makefile.in
 .AppleDouble
 ming_wrap.doc
 build
+setup.py
