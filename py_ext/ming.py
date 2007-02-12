@@ -300,7 +300,7 @@ class SWFMovie(SWFBase):
 
     def protect(self, passwd=None):
         if passwd is None:
-            mingc.SWFMovie_protect(self.this,"")
+            mingc.SWFMovie_protect(self.this, None)
         else:
             mingc.SWFMovie_protect(self.this, passwd)
 
