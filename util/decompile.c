@@ -559,11 +559,12 @@ struct SWF_ACTIONPUSHPARAM *
 newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final)
 {
 	struct SWF_ACTIONPUSHPARAM *v;
+	int psize=PARAM_STRSIZE;
 	int i;
 	int slen=strlen(var)+strlen(var2)+strlen(var3)+strlen(var4)+strlen(final);
 	
 	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
-	v->p.String = malloc(PARAM_STRSIZE+slen);
+	v->p.String = malloc(psize + slen);
 	v->Type=10; /* VARIABLE */
 	strcpy(v->p.String,var);
 	strcat(v->p.String,var2);
@@ -572,19 +573,14 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 	for(i=0;i<pop_counter;i++) 
 	{
 	 char *pops=getString(pop());
-	 if ( strlen(v->p.String)+ 2 + strlen(pops) < PARAM_STRSIZE+slen)
+	 while ( strlen(v->p.String)+ 2 + strlen(pops) >= psize + slen)
 	 {
-	  strcat(v->p.String,pops);
-	  if( i < pop_counter-1 ) 
+	  psize += PARAM_STRSIZE;
+	  v->p.String = realloc( v->p.String, psize);
+	 }
+	 strcat(v->p.String,pops);
+	 if( i < pop_counter-1 ) 
 	   strcat(v->p.String,",");
-	 }
-	 else {
-		fprintf(stderr,"Some string overflowed something in newVar_N()??????\n");
-		while (++i<pop_counter)
-		  getString(pop());
-		printf("/* *** truncated string here: *** */\n");
-		break;
-	 }
 	}
 	strcat(v->p.String,final);
 	return v;
@@ -597,11 +593,12 @@ struct SWF_ACTIONPUSHPARAM *
 newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final)
 {
 	struct SWF_ACTIONPUSHPARAM *v;
+	int psize=PARAM_STRSIZE;
 	int i;
 	int slen=strlen(var)+strlen(var2)+strlen(var3)+strlen(var4)+strlen(final);
 	
 	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
-	v->p.String = malloc(PARAM_STRSIZE+slen);
+	v->p.String = malloc(psize + slen);
 	v->Type=10; /* VARIABLE */
 	strcpy(v->p.String,var);
 	strcat(v->p.String,var2);
@@ -611,21 +608,17 @@ newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *fina
 	{
 	 char *pops1=getString(pop());
 	 char *pops2=getName  (pop());
-	 if ( strlen(v->p.String)+ 3 + strlen(pops1)+ strlen(pops2) < PARAM_STRSIZE+slen)
+
+	 while ( strlen(v->p.String)+ 3 + strlen(pops1)+ strlen(pops2) >= psize + slen)
 	 {
-	  strcat(v->p.String,pops2);
-	  strcat(v->p.String,":");
-	  strcat(v->p.String,pops1);
-	  if( i < pop_counter-1 ) 
+	  psize += PARAM_STRSIZE;
+	  v->p.String = realloc( v->p.String, psize);
+	 }
+	 strcat(v->p.String,pops2);
+	 strcat(v->p.String,":");
+	 strcat(v->p.String,pops1);
+	 if( i < pop_counter-1 ) 
 	   strcat(v->p.String,",");
-	 }
-	 else {
-		fprintf(stderr,"Some string overflowed something in newVar_N2()??????\n");
-		while (++i<pop_counter)
-		  getString(pop());
-		printf("/* *** truncated string here: *** */\n");
-		break;
-	 }
 	}
 	strcat(v->p.String,final);
 	return v;
