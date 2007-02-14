@@ -504,7 +504,7 @@ outputSWF_CHARACTERSET (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEBITS);
+  //RECTOUT_BEGIN (SWF_DEFINEBITS);
 
 }
 
@@ -1077,7 +1077,9 @@ outputSWF_REMOVEOBJECT2 (SWF_Parserstruct * pblock)
 void
 outputSWF_SERIALNUMBER (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_SERIALNUMBER);
+  OUT_BEGIN (SWF_SERIALNUMBER);
+
+  iprintf (" Code: %s\n", sblock->code);
 
 }
 

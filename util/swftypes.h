@@ -1259,7 +1259,7 @@ struct SWF_REMOVEOBJECT2
 
 struct SWF_SERIALNUMBER
 {
-  int chid;
+	STRING code;
 };
 
 struct SWF_SETBACKGROUNDCOLOR

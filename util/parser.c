@@ -2008,7 +2008,7 @@ parseSWF_SERIALNUMBER (FILE * f, int length)
 {
   PAR_BEGIN (SWF_SERIALNUMBER);
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->code = readSizedString(f, length);
 
   PAR_END;
 }
