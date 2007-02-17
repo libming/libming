@@ -86,6 +86,15 @@ void SWFOutput_writeSInt32(SWFOutput out, long data);
 
 void SWFOutput_writeBuffer(SWFOutput out, unsigned char *buffer, int bytes);
 
+void SWFOutput_writeFixed(SWFOutput out, double val);
+
+void SWFOutput_writeFixed8(SWFOutput out, double val);
+
+void SWFOutput_writeFloat(SWFOutput out, float val);
+
+void SWFOutput_writeDouble(SWFOutput out, double val);
+
+void SWFOutput_writeFloat16(SWFOutput out, float val);
 
 /* number of bits required to store num */
 int SWFOutput_numBits(int num);

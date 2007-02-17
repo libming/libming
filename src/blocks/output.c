@@ -382,6 +382,93 @@ SWFOutput_writeString(SWFOutput out, const unsigned char *string)
 	SWFOutput_writeUInt8(out, 0);
 }
 
+void 
+SWFOutput_writeFixed(SWFOutput out, double val)
+{
+	unsigned int fixed;
+
+	fixed = val * (1<<16);
+	SWFOutput_writeUInt32(out, fixed);
+}
+
+void 
+SWFOutput_writeFixed8(SWFOutput out, double val)
+{
+	unsigned int fixed;
+
+	fixed = 0xffff & (int)(val * (1<<8));
+	SWFOutput_writeUInt16(out, fixed);
+}
+
+void
+SWFOutput_writeFloat(SWFOutput out, float f)
+{
+	unsigned char buf[4];
+	float *pf = (float *)buf;
+	
+	*pf = f;
+
+	SWFOutput_writeUInt32(out, (unsigned int) *buf);
+}
+
+void
+SWFOutput_writeDouble(SWFOutput out, double d)
+{
+	unsigned int i;
+	unsigned char buf[8];
+	double *pd = (double *)buf;
+
+	*pd = d;
+
+	for(i = 7; i >= 0; i--)
+		SWFOutput_writeUInt8(out, buf[i]);
+}
+
+#define FLOAT_SIGN_MASK 	0x80000000
+#define FLOAT_SIGN_SHIFT 	31
+#define FLOAT_EXP_MASK		0x7f800000
+#define FLOAT_EXP_SHIFT 	23
+#define FLOAT_MAT_MASK		0x7fff
+#define FLOAT_BIAS		127;
+
+/*
+ * FLOAT16 - half precision
+ * 1 - bit sign
+ * 5 - bit exp / bias = 16
+ * 10 - bit mantissa
+ */
+
+#define FLOAT16_SIGN_SHIFT 	15
+#define FLOAT16_EXP_SHIFT	11
+#define FLOAT16_BIAS		16
+
+void
+SWFOutput_writeFloat16(SWFOutput out, float f)
+{
+	unsigned char buf[4];
+	float *pf = (float *)buf;
+	int sig, exp, mat;
+	unsigned int i;
+
+	*pf = f;
+	i = (unsigned int)*buf;
+	
+	sig = (FLOAT_SIGN_MASK & i) >> FLOAT_SIGN_SHIFT;
+
+	exp = (FLOAT_EXP_MASK & i) >> FLOAT_EXP_SHIFT;
+	exp -= FLOAT_BIAS;
+
+	mat = (FLOAT_MAT_MASK &i);
+
+	exp += FLOAT16_BIAS;
+	exp &= 0x1f;
+	
+	// reduce mantissa to 11-bit
+	mat >>= 12;
+
+	i = sig << FLOAT16_SIGN_SHIFT | exp << FLOAT16_EXP_SHIFT | (mat & 0x7ff);
+	SWFOutput_writeUInt16(out, i);
+}
 
 /*
  * Local variables:
