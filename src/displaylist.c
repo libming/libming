@@ -475,6 +475,62 @@ float SWFDisplayItem_get_rot(SWFDisplayItem item)
   return SWFPosition_getRotation(item->position);
 }
 
+
+/* 
+ * adds a surface filter
+ * Adds a bitmap filter to the display object. 
+ * Also sets cache-as-bitmap flag. 
+ * See SWFFilter for possible filter objects
+ */ 
+void SWFDisplayItem_addFilter(SWFDisplayItem item,
+                              SWFFilter filter /* filter */)
+{
+	checkBlock(item);
+	SWFPlaceObject2Block_setCacheFlag(item->block, 1);
+	SWFPlaceObject2Block_addFilter(item->block, filter);
+}
+
+
+/*
+ * set blend mdoe
+ * Sets an alternative blend mode instead of default alpha blend.
+ * possible modes are:
+ * BLEND_MODE_NORMAL
+ * BLEND_MODE_LAYER
+ * BLEND_MODE_MULT
+ * BLEND_MODE_SCREEN
+ * BLEND_MODE_DARKEN
+ * BLEND_MODE_ADD
+ * BLEND_MODE_SUB
+ * BLEND_MODE_DIFF
+ * BLEND_MODE_DIFF
+ * BLEND_MODE_INV
+ * BLDEN_MODE_ALPHA
+ * BLEND_MDOE_ERASE
+ * BLEND_MDOE_OVERLAY
+ * BLEND_MODE_HARDLIGHT
+ */
+void SWFDisplayItem_setBlendMode(SWFDisplayItem item,
+			int mode /* blend mode */)
+{
+	checkBlock(item);
+	SWFPlaceObject2Block_setBlendMode(item->block, mode);
+}
+
+
+/*
+ * set cashing flag
+ * If this flag ist set, the character can be cached as a bitmap. This might
+ * improve rednering speed, if the object dos no change often.
+ * This feature is for SWF version >= 8 only.
+ */
+void SWFDisplayItem_cacheAsBitmap(SWFDisplayItem item, 
+	int flag /* flag 0 or 1 */)
+{
+	checkBlock(item);
+	SWFPlaceObject2Block_setCacheFlag(item->block, flag);
+}
+
 void
 SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream)
 {
