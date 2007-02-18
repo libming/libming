@@ -77,6 +77,7 @@ typedef struct SWFMovieClip_s *SWFMovieClip;
 typedef struct SWFMovie_s *SWFMovie;
 typedef struct SWFVideoStream_s *SWFVideoStream;
 typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
+typedef struct SWFFilter_s * SWFFilter;
 
 /***** General Ming functions *****/
 
@@ -602,6 +603,55 @@ void SWFPosition_rotateTo(SWFPosition position, float degrees);
 void SWFPosition_move(SWFPosition position, float x, float y);
 void SWFPosition_moveTo(SWFPosition position, float x, float y);
 
+/***** SWFFilter ***********/
+
+#define FILTER_MODE_INNER     (1<<7)
+#define FILTER_MODE_KO        (1<<6)
+#define FILTER_MODE_COMPOSITE (1<<5)
+#define FILTER_MODE_ONTOP     (1<<4)
+
+#define FILTER_FLAG_CLAMP          (1<<1)
+#define FILTER_FLAG_PRESERVE_ALPHA (1<<0)
+
+typedef struct SWFColor {
+        unsigned char    red;
+        unsigned char    green;
+        unsigned char    blue;
+        unsigned char    alpha;
+} SWFColor;
+
+typedef struct Shadow_s *SWFShadow;
+SWFShadow newSWFShadow(float angle, float distance, float strength);
+void destroySWFShadow(SWFShadow s);
+
+typedef struct Blur_s *SWFBlur;
+SWFBlur newSWFBlur(float blurX, float blurY, int passes);
+void destroySWFBlur(SWFBlur b);
+
+typedef struct FilterMatrix_s *SWFFilterMatrix;
+SWFFilterMatrix newSWFFilterMatrix(int cols, int rows, float *vals);
+void destroySWFFilterMatrix(SWFFilterMatrix m);
+
+void destroySWFFilter(SWFFilter filter);
+SWFFilter newColorMatrixFilter(SWFFilterMatrix matrix);
+SWFFilter newConvolutionFilter(SWFFilterMatrix matrix, float divisor,
+                               float bias, SWFColor color, int flags);
+
+SWFFilter newGradientBevelFilter(SWFGradient gradient, SWFBlur blur,
+                                 SWFShadow shadow, int flags);
+
+SWFFilter newGradientGlowFilter(SWFGradient gradient, SWFBlur blur,
+                                SWFShadow shadow, int flags);
+
+SWFFilter newBevelFilter(SWFColor shadowColor, SWFColor highlightColor, 
+                         SWFBlur blur, SWFShadow shadow, int flags);
+
+SWFFilter newGlowFilter(SWFColor color, SWFBlur blur, 
+                        float strength, int flags);
+
+SWFFilter newBlurFilter(SWFBlur blur);
+SWFFilter newDropShadowFilter(SWFColor color, SWFBlur blur, 
+                              SWFShadow shadow, int flags);
 
 /***** SWFDisplayItem *****/
 
@@ -668,7 +718,26 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 
 void SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags);
 
+void SWFDisplayItem_cacheAsBitmap(SWFDisplayItem item, int flag);
 
+enum {
+	BLEND_MODE_NULL,
+	BLEND_MODE_NORMAL,
+	BLEND_MODE_LAYER,
+	BLEND_MODE_MULT,
+	BLEND_MODE_SCREEN,
+	BLEND_MODE_DARKEN,
+	BLEND_MODE_ADD,
+	BLEND_MODE_SUB,
+	BLEND_MODE_DIFF,
+	BLEND_MODE_INV,
+	BLDEN_MODE_ALPHA,
+	BLEND_MDOE_ERASE,
+	BLEND_MDOE_OVERLAY,
+	BLEND_MODE_HARDLIGHT
+ };
+void SWFDisplayItem_setBlendMode(SWFDisplayItem item, int mode);
+void SWFDisplayItem_addFilter(SWFDisplayItem item, SWFFilter filter);
 /***** SWFFill *****/
 
 /* adds a position object to manipulate SWFFillStyle's matrix */

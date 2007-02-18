@@ -33,6 +33,10 @@
 #include "output.h"
 #include "blocktypes.h"
 
+
+void 
+SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient);
+
 void SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient,
                              SWFBlocktype shapeType);
 

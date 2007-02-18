@@ -79,6 +79,26 @@ SWFGradient_addEntry(SWFGradient gradient,
 	++gradient->nGrads;
 }
 
+void 
+SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient)
+{
+	int i;
+	int nGrads = gradient->nGrads;
+
+	SWFOutput_writeUInt8(out, gradient->nGrads); /* only 1-8 allowed */
+
+	for ( i=0; i<nGrads; ++i )
+	{
+		SWFOutput_writeUInt8(out, gradient->entries[i].r);
+		SWFOutput_writeUInt8(out, gradient->entries[i].g);
+		SWFOutput_writeUInt8(out, gradient->entries[i].b);
+		SWFOutput_writeUInt8(out, gradient->entries[i].a);
+	}
+
+	for ( i=0; i<nGrads; ++i )
+		SWFOutput_writeUInt8(out, gradient->entries[i].ratio);
+
+}
 
 void
 SWFOutput_writeGradient(SWFOutput out,

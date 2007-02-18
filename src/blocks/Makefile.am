@@ -43,6 +43,7 @@ noinst_HEADERS =	\
 	ttffont.h	\
 	utf8.h		\
 	videostream.h	\
+	filter.h	\
 	flv.h
 
 noinst_LTLIBRARIES = libblock.la
@@ -92,5 +93,6 @@ libblock_la_SOURCES = 	\
 	utf8.c		\
 	videostream.c	\
 	flv.c		\
+	filter.c	\
 	$(PNG_SOURCE)
 
