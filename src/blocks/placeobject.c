@@ -31,14 +31,26 @@
 #include "character.h"
 #include "matrix.h"
 #include "cxform.h"
+#include "filter.h"
 
 #include "libming.h"
+
+struct FilterList_s
+{
+	int numFilter;
+	SWFFilter *filter;
+};
 
 struct SWFPlaceObject2Block_s
 {
 	struct SWFBlock_s block;
 
 	SWFOutput out;
+
+	// PlaceObject - version 
+	// default is 2
+	// 3 if with SWF_versiom >= 8 and V3 extensions were used
+	int version;  
 
 	SWFCharacter character;
 	SWFMatrix matrix;
@@ -54,8 +66,15 @@ struct SWFPlaceObject2Block_s
 	SWFAction *actions;
 	int *actionFlags;
 //	char *actionChars;
-};
+	
+	// V3 extension SWF_version >= 8
+	char hasCacheFlag;
+	char hasBlendFlag;
+	char hasFilterFlag;
 
+	struct FilterList_s *filterList; 
+	int blendMode;
+}; 
 
 void
 writeSWFPlaceObject2BlockToStream(SWFBlock block,
@@ -117,8 +136,16 @@ completeSWFPlaceObject2Block(SWFBlock block)
 		((place->nActions != 0)			? SWF_PLACE_HAS_ACTIONS : 0);
 
 	SWFOutput_writeUInt8(out, flags);
+	if(place->version == 3)
+	{
+		flags = 0;
+		if(place->hasCacheFlag) flags |= SWF_PLACE_CACHE;
+		if(place->hasBlendFlag) flags |= SWF_PLACE_HAS_BLEND;
+		if(place->hasFilterFlag) flags |= SWF_PLACE_HAS_FILTER;
+		SWFOutput_writeUInt8(out, flags);
+	}
 	SWFOutput_writeUInt16(out, place->depth);
-
+	
 	if ( place->character != NULL )
 		SWFOutput_writeUInt16(out, CHARACTERID(place->character));
 
@@ -136,6 +163,20 @@ completeSWFPlaceObject2Block(SWFBlock block)
 
 	if ( place->masklevel != -1 )
 		SWFOutput_writeUInt16(out, place->masklevel);
+
+	if( place->version == 3 && place->hasFilterFlag)
+	{
+		int i;
+		
+		for(i = 0; i < place->filterList->numFilter; i++)
+			SWFOutput_writeSWFFilter(out, place->filterList->filter[i]);
+	}
+
+	if( place->version == 3 && place->hasBlendFlag)
+	{
+		SWFOutput_writeUInt8(out, place->blendMode);
+	}
+
 
 	if ( place->nActions != 0 )
 	{
@@ -171,6 +212,12 @@ destroySWFPlaceObject2Block(SWFPlaceObject2Block place)
 		free(place->actionFlags);
 //	}
 
+	if( place->filterList != NULL )
+	{
+		free(place->filterList->filter);
+		free(place->filterList);
+	}
+
 	if ( place->name != NULL )
 		free(place->name);
 
@@ -187,6 +234,25 @@ destroySWFPlaceObject2Block(SWFPlaceObject2Block place)
 }
 
 
+static inline void
+setPlaceObjectVersion(SWFPlaceObject2Block block, int version)
+{
+	switch(version)
+	{
+		case 2: 
+			block->version = version;
+			BLOCK(block)->type = SWF_PLACEOBJECT2;
+			break;
+		case 3:
+			block->version = version;
+			BLOCK(block)->type = SWF_PLACEOBJECT3;
+			break;
+		default:
+			SWF_error("setPlaceObjectVersion: invalid version %i\n",
+                                  version);
+	}
+}
+
 SWFPlaceObject2Block
 newSWFPlaceObject2Block(int depth)
 {
@@ -199,6 +265,7 @@ newSWFPlaceObject2Block(int depth)
 	BLOCK(place)->complete = completeSWFPlaceObject2Block;
 	BLOCK(place)->dtor = (destroySWFBlockMethod) destroySWFPlaceObject2Block;
 
+	place->version = 2;
 	place->out = NULL;
 	place->name = NULL;
 
@@ -216,6 +283,10 @@ newSWFPlaceObject2Block(int depth)
 //	place->actionChars = NULL;
 	place->actions = NULL;
 
+	place->hasCacheFlag = 0;
+	place->hasBlendFlag = 0;
+	place->hasFilterFlag = 0;
+	place->filterList = NULL;
 	return place;
 }
 
@@ -326,6 +397,61 @@ SWFPlaceObject2Block_addAction(SWFPlaceObject2Block block,
 	++block->nActions;
 }
 
+
+/* 
+ * set Cache as BitmapFlag 
+ * Only if SWF Version >= 8. Sets PlaceObject version to 3
+ */
+void 
+SWFPlaceObject2Block_setCacheFlag(SWFPlaceObject2Block block, int flag)
+{
+	setPlaceObjectVersion(block, 3);
+	block->hasCacheFlag = 1;
+}
+
+/* 
+ * set blend mode. 
+ * See ming.h for possible blend modes
+ * Only if SWF Version >= 8. Sets PlaceObject version to 3
+ */
+void 
+SWFPlaceObject2Block_setBlendMode(SWFPlaceObject2Block block, int mode)
+{
+	if(mode < 0 || mode > 255)
+	{
+		SWF_warn("SWFPlaceObject2Block_setBlendMode: mode must be in between [0...255]");
+		return;
+	}
+	
+	setPlaceObjectVersion(block, 3);
+	block->hasBlendFlag = 1;
+	block->blendMode = mode;
+}
+
+
+/*
+ * add filter
+ * see ming.h for filtertypes
+ * Only if SWF Version >= 8. Sets PlaceObject version to 3
+ */
+void 
+SWFPlaceObject2Block_addFilter(SWFPlaceObject2Block block, SWFFilter filter)
+{
+	int count;
+	if(block->filterList == NULL)
+	{
+		setPlaceObjectVersion(block, 3);
+		block->filterList = (struct FilterList_s *)
+			malloc(sizeof(struct FilterList_s));
+		block->filterList->numFilter = 0;
+		block->filterList->filter = 0;
+		block->hasFilterFlag = 1;
+	}
+	count = block->filterList->numFilter;
+	block->filterList->filter = realloc(block->filterList->filter, count + 1);
+	block->filterList->filter[count] = filter;
+	block->filterList->numFilter++;
+}
 
 /*
  * Local variables:

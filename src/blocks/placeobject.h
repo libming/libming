@@ -23,6 +23,10 @@ typedef struct SWFPlaceObject2Block_s *SWFPlaceObject2Block;
 #define SWF_PLACE_HAS_CHARACTER   (1<<1)
 #define SWF_PLACE_MOVE            (1<<0)
 
+#define SWF_PLACE_CACHE           (1<<2)
+#define SWF_PLACE_HAS_BLEND       (1<<1)
+#define SWF_PLACE_HAS_FILTER      (1<<0)	      
+
 SWFPlaceObject2Block newSWFPlaceObject2Block(int depth);
 
 void SWFPlaceObject2Block_setName(SWFPlaceObject2Block block,
@@ -52,6 +56,13 @@ void SWFPlaceObject2Block_setCharacter(SWFPlaceObject2Block block,
 
 void SWFPlaceObject2Block_setMove(SWFPlaceObject2Block block);
 
+void SWFPlaceObject2Block_addFilter(SWFPlaceObject2Block block, SWFFilter filter);
+
+void 
+SWFPlaceObject2Block_setBlendMode(SWFPlaceObject2Block block, int mode);
+
+void 
+SWFPlaceObject2Block_setCacheFlag(SWFPlaceObject2Block block, int flag);
 #define SWF_PLACEACTION_ONLOAD      (1<<0)
 #define SWF_PLACEACTION_ENTERFRAME  (1<<1)
 #define SWF_PLACEACTION_UNLOAD      (1<<2)
