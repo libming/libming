@@ -616,6 +616,7 @@ newBlurFilter(SWFBlur blur /* blur */)
 	if(blur == NULL)
 		return NULL;
 
+	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
 	filter->id = BLUR_FILTER;
 	b = &filter->filter.blur;
 	b->blur = blur;
