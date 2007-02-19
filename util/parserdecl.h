@@ -80,6 +80,7 @@ extern SWF_Parserstruct *parseSWF_NAMECHARACTER(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_PATHSAREPOSTSCRIPT(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_PLACEOBJECT(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_PLACEOBJECT2(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_PLACEOBJECT3(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_PREBUILT(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_PREBUILTCLIP(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_PROTECT(FILE *f, int length);

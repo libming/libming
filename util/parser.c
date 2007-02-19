@@ -1102,6 +1102,166 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 	return 1;
 }
 
+void 
+parseSWF_DROPSHADOWFILTER(FILE *f, SWF_DROPSHADOWFILTER *filter)
+{
+	parseSWF_RGBA(f, &filter->DropShadowColor);
+	filter->BlurX = readUInt32(f);
+	filter->BlurY = readUInt32(f);
+	filter->Angle = readUInt32(f);
+	filter->Distance = readUInt32(f);
+	filter->Strength = readUInt16(f);
+	filter->InnerShadow = readBits(f, 1);
+	filter->Kockout = readBits(f, 1);
+	filter->CompositeSource = readBits(f, 1);
+	filter->Passes = readBits(f, 5);
+} 
+
+void 
+parseSWF_BLURFILTER(FILE *f, SWF_BLURFILTER *filter)
+{
+	filter->BlurX = readUInt32(f);
+	filter->BlurY = readUInt32(f);
+	filter->Passes = readBits(f, 5);
+	filter->Reserved = readBits(f, 3);
+}
+
+void 
+parseSWF_GLOWFILTER(FILE *f, SWF_GLOWFILTER *filter)
+{
+	parseSWF_RGBA(f, &filter->GlowColor);
+	filter->BlurX = readUInt32(f);
+	filter->BlurY = readUInt32(f);
+	filter->Strength = readUInt16(f);
+	filter->InnerGlow = readBits(f, 1);
+	filter->Kockout = readBits(f, 1);
+	filter->CompositeSource = readBits(f, 1);
+	filter->Passes = readBits(f, 5);
+}
+
+void 
+parseSWF_BEVELFILTER(FILE *f, SWF_BEVELFILTER *filter)
+{
+	parseSWF_RGBA(f, &filter->ShadowColor);
+	parseSWF_RGBA(f, &filter->HighlightColor);
+	filter->BlurX = readUInt32(f);
+	filter->BlurY = readUInt32(f);
+	filter->Angle = readUInt32(f);
+	filter->Distance = readUInt32(f);
+	filter->Strength = readUInt16(f);
+	filter->InnerShadow = readBits(f, 1);
+	filter->Kockout = readBits(f, 1);
+	filter->CompositeSource = readBits(f, 1);
+	filter->OnTop = readBits(f, 1);
+	filter->Passes = readBits(f, 4);
+}
+
+void 
+parseSWF_GRADIENTFILTER(FILE *f, SWF_GRADIENTFILTER *filter)
+{
+	int i, size;
+
+	filter->NumColors = readUInt8(f);
+	size = filter->NumColors * sizeof(SWF_RGBA);
+	filter->GradientColors = (SWF_RGBA *)malloc(size);
+	for(i = 0; i < filter->NumColors; i++)
+		parseSWF_RGBA(f, filter->GradientColors + i);
+
+	size = filter->NumColors * sizeof(UI8);
+	filter->GradientRatio = (UI8 *)malloc(size);
+	for(i = 0; i < filter->NumColors; i++)
+		filter->GradientRatio[i] = readUInt8(f);
+
+	filter->BlurX = readUInt32(f);
+	filter->BlurY = readUInt32(f);
+	filter->Angle = readUInt32(f);
+	filter->Distance = readUInt32(f);
+	filter->Strength = readUInt16(f);
+	filter->InnerShadow = readBits(f, 1);
+	filter->Kockout = readBits(f, 1);
+	filter->CompositeSource = readBits(f, 1);
+	filter->OnTop = readBits(f, 1);
+	filter->Passes = readBits(f, 4);
+}
+
+void 
+parseSWF_CONVOLUTIONFILTER(FILE *f, SWF_CONVOLUTIONFILTER *filter)
+{
+	int size, i;
+
+	filter->MatrixX = readUInt8(f);
+	filter->MatrixY = readUInt8(f);
+	filter->Divisor = readUInt32(f);
+	filter->Bias = readUInt32(f);
+
+	size = filter->MatrixX * filter->MatrixY * sizeof(UI32);
+	filter->Matrix = (FLOAT *)malloc(size);
+	for(i = 0; i < filter->MatrixX * filter->MatrixY; i++)
+		filter->Matrix[i] = readUInt32(f);
+
+	parseSWF_RGBA(f, &filter->DefaultColor);
+	filter->Reserved = readBits(f, 6);
+	filter->Clamp = readBits(f, 1);
+	filter->PreserveAlpha = readBits(f, 1);	
+}
+
+void 
+parseSWF_COLORMATRIXFILTER(FILE *f, SWF_COLORMATRIXFILTER *filter)
+{
+	int i;
+	
+	for(i = 0; i < 20; i++)
+		filter->Matrix[i] = readUInt32(f);
+}
+
+void 
+parseSWF_FILTER(FILE *f, SWF_FILTER *filter)
+{
+	filter->FilterId = readUInt8(f);
+
+	switch(filter->FilterId)
+	{
+		case FILTER_DROPSHADOW:
+			parseSWF_DROPSHADOWFILTER(f, &filter->filter.dropShadow);
+			break;
+		case FILTER_BLUR:
+			parseSWF_BLURFILTER(f, &filter->filter.blur);
+			break;
+		case FILTER_GLOW:
+			parseSWF_GLOWFILTER(f, &filter->filter.glow);
+			break;
+		case FILTER_BEVEL:
+			parseSWF_BEVELFILTER(f, &filter->filter.bevel);
+			break;
+		case FILTER_CONVOLUTION:
+			parseSWF_CONVOLUTIONFILTER(f, &filter->filter.convolution);
+			break;
+		case FILTER_COLORMATRIX:
+			parseSWF_COLORMATRIXFILTER(f, &filter->filter.colorMatrix);
+			break;
+		case FILTER_GRADIENTGLOW:
+			parseSWF_GRADIENTFILTER(f, &filter->filter.gradientGlow);
+			break;
+		case FILTER_GRADIENTBEVEL:
+			parseSWF_GRADIENTFILTER(f, &filter->filter.gradientBevel);
+			break;
+		default:
+			printf("unknown filter %i\n", filter->FilterId);
+	}
+}
+
+void 
+parseSWF_FILTERLIST(FILE *f, SWF_FILTERLIST *list)
+{
+	int i, size;
+	list->NumberOfFilters = readUInt8(f);
+	size = list->NumberOfFilters * sizeof(SWF_FILTER);
+	list->Filter = (SWF_FILTER *)malloc(size);
+
+	for(i = 0; i < list->NumberOfFilters; i++)
+		parseSWF_FILTER(f, list->Filter + i);
+}
+
 /* Parse Block types */
 
 SWF_Parserstruct *
@@ -1900,10 +2060,16 @@ parseSWF_PATHSAREPOSTSCRIPT (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_PLACEOBJECT (FILE * f, int length)
 {
+  int end = fileOffset + length;
   PAR_BEGIN (SWF_PLACEOBJECT);
+  
+  parserrec->CharacterId = readUInt16 (f);
+  parserrec->Depth = readUInt16 (f);
+  parseSWF_MATRIX( f, &(parserrec->Matrix) );
 
-  parserrec->chid = readUInt16 (f);
-
+  if(end > fileOffset)
+    parseSWF_CXFORMWITHALPHA( f, &(parserrec->ColorTransform) ); 
+	
   PAR_END;
 }
 
@@ -1945,6 +2111,60 @@ parseSWF_PLACEOBJECT2 (FILE * f, int length)
     parseSWF_CLIPACTIONS( f, &(parserrec->ClipActions) ); 
   }
 
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_PLACEOBJECT3 (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_PLACEOBJECT3);
+
+  byteAlign();
+
+  parserrec->PlaceFlagHasClipActions = readBits (f, 1);
+  parserrec->PlaceFlagHasClipDepth   = readBits (f, 1);
+  parserrec->PlaceFlagHasName        = readBits (f, 1);
+  parserrec->PlaceFlagHasRatio       = readBits (f, 1);
+  parserrec->PlaceFlagHasColorTransform = readBits (f, 1);
+  parserrec->PlaceFlagHasMatrix      = readBits (f, 1);
+  parserrec->PlaceFlagHasCharacter   = readBits (f, 1);
+  parserrec->PlaceFlagMove           = readBits (f, 1);
+  
+  byteAlign();
+  parserrec->Reserved                = readBits (f, 5);
+  parserrec->PlaceFlagHasCacheAsBitmap = readBits (f, 1);
+  parserrec->PlaceFlagHasBlendMode   = readBits(f, 1);
+  parserrec->PlaceFlagHasFilterList  = readBits(f, 1);
+
+  parserrec->Depth = readUInt16 (f);
+  if( parserrec->PlaceFlagHasCharacter ) {
+    parserrec->CharacterId = readUInt16 (f);
+  }
+  if( parserrec->PlaceFlagHasMatrix ) {
+    parseSWF_MATRIX( f, &(parserrec->Matrix) ); 
+  }
+  if( parserrec->PlaceFlagHasColorTransform ) {
+    parseSWF_CXFORMWITHALPHA( f, &(parserrec->ColorTransform) ); 
+  }
+  if( parserrec->PlaceFlagHasRatio ) {
+    parserrec->Ratio = readUInt16 (f);
+  }
+  if( parserrec->PlaceFlagHasName ) {
+    parserrec->Name = readString (f);
+  }
+  if( parserrec->PlaceFlagHasClipDepth ) {
+    parserrec->ClipDepth = readUInt16 (f);
+  }
+  if( parserrec->PlaceFlagHasFilterList ) {
+    parseSWF_FILTERLIST( f, &parserrec->SurfaceFilterList);
+  }
+  if( parserrec->PlaceFlagHasBlendMode ) {
+    parserrec->BlendMode = readUInt8 (f);
+  }
+  if( parserrec->PlaceFlagHasClipActions ) {
+    parseSWF_CLIPACTIONS( f, &(parserrec->ClipActions) ); 
+  }
+   
   PAR_END;
 }
 

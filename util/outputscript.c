@@ -135,6 +135,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_PATHSAREPOSTSCRIPT, outputSWF_PATHSAREPOSTSCRIPT},
   {SWF_PLACEOBJECT, outputSWF_PLACEOBJECT},
   {SWF_PLACEOBJECT2, outputSWF_PLACEOBJECT2},
+  {SWF_PLACEOBJECT3, outputSWF_PLACEOBJECT3},
   {SWF_PREBUILT, outputSWF_PREBUILT},
   {SWF_PREBUILTCLIP, outputSWF_PREBUILTCLIP},
   {SWF_PROTECT, outputSWF_PROTECT},
@@ -1087,6 +1088,13 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
       printf(COMMSTART " PlaceFlagHasClipActions " COMMEND "\n");
       outputSWF_CLIPACTIONS (&sblock->ClipActions, spritename);
   }
+
+}
+
+void
+outputSWF_PLACEOBJECT3 (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN_EMPTY (SWF_PLACEOBJECT3);
 
 }
 

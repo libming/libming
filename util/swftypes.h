@@ -28,6 +28,7 @@ typedef unsigned short	UI16;	/* Unsigned 16-bit integer value */
 typedef unsigned long	UI32;	/* Unsigned 32-bit integer value */
 
 typedef unsigned long	FIXED;	/* 32-bit 16.16 fixed-point number */
+typedef unsigned short	FIXED8;	/* 16-bit 8.8 fixed-point number */
 typedef unsigned long	SB32;	/* Signed bit value */
 typedef unsigned long	UB32;	/* Unsigned bit value */
 typedef float		FB32;	/* Signed fixed-point bit value */
@@ -844,7 +845,117 @@ typedef struct SWF_SOUNDINFO {
 	SWF_SOUNDENVELOPE *EnvelopeRecords;
 } SWF_SOUNDINFO;
 
+typedef struct SWF_BLURFILTER {
+	FIXED	BlurX;
+	FIXED	BlurY;
+	UI8	Passes:5;
+	UI8	Reserved:3;
+} SWF_BLURFILTER;
 
+typedef struct SWF_BEVELFILTER {
+	SWF_RGBA	ShadowColor;
+	SWF_RGBA	HighlightColor;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED		Angle;
+	FIXED		Distance;
+	FIXED8		Strength;
+	UI8		InnerShadow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		OnTop:1;
+	UI8		Passes:4;
+} SWF_BEVELFILTER;
+
+typedef struct SWF_GRADIENTFILTER
+{
+	UI8		NumColors;
+	SWF_RGBA*	GradientColors;
+	UI8*		GradientRatio;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED		Angle;
+	FIXED		Distance;
+	FIXED8		Strength;
+	UI8		InnerShadow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		OnTop:1;
+	UI8		Passes:4;
+} SWF_GRADIENTFILTER;
+	
+
+typedef struct SWF_GLOWFILTER {
+	SWF_RGBA 	GlowColor;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED8		Strength;
+	UI8		InnerGlow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		Passes:5;
+} SWF_GLOWFILTER;
+
+typedef struct SWF_CONVOLUTIONFILTER {
+	UI8		MatrixX;
+	UI8		MatrixY;
+	FLOAT		Divisor;
+	FLOAT		Bias;
+	FLOAT*		Matrix;
+	SWF_RGBA	DefaultColor;
+	UI8		Reserved:6;
+	UI8		Clamp:1;
+	UI8		PreserveAlpha:1;
+} SWF_CONVOLUTIONFILTER;
+
+typedef struct SWF_COLORMATRIXFILTER
+{
+	FLOAT Matrix[20];
+} SWF_COLORMATRIXFILTER;
+
+typedef struct SWF_DROPSHADOWFILTER {
+	SWF_RGBA	DropShadowColor;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED		Angle;
+	FIXED		Distance;
+	FIXED8		Strength;
+	UI8		InnerShadow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		Passes:5;
+} SWF_DROPSHADOWFILTER;
+
+enum
+{
+        FILTER_DROPSHADOW,
+        FILTER_BLUR,
+        FILTER_GLOW,
+        FILTER_BEVEL,
+        FILTER_GRADIENTGLOW,
+        FILTER_CONVOLUTION,
+        FILTER_COLORMATRIX,
+        FILTER_GRADIENTBEVEL
+};
+
+typedef struct SWF_FILTER {
+	UI8 	FilterId;
+	union {
+		SWF_DROPSHADOWFILTER dropShadow;
+		SWF_BLURFILTER blur;
+		SWF_GLOWFILTER glow;
+		SWF_BEVELFILTER bevel;
+		SWF_GRADIENTFILTER gradientGlow;
+		SWF_CONVOLUTIONFILTER convolution;
+		SWF_COLORMATRIXFILTER colorMatrix;
+		SWF_GRADIENTFILTER gradientBevel;
+	} filter;
+} SWF_FILTER;
+
+typedef struct SWF_FILTERLIST {
+	UI8 		NumberOfFilters;
+	SWF_FILTER 	*Filter;
+} SWF_FILTERLIST;
 
 /* Types to represent Blocks */
 
@@ -1208,7 +1319,10 @@ struct SWF_PATHSAREPOSTSCRIPT
 
 struct SWF_PLACEOBJECT
 {
-  int chid;
+  UI16 CharacterId;
+  UI16 Depth;
+  SWF_MATRIX Matrix;
+  SWF_CXFORMWITHALPHA ColorTransform;
 };
 
 struct SWF_PLACEOBJECT2
@@ -1228,6 +1342,32 @@ struct SWF_PLACEOBJECT2
   UI16 Ratio;
   STRING Name;
   UI16 ClipDepth;
+  SWF_CLIPACTIONS ClipActions;
+};
+
+struct SWF_PLACEOBJECT3
+{
+  UI8 PlaceFlagHasClipActions:1;
+  UI8 PlaceFlagHasClipDepth:1;
+  UI8 PlaceFlagHasName:1;
+  UI8 PlaceFlagHasRatio:1;
+  UI8 PlaceFlagHasColorTransform:1;
+  UI8 PlaceFlagHasMatrix:1;
+  UI8 PlaceFlagHasCharacter:1;
+  UI8 PlaceFlagMove:1;
+  UI8 Reserved:5;
+  UI8 PlaceFlagHasCacheAsBitmap:1;
+  UI8 PlaceFlagHasBlendMode:1;
+  UI8 PlaceFlagHasFilterList:1;
+  UI16 Depth;
+  UI16 CharacterId;
+  SWF_MATRIX Matrix;
+  SWF_CXFORMWITHALPHA ColorTransform;
+  UI16 Ratio;
+  STRING Name;
+  UI16 ClipDepth;
+  SWF_FILTERLIST SurfaceFilterList;
+  UI8 BlendMode;
   SWF_CLIPACTIONS ClipActions;
 };
 
@@ -1390,6 +1530,7 @@ typedef union SWF_Parserstruct
   struct SWF_PATHSAREPOSTSCRIPT SWF_PATHSAREPOSTSCRIPT;
   struct SWF_PLACEOBJECT SWF_PLACEOBJECT;
   struct SWF_PLACEOBJECT2 SWF_PLACEOBJECT2;
+  struct SWF_PLACEOBJECT3 SWF_PLACEOBJECT3;
   struct SWF_PREBUILT SWF_PREBUILT;
   struct SWF_PREBUILTCLIP SWF_PREBUILTCLIP;
   struct SWF_PROTECT SWF_PROTECT;

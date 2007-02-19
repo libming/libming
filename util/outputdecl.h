@@ -74,6 +74,7 @@ extern OUTPUTRET outputSWF_NAMECHARACTER(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PATHSAREPOSTSCRIPT(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PLACEOBJECT(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PLACEOBJECT2(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_PLACEOBJECT3(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PREBUILT(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PREBUILTCLIP(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PROTECT(SWF_Parserstruct *pblock);

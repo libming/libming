@@ -84,6 +84,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_PATHSAREPOSTSCRIPT, outputSWF_PATHSAREPOSTSCRIPT},
   {SWF_PLACEOBJECT, outputSWF_PLACEOBJECT},
   {SWF_PLACEOBJECT2, outputSWF_PLACEOBJECT2},
+  {SWF_PLACEOBJECT3, outputSWF_PLACEOBJECT3},
   {SWF_PREBUILT, outputSWF_PREBUILT},
   {SWF_PREBUILTCLIP, outputSWF_PREBUILTCLIP},
   {SWF_PROTECT, outputSWF_PROTECT},
@@ -490,6 +491,175 @@ outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
   iprintf ("  GlyphCount: %d\n", trec->GlyphCount);
   for(i=0;i<trec->GlyphCount;i++)
 	  outputSWF_GLYPHENTRY( &(trec->GlyphEntries[i]) );
+}
+
+void 
+outputFIXED(FIXED fixed, const char *prefix)
+{
+	float f;
+	
+	f = fixed * 1.0 / (1<<16);
+	iprintf("%s%f\n", prefix, f);
+}
+
+void 
+outputFIXED8(FIXED fixed, const char *prefix)
+{
+	float f;
+	
+	f = fixed * 1.0 / (1<<8);
+	iprintf("%s%f\n", prefix, f);
+}
+
+void 
+outputSWF_BLURFILTER(SWF_BLURFILTER *filter)
+{
+	outputFIXED(filter->BlurX, "    BlurX: ");
+        outputFIXED(filter->BlurY, "    BlurY: ");
+	iprintf("    Passes %d\n", filter->Passes);
+}
+
+void 
+outputSWF_BEVELFILTER(SWF_BEVELFILTER *filter)
+{
+	outputSWF_RGBA (&filter->ShadowColor, "    ShadowColor:");
+	outputSWF_RGBA (&filter->HighlightColor, "    HighLightColor:");
+	outputFIXED(filter->BlurX, "    BlurX: ");
+        outputFIXED(filter->BlurY, "    BlurY: ");
+        outputFIXED(filter->Angle, "    Angle: ");
+        outputFIXED(filter->Distance, "    Distance: ");
+        outputFIXED8(filter->Strength, "    Strength: ");
+        iprintf("    InnerShadow: %d\n", filter->InnerShadow);
+        iprintf("    Kockout %d\n", filter->Kockout);
+        iprintf("    CompositeSource %d\n", filter->CompositeSource);
+        iprintf("    OnTop: %d\n", filter->OnTop);
+        iprintf("    Passes %d\n", filter->Passes);
+}
+
+void
+outputSWF_GRADIENTFILTER(SWF_GRADIENTFILTER *filter)
+{
+	int i;
+	iprintf("    NumColor %d\n", filter->NumColors);
+	for(i = 0; i < filter->NumColors; i++)
+	{
+		outputSWF_RGBA (filter->GradientColors + i, "    ");
+		iprintf("    Ratio: %d\n", filter->GradientRatio[i]);
+	}
+	outputFIXED(filter->BlurX, "    BlurX: ");
+        outputFIXED(filter->BlurY, "    BlurY: ");
+        outputFIXED(filter->Angle, "    Angle: ");
+        outputFIXED(filter->Distance, "    Distance: ");
+        outputFIXED8(filter->Strength, "    Strength: ");
+	iprintf("    InnerShadow: %d\n", filter->InnerShadow);
+        iprintf("    Kockout %d\n", filter->Kockout);
+        iprintf("    CompositeSource %d\n", filter->CompositeSource);
+	iprintf("    OnTop: %d\n", filter->OnTop);
+        iprintf("    Passes %d\n", filter->Passes);
+}
+
+void 
+outputSWF_DROPSHADOWFILTER(SWF_DROPSHADOWFILTER *filter)
+{
+	outputSWF_RGBA (&filter->DropShadowColor, "    DropShadowColor:");
+	outputFIXED(filter->BlurX, "    BlurX: ");
+	outputFIXED(filter->BlurY, "    BlurY: ");
+	outputFIXED(filter->Angle, "    Angle: ");
+	outputFIXED(filter->Distance, "    Distance: ");
+	outputFIXED8(filter->Strength, "    Strength: ");
+	iprintf("    InnerShadow: %d\n", filter->InnerShadow);
+	iprintf("    Kockout %d\n", filter->Kockout);
+	iprintf("    CompositeSource %d\n", filter->CompositeSource);
+	iprintf("    Passes %d\n", filter->Passes);
+}
+
+void 
+outputSWF_GLOWFILTER(SWF_GLOWFILTER *filter)
+{
+	outputSWF_RGBA (&filter->GlowColor, "");
+	outputFIXED(filter->BlurX, "    BlurX: ");
+	outputFIXED(filter->BlurY, "    BlurY: ");
+	outputFIXED8(filter->Strength, "    Strength: ");
+	iprintf("    InnerGlow: %d\n", filter->InnerGlow);
+	iprintf("    Kockout %d\n", filter->Kockout);
+	iprintf("    CompositeSource %d\n", filter->CompositeSource);
+	iprintf("    Passes %d\n", filter->Passes);
+}
+
+void 
+outputSWF_CONVOLUTIONFILTER(SWF_CONVOLUTIONFILTER *filter)
+{
+	int y, x;
+
+	iprintf("    Matrix %dx%d\n", filter->MatrixX, filter->MatrixY);
+	iprintf("      Bias %f, Divisor %f\n", filter->Bias, filter->Divisor);
+	for(y = 0; y < filter->MatrixY; y++)
+	{
+		iprintf("    ");
+		for(x = 0; x < filter->MatrixX; x++)
+		{
+			FLOAT val = filter->Matrix[y * filter->MatrixX + x];
+			iprintf("%f ", val);
+		}
+		iprintf("\n");
+	}
+	outputSWF_RGBA (&filter->DefaultColor, "     efault Color: ");
+	iprintf("    Clamp: %d\n", filter->Clamp);
+	iprintf("    PreserveAlpha: %d\n", filter->PreserveAlpha);
+}
+
+void 
+outputSWF_COLORMATRIXFILTER(SWF_COLORMATRIXFILTER *filter)
+{
+	int y, x;
+
+	for(y = 0; y < 4; y++)
+        {
+                iprintf("    ");
+                for(x = 0; x < 5; x++)
+                {
+                        FLOAT val = filter->Matrix[y * 5 + x];
+                        iprintf("%f ", val);
+                }
+                iprintf("\n");
+        }
+}
+
+void 
+outputSWF_FILTER(SWF_FILTER *filter)
+{
+	switch(filter->FilterId)
+	{
+		case FILTER_DROPSHADOW:
+			iprintf("  Filter: DropShadow\n");
+			outputSWF_DROPSHADOWFILTER(&filter->filter.dropShadow);
+			break;
+		case FILTER_BLUR:
+			iprintf("  Filter: Blur\n");
+			outputSWF_BLURFILTER(&filter->filter.blur);
+			break;
+		case FILTER_GLOW:
+			iprintf("  Filter: Glow\n");
+			outputSWF_GLOWFILTER(&filter->filter.glow);
+			break;
+		case FILTER_GRADIENTGLOW:
+			iprintf("  Filter: GradientGlow\n");
+			outputSWF_GRADIENTFILTER(&filter->filter.gradientGlow);
+			break;
+		case FILTER_CONVOLUTION:
+			iprintf("  Filter: Convolution\n");
+			outputSWF_CONVOLUTIONFILTER(&filter->filter.convolution);
+			break;
+		case FILTER_COLORMATRIX:
+			iprintf("  Filter: ColorMatrix\n");
+			outputSWF_COLORMATRIXFILTER(&filter->filter.colorMatrix);
+			break;
+		case FILTER_GRADIENTBEVEL:
+			iprintf("  Filter: GradientBevel\n");
+			outputSWF_GRADIENTFILTER(&filter->filter.gradientBevel);
+		default:
+			iprintf("  Filter: Unknown\n");
+	}
 }
 
 /* Output Flash Blocks */
@@ -1034,6 +1204,55 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 #endif
   if( sblock->PlaceFlagHasClipActions )
 	outputSWF_CLIPACTIONS (&(sblock->ClipActions));
+}
+
+void
+outputSWF_PLACEOBJECT3 (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_PLACEOBJECT3);
+#if !defined(ACTIONONLY)
+  iprintf(" PlaceFlagHasClipActions %d\n", sblock->PlaceFlagHasClipActions);
+  iprintf(" PlaceFlagHasClipDepth %d\n", sblock->PlaceFlagHasClipDepth);
+  iprintf(" PlaceFlagHasName %d\n", sblock->PlaceFlagHasName);
+  iprintf(" PlaceFlagHasRatio %d\n", sblock->PlaceFlagHasRatio);
+  iprintf(" PlaceFlagHasColorTransform %d\n", sblock->PlaceFlagHasColorTransform);
+  iprintf(" PlaceFlagHasMatrix %d\n", sblock->PlaceFlagHasMatrix);
+  iprintf(" PlaceFlagHasCharacter %d\n", sblock->PlaceFlagHasCharacter);
+  iprintf(" PlaceFlagMove %d\n", sblock->PlaceFlagMove);
+  iprintf(" PlaceFlagHasCacheAsbitmap %d\n", sblock->PlaceFlagHasCacheAsBitmap);
+  iprintf(" PlaceFlagHasBlendMode %d\n", sblock->PlaceFlagHasBlendMode);
+  iprintf(" PlaceFlagHasFilterList %d\n", sblock->PlaceFlagHasFilterList); 
+  iprintf(" Depth %d\n", sblock->Depth);
+  if( sblock->PlaceFlagHasCharacter )
+	  iprintf( " CharacterId: %d\n", sblock->CharacterId );
+  if( sblock->PlaceFlagHasMatrix )
+	outputSWF_MATRIX (&(sblock->Matrix), "");
+/*
+  if( sblock->PlaceFlagHasColorTransform )
+	outputSWF_CXFORMWITHALPHA (&(sblock->ColorTransform), "");
+*/
+  if( sblock->PlaceFlagHasRatio )
+	  iprintf( " Ratio: %d\n", sblock->Ratio );
+  if( sblock->PlaceFlagHasName )
+	  iprintf( " Name: %s\n", sblock->Name );
+  if( sblock->PlaceFlagHasClipDepth )
+	  iprintf( " ClipDepth: %d\n", sblock->ClipDepth );
+  if( sblock->PlaceFlagHasBlendMode )
+	  iprintf("  BlendMode %d\n", sblock->BlendMode );
+  if( sblock->PlaceFlagHasFilterList )
+  {
+	  int i;
+	  SWF_FILTERLIST *filterList = &sblock->SurfaceFilterList;
+	  
+	  iprintf("  NumberOfFilters %d\n", filterList->NumberOfFilters);
+	  
+	  for(i = 0; i < filterList->NumberOfFilters; i++)
+	    outputSWF_FILTER(filterList->Filter + i);
+  }
+#endif
+  if( sblock->PlaceFlagHasClipActions )
+	outputSWF_CLIPACTIONS (&(sblock->ClipActions));
+
 }
 
 void

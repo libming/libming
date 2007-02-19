@@ -76,6 +76,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_PATHSAREPOSTSCRIPT),
   BlockType (SWF_PLACEOBJECT),
   BlockType (SWF_PLACEOBJECT2),
+  BlockType (SWF_PLACEOBJECT3),
   BlockType (SWF_PREBUILT),
   BlockType (SWF_PREBUILTCLIP),
   BlockType (SWF_PROTECT),
