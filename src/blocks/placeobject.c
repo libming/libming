@@ -167,7 +167,7 @@ completeSWFPlaceObject2Block(SWFBlock block)
 	if( place->version == 3 && place->hasFilterFlag)
 	{
 		int i;
-		
+		SWFOutput_writeUInt8(out, place->filterList->numFilter);		
 		for(i = 0; i < place->filterList->numFilter; i++)
 			SWFOutput_writeSWFFilter(out, place->filterList->filter[i]);
 	}
