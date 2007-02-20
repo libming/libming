@@ -31,6 +31,7 @@
 #include "blocks/button.h"
 #include "blocks/videostream.h"
 #include "blocks/blocktypes.h"
+#include "blocks/filter.h"
 #include "libming.h"
 
 #define ITEM_NEW						(1<<0)
@@ -480,14 +481,23 @@ float SWFDisplayItem_get_rot(SWFDisplayItem item)
  * adds a surface filter
  * Adds a bitmap filter to the display object. 
  * Also sets cache-as-bitmap flag. 
- * See SWFFilter for possible filter objects
+ * See SWFFilter for possible filter objects. Filter can 
+ * only be applied to buttons, sprite/movieclips and text
  */ 
 void SWFDisplayItem_addFilter(SWFDisplayItem item,
                               SWFFilter filter /* filter */)
 {
+	SWFBlock block;
+	block = (SWFBlock)item->character;
+	if(!SWFFilter_testBlockType(block->type))
+	{
+		SWF_warn("Filter can only be applied to buttons, sprite/movieclips and text\n");
+		return;
+	}
 	checkBlock(item);
 	SWFPlaceObject2Block_setCacheFlag(item->block, 1);
 	SWFPlaceObject2Block_addFilter(item->block, filter);
+	
 }
 
 
