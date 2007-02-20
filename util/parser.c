@@ -2409,3 +2409,17 @@ parseSWF_REFLEX (FILE * f, int length)
   parserrec->rfx[2] = readUInt8 (f);
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_FILEATTRIBUTES (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_FILEATTRIBUTES);
+  byteAlign();
+  parserrec->Reserved = readBits(f, 3);
+  parserrec->HasMetadata = readBits(f, 1);
+  parserrec->Reserved2 = readBits(f, 3);
+  parserrec->UseNetwork = readBits(f, 1);
+  parserrec->Reserved3 = readUInt16(f);
+  parserrec->Reserved4 = readUInt8(f);
+  PAR_END;
+}

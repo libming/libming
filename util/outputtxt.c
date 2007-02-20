@@ -101,6 +101,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
   {SWF_REFLEX, outputSWF_REFLEX},
+  {SWF_FILEATTRIBUTES, outputSWF_FILEATTRIBUTES},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1511,12 +1512,22 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
   iprintf("  StreamID %i\n", sblock->StreamID);
   iprintf("  FrameNum %i\n", sblock->FrameNum);
 }
+
 void
 outputSWF_REFLEX (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_REFLEX);
 
   iprintf(" Reflex: \"%c%c%c\"\n", sblock->rfx[0], sblock->rfx[1], sblock->rfx[2]);
+}
+
+void 
+outputSWF_FILEATTRIBUTES(SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_FILEATTRIBUTES);
+  
+  iprintf(" FileAttributes: HasMetaData %d, UseNetwork %d\n", 
+          sblock->HasMetadata, sblock->UseNetwork);
 }
 
 void
