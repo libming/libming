@@ -643,6 +643,10 @@ outputSWF_FILTER(SWF_FILTER *filter)
 			iprintf("  Filter: Glow\n");
 			outputSWF_GLOWFILTER(&filter->filter.glow);
 			break;
+		case FILTER_BEVEL:
+			iprintf("  Filter: Bevel\n");
+			outputSWF_BEVELFILTER(&filter->filter.bevel);
+			break;
 		case FILTER_GRADIENTGLOW:
 			iprintf("  Filter: GradientGlow\n");
 			outputSWF_GRADIENTFILTER(&filter->filter.gradientGlow);
@@ -658,8 +662,9 @@ outputSWF_FILTER(SWF_FILTER *filter)
 		case FILTER_GRADIENTBEVEL:
 			iprintf("  Filter: GradientBevel\n");
 			outputSWF_GRADIENTFILTER(&filter->filter.gradientBevel);
+			break;
 		default:
-			iprintf("  Filter: Unknown\n");
+			iprintf("  Filter: Unknown %d\n", filter->FilterId);
 	}
 }
 
