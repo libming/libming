@@ -1,4 +1,4 @@
-SUBDIRS = Movie actionscript
+SUBDIRS = Movie actionscript Filter
 
 EXTRA_DIST = \
 	dotests.pl \

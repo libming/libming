@@ -330,6 +330,7 @@ AC_OUTPUT([
 	test/Movie/FrameLabel/Makefile
 	test/Movie/Protect/Makefile
 	test/Movie/Rate/Makefile
+	test/Filter/Makefile
 	test/actionscript/Makefile
 	macros/Makefile
 	util/Makefile
