@@ -48,6 +48,10 @@ extern "C"
   #define SWFInput        c_SWFInput
   #define SWFSound        c_SWFSound
   #define SWFVideoStream  c_SWFVideoStream
+  #define SWFFilter       c_SWFFilter
+  #define SWFBlur         c_SWFBlur
+  #define SWFShadow       c_SWFShadow
+  #define SWFFilterMatrix c_SWFFilterMatrix
 
 // begin minguts 2004/08/31 ((((
   #define SWFFontCharacter c_SWFFontCharacter
@@ -80,6 +84,10 @@ extern "C"
   #undef SWFPrebuiltClip 
 // )))) end minguts 2004/08/31
   #undef SWFVideoStream
+  #undef SWFFilter
+  #undef SWFBlur
+  #undef SWFShadow
+  #undef SWFFilterMatrix
 }
 
 #define SWF_DECLAREONLY(classname) \
@@ -220,6 +228,114 @@ class SWFAction : public SWFBlock
 };
 
 
+/*  SWFGradient  */
+
+class SWFGradient
+{
+ public:
+  c_SWFGradient gradient;
+
+  SWFGradient()
+    { this->gradient = newSWFGradient(); }
+
+  virtual ~SWFGradient()
+    { destroySWFGradient(this->gradient); }
+
+  void addEntry(float ratio, byte r, byte g, byte b, byte a=0xff)
+    { SWFGradient_addEntry(this->gradient, ratio, r, g, b, a); }
+  SWF_DECLAREONLY(SWFGradient);
+};
+
+/* SWFFilter */
+class SWFBlur
+{
+ public:
+  c_SWFBlur blur;
+  
+  SWFBlur(float blurX, float blurY, int passes)
+    {  this->blur = newSWFBlur(blurX, blurY, passes); }
+
+  ~SWFBlur()
+    { destroySWFBlur(blur); }
+
+  SWF_DECLAREONLY(SWFBlur);
+  SWFBlur();
+};
+
+class SWFShadow
+{
+ public:
+  c_SWFShadow shadow;
+
+  SWFShadow(float angle, float distance, float strength)
+    { this->shadow = newSWFShadow(angle, distance, strength); }
+
+  ~SWFShadow()
+    { destroySWFShadow(shadow); }
+
+  SWF_DECLAREONLY(SWFShadow);
+  SWFShadow();
+};
+
+class SWFFilterMatrix 
+{
+ public:
+  c_SWFFilterMatrix matrix;
+
+  SWFFilterMatrix(int cols, int rows, float *vals)
+    { this->matrix = newSWFFilterMatrix(cols, rows, vals); }
+
+  ~SWFFilterMatrix()
+    { destroySWFFilterMatrix(matrix); }
+
+  SWF_DECLAREONLY(SWFFilterMatrix);
+  SWFFilterMatrix();
+};
+
+class SWFFilter
+{
+ public:
+  c_SWFFilter filter;
+
+  virtual ~SWFFilter() {}
+
+  static SWFFilter *BlurFilter(SWFBlur *blur)
+    { return new SWFFilter(newBlurFilter(blur->blur)); }
+
+  static SWFFilter *DropShadowFilter(SWFColor color, SWFBlur *blur, 
+                                    SWFShadow *shadow, int flags)
+    { return new SWFFilter(newDropShadowFilter(color, blur->blur, shadow->shadow, flags)); } 
+
+  static SWFFilter *GlowFilter(SWFColor color, SWFBlur *blur, 
+                              float strength, int flags)
+    { return new SWFFilter(newGlowFilter(color, blur->blur, strength, flags));}
+
+  static SWFFilter *BevelFilter(SWFColor sColor, SWFColor hColor,
+                               SWFBlur *blur, SWFShadow *shadow, int flags)
+    { return new SWFFilter(newBevelFilter(sColor, hColor, blur->blur, shadow->shadow, flags)); }
+
+  static SWFFilter *GradientGlowFilter(SWFGradient *gradient, SWFBlur *blur, SWFShadow *shadow, int flags)
+    { return new SWFFilter(newGradientGlowFilter(gradient->gradient, blur->blur, shadow->shadow, flags)); }
+
+  static SWFFilter *GradientBevelFilter(SWFGradient *gradient, SWFBlur *blur,
+                                       SWFShadow *shadow, int flags)
+    { return new SWFFilter(newGradientBevelFilter(gradient->gradient, blur->blur, shadow->shadow, flags)); }
+
+  static SWFFilter *ConvolutionFilter(SWFFilterMatrix *matrix, float divisor,
+                                     float bias, SWFColor color, int flags)
+    { return new SWFFilter(newConvolutionFilter(matrix->matrix, divisor, bias, color, flags)); }
+
+  static SWFFilter *ColorMatrixFilter(SWFFilterMatrix *matrix)
+    { return new SWFFilter(newColorMatrixFilter(matrix->matrix)); }
+
+private:
+  SWFFilter(c_SWFFilter filter)
+    {  this->filter = filter; } 
+  SWF_DECLAREONLY(SWFFilter);
+  SWFFilter();
+};
+
+
 /*  SWFDisplayItem  */
 
 class SWFDisplayItem
@@ -304,6 +420,15 @@ class SWFDisplayItem
 
   void addAction(SWFAction *action, int flags)
     { SWFDisplayItem_addAction(this->item, action->action, flags); }
+
+  void addFilter(SWFFilter *filter)
+    { SWFDisplayItem_addFilter(this->item, filter->filter); }
+
+  void cacheAsBitmap(int flag)
+    { SWFDisplayItem_cacheAsBitmap(this->item, flag); }
+
+  void setBlendMode(int mode)
+    { SWFDisplayItem_setBlendMode(this->item, mode); }
 
   SWF_DECLAREONLY(SWFDisplayItem);
   SWFDisplayItem();
@@ -514,23 +639,6 @@ class SWFFill
 };
 
 
-/*  SWFGradient  */
-
-class SWFGradient
-{
- public:
-  c_SWFGradient gradient;
-
-  SWFGradient()
-    { this->gradient = newSWFGradient(); }
-
-  virtual ~SWFGradient()
-    { destroySWFGradient(this->gradient); }
-
-  void addEntry(float ratio, byte r, byte g, byte b, byte a=0xff)
-    { SWFGradient_addEntry(this->gradient, ratio, r, g, b, a); }
-  SWF_DECLAREONLY(SWFGradient);
-};
 
 
 /*  SWFBitmap  */
