@@ -22,10 +22,10 @@ Block length: 244
      [003] gotoAndStop
      [004] label1
     SWFACTION_GOTOFRAME
-     Frame: 3
+     Frame: 2
     SWFACTION_PLAY
     SWFACTION_GOTOFRAME
-     Frame: 3
+     Frame: 2
     SWFACTION_STOP
     SWFACTION_PUSH
      [000]   Constant: 0 "_currentframe"
