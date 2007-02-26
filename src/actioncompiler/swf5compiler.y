@@ -928,14 +928,14 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GOTOFRAME);
 		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, $3); 
+		  bufferWriteS16($$, $3-1); /* GOTOFRAME target is 0-based */
 		  bufferWriteOp($$, SWFACTION_PLAY); }
 
 	| GOTOANDSTOP '(' INTEGER ')'
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GOTOFRAME);
 		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, $3); 
+		  bufferWriteS16($$, $3-1);  /* GOTOFRAME target is 0-based */
 		  bufferWriteOp($$, SWFACTION_STOP); }
 
 	| GOTOANDPLAY '(' STRING ')'
