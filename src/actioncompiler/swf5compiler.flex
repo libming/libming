@@ -179,7 +179,8 @@ stop			{ count();	return STOP;		}
 toggleQuality		{ count();	return TOGGLEQUALITY;	}
 stopSounds		{ count();	return STOPSOUNDS;	}
 callFrame		{ count();	return CALLFRAME;	}
-gotoFrame		{ count();	return GOTOFRAME;	}
+gotoAndPlay		{ count();	return GOTOANDPLAY;	}
+gotoAndStop		{ count();	return GOTOANDSTOP;	}
 setTarget		{ count();	return SETTARGET;	}
 loadVariables		{ count();	return LOADVARIABLES;	}
 loadMovie		{ count();	return LOADMOVIE;	}

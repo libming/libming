@@ -61,7 +61,7 @@ extern int SWF_versionNum;
 %token STRINGLESSTHAN MBLENGTH MBSUBSTRING MBORD MBCHR
 %token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET 
 %token LOADVARIABLES LOADMOVIE LOADVARIABLESNUM LOADMOVIENUM
-%token CALLFRAME STARTDRAG STOPDRAG GOTOFRAME SETTARGET 
+%token CALLFRAME STARTDRAG STOPDRAG GOTOANDSTOP GOTOANDPLAY SETTARGET 
 
 %token TRY THROW CATCH FINALLY
 
@@ -458,6 +458,8 @@ identifier
 	| LOADVARIABLES	{ $$ = strdup("loadvariables"); }
 	| LOADMOVIE	{ $$ = strdup("loadmovie"); }
 	| EXTENDS	{ $$ = strdup("extends"); }
+	| GOTOANDSTOP	{ $$ = strdup("gotoAndStop"); }
+	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }
 	;
 
 formals_list
@@ -922,20 +924,43 @@ void_function_call
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_TOGGLEQUALITY); }
 
-	| GOTOFRAME '(' INTEGER ')'
+	| GOTOANDPLAY '(' INTEGER ')'
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GOTOFRAME);
 		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, $3); }
+		  bufferWriteS16($$, $3); 
+		  bufferWriteOp($$, SWFACTION_PLAY); }
 
-	| GOTOFRAME '(' STRING ')'
+	| GOTOANDSTOP '(' INTEGER ')'
+		{ $$ = newBuffer();
+		  bufferWriteOp($$, SWFACTION_GOTOFRAME);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, $3); 
+		  bufferWriteOp($$, SWFACTION_STOP); }
+
+	| GOTOANDPLAY '(' STRING ')'
 		{ $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_GOTOLABEL);
 		  bufferWriteS16($$, strlen($3)+1);
 		  bufferWriteHardString($$, $3, strlen($3)+1);
-		  free($3); }
+		  free($3); 
+		  bufferWriteOp($$, SWFACTION_PLAY); }
 
-	| GOTOFRAME '(' expr ')'
+	| GOTOANDSTOP '(' STRING ')'
+		{ $$ = newBuffer();
+		  bufferWriteOp($$, SWFACTION_GOTOLABEL);
+		  bufferWriteS16($$, strlen($3)+1);
+		  bufferWriteHardString($$, $3, strlen($3)+1);
+		  free($3); 
+		  bufferWriteOp($$, SWFACTION_STOP); }
+
+	| GOTOANDPLAY '(' expr ')'
+		{ $$ = $3;
+		  bufferWriteOp($$, SWFACTION_GOTOFRAME2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, 1); } /* XXX - and play */
+
+	| GOTOANDSTOP '(' expr ')'
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_GOTOFRAME2);
 		  bufferWriteS16($$, 1);
