@@ -788,7 +788,7 @@ decompileGOTOFRAME (SWF_ACTION *act,int is_type2)
    println(");");
   }
   else
-  println("gotoFrame(%d);", sact->Frame);
+  println("gotoFrame(%d);", sact->Frame+1); /* GOTOFRAME arg is 0-based */
 }
 
 /*
