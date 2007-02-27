@@ -21,6 +21,7 @@
 #define _GNU_SOURCE
 
 #define DEBUGSTACK
+//#define DECOMP_SWITCH
 //#define STATEMENT_CLASS  
 //  I have uncommented some buggy class recognition stuff in decompileIF()
 //  to make work simple code lines like:  "if(!a) trace(a);"   - ak, November 2006
@@ -848,6 +849,14 @@ int precedence(int op1,int op2)
  return f>s;
 }
 
+#ifdef DECOMP_SWITCH
+static int
+check_switch(int firstcode)
+{
+ return (firstcode == SWFACTION_PUSH || firstcode == SWFACTION_JUMP);
+}
+#endif
+
 int
 decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 {
@@ -1004,6 +1013,17 @@ decompileArithmeticOp(int n, SWF_ACTION *actions,int maxn)
 	      puts("STRINGCOMPARE");
 	      break;
       case SWFACTION_STRICTEQUALS:
+#ifdef DECOMP_SWITCH
+	      if  (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
+	      {
+		if (check_switch(actions[n+1].SWF_ACTIONIF.Actions[0].SWF_ACTIONRECORD.ActionCode))
+		{
+		 push(right);			// keep left and right side separated
+		 push(left);			// because it seems we have found a switch(){} and
+	         break;				// let decompileIF() once more do all the dirty work
+	        }
+      	      }
+#endif
 	      if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
 	          actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) {
       	      if (precedence(actions[n].SWF_ACTIONRECORD.ActionCode,actions[n+1].SWF_ACTIONRECORD.ActionCode))
@@ -1697,6 +1717,109 @@ decompileENUMERATE(int n, SWF_ACTION *actions,int maxn,int is_type2)
  return i-1;		// preserve some code for decompileIF()... 
 } 			// ... and let decompileIF() do all the dirty work ;-)
 
+
+#ifdef DECOMP_SWITCH
+
+static union SWF_ACTION *
+getAllSwitchActions(union SWF_ACTION *dest,union SWF_ACTION *actions)
+{
+  *dest++=*actions;
+  if (actions->SWF_ACTIONRECORD.ActionCode==SWFACTION_IF)  
+  {
+    int i;
+    struct SWF_ACTIONIF *sactv2 = (struct SWF_ACTIONIF*)actions;
+    for(i=0; i< sactv2->numActions ;i++)
+    {
+     dest=getAllSwitchActions(dest,&sactv2->Actions[i]);
+    }
+  }                                
+  return dest;
+}
+
+static int
+countAllSwitchActions (union SWF_ACTION *actions)
+{
+  int i,j=1;
+  if (actions->SWF_ACTIONRECORD.ActionCode==SWFACTION_IF)  
+  {
+    for(i=0; i < ((struct SWF_ACTIONIF*)actions)->numActions; i++)
+    {
+     j+=countAllSwitchActions(&((struct SWF_ACTIONIF*)actions)->Actions[i]);
+    }
+  }                                
+  return j;
+}
+
+// looks similar other decompileXXXX() but is never called by decompileAction()
+// only called after some preparation by decompileIF()
+//
+static int
+decompile_SWITCH(int n, SWF_ACTION *actions,int maxn)
+{
+  int i,y,z;
+  int maxi=0;
+  int minimaloffset =99999999;
+  struct _stack *StackSave;
+  struct SWF_ACTIONPUSHPARAM *swcopy,*sw=pop();
+  struct SWF_ACTIONPUSHPARAM *compare=pop();
+  INDENT
+  println("switch( %s ) {",getName(sw));
+  push(sw);
+  push(compare);
+
+  for(i=1;i<maxn-1;i++)
+  {
+   if (actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_IF
+    && actions[i-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_STRICTEQUALS )
+   {
+    struct SWF_ACTIONIF *sactv2 = (struct SWF_ACTIONIF*)&actions[i];
+    INDENT
+    println("case %s:",getName(pop()));
+    swcopy=pop();
+    SanityCheck(decompile_SWITCH,!strcmp(getName(swcopy),getName(sw)),"sw0 != sw");
+
+    z=i;
+    while (actions[z].SWF_ACTIONRECORD.Offset < actions[i+1].SWF_ACTIONRECORD.Offset+sactv2->BranchOffset)
+    {
+     z++;
+    }
+    if (actions[z].SWF_ACTIONRECORD.Offset<minimaloffset) 
+      minimaloffset=actions[z].SWF_ACTIONRECORD.Offset;
+    y=0;
+    while (actions[y+z].SWF_ACTIONRECORD.ActionCode!=SWFACTION_JUMP)	// fixme: could be too less
+    {
+     y++;
+    }
+    y++;
+    if (z+y>maxi) 
+    {
+     maxi=y+z;
+    }
+    StackSave=Stack;
+    decompileActions( y, &actions[z],gIndent+1);
+    Stack=StackSave;
+    if (actions[i+1].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP)
+    {
+     break;
+    }
+    y=0;
+
+    while (actions[y+i].SWF_ACTIONRECORD.ActionCode!=SWFACTION_STRICTEQUALS
+     && actions[y+i].SWF_ACTIONRECORD.Offset<minimaloffset)
+    {
+     y++;
+    }
+    y--;
+    decompileActions( y, &actions[i+1],gIndent+1);    // at least one push on stack expected
+    i+=y;
+   }
+  }
+  INDENT
+  println("}");
+  return maxi;
+}
+#endif
+
 int
 decompileIF(int n, SWF_ACTION *actions,int maxn)
 {
@@ -1916,6 +2039,24 @@ if(0)	    dumpRegs();
 	    #endif
 	      return 0;
 	   }
+#ifdef DECOMP_SWITCH
+ 	   if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STRICTEQUALS
+ 	        && check_switch(sact->Actions[0].SWF_ACTIONRECORD.ActionCode) )
+ 	   {
+ 	    union SWF_ACTION *xact,*xact0;
+ 	    for(i=n-1,j=0; i< maxn ;i++)	// n-1 due adding 1st SWFACTION_STRICTEQUALS in buffer	
+ 	    {
+ 	    	j+=countAllSwitchActions(&actions[i]); 		// FIRST count size of code
+	    }
+	    xact0=xact = (union SWF_ACTION *) calloc (j,sizeof (SWF_ACTION));
+	    println("/* checking %d actions for switch(){} */",j);
+	    for(i=n-1; i< maxn ;i++)
+	    {
+		xact=getAllSwitchActions(xact,&actions[i]);	// SECOND copy into xtra buffer
+	    }
+	    return decompile_SWITCH(0,xact0,j);			// THIRD decompile xtra buffer
+	   }
+#endif
 	   /* it seems we have a found the REAL 'if' statement,
 	      so it's right time to print the "if" just NOW!
 	   */
