@@ -130,9 +130,7 @@ write_flv(SWFSoundStreamBlock streamblock, SWFByteOutputMethod method, void *dat
 	
 	if(tagOffset < 0)
 		ret = FLVStream_nextTagType(flv, tag, NULL, FLV_AUDIOTAG);
-	else 
-		ret = FLVStream_nextTagType(flv, tag, tag, FLV_AUDIOTAG);
-
+	
 	if(ret < 0)
 		return;
 	
@@ -164,7 +162,6 @@ write_flv(SWFSoundStreamBlock streamblock, SWFByteOutputMethod method, void *dat
 
 	streamblock->stream->source.flv.tag = *tag;
 	streamblock->stream->source.flv.tagOffset = SWFInput_tell(input);
-
 }
 
 static void 
@@ -213,9 +210,7 @@ fillStreamBlock_flv(SWFSoundStream stream, SWFSoundStreamBlock block)
 
 	if(tagOffset < 0)
 		ret = FLVStream_nextTagType(flv, tag, NULL, FLV_AUDIOTAG);
-	else 
-		ret = FLVStream_nextTagType(flv, tag, tag, FLV_AUDIOTAG);
-
+	
 	if(ret < 0)
 	{
 		SWF_warn("fillStreamBlock_flv: not a valid flv audio stream\n");
