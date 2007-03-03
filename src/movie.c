@@ -49,6 +49,7 @@
 #include "blocks/soundinstance.h"
 #include "blocks/fileattrs.h"
 #include "blocks/metadata.h"
+#include "blocks/scriptlimits.h"
 #include "libming.h"
 
 #ifdef HAVE_ZLIB_H
@@ -99,7 +100,10 @@ struct SWFMovie_s
 	SWFFileAttributes fattrs;
 
 	/* Metadata object */
-	SWFMetadata metadata;	
+	SWFMetadata metadata;
+
+	/* Script limits */
+	SWFScriptLimits limits;	
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -146,6 +150,9 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 
 	if(movie->metadata)
 		destroySWFMetadata(movie->metadata);
+
+	if(movie->limits)
+		destroySWFScriptLimits(movie->limits);
 #if TRACK_ALLOCS
 	ming_gc_remove_node(movie->gcnode);
 #endif
@@ -193,6 +200,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	else
 		movie->fattrs = NULL;
 	movie->metadata = NULL;
+	movie->limits = NULL;
 #if TRACK_ALLOCS
 	movie->gcnode = ming_gc_add_node(movie, (dtorfunctype) destroySWFMovie);
 #endif
@@ -620,7 +628,8 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	/* SWF >= 8: first block _must_ be SWF_FILEATTRIBUTES */ 
 	if(movie->fattrs)
 		writeSWFBlockToMethod((SWFBlock)movie->fattrs, SWFOutputMethod, header);
-	
+	if(movie->limits)
+		writeSWFBlockToMethod((SWFBlock)movie->limits, SWFOutputMethod, header);	
 	SWFOutput_byteAlign(header);
 	swflength += 8 + SWFOutput_getLength(header);
 
@@ -815,8 +824,6 @@ SWFMovie_setNetworkAccess(SWFMovie movie, int flag)
 void
 SWFMovie_addMetadata(SWFMovie movie, char *xml)
 {
-	SWFMetadata metadata;
-
 	if(!movie->fattrs)
 		movie->fattrs = newSWFFileAttributes();
 
@@ -825,6 +832,23 @@ SWFMovie_addMetadata(SWFMovie movie, char *xml)
 	if(movie->metadata)
 		destroySWFMetadata(movie->metadata);
 	movie->metadata = newSWFMetadata(xml);
+}
+
+/*
+ * modifies scruipt limits
+ * default recursion depth is 265
+ * default timeout is 15-20 sec
+ */
+void 
+SWFMovie_setScriptLimits(SWFMovie movie, 
+                         int maxRecursion /* max recursion */,
+                         int timeout /* timeout in sec */)
+{
+	if(!movie->limits)
+		movie->limits = newSWFScriptLimits();
+
+	SWFScriptLimits_maxRecursion(movie->limits, maxRecursion);
+	SWFScriptLimits_setTimeout(movie->limits, timeout);
 }
 /*
  * Local variables:
