@@ -45,7 +45,9 @@ noinst_HEADERS =	\
 	videostream.h	\
 	filter.h	\
 	flv.h		\
-	fileattrs.h
+	fileattrs.h	\
+	metadata.h
+
 
 noinst_LTLIBRARIES = libblock.la
 
@@ -96,5 +98,6 @@ libblock_la_SOURCES = 	\
 	flv.c		\
 	filter.c	\
 	fileattrs.c	\
+	metadata.c	\
 	$(PNG_SOURCE)
 

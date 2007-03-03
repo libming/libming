@@ -1495,6 +1495,11 @@ struct SWF_FILEATTRIBUTES
 	UI8	Reserved4;
 };
 
+struct SWF_METADATA
+{
+	STRING Metadata;
+};
+
 typedef union SWF_Parserstruct
 {
   struct SWF_CHARACTERSET SWF_CHARACTERSET;
@@ -1558,5 +1563,6 @@ typedef union SWF_Parserstruct
   struct SWF_VIDEOFRAME SWF_VIDEOFRAME;
   struct SWF_REFLEX SWF_REFLEX;
   struct SWF_FILEATTRIBUTES SWF_FILEATTRIBUTES;
+  struct SWF_METADATA SWF_METADATA;
 } SWF_Parserstruct;
 #endif /* _SWFTYPES_H_ */

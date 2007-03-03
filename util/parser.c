@@ -2423,3 +2423,11 @@ parseSWF_FILEATTRIBUTES (FILE * f, int length)
   parserrec->Reserved4 = readUInt8(f);
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_METADATA (FILE * f, int length)
+{
+  PAR_BEGIN(SWF_METADATA);
+  parserrec->Metadata = readString(f);
+  PAR_END;
+}

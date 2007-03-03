@@ -102,6 +102,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
   {SWF_REFLEX, outputSWF_REFLEX},
   {SWF_FILEATTRIBUTES, outputSWF_FILEATTRIBUTES},
+  {SWF_METADATA, outputSWF_METADATA},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1534,6 +1535,16 @@ outputSWF_FILEATTRIBUTES(SWF_Parserstruct * pblock)
   iprintf(" FileAttributes: HasMetaData %d, UseNetwork %d\n", 
           sblock->HasMetadata, sblock->UseNetwork);
 }
+
+void 
+outputSWF_METADATA(SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_METADATA);
+  
+  iprintf(" Metadata: \n%s\n\n", 
+          sblock->Metadata);
+}
+
 
 void
 printRect(struct Rect *r)

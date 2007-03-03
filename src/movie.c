@@ -48,6 +48,7 @@
 #include "blocks/shape.h"
 #include "blocks/soundinstance.h"
 #include "blocks/fileattrs.h"
+#include "blocks/metadata.h"
 #include "libming.h"
 
 #ifdef HAVE_ZLIB_H
@@ -96,7 +97,9 @@ struct SWFMovie_s
 	
 	/* Fileattributes (necessary for version >= 8 */
 	SWFFileAttributes fattrs;
-	
+
+	/* Metadata object */
+	SWFMetadata metadata;	
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -141,6 +144,8 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 	if(movie->fattrs)
 		destroySWFFileAttributes(movie->fattrs);
 
+	if(movie->metadata)
+		destroySWFMetadata(movie->metadata);
 #if TRACK_ALLOCS
 	ming_gc_remove_node(movie->gcnode);
 #endif
@@ -187,7 +192,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 		movie->fattrs = newSWFFileAttributes();
 	else
 		movie->fattrs = NULL;
-
+	movie->metadata = NULL;
 #if TRACK_ALLOCS
 	movie->gcnode = ming_gc_add_node(movie, (dtorfunctype) destroySWFMovie);
 #endif
@@ -578,6 +583,12 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	if ( movie->nExports > 0 )
 		SWFMovie_writeExports(movie);
 
+	if ( movie->metadata != NULL)
+	{
+		SWFMovie_addBlock(movie, (SWFBlock)movie->metadata);
+		movie->metadata = NULL; // do not destroy with movie if added as block
+	}
+
 	/* Add a terminating SHOWFRAME tag if not already there */
 	SWFBlock lastBlock = SWFBlockList_getLastBlockType(movie->blockList);
 	if ( ! lastBlock || SWFBlock_getType(lastBlock) != SWF_SHOWFRAME )
@@ -792,6 +803,28 @@ SWFMovie_setNetworkAccess(SWFMovie movie, int flag)
 		movie->fattrs = newSWFFileAttributes();
 
 	SWFFileAttributes_useNetwork(movie->fattrs, flag);
+}
+
+/*
+ * adds Metadata to the movie
+ * This function inserts a metadata-tag into the movie. Only one metadata-tag can
+ * be set to a movie. 
+ * Metadata is specified as an XML string. For more details see:
+ * http://www.adobe.com/products/xmp
+ */
+void
+SWFMovie_addMetadata(SWFMovie movie, char *xml)
+{
+	SWFMetadata metadata;
+
+	if(!movie->fattrs)
+		movie->fattrs = newSWFFileAttributes();
+
+	SWFFileAttributes_hasMetadata(movie->fattrs, 1);
+	
+	if(movie->metadata)
+		destroySWFMetadata(movie->metadata);
+	movie->metadata = newSWFMetadata(xml);
 }
 /*
  * Local variables:
