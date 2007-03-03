@@ -98,3 +98,4 @@ extern SWF_Parserstruct *parseSWF_VIDEOFRAME(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_REFLEX(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_FILEATTRIBUTES(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_METADATA(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_SCRIPTLIMITS(FILE *f, int length);

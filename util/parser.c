@@ -2431,3 +2431,12 @@ parseSWF_METADATA (FILE * f, int length)
   parserrec->Metadata = readString(f);
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_SCRIPTLIMITS (FILE * f, int length)
+{
+  PAR_BEGIN(SWF_SCRIPTLIMITS);
+  parserrec->MaxRecursionDepth = readUInt16(f);
+  parserrec->ScriptTimeoutSeconds = readUInt16(f);
+  PAR_END;
+}

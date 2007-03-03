@@ -1500,6 +1500,12 @@ struct SWF_METADATA
 	STRING Metadata;
 };
 
+struct SWF_SCRIPTLIMITS
+{
+	UI16 MaxRecursionDepth;
+	UI16 ScriptTimeoutSeconds;
+};
+
 typedef union SWF_Parserstruct
 {
   struct SWF_CHARACTERSET SWF_CHARACTERSET;
@@ -1564,5 +1570,6 @@ typedef union SWF_Parserstruct
   struct SWF_REFLEX SWF_REFLEX;
   struct SWF_FILEATTRIBUTES SWF_FILEATTRIBUTES;
   struct SWF_METADATA SWF_METADATA;
+  struct SWF_SCRIPTLIMITS SWF_SCRIPTLIMITS;
 } SWF_Parserstruct;
 #endif /* _SWFTYPES_H_ */
