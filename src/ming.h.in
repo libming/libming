@@ -876,6 +876,8 @@ int SWFMovie_output_to_stream(SWFMovie movie, FILE *fp);
  */
 void SWFMovie_protect(SWFMovie movie, char *password);
 
+void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
+
   /* deprecated */
   /*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
 

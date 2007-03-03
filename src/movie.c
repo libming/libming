@@ -47,6 +47,7 @@
 #include "blocks/textfield.h"
 #include "blocks/shape.h"
 #include "blocks/soundinstance.h"
+#include "blocks/fileattrs.h"
 #include "libming.h"
 
 #ifdef HAVE_ZLIB_H
@@ -92,7 +93,10 @@ struct SWFMovie_s
 	byte r;
 	byte g;
 	byte b;
-
+	
+	/* Fileattributes (necessary for version >= 8 */
+	SWFFileAttributes fattrs;
+	
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -133,6 +137,9 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 
 	if (movie->imports)
 		free(movie->imports);
+	
+	if(movie->fattrs)
+		destroySWFFileAttributes(movie->fattrs);
 
 #if TRACK_ALLOCS
 	ming_gc_remove_node(movie->gcnode);
@@ -175,6 +182,11 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	movie->r = 0xff;
 	movie->g = 0xff;
 	movie->b = 0xff;
+
+	if(version >= 8)	
+		movie->fattrs = newSWFFileAttributes();
+	else
+		movie->fattrs = NULL;
 
 #if TRACK_ALLOCS
 	movie->gcnode = ming_gc_add_node(movie, (dtorfunctype) destroySWFMovie);
@@ -593,6 +605,10 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	backgroundBlock = (SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
         writeSWFBlockToMethod(backgroundBlock, SWFOutputMethod, header);
 	destroySWFBlock(backgroundBlock);
+
+	/* SWF >= 8: first block _must_ be SWF_FILEATTRIBUTES */ 
+	if(movie->fattrs)
+		writeSWFBlockToMethod((SWFBlock)movie->fattrs, SWFOutputMethod, header);
 	
 	SWFOutput_byteAlign(header);
 	swflength += 8 + SWFOutput_getLength(header);
@@ -761,6 +777,21 @@ SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name)
 	importer = SWFMovie_addImport(movie, filename, name, id);
 	SWFCharacter_addDependency((SWFCharacter) res, (SWFCharacter) importer);
 	return res;
+}
+
+
+/* 
+ * sets SWF network permission
+ * if flag is set to 0, a localy loaded movie will be able to access the network
+ * For SWF >= 8: default is 0
+ */
+void 
+SWFMovie_setNetworkAccess(SWFMovie movie, int flag)
+{
+	if(!movie->fattrs)
+		movie->fattrs = newSWFFileAttributes();
+
+	SWFFileAttributes_useNetwork(movie->fattrs, flag);
 }
 /*
  * Local variables:
