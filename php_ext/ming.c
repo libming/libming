@@ -2236,6 +2236,51 @@ PHP_METHOD(swfmovie, protect)
 }
 /* }}} */
 
+/* {{{ proto void swfmovie::addMetadata(string xml)
+ * */
+PHP_METHOD(swfmovie, addMetadata)
+{ 
+  zval **zchar
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+  
+  if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zchar) == FAILURE) {
+        WRONG_PARAM_COUNT;
+  } 
+  convert_to_string(zchar);
+  SWFMovie_addMetadata(movie, Z_LVAL_PP(zchar));
+}
+/* }}} */
+
+/* {{{ proto void swfmovie::setScriptLimits(int maxRecursion, int timeout)
+*/
+PHP_METHOD(swfmovie, setScriptLimits)
+{
+  zval **maxRecursion, **timeout;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  if( ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &maxRecursion, &timeout) == FAILURE) {
+        WRONG_PARAM_COUNT; 
+  } 
+  convert_to_long_ex(maxRecursion);
+  convert_to_long_ex(timeout);
+  SWFMovie_setScriptLimits(movie, Z_LVAL_PP(maxRecursion), Z_LVAL_PP(timeout));  
+}
+/* }}} */
+
+/* {{{ proto void swfmovie::setNetworkAccess(int flag)
+ * */  
+PHP_METHOD(swfmovie, setScriptLimits)
+{   
+  zval **flag;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+    
+  if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &flag) == FAILURE) {
+        WRONG_PARAM_COUNT;
+  }  
+  convert_to_long_ex(flag);
+  SWFMovie_setNetworkAccess(movie, Z_LVAL_PP(flag));
+} 
+/* }}} */
 
 /* {{{ proto object swfmovie::add(object SWFBlock) 
 */
@@ -2511,7 +2556,7 @@ PHP_METHOD(swfmovie, setBackground)
 	convert_to_long_ex(b);
 	SWFMovie_setBackground(movie, Z_LVAL_PP(r), Z_LVAL_PP(g), Z_LVAL_PP(b));
 }
-/* }}} */
+/* }}} * /
 
 /* {{{ proto void swfmovie::setRate(float rate)
    Sets movie rate */
@@ -2791,6 +2836,9 @@ static zend_function_entry swfmovie_functions[] = {
 	PHP_ME(swfmovie, importFont,        NULL, 0)
 	PHP_ME(swfmovie, addFont,           NULL, 0)
 	PHP_ME(swfmovie, protect,           NULL, 0)
+	PHP_ME(swfmovie, addMetadata,		NULL, 0)
+	PHP_ME(swfmovie, setNetworkAccess,	NULL, 0)
+	PHP_ME(swfmovie, setScriptLimits,	NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
