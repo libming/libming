@@ -568,6 +568,15 @@ class SWFMovie
 	{
 		SWFMovie_protect(this->movie,password);
 	}
+  
+  void addMetadata(char *xml)
+    { SWFMovie_addMetadata(this->movie, xml); }
+  
+  void setNetworkAccess(int flag)
+    { SWFMovie_setNetworkAccess(this->movie, flag); }
+  
+  void setScriptLimits(int maxRecursion, int timeout)
+    { SWFMovie_setScriptLimits(this->movie, maxRecursion, timeout); }
 
   SWF_DECLAREONLY(SWFMovie);
 };

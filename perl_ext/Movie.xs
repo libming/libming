@@ -168,3 +168,19 @@ SWFMovie_stopSound(movie, sound)
 	SWF::Sound sound
 	CODE:
 	SWFMovie_stopSound(movie, sound);
+
+void 
+SWFMovie_setNetworkAccess(movie, flag)
+	SWF::Movie movie
+	int flag
+
+void 
+SWFMovie_addMetadata(movie, xml)
+	SWF::Movie movie
+	char *xml
+
+void 
+SWFMovie_setScriptLimits(movie, maxRecursion, timeout)
+	SWF::Movie movie
+	int maxRecursion
+	int timeout
