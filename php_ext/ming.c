@@ -2240,14 +2240,14 @@ PHP_METHOD(swfmovie, protect)
  * */
 PHP_METHOD(swfmovie, addMetadata)
 { 
-  zval **zchar
+  zval **zchar;
   SWFMovie movie = getMovie(getThis() TSRMLS_CC);
   
   if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zchar) == FAILURE) {
         WRONG_PARAM_COUNT;
   } 
-  convert_to_string(zchar);
-  SWFMovie_addMetadata(movie, Z_LVAL_PP(zchar));
+  convert_to_string_ex(zchar);
+  SWFMovie_addMetadata(movie, Z_STRVAL_PP(zchar));
 }
 /* }}} */
 
@@ -2269,7 +2269,7 @@ PHP_METHOD(swfmovie, setScriptLimits)
 
 /* {{{ proto void swfmovie::setNetworkAccess(int flag)
  * */  
-PHP_METHOD(swfmovie, setScriptLimits)
+PHP_METHOD(swfmovie, setNetworkAccess)
 {   
   zval **flag;
   SWFMovie movie = getMovie(getThis() TSRMLS_CC);
