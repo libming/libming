@@ -213,25 +213,25 @@ outputSWF_BUTTONCONDACTION (SWF_BUTTONCONDACTION *bcarec)
 void
 outputSWF_CLIPEVENTFLAGS (SWF_CLIPEVENTFLAGS * clipevflags )
 {
-  iprintf ("  ClipEventKeyUp: %d ", clipevflags->ClipEventKeyUp);
-  iprintf ("  ClipEventKeyDown: %d ", clipevflags->ClipEventKeyDown);
-  iprintf ("  ClipEventMouseUp: %d ", clipevflags->ClipEventMouseUp);
-  iprintf ("  ClipEventMouseDown: %d ", clipevflags->ClipEventMouseDown);
-  iprintf ("  ClipEventMouseMove: %d ", clipevflags->ClipEventMouseMove);
-  iprintf ("  ClipEventUnload: %d ", clipevflags->ClipEventUnload);
-  iprintf ("  ClipEventEnterFrame: %d ", clipevflags->ClipEventEnterFrame);
-  iprintf ("  ClipEventLoad: %d ", clipevflags->ClipEventLoad);
-  iprintf ("  ClipEventDragOver: %d ", clipevflags->ClipEventDragOver);
-  iprintf ("  ClipEventRollOut: %d ", clipevflags->ClipEventRollOut);
-  iprintf ("  ClipEventRollOver: %d ", clipevflags->ClipEventRollOver);
-  iprintf ("  ClipEventReleaseOutside: %d ", clipevflags->ClipEventReleaseOutside);
-  iprintf ("  ClipEventRelease: %d ", clipevflags->ClipEventRelease);
-  iprintf ("  ClipEventPress: %d ", clipevflags->ClipEventPress);
-  iprintf ("  ClipEventInitialize: %d ", clipevflags->ClipEventInitialize);
-  iprintf ("  ClipEventData: %d ", clipevflags->ClipEventData);
-  iprintf ("  ClipEventConstruct: %d ", clipevflags->ClipEventConstruct);
-  iprintf ("  ClipEventKeyPress: %d ", clipevflags->ClipEventKeyPress);
-  iprintf ("  ClipEventDragOut: %d ", clipevflags->ClipEventDragOut);
+  if ( clipevflags->ClipEventKeyUp ) printf (" ClipEventKeyUp");
+  if ( clipevflags->ClipEventKeyDown ) printf (" ClipEventKeyDown");
+  if ( clipevflags->ClipEventMouseUp ) printf (" ClipEventMouseUp");
+  if ( clipevflags->ClipEventMouseDown ) printf (" ClipEventMouseDown");
+  if ( clipevflags->ClipEventMouseMove ) printf (" ClipEventMouseMove");
+  if ( clipevflags->ClipEventUnload ) printf (" ClipEventUnload");
+  if ( clipevflags->ClipEventEnterFrame ) printf (" ClipEventEnterFrame");
+  if ( clipevflags->ClipEventLoad ) printf (" ClipEventLoad");
+  if ( clipevflags->ClipEventDragOver ) printf (" ClipEventDragOver");
+  if ( clipevflags->ClipEventRollOut ) printf (" ClipEventRollOut");
+  if ( clipevflags->ClipEventRollOver ) printf (" ClipEventRollOver");
+  if ( clipevflags->ClipEventReleaseOutside ) printf (" ClipEventReleaseOutside");
+  if ( clipevflags->ClipEventRelease ) iprintf (" ClipEventRelease");
+  if ( clipevflags->ClipEventPress ) iprintf (" ClipEventPress");
+  if ( clipevflags->ClipEventInitialize ) iprintf (" ClipEventInitialize");
+  if ( clipevflags->ClipEventData ) iprintf (" ClipEventData");
+  if ( clipevflags->ClipEventConstruct ) iprintf (" ClipEventConstruct");
+  if ( clipevflags->ClipEventKeyPress ) iprintf (" ClipEventKeyPress");
+  if ( clipevflags->ClipEventDragOut ) iprintf (" ClipEventDragOut");
 }
 
 void
@@ -241,16 +241,20 @@ outputSWF_CLIPACTIONRECORD (SWF_CLIPACTIONRECORD * carec )
   int i;
 #endif
 #if !defined(ACTIONONLY)
-  outputSWF_CLIPEVENTFLAGS (&carec->EventFlag);
-  iprintf(" %ld ActionRecordSize\n", carec->ActionRecordSize);
-  iprintf(" %d KeyCode\n", carec->KeyCode);
+  iprintf(" onClipEvents("); outputSWF_CLIPEVENTFLAGS (&carec->EventFlag); printf(" ):\n");
+  /*iprintf(" ActionRecordSize %ld\n", carec->ActionRecordSize);*/
+  if ( carec->KeyCode) iprintf(" EventKeyCode %d\n", carec->KeyCode);
 #endif
 #ifdef NODECOMPILE
-  iprintf(" %d Actions\n", carec->numActions);
+  ++INDENT;
+  /*iprintf(" %d Actions\n", carec->numActions);*/
   for(i=0;i<carec->numActions;i++)
      outputSWF_ACTION(i,&(carec->Actions[i]));
+  --INDENT;
 #else
+  ++INDENT;
   iprintf (" %s\n", decompile5Action(carec->numActions,carec->Actions,0));
+  --INDENT;
 #endif
 }
 
@@ -258,11 +262,7 @@ void
 outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions )
 {
   int i;
-#if !defined(ACTIONONLY)
-  outputSWF_CLIPEVENTFLAGS (&clipactions->AllEventFlags);
-  iprintf(" %d NumClipRecords\n", clipactions->NumClipRecords);
-#endif
-  for(i=0;i<clipactions->NumClipRecords;i++)
+  for(i=0;i<clipactions->NumClipRecords-1;i++)
     outputSWF_CLIPACTIONRECORD(&(clipactions->ClipActionRecords[i]));
 }
 
