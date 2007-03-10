@@ -51,6 +51,7 @@ extern OUTPUTRET outputSWF_DEFINEMORPHSHAPE(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINESHAPE(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINESHAPE2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINESHAPE3(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_DEFINESHAPE4(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINESOUND(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINESPRITE(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINETEXT(SWF_Parserstruct *pblock);

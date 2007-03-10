@@ -685,10 +685,27 @@ typedef struct SWF_LINESTYLE {
 	SWF_RGBA	Color;
 } SWF_LINESTYLE;
 
+typedef struct SWF_LINESTYLE2 {
+	UI16		Width;
+	UI8		StartCapStyle:2;
+	UI8		JoinStyle:2;
+	UI8		HasFillFlag:1;
+	UI8		NoHScaleFlag:1;
+	UI8		NoVScaleFlag:1;
+	UI8		PixelHintingFlag:1;
+	UI8		Reserved:5;
+	UI8		NoClose:1;
+	UI8		EndCapStyle:2;
+	UI16		MiterLimitFactor;
+	SWF_RGBA	Color;
+	SWF_FILLSTYLE	FillType;
+} SWF_LINESTYLE2;
+
 typedef struct SWF_LINESTYLEARRAY {
 	UI8	LineStyleCount;
 	UI16	LineStyleCountExtended;
 	SWF_LINESTYLE	*LineStyles;
+	SWF_LINESTYLE2	*LineStyles2;
 } SWF_LINESTYLEARRAY;
 
 typedef struct SWF_ENDSHAPERECORD {
@@ -1175,6 +1192,17 @@ struct SWF_DEFINESHAPE3
   SWF_SHAPEWITHSTYLE Shapes;
 };
 
+struct SWF_DEFINESHAPE4
+{
+  UI16 ShapeID;
+  SWF_RECT ShapeBounds;
+  SWF_RECT EdgeBounds;
+  UI8 Reserved:6;
+  UI8 UsesNonScalingStrokes:1;
+  UI8 UsesScalingStrokes:1;
+  SWF_SHAPEWITHSTYLE Shapes;
+};
+
 struct SWF_DEFINESOUND
 {
   UI16 SoundId;
@@ -1528,6 +1556,7 @@ typedef union SWF_Parserstruct
   struct SWF_DEFINESHAPE SWF_DEFINESHAPE;
   struct SWF_DEFINESHAPE2 SWF_DEFINESHAPE2;
   struct SWF_DEFINESHAPE3 SWF_DEFINESHAPE3;
+  struct SWF_DEFINESHAPE4 SWF_DEFINESHAPE4;
   struct SWF_DEFINESOUND SWF_DEFINESOUND;
   struct SWF_DEFINESPRITE SWF_DEFINESPRITE;
   struct SWF_DEFINETEXT SWF_DEFINETEXT;

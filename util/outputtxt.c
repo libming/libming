@@ -61,6 +61,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINESHAPE, outputSWF_DEFINESHAPE},
   {SWF_DEFINESHAPE2, outputSWF_DEFINESHAPE2},
   {SWF_DEFINESHAPE3, outputSWF_DEFINESHAPE3},
+  {SWF_DEFINESHAPE4, outputSWF_DEFINESHAPE4},
   {SWF_DEFINESOUND, outputSWF_DEFINESOUND},
   {SWF_DEFINESPRITE, outputSWF_DEFINESPRITE},
   {SWF_DEFINETEXT, outputSWF_DEFINETEXT},
@@ -338,6 +339,27 @@ outputSWF_LINESTYLE (SWF_LINESTYLE * fillstyle, char *name, int i)
 }
 
 void
+outputSWF_LINESTYLE2 (SWF_LINESTYLE2 * fillstyle, char *name, int i)
+{
+  iprintf (" LineStyle2: ");
+  iprintf (" Width: %d\n", fillstyle->Width);
+  iprintf (" StartCapStyle: %d\n", fillstyle->StartCapStyle);
+  iprintf (" JoinStyle: %d\n", fillstyle->JoinStyle);
+  iprintf (" HasFillFlag: %d\n", fillstyle->HasFillFlag);
+  iprintf (" NoHScaleFlag: %d\n", fillstyle->NoHScaleFlag);
+  iprintf (" NoVScaleFlag: %d\n", fillstyle->NoVScaleFlag);
+  iprintf (" PixelHintingFlag %d\n", fillstyle->PixelHintingFlag);
+  iprintf (" NoClose %d\n", fillstyle->NoClose);
+  iprintf (" EndCapStyle %d\n", fillstyle->EndCapStyle);
+  if(fillstyle->JoinStyle == 2)
+    iprintf (" MiterLimitFactor %d\n", fillstyle->MiterLimitFactor);
+  if(fillstyle->HasFillFlag == 0)
+    outputSWF_RGBA (&fillstyle->Color, "");
+  else
+    outputSWF_FILLSTYLE (&fillstyle->FillType, "", 0);
+}
+
+void
 outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
 {
 
@@ -353,9 +375,14 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
      0xff) ? linestylearray->LineStyleCount : linestylearray->
     LineStyleCountExtended;
   for (i = 0; i < count; i++)
-    {
+  {
+    if(linestylearray->LineStyles != NULL)   
       outputSWF_LINESTYLE (&(linestylearray->LineStyles[i]),"",0);
-    }
+    else if(linestylearray->LineStyles2 != NULL)
+      outputSWF_LINESTYLE2 (&(linestylearray->LineStyles2[i]),"",0);
+    else
+      iprintf("LineStyleArray: parser error\n");
+  }
 }
 
 void
@@ -958,6 +985,19 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),2,"");
 
+}
+
+void
+outputSWF_DEFINESHAPE4 (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_DEFINESHAPE4);
+
+  iprintf (" ShapeID: %d\n", sblock->ShapeID);
+  outputSWF_RECT (&(sblock->ShapeBounds));
+  outputSWF_RECT (&(sblock->EdgeBounds));
+  iprintf("   UsesNonScalingStrokes: %d\n", sblock->UsesNonScalingStrokes);
+  iprintf("   UsesScalingStrokes: %d\n", sblock->UsesScalingStrokes);
+  outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),2,"");
 }
 
 void

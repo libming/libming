@@ -553,6 +553,27 @@ parseSWF_LINESTYLE (FILE * f, SWF_LINESTYLE * linestyle, int level)
     parseSWF_RGBA (f, &linestyle->Color);
 }
 
+void 
+parseSWF_LINESTYLE2 (FILE *f, SWF_LINESTYLE2 *linestyle2, int level)
+{
+  linestyle2->Width = readUInt16(f);
+  linestyle2->StartCapStyle = readBits(f, 2);
+  linestyle2->JoinStyle = readBits(f, 2);
+  linestyle2->HasFillFlag = readBits(f, 1);
+  linestyle2->NoHScaleFlag = readBits(f, 1);
+  linestyle2->NoVScaleFlag = readBits(f, 1);
+  linestyle2->PixelHintingFlag = readBits(f, 1);
+  linestyle2->Reserved = readBits(f, 5);
+  linestyle2->NoClose = readBits(f, 1);
+  linestyle2->EndCapStyle = readBits(f, 2);
+  if(linestyle2->JoinStyle == 2)
+	linestyle2->MiterLimitFactor = readUInt16(f);
+  if(linestyle2->HasFillFlag == 0)
+	parseSWF_RGBA (f, &linestyle2->Color);
+  else
+	parseSWF_FILLSTYLE(f, &linestyle2->FillType, level);
+}
+
 void
 parseSWF_LINESTYLEARRAY (FILE * f, SWF_LINESTYLEARRAY * linestyle, int level)
 {
@@ -565,12 +586,26 @@ parseSWF_LINESTYLEARRAY (FILE * f, SWF_LINESTYLEARRAY * linestyle, int level)
       linestyle->LineStyleCountExtended = readUInt16 (f);
       count = linestyle->LineStyleCountExtended;
     }
-  linestyle->LineStyles =
-    (SWF_LINESTYLE *) malloc (count * sizeof (SWF_LINESTYLE));
+  if(level == 4)
+  {
+    linestyle->LineStyles = NULL;
+    linestyle->LineStyles2 = 
+      (SWF_LINESTYLE2 *) malloc (count * sizeof (SWF_LINESTYLE2));
+  }
+  else 
+  {
+    linestyle->LineStyles =
+      (SWF_LINESTYLE *) malloc (count * sizeof (SWF_LINESTYLE));
+    linestyle->LineStyles2 = NULL;
+  }
+  
   for (i = 0; i < count; i++)
-    {
+  {
+    if(level == 4)
+      parseSWF_LINESTYLE2 (f, &(linestyle->LineStyles2[i]), level);
+    else
       parseSWF_LINESTYLE (f, &(linestyle->LineStyles[i]), level);
-    }
+  }
 }
 
 void
@@ -1721,6 +1756,22 @@ parseSWF_DEFINESHAPE3 (FILE * f, int length)
   parserrec->ShapeID = readUInt16 (f);
   parseSWF_RECT (f, &(parserrec->ShapeBounds));
   parseSWF_SHAPEWITHSTYLE (f, &(parserrec->Shapes), 3);
+
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_DEFINESHAPE4 (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_DEFINESHAPE4);
+
+  parserrec->ShapeID = readUInt16 (f);
+  parseSWF_RECT (f, &(parserrec->ShapeBounds));
+  parseSWF_RECT (f, &(parserrec->EdgeBounds));
+  parserrec->Reserved = readBits(f, 6);
+  parserrec->UsesNonScalingStrokes = readBits(f, 1);
+  parserrec->UsesScalingStrokes = readBits(f, 1);
+  parseSWF_SHAPEWITHSTYLE (f, &(parserrec->Shapes), 4);
 
   PAR_END;
 }

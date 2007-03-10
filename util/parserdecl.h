@@ -56,6 +56,7 @@ extern SWF_Parserstruct *parseSWF_DEFINEMORPHSHAPE(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINESHAPE(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINESHAPE2(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINESHAPE3(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_DEFINESHAPE4(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINESOUND(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINESPRITE(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINETEXT(FILE *f, int length);
