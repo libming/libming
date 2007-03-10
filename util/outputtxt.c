@@ -105,6 +105,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_FILEATTRIBUTES, outputSWF_FILEATTRIBUTES},
   {SWF_METADATA, outputSWF_METADATA},
   {SWF_SCRIPTLIMITS, outputSWF_SCRIPTLIMITS},
+  {SWF_DEFINESCALINGGRID, outputSWF_DEFINESCALINGGRID},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1593,6 +1594,15 @@ outputSWF_SCRIPTLIMITS(SWF_Parserstruct * pblock)
   iprintf(" MaxRecursionDepth %d\n", sblock->MaxRecursionDepth);
   iprintf(" ScriptTimeoutSeconds %d\n", sblock->ScriptTimeoutSeconds);
 }
+
+void 
+outputSWF_DEFINESCALINGGRID(SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_DEFINESCALINGGRID);
+  iprintf(" CharacterId %d\n", sblock->CharacterId);
+  outputSWF_RECT(&sblock->Splitter);
+}
+
 
 void
 printRect(struct Rect *r)

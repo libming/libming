@@ -2491,3 +2491,13 @@ parseSWF_SCRIPTLIMITS (FILE * f, int length)
   parserrec->ScriptTimeoutSeconds = readUInt16(f);
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_DEFINESCALINGGRID (FILE * f, int length)
+{
+  PAR_BEGIN(SWF_DEFINESCALINGGRID);
+  parserrec->CharacterId = readUInt16(f);
+  parseSWF_RECT(f, &parserrec->Splitter);  
+  PAR_END;
+}
+

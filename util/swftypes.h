@@ -1534,6 +1534,12 @@ struct SWF_SCRIPTLIMITS
 	UI16 ScriptTimeoutSeconds;
 };
 
+struct SWF_DEFINESCALINGGRID
+{
+	UI16 CharacterId;
+	SWF_RECT Splitter;
+};
+
 typedef union SWF_Parserstruct
 {
   struct SWF_CHARACTERSET SWF_CHARACTERSET;
@@ -1600,5 +1606,6 @@ typedef union SWF_Parserstruct
   struct SWF_FILEATTRIBUTES SWF_FILEATTRIBUTES;
   struct SWF_METADATA SWF_METADATA;
   struct SWF_SCRIPTLIMITS SWF_SCRIPTLIMITS;
+  struct SWF_DEFINESCALINGGRID SWF_DEFINESCALINGGRID;
 } SWF_Parserstruct;
 #endif /* _SWFTYPES_H_ */
