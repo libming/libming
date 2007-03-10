@@ -70,6 +70,7 @@ extern OUTPUTRET outputSWF_FREEALL(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_FREECHARACTER(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_GENCOMMAND(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_IMPORTASSETS(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_IMPORTASSETS2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_JPEGTABLES(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_NAMECHARACTER(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_PATHSAREPOSTSCRIPT(SWF_Parserstruct *pblock);

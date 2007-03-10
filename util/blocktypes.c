@@ -71,6 +71,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_FREECHARACTER),
   BlockType (SWF_GENCOMMAND),
   BlockType (SWF_IMPORTASSETS),
+  BlockType (SWF_IMPORTASSETS2),
   BlockType (SWF_INITACTION),
   BlockType (SWF_JPEGTABLES),
   BlockType (SWF_NAMECHARACTER),

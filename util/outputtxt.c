@@ -80,6 +80,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_FREECHARACTER, outputSWF_FREECHARACTER},
   {SWF_GENCOMMAND, outputSWF_GENCOMMAND},
   {SWF_IMPORTASSETS, outputSWF_IMPORTASSETS},
+  {SWF_IMPORTASSETS2, outputSWF_IMPORTASSETS2},
   {SWF_JPEGTABLES, outputSWF_JPEGTABLES},
   {SWF_NAMECHARACTER, outputSWF_NAMECHARACTER},
   {SWF_PATHSAREPOSTSCRIPT, outputSWF_PATHSAREPOSTSCRIPT},
@@ -1182,6 +1183,22 @@ outputSWF_IMPORTASSETS (SWF_Parserstruct * pblock)
 {
   int i;
   OUT_BEGIN (SWF_IMPORTASSETS);
+
+  iprintf (" URL: %s\n", sblock->URL );
+  iprintf (" num assets: %d\n", sblock->Count );
+  for (i = 0; i < sblock->Count; i++)
+    {
+	iprintf (" Asset[%3.3d]: %s\n", sblock->Tags[i],
+		  sblock->Names[i]);
+    }
+
+}
+
+void
+outputSWF_IMPORTASSETS2 (SWF_Parserstruct * pblock)
+{
+  int i;
+  OUT_BEGIN (SWF_IMPORTASSETS2);
 
   iprintf (" URL: %s\n", sblock->URL );
   iprintf (" num assets: %d\n", sblock->Count );

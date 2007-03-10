@@ -75,6 +75,7 @@ extern SWF_Parserstruct *parseSWF_FREEALL(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_FREECHARACTER(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_GENCOMMAND(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_IMPORTASSETS(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_IMPORTASSETS2(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_INITACTION(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_JPEGTABLES(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_NAMECHARACTER(FILE *f, int length);

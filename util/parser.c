@@ -2079,6 +2079,26 @@ parseSWF_IMPORTASSETS (FILE * f, int length)
 }
 
 SWF_Parserstruct *
+parseSWF_IMPORTASSETS2 (FILE * f, int length)
+{
+  int i;
+  PAR_BEGIN (SWF_IMPORTASSETS2);
+
+  parserrec->URL = readString (f);
+  parserrec->Reserved = readUInt8(f);
+  parserrec->Reserved2 = readUInt8(f);
+  parserrec->Count = readUInt16 (f);
+  parserrec->Tags = (UI16 *)malloc(parserrec->Count*sizeof(UI16));
+  parserrec->Names = (STRING *)malloc(parserrec->Count*sizeof(char *));
+  for(i=0;i<parserrec->Count;i++) {
+	parserrec->Tags[i] = readUInt16(f);
+	parserrec->Names[i] = readString(f);
+  }
+
+  PAR_END;
+}
+
+SWF_Parserstruct *
 parseSWF_JPEGTABLES (FILE * f, int length)
 {
   int end = fileOffset + length;
