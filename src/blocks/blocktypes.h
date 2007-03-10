@@ -81,7 +81,7 @@ typedef enum
   SWF_FREEALL			= 31,
   SWF_FREECHARACTER		=  3,
   SWF_GENCOMMAND		= 49,
-  SWF_IMPORTASSETS              = 57,
+  SWF_IMPORTASSETS              = 57,  /* SWF_version  < 8 only */
   SWF_IMPORTASSETS2		= 71,  /* SWF_version  >= 8 */
   SWF_JPEGTABLES                =  8,
   SWF_NAMECHARACTER		= 40,
