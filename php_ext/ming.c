@@ -2272,52 +2272,6 @@ PHP_METHOD(swfmovie, protect)
 }
 /* }}} */
 
-/* {{{ proto void swfmovie::addMetadata(string xml)
- * */
-PHP_METHOD(swfmovie, addMetadata)
-{ 
-  zval **zchar;
-  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-  
-  if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zchar) == FAILURE) {
-        WRONG_PARAM_COUNT;
-  } 
-  convert_to_string_ex(zchar);
-  SWFMovie_addMetadata(movie, Z_STRVAL_PP(zchar));
-}
-/* }}} */
-
-/* {{{ proto void swfmovie::setScriptLimits(int maxRecursion, int timeout)
-*/
-PHP_METHOD(swfmovie, setScriptLimits)
-{
-  zval **maxRecursion, **timeout;
-  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-
-  if( ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &maxRecursion, &timeout) == FAILURE) {
-        WRONG_PARAM_COUNT; 
-  } 
-  convert_to_long_ex(maxRecursion);
-  convert_to_long_ex(timeout);
-  SWFMovie_setScriptLimits(movie, Z_LVAL_PP(maxRecursion), Z_LVAL_PP(timeout));  
-}
-/* }}} */
-
-/* {{{ proto void swfmovie::setNetworkAccess(int flag)
- * */  
-PHP_METHOD(swfmovie, setNetworkAccess)
-{   
-  zval **flag;
-  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-    
-  if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &flag) == FAILURE) {
-        WRONG_PARAM_COUNT;
-  }  
-  convert_to_long_ex(flag);
-  SWFMovie_setNetworkAccess(movie, Z_LVAL_PP(flag));
-} 
-/* }}} */
-
 /* {{{ proto object swfmovie::add(object SWFBlock) 
 */
 PHP_METHOD(swfmovie, add)
@@ -2644,6 +2598,52 @@ PHP_METHOD(swfmovie, setFrames)
 /* }}} */
 
 #ifdef HAVE_NEW_MING
+/* {{{ proto void swfmovie::addMetadata(string xml)
+ * */
+PHP_METHOD(swfmovie, addMetadata)
+{ 
+  zval **zchar;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+  
+  if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zchar) == FAILURE) {
+        WRONG_PARAM_COUNT;
+  } 
+  convert_to_string_ex(zchar);
+  SWFMovie_addMetadata(movie, Z_STRVAL_PP(zchar));
+}
+/* }}} */
+
+/* {{{ proto void swfmovie::setScriptLimits(int maxRecursion, int timeout)
+*/
+PHP_METHOD(swfmovie, setScriptLimits)
+{
+  zval **maxRecursion, **timeout;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+
+  if( ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &maxRecursion, &timeout) == FAILURE) {
+        WRONG_PARAM_COUNT; 
+  } 
+  convert_to_long_ex(maxRecursion);
+  convert_to_long_ex(timeout);
+  SWFMovie_setScriptLimits(movie, Z_LVAL_PP(maxRecursion), Z_LVAL_PP(timeout));  
+}
+/* }}} */
+
+/* {{{ proto void swfmovie::setNetworkAccess(int flag)
+ * */  
+PHP_METHOD(swfmovie, setNetworkAccess)
+{   
+  zval **flag;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+    
+  if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &flag) == FAILURE) {
+        WRONG_PARAM_COUNT;
+  }  
+  convert_to_long_ex(flag);
+  SWFMovie_setNetworkAccess(movie, Z_LVAL_PP(flag));
+} 
+/* }}} */
+
 /* {{{ proto long swfmovie::streamMP3(mixed file)
    Sets sound stream of the SWF movie. The parameter can be stream or string. */
 PHP_METHOD(swfmovie, streamMP3)
