@@ -43,7 +43,7 @@ completeSWFScriptLimits(SWFBlock block)
 void
 destroySWFScriptLimits(SWFScriptLimits sl)
 {
-	
+	free(sl);	
 }
 
 void 
