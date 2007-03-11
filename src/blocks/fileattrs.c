@@ -58,7 +58,7 @@ completeSWFFileAttributes(SWFBlock block)
 void
 destroySWFFileAttributes(SWFFileAttributes fattrs)
 {
-	free(attrs);	
+	free(fattrs);	
 }
 
 void 
