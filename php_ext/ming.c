@@ -1198,6 +1198,40 @@ PHP_METHOD(swfdisplayitem, getRot)
 	RETURN_DOUBLE(ret);
 }
 /* }}} */
+
+/* {{{ proto void swfdisplayitem::cacheAsBitmap(int flag)
+   caches item as bitmap. can improve rendering speed */
+
+PHP_METHOD(swfdisplayitem, cacheAsBitmap)
+{
+	zval **flag;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &flag) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(flag);
+
+	SWFDisplayItem_cacheAsBitmap(getDisplayItem(getThis() TSRMLS_CC), Z_LVAL_PP(flag));
+}
+/* }}} */
+
+
+/* {{{ proto void swfdisplayitem::setBlendMode(int mode)
+   adds blending to item */
+
+PHP_METHOD(swfdisplayitem, setBlendMode)
+{
+	zval **mode;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &mode) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(mode);
+
+	SWFDisplayItem_cacheAsBitmap(getDisplayItem(getThis() TSRMLS_CC), Z_LVAL_PP(mode));
+}
+/* }}} */
+
 #endif
 
 static zend_function_entry swfdisplayitem_functions[] = {
@@ -1229,6 +1263,8 @@ static zend_function_entry swfdisplayitem_functions[] = {
 	PHP_ME(swfdisplayitem, getXSkew,    NULL, 0)
 	PHP_ME(swfdisplayitem, getYSkew,    NULL, 0)
 	PHP_ME(swfdisplayitem, getRot,      NULL, 0)
+	PHP_ME(swfdisplayitem, cacheAsBitmap, NULL, 0)
+    PHP_ME(swfdisplayitem, setBlendMode, NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
@@ -4336,6 +4372,23 @@ PHP_MINIT_FUNCTION(ming)
 	CONSTANT("SWF_SOUND_16BITS",            SWF_SOUND_16BITS);
 	CONSTANT("SWF_SOUND_MONO",              SWF_SOUND_MONO);
 	CONSTANT("SWF_SOUND_STEREO",            SWF_SOUND_STEREO);
+
+#ifdef HAVE_NEW_MING
+	/* Blend Modes */
+	CONSTANT("BLEND_MODE_NORMAL", 		BLEND_MODE_NORMAL);
+	CONSTANT("BLEND_MODE_LAYER", 		BLEND_MODE_LAYER);
+	CONSTANT("BLEND_MODE_MULT", 		BLEND_MODE_MULT);
+	CONSTANT("BLEND_MODE_SCREEN",		BLEND_MODE_SCREEN);
+	CONSTANT("BLEND_MODE_DARKEN",		BLEND_MODE_DARKEN);
+	CONSTANT("BLEND_MODE_ADD", 			BLEND_MODE_ADD);
+	CONSTANT("BLEND_MODE_SUB",			BLEND_MODE_SUB);
+	CONSTANT("BLEND_MODE_DIFF", 		BLEND_MODE_DIFF);
+  	CONSTANT("BLEND_MODE_INV", 			BLEND_MODE_INV);
+	CONSTANT("BLEND_MODE_ALPHA", 		BLEND_MODE_ALPHA);
+	CONSTNAT("BLEND_MODE_ERASE", 		BLEND_MODE_ERASE);
+	CONSTANT("BLEND_MODE_OVERLAY", 		BLEND_MODE_OVERLAY);
+	CONSTANT("BLEND_MODE_HARDLIGHT", 	BLEND_MODE_HARDLIGHT);
+#endif
 
 	le_swfshapep = zend_register_list_destructors_ex(destroy_SWFShape_resource, NULL, "SWFShape", module_number);
 	le_swffillp = zend_register_list_destructors_ex(destroy_SWFFill_resource, NULL, "SWFFill", module_number);
