@@ -1688,7 +1688,7 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
       }
   if (sact->BranchOffset>0)
   {
-   if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH && n+1==maxn)
+   if ( stackVal(n,actions) == 1 && n+1==maxn)
    {	// leaving block @last op with value on stack: a return x;
      return decompileRETURN(n, actions,maxn);
    }
@@ -2129,6 +2129,27 @@ if(0)	    dumpRegs();
 	   i=else_action_cnt;						// =return value
 	   sbi=stackVal (sact->numActions-1,sact->Actions);
 	   sbe=stackVal (else_action_cnt,&actions[n+1]);
+
+	   // check against opcodes we do not expect in a ternary operation
+	   if (sbi==1 && sbe==1)
+	   {
+	     for (j=0;j<sact->numActions-1;j++)
+	     {
+	 	if (sact->Actions[j].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP) // perhaps more ops
+		{
+		  sbi=i=has_else_or_break=0;
+		  break;
+		}
+	     }
+	     for (j=0;j<else_action_cnt;j++)
+	     {
+		if (actions[n+j].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP) // perhaps more ops
+		{
+		  sbe=i=has_else_or_break=0;
+		  break;
+		}
+	     }
+	   }
 	   #if SOME_IF_DEBUG
 	   printf("sbi=%d   sbe=%d\n", sbi,sbe);
 	   #endif
