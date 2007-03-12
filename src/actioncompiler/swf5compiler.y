@@ -1855,31 +1855,31 @@ push_item
 	: STRING		{ $$ = bufferWriteConstantString(asmBuffer, $1,
 								 strlen($1)+1); }
 
-	| INTEGER		{ bufferWriteU8(asmBuffer, PUSH_INT);
-				  $$ = bufferWriteInt(asmBuffer, $1)+1; }
+	| INTEGER		{ $$ = bufferWriteInt(asmBuffer, $1); }
 
-	| DOUBLE		{ bufferWriteU8(asmBuffer, PUSH_DOUBLE);
-				  $$ = bufferWriteDouble(asmBuffer, $1)+1; }
+	| DOUBLE		{ $$ = bufferWriteDouble(asmBuffer, $1); }
 
 	| BOOLEAN		{ bufferWriteU8(asmBuffer, PUSH_BOOLEAN);
-				  $$ = bufferWriteU8(asmBuffer, $1)+1; }
+				  $$ = bufferWriteU8(asmBuffer, $1)+1;
+				  bufferPatchPushLength(asmBuffer, 2); }
 
-	| NULLVAL		{ $$ = bufferWriteU8(asmBuffer, PUSH_NULL); }
+	| NULLVAL		{ $$ = bufferWriteU8(asmBuffer, PUSH_NULL);
+				  bufferPatchPushLength(asmBuffer, 1); }
 
 	| REGISTER		{ bufferWriteU8(asmBuffer, PUSH_REGISTER);
 				  $$ = bufferWriteU8(asmBuffer,
-						     (char)atoi($1))+1; }
+						     (char)atoi($1))+1;
+				  bufferPatchPushLength(asmBuffer, 2); }
 	;
 
 
 push_list
 	: push_item			{ $$ = $1; }
-	| push_list ',' push_item	{ $$ += $3; }
+	| push_list ',' push_item	{ $$ = $1 + $3; }
 	;
 
 opcode
-	: PUSH 			{ $$ = bufferWriteOp(asmBuffer,
-						     SWFACTION_PUSH);
+	: PUSH 			{ $$ = bufferWritePushOp(asmBuffer);
 				  $$ += bufferWriteS16(asmBuffer, 0); }
 	  push_list		{ $$ = $<len>2 + $3;
 				  bufferPatchLength(asmBuffer, $3); }
