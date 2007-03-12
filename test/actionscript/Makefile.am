@@ -11,6 +11,7 @@ AS_TESTS = \
 	ASM0.as		\
 	ASM1.as		\
 	ASM_extend.as	\
+	ASM_push.as	\
 	delete.as	\
 	GotoFrame.as	\
 	logor.as
@@ -20,6 +21,7 @@ EXTRA_DIST = 		\
 	ASM1.ref	\
 	ASM0.ref	\
 	ASM_extend.ref	\
+	ASM_push.ref	\
 	delete.ref	\
 	logor.ref	\
 	GotoFrame.ref	\
