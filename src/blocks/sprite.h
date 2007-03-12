@@ -31,6 +31,7 @@
 
 #include "ming.h"
 #include "character.h"
+#include "scalinggrid.h"
 
 
 /* movie clip extends sprite, so we need a public definition */
@@ -44,6 +45,8 @@ struct SWFSprite_s
 
   int nBlocks;
   SWFBlock *blocks;
+
+  SWFScalingGrid grid;
 };
 
 void SWFSprite_setNumberOfFrames(SWFSprite sprite, int totalFrames);

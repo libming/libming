@@ -47,7 +47,8 @@ noinst_HEADERS =	\
 	flv.h		\
 	fileattrs.h	\
 	metadata.h	\
-	scriptlimits.h	
+	scriptlimits.h	\
+	scalinggrid.h	
 
 
 noinst_LTLIBRARIES = libblock.la
@@ -101,5 +102,6 @@ libblock_la_SOURCES = 	\
 	fileattrs.c	\
 	metadata.c	\
 	scriptlimits.c	\
+	scalinggrid.c	\
 	$(PNG_SOURCE)
 

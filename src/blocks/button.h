@@ -30,7 +30,7 @@
 #define SWF_BUTTON_H_INCLUDED
 
 #include "ming.h"
-
+#include "scalinggrid.h"
 typedef struct SWFButtonSound_s *SWFButtonSound;
 
 #define SWF_BUTTON_TRACKASMENU  (1<<0)
@@ -42,5 +42,7 @@ SWFButtonSound newSWFButtonSound(SWFButton button);
 SWFSoundInstance SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags);
 
 SWFButtonSound getButtonSound(SWFButton button);
+
+SWFScalingGrid SWFButton_getScalingGrid(SWFButton b);
 
 #endif /* SWF_BUTTON_H_INCLUDED */

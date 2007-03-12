@@ -32,6 +32,8 @@
 #include "blocks/videostream.h"
 #include "blocks/blocktypes.h"
 #include "blocks/filter.h"
+#include "blocks/sprite.h"
+#include "blocks/scalinggrid.h"
 #include "libming.h"
 
 #define ITEM_NEW						(1<<0)
@@ -608,6 +610,23 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 				 !list->isSprite )
 		{
 			SWFBlockList_addBlock(blocklist, (SWFBlock)character);
+			
+			/* scaling grid is only available for buttons and sprites
+			 * has to be added after character definition and before place
+			 */
+			if(((SWFBlock)character)->type == SWF_DEFINEBUTTON2)
+			{
+				SWFScalingGrid grid = SWFButton_getScalingGrid((SWFButton)character);
+				if(grid)
+					SWFBlockList_addBlock(blocklist, (SWFBlock)grid);
+			}
+
+			if(((SWFBlock)character)->type == SWF_DEFINESPRITE)
+			{
+				SWFSprite sprite = (SWFSprite)character;
+				if(sprite->grid)
+					 SWFBlockList_addBlock(blocklist, (SWFBlock)sprite->grid);
+			}
 		}
 
 		if ( item->block != NULL )

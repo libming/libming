@@ -30,6 +30,7 @@
 #include "blocks/morph.h"
 #include "blocks/button.h"
 #include "blocks/text.h"
+#include "blocks/scalinggrid.h"
 #include "libming.h"
 
 struct SWFMovieClip_s
@@ -39,6 +40,7 @@ struct SWFMovieClip_s
 	SWFBlockList blockList;
 	SWFDisplayList displayList;
 	unsigned short nFrames;
+	
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -68,7 +70,6 @@ newSWFMovieClip()
 
 	clip->blockList = newSWFBlockList();
 	clip->displayList = newSWFSpriteDisplayList();
-
 #if TRACK_ALLOCS
 	clip->gcnode = ming_gc_add_node(clip, (dtorfunctype) destroySWFMovieClip);
 #endif
@@ -174,6 +175,26 @@ SWFMovieClip_nextFrame(SWFMovieClip clip)
 	SWFDisplayList_writeBlocks(clip->displayList, clip->blockList);
 	SWFBlockList_addToSprite(clip->blockList, (SWFSprite)clip);
 	SWFSprite_addBlock((SWFSprite)clip, newSWFShowFrameBlock());
+}
+
+
+void 
+SWFMovieClip_setScalingGrid(SWFMovieClip clip, int x, int y, int w, int h)
+{
+	if(clip->sprite.grid)
+		destroySWFScalingGrid(clip->sprite.grid);
+
+	clip->sprite.grid = newSWFScalingGrid((SWFCharacter)clip, x, y, w, h);
+}
+
+void 
+SWFMovieClip_removeScalingGrid(SWFMovieClip clip)
+{
+	if(clip->sprite.grid)
+	{
+		destroySWFScalingGrid(clip->sprite.grid);
+		clip->sprite.grid = NULL;
+	}
 }
 
 

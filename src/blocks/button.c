@@ -61,7 +61,7 @@ struct SWFButton_s
 	struct actionRecord *actions;
 
 	SWFButtonSound sounds;
-
+	SWFScalingGrid grid;
 	SWFOutput out;
 };
 
@@ -268,7 +268,7 @@ newSWFButton()
 	button->actions = NULL;
 	button->out = NULL;
 	button->sounds = NULL;
-
+	button->grid = NULL;
 	return button;
 }
 
@@ -394,6 +394,30 @@ SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags)
 	return NULL;
 }
 
+void 
+SWFButton_setScalingGrid(SWFButton b, int x, int y, int w, int h)
+{
+	if(b->grid)
+		destroySWFScalingGrid(b->grid);
+
+	b->grid = newSWFScalingGrid((SWFCharacter)b, x, y, w, h);
+}
+
+void 
+SWFButton_removeScalingGrid(SWFButton b)
+{
+	if(b->grid)
+	{
+		destroySWFScalingGrid(b->grid);
+		b->grid = NULL;
+	}
+}
+
+SWFScalingGrid
+SWFButton_getScalingGrid(SWFButton b)
+{
+	return b->grid;
+}
 
 /*
  * Local variables:
