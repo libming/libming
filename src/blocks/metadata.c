@@ -43,6 +43,7 @@ void
 destroySWFMetadata(SWFMetadata metadata)
 {
 	destroySWFOutput(metadata->out);
+	free(metadata);
 }
 
 SWFMetadata
