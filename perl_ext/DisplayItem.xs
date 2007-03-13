@@ -109,6 +109,16 @@ SWFDisplayItem_setRatio(item, ratio)
         SWF::DisplayItem item
         float ratio
 
+void 
+SWFDisplayItem_setBlendMode(item, mode)
+	SWF::DisplayItem item
+	int mode
+
+void
+SWFDisplayItem_cacheAsBitmap(item, flag)
+	SWF::DisplayItem item
+	int flag
+
 void
 SWFDisplayItem_setColorAdd(item, r, g, b, a=0)
         SWF::DisplayItem item
