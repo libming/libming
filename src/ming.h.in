@@ -716,6 +716,16 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 #define SWFACTION_KEYDOWN     (1<<6)
 #define SWFACTION_KEYUP       (1<<7)
 #define SWFACTION_DATA        (1<<8)
+#define SWFACTION_INIT       (1<<9)
+#define SWFACTION_PRESS              (1<<10)
+#define SWFACTION_RELEASE     (1<<11)
+#define SWFACTION_RELEASEOUTSIDE (1<<12)
+#define SWFACTION_ROLLOVER    (1<<13)
+#define SWFACTION_ROLLOUT     (1<<14)
+#define SWFACTION_DRAGOVER    (1<<15)
+#define SWFACTION_DRAGOUT     (1<<16)
+#define SWFACTION_KEYPRESS    (1<<17)
+#define SWFACTION_CONSTRUCT   (1<<18)
 
 void SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags);
 
