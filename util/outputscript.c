@@ -288,7 +288,7 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 void
 outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions, char *sname)
 {
-	printf( "/* %d clip actions */\n", clipactions->NumClipRecords );
+	printf( COMMSTART " %d clip actions " COMMEND "\n", clipactions->NumClipRecords );
 }
 void
 outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *gname)
@@ -870,7 +870,7 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINESHAPE3);
   sprintf (name, "character%d", sblock->ShapeID);
 
-  printf ("\n\t/*  Shape %d */\n", sblock->ShapeID);
+  printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
   printf ("%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
