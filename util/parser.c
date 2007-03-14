@@ -2521,3 +2521,11 @@ parseSWF_DEFINESCALINGGRID (FILE * f, int length)
   PAR_END;
 }
 
+SWF_Parserstruct *
+parseSWF_SETTABINDEX (FILE * f, int length)
+{
+  PAR_BEGIN(SWF_SETTABINDEX);
+  parserrec->Depth = readUInt16(f);
+  parserrec->TabIndex = readUInt16(f);
+  PAR_END;
+};

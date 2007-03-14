@@ -107,6 +107,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_METADATA, outputSWF_METADATA},
   {SWF_SCRIPTLIMITS, outputSWF_SCRIPTLIMITS},
   {SWF_DEFINESCALINGGRID, outputSWF_DEFINESCALINGGRID},
+  {SWF_SETTABINDEX, outputSWF_SETTABINDEX},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1618,6 +1619,14 @@ outputSWF_DEFINESCALINGGRID(SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINESCALINGGRID);
   iprintf(" CharacterId %d\n", sblock->CharacterId);
   outputSWF_RECT(&sblock->Splitter);
+}
+
+void 
+outputSWF_SETTABINDEX(SWF_Parserstruct *pblock)
+{
+  OUT_BEGIN (SWF_SETTABINDEX);
+  iprintf(" Depth: %d\n", sblock->Depth);
+  iprintf(" TabIndex: %d\n", sblock->TabIndex);
 }
 
 

@@ -1551,6 +1551,12 @@ struct SWF_DEFINESCALINGGRID
 	SWF_RECT Splitter;
 };
 
+struct SWF_SETTABINDEX
+{
+	UI16 Depth;
+	UI16 TabIndex;
+};
+
 typedef union SWF_Parserstruct
 {
   struct SWF_CHARACTERSET SWF_CHARACTERSET;
@@ -1619,5 +1625,6 @@ typedef union SWF_Parserstruct
   struct SWF_METADATA SWF_METADATA;
   struct SWF_SCRIPTLIMITS SWF_SCRIPTLIMITS;
   struct SWF_DEFINESCALINGGRID SWF_DEFINESCALINGGRID;
+  struct SWF_SETTABINDEX SWF_SETTABINDEX;
 } SWF_Parserstruct;
 #endif /* _SWFTYPES_H_ */
