@@ -115,14 +115,11 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream /* associated video stream */
 	SWFVideoFrame block;
 	
 	if(!stream->embedded)
-	{
-		SWF_warn("SWFVideoStream_getVideoFrame: not an embedded stream");
 		return NULL;
-	}
 	
 	if(stream->frame >= stream->numFrames)
 	{
-		SWF_warn("SWFVideoStream_getVideoFrame: no more frames");
+		SWF_warn("SWFVideoStream_getVideoFrame: no more frames\n");
 		return NULL;
 	}
 	
