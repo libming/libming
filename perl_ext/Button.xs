@@ -97,3 +97,15 @@ void
 SWFButton_setMenu(button, flag=1)
 	SWF::Button	button
 	int flag;
+
+void 
+SWFButton_setScalingGrid(button, x, y, w, h)
+	SWF::Button button
+	int x
+	int y
+	int w
+	int h
+
+void 
+SWFButton_removeScalingGrid(button)
+	SWF::Button button

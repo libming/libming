@@ -86,3 +86,15 @@ SWFMovieClip_stopSound(movieclip, sound)
 	SWF::Sound sound
 	CODE:
 	SWFMovieClip_stopSound(movieclip, sound);
+
+void 
+SWFMovieClip_setScalingGrid(movieclip, x, y, w, h)
+	SWF::MovieClip movieclip
+	int x
+	int y
+	int w
+	int h
+
+void
+SWFMovieClip_removeScalingGrid(movieclip)
+	SWF::MovieClip movieclip
