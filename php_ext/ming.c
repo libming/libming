@@ -610,6 +610,36 @@ PHP_METHOD(swfbutton, setMenu)
 	SWFButton_setMenu(button, Z_LVAL_PP(zflag));
 }
 /* }}} */
+
+/* {{{ proto void swfbutton::setScalingGrid(int x, int y, int w, int h) */
+PHP_METHOD(swfbutton, setScalingGrid)
+{
+	zval **zx, **zy, **zw, **zh;
+	SWFButton button = getButton(getThis() TSRMLS_CC);
+	if(ZEND_NUM_ARGS() != 4 || 
+			zend_get_parameters_ex(4, &zx, &zy, &zw, &zh) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(zx);
+	convert_to_long_ex(zy);
+	convert_to_long_ex(zw);
+	convert_to_long_ex(zh);
+
+	SWFButton_setScalingGrid(button, Z_LVAL_PP(zx), Z_LVAL_PP(zy), 
+					Z_LVAL_PP(zw), Z_LVAL_PP(zh));
+}
+/* }}} */
+
+/* {{{ proto void swfbutton::removeScalingGrid() */
+PHP_METHOD(swfbutton, removeScalingGrid)
+{
+	SWFButton button = getButton(getThis() TSRMLS_CC);
+	if(ZEND_NUM_ARGS() != 0) 
+		WRONG_PARAM_COUNT;
+
+	SWFButton_removeScalingGrid(button);
+}
+/* }}} */
 #endif
 
 /* {{{ proto void swfbutton::setAction(object SWFAction)
@@ -715,6 +745,8 @@ static zend_function_entry swfbutton_functions[] = {
 	PHP_ME(swfbutton, addShape,      NULL, 0)
 #ifdef HAVE_NEW_MING
 	PHP_ME(swfbutton, setMenu,       NULL, 0)
+	PHP_ME(swfbutton, setScalingGrid, NULL, 0)
+	PHP_ME(swfbutton, removeScalingGrid, NULL, 0)
 #endif
 	PHP_ME(swfbutton, addAction,     NULL, 0)
 #ifdef HAVE_NEW_MING
@@ -3569,6 +3601,37 @@ PHP_METHOD(swfsprite, stopSound)
 	SWFMovieClip_stopSound(sprite, sound);
 }
 /* }}} */
+
+/* {{{ proto void swfsprite::setScalingGrid(int x, int y, int w, int h) */
+PHP_METHOD(swfsprite, setScalingGrid)
+{
+	zval **zx, **zy, **zw, **zh;
+	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
+	if(ZEND_NUM_ARGS() != 4 || 
+			zend_get_parameters_ex(4, &zx, &zy, &zw, &zh) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(zx);
+	convert_to_long_ex(zy);
+	convert_to_long_ex(zw);
+	convert_to_long_ex(zh);
+
+	SWFMovieClip_setScalingGrid(sprite, Z_LVAL_PP(zx), Z_LVAL_PP(zy), 
+					Z_LVAL_PP(zw), Z_LVAL_PP(zh));
+}
+/* }}} */
+
+/* {{{ proto void swfsprite::removeScalingGrid() */
+PHP_METHOD(swfsprite, removeScalingGrid)
+{
+	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
+	if(ZEND_NUM_ARGS() != 0) 
+		WRONG_PARAM_COUNT;
+
+	SWFMovieClip_removeScalingGrid(sprite);
+}
+/* }}} */
+
 #endif
 
 static zend_function_entry swfsprite_functions[] = {
@@ -3581,6 +3644,8 @@ static zend_function_entry swfsprite_functions[] = {
 #ifdef HAVE_NEW_MING
 	PHP_ME(swfsprite, startSound,		NULL, 0)
 	PHP_ME(swfsprite, stopSound,		NULL, 0)
+	PHP_ME(swfsprite, setScalingGrid, 	NULL, 0)
+	PHP_ME(swfsprite, removeScalingGrid, NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
