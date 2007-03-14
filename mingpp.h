@@ -880,6 +880,13 @@ class SWFSprite : public SWFCharacter
 
   void labelFrame(char *label)
     { SWFMovieClip_labelFrame(this->clip, label); }
+
+  void setScalingGrid(int x, int y, int w, int h)
+    { SWFMovieClip_setScalingGrid(this->clip, x, y, w, h); }
+
+  void removeScalingGrid()
+    { SWFMovieClip_removeScalingGrid(this->clip); }
+
   SWF_DECLAREONLY(SWFSprite);
 };
 
@@ -1085,6 +1092,12 @@ class SWFButton : public SWFCharacter
 
   void addSound(SWFSound *sound, int flags)
     { SWFButton_addSound(this->button, sound->sound, flags); }
+
+  void setScalingGrid(int x, int y, int w, int h);
+    { SWFButton_setScalingGrid(this->button, x, y, w, h); }
+
+  void removeScalingGrid()
+    { SWFButton_removeScalingGrid(this->button); }
 
   SWF_DECLAREONLY(SWFButton);
 };
