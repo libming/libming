@@ -12,5 +12,4 @@ push undefined // undefined
 
 // TODO:
 //	- push "string" (hard to do as any string will end up in the dictionary)
-//	- push undefined 
 };
