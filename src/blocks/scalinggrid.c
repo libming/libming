@@ -1,5 +1,5 @@
 /*
-:q    Ming, an SWF output library
+    Ming, an SWF output library
     Copyright (C) 2007 Klaus Rechert
 
     This library is free software; you can redistribute it and/or

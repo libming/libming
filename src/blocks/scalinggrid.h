@@ -22,8 +22,8 @@
 */
 
 
-#ifndef _SCRIPTLIMITS_H_
-#define _SCRIPTLIMITS_H_
+#ifndef _SCALINGGRID_H_
+#define _SCALINGGRID_H_
 
 #include "block.h"
 #include "rect.h"
