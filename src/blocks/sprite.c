@@ -99,6 +99,7 @@ newSWFSprite()
 	sprite->blocks = NULL;
 	sprite->frames = 0;
 	sprite->totalFrames = 0;
+	sprite->grid = NULL;
 
 	return sprite;
 }
