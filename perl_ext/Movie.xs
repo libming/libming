@@ -184,3 +184,9 @@ SWFMovie_setScriptLimits(movie, maxRecursion, timeout)
 	SWF::Movie movie
 	int maxRecursion
 	int timeout
+
+void 
+SWFMovie_setTabIndex(movie, depth, index)
+	SWF::Movie movie
+	int depth
+	int index

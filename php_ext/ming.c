@@ -2661,6 +2661,22 @@ PHP_METHOD(swfmovie, setScriptLimits)
 }
 /* }}} */
 
+/* {{{ proto void swfmovie::setTabIndex(int depth, int index)
+ * */
+PHP_METHOD(swfmovie, setTabIndex)
+{
+  zval **depth, **index;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+  
+  if( ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &depth, &index) == FAILURE) {
+        WRONG_PARAM_COUNT; 
+  } 
+  convert_to_long_ex(depth);
+  convert_to_long_ex(index);
+  SWFMovie_setTabIndex(movie, Z_LVAL_PP(depth), Z_LVAL_PP(index));
+}
+/* }}} */
+
 /* {{{ proto void swfmovie::setNetworkAccess(int flag)
  * */  
 PHP_METHOD(swfmovie, setNetworkAccess)
@@ -2907,6 +2923,7 @@ static zend_function_entry swfmovie_functions[] = {
 	PHP_ME(swfmovie, addMetadata,		NULL, 0)
 	PHP_ME(swfmovie, setNetworkAccess,	NULL, 0)
 	PHP_ME(swfmovie, setScriptLimits,	NULL, 0)
+	PHP_ME(swfmovie, setTabIndex,		NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
