@@ -32,7 +32,7 @@ Block length: 59
     SWFACTION_PUSH
      [000]   Register: 0
     SWFACTION_PUSH
-     [000]   undefined:
+     [000]   undefined
     SWFACTION_END
 
 Offset: 86 (0x0056)
