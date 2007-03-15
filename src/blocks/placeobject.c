@@ -102,10 +102,13 @@ writeSWFPlaceObject2BlockToStream(SWFBlock block,
 				methodWriteUInt32(place->actionFlags[i], method, data);
 			else
 				methodWriteUInt16(place->actionFlags[i], method, data);
-			methodWriteUInt32(SWFOutputBlock_getLength(local_block), method, data);
 // SWF6: extra char if(place->actionFlags[i] & 0x20000)
-			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000))
+			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000)) {
+				methodWriteUInt32(SWFOutputBlock_getLength(local_block) + 1, method, data);
 				method(0, data);
+			} else {
+				methodWriteUInt32(SWFOutputBlock_getLength(local_block), method, data);
+			}
 			SWFOutput_writeToMethod(SWFOutputBlock_getOutput(local_block), method, data);
 		}
 // SWF6: UInt32
