@@ -893,6 +893,7 @@ void SWFMovie_protect(SWFMovie movie, char *password);
 void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
 void SWFMovie_addMetadata(SWFMovie movie, char *xml);
 void SWFMovie_setScriptLimits(SWFMovie movie, int maxRecursion, int timeout);
+void SWFMovie_setTabIndex(SWFMovie movie, int depth, int index);
 
   /* deprecated */
   /*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/

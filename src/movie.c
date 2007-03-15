@@ -50,6 +50,7 @@
 #include "blocks/fileattrs.h"
 #include "blocks/metadata.h"
 #include "blocks/scriptlimits.h"
+#include "blocks/tabindex.h"
 #include "libming.h"
 
 #ifdef HAVE_ZLIB_H
@@ -849,6 +850,18 @@ SWFMovie_setScriptLimits(SWFMovie movie,
 
 	SWFScriptLimits_maxRecursion(movie->limits, maxRecursion);
 	SWFScriptLimits_setTimeout(movie->limits, timeout);
+}
+
+/*
+ * set tabindex for specified depth level
+ */
+void 
+SWFMovie_setTabIndex(SWFMovie movie,
+                     int depth /* depth level */,
+                     int index /* index */)
+{
+	SWFTabIndex ti = newSWFTabIndex(depth, index);
+	SWFMovie_addBlock(movie, (SWFBlock) ti);
 }
 /*
  * Local variables:
