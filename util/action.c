@@ -248,7 +248,7 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   		printf ("  NULL: \n" );
 		break;
 	  case 3: /* Undefined */
-  		printf ("  undefined:\n" );
+  		printf ("  undefined\n" );
 		break;
 	  case 4: /* Register */
   		printf ("  Register: %d\n", (int)act->p.RegisterNumber);
