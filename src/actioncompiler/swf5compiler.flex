@@ -137,6 +137,7 @@ true			{ count();swf5lval.intVal = 1;
 false			{ count(); swf5lval.intVal = 0;
 				return BOOLEAN;	}
 null			{ count();	return NULLVAL;		}
+undefined		{ count();	return UNDEFINED;	}
 break			{ count();	return BREAK;		}
 continue		{ count();	return CONTINUE;	}
 function		{ count();	return FUNCTION;	}

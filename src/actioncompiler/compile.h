@@ -168,6 +168,7 @@ int bufferWriteString(Buffer out, char *string, int length);
 int bufferWriteInt(Buffer out, int i);
 int bufferWriteDouble(Buffer out, double d);
 int bufferWriteNull(Buffer out);
+int bufferWriteUndef(Buffer out);
 int bufferWriteBoolean(Buffer out, int val);
 int bufferWriteRegister(Buffer out, int num);
 int bufferWriteSetRegister(Buffer out, int num);

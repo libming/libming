@@ -1,12 +1,14 @@
 0.4.0.beta4 - ????
 
-	* Fix 'delete' syntax in action compiler
-	* makeswf now handles bitmaps
-	* Many improvements in decompiler
-	* Build scripts cleanup (including check rule)
-	* Add support for 'extends' asm opcode in ActionScript compiler
-	* Generate DefineFunction2 when target version > 6
-	* Use GOTOFRAME, GOTOFRAME2 and GOTOLABEL when using gotoAndPlay()
+	* Fix handling of the special 'undefined' value.
+	* Fix 'delete' syntax in action compiler.
+	* makeswf now handles bitmaps.
+	* Many improvements in decompiler.
+	* Build scripts cleanup (including check rule).
+	* Add support for 'extends' and proper 'push' asm opcodes in
+	  ActionScript compiler.
+	* Generate DefineFunction2 when target version > 6.
+	* Use GOTOFRAME, GOTOFRAME2 and GOTOLABEL when using gotoAndPlay().
 	  or gotoAndStop() w/out an object.
 
 0.4.0.beta3 - 2006-12-10

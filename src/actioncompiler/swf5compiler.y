@@ -68,6 +68,7 @@ extern int SWF_versionNum;
 %token EXTENDS
 
 %token NULLVAL
+%token UNDEFINED
 %token <intVal> INTEGER
 %token <doubleVal> DOUBLE
 %token <intVal> BOOLEAN
@@ -1601,6 +1602,10 @@ primary
 		{ $$ = newBuffer();
 		  bufferWriteNull($$); }
 
+	| UNDEFINED
+		{ $$ = newBuffer();
+		  bufferWriteUndef($$); }
+
 	| STRING
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
@@ -1864,6 +1869,9 @@ push_item
 				  bufferPatchPushLength(asmBuffer, 2); }
 
 	| NULLVAL		{ $$ = bufferWriteU8(asmBuffer, PUSH_NULL);
+				  bufferPatchPushLength(asmBuffer, 1); }
+
+	| UNDEFINED		{ $$ = bufferWriteU8(asmBuffer, PUSH_UNDEF);
 				  bufferPatchPushLength(asmBuffer, 1); }
 
 	| REGISTER		{ bufferWriteU8(asmBuffer, PUSH_REGISTER);

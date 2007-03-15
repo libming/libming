@@ -571,6 +571,24 @@ int bufferWriteNull(Buffer out)
 	return len + 1;
 }
 
+int bufferWriteUndef(Buffer out)
+{
+	int len = 0;
+
+	if(out->pushloc == NULL || SWF_versionNum < 5)
+	{
+		len = 3;
+		bufferWritePushOp(out);
+		bufferWriteS16(out, 1);
+	}
+	else
+		bufferPatchPushLength(out, 1);
+
+	bufferWriteU8(out, PUSH_UNDEF);
+
+	return len + 1;
+}
+
 int bufferWriteBoolean(Buffer out, int val)
 {
 	int len = 0;
