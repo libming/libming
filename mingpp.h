@@ -578,6 +578,9 @@ class SWFMovie
   void setScriptLimits(int maxRecursion, int timeout)
     { SWFMovie_setScriptLimits(this->movie, maxRecursion, timeout); }
 
+  void setTabIndex(int depth, int index)
+    { SWFMovie_setTabIndex(this->movie, depth, index); }
+
   SWF_DECLAREONLY(SWFMovie);
 };
 
