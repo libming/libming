@@ -793,9 +793,6 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEFONT2);
 
   sprintf (fname, "f%d", sblock->FontID);
-#ifdef SWFPLUSPLUS
-  printf ("class SWFFont *%s;\n", fname);
-#endif
   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
 
 }
@@ -1268,7 +1265,6 @@ outputHeader (struct Movie *m)
 #ifdef SWFPLUSPLUS
   printf ("#include <mingpp.h>\n");
   printf ("\n\nmain(){\n");
-  //printf ("class SWFMovie *m;\n");
   if( m->version == 5 ) 
   	printf ("%s();\n\n", newobj ("m", "Movie"));
   else
