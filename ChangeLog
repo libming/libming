@@ -1,3 +1,686 @@
+2007-03-15 06:01  anderson
+
+	* util/outputscript.c: Remove redundant 'class SWFFont'
+
+2007-03-15 05:49  anderson
+
+	* php_ext/ming.c: dyslexic typo
+
+2007-03-15 05:46  anderson
+
+	* mingpp.h: Remove an extraneous ';'
+
+2007-03-14 21:57  strk
+
+	* src/ming.h.in: Add missing clip event values (contributed by
+	  Benjamin Otte <otte@gnome.org>)
+
+2007-03-14 17:37  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: parse SWF_SETTABINDEX
+
+2007-03-14 17:26  krechert
+
+	* perl_ext/: Button.xs, MovieClip.xs: added scaling grid methods
+
+2007-03-14 17:19  krechert
+
+	* php_ext/ming.c: added ScalingGrid methods
+
+2007-03-14 17:14  akleine
+
+	* util/outputscript.c: Changed hardcoded generating of comments now
+	  by using the COMMSTART and COMMEND macros at two places.
+
+2007-03-14 17:04  krechert
+
+	* mingpp.h: added ScalingGrid methods
+
+2007-03-14 16:30  krechert
+
+	* src/blocks/videostream.c: removed unnecessary warning. proper
+	  checkinng in displaylist added \n to warn message
+
+2007-03-13 21:34  krechert
+
+	* perl_ext/: Constants.xs, DisplayItem.xs: SWFDisplayItem API
+	  update
+
+2007-03-13 21:18  krechert
+
+	* php_ext/ming.c, src/displaylist.c, src/ming.h.in: added SWF
+	  prefix to blend mode constants
+
+2007-03-12 18:45  akleine
+
+	* util/decompile.c: 2 bugfixes for ternary operation (?:) and
+	  return op
+
+2007-03-12 18:26  krechert
+
+	* src/: displaylist.c, ming.h.in, movieclip.c, blocks/Makefile.am,
+	  blocks/button.c, blocks/button.h, blocks/scalinggrid.c,
+	  blocks/scalinggrid.h, blocks/sprite.h: [no log message]
+
+2007-03-12 18:17  krechert
+
+	* src/blocks/soundstream.c: fixed compiler warning
+
+2007-03-12 17:08  strk
+
+	* test/actionscript/: ASM_push.as, ASM_push.ref, Makefile.am: Add
+	  testcases for asm { push }
+
+2007-03-12 17:07  strk
+
+	* src/actioncompiler/swf5compiler.y: Fix asm 'push' (see bug #10) -
+	  contributed by Benjamin Otte
+
+2007-03-12 16:29  krechert
+
+	* src/blocks/metadata.c: added missing free()
+
+2007-03-12 13:45  strk
+
+	* test/Movie/new/test06.ref: Fix expected output after UseNetwork
+	  default has been changed to true
+
+2007-03-11 18:32  krechert
+
+	* src/blocks/fileattrs.c: typo
+
+2007-03-11 18:28  krechert
+
+	* src/blocks/: fileattrs.c, scriptlimits.c: added missing free() in
+	  destroy-methods
+
+2007-03-11 13:27  krechert
+
+	* php_ext/ming.c: moved new SWFMovie methods under #HAVE_NEW_MING
+	  condition
+
+2007-03-11 13:22  krechert
+
+	* php_ext/ming.c: API updates: SWFDisplayItem_cacheAsBitmap
+	  SWFDisplayItem_setBlendMode
+
+2007-03-11 13:19  krechert
+
+	* src/ming.h.in: typo-fix
+
+2007-03-10 16:21  krechert
+
+	* src/blocks/blocktypes.h: SWF_IMPORTASSETS was deprecated in SWF 8
+
+2007-03-10 16:14  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: parsing SWF_IMPORTASSETS2
+
+2007-03-10 15:56  krechert
+
+	* src/blocks/fileattrs.c, util/blocktypes.c, util/outputdecl.h,
+	  util/outputtxt.c, util/parser.c, util/parserdecl.h,
+	  util/swftypes.h: [no log message]
+
+2007-03-10 15:22  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: DefineShape4 / LineStyle2
+
+2007-03-05 20:25  akleine
+
+	* util/decompile.c: Continued work on "switch(x){case y:...}" .
+	  (Now enabled by default.)
+
+2007-03-05 16:45  strk
+
+	* util/outputtxt.c: Made output of PLACEOBJECT2 clip actions neater
+
+2007-03-04 19:52  krechert
+
+	* src/blocks/imports.c: SWF_IMPORTASSETS is deprecated with version
+	  >= 8. Use SWF_IMPORTASSETS2 instead
+
+2007-03-04 18:13  krechert
+
+	* php_ext/ming.c: fixed compile error
+
+2007-03-04 17:41  krechert
+
+	* php_ext/ming.c: added new SWFMovie features
+
+2007-03-04 17:25  krechert
+
+	* perl_ext/Movie.xs, mingpp.h: added new SWFMovie features
+
+2007-03-04 17:18  krechert
+
+	* test/Movie/new/: Makefile.am, TestList, test06-cxx.C, test06.c,
+	  test06.php, test06.pl, test06.py, test06.ref: test for proper SWF
+	  8 files
+
+2007-03-03 18:17  krechert
+
+	* src/: ming.h.in, movie.c, blocks/Makefile.am,
+	  blocks/scriptlimits.c, blocks/scriptlimits.h: ScripLimits support
+
+2007-03-03 18:16  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: ScriptLimits support
+
+2007-03-03 17:30  krechert
+
+	* src/ming.h.in, src/movie.c, src/blocks/Makefile.am,
+	  src/blocks/metadata.c, src/blocks/metadata.h, util/blocktypes.c,
+	  util/outputdecl.h, util/outputtxt.c, util/parser.c,
+	  util/parserdecl.h, util/swftypes.h: Metadata support
+
+2007-03-03 15:46  krechert
+
+	* src/: ming.h.in, movie.c, blocks/Makefile.am, blocks/fileattrs.c,
+	  blocks/fileattrs.h: write proper SWF 8 files:       first tag
+	  after header must be a SWFFileAttributes-tag.
+
+	  set UseNetworkFlag:	  for localy loaded movies permission for
+	  network access must be stated explicitly
+
+2007-02-28 22:55  krechert
+
+	* src/blocks/soundstream.c: small bugfix for flv sound streams.
+
+2007-02-27 19:39  akleine
+
+	* util/decompile.c: Added first time support for  switch(){}
+	  -statements (not quite complete and thus disabled by default).
+
+2007-02-26 17:21  strk
+
+	* util/decompile.c: GOTOFRAME arg is 0-based!
+
+2007-02-26 17:20  strk
+
+	* test/actionscript/GotoFrame.ref: Expect GOTOFRAME arg to be
+	  0-based
+
+2007-02-26 17:05  strk
+
+	* src/actioncompiler/swf5compiler.y: Target frame for GOTOFRAME tag
+	  is 0-based
+
+2007-02-26 16:11  strk
+
+	* NEWS: Add note about gotoAndPlay() and gotoAndStop() handling
+	  change
+
+2007-02-26 16:10  strk
+
+	* test/actionscript/: GotoFrame.as, GotoFrame.ref, Makefile.am: Add
+	  test for gotoAndPlay() and gotoAndStop()
+
+2007-02-26 16:10  strk
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: Drop
+	  support for non-standard gotoFrame() calls.  Handle gotoAndPlay()
+	  and gotoAndStop() by using GOTOFRAME, GOTOFRAME2 or GOTOLABEL
+	  depending on argument type. Still use callMethod if they are
+	  invoked as methods of something.
+
+2007-02-21 18:12  krechert
+
+	* configure.in, test/Makefile.am, test/Filter/Makefile.am,
+	  test/Filter/TestList, test/Filter/test01-cxx.C,
+	  test/Filter/test01.c, test/Filter/test01.ref: [no log message]
+
+2007-02-21 17:33  krechert
+
+	* mingpp.h: added SWFFilter support to C++ header
+
+2007-02-20 21:27  krechert
+
+	* util/outputtxt.c: added missing bevel-filter
+
+2007-02-20 20:16  krechert
+
+	* src/: displaylist.c, blocks/filter.h: [no log message]
+
+2007-02-20 18:39  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: added SWF_FILEATTRIBUTES (69) for SWF
+	  >= 8 this tag is obligatory
+
+2007-02-19 22:41  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputscript.c, outputtxt.c,
+	  parser.c, parserdecl.h, swftypes.h: added PlaceObject3, SWFFilter
+
+2007-02-19 20:10  krechert
+
+	* src/blocks/filter.c: bugfix
+
+2007-02-19 20:08  krechert
+
+	* src/blocks/placeobject.c: bugfix: write number of filters first
+
+2007-02-18 20:22  krechert
+
+	* src/blocks/: placeobject.c, placeobject.h: PlaceObject3 tags
+	  extend PlaceObject2 tags. PlaceObject object has now version
+	  information.
+
+2007-02-18 20:19  krechert
+
+	* src/displaylist.c: added functions for PlaceObject3 tags
+
+2007-02-18 20:17  krechert
+
+	* src/: ming.h.in, blocks/Makefile.am, blocks/filter.c,
+	  blocks/filter.h, blocks/gradient.c, blocks/gradient.h: added :  -
+	  SWFFilter	- write Gradient for SWF filter 	-
+	  DisplayItem prototypes for PlaceObject3 tags
+
+2007-02-17 17:05  krechert
+
+	* src/blocks/: output.c, output.h: write FIXED, FLOAT16/32, DOUBLE
+	  datatypes
+
+2007-02-14 23:06  strk
+
+	* util/: outputtxt.c, parser.c, swftypes.h: Add support for
+	  SERIALNUMBER (tag 41)
+
+2007-02-13 19:44  akleine
+
+	* util/decompile.c: Added some memory reallocation if needed to
+	  newVar_N() and newVar_N2.
+
+2007-02-12 18:15  strk
+
+	* test/Movie/Protect/: test01-cxx.C, test01.php, test01.pl,
+	  test01.py, test02-cxx.C, test02.php, test02.pl, test02.py:
+	  Regenerated binding tests, just for fun (to show it still works)
+	  :)
+
+2007-02-12 18:07  strk
+
+	* py_ext/ming.py: Fix handling of Protect tag w/out password
+
+2007-02-12 11:15  strk
+
+	* perl_ext/.cvsignore, php_ext/.cvsignore, py_ext/.cvsignore,
+	  src/.cvsignore, tcl_ext/.cvsignore: Updated .cvsignore files
+
+2007-02-11 18:50  krechert
+
+	* util/: main.c, outputtxt.c, parser.c, parser.h, swftypes.h: more
+	  SWF_STREAMBLOCK info
+
+2007-02-11 16:11  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: output
+	  SWF_SOUNDSTREAM[...]
+
+2007-02-11 13:05  krechert
+
+	* src/blocks/blocktypes.h: added some blocktypes
+
+2007-02-11 11:51  krechert
+
+	* src/blocks/blocktypes.h: [no log message]
+
+2007-02-11 11:40  strk
+
+	* test/dotests.pl: Add execute bit to non-executable testbuilders
+	  (this is the case for script builders).
+
+2007-02-11 10:57  strk
+
+	* test/actionscript/Makefile.am: Properly clean .frame#.pp files
+
+2007-02-10 16:00  krechert
+
+	* src/blocks/blocktypes.h: added missing SWF 8 blocktypes
+
+2007-02-10 14:51  krechert
+
+	* src/blocks/protect.c: added cast to avoid warning
+
+2007-02-10 14:45  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf4compiler.y,
+	  swf5compiler.y: bufferWriteConstantString(),
+	  bufferWriteHardString(), bufferWriteString() use (char *) instead
+	  of (byte *)
+
+2007-02-10 13:59  krechert
+
+	* src/blocks/videostream.c: fixed compiler warning
+
+2007-02-09 14:57  krechert
+
+	* src/blocks/videostream.c: parse dimension for VP6 codec
+
+2007-02-09 12:07  krechert
+
+	* src/blocks/: error.c, error.h: SWF_assert: print __FILE__,
+	  __LINE__ and condition
+
+2007-02-09 11:54  krechert
+
+	* src/blocks/flv.c: skip first byte flv-video payload for VP6
+	  codec.
+
+2007-02-08 21:48  krechert
+
+	* src/blocks/videostream.c: make sure video-width and -height are
+	  always set
+
+2007-02-08 21:14  akleine
+
+	* util/decompile.c: Fixed several problems: array indexing by
+	  register variables, incrementing/decrementing registers and usual
+	  variables, Also removed some obsolete notes and comments and
+	  fixed an INDENT call.
+
+2007-02-08 14:18  krechert
+
+	* src/blocks/: flv.h, videostream.c: added flash 8 codec ids
+
+2007-02-08 14:17  krechert
+
+	* src/blocks/videostream.h: clean up this mess
+
+2007-02-08 13:50  krechert
+
+	* src/blocks/: flv.c, flv.h: added tagtype FLV_SCRIPTTAG
+
+2007-02-08 12:47  krechert
+
+	* src/blocks/soundstream.c: first step towards generic soundstreams
+	  from flv files
+
+2007-02-08 12:39  krechert
+
+	* src/blocks/: flv.c, flv.h, videostream.c: use new SWFInput_input
+	  added destroyFLVStream()
+
+2007-02-08 12:38  krechert
+
+	* src/: blocks/input.c, ming.h.in: SWFInput_input(SWFInput in, int
+	  len): Allows restricted reading from a given SWFInput. The new
+	  created input starts at SWFInput_tell(in) and has length len.
+
+2007-02-07 21:57  akleine
+
+	* util/outputscript.c: fixed DECLOBJ macro for PERL by adding a $
+	  sign
+
+2007-02-06 18:01  akleine
+
+	* util/decompile.c: 2 bugfixes to avoid emitting of "break"
+	  statements at wrong place
+
+2007-02-06 11:13  strk
+
+	* util/outputscript.c: SWFFillStyle is called SWFFill in C++, dunno
+	  about other bindings so I changed it for all of them (please
+	  verify). Renamed all character instances to have the 'character'
+	  prefix (rather then 'sp' for sprites, 's' for shapes and so on)
+	  to simplify handling of PLACEOBJECT and other tags referencing
+	  generic chars.  Fixed a typo in BitmapFillStyle. Fixed C++ output
+	  of lineStyle output.	Added some missing comment START/END specs
+	  (comments were added as code).  Added support for DEFINESHAPE2
+	  (just copied from DEFINESHAPE).
+
+2007-02-06 10:14  strk
+
+	* util/outputscript.c: Stubbed SWF_DEFINEBITSJPEG2, fixes and
+	  cleanups SWFFillStyle output. Comments left for things to do.
+
+2007-02-05 20:03  krechert
+
+	* src/blocks/input.c: removed statement with no effect
+
+2007-02-04 15:51  krechert
+
+	* src/blocks/: flv.c, flv.h: added FLVStream_setStreamOffset
+	  function
+
+2007-02-04 15:22  krechert
+
+	* src/blocks/soundstream.c: fixed memory leak if MP3 file is
+	  corrupt
+
+2007-02-04 13:46  krechert
+
+	* src/blocks/videostream.c: added documentation for public
+	  functions
+
+2007-02-03 20:24  krechert
+
+	* src/blocks/videostream.c: use generic flv reader
+
+2007-02-03 20:13  krechert
+
+	* src/blocks/: Makefile.am, flv.c, flv.h: generic flv file parsing
+
+2007-02-03 09:19  akleine
+
+	* util/decompile.c: Added 'cast' operation and removed obsolete
+	  code.
+
+2007-02-01 18:13  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: listswf: list
+	  video-tags
+
+2007-02-01 17:25  akleine
+
+	* util/: decompile.c, outputscript.c: 1. enhanced detection of
+	  'else' and 'break' 2. implented new operation:
+	  SWFACTION_IMPLEMENTSOP 3. added SWFPERL to initializer function
+	  in outputscript.c
+
+2007-02-01 13:47  strk
+
+	* test/: Movie/Background/test01.ref, Movie/Background/test02.ref,
+	  Movie/Background/test03.ref, Movie/Dimension/test01.ref,
+	  Movie/FrameLabel/test01.ref, Movie/FrameLabel/test02.ref,
+	  Movie/NumFrames/test01.ref, Movie/Protect/test01.ref,
+	  Movie/Protect/test02.ref, Movie/Rate/test01.ref,
+	  Movie/add/test01.ref, Movie/add/test02.ref, Movie/new/test01.ref,
+	  Movie/new/test02.ref, Movie/new/test03.ref, Movie/new/test04.ref,
+	  Movie/new/test05.ref, Movie/nextFrame/test01.ref,
+	  Movie/nextFrame/test02.ref, actionscript/ASM0.ref,
+	  actionscript/ASM1.ref, actionscript/ASM_extend.ref,
+	  actionscript/Function.ref, actionscript/delete.ref,
+	  actionscript/logor.ref: Regenerated .ref files after 'listswf'
+	  fix adding SWF_END output.
+
+2007-01-31 21:53  krechert
+
+	* util/main.c: also output SWF_END
+
+2007-01-30 13:41  anderson
+
+	* test/Movie/Background/: test01-cxx.C, test02-cxx.C, test03-cxx.C:
+	  sync in C++ changes
+
+2007-01-30 10:50  strk
+
+	* test/Movie/nextFrame/: Makefile.am, TestList, test01.php,
+	  test02-cxx.C, test02.c, test02.php, test02.pl, test02.py,
+	  test02.ref: New test for explicit last nextFrame call
+
+2007-01-30 10:48  strk
+
+	* util/outputscript.c: Add a language-based initialization
+	  function, called by outputBlock (will take care of not running
+	  twice). Use unescaped newlines for PHP target
+
+2007-01-30 10:47  strk
+
+	* util/decompile.h: Export setNewLineString
+
+2007-01-30 10:40  strk
+
+	* util/decompile.c: Add a println function to allow for externally
+	  setting the newline character
+
+2007-01-30 05:23  anderson
+
+	* test/Movie/nextFrame/test01.php: Drop the backslash as is makes
+	  php unhappy
+
+2007-01-29 23:49  strk
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/nextFrame/.cvsignore,
+	  test/Movie/nextFrame/Makefile.am, test/Movie/nextFrame/TestList,
+	  test/Movie/nextFrame/test01-cxx.C, test/Movie/nextFrame/test01.c,
+	  test/Movie/nextFrame/test01.php, test/Movie/nextFrame/test01.pl,
+	  test/Movie/nextFrame/test01.py, test/Movie/nextFrame/test01.ref,
+	  test/Movie/nextFrame/test01.tcl: A simple test for the automatic
+	  addition of required final SHOWFRAME tags
+
+2007-01-29 23:42  strk
+
+	* src/movie.c: (SWFMovie_toOutput): make sure the movie ends with a
+	  SHOWFRAME tag.  (newSWFMovieWithVersion): initialize totalFrames
+	  to 0.
+
+2007-01-29 23:41  strk
+
+	* src/: blocklist.c, blocklist.h: Added SWFBlockList_getLastBlock
+	  method
+
+2007-01-29 23:20  strk
+
+	* src/movie.c: Removed obsoleted code
+
+2007-01-29 19:13  akleine
+
+	* util/decompile.c: Short patch - big effect: 1. keep function
+	  decompiling stack inside limit 2. predefined some register
+	  variables
+
+2007-01-27 18:42  krechert
+
+	* mingpp.h: added videostream class
+
+2007-01-27 18:39  krechert
+
+	* src/: blocks/videostream.c, ming.h.in: fix destroy-fn signature
+
+2007-01-25 12:36  strk
+
+	* src/: ming.c, movie.c: Don't warn if Ming_useSWFVersion() is
+	  called multiple times but with *same* output version; simplify
+	  newSWFMovieWithVersion() by delegating SWF version check to
+	  Ming_useSWFVersion() [ call it always ]
+
+2007-01-25 12:16  strk
+
+	* src/movie.c: Have newSWFMovieWithVersion() call
+	  Ming_userSWFVersion() if requested version doesn't match current
+	  global version (in this case Ming_userSWFVersion will raise a
+	  warning)
+
+2007-01-25 12:15  strk
+
+	* src/ming.c: Warn about multiple calls to Ming_useSWFVersion()
+	  potentially resulting in malformed SWF.
+
+2007-01-23 18:11  akleine
+
+	* util/decompile.c: Fixed a bug in new increment/decrement code
+	  (1.49, 1.65, 1.72).
+
+2007-01-21 15:03  strk
+
+	* src/movie.c: Allow export of Shape characters, raise an error if
+	  an unsupported export is attempted
+
+2007-01-21 10:46  akleine
+
+	* util/outputscript.c: Ad hoc bugix: added missing initialisation
+	  of 'gname' buffer in outputSWF_FILLSTYLE(), used in output for
+	  FillStyleTypes 0x40-0x43.
+
+2007-01-21 10:27  akleine
+
+	* util/decompile.c: 1.Enhanced incr/decr for local register
+	  variables.	This avoids output like   "R1--; while(R1>0)
+	  {...}",    when something other is needed: "while(--R1>0) {...}".
+	  2.Moved all other parts except LOGICALNOT from
+	  decompileLogicalOp() into  decompileArithmeticOp().	 LOGICALNOT
+	  now has got its own special function.
+
+2007-01-19 12:50  strk
+
+	* src/ming.h.in: Added some informations about SWFMovie_addExport
+	  and SWFMovie_writeExports.
+
+2007-01-18 19:50  akleine
+
+	* util/decompile.c: Extended handling of local register variables
+	  to 'old' type 1 functions.  (Using different basics, but getting
+	  results similar to V7 files.)
+
+2007-01-17 19:40  akleine
+
+	* util/decompile.c: Added some sugar for V7 local register
+	  variables inside the second type function code. This locals are
+	  declared by "var R1, R2, ...Rn;" on top of function.	This also
+	  includes a more precise register access in
+	  decompileSTOREREGISTER().
+
+2007-01-17 14:18  strk
+
+	* macros/ming.m4: Prepend MING_PATH to PATH when scanning for
+	  makeswf
+
+2007-01-11 20:02  akleine
+
+	* util/decompile.c: Added first time support for tellTarget(
+	  destination ){ action; .. }
+
+2007-01-09 20:45  akleine
+
+	* util/decompile.c: Fixed decompiled indentation at several places,
+	  plus also minor cleaning and bigfixes in
+	  decompileDEFINEFUNCTION().
+
+2007-01-09 01:27  strk
+
+	* src/actioncompiler/compile.h: Oops, plug comments leaks
+
+2007-01-09 01:23  strk
+
+	* NEWS: Added item about function2
+
+2007-01-09 01:22  strk
+
+	* src/actioncompiler/compile.h: Completed and documented
+	  enumeration for DefineFunction2 flags
+
+2007-01-08 21:45  strk
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.y: Output
+	  DefineFunction2 instead of DefineFunction when output version is
+	  > 6.	This is a review and cleanup of the code contributed by Tim
+	  Knip as part of his AS7 efforts (only the DefineFunction2
+	  extrapolated).
+
+2007-01-08 20:59  akleine
+
+	* util/decompile.c: Added support for SWFACTION_STARTDRAG,
+	  SWFACTION_ENDDRAG, SWFACTION_STOPSOUNDS and removed some code
+	  duplication.
+
 2007-01-07 17:42  akleine
 
 	* util/decompile.c: 1.Simplified and bugfixed detection of
