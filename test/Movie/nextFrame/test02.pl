@@ -20,10 +20,12 @@ $m->setBackground(0xff, 0xff, 0xff);
 $m->nextFrame(); # end of frame 1 
 
 # SWF_DOACTION 
-$m->add(new SWF::Action("var a = 1;\
+$m->add(new SWF::Action("var a = 1;
 ") );
 
 # SWF_SHOWFRAME 
 $m->nextFrame(); # end of frame 2 
+
+# SWF_END 
 
 $m->save("test02.swf");

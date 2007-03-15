@@ -16,11 +16,12 @@ $m = new SWF::Movie();
 $m->setBackground(0xff, 0xff, 0xff);
 
 # SWF_DOACTION 
-$m->add(new SWF::Action("
-var a = 1;
+$m->add(new SWF::Action("var a = 1;
 ") );
 
 # SWF_SHOWFRAME 
 $m->nextFrame(); # end of frame 1 
+
+# SWF_END 
 
 $m->save("test01.swf");

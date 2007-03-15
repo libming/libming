@@ -17,5 +17,7 @@ $m->add(new SWFAction("var a = 1;
 /* SWF_SHOWFRAME */
 $m->nextFrame(); /* end of frame 2 */
 
+/* SWF_END */
+
 $m->save("test01.swf");
 ?>
