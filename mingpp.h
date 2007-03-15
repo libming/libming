@@ -1093,7 +1093,7 @@ class SWFButton : public SWFCharacter
   void addSound(SWFSound *sound, int flags)
     { SWFButton_addSound(this->button, sound->sound, flags); }
 
-  void setScalingGrid(int x, int y, int w, int h);
+  void setScalingGrid(int x, int y, int w, int h)
     { SWFButton_setScalingGrid(this->button, x, y, w, h); }
 
   void removeScalingGrid()
