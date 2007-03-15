@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 #include <math.h>
+#include <stdarg.h>
 #include "blocks/blocktypes.h"
 #include "decompile.h"
 #include "parser.h"
@@ -34,8 +35,8 @@ extern char *swftargetfile;
  * difference in syntax can be paramterized so the code in #ifdefs is not
  * a lot of duplicated code.
  */
-#if !defined(SWFPHP) && !defined(SWFPERL) && !defined(SWFPYTHON) && !defined(SWFPLUSPLUS)
-#error "You must define SWFPHP or SWFPERL or SWFPYTHON or SWFPLUSPLUS when building this file"
+#if !defined(SWFPHP) && !defined(SWFPERL) && !defined(SWFPYTHON) && !defined(SWFPLUSPLUS) && !defined(SWFTCL)
+#error "You must define SWFPHP or SWFPERL or SWFPYTHON or SWFPLUSPLUS or SWFTCL when building this file"
 #endif
 
 #ifdef SWFPERL
@@ -47,6 +48,10 @@ extern char *swftargetfile;
 #define OBJPREF   "SWF::"
 #define NEWOP     "new"
 #define SQ	"'"
+#define ARGSEP	","
+#define ARGSTART "("
+#define ARGEND	")"
+#define STMNTEND ";"
 #endif
 #ifdef SWFPHP
 #define COMMSTART "/*"
@@ -57,6 +62,10 @@ extern char *swftargetfile;
 #define OBJPREF   "SWF"
 #define NEWOP     "new"
 #define SQ	"'"
+#define ARGSEP	","
+#define ARGSTART "("
+#define ARGEND	")"
+#define STMNTEND ";"
 #endif
 #ifdef SWFPYTHON
 #define COMMSTART "#"
@@ -67,6 +76,10 @@ extern char *swftargetfile;
 #define OBJPREF   "SWF"
 #define NEWOP     ""
 #define SQ	"'"
+#define ARGSEP	","
+#define ARGSTART "("
+#define ARGEND	")"
+#define STMNTEND ";"
 #endif
 #ifdef SWFPLUSPLUS
 #define COMMSTART "//"
@@ -77,6 +90,24 @@ extern char *swftargetfile;
 #define OBJPREF   "SWF"
 #define NEWOP     "new"
 #define SQ	"\""
+#define ARGSEP	","
+#define ARGSTART "("
+#define ARGEND	")"
+#define STMNTEND ";"
+#endif
+#ifdef SWFTCL
+#define COMMSTART "#"
+#define COMMEND   ""
+#define VAR       "$"
+#define DECLOBJ(x) "SWF" #x "* " 
+#define MEMBER    " "
+#define OBJPREF   "SWF"
+#define NEWOP     "new"
+#define SQ	""
+#define ARGSEP	" "
+#define ARGSTART ""
+#define ARGEND	""
+#define STMNTEND ""
 #endif
 
 static int framenum = 1;
@@ -178,10 +209,36 @@ methodcall (char *varname, char *method)
 {
   static char buf[256];
 
+#if defined(SWFTCL)
+  sprintf (buf, "%s " VAR "%s ", method, varname);
+#else
   sprintf (buf, VAR "%s" MEMBER "%s", varname, method);
+#endif
 
   return buf;
 }
+
+void
+params(int nparam, ...)
+{
+va_list ap;
+char *fmt;
+unsigned long p;
+int i;
+
+va_start(ap,nparam);
+printf(ARGSTART);
+for(i=0;i<nparam;i++) {
+	fmt = va_arg(ap,char *);
+	p = va_arg(ap,unsigned long);
+	printf(fmt,p);
+	if( i<nparam-1 )
+		printf(ARGSEP " ");
+}
+printf(ARGEND);
+va_end(ap);
+}
+
 
 char *
 newobj (char *varname, char *obj)
@@ -190,10 +247,12 @@ newobj (char *varname, char *obj)
 
   if (varname)
   {
-#ifdef SWFPLUSPLUS
+#if defined(SWFPLUSPLUS)
     // might be worth storing the newly created object in a std::auto_ptr here
     // as I dubt we're outputting nested scopes anyway..
     sprintf (buf, OBJPREF "%s* %s = " NEWOP " " OBJPREF "%s", obj, varname, obj);
+#elif defined(SWFTCL)
+    sprintf (buf, "set %s [" NEWOP OBJPREF "%s]", varname, obj);
 #else
     sprintf (buf, VAR "%s = " NEWOP " " OBJPREF "%s", varname, obj);
 #endif
@@ -1154,9 +1213,11 @@ outputSWF_SETBACKGROUNDCOLOR (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_SETBACKGROUNDCOLOR);
 
-  printf ("%s(0x%02x, 0x%02x, 0x%02x);\n",
-	  methodcall ("m", "setBackground"), sblock->rgb.red,
-	  sblock->rgb.green, sblock->rgb.blue);
+  printf ("%s", methodcall ("m", "setBackground"));
+  params (3,"0x%02x", sblock->rgb.red,
+	    "0x%02x", sblock->rgb.green,
+	    "0x%02x", sblock->rgb.blue);
+  printf (STMNTEND "\n");
 
 }
 
@@ -1165,8 +1226,9 @@ outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN_EMPTY (SWF_SHOWFRAME);
 
-  printf ("%s(); " COMMSTART " end of %sframe %d " COMMEND "\n",
-	  methodcall (spritenum?spritename:"m", "nextFrame"),
+  printf ("%s", methodcall (spritenum?spritename:"m", "nextFrame"));
+  params(0);
+  printf (STMNTEND " " COMMSTART " end of %sframe %d " COMMEND "\n",
 	  spritenum?"clip ":"",
 	  spritenum?spframenum++:framenum++);
 }
@@ -1270,6 +1332,14 @@ outputHeader (struct Movie *m)
   else
   	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
 #endif
+#ifdef SWFTCL
+  printf ("load mingc.so mingc\n");
+  printf ("%s\n", newobj ("m", "Movie"));
+  if( m->version != 5 ) {
+  	printf ("#%s(%d);\n\n", newobj ("m", "Movie"), m->version);
+  	printf ("#add setversion here\n\n", "m", m->version);
+	}
+#endif
   if( m->rate != 12.0 ) 
   	printf ("%s(%f);\n", methodcall ("m", "setRate"), m->rate);
   if( m->frame.xMax != 6400 || m->frame.yMax != 4800 )
@@ -1298,7 +1368,9 @@ outputTrailer (struct Movie *m)
  		printf ("%s();\n", methodcall ("m", "output"));
 	}
   } else {
- 	printf ("%s(\"%s\");\n", methodcall ("m", "save"), swftargetfile);
+ 	printf ("%s", methodcall ("m", "save"));
+	params (1, "\"%s\"", swftargetfile);
+	printf ( STMNTEND "\n");
   }
 #ifdef SWFPHP
   printf ("?>\n");
