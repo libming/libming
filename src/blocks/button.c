@@ -394,6 +394,19 @@ SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags)
 	return NULL;
 }
 
+/*
+ * set a 9 slice scaling grid to this sprite / movieclip / button
+ * This function sets a 9 slice scaling grid to buttons / sprites / movieclips
+ *
+ *      1 2 3
+ *      4 5 6 
+ *      7 8 9
+ *
+ * x, y, w and h define a rectangle, which is the dimension of the center slice (5)
+ * all other slices are determined out of the characters bounds and the defined rect.
+ * While slice 5 is scalde vertical and horizontal, slice 2 and 8 are only scale horizontal.
+ * slice 4 and 6 only vertical. the 4 corner slices are not scaled (1, 3, 7, 9).  
+ */
 void 
 SWFButton_setScalingGrid(SWFButton b, int x, int y, int w, int h)
 {
@@ -403,6 +416,9 @@ SWFButton_setScalingGrid(SWFButton b, int x, int y, int w, int h)
 	b->grid = newSWFScalingGrid((SWFCharacter)b, x, y, w, h);
 }
 
+/*
+ * removes the scaling grid
+ */
 void 
 SWFButton_removeScalingGrid(SWFButton b)
 {
