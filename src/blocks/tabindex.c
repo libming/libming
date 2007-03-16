@@ -20,6 +20,7 @@
 #include "ming.h"
 #include "block.h"
 #include "output.h"
+#include "method.h"
 #include "tabindex.h"
 
 static void
