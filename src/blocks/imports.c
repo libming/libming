@@ -23,7 +23,7 @@ writeSWFImportBlockToMethod(SWFBlock block, SWFByteOutputMethod method, void *da
 		method(*p++, data);
 	method(0, data);
 
-	if(SWF_versionNum >= 8)
+	if(block->swfVersion >= 8)
 	{
 		method(1, data);
 		method(0, data);
@@ -47,8 +47,12 @@ completeSWFImportBlock(SWFBlock block)
 	for(ip = imports->importlist ; ip ; ip = ip->next)
 		length += 3 + strlen(ip->name);
 
-	if(SWF_versionNum >= 8)
-		length += 2;	
+	/* SWF_IMPORTASSETS is deprecated with version >= 8. */
+	if(block->swfVersion >= 8)
+	{
+		block->type = SWF_IMPORTASSETS2;
+		length += 2;
+	}	
 
 	return length;
 }
@@ -80,11 +84,7 @@ SWFImportBlock
 newSWFImportBlock(const char *filename)
 {	SWFImportBlock iblock = (SWFImportBlock) malloc(sizeof(struct SWFImportBlock_s));
 	
-	/* SWF_IMPORTASSETS is deprecated with version >= 8. */
-	if(SWF_versionNum >= 8)
-		BLOCK(iblock)->type = SWF_IMPORTASSETS2;
-	else
-		BLOCK(iblock)->type = SWF_IMPORTASSETS;
+	BLOCK(iblock)->type = SWF_IMPORTASSETS;
 
 	BLOCK(iblock)->writeBlock = (writeSWFBlockMethod) writeSWFImportBlockToMethod;
 	BLOCK(iblock)->complete = completeSWFImportBlock;
