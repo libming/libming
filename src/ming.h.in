@@ -237,6 +237,31 @@ SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 
 SWFLineStyle newSWFLineStyle(unsigned short width, byte r, byte g, byte b, byte a);
 
+/* linestyle 2 flags */
+
+#define SWF_LINESTYLE_CAP_ROUND         (0<<14)
+#define SWF_LINESTYLE_CAP_NONE          (1<<14)
+#define SWF_LINESTYLE_CAP_SQUARE        (2<<14)
+
+#define SWF_LINESTYLE_JOIN_ROUND        (0<<12)
+#define SWF_LINESTYLE_JOIN_BEVEL        (1<<12)
+#define SWF_LINESTYLE_JOIN_MITER        (2<<12)
+
+#define SWF_LINESTYLE_FLAG_NOHSCALE     (1<<10)
+#define SWF_LINESTYLE_FLAG_NOVSCALE     (1<<9)
+#define SWF_LINESTYLE_FLAG_HINTING      (1<<8)
+
+#define SWF_LINESTYLE_FLAG_NOCLOSE      (1<<2)
+
+#define SWF_LINESTYLE_FLAG_ENDCAP_ROUND (0<<0)
+#define SWF_LINESTYLE_FLAG_ENDCAP_NONE  (1<<0)
+#define SWF_LINESTYLE_FLAG_ENDCAP_SQUARE (2<<0)
+
+SWFLineStyle newSWFLineStyle2(unsigned short width, byte r, byte g, byte b, byte a,
+                              int flags, float miterLimit);
+SWFLineStyle newSWFLineStyle2_filled(unsigned short width, 
+                                     SWFFillStyle fill, int flags, 
+                                     float miterLimit);
 
 /***** SWFShape *****/
 
@@ -268,6 +293,15 @@ void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 			  byte r, byte g, byte b, byte a);
+
+void SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
+                            byte r, byte g, byte b, byte a, 
+                            int flags, float miterLimit);
+
+void SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
+                                  SWFFillStyle fill,
+                                  int flags, float miterLimit);
+
 void SWFShape_hideLine(SWFShape shape);
 
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,

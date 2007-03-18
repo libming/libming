@@ -29,7 +29,9 @@
 #include "font.h"
 #include "libming.h"
 
-
+// SWF_DEFINESHAPE4 flags
+#define SWF_SHAPE_USESCALINGSTROKES 	(1<<0)
+#define SWF_SHAPE_USENONSCALINGSTREOKES	(1<<1)
 
 
 struct stateChangeRecord
@@ -101,6 +103,9 @@ struct SWFShape_s
 	short lineWidth;
 	BOOL isMorph;
 	BOOL isEnded;
+	// SWF_DEFINESHAPE4 extensions
+	unsigned char flags;
+	SWFRect edgeBounds;
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -127,7 +132,7 @@ completeSWFShapeBlock(SWFBlock block)
 	SWFShape shape = (SWFShape)block;
 
 	SWFShape_end(shape);
-
+	
 	return SWFOutput_getLength(shape->out);
 }
 
@@ -179,11 +184,12 @@ newSWFShape()
 	BLOCK(shape)->complete = completeSWFShapeBlock;
 	BLOCK(shape)->dtor = (destroySWFBlockMethod) destroySWFShape;
 	BLOCK(shape)->type = SWF_DEFINESHAPE3;
-
+	
 	CHARACTERID(shape) = ++SWF_gNumCharacters;
 
 	shape->out = newSWFOutput();
 	CHARACTER(shape)->bounds = newSWFRect(0,0,0,0);
+	shape->edgeBounds = NULL;
 
 	shape->records = NULL;
 	shape->lines = NULL;
@@ -197,6 +203,7 @@ newSWFShape()
 	shape->lineWidth = 0;
 	shape->isMorph = FALSE;
 	shape->isEnded = FALSE;
+	shape->flags = 0;
 
 	SWFOutput_writeUInt8(shape->out, 0); /* space for nFillBits, nLineBits */
 
@@ -320,10 +327,18 @@ SWFShape_addStyleHeader(SWFShape shape)
 
 	SWFOutput_writeUInt16(out, CHARACTERID(shape));
 	SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
+	if(BLOCK(shape)->type == SWF_DEFINESHAPE4)
+	{
+		if(shape->edgeBounds == NULL)
+			SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
+		else
+			SWFOutput_writeRect(out, shape->edgeBounds);
 
+		SWFOutput_writeUInt8(out, shape->flags);
+	}
 	SWFOutput_writeFillStyles(out, shape->fills, shape->nFills, BLOCK(shape)->type);
 	SWFOutput_writeLineStyles(out, shape->lines, shape->nLines, BLOCK(shape)->type);
-
+	
 	/* prepend shape->out w/ shape header */
 	SWFOutput_setNext(out, shape->out);
 	shape->out = out;
@@ -601,19 +616,45 @@ SWFShape_drawScaledCurve(SWFShape shape,
 
 #define STYLE_INCREMENT 4
 
+static inline void growLineArray(SWFShape shape)
+{
+	int size;
+
+	if ( shape->nLines % STYLE_INCREMENT != 0 )
+		return;
+
+	size = (shape->nLines+STYLE_INCREMENT) * sizeof(SWFLineStyle);
+	shape->lines = (SWFLineStyle*)realloc(shape->lines, size);	
+}
+
+static int 
+SWFShape_addLineStyle2filled(SWFShape shape, unsigned short width,
+                             SWFFillStyle fill,
+                             int flags, float miterLimit)
+{
+	growLineArray(shape);
+	BLOCK(shape)->type = SWF_DEFINESHAPE4;
+	shape->lines[shape->nLines] = newSWFLineStyle2_filled(width, fill, flags, miterLimit);
+	return ++shape->nLines;
+}
+
+static int
+SWFShape_addLineStyle2(SWFShape shape, unsigned short width,
+                      byte r, byte g, byte b, byte a,
+                      int flags, float miterLimit)
+{
+	growLineArray(shape);
+	BLOCK(shape)->type = SWF_DEFINESHAPE4;
+	shape->lines[shape->nLines] = newSWFLineStyle2(width, r, g, b, a, flags, miterLimit);
+	return ++shape->nLines;
+}
+
 static int
 SWFShape_addLineStyle(SWFShape shape, unsigned short width,
-											byte r, byte g, byte b, byte a)
+                      byte r, byte g, byte b, byte a)
 {
-	if ( shape->nLines % STYLE_INCREMENT == 0 )
-	{
-		shape->lines = (SWFLineStyle*)realloc(shape->lines,
-													 (shape->nLines+STYLE_INCREMENT) *
-													 sizeof(SWFLineStyle));
-	}
-
+	growLineArray(shape);
 	shape->lines[shape->nLines] = newSWFLineStyle(width, r, g, b, a);
-
 	return ++shape->nLines;
 }
 
@@ -649,27 +690,10 @@ SWFShape_hideLine(SWFShape shape)
 	record.record.stateChange->flags |= SWF_SHAPE_LINESTYLEFLAG;
 }
 
-void
-SWFShape_setLineStyle(SWFShape shape, unsigned short width,
-											byte r, byte g, byte b, byte a)
+static void finishSetLine(SWFShape shape, int line, unsigned short width)
 {
 	ShapeRecord record;
-	int line;
-
-	if ( shape->isEnded )
-		return;
-
-	for ( line=0; line<shape->nLines; ++line )
-	{
-		if ( SWFLineStyle_equals(shape->lines[line], width, r, g, b, a) )
-			break;
-	}
-
-	if ( line == shape->nLines )
-		line = SWFShape_addLineStyle(shape, width, r, g, b, a);
-	else
-		++line;
-
+	
 	if ( width == 0 )
 		shape->lineWidth = 0;
 	else
@@ -682,6 +706,155 @@ SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 
 	record.record.stateChange->line = line;
 	record.record.stateChange->flags |= SWF_SHAPE_LINESTYLEFLAG;
+}
+
+/*
+ * set filled Linestyle2 introduce with SWF 8.
+ * 
+ * Instead of providing a fill color, a FillStyle can be applied
+ * to a line.
+ * 
+ * Linestyle2 also extends Linestyle1 with some extra flags:
+ *
+ * Line cap style: select one of the following flags (default is round cap style)
+ * SWF_LINESTYLE_CAP_ROUND 
+ * SWF_LINESTYLE_CAP_NONE
+ * SWF_LINESTYLE_CAP_SQUARE 
+ *
+ * Line join style: select one of the following flags (default is round join style)
+ * SWF_LINESTYLE_JOIN_ROUND
+ * SWF_LINESTYLE_JOIN_BEVEL 
+ * SWF_LINESTYLE_JOIN_MITER  
+ *
+ * Scaling flags: disable horizontal / vertical scaling
+ * SWF_LINESTYLE_FLAG_NOHSCALE
+ * SWF_LINESTYLE_FLAG_NOVSCALE 
+ *
+ * Enable pixel hinting to correct blurry vertical / horizontal lines
+ * -> all anchors will be aligned to full pixels
+ * SWF_LINESTYLE_FLAG_HINTING  
+ *
+ * Disable stroke closure: if no-close flag is set caps will be applied 
+ * instead of joins
+ * SWF_LINESTYLE_FLAG_NOCLOSE
+ *
+ * End-cap style: default round
+ * SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+ * SWF_LINESTYLE_FLAG_ENDCAP_NONE
+ * SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+ *
+ * If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor 
+ * must be set. Miter max length is then calculated as:
+ * max miter len = miter limit * width.
+ * If join style is not miter, this value will be ignored.
+ */
+void 
+SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
+                       SWFFillStyle fill,
+                       int flags, float miterLimit)
+{
+	int line;
+
+	if ( shape->isEnded )
+		return;
+
+	for ( line=0; line<shape->nLines; ++line )
+	{
+		if ( SWFLineStyle_equals2filled(shape->lines[line], width, fill, flags) )
+			break;
+	}
+
+	if ( line == shape->nLines )
+		line = SWFShape_addLineStyle2filled(shape, width, fill, flags, miterLimit);
+	else
+		++line;
+
+	finishSetLine(shape, line, width);
+}
+
+
+
+/*
+ * set Linestyle2 introduce with SWF 8.
+ * Linestyle2 extends Linestyle1 with some extra flags:
+ *
+ * Line cap style: select one of the following flags (default is round cap style)
+ * SWF_LINESTYLE_CAP_ROUND 
+ * SWF_LINESTYLE_CAP_NONE
+ * SWF_LINESTYLE_CAP_SQUARE 
+ *
+ * Line join style: select one of the following flags (default is round join style)
+ * SWF_LINESTYLE_JOIN_ROUND
+ * SWF_LINESTYLE_JOIN_BEVEL 
+ * SWF_LINESTYLE_JOIN_MITER  
+ *
+ * Scaling flags: disable horizontal / vertical scaling
+ * SWF_LINESTYLE_FLAG_NOHSCALE
+ * SWF_LINESTYLE_FLAG_NOVSCALE 
+ *
+ * Enable pixel hinting to correct blurry vertical / horizontal lines
+ * -> all anchors will be aligned to full pixels
+ * SWF_LINESTYLE_FLAG_HINTING  
+ *
+ * Disable stroke closure: if no-close flag is set caps will be applied 
+ * instead of joins
+ * SWF_LINESTYLE_FLAG_NOCLOSE
+ *
+ * End-cap style: default round
+ * SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+ * SWF_LINESTYLE_FLAG_ENDCAP_NONE
+ * SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+ *
+ * If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor 
+ * must be set. Miter max length is then calculated as:
+ * max miter len = miter limit * width.
+ * If join style is not miter, this value will be ignored.
+ */
+void 
+SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
+                       byte r, byte g, byte b, byte a,
+                       int flags, float miterLimit)
+{
+	int line;
+
+	if ( shape->isEnded )
+		return;
+
+	for ( line=0; line<shape->nLines; ++line )
+	{
+		if ( SWFLineStyle_equals(shape->lines[line], width, r, g, b, a, flags) )
+			break;
+	}
+
+	if ( line == shape->nLines )
+		line = SWFShape_addLineStyle2(shape, width, r, g, b, a, flags, miterLimit);
+	else
+		++line;
+
+	finishSetLine(shape, line, width);
+}
+
+void
+SWFShape_setLineStyle(SWFShape shape, unsigned short width,
+                      byte r, byte g, byte b, byte a)
+{
+	int line;
+	
+	if ( shape->isEnded )
+		return;
+
+	for ( line=0; line<shape->nLines; ++line )
+	{
+		if ( SWFLineStyle_equals(shape->lines[line], width, r, g, b, a, 0) )
+			break;
+	}
+
+	if ( line == shape->nLines )
+		line = SWFShape_addLineStyle(shape, width, r, g, b, a);
+	else
+		++line;
+	
+	finishSetLine(shape, line, width);
 }
 
 

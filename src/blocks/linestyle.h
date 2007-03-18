@@ -36,7 +36,11 @@
 
 /* okay, this is kinda lame.. */
 byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
-			 byte r, byte g, byte b, byte a);
+			 byte r, byte g, byte b, byte a, int flags);
+
+byte SWFLineStyle_equals2filled(SWFLineStyle line, unsigned short width,
+                                SWFFillStyle fill, int flags);
+
 
 unsigned short SWFLineStyle_getWidth(SWFLineStyle line);
 
