@@ -154,13 +154,42 @@ SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2)
 	return 0;
 }
 
+void
+SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle fill, 
+                         SWFBlocktype shapeType)
+{
+	int type = fill->type;
+	SWFOutput_writeUInt8(out, type);
+
+	if ( type == SWFFILL_SOLID )
+	{
+		SWFOutput_writeUInt8(out, fill->data.solid.r);
+		SWFOutput_writeUInt8(out, fill->data.solid.g);
+		SWFOutput_writeUInt8(out, fill->data.solid.b);
+
+		if ( shapeType == SWF_DEFINESHAPE3 )
+			SWFOutput_writeUInt8(out, fill->data.solid.a);
+	}
+	else if ( type & SWFFILL_GRADIENT )
+	{
+		SWFOutput_writeMatrix(out, fill->matrix);
+		SWFOutput_writeGradient(out, fill->data.gradient, shapeType);
+	}
+	else if ( type & SWFFILL_BITMAP )
+	{
+		SWFOutput_writeUInt16(out, CHARACTERID(fill->data.bitmap));
+		SWFOutput_writeMatrix(out, fill->matrix);
+	}
+	else
+		SWF_error("Unknown fill type: %i", type);
+}
 
 void
 SWFOutput_writeFillStyles(SWFOutput out,
 													SWFFillStyle *fills, int nFills,
 													SWFBlocktype shapeType)
 {
-	int i, type;
+	int i;
 	SWFFillStyle fill;
 
 	if ( nFills < 255 )
@@ -176,31 +205,7 @@ SWFOutput_writeFillStyles(SWFOutput out,
 	for ( i=0; i<nFills; ++i )
 	{
 		fill = fills[i];
-		type = fill->type;
-
-		SWFOutput_writeUInt8(out, type);
-
-		if ( type == SWFFILL_SOLID )
-		{
-			SWFOutput_writeUInt8(out, fill->data.solid.r);
-			SWFOutput_writeUInt8(out, fill->data.solid.g);
-			SWFOutput_writeUInt8(out, fill->data.solid.b);
-
-			if ( shapeType == SWF_DEFINESHAPE3 )
-				SWFOutput_writeUInt8(out, fill->data.solid.a);
-		}
-		else if ( type & SWFFILL_GRADIENT )
-		{
-			SWFOutput_writeMatrix(out, fill->matrix);
-			SWFOutput_writeGradient(out, fill->data.gradient, shapeType);
-		}
-		else if ( type & SWFFILL_BITMAP )
-		{
-			SWFOutput_writeUInt16(out, CHARACTERID(fill->data.bitmap));
-			SWFOutput_writeMatrix(out, fill->matrix);
-		}
-		else
-			SWF_error("Unknown fill type: %i", type);
+		SWFOutput_writeFillStyle(out, fill, shapeType);
 	}
 }
 

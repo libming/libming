@@ -30,6 +30,7 @@
 #define SWF_FILLSTYLE_H_INCLUDED
 
 #include "ming.h"
+#include "blocktypes.h"
 
 void SWFFill_setIdx(SWFFillStyle fill, int idx);
 int SWFFill_getIdx(SWFFillStyle fill);
@@ -39,6 +40,8 @@ int SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2);
 void SWFOutput_writeFillStyles(SWFOutput out,
 			       SWFFillStyle *fills, int nFills,
 			       SWFBlocktype shapeType);
+
+void SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle file, SWFBlocktype type);
 
 void SWFOutput_writeMorphFillStyles(SWFOutput out,
 				    SWFFillStyle *fills1, int nFills1,
