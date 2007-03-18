@@ -50,6 +50,7 @@ SWFOutput_writeRect(SWFOutput out, SWFRect rect)
 	SWFOutput_writeSBits(out, rect->maxX, nBits);
 	SWFOutput_writeSBits(out, rect->minY, nBits);
 	SWFOutput_writeSBits(out, rect->maxY, nBits);
+	SWFOutput_byteAlign(out);
 }
 
 
