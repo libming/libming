@@ -189,7 +189,7 @@ newSWFShape()
 
 	shape->out = newSWFOutput();
 	CHARACTER(shape)->bounds = newSWFRect(0,0,0,0);
-	shape->edgeBounds = NULL;
+	shape->edgeBounds = newSWFRect(0,0,0,0);
 
 	shape->records = NULL;
 	shape->lines = NULL;
@@ -329,11 +329,7 @@ SWFShape_addStyleHeader(SWFShape shape)
 	SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
 	if(BLOCK(shape)->type == SWF_DEFINESHAPE4)
 	{
-		if(shape->edgeBounds == NULL)
-			SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
-		else
-			SWFOutput_writeRect(out, shape->edgeBounds);
-
+		SWFOutput_writeRect(out, shape->edgeBounds);
 		SWFOutput_writeUInt8(out, shape->flags);
 	}
 	SWFOutput_writeFillStyles(out, shape->fills, shape->nFills, BLOCK(shape)->type);
@@ -559,6 +555,7 @@ SWFShape_drawScaledLine(SWFShape shape, int dx, int dy)
 
 	SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
 											 shape->xpos, shape->ypos, shape->lineWidth);
+	SWFRect_includePoint(shape->edgeBounds, shape->xpos, shape->ypos, 0);
 }
 
 
@@ -605,12 +602,13 @@ SWFShape_drawScaledCurve(SWFShape shape,
 
 	SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
 											 shape->xpos, shape->ypos, shape->lineWidth);
-
+	SWFRect_includePoint(shape->edgeBounds, shape->xpos, shape->ypos, 0);
 	shape->xpos += anchordx;
 	shape->ypos += anchordy;
 
 	SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
 											 shape->xpos, shape->ypos, shape->lineWidth);
+	SWFRect_includePoint(shape->edgeBounds, shape->xpos, shape->ypos, 0);
 }
 
 
@@ -987,6 +985,7 @@ SWFShape_moveScaledPenTo(SWFShape shape, int x, int y)
 				shape->records[0].type == SHAPERECORD_STATECHANGE) )
 	{
 		SWFRect_setBounds(SWFCharacter_getBounds(CHARACTER(shape)), x, x, y, y);
+		SWFRect_setBounds(shape->edgeBounds, x, x, y, y);
 	}
 }
 
