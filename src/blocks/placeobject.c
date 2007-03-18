@@ -89,7 +89,7 @@ writeSWFPlaceObject2BlockToStream(SWFBlock block,
 	{
 		methodWriteUInt16(0, method, data); /* mystery number */
 // SWF6: UInt32
-		if(SWF_versionNum >= 6)
+		if(block->swfVersion >= 6)
 			methodWriteUInt32(place->actionORFlags, method, data);
 		else
 			methodWriteUInt16(place->actionORFlags, method, data);
@@ -98,12 +98,12 @@ writeSWFPlaceObject2BlockToStream(SWFBlock block,
 		{
 			SWFOutputBlock local_block = (SWFOutputBlock)place->actions[i];
 // SWF6: UInt32
-			if(SWF_versionNum >= 6)
+			if(block->swfVersion >= 6)
 				methodWriteUInt32(place->actionFlags[i], method, data);
 			else
 				methodWriteUInt16(place->actionFlags[i], method, data);
 // SWF6: extra char if(place->actionFlags[i] & 0x20000)
-			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000)) {
+			if((block->swfVersion >= 6) && (place->actionFlags[i] & 0x20000)) {
 				methodWriteUInt32(SWFOutputBlock_getLength(local_block) + 1, method, data);
 				method(0, data);
 			} else {
@@ -112,7 +112,7 @@ writeSWFPlaceObject2BlockToStream(SWFBlock block,
 			SWFOutput_writeToMethod(SWFOutputBlock_getOutput(local_block), method, data);
 		}
 // SWF6: UInt32
-		if(SWF_versionNum >= 6)
+		if(block->swfVersion >= 6)
 			methodWriteUInt32(0, method, data); /* trailing 0 for end of actions */
 		else
 			methodWriteUInt16(0, method, data); /* trailing 0 for end of actions */
@@ -185,17 +185,17 @@ completeSWFPlaceObject2Block(SWFBlock block)
 	{
 		int i;
 // SWF6: 6
-		actionLen += (SWF_versionNum >= 6 ? 6 : 4);
+		actionLen += (block->swfVersion >= 6 ? 6 : 4);
 		for ( i=0; i<place->nActions; ++i )
 		{
 			SWFOutputBlock local_block = (SWFOutputBlock)place->actions[i];
 // SWF6: 8 (9 if char)
-			actionLen += (SWF_versionNum >= 6 ? 8 : 6) + SWFOutputBlock_getLength(local_block);
-			if((SWF_versionNum >= 6) && (place->actionFlags[i] & 0x20000))
+			actionLen += (block->swfVersion >= 6 ? 8 : 6) + SWFOutputBlock_getLength(local_block);
+			if((block->swfVersion >= 6) && (place->actionFlags[i] & 0x20000))
 				actionLen++;
 		}
 // SWF6: 4
-		actionLen += (SWF_versionNum >= 6 ? 4 : 2);
+		actionLen += (block->swfVersion >= 6 ? 4 : 2);
 	}
 
 	place->out = out;
