@@ -30,6 +30,7 @@
 #define SWF_BLOCKTYPES_H_INCLUDED
 
 #include "ming.h"
+#include "error.h"
 
 typedef enum
 {
@@ -115,5 +116,88 @@ typedef enum
   SWF_PREBUILTCLIP = 254,
   SWF_PREBUILT = 255
 } SWFBlocktype;
+
+
+static inline int SWFBlocktype_swfVersion(int type)
+{
+	switch(type)
+	{	
+		case SWF_END:
+		case SWF_SHOWFRAME:
+		case SWF_DEFINESHAPE:
+		case SWF_PLACEOBJECT:
+		case SWF_REMOVEOBJECT:
+		case SWF_DEFINEBITS:
+		case SWF_DEFINEBUTTON:
+		case SWF_JPEGTABLES:	
+		case SWF_SETBACKGROUNDCOLOR:
+		case SWF_DEFINEFONT:
+		case SWF_DEFINETEXT:
+		case SWF_DOACTION:
+		case SWF_DEFINEFONTINFO:
+			return 1;
+		
+		case SWF_DEFINESOUND:
+		case SWF_STARTSOUND:
+		case SWF_DEFINEBUTTONSOUND:
+		case SWF_SOUNDSTREAMHEAD:
+		case SWF_SOUNDSTREAMBLOCK:
+		case SWF_DEFINELOSSLESS:
+		case SWF_DEFINEBITSJPEG2:
+		case SWF_DEFINESHAPE2:
+		case SWF_DEFINEBUTTONCXFORM:
+		case SWF_PROTECT:
+			return 2;
+
+		case SWF_PLACEOBJECT2:
+		case SWF_REMOVEOBJECT2:
+		case SWF_DEFINESHAPE3:
+		case SWF_DEFINETEXT2:
+		case SWF_DEFINEBUTTON2:
+		case SWF_DEFINEBITSJPEG3:
+		case SWF_DEFINELOSSLESS2:
+		case SWF_DEFINESPRITE:
+		case SWF_FRAMELABEL:
+		case SWF_SOUNDSTREAMHEAD2:
+		case SWF_DEFINEMORPHSHAPE:
+		case SWF_DEFINEFONT2:
+		case SWF_GENCOMMAND:
+			return 3;
+		
+		case SWF_DEFINEEDITTEXT:
+			return 4;		
+
+		case SWF_EXPORTASSETS:
+		case SWF_IMPORTASSETS:
+		case SWF_ENABLEDEBUGGER:
+			return 5;
+
+		case SWF_INITACTION:
+		case SWF_DEFINEVIDEOSTREAM:
+		case SWF_VIDEOFRAME:
+		case SWF_DEFINEFONTINFO2:
+		case SWF_ENABLEDEBUGGER2:
+			return 6;
+
+		case SWF_SCRIPTLIMITS:
+		case SWF_SETTABINDEX:
+			return 7;
+
+		case SWF_FILEATTRIBUTES:
+		case SWF_PLACEOBJECT3:
+		case SWF_IMPORTASSETS2:
+		case SWF_DEFINEFONTALIGNZONES:
+		case SWF_CMSTEXTSETTINGS:
+		case SWF_DEFINEFONT3:
+		case SWF_METADATA:
+		case SWF_DEFINESHAPE4:
+		case SWF_DEFINESCALINGGRID:
+		case SWF_DEFINEMORPHSHAPE2:
+			return 8;
+		default:
+			SWF_warn("unknown tag type %i\n", type);
+			return -1;
+	}
+}
 
 #endif /* SWF_BLOCKTYPES_H_INCLUDED */
