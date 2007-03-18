@@ -55,8 +55,16 @@ completeSWFSprite(SWFBlock block)
 
 	SWFSprite_addBlock(sprite, newSWFEndBlock());
 
+	SWF_assert(block->swfVersion);
 	for ( i=0; i<sprite->nBlocks; ++i )
+	{
+		/* 
+ 		set version information to sprite blocks 
+		so we can assure a valid movie version at completion time
+		*/   	
+		sprite->blocks[i]->swfVersion = block->swfVersion;
 		length += completeSWFBlock(sprite->blocks[i]);
+	}
 
 	return length + 4;
 }

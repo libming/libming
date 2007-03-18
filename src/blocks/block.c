@@ -139,6 +139,8 @@ SWFBlockInit(SWFBlock block)
 	block->length = 0;
 	block->isDefined = FALSE;
 	block->completed = FALSE;
+	
+	block->swfVersion = 0;
 }
 
 

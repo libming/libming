@@ -53,8 +53,9 @@ struct SWFBlock_s
   int length;
   byte isDefined;
   byte completed;
-};
 
+  int swfVersion;
+};
 
 /* sets the defined flag in this block */
 void SWFBlock_setDefined(SWFBlock block);

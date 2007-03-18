@@ -118,12 +118,16 @@ SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite)
 
 
 int
-SWFBlockList_completeBlocks(SWFBlockList list)
+SWFBlockList_completeBlocks(SWFBlockList list, int version)
 {
 	int i, total = 0;
 
 	for ( i=0; i<list->nBlocks; ++i )
+	{
+		/* ensure movie version information at completion time */
+		list->blocks[i].block->swfVersion = version;
 		total += completeSWFBlock(list->blocks[i].block);
+	}
 
 	return total;
 }

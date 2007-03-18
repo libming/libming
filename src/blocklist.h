@@ -43,7 +43,7 @@ SWFBlock SWFBlockList_getLastBlock(SWFBlockList blocklist);
 
 void SWFBlockList_addToSprite(SWFBlockList list, SWFSprite sprite);
 
-int SWFBlockList_completeBlocks(SWFBlockList list);
+int SWFBlockList_completeBlocks(SWFBlockList list, int version);
 
 int SWFBlockList_writeBlocksToMethod(SWFBlockList list,
 				     SWFByteOutputMethod method, void *data);

@@ -611,7 +611,7 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	SWFMovie_addBlock(movie, newSWFEndBlock());
 
 	// add five for the setbackground block..
-	swflength = SWFBlockList_completeBlocks(movie->blockList);
+	swflength = SWFBlockList_completeBlocks(movie->blockList, movie->version);
 
 	/* XXX - hack */
 	SWFDisplayList_rewindSoundStream(movie->displayList);
