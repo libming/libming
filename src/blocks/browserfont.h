@@ -32,8 +32,6 @@
 #include "ming.h"
 #include "output.h"
 
-extern int SWF_versionNum;
-
 SWFOutput SWFBrowserFont_getOutput(SWFBrowserFont font);
 
 #endif /* SWF_BROWSERFONT_H_INCLUDED */

@@ -31,6 +31,7 @@ struct SWFBrowserFont_s
 {
 	struct SWFCharacter_s character;
 	SWFOutput out;
+	char *name;
 };
 
 
@@ -43,16 +44,43 @@ void writeSWFBrowserFontToMethod(SWFBlock block,
 }
 
 
+static void
+finishBrowserFont(SWFBrowserFont font)
+{
+	unsigned int i;
+
+	SWF_assert(BLOCK(font)->swfVersion);
+
+	SWFOutput out = newSWFOutput();
+	font->out = out;	
+	
+	SWFOutput_writeUInt16(out, CHARACTERID(font));
+	if(BLOCK(font)->swfVersion > 5)	/* maybe italic or bold flag? */
+		SWFOutput_writeUInt8(out, SWF_FONT_WIDECODES);
+	else
+	 	SWFOutput_writeUInt8(out, 0); 
+
+	SWFOutput_writeUInt8(out, 0); /* reserved flags */
+	SWFOutput_writeUInt8(out, strlen(font->name));
+
+	for ( i=0; i<strlen(font->name); ++i )
+		SWFOutput_writeUInt8(out, font->name[i]);
+
+	SWFOutput_writeUInt16(out, 0); /* number of glyphs */
+	SWFOutput_writeSInt16(out, 2); /* offset */
+
+	SWFOutput_byteAlign(out);
+}
+
 static int
 completeSWFBrowserFont(SWFBlock block)
 {
 	SWFBrowserFont font = (SWFBrowserFont)block;
-	SWFOutput out = font->out;
-	SWFOutput_byteAlign(out);
-
+	if(font->out == NULL) 
+		finishBrowserFont(font);
+	
 	BLOCK(font)->type = SWF_DEFINEFONT2; /* see below */
-
-	return SWFOutput_getLength(out);
+	return SWFOutput_getLength(font->out);
 }
 
 
@@ -60,6 +88,7 @@ void
 destroySWFBrowserFont(SWFBrowserFont font)
 {
 	destroySWFOutput(font->out);
+	free(font->name);
 	free(font);
 }
 
@@ -67,9 +96,7 @@ destroySWFBrowserFont(SWFBrowserFont font)
 SWFBrowserFont
 newSWFBrowserFont(const char *name)
 {
-	unsigned int i;
 	SWFBrowserFont font = (SWFBrowserFont) malloc(sizeof(struct SWFBrowserFont_s));
-	SWFOutput out = newSWFOutput();
 
 	SWFCharacterInit((SWFCharacter)font);
 
@@ -82,27 +109,18 @@ newSWFBrowserFont(const char *name)
 
 	BLOCK(font)->type = SWF_DEFINEEDITTEXT;
 	CHARACTERID(font) = ++SWF_gNumCharacters;
-
-	SWFOutput_writeUInt16(out, CHARACTERID(font));
-	SWFOutput_writeUInt8(out, (SWF_versionNum > 5) ? SWF_FONT_WIDECODES : 0); /* maybe italic or bold flag? */
-	SWFOutput_writeUInt8(out, 0); /* reserved flags */
-	SWFOutput_writeUInt8(out, strlen(name));
-
-	for ( i=0; i<strlen(name); ++i )
-		SWFOutput_writeUInt8(out, name[i]);
-
-	SWFOutput_writeUInt16(out, 0); /* number of glyphs */
-	SWFOutput_writeSInt16(out, 2); /* offset */
-
-	font->out = out;
+	font->out = NULL;
+	font->name = strdup(name);
 
 	return font;
 }
 
-
 SWFOutput
 SWFBrowserFont_getOutput(SWFBrowserFont font)
 {
+	if(font->out == NULL) // in case complete is called twice
+		finishBrowserFont(font);
+
 	return font->out;
 }
 
