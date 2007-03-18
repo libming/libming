@@ -194,7 +194,7 @@ int completeSWFButton(SWFBlock block)
 		SWFOutput_writeUInt8(out, record->flags);
 		SWFOutput_writeUInt16(out, CHARACTERID(record->character));
 		layer = record->layer;
-		if(layer == 0 && SWF_versionNum >= 5) layer = i+1;
+		if(layer == 0 && block->swfVersion >= 5) layer = i+1;
 		SWFOutput_writeUInt16(out, layer);
 		SWFOutput_writeMatrix(out, record->matrix);
 		SWFOutput_writeUInt8(out, 0); /* blank CXForm */
