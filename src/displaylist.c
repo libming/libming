@@ -642,23 +642,23 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
  		if(character && ((SWFBlock)character)->type == SWF_DEFINEVIDEOSTREAM) {
  			SWFBlock video = SWFVideoStream_getVideoFrame((SWFVideoStream)character);
  			
- 			if(!video)
- 				break;
- 		
- 			/* well it isn't really clear why we need the place-block here
- 			 * its not metioned in the flash-specs 
- 			 * but its not working without */
- 			if((item->flags & ITEM_NEW) == 0) 
+ 			if(video != NULL)
  			{
- 				frame = SWFVideoStream_getFrameNumber((SWFVideoFrame)video);
- 				placeVideo = newSWFPlaceObject2Block(item->depth);
- 				SWFPlaceObject2Block_setRatio(placeVideo, frame);
- 				SWFPlaceObject2Block_setMove(placeVideo);
- 				SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);
- 			}
+ 		
+ 				/* well it isn't really clear why we need the place-block here
+ 				 * its not metioned in the flash-specs 
+ 				 * but its not working without */
+ 				if((item->flags & ITEM_NEW) == 0) 
+ 				{
+ 					frame = SWFVideoStream_getFrameNumber((SWFVideoFrame)video);
+ 					placeVideo = newSWFPlaceObject2Block(item->depth);
+ 					SWFPlaceObject2Block_setRatio(placeVideo, frame);
+ 					SWFPlaceObject2Block_setMove(placeVideo);
+ 					SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);
+ 				}
  				
- 			 
- 			SWFBlockList_addBlock(blocklist, video);
+ 				SWFBlockList_addBlock(blocklist, video);
+			}
  		}
 		
 		item->flags = 0;
