@@ -86,6 +86,7 @@ struct SWF_ACTIONPUSHPARAM *regs[256];
 
 static char *getName(struct SWF_ACTIONPUSHPARAM *act);
 
+static int offseoloop;	// offset wherever a break can jump to (loops and switch)
 
 static void
 dumpRegs()
@@ -700,7 +701,7 @@ decompileGETURL (SWF_ACTION *act)
   OUT_BEGIN(SWF_ACTIONGETURL);
 
   INDENT
-  println("getUrl(\"%s\",%s);", sact->UrlString, sact->TargetString);
+  println("getUrl('%s',%s);", sact->UrlString, sact->TargetString);
 }
 int
 decompileGETURL2 (SWF_ACTION *act)
@@ -1621,6 +1622,7 @@ int
 decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 {
     int i=0,j=0;
+    int offSave;
     OUT_BEGIN2(SWF_ACTIONJUMP);
     struct SWF_ACTIONIF *sactif=NULL;
 
@@ -1638,7 +1640,6 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	if (actions[n+1].SWF_ACTIONJUMP.BranchOffset==0)
 	  return 1;
 
-    /* ak,2006 */
       for(i=0;(actions[(n+1)+i].SWF_ACTIONRECORD.Offset <
 	(actions[n+1].SWF_ACTIONRECORD.Offset+actions[n ].SWF_ACTIONJUMP.BranchOffset))
 	 && n+1+i<maxn; i++)
@@ -1680,8 +1681,14 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 	decompileActions(j-1, &actions[n+1+i], gIndent);
 	puts(getName(pop()));
 	println("){         /* original FOR loop rewritten to WHILE */");
+	offSave=offseoloop;
+	if (n+i+j+1<maxn)						// see part2 above
+	  offseoloop=actions[n+i+j+1].SWF_ACTIONRECORD.Offset;
+	else
+	  offseoloop=actions[n+i+j].SWF_ACTIONRECORD.Offset+5;
 	decompileActions(sactif->numActions-1, sactif->Actions,gIndent+1);
 	decompileActions(i, &actions[n+1], gIndent+1);
+	offseoloop=offSave;
 	INDENT
 	println("};");
 	return i+j; 
@@ -1697,9 +1704,12 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
    {
 	return 1; 	// jump to short to be a 'break': but an internal jump over a push
    }			// to do: add some control flow analysis
-   
    INDENT
-   println("break;        /*------*/" );
+   if (offseoloop==actions[n].SWF_ACTIONRECORD.Offset+sact->BranchOffset+5)
+    puts("break;" );
+   else
+    puts("return;" );
+   println("\t\t\t// offs_end_of_loop=%d  offs_jmp_dest=%d",offseoloop, actions[n].SWF_ACTIONRECORD.Offset+sact->BranchOffset+5);
   }
   else
   {
@@ -1807,7 +1817,7 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
   struct _stack *StackSave;
   struct SWF_ACTIONPUSHPARAM *swcopy,*sw=pop();
   struct SWF_ACTIONPUSHPARAM *compare=pop();
-
+  int offSave;
   for (i=0;i<n_firstactions;i++)			// seek last op in 1st if
   {
    if (actions[i+1].SWF_ACTIONRECORD.Offset==off1end)
@@ -1916,23 +1926,22 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
       //   SanityCheck(decompile_SWITCH,!strcmp(getName(swcopy),getName(sw)),"sw0 != sw");
      }
 
-
 #if USE_LIB
     origbuf=setTempString();						// switch to temp buffer
 #endif
     StackSave=Stack;
+    offSave=offseoloop;
+    offseoloop=maxoff;
     decompileActions( ccsize, &actions[start],gIndent+1);
-
+    offseoloop=offSave;
+    Stack=StackSave;
     if (actions[i].SWF_ACTIONRECORD.ActionCode!=SWFACTION_JUMP) 
       xsize=ccsize;
     else
       xsize+=ccsize;
-
-    Stack=StackSave;
 #if USE_LIB
     tmp=switchToOrigString(origbuf);
 #endif
-
 
     if (actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP)		// after "default:"
     {
@@ -1974,6 +1983,7 @@ decompileIF(int n, SWF_ACTION *actions,int maxn)
 {
     int j,i=0;
     OUT_BEGIN2(SWF_ACTIONIF);
+    int offSave;
 struct strbufinfo origbuf;
     /*
      * IF is used in various way to implement different types
@@ -2021,7 +2031,10 @@ struct strbufinfo origbuf;
 	isLogicalOp(sact->numActions-2, sact->Actions, maxn) ) {
 	    INDENT
 	    println("do {");
+	    offSave=offseoloop;
+	    offseoloop=actions[n].SWF_ACTIONRECORD.Offset+5;
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+            offseoloop=offSave;
 	    INDENT
 	    puts("while( ");
 	    puts(getName(pop()));
@@ -2035,7 +2048,10 @@ struct strbufinfo origbuf;
     {
 	INDENT
 	println("do {                  /* 2nd type */ ");
+	offSave=offseoloop;
+	offseoloop=actions[n  ].SWF_ACTIONRECORD.Offset+5;
 	decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	offseoloop=offSave;
 	INDENT
 	puts("} while( ");
 	puts(getName(pop()));
@@ -2084,14 +2100,20 @@ if(0)	    dumpRegs();
 	    puts(" in ");
 	    puts(getName(var));
 	    println(" ) {");
+	    offSave=offseoloop;
+	    offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
             decompileActions(sact->numActions-1-2, &sact->Actions[2],gIndent+1);
+            offseoloop=offSave;
          }
          else	/* while(){}  as usual */
 	 {
 	    puts("while( ");
 	    puts(getName(pop()));
 	    println(" ) {");
+	    offSave=offseoloop;
+	    offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
             decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+            offseoloop=offSave;
          }
 	}
 	INDENT
@@ -2241,24 +2263,27 @@ if(0)	    dumpRegs();
            {
 	      int limit=actions[n+1].SWF_ACTIONRECORD.Offset+
 	               sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset;
+	      // limit == dest of jmp == offset next op after 'if' + jumpdist at end of 'if'
  	      int lastopsize=actions[maxn-1].SWF_ACTIONRECORD.Length;
 	      if (actions[maxn-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
 		 lastopsize+=actions[maxn-1].SWF_ACTIONIF.BranchOffset  
 		 +3; /* +3 see parser.c: "Action + Length bytes not included in the length" */
- 	      if (! (has_lognot
+ 	      if (offseoloop 
+ 	       &&  ! (has_lognot
  	       && actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_EQUALS2 
  	       && actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH
- 	       && actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
+ 	       && actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
+ 		)
 	       && limit > actions[maxn-1].SWF_ACTIONRECORD.Offset+lastopsize
 	       )
 	      {
-	      /* the jump leads outside this limit, so it is a simple 'if'
-	         with a 'break' at the end, there is NO else clause.
-		 But as long switch(){} statements are written as sequence of 
-		 if-else-if-else we have to suppress this kind of 'break'.
+	       /* the jump leads outside this limit, so it is a simple 'if'
+	          with a 'break' or 'return' at the end, and there is NO else clause.
 	       */  
+		INDENT
+		println("// offs_endjump_dest=%d  offs_after_blk %d",limit,actions[maxn-1].SWF_ACTIONRECORD.Offset+lastopsize);
 		decompileActions(sact->numActions, sact->Actions,gIndent+1);
-		i=0;			/* found break but no else and thus return 0 */
+		i=0;			/* found break/return but no else and thus return 0 */
 	      }
 	      else
 	      {
@@ -2473,6 +2498,12 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     meth=pop();
     obj=pop();
     nparam=pop();
+    if (nparam->p.Integer>25)
+    {
+     INDENT
+     println("// Problem getting method arguments (%d ignored) below:",nparam->p.Integer);
+     nparam->p.Integer=0;
+    }
     push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
@@ -2496,6 +2527,12 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions,int maxn)
     
     meth=pop();
     nparam=pop();
+    if (nparam->p.Integer>25)
+    {
+     INDENT
+     println("// Problem getting function arguments (%d ignored) below:",nparam->p.Integer);
+     nparam->p.Integer=0;
+    }
     push(newVar_N("","",getName(meth),"(", nparam->p.Integer,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
