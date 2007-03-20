@@ -747,7 +747,7 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
       }
     for (i = 0; i < sblock->NumGlyphs; i++) {
 	outputswfSWF_RECT (hdr1,&(sblock->FontBoundsTable[i]));
-	SWFOutput_byteAlign(hdr1);
+        SWFOutput_byteAlign(hdr1);
       }
     SWFOutput_writeUInt16(hdr1,sblock->KerningCount);
     for (i = 0; i < sblock->KerningCount; i++) {
@@ -1232,6 +1232,10 @@ SWFOutput_writeSBits(out,m->frame.yMax,15);
 SWFOutput_byteAlign(out);
 SWFOutput_writeUInt16(out,m->rate);
 SWFOutput_writeUInt16(out,m->nFrames);
+
+/* Add the SWF_END tag */
+SWFOutput_writeUInt16(swfout,0);
+
 SWFOutput_writeToMethod(out,fileOutputMethod,stdout);
 SWFOutput_writeToMethod(swfout,fileOutputMethod,stdout);
 destroySWFOutput(swfout);
