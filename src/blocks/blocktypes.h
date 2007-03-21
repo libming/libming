@@ -135,6 +135,8 @@ static inline int SWFBlocktype_swfVersion(int type)
 		case SWF_DEFINETEXT:
 		case SWF_DOACTION:
 		case SWF_DEFINEFONTINFO:
+		case SWF_PREBUILTCLIP:
+		case SWF_PREBUILT:
 			return 1;
 		
 		case SWF_DEFINESOUND:
