@@ -75,8 +75,7 @@ static void unescape(char *buf)
   *w='\0';
 }
 
-extern int SWF_versionNum;
-void swf5ParseInit(const char *script, int debug)
+void swf5ParseInit(const char *script, int debug, int version)
 {
   checkByteOrder();
   yyrestart(NULL);
@@ -88,6 +87,7 @@ void swf5ParseInit(const char *script, int debug)
   sLineNumber = 0;
   column = 0;
   msgline = msgbufs[0];
+  swfVersion = version;
 }
 
 %}
@@ -118,7 +118,7 @@ EXPONENT [eE][-+]?{DIGIT}+
 %%
 
  // Only reset start condition if in INITIAL state
- if(YY_START == INITIAL && SWF_versionNum >= 6) {
+ if(YY_START == INITIAL && swfVersion >= 6) {
 	BEGIN(AS_V6);
  }
 

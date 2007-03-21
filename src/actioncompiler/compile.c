@@ -34,6 +34,8 @@
 /* Define this to have some debugging output when outputting DEFINEFUNCTION2 */
 #undef MING_DEBUG_FUNCTION2
 
+// XXX: set by swf[4|5]Init()
+int swfVersion = 0;
 
 static int nConstants = {0}, maxConstants = {0}, sizeConstants = {0};
 static char **constants = NULL;
@@ -330,7 +332,7 @@ int bufferWriteDataAndPush(Buffer a, Buffer b)
 	byte *data = b->buffer;
 	int length = b->pos - b->buffer;
 
-	if(a->pushloc && (b->buffer[0] == SWFACTION_PUSH) && SWF_versionNum > 4)
+	if(a->pushloc && (b->buffer[0] == SWFACTION_PUSH) && swfVersion > 4)
 	{
 		pushd = (b->buffer[1] & 0xff) | ((b->buffer[2] & 0xff) << 8);
 		bufferPatchPushLength(a, pushd);
@@ -424,7 +426,7 @@ int bufferWriteConstantString(Buffer out, char *string, int length)
 {
 	int n;
 
-	if(SWF_versionNum < 5)
+	if(swfVersion < 5)
 		return -1;
 
 	if(useConstants)
@@ -451,7 +453,7 @@ int bufferWriteConstantString(Buffer out, char *string, int length)
 
 int bufferWriteString(Buffer out, char *string, int length)
 {
-	if(SWF_versionNum < 5)
+	if(swfVersion < 5)
 	{
 		bufferWritePushOp(out);
 		bufferWriteS16(out, length+1);
@@ -482,7 +484,7 @@ int bufferWriteInt(Buffer out, int i)
 	int len = 0;
 	unsigned char *p = (unsigned char *)&i;
 
-	if(out->pushloc == NULL || SWF_versionNum < 5)
+	if(out->pushloc == NULL || swfVersion < 5)
 	{
 		len = 3;
 		bufferWritePushOp(out);
@@ -516,7 +518,7 @@ int bufferWriteDouble(Buffer out, double d)
 	int len = 0;
 	unsigned char *p = (unsigned char *)&d;
 
-	if(out->pushloc == NULL || SWF_versionNum < 5)
+	if(out->pushloc == NULL || swfVersion < 5)
 	{
 		len = 3;
 		bufferWritePushOp(out);
@@ -557,7 +559,7 @@ int bufferWriteNull(Buffer out)
 {
 	int len = 0;
 
-	if(out->pushloc == NULL || SWF_versionNum < 5)
+	if(out->pushloc == NULL || swfVersion < 5)
 	{
 		len = 3;
 		bufferWritePushOp(out);
@@ -575,7 +577,7 @@ int bufferWriteUndef(Buffer out)
 {
 	int len = 0;
 
-	if(out->pushloc == NULL || SWF_versionNum < 5)
+	if(out->pushloc == NULL || swfVersion < 5)
 	{
 		len = 3;
 		bufferWritePushOp(out);
@@ -593,7 +595,7 @@ int bufferWriteBoolean(Buffer out, int val)
 {
 	int len = 0;
 
-	if(out->pushloc == NULL || SWF_versionNum < 5)
+	if(out->pushloc == NULL || swfVersion < 5)
 	{
 		len = 3;
 		bufferWritePushOp(out);
@@ -612,7 +614,7 @@ int bufferWriteRegister(Buffer out, int num)
 {
 	int len = 0;
 
-	if(out->pushloc == NULL || SWF_versionNum < 5)
+	if(out->pushloc == NULL || swfVersion < 5)
 	{
 		len = 3;
 		bufferWritePushOp(out);

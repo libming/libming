@@ -12,6 +12,8 @@
 
 #include "ming.h"
 
+extern int swfVersion;
+
 typedef struct _buffer *Buffer;
 
 /* shut up bison.simple */
@@ -197,8 +199,8 @@ void bufferResolveJumps(Buffer out);
 void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 
 /* rather than setting globals... */
-void swf4ParseInit(const char *string, int debug);
-void swf5ParseInit(const char *string, int debug);
+void swf4ParseInit(const char *string, int debug, int version);
+void swf5ParseInit(const char *string, int debug, int version);
 
 int swf4parse(void *b);
 int swf5parse(void *b);

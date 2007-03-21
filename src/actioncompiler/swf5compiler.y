@@ -16,8 +16,6 @@
 
 Buffer bf, bc;
 
-extern int SWF_versionNum;
-
 %}
 
 %union
@@ -491,7 +489,7 @@ function_decl
 	: function_init identifier '(' formals_list ')' stmt
 	{
 		$$ = newBuffer();
-		if(SWF_versionNum > 6)
+		if(swfVersion > 6)
 		{
 			// TODO: let user control which flags to use ?
 			// Don't preload any variable in registers, or we'll need to track all uses of 
@@ -1092,7 +1090,7 @@ anon_function_decl
 	: function_init '(' formals_list ')' stmt
 	{
 		$$ = newBuffer();
-		if(SWF_versionNum > 6)
+		if(swfVersion > 6)
 		{
 			// TODO: let user control which flags to use ?
 			// Don't preload any variable in registers, or we'll need to track all uses of 

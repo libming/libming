@@ -22,7 +22,6 @@ void (*SWF_error)(const char *msg, ...);
 void (*SWF_warn)(const char *msg, ...);
 
 static int SWF_versionNumber = 5;
-int SWF_versionNum = {5};
 
 void print_error(const char *msg, ...)
 {
@@ -96,19 +95,17 @@ int main(int argc, char *argv[])
   bufferLen += size;
 
 // swf5compiler may understand different code
-  SWF_versionNum = SWF_versionNumber;
-
   if (SWF_versionNumber == 4) {
     printf("======================\n");
     printf("Using Flash 4 compiler\n");
     printf("======================\n");
-    swf4ParseInit(buffer, 1);
+    swf4ParseInit(buffer, 1, SWF_versionNumber);
     swf4parse((void *)&b);
   } else {
     printf("======================\n");
     printf("Using Flash 5 compiler\n");
     printf("======================\n");
-      swf5ParseInit(buffer, 1);
+      swf5ParseInit(buffer, 1, SWF_versionNumber);
       swf5parse((void *)&b);
   }
 

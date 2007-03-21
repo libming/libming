@@ -72,7 +72,7 @@ static void unescape(char *buf)
   *w='\0';
 }
 
-void swf4ParseInit(const char *script, int debug)
+void swf4ParseInit(const char *script, int debug, int version)
 {
   checkByteOrder();
   yyrestart(NULL);
@@ -84,6 +84,7 @@ void swf4ParseInit(const char *script, int debug)
   sLineNumber = 0;
   column = 0;
   msgline = msgbufs[0];
+  swfVersion = version;
 }
 
 %}
