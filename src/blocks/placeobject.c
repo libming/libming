@@ -120,8 +120,7 @@ static void writeActions(SWFPlaceObject2Block place)
 }
 
 void
-writeSWFPlaceObject2BlockToStream(SWFBlock block,
-																	SWFByteOutputMethod method, void *data)
+writeSWFPlaceObject2BlockToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFPlaceObject2Block place = (SWFPlaceObject2Block)block;
 	SWFOutput_writeToMethod(place->out, method, data);

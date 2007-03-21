@@ -31,7 +31,6 @@
 #include "action.h"
 #include "libming.h"
 
-
 struct buttonRecord
 {
 	byte flags;

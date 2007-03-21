@@ -526,7 +526,6 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 
 
 /***** SWFAction *****/
-
 SWFAction newSWFAction(const char *script);
 SWFAction newSWFAction_fromFile(const char *filename);
 SWFAction compileSWFActionCode(const char *script);
