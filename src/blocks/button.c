@@ -28,6 +28,7 @@
 #include "method.h"
 #include "soundinstance.h"
 #include "browserfont.h"
+#include "action.h"
 #include "libming.h"
 
 
@@ -153,23 +154,8 @@ void SWFButton_setMenu(SWFButton button, int flag)
 void writeSWFButtonToMethod(SWFBlock block, 
 					SWFByteOutputMethod method, void *data)
 {
-	int i;
 	SWFButton button = (SWFButton)block;
-
 	SWFOutput_writeToMethod(button->out, method, data);
-
-	for(i=0; i<button->nActions; ++i)
-	{
-		SWFOutput out = SWFOutputBlock_getOutput(button->actions[i].action);
-
-		if(i == button->nActions-1)
-			methodWriteUInt16(0, method, data);
-		else
-			methodWriteUInt16(SWFOutput_getLength(out)+4, method, data);
-
-		methodWriteUInt16(button->actions[i].flags, method, data);
-		SWFOutput_writeToMethod(out, method, data);
-	}
 }
 
 
@@ -210,14 +196,21 @@ int completeSWFButton(SWFBlock block)
 		*(offset+1) = (length>>8)&0xff;
 	}
 
-	button->out = out;
-
-	length = 0;
-
 	for(i=0; i<button->nActions; ++i)
-		length += SWFOutputBlock_getLength(button->actions[i].action) + 4;
+	{
+		length = SWFAction_compile(button->actions[i].action, block->swfVersion);
 
-	return SWFOutput_getLength(out) + length;
+		if(i == button->nActions-1)
+			SWFOutput_writeUInt16(out, 0);
+		else
+			SWFOutput_writeUInt16(out, length + 4);
+
+		SWFOutput_writeUInt8(out, button->actions[i].flags);
+		SWFOutput_writeAction(out, button->actions[i].action);
+	}
+	
+	button->out = out;
+	return SWFOutput_getLength(out);
 }
 
 

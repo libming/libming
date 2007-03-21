@@ -67,7 +67,7 @@ typedef struct SWFSoundStream_s *SWFSoundStream;
 typedef struct SWFSound_s *SWFSound;
 typedef struct SWFSoundInstance_s *SWFSoundInstance;
 typedef struct SWFCXform_s *SWFCXform;
-typedef struct SWFOutputBlock_s *SWFAction;
+typedef struct SWFAction_s *SWFAction;
 typedef struct SWFButton_s *SWFButton;
 typedef struct SWFSprite_s *SWFSprite;
 typedef struct SWFPosition_s *SWFPosition;
@@ -527,6 +527,8 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 
 /***** SWFAction *****/
 
+SWFAction newSWFAction(const char *script);
+SWFAction newSWFAction_fromFile(const char *filename);
 SWFAction compileSWFActionCode(const char *script);
 void destroySWFAction(SWFAction action);
 

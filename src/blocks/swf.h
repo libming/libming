@@ -16,7 +16,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
+#if 0
 #ifndef SWF_H_INCLUDED
 #define SWF_H_INCLUDED
 
@@ -433,8 +433,6 @@ void destroySWFCXform(SWFCXform cXform);
 
 typedef struct SWFAction_s *SWFAction;
 
-SWFAction newSWFAction();
-SWFAction newSWFAction_fromOutput(SWFOutput out);
 SWFAction compileSWFActionCode(const char *script);
 void destroySWFAction(SWFAction action);
 
@@ -560,3 +558,4 @@ void SWFSprite_setBlocks(SWFSprite sprite, SWFBlock *blocks, int nBlocks);
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
 
 #endif /* SWF_H_INCLUDED */
+#endif

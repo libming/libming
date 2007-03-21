@@ -32,10 +32,7 @@
 #include "ming.h"
 #include "outputblock.h"
 
-SWFAction newSWFAction();
-
-SWFAction newSWFAction_fromOutput(SWFOutput out);
-
 void destroySWFAction(SWFAction action);
-
+int SWFAction_compile(SWFAction action, int swfVersion);
+void SWFOutput_writeAction(SWFOutput out, SWFAction action);
 #endif /* SWF_ACTION_H_INCLUDED */

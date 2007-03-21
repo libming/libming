@@ -32,6 +32,7 @@
 #include "matrix.h"
 #include "cxform.h"
 #include "filter.h"
+#include "action.h"
 
 #include "libming.h"
 
@@ -76,47 +77,54 @@ struct SWFPlaceObject2Block_s
 	int blendMode;
 }; 
 
+
+static void writeActions(SWFPlaceObject2Block place)
+{
+	int i;
+	SWFBlock block = BLOCK(place);
+	
+	if ( place->nActions > 0 )
+	{
+		SWFOutput_writeUInt16(place->out, 0); 
+		
+		if(block->swfVersion >= 6)
+			SWFOutput_writeUInt32(place->out, place->actionORFlags);
+		else
+			SWFOutput_writeUInt16(place->out, place->actionORFlags);
+
+		for ( i=0; i<place->nActions; ++i )
+		{
+			int length = SWFAction_compile(place->actions[i], block->swfVersion);
+			if(block->swfVersion >= 6)
+				SWFOutput_writeUInt32(place->out, place->actionFlags[i]);
+			else
+				SWFOutput_writeUInt16(place->out, place->actionFlags[i]);
+			
+			// SWF6: extra char if(place->actionFlags[i] & 0x20000)
+			if((block->swfVersion >= 6) && (place->actionFlags[i] & 0x20000)) {
+				SWFOutput_writeUInt32(place->out, length + 1);
+				SWFOutput_writeUInt8(place->out, 0);
+			} 
+			else 
+				SWFOutput_writeUInt32(place->out, length);
+			
+			SWFOutput_writeAction(place->out, place->actions[i]);
+		}
+		
+		/* trailing 0 for end of actions */
+		if(block->swfVersion >= 6)
+			SWFOutput_writeUInt32(place->out, 0); 
+		else
+			SWFOutput_writeUInt16(place->out, 0); 
+	}
+}
+
 void
 writeSWFPlaceObject2BlockToStream(SWFBlock block,
 																	SWFByteOutputMethod method, void *data)
 {
-	int i;
-
 	SWFPlaceObject2Block place = (SWFPlaceObject2Block)block;
 	SWFOutput_writeToMethod(place->out, method, data);
-
-	if ( place->nActions > 0 )
-	{
-		methodWriteUInt16(0, method, data); /* mystery number */
-// SWF6: UInt32
-		if(block->swfVersion >= 6)
-			methodWriteUInt32(place->actionORFlags, method, data);
-		else
-			methodWriteUInt16(place->actionORFlags, method, data);
-
-		for ( i=0; i<place->nActions; ++i )
-		{
-			SWFOutputBlock local_block = (SWFOutputBlock)place->actions[i];
-// SWF6: UInt32
-			if(block->swfVersion >= 6)
-				methodWriteUInt32(place->actionFlags[i], method, data);
-			else
-				methodWriteUInt16(place->actionFlags[i], method, data);
-// SWF6: extra char if(place->actionFlags[i] & 0x20000)
-			if((block->swfVersion >= 6) && (place->actionFlags[i] & 0x20000)) {
-				methodWriteUInt32(SWFOutputBlock_getLength(local_block) + 1, method, data);
-				method(0, data);
-			} else {
-				methodWriteUInt32(SWFOutputBlock_getLength(local_block), method, data);
-			}
-			SWFOutput_writeToMethod(SWFOutputBlock_getOutput(local_block), method, data);
-		}
-// SWF6: UInt32
-		if(block->swfVersion >= 6)
-			methodWriteUInt32(0, method, data); /* trailing 0 for end of actions */
-		else
-			methodWriteUInt16(0, method, data); /* trailing 0 for end of actions */
-	}
 }
 
 
@@ -181,26 +189,10 @@ completeSWFPlaceObject2Block(SWFBlock block)
 	}
 
 
-	if ( place->nActions != 0 )
-	{
-		int i;
-// SWF6: 6
-		actionLen += (block->swfVersion >= 6 ? 6 : 4);
-		for ( i=0; i<place->nActions; ++i )
-		{
-			SWFOutputBlock local_block = (SWFOutputBlock)place->actions[i];
-// SWF6: 8 (9 if char)
-			actionLen += (block->swfVersion >= 6 ? 8 : 6) + SWFOutputBlock_getLength(local_block);
-			if((block->swfVersion >= 6) && (place->actionFlags[i] & 0x20000))
-				actionLen++;
-		}
-// SWF6: 4
-		actionLen += (block->swfVersion >= 6 ? 4 : 2);
-	}
-
 	place->out = out;
+	writeActions(place);
 
-	return SWFOutput_getLength(out) + actionLen;
+	return SWFOutput_getLength(out);
 }
 
 
