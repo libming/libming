@@ -577,7 +577,7 @@ stackswap()
 }
 
 
-struct SWF_ACTIONPUSHPARAM *
+static struct SWF_ACTIONPUSHPARAM *
 newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final)
 {
 	struct SWF_ACTIONPUSHPARAM *v;
@@ -595,7 +595,7 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 	for(i=0;i<pop_counter;i++) 
 	{
 	 char *pops=getString(pop());
-	 while ( strlen(v->p.String)+ 2 + strlen(pops) >= psize + slen)
+	 while ( strlen(v->p.String)+ 2 + strlen(pops) +slen >= psize)
 	 {
 	  psize += PARAM_STRSIZE;
 	  v->p.String = realloc( v->p.String, psize);
@@ -611,7 +611,7 @@ newVar_N(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final
 // similar to newVar_N(), 
 // but pops 2 items from stack per counter,
 // and second of them we are interested in getName() instead of getString()
-struct SWF_ACTIONPUSHPARAM *
+static struct SWF_ACTIONPUSHPARAM *
 newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *final)
 {
 	struct SWF_ACTIONPUSHPARAM *v;
@@ -631,7 +631,7 @@ newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *fina
 	 char *pops1=getString(pop());
 	 char *pops2=getName  (pop());
 
-	 while ( strlen(v->p.String)+ 3 + strlen(pops1)+ strlen(pops2) >= psize + slen)
+	 while ( strlen(v->p.String)+ 3 + strlen(pops1)+ strlen(pops2) +slen >= psize)
 	 {
 	  psize += PARAM_STRSIZE;
 	  v->p.String = realloc( v->p.String, psize);
