@@ -10,6 +10,7 @@ AS_TESTS = \
 	Function.as	\
 	ASM0.as		\
 	ASM1.as		\
+	ASM_all.as	\
 	ASM_extend.as	\
 	ASM_push.as	\
 	delete.as	\
@@ -20,6 +21,7 @@ EXTRA_DIST = 		\
 	Function.ref	\
 	ASM1.ref	\
 	ASM0.ref	\
+	ASM_all.ref	\
 	ASM_extend.ref	\
 	ASM_push.ref	\
 	delete.ref	\
