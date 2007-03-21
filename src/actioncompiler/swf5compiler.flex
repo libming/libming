@@ -251,6 +251,8 @@ post			{ count();	return POST; }
 get			{ count();	return GET; }
 end			{ count();	return END;		}
 extends			{ count();	return EXTENDS;		}
+tonumber		{ count();	return TONUMBER;	}
+tostring		{ count();	return TOSTRING;	}
 }
 
 <AS_V6>{
