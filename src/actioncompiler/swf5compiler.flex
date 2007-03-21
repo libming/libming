@@ -232,6 +232,8 @@ not			{ count();	return NOT; }
 stringeq		{ count();	return STRINGEQ; }
 stringlength		{ count();	return STRINGLENGTH; }
 substring		{ count();	return SUBSTRING; }
+getproperty		{ count();	return GETPROPERTY; }
+setproperty		{ count();	return SETPROPERTY; }
 getvariable		{ count();	return GETVARIABLE; }
 setvariable		{ count();	return SETVARIABLE; }
 settargetexpr		{ count();	return SETTARGETEXPRESSION; }
