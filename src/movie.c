@@ -429,6 +429,7 @@ SWFMovie_writeExports(SWFMovie movie)
 	for ( n=0; n<movie->nExports; ++n )
 	{
 		SWFBlock b = movie->exports[n].block;
+		b->swfVersion = movie->version;
 
 		if ( SWFBlock_isCharacter(b) && !SWFBlock_isDefined(b) )
 		{
