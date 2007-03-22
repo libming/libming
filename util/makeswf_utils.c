@@ -126,7 +126,7 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 	old_error_func = Ming_setErrorFunction(compileError);
 
 	printf("Compiling `%s'... ", filename);
-	ac = compileSWFActionCode(code);
+	ac = newSWFAction(code);
 	if ( lastcompilefailed )
 	{
 		printf("failed:\n"); 
@@ -247,6 +247,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.3  2007/03/22 10:59:20  strk
+ * Updated to use newSWFAction() instead of compileSWFActionCode()
+ *
  * Revision 1.2  2006/07/10 16:11:26  strk
  * Changed makeswf_compile_source signature to accept path to preprocessor output file. Changed preprocessed file paths to (<output>.frame#.pp) to reduce probability of filesystem permission problems.
  *

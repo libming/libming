@@ -453,7 +453,7 @@ add_imports()
 	SWFMovieClip_nextFrame(mc);
 	di = SWFMovie_add(mo, (SWFBlock)mc);
 	SWFDisplayItem_setName(di, "__shared_assets");
-	ac = compileSWFActionCode("__shared_assets._visible=false;");
+	ac = newSWFAction("__shared_assets._visible=false;");
 	SWFMovie_add(mo, (SWFBlock)ac);
 
 	return 1;
@@ -554,6 +554,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.32  2007/03/22 10:59:17  strk
+ * Updated to use newSWFAction() instead of compileSWFActionCode()
+ *
  * Revision 1.31  2006/12/12 23:36:10  strk
  * Implement a separate function for detecting the type of frame content.
  * Take files anding in .jpeg as bitmaps.
