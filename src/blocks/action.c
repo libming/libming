@@ -58,7 +58,6 @@ static char *readActionFile(FILE *file)
 	SWFInput input = newSWFInput_file(file);
 	len = SWFInput_length(input);
 	script = (char *)malloc(len + 1);
-	printf("len %i\n", len);
 	if(SWFInput_read(input, (unsigned char *)script, len) != len)
 	{
 		SWF_warn("readActionFile failed\n");
@@ -106,7 +105,7 @@ int SWFAction_compile(SWFAction action, int swfVersion)
 			break;
 		default: break;
 	}
-	
+
 	if(script != NULL && swfVersion == 4)
         {
                 swf4ParseInit(script, 0, swfVersion);

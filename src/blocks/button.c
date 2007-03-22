@@ -204,7 +204,7 @@ int completeSWFButton(SWFBlock block)
 		else
 			SWFOutput_writeUInt16(out, length + 4);
 
-		SWFOutput_writeUInt8(out, button->actions[i].flags);
+		SWFOutput_writeUInt16(out, button->actions[i].flags);
 		SWFOutput_writeAction(out, button->actions[i].action);
 	}
 	
