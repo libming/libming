@@ -133,8 +133,6 @@ completeSWFPlaceObject2Block(SWFBlock block)
 	SWFPlaceObject2Block place = (SWFPlaceObject2Block)block;
 	SWFOutput out = newSizedSWFOutput(42);
 
-	int actionLen = 0;
-
 	int flags =
 		((place->name != NULL)			? SWF_PLACE_HAS_NAME : 0) |
 		((place->ratio != -1)				? SWF_PLACE_HAS_RATIO : 0) |
