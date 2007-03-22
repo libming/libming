@@ -1,3 +1,234 @@
+2007-03-21 23:27  krechert
+
+	* src/: ming.h.in, blocks/action.c, blocks/button.c,
+	  blocks/placeobject.c: use newSWFAction(char *script) or
+	  SWFAction_fromFile(char *path)
+
+	  buttons and placeObject:  use SWFAction_compile() and
+	  SWFOutput_writeAction()  write outputbuffer completly at
+	  tag-completion time
+
+	  whitespace diff -> forgot log-entry last commit :(
+
+2007-03-21 23:14  krechert
+
+	* src/: ming.h.in, blocks/action.c, blocks/action.h,
+	  blocks/button.c, blocks/placeobject.c, blocks/swf.h: [no log
+	  message]
+
+2007-03-21 23:09  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, compileaction.c,
+	  main.c, swf4compiler.flex, swf5compiler.flex, swf5compiler.y:
+	  removed SWF_versionNum global, but introduced a new global
+	  swfVersion :( swfVersion is set by swf4|5Init() and is only used
+	  inside the compiler dddddddddddddddddddddddd also removed
+	  compileAction() code
+
+2007-03-21 20:03  strk
+
+	* test/actionscript/: ASM_all.as, ASM_all.ref, Makefile.am: Add a
+	  non-sense huge asm block with all supported opcodes (to catch
+	  eventual regressions)
+
+2007-03-21 20:03  strk
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: Add
+	  'tonumber' and 'tostring' ASM opcodes
+
+2007-03-21 19:26  strk
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: Add
+	  support for 'getproperty' and 'setproperty'
+
+2007-03-21 18:44  akleine
+
+	* util/decompile.c: bugfix in newVar_N() and newVar_N2() preventing
+	  crash
+
+2007-03-21 15:08  krechert
+
+	* src/blocks/blocktypes.h: allow SWF_PREBUILD_* for any swfVersion
+
+2007-03-21 13:15  krechert
+
+	* src/movie.c: SWF_versionNum cleanup. Set block version also for
+	  exports
+
+2007-03-20 02:08  anderson
+
+	* util/outputswf.c: Need to output a SWF_END at the end of the font
+
+2007-03-19 19:43  akleine
+
+	* util/decompile.c: 1. enhanced interpretation of forward direction
+	  jumps    used for else/break/return statements regarding
+	  if/for/while/do/switch  code constructions.  2. added some safety
+	  aganst bad formed 'nparams' in function calls 3. added a minor
+	  bugfix in decompileGETURL()
+
+2007-03-19 10:31  krechert
+
+	* src/displaylist.c: fixed bug in displaylist video handling patch
+	  submitted by Philip Lindsay
+
+2007-03-18 22:53  krechert
+
+	* src/blocks/blocktypes.h: get version information for a given
+	  block type
+
+2007-03-18 22:12  krechert
+
+	* src/blocks/imports.c: removed SWF_versionNum dependency
+
+2007-03-18 22:07  krechert
+
+	* src/blocks/placeobject.c: removed SWF_numVersion dependency
+
+2007-03-18 22:02  krechert
+
+	* src/blocks/button.c: removed SWF_versionNum dependency
+
+2007-03-18 22:00  krechert
+
+	* src/blocks/: browserfont.c, browserfont.h: removed SWF_versionNum
+	  dependancy
+
+2007-03-18 21:49  krechert
+
+	* src/: blocklist.c, blocklist.h, movie.c, blocks/block.c,
+	  blocks/block.h, blocks/sprite.c: First step removing global
+	  SWF_numVersion variable by adding a version field to the SWFBlock
+	  structure. Version information is set at block completion time.
+	  This is earliest point version information is really necessary.
+
+2007-03-18 19:54  krechert
+
+	* src/blocks/shape.c: SWF_DEFINSHAPE4 structure has a second RECT
+	  describing edge bounds.  The edge bounds rectangle outlines the
+	  shape without using adding line width.
+
+2007-03-18 19:20  krechert
+
+	* src/: ming.h.in, blocks/linestyle.c, blocks/linestyle.h,
+	  blocks/shape.c: add LINSTYLE2 and SWF_DEFINESHAPE4
+
+2007-03-18 19:12  krechert
+
+	* src/blocks/: fillstyle.c, fillstyle.h: write also a single
+	  fillstyle
+
+2007-03-18 18:52  krechert
+
+	* src/blocks/rect.c: byteAlign buffer after writing a SWF_RECT if a
+	  block contains a sequence of two RECT structures, the second RECT
+	  must be written byteAligned.
+
+2007-03-16 17:48  krechert
+
+	* src/: movieclip.c, blocks/button.c: added documentation
+
+2007-03-16 17:31  krechert
+
+	* src/blocks/tabindex.c: added missing include
+
+2007-03-15 21:12  krechert
+
+	* php_ext/ming.c, perl_ext/Movie.xs: API update:
+	  SWFMovie::setTabIndex
+
+2007-03-15 21:07  krechert
+
+	* mingpp.h: [no log message]
+
+2007-03-15 21:06  krechert
+
+	* src/: ming.h.in, movie.c, blocks/Makefile.am, blocks/tabindex.c,
+	  blocks/tabindex.h: support for missing SWF7 tag SetTabIndex
+
+2007-03-15 20:49  strk
+
+	* src/blocks/placeobject.c: Fix for KeyPress clip event -
+	  contributed by Benjamin Otte <otte@gnome.org>, see bug #12.
+
+2007-03-15 20:28  krechert
+
+	* src/blocks/: scalinggrid.c, scalinggrid.h: clean up
+
+2007-03-15 14:14  anderson
+
+	* test/Movie/new/.cvsignore: ignore new test
+
+2007-03-15 14:10  anderson
+
+	* test/Movie/: Rate/test01-cxx.C, Rate/test01.php, Rate/test01.pl,
+	  Rate/test01.py, add/test01-cxx.C, add/test01.php, add/test01.pl,
+	  add/test01.py, add/test02-cxx.C, add/test02.php, add/test02.pl,
+	  add/test02.py: a simple regen of the scripts
+
+2007-03-15 14:07  anderson
+
+	* test/Movie/: Dimension/test01-cxx.C, Dimension/test01.php,
+	  Dimension/test01.pl, Dimension/test01.py, new/test01-cxx.C,
+	  new/test01.php, new/test01.pl, new/test01.py, new/test02-cxx.C,
+	  new/test02.php, new/test02.pl, new/test02.py, new/test03-cxx.C,
+	  new/test03.php, new/test03.pl, new/test03.py, new/test04-cxx.C,
+	  new/test04.php, new/test04.pl, new/test04.py, new/test05-cxx.C,
+	  new/test05.php, new/test05.pl, new/test05.py,
+	  FrameLabel/test01-cxx.C, FrameLabel/test01.php,
+	  FrameLabel/test01.pl, FrameLabel/test01.py,
+	  FrameLabel/test02-cxx.C, FrameLabel/test02.php,
+	  FrameLabel/test02.pl, FrameLabel/test02.py,
+	  NumFrames/test01-cxx.C, NumFrames/test01.php,
+	  NumFrames/test01.pl, NumFrames/test01.py, nextFrame/test01-cxx.C,
+	  nextFrame/test01.php, nextFrame/test01.pl, nextFrame/test01.py,
+	  nextFrame/test01.tcl, nextFrame/test02-cxx.C,
+	  nextFrame/test02.php, nextFrame/test02.pl, nextFrame/test02.py: a
+	  simple regen of the scripts
+
+2007-03-15 14:01  anderson
+
+	* test/Movie/Background/: test01-cxx.C, test01.php, test01.pl,
+	  test01.py, test02-cxx.C, test02.php, test02.pl, test02.py,
+	  test03-cxx.C, test03.php, test03.pl, test03.py: a simple regen of
+	  the scripts
+
+2007-03-15 14:01  anderson
+
+	* util/: Makefile.am, outputscript.c: Preliminary support for
+	  outputting tcl. Still much more work needed before it's useful,
+	  but the framework is there now.
+
+2007-03-15 11:51  strk
+
+	* test/actionscript/ASM_push.as: remove TODO item for undefined (we
+	  do test it now)
+
+2007-03-15 11:50  strk
+
+	* test/actionscript/ASM_push.ref: fix after typo in undefined push
+
+2007-03-15 11:49  strk
+
+	* util/action.c: fix typo in 'undefined' output
+
+2007-03-15 11:33  strk
+
+	* NEWS, src/actioncompiler/compile.c, src/actioncompiler/compile.h,
+	  src/actioncompiler/swf5compiler.flex,
+	  src/actioncompiler/swf5compiler.y, test/actionscript/ASM_push.as,
+	  test/actionscript/ASM_push.ref: Handle 'undefined' as an
+	  undefined value (using push type undefined)
+
+2007-03-15 10:42  strk
+
+	* util/action.c: Fox typy (undefiend is undefined)
+
+2007-03-15 08:54  strk
+
+	* src/blocks/sprite.c: (newSWFSprite): properly initialize the grid
+	  member
+
 2007-03-15 06:01  anderson
 
 	* util/outputscript.c: Remove redundant 'class SWFFont'
