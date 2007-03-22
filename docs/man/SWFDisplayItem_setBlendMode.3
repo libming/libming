@@ -1,0 +1,44 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFDisplayItem_setBlendMode" 3 "14 March 2007" "c2man displaylist.c"
+.SH "NAME"
+SWFDisplayItem_setBlendMode \- set blend mdoe
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFDisplayItem_setBlendMode
+.br
+(
+.br
+	SWFDisplayItem item,
+.br
+	int mode
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFDisplayItem item"
+Not Documented.
+.TP
+.B "int mode"
+Blend mode.
+.SH "DESCRIPTION"
+Sets an alternative blend mode instead of default alpha blend.
+Possible modes are:
+SWFBLEND_MODE_NORMAL
+SWFBLEND_MODE_LAYER
+SWFBLEND_MODE_MULT
+SWFBLEND_MODE_SCREEN
+SWFBLEND_MODE_DARKEN
+SWFBLEND_MODE_ADD
+SWFBLEND_MODE_SUB
+SWFBLEND_MODE_DIFF
+SWFBLEND_MODE_DIFF
+SWFBLEND_MODE_INV
+SWFBLDEN_MODE_ALPHA
+SWFBLEND_MDOE_ERASE
+SWFBLEND_MDOE_OVERLAY
+SWFBLEND_MODE_HARDLIGHT.

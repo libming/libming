@@ -1,0 +1,35 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFVideoStream_setDimension" 3 "14 March 2007" "c2man videostream.c"
+.SH "NAME"
+SWFVideoStream_setDimension \- sets video dimension
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFVideoStream_setDimension
+.br
+(
+.br
+	SWFVideoStream stream,
+.br
+	int width,
+.br
+	int height
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFVideoStream stream"
+Stream object.
+.TP
+.B "int width"
+Width in px.
+.TP
+.B "int height"
+Height in px.
+.SH "DESCRIPTION"
+This function set width and height for streamed videos
+Works only _streamed_ videos (progressive download or rtmp).

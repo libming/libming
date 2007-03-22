@@ -1,0 +1,32 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFDisplayItem_addFilter" 3 "14 March 2007" "c2man displaylist.c"
+.SH "NAME"
+SWFDisplayItem_addFilter \- adds a surface filter
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFDisplayItem_addFilter
+.br
+(
+.br
+	SWFDisplayItem item,
+.br
+	SWFFilter filter
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFDisplayItem item"
+Not Documented.
+.TP
+.B "SWFFilter filter"
+Filter.
+.SH "DESCRIPTION"
+Adds a bitmap filter to the display object.
+Also sets cache-as-bitmap flag.
+See SWFFilter for possible filter objects. Filter can
+only be applied to buttons, sprite/movieclips and text.

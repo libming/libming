@@ -1,0 +1,20 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFVideoStream_fromInput" 3 "14 March 2007" "c2man videostream.c"
+.SH "NAME"
+newSWFVideoStream_fromInput \- create a new SWFVideoSteam object
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFInput input"
+Not Documented.
+.SH "DESCRIPTION"
+This function creates a new videostream object from a FLV-file.
+Takes a SWFInput object as argument.
+Be aware: You need to keep the SWFInput valid until the movie is generated via save() or output()!.

@@ -1,0 +1,24 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newSWFVideoStream_fromFile - create a new SWFVideoSteam object</title>
+</header>
+<body>
+<h1>NAME</h1>
+newSWFVideoStream_fromFile - create a new SWFVideoSteam object
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+FILE *f<dd>
+FILE pointer to a FLV-file.
+</dl>
+<h1>DESCRIPTION</h1>
+This function creates a new videostream object from a FLV-file.
+Takes a FILE * as argument. 
+Be aware: You need to keep the FILE open until the movie is generated via save() or output()!.
+
+</body>

@@ -1,0 +1,20 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFVideoStream_fromFile" 3 "14 March 2007" "c2man videostream.c"
+.SH "NAME"
+newSWFVideoStream_fromFile \- create a new SWFVideoSteam object
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "FILE *f"
+FILE pointer to a FLV-file.
+.SH "DESCRIPTION"
+This function creates a new videostream object from a FLV-file.
+Takes a FILE * as argument. 
+Be aware: You need to keep the FILE open until the movie is generated via save() or output()!.

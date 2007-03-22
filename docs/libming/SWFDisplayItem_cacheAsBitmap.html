@@ -1,0 +1,31 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFDisplayItem_cacheAsBitmap - set cashing flag</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFDisplayItem_cacheAsBitmap - set cashing flag
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFDisplayItem_cacheAsBitmap
+(
+	SWFDisplayItem item,
+	int flag
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFDisplayItem item<dd>
+Not Documented.
+<dt>
+int flag<dd>
+Flag 0 or 1.
+</dl>
+<h1>DESCRIPTION</h1>
+If this flag ist set, the character can be cached as a bitmap. This might
+improve rednering speed, if the object dos no change often.
+This feature is for SWF version &gt;= 8 only.
+
+</body>

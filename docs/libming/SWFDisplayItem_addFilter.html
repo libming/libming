@@ -1,0 +1,32 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFDisplayItem_addFilter - adds a surface filter</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFDisplayItem_addFilter - adds a surface filter
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFDisplayItem_addFilter
+(
+	SWFDisplayItem item,
+	SWFFilter filter
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFDisplayItem item<dd>
+Not Documented.
+<dt>
+SWFFilter filter<dd>
+Filter.
+</dl>
+<h1>DESCRIPTION</h1>
+Adds a bitmap filter to the display object.
+Also sets cache-as-bitmap flag.
+See SWFFilter for possible filter objects. Filter can
+only be applied to buttons, sprite/movieclips and text.
+
+</body>
