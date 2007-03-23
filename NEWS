@@ -10,6 +10,19 @@
 	* Generate DefineFunction2 when target version > 6.
 	* Use GOTOFRAME, GOTOFRAME2 and GOTOLABEL when using gotoAndPlay().
 	  or gotoAndStop() w/out an object.
+	* Video updates: added Flash8 codecs, generic flv parser
+	* Soundstream: accept flv audio streams (mp3 only for now)
+	* Flash 8: PlaceObject3
+	* Flash 8: Filter and Blendmode
+	* Write proper Flash 8 files
+	* Added movie control tags: FileAttributes, Metadata, 
+	  ScriptLimits, ImportAssets2, SetTabIndex
+	* Flash 8: ScalingGrid
+	* Parser / listswf updates
+	* PHP / Perl bindings update
+	* Flash 8: DefineShape4 / Linestyle2
+	* SWFAction cleanup and API cleanup
+	* SWF_warnOnce()
 
 0.4.0.beta3 - 2006-12-10
 
