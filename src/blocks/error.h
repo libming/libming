@@ -23,6 +23,19 @@ void error_default(const char *msg, ...);
 SWFMsgFunc setSWFWarnFunction(SWFMsgFunc warn);
 SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
 
+#define SWF_warnOnce(msg, va...)	\
+{					\
+	static int __warned = 0;	\
+					\
+	if(!__warned)			\
+	{				\
+		SWF_warn((msg), ##va);	\
+		__warned = 1;		\
+	}				\
+}					\
+
+
+
 #define SWF_assert(__condition) 						\
 	if ( !(__condition) )							\
 		SWF_error("failed assertion '%s' in %s:%i\n", 			\
