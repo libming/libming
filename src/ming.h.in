@@ -28,6 +28,12 @@
 #ifndef SWF_MING_H_INCLUDED
 #define SWF_MING_H_INCLUDED
 
+#ifdef __GNUC__
+	#define __deprecated __attribute__((deprecated))
+#else
+	#define __deprecated
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -528,7 +534,7 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 /***** SWFAction *****/
 SWFAction newSWFAction(const char *script);
 SWFAction newSWFAction_fromFile(const char *filename);
-SWFAction compileSWFActionCode(const char *script);
+SWFAction compileSWFActionCode(const char *script) __deprecated;
 void destroySWFAction(SWFAction action);
 
 
