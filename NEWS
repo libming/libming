@@ -8,7 +8,7 @@
 	* Add support for 'extends' and proper 'push' asm opcodes in
 	  ActionScript compiler.
 	* Generate DefineFunction2 when target version > 6.
-	* Use GOTOFRAME, GOTOFRAME2 and GOTOLABEL when using gotoAndPlay().
+	* Use GOTOFRAME, GOTOFRAME2 and GOTOLABEL when using gotoAndPlay()
 	  or gotoAndStop() w/out an object.
 	* Video updates: added Flash8 codecs, generic flv parser
 	* Soundstream: accept flv audio streams (mp3 only for now)
