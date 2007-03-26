@@ -394,7 +394,7 @@ static int setStreamProperties(SWFVideoStream stream)
 }
 
 
-static int onInit(SWFDisplayItem item, SWFBlockList blocklist)
+static int onPlace(SWFDisplayItem item, SWFBlockList blocklist)
 {
 	SWFVideoStream stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);                
 	SWFBlock video = SWFVideoStream_getVideoFrame(stream);
@@ -457,7 +457,7 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	SWFCharacterInit((SWFCharacter)stream);
 	CHARACTERID(stream) = ++SWF_gNumCharacters;
  	((SWFCharacter)stream)->onFrame = onFrame;       
- 	((SWFCharacter)stream)->onInit = onInit;       
+ 	((SWFCharacter)stream)->onPlace = onPlace;       
 	block->type = SWF_DEFINEVIDEOSTREAM;
 	block->writeBlock = writeSWFVideoStreamToMethod;
 	block->complete = completeSWFVideoStream;

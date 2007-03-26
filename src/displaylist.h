@@ -39,10 +39,15 @@ typedef struct SWFDisplayList_s *SWFDisplayList;
 struct SWFDisplayItem_s
 {
 	SWFDisplayItem next;
-
+	SWFDisplayItem prev;
 	int flags;
 	int depth;
 	SWFPlaceObject2Block block;
+	
+	/* we need to know if an item is placed
+ 	 * if it is not placed do not write a remove tag
+ 	 */
+	int isPlaced; 
 
 	SWFCharacter character;
 	SWFPosition position;
@@ -72,6 +77,7 @@ float SWFDisplayItem_get_rot(SWFDisplayItem item);
 
 SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
 
+void SWFDisplayItem_removeFromList(SWFDisplayItem, SWFBlockList); 
 
 /* display list */
 

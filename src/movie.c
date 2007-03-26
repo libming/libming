@@ -501,7 +501,7 @@ SWFMovie_add(SWFMovie movie /* movie to which the block will be added */,
 void
 SWFMovie_remove(SWFMovie movie , SWFDisplayItem item)
 {
-	SWFDisplayItem_remove(item);
+	SWFDisplayItem_removeFromList(item, movie->blockList);
 }
 
 void

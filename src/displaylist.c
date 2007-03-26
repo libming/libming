@@ -129,6 +129,7 @@ SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 
 	item->block = newSWFPlaceObject2Block(item->depth);
 	item->character = character;
+	item->isPlaced = 0;
 
 	SWFPlaceObject2Block_setCharacter(item->block, character);
 	SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
@@ -137,7 +138,8 @@ SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 		list->tail->next = item;
 	else
 		list->head = item;
-
+	
+	item->prev = list->tail;
 	list->tail = item;
 	// back pointer for endmask
 	item->list = list;
@@ -151,6 +153,32 @@ SWFDisplayItem_remove(SWFDisplayItem item)
 	item->flags |= ITEM_REMOVED;
 }
 
+void 
+SWFDisplayItem_removeFromList(SWFDisplayItem item, SWFBlockList blocklist)
+{
+		SWFDisplayList list;
+		
+		if(item == NULL || item->list == NULL || blocklist == NULL)
+			return;
+
+		list = item->list;
+		if(item->next)
+			item->next->prev = item->prev;
+		
+		if(item->prev)
+			item->prev->next = item->next;		
+
+		if(item == list->head)
+			list->head = item->next;
+		if(item == list->tail)
+			list->tail = item->prev;
+
+		if(item->isPlaced)
+			SWFBlockList_addBlock(blocklist,
+				(SWFBlock)newSWFRemoveObject2Block(item->depth));
+
+		destroySWFDisplayItem(item);
+}
 
 static void
 checkBlock(SWFDisplayItem item)
@@ -562,7 +590,7 @@ SWFDisplayList_rewindSoundStream(SWFDisplayList list)
 void
 SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 {
-	SWFDisplayItem item = list->head, last = NULL, next;
+	SWFDisplayItem item = list->head, next;
 	SWFCharacter character;
 
 	if ( list->soundStream )
@@ -582,22 +610,9 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 
 		if ( item->flags & ITEM_REMOVED )
 		{
-			if(item == list->head)
-				list->head = item->next;
-			else
-				last->next = item->next;
-
-			if(item == list->tail)
-				list->tail = last;
-
-			SWFBlockList_addBlock(blocklist,
-					(SWFBlock)newSWFRemoveObject2Block(item->depth));
-
 			next = item->next;
-			
-			destroySWFDisplayItem(item);
+			SWFDisplayItem_removeFromList(item, blocklist);
 			item = next;
-
 			continue;
 		}
 		
@@ -606,13 +621,15 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 				 !list->isSprite )
 		{
 			SWFBlockList_addBlock(blocklist, (SWFBlock)character);
-			
-			if(character->onInit)
-				character->onInit(item, blocklist);
 		}
 
 		if ( item->block != NULL )
+		{
+			if(!item->isPlaced && character->onPlace)
+				character->onPlace(item, blocklist);
 			SWFBlockList_addBlock(blocklist, (SWFBlock)item->block);
+			item->isPlaced = 1;
+		}
 		
 		if (character && character->onFrame)
 			character->onFrame(item, blocklist);
@@ -620,7 +637,6 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 		item->flags = 0;
 		item->block = NULL;
 
-		last = item;
 		item = item->next;
 	}
 }

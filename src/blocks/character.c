@@ -43,7 +43,7 @@ SWFCharacterInit(SWFCharacter character)
 	
 	character->isFinished = FALSE;
 
-	character->onInit = NULL;
+	character->onPlace = NULL;
 	character->onFrame = NULL;
 }
 

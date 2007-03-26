@@ -63,11 +63,13 @@ struct SWFCharacter_s
 
   BOOL isFinished;
 	 
-  /* will be called if a character is added to a displaylist
+  /* will be called if a character is placed first
    * character can add additional blocks to the movies blocklist
+   * all blocks are added _before_ the place tag
+   * onPlace ist called only for the first place event
    * returns the number of added blocks
    */
-  int (*onInit)(SWFDisplayItem, SWFBlockList);
+  int (*onPlace)(SWFDisplayItem, SWFBlockList);
 
   /* will be called for each frame
    * returns the number of blocks added

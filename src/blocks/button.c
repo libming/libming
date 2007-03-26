@@ -239,7 +239,7 @@ void destroySWFButton(SWFButton button)
 	destroySWFCharacter((SWFCharacter) button);
 }
 
-static int onSWFButtonInit(SWFDisplayItem item, SWFBlockList list)
+static int onSWFButtonPlace(SWFDisplayItem item, SWFBlockList list)
 {
 	SWFButton button = (SWFButton)SWFDisplayItem_getCharacter(item);
 	if(!button->grid)
@@ -272,7 +272,7 @@ newSWFButton()
 	BLOCK(button)->complete = completeSWFButton;
 	BLOCK(button)->dtor = (destroySWFBlockMethod) destroySWFButton;
 	
-	((SWFCharacter)button)->onInit = onSWFButtonInit;
+	((SWFCharacter)button)->onPlace = onSWFButtonPlace;
 	((SWFCharacter)button)->onFrame = onSWFButtonFrame;
 
 	button->menuflag = 0;
