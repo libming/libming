@@ -600,7 +600,7 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	}
 
 	/* Add a terminating SHOWFRAME tag if not already there */
-	SWFBlock lastBlock = SWFBlockList_getLastBlockType(movie->blockList);
+	SWFBlock lastBlock = SWFBlockList_getLastBlock(movie->blockList);
 	if ( ! lastBlock || SWFBlock_getType(lastBlock) != SWF_SHOWFRAME )
 	{
 		SWFMovie_nextFrame(movie);

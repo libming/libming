@@ -147,7 +147,7 @@ SWFBlockList_writeBlocksToMethod(SWFBlockList list,
 
 /* Return last block in the list, or NULL if the list is empty */
 SWFBlock
-SWFBlockList_getLastBlockType(SWFBlockList list)
+SWFBlockList_getLastBlock(SWFBlockList list)
 {
 	if ( list->nBlocks ) return list->blocks[list->nBlocks-1].block;
 	else return NULL;
