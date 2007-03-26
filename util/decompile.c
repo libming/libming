@@ -3043,25 +3043,23 @@ int j;
 #ifdef DEBUGSTACK
   if( Stack != NULL && *dcstr) 
   { 
-   #define BUFFSIZE 40
    int i=0;
-   char buf[BUFFSIZE];
-   memset(buf, '\0', BUFFSIZE);
+   println("/* -----------------------------------------------------------------");
+   println("NOTE: some stuff left on the stack at the end of a block of actions:");
    while (Stack)
    {
-    getString(pop());
     i++;
+    printf("%d.:\t%s",i, getString(pop()));
+    println("");
    }
-   fprintf(stderr,"Stuff (==%d) left on the stack at the end of a block of actions!?!?!?\n",i);
-   strncpy(buf,dcstr,BUFFSIZE-1);
-   for (i=0;i<BUFFSIZE;i++) if (buf[i]=='\n' || buf[i]=='\\' ) buf[i]=' ';
-   if (strlen(buf)==BUFFSIZE-1)
-     fprintf(stderr," Block begins with:   %s ...\n",buf);
-   else
-     fprintf(stderr," Block contents:      %s\n",buf);
+   println("*/");
   }
 #else
   if( Stack != NULL ) fprintf(stderr,"Stuff left on the stack at the end of a block of actions!?!?!?\n");
+  while (Stack)
+  {
+    pop();
+  }
 #endif
   return dcgetstr();
 }
