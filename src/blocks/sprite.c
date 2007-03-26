@@ -91,13 +91,20 @@ destroySWFSprite(SWFSprite sprite)
 
 static int onInit(SWFDisplayItem item, SWFBlockList list)
 {
+	int ret = 0;
 	SWFSprite sprite = (SWFSprite)SWFDisplayItem_getCharacter(item);
+	
 	if(sprite->grid)
 	{
 		SWFBlockList_addBlock(list, (SWFBlock)sprite->grid);
-		return 1;
+		ret++;
 	}
-	return 0;
+	if(sprite->initAction)
+	{
+		SWFBlockList_addBlock(list, (SWFBlock)sprite->initAction);
+		ret++;
+	}	
+	return ret;
 }
 
 SWFSprite
@@ -120,7 +127,7 @@ newSWFSprite()
 	sprite->frames = 0;
 	sprite->totalFrames = 0;
 	sprite->grid = NULL;
-
+	sprite->initAction = NULL;
 	return sprite;
 }
 

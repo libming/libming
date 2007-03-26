@@ -213,7 +213,14 @@ SWFMovieClip_removeScalingGrid(SWFMovieClip clip)
 	}
 }
 
+void
+SWFMovieClip_addInitAction(SWFMovieClip clip, SWFAction action)
+{
+	if(clip->sprite.initAction)
+		destroySWFInitAction(clip->sprite.initAction);
 
+	clip->sprite.initAction = newSWFInitAction(clip, action);
+}
 /*
  * Local variables:
  * tab-width: 2

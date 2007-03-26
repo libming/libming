@@ -872,7 +872,7 @@ SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_setScalingGrid(SWFMovieClip clip, int x, int y, int w, int h);
 void SWFMovieClip_removeScalingGrid(SWFMovieClip clip);
-
+void SWFMovieClip_addInitAction(SWFMovieClip, SWFAction);
 
 /***** SWFPrebuiltClip ****/
 

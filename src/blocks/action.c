@@ -22,14 +22,13 @@
 #include "stdlib.h"
 #include "string.h"
 
-#include "stdlib.h"
-#include "string.h"
-
 #include "action.h"
 #include "output.h"
 #include "block.h"
 #include "input.h"
+#include "method.h"
 #include "libming.h"
+#include "character.h"
 #include "actioncompiler/compile.h"
 #include "actiontypes.h"
 
@@ -49,6 +48,13 @@ struct SWFAction_s
 		FILE *file;
 		char *script;
 	} input;	
+};
+
+struct SWFInitAction_s
+{
+	struct SWFBlock_s block;
+	int spriteId;
+	SWFAction action; 
 };
 
 static char *readActionFile(FILE *file)
@@ -144,11 +150,30 @@ completeSWFAction(SWFBlock block)
 	return SWFAction_compile(action, block->swfVersion);
 }
 
+static int
+completeSWFInitAction(SWFBlock block)
+{
+	SWFInitAction init = (SWFInitAction)block;
+	int len;
+
+	len = SWFAction_compile(init->action, block->swfVersion);
+	return len + 2;
+}
+
+
 static void
 writeSWFActionToMethod(SWFBlock block, SWFByteOutputMethod method, void* data)
 {
 	SWFOutput out = ((SWFAction)block)->out;
         SWFOutput_writeToMethod(out, method, data);
+}
+
+static void
+writeSWFInitActionToMethod(SWFBlock block, SWFByteOutputMethod method, void* data)
+{
+	SWFInitAction init = (SWFInitAction)block;
+	methodWriteUInt16(init->spriteId, method, data);
+	SWFOutput_writeToMethod(init->action->out, method, data);
 }
 
 void destroySWFAction(SWFAction action)
@@ -172,6 +197,15 @@ void destroySWFAction(SWFAction action)
 		destroySWFOutput(action->out);
 	
 	free(action);
+}
+
+void destroySWFInitAction(SWFInitAction init)
+{
+	if(!init)
+		return;
+
+	destroySWFAction(init->action);
+	free(init);
 }
 
 
@@ -212,7 +246,18 @@ SWFAction newSWFAction_fromFile(const char *filename)
 	return action;
 }
 
-
+SWFInitAction newSWFInitAction(SWFMovieClip clip, SWFAction action)
+{
+	SWFInitAction init = (SWFInitAction)malloc(sizeof(struct SWFInitAction_s));
+	SWFBlockInit(BLOCK(init));
+        BLOCK(init)->writeBlock = writeSWFInitActionToMethod;
+        BLOCK(init)->complete = completeSWFInitAction;
+        BLOCK(init)->dtor = (destroySWFBlockMethod) destroySWFInitAction;
+	BLOCK(init)->type = SWF_INITACTION;
+	init->spriteId = CHARACTERID(clip);
+	init->action = action;
+	return init;
+}
 
 /*
  * Local variables:
