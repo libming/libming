@@ -32,9 +32,9 @@
 #include "ming.h"
 #include "block.h"
 #include "rect.h"
+#include "../displaylist.h"
 
 extern int SWF_gNumCharacters;
-
 
 #define CHARACTER(c) ((SWFCharacter)(c))
 #define CHARACTERID(c) (((SWFCharacter)(c))->id)
@@ -62,6 +62,17 @@ struct SWFCharacter_s
      to a container- movie, sprite, or button. */
 
   BOOL isFinished;
+	 
+  /* will be called if a character is added to a displaylist
+   * character can add additional blocks to the movies blocklist
+   * returns the number of added blocks
+   */
+  int (*onInit)(SWFDisplayItem, SWFBlockList);
+
+  /* will be called for each frame
+   * returns the number of blocks added
+   */
+  int (*onFrame)(SWFDisplayItem, SWFBlockList);
 };
 
 

@@ -564,8 +564,6 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 {
 	SWFDisplayItem item = list->head, last = NULL, next;
 	SWFCharacter character;
-	SWFPlaceObject2Block placeVideo;
-	int frame;
 
 	if ( list->soundStream )
 	{
@@ -603,64 +601,22 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 			continue;
 		}
 		
-				
-		
 		if ( character != NULL &&
 				 !SWFBlock_isDefined((SWFBlock)character) &&
 				 !list->isSprite )
 		{
 			SWFBlockList_addBlock(blocklist, (SWFBlock)character);
 			
-			/* scaling grid is only available for buttons and sprites
-			 * has to be added after character definition and before place
-			 */
-			if(((SWFBlock)character)->type == SWF_DEFINEBUTTON2)
-			{
-				SWFScalingGrid grid = SWFButton_getScalingGrid((SWFButton)character);
-				if(grid)
-					SWFBlockList_addBlock(blocklist, (SWFBlock)grid);
-			}
-
-			if(((SWFBlock)character)->type == SWF_DEFINESPRITE)
-			{
-				SWFSprite sprite = (SWFSprite)character;
-				if(sprite->grid)
-					 SWFBlockList_addBlock(blocklist, (SWFBlock)sprite->grid);
-			}
+			if(character->onInit)
+				character->onInit(item, blocklist);
 		}
 
 		if ( item->block != NULL )
 			SWFBlockList_addBlock(blocklist, (SWFBlock)item->block);
-		if(((SWFBlock)character)->type == SWF_DEFINEBUTTON2)
-		{	SWFButtonSound buttonsound = getButtonSound((SWFButton) character);
-			if(buttonsound)
-				SWFBlockList_addBlock(blocklist, (SWFBlock)buttonsound);
-		}
+		
+		if (character && character->onFrame)
+			character->onFrame(item, blocklist);
 
-		
-		/* for each videostream in movie add VideoFrame */
- 		if(character && ((SWFBlock)character)->type == SWF_DEFINEVIDEOSTREAM) {
- 			SWFBlock video = SWFVideoStream_getVideoFrame((SWFVideoStream)character);
- 			
- 			if(video != NULL)
- 			{
- 		
- 				/* well it isn't really clear why we need the place-block here
- 				 * its not metioned in the flash-specs 
- 				 * but its not working without */
- 				if((item->flags & ITEM_NEW) == 0) 
- 				{
- 					frame = SWFVideoStream_getFrameNumber((SWFVideoFrame)video);
- 					placeVideo = newSWFPlaceObject2Block(item->depth);
- 					SWFPlaceObject2Block_setRatio(placeVideo, frame);
- 					SWFPlaceObject2Block_setMove(placeVideo);
- 					SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);
- 				}
- 				
- 				SWFBlockList_addBlock(blocklist, video);
-			}
- 		}
-		
 		item->flags = 0;
 		item->block = NULL;
 

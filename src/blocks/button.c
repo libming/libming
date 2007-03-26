@@ -239,6 +239,25 @@ void destroySWFButton(SWFButton button)
 	destroySWFCharacter((SWFCharacter) button);
 }
 
+static int onSWFButtonInit(SWFDisplayItem item, SWFBlockList list)
+{
+	SWFButton button = (SWFButton)SWFDisplayItem_getCharacter(item);
+	if(!button->grid)
+		return 0;
+
+	SWFBlockList_addBlock(list, (SWFBlock)button->grid);
+	return 1;
+}
+
+static int onSWFButtonFrame(SWFDisplayItem item, SWFBlockList list)
+{
+	SWFButton button = (SWFButton)SWFDisplayItem_getCharacter(item);
+	if(!button->sounds)
+		return 0;
+	SWFBlockList_addBlock(list, (SWFBlock)button->sounds);
+	return 1;
+}
+
 
 SWFButton
 newSWFButton()
@@ -252,6 +271,9 @@ newSWFButton()
 	BLOCK(button)->writeBlock = writeSWFButtonToMethod;
 	BLOCK(button)->complete = completeSWFButton;
 	BLOCK(button)->dtor = (destroySWFBlockMethod) destroySWFButton;
+	
+	((SWFCharacter)button)->onInit = onSWFButtonInit;
+	((SWFCharacter)button)->onFrame = onSWFButtonFrame;
 
 	button->menuflag = 0;
 	button->nRecords = 0;
@@ -262,12 +284,6 @@ newSWFButton()
 	button->sounds = NULL;
 	button->grid = NULL;
 	return button;
-}
-
-SWFButtonSound
-getButtonSound(SWFButton button)
-{
-	return button->sounds;
 }
 
 SWFSoundInstance
@@ -419,12 +435,6 @@ SWFButton_removeScalingGrid(SWFButton b)
 		destroySWFScalingGrid(b->grid);
 		b->grid = NULL;
 	}
-}
-
-SWFScalingGrid
-SWFButton_getScalingGrid(SWFButton b)
-{
-	return b->grid;
 }
 
 /*

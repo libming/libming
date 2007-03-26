@@ -30,6 +30,7 @@
 #include "character.h"
 #include "videostream.h"
 #include "libming.h"
+#include "../displaylist.h"
 
 #include "flv.h"
 
@@ -393,6 +394,46 @@ static int setStreamProperties(SWFVideoStream stream)
 }
 
 
+static int onInit(SWFDisplayItem item, SWFBlockList blocklist)
+{
+	SWFVideoStream stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);                
+	SWFBlock video = SWFVideoStream_getVideoFrame(stream);
+	if(video == NULL)
+		return 0;
+
+        SWFBlockList_addBlock(blocklist, video);
+	return 1;
+}
+
+static int onFrame(SWFDisplayItem item, SWFBlockList blocklist)
+{
+        int frame;
+	SWFPlaceObject2Block placeVideo;
+
+	/* if item is new -> onInit already inserted a frame */	
+	if(item->flags != 0)
+		return 0;
+
+	SWFVideoStream stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);                
+	SWFBlock video = SWFVideoStream_getVideoFrame(stream);
+	if(video != NULL)
+	{
+		/* well it isn't really clear why we need the place-block here
+	 	 * its not metioned in the flash-specs 
+	 	 * but its not working without */
+		frame = SWFVideoStream_getFrameNumber((SWFVideoFrame)video);
+		placeVideo = newSWFPlaceObject2Block(item->depth);
+		SWFPlaceObject2Block_setRatio(placeVideo, frame);
+		SWFPlaceObject2Block_setMove(placeVideo);
+		SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);               
+	 
+                SWFBlockList_addBlock(blocklist, video);
+		return 2;
+	}
+	return 0;
+}
+
+
 /* 
  * create a new SWFVideoSteam object
  * This function creates a new videostream object from a FLV-file.
@@ -415,7 +456,8 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	
 	SWFCharacterInit((SWFCharacter)stream);
 	CHARACTERID(stream) = ++SWF_gNumCharacters;
-        
+ 	((SWFCharacter)stream)->onFrame = onFrame;       
+ 	((SWFCharacter)stream)->onInit = onInit;       
 	block->type = SWF_DEFINEVIDEOSTREAM;
 	block->writeBlock = writeSWFVideoStreamToMethod;
 	block->complete = completeSWFVideoStream;

@@ -41,8 +41,4 @@ SWFButtonSound newSWFButtonSound(SWFButton button);
 
 SWFSoundInstance SWFButtonSound_setSound(SWFButtonSound sounds, SWFSound sound, byte flags);
 
-SWFButtonSound getButtonSound(SWFButton button);
-
-SWFScalingGrid SWFButton_getScalingGrid(SWFButton b);
-
 #endif /* SWF_BUTTON_H_INCLUDED */

@@ -89,6 +89,16 @@ destroySWFSprite(SWFSprite sprite)
 	destroySWFCharacter((SWFCharacter) sprite);
 }
 
+static int onInit(SWFDisplayItem item, SWFBlockList list)
+{
+	SWFSprite sprite = (SWFSprite)SWFDisplayItem_getCharacter(item);
+	if(sprite->grid)
+	{
+		SWFBlockList_addBlock(list, (SWFBlock)sprite->grid);
+		return 1;
+	}
+	return 0;
+}
 
 SWFSprite
 newSWFSprite()
@@ -102,6 +112,8 @@ newSWFSprite()
 	BLOCK(sprite)->writeBlock = writeSWFSpriteToMethod;
 	BLOCK(sprite)->complete = completeSWFSprite;
 	BLOCK(sprite)->dtor = (destroySWFBlockMethod) destroySWFSprite;
+	
+	((SWFCharacter)sprite)->onInit = onInit;
 
 	sprite->nBlocks = 0;
 	sprite->blocks = NULL;

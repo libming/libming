@@ -40,8 +40,11 @@ SWFCharacterInit(SWFCharacter character)
 
 	character->dependencies = NULL;
 	character->nDependencies = 0;
-
+	
 	character->isFinished = FALSE;
+
+	character->onInit = NULL;
+	character->onFrame = NULL;
 }
 
 
