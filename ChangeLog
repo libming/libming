@@ -1,14 +1,116 @@
-2007-03-21 23:27  krechert
+2007-03-27 10:41  strk
 
-	* src/: ming.h.in, blocks/action.c, blocks/button.c,
-	  blocks/placeobject.c: use newSWFAction(char *script) or
-	  SWFAction_fromFile(char *path)
+	* src/Makefile.am: Don't buil test.c as part of libming
 
-	  buttons and placeObject:  use SWFAction_compile() and
-	  SWFOutput_writeAction()  write outputbuffer completly at
-	  tag-completion time
+2007-03-26 16:28  krechert
 
-	  whitespace diff -> forgot log-entry last commit :(
+	* src/: blocklist.c, movie.c: fixed function declaration
+
+2007-03-26 14:29  krechert
+
+	* src/: displaylist.c, displaylist.h, movie.c, blocks/button.c,
+	  blocks/character.c, blocks/character.h, blocks/sprite.c,
+	  blocks/videostream.c: rename onInit callback to onFrame
+	  SWFMovie_remove() has immediate effect now
+	  SWFDisplayItem_remove() keeps old removal behavior (defers
+	  removal till nextFrame())
+
+2007-03-26 12:21  akleine
+
+	* util/decompile.c: Moved [stderr] error message "Stuff (x) left on
+	  the stack.." to the end of concerned block, now including more
+	  information about current stack contents and thus making analysis
+	  much easier.
+
+2007-03-26 06:02  krechert
+
+	* src/: ming.h.in, movieclip.c, blocks/action.c, blocks/action.h,
+	  blocks/sprite.c, blocks/sprite.h: added SWFInitAction support
+
+2007-03-26 05:39  krechert
+
+	* src/: displaylist.c, blocks/button.c, blocks/button.h,
+	  blocks/character.c, blocks/character.h, blocks/sprite.c,
+	  blocks/videostream.c: added onInit and onFrame callbacks to the
+	  character structure if a character needs to add additional blocks
+	  (like video, sound ...) these callbacks should be used.
+
+2007-03-25 05:01  strk
+
+	* NEWS: typo
+
+2007-03-23 09:29  krechert
+
+	* src/ming.h.in: use gcc deprecated attribute to mark deprecated
+	  functions user will get a compiler warning if he uses deprecated
+	  functions
+
+	  example: void old_func() __deprecated;
+
+2007-03-23 08:57  krechert
+
+	* NEWS: news update
+
+2007-03-23 08:41  krechert
+
+	* src/actioncompiler/compileaction.c: only warn once...
+
+2007-03-23 08:40  krechert
+
+	* src/blocks/error.h: added SWF_warnOnce()
+
+2007-03-22 13:17  krechert
+
+	* src/blocks/placeobject.c: removed unused var
+
+2007-03-22 09:12  anderson
+
+	* docs/: libming/SWFDisplayItem_addFilter.html,
+	  libming/SWFDisplayItem_cacheAsBitmap.html,
+	  libming/SWFDisplayItem_get_x.html,
+	  libming/SWFDisplayItem_setBlendMode.html,
+	  libming/SWFShape_drawArc.html, libming/SWFShape_drawCubic.html,
+	  libming/SWFShape_drawScaledLineTo.html,
+	  libming/SWFShape_movePenTo.html,
+	  libming/SWFShape_moveScaledPenTo.html,
+	  libming/SWFVideoStream_getNumFrames.html,
+	  libming/SWFVideoStream_getVideoFrame.html,
+	  libming/SWFVideoStream_hasAudio.html,
+	  libming/SWFVideoStream_setDimension.html, libming/index.html,
+	  libming/newSWFShapeFromBitmap.html,
+	  libming/newSWFVideoStream.html,
+	  libming/newSWFVideoStream_fromFile.html,
+	  libming/newSWFVideoStream_fromInput.html, man/Ming_getScale.3,
+	  man/Ming_init.3, man/Ming_setCubicThreshold.3,
+	  man/Ming_setErrorFunction.3, man/Ming_setSWFCompression.3,
+	  man/Ming_setScale.3, man/Ming_setWarnFunction.3,
+	  man/Ming_useSWFVersion.3, man/SWFDisplayItem_addFilter.3,
+	  man/SWFDisplayItem_cacheAsBitmap.3, man/SWFDisplayItem_get_x.3,
+	  man/SWFDisplayItem_setBlendMode.3, man/SWFMovie_add.3,
+	  man/SWFMovie_labelFrame.3, man/SWFMovie_namedAnchor.3,
+	  man/SWFMovie_protect.3, man/SWFMovie_setBackground.3,
+	  man/SWFMovie_setDimension.3, man/SWFMovie_setNumberOfFrames.3,
+	  man/SWFMovie_setRate.3, man/SWFShape_drawArc.3,
+	  man/SWFShape_drawCubic.3, man/SWFShape_drawScaledLineTo.3,
+	  man/SWFShape_movePenTo.3, man/SWFShape_moveScaledPenTo.3,
+	  man/SWFVideoStream_getNumFrames.3,
+	  man/SWFVideoStream_getVideoFrame.3,
+	  man/SWFVideoStream_hasAudio.3, man/SWFVideoStream_setDimension.3,
+	  man/destroySWFMovie.3, man/newSWFMovie.3,
+	  man/newSWFMovieWithVersion.3, man/newSWFShapeFromBitmap.3,
+	  man/newSWFVideoStream.3, man/newSWFVideoStream_fromFile.3,
+	  man/newSWFVideoStream_fromInput.3: Regenerate docuemntation and
+	  add new interfaces
+
+2007-03-22 08:15  krechert
+
+	* src/blocks/: action.c, button.c: fixed regression with button
+	  actions removed printf() in action.c
+
+2007-03-22 06:59  strk
+
+	* util/: makeswf.c, makeswf_utils.c: Updated to use newSWFAction()
+	  instead of compileSWFActionCode()
 
 2007-03-21 23:14  krechert
 
