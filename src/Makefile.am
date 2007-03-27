@@ -34,7 +34,6 @@ libming_la_SOURCES = 	\
 	position.c	\
 	shape_cubic.c	\
 	shape_util.c	\
-	test.c		\
 	text_util.c
 
 libming_la_LDFLAGS = \
