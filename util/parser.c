@@ -2405,7 +2405,7 @@ parseSWF_STARTSOUND (FILE * f, int length)
   SWF_SOUNDINFO *si;
   int i;
 
-  parserrec->chid = readUInt16 (f);
+  parserrec->SoundId = readUInt16 (f);
   si=&(parserrec->SoundInfo);
   si->Reserved = readBits (f, 2);
   si->SyncStop = readBits (f, 1);

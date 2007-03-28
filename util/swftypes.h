@@ -1500,7 +1500,7 @@ struct SWF_SOUNDSTREAMHEAD2
 
 struct SWF_STARTSOUND
 {
-  int chid;
+  UI16 SoundId;
   SWF_SOUNDINFO	SoundInfo;
 };
 

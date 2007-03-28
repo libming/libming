@@ -1558,11 +1558,53 @@ outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
 }
 
 void
+outputSWF_SOUNDENVELOPE (SWF_SOUNDENVELOPE *env)
+{
+  iprintf("    SoundEnvelope:");
+  iprintf(" Pos44 %d, LeftLevel %d, RightLevel %d\n",
+    env->Pos44, env->LeftLevel, env->RightLevel);
+}
+
+void 
+outputSWF_SOUNDINFO (SWF_SOUNDINFO *info)
+{
+  iprintf("  SoundInfo:");
+  
+  if(info->SyncStop)
+    iprintf(" SyncStop");
+
+  if(info->SyncNoMultiple)
+    iprintf(" SyncNoMultiple");
+  
+  if(info->HasEnvelope)
+    iprintf(" HasEnvelope");
+
+  if(info->HasLoops)
+    iprintf(" Loops: %d", info->LoopCount);
+
+  if(info->HasOutPoint)
+    iprintf(" HasOutPoint: %d", info->OutPoint);
+
+  if(info->HasInPoint)
+    iprintf(" HasInPoint: %d", info->InPoint);
+
+  iprintf("\n");
+
+  if(info->HasEnvelope)
+  {
+    int i;
+    iprintf("    EnvPoints %d\n", info->EnvPoints);
+    for(i = 0; i < info->EnvPoints; i++)
+      outputSWF_SOUNDENVELOPE(info->EnvelopeRecords + i);
+  }
+} 
+
+void
 outputSWF_STARTSOUND (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_STARTSOUND);
-  iprintf("SWF_STARTSOUND details should be here instead of this message\n");
-
+  iprintf(" SoundId %d\n", sblock->SoundId);
+  outputSWF_SOUNDINFO(&sblock->SoundInfo);
 }
 
 void

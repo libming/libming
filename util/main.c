@@ -48,6 +48,7 @@
 #include "swfoutput.h"
 
 SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
+const char *blockName (SWFBlocktype header);
 
 char *filename;
 char tmp_name[PATH_MAX];
