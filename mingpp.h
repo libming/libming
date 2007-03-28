@@ -832,9 +832,16 @@ class SWFShape : public SWFCharacter
 // begin minguts 2004/08/31 ((((
   void drawCharacterBounds(SWFCharacter *character)
 	{ SWFShape_drawCharacterBounds(this->shape, character->character); }
+
   void setLineStyle(unsigned short width, byte r, byte g, byte b, byte a=0xff) // alias for setline
 	{ setLine(width, r, g, b, a); }
 // )))) end minguts 2004/08/31
+
+  void setLineStyle2(unsigned short width, SWFFillStyle fill, int flags, float miterLimit)
+    {  SWFShape_setLineStyle2filled(this->shape, width, fill, flags, miterLimit); }
+  
+  void setLineStyle2(unsigned short width, byte r, byte g, byte b, byte a, int flags, float miterLimit)
+    {  SWFShape_setLineStyle2(this->shape, width, r, g, b, a flags, miterLimit); }
 
   void drawArc(float r, float startAngle, float endAngle)
     { SWFShape_drawArc(this->shape, r, startAngle, endAngle); }
