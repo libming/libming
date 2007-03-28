@@ -215,7 +215,7 @@ class SWFAction : public SWFBlock
   c_SWFAction action;
 
   SWFAction(const char *script)
-    { this->action = compileSWFActionCode(script); }
+    { this->action = newSWFAction(script); }
 
   // movies, buttons, etc. destroy the c_SWFAction..
   virtual ~SWFAction() {}
