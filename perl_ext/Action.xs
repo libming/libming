@@ -25,7 +25,7 @@ SWFAction_new(package="SWF::Action", script)
         char *script
 	CODE:
 	
-        RETVAL = compileSWFActionCode(script);
+        RETVAL = newSWFActionCode(script);
         ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 

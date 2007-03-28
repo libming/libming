@@ -98,3 +98,8 @@ SWFMovieClip_setScalingGrid(movieclip, x, y, w, h)
 void
 SWFMovieClip_removeScalingGrid(movieclip)
 	SWF::MovieClip movieclip
+
+void 
+SWFMovieClip_addInitAction(movieclip, action)
+	SWF::MovieClip movieclip
+	SWF::Action action
