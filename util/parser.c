@@ -97,12 +97,17 @@ parseSWF_MATRIX (FILE * f, struct SWF_MATRIX *matrix)
   matrix->TranslateY = readSBits (f, matrix->NTranslateBits);
 }
 
+void 
+parseSWF_FILTERLIST(FILE *f, SWF_FILTERLIST *list);
+
 int
 parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
 {
   byteAlign ();
 
-  brec->ButtonReserved = readBits (f, 4);
+  brec->ButtonReserved = readBits (f, 2);
+  brec->ButtonHasBlendMode = readBits(f, 1);
+  brec->ButtonHasFilterList = readBits(f, 1);
   brec->ButtonStateHitTest = readBits (f, 1);
   brec->ButtonStateDown = readBits (f, 1);
   brec->ButtonStateOver = readBits (f, 1);
@@ -117,7 +122,10 @@ parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
   parseSWF_MATRIX (f, &brec->PlaceMatrix);
   if( level > 1 )
   	parseSWF_CXFORMWITHALPHA (f, &brec->ColorTransform);
-
+  if ( brec->ButtonHasFilterList )
+	parseSWF_FILTERLIST(f, &brec->FilterList);
+  if ( brec->ButtonHasBlendMode )
+	brec->BlendMode = readUInt8(f);
   return 1;
 }
 

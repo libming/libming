@@ -531,6 +531,31 @@ typedef union SWF_ACTION {
 
 /* Types Flash Types */
 
+typedef struct SWF_RGBA {
+	UI8	red;
+	UI8	green;
+	UI8	blue;
+	UI8	alpha;
+} SWF_RGBA;
+
+typedef struct SWF_RECT {
+	UI8	Nbits:5;
+	SB32	Xmin;
+	SB32	Xmax;
+	SB32	Ymin;
+	SB32	Ymax;
+} SWF_RECT;
+
+typedef struct SWF_GRADIENTRECORD {
+	UI8		Ratio;
+	SWF_RGBA	Color;
+} SWF_GRADIENTRECORD;
+
+typedef struct SWF_GRADIENT {
+	UI8	NumGradients;
+	SWF_GRADIENTRECORD	GradientRecords[8];
+} SWF_GRADIENT;
+
 typedef struct SWF_MATRIX {
 	UI8	HasScale:1;
 	UI8	NScaleBits:5;
@@ -571,8 +596,121 @@ typedef struct SWF_CXFORMWITHALPHA {
 	UI32	AlphaAddTerm;
 } SWF_CXFORMWITHALPHA;
 
+typedef struct SWF_BLURFILTER {
+	FIXED	BlurX;
+	FIXED	BlurY;
+	UI8	Passes:5;
+	UI8	Reserved:3;
+} SWF_BLURFILTER;
+
+typedef struct SWF_BEVELFILTER {
+	SWF_RGBA	ShadowColor;
+	SWF_RGBA	HighlightColor;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED		Angle;
+	FIXED		Distance;
+	FIXED8		Strength;
+	UI8		InnerShadow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		OnTop:1;
+	UI8		Passes:4;
+} SWF_BEVELFILTER;
+
+typedef struct SWF_GRADIENTFILTER
+{
+	UI8		NumColors;
+	SWF_RGBA*	GradientColors;
+	UI8*		GradientRatio;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED		Angle;
+	FIXED		Distance;
+	FIXED8		Strength;
+	UI8		InnerShadow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		OnTop:1;
+	UI8		Passes:4;
+} SWF_GRADIENTFILTER;
+	
+typedef struct SWF_GLOWFILTER {
+	SWF_RGBA 	GlowColor;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED8		Strength;
+	UI8		InnerGlow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		Passes:5;
+} SWF_GLOWFILTER;
+
+typedef struct SWF_CONVOLUTIONFILTER {
+	UI8		MatrixX;
+	UI8		MatrixY;
+	FLOAT		Divisor;
+	FLOAT		Bias;
+	FLOAT*		Matrix;
+	SWF_RGBA	DefaultColor;
+	UI8		Reserved:6;
+	UI8		Clamp:1;
+	UI8		PreserveAlpha:1;
+} SWF_CONVOLUTIONFILTER;
+
+typedef struct SWF_COLORMATRIXFILTER
+{
+	FLOAT Matrix[20];
+} SWF_COLORMATRIXFILTER;
+
+typedef struct SWF_DROPSHADOWFILTER {
+	SWF_RGBA	DropShadowColor;
+	FIXED		BlurX;
+	FIXED		BlurY;
+	FIXED		Angle;
+	FIXED		Distance;
+	FIXED8		Strength;
+	UI8		InnerShadow:1;
+	UI8		Kockout:1;
+	UI8		CompositeSource:1;
+	UI8		Passes:5;
+} SWF_DROPSHADOWFILTER;
+
+enum
+{
+        FILTER_DROPSHADOW,
+        FILTER_BLUR,
+        FILTER_GLOW,
+        FILTER_BEVEL,
+        FILTER_GRADIENTGLOW,
+        FILTER_CONVOLUTION,
+        FILTER_COLORMATRIX,
+        FILTER_GRADIENTBEVEL
+};
+
+typedef struct SWF_FILTER {
+	UI8 	FilterId;
+	union {
+		SWF_DROPSHADOWFILTER dropShadow;
+		SWF_BLURFILTER blur;
+		SWF_GLOWFILTER glow;
+		SWF_BEVELFILTER bevel;
+		SWF_GRADIENTFILTER gradientGlow;
+		SWF_CONVOLUTIONFILTER convolution;
+		SWF_COLORMATRIXFILTER colorMatrix;
+		SWF_GRADIENTFILTER gradientBevel;
+	} filter;
+} SWF_FILTER;
+
+typedef struct SWF_FILTERLIST {
+	UI8 		NumberOfFilters;
+	SWF_FILTER 	*Filter;
+} SWF_FILTERLIST;
+
 typedef struct SWF_BUTTONRECORD {
-	UI8	ButtonReserved:4;
+	UI8	ButtonReserved:2;
+	UI8	ButtonHasBlendMode:1;
+	UI8	ButtonHasFilterList:1;
 	UI8	ButtonStateHitTest:1;
 	UI8	ButtonStateDown:1;
 	UI8	ButtonStateOver:1;
@@ -581,6 +719,8 @@ typedef struct SWF_BUTTONRECORD {
 	UI16	PlaceDepth;
 	SWF_MATRIX	PlaceMatrix;
 	SWF_CXFORMWITHALPHA	ColorTransform;
+	SWF_FILTERLIST	FilterList;	
+	UI8 	BlendMode;
 } SWF_BUTTONRECORD;
 
 typedef struct SWF_BUTTONCONDACTION {
@@ -638,32 +778,6 @@ typedef struct SWF_CLIPACTIONS {
 	SWF_CLIPACTIONRECORD	*ClipActionRecords;
 	UI32	ClipActionEndFlag;
 } SWF_CLIPACTIONS;
-
-
-typedef struct SWF_RGBA {
-	UI8	red;
-	UI8	green;
-	UI8	blue;
-	UI8	alpha;
-} SWF_RGBA;
-
-typedef struct SWF_RECT {
-	UI8	Nbits:5;
-	SB32	Xmin;
-	SB32	Xmax;
-	SB32	Ymin;
-	SB32	Ymax;
-} SWF_RECT;
-
-typedef struct SWF_GRADIENTRECORD {
-	UI8		Ratio;
-	SWF_RGBA	Color;
-} SWF_GRADIENTRECORD;
-
-typedef struct SWF_GRADIENT {
-	UI8	NumGradients;
-	SWF_GRADIENTRECORD	GradientRecords[8];
-} SWF_GRADIENT;
 
 typedef struct SWF_FILLSTYLE {
 	UI8		FillStyleType;
@@ -862,117 +976,7 @@ typedef struct SWF_SOUNDINFO {
 	SWF_SOUNDENVELOPE *EnvelopeRecords;
 } SWF_SOUNDINFO;
 
-typedef struct SWF_BLURFILTER {
-	FIXED	BlurX;
-	FIXED	BlurY;
-	UI8	Passes:5;
-	UI8	Reserved:3;
-} SWF_BLURFILTER;
 
-typedef struct SWF_BEVELFILTER {
-	SWF_RGBA	ShadowColor;
-	SWF_RGBA	HighlightColor;
-	FIXED		BlurX;
-	FIXED		BlurY;
-	FIXED		Angle;
-	FIXED		Distance;
-	FIXED8		Strength;
-	UI8		InnerShadow:1;
-	UI8		Kockout:1;
-	UI8		CompositeSource:1;
-	UI8		OnTop:1;
-	UI8		Passes:4;
-} SWF_BEVELFILTER;
-
-typedef struct SWF_GRADIENTFILTER
-{
-	UI8		NumColors;
-	SWF_RGBA*	GradientColors;
-	UI8*		GradientRatio;
-	FIXED		BlurX;
-	FIXED		BlurY;
-	FIXED		Angle;
-	FIXED		Distance;
-	FIXED8		Strength;
-	UI8		InnerShadow:1;
-	UI8		Kockout:1;
-	UI8		CompositeSource:1;
-	UI8		OnTop:1;
-	UI8		Passes:4;
-} SWF_GRADIENTFILTER;
-	
-
-typedef struct SWF_GLOWFILTER {
-	SWF_RGBA 	GlowColor;
-	FIXED		BlurX;
-	FIXED		BlurY;
-	FIXED8		Strength;
-	UI8		InnerGlow:1;
-	UI8		Kockout:1;
-	UI8		CompositeSource:1;
-	UI8		Passes:5;
-} SWF_GLOWFILTER;
-
-typedef struct SWF_CONVOLUTIONFILTER {
-	UI8		MatrixX;
-	UI8		MatrixY;
-	FLOAT		Divisor;
-	FLOAT		Bias;
-	FLOAT*		Matrix;
-	SWF_RGBA	DefaultColor;
-	UI8		Reserved:6;
-	UI8		Clamp:1;
-	UI8		PreserveAlpha:1;
-} SWF_CONVOLUTIONFILTER;
-
-typedef struct SWF_COLORMATRIXFILTER
-{
-	FLOAT Matrix[20];
-} SWF_COLORMATRIXFILTER;
-
-typedef struct SWF_DROPSHADOWFILTER {
-	SWF_RGBA	DropShadowColor;
-	FIXED		BlurX;
-	FIXED		BlurY;
-	FIXED		Angle;
-	FIXED		Distance;
-	FIXED8		Strength;
-	UI8		InnerShadow:1;
-	UI8		Kockout:1;
-	UI8		CompositeSource:1;
-	UI8		Passes:5;
-} SWF_DROPSHADOWFILTER;
-
-enum
-{
-        FILTER_DROPSHADOW,
-        FILTER_BLUR,
-        FILTER_GLOW,
-        FILTER_BEVEL,
-        FILTER_GRADIENTGLOW,
-        FILTER_CONVOLUTION,
-        FILTER_COLORMATRIX,
-        FILTER_GRADIENTBEVEL
-};
-
-typedef struct SWF_FILTER {
-	UI8 	FilterId;
-	union {
-		SWF_DROPSHADOWFILTER dropShadow;
-		SWF_BLURFILTER blur;
-		SWF_GLOWFILTER glow;
-		SWF_BEVELFILTER bevel;
-		SWF_GRADIENTFILTER gradientGlow;
-		SWF_CONVOLUTIONFILTER convolution;
-		SWF_COLORMATRIXFILTER colorMatrix;
-		SWF_GRADIENTFILTER gradientBevel;
-	} filter;
-} SWF_FILTER;
-
-typedef struct SWF_FILTERLIST {
-	UI8 		NumberOfFilters;
-	SWF_FILTER 	*Filter;
-} SWF_FILTERLIST;
 
 /* Types to represent Blocks */
 

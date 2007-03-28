@@ -172,16 +172,34 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
   iprintf ("TranslateY %6ld\n", matrix->TranslateY);
 }
 
+void 
+outputSWF_FILTER(SWF_FILTER *filter);
+
 void
 outputSWF_BUTTONRECORD (SWF_BUTTONRECORD *brec)
 {
   iprintf (" BUTTONRECORD: ");
+  iprintf ("  ButtonHasBlendMode %d ", brec->ButtonHasBlendMode);
+  iprintf ("  ButtonHasFilterList %d ", brec->ButtonHasFilterList);
   iprintf ("  ButtonStateHitTest: %d ", brec->ButtonStateHitTest);
   iprintf ("  ButtonStateDown: %d ", brec->ButtonStateDown);
   iprintf ("  ButtonStateOver: %d ", brec->ButtonStateOver);
   iprintf ("  ButtonStateUp: %d\n", brec->ButtonStateUp);
   iprintf ("  CharacterID: %d\n", brec->CharacterId);
   iprintf ("  PlaceDepth: %d\n", brec->PlaceDepth);
+
+  if( brec->ButtonHasBlendMode )
+	  iprintf("  BlendMode %d\n", brec->BlendMode );
+  if( brec->ButtonHasFilterList )
+  {
+	  int i;
+	  SWF_FILTERLIST *filterList = &brec->FilterList;
+	  
+	  iprintf("  NumberOfFilters %d\n", filterList->NumberOfFilters);
+	  
+	  for(i = 0; i < filterList->NumberOfFilters; i++)
+	    outputSWF_FILTER(filterList->Filter + i);
+  }
 }
 
 void
