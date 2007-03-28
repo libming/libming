@@ -890,6 +890,9 @@ class SWFSprite : public SWFCharacter
   void removeScalingGrid()
     { SWFMovieClip_removeScalingGrid(this->clip); }
 
+  void addInitAction(SWFAction a)
+    { SWFMovieClip_addInitAction(this->clip, a); }
+
   SWF_DECLAREONLY(SWFSprite);
 };
 
