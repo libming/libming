@@ -29,6 +29,7 @@
 
 extern struct Movie m;
 extern SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
+const char *blockName (SWFBlocktype header);
 void silentSkipBytes(FILE *f, int length);
 
 #define PAR_BEGIN(block) \
