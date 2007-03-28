@@ -134,6 +134,25 @@ SWFShape_setLineStyle(shape, width, r, g, b, a=0xff)
 	byte	b
 	byte	a
 
+void 
+SWFShape_setLineStyle2(shape, width, r, g, b, a, flags, miterLimit)
+	SWF::Shape shape
+	unsigned short width
+	byte r
+	byte g
+	byte b
+	byte a
+	int flags
+	float miterLimit
+
+void 
+SWFShape_setLineStyle2filled(shape, width, fill, flags, miterLimit)
+	SWF::Shape shape
+	unsigned short width
+	SWF::Fill fill
+	int flags
+	float miterLimit
+
 SWF::Fill
 SWFShape_addFill(shape, ...)
        SWF::Shape      shape
