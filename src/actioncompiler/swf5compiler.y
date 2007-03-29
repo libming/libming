@@ -1952,6 +1952,8 @@ opcode
 						     SWFACTION_DEFINELOCAL2); }
 	| EXTENDS		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_EXTENDS); }
+	| TARGETPATH		{ $$ = bufferWriteOp(asmBuffer, 
+						     SWFACTION_TARGETPATH); }
 
 	/* f4 ops */
 	| OLDADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }

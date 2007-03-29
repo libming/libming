@@ -253,6 +253,7 @@ end			{ count();	return END;		}
 extends			{ count();	return EXTENDS;		}
 tonumber		{ count();	return TONUMBER;	}
 tostring		{ count();	return TOSTRING;	}
+tostring		{ count();	return TARGETPATH;	}
 }
 
 <AS_V6>{

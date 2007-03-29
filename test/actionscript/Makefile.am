@@ -13,9 +13,11 @@ AS_TESTS = \
 	ASM_all.as	\
 	ASM_extend.as	\
 	ASM_push.as	\
+	ASM_targetPath.as \
 	delete.as	\
 	GotoFrame.as	\
-	logor.as
+	logor.as 	\
+	targetPath.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -24,9 +26,11 @@ EXTRA_DIST = 		\
 	ASM_all.ref	\
 	ASM_extend.ref	\
 	ASM_push.ref	\
+	ASM_targetPath.ref \
 	delete.ref	\
 	logor.ref	\
 	GotoFrame.ref	\
+	targetPath.ref  \
 	$(AS_TESTS)
 
 CLEANFILES = *.pp *.swf
