@@ -33,7 +33,7 @@ while test $# -gt 0; do
 		echo -I@includedir@
 		;;
 	    --libs)
-		echo -L@libdir@ -lming
+		echo -L@libdir@ @ZLIB@ @MATHLIB@ @GIFLIB@ @PNGLIB@ -lming
 		;;
 	    --bindir)
 		echo @bindir@
