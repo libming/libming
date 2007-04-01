@@ -117,7 +117,7 @@ vasprintf(char **ret, const char *format, va_list ap)
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
 
-#define CPP "cpp -P -C -Wall"
+#define CPP "cpp -xc++ -P -C -Wall"
 #define MAXERRORMSG 1024
 
 /* prototypes */
@@ -554,6 +554,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.33  2007/04/01 10:01:16  strk
+ * Add -xc++ in CPP define  - patch by Deanna Phillips.
+ *
  * Revision 1.32  2007/03/22 10:59:17  strk
  * Updated to use newSWFAction() instead of compileSWFActionCode()
  *
