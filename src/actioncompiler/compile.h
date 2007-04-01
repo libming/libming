@@ -198,6 +198,8 @@ char *stringConcat(char *a, char *b);
 void bufferResolveJumps(Buffer out);
 void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 
+void bufferPatchPushLength(Buffer buffer, int len);
+
 /* rather than setting globals... */
 void swf4ParseInit(const char *string, int debug, int version);
 void swf5ParseInit(const char *string, int debug, int version);
