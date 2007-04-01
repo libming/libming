@@ -651,3 +651,38 @@ newDropShadowFilter(SWFColor color /* color of shadow */,
 
 	return filter;
 }
+
+SWFFilterList newSWFFilterList()
+{
+	SWFFilterList list;
+
+	list = (SWFFilterList)malloc(sizeof(struct SWFFilterList_s));
+        list->numFilter = 0;
+        list->filter = NULL;
+	return list;
+}
+
+void SWFFilterList_add(SWFFilterList list, SWFFilter filter)
+{
+	int count = list->numFilter;
+        list->filter = realloc(list->filter, count + 1);
+        list->filter[count] = filter;
+        list->numFilter++;
+}
+
+void SWFOutput_writeFilterList(SWFOutput out, SWFFilterList list)
+{
+	int i;
+	if(list->numFilter <= 0)
+		return;
+
+	SWFOutput_writeUInt8(out, list->numFilter);
+	for(i = 0; i < list->numFilter; i++)
+		SWFOutput_writeSWFFilter(out, list->filter[i]);
+}
+
+void destroySWFFilterList(SWFFilterList list)
+{
+	free(list->filter);
+	free(list);
+}

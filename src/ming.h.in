@@ -84,6 +84,7 @@ typedef struct SWFMovie_s *SWFMovie;
 typedef struct SWFVideoStream_s *SWFVideoStream;
 typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
 typedef struct SWFFilter_s * SWFFilter;
+typedef struct SWFButtonRecord_s* SWFButtonRecord;
 
 /***** General Ming functions *****/
 
@@ -578,12 +579,16 @@ void destroySWFAction(SWFAction action);
 SWFButton newSWFButton();
 void destroySWFButton(SWFButton button);
 
-void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
+void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags) __deprecated;
+SWFButtonRecord SWFButton_addCharacter(SWFButton, SWFCharacter, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 SWFSoundInstance SWFButton_addSound(SWFButton button, SWFSound action, byte flags);
 void SWFButton_setMenu(SWFButton button, int flag);
 void SWFButton_setScalingGrid(SWFButton b, int x, int y, int w, int h);
 void SWFButton_removeScalingGrid(SWFButton b);
+
+void SWFButtonRecord_addFilter(SWFButtonRecord b, SWFFilter f);
+void SWFButtonRecord_setBlendMode(SWFButtonRecord b, int mode);
 
 /****** SWFVideo ******/
 

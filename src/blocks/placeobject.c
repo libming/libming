@@ -36,12 +36,6 @@
 
 #include "libming.h"
 
-struct FilterList_s
-{
-	int numFilter;
-	SWFFilter *filter;
-};
-
 struct SWFPlaceObject2Block_s
 {
 	struct SWFBlock_s block;
@@ -73,7 +67,7 @@ struct SWFPlaceObject2Block_s
 	char hasBlendFlag;
 	char hasFilterFlag;
 
-	struct FilterList_s *filterList; 
+	SWFFilterList filterList; 
 	int blendMode;
 }; 
 
@@ -173,18 +167,10 @@ completeSWFPlaceObject2Block(SWFBlock block)
 		SWFOutput_writeUInt16(out, place->masklevel);
 
 	if( place->version == 3 && place->hasFilterFlag)
-	{
-		int i;
-		SWFOutput_writeUInt8(out, place->filterList->numFilter);		
-		for(i = 0; i < place->filterList->numFilter; i++)
-			SWFOutput_writeSWFFilter(out, place->filterList->filter[i]);
-	}
+		SWFOutput_writeFilterList(out, place->filterList);		
 
 	if( place->version == 3 && place->hasBlendFlag)
-	{
 		SWFOutput_writeUInt8(out, place->blendMode);
-	}
-
 
 	place->out = out;
 	writeActions(place);
@@ -205,10 +191,7 @@ destroySWFPlaceObject2Block(SWFPlaceObject2Block place)
 //	}
 
 	if( place->filterList != NULL )
-	{
-		free(place->filterList->filter);
-		free(place->filterList);
-	}
+		destroySWFFilterList(place->filterList);		
 
 	if ( place->name != NULL )
 		free(place->name);
@@ -429,20 +412,13 @@ SWFPlaceObject2Block_setBlendMode(SWFPlaceObject2Block block, int mode)
 void 
 SWFPlaceObject2Block_addFilter(SWFPlaceObject2Block block, SWFFilter filter)
 {
-	int count;
 	if(block->filterList == NULL)
 	{
 		setPlaceObjectVersion(block, 3);
-		block->filterList = (struct FilterList_s *)
-			malloc(sizeof(struct FilterList_s));
-		block->filterList->numFilter = 0;
-		block->filterList->filter = 0;
+		block->filterList = newSWFFilterList();
 		block->hasFilterFlag = 1;
 	}
-	count = block->filterList->numFilter;
-	block->filterList->filter = realloc(block->filterList->filter, count + 1);
-	block->filterList->filter[count] = filter;
-	block->filterList->numFilter++;
+	SWFFilterList_add(block->filterList, filter);
 }
 
 /*
