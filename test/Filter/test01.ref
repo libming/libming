@@ -33,7 +33,7 @@ Block length: 13
  CharacterID: 2
  TrackAsMenu: 0
  ActionOffset: 0
- BUTTONRECORD:   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
   CharacterID: 1
   PlaceDepth: 1
 
