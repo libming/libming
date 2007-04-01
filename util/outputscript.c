@@ -227,7 +227,7 @@ unsigned long p;
 int i;
 
 va_start(ap,nparam);
-printf(ARGSTART);
+printf("%s", ARGSTART);
 for(i=0;i<nparam;i++) {
 	fmt = va_arg(ap,char *);
 	p = va_arg(ap,unsigned long);
@@ -235,7 +235,7 @@ for(i=0;i<nparam;i++) {
 	if( i<nparam-1 )
 		printf(ARGSEP " ");
 }
-printf(ARGEND);
+printf("%s", ARGEND);
 va_end(ap);
 }
 
