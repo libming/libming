@@ -1,4 +1,4 @@
-#include <ming.h>
+#include <libming.h>
 
 // static char *test = "test01";
 
