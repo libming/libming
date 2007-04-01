@@ -1743,6 +1743,7 @@ decompileENUMERATE(int n, SWF_ACTION *actions,int maxn,int is_type2)
  int i=0;
  while (actions[n+i].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF && i<maxn && i<5)
    i++;
+ INDENT  
  println("/* a for-var-in  loop should follow below: */" );
  return i-1;		// preserve some code for decompileIF()... 
 } 			// ... and let decompileIF() do all the dirty work ;-)
@@ -2059,6 +2060,39 @@ struct strbufinfo origbuf;
 	return 0;
     }
 
+    j=0;
+    while (actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE  && 
+	        actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE2 && j<n && j<5) 
+     j++;		// check for a pending ENUMERATE
+     if ((actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE ||
+	  actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE2 ) && 
+	  actions[n-j+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER )
+     {
+	struct SWF_ACTIONPUSHPARAM *var;
+	var = pop();
+	INDENT
+	puts("for ( ");
+	// check for an usual special case w register Rx
+	if (sact->Actions[1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER)
+	{
+	  struct SWF_ACTIONSTOREREGISTER *sactv2 = (struct SWF_ACTIONSTOREREGISTER*)&sact->Actions[1];
+	  puts("var ");
+	  puts(getName(regs[sactv2->Register]));
+	}
+	else
+	  decompileActions( 2 , sact->Actions,-1);   /* -1 == the ENUM workaround */
+	puts(" in ");
+	puts(getName(var));
+	println(" ) {");
+	offSave=offseoloop;
+	offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
+        decompileActions(sact->numActions-1-2, &sact->Actions[2],gIndent+1);
+        offseoloop=offSave;
+	INDENT
+	println("}");
+	return 0;
+     }
+
     /*
      * while() loops have a JUMP at the end of the if clause that jumps backwards
        But also "continue" statements could jump backwards.
@@ -2075,46 +2109,22 @@ if(0)	    dumpRegs();
 	  && actions[maxn].SWF_ACTIONJUMP.Offset+actions[maxn].SWF_ACTIONJUMP.BranchOffset==
 	      sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.Offset+sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)
 	{      
-	    /* this jump leads from a block to start of a loop on outer block:
+	   /* this jump leads from a block to start of a loop on outer block:
 	       it is an 'if' later followed by last action 'continue' */
-	    puts("if ( ");
-	    puts(getName(pop()));
-	    println(" ) {");
-	    decompileActions(sact->numActions, sact->Actions,gIndent+1);
+	   puts("if ( ");
+	   puts(getName(pop()));
+	   println(" ) {");
+	   decompileActions(sact->numActions, sact->Actions,gIndent+1);
 	}
-	else
+        else	/* while(){}  as usual */
 	{
-	 /* two important similar loop types below:   a.k. 2006 */
-	 j=0;
-	 while (actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE  && 
-	        actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE2 && j<n && j<5) 
-	   j++;		// check for a pending ENUMERATE
-	 if ((actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE ||
-	      actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE2 ) && 
-	      actions[n-j+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER )
-	 {
-	    struct SWF_ACTIONPUSHPARAM *var;
-	    var = pop();
-	    puts("for ( ");
-	    decompileActions( 2 , sact->Actions,-1);   /* -1 == the ENUM workaround */
-	    puts(" in ");
-	    puts(getName(var));
-	    println(" ) {");
-	    offSave=offseoloop;
-	    offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
-            decompileActions(sact->numActions-1-2, &sact->Actions[2],gIndent+1);
-            offseoloop=offSave;
-         }
-         else	/* while(){}  as usual */
-	 {
-	    puts("while( ");
-	    puts(getName(pop()));
-	    println(" ) {");
-	    offSave=offseoloop;
-	    offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
-            decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
-            offseoloop=offSave;
-         }
+	   puts("while( ");
+	   puts(getName(pop()));
+	   println(" ) {");
+	   offSave=offseoloop;
+	   offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
+	   decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
+	   offseoloop=offSave;
 	}
 	INDENT
 	println("}");
