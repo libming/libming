@@ -30,6 +30,7 @@
 #include "browserfont.h"
 #include "action.h"
 #include "filter.h"
+#include "../position.h"
 #include "libming.h"
 
 #define RECORD_HASFILTER	(1<<4)
@@ -40,7 +41,7 @@ struct SWFButtonRecord_s
 	byte flags;
 	unsigned short layer;
 	SWFCharacter character;
-	SWFMatrix matrix;
+	SWFPosition position;
 	SWFCXform cxform;
 	int blendMode;
 	SWFFilterList filterList;
@@ -87,7 +88,7 @@ static SWFButtonRecord newSWFButtonRecord(byte flags, SWFCharacter character,
 	record->flags = flags;
 	record->character = character;
 	record->layer = layer;
-	record->matrix = matrix;
+	record->position = newSWFPosition(matrix);
 	record->filterList = NULL;
 	record->blendMode = 0;
 	return record;
@@ -237,6 +238,66 @@ SWFButtonRecord_addFilter(SWFButtonRecord record, SWFFilter filter)
         SWFFilterList_add(record->filterList, filter);
 }
 
+void 
+SWFButtonRecord_move(SWFButtonRecord record, float x, float y)
+{
+	SWFPosition_move(record->position, x, y);
+}
+
+void 
+SWFButtonRecord_moveTo(SWFButtonRecord record, float x, float y)
+{
+	SWFPosition_moveTo(record->position, x, y);
+}
+
+void 
+SWFButtonRecord_rotate(SWFButtonRecord record, float deg)
+{
+	SWFPosition_rotate(record->position, deg);
+}
+
+void 
+SWFButtonRecord_rotateTo(SWFButtonRecord record, float deg)
+{
+	SWFPosition_rotateTo(record->position, deg);
+}
+
+void 
+SWFButtonRecord_scale(SWFButtonRecord record, float scaleX, float scaleY)
+{
+	SWFPosition_scaleXY(record->position, scaleX, scaleY);
+}
+
+void 
+SWFButtonRecord_scaleTo(SWFButtonRecord record, float scaleX, float scaleY)
+{
+	SWFPosition_scaleXYTo(record->position, scaleX, scaleY);
+}
+
+void 
+SWFButtonRecord_skewX(SWFButtonRecord record, float skewX)
+{
+	SWFPosition_skewX(record->position, skewX);
+}
+
+void 
+SWFButtonRecord_skewXTo(SWFButtonRecord record, float skewX)
+{
+	SWFPosition_skewXTo(record->position, skewX);
+}
+
+void 
+SWFButtonRecord_skewY(SWFButtonRecord record, float skewY)
+{
+	SWFPosition_skewY(record->position, skewY);
+}
+
+void 
+SWFButtinRecord_skewYTo(SWFButtonRecord record, float skewY)
+{
+	SWFPosition_skewYTo(record->position, skewY);
+}
+
 void SWFButton_setMenu(SWFButton button, int flag)
 {
 	button->menuflag = flag;
@@ -248,7 +309,6 @@ void writeSWFButtonToMethod(SWFBlock block,
 	SWFButton button = (SWFButton)block;
 	SWFOutput_writeToMethod(button->out, method, data);
 }
-
 
 int completeSWFButton(SWFBlock block)
 {
@@ -273,7 +333,7 @@ int completeSWFButton(SWFBlock block)
 		layer = record->layer;
 		if(layer == 0 && block->swfVersion >= 5) layer = i+1;
 		SWFOutput_writeUInt16(out, layer);
-		SWFOutput_writeMatrix(out, record->matrix);
+		SWFOutput_writeMatrix(out, SWFPosition_getMatrix(record->position));
 		SWFOutput_writeUInt8(out, 0); /* blank CXForm */
 		if(record->flags & RECORD_HASFILTER)
 			SWFOutput_writeFilterList(out, record->filterList);
@@ -315,8 +375,11 @@ void destroySWFButton(SWFButton button)
 
 	for ( i=0; i<button->nRecords; ++i )
 	{
-		if ( button->records[i]->matrix != NULL )
-			destroySWFMatrix(button->records[i]->matrix);
+		if ( button->records[i]->position != NULL )
+			destroySWFPosition(button->records[i]->position);
+
+		if( button->records[i]->filterList != NULL)
+			destroySWFFilterList(button->records[i]->filterList);
 
 		free(button->records[i]);
 	}

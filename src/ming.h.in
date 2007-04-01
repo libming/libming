@@ -589,6 +589,16 @@ void SWFButton_removeScalingGrid(SWFButton b);
 
 void SWFButtonRecord_addFilter(SWFButtonRecord b, SWFFilter f);
 void SWFButtonRecord_setBlendMode(SWFButtonRecord b, int mode);
+void SWFButtonRecord_move(SWFButtonRecord record, float x, float y);
+void SWFButtonRecord_moveTo(SWFButtonRecord record, float x, float y);
+void SWFButtonRecord_rotate(SWFButtonRecord record, float deg);
+void SWFButtonRecord_rotateTo(SWFButtonRecord record, float deg);
+void SWFButtonRecord_scale(SWFButtonRecord record, float scaleX, float scaleY);
+void SWFButtonRecord_scaleTo(SWFButtonRecord record, float scaleX, float scaleY);
+void SWFButtonRecord_skewX(SWFButtonRecord record, float skewX);
+void SWFButtonRecord_skewXTo(SWFButtonRecord record, float skewX);
+void SWFButtonRecord_skewY(SWFButtonRecord record, float skewY);
+void SWFButtinRecord_skewYTo(SWFButtonRecord record, float skewY);
 
 /****** SWFVideo ******/
 
