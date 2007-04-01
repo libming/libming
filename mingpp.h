@@ -841,7 +841,7 @@ class SWFShape : public SWFCharacter
     {  SWFShape_setLineStyle2filled(this->shape, width, fill, flags, miterLimit); }
   
   void setLineStyle2(unsigned short width, byte r, byte g, byte b, byte a, int flags, float miterLimit)
-    {  SWFShape_setLineStyle2(this->shape, width, r, g, b, a flags, miterLimit); }
+    {  SWFShape_setLineStyle2(this->shape, width, r, g, b, a, flags, miterLimit); }
 
   void drawArc(float r, float startAngle, float endAngle)
     { SWFShape_drawArc(this->shape, r, startAngle, endAngle); }
@@ -897,8 +897,8 @@ class SWFSprite : public SWFCharacter
   void removeScalingGrid()
     { SWFMovieClip_removeScalingGrid(this->clip); }
 
-  void addInitAction(SWFAction a)
-    { SWFMovieClip_addInitAction(this->clip, a); }
+  void addInitAction(SWFAction* a)
+    { SWFMovieClip_addInitAction(this->clip, a->action); }
 
   SWF_DECLAREONLY(SWFSprite);
 };
