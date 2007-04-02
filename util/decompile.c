@@ -180,6 +180,7 @@ dcgetstr()
 struct strbufinfo
 {
   int size;
+  int maxsize;
   char *str;
   char *ptr;
 };
@@ -189,6 +190,7 @@ struct strbufinfo setTempString(void)
 {
   struct strbufinfo current;
   current.size=strsize;
+  current.maxsize=strmaxsize;
   current.str=dcstr;
   current.ptr=dcptr;
   dcinit();
@@ -199,6 +201,7 @@ void setOrigString(struct strbufinfo old)
 {
    free(dcstr);				/* not needed anymore */
    strsize=old.size;
+   strmaxsize=old.maxsize;
    dcstr=old.str;
    dcptr=old.ptr;
 }
@@ -211,6 +214,7 @@ switchToOrigString(struct strbufinfo old)
 {
    char *tmp=dcstr;
    strsize=old.size;
+   strmaxsize=old.maxsize;
    dcstr=old.str;
    dcptr=old.ptr;
    return tmp;
