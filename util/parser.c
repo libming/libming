@@ -130,16 +130,12 @@ parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
   return 1;
 }
 
-void
+int
 parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
 {
-  int end;
-
   byteAlign ();
 
-  end = fileOffset;
   bcarec->CondActionSize = readUInt16 (f);
-  end += bcarec->CondActionSize;
   bcarec->CondIdleToOverDown = readBits (f, 1);
   bcarec->CondOutDownToIdle = readBits (f, 1);
   bcarec->CondOutDownToOverDown = readBits (f, 1);
@@ -162,7 +158,7 @@ parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
 							 sizeof
 							 (SWF_ACTION));
     }
-
+  return bcarec->CondActionSize;
 }
 
 void
@@ -1420,12 +1416,18 @@ parseSWF_DEFINEBUTTON2 (FILE * f, int length)
   parserrec->Actions =
     (SWF_BUTTONCONDACTION *) calloc (1, sizeof (SWF_BUTTONCONDACTION));
   while( fileOffset < end ) {
-    parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]) );
+    int len = parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]) );
     parserrec->Actions = (SWF_BUTTONCONDACTION *) realloc (parserrec->Actions,
 							 (parserrec->numActions + 1) *
 							 sizeof
 							 (SWF_BUTTONCONDACTION));
+    if(len == 0)
+    {
+	if(readUInt8(f))
+		warning("BUTTONRECORD: ActionEnd != 0\n");
+	break;
     }
+  }
 
   PAR_END;
 }
