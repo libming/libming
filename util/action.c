@@ -355,7 +355,8 @@ outputSWFACTION_GOTOFRAME2 (SWF_ACTION *act)
   printf ("  Reserved bits: %x\n", sact->f.FlagBits.Reserved);
   printf ("  Scene bias flag: %x\n", sact->f.FlagBits.SceneBiasFlag);
   printf ("  Play flag : %x\n", sact->f.FlagBits.PlayFlag);
-  printf ("  Scene bias : %u\n", sact->SceneBias);
+  if(sact->f.FlagBits.SceneBiasFlag)
+	  printf ("  Scene bias : %u\n", sact->SceneBias);
 }
 
 
