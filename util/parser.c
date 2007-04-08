@@ -935,8 +935,9 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 			if( (actions[i].SWF_ACTIONRECORD.Offset-actions[0].SWF_ACTIONRECORD.Offset) == curroffset+act->BranchOffset ) break;
 		    }
 		    if( i>=thisaction ) {
-			    fprintf(stderr,"Failed to find branch target!!!\n");
-			    exit(2);
+                            SWF_warn("Failed to find branch target!!!\n");
+                            SWF_warn("Looking for: %d\n\n", curroffset + act->BranchOffset);
+                            break;
 		    }
 		    act->numActions = thisaction-i;
 		    act->Actions = (union SWF_ACTION *) calloc (act->numActions, sizeof (SWF_ACTION));
