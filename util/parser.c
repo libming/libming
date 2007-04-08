@@ -158,6 +158,13 @@ parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
 							 sizeof
 							 (SWF_ACTION));
     }
+
+  /* read end action flag only there are realy action records
+   * if there are no actionrecords parseSWF_ACTIONRECORD did already
+   * read end action
+   */
+  if(bcarec->numActions > 0)
+    readUInt8(f);
   return bcarec->CondActionSize;
 }
 
@@ -1415,18 +1422,13 @@ parseSWF_DEFINEBUTTON2 (FILE * f, int length)
   parserrec->numActions = 0;
   parserrec->Actions =
     (SWF_BUTTONCONDACTION *) calloc (1, sizeof (SWF_BUTTONCONDACTION));
-  while( fileOffset < end ) {
-    int len = parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]) );
+  while( fileOffset < end && 
+       parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]) ) ) 
+  {
     parserrec->Actions = (SWF_BUTTONCONDACTION *) realloc (parserrec->Actions,
 							 (parserrec->numActions + 1) *
 							 sizeof
 							 (SWF_BUTTONCONDACTION));
-    if(len == 0)
-    {
-	if(readUInt8(f))
-		warning("BUTTONRECORD: ActionEnd != 0\n");
-	break;
-    }
   }
 
   PAR_END;
