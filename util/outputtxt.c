@@ -958,15 +958,24 @@ outputSWF_DEFINEFONTINFO (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINELOSSLESS (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINELOSSLESS);
-
+  OUT_BEGIN (SWF_DEFINELOSSLESS);
+  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" Bitmap format %d\n", sblock->BitmapFormat);
+  iprintf(" Bitmap width %d x height %d\n", sblock->BitmapWidth, sblock->BitmapHeight);
+  
+  if(sblock->BitmapFormat == 3)
+  	iprintf(" BitmapColorTableSize %d\n", sblock->BitmapColorTableSize);
 }
 
 void
 outputSWF_DEFINELOSSLESS2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINELOSSLESS2);
-
+  OUT_BEGIN (SWF_DEFINELOSSLESS2);
+  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" Bitmap format %d\n", sblock->BitmapFormat);
+  iprintf(" Bitmap width %d x height %d\n", sblock->BitmapWidth, sblock->BitmapHeight);
+  if(sblock->BitmapFormat == 3)                                                                                                                                                    
+        iprintf(" BitmapColorTableSize %d\n", sblock->BitmapColorTableSize);
 }
 
 void
