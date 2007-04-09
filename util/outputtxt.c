@@ -730,22 +730,23 @@ outputSWF_CHARACTERSET (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
 {
-  //RECTOUT_BEGIN (SWF_DEFINEBITS);
-
+  OUT_BEGIN (SWF_DEFINEBITS);
+  iprintf(" CharacterId: %d\n", sblock->CharacterID);
 }
 
 void
 outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEBITSJPEG2);
-
+  OUT_BEGIN (SWF_DEFINEBITSJPEG2);
+  iprintf(" CharacterId: %d\n", sblock->CharacterID);
 }
 
 void
 outputSWF_DEFINEBITSJPEG3 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEBITSJPEG3);
-
+  OUT_BEGIN (SWF_DEFINEBITSJPEG3);
+  iprintf(" CharacterId: %d\n", sblock->CharacterID);
+  iprintf(" AlphaDataOffset %d\n", sblock->AlphaDataOffset);
 }
 
 void
