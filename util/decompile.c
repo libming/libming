@@ -1521,7 +1521,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
      obj->Type = 10;					/* ...but only once */
      return 0;
     }
-    INDENT    
+    INDENT
     if (obj->Type == 11)				/* simply output variable and inc/dec op */
     {
      decompilePUSHPARAM(obj,0);
@@ -1534,7 +1534,15 @@ decompileSETMEMBER(int n, SWF_ACTION *actions,int maxn)
      || var->Type == 4 || var->Type == 12 )
      puts("[");
     else
+    {
      puts(".");
+     if (n && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER)
+     {
+      struct SWF_ACTIONSTOREREGISTER *sactv2 = (struct SWF_ACTIONSTOREREGISTER*)&actions[n-1];
+      if (sactv2->Register==0)
+	regs[0]=newVar3(getName(obj),".",getName(var));		// easter 07: some sugar for mtc et al.
+     }
+    }
     decompilePUSHPARAM(var,0);
     if (var->Type == 7 || var->Type == 6 || var->Type == 10
      || var->Type == 4 || var->Type == 12 )
@@ -2073,6 +2081,7 @@ struct strbufinfo origbuf;
 	  actions[n-j+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER )
      {
 	struct SWF_ACTIONPUSHPARAM *var;
+	int x;
 	var = pop();
 	INDENT
 	puts("for ( ");
@@ -2082,15 +2091,19 @@ struct strbufinfo origbuf;
 	  struct SWF_ACTIONSTOREREGISTER *sactv2 = (struct SWF_ACTIONSTOREREGISTER*)&sact->Actions[1];
 	  puts("var ");
 	  puts(getName(regs[sactv2->Register]));
+	  x=3;
 	}
 	else
+	{
 	  decompileActions( 2 , sact->Actions,-1);   /* -1 == the ENUM workaround */
+	  x=2;
+	}
 	puts(" in ");
 	puts(getName(var));
 	println(" ) {");
 	offSave=offseoloop;
 	offseoloop=actions[n+1].SWF_ACTIONRECORD.Offset;
-        decompileActions(sact->numActions-1-2, &sact->Actions[2],gIndent+1);
+        decompileActions(sact->numActions-1-x, &sact->Actions[x],gIndent+1);
         offseoloop=offSave;
 	INDENT
 	println("}");
