@@ -1,7 +1,7 @@
-Makefile
-Makefile.in
 .deps
 .libs
+Makefile
+Makefile.in
 dotests
 php.ini
 test01
@@ -10,7 +10,9 @@ test01.swf
 test02
 test02-cxx
 test02.swf
-test01-py.ref
-test01-py.swf
-test01.tcl
-test02.tcl
+test03
+test03-cxx
+test03.swf
+test04
+test04-cxx
+test04.swf
