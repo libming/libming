@@ -131,10 +131,13 @@ parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
 }
 
 int
-parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
+parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec, int end)
 {
   byteAlign ();
 
+  int actionEnd, start;
+
+  start = fileOffset;
   bcarec->CondActionSize = readUInt16 (f);
   bcarec->CondIdleToOverDown = readBits (f, 1);
   bcarec->CondOutDownToIdle = readBits (f, 1);
@@ -158,6 +161,17 @@ parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec)
 							 sizeof
 							 (SWF_ACTION));
     }
+
+  if(bcarec->CondActionSize > 0)
+	actionEnd = start + bcarec->CondActionSize;
+  else
+	actionEnd = end;
+
+  if(fileOffset >= actionEnd)
+  {
+	printf("expected actionEnd flag\n");
+  	return bcarec->CondActionSize;
+  }
 
   /* read end action flag only there are realy action records
    * if there are no actionrecords parseSWF_ACTIONRECORD did already
@@ -1424,7 +1438,7 @@ parseSWF_DEFINEBUTTON2 (FILE * f, int length)
   parserrec->Actions =
     (SWF_BUTTONCONDACTION *) calloc (1, sizeof (SWF_BUTTONCONDACTION));
   while( fileOffset < end && 
-       parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]) ) ) 
+       parseSWF_BUTTONCONDACTION (f, &(parserrec->Actions[parserrec->numActions++]), end)) 
   {
     parserrec->Actions = (SWF_BUTTONCONDACTION *) realloc (parserrec->Actions,
 							 (parserrec->numActions + 1) *
@@ -1832,11 +1846,10 @@ parseSWF_DEFINESPRITE (FILE * f, int length)
 		    splength = readUInt32 (f);
 	  blockstart = fileOffset;
 	  nextFrame = fileOffset+splength;
-	  /*
-	  printf ("Found Block: %s, %i bytes\n",
-			  blockName (type), splength );
-	  */
-
+          /*
+	  printf ("Found Block: %s, %i bytes @%i\n",
+			  blockName (type), splength, blockstart );
+          */
 	  parserrec->tagTypes = (UI16 *)
 	  	realloc(parserrec->tagTypes, ((numblocks+1)*sizeof(UI16)));
 	  parserrec->Tags = (SWF_Parserstruct **)
@@ -1852,8 +1865,14 @@ parseSWF_DEFINESPRITE (FILE * f, int length)
 	    silentSkipBytes (f, (nextFrame-ftell(f)));
 	    fileOffset=ftell(f);
 	  }
-
+	  if(type == 0)
+		break;
   }
+  if(fileOffset < start + length)
+  {  
+    printf("skiping excessive bytes after SWF_END\n");
+    readBytes(f, start + length - fileOffset);
+  } 
   parserrec->BlockCount = numblocks;
 
   PAR_END;
