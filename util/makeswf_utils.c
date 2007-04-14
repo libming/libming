@@ -52,7 +52,7 @@
 
 //#define CPP "cpp -P -C -Wall"
 /* we don't need comments, do we ? */
-#define CPP "cpp -P -Wall"
+#define CPP "cpp -xc++ -P -Wall"
 #define MAXERRORMSG 1024
 
 /* prototypes */
@@ -247,6 +247,10 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.4  2007/04/14 16:58:46  strk
+ * Removed unused CPP define from makeswf.c, fix the *used* one in makeswf_utils.
+ * Thanks to Bastiaan Jacques for finding this out.
+ *
  * Revision 1.3  2007/03/22 10:59:20  strk
  * Updated to use newSWFAction() instead of compileSWFActionCode()
  *

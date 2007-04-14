@@ -33,8 +33,8 @@
  *  You can skip the preprocessing step using the -p switch, but this
  *  is undocumented/deprecated.
  *
- *  If you need another kind of preprocessing change the CPP define on
- *  top of this file.
+ *  If you need another kind of preprocessing change the CPP define in
+ *  makeswf_utils.c.
  *
  *  Build
  *  -----
@@ -117,7 +117,6 @@ vasprintf(char **ret, const char *format, va_list ap)
 #define DEFSWFVERSION 6
 #define DEFSWFCOMPRESSION 9
 
-#define CPP "cpp -xc++ -P -C -Wall"
 #define MAXERRORMSG 1024
 
 /* prototypes */
@@ -554,6 +553,10 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.34  2007/04/14 16:58:46  strk
+ * Removed unused CPP define from makeswf.c, fix the *used* one in makeswf_utils.
+ * Thanks to Bastiaan Jacques for finding this out.
+ *
  * Revision 1.33  2007/04/01 10:01:16  strk
  * Add -xc++ in CPP define  - patch by Deanna Phillips.
  *
