@@ -631,7 +631,8 @@ SWFShape_addLineStyle2filled(SWFShape shape, unsigned short width,
                              int flags, float miterLimit)
 {
 	growLineArray(shape);
-	BLOCK(shape)->type = SWF_DEFINESHAPE4;
+	if(!shape->isMorph)
+		BLOCK(shape)->type = SWF_DEFINESHAPE4;
 	shape->lines[shape->nLines] = newSWFLineStyle2_filled(width, fill, flags, miterLimit);
 	return ++shape->nLines;
 }
@@ -642,7 +643,8 @@ SWFShape_addLineStyle2(SWFShape shape, unsigned short width,
                       int flags, float miterLimit)
 {
 	growLineArray(shape);
-	BLOCK(shape)->type = SWF_DEFINESHAPE4;
+	if(!shape->isMorph)
+		BLOCK(shape)->type = SWF_DEFINESHAPE4;
 	shape->lines[shape->nLines] = newSWFLineStyle2(width, r, g, b, a, flags, miterLimit);
 	return ++shape->nLines;
 }
