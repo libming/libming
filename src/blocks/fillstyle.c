@@ -210,16 +210,53 @@ SWFOutput_writeFillStyles(SWFOutput out,
 }
 
 
+void 
+SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1, 
+                              SWFFillStyle fill2)
+{
+	int type;
+	SWF_assert(fill1->type == fill2->type); 
+	type = fill1->type;
+
+	SWFOutput_writeUInt8(out, type);
+
+	if ( type == SWFFILL_SOLID )
+	{
+		SWFOutput_writeUInt8(out, fill1->data.solid.r);
+		SWFOutput_writeUInt8(out, fill1->data.solid.g);
+		SWFOutput_writeUInt8(out, fill1->data.solid.b);
+		SWFOutput_writeUInt8(out, fill1->data.solid.a);
+		SWFOutput_writeUInt8(out, fill2->data.solid.r);
+		SWFOutput_writeUInt8(out, fill2->data.solid.g);
+		SWFOutput_writeUInt8(out, fill2->data.solid.b);
+		SWFOutput_writeUInt8(out, fill2->data.solid.a);
+	}
+	else if ( type & SWFFILL_GRADIENT )
+	{
+		SWFOutput_writeMatrix(out, fill1->matrix);
+		SWFOutput_writeMatrix(out, fill2->matrix);
+		SWFOutput_writeMorphGradient(out, fill1->data.gradient, fill2->data.gradient);
+	}
+	else if ( type & SWFFILL_BITMAP )
+	{
+		SWF_assert(CHARACTERID(fill1->data.bitmap) == CHARACTERID(fill2->data.bitmap));
+
+		SWFOutput_writeUInt16(out, CHARACTERID(fill1->data.bitmap));
+		SWFOutput_writeMatrix(out, fill1->matrix);
+		SWFOutput_writeMatrix(out, fill2->matrix);
+	}
+	else
+		SWF_assert(0);
+
+}
+
 void
 SWFOutput_writeMorphFillStyles(SWFOutput out,
 															 SWFFillStyle *fills1, int nFills1,
 															 SWFFillStyle *fills2, int nFills2)
 {
-	int i, type;
-	SWFFillStyle fill1, fill2;
-
+	int i;
 	SWF_assert(nFills1 == nFills2);
-
 	if ( nFills1 < 255 )
 	{
 		SWFOutput_writeUInt8(out, nFills1);
@@ -232,46 +269,10 @@ SWFOutput_writeMorphFillStyles(SWFOutput out,
 
 	for ( i=0; i<nFills1; ++i )
 	{
-		fill1 = fills1[0];
-		fill2 = fills2[0];
+		SWFFillStyle fill1 = fills1[i];
+		SWFFillStyle fill2 = fills2[i];
 
-		SWF_assert(fill1->type == fill2->type);
-
-		type = fill1->type;
-
-		SWFOutput_writeUInt8(out, type);
-
-		if ( type == SWFFILL_SOLID )
-		{
-			SWFOutput_writeUInt8(out, fill1->data.solid.r);
-			SWFOutput_writeUInt8(out, fill1->data.solid.g);
-			SWFOutput_writeUInt8(out, fill1->data.solid.b);
-			SWFOutput_writeUInt8(out, fill1->data.solid.a);
-			SWFOutput_writeUInt8(out, fill2->data.solid.r);
-			SWFOutput_writeUInt8(out, fill2->data.solid.g);
-			SWFOutput_writeUInt8(out, fill2->data.solid.b);
-			SWFOutput_writeUInt8(out, fill2->data.solid.a);
-		}
-		else if ( type & SWFFILL_GRADIENT )
-		{
-			SWFOutput_writeMatrix(out, fill1->matrix);
-			SWFOutput_writeMatrix(out, fill2->matrix);
-			SWFOutput_writeMorphGradient(out, fill1->data.gradient, fill2->data.gradient);
-		}
-		else if ( type & SWFFILL_BITMAP )
-		{
-			SWF_assert(CHARACTERID(fill1->data.bitmap) ==
-								 CHARACTERID(fill2->data.bitmap));
-
-			SWFOutput_writeUInt16(out, CHARACTERID(fill1->data.bitmap));
-			SWFOutput_writeMatrix(out, fill1->matrix);
-			SWFOutput_writeMatrix(out, fill2->matrix);
-		}
-		else
-			SWF_assert(0);
-
-		++fill1;
-		++fill2;
+		SWFOutput_writeMorphFillStyle(out, fill1, fill2);
 	}
 }
 

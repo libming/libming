@@ -47,4 +47,8 @@ void SWFOutput_writeMorphFillStyles(SWFOutput out,
 				    SWFFillStyle *fills1, int nFills1,
 				    SWFFillStyle *fills2, int nFills2);
 
+void
+SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1,
+                              SWFFillStyle fill2);
+
 #endif /* SWF_FILLSTYLE_H_INCLUDED */
