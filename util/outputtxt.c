@@ -58,6 +58,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
   {SWF_DEFINEMORPHSHAPE, outputSWF_DEFINEMORPHSHAPE},
+  {SWF_DEFINEMORPHSHAPE2, outputSWF_DEFINEMORPHSHAPE2},
   {SWF_DEFINESHAPE, outputSWF_DEFINESHAPE},
   {SWF_DEFINESHAPE2, outputSWF_DEFINESHAPE2},
   {SWF_DEFINESHAPE3, outputSWF_DEFINESHAPE3},
@@ -296,6 +297,16 @@ outputSWF_GRADIENTRECORD (SWF_GRADIENTRECORD * gradientrec, char *gname)
 }
 
 void
+outputSWF_MORPHGRADIENTRECORD (SWF_MORPHGRADIENTRECORD * gradientrec, 
+                               char *gname)
+{
+  iprintf (" StartRatio: %d\n", gradientrec->StartRatio);
+  outputSWF_RGBA (&gradientrec->StartColor, "");
+  iprintf (" EndRatio: %d\n", gradientrec->EndRatio);
+  outputSWF_RGBA (&gradientrec->EndColor, "");
+}
+
+void
 outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *name)
 {
   int i;
@@ -303,6 +314,16 @@ outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *name)
   iprintf (" NumGradients: %d\n", gradient->NumGradients);
   for (i = 0; i < gradient->NumGradients; i++)
     outputSWF_GRADIENTRECORD (&(gradient->GradientRecords[i]),"");
+}
+
+void
+outputSWF_MORPHGRADIENT (SWF_MORPHGRADIENT * gradient, char *name)
+{
+  int i;
+  iprintf (" MorphGradient: ");
+  iprintf (" NumGradients: %d\n", gradient->NumGradients);
+  for (i = 0; i < gradient->NumGradients; i++)
+    outputSWF_MORPHGRADIENTRECORD (&(gradient->GradientRecords[i]),"");
 }
 
 
@@ -350,6 +371,57 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray, char *name)
       outputSWF_FILLSTYLE (&(fillstylearray->FillStyles[i]),"",0);
     }
 }
+
+void
+outputSWF_MORPHFILLSTYLE (SWF_MORPHFILLSTYLE * fillstyle, char *name, 
+                          int i)
+{
+  iprintf (" MorphFillStyle: ");
+  iprintf (" FillStyleType: %x\n", fillstyle->FillStyleType);
+  switch (fillstyle->FillStyleType)
+    {
+    case 0x00:			/* Solid Fill */
+      outputSWF_RGBA (&fillstyle->StartColor, "");
+      outputSWF_RGBA (&fillstyle->EndColor, "");
+      break;
+    case 0x10:			/* Linear Gradient Fill */
+    case 0x12:			/* Radial Gradient Fill */
+      outputSWF_MATRIX (&fillstyle->StartGradientMatrix,"");
+      outputSWF_MATRIX (&fillstyle->EndGradientMatrix,"");
+      outputSWF_MORPHGRADIENT (&fillstyle->Gradient,"");
+      break;
+    case 0x40:			/* Repeating Bitmap Fill */
+    case 0x41:			/* Clipped Bitmap Fill */
+    case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
+    case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
+      iprintf (" BitmapID: %d\n", fillstyle->BitmapId);
+      outputSWF_MATRIX (&fillstyle->StartBitmapMatrix,"");
+      outputSWF_MATRIX (&fillstyle->EndBitmapMatrix,"");
+      break;
+    }
+}
+
+void
+outputSWF_MORPHFILLSTYLES( SWF_MORPHFILLSTYLES *fillstylearray)
+{
+  int count, i;
+
+  if( !verbose ) 
+	return;
+  iprintf (" MorphFillStyleArray: ");
+  iprintf (" FillStyleCount: %6d ", fillstylearray->FillStyleCount);
+  iprintf (" FillStyleCountExtended: %6d\n",
+          fillstylearray->FillStyleCountExtended);
+  count =
+    (fillstylearray->FillStyleCount !=
+     0xff) ? fillstylearray->FillStyleCount : fillstylearray->
+    FillStyleCountExtended;
+  for (i = 0; i < count; i++)
+    { 
+      outputSWF_MORPHFILLSTYLE (&(fillstylearray->FillStyles[i]),"",0);
+    }
+}
+
 
 void
 outputSWF_LINESTYLE (SWF_LINESTYLE * fillstyle, char *name, int i)
@@ -401,6 +473,66 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
       outputSWF_LINESTYLE (&(linestylearray->LineStyles[i]),"",0);
     else if(linestylearray->LineStyles2 != NULL)
       outputSWF_LINESTYLE2 (&(linestylearray->LineStyles2[i]),"",0);
+    else
+      iprintf("LineStyleArray: parser error\n");
+  }
+}
+
+void
+outputSWF_MORPHLINESTYLE (SWF_MORPHLINESTYLE * linestyle, char *name)
+{
+  iprintf (" MorphLineStyle: ");
+  iprintf (" StartWidth: %d\n", linestyle->StartWidth);
+  iprintf (" EndWidth: %d\n", linestyle->EndWidth);
+  outputSWF_RGBA (&linestyle->StartColor, "");
+  outputSWF_RGBA (&linestyle->EndColor, "");
+}
+
+void
+outputSWF_MORPHLINESTYLE2 (SWF_MORPHLINESTYLE2 * linestyle, char *name)
+{
+  iprintf (" MorphLineStyle2: ");
+  iprintf (" StartWidth: %d\n", linestyle->StartWidth);
+  iprintf (" EndWidth: %d\n", linestyle->EndWidth);
+  iprintf (" StartCapStyle: %d\n", linestyle->StartCapStyle);
+  iprintf (" JoinStyle: %d\n", linestyle->JoinStyle);
+  iprintf (" HasFillFlag: %d\n", linestyle->HasFillFlag);
+  iprintf (" NoHScaleFlag: %d\n", linestyle->NoHScaleFlag);
+  iprintf (" NoVScaleFlag: %d\n", linestyle->NoVScaleFlag);
+  iprintf (" PixelHintingFlag %d\n", linestyle->PixelHintingFlag);
+  iprintf (" NoClose %d\n", linestyle->NoClose);
+  iprintf (" EndCapStyle %d\n", linestyle->EndCapStyle);
+  if(linestyle->JoinStyle == 2)
+    iprintf (" MiterLimitFactor %d\n", linestyle->MiterLimitFactor);
+  if(linestyle->HasFillFlag == 0) {
+    outputSWF_RGBA (&linestyle->StartColor, "");
+    outputSWF_RGBA (&linestyle->EndColor, "");
+  }
+  else
+    outputSWF_MORPHFILLSTYLE (&linestyle->FillType, "", 0);
+}
+
+void
+outputSWF_MORPHLINESTYLES (SWF_MORPHLINESTYLES * linestylearray)
+{
+
+  int count, i;
+
+  if( !verbose ) return;
+  iprintf (" MorphLineStyleArray: ");
+  iprintf (" LineStyleCount: %6d ", linestylearray->LineStyleCount);
+  iprintf (" LineStyleCountExtended: %6d\n",
+	  linestylearray->LineStyleCountExtended);
+  count =
+    (linestylearray->LineStyleCount !=
+     0xff) ? linestylearray->LineStyleCount : linestylearray->
+    LineStyleCountExtended;
+  for (i = 0; i < count; i++)
+  {
+    if(linestylearray->LineStyles != NULL)   
+      outputSWF_MORPHLINESTYLE (&(linestylearray->LineStyles[i]),"");
+    else if(linestylearray->LineStyles2 != NULL)
+      outputSWF_MORPHLINESTYLE2 (&(linestylearray->LineStyles2[i]),"");
     else
       iprintf("LineStyleArray: parser error\n");
   }
@@ -982,8 +1114,35 @@ outputSWF_DEFINELOSSLESS2 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEMORPHSHAPE (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEMORPHSHAPE);
+  OUT_BEGIN (SWF_DEFINEMORPHSHAPE);
+  iprintf(" CharcterID %d\n", sblock->CharacterID);
+  outputSWF_RECT(&(sblock->StartBounds));
+  outputSWF_RECT(&(sblock->EndBounds));
+  iprintf("  Offset %d\n", sblock->Offset);
+  outputSWF_MORPHFILLSTYLES(&(sblock->MorphFillStyles));
+  outputSWF_MORPHLINESTYLES(&(sblock->MorphLineStyles));
+  outputSWF_SHAPE(&(sblock->StartEdges), "");
+  outputSWF_SHAPE(&(sblock->EndEdges), "");
+}
 
+void
+outputSWF_DEFINEMORPHSHAPE2 (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_DEFINEMORPHSHAPE2);
+  iprintf(" CharcterID %d\n", sblock->CharacterID);
+  outputSWF_RECT(&(sblock->StartBounds));
+  outputSWF_RECT(&(sblock->EndBounds));
+  outputSWF_RECT(&(sblock->StartEdgeBounds));
+  outputSWF_RECT(&(sblock->EndEdgeBounds));
+  iprintf("  UsesNonScalingStrokes %d\n", 
+    sblock->UsesNonScalingStrokes);
+  iprintf("  UsesScalinStrokes %d\n",
+    sblock->UsesScalingStrokes);
+  iprintf("  Offset %d\n", sblock->Offset);
+  outputSWF_MORPHFILLSTYLES(&(sblock->MorphFillStyles));
+  outputSWF_MORPHLINESTYLES(&(sblock->MorphLineStyles));
+  outputSWF_SHAPE(&(sblock->StartEdges), "");
+  outputSWF_SHAPE(&(sblock->EndEdges), "");
 }
 
 void

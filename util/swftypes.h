@@ -875,19 +875,6 @@ typedef union SWF_SHAPERECORD {
 	SWF_CURVEDEDGERECORD	CurvedEdge;
 } SWF_SHAPERECORD;
 
-typedef struct SWF_MORPHLINESTYLE {
-	UI16		StartWidth;
-	UI16		EndWidth;
-	SWF_RGBA	StartColor;
-	SWF_RGBA	EndColor;
-} SWF_MORPHLINESTYLE;
-
-typedef struct SWF_MORPHLINESTYLES {
-	UI8	LineStyleCount;
-	UI16	LineStyleCountExtended;
-	SWF_MORPHLINESTYLE	*LineStyles;
-} SWF_MORPHLINESTYLES;
-
 typedef struct SWF_MORPHGRADIENTRECORD {
 	UI8		StartRatio;
 	SWF_RGBA	StartColor;
@@ -917,6 +904,39 @@ typedef struct SWF_MORPHFILLSTYLES {
 	UI16	FillStyleCountExtended;
 	SWF_MORPHFILLSTYLE	*FillStyles;
 } SWF_MORPHFILLSTYLES;
+
+
+typedef struct SWF_MORPHLINESTYLE {
+	UI16		StartWidth;
+	UI16		EndWidth;
+	SWF_RGBA	StartColor;
+	SWF_RGBA	EndColor;
+} SWF_MORPHLINESTYLE;
+
+typedef struct SWF_MORPHLINESTYLE2 {
+	UI16		StartWidth;
+	UI16		EndWidth;
+	UI16		StartCapStyle:2;
+	UI16		JoinStyle:2;
+	UI16		HasFillFlag:2;
+	UI16		NoHScaleFlag:1;
+	UI16		NoVScaleFlag:1;
+	UI16		PixelHintingFlag:1;
+	UI16		Reserved:5;
+	UI16		NoClose:1;
+	UI16		EndCapStyle:2;
+	UI16		MiterLimitFactor;
+	SWF_RGBA	StartColor;
+	SWF_RGBA	EndColor;
+	SWF_MORPHFILLSTYLE FillType;
+} SWF_MORPHLINESTYLE2;
+
+typedef struct SWF_MORPHLINESTYLES {
+	UI8	LineStyleCount;
+	UI16	LineStyleCountExtended;
+	SWF_MORPHLINESTYLE	*LineStyles;
+	SWF_MORPHLINESTYLE2	*LineStyles2;
+} SWF_MORPHLINESTYLES;
 
 typedef struct SWF_SHAPE {
 	UI8	NumFillBits:4;
@@ -1174,6 +1194,24 @@ struct SWF_DEFINEMORPHSHAPE
   SWF_SHAPE StartEdges;
   SWF_SHAPE EndEdges;
 };
+
+struct SWF_DEFINEMORPHSHAPE2
+{
+  UI16 CharacterID;
+  SWF_RECT StartBounds;
+  SWF_RECT EndBounds;
+  SWF_RECT StartEdgeBounds;
+  SWF_RECT EndEdgeBounds;
+  UI8 Reserved:6;
+  UI8 UsesNonScalingStrokes:1;
+  UI8 UsesScalingStrokes:1;
+  UI32 Offset;
+  SWF_MORPHFILLSTYLES MorphFillStyles;
+  SWF_MORPHLINESTYLES MorphLineStyles;
+  SWF_SHAPE StartEdges;
+  SWF_SHAPE EndEdges;
+};
+
 
 struct SWF_DEFINESHAPE
 {

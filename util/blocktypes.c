@@ -49,6 +49,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_DEFINELOSSLESS),
   BlockType (SWF_DEFINELOSSLESS2),
   BlockType (SWF_DEFINEMORPHSHAPE),
+  BlockType (SWF_DEFINEMORPHSHAPE2),
   BlockType (SWF_DEFINESHAPE),
   BlockType (SWF_DEFINESHAPE2),
   BlockType (SWF_DEFINESHAPE3),
