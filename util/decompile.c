@@ -261,6 +261,53 @@ println(const char* fmt, ...)
 /*
  * Start Package 
  *
+ * A package to maintain escaped characters strings
+ * [ BSC == BackSlashCounter ]
+ */
+#define BSC 2
+static int strlenext(char *str)
+{
+ int i=0;
+ while (*str)
+ {
+   i++;
+   if (*str=='\'') i+=BSC;
+   str++;
+ }
+ return i;
+}
+
+static char* strcpyext(char *dest,char *src)
+{
+ char *r=dest;
+ while (*src)
+ {
+  if (*src=='\'')
+  {
+   *dest++='\\';
+#if BSC == 2
+   *dest++='\\';
+#endif
+  }
+  *dest++=*src++;
+ }
+ *dest='\0';
+ return r;
+}
+
+static char* strcatext(char *dest,char *src)
+{
+ char *r=dest;
+ while (*dest)
+  dest++;
+ strcpyext(dest,src);
+ return r;
+}
+/* End Package */
+
+/*
+ * Start Package 
+ *
  * A package to maintain a representation of the Flash VM stack
  */
 
@@ -318,17 +365,17 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
   		sprintf(t,"%ld", act->p.Integer );
   		return t;
 	  case 8: /* CONSTANT8 */
-                t=malloc(strlen(pool[act->p.Constant8])+3); /* 2 "'"s and a NULL */
+		t=malloc(strlenext(pool[act->p.Constant8])+3); /* 2 "'"s and a NULL */
 		strcpy(t,"'");
-		strcat(t,pool[act->p.Constant8]);
+		strcatext(t,pool[act->p.Constant8]);
 		strcat(t,"'");
-  		return t;
+		return t;
 	  case 9: /* CONSTANT16 */
-                t=malloc(strlen(pool[act->p.Constant16])+3); /* 2 '\"'s and a NULL */
+		t=malloc(strlenext(pool[act->p.Constant16])+3); /* 2 '\"'s and a NULL */
 		strcpy(t,"'");
-		strcat(t,pool[act->p.Constant16]);
+		strcatext(t,pool[act->p.Constant16]);
 		strcat(t,"'");
-  		return t;
+		return t;
 
 	  case 12:
 	  case 11: /* INCREMENTED or DECREMENTED VARIABLE */
@@ -367,19 +414,25 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
   		return t;
 #endif
 	  case 8: /* CONSTANT8 */
-                t=malloc(strlen(pool[act->p.Constant8])+1);
-		strcpy(t,pool[act->p.Constant8]);
+		t=malloc(strlenext(pool[act->p.Constant8])+1);
+		strcpyext(t,pool[act->p.Constant8]);
 		if(strlen(t)) /* Not a zero length string */
-  			return t;
+		  return t;
 		else
-  			return "_this";
+		{
+		 t=realloc(t,6);
+		 return strcpy(t,"_this");
+  		}
 	  case 9: /* CONSTANT16 */
-                t=malloc(strlen(pool[act->p.Constant16])+1);
-		strcpy(t,pool[act->p.Constant16]);
+		t=malloc(strlenext(pool[act->p.Constant16])+1);
+		strcpyext(t,pool[act->p.Constant16]);
 		if(strlen(t)) /* Not a zero length string */
-  			return t;
+		  return t;
 		else
-  			return "_this";
+		{
+		 t=realloc(t,6);
+		 return strcpy(t,"_this");
+		}
 	  default: 
   		return getString(act);
   }
@@ -729,7 +782,7 @@ decompileGETURL2 (SWF_ACTION *act)
 static void
 decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 {
-
+  char *t;
   switch( act->Type ) 
   {
 	  case 0: /* STRING */
@@ -763,6 +816,18 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 	  case 7: /* INTEGER */
   		printf ("%ld", act->p.Integer);
 		break;
+
+	  case 8: /* CONSTANT8 */
+	  case 9: /* CONSTANT16 */
+	  	if( wantstring )
+	  	  t=getString(act);
+	  	else
+	  	  t=getName(act);
+	  	puts(t);  
+	  	free(t);  
+	  	break;
+
+#if 0
 	  case 8: /* CONSTANT8 */
 		if( wantstring )
   		  printf ("'%s'", pool[act->p.Constant8]);
@@ -775,6 +840,7 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
 		else
   		  printf ("%s", pool[act->p.Constant16]);
 		break;
+#endif
 	  case 12:
 	  case 11: /* INCREMENTED or DECREMENTED VARIABLE */
 	  case 10: /* VARIABLE */
