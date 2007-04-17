@@ -34,7 +34,6 @@ Block length: 244
   Reserved bits: 0
   Scene bias flag: 0
   Play flag : 1
-  Scene bias : 0
     SWFACTION_PUSH
      [000]   Constant: 0 "_currentframe"
     SWFACTION_GETVARIABLE
@@ -42,7 +41,6 @@ Block length: 244
   Reserved bits: 0
   Scene bias flag: 0
   Play flag : 0
-  Scene bias : 0
     SWFACTION_GOTOLABEL
     SWFACTION_PLAY
     SWFACTION_GOTOLABEL
