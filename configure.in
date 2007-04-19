@@ -264,7 +264,7 @@ AC_CHECK_FUNC(sin, MATHLIB="", [
 
 AC_DEFINE(TRACK_ALLOCS, 1, [Define this if you want Ming to track all objects allocations. Ming will mantain a doubly linked list of allocated objects, call Ming_collectGarbage() to get rid of them all])
 
-AM_CONDITIONAL(USE_CXX, [test x${CXX} != x])
+AM_CONDITIONAL(USE_CXX, [test "x${CXX}" != x])
 if test -n "${CXX}"; then
 	AC_DEFINE([USE_CXX], [1], [Use c++])
 fi
