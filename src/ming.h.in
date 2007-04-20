@@ -272,6 +272,12 @@ SWFLineStyle newSWFLineStyle2_filled(unsigned short width,
 
 /***** SWFShape *****/
 
+#define SWF_SHAPE3 3
+#define SWF_SHAPE4 4
+
+#define SWF_SHAPE_USESCALINGSTROKES 	(1<<0)
+#define SWF_SHAPE_USENONSCALINGSTREOKES	(1<<1)
+
 SWFShape newSWFShape();
 /*
  * returns a shape containing the bitmap in a filled rect
@@ -281,6 +287,9 @@ SWFShape newSWFShapeFromBitmap(SWFBitmap bitmap, int flag);
 void destroySWFShape(SWFShape shape);
 
 void SWFShape_end(SWFShape shape);
+void SWFShape_useVersion(SWFShape shape, int version);
+int SWFShape_getVersion(SWFShape shape);
+void SWFShape_setRenderHintingFlags(SWFShape shape, int flags);
 
 void SWFShape_movePenTo(SWFShape shape, float x, float y);
 void SWFShape_movePen(SWFShape shape, float x, float y);
