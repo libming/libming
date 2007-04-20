@@ -321,7 +321,6 @@ SWFShape_setMorphFlag(SWFShape shape)
 void
 SWFShape_addStyleHeader(SWFShape shape)
 {
-	printf("SWFShape_addStyleHeader\n");
 	SWFOutput out = newSWFOutput();
 	SWFOutput_writeUInt16(out, CHARACTERID(shape));
 	SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
