@@ -52,4 +52,8 @@ void SWFOutput_writeMorphLineStyles(SWFOutput out,
 				    SWFLineStyle *lines1, int nLines1,
 				    SWFLineStyle *lines2, int nLines2);
 
+void SWFOutput_writeMorphLineStyles2(SWFOutput out,
+                SWFLineStyle *lines1, int nLines1,
+                SWFLineStyle *lines2, int nLines2);
+
 #endif /* SWF_LINESTYLE_H_INCLUDED */

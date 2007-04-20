@@ -259,7 +259,56 @@ void SWFOutput_writeLineStyles(SWFOutput out,
 			writeLineStyle2(out, line, shapeType);
 		else
 			writeLineStyle1(out, line, shapeType);
-		++line;
+	}
+}
+
+
+void SWFOutput_writeMorphLineStyles2(SWFOutput out,
+		SWFLineStyle *lines1, int nLines1,
+		SWFLineStyle *lines2, int nLines2)
+{
+	SWFLineStyle line1, line2;
+	int i;
+
+	SWF_assert(nLines1 == nLines2);
+
+	if(nLines1<255)
+		SWFOutput_writeUInt8(out, nLines1);
+	else
+	{
+		SWFOutput_writeUInt8(out, 255);
+		SWFOutput_writeUInt16(out, nLines1);
+	}
+
+	for(i=0; i<nLines1; ++i)
+	{
+		line1 = lines1[i];
+		line2 = lines2[i];
+
+		SWFOutput_writeUInt16(out, line1->width);
+		SWFOutput_writeUInt16(out, line2->width);
+		
+		if(line1->flags != line2->flags)
+			SWF_warnOnce("Morph: shapes _must_ us equal line flags\n");
+		SWFOutput_writeUInt8(out, (line1->flags >> 8));
+		SWFOutput_writeUInt8(out, line1->flags);
+
+		if(line1->flags & SWF_LINESTYLE_JOIN_MITER)
+			SWFOutput_writeFixed8(out, line1->miterLimit);
+		if(line1->flags & SWF_LINESTYLE_FLAG_FILL)
+			SWFOutput_writeMorphFillStyle(out, line1->fill, line2->fill);
+		else
+		{	
+
+			SWFOutput_writeUInt8(out, line1->r);
+			SWFOutput_writeUInt8(out, line1->g);
+			SWFOutput_writeUInt8(out, line1->b);
+			SWFOutput_writeUInt8(out, line1->a);
+			SWFOutput_writeUInt8(out, line2->r);
+			SWFOutput_writeUInt8(out, line2->g);
+			SWFOutput_writeUInt8(out, line2->b);
+			SWFOutput_writeUInt8(out, line2->a);
+		}
 	}
 }
 
@@ -296,9 +345,6 @@ void SWFOutput_writeMorphLineStyles(SWFOutput out,
 		SWFOutput_writeUInt8(out, line2->g);
 		SWFOutput_writeUInt8(out, line2->b);
 		SWFOutput_writeUInt8(out, line2->a);
-
-		++line1;
-		++line2;
 	}
 }
 
