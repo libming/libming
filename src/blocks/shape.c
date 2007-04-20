@@ -29,11 +29,6 @@
 #include "font.h"
 #include "libming.h"
 
-// SWF_DEFINESHAPE4 flags
-#define SWF_SHAPE_USESCALINGSTROKES 	(1<<0)
-#define SWF_SHAPE_USENONSCALINGSTREOKES	(1<<1)
-
-
 struct stateChangeRecord
 {
 	int flags;
@@ -103,6 +98,7 @@ struct SWFShape_s
 	short lineWidth;
 	BOOL isMorph;
 	BOOL isEnded;
+	int useVersion;
 	// SWF_DEFINESHAPE4 extensions
 	unsigned char flags;
 	SWFRect edgeBounds;
@@ -204,6 +200,7 @@ newSWFShape()
 	shape->isMorph = FALSE;
 	shape->isEnded = FALSE;
 	shape->flags = 0;
+	shape->useVersion = SWF_SHAPE3;
 
 	SWFOutput_writeUInt8(shape->out, 0); /* space for nFillBits, nLineBits */
 
@@ -257,9 +254,8 @@ SWFShape_end(SWFShape shape)
 		return;
 
 	shape->isEnded = TRUE;
-
+	
 	buffer = SWFOutput_getBuffer(shape->out);
-
 	buffer[0] =
 		(SWFOutput_numBits(shape->nFills) << 4) + SWFOutput_numBits(shape->nLines);
 
@@ -280,9 +276,11 @@ SWFShape_end(SWFShape shape)
 	/* addStyleHeader creates a new output and adds the existing one after
 		 itself- so even though it's called afterwards it's written before,
 		 as it should be */
-
-	if ( BLOCK(shape)->type > 0 ) /* i.e., shape with style */
+	if ( BLOCK(shape)->type > 0 )
 		SWFShape_addStyleHeader(shape);
+	
+	if(shape->useVersion == SWF_SHAPE4)
+		BLOCK(shape)->type = SWF_DEFINESHAPE4;	
 
 	free(shape->records);
 	shape->records = NULL;
@@ -323,11 +321,11 @@ SWFShape_setMorphFlag(SWFShape shape)
 void
 SWFShape_addStyleHeader(SWFShape shape)
 {
+	printf("SWFShape_addStyleHeader\n");
 	SWFOutput out = newSWFOutput();
-
 	SWFOutput_writeUInt16(out, CHARACTERID(shape));
 	SWFOutput_writeRect(out, SWFCharacter_getBounds(CHARACTER(shape)));
-	if(BLOCK(shape)->type == SWF_DEFINESHAPE4)
+	if(shape->useVersion == SWF_SHAPE4)
 	{
 		SWFOutput_writeRect(out, shape->edgeBounds);
 		SWFOutput_writeUInt8(out, shape->flags);
@@ -631,8 +629,7 @@ SWFShape_addLineStyle2filled(SWFShape shape, unsigned short width,
                              int flags, float miterLimit)
 {
 	growLineArray(shape);
-	if(!shape->isMorph)
-		BLOCK(shape)->type = SWF_DEFINESHAPE4;
+	SWFShape_useVersion(shape, SWF_SHAPE4);
 	shape->lines[shape->nLines] = newSWFLineStyle2_filled(width, fill, flags, miterLimit);
 	return ++shape->nLines;
 }
@@ -643,8 +640,7 @@ SWFShape_addLineStyle2(SWFShape shape, unsigned short width,
                       int flags, float miterLimit)
 {
 	growLineArray(shape);
-	if(!shape->isMorph)
-		BLOCK(shape)->type = SWF_DEFINESHAPE4;
+	SWFShape_useVersion(shape, SWF_SHAPE4);
 	shape->lines[shape->nLines] = newSWFLineStyle2(width, r, g, b, a, flags, miterLimit);
 	return ++shape->nLines;
 }
@@ -1132,6 +1128,59 @@ SWFShape_drawScaledGlyph(SWFShape shape,
 }
 
 
+/*
+ * set shape version manualy
+ * This function allows to set the shapes version information. The
+ * version is only a hint. if necessary the version is upgraded. 
+ * valid values: SWF_SHAPE3 and SWF_SHAPE4 
+ * 3 is default
+ * 4 if linestyle2 is used
+ */
+void SWFShape_useVersion(SWFShape shape, int version)
+{
+	if(shape->useVersion >= version)
+		return;
+	if(version > SWF_SHAPE4)
+		return;
+	shape->useVersion = version;
+}
+
+/*
+ * get shape version
+ * possible values SWF_SHAPE3 and SWF_SHAPE4 
+ */
+int SWFShape_getVersion(SWFShape shape)
+{
+	return shape->useVersion;
+}
+
+/* 
+ * set render hinting flags
+ * possible values:
+ * SWF_SHAPE_USESCALINGSTROKES 	SWF_SHAPE_USENONSCALINGSTREOKES	
+ */
+void SWFShape_setRenderHintingFlags(SWFShape shape, int flags)
+{
+	flags &= (SWF_SHAPE_USESCALINGSTROKES | SWF_SHAPE_USENONSCALINGSTREOKES);
+	shape->flags = flags;
+	SWFShape_useVersion(shape, SWF_SHAPE4);
+}
+
+SWFRect SWFShape_getEdgeBounds(SWFShape shape)
+{
+	if(shape->useVersion == SWF_SHAPE4)
+		return shape->edgeBounds;
+	else
+		return NULL;
+}
+
+int SWFShape_getFlags(SWFShape shape)
+{
+	if(shape->useVersion == SWF_SHAPE4)
+		return shape->flags;
+	else
+		return 0;
+}
 /*
  * Local variables:
  * tab-width: 2
