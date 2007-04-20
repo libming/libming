@@ -453,7 +453,7 @@ parseSWF_SHAPERECORD (FILE * f, SWF_SHAPERECORD * shape, int *fillBits,
 	    }
 	}
       else
-	{
+	{ 
 	  /* A Curved Edge Record */
 	  shape->CurvedEdge.NumBits = readBits (f, 4);
 	  shape->CurvedEdge.ControlDeltaX =
@@ -683,8 +683,13 @@ parseSWF_MORPHLINESTYLES (FILE * f, SWF_MORPHLINESTYLES * linestyle,
       linestyle->LineStyleCountExtended = readUInt16 (f);
       count = linestyle->LineStyleCountExtended;
     }
-  linestyle->LineStyles =
-    (SWF_MORPHLINESTYLE *) malloc (count * sizeof (SWF_MORPHLINESTYLE));
+  if(version == 1)
+    linestyle->LineStyles =
+      (SWF_MORPHLINESTYLE *) malloc (count * sizeof (SWF_MORPHLINESTYLE));
+  else if(version == 2)
+    linestyle->LineStyles2 = 
+      (SWF_MORPHLINESTYLE2 *) malloc (count * sizeof (SWF_MORPHLINESTYLE2));
+
   for (i = 0; i < count; i++)
     {
       if(version == 1)
@@ -763,10 +768,11 @@ parseSWF_MORPHFILLSTYLES (FILE * f, SWF_MORPHFILLSTYLES * fillstyle )
 }
 
 void
-parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level)
+parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level, int len)
 {
   int fillBits, lineBits;
-
+  int end = fileOffset + len;
+	
   byteAlign ();
 
   shape->NumFillBits = fillBits = readBits (f, 4);
@@ -784,6 +790,7 @@ parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level)
 							  1) *
 							 sizeof
 							 (SWF_SHAPERECORD));
+      shape->NumShapeRecords++;
     }
 }
 
@@ -1572,6 +1579,7 @@ parseSWF_DEFINEFONT (FILE * f, int length)
   int i;
   UI16  firstOffset;
   PAR_BEGIN (SWF_DEFINEFONT);
+  int end = fileOffset + length;
 
   parserrec->FontID = readUInt16 (f);
   firstOffset = readUInt16 (f);
@@ -1582,10 +1590,13 @@ parseSWF_DEFINEFONT (FILE * f, int length)
   }
   parserrec->GlyphShapeTable = (SWF_SHAPE *)malloc(firstOffset/2 * sizeof( SWF_SHAPE ) );
   for(i=0;i<firstOffset/2;i++) {
-  	parseSWF_SHAPE(f, &(parserrec->GlyphShapeTable[i]), 1 );
+    int len;
+    if(i < firstOffset/2 - 1)
+      len = parserrec->OffsetTable[i + 1] - parserrec->OffsetTable[i];
+    else
+      len = end -  parserrec->OffsetTable[i];
+    parseSWF_SHAPE(f, &(parserrec->GlyphShapeTable[i]), 1, len);
   }
-
-
   PAR_END;
 }
 
@@ -1642,7 +1653,22 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
     malloc (parserrec->NumGlyphs * sizeof (SWF_SHAPE));
   for (i = 0; i < parserrec->NumGlyphs; i++)
     {
-      parseSWF_SHAPE (f, &parserrec->GlyphShapeTable[i], 3);
+      int len;
+      if(parserrec->FontFlagsWideOffsets)
+      {
+        if(i < parserrec->NumGlyphs - 1)
+          len = parserrec->OffsetTable.UI32[i] - parserrec->OffsetTable.UI32[i + 1];
+        else
+          len = parserrec->CodeTableOffset.UI32 - parserrec->OffsetTable.UI32[i];   
+      }
+      else
+      {
+         if(i < parserrec->NumGlyphs - 1)
+           len = parserrec->OffsetTable.UI16[i] - parserrec->OffsetTable.UI16[i + 1];
+         else
+           len = parserrec->CodeTableOffset.UI16 - parserrec->OffsetTable.UI16[i];
+      }
+      parseSWF_SHAPE (f, &parserrec->GlyphShapeTable[i], 3, len);
     }
 
   parserrec->CodeTable =
@@ -1772,15 +1798,22 @@ SWF_Parserstruct *
 parseSWF_DEFINEMORPHSHAPE (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEMORPHSHAPE);
-
+  int end = fileOffset + length;
   parserrec->CharacterID = readUInt16 (f);
   parseSWF_RECT (f, &(parserrec->StartBounds));
   parseSWF_RECT (f, &(parserrec->EndBounds));
+  
+  int start = fileOffset;
   parserrec->Offset = readUInt32 (f);
+  int endEdges = start + parserrec->Offset;
+
   parseSWF_MORPHFILLSTYLES (f, &(parserrec->MorphFillStyles));
   parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles), 1);
-  parseSWF_SHAPE (f, &(parserrec->StartEdges),0);
-  parseSWF_SHAPE (f, &(parserrec->EndEdges),0);
+  
+  if(parserrec->Offset == 0)
+    error("parseSWF_DEFINEMORPHSHAPE: offset == 0!\n");
+  parseSWF_SHAPE (f, &(parserrec->StartEdges), 0, endEdges - fileOffset);
+  parseSWF_SHAPE (f, &(parserrec->EndEdges), 0, end - fileOffset);
 
   PAR_END;
 }
@@ -1789,18 +1822,28 @@ SWF_Parserstruct *
 parseSWF_DEFINEMORPHSHAPE2 (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEMORPHSHAPE2);
-
+  int end = fileOffset + length;
+  
   parserrec->CharacterID = readUInt16 (f);
   parseSWF_RECT (f, &(parserrec->StartBounds));
   parseSWF_RECT (f, &(parserrec->EndBounds));
+  parseSWF_RECT (f, &(parserrec->StartEdgeBounds));
+  parseSWF_RECT (f, &(parserrec->EndEdgeBounds));
   parserrec->Reserved = readBits(f, 6);
   parserrec->UsesNonScalingStrokes = readBits(f, 1);
   parserrec->UsesScalingStrokes = readBits(f, 1);
+  
+  int start = fileOffset;
   parserrec->Offset = readUInt32 (f);
+  int endEdges = start + parserrec->Offset + 4;
   parseSWF_MORPHFILLSTYLES (f, &(parserrec->MorphFillStyles));
   parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles), 2);
-  parseSWF_SHAPE (f, &(parserrec->StartEdges),0);
-  parseSWF_SHAPE (f, &(parserrec->EndEdges),0);
+  
+  if(parserrec->Offset == 0)
+    error("parseSWF_DEFINEMORPHSHAPE2: offset == 0!\n");
+  
+  parseSWF_SHAPE (f, &(parserrec->StartEdges), 0, endEdges - fileOffset);
+  parseSWF_SHAPE (f, &(parserrec->EndEdges), 0, end - fileOffset);
 
   PAR_END;
 }
