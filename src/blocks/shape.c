@@ -693,7 +693,7 @@ static void finishSetLine(SWFShape shape, int line, unsigned short width)
 		shape->lineWidth = 0;
 	else
 		shape->lineWidth = (SWFLineStyle_getWidth(shape->lines[line-1]) + 1) / 2;
-
+	
 	if ( shape->isMorph )
 		return;
 
@@ -706,6 +706,8 @@ static void finishSetLine(SWFShape shape, int line, unsigned short width)
 /*
  * set filled Linestyle2 introduce with SWF 8.
  * 
+ * set line width in pixel
+ *
  * Instead of providing a fill color, a FillStyle can be applied
  * to a line.
  * 
@@ -753,6 +755,8 @@ SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
 	if ( shape->isEnded )
 		return;
 
+	width = (unsigned short)(Ming_scale*width);
+
 	for ( line=0; line<shape->nLines; ++line )
 	{
 		if ( SWFLineStyle_equals2filled(shape->lines[line], width, fill, flags) )
@@ -771,6 +775,11 @@ SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
 
 /*
  * set Linestyle2 introduce with SWF 8.
+ *
+ * set line width in pixel
+ *
+ * set color {r, g, b, a}
+ *
  * Linestyle2 extends Linestyle1 with some extra flags:
  *
  * Line cap style: select one of the following flags (default is round cap style)
@@ -815,6 +824,8 @@ SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
 	if ( shape->isEnded )
 		return;
 
+	width = (unsigned short)(Ming_scale*width);
+
 	for ( line=0; line<shape->nLines; ++line )
 	{
 		if ( SWFLineStyle_equals(shape->lines[line], width, r, g, b, a, flags) )
@@ -829,15 +840,23 @@ SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
 	finishSetLine(shape, line, width);
 }
 
+/*
+ * set line width and line color
+ *
+ * set line width in pixel
+ * set line color as {r, g, b, a}
+ */
 void
 SWFShape_setLineStyle(SWFShape shape, unsigned short width,
                       byte r, byte g, byte b, byte a)
 {
 	int line;
-	
+		
 	if ( shape->isEnded )
 		return;
-
+	
+	width = (unsigned short)(Ming_scale*width);
+	
 	for ( line=0; line<shape->nLines; ++line )
 	{
 		if ( SWFLineStyle_equals(shape->lines[line], width, r, g, b, a, 0) )
@@ -966,7 +985,6 @@ void
 SWFShape_moveScaledPenTo(SWFShape shape, int x, int y)
 {
 	ShapeRecord record;
-
 	if ( shape->isEnded )
 		return;
 
