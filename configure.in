@@ -334,6 +334,7 @@ AC_OUTPUT([
 	test/Movie/FrameLabel/Makefile
 	test/Movie/Protect/Makefile
 	test/Movie/Rate/Makefile
+	test/Movie/addMetadata/Makefile
 	test/Filter/Makefile
 	test/Morph/Makefile
 	test/Video/Makefile

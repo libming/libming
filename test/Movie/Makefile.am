@@ -7,5 +7,6 @@ SUBDIRS = \
 	NumFrames	\
 	Protect		\
 	Rate 		\
-	nextFrame
+	nextFrame       \
+	addMetadata
 
