@@ -852,6 +852,9 @@ class SWFShape : public SWFCharacter
   void drawGlyph(SWFFont *font, unsigned short c, int size=0)
     { SWFShape_drawSizedGlyph(this->shape, font->font, c, size); }
 
+  void useVersion(int version)
+    { SWFShape_useVersion(this->shape, version); }
+
   // deprecated?
   void drawFontGlyph(SWFFont *font, unsigned short c)
     { SWFShape_drawGlyph(this->shape, font->font, c); }
