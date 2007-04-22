@@ -458,7 +458,6 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
 
   int count, i;
 
-  if( !verbose ) return;
   iprintf (" LineStyleArray: ");
   iprintf (" LineStyleCount: %6d ", linestylearray->LineStyleCount);
   iprintf (" LineStyleCountExtended: %6d\n",
