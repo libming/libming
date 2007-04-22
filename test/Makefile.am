@@ -1,4 +1,4 @@
-SUBDIRS = Movie actionscript Filter Morph Video
+SUBDIRS = Movie actionscript Filter Morph Video Shape
 
 EXTRA_DIST = \
 	dotests.pl \
