@@ -1,0 +1,23 @@
+#include <mingpp.h>
+
+
+int main()
+{
+	SWFMovie *m = new SWFMovie(7);
+	FILE *file;
+	file = fopen("../Media/video01.flv", "rb");
+	if(!file)
+		return 0;
+	
+	SWFVideoStream *stream = new SWFVideoStream(file);
+	stream->setDimension(200, 200);
+	int frames = stream->getNumFrames();
+	m->add(stream);
+	
+	int i;
+	for(i = 0; i < frames; i++)
+		m->nextFrame();
+
+	m->save("test01.swf");
+	return 0;
+}
