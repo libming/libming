@@ -51,7 +51,7 @@ typedef enum
   SWF_DEFINEFONT2               = 48,
   SWF_DEFINEFONT3		= 75,  /* SWF_version  >= 8 */
   SWF_DEFINEFONTALIGNZONES	= 73,  /* SWF_version  >= 8 */
-  SWF_CMSTEXTSETTINGS		= 74,  /* SWF_version  >= 8 */
+  SWF_CSMTEXTSETTINGS		= 74,  /* SWF_version  >= 8 */
   SWF_DEFINEFONTINFO            = 13,
   SWF_DEFINEFONTINFO2		= 62,  /* SWF_version  >= 6 */
   SWF_DEFINELOSSLESS            = 20,
@@ -189,7 +189,7 @@ static inline int SWFBlocktype_swfVersion(int type)
 		case SWF_PLACEOBJECT3:
 		case SWF_IMPORTASSETS2:
 		case SWF_DEFINEFONTALIGNZONES:
-		case SWF_CMSTEXTSETTINGS:
+		case SWF_CSMTEXTSETTINGS:
 		case SWF_DEFINEFONT3:
 		case SWF_METADATA:
 		case SWF_DEFINESHAPE4:
