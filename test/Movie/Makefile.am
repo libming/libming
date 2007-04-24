@@ -8,5 +8,6 @@ SUBDIRS = \
 	Protect		\
 	Rate 		\
 	nextFrame       \
-	addMetadata
+	addMetadata	\
+	setSoundStream	
 

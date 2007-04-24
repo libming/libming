@@ -1,0 +1,2431 @@
+File version: 7
+File size: 203055
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 200
+
+Offset: 20 (0x0014)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (ff,ff,ff,ff)
+
+Offset: 25 (0x0019)
+Block type: 18 (SWF_SOUNDSTREAMHEAD)
+Block length: 6
+
+  PlaybackSoundRate 22 kHz
+  PlaybackSoundSize 16 bit
+  PlaybackSoundType stereo
+  StreamSoundCompression MP3
+  StreamSoundRate 22 kHz
+  StreamSoundSize 16 bit
+  StreamSoundType stereo
+  StreamSoundSampleCount 1837
+  LatencySeek 1663
+
+Offset: 33 (0x0021)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1885
+
+  Mp3: SampleCount 3456
+  Mp3: SeekSamples 1663
+
+Offset: 1924 (0x0784)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1926 (0x0786)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 44
+
+Offset: 2876 (0x0b3c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 2878 (0x0b3e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 153
+
+Offset: 3829 (0x0ef5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 3831 (0x0ef7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 262
+
+Offset: 4781 (0x12ad)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 4783 (0x12af)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 371
+
+Offset: 5733 (0x1665)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 5735 (0x1667)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 480
+
+Offset: 6999 (0x1b57)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 7001 (0x1b59)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 13
+
+Offset: 7952 (0x1f10)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 7954 (0x1f12)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 122
+
+Offset: 8904 (0x22c8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8906 (0x22ca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 231
+
+Offset: 9857 (0x2681)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 9859 (0x2683)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 340
+
+Offset: 10809 (0x2a39)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 10811 (0x2a3b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 449
+
+Offset: 11761 (0x2df1)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 11763 (0x2df3)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 558
+
+Offset: 13027 (0x32e3)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 13029 (0x32e5)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 91
+
+Offset: 13980 (0x369c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 13982 (0x369e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 200
+
+Offset: 14932 (0x3a54)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 14934 (0x3a56)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 309
+
+Offset: 15884 (0x3e0c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 15886 (0x3e0e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 418
+
+Offset: 16837 (0x41c5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 16839 (0x41c7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 527
+
+Offset: 18103 (0x46b7)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 18105 (0x46b9)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 60
+
+Offset: 19055 (0x4a6f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 19057 (0x4a71)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 169
+
+Offset: 20008 (0x4e28)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 20010 (0x4e2a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 278
+
+Offset: 20960 (0x51e0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 20962 (0x51e2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 387
+
+Offset: 21912 (0x5598)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 21914 (0x559a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 496
+
+Offset: 23178 (0x5a8a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 23180 (0x5a8c)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 29
+
+Offset: 24131 (0x5e43)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 24133 (0x5e45)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 138
+
+Offset: 25083 (0x61fb)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 25085 (0x61fd)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 247
+
+Offset: 26036 (0x65b4)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 26038 (0x65b6)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 356
+
+Offset: 26988 (0x696c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 26990 (0x696e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 465
+
+Offset: 27940 (0x6d24)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 27942 (0x6d26)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 574
+
+Offset: 29206 (0x7216)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 29208 (0x7218)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 107
+
+Offset: 30159 (0x75cf)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 30161 (0x75d1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 216
+
+Offset: 31111 (0x7987)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 31113 (0x7989)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 325
+
+Offset: 32063 (0x7d3f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 32065 (0x7d41)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 434
+
+Offset: 33016 (0x80f8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 33018 (0x80fa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 543
+
+Offset: 34282 (0x85ea)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 34284 (0x85ec)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 76
+
+Offset: 35234 (0x89a2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 35236 (0x89a4)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 185
+
+Offset: 36187 (0x8d5b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 36189 (0x8d5d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 294
+
+Offset: 37139 (0x9113)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 37141 (0x9115)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 403
+
+Offset: 38091 (0x94cb)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 38093 (0x94cd)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 512
+
+Offset: 39357 (0x99bd)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 39359 (0x99bf)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 45
+
+Offset: 40310 (0x9d76)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 40312 (0x9d78)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 154
+
+Offset: 41262 (0xa12e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 41264 (0xa130)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 263
+
+Offset: 42214 (0xa4e6)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 42216 (0xa4e8)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 372
+
+Offset: 43167 (0xa89f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 43169 (0xa8a1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 481
+
+Offset: 44433 (0xad91)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 44435 (0xad93)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 14
+
+Offset: 45385 (0xb149)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 45387 (0xb14b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 123
+
+Offset: 46338 (0xb502)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 46340 (0xb504)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 232
+
+Offset: 47290 (0xb8ba)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 47292 (0xb8bc)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 341
+
+Offset: 48242 (0xbc72)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 48244 (0xbc74)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 450
+
+Offset: 49195 (0xc02b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 49197 (0xc02d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 559
+
+Offset: 50461 (0xc51d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 50463 (0xc51f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 92
+
+Offset: 51413 (0xc8d5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 51415 (0xc8d7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 201
+
+Offset: 52365 (0xcc8d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 52367 (0xcc8f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 310
+
+Offset: 53318 (0xd046)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 53320 (0xd048)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 419
+
+Offset: 54270 (0xd3fe)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 54272 (0xd400)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 528
+
+Offset: 55536 (0xd8f0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 55538 (0xd8f2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 61
+
+Offset: 56489 (0xdca9)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 56491 (0xdcab)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 170
+
+Offset: 57441 (0xe061)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 57443 (0xe063)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 279
+
+Offset: 58393 (0xe419)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 58395 (0xe41b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 388
+
+Offset: 59346 (0xe7d2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 59348 (0xe7d4)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 497
+
+Offset: 60612 (0xecc4)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 60614 (0xecc6)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 30
+
+Offset: 61564 (0xf07c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 61566 (0xf07e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 139
+
+Offset: 62516 (0xf434)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 62518 (0xf436)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 248
+
+Offset: 63469 (0xf7ed)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 63471 (0xf7ef)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 357
+
+Offset: 64421 (0xfba5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 64423 (0xfba7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 466
+
+Offset: 65374 (0xff5e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 65376 (0xff60)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 575
+
+Offset: 66640 (0x10450)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 66642 (0x10452)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 108
+
+Offset: 67592 (0x10808)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 67594 (0x1080a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 217
+
+Offset: 68544 (0x10bc0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 68546 (0x10bc2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 326
+
+Offset: 69497 (0x10f79)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 69499 (0x10f7b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 435
+
+Offset: 70449 (0x11331)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 70451 (0x11333)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 544
+
+Offset: 71715 (0x11823)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 71717 (0x11825)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 77
+
+Offset: 72668 (0x11bdc)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 72670 (0x11bde)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 186
+
+Offset: 73620 (0x11f94)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 73622 (0x11f96)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 295
+
+Offset: 74572 (0x1234c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 74574 (0x1234e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 404
+
+Offset: 75525 (0x12705)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 75527 (0x12707)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 513
+
+Offset: 76791 (0x12bf7)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 76793 (0x12bf9)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 46
+
+Offset: 77743 (0x12faf)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 77745 (0x12fb1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 155
+
+Offset: 78695 (0x13367)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 78697 (0x13369)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 264
+
+Offset: 79648 (0x13720)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 79650 (0x13722)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 373
+
+Offset: 80600 (0x13ad8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 80602 (0x13ada)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 482
+
+Offset: 81866 (0x13fca)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 81868 (0x13fcc)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 15
+
+Offset: 82819 (0x14383)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 82821 (0x14385)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 124
+
+Offset: 83771 (0x1473b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 83773 (0x1473d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 233
+
+Offset: 84723 (0x14af3)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 84725 (0x14af5)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 342
+
+Offset: 85676 (0x14eac)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 85678 (0x14eae)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 451
+
+Offset: 86628 (0x15264)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 86630 (0x15266)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 560
+
+Offset: 87894 (0x15756)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 87896 (0x15758)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 93
+
+Offset: 88846 (0x15b0e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 88848 (0x15b10)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 202
+
+Offset: 89799 (0x15ec7)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 89801 (0x15ec9)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 311
+
+Offset: 90751 (0x1627f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 90753 (0x16281)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 420
+
+Offset: 91704 (0x16638)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 91706 (0x1663a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 529
+
+Offset: 92970 (0x16b2a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 92972 (0x16b2c)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 62
+
+Offset: 93922 (0x16ee2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 93924 (0x16ee4)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 171
+
+Offset: 94874 (0x1729a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 94876 (0x1729c)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 280
+
+Offset: 95827 (0x17653)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 95829 (0x17655)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 389
+
+Offset: 96779 (0x17a0b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 96781 (0x17a0d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 498
+
+Offset: 98045 (0x17efd)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 98047 (0x17eff)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 31
+
+Offset: 98997 (0x182b5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 98999 (0x182b7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 140
+
+Offset: 99950 (0x1866e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 99952 (0x18670)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 249
+
+Offset: 100902 (0x18a26)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 100904 (0x18a28)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 358
+
+Offset: 101855 (0x18ddf)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 101857 (0x18de1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 467
+
+Offset: 102807 (0x19197)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 102809 (0x19199)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 576
+
+Offset: 104073 (0x19689)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 104075 (0x1968b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 109
+
+Offset: 105025 (0x19a41)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 105027 (0x19a43)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 218
+
+Offset: 105978 (0x19dfa)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 105980 (0x19dfc)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 327
+
+Offset: 106930 (0x1a1b2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 106932 (0x1a1b4)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 436
+
+Offset: 107883 (0x1a56b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 107885 (0x1a56d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1257
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 545
+
+Offset: 109148 (0x1aa5c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 109150 (0x1aa5e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 78
+
+Offset: 110101 (0x1ae15)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 110103 (0x1ae17)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 187
+
+Offset: 111053 (0x1b1cd)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 111055 (0x1b1cf)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 296
+
+Offset: 112006 (0x1b586)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 112008 (0x1b588)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 405
+
+Offset: 112958 (0x1b93e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 112960 (0x1b940)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 514
+
+Offset: 114224 (0x1be30)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 114226 (0x1be32)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 47
+
+Offset: 115176 (0x1c1e8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 115178 (0x1c1ea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 156
+
+Offset: 116129 (0x1c5a1)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 116131 (0x1c5a3)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 265
+
+Offset: 117081 (0x1c959)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 117083 (0x1c95b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 374
+
+Offset: 118034 (0x1cd12)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 118036 (0x1cd14)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 483
+
+Offset: 119300 (0x1d204)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 119302 (0x1d206)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 16
+
+Offset: 120252 (0x1d5bc)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 120254 (0x1d5be)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 125
+
+Offset: 121204 (0x1d974)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 121206 (0x1d976)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 234
+
+Offset: 122157 (0x1dd2d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 122159 (0x1dd2f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 343
+
+Offset: 123109 (0x1e0e5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 123111 (0x1e0e7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 452
+
+Offset: 124062 (0x1e49e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 124064 (0x1e4a0)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1257
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 561
+
+Offset: 125327 (0x1e98f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 125329 (0x1e991)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 94
+
+Offset: 126280 (0x1ed48)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 126282 (0x1ed4a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 203
+
+Offset: 127232 (0x1f100)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 127234 (0x1f102)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 312
+
+Offset: 128185 (0x1f4b9)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 128187 (0x1f4bb)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 421
+
+Offset: 129137 (0x1f871)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 129139 (0x1f873)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 530
+
+Offset: 130403 (0x1fd63)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 130405 (0x1fd65)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 63
+
+Offset: 131355 (0x2011b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 131357 (0x2011d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 172
+
+Offset: 132308 (0x204d4)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 132310 (0x204d6)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 281
+
+Offset: 133260 (0x2088c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 133262 (0x2088e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 390
+
+Offset: 134213 (0x20c45)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 134215 (0x20c47)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1257
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 499
+
+Offset: 135478 (0x21136)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 135480 (0x21138)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 32
+
+Offset: 136431 (0x214ef)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 136433 (0x214f1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 141
+
+Offset: 137383 (0x218a7)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 137385 (0x218a9)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 250
+
+Offset: 138336 (0x21c60)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 138338 (0x21c62)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 359
+
+Offset: 139288 (0x22018)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 139290 (0x2201a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 468
+
+Offset: 140554 (0x2250a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 140556 (0x2250c)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 1
+
+Offset: 141506 (0x228c2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 141508 (0x228c4)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 110
+
+Offset: 142459 (0x22c7b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 142461 (0x22c7d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 219
+
+Offset: 143411 (0x23033)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 143413 (0x23035)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 328
+
+Offset: 144364 (0x233ec)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 144366 (0x233ee)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 437
+
+Offset: 145316 (0x237a4)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 145318 (0x237a6)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 546
+
+Offset: 146582 (0x23c96)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 146584 (0x23c98)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 79
+
+Offset: 147534 (0x2404e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 147536 (0x24050)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 188
+
+Offset: 148487 (0x24407)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 148489 (0x24409)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 297
+
+Offset: 149439 (0x247bf)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 149441 (0x247c1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 406
+
+Offset: 150392 (0x24b78)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 150394 (0x24b7a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1257
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 515
+
+Offset: 151657 (0x25069)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 151659 (0x2506b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 48
+
+Offset: 152610 (0x25422)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 152612 (0x25424)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 157
+
+Offset: 153562 (0x257da)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 153564 (0x257dc)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 266
+
+Offset: 154515 (0x25b93)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 154517 (0x25b95)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 375
+
+Offset: 155467 (0x25f4b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 155469 (0x25f4d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 484
+
+Offset: 156733 (0x2643d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 156735 (0x2643f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 17
+
+Offset: 157685 (0x267f5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 157687 (0x267f7)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 126
+
+Offset: 158638 (0x26bae)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 158640 (0x26bb0)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 235
+
+Offset: 159590 (0x26f66)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 159592 (0x26f68)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 344
+
+Offset: 160543 (0x2731f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 160545 (0x27321)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 453
+
+Offset: 161495 (0x276d7)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 161497 (0x276d9)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 562
+
+Offset: 162761 (0x27bc9)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 162763 (0x27bcb)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 95
+
+Offset: 163713 (0x27f81)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 163715 (0x27f83)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 204
+
+Offset: 164666 (0x2833a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 164668 (0x2833c)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 313
+
+Offset: 165618 (0x286f2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 165620 (0x286f4)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 422
+
+Offset: 166570 (0x28aaa)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 166572 (0x28aac)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 531
+
+Offset: 167836 (0x28f9c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 167838 (0x28f9e)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 64
+
+Offset: 168789 (0x29355)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 168791 (0x29357)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 173
+
+Offset: 169741 (0x2970d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 169743 (0x2970f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 282
+
+Offset: 170694 (0x29ac6)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 170696 (0x29ac8)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 391
+
+Offset: 171646 (0x29e7e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 171648 (0x29e80)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 500
+
+Offset: 172912 (0x2a370)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 172914 (0x2a372)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 33
+
+Offset: 173864 (0x2a728)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 173866 (0x2a72a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 142
+
+Offset: 174817 (0x2aae1)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 174819 (0x2aae3)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 251
+
+Offset: 175769 (0x2ae99)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 175771 (0x2ae9b)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 360
+
+Offset: 176721 (0x2b251)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 176723 (0x2b253)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 469
+
+Offset: 177987 (0x2b743)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 177989 (0x2b745)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 2
+
+Offset: 178940 (0x2bafc)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 178942 (0x2bafe)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 111
+
+Offset: 179892 (0x2beb4)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 179894 (0x2beb6)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 220
+
+Offset: 180845 (0x2c26d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 180847 (0x2c26f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 329
+
+Offset: 181797 (0x2c625)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 181799 (0x2c627)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 438
+
+Offset: 182749 (0x2c9dd)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 182751 (0x2c9df)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 547
+
+Offset: 184015 (0x2cecf)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 184017 (0x2ced1)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 80
+
+Offset: 184968 (0x2d288)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 184970 (0x2d28a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 189
+
+Offset: 185920 (0x2d640)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 185922 (0x2d642)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 298
+
+Offset: 186872 (0x2d9f8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 186874 (0x2d9fa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 407
+
+Offset: 187825 (0x2ddb1)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 187827 (0x2ddb3)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 516
+
+Offset: 189091 (0x2e2a3)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 189093 (0x2e2a5)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 49
+
+Offset: 190043 (0x2e65b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 190045 (0x2e65d)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 158
+
+Offset: 190996 (0x2ea14)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 190998 (0x2ea16)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 267
+
+Offset: 191948 (0x2edcc)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 191950 (0x2edce)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 376
+
+Offset: 192900 (0x2f184)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 192902 (0x2f186)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 485
+
+Offset: 194166 (0x2f676)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 194168 (0x2f678)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 18
+
+Offset: 195119 (0x2fa2f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 195121 (0x2fa31)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 127
+
+Offset: 196071 (0x2fde7)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 196073 (0x2fde9)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 236
+
+Offset: 197024 (0x301a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 197026 (0x301a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 345
+
+Offset: 197976 (0x30558)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 197978 (0x3055a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 454
+
+Offset: 198928 (0x30910)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 198930 (0x30912)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1258
+
+  Mp3: SampleCount 2304
+  Mp3: SeekSamples 563
+
+Offset: 200194 (0x30e02)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 200196 (0x30e04)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 945
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 96
+
+Offset: 201147 (0x311bb)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 201149 (0x311bd)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 205
+
+Offset: 202099 (0x31573)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 202101 (0x31575)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 944
+
+  Mp3: SampleCount 1728
+  Mp3: SeekSamples 314
+
+Offset: 203051 (0x3192b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 203053 (0x3192d)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
