@@ -336,6 +336,7 @@ AC_OUTPUT([
 	test/Movie/Rate/Makefile
 	test/Movie/addMetadata/Makefile
 	test/Movie/setSoundStream/Makefile
+	test/Movie/setTabIndex/Makefile
 	test/Filter/Makefile
 	test/Morph/Makefile
 	test/Video/Makefile

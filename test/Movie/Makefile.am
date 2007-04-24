@@ -9,5 +9,6 @@ SUBDIRS = \
 	Rate 		\
 	nextFrame       \
 	addMetadata	\
-	setSoundStream	
+	setSoundStream	\
+	setTabIndex	
 
