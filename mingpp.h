@@ -936,6 +936,10 @@ class SWFMovieClip : public SWFCharacter
 
   void labelFrame(char *label)
     { SWFMovieClip_labelFrame(this->clip, label); }
+
+  void addInitAction(SWFAction* a)
+    { SWFMovieClip_addInitAction(this->clip, a->action); }
+
   SWF_DECLAREONLY(SWFMovieClip);
 };
 
