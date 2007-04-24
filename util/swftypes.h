@@ -1113,6 +1113,7 @@ struct SWF_DEFINEEDITTEXT
 struct SWF_DEFINEFONT
 {
   UI16 FontID;
+  int NumGlyphs;
   UI16 *OffsetTable;
   SWF_SHAPE *GlyphShapeTable;
 };
@@ -1149,6 +1150,40 @@ struct SWF_DEFINEFONT2
   } CodeTableOffset;
   SWF_SHAPE *GlyphShapeTable;
   int *CodeTable;
+  SI16 FontAscent;
+  SI16 FontDecent;
+  SI16 FontLeading;
+  SI16 *FontAdvanceTable;
+  SWF_RECT *FontBoundsTable;
+  UI16 KerningCount;
+  struct SWF_KERNINGRECORD *FontKerningTable;
+};
+
+struct SWF_DEFINEFONT3
+{
+  UI16 FontID;
+  UI8 FontFlagsHasLayout:1;
+  UI8 FontFlagsShiftJis:1;
+  UI8 FontFlagsSmallText:1;
+  UI8 FontFlagsFlagANSI:1;
+  UI8 FontFlagsWideOffsets:1;
+  UI8 FontFlagsWideCodes:1;
+  UI8 FontFlagsFlagsItalics:1;
+  UI8 FontFlagsFlagsBold:1;
+  LANGCODE LanguageCode;
+  UI8 FontNameLen;
+  STRING FontName;
+  UI16 NumGlyphs;
+  union {
+    UI16 *UI16;
+    UI32 *UI32;
+  } OffsetTable;
+  union {
+    UI16 UI16;
+    UI32 UI32;
+  } CodeTableOffset;
+  SWF_SHAPE *GlyphShapeTable;
+  UI16 *CodeTable;
   SI16 FontAscent;
   SI16 FontDecent;
   SI16 FontLeading;
@@ -1642,6 +1677,7 @@ typedef union SWF_Parserstruct
   struct SWF_DEFINEEDITTEXT SWF_DEFINEEDITTEXT;
   struct SWF_DEFINEFONT SWF_DEFINEFONT;
   struct SWF_DEFINEFONT2 SWF_DEFINEFONT2;
+  struct SWF_DEFINEFONT3 SWF_DEFINEFONT3;
   struct SWF_DEFINEFONTINFO SWF_DEFINEFONTINFO;
   struct SWF_DEFINEFONTINFO2 SWF_DEFINEFONTINFO2;
   struct SWF_DEFINELOSSLESS SWF_DEFINELOSSLESS;

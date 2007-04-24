@@ -54,6 +54,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEEDITTEXT, outputSWF_DEFINEEDITTEXT},
   {SWF_DEFINEFONT, outputSWF_DEFINEFONT},
   {SWF_DEFINEFONT2, outputSWF_DEFINEFONT2},
+  {SWF_DEFINEFONT3, outputSWF_DEFINEFONT3},
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
   {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
@@ -1006,8 +1007,18 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEFONT (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEFONT);
-
+  int i;
+  OUT_BEGIN (SWF_DEFINEFONT);
+  iprintf (" FontID: %d\n", sblock->FontID);
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    iprintf (" OffsetTable[%3.3d]: %x\n", i, sblock->OffsetTable[i]);
+  
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    {
+	char shapename[32];
+	sprintf(shapename,"Shape[%3.3d]",i);
+	outputSWF_SHAPE (&(sblock->GlyphShapeTable[i]), shapename);
+    }
 }
 
 void
@@ -1015,6 +1026,94 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 {
   int i;
   OUT_BEGIN (SWF_DEFINEFONT2);
+
+  iprintf (" FontID: %d\n", sblock->FontID);
+  iprintf (" FontFlagsHasLayout: %d\n", sblock->FontFlagsHasLayout);
+  iprintf (" FontFlagsShiftJis: %d\n", sblock->FontFlagsShiftJis);
+  iprintf (" FontFlagsSmallText: %d\n", sblock->FontFlagsSmallText);
+  iprintf (" FontFlagsFlagANSI: %d\n", sblock->FontFlagsFlagANSI);
+  iprintf (" FontFlagsWideOffsets: %d\n", sblock->FontFlagsWideOffsets);
+  iprintf (" FontFlagsWideCodes: %d\n", sblock->FontFlagsWideCodes);
+  iprintf (" FontFlagsFlagsItalics: %d\n", sblock->FontFlagsFlagsItalics);
+  iprintf (" FontFlagsFlagsBold: %d\n", sblock->FontFlagsFlagsBold);
+  iprintf (" LanguageCode: %d\n", sblock->LanguageCode);
+  iprintf (" FontNameLen: %d\n", sblock->FontNameLen);
+  iprintf (" FontName: %s\n", sblock->FontName);
+  iprintf (" NumGlyphs: %d\n", sblock->NumGlyphs);
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    {
+      if (sblock->FontFlagsWideOffsets)
+	{
+	  iprintf (" OffsetTable[%3.3d]: %lx\n", i,
+		  sblock->OffsetTable.UI32[i]);
+	}
+      else
+	{
+	  iprintf (" OffsetTable[%3.3d]: %x\n", i,
+		  sblock->OffsetTable.UI16[i]);
+	}
+    }
+  if (sblock->FontFlagsWideOffsets)
+    {
+      iprintf (" CodeTableOffset: %lx\n", sblock->CodeTableOffset.UI32);
+    }
+  else
+    {
+      iprintf (" CodeTableOffset: %x\n", sblock->CodeTableOffset.UI16);
+    }
+
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    {
+	char shapename[32];
+	sprintf(shapename,"Shape[%3.3d]",i);
+	outputSWF_SHAPE (&(sblock->GlyphShapeTable[i]), shapename);
+    }
+
+  for (i = 0; i < sblock->NumGlyphs; i++)
+    {
+	if( sblock->FontFlagsWideCodes )
+	  {
+		iprintf (" CodeTable[%3.3d]: %4.4x\n", i,
+		  	sblock->CodeTable[i]);
+	  }
+	else
+	  {
+		iprintf (" CodeTable[%3.3d]: %2.2x\n", i,
+		  	sblock->CodeTable[i]);
+	  }
+    }
+
+  if( sblock->FontFlagsHasLayout ) {
+    iprintf (" FontAscent: %d\n", sblock->FontAscent);
+    iprintf (" FontDecent: %d\n", sblock->FontDecent);
+    iprintf (" FontLeading: %d\n", sblock->FontLeading);
+    for (i = 0; i < sblock->NumGlyphs; i++)
+      {
+	iprintf (" FontAdvanceTable[%3.3d]: %x\n", i,
+		  sblock->FontAdvanceTable[i]);
+      }
+    iprintf (" FontBoundsable: (not used)\n");
+    for (i = 0; i < sblock->NumGlyphs; i++)
+      {
+	outputSWF_RECT (&(sblock->FontBoundsTable[i]));
+      }
+    iprintf (" KerningCount: %d\n", sblock->KerningCount);
+    for (i = 0; i < sblock->KerningCount; i++)
+      {
+	iprintf (" FontKerningTable[%3.3d]: %d,%d %d\n", i,
+		  sblock->FontKerningTable[i].FontKerningCode1,
+		  sblock->FontKerningTable[i].FontKerningCode2,
+		  sblock->FontKerningTable[i].FontKerningAdjustment);
+      }
+  }
+
+}
+
+void
+outputSWF_DEFINEFONT3 (SWF_Parserstruct * pblock)
+{
+  int i;
+  OUT_BEGIN (SWF_DEFINEFONT3);
 
   iprintf (" FontID: %d\n", sblock->FontID);
   iprintf (" FontFlagsHasLayout: %d\n", sblock->FontFlagsHasLayout);
