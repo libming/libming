@@ -306,11 +306,44 @@ outputSWF_MORPHGRADIENTRECORD (SWF_MORPHGRADIENTRECORD * gradientrec,
   outputSWF_RGBA (&gradientrec->EndColor, "");
 }
 
+void 
+outputFIXED(FIXED fixed, const char *prefix)
+{
+	float f;
+	
+	f = fixed * 1.0 / (1<<16);
+	iprintf("%s%f\n", prefix, f);
+}
+
+void 
+outputFIXED8(FIXED fixed, const char *prefix)
+{
+	float f;
+	
+	f = fixed * 1.0 / (1<<8);
+	iprintf("%s%f\n", prefix, f);
+}
+
+void
+outputSWF_FOCALGRADIENT (SWF_FOCALGRADIENT * gradient, char *name)
+{
+  int i;
+  iprintf (" Gradient: ");
+  iprintf (" SpreadMode: %d\n", gradient->SpreadMode);
+  iprintf (" InterpolationMode: %d\n", gradient->InterpolationMode);
+  iprintf (" NumGradients: %d\n", gradient->NumGradients);
+  for (i = 0; i < gradient->NumGradients; i++)
+    outputSWF_GRADIENTRECORD (&(gradient->GradientRecords[i]),"");
+  outputFIXED8(gradient->FocalPoint, "  FocalPoint: \n");
+}
+
 void
 outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *name)
 {
   int i;
   iprintf (" Gradient: ");
+  iprintf (" SpreadMode: %d\n", gradient->SpreadMode);
+  iprintf (" InterpolationMode: %d\n", gradient->InterpolationMode);
   iprintf (" NumGradients: %d\n", gradient->NumGradients);
   for (i = 0; i < gradient->NumGradients; i++)
     outputSWF_GRADIENTRECORD (&(gradient->GradientRecords[i]),"");
@@ -342,6 +375,8 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *name, int i)
       outputSWF_MATRIX (&fillstyle->GradientMatrix,"");
       outputSWF_GRADIENT (&fillstyle->Gradient,"");
       break;
+    case 0x13:
+      outputSWF_FOCALGRADIENT(&fillstyle->FocalGradient, "");
     case 0x40:			/* Repeating Bitmap Fill */
     case 0x41:			/* Clipped Bitmap Fill */
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
@@ -673,24 +708,6 @@ outputSWF_TEXTRECORD (SWF_TEXTRECORD *trec, int level)
   iprintf ("  GlyphCount: %d\n", trec->GlyphCount);
   for(i=0;i<trec->GlyphCount;i++)
 	  outputSWF_GLYPHENTRY( &(trec->GlyphEntries[i]) );
-}
-
-void 
-outputFIXED(FIXED fixed, const char *prefix)
-{
-	float f;
-	
-	f = fixed * 1.0 / (1<<16);
-	iprintf("%s%f\n", prefix, f);
-}
-
-void 
-outputFIXED8(FIXED fixed, const char *prefix)
-{
-	float f;
-	
-	f = fixed * 1.0 / (1<<8);
-	iprintf("%s%f\n", prefix, f);
 }
 
 void 

@@ -552,9 +552,19 @@ typedef struct SWF_GRADIENTRECORD {
 } SWF_GRADIENTRECORD;
 
 typedef struct SWF_GRADIENT {
-	UI8	NumGradients;
-	SWF_GRADIENTRECORD	GradientRecords[8];
+	UI8	SpreadMode:2;
+	UI8	InterpolationMode:2;
+	UI8	NumGradients:4;
+	SWF_GRADIENTRECORD	GradientRecords[15];
 } SWF_GRADIENT;
+
+typedef struct SWF_FOCALGRADIENT {
+	UI8     SpreadMode:2;
+	UI8     InterpolationMode:2;
+	UI8     NumGradients:4;
+	SWF_GRADIENTRECORD      GradientRecords[15];
+	FIXED8 	FocalPoint;
+} SWF_FOCALGRADIENT;
 
 typedef struct SWF_MATRIX {
 	UI8	HasScale:1;
@@ -784,6 +794,7 @@ typedef struct SWF_FILLSTYLE {
 	SWF_RGBA	Color;
 	SWF_MATRIX	GradientMatrix;
 	SWF_GRADIENT	Gradient;
+	SWF_FOCALGRADIENT FocalGradient;
 	UI16		BitmapId;
 	SWF_MATRIX	BitmapMatrix;
 } SWF_FILLSTYLE;

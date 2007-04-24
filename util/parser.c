@@ -400,18 +400,38 @@ parseSWF_GRADIENTRECORD (FILE * f, struct SWF_GRADIENTRECORD *gradientrec, int l
 }
 
 void
+parseSWF_FOCALGRADIENT (FILE * f, struct SWF_FOCALGRADIENT *gradient, int level)
+{
+  int i;
+  gradient->SpreadMode = readBits(f, 2);
+  gradient->InterpolationMode = readBits(f, 2);
+  gradient->NumGradients = readBits (f, 4);
+  if(gradient->NumGradients > 15) {
+	  fprintf(stderr,"Something is out of sync in parseSWF_FOCALGRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
+	  exit(1);
+  }
+
+  for (i = 0; i < gradient->NumGradients; i++)
+    parseSWF_GRADIENTRECORD (f, &(gradient->GradientRecords[i]), level);
+  
+  gradient->FocalPoint = readUInt16(f); 
+}
+
+void
 parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient, int level)
 {
   int i;
-  gradient->NumGradients = readUInt8 (f);
-  if( gradient->NumGradients > 8 ) {
+  gradient->SpreadMode = readBits(f, 2);
+  gradient->InterpolationMode = readBits(f, 2);
+  gradient->NumGradients = readBits (f, 4);
+  if((gradient->NumGradients > 8  && level < 4) || (gradient->NumGradients > 15  && level == 4)) {
 	  fprintf(stderr,"Something is out of sync in parseSWF_GRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
 	  exit(1);
   }
+
   for (i = 0; i < gradient->NumGradients; i++)
     parseSWF_GRADIENTRECORD (f, &(gradient->GradientRecords[i]), level);
 }
-
 
 int
 parseSWF_SHAPERECORD (FILE * f, SWF_SHAPERECORD * shape, int *fillBits,
@@ -540,6 +560,8 @@ parseSWF_FILLSTYLE (FILE * f, SWF_FILLSTYLE * fillstyle, int level)
       parseSWF_MATRIX (f, &fillstyle->GradientMatrix);
       parseSWF_GRADIENT (f, &fillstyle->Gradient, level);
       break;
+    case 0x13:
+      parseSWF_FOCALGRADIENT(f, &fillstyle->FocalGradient, level);
     case 0x40:			/* Repeating Bitmap Fill */
     case 0x41:			/* Clipped Bitmap Fill */
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
