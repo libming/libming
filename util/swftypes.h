@@ -32,7 +32,6 @@ typedef unsigned short	FIXED8;	/* 16-bit 8.8 fixed-point number */
 typedef unsigned long	SB32;	/* Signed bit value */
 typedef unsigned long	UB32;	/* Unsigned bit value */
 typedef float		FB32;	/* Signed fixed-point bit value */
-
 typedef char	*STRING;/* String */
 
 typedef UI8 LANGCODE;
@@ -41,6 +40,7 @@ typedef SI16 WORD;
 typedef UI8 BOOLEAN;
 typedef float		FLOAT;	/* 32-bit IEEE single-precision little endian fp value */
 typedef double		DOUBLE;	/* 64-bit IEEE double-precision little endian double value */
+typedef float 		FLOAT16; /* 16-bit IEEE double-precision little endian double value */
 
 /* Types to represent Actions */
 
@@ -1226,6 +1226,40 @@ struct SWF_DEFINEFONTINFO2
   UI16 *CodeTable;
 };
 
+struct SWF_ZONEDATA
+{
+  FLOAT16 AlignmentCoordinate;
+  FLOAT16 Range;
+};
+
+struct SWF_ZONERECORD
+{
+  UI8 NumZoneData;
+  struct SWF_ZONEDATA *ZoneData;
+  UI8 ZoneMaskX:1;
+  UI8 ZoneMaskY:1;
+  UI8 Reserved:6;
+};
+
+struct SWF_DEFINEFONTALIGNZONES
+{
+  UI16 FontID;
+  UI8 CSMTableHint:2;
+  UI8 Reserved;
+  struct SWF_ZONERECORD *ZoneTable;
+};
+
+struct SWF_CSMTEXTSETTINGS
+{
+  UI16 TextID;
+  UI8 UseFlashType:2;
+  UI8 GridFit:3;
+  UI8 Reserved:3;
+  FB32 Thickness;
+  FB32 Sharpness;
+  UI8 Reserved2;
+};
+
 struct SWF_DEFINELOSSLESS
 {
   UI16 CharacterID;
@@ -1680,6 +1714,8 @@ typedef union SWF_Parserstruct
   struct SWF_DEFINEFONT3 SWF_DEFINEFONT3;
   struct SWF_DEFINEFONTINFO SWF_DEFINEFONTINFO;
   struct SWF_DEFINEFONTINFO2 SWF_DEFINEFONTINFO2;
+  struct SWF_DEFINEFONTALIGNZONES SWF_DEFINEFONTALIGNZONES;
+  struct SWF_CSMTEXTSETTINGS SWF_CSMTEXTSETTINGS;
   struct SWF_DEFINELOSSLESS SWF_DEFINELOSSLESS;
   struct SWF_DEFINELOSSLESS2 SWF_DEFINELOSSLESS2;
   struct SWF_DEFINEMORPHSHAPE SWF_DEFINEMORPHSHAPE;
