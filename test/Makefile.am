@@ -4,7 +4,8 @@ SUBDIRS = Movie \
 	Morph \
 	Video \
 	Shape \
-	LineStyle
+	LineStyle \
+	MovieClip
 
 EXTRA_DIST = \
 	dotests.pl \

@@ -1,0 +1,68 @@
+File version: 5
+File size: 64
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (ff,ff,ff,ff)
+
+Offset: 25 (0x0019)
+Block type: 39 (SWF_DEFINESPRITE)
+Block length: 8
+
+ SpriteId: 1
+ FrameCount: 1
+ BlockCount: 2
+
+  Offset: 0 (0x0000)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 0 (0x0000)
+  Block type: 0 (SWF_END)
+  Block length: 0
+
+
+Offset: 35 (0x0023)
+Block type: 59 (SWF_INITACTION)
+Block length: 15
+
+ 4 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] 
+    SWFACTION_PUSH
+     [000]   Constant: 0 ""
+    SWFACTION_TRACE
+    SWFACTION_END
+
+Offset: 52 (0x0034)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterId: 1
+ Matrix:    TranslateX      0 TranslateY      0
+
+Offset: 60 (0x003c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 62 (0x003e)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

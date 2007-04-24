@@ -341,6 +341,7 @@ AC_OUTPUT([
 	test/actionscript/Makefile
 	test/Shape/Makefile
 	test/LineStyle/Makefile
+	test/MovieClip/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config
