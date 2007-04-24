@@ -55,6 +55,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEFONT, outputSWF_DEFINEFONT},
   {SWF_DEFINEFONT2, outputSWF_DEFINEFONT2},
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
+  {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
   {SWF_DEFINEMORPHSHAPE, outputSWF_DEFINEMORPHSHAPE},
@@ -1100,8 +1101,46 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEFONTINFO (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEFONTINFO);
+  int i;
+  OUT_BEGIN (SWF_DEFINEFONTINFO);
+  iprintf("FontID: %d\n", sblock->FontID);
+  iprintf("FontNameLen %d\n", sblock->FontNameLen);
+  iprintf("FontName %s\n", sblock->FontName);
+  iprintf("FontFlagsSmallText %d\n", sblock->FontFlagsSmallText);
+  iprintf("FontFlagsShiftJIS %d\n", sblock->FontFlagsShiftJIS);
+  iprintf("FontFlagsANSI %d\n", sblock->FontFlagsANSI);
+  iprintf("FontFlagsItalic %d\n", sblock->FontFlagsItalic);
+  iprintf("FontFlagsBold %d\n", sblock->FontFlagsBold);
+  iprintf("FontFlagsWideCodes %d\n", sblock->FontFlagsWideCodes);
+  
+  if(!verbose)
+	return;
 
+  for (i = 0; i < sblock->nGlyph; i++)
+  	iprintf("code table mapping: %i -> %i\n", i, sblock->CodeTable[i]);
+}
+
+void
+outputSWF_DEFINEFONTINFO2 (SWF_Parserstruct * pblock)
+{
+  int i;
+  OUT_BEGIN (SWF_DEFINEFONTINFO2);
+  iprintf("FontID: %d\n", sblock->FontID);
+  iprintf("FontNameLen %d\n", sblock->FontNameLen);
+  iprintf("FontName %s\n", sblock->FontName);
+  iprintf("FontFlagsSmallText %d\n", sblock->FontFlagsSmallText);
+  iprintf("FontFlagsShiftJIS %d\n", sblock->FontFlagsShiftJIS);
+  iprintf("FontFlagsANSI %d\n", sblock->FontFlagsANSI);
+  iprintf("FontFlagsItalic %d\n", sblock->FontFlagsItalic);
+  iprintf("FontFlagsBold %d\n", sblock->FontFlagsBold);
+  iprintf("FontFlagsWideCodes %d\n", sblock->FontFlagsWideCodes);
+  iprintf("LanguageCode %d\n", sblock->LanguageCode); 
+ 
+  if(!verbose)
+	return;
+
+  for (i = 0; i < sblock->nGlyph; i++)
+  	iprintf("code table mapping: %i -> %i\n", i, sblock->CodeTable[i]);
 }
 
 void

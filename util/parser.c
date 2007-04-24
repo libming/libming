@@ -1781,6 +1781,33 @@ parseSWF_DEFINEFONTINFO (FILE * f, int length)
 }
 
 SWF_Parserstruct *
+parseSWF_DEFINEFONTINFO2 (FILE * f, int length)
+{
+  int i, end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINEFONTINFO2);
+
+  parserrec->FontID = readUInt16 (f);
+  parserrec->FontNameLen = readUInt8 (f);
+  parserrec->FontName = readSizedString (f, parserrec->FontNameLen);
+  byteAlign ();
+  parserrec->FontFlagsReserved = readBits (f, 2);
+  parserrec->FontFlagsSmallText = readBits (f, 1);
+  parserrec->FontFlagsShiftJIS = readBits (f, 1);
+  parserrec->FontFlagsANSI = readBits (f, 1);
+  parserrec->FontFlagsItalic = readBits (f, 1);
+  parserrec->FontFlagsBold = readBits (f, 1);
+  parserrec->FontFlagsWideCodes = readBits (f, 1);
+  parserrec->LanguageCode = readUInt8(f);
+  parserrec->nGlyph = end-(fileOffset/2);
+
+  parserrec->CodeTable = (UI16 *)malloc(parserrec->nGlyph*sizeof(UI16));
+  for(i=0;i<parserrec->nGlyph;i++)
+	  parserrec->CodeTable[i] = readUInt16(f);
+  
+  PAR_END;
+}
+
+SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS (FILE * f, int length)
 {
   int end = fileOffset + length;

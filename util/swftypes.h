@@ -1174,6 +1174,23 @@ struct SWF_DEFINEFONTINFO
   UI16 *CodeTable;
 };
 
+struct SWF_DEFINEFONTINFO2
+{
+  UI16 FontID;
+  UI8 FontNameLen;
+  STRING FontName;
+  UI8 FontFlagsReserved:2;
+  UI8 FontFlagsSmallText:1;
+  UI8 FontFlagsShiftJIS:1;
+  UI8 FontFlagsANSI:1;
+  UI8 FontFlagsItalic:1;
+  UI8 FontFlagsBold:1;
+  UI8 FontFlagsWideCodes:1;
+  LANGCODE LanguageCode;
+  int nGlyph;
+  UI16 *CodeTable;
+};
+
 struct SWF_DEFINELOSSLESS
 {
   UI16 CharacterID;
@@ -1626,6 +1643,7 @@ typedef union SWF_Parserstruct
   struct SWF_DEFINEFONT SWF_DEFINEFONT;
   struct SWF_DEFINEFONT2 SWF_DEFINEFONT2;
   struct SWF_DEFINEFONTINFO SWF_DEFINEFONTINFO;
+  struct SWF_DEFINEFONTINFO2 SWF_DEFINEFONTINFO2;
   struct SWF_DEFINELOSSLESS SWF_DEFINELOSSLESS;
   struct SWF_DEFINELOSSLESS2 SWF_DEFINELOSSLESS2;
   struct SWF_DEFINEMORPHSHAPE SWF_DEFINEMORPHSHAPE;
