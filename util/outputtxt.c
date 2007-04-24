@@ -57,6 +57,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEFONT3, outputSWF_DEFINEFONT3},
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
   {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
+  {SWF_CSMTEXTSETTINGS, outputSWF_CSMTEXTSETTINGS},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
   {SWF_DEFINEMORPHSHAPE, outputSWF_DEFINEMORPHSHAPE},
@@ -1240,6 +1241,17 @@ outputSWF_DEFINEFONTINFO2 (SWF_Parserstruct * pblock)
 
   for (i = 0; i < sblock->nGlyph; i++)
   	iprintf("code table mapping: %i -> %i\n", i, sblock->CodeTable[i]);
+}
+
+void 
+outputSWF_CSMTEXTSETTINGS (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_CSMTEXTSETTINGS);
+  iprintf("TextID: %d\n", sblock->TextID);
+  iprintf("UseFlashType %d\n", sblock->UseFlashType);
+  iprintf("GridFit %d\n", sblock->GridFit);
+  iprintf("Thickness %d\n", sblock->Thickness);
+  iprintf("Sharpness %d\n", sblock->Sharpness);
 }
 
 void

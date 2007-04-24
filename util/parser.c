@@ -1935,6 +1935,21 @@ parseSWF_DEFINEFONTINFO2 (FILE * f, int length)
 }
 
 SWF_Parserstruct *
+parseSWF_CSMTEXTSETTINGS (FILE * f, int length)
+{ 
+  PAR_BEGIN (SWF_CSMTEXTSETTINGS);
+  parserrec->TextID = readUInt16(f);
+  parserrec->UseFlashType = readBits(f, 2);
+  parserrec->GridFit = readBits(f, 3);
+  parserrec->Reserved = readBits(f, 3);
+  parserrec->Thickness = readUInt32(f); 
+  parserrec->Sharpness = readUInt32(f);
+  parserrec->Reserved = readUInt8(f);
+  PAR_END;
+}
+
+
+SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS (FILE * f, int length)
 {
   int end = fileOffset + length;

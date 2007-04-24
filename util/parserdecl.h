@@ -52,6 +52,7 @@ extern SWF_Parserstruct *parseSWF_DEFINEFONT2(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEFONT3(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEFONTINFO(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEFONTINFO2(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_CSMTEXTSETTINGS(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINELOSSLESS(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINELOSSLESS2(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEMORPHSHAPE(FILE *f, int length);

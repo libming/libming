@@ -47,6 +47,7 @@ extern OUTPUTRET outputSWF_DEFINEFONT2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINEFONT3(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINEFONTINFO(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINEFONTINFO2(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_CSMTEXTSETTINGS(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINELOSSLESS(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINELOSSLESS2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINEMORPHSHAPE(SWF_Parserstruct *pblock);
