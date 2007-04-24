@@ -277,11 +277,11 @@ SWFShape_end(SWFShape shape)
 		 itself- so even though it's called afterwards it's written before,
 		 as it should be */
 	if ( BLOCK(shape)->type > 0 )
+	{
+		if(shape->useVersion == SWF_SHAPE4)
+			BLOCK(shape)->type = SWF_DEFINESHAPE4;	
 		SWFShape_addStyleHeader(shape);
-	
-	if(shape->useVersion == SWF_SHAPE4)
-		BLOCK(shape)->type = SWF_DEFINESHAPE4;	
-
+	}
 	free(shape->records);
 	shape->records = NULL;
 	shape->nRecords = 0;
