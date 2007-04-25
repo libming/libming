@@ -38,7 +38,9 @@ struct gradientEntry
 
 struct SWFGradient_s
 {
-	struct gradientEntry entries[8];
+	int spreadMode;
+	int interpolationMode;
+	struct gradientEntry entries[15];
 	int nGrads;
 };
 
@@ -47,12 +49,35 @@ SWFGradient
 newSWFGradient()
 {
 	SWFGradient gradient = (SWFGradient) malloc(sizeof(struct SWFGradient_s));
-
+	gradient->spreadMode = 0;
+	gradient->interpolationMode = 0;
 	gradient->nGrads = 0;
 
 	return gradient;
 }
 
+/* 
+ * set gradient spread mode 
+ * SWF8 allows to set different spread modes:
+ * PAD (default)
+ * REFLECT
+ * REPEAT
+ */
+void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode)
+{
+	gradient->spreadMode = mode;
+}
+
+/*
+ * set gradient interpolation mode
+ * SWF8 allows to set different interpolation modes:
+ * NORMAL (default)
+ * LINEAR
+ */
+void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolationMode mode)
+{
+	gradient->interpolationMode;
+}
 
 void
 destroySWFGradient(SWFGradient gradient)
@@ -63,11 +88,11 @@ destroySWFGradient(SWFGradient gradient)
 
 void
 SWFGradient_addEntry(SWFGradient gradient,
-										 float ratio, byte r, byte g, byte b, byte a)
+                     float ratio, byte r, byte g, byte b, byte a)
 {
 	int nGrads = gradient->nGrads;
 
-	if ( nGrads == 8 )
+	if ( nGrads == 15 )
 		return;
 
 	gradient->entries[nGrads].ratio = (byte)floor(255*ratio);
@@ -84,8 +109,14 @@ SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient)
 {
 	int i;
 	int nGrads = gradient->nGrads;
-
-	SWFOutput_writeUInt8(out, gradient->nGrads); /* only 1-8 allowed */
+	
+	if(nGrads > 8)
+	{
+		SWF_warn("Can't write more than 8 control points for filter gradients\n");
+		nGrads = 8;
+	}	
+	
+	SWFOutput_writeUInt8(out, nGrads); /* only 1-8 allowed */
 
 	for ( i=0; i<nGrads; ++i )
 	{
@@ -101,13 +132,25 @@ SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient)
 }
 
 void
-SWFOutput_writeGradient(SWFOutput out,
-												SWFGradient gradient,	SWFBlocktype shapeType)
+SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient, SWFBlocktype shapeType)
 {
 	int i;
-	int nGrads = min(gradient->nGrads, 8);
+	int nGrads = gradient->nGrads;
 
-	SWFOutput_writeUInt8(out, gradient->nGrads); /* only 1-8 allowed */
+	if(shapeType == SWF_DEFINESHAPE4)
+	{
+		byte flags ;
+		nGrads = min(nGrads, 15);
+		flags = nGrads;
+		flags |= (0x3 & gradient->spreadMode) << 4;
+		flags |= (0x3 & gradient->interpolationMode) << 6;
+		SWFOutput_writeUInt8(out, flags); /* only 1-15 allowed */
+	}
+	else 
+	{
+		nGrads = min(nGrads, 8);
+		SWFOutput_writeUInt8(out, nGrads); /* only 1-8 allowed */
+	}
 
 	for ( i=0; i<nGrads; ++i )
 	{
@@ -124,7 +167,7 @@ SWFOutput_writeGradient(SWFOutput out,
 
 void
 SWFOutput_writeMorphGradient(SWFOutput out,
-														 SWFGradient gradient1, SWFGradient gradient2)
+                             SWFGradient gradient1, SWFGradient gradient2)
 {
 	int i;
 	int nGrads = min(min(gradient1->nGrads, gradient2->nGrads), 8);

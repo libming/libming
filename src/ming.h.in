@@ -216,12 +216,27 @@ SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 /***** SWFGradient *****/
 
+typedef enum
+{
+        PAD,
+        REFLECT,
+        REPEAT
+} GradientSpreadMode;
+
+typedef enum
+{
+        NORMAL,
+        LINEAR
+} GradientInterpolationMode;
+
 SWFGradient newSWFGradient();
 void destroySWFGradient(SWFGradient gradient);
 
 void SWFGradient_addEntry(SWFGradient gradient,
 			  float ratio, byte r, byte g, byte b, byte a);
 
+void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode);
+void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolationMode mode);
 
 /***** SWFFillStyle - a fill instance on a shape *****/
 
@@ -260,8 +275,8 @@ SWFLineStyle newSWFLineStyle(unsigned short width, byte r, byte g, byte b, byte 
 
 #define SWF_LINESTYLE_FLAG_NOCLOSE      (1<<2)
 
-#define SWF_LINESTYLE_FLAG_ENDCAP_ROUND (0<<0)
-#define SWF_LINESTYLE_FLAG_ENDCAP_NONE  (1<<0)
+#define SWF_LINESTYLE_FLAG_ENDCAP_ROUND  (0<<0)
+#define SWF_LINESTYLE_FLAG_ENDCAP_NONE   (1<<0)
 #define SWF_LINESTYLE_FLAG_ENDCAP_SQUARE (2<<0)
 
 SWFLineStyle newSWFLineStyle2(unsigned short width, byte r, byte g, byte b, byte a,
