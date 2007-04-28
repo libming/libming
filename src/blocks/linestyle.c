@@ -227,7 +227,7 @@ static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, int shapeTy
 	if(line->flags & SWF_LINESTYLE_JOIN_MITER)
 		SWFOutput_writeFixed8(out, line->miterLimit);
 	if(line->flags & SWF_LINESTYLE_FLAG_FILL)
-		SWFOutput_writeFillStyle(out, line->fill, shapeType);
+		SWFOutput_writeFillStyle(out, line->fill, shapeType, NULL);
 	else
 	{
 		SWFOutput_writeUInt8(out, line->r);
@@ -296,7 +296,7 @@ void SWFOutput_writeMorphLineStyles2(SWFOutput out,
 		if(line1->flags & SWF_LINESTYLE_JOIN_MITER)
 			SWFOutput_writeFixed8(out, line1->miterLimit);
 		if(line1->flags & SWF_LINESTYLE_FLAG_FILL)
-			SWFOutput_writeMorphFillStyle(out, line1->fill, line2->fill);
+			SWFOutput_writeMorphFillStyle(out, line1->fill, NULL, line2->fill, NULL);
 		else
 		{	
 

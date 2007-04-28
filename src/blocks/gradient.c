@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include "libming.h"
+#include "matrix.h"
 #include "gradient.h"
 
 #include "libming.h"
@@ -42,6 +43,8 @@ struct SWFGradient_s
 	int interpolationMode;
 	struct gradientEntry entries[15];
 	int nGrads;
+	float focalPoint;
+	int isFocalGradient;
 };
 
 
@@ -52,7 +55,7 @@ newSWFGradient()
 	gradient->spreadMode = 0;
 	gradient->interpolationMode = 0;
 	gradient->nGrads = 0;
-
+	gradient->isFocalGradient = 0;
 	return gradient;
 }
 
@@ -76,7 +79,27 @@ void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode)
  */
 void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolationMode mode)
 {
-	gradient->interpolationMode;
+	gradient->interpolationMode = mode;
+}
+
+/*
+ * creates a radial gradient with focal point
+ * valid focalPoint value range is -1.0 ... 1.0
+ * where -1.0 means the focal point is close to the left border of 
+ * the radial gradient circle; 0.0 is in the center and 1.0 is close
+ * to the right border.
+ */
+void SWFGradient_setFocalPoint(SWFGradient gradient, float focalPoint)
+{
+	gradient->isFocalGradient = 1;
+	if(focalPoint < -1.0) focalPoint = -1.0;
+	if(focalPoint > 1.0) focalPoint = 1.0;
+	gradient->focalPoint = focalPoint;
+}
+
+int SWFGradient_isFocalGradient(SWFGradient gradient)
+{
+	return gradient->isFocalGradient;
 }
 
 void
@@ -85,7 +108,13 @@ destroySWFGradient(SWFGradient gradient)
 	free(gradient);
 }
 
-
+/*
+ * add a control point
+ * The ratio defines the position of the control point 
+ * and RGBA defines its color. 
+ * SWF <= 7 allows up to 8 control points 
+ * SWF >= 8 allows up to 15 control points
+ */
 void
 SWFGradient_addEntry(SWFGradient gradient,
                      float ratio, byte r, byte g, byte b, byte a)
@@ -131,6 +160,26 @@ SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient)
 
 }
 
+#define GRADIENT_SIZE 32786.0
+
+void 
+SWFGradientMatrix_update(SWFMatrix matrix, SWFRect bounds)
+{
+	int w, h;
+	float scaleX, scaleY;
+
+	if(bounds == NULL)
+		return;
+
+	w = SWFRect_getWidth(bounds);
+	h = SWFRect_getHeight(bounds);
+	scaleX = w / GRADIENT_SIZE;
+	scaleY = h / GRADIENT_SIZE;
+	SWFMatrix_set(matrix, scaleX, 0, 0, scaleY,
+		GRADIENT_SIZE / 2 * scaleX,  GRADIENT_SIZE / 2 * scaleY);
+}
+
+
 void
 SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient, SWFBlocktype shapeType)
 {
@@ -159,9 +208,12 @@ SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient, SWFBlocktype shapeT
 		SWFOutput_writeUInt8(out, gradient->entries[i].g);
 		SWFOutput_writeUInt8(out, gradient->entries[i].b);
 
-		if ( shapeType == SWF_DEFINESHAPE3 )
+		if ( shapeType == SWF_DEFINESHAPE3 || shapeType == SWF_DEFINESHAPE4 )
 			SWFOutput_writeUInt8(out, gradient->entries[i].a);
 	}
+
+	if(shapeType == SWF_DEFINESHAPE4 && gradient->isFocalGradient)
+		SWFOutput_writeFixed8(out, gradient->focalPoint);
 }
 
 

@@ -30,13 +30,10 @@
 #include "character.h"
 #include "libming.h"
 
-
 struct SWFFillStyle_s
 {
 	byte type;
 	SWFMatrix matrix;
-	int idx;
-
 	union
 	{
 		struct
@@ -53,6 +50,13 @@ struct SWFFillStyle_s
 	} data;
 };
 
+
+void destroySWFFillStyle(SWFFillStyle fill)
+{
+	if(fill->matrix != NULL)
+		destroySWFMatrix(fill->matrix);
+	free(fill);
+}
 
 SWFFillStyle
 newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
@@ -77,11 +81,13 @@ newSWFGradientFillStyle(SWFGradient gradient, byte flags)
 
 	if ( flags == SWFFILL_RADIAL_GRADIENT )
 		fill->type = SWFFILL_RADIAL_GRADIENT;
+	else if(SWFGradient_isFocalGradient(gradient))
+		fill->type = SWFFILL_FOCAL_GRADIENT;
 	else
 		fill->type = SWFFILL_LINEAR_GRADIENT;
 
 	fill->data.gradient = gradient;
-	fill->matrix = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
+	fill->matrix = newSWFMatrix(20.0, 0, 0, 20.0, 0, 0);
 
 	return fill;
 }
@@ -102,21 +108,6 @@ newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 
 	return fill;
 }
-
-
-void
-SWFFill_setIdx(SWFFillStyle fill, int idx)
-{
-	fill->idx = idx;
-}
-
-
-int
-SWFFill_getIdx(SWFFillStyle fill)
-{
-	return fill->idx;
-}
-
 
 SWFMatrix
 SWFFillStyle_getMatrix(SWFFillStyle fill)
@@ -141,6 +132,7 @@ SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2)
 
 		case SWFFILL_LINEAR_GRADIENT:
 		case SWFFILL_RADIAL_GRADIENT:
+		case SWFFILL_FOCAL_GRADIENT:
 			return (fill1->data.gradient == fill2->data.gradient);
 
 		case SWFFILL_TILED_BITMAP:
@@ -156,7 +148,7 @@ SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2)
 
 void
 SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle fill, 
-                         SWFBlocktype shapeType)
+                         SWFBlocktype shapeType, SWFRect bounds)
 {
 	int type = fill->type;
 	SWFOutput_writeUInt8(out, type);
@@ -172,6 +164,7 @@ SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle fill,
 	}
 	else if ( type & SWFFILL_GRADIENT )
 	{
+		SWFGradientMatrix_update(fill->matrix, bounds);
 		SWFOutput_writeMatrix(out, fill->matrix);
 		SWFOutput_writeGradient(out, fill->data.gradient, shapeType);
 	}
@@ -186,11 +179,11 @@ SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle fill,
 
 void
 SWFOutput_writeFillStyles(SWFOutput out,
-													SWFFillStyle *fills, int nFills,
-													SWFBlocktype shapeType)
+                          SWFFillStyle *fills, int nFills,
+                          SWFBlocktype shapeType,
+                          SWFRect bounds)
 {
 	int i;
-	SWFFillStyle fill;
 
 	if ( nFills < 255 )
 	{
@@ -203,16 +196,13 @@ SWFOutput_writeFillStyles(SWFOutput out,
 	}
 
 	for ( i=0; i<nFills; ++i )
-	{
-		fill = fills[i];
-		SWFOutput_writeFillStyle(out, fill, shapeType);
-	}
+		SWFOutput_writeFillStyle(out, fills[i], shapeType, bounds);
 }
 
 
 void 
-SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1, 
-                              SWFFillStyle fill2)
+SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1, SWFRect bounds1,
+                              SWFFillStyle fill2, SWFRect bounds2)
 {
 	int type;
 	SWF_assert(fill1->type == fill2->type); 
@@ -233,7 +223,9 @@ SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1,
 	}
 	else if ( type & SWFFILL_GRADIENT )
 	{
+                SWFGradientMatrix_update(fill1->matrix, bounds1);
 		SWFOutput_writeMatrix(out, fill1->matrix);
+		SWFGradientMatrix_update(fill2->matrix, bounds2);
 		SWFOutput_writeMatrix(out, fill2->matrix);
 		SWFOutput_writeMorphGradient(out, fill1->data.gradient, fill2->data.gradient);
 	}
@@ -252,8 +244,8 @@ SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1,
 
 void
 SWFOutput_writeMorphFillStyles(SWFOutput out,
-															 SWFFillStyle *fills1, int nFills1,
-															 SWFFillStyle *fills2, int nFills2)
+                               SWFFillStyle *fills1, int nFills1, SWFRect bounds1,
+                               SWFFillStyle *fills2, int nFills2, SWFRect bounds2)
 {
 	int i;
 	SWF_assert(nFills1 == nFills2);
@@ -268,12 +260,8 @@ SWFOutput_writeMorphFillStyles(SWFOutput out,
 	}
 
 	for ( i=0; i<nFills1; ++i )
-	{
-		SWFFillStyle fill1 = fills1[i];
-		SWFFillStyle fill2 = fills2[i];
-
-		SWFOutput_writeMorphFillStyle(out, fill1, fill2);
-	}
+		SWFOutput_writeMorphFillStyle(out, fills1[i], bounds1, 
+			fills2[i], bounds2);
 }
 
 

@@ -32,7 +32,7 @@
 #include "ming.h"
 #include "output.h"
 #include "blocktypes.h"
-
+#include "rect.h"
 
 void 
 SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient);
@@ -42,5 +42,10 @@ void SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient,
 
 void SWFOutput_writeMorphGradient(SWFOutput out,
                                   SWFGradient gradient1, SWFGradient gradient2);
+
+int SWFGradient_isFocalGradient(SWFGradient gradient);
+
+void
+SWFGradientMatrix_update(SWFMatrix matrix, SWFRect bounds);
 
 #endif /* SWF_GRADIENT_H_INCLUDED */

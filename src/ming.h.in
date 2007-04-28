@@ -237,6 +237,7 @@ void SWFGradient_addEntry(SWFGradient gradient,
 
 void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode);
 void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolationMode mode);
+void SWFGradient_setFocalPoint(SWFGradient gradient, float focalPoint);
 
 /***** SWFFillStyle - a fill instance on a shape *****/
 
@@ -244,6 +245,7 @@ void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolatio
 #define SWFFILL_GRADIENT		0x10
 #define SWFFILL_LINEAR_GRADIENT 	0x10
 #define SWFFILL_RADIAL_GRADIENT 	0x12
+#define SWFFILL_FOCAL_GRADIENT		0x13
 #define SWFFILL_BITMAP			0x40
 #define SWFFILL_TILED_BITMAP		0x40
 #define SWFFILL_CLIPPED_BITMAP		0x41
@@ -253,7 +255,7 @@ SWFFillStyle newSWFGradientFillStyle(SWFGradient gradient, byte radial);
 SWFFillStyle newSWFBitmapFillStyle(SWFCharacter bitmap, byte flags);
 
 SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
-
+void destroySWFFillStyle(SWFFillStyle fill);
 
 /***** SWFLineStyle *****/
 

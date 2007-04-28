@@ -139,16 +139,7 @@ destroySWFShape(SWFShape shape)
 	int i;
 
 	for ( i=0; i<shape->nFills; ++i )
-	{
-		SWFMatrix matrix = SWFFillStyle_getMatrix(shape->fills[i]);
-
-		if ( matrix != NULL )
-			destroySWFMatrix(matrix);
-
-		/* gradients and bitmaps are destroyed separately */
-
-		free(shape->fills[i]);
-	}
+		destroySWFFillStyle(shape->fills[i]);
 
 	if ( shape->fills != NULL )
 		free(shape->fills);
@@ -272,7 +263,7 @@ SWFShape_end(SWFShape shape)
 
 	SWFOutput_writeBits(shape->out, 0, 6); /* end tag */
 	SWFOutput_byteAlign(shape->out);
-
+		
 	/* addStyleHeader creates a new output and adds the existing one after
 		 itself- so even though it's called afterwards it's written before,
 		 as it should be */
@@ -329,7 +320,9 @@ SWFShape_addStyleHeader(SWFShape shape)
 		SWFOutput_writeRect(out, shape->edgeBounds);
 		SWFOutput_writeUInt8(out, shape->flags);
 	}
-	SWFOutput_writeFillStyles(out, shape->fills, shape->nFills, BLOCK(shape)->type);
+	
+	SWFOutput_writeFillStyles(out, shape->fills, shape->nFills, 
+		BLOCK(shape)->type, shape->edgeBounds);
 	SWFOutput_writeLineStyles(out, shape->lines, shape->nLines, BLOCK(shape)->type);
 	
 	/* prepend shape->out w/ shape header */
@@ -872,54 +865,67 @@ SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 }
 
 
-/* fill 0 is no fill, so set fill->idx to one more than the shape's fill index */
-static SWFFillStyle
-addFillStyle(SWFShape shape, SWFFillStyle fill)
+/* fill 0 is no fill, so set idx to one more than the shape's fill index */
+static int getFillIdx(SWFShape shape, SWFFillStyle fill)
 {
 	int i;
 
 	for ( i=0; i<shape->nFills; ++i )
 	{
 		if ( SWFFillStyle_equals(fill, shape->fills[i]) )
-		{
-			free(fill); // XXX - safe?
-			return shape->fills[i];
-		}
+			return (i+1);
+	}
+	return 0; // no fill
+}
+
+static int addFillStyle(SWFShape shape, SWFFillStyle fill)
+{
+	int i;
+	
+	for ( i=0; i<shape->nFills; ++i )
+	{
+		if ( SWFFillStyle_equals(fill, shape->fills[i]) )
+			return -1;
 	}
 
 	if ( shape->isEnded )
-	{
-		SWFFill_setIdx(fill, 0);
-		return fill;
-	}
+		return -1;
 
 	if ( shape->nFills%STYLE_INCREMENT == 0 )
 	{
-		shape->fills =
-			(SWFFillStyle*)realloc(shape->fills,
-							(shape->nFills+STYLE_INCREMENT) * sizeof(SWFFillStyle));
+		int size = (shape->nFills+STYLE_INCREMENT) * sizeof(SWFFillStyle);
+		shape->fills = (SWFFillStyle*)realloc(shape->fills, size);
 	}
-
-	SWFFill_setIdx(fill, shape->nFills+1);
 
 	shape->fills[shape->nFills] = fill;
 	++shape->nFills;
-
-	return fill;
+	return 0;
 }
 
 
 SWFFillStyle
 SWFShape_addSolidFillStyle(SWFShape shape, byte r, byte g, byte b, byte a)
 {
-	return addFillStyle(shape, newSWFSolidFillStyle(r, g, b, a));
+	SWFFillStyle fill = newSWFSolidFillStyle(r, g, b, a);	
+	if(addFillStyle(shape, fill) < 0)
+	{
+		destroySWFFillStyle(fill);
+		return NULL;
+	}
+	return fill;	
 }
 
 
 SWFFillStyle
 SWFShape_addGradientFillStyle(SWFShape shape, SWFGradient gradient, byte flags)
 {
-	return addFillStyle(shape, newSWFGradientFillStyle(gradient, flags));
+	SWFFillStyle fill = newSWFGradientFillStyle(gradient, flags);
+	if(addFillStyle(shape, fill) < 0)
+	{
+		destroySWFFillStyle(fill);
+		return NULL;
+	}
+	return fill;		
 }
 
 
@@ -927,8 +933,13 @@ SWFFillStyle
 SWFShape_addBitmapFillStyle(SWFShape shape, SWFBitmap bitmap, byte flags)
 {
 	SWFCharacter_addDependency((SWFCharacter)shape, (SWFCharacter)bitmap);
-
-	return addFillStyle(shape, newSWFBitmapFillStyle(bitmap, flags));
+	SWFFillStyle fill = newSWFBitmapFillStyle(bitmap, flags);
+	if(addFillStyle(shape, fill) < 0)
+	{
+		destroySWFFillStyle(fill);
+		return NULL;
+	}
+	return fill;
 }
 
 
@@ -936,22 +947,29 @@ void
 SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill)
 {
 	ShapeRecord record;
+	int idx;
 
 	if ( shape->isEnded || shape->isMorph )
 		return;
-
-	record = addStyleRecord(shape);
-
-	if ( fill != NOFILL )
+	
+	if(fill == NOFILL)
 	{
-		if ( SWFFill_getIdx(fill) > shape->nFills )
-			SWF_error("Invalid fill idx");
-
-		record.record.stateChange->leftFill = SWFFill_getIdx(fill);
-	}
-	else
+		record = addStyleRecord(shape);
 		record.record.stateChange->leftFill = 0;
+		record.record.stateChange->flags |= SWF_SHAPE_FILLSTYLE0FLAG;
+		return;
+	}
 
+	idx = getFillIdx(shape, fill);
+	if(idx == 0) // fill not present in array
+	{
+		if(addFillStyle(shape, fill) < 0)
+			return;		
+		idx = getFillIdx(shape, fill);
+	}
+				
+	record = addStyleRecord(shape);
+	record.record.stateChange->leftFill = idx;
 	record.record.stateChange->flags |= SWF_SHAPE_FILLSTYLE0FLAG;
 }
 
@@ -960,25 +978,31 @@ void
 SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 {
 	ShapeRecord record;
+	int idx;
 
 	if ( shape->isEnded || shape->isMorph )
 		return;
-
-	record = addStyleRecord(shape);
-
-	if ( fill != NOFILL )
+	
+	if(fill == NOFILL)
 	{
-		if ( SWFFill_getIdx(fill) > shape->nFills )
-			SWF_error("Invalid fill idx");
-
-		record.record.stateChange->rightFill = SWFFill_getIdx(fill);
-	}
-	else
+		record = addStyleRecord(shape);
 		record.record.stateChange->rightFill = 0;
+		record.record.stateChange->flags |= SWF_SHAPE_FILLSTYLE1FLAG;
+		return;
+	}
 
+	idx = getFillIdx(shape, fill);
+	if(idx == 0) // fill not present in array
+	{
+		if(addFillStyle(shape, fill) < 0)
+			return;		
+		idx = getFillIdx(shape, fill);
+	}
+				
+	record = addStyleRecord(shape);
+	record.record.stateChange->rightFill = idx;
 	record.record.stateChange->flags |= SWF_SHAPE_FILLSTYLE1FLAG;
 }
-
 
 /* move pen relative to shape origin */
 void
