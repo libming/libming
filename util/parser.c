@@ -96,6 +96,7 @@ parseSWF_MATRIX (FILE * f, struct SWF_MATRIX *matrix)
   matrix->NTranslateBits = readBits (f, 5);
   matrix->TranslateX = readSBits (f, matrix->NTranslateBits);
   matrix->TranslateY = readSBits (f, matrix->NTranslateBits);
+  byteAlign();
 }
 
 void 
@@ -562,6 +563,7 @@ parseSWF_FILLSTYLE (FILE * f, SWF_FILLSTYLE * fillstyle, int level)
       break;
     case 0x13:
       parseSWF_FOCALGRADIENT(f, &fillstyle->FocalGradient, level);
+      break;
     case 0x40:			/* Repeating Bitmap Fill */
     case 0x41:			/* Clipped Bitmap Fill */
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
