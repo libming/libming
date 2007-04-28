@@ -395,7 +395,6 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray, char *name)
 {
   int count, i;
 
-  if( !verbose ) return;
   iprintf (" FillStyleArray: ");
   iprintf (" FillStyleCount: %6d ", fillstylearray->FillStyleCount);
   iprintf (" FillStyleCountExtended: %6d\n",
