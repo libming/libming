@@ -4,6 +4,9 @@
 	* Flash 8: filter and blend modes for buttons
 	* Flash 8: SWF_DEFINEMORPHSHAPE2
 	* Flash 8: SWFShape rendering hints
+	* Flash 8: new gradient features
+	* SWFFillStyle is reusable now and calculates propper GradientMatrix
+	* setLeft/RightFillStyle adds fill to the shape if necessary
 
 0.4.0.beta4 - 2007-03-27
 
