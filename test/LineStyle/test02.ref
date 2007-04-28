@@ -25,6 +25,7 @@ Block length: 40
  RECT:  (100,100)x(2000,2000):12
    UsesNonScalingStrokes: 0
    UsesScalingStrokes: 0
+ FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
  LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
  LineStyle2:  Width: 800
  StartCapStyle: 0

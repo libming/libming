@@ -22,6 +22,7 @@ Block length: 29
 
  ShapeID: 1
  RECT:  (100,100)x(2040,2040):12
+ FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
  LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
  LineStyle:  Width: 80
  RGBA: (19, 0, 0,80)
