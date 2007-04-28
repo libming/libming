@@ -337,7 +337,7 @@ outputSWF_FOCALGRADIENT (SWF_FOCALGRADIENT * gradient, char *name)
   iprintf (" NumGradients: %d\n", gradient->NumGradients);
   for (i = 0; i < gradient->NumGradients; i++)
     outputSWF_GRADIENTRECORD (&(gradient->GradientRecords[i]),"");
-  outputFIXED8(gradient->FocalPoint, "  FocalPoint: \n");
+  outputFIXED8(gradient->FocalPoint, "  FocalPoint: ");
 }
 
 void
@@ -379,6 +379,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *name, int i)
       outputSWF_GRADIENT (&fillstyle->Gradient,"");
       break;
     case 0x13:
+      outputSWF_MATRIX (&fillstyle->GradientMatrix,"");
       outputSWF_FOCALGRADIENT(&fillstyle->FocalGradient, "");
     case 0x40:			/* Repeating Bitmap Fill */
     case 0x41:			/* Clipped Bitmap Fill */

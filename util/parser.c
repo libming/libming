@@ -562,6 +562,7 @@ parseSWF_FILLSTYLE (FILE * f, SWF_FILLSTYLE * fillstyle, int level)
       parseSWF_GRADIENT (f, &fillstyle->Gradient, level);
       break;
     case 0x13:
+      parseSWF_MATRIX (f, &fillstyle->GradientMatrix);
       parseSWF_FOCALGRADIENT(f, &fillstyle->FocalGradient, level);
       break;
     case 0x40:			/* Repeating Bitmap Fill */
