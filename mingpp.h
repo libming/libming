@@ -347,30 +347,6 @@ private:
   SWFFilter();
 };
 
-class SWFFillStyle
-{
- public:
-  c_SWFFillStyle fill;
-  
-  virtual ~SWFFillStyle() { }
-
-  static SWFFillStyle *SolidFillStyle(byte r, byte g, byte b, byte a=255)
-    { return new SWFFillStyle(newSWFSolidFillStyle(r, g, b, a)); }
-
-  static SWFFillStyle *GradientFillStyle(SWFGradient *gradient, byte flags)
-    { return new SWFFillStyle(newSWFGradientFillStyle(gradient->gradient, flags)); }
-
-/*
-  static SWFFillStyle *BitmapFillStyle(SWFBitmap *bitmap, byte flags)
-    { return new SWFFillStyle(newSWFBitmapFillStyle(bitmap->bitmap, flags)); }
-*/
-
- private:
-  SWFFillStyle(c_SWFFillStyle fill)
-    { this->fill = fill; }
-  SWF_DECLAREONLY(SWFFillStyle);
-  SWFFillStyle();
-};   
 
 
 /*  SWFDisplayItem  */
@@ -751,6 +727,30 @@ class SWFBitmap : public SWFBlock
   SWF_DECLAREONLY(SWFBitmap);
   SWFBitmap();
 };
+
+
+class SWFFillStyle
+{
+ public:
+  c_SWFFillStyle fill;
+  
+  virtual ~SWFFillStyle() { }
+
+  static SWFFillStyle *SolidFillStyle(byte r, byte g, byte b, byte a=255)
+    { return new SWFFillStyle(newSWFSolidFillStyle(r, g, b, a)); }
+
+  static SWFFillStyle *GradientFillStyle(SWFGradient *gradient, byte flags)
+    { return new SWFFillStyle(newSWFGradientFillStyle(gradient->gradient, flags)); }
+
+  static SWFFillStyle *BitmapFillStyle(SWFBitmap *bitmap, byte flags)
+    { return new SWFFillStyle(newSWFBitmapFillStyle(bitmap->bitmap, flags)); }
+
+ private:
+  SWFFillStyle(c_SWFFillStyle fill)
+    { this->fill = fill; }
+  SWF_DECLAREONLY(SWFFillStyle);
+  SWFFillStyle();
+};   
 
 
 /*  SWFFont  */
