@@ -10,5 +10,6 @@ SUBDIRS = \
 	nextFrame       \
 	addMetadata	\
 	setSoundStream	\
-	setTabIndex	
+	setTabIndex	\
+	setScriptLimits	
 
