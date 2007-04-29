@@ -1,5 +1,5 @@
 File version: 8
-File size: 4298
+File size: 1698
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -17,14 +17,14 @@ Block length: 4
  FileAttributes: HasMetaData 0, UseNetwork 1
 
 Offset: 31 (0x001f)
-Block type: 36 (SWF_DEFINELOSSLESS2)
-Block length: 4207
+Block type: 20 (SWF_DEFINELOSSLESS)
+Block length: 1607
 
  CharacterID 1
  Bitmap format 5
- Bitmap width 35 x height 30
+ Bitmap width 20 x height 20
 
-Offset: 4244 (0x1094)
+Offset: 1644 (0x066c)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 40
 
@@ -51,7 +51,7 @@ Block length: 40
  Straight EdgeRecord: (10) - (0, -2000)
   ENDSHAPE
 
-Offset: 4286 (0x10be)
+Offset: 1686 (0x0696)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -67,12 +67,12 @@ Block length: 6
  CharacterId: 2
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 4294 (0x10c6)
+Offset: 1694 (0x069e)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 4296 (0x10c8)
+Offset: 1696 (0x06a0)
 Block type: 0 (SWF_END)
 Block length: 0
 
