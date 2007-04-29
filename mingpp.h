@@ -32,6 +32,7 @@ extern "C"
   #define SWFMovie        c_SWFMovie
   #define SWFDisplayItem  c_SWFDisplayItem
   #define SWFFill         c_SWFFill
+  #define SWFFillStyle    c_SWFFillStyle
   #define SWFCharacter    c_SWFCharacter
   #define SWFBlock        c_SWFBlock
   #define SWFSprite       c_SWFSprite
@@ -64,6 +65,7 @@ extern "C"
   #undef SWFMovie
   #undef SWFDisplayItem
   #undef SWFFill
+  #undef SWFFillStyle
   #undef SWFCharacter
   #undef SWFBlock
   #undef SWFSprite
@@ -243,6 +245,16 @@ class SWFGradient
 
   void addEntry(float ratio, byte r, byte g, byte b, byte a=0xff)
     { SWFGradient_addEntry(this->gradient, ratio, r, g, b, a); }
+
+  void setSpreadMode(GradientSpreadMode mode)
+    { SWFGradient_setSpreadMode(this->gradient, mode); }
+
+  void setInterpolationMode(GradientInterpolationMode mode)
+    { SWFGradient_setInterpolationMode(this->gradient, mode); }
+
+  void setFocalPoint(float focalPoint)
+    { SWFGradient_setFocalPoint(this->gradient, focalPoint); }
+
   SWF_DECLAREONLY(SWFGradient);
 };
 
@@ -334,6 +346,31 @@ private:
   SWF_DECLAREONLY(SWFFilter);
   SWFFilter();
 };
+
+class SWFFillStyle
+{
+ public:
+  c_SWFFillStyle fill;
+  
+  virtual ~SWFFillStyle() { }
+
+  static SWFFillStyle *SolidFillStyle(byte r, byte g, byte b, byte a=255)
+    { return new SWFFillStyle(newSWFSolidFillStyle(r, g, b, a)); }
+
+  static SWFFillStyle *GradientFillStyle(SWFGradient *gradient, byte flags)
+    { return new SWFFillStyle(newSWFGradientFillStyle(gradient->gradient, flags)); }
+
+/*
+  static SWFFillStyle *BitmapFillStyle(SWFBitmap *bitmap, byte flags)
+    { return new SWFFillStyle(newSWFBitmapFillStyle(bitmap->bitmap, flags)); }
+*/
+
+ private:
+  SWFFillStyle(c_SWFFillStyle fill)
+    { this->fill = fill; }
+  SWF_DECLAREONLY(SWFFillStyle);
+  SWFFillStyle();
+};   
 
 
 /*  SWFDisplayItem  */
@@ -820,6 +857,12 @@ class SWFShape : public SWFCharacter
   SWFFill *addBitmapFill(SWFBitmap *bitmap, byte flags=0)
     { return new SWFFill(SWFShape_addBitmapFill(this->shape, bitmap->bitmap, flags)); }
 
+  void setLeftFillStyle(SWFFillStyle *fill)
+    { SWFShape_setLeftFillStyle(this->shape, fill->fill); }
+
+  void setRightFillStyle(SWFFillStyle *fill)
+    { SWFShape_setRightFillStyle(this->shape, fill->fill); }
+
   void setLeftFill(SWFFill *fill)
     { SWFShape_setLeftFill(this->shape, fill->fill); }
 
@@ -837,8 +880,8 @@ class SWFShape : public SWFCharacter
 	{ setLine(width, r, g, b, a); }
 // )))) end minguts 2004/08/31
 
-  void setLineStyle2(unsigned short width, SWFFillStyle fill, int flags, float miterLimit)
-    {  SWFShape_setLineStyle2filled(this->shape, width, fill, flags, miterLimit); }
+  void setLineStyle2(unsigned short width, SWFFillStyle *fill, int flags, float miterLimit)
+    {  SWFShape_setLineStyle2filled(this->shape, width, fill->fill, flags, miterLimit); }
   
   void setLineStyle2(unsigned short width, byte r, byte g, byte b, byte a, int flags, float miterLimit)
     {  SWFShape_setLineStyle2(this->shape, width, r, g, b, a, flags, miterLimit); }
