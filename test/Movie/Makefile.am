@@ -11,5 +11,6 @@ SUBDIRS = \
 	addMetadata	\
 	setSoundStream	\
 	setTabIndex	\
-	setScriptLimits	
+	setScriptLimits \
+	setNetworkAccess	
 
