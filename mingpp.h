@@ -682,24 +682,25 @@ class SWFBitmap : public SWFBlock
   {
     if(strlen(filename) > 4)
     {
-      if(strcmp(filename+strlen(filename)-4, ".dbl") == 0)
+      if(strcasecmp(filename+strlen(filename)-4, ".dbl") == 0)
 	this->bitmap = (c_SWFBitmap) newSWFDBLBitmap(fopen(filename, "rb"));
 
 #if USE_GIF
       
-      else if(strcmp(filename+strlen(filename)-4, ".gif") == 0)
+      else if(strcasecmp(filename+strlen(filename)-4, ".gif") == 0)
 	this->bitmap = (c_SWFBitmap) newSWFDBLBitmapData_fromGifFile(filename);
 
 #endif
 
 #if USE_PNG
 
-      else if(strcmp(filename+strlen(filename)-4, ".png") == 0)
+      else if(strcasecmp(filename+strlen(filename)-4, ".png") == 0)
  		this->bitmap =   (c_SWFBitmap) newSWFDBLBitmapData_fromPngFile( filename );
 
 #endif
 
-      else if(strcmp(filename+strlen(filename)-4, ".jpg") == 0)
+      else if(strcasecmp(filename+strlen(filename)-4, ".jpg") == 0 ||
+	(strlen(filename) > 5 && (strcasecmp(filename+strlen(filename)-5, ".jpeg") == 0)))
       {
 	if(alpha != NULL)
 	  this->bitmap = (c_SWFBitmap) newSWFJpegWithAlpha(fopen(filename, "rb"),
