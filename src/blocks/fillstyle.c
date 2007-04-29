@@ -58,6 +58,12 @@ void destroySWFFillStyle(SWFFillStyle fill)
 	free(fill);
 }
 
+void SWFFillStyle_addDependency(SWFFillStyle fill, SWFCharacter c)
+{
+	if(fill->type & SWFFILL_BITMAP)
+		SWFCharacter_addDependency(c, (SWFCharacter)fill->data.bitmap);
+}
+
 SWFFillStyle
 newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 {

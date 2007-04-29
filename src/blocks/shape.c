@@ -963,6 +963,7 @@ SWFShape_setLeftFillStyle(SWFShape shape, SWFFillStyle fill)
 	idx = getFillIdx(shape, fill);
 	if(idx == 0) // fill not present in array
 	{
+		SWFFillStyle_addDependency(fill, (SWFCharacter)shape);
 		if(addFillStyle(shape, fill) < 0)
 			return;		
 		idx = getFillIdx(shape, fill);
@@ -994,6 +995,7 @@ SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 	idx = getFillIdx(shape, fill);
 	if(idx == 0) // fill not present in array
 	{
+		SWFFillStyle_addDependency(fill, (SWFCharacter)shape);
 		if(addFillStyle(shape, fill) < 0)
 			return;		
 		idx = getFillIdx(shape, fill);

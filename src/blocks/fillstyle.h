@@ -49,4 +49,5 @@ void
 SWFOutput_writeMorphFillStyle(SWFOutput out, SWFFillStyle fill1, SWFRect bounds1,
                               SWFFillStyle fill2, SWFRect bounds2);
 
+void SWFFillStyle_addDependency(SWFFillStyle fill, SWFCharacter c);
 #endif /* SWF_FILLSTYLE_H_INCLUDED */
