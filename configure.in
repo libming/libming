@@ -347,6 +347,7 @@ AC_OUTPUT([
 	test/LineStyle/Makefile
 	test/MovieClip/Makefile
 	test/Gradient/Makefile
+	test/FillStyle/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config
