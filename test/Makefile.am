@@ -5,7 +5,8 @@ SUBDIRS = Movie \
 	Video \
 	Shape \
 	LineStyle \
-	MovieClip
+	MovieClip \
+	Gradient
 
 EXTRA_DIST = \
 	dotests.pl \

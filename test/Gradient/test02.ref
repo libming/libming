@@ -1,0 +1,87 @@
+File version: 8
+File size: 124
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (ff,ff,ff,ff)
+
+Offset: 25 (0x0019)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 1
+
+Offset: 31 (0x001f)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 75
+
+ ShapeID: 1
+ RECT:  (-10,-10)x(2010,2010):12
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 10
+ Matrix: ScaleX 0.060989 ScaleY 0.060989
+   TranslateX   1000 TranslateY   1000
+ Gradient:  SpreadMode: 0
+ InterpolationMode: 0
+ NumGradients: 7
+ Ratio: 0
+ RGBA: ( 0, 0, 0,ff)
+ Ratio: 51
+ RGBA: ( 0, a, 0,ff)
+ Ratio: 76
+ RGBA: (6e, 0, a,ff)
+ Ratio: 102
+ RGBA: (14, 0, 0,ff)
+ Ratio: 127
+ RGBA: ( 0,14, 0,ff)
+ Ratio: 153
+ RGBA: ( 0, 0,14,ff)
+ Ratio: 178
+ RGBA: (1e, 0, 0,ff)
+ LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyle:  Width: 20
+ RGBA: ( 0, 0, 0,ff)
+ NumFillBits: 1
+ NumLineBits: 1
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
+  StateFillStyle0: 0 StateMoveTo: 0
+   LineStyle: 1
+   FillStyle1: 1
+ Straight EdgeRecord: (10) - (2000, 0)
+ Straight EdgeRecord: (10) - (0, 2000)
+ Straight EdgeRecord: (10) - (-2000, 0)
+ Straight EdgeRecord: (10) - (0, -2000)
+  ENDSHAPE
+
+Offset: 112 (0x0070)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterId: 1
+ Matrix:    TranslateX      0 TranslateY      0
+
+Offset: 120 (0x0078)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 122 (0x007a)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

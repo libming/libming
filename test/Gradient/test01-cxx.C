@@ -1,0 +1,25 @@
+#include <mingpp.h>
+
+int main()
+{
+	SWFMovie *m = new SWFMovie(8);
+	SWFGradient *g = new SWFGradient();
+
+	g->addEntry(0, 0, 0, 0, 255);	
+	g->addEntry(1, 255, 255, 255, 255);	
+
+	SWFFillStyle *fill =  SWFFillStyle::GradientFillStyle(g, SWFFILL_LINEAR_GRADIENT);
+	SWFShape *shape = new SWFShape();
+	shape->setRightFillStyle(fill);
+	
+	shape->setLineStyle(1, 0,0,0,255);
+	shape->drawLine(100, 0);
+	shape->drawLine(0, 100);
+	shape->drawLine(-100, 0);
+	shape->drawLine(0, -100);
+
+	m->add(shape);
+	m->save("test01.swf");
+	return 0;
+
+}
