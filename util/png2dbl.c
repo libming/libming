@@ -2,10 +2,15 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include <ming_config.h>
+
 #include <math.h>
 
 #include <png.h>
+
+#ifdef HAVE_ZLIB_H
 #include <zlib.h>
+#endif
 
 int verbose = 0;
 typedef unsigned char byte;
@@ -274,13 +279,11 @@ void writeDBL(FILE *f, struct pngdata png)
   }
 
   outdata = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
-  
-#ifdef HAVE_LIBZ
+#ifdef USE_ZLIB
   /* compress the RGB color table (if present) and image data one block */
   compress2(outdata, &outsize, data, alignedsize, 9);
   outsize = alignedsize;
-#endif
-#ifndef HAVE_LIBZ
+#else
   /* No zlib, so just copy the data to the result location */
   memcpy(outdata, data, alignedsize);
   outsize = alignedsize;
