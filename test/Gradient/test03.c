@@ -21,7 +21,7 @@ int main()
 	SWFShape shape = newSWFShape();
 	SWFShape_setRightFillStyle(shape, fill);
 	
-	SWFShape_setLineStyle(shape, 1, 0,0,0,255);
+	SWFShape_setLine(shape, 1, 0,0,0,255);
 	SWFShape_drawLine(shape, 100, 0);
 	SWFShape_drawLine(shape, 0, 100);
 	SWFShape_drawLine(shape, -100, 0);
