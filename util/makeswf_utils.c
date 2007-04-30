@@ -38,7 +38,7 @@
 #include <limits.h>
 #include <ming.h>
 #include "makeswf.h"
-#ifdef HAVE_GETOPT
+#ifdef HAVE_GETOPT_H
 #include <getopt.h>
 #endif
 
@@ -247,6 +247,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.5  2007/04/30 09:58:32  strk
+ * Don't include getopt.h if it's not found. Patch by Nils Goroll <nils.goroll@mcs.de>.
+ *
  * Revision 1.4  2007/04/14 16:58:46  strk
  * Removed unused CPP define from makeswf.c, fix the *used* one in makeswf_utils.
  * Thanks to Bastiaan Jacques for finding this out.

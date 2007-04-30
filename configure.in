@@ -247,6 +247,7 @@ AC_CHECK_LIB(z, compress2,
 	AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
 )
 AC_CHECK_HEADERS([zlib.h])
+AC_CHECK_HEADERS([getopt.h])
 
 dnl Check if the vasprintf function exists on this platform
 dnl (It's not present on MinGW and Solaris 10 at the time of this coding)
