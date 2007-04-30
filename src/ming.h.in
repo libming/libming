@@ -835,20 +835,20 @@ void SWFDisplayItem_addFilter(SWFDisplayItem item, SWFFilter filter);
 
 /* adds a position object to manipulate SWFFillStyle's matrix */
 
-SWFFill newSWFFill(SWFFillStyle fillstyle);
-void destroySWFFill(SWFFill fill);
+SWFFill newSWFFill(SWFFillStyle fillstyle) __deprecated;
+void destroySWFFill(SWFFill fill) __deprecated;
 
-void SWFFill_skewX(SWFFill fill, float x);
-void SWFFill_skewXTo(SWFFill fill, float x);
-void SWFFill_skewY(SWFFill fill, float y);
-void SWFFill_skewYTo(SWFFill fill, float y);
+void SWFFill_skewX(SWFFill fill, float x) __deprecated;
+void SWFFill_skewXTo(SWFFill fill, float x) __deprecated;
+void SWFFill_skewY(SWFFill fill, float y) __deprecated;
+void SWFFill_skewYTo(SWFFill fill, float y) __deprecated;
 
-void SWFFill_scaleX(SWFFill fill, float x);
-void SWFFill_scaleXTo(SWFFill fill, float x);
-void SWFFill_scaleY(SWFFill fill, float y);
-void SWFFill_scaleYTo(SWFFill fill, float y);
-void SWFFill_scaleXY(SWFFill fill, float x, float y);
-void SWFFill_scaleXYTo(SWFFill fill, float x, float y);
+void SWFFill_scaleX(SWFFill fill, float x) __deprecated;
+void SWFFill_scaleXTo(SWFFill fill, float x) __deprecated;
+void SWFFill_scaleY(SWFFill fill, float y) __deprecated;
+void SWFFill_scaleYTo(SWFFill fill, float y) __deprecated;
+void SWFFill_scaleXY(SWFFill fill, float x, float y) __deprecated;
+void SWFFill_scaleXYTo(SWFFill fill, float x, float y) __deprecated;
 
   /* Deprecated? */
   #define SWFFill_scale    SWFFill_scaleXY
