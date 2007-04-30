@@ -869,6 +869,14 @@ void SWFFill_setMatrix(SWFFill fill, float a, float b,
 void SWFShape_setLine(SWFShape shape, unsigned short width,
 		      byte r, byte g, byte b, byte a);
 
+void SWFShape_setLine2Filled(SWFShape shape, unsigned short width,
+                             SWFFillStyle fill,
+                             int flags, float miterLimit);
+
+void SWFShape_setLine2(SWFShape shape, unsigned short width, 
+                       byte r, byte g, byte b, byte a,
+                       int flags, float miterLimit);
+
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
 SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient, byte flags);
 SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
