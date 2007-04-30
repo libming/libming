@@ -699,7 +699,10 @@ static void finishSetLine(SWFShape shape, int line, unsigned short width)
 /*
  * set filled Linestyle2 introduce with SWF 8.
  * 
- * set line width in pixel
+ * set line width in TWIPS
+ *
+ * WARNING: this is an internal interface
+ * external use is deprecated! use setLine2 instead
  *
  * Instead of providing a fill color, a FillStyle can be applied
  * to a line.
@@ -748,8 +751,6 @@ SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
 	if ( shape->isEnded )
 		return;
 
-	width = (unsigned short)(Ming_scale*width);
-
 	for ( line=0; line<shape->nLines; ++line )
 	{
 		if ( SWFLineStyle_equals2filled(shape->lines[line], width, fill, flags) )
@@ -769,8 +770,9 @@ SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
 /*
  * set Linestyle2 introduce with SWF 8.
  *
- * set line width in pixel
- *
+ * set line width in TWIPS
+ * WARNING: this is an internal interface
+ * external use is deprecated! use setLine2 instead !
  * set color {r, g, b, a}
  *
  * Linestyle2 extends Linestyle1 with some extra flags:
@@ -817,8 +819,6 @@ SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
 	if ( shape->isEnded )
 		return;
 
-	width = (unsigned short)(Ming_scale*width);
-
 	for ( line=0; line<shape->nLines; ++line )
 	{
 		if ( SWFLineStyle_equals(shape->lines[line], width, r, g, b, a, flags) )
@@ -836,8 +836,11 @@ SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
 /*
  * set line width and line color
  *
- * set line width in pixel
+ * set line width in TWIPS
  * set line color as {r, g, b, a}
+ *
+ * WARNING: this is an internal interface.
+ * external use is deprecated! use setLine instead ! 
  */
 void
 SWFShape_setLineStyle(SWFShape shape, unsigned short width,
@@ -847,8 +850,6 @@ SWFShape_setLineStyle(SWFShape shape, unsigned short width,
 		
 	if ( shape->isEnded )
 		return;
-	
-	width = (unsigned short)(Ming_scale*width);
 	
 	for ( line=0; line<shape->nLines; ++line )
 	{

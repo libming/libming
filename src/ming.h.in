@@ -97,7 +97,7 @@ void Ming_useConstants(int flag);
    accurate, hence larger file size. */
 void Ming_setCubicThreshold(int num);
 
-/* sets the overall scale, default is 1 */
+/* sets the overall scale, default is 20.0 */
 void Ming_setScale(float scale);
 float Ming_getScale();
 
@@ -325,15 +325,15 @@ void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
 			float anchordx, float anchordy);
 
 void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
-			  byte r, byte g, byte b, byte a);
+			  byte r, byte g, byte b, byte a) __deprecated;
 
 void SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
                             byte r, byte g, byte b, byte a, 
-                            int flags, float miterLimit);
+                            int flags, float miterLimit) __deprecated;
 
 void SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
                                   SWFFillStyle fill,
-                                  int flags, float miterLimit);
+                                  int flags, float miterLimit) __deprecated;
 
 void SWFShape_hideLine(SWFShape shape);
 

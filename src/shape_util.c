@@ -42,13 +42,114 @@ float SWFCharacter_getHeight(SWFCharacter character)
 	return SWFCharacter_getScaledHeight(character) / Ming_scale;
 }
 
-
+/*
+ * set line width and line color
+ *
+ * set line width in TWIPS
+ * set line color as {r, g, b, a}
+ *
+ */
 void SWFShape_setLine(SWFShape shape, unsigned short width,
 					byte r, byte g, byte b, byte a)
 {
-	SWFShape_setLineStyle(shape, width, r, g, b, a);
+	SWFShape_setLineStyle(shape, width * Ming_scale, r, g, b, a);
 }
 
+/*
+ * set Linestyle2 introduce with SWF 8.
+ *
+ * set line width in pixel
+ * set color {r, g, b, a}
+ *
+ * Linestyle2 extends Linestyle1 with some extra flags:
+ *
+ * Line cap style: select one of the following flags (default is round cap style)
+ * SWF_LINESTYLE_CAP_ROUND 
+ * SWF_LINESTYLE_CAP_NONE
+ * SWF_LINESTYLE_CAP_SQUARE 
+ *
+ * Line join style: select one of the following flags (default is round join style)
+ * SWF_LINESTYLE_JOIN_ROUND
+ * SWF_LINESTYLE_JOIN_BEVEL 
+ * SWF_LINESTYLE_JOIN_MITER  
+ *
+ * Scaling flags: disable horizontal / vertical scaling
+ * SWF_LINESTYLE_FLAG_NOHSCALE
+ * SWF_LINESTYLE_FLAG_NOVSCALE 
+ *
+ * Enable pixel hinting to correct blurry vertical / horizontal lines
+ * -> all anchors will be aligned to full pixels
+ * SWF_LINESTYLE_FLAG_HINTING  
+ *
+ * Disable stroke closure: if no-close flag is set caps will be applied 
+ * instead of joins
+ * SWF_LINESTYLE_FLAG_NOCLOSE
+ *
+ * End-cap style: default round
+ * SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+ * SWF_LINESTYLE_FLAG_ENDCAP_NONE
+ * SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+ *
+ * If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor 
+ * must be set. Miter max length is then calculated as:
+ * max miter len = miter limit * width.
+ * If join style is not miter, this value will be ignored.
+ */
+void SWFShape_setLine2(SWFShape shape, unsigned short width, 
+                       byte r, byte g, byte b, byte a,
+                       int flags, float miterLimit)
+{
+	SWFShape_setLineStyle2(shape, width * Ming_scale, r, g, b, a, flags, miterLimit);
+}
+
+/*
+ * set filled Linestyle2 introduce with SWF 8.
+ * 
+ * set line width in pixel
+ *
+ * Instead of providing a fill color, a FillStyle can be applied
+ * to a line.
+ * 
+ * Linestyle2 also extends Linestyle1 with some extra flags:
+ *
+ * Line cap style: select one of the following flags (default is round cap style)
+ * SWF_LINESTYLE_CAP_ROUND 
+ * SWF_LINESTYLE_CAP_NONE
+ * SWF_LINESTYLE_CAP_SQUARE 
+ *
+ * Line join style: select one of the following flags (default is round join style)
+ * SWF_LINESTYLE_JOIN_ROUND
+ * SWF_LINESTYLE_JOIN_BEVEL 
+ * SWF_LINESTYLE_JOIN_MITER  
+ *
+ * Scaling flags: disable horizontal / vertical scaling
+ * SWF_LINESTYLE_FLAG_NOHSCALE
+ * SWF_LINESTYLE_FLAG_NOVSCALE 
+ *
+ * Enable pixel hinting to correct blurry vertical / horizontal lines
+ * -> all anchors will be aligned to full pixels
+ * SWF_LINESTYLE_FLAG_HINTING  
+ *
+ * Disable stroke closure: if no-close flag is set caps will be applied 
+ * instead of joins
+ * SWF_LINESTYLE_FLAG_NOCLOSE
+ *
+ * End-cap style: default round
+ * SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+ * SWF_LINESTYLE_FLAG_ENDCAP_NONE
+ * SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+ *
+ * If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor 
+ * must be set. Miter max length is then calculated as:
+ * max miter len = miter limit * width.
+ * If join style is not miter, this value will be ignored.
+ */
+void SWFShape_setLine2Filled(SWFShape shape, unsigned short width,
+                             SWFFillStyle fill,
+                             int flags, float miterLimit)
+{
+	SWFShape_setLineStyle2filled(shape, width * Ming_scale, fill, flags, miterLimit);
+}
 
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a)
 {

@@ -44,8 +44,12 @@ struct SWFLineStyle_s
 };
 
 
+/* 
+ * sets simple linestyle 
+ * width is set in TWIPS
+ */
 SWFLineStyle newSWFLineStyle(unsigned short width,
-					 byte r, byte g, byte b, byte a)
+                             byte r, byte g, byte b, byte a)
 {
 	SWFLineStyle line = (SWFLineStyle)malloc(sizeof(struct SWFLineStyle_s));
 
