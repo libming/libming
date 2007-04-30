@@ -11,11 +11,11 @@ int main()
 	SWFShape shape1 = SWFMorph_getShape1(morph);
 	SWFShape shape2 = SWFMorph_getShape2(morph);
 	
-        SWFShape_setLineStyle(shape1, 4, 25, 0, 0, 128);
+        SWFShape_setLine(shape1, 4, 25, 0, 0, 128);
 	SWFShape_movePenTo(shape1, 5, 5);
         SWFShape_drawLineTo(shape1, 50, 30);
 
-         SWFShape_setLineStyle(shape2, 4, 25, 0, 0, 128);
+        SWFShape_setLine(shape2, 4, 25, 0, 0, 128);
 	SWFShape_movePenTo(shape2, 5, 5);
         SWFShape_drawLineTo(shape2, 50, 130);
 
