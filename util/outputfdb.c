@@ -24,6 +24,7 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* f,
 	FILE *out;
 	char buf[length];
 	char name[256];
+	int skipBytes;
 
 	if ( type != SWF_DEFINEFONT2 ) return;
 
@@ -45,8 +46,12 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* f,
 	fputc('b', out);
 	fputc('0', out);
 
-	fseek(f, offset+2, SEEK_SET); /* skip FontId (UI16) */
-	length-=2;
+	skipBytes = 4; // skip blockType (2 bytes) + fontId (2 bytes) 
+	if(length >= 63) // long Block
+		skipBytes += 4;
+
+	fseek(f, offset + skipBytes, SEEK_SET); /* skip FontId (UI16) */
+	length -= skipBytes;
 	fread(buf, length, 1, f);
 	fwrite(buf, length, 1, out);
 
