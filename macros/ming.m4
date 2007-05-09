@@ -62,7 +62,7 @@ AC_DEFUN([AC_PATH_MING],
 			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
 		micro=`echo $MING_VERSION | \
 			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
-		beta=`echo $MING_VERSION | sed -e 's/.*beta\([[0-9]]*\).*/\1/' 2> /dev/null`
+		beta=`echo $MING_VERSION | sed -ne 's/.*beta\([[0-9]]*\).*/\1/p'`
 		MING_VERSION_CODE=`printf %2.2d%2.2d%2.2d%2.2d $major $minor $micro $beta`
 		MING_CFLAGS=`$MING_CONFIG --cflags`
 		MING_LIBS=`$MING_CONFIG --libs`
