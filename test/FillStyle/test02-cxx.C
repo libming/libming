@@ -10,7 +10,7 @@ int main()
 	SWFShape *shape = new SWFShape();
 	shape->setRightFillStyle(fill);
 	
-	shape->setLineStyle(1, 0,0,0,255);
+	shape->setLine(1, 0,0,0,255);
 	shape->drawLine(100, 0);
 	shape->drawLine(0, 100);
 	shape->drawLine(-100, 0);
