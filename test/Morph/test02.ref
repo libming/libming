@@ -36,10 +36,7 @@ Block length: 72
   StateFillStyle0: 0 StateMoveTo: 1
    LineStyle: 1
    MoveBits: 8  MoveDeltaX: 100  MoveDeltaY: 100
-  ENDSHAPE
  Straight EdgeRecord: (9) - (900, 500)
-  ENDSHAPE
-  ENDSHAPE
  
  NumFillBits: 0
  NumLineBits: 1
@@ -47,10 +44,7 @@ Block length: 72
   StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
   StateFillStyle0: 0 StateMoveTo: 1
    MoveBits: 8  MoveDeltaX: 100  MoveDeltaY: 100
-  ENDSHAPE
  Straight EdgeRecord: (11) - (900, 2500)
-  ENDSHAPE
-  ENDSHAPE
 
 Offset: 109 (0x006d)
 Block type: 26 (SWF_PLACEOBJECT2)
