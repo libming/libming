@@ -218,15 +218,15 @@ SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 typedef enum
 {
-        PAD,
-        REFLECT,
-        REPEAT
+        SWF_GRADIENT_PAD,
+        SWF_GRADIENT_REFLECT,
+        SWF_GRADIENT_REPEAT
 } GradientSpreadMode;
 
 typedef enum
 {
-        NORMAL,
-        LINEAR
+        SWF_GRADIENT_NORMAL,
+        SWF_GRADIENT_LINEAR
 } GradientInterpolationMode;
 
 SWFGradient newSWFGradient();

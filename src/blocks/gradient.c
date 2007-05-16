@@ -62,9 +62,9 @@ newSWFGradient()
 /* 
  * set gradient spread mode 
  * SWF8 allows to set different spread modes:
- * PAD (default)
- * REFLECT
- * REPEAT
+ * SWF_GRADIENT_PAD (default)
+ * SWF_GRADIENT_REFLECT
+ * SWF_GRADIENT_REPEAT
  */
 void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode)
 {
@@ -74,8 +74,8 @@ void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode)
 /*
  * set gradient interpolation mode
  * SWF8 allows to set different interpolation modes:
- * NORMAL (default)
- * LINEAR
+ * SWF_GRADIENT_NORMAL (default)
+ * SWF_GRADIENT_LINEAR
  */
 void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolationMode mode)
 {
