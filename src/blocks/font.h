@@ -43,6 +43,20 @@
 #define SWF_FONT_ISITALIC     (1<<1)
 #define SWF_FONT_ISBOLD       (1<<0)
 
+struct kernInfo
+{
+	byte code1;
+	byte code2;
+	short adjustment;
+};
+
+struct kernInfo16
+{
+	unsigned short code1;
+	unsigned short code2;
+	short adjustment;
+};
+
 struct SWFFont_s
 {
 	/* even though SWFFont isn't represented in the SWF file, */

@@ -41,6 +41,7 @@ noinst_HEADERS =	\
 	textfield.h	\
 	text.h		\
 	ttffont.h	\
+	fdbfont.h	\
 	utf8.h		\
 	videostream.h	\
 	filter.h	\
@@ -96,6 +97,7 @@ libblock_la_SOURCES = 	\
 	text.c		\
 	textfield.c	\
 	ttffont.c	\
+	fdbfont.c	\
 	utf8.c		\
 	videostream.c	\
 	flv.c		\
