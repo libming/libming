@@ -1608,6 +1608,7 @@ parseSWF_DEFINEFONT (FILE * f, int length)
   parserrec->FontID = readUInt16 (f);
   firstOffset = readUInt16 (f);
   parserrec->NumGlyphs = (firstOffset/2);
+  Movie_addFontInfo(&m, parserrec->FontID, parserrec->NumGlyphs);
   parserrec->OffsetTable = (UI16 *)malloc((firstOffset/2) * sizeof( UI16 ) );
   parserrec->OffsetTable[0] = firstOffset;
   for(i=1;i<firstOffset/2;i++) {
@@ -1646,6 +1647,7 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
   parserrec->FontNameLen = readUInt8 (f);
   parserrec->FontName = readSizedString (f, parserrec->FontNameLen);
   parserrec->NumGlyphs = readUInt16 (f);
+  Movie_addFontInfo(&m, parserrec->FontID, parserrec->NumGlyphs);
   if (parserrec->FontFlagsWideOffsets)
     {
       parserrec->OffsetTable.UI32 =
@@ -1693,7 +1695,7 @@ parseSWF_DEFINEFONT2 (FILE * f, int length)
          else
            len = parserrec->CodeTableOffset.UI16 - parserrec->OffsetTable.UI16[i];
       }
-      parseSWF_SHAPE (f, &parserrec->GlyphShapeTable[i], 3, len);
+	parseSWF_SHAPE (f, parserrec->GlyphShapeTable + i, 3, len);
     }
 
   parserrec->CodeTable =
@@ -1772,6 +1774,7 @@ parseSWF_DEFINEFONT3 (FILE * f, int length)
   parserrec->FontNameLen = readUInt8 (f);
   parserrec->FontName = readSizedString (f, parserrec->FontNameLen);
   parserrec->NumGlyphs = readUInt16 (f);
+  Movie_addFontInfo(&m, parserrec->FontID, parserrec->NumGlyphs);
   if (parserrec->FontFlagsWideOffsets)
     {
       parserrec->OffsetTable.UI32 =
@@ -1950,6 +1953,45 @@ parseSWF_CSMTEXTSETTINGS (FILE * f, int length)
   PAR_END;
 }
 
+void 
+parseSWF_ZONEDATA(FILE *f, struct SWF_ZONEDATA *data)
+{
+  data->AlignmentCoordinate = readUInt16(f); // FLOAT16
+  data->Range = readUInt16(f); // FLOAT16
+}
+
+void 
+parseSWF_ZONERECORD(FILE *f, struct SWF_ZONERECORD *table)
+{
+  int i;
+  table->NumZoneData = readUInt8(f);
+  table->ZoneData = (struct SWF_ZONEDATA *)
+    malloc(table->NumZoneData * sizeof(struct SWF_ZONEDATA));
+  for(i = 0; i < table->NumZoneData; i++)
+  	parseSWF_ZONEDATA(f, table->ZoneData + i);
+  
+  table->ZoneMaskX = readBits(f, 1);
+  table->ZoneMaskY = readBits(f, 1);
+  table->Reserved  = readBits(f, 6);	
+}
+
+SWF_Parserstruct *
+parseSWF_DEFINEFONTALIGNZONES(FILE *f, int length)
+{
+  int i;
+  PAR_BEGIN (SWF_DEFINEFONTALIGNZONES);
+  parserrec->FontID = readUInt16(f);
+  parserrec->CSMTableHint = readBits(f, 2);
+  parserrec->Reserved = readBits(f, 6);
+  parserrec->GlyphCount = Movie_getFontGlyphCount(&m, parserrec->FontID);
+  if(parserrec->GlyphCount <= 0)
+	error("SWF_DEFINEFONTALIGNZONES: FontID %i not present\n", parserrec->FontID);
+  parserrec->ZoneTable = malloc(sizeof(struct SWF_ZONERECORD) * parserrec->GlyphCount);
+ 
+  for(i = 0; i < parserrec->GlyphCount; i++)
+  	parseSWF_ZONERECORD(f, parserrec->ZoneTable + i);
+  PAR_END;
+}
 
 SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS (FILE * f, int length)

@@ -58,6 +58,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
   {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
   {SWF_CSMTEXTSETTINGS, outputSWF_CSMTEXTSETTINGS},
+  {SWF_DEFINEFONTALIGNZONES, outputSWF_DEFINEFONTALIGNZONES},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
   {SWF_DEFINEMORPHSHAPE, outputSWF_DEFINEMORPHSHAPE},
@@ -1252,6 +1253,13 @@ outputSWF_CSMTEXTSETTINGS (SWF_Parserstruct * pblock)
   iprintf("GridFit %d\n", sblock->GridFit);
   iprintf("Thickness %d\n", sblock->Thickness);
   iprintf("Sharpness %d\n", sblock->Sharpness);
+}
+
+void 
+outputSWF_DEFINEFONTALIGNZONES (SWF_Parserstruct * pblock)
+{
+  // OUT_BEGIN (SWF_DEFINEFONTALIGNZONES);
+
 }
 
 void

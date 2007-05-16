@@ -1245,7 +1245,8 @@ struct SWF_DEFINEFONTALIGNZONES
 {
   UI16 FontID;
   UI8 CSMTableHint:2;
-  UI8 Reserved;
+  UI8 Reserved:6;
+  int GlyphCount;
   struct SWF_ZONERECORD *ZoneTable;
 };
 

@@ -237,6 +237,8 @@ main (int argc, char *argv[])
 	m.version = readUInt8 (f);
 	m.size = readUInt32 (f);
 	m.soundStreamFmt = -1;
+        m.fonts = NULL;
+        m.numFonts = 0;
 	if (compressed)
 	{
 		int unzipped = cws2fws (f, m.size);

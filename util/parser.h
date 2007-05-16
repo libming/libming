@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Rect
 { 
@@ -26,6 +27,12 @@ struct Rect
   int xMax;
   int yMin;
   int yMax;
+};
+
+struct FontInfo
+{
+  int ID;
+  int GlyphCount;
 };
 
 struct Movie
@@ -36,8 +43,32 @@ struct Movie
   float rate;
   int nFrames;
   int soundStreamFmt;
+  struct FontInfo *fonts;
+  int numFonts;
 };
 
+static inline void 
+Movie_addFontInfo(struct Movie *m, int ID, int count)
+{
+  return;
+  printf("numFonts %i, fonts %p\n", m->numFonts, m->fonts);
+  m->fonts = realloc(m->fonts, (m->numFonts + 1) * sizeof(struct FontInfo));
+  m->fonts[m->numFonts].ID = ID;
+  m->fonts[m->numFonts].GlyphCount = count;
+  m->numFonts++;
+}
+
+static inline int 
+Movie_getFontGlyphCount(struct Movie *m, int ID)
+{
+  int i;
+  for(i = 0; i < m->numFonts; i++)
+  {
+    if(m->fonts[i].ID == ID)
+      return m->fonts[i].GlyphCount;
+  }
+  return -1;
+}
 
 #include "swftypes.h"
 
