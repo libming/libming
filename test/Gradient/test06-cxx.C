@@ -5,8 +5,8 @@ int main()
 	SWFMovie *m = new SWFMovie(8);
 	SWFGradient *g = new SWFGradient();
 
-	g->setSpreadMode(REPEAT);
-	g->setInterpolationMode(LINEAR);
+	g->setSpreadMode(SWF_GRADIENT_REPEAT);
+	g->setInterpolationMode(SWF_GRADIENT_LINEAR);
 	g->setFocalPoint(0.2);
 
 

@@ -4,8 +4,8 @@ int main()
 {
 	SWFMovie m = newSWFMovieWithVersion(8);
 	SWFGradient g = newSWFGradient();
-	SWFGradient_setSpreadMode(g, REPEAT);
-	SWFGradient_setInterpolationMode(g, LINEAR);
+	SWFGradient_setSpreadMode(g, SWF_GRADIENT_REPEAT);
+	SWFGradient_setInterpolationMode(g, SWF_GRADIENT_LINEAR);
 
 	SWFGradient_addEntry(g, 0, 0, 0, 0, 255);	
 	SWFGradient_addEntry(g, 0.2, 0, 10, 0, 255);	
