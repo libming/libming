@@ -815,7 +815,6 @@ parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level, int len)
 							  1) *
 							 sizeof
 							 (SWF_SHAPERECORD));
-      shape->NumShapeRecords++;
     }
 }
 
