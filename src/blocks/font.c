@@ -824,16 +824,6 @@ SWFFont_getCharacterKern(SWFFont font,
 
 /* font loader */
 
-#define SWF_LOAD_FONT_HASLAYOUT		 (1<<7)
-#define SWF_LOAD_FONT_SHIFTJIS		 (1<<6)
-#define SWF_LOAD_FONT_UNICODE			 (1<<5)
-#define SWF_LOAD_FONT_ANSI				 (1<<4)
-#define SWF_LOAD_FONT_WIDEOFFSETS	 (1<<3)
-#define SWF_LOAD_FONT_WIDECODES		 (1<<2)
-#define SWF_LOAD_FONT_ITALIC			 (1<<1)
-#define SWF_LOAD_FONT_BOLD				 (1<<0)
-
-
 static int
 readUInt16(FILE *f)
 {
@@ -983,21 +973,21 @@ loadSWFFontFromFile(FILE *file)
 
 /* this isn't right, and I don't know why.. */
 
-	if(flags & SWF_LOAD_FONT_HASLAYOUT)
+	if(flags & SWF_FONT_HASLAYOUT)
 		font->flags |= SWF_FONT_HASLAYOUT;
-	if(flags & SWF_LOAD_FONT_SHIFTJIS)
+	if(flags & SWF_FONT_SHIFTJIS)
 		font->flags |= SWF_FONT_SHIFTJIS;
-	if(flags & SWF_LOAD_FONT_ANSI)
+	if(flags & SWF_FONT_ANSI)
 		font->flags |= SWF_FONT_ANSI;
-	if(flags & SWF_LOAD_FONT_UNICODE)
-		font->flags |= SWF_FONT_UNICODE;
-	if(flags & SWF_LOAD_FONT_ITALIC)
+	if(flags & SWF_FONT_SMALLTEXT)
+		font->flags |= SWF_FONT_SMALLTEXT;
+	if(flags & SWF_FONT_ISITALIC)
 		font->flags |= SWF_FONT_ISITALIC;
-	if(flags & SWF_LOAD_FONT_BOLD)
+	if(flags & SWF_FONT_ISBOLD)
 		font->flags |= SWF_FONT_ISBOLD;
-	if(flags & SWF_LOAD_FONT_WIDEOFFSETS)
+	if(flags & SWF_FONT_WIDEOFFSETS)
 		font->flags |= SWF_FONT_WIDEOFFSETS;
-	if(flags & SWF_LOAD_FONT_WIDECODES)
+	if(flags & SWF_FONT_WIDECODES)
 		font->flags |= SWF_FONT_WIDECODES;
 
 //	font->flags = flags; // XXX - ???
@@ -1023,7 +1013,7 @@ loadSWFFontFromFile(FILE *file)
 	font->glyphToCode = (unsigned short*)malloc(nGlyphs * sizeof(*font->glyphToCode));
 	font->advances = (short*) malloc(nGlyphs * sizeof(*font->advances));
 
-	if ( flags & SWF_LOAD_FONT_WIDEOFFSETS )
+	if ( flags & SWF_FONT_WIDEOFFSETS )
 	{
 		for ( i=0; i<=nGlyphs; ++i )
 			font->glyphOffset[i] = (byte *)(readUInt32(file) - 4*nGlyphs - 4);
@@ -1072,7 +1062,7 @@ loadSWFFontFromFile(FILE *file)
 
 	/* read glyph-to-code table */
 
-	if ( flags & SWF_LOAD_FONT_WIDECODES )
+	if ( flags & SWF_FONT_WIDECODES )
 	{
 		for ( i=0; i<nGlyphs; ++i )
 			font->glyphToCode[i] = readUInt16(file);
@@ -1089,7 +1079,7 @@ loadSWFFontFromFile(FILE *file)
 
 	/* read metrics */
 
-	if ( flags & SWF_LOAD_FONT_HASLAYOUT )
+	if ( flags & SWF_FONT_HASLAYOUT )
 	{
 		font->ascent = readSInt16(file);
 		font->descent = readSInt16(file);
