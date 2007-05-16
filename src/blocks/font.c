@@ -309,6 +309,7 @@ newSWFFont()
 
 	font->name = NULL;
 	font->flags = 0;
+	font->langCode = 0;
 
 	font->nGlyphs = 0;
 	font->glyphToCode = NULL;
@@ -990,11 +991,7 @@ loadSWFFontFromFile(FILE *file)
 	if(flags & SWF_FONT_WIDECODES)
 		font->flags |= SWF_FONT_WIDECODES;
 
-//	font->flags = flags; // XXX - ???
-// new rules... SWF6 said to require unicode, no ansi, no shiftjis
-//	font->flags |= SWF_FONT_SHIFTJIS;
-
-	fgetc(file); /* "reserved" */
+	font->langCode = fgetc(file); 
 
 	namelen = fgetc(file);
 	font->name = (byte*) malloc(namelen+1);
