@@ -1,15 +1,18 @@
 To add a new test:
 
-	0: let your test name be "Test"
+	0: let your test name be "testXX"
 	1: write the testXX.c
-	3: create a .ref with 'listswf testXX.swf > testXX.ref'
-	4: IMPORTANT: verify that the output is *correct*
-	5: add testXX.c and testXX.ref to CVS; add outputfile (.swf) and binaries to .cvsignore and add .cvsignore to CVS
+	3: create a .ref with 'listswf testXX.swf > testXX.ref' (TIP: make ref should do that)
+	4a: IMPORTANT: verify that the output is *correct* 
+	4b: Run 'make gen' to create binding versions
+	5a: add testXX.c and testXX.ref to CVS; add outputfile (.swf) and binaries to .cvsignore and add .cvsignore to CVS
+	5b: add testXX-cxx.C, testXX.php, testXX.pl, testXX.py, testXX.tcl to cvs
 	6: add testXX to the TestList file
-	7: add testXX.ref and TestList to the EXTRA_DIST variable in Makefile.am
+	7a: add testXX.ref and TestList to the EXTRA_DIST variable in Makefile.am
+	7b: add testXX-cxx.C, testXX.php, testXX.pl, testXX.py, testXX.tcl to EXTRA_DIST
 	8: run ./autogen.sh && configure
 	9: run 'make check' to test the test :)
-	10: commit (testXX.c testXX.ref Makefile.am TestList .cvsignore)
+	10: commit 
 
 also take a look at:
 http://www.libming.org/moin.cgi/HowToAddNewInterface
