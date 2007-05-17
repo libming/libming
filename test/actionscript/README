@@ -15,3 +15,6 @@ To add a new test:
 	10: commit (Test.as Test.ref Makefile.am)
 
 --strk; Sun Jul  9 01:25:51 CEST 2006
+
+also take a look at:
+http://www.libming.org/moin.cgi/HowToAddNewInterface
