@@ -21,5 +21,8 @@ int SWFInput_getSInt16(SWFInput input);
 unsigned long SWFInput_getUInt24_BE(SWFInput input);
 unsigned long SWFInput_getUInt32(SWFInput input);
 unsigned long SWFInput_getUInt32_BE(SWFInput input);
+void SWFInput_byteAlign(SWFInput input);
+int SWFInput_readBits(SWFInput input, int number);
+int SWFInput_readSBits(SWFInput input, int number);
 
 #endif /* SWF_INPUT_H_INCLUDED */

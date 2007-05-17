@@ -50,8 +50,72 @@ struct SWFInput_s
 	/* memory node for garbage collection */
 	mem_node *gcnode;
 #endif
+	int buffer;
+	int bufbits;
 };
 
+void
+SWFInput_byteAlign(SWFInput input)
+{
+	if(input->bufbits > 0)
+	{
+		input->bufbits = 0;
+		input->buffer = 0;
+	}
+}
+
+int
+SWFInput_readBits(SWFInput input, int number)
+{
+	int ret = input->buffer;
+	if ( number == input->bufbits )
+	{
+		input->bufbits = 0;
+		input->buffer = 0;
+		return ret;
+	}
+
+	if ( number > input->bufbits )
+	{
+		number -= input->bufbits;
+
+		while( number > 8 )
+		{
+			ret <<= 8;
+			ret += SWFInput_getChar(input);
+			number -= 8;
+		}
+
+		input->buffer = SWFInput_getChar(input);
+
+		if ( number > 0 )
+		{
+			ret <<= number;
+			input->bufbits = 8-number;
+			ret += input->buffer >> (8-number);
+			input->buffer &= (1<<input->bufbits)-1;
+		}
+
+		return ret;
+	}
+
+	ret = input->buffer >> (input->bufbits-number);
+	input->bufbits -= number;
+	input->buffer &= (1<<input->bufbits)-1;
+
+	return ret;
+}
+
+int 
+SWFInput_readSBits(SWFInput input, int number)
+{
+	int num = SWFInput_readBits(input, number);
+
+	if ( num & (1<<(number-1)) )
+		return num - (1<<number);
+	else
+		return num;
+}
 
 int
 SWFInput_getChar(SWFInput input)
@@ -256,7 +320,8 @@ newSWFInput_file(FILE *f)
 	input->seek = SWFInput_file_seek;
 	input->read = SWFInput_file_read;
 	input->data = f;
-
+	input->bufbits = 0;
+	input->buffer = 0;
 	input->offset = 0;
 	input->length = buf.st_size;
 
@@ -330,7 +395,8 @@ newSWFInput_buffer(unsigned char* buffer, int length)
 	input->read = SWFInput_buffer_read;
 	input->seek = SWFInput_buffer_seek;
 	input->data = buffer;
-
+	input->buffer = 0;
+	input->bufbits = 0;
 	input->offset = 0;
 	input->length = length;
 
@@ -532,6 +598,8 @@ newSWFInput_stream(FILE* f)
 
 	input->offset = 0;
 	input->length = 0;
+	input->buffer = 0;
+	input->bufbits = 0;
 
 	data->file = f;
 	data->buffer = NULL;
@@ -657,7 +725,8 @@ newSWFInput_input(SWFInput in, unsigned int length)
 	input->length = length;
 
 	input->data = (void *)data;
-
+	input->buffer = 0;
+	input->bufbits = 0;
 #if TRACK_ALLOCS
 	input->gcnode = ming_gc_add_node(input, (dtorfunctype) destroySWFInput);
 #endif
