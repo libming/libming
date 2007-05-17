@@ -81,7 +81,7 @@ Block length: 5
  PlaceFlagHasCharacter 0
  PlaceFlagMove 1
  Depth 1
- Ratio: 6554
+ Ratio: 6553
 
 Offset: 128 (0x0080)
 Block type: 1 (SWF_SHOWFRAME)
@@ -121,7 +121,7 @@ Block length: 5
  PlaceFlagHasCharacter 0
  PlaceFlagMove 1
  Depth 1
- Ratio: 19661
+ Ratio: 19660
 
 Offset: 146 (0x0092)
 Block type: 1 (SWF_SHOWFRAME)
@@ -161,7 +161,7 @@ Block length: 5
  PlaceFlagHasCharacter 0
  PlaceFlagMove 1
  Depth 1
- Ratio: 32768
+ Ratio: 32767
 
 Offset: 164 (0x00a4)
 Block type: 1 (SWF_SHOWFRAME)
@@ -201,7 +201,7 @@ Block length: 5
  PlaceFlagHasCharacter 0
  PlaceFlagMove 1
  Depth 1
- Ratio: 45875
+ Ratio: 45874
 
 Offset: 182 (0x00b6)
 Block type: 1 (SWF_SHOWFRAME)
@@ -241,7 +241,7 @@ Block length: 5
  PlaceFlagHasCharacter 0
  PlaceFlagMove 1
  Depth 1
- Ratio: 58982
+ Ratio: 58981
 
 Offset: 200 (0x00c8)
 Block type: 1 (SWF_SHOWFRAME)
