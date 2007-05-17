@@ -420,7 +420,18 @@ void
 SWFDisplayItem_setRatio(SWFDisplayItem item, float ratio)
 {
 	checkBlock(item);
-	SWFPlaceObject2Block_setRatio(item->block, (int)rint(ratio*65535));
+	if(ratio < 0)
+	{
+		SWF_warn("SWFDisplayItem_setRatio: ratio must be inside [0...1]\n");
+	 	ratio = 0;
+	}
+	else if (ratio > 1.0)
+	{
+		SWF_warn("SWFDisplayItem_setRatio: ratio must be inside [0...1]\n");
+	 	ratio = 1.0;
+	}
+	int res = (int)floor(ratio * 65535);
+	SWFPlaceObject2Block_setRatio(item->block, res);
 }
 
 
