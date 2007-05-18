@@ -1,4 +1,673 @@
-2007-03-27 10:41  strk
+2007-05-17 17:54  krechert
+
+	* src/blocks/: input.c, input.h: readBits and friends for SWFInput
+
+2007-05-17 14:16  krechert
+
+	* test/README: improved
+
+2007-05-17 14:05  krechert
+
+	* test/: README, actionscript/README: creating and adding tests in
+	  10 steps :)
+
+2007-05-17 12:57  krechert
+
+	* test/Morph/: test01.ref, test02.ref: update test reference
+
+2007-05-17 12:55  krechert
+
+	* src/displaylist.c: make morph ratio failsafe
+
+2007-05-16 22:14  krechert
+
+	* test/Morph/: test01.ref, test02.ref: updated reference after
+	  parser fixes
+
+2007-05-16 22:12  krechert
+
+	* util/parser.c: use length parameter in parseSWF_SHAPE bufixes
+	  generating shape length
+
+2007-05-16 22:07  krechert
+
+	* test/Gradient/: test05-cxx.C, test05.c, test06-cxx.C, test06.c:
+	  changed flag names
+
+2007-05-16 20:37  krechert
+
+	* util/: blocktypes.c, main.c, outputdecl.h, outputtxt.c, parser.c,
+	  parser.h, parserdecl.h, swftypes.h: parse
+	  SWF_DEFINEFONTALIGNZONES extended movie structure to store font
+	  information
+
+2007-05-16 20:29  krechert
+
+	* util/parser.c: removed bogus increment
+
+2007-05-16 19:45  krechert
+
+	* src/: ming.h.in, blocks/gradient.c: make perl extension compile
+	  (redefinition of symbol PAD)
+
+2007-05-16 17:59  krechert
+
+	* src/blocks/: fdbfont.c, fdbfont.h, font.c, font.h, Makefile.am:
+	  handle fdb font reading in an extra file
+
+2007-05-16 16:46  krechert
+
+	* src/blocks/: font.c, font.h: for SWF6 and later DEFINEFONT has a
+	  LanguageCode field
+
+2007-05-16 16:39  krechert
+
+	* src/blocks/: font.c, font.h: SWF_DEFINEFONT2/3 has no UNICODE
+	  flag. since SWF7 there is SMALLTEXT flag available cleaup
+	  duplicated constants
+
+2007-05-14 15:18  krechert
+
+	* test/FillStyle/: test01-cxx.C, test01.c, test02-cxx.C, test02.c,
+	  test03-cxx.C, test03.c, test04-cxx.C, test04.c: use setLine API
+
+2007-05-14 15:14  krechert
+
+	* mingpp.h: use setLine2 instead of internal setLineStyle2
+
+2007-05-09 10:18  strk
+
+	* macros/ming.m4: Cleaner fix to avoid the 'missing beta' warning.
+	  Patch by Andrew Guertin <bugzilla@dolphinling.net>.
+
+2007-05-09 09:57  strk
+
+	* macros/ming.m4: Suppress printf warning when 'beta' component of
+	  the version doesn't exist
+
+2007-05-02 16:31  krechert
+
+	* util/outputfdb.c: fix by: David Wojtowicz
+
+	  There is a bug in the v0.4x replacement for makefdb.	 The block
+	  type/len + 32bit long block length aren't accounted for and 6
+	  extra bytes ends up in the .fdb file.   The result is that trying
+	  to use the resulting .fdb file results in a segfault.
+
+2007-04-30 18:58  krechert
+
+	* test/Gradient/: test01-cxx.C, test01.c, test02-cxx.C, test02.c,
+	  test03-cxx.C, test03.c, test04-cxx.C, test04.c, test05-cxx.C,
+	  test05.c, test06-cxx.C, test06.c: update setLine API
+
+2007-04-30 18:52  krechert
+
+	* test/LineStyle/: test01.c, test02-cxx.C, test02.c: updated test
+	  cases to new setLine API
+
+2007-04-30 18:50  krechert
+
+	* test/Morph/: test01.c, test02-cxx.C, test02.c: changed to new
+	  setLine API
+
+2007-04-30 18:42  krechert
+
+	* src/ming.h.in: added setLine2 methods from ming-util
+
+2007-04-30 18:31  krechert
+
+	* src/ming.h.in: deprecated SWFFill
+
+2007-04-30 17:53  krechert
+
+	* src/: ming.h.in, shape_util.c, blocks/linestyle.c,
+	  blocks/shape.c: Deprecate setLineStyle interface. Outside use is
+	  deprecated! Use setLine[...]() instead! setLineStyle takes scaled
+	  width (TWIPS) default scale ist 20.0 ! 1px -> 20 TWIPS
+
+2007-04-30 11:58  strk
+
+	* configure.in, util/makeswf.c, util/makeswf_utils.c: Don't include
+	  getopt.h if it's not found. Patch by Nils Goroll
+	  <nils.goroll@mcs.de>.
+
+2007-04-29 21:55  krechert
+
+	* test/: Media/image01.dbl, FillStyle/test04.ref: fix broken dbl
+
+2007-04-29 21:52  krechert
+
+	* util/png2dbl.c: bugfix: zlib was never used include ming_config
+
+2007-04-29 20:20  krechert
+
+	* test/FillStyle/test04.ref: added test04.ref
+
+2007-04-29 20:16  krechert
+
+	* test/FillStyle/: .cvsignore, Makefile.am, TestList, test04-cxx.C,
+	  test04.c: DBL fill
+
+2007-04-29 17:27  krechert
+
+	* configure.in, test/Makefile.am, test/FillStyle/.cvsignore,
+	  test/FillStyle/Makefile.am, test/FillStyle/TestList,
+	  test/FillStyle/test01-cxx.C, test/FillStyle/test01.c,
+	  test/FillStyle/test01.ref, test/FillStyle/test02-cxx.C,
+	  test/FillStyle/test02.c, test/FillStyle/test02.ref,
+	  test/FillStyle/test03-cxx.C, test/FillStyle/test03.c,
+	  test/FillStyle/test03.ref: fillstyle tests
+
+2007-04-29 17:20  krechert
+
+	* src/blocks/: fillstyle.c, fillstyle.h, shape.c: add character
+	  dependency if necessary
+
+2007-04-29 17:19  krechert
+
+	* mingpp.h: improved bitmap file format recognition
+
+2007-04-29 16:22  krechert
+
+	* test/Media/: image01.dbl, image01.jpeg, image01.png: added images
+	  for test cases
+
+2007-04-29 16:03  krechert
+
+	* mingpp.h: rearanged file such that dependencies work again
+
+2007-04-29 15:56  krechert
+
+	* test/Video/: .cvsignore, Makefile.am, TestList, test02-cxx.C,
+	  test02.c, test02.ref, test03-cxx.C, test03.c, test03.ref: more
+	  video testcases
+
+2007-04-29 15:24  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/setNetworkAccess/.cvsignore,
+	  test/Movie/setNetworkAccess/Makefile.am,
+	  test/Movie/setNetworkAccess/TestList,
+	  test/Movie/setNetworkAccess/test01-cxx.C,
+	  test/Movie/setNetworkAccess/test01.c,
+	  test/Movie/setNetworkAccess/test01.ref: networkaccess testcase
+
+2007-04-29 15:21  krechert
+
+	* test/Movie/setScriptLimits/: test01-cxx.C, test01.ref: testcase
+	  update
+
+2007-04-29 15:12  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/setScriptLimits/.cvsignore,
+	  test/Movie/setScriptLimits/Makefile.am,
+	  test/Movie/setScriptLimits/TestList,
+	  test/Movie/setScriptLimits/test01-cxx.C,
+	  test/Movie/setScriptLimits/test01.c,
+	  test/Movie/setScriptLimits/test01.ref: script limit test case
+
+2007-04-29 13:57  krechert
+
+	* test/: Gradient/.cvsignore, LineStyle/.cvsignore,
+	  Morph/.cvsignore, Movie/addMetadata/.cvsignore,
+	  Movie/setSoundStream/.cvsignore, Movie/setTabIndex/.cvsignore,
+	  MovieClip/.cvsignore, Shape/.cvsignore, Video/.cvsignore: added
+	  .cvsignore files
+
+2007-04-29 13:42  krechert
+
+	* configure.in, test/Makefile.am, test/Gradient/Makefile.am,
+	  test/Gradient/TestList, test/Gradient/test01-cxx.C,
+	  test/Gradient/test01.c, test/Gradient/test01.ref,
+	  test/Gradient/test02-cxx.C, test/Gradient/test02.c,
+	  test/Gradient/test02.ref, test/Gradient/test03-cxx.C,
+	  test/Gradient/test03.c, test/Gradient/test03.ref,
+	  test/Gradient/test04-cxx.C, test/Gradient/test04.c,
+	  test/Gradient/test04.ref, test/Gradient/test05-cxx.C,
+	  test/Gradient/test05.c, test/Gradient/test05.ref,
+	  test/Gradient/test06-cxx.C, test/Gradient/test06.c,
+	  test/Gradient/test06.ref: Gradient test cases
+
+2007-04-29 13:38  krechert
+
+	* mingpp.h: added FillStyle class some type fixes
+
+2007-04-28 22:43  krechert
+
+	* NEWS: news update
+
+2007-04-28 22:38  krechert
+
+	* src/: ming.h.in, blocks/fillstyle.c, blocks/fillstyle.h,
+	  blocks/gradient.c, blocks/gradient.h, blocks/linestyle.c,
+	  blocks/morph.c, blocks/shape.c: SWF8: 	new fillstyle
+	  SWFFILL_FOCAL_GRADIENT SWFFill:	  make SWFFill independent
+	  of shapes (usefull for morphs)	 removed get/setIdx
+	  calculate and write propper gradient matrix
+	  setLeft/RightFillStyle adds fillstyle to the shape if necessary
+
+2007-04-28 22:32  krechert
+
+	* util/: outputtxt.c, parser.c: FocalPoint Gradient updates
+
+2007-04-28 18:08  krechert
+
+	* test/: Filter/test01.ref, Filter/test02.ref, Filter/test03.ref,
+	  Filter/test04.ref, LineStyle/test01.ref, LineStyle/test02.ref,
+	  Shape/test01.ref: update expected output
+
+2007-04-28 18:07  krechert
+
+	* util/outputtxt.c: output FillStyles
+
+2007-04-28 18:06  krechert
+
+	* util/parser.c: bugfix: byteAlign() after reading matrix
+
+2007-04-25 12:35  krechert
+
+	* src/: ming.h.in, blocks/gradient.c: SWF8: added new gradient
+	  features
+
+2007-04-24 17:43  krechert
+
+	* src/blocks/blocktypes.h: typo
+
+2007-04-24 17:42  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h: parse and output CSMTEXTSETTINGS
+
+2007-04-24 17:21  krechert
+
+	* util/swftypes.h: SWF8 font extension
+
+2007-04-24 16:54  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: outputtxt: DEFINEFONT[3] parse:
+	  DEFINEFONT3
+
+2007-04-24 16:35  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: outputtxt: DEFINEFONTINFO[2] parse
+	  DEFINEFONTINFO2
+
+2007-04-24 14:57  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: SWF8: gradient and
+	  focalgradient
+
+2007-04-24 13:25  krechert
+
+	* test/Movie/setTabIndex/: Makefile.am, TestList, test01-cxx.C,
+	  test01.c, test01.ref: added simple setTabIndex testcase
+
+2007-04-24 13:23  krechert
+
+	* configure.in, test/Movie/Makefile.am: added simple setTabIndex
+	  test
+
+2007-04-24 12:01  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/setSoundStream/Makefile.am,
+	  test/Movie/setSoundStream/TestList,
+	  test/Movie/setSoundStream/test01-cxx.C,
+	  test/Movie/setSoundStream/test01.c,
+	  test/Movie/setSoundStream/test01.ref,
+	  test/Movie/setSoundStream/test02-cxx.C,
+	  test/Movie/setSoundStream/test02.c,
+	  test/Movie/setSoundStream/test02.ref: soundstream tests mp3 and
+	  flv
+
+2007-04-24 11:58  krechert
+
+	* test/Media/: audio01.mp3, video02.flv: add audio and vp6 video
+	  file for testcases
+
+2007-04-24 11:03  krechert
+
+	* configure.in, test/Makefile.am, test/MovieClip/Makefile.am,
+	  test/MovieClip/TestList, test/MovieClip/test01-cxx.C,
+	  test/MovieClip/test01.c, test/MovieClip/test01.ref: MovieClip
+	  initAction test case
+
+2007-04-24 11:00  krechert
+
+	* mingpp.h: added addInitAction() method to MovieClip class
+
+2007-04-24 10:50  krechert
+
+	* configure.in, test/Makefile.am, test/LineStyle/Makefile.am,
+	  test/LineStyle/TestList, test/LineStyle/test01-cxx.C,
+	  test/LineStyle/test01.c, test/LineStyle/test01.ref,
+	  test/LineStyle/test02-cxx.C, test/LineStyle/test02.c,
+	  test/LineStyle/test02.ref: Linestyle test cases
+
+2007-04-24 10:47  krechert
+
+	* src/blocks/shape.c: fix shape versioning
+
+2007-04-22 19:54  krechert
+
+	* test/Shape/test01.ref: update expected result due linestyle
+	  output
+
+2007-04-22 19:52  krechert
+
+	* test/Filter/: test01.ref, test02.ref, test03.ref, test04.ref:
+	  update expected results due new linestyle output
+
+2007-04-22 19:51  krechert
+
+	* util/outputtxt.c: always output linestyles
+
+2007-04-22 19:39  krechert
+
+	* mingpp.h: SWFShape API update
+
+2007-04-22 19:30  krechert
+
+	* configure.in, test/Makefile.am, test/Shape/Makefile.am,
+	  test/Shape/TestList, test/Shape/test01-cxx.C,
+	  test/Shape/test01.c, test/Shape/test01.ref: simple shape
+	  testcases
+
+2007-04-22 15:36  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/addMetadata/Makefile.am,
+	  test/Movie/addMetadata/TestList,
+	  test/Movie/addMetadata/test01-cxx.C,
+	  test/Movie/addMetadata/test01.c,
+	  test/Movie/addMetadata/test01.ref: add Metadata testcase
+
+2007-04-22 15:24  krechert
+
+	* configure.in, test/Makefile.am, test/Video/Makefile.am,
+	  test/Video/TestList, test/Video/test01-cxx.C,
+	  test/Video/test01.c, test/Video/test01.ref: embedded video test
+	  case
+
+2007-04-22 15:21  krechert
+
+	* test/Media/video01.flv: added flv video for testing
+
+2007-04-20 19:39  krechert
+
+	* configure.in: add Morph testcases
+
+2007-04-20 19:37  krechert
+
+	* test/Makefile.am: add Morph to subdirs
+
+2007-04-20 19:36  krechert
+
+	* test/Morph/: Makefile.am, TestList, test01-cxx.C, test01.c,
+	  test01.ref, test02-cxx.C, test02.c, test02.ref: add 2 simple
+	  morph tests
+
+2007-04-20 18:04  krechert
+
+	* src/: shape_util.c, blocks/shape.c: save linestyle width in TWIPS
+	  update documentation convert pixel->twips in
+	  shape.c::setLineStyle*
+
+2007-04-20 17:03  krechert
+
+	* NEWS: news update
+
+2007-04-20 16:58  krechert
+
+	* src/blocks/: morph.c, shape.c: output SWF_DEFINEMORPHSHAPE2 if
+	  SWF_SHAPE4 is used remove bogus printf from shape.c
+
+2007-04-20 16:54  krechert
+
+	* src/ming.h.in: SWFShape API update
+
+2007-04-20 16:52  krechert
+
+	* src/blocks/: shape.c, shape.h: API extension: 	* set
+	  render hinting flags	    * manually upgrade SWF_DEFINESHAPE
+	  version (usefull to enable edgeBounds)       * hand out version
+	  information (usefull for SWF_DEFINEMORPHSHAPE[2]
+
+2007-04-20 16:47  krechert
+
+	* src/blocks/: linestyle.c, linestyle.h: removed line increment
+	  output linestyle2 for morphshapes
+
+2007-04-20 16:01  krechert
+
+	* util/parserdecl.h: SWF_PARSE prototype
+
+2007-04-20 15:58  krechert
+
+	* util/parser.c: check length if parsing SWF_SHAPE MORPHSHAP2 fixes
+
+2007-04-19 17:30  strk
+
+	* configure.in: Quote ${CXX} as it might be defined to 'ccache g++'
+	  - Patch by Marting Guy btw, can't we rely on the result of
+	  AC_PROG_GXX instead ?
+
+2007-04-19 15:19  krechert
+
+	* NEWS: small NEWS update
+
+2007-04-17 13:35  strk
+
+	* test/actionscript/GotoFrame.ref: Updated the expected output (the
+	  current one contained a duplicated scene bias)
+
+2007-04-16 20:58  krechert
+
+	* src/blocks/shape.c: upgrade shape version only if not morphshape
+
+2007-04-16 20:23  krechert
+
+	* src/blocks/: fillstyle.c, fillstyle.h: bugfix: write all
+	  morphfillstyles
+
+2007-04-16 20:01  akleine
+
+	* util/decompile.c: Now escaping quote character (') inside strings
+	  with backslashes...
+
+2007-04-16 19:49  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: parse SWF_DEFINEMORHSHAPE2 output
+	  SWF_DEFIMEMORPHSHAPE[2]
+
+2007-04-14 18:58  strk
+
+	* util/: makeswf.c, makeswf_utils.c: Removed unused CPP define from
+	  makeswf.c, fix the *used* one in makeswf_utils.  Thanks to
+	  Bastiaan Jacques for finding this out.
+
+2007-04-13 19:10  krechert
+
+	* util/parser.c: another BUTTONCONDACTION fix parseSWF_SPRITE: skip
+	  extra byts after parsinf SWF_END
+
+2007-04-10 17:07  akleine
+
+	* util/decompile.c: Two bugfixes: 1. for-in loop stack 2. register
+	  R0 usage
+
+2007-04-10 16:07  strk
+
+	* test/Filter/.cvsignore, test/Movie/Protect/.cvsignore,
+	  util/.cvsignore: Update cvsignore files
+
+2007-04-09 14:56  krechert
+
+	* util/outputtxt.c: outputtxt: output JPEG, JEPG2 and DEFINEBITS
+
+2007-04-09 14:49  krechert
+
+	* util/outputtxt.c: outputtxt: output BITMAPLOSSLESS and
+	  BITMAPLOSSLESS2
+
+2007-04-08 22:25  krechert
+
+	* util/parser.c: AS parser: if branch target is not found, continue
+
+2007-04-08 22:15  krechert
+
+	* util/parser.c: bugfix: read actionEnd flag in
+	  buttoncondactionrecord
+
+2007-04-05 16:03  strk
+
+	* php_ext/ming.c: Add the missing SWFACTION constants for
+	  SWFDisplayItem_addAction
+
+2007-04-05 13:25  krechert
+
+	* util/action.c: fixed valgrind report:  Use of uninitialised value
+	  of size 4
+
+2007-04-02 21:17  akleine
+
+	* util/decompile.c: A bug when switching to second output buffer
+	  was fixed.
+
+2007-04-02 21:06  krechert
+
+	* util/parser.c: fixed bug in definebutton2 actionrecord parsing
+
+2007-04-01 23:26  krechert
+
+	* src/: ming.h.in, blocks/button.c: added functions to modify
+	  button charactes matrix
+
+2007-04-01 22:33  krechert
+
+	* NEWS: NEWS update
+
+2007-04-01 22:25  krechert
+
+	* util/outputscript.c: fixed warning if string ist empty
+
+2007-04-01 22:13  krechert
+
+	* src/: ming.h.in, blocks/button.c, blocks/filter.c,
+	  blocks/filter.h, blocks/placeobject.c: new SWFButton_addCharacter
+	  interface returns a SWFButtonRecord Object.
+	  SWFButtonRecord_addFilter, SWFButtonRecord_setBlendMode
+
+2007-04-01 22:11  krechert
+
+	* src/actioncompiler/compile.h: added missing function prototype
+
+2007-04-01 21:47  krechert
+
+	* test/Filter/: test02-cxx.C, test02.c, test02.ref, test03-cxx.C,
+	  test03.c, test03.ref, test04-cxx.C, test04.c, test04.ref: [no log
+	  message]
+
+2007-04-01 20:28  krechert
+
+	* test/Filter/: Makefile.am, TestList, test01.c: mor filter tests
+
+2007-04-01 20:28  krechert
+
+	* test/Filter/test01.ref: reflect modified listswf output
+
+2007-04-01 12:01  strk
+
+	* util/makeswf.c: Add -xc++ in CPP define  - patch by Deanna
+	  Phillips.
+
+2007-04-01 11:59  strk
+
+	* mingpp.h: Fix compile-time bugs in setLineStyle2 and
+	  addInitAction
+
+2007-04-01 11:54  strk
+
+	* util/ming-config.in: Add dependency in --libs output. Patch by
+	  Deanna Phillips.
+
+2007-04-01 09:40  akleine
+
+	* util/decompile.c: some fixes related to 'for (var x in y) {...}'
+	  loops
+
+2007-03-30 12:02  strk
+
+	* config/install-sh: re-added install-sh with execute bit set
+
+2007-03-30 12:02  strk
+
+	* config/install-sh: removed install-sh, will add right back with
+	  execute bit set
+
+2007-03-30 10:12  strk
+
+	* configure.in: Don't use AM_PROG_LEX as it breaks builds on OS/X
+
+2007-03-29 21:25  strk
+
+	* NEWS, src/actioncompiler/swf5compiler.flex,
+	  src/actioncompiler/swf5compiler.y,
+	  test/actionscript/ASM_targetPath.as,
+	  test/actionscript/ASM_targetPath.ref,
+	  test/actionscript/Makefile.am, test/actionscript/targetPath.as,
+	  test/actionscript/targetPath.ref: Add support for 'targetPath'
+	  asm opcode, and add a couple of testcases for generic targetPath
+
+2007-03-29 03:00  anderson
+
+	* configure.in: We're on the way to beta 5 now
+
+2007-03-28 23:20  krechert
+
+	* perl_ext/: Action.xs, Shape.xs: API update setFillStyle2 fixed
+	  mistake in Action.xs
+
+2007-03-28 23:08  krechert
+
+	* perl_ext/: Action.xs, MovieClip.xs: API update SWFAction,
+	  addInitAction
+
+2007-03-28 23:07  krechert
+
+	* mingpp.h: added linestyle2 methods
+
+2007-03-28 22:58  krechert
+
+	* util/: main.c, outputtxt.c, parser.c, swftypes.h: added missing
+	  prototype output SWF_SATRTSOUND SWF_SOUNDINFO SWF_SOUNDENVELOPE
+
+2007-03-28 22:33  krechert
+
+	* util/parser.c: added missing function prototype
+
+2007-03-28 22:28  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: ButtonRecord can have
+	  filter and blendmode properties
+
+2007-03-28 21:33  krechert
+
+	* mingpp.h: added SWFAction::addInitAction method
+
+2007-03-28 21:29  krechert
+
+	* mingpp.h: change to new SWFAction API
+
+2007-03-27 18:03  anderson
+
+	* NEWS: Put a dat on beta4
+
+2007-03-27 16:41  strk
 
 	* src/Makefile.am: Don't buil test.c as part of libming
 
