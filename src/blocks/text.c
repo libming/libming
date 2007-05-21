@@ -362,7 +362,7 @@ SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string)
 	int height = text->currentRecord->height;
 	int len;
 
-	for(len = 0 ; *string ; len++)
+	for(len = 0 ; *(string + len); len++)
 		;
 	if ( text->currentRecord->isResolved )
 		font = SWFFontCharacter_getFont(text->currentRecord->font.fontchar);
