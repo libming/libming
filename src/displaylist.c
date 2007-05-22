@@ -123,6 +123,7 @@ SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character)
 		destroySWFPlaceObject2Block(item->block);
 	item->block = newSWFPlaceObject2Block(item->depth);
 
+	item->flags = ITEM_NEW;
 	item->isPlaced = 0;
 	SWFPlaceObject2Block_setMove(item->block);
 	SWFPlaceObject2Block_setCharacter(item->block, character);
