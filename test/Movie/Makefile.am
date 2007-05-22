@@ -12,5 +12,6 @@ SUBDIRS = \
 	setSoundStream	\
 	setTabIndex	\
 	setScriptLimits \
-	setNetworkAccess	
+	setNetworkAccess \
+	replace	
 
