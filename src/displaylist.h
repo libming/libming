@@ -97,4 +97,8 @@ void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream);
 
 void SWFDisplayList_rewindSoundStream(SWFDisplayList list);
 
+SWFDisplayItem
+SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character);
+
+
 #endif /* SWF_DISPLAYLIST_H_INCLUDED */

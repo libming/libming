@@ -114,6 +114,21 @@ newSWFSpriteDisplayList()
 	return list;
 }
 
+SWFDisplayItem
+SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character)
+{
+	item->character = character;
+ 
+	if ( item->block )
+		destroySWFPlaceObject2Block(item->block);
+	item->block = newSWFPlaceObject2Block(item->depth);
+
+	item->isPlaced = 0;
+	SWFPlaceObject2Block_setMove(item->block);
+	SWFPlaceObject2Block_setCharacter(item->block, character);
+
+	return item;
+}
 
 SWFDisplayItem
 SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)

@@ -447,6 +447,47 @@ SWFMovie_writeExports(SWFMovie movie)
 }
 
 
+SWFDisplayItem
+SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
+{
+	if(block == NULL || item == NULL)
+		return NULL;
+
+	if ( SWFBlock_getType(block) == SWF_DEFINEBITS ||
+			 SWFBlock_getType(block) == SWF_DEFINEBITSJPEG2 ||
+			 SWFBlock_getType(block) == SWF_DEFINEBITSJPEG3 ||
+			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS ||
+			 SWFBlock_getType(block) == SWF_DEFINELOSSLESS2 )
+	{
+		block = (SWFBlock)newSWFShapeFromBitmap((SWFBitmap)block, SWFFILL_TILED_BITMAP);
+	}
+
+	/* if it's a text object, we need to translate fonts into font characters */
+
+	if ( SWFBlock_getType(block) == SWF_DEFINETEXT ||
+			 SWFBlock_getType(block) == SWF_DEFINETEXT2 )
+	{
+		SWFMovie_resolveTextFonts(movie, (SWFText)block);
+	}
+
+	if ( SWFBlock_getType(block) == SWF_DEFINEEDITTEXT)
+	{
+		SWFMovie_resolveTextfieldFont(movie, (SWFTextField)block);
+	}
+	
+	if ( SWFBlock_isCharacter(block) )
+	{
+		SWFCharacter_setFinished((SWFCharacter)block);
+		SWFMovie_addCharacterDependencies(movie, (SWFCharacter)block);
+
+		return SWFDisplayItem_replace(item, (SWFCharacter)block);
+	}
+
+	SWF_warn("SWFMovie_replace: only characters can be replaced\n");
+	return NULL;
+}
+
+
 /*
  * add a block to a movie.
  * This function adds a block or character to a movie. 

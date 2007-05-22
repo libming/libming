@@ -76,4 +76,6 @@ SWFPlaceObject2Block_setCacheFlag(SWFPlaceObject2Block block, int flag);
 void SWFPlaceObject2Block_addAction(SWFPlaceObject2Block block,
 				    SWFAction action, int flags);
 
+void
+destroySWFPlaceObject2Block(SWFPlaceObject2Block place);
 #endif /* SWF_PLACEOBJECT_H_INCLUDED */
