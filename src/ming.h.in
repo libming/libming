@@ -963,7 +963,7 @@ SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
 
 SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block);
-SWFDisplayItem SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block);
+int SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block);
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
 void SWFMovie_nextFrame(SWFMovie movie);

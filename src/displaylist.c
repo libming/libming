@@ -114,7 +114,7 @@ newSWFSpriteDisplayList()
 	return list;
 }
 
-SWFDisplayItem
+void
 SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character)
 {
 	item->character = character;
@@ -122,13 +122,10 @@ SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character)
 	if ( item->block )
 		destroySWFPlaceObject2Block(item->block);
 	item->block = newSWFPlaceObject2Block(item->depth);
-
 	item->flags = ITEM_NEW;
 	item->isPlaced = 0;
 	SWFPlaceObject2Block_setMove(item->block);
 	SWFPlaceObject2Block_setCharacter(item->block, character);
-
-	return item;
 }
 
 SWFDisplayItem
@@ -402,7 +399,6 @@ SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 		/* warn.. */
 		return;
 	}
-
 	/* item->block is never null when ITEM_NEW set */
 	SWFPlaceObject2Block_setName(item->block, name);
 }

@@ -97,7 +97,7 @@ void SWFDisplayList_setSoundStream(SWFDisplayList list, SWFSoundStream stream);
 
 void SWFDisplayList_rewindSoundStream(SWFDisplayList list);
 
-SWFDisplayItem
+void
 SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character);
 
 

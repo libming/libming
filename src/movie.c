@@ -446,12 +446,15 @@ SWFMovie_writeExports(SWFMovie movie)
 	destroySWFExports(movie);
 }
 
-
-SWFDisplayItem
+/* 
+ * this function replaces a displayable character with a new one
+ * returns 0 on success 
+ */
+int
 SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
 {
 	if(block == NULL || item == NULL)
-		return NULL;
+		return -1;
 
 	if ( SWFBlock_getType(block) == SWF_DEFINEBITS ||
 			 SWFBlock_getType(block) == SWF_DEFINEBITSJPEG2 ||
@@ -480,11 +483,12 @@ SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
 		SWFCharacter_setFinished((SWFCharacter)block);
 		SWFMovie_addCharacterDependencies(movie, (SWFCharacter)block);
 
-		return SWFDisplayItem_replace(item, (SWFCharacter)block);
+		SWFDisplayItem_replace(item, (SWFCharacter)block);
+		return 0;
 	}
 
 	SWF_warn("SWFMovie_replace: only characters can be replaced\n");
-	return NULL;
+	return -1;
 }
 
 
@@ -492,7 +496,7 @@ SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
  * add a block to a movie.
  * This function adds a block or character to a movie. 
  */
-SWFDisplayItem
+int
 SWFMovie_add(SWFMovie movie /* movie to which the block will be added */,
 		SWFBlock block /* block to add to the movie */)
 {
