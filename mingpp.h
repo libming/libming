@@ -535,6 +535,9 @@ class SWFMovie
   void remove(SWFDisplayItem *item)
     { SWFMovie_remove(this->movie, item->item); }
 
+  bool replace(SWFDisplayItem *item, SWFBlock *character)
+    { return SWFMovie_replace(this->movie, item->item, character->getBlock()); }
+
   void nextFrame()
     { SWFMovie_nextFrame(this->movie); }
 
