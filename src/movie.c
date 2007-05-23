@@ -496,7 +496,7 @@ SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
  * add a block to a movie.
  * This function adds a block or character to a movie. 
  */
-int
+SWFDisplayItem
 SWFMovie_add(SWFMovie movie /* movie to which the block will be added */,
 		SWFBlock block /* block to add to the movie */)
 {
