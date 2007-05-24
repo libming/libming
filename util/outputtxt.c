@@ -1710,14 +1710,18 @@ outputSWF_PROTECT (SWF_Parserstruct * pblock)
 void
 outputSWF_REMOVEOBJECT (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_REMOVEOBJECT);
+  OUT_BEGIN (SWF_REMOVEOBJECT);
+
+  iprintf(" CharacterId: %d\n", sblock->CharacterId);
+  iprintf(" Depth: %d\n", sblock->Depth);
 
 }
 
 void
 outputSWF_REMOVEOBJECT2 (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_REMOVEOBJECT2);
+  OUT_BEGIN (SWF_REMOVEOBJECT2);
+  iprintf(" Depth: %d\n", sblock->Depth);
 
 }
 
