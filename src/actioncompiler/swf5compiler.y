@@ -508,9 +508,10 @@ function_decl
 			bufferConcat($$, $4.buffer);
 			bufferWriteS16($$, bufferLength($6));
 			bufferConcat($$, $6);
-			delctx(CTX_FUNCTION);
-			free($2); // should be done for function2 as well ?
 		}
+		delctx(CTX_FUNCTION); 
+		free($2); 
+		// how to release $4 ?
 	}
 	;
 
@@ -1108,8 +1109,8 @@ anon_function_decl
 			bufferConcat($$, $3.buffer);
 			bufferWriteS16($$, bufferLength($5));
 			bufferConcat($$, $5);
-			delctx(CTX_FUNCTION); // should be done for function2 as well ?
 		}
+		delctx(CTX_FUNCTION); 
 	}
 	;
 
