@@ -1,3 +1,30 @@
+/****************************************************************************
+ *
+ *  ActionScriptTest.c - Ming testing framework tool
+ *
+ *  Copyright (C) 2003 2004 2005 2006 2007 Free Software Foundation, Inc.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ ***************************************************************************
+ *
+ *  Authors:
+ * 	- "Sandro Santilli" <strk@keybit.net>
+ *
+ ***************************************************************************/
+
 /* This is needed to get vasprintf definition */
 #define _GNU_SOURCE 1
 
@@ -91,12 +118,6 @@ do_tests()
 
 	} while (from < end);
 
-#if 0
-	printf("Should test all tests (%s), but this is not implemented yet, so I'll test the hard-coded \"Function.as\" one\n", all_tests);
-
-	failures += do_test("Function");
-#endif
-
 	return failures;
 }
 
@@ -110,6 +131,9 @@ main()
 		fprintf(stderr, "Ming initialization error\n");
 		exit(EXIT_FAILURE);
 	}
+
+	// TODO: use multiple SWF target versions !
+
 	Ming_useSWFVersion(swfversion);
 	makeswf_set_swfversion(swfversion);
 	Ming_setSWFCompression(swfcompression);
