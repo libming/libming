@@ -30,339 +30,291 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
 #include "error.h"
 #include "movie.h"
 #include "libming.h"
-
-
-// #define HAS_MMAP 1
-
-#ifdef HAS_MMAP
-	#include <unistd.h>
-	#include <sys/mman.h>
-#endif
-
-
-static int
-readUInt16(FILE *f)
-{
-	int low = fgetc(f);
-	int high = fgetc(f);
-	return low + (high<<8);
-}
-
-static int
-readSInt16(FILE *f)
-{
-	int low = fgetc(f);
-	int high = fgetc(f);
-	return low + high*256;
-}
-
-
-static unsigned long
-readUInt32(FILE *f)
-{
-	return (unsigned long)(fgetc(f) + (fgetc(f)<<8) + (fgetc(f)<<16) + (fgetc(f)<<24));
-}
-
-
-static int buffer;
-static int bufbits = 0; /* # of bits in buffer */
+#include "input.h"
+#include "shape.h"
 
 static void
-byteAlign()
-{
-	if ( bufbits > 0 )
-	{
-		bufbits = 0;
-		buffer = 0;
-	}
-}
-
-
-static int
-readBits(FILE *f, int number)
-{
-	int ret = buffer;
-
-	if ( number == bufbits )
-	{
-		bufbits = 0;
-		buffer = 0;
-		return ret;
-	}
-
-	if ( number > bufbits )
-	{
-		number -= bufbits;
-
-		while( number > 8 )
-		{
-			ret <<= 8;
-			ret += fgetc(f);
-			number -= 8;
-		}
-
-		buffer = fgetc(f);
-
-		if ( number > 0 )
-		{
-			ret <<= number;
-			bufbits = 8-number;
-			ret += buffer >> (8-number);
-			buffer &= (1<<bufbits)-1;
-		}
-
-		return ret;
-	}
-
-	ret = buffer >> (bufbits-number);
-	bufbits -= number;
-	buffer &= (1<<bufbits)-1;
-
-	return ret;
-}
-
-
-static int
-readSBits(FILE *f, int number)
-{
-	int num = readBits(f, number);
-
-	if ( num & (1<<(number-1)) )
-		return num - (1<<number);
-	else
-		return num;
-}
-
-
-static void
-readBounds(FILE *file, struct SWFRect_s* bounds)
+readBounds(SWFInput input, struct SWFRect_s* bounds)
 {
 	int nBits;
 
-	byteAlign();
+	SWFInput_byteAlign(input);
 
-	nBits = readBits(file, 5);
-	bounds->minX = readSBits(file, nBits);
-	bounds->maxX = readSBits(file, nBits);
-	bounds->minY = readSBits(file, nBits);
-	bounds->maxY = readSBits(file, nBits);
+	nBits = SWFInput_readBits(input, 5);
+	bounds->minX = SWFInput_readSBits(input, nBits);
+	bounds->maxX = SWFInput_readSBits(input, nBits);
+	bounds->minY = SWFInput_readSBits(input, nBits);
+	bounds->maxY = SWFInput_readSBits(input, nBits);
 }
 
-
 static void
-readKernInfo(FILE *file, struct kernInfo *kern)
+readKernInfo(SWFInput input, struct kernInfo *kern)
 {
-	kern->code1 = fgetc(file);
-	kern->code2 = fgetc(file);
-	kern->adjustment = readSInt16(file);
+	kern->code1 = SWFInput_getChar(input);
+	kern->code2 = SWFInput_getChar(input);
+	kern->adjustment = SWFInput_getSInt16(input);
 }
 
 static void
-readKernInfo16(FILE *file, struct kernInfo16 *kern)
+readKernInfo16(SWFInput input, struct kernInfo16 *kern)
 {
-	kern->code1 = readUInt16(file);
-	kern->code2 = readUInt16(file);
-	kern->adjustment = readSInt16(file);
+	kern->code1 = SWFInput_getUInt16(input);
+	kern->code2 = SWFInput_getUInt16(input);
+	kern->adjustment = SWFInput_getSInt16(input);
 }
 
-static void
-SWFFont_buildReverseMapping(SWFFont font)
+
+static inline void checkShapeHeader(SWFInput input,
+                                    int *numFillBits,
+                                    int *numLineBits)
+{
+	SWFInput_byteAlign(input);
+	if ( (*numFillBits = SWFInput_readBits(input, 4)) != 1 ) /* fill bits */
+		SWF_error("SWFShape_drawGlyph: bad file format (was expecting fill bits = 1)");
+
+	if ( (*numLineBits = SWFInput_readBits(input, 4)) > 0 ) /* line bits */
+		SWF_error("SWFShape_drawGlyph: bad file format (was expecting line bits = 0)");
+}
+
+static inline void checkShapeStyle(SWFInput input, char style,
+                             int numFillBits, int numLineBits)
+{
+	if ( style & 1 )
+		if ( SWFInput_readBits(input, numFillBits) != 0 ) /* fill0 = 0 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting fill0 = 0)");
+	if ( style & 2 )
+		if ( SWFInput_readBits(input, numFillBits) != 1 ) /* fill1 = 1 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting fill1 = 1)");
+	if ( style & 4 )
+		if ( SWFInput_readBits(input, numLineBits) != 0 ) /* line = 1 */
+			SWF_error("SWFFont_getShape: bad file format (was expecting line = 0)");
+}
+
+static int translateShapeRecord(SWFInput input, SWFShape shape)
+{
+	int moveBits, x = 0, y = 0;
+	int straight, numBits;
+
+	if ( SWFInput_readBits(input, 1) == 0 )
+	{
+		/* it's a moveTo or a shape end */
+		if ( SWFInput_readBits(input, 5) == 0 )
+			return 0; /* shape end */
+
+		moveBits = SWFInput_readBits(input, 5);
+		x = SWFInput_readSBits(input, moveBits);
+		y = SWFInput_readSBits(input, moveBits);
+		SWFShape_moveScaledPenTo(shape, x, y);
+		return 1;
+	}
+
+	straight = SWFInput_readBits(input, 1);
+	numBits = SWFInput_readBits(input, 4) + 2;
+	if (straight == 1)
+	{
+		if ( SWFInput_readBits(input, 1) ) /* general line */
+		{
+			x = SWFInput_readSBits(input, numBits);
+			y = SWFInput_readSBits(input, numBits);
+		}
+		else
+		{
+			if ( SWFInput_readBits(input, 1) ) /* vert = 1 */
+				y = SWFInput_readSBits(input, numBits);
+			else
+				x = SWFInput_readSBits(input, numBits);
+		}
+		SWFShape_drawScaledLine(shape, x, y);
+	}
+	else
+	{
+		int controlX = SWFInput_readSBits(input, numBits);
+		int controlY = SWFInput_readSBits(input, numBits);
+		int anchorX = SWFInput_readSBits(input, numBits);
+		int anchorY = SWFInput_readSBits(input, numBits);
+
+		SWFShape_drawScaledCurve(shape, controlX, controlY,
+			anchorX, anchorY);
+	}
+	return 1;
+}
+
+static SWFShape readGlyphShape(SWFInput input)
+{
+	int numFillBits, numLineBits, moveBits, x, y;
+	char style;
+	SWFShape shape;
+
+	checkShapeHeader(input, &numFillBits, &numLineBits);
+
+	SWFInput_readBits(input, 2); /* type 0, newstyles */
+	style = SWFInput_readBits(input, 3);
+
+	shape = newSWFGlyphShape();
+	if (SWFInput_readBits(input, 1))
+	{	moveBits = SWFInput_readBits(input, 5);
+		x = SWFInput_readSBits(input, moveBits);
+		y = SWFInput_readSBits(input, moveBits);
+		SWFShape_moveScaledPenTo(shape, x, y);
+	}
+	else if (style == 0)	/* no style, no move => space character */
+	{
+		destroySWFShape(shape);
+		return NULL;
+	}
+	checkShapeStyle(input, style, numFillBits, numLineBits);
+	
+	/* translate the glyph's shape records into drawing commands */
+	while (translateShapeRecord(input, shape))
+		;
+
+	return shape;
+}
+
+static inline int readFontLayout(SWFInput input, SWFFont font)
 {
 	int i;
 
-	if ( font->flags & SWF_FONT_WIDECODES )
+	font->advances = (short *)malloc(
+			font->nGlyphs * sizeof(short));
+	font->bounds = (struct SWFRect_s *)malloc(
+			font->nGlyphs * sizeof(struct SWFRect_s));
+	font->ascent = SWFInput_getSInt16(input);
+	font->descent = SWFInput_getSInt16(input);
+	font->leading = SWFInput_getSInt16(input);
+	
+	/* get advances */
+	for (i = 0; i < font->nGlyphs; ++i )
+		font->advances[i] = SWFInput_getSInt16(input);
+
+	/* get bounds */
+	for (i = 0; i < font->nGlyphs; ++i )
+		readBounds(input, &font->bounds[i]);
+
+		/* get kern table */
+	font->kernCount = SWFInput_getUInt16(input);
+
+	if ( font->kernCount > 0 )
 	{
-		font->codeToGlyph.wideMap = (unsigned short**)malloc(256 * sizeof(unsigned short*));
+		if(font->flags & SWF_FONT_WIDECODES)
+			font->kernTable.w = (struct kernInfo16*) malloc(sizeof(struct kernInfo16) * font->kernCount);
+		else
+			font->kernTable.k = (struct kernInfo*)malloc(sizeof(struct kernInfo) * font->kernCount);
+	}
+	else
+		font->kernTable.k = NULL;
 
-		for ( i=0; i<256; ++i )
-			font->codeToGlyph.wideMap[i] = NULL;
-
-		for ( i=0; i<font->nGlyphs; ++i )
-		{
-			unsigned short charcode = font->glyphToCode[i];
-			byte high = charcode >> 8;
-			byte low = charcode & 0xff;
-
-			if ( font->codeToGlyph.wideMap[high] == NULL )
-			{
-				font->codeToGlyph.wideMap[high] = (unsigned short*)malloc(256 * sizeof(unsigned short));
-				memset(font->codeToGlyph.wideMap[high], 0, 256 * sizeof(unsigned short));
-			}
-
-			font->codeToGlyph.wideMap[high][low] = i;
-		}
+	if(font->flags & SWF_FONT_WIDECODES)
+	{
+		for (i = 0; i < font->kernCount; ++i )
+			readKernInfo16(input, &(font->kernTable.w[i]));
 	}
 	else
 	{
-		font->codeToGlyph.charMap = (byte*) malloc(256 * sizeof(char));
-		memset(font->codeToGlyph.charMap, 0, 256 * sizeof(char));
-
-		for ( i=0; i<font->nGlyphs; ++i )
-			font->codeToGlyph.charMap[font->glyphToCode[i]] = i;
+		for (i = 0; i < font->kernCount; ++i )
+			readKernInfo(input, &(font->kernTable.k[i]));
 	}
+	return 0;
 }
 
+static inline int checkFdbHeader(SWFInput input)
+{
+	char f, d, b, z;
+	f = SWFInput_getChar(input);
+	d = SWFInput_getChar(input);
+	b = SWFInput_getChar(input);;
+	z = SWFInput_getChar(input);
+
+	if(f != 'f' || d != 'd' || b != 'b' || z != '0')
+	{	
+		SWF_warn("loadSWFFont: not a fdb file\n");
+		return -1;
+	}
+	
+	return 0;
+}
+
+SWFFont loadSWFFontFromInput(SWFInput input)
+{
+	SWFFont font; 
+	int namelen, flags, i, nGlyphs;
+	unsigned int *glyphOffset;
+	unsigned int codeTableOffset;
+
+	if(input == NULL)
+		return NULL;
+
+	if(checkFdbHeader(input) < 0)
+		return NULL;
+
+
+	font = newSWFFont();	
+	flags = SWFInput_getChar(input);
+	font->flags = flags;
+	font->langCode = SWFInput_getChar(input); 
+	namelen = SWFInput_getChar(input);
+	font->name = (char *) malloc(namelen + 1);
+	for ( i=0; i < namelen; ++i )
+		font->name[i] = SWFInput_getChar(input);
+	font->name[namelen] = '\0';
+
+	nGlyphs = SWFInput_getUInt16(input);
+
+	font->nGlyphs = nGlyphs;
+	font->glyphToCode = malloc(nGlyphs * sizeof(short));	
+	glyphOffset = (unsigned int *)malloc(nGlyphs * sizeof(unsigned int));
+	if ( flags & SWF_FONT_WIDEOFFSETS )
+	{
+		for (i=0; i < nGlyphs; ++i)
+			glyphOffset[i] = SWFInput_getUInt32(input);
+		codeTableOffset = SWFInput_getUInt32(input);
+	}
+	else
+	{
+		for(i=0; i < nGlyphs; ++i)
+			glyphOffset[i] = SWFInput_getUInt16(input);
+		codeTableOffset = SWFInput_getUInt16(input);
+	}
+
+	font->shapes = (SWFShape *)malloc(nGlyphs * sizeof(SWFShape));
+	for(i = 0; i < nGlyphs; i++)
+		font->shapes[i] = readGlyphShape(input);
+
+	/* read glyph-to-code table */
+	if ( flags & SWF_FONT_WIDECODES )
+	{
+		for (i = 0; i < nGlyphs; ++i )
+			font->glyphToCode[i] = SWFInput_getUInt16(input);
+	}
+	else
+	{
+		for (i = 0; i < nGlyphs; ++i )
+			font->glyphToCode[i] = SWFInput_getChar(input);
+	}
+
+	if ( flags & SWF_FONT_HASLAYOUT )
+		readFontLayout(input, font);
+	SWFFont_buildReverseMapping(font);	
+	return font;
+}
+
+/* pull font definition from fdb (font def block) file */
 SWFFont loadSWFFontFromFile(FILE *file)
 {
-	/* pull font definition from fdb (font def block) file */
-
-	SWFFont font = newSWFFont();
-	int namelen, flags, i, nGlyphs;
-	int shapeTableLen;
-	byte *p;
-
+	SWFInput input;
+	SWFFont font;
 	if ( file == NULL )
 		return NULL;
 
-	fgetc(file); /* header whatever */
-	fgetc(file);
-	fgetc(file);
-	fgetc(file);
-
-	flags = fgetc(file);
-
-/* this isn't right, and I don't know why.. */
-
-	if(flags & SWF_FONT_HASLAYOUT)
-		font->flags |= SWF_FONT_HASLAYOUT;
-	if(flags & SWF_FONT_SHIFTJIS)
-		font->flags |= SWF_FONT_SHIFTJIS;
-	if(flags & SWF_FONT_ANSI)
-		font->flags |= SWF_FONT_ANSI;
-	if(flags & SWF_FONT_SMALLTEXT)
-		font->flags |= SWF_FONT_SMALLTEXT;
-	if(flags & SWF_FONT_ISITALIC)
-		font->flags |= SWF_FONT_ISITALIC;
-	if(flags & SWF_FONT_ISBOLD)
-		font->flags |= SWF_FONT_ISBOLD;
-	if(flags & SWF_FONT_WIDEOFFSETS)
-		font->flags |= SWF_FONT_WIDEOFFSETS;
-	if(flags & SWF_FONT_WIDECODES)
-		font->flags |= SWF_FONT_WIDECODES;
-
-	font->langCode = fgetc(file); 
-
-	namelen = fgetc(file);
-	font->name = (byte*) malloc(namelen+1);
-
-	for ( i=0; i<namelen; ++i )
-		font->name[i] = fgetc(file);
-
-	font->name[namelen] = '\0';
-
-	nGlyphs = readUInt16(file);
-
-	font->nGlyphs = nGlyphs;
-
-	font->bounds = (struct SWFRect_s*) malloc(nGlyphs * sizeof(struct SWFRect_s));
-	font->glyphOffset = (byte**)malloc((nGlyphs + 1) * sizeof(*font->glyphOffset));
-	font->glyphToCode = (unsigned short*)malloc(nGlyphs * sizeof(*font->glyphToCode));
-	font->advances = (short*) malloc(nGlyphs * sizeof(*font->advances));
-
-	if ( flags & SWF_FONT_WIDEOFFSETS )
-	{
-		for ( i=0; i<=nGlyphs; ++i )
-			font->glyphOffset[i] = (byte *)(readUInt32(file) - 4*nGlyphs - 4);
-	}
-	else
-	{
-		for(i=0; i<=nGlyphs; ++i)
-			font->glyphOffset[i] = (byte *)(readUInt16(file) - 2*nGlyphs - 2);
-	}
-
-	shapeTableLen = font->glyphOffset[nGlyphs] - font->glyphOffset[0];
-
-#if HAS_MMAP
-	font->shapes =
-		mmap(NULL, shapeTableLen + 1, PROT_READ, MAP_PRIVATE,
-				 fileno(file), ftell(file));
-
-	if ( (void*)font->shapes != MAP_FAILED )
-	{
-		fseek(file, shapeTableLen, SEEK_CUR);
-	}
-	else
-	{
-#endif
-
-	/* it helps to allocate the right amount. (thanks, Tim!) */
-	font->shapes = (byte*)malloc(font->glyphOffset[nGlyphs] - font->glyphOffset[0] + 1);
-
-	p = font->shapes;
-
-	while ( shapeTableLen > 0 )
-	{
-		int count = fread(p, 1, shapeTableLen, file);
-		shapeTableLen -= count;
-		p += count;
-	}
-
-#if HAS_MMAP
-  }
-#endif
-
-	/* adjust offset table to point to shapes */
-
-	for ( i=0; i<=nGlyphs; ++i )
-		font->glyphOffset[i] += (unsigned long)font->shapes;
-
-	/* read glyph-to-code table */
-
-	if ( flags & SWF_FONT_WIDECODES )
-	{
-		for ( i=0; i<nGlyphs; ++i )
-			font->glyphToCode[i] = readUInt16(file);
-	}
-	else
-	{
-		for ( i=0; i<nGlyphs; ++i )
-			font->glyphToCode[i] = fgetc(file);
-	}
-
-	// build code-to-glyph table
-	// XXX - make new version of FDB with reverse map?
-	SWFFont_buildReverseMapping(font);
-
-	/* read metrics */
-
-	if ( flags & SWF_FONT_HASLAYOUT )
-	{
-		font->ascent = readSInt16(file);
-		font->descent = readSInt16(file);
-		font->leading = readSInt16(file);
-
-		/* get advances */
-		for ( i=0; i<nGlyphs; ++i )
-			font->advances[i] = readSInt16(file);
-
-		/* get bounds */
-		for ( i=0; i<nGlyphs; ++i )
-			readBounds(file, &font->bounds[i]);
-
-		/* get kern table */
-		font->kernCount = readUInt16(file);
-
-		if ( font->kernCount > 0 )
-			if(font->flags & SWF_FONT_WIDECODES)
-				font->kernTable.w = (struct kernInfo16*) malloc(sizeof(struct kernInfo16) * font->kernCount);
-			else
-				font->kernTable.k = (struct kernInfo*)malloc(sizeof(struct kernInfo) * font->kernCount);
-		else
-			font->kernTable.k = NULL;
-
-		if(font->flags & SWF_FONT_WIDECODES)
-			for ( i=0; i<font->kernCount; ++i )
-				readKernInfo16(file, &(font->kernTable.w[i]));
-		else
-			for ( i=0; i<font->kernCount; ++i )
-				readKernInfo(file, &(font->kernTable.k[i]));
-	}
-
+	input = newSWFInput_file(file);
+	font = loadSWFFontFromInput(input);
+	destroySWFInput(input);
 	return font;
 }
 
 
 
+#if 0
 /* retrieve glyph shape of a font */
 #include <stdio.h>
 #include <stdarg.h>
@@ -386,59 +338,6 @@ static void oprintf(struct out *op, const char *fmt, ...)
 	}
 	for(d = 0 ; d < l ; d++)
 		*op->ptr++ = buf[d];
-}
-
-static int readBitsP(byte **p, int number)
-{
-	byte *ptr = *p;
-	int ret = buffer;
-
-	if(number == bufbits)
-	{
-		ret = buffer;
-		bufbits = 0;
-		buffer = 0;
-	}
-	else if(number > bufbits)
-	{
-		number -= bufbits;
-
-		while(number>8)
-		{
-			ret <<= 8;
-			ret += *ptr++;
-			number -= 8;
-		}
-
-		buffer = *ptr++;
-
-		if(number>0)
-		{
-			ret <<= number;
-			bufbits = 8-number;
-			ret += buffer >> (8-number);
-			buffer &= (1<<bufbits)-1;
-		}
-	}
-	else
-	{
-		ret = buffer >> (bufbits-number);
-		bufbits -= number;
-		buffer &= (1<<bufbits)-1;
-	}
-
-	*p = ptr;
-	return ret;
-}
-
-static int readSBitsP(byte **p, int number)
-{
-	int num = readBitsP(p, number);
-
-	if(num & (1<<(number-1)))
-		return num - (1<<number);
-	else
-		return num;
 }
 
 // return a malloc'ed string describing the glyph shape
@@ -552,4 +451,4 @@ SWFFont_getShape(SWFFont font, unsigned short c)
 	*o.ptr = 0;
 	return o.buf;
 }
-
+#endif

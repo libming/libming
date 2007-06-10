@@ -30,6 +30,7 @@
 #include "error.h"
 #include "movie.h"
 #include "libming.h"
+#include "shape.h"
 #include "fdbfont.h"
 
 
@@ -61,144 +62,132 @@ struct SWFFontCharacter_s
 	// idx into this table is stored in text records
 	int nGlyphs;
 	unsigned short* codeTable;
+
+	SWFOutput out;
 };
-
-
-#define glyphLength(font,glyph) \
-	((font)->glyphOffset[(glyph)+1] - (font)->glyphOffset[(glyph)])
-
 
 static void
 SWFFontCharacter_resolveTextCodes(SWFFontCharacter font);
 
+void
+SWFFont_buildReverseMapping(SWFFont font)
+{
+	int i;
 
-int
+	if ( font->flags & SWF_FONT_WIDECODES )
+	{
+		font->codeToGlyph.wideMap = (unsigned short**)malloc(256 * sizeof(unsigned short*));
+
+		for ( i=0; i<256; ++i )
+			font->codeToGlyph.wideMap[i] = NULL;
+
+		for ( i=0; i<font->nGlyphs; ++i )
+		{
+			unsigned short charcode = font->glyphToCode[i];
+			byte high = charcode >> 8;
+			byte low = charcode & 0xff;
+
+			if ( font->codeToGlyph.wideMap[high] == NULL )
+			{
+				font->codeToGlyph.wideMap[high] = (unsigned short*)malloc(256 * sizeof(unsigned short));
+				memset(font->codeToGlyph.wideMap[high], 0, 256 * sizeof(unsigned short));
+			}
+
+			font->codeToGlyph.wideMap[high][low] = i;
+		}
+	}
+	else
+	{
+		font->codeToGlyph.charMap = (byte*) malloc(256 * sizeof(char));
+		memset(font->codeToGlyph.charMap, 0, 256 * sizeof(char));
+
+		for ( i=0; i<font->nGlyphs; ++i )
+			font->codeToGlyph.charMap[font->glyphToCode[i]] = i;
+	}
+}
+
+static int
 completeSWFFontCharacter(SWFBlock block)
 {
 	SWFFontCharacter inst = (SWFFontCharacter)block;
 	SWFFont font = inst->font;
-	int size = 0;
-	int i, nbits;
+	SWFOutput buffer;
+	int i, tablen, offset;
+	char c, *string;
 
-	// get charcodes from text records, translate into local code map
 	SWFFontCharacter_resolveTextCodes(inst);
+	
+	SWF_assert(!inst->out);
+	inst->out = newSWFOutput();
+	SWFOutput_writeUInt16(inst->out, CHARACTERID(inst));
+	SWFOutput_writeUInt8(inst->out, inst->flags);
+	SWFOutput_writeUInt8(inst->out, font->langCode);
 
-	size += 2; // character id
-	size += 2; // flags
-	size += 1; // name length
-	size += strlen((const char*)font->name); // font name
-	size += 2; // nglyphs
-	size += 2 * (inst->nGlyphs + 1); // offset table
+	SWFOutput_writeUInt8(inst->out, strlen(font->name));
+	string = font->name;
+	while ( (c = *(string++)) != 0 )
+		SWFOutput_writeUInt8(inst->out, c);
 
-	/* get length of each glyph from its output buffer */
-
-	for ( i=0; i<inst->nGlyphs; ++i )
-		size += glyphLength(font, inst->codeTable[i]);
-
-	if ( font->flags & SWF_FONT_WIDECODES )
-		size += 2 * inst->nGlyphs;
-	else
-		size += inst->nGlyphs;
-
-	if ( size > 65500 )
+	SWFOutput_writeUInt16(inst->out, inst->nGlyphs);
+	
+	tablen = (inst->nGlyphs+1) * 
+		(inst->flags & SWF_FONT_WIDEOFFSETS ? 4 : 2);
+	buffer = newSWFOutput();
+	for (i = 0; i < inst->nGlyphs; ++i)
 	{
-		size += 2 * (inst->nGlyphs+1);
-		inst->flags |= SWF_FONT_WIDEOFFSETS;
+		SWFShape shape = font->shapes[inst->codeTable[i]];
+		offset = SWFOutput_getLength(buffer) + tablen;
+		SWFOutput_writeGlyphShape(buffer, shape);
+		if(inst->flags & SWF_FONT_WIDEOFFSETS)
+			SWFOutput_writeUInt32(inst->out, offset);
+		else 
+			SWFOutput_writeUInt16(inst->out, offset);
 	}
+	// codeTableOffset
+	offset = SWFOutput_getLength(buffer) + tablen;
+	if(inst->flags & SWF_FONT_WIDEOFFSETS)
+		SWFOutput_writeUInt32(inst->out, offset);
+	else
+		SWFOutput_writeUInt16(inst->out, offset);
 
-	if( inst->flags & SWF_FONT_HASLAYOUT )
-	{	
-		size += 8;	// ascent, descent, leading, 0 kern pairs
-		size += 2 * inst->nGlyphs;	// width table
-		for(i = 0 ; i < inst->nGlyphs ; i++)
-		{
-			nbits = SWFRect_numBits(font->bounds + inst->codeTable[i]);
-			size += (nbits+7) >> 3;
-		}
+	/* user buffer from here! */
+	SWFOutput_setNext(inst->out, buffer);
+	
+	for (i = 0; i < inst->nGlyphs; ++i)
+	{
+		unsigned short c = font->glyphToCode[inst->codeTable[i]];
+		if (inst->flags & SWF_FONT_WIDECODES)
+			SWFOutput_writeUInt16(buffer, c);
+		else
+			SWFOutput_writeUInt8(buffer, c);
 	}
-	return size;
+	
+	/* write font layout */
+	if (inst->flags & SWF_FONT_HASLAYOUT )
+	{	SWFOutput_writeUInt16(buffer, font->ascent);
+		SWFOutput_writeUInt16(buffer, font->descent);
+		SWFOutput_writeUInt16(buffer, font->leading);
+		for (i = 0; i < inst->nGlyphs; ++i)
+			SWFOutput_writeSInt16(buffer,
+				font->advances[inst->codeTable[i]]);
+	
+		for (i = 0; i < inst->nGlyphs; ++i)
+		{	SWFOutput_writeRect(buffer, 
+				&font->bounds[inst->codeTable[i]]);
+			SWFOutput_byteAlign(buffer);
+		}
+		SWFOutput_writeUInt16(buffer, 0); /* no kerning */
+	}
+	return SWFOutput_getLength(inst->out);
 }
 
 
 void
 writeSWFFontCharacterToMethod(SWFBlock block,
-															SWFByteOutputMethod method, void *data)
+                              SWFByteOutputMethod method, void *data)
 {
 	SWFFontCharacter inst = (SWFFontCharacter)block;
-	SWFFont font = inst->font;
-	SWFOutput bounds;
-	int offset, i;
-	byte *p, *s;
-
-	methodWriteUInt16(CHARACTERID(inst), method, data);
-
-	method(inst->flags, data); /* main flags */
-	method(0, data);																					/* more flags */
-	method((unsigned char)strlen((const char*)font->name), data);
-
-	for ( p = font->name; *p != '\0'; ++p )
-		method(*p, data);
-
-	methodWriteUInt16(inst->nGlyphs, method, data);
-
-	offset = (inst->nGlyphs+1) * (inst->flags & SWF_FONT_WIDEOFFSETS ? 4 : 2);
-
-	/* write offset table for glyphs */
-
-	for ( i=0; i<=inst->nGlyphs; ++i )
-	{
-		if ( inst->flags & SWF_FONT_WIDEOFFSETS )
-			methodWriteUInt32(offset, method, data);
-		else
-			methodWriteUInt16(offset, method, data);
-
-		if ( i < inst->nGlyphs )
-			offset += glyphLength(font, inst->codeTable[i]);
-	}
-
-	/* write shape records for glyphs */
-
-	for ( i=0; i<inst->nGlyphs; ++i )
-	{
-		p = font->glyphOffset[inst->codeTable[i]];
-		s = font->glyphOffset[inst->codeTable[i]+1];
-
-		SWF_assert(p < s);
-
-		while(p < s)
-			method(*(p++), data);
-	}
-	
-	/* write glyph to code map */
-
-	if ( inst->flags & SWF_FONT_WIDECODES )
-	{
-		for ( i=0; i<inst->nGlyphs; ++i )
-			methodWriteUInt16(font->glyphToCode[inst->codeTable[i]], method, data);
-	}
-	else
-	{
-		for ( i=0; i<inst->nGlyphs; ++i )
-			method((byte)font->glyphToCode[inst->codeTable[i]], data);
-	}
-
-	/* write font layout */
-	if (inst->flags & SWF_FONT_HASLAYOUT )
-	{	methodWriteUInt16(font->ascent, method, data);
-		methodWriteUInt16(font->descent, method, data);
-		methodWriteUInt16(font->leading, method, data);
-		for ( i=0; i<inst->nGlyphs; ++i )
-			methodWriteUInt16(font->advances[inst->codeTable[i]], method, data);
-		bounds = newSWFOutput();
-		for ( i=0; i<inst->nGlyphs; ++i )
-		{	SWFOutput_writeRect(bounds, font->bounds + inst->codeTable[i]);
-			SWFOutput_byteAlign(bounds);
-		}
-		SWFOutput_writeToMethod(bounds, method, data);
-		destroySWFOutput(bounds);
-		methodWriteUInt16(0, method, data);		/* no kerning */
-	}
-			
+	SWFOutput_writeToMethod(inst->out, method, data);
 }
 
 
@@ -207,17 +196,9 @@ destroySWFFont(SWFFont font)
 {	// should not happen but seemingly does
 	if (!font)
 		return;
-
-	if ( font->shapes != NULL )
-	{
-#if HAS_MMAP
-		// XXX - if mmap failed, we malloced this!
-		int len = font->glyphOffset[font->nGlyphs] - font->glyphOffset[0];
-		munmap(font->shapes, len);
-#else
+	
+	if(font->shapes)
 		free(font->shapes);
-#endif
-	}
 
 	if ( font->flags & SWF_FONT_WIDECODES )
 	{
@@ -249,9 +230,6 @@ destroySWFFont(SWFFont font)
 	if ( font->kernTable.k != NULL )	// union of pointers ...
 		free(font->kernTable.k);
 
-	if ( font->glyphOffset != NULL )
-		free(font->glyphOffset);
-
 	if ( font->glyphToCode != NULL )
 		free(font->glyphToCode);
 
@@ -276,7 +254,8 @@ destroySWFFontCharacter(SWFFontCharacter font)
 
 	if ( font->codeTable != NULL )
 		free(font->codeTable);
-
+	if( font->out != NULL);
+		destroySWFOutput(font->out);
 	free(font);
 }
 
@@ -299,8 +278,7 @@ newSWFFont()
 
 	font->nGlyphs = 0;
 	font->glyphToCode = NULL;
-	font->codeToGlyph.charMap = NULL;
-	font->glyphOffset = NULL;
+	
 	font->advances = NULL;
 	font->bounds = NULL;
 
@@ -320,8 +298,9 @@ newSWFFont()
 SWFFontCharacter
 newSWFFontCharacter(SWFFont font)
 {
-	SWFFontCharacter inst = (SWFFontCharacter) malloc(sizeof(struct SWFFontCharacter_s));
+	SWFFontCharacter inst;
 
+	inst = (SWFFontCharacter) malloc(sizeof(struct SWFFontCharacter_s));
 	SWFCharacterInit((SWFCharacter)inst);
 
 	BLOCK(inst)->type = SWF_DEFINEFONT2;
@@ -330,15 +309,16 @@ newSWFFontCharacter(SWFFont font)
 	BLOCK(inst)->dtor = (destroySWFBlockMethod) destroySWFFontCharacter;
 
 	CHARACTERID(inst) = ++SWF_gNumCharacters;
-
 	inst->font = font;
-	inst->flags = (unsigned char)(font->flags & /*(~SWF_FONT_HASLAYOUT) &*/ (~SWF_FONT_WIDEOFFSETS));
+	inst->flags = font->flags; // (unsigned char)(font->flags & /*(~SWF_FONT_HASLAYOUT) &*/ (~SWF_FONT_WIDEOFFSETS));
 
 	inst->nGlyphs = 0;
 	inst->codeTable = NULL;
 
 	inst->textList = NULL;
 	inst->currentList = NULL;
+	
+	inst->out = NULL;
 
 	return inst;
 }
@@ -356,6 +336,7 @@ newSWFDummyFontCharacter()
 	ret->flags = SWF_FONT_HASLAYOUT;
 	ret->nGlyphs = 1;
 	ret->codeTable = NULL;
+	ret->out = NULL;
 	
 	return ret;
 }
@@ -381,19 +362,6 @@ SWFFont_findGlyphCode(SWFFont font, unsigned short c)
 			return -1;
 	}
 }
-
-
-byte*
-SWFFont_findGlyph(SWFFont font, unsigned short c)
-{
-	int code = SWFFont_findGlyphCode(font, c);
-
-	if ( code >= 0 )
-		return font->glyphOffset[code];
-
-	return NULL;
-}
-
 
 void
 SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text)
@@ -459,7 +427,7 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 		memmove(&font->codeTable[p + 1], &font->codeTable[p],
 						(font->nGlyphs - p) * sizeof(*font->codeTable));
 	}
-
+	
 	font->codeTable[p] = c;
 	++font->nGlyphs;
 }
