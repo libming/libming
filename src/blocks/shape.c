@@ -159,7 +159,7 @@ destroySWFShape(SWFShape shape)
 	destroySWFCharacter((SWFCharacter) shape);
 }
 
-SWFShape
+SWFShape 
 newSWFGlyphShape()
 {
 	SWFShape shape = (SWFShape)malloc(sizeof(struct SWFShape_s));
