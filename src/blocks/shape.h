@@ -84,4 +84,9 @@ SWFRect SWFShape_getEdgeBounds(SWFShape shape);
 
 int SWFShape_getFlags(SWFShape shape);
 
+void
+SWFOutput_writeGlyphShape(SWFOutput out, SWFShape shape);
+
+SWFShape newSWFGlyphShape();
+
 #endif /* SWF_SHAPE_H_INCLUDED */
