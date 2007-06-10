@@ -1023,8 +1023,13 @@ class SWFText : public SWFCharacter
  public:
   c_SWFText text;
 
-  SWFText()
-    { this->text = newSWFText2(); }
+  SWFText(int version = 2)
+  { 
+      if(version == 2)
+        this->text = newSWFText2();
+      else 
+        this->text = newSWFText(); 
+  }
 
   virtual ~SWFText()
     { destroySWFText(this->text); }
