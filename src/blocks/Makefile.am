@@ -87,7 +87,6 @@ libblock_la_SOURCES = 	\
 	output.c	\
 	protect.c	\
 	placeobject.c	\
-	read.c		\
 	rect.c		\
 	shape.c		\
 	sound.c		\
