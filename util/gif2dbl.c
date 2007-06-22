@@ -12,8 +12,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+
+#include <ming_config.h>
+
 #include <gif_lib.h>
+
+#if HAVE_ZLIB_H
 #include <zlib.h>
+#endif
 
 void error(char *msg)
 {
