@@ -1,14 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <math.h>
 
 #include <ming_config.h>
 
-#include <math.h>
-
 #include <png.h>
 
-#ifdef HAVE_ZLIB_H
+#ifdef USE_ZLIB
 #include <zlib.h>
 #endif
 

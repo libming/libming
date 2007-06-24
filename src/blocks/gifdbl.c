@@ -10,7 +10,10 @@
 
 #if USE_GIF
 #include <gif_lib.h>
+
+#if USE_ZLIB
 #include <zlib.h>
+#endif
 
 #include "bitmap.h"
 #include "dbl.h"
@@ -191,12 +194,11 @@ readGif(GifFileType *file, dblData result)
 
 	result->data = malloc(outsize = (int)floor(size*1.01+12));
 
-#ifdef HAVE_LIBZ
+#if USE_ZLIB
 	/* zlib-compress the gif data */
 	compress2(result->data, &outsize, data, size, 9);
 	result->length = outsize;
-#endif
-#ifndef HAVE_LIBZ
+#else
 	/* No zlib, so just copy the data to the result location */
 	memcpy(result->data, data, size);
 	result->length = size;

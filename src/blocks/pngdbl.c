@@ -6,7 +6,10 @@
 
 #if USE_PNG
 #include <png.h>
+
+#if USE_ZLIB
 #include <zlib.h>
+#endif
 
 #include "bitmap.h"
 #include "dbl.h"
@@ -279,12 +282,11 @@ static int readPNG(png_structp png_ptr, dblData result)
 
 	result->data = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
 
-#ifdef HAVE_LIBZ
+#ifdef USE_ZLIB
 	/* compress the RGB color table (if present) and image data one block */
 	compress2(result->data, (uLongf *) &outsize, data, alignedsize, 9);
 	result->length = outsize;
-#endif
-#ifndef HAVE_LIBZ
+#else
 	/* No zlib, so just copy the data to the result location */
 	memcpy(result->data, data, alignedsize);
 	result->length = alignedsize;

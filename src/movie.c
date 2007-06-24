@@ -53,7 +53,7 @@
 #include "blocks/tabindex.h"
 #include "libming.h"
 
-#ifdef HAVE_ZLIB_H
+#ifdef USE_ZLIB
 # include <zlib.h>
 #endif
 

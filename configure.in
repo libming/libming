@@ -235,6 +235,7 @@ dnl MinGW check for libungif
 AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
 dnl Solaris needs -lX11 on the linker line for ungif to work
 AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
+AC_CHECK_HEADERS([gif_lib.h], GIFINC="true", GIFINC="")
 
 dnl Check for the png library
 dnl Solaris needs -lm on the linker line, and other platforms aren't bothered having it there. :)
@@ -246,7 +247,7 @@ AC_CHECK_LIB(z, compress2,
 	dnl Windows has the zlib library, but its named zdll instead
 	AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
 )
-AC_CHECK_HEADERS([zlib.h])
+AC_CHECK_HEADERS([zlib.h], ZLIB_INC="true", ZLIB_INC="")
 AC_CHECK_HEADERS([getopt.h])
 
 dnl Check if the vasprintf function exists on this platform
@@ -270,8 +271,8 @@ if test -n "${CXX}"; then
 	AC_DEFINE([USE_CXX], [1], [Use c++])
 fi
 
-AM_CONDITIONAL(USE_ZLIB, test x${ZLIB} != x)
-if test -n "${ZLIB}"; then
+AM_CONDITIONAL(USE_ZLIB, test x${ZLIB} != x -a x${ZLIB_INC} != x)
+if test -n "${ZLIB}" -a -n "${ZLIB_INC}"; then
 	AC_DEFINE([USE_ZLIB], [1], [Use zlib])
 fi
 
@@ -280,8 +281,8 @@ if test -n "${ft_config}"; then
 	AC_DEFINE(USE_FREETYPE, [1], [Use freetype library])
 fi
 
-AM_CONDITIONAL(USE_GIF, test x${GIFLIB} != x)
-if test -n "${GIFLIB}"; then
+AM_CONDITIONAL(USE_GIF, test x${GIFLIB} != x -a x${GIFINC} != x)
+if test -n "${GIFLIB}" -a -n "${GIFINC}"; then
 	AC_DEFINE(USE_GIF, [1], [Use gif library])
 fi
 
@@ -389,10 +390,10 @@ else
 	echo "  Tcl extension disabled"
 fi
 
-if test x"$ZLIB" != "x"; then
-	echo "  ZLIB enabled ($ZLIB)"
-else
+if test x"$ZLIB" = "x" -o x"$ZLIB_INC" = x; then
 	echo "  ZLIB disabled"
+else
+	echo "  ZLIB enabled ($ZLIB)"
 fi
 
 if test x"$ft_config" = "x"; then
@@ -401,7 +402,7 @@ else
 	echo "  Freetype library enabled ($ft_config)"
 fi
 
-if test x"$GIFLIB" = "x"; then
+if test x"$GIFLIB" = "x" -o x"$GIFINC" = "x"; then
 	echo "  GIF library disabled"
 else
 	echo "  GIF library enabled ($GIFLIB)"

@@ -17,7 +17,7 @@
 
 #include <gif_lib.h>
 
-#if HAVE_ZLIB_H
+#if USE_ZLIB
 #include <zlib.h>
 #endif
 
@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 
   outdata = malloc(outsize = (int)floor(size*1.01+12));
 
-#ifdef HAVE_LIBZ_H
+#if USE_ZLIB
   /* zlib-compress the gif data */
   compress2(outdata, &outsize, data+6, size-6, 9);
 #else

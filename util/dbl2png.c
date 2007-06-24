@@ -2,8 +2,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include <ming_config.h>
+
 #include <png.h>
+
+#if USE_ZLIB
 #include <zlib.h>
+#endif
 
 int verbose = 0;
 typedef unsigned char byte;
@@ -127,11 +132,10 @@ struct pngdata readDBL(FILE *fp)
    error("memory allocation");
   }
 
-#ifdef HAVE_LIBZ
+#ifdef USE_ZLIB
   /* uncompress the data */
   i=uncompress (png.data, &datsize, data, readsize );
-#endif
-#ifndef HAVE_LIBZ
+#else
   /* No zlib, so we can't uncompress the data */
   i = -3;  // Try and indication compression failure.  -3 should == Z_DATA_ERROR and I'm not sure which error to indicate ;)
 #endif

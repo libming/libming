@@ -31,7 +31,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_ZLIB_H
+
+#ifdef USE_ZLIB
 #include <zlib.h>
 #endif
 
