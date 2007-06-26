@@ -74,7 +74,7 @@ struct SWFFont_s
 	/* map from glyphs to char codes */
 	unsigned short* glyphToCode; 
 
-	/* shape table, mapped in from file */
+	/* shape table */
 	SWFShape* shapes;
 
 	/* glyph metrics */

@@ -1,220 +1,274 @@
-/*
-    Ming, an SWF output library
-    Copyright (C) 2002  Opaque Industries - http://www.opaque.net/
+/****************************************************************************
+ *
+ *  Copyright (C) 2005-2006 "Stuart R. Anderson" <anderson@netsweng.com>
+ *  Copyright (C) 2007 Klaus Rechert
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ ****************************************************************************/
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <sys/types.h>
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#include FT_SFNT_NAMES_H
+#include FT_TRUETYPE_IDS_H
+#include FT_OUTLINE_H
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/* $Id$ */
-
-#if 0
-
-#include <math.h>
+#include "shape.h"
 #include "font.h"
-#include "method.h"
-#include "libming.h"
 
-#define glyphLength(font,glyph) \
-  ((font)->glyphOffset[(glyph)+1] - (font)->glyphOffset[(glyph)])
-
-SWFFont loadSWFFontfromTTF(char *filename)
+struct outl_data
 {
-  int i;
+	SWFShape shape;
+	double ratio_EM;
+}; 
 
-  TT_Engine *engine;
-  TT_Face face;
-  TT_Instance instance;
-  TT_Glyph glyph;
-  TT_Glyph_Metrics metrics;
-  TT_Outline outline;
-  TT_CharMap charmap;
-  TT_Face_Properties properties;
-  TT_UShort pid, eid;
+static int
+outl_moveto(const FT_Vector *to, void *user)
+{
+	struct outl_data *data = (struct outl_data *)user;
+	SWFShape shape = data->shape;
+	double ratio_EM = data->ratio_EM;
 
-  TT_Init_FreeType(engine);
+	int dx = (int)(to->x*ratio_EM);
+	int dy = -(int)(to->y*ratio_EM);
 
-  error = TT_Open_Face(engine, filename, &face);
+	SWFShape_moveScaledPenTo(shape, dx, dy);	
 
-  if(error)
-    fprintf(stderr, "Could not open face.\n");
-
-  TT_Get_Face_Properties(face, &properties);
-
-  for(i=0; i<properties->num_CharMaps; ++i)
-    TT_Get_CharMap_ID(face, i, &pid, &eid);
-
-  TT_Get_CharMap(face, charmapIndex, &charmap);
-
-  TT_New_Instance(face, &instance);
-
-  TT_New_Glyph(face, &glyph);
-
-  for(i=0; i<whatever; ++i)
-  {
-    TT_Load_Glyph(instance, glyph, TT_Char_Index(charmap, i), loadFlags);
-
-    TT_Get_Glyph_Outline(glyph, &outline);
-
-    TT_Get_Glyph_Metrics(glyph, &metrics);
-  }
-
-  TT_Done_FreeType(engine);
+        return 0;
 }
 
-
-int completeSWFFont(SWFBlock block)
+static int
+outl_lineto(const FT_Vector *to, void *user)
 {
-  SWFFont font = (SWFFont)block;
-  int size, i;
+	struct outl_data *data = (struct outl_data *)user;
+	SWFShape shape = data->shape;
+	double ratio_EM = data->ratio_EM;
 
-  SWFFont_resolveTextList(font);
+	int x = (int)(to->x*ratio_EM);
+	int y = -(int)(to->y*ratio_EM);
 
-  size = 2 + 2*font->nGlyphs;
-
-  /* get length of each glyph from its output buffer */
-  for(i=0; i<font->nGlyphs; ++i)
-    size += glyphLength(font, font->codeToGlyph[i]);
-
-  return size;
+	SWFShape_drawScaledLineTo(shape, x, y);
+	
+        return 0;
 }
 
-
-void writeSWFFontToMethod(SWFBlock block,
-			  SWFByteOutputMethod method, void *data)
+static int
+outl_conicto(const FT_Vector *ctl, const FT_Vector *to, void *user)
 {
-  SWFFont font = (SWFFont)block;
-  int offset, i;
-  byte *p, *s;
+	struct outl_data *data = (struct outl_data *)user;
+	SWFShape shape = data->shape;
+	double ratio_EM = data->ratio_EM;
 
-  methodWriteUInt16(CHARACTERID(font), method, data);
+	int cx = (int)(ctl->x*ratio_EM);
+	int cy = -(int)(ctl->y*ratio_EM);
+	int ax = (int)(to->x*ratio_EM);
+	int ay = -(int)(to->y*ratio_EM);
 
-  offset = font->nGlyphs*2;
+	SWFShape_drawScaledCurveTo(shape, cx, cy, ax, ay);
 
-  /* write offset table for glyphs */
-  for(i=0; i<font->nGlyphs; ++i)
-  {
-    methodWriteUInt16(offset, method, data);
-    offset += glyphLength(font, font->codeToGlyph[i]);
-  }
-
-  /* write shape records for glyphs */
-  for(i=0; i<font->nGlyphs; ++i)
-  {
-    p = font->glyphOffset[font->codeToGlyph[i]];
-    s = font->glyphOffset[font->codeToGlyph[i]+1];
-
-    SWF_assert(p < s);
-
-    while(p < s)
-      method(*(p++), data);
-  }
+        return 0;
 }
 
-
-void destroySWFFont(SWFFont font)
+static int
+outl_cubicto(const FT_Vector *ctl1, const FT_Vector *ctl2,
+             const FT_Vector *to, void *user)
 {
-  free(font->shapes);
-  free(font->name);
-  free(font->kernTable);
+	FT_Vector midpnt;
+	int cx, cy, ax, ay;
+	struct outl_data *data = (struct outl_data *)user;
+	SWFShape shape = data->shape;
+	double ratio_EM = data->ratio_EM;
+
+	/* This is handled by breaking the cubic into 2 conic segments */
+	midpnt.x=(ctl1->x+ctl2->x)/2;
+	midpnt.y=(ctl1->y+ctl2->y)/2;
+
+	/* First half */
+	cx = (int)(ctl1->x*ratio_EM);
+	cy = -(int)(ctl1->y*ratio_EM);
+	ax = (int)(midpnt.x*ratio_EM);
+	ay = -(int)(midpnt.y*ratio_EM);
+	SWFShape_drawScaledCurveTo(shape, cx, cy, ax, ay);
+
+	/* Second half */
+	cx = (int)(ctl2->x*ratio_EM);
+	cy = -(int)(ctl2->y*ratio_EM);
+	ax = (int)(to->x*ratio_EM);
+	ay = -(int)(to->y*ratio_EM);
+        SWFShape_drawScaledCurveTo(shape, cx, cy, ax, ay);
+        return 0;
 }
 
+static FT_Outline_Funcs ft_outl_funcs = {
+        outl_moveto,
+        outl_lineto,
+        outl_conicto,
+        outl_cubicto,
+        0,
+        0
+};
 
-SWFFont newSWFFont()
+	
+static int readGlyphs(SWFFont font, FT_Face face)
 {
-  SWFFont font = (SWFFont)malloc(SWFFONT_SIZE);
-  memset(font, 0, SWFFONT_SIZE);
+	int glyphCount = 0;
+	FT_UInt gindex;
+	FT_ULong charcode;
+	double ratio_EM = 1024.0 / face->units_per_EM;
 
-  CHARACTER(font)->number = ++SWF_gNumCharacters;
-  BLOCK(font)->type = SWF_DEFINEFONT;
-  BLOCK(font)->writeBlock = writeSWFFontToMethod;
-  BLOCK(font)->complete = completeSWFFont;
-  BLOCK(font)->dtor = destroySWFFont;
+	font->shapes = (SWFShape *)malloc(sizeof(SWFShape) * face->num_glyphs);
+	font->advances = (short *)malloc(sizeof(short) * face->num_glyphs);
+	font->glyphToCode = (unsigned short *)malloc(sizeof(unsigned short) * face->num_glyphs);
+	font->bounds = (struct SWFRect_s *)malloc(sizeof(struct SWFRect_s) * face->num_glyphs);
+	charcode = FT_Get_First_Char(face, &gindex );
+	while ( gindex != 0 ) 
+	{
+		struct outl_data data;
+		if( FT_Load_Glyph(face, gindex, FT_LOAD_NO_BITMAP|FT_LOAD_NO_SCALE)) 
+		{
+			SWF_warn("readGlyphsTTF: Can't load glyph %d, skipped\n", gindex);
+			continue;
+		}
+		
+		data.shape = newSWFGlyphShape();
+		data.ratio_EM = ratio_EM;	
+        	if(FT_Outline_Decompose(&(face->glyph->outline), 
+			&ft_outl_funcs, &data)) 
+		{
+			SWF_warn("readGlyphsTTF: Can't decompose outline for glyph %d\n", gindex);
+			destroySWFShape(data.shape);
+			continue;
+		}
+		font->shapes[glyphCount] = data.shape;
+		font->glyphToCode[glyphCount] = charcode;
+		if(charcode > 255)
+			font->flags |= SWF_FONT_WIDECODES;
+        	font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
 
-  return font;
+		// hmm ? 
+		font->bounds[glyphCount].minX = -1024;
+		font->bounds[glyphCount].maxX = 1024;
+		font->bounds[glyphCount].minY = -1024;
+		font->bounds[glyphCount].maxY = 1024;
+		charcode = FT_Get_Next_Char(face, charcode, &gindex);
+        	glyphCount++;
+	}
+	font->nGlyphs = glyphCount;
 }
 
-
-SWFFont loadSWFFontFromTTF(char *file)
+SWFFont loadSWFFontTTF(char *filename)
 {
-  SWFFont font = newSWFFont();
-  font->file = file;
+	FT_Error error;
+	FT_Library library;
+	FT_Face face;
+	FT_CharMap charmap = NULL;
+	SWFFont font;
+	int i;
+	double ratio_EM;
+	
+	if( FT_Init_FreeType( &library ) ) {
+		SWF_warn("loadSWFFontTTF: FreeType initialization failed\n");
+		return NULL;
+	}
+
+	if( (error = FT_New_Face( library, filename, 0, &face )) ) 
+	{
+		if ( error == FT_Err_Unknown_File_Format )
+			SWF_warn("loadSWFFontTTF: %s has format unknown to FreeType\n",
+				filename);
+        	else
+                	SWF_warn("loadSWFFontTTF: Cannot access %s ****\n", filename);
+        	goto error_ft;
+	}
+
+	for(i=0; i < face->num_charmaps; i++) 
+	{
+		/*
+		printf("map %d encoding pid=%d eid=%d\n", i,
+			face->charmaps[i]->platform_id,
+			face->charmaps[i]->encoding_id);
+		*/
+		if( face->charmaps[i]->platform_id == TT_PLATFORM_MACINTOSH &&
+			face->charmaps[i]->encoding_id == TT_MAC_ID_ROMAN ) 
+		{
+			charmap = face->charmaps[i];
+			break;
+		}
+	}
+
+	if( charmap == NULL ) 
+	{
+		SWF_warn("loadSWFFontTTF: Unable to find an ANSI charactermap.");
+        	goto error_face;
+        }
+	
+	FT_Set_Charmap(face, charmap);
+	font = newSWFFont();
+	font->flags = SWF_FONT_HASLAYOUT;
+	font->name = strdup(face->family_name);
+	font->langCode = 0;
+	if( charmap->platform_id == TT_PLATFORM_APPLE_UNICODE ) 
+	{
+		font->flags |= SWF_FONT_SMALLTEXT;
+	} 
+	else if (charmap->platform_id == TT_PLATFORM_MICROSOFT )
+	{
+		switch( charmap->encoding_id )
+		{
+			case TT_MS_ID_UNICODE_CS:
+				font->flags |= SWF_FONT_SMALLTEXT;
+				break;
+			case TT_MS_ID_SJIS:
+				font->flags |= SWF_FONT_SHIFTJIS;
+				break;
+			default: /* Else assume it's ANSI */
+ 				font->flags |= SWF_FONT_ANSI;	
+ 		}
+	}
+
+	if( face->style_flags & FT_STYLE_FLAG_BOLD) 
+		font->flags |= SWF_FONT_ISBOLD ; 
+ 
+	if( face->style_flags&FT_STYLE_FLAG_ITALIC ) 
+		font->flags |= SWF_FONT_ISITALIC;
+	
+	if(readGlyphs(font, face) < 0)
+		goto error_font;
+	
+	ratio_EM = 1024.0 / face->units_per_EM;
+	font->ascent = (short)(face->ascender * ratio_EM);
+	font->descent = (short)(face->descender*ratio_EM);
+	font->leading = ((face->height-face->ascender + face->descender) * ratio_EM);
+
+	SWFFont_buildReverseMapping(font);
+	FT_Done_Face(face);
+	FT_Done_FreeType(library);
+	return font;
+error_font:
+	destroySWFFont(font);
+error_face:
+	FT_Done_Face(face);
+error_ft:
+	FT_Done_FreeType(library);
+	return NULL;
 }
-
-void SWFFont_addTextToList(SWFFont font, struct _textRecord *text)
-{
-  SWFTextList textList = (SWFTextList)malloc(TEXTLIST_SIZE);
-  textList->next = NULL;
-  textList->text = text;
-
-  if(font->currentList != NULL)
-    font->currentList->next = textList;
-  else
-    font->textList = textList;
-
-  font->currentList = textList;
-}
-
-void SWFFont_addCharToTable(SWFFont font, byte c)
-{
-  if(font->glyphToCode[c]==0xff) /* assuming one can't actually use all 255 */
-  {
-    font->codeToGlyph[font->nGlyphs] = font->codeTable[c];
-    font->glyphToCode[c] = font->nGlyphs;
-    ++font->nGlyphs;
-  }
-}
-
-/* XXX - big confusion between terms here.  CodeTable isn't font->codeTable */
-void SWFFont_buildCodeTable(SWFFont font, SWFTextRecord text)
-{
-  SWFTextRecord textRecord;
-  byte *string;
-  int l, i;
-
-  textRecord = text;
-  while(textRecord != NULL)
-  {
-    string = textRecord->string;
-
-    if(string != NULL)
-    {
-      l = strlen(string);
-      for(i=0; i<l; ++i)
-      	SWFFont_addCharToTable(font, string[i]);
-    }
-
-    textRecord = textRecord->next;
-  }
-}
-
-
-/* build code table from text in all proceding Text blocks */
-void SWFFont_resolveTextList(SWFFont font)
-{
-  SWFTextList textList, oldList;
-
-  textList = font->textList;
-  while(textList != NULL)
-  {
-    oldList = textList;
-    SWFFont_buildCodeTable(font, textList->text);
-    textList = textList->next;
-    free(oldList);
-  }
-
-  font->textList = NULL;
-}
-
-#endif

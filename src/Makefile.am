@@ -46,7 +46,8 @@ libming_la_LIBADD = \
 	$(PNGLIB) \
 	$(GIFLIB) \
 	$(MATHLIB) \
-	$(ZLIB)
+	$(ZLIB) \
+	$(FREETYPE_LIBS)
 
 DOCSRC = \
 	blocks/action.c \

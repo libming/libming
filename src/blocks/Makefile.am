@@ -59,6 +59,11 @@ if USE_PNG
 PNG_SOURCE=pngdbl.c
 endif
 
+if USE_FREETYPE
+libblock_la_CFLAGS = $(FREETYPE_CFLAGS) $(AM_CFLAGS)
+TTF_SOURCE = ttffont.c
+endif
+
 libblock_la_SOURCES = 	\
 	action.c	\
 	bitmap.c	\
@@ -95,7 +100,6 @@ libblock_la_SOURCES = 	\
 	sprite.c	\
 	text.c		\
 	textfield.c	\
-	ttffont.c	\
 	fdbfont.c	\
 	utf8.c		\
 	videostream.c	\
@@ -106,5 +110,6 @@ libblock_la_SOURCES = 	\
 	scriptlimits.c	\
 	scalinggrid.c	\
 	tabindex.c	\
-	$(PNG_SOURCE)
+	$(PNG_SOURCE)	\
+	$(TTF_SOURCE)
 
