@@ -447,12 +447,14 @@ SWFMovie_writeExports(SWFMovie movie)
 }
 
 /* 
- * this function replaces a displayable character with a new one
+ * This function replaces a displayable character with a new one.
+ * Do not use this function. Use SWFMovie_replace instead!
  * returns 0 on success 
  */
 int
-SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
+SWFMovie_replace_internal(SWFMovie movie, SWFDisplayItem item, SWFMovieBlockType ublock)
 {
+	SWFBlock block = ublock.block;
 	if(block == NULL || item == NULL)
 		return -1;
 
@@ -493,12 +495,14 @@ SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
 
 
 /*
- * add a block to a movie.
- * This function adds a block or character to a movie. 
+ * Adds a block to a movie.
+ * This function adds a block or character to a movie.
+ * Do not use this function. Use SWFMovie_add instead
+ * returns a SWFDisplayItem 
  */
 SWFDisplayItem
-SWFMovie__add(SWFMovie movie /* movie to which the block will be added */,
-		SWFMovieBlockType ublock /* block to add to the movie */)
+SWFMovie_add_internal(SWFMovie movie /* movie to which the block will be added */,
+                      SWFMovieBlockType ublock /* block to add to the movie */)
 {
 	SWFBlock block = ublock.block;
 	if ( block == NULL )

@@ -86,6 +86,38 @@ typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
 typedef struct SWFFilter_s * SWFFilter;
 typedef struct SWFButtonRecord_s* SWFButtonRecord;
 
+union SWFMovieBlockType_u {
+	SWFBlock 		block;
+	SWFCharacter 		character;
+	SWFDBLBitmap 		dblbmp;
+	SWFDBLBitmapData 	dblbmp_data;
+	SWFJpegBitmap 		jpegbmp;
+	SWFJpegWithAlpha        jpegbmp_alpha;
+	SWFShape 		shape;
+	SWFMorph		morph;
+	SWFText			text;
+	SWFTextField		textfield;
+	SWFSound		sound;
+	SWFSoundInstance	sound_instance;
+	SWFAction		action;
+	SWFButton		button;
+	SWFSprite		sprite;
+	SWFMovieClip		mc;
+	SWFVideoStream		stream;
+	SWFPrebuiltClip		prebuild;
+};
+
+typedef union SWFMovieBlockType_u SWFMovieBlockType;
+
+#if __GNUC__ > 3 ||  \
+	(__GNUC__ == 3 && (__GNUC_MINOR__ > 3 || \
+                 (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ > 0)))
+#define __to_movie_block(x) (union SWFMovieBlockType_u)x
+#else
+#define __to_movie_block(x) (union SWFMovieBlockType_u) { x }
+#endif
+
+
 /***** General Ming functions *****/
 
 int Ming_init();
@@ -963,43 +995,15 @@ void SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
 SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
 
-union SWFMovieBlockType_u {
-	SWFBlock 		block;
-	SWFCharacter 		character;
-	SWFDBLBitmap 		dblbmp;
-	SWFDBLBitmapData 	dblbmp_data;
-	SWFJpegBitmap 		jpegbmp;
-	SWFJpegWithAlpha        jpegbmp_alpha;
-	SWFShape 		shape;
-	SWFMorph		morph;
-	SWFText			text;
-	SWFTextField		textfield;
-	SWFSound		sound;
-	SWFSoundInstance	sound_instance;
-	SWFAction		action;
-	SWFButton		button;
-	SWFSprite		sprite;
-	SWFMovieClip		mc;
-	SWFVideoStream		stream;
-	SWFPrebuiltClip		prebuild;
-};
 
-typedef union SWFMovieBlockType_u SWFMovieBlockType;
-
-#if __GNUC__ > 3 ||  \
-	(__GNUC__ == 3 && (__GNUC_MINOR__ > 3 || \
-                 (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ > 0)))
-#define __to_union(x) (union SWFMovieBlockType_u)x
-#else
-#define __to_union(x)  (union SWFMovieBlockType_u) { x }
-#endif
-
-SWFDisplayItem SWFMovie__add(SWFMovie movie, SWFMovieBlockType ublock);
-
+SWFDisplayItem SWFMovie_add_internal(SWFMovie movie, SWFMovieBlockType ublock);
 #define SWFMovie_add(__movie, __block) \
-	SWFMovie__add((__movie), __to_union((__block)))
+	SWFMovie_add_internal((__movie), __to_movie_block((__block)))
 
-int SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block);
+int SWFMovie_replace_internal(SWFMovie movie, SWFDisplayItem item, SWFMovieBlockType block);
+#define SWFMovie_replace(__movie, __item, __block) \
+	SWFMovie_replace_internal((__movie), (__item), __to_movie_block((__block)))
+
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
 void SWFMovie_nextFrame(SWFMovie movie);
