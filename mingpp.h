@@ -530,7 +530,8 @@ class SWFMovie
     { SWFMovie_setSoundStream(this->movie, sound->sound); /* wogl */ }
 
   SWFDisplayItem *add(SWFBlock *character)
-    { return new SWFDisplayItem(SWFMovie_add(this->movie, character->getBlock())); }
+    { return new SWFDisplayItem(SWFMovie__add(this->movie, 
+		(SWFMovieBlockType){character->getBlock()})); }
 
   void remove(SWFDisplayItem *item)
     { SWFMovie_remove(this->movie, item->item); }
