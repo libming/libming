@@ -353,6 +353,7 @@ AC_OUTPUT([
 	test/FillStyle/Makefile
 	test/Font/Makefile
 	test/Text/Makefile
+	test/Bitmap/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config

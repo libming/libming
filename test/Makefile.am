@@ -9,7 +9,8 @@ SUBDIRS = Movie \
 	Gradient \
 	FillStyle \
 	Font	\
-	Text
+	Text	\
+	Bitmap
 
 EXTRA_DIST = \
 	dotests.pl \
