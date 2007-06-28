@@ -54,7 +54,7 @@ outl_moveto(const FT_Vector *to, void *user)
 
 	SWFShape_moveScaledPenTo(shape, dx, dy);	
 
-        return 0;
+	return 0;
 }
 
 static int
@@ -68,8 +68,7 @@ outl_lineto(const FT_Vector *to, void *user)
 	int y = -(int)(to->y*ratio_EM);
 
 	SWFShape_drawScaledLineTo(shape, x, y);
-	
-        return 0;
+	return 0;
 }
 
 static int
@@ -86,7 +85,7 @@ outl_conicto(const FT_Vector *ctl, const FT_Vector *to, void *user)
 
 	SWFShape_drawScaledCurveTo(shape, cx, cy, ax, ay);
 
-        return 0;
+	return 0;
 }
 
 static int
@@ -115,17 +114,17 @@ outl_cubicto(const FT_Vector *ctl1, const FT_Vector *ctl2,
 	cy = -(int)(ctl2->y*ratio_EM);
 	ax = (int)(to->x*ratio_EM);
 	ay = -(int)(to->y*ratio_EM);
-        SWFShape_drawScaledCurveTo(shape, cx, cy, ax, ay);
-        return 0;
+	SWFShape_drawScaledCurveTo(shape, cx, cy, ax, ay);
+	return 0;
 }
 
 static FT_Outline_Funcs ft_outl_funcs = {
-        outl_moveto,
-        outl_lineto,
-        outl_conicto,
-        outl_cubicto,
-        0,
-        0
+	outl_moveto,
+	outl_lineto,
+	outl_conicto,
+	outl_cubicto,
+	0,
+	0
 };
 
 	
@@ -152,7 +151,7 @@ static int readGlyphs(SWFFont font, FT_Face face)
 		
 		data.shape = newSWFGlyphShape();
 		data.ratio_EM = ratio_EM;	
-        	if(FT_Outline_Decompose(&(face->glyph->outline), 
+		if(FT_Outline_Decompose(&(face->glyph->outline), 
 			&ft_outl_funcs, &data)) 
 		{
 			SWF_warn("readGlyphsTTF: Can't decompose outline for glyph %d\n", gindex);
@@ -163,7 +162,7 @@ static int readGlyphs(SWFFont font, FT_Face face)
 		font->glyphToCode[glyphCount] = charcode;
 		if(charcode > 255)
 			font->flags |= SWF_FONT_WIDECODES;
-        	font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
+		font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
 
 		// hmm ? 
 		font->bounds[glyphCount].minX = -1024;
@@ -171,7 +170,7 @@ static int readGlyphs(SWFFont font, FT_Face face)
 		font->bounds[glyphCount].minY = -1024;
 		font->bounds[glyphCount].maxY = 1024;
 		charcode = FT_Get_Next_Char(face, charcode, &gindex);
-        	glyphCount++;
+		glyphCount++;
 	}
 	font->nGlyphs = glyphCount;
 }
@@ -196,9 +195,9 @@ SWFFont loadSWFFontTTF(char *filename)
 		if ( error == FT_Err_Unknown_File_Format )
 			SWF_warn("loadSWFFontTTF: %s has format unknown to FreeType\n",
 				filename);
-        	else
-                	SWF_warn("loadSWFFontTTF: Cannot access %s ****\n", filename);
-        	goto error_ft;
+		else
+			SWF_warn("loadSWFFontTTF: Cannot access %s ****\n", filename);
+		goto error_ft;
 	}
 
 	for(i=0; i < face->num_charmaps; i++) 
@@ -219,8 +218,8 @@ SWFFont loadSWFFontTTF(char *filename)
 	if( charmap == NULL ) 
 	{
 		SWF_warn("loadSWFFontTTF: Unable to find an ANSI charactermap.");
-        	goto error_face;
-        }
+		goto error_face;
+	}
 	
 	FT_Set_Charmap(face, charmap);
 	font = newSWFFont();
@@ -242,13 +241,13 @@ SWFFont loadSWFFontTTF(char *filename)
 				font->flags |= SWF_FONT_SHIFTJIS;
 				break;
 			default: /* Else assume it's ANSI */
- 				font->flags |= SWF_FONT_ANSI;	
- 		}
+				font->flags |= SWF_FONT_ANSI;	
+		}
 	}
 
 	if( face->style_flags & FT_STYLE_FLAG_BOLD) 
 		font->flags |= SWF_FONT_ISBOLD ; 
- 
+
 	if( face->style_flags&FT_STYLE_FLAG_ITALIC ) 
 		font->flags |= SWF_FONT_ISITALIC;
 	
