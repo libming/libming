@@ -7,6 +7,9 @@
 	* Flash 8: new gradient features
 	* SWFFillStyle is reusable now and calculates propper GradientMatrix
 	* setLeft/RightFillStyle adds fill to the shape if necessary
+	* Handling fonts as shapes
+	* Basic ttf font support 
+	* Typesafe SWFMovie_add / replace
 
 0.4.0.beta4 - 2007-03-27
 
