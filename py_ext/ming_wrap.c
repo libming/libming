@@ -7104,7 +7104,7 @@ SWIGINTERN PyObject *_wrap_newSWFVideoStream_fromFile(PyObject *SWIGUNUSEDPARM(s
     arg1 = PyFile_AsFile(obj0);
   }
   result = newSWFVideoStream_fromFile(arg1);
-  resultobj = SWIG_NewPointerObj((SWFVideoStream *)memcpy((SWFVideoStream *)malloc(sizeof(SWFVideoStream)),&result,sizeof(SWFVideoStream)), SWIGTYPE_p_SWFVideoStream, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(result, SWIGTYPE_p_SWFVideoStream, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7132,7 +7132,7 @@ SWIGINTERN PyObject *_wrap_newSWFVideoStream_fromInput(PyObject *SWIGUNUSEDPARM(
     }
   }
   result = newSWFVideoStream_fromInput(arg1);
-  resultobj = SWIG_NewPointerObj((SWFVideoStream *)memcpy((SWFVideoStream *)malloc(sizeof(SWFVideoStream)),&result,sizeof(SWFVideoStream)), SWIGTYPE_p_SWFVideoStream, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(result, SWIGTYPE_p_SWFVideoStream, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7145,7 +7145,7 @@ SWIGINTERN PyObject *_wrap_newSWFVideoStream(PyObject *SWIGUNUSEDPARM(self), PyO
   
   if (!PyArg_ParseTuple(args,(char *)":newSWFVideoStream")) SWIG_fail;
   result = newSWFVideoStream();
-  resultobj = SWIG_NewPointerObj((SWFVideoStream *)memcpy((SWFVideoStream *)malloc(sizeof(SWFVideoStream)),&result,sizeof(SWFVideoStream)), SWIGTYPE_p_SWFVideoStream, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(result, SWIGTYPE_p_SWFVideoStream, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7157,7 +7157,6 @@ SWIGINTERN PyObject *_wrap_SWFVideoStream_setDimension(PyObject *SWIGUNUSEDPARM(
   SWFVideoStream arg1 ;
   int arg2 ;
   int arg3 ;
-  void *argp1 ;
   int res1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
@@ -7169,15 +7168,10 @@ SWIGINTERN PyObject *_wrap_SWFVideoStream_setDimension(PyObject *SWIGUNUSEDPARM(
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:SWFVideoStream_setDimension",&obj0,&obj1,&obj2)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFVideoStream,  0 );
+    res1 = SWIG_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_SWFVideoStream,  0 );
     if (!SWIG_IsOK(res1)) {
       SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFVideoStream_setDimension" "', argument " "1"" of type '" "SWFVideoStream""'"); 
     }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFVideoStream_setDimension" "', argument " "1"" of type '" "SWFVideoStream""'");
-    } else {
-      arg1 = *((SWFVideoStream *)(argp1));
-    }
   }
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
@@ -7201,21 +7195,15 @@ SWIGINTERN PyObject *_wrap_SWFVideoStream_getNumFrames(PyObject *SWIGUNUSEDPARM(
   PyObject *resultobj = 0;
   SWFVideoStream arg1 ;
   int result;
-  void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:SWFVideoStream_getNumFrames",&obj0)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFVideoStream,  0 );
+    res1 = SWIG_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_SWFVideoStream,  0 );
     if (!SWIG_IsOK(res1)) {
       SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFVideoStream_getNumFrames" "', argument " "1"" of type '" "SWFVideoStream""'"); 
     }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFVideoStream_getNumFrames" "', argument " "1"" of type '" "SWFVideoStream""'");
-    } else {
-      arg1 = *((SWFVideoStream *)(argp1));
-    }
   }
   result = (int)SWFVideoStream_getNumFrames(arg1);
   resultobj = SWIG_From_int((int)(result));

@@ -676,6 +676,14 @@ class SWFButton(SWFBase):
     def addAction(self, action, flags):
         mingc.SWFButton_addAction(self.this, action, flags)
 
+class SWFVideoStream(SWFBase):
+    def __init__(self):
+        self.this = mingc.newSWFVideoStream()
+    def setDimension(self, w, h):
+        return mingc.SWFVideoStream_setDimension(self.this, w, h)
+    def getNumFrames(self):
+        return mingc.SWFVideoStream_getNumFrames(self.this)
+
 
 def SWFBUTTON_KEYPRESS(c):
     return mingc.swfButton_keypress(c)

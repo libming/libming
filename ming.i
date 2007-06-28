@@ -62,7 +62,7 @@ void Ming_useSWFVersion(int version);
 typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
              *SWFShape, *SWFAction, *SWFGradient, *SWFButton, *SWFButtonRecord,
              *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
-             *SWFFont, *SWFText, *SWFTextField;
+             *SWFFont, *SWFText, *SWFTextField, *SWFVideoStream;
 
 /*
  * Set output compression level.
