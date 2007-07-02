@@ -53,7 +53,7 @@ completeSWFPrebuiltClip(SWFBlock block)
 }
 
 int
-SWFPrebuiltClipLength(block)
+SWFPrebuiltClipLength(SWFBlock block)
 {	SWFPrebuiltClip clip = (SWFPrebuiltClip)block;
 	return SWFOutput_getLength(clip->display);
 }

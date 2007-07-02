@@ -51,7 +51,7 @@ struct SWFPrebuilt_s
 };
 typedef struct SWFPrebuilt_s *SWFPrebuilt;
 
-int SWFPrebuiltClipLength();
+int SWFPrebuiltClipLength(SWFBlock block);
 
 #endif /* SWF_FROMSWF_H_INCLUDED */
 
