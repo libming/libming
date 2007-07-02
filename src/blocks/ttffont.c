@@ -128,7 +128,7 @@ static FT_Outline_Funcs ft_outl_funcs = {
 };
 
 	
-static int readGlyphs(SWFFont font, FT_Face face)
+static void readGlyphs(SWFFont font, FT_Face face)
 {
 	int glyphCount = 0;
 	FT_UInt gindex;
