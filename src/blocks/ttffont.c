@@ -251,8 +251,7 @@ SWFFont loadSWFFontTTF(char *filename)
 	if( face->style_flags&FT_STYLE_FLAG_ITALIC ) 
 		font->flags |= SWF_FONT_ISITALIC;
 	
-	if(readGlyphs(font, face) < 0)
-		goto error_font;
+	readGlyphs(font, face); 
 	
 	ratio_EM = 1024.0 / face->units_per_EM;
 	font->ascent = (short)(face->ascender * ratio_EM);
@@ -263,8 +262,8 @@ SWFFont loadSWFFontTTF(char *filename)
 	FT_Done_Face(face);
 	FT_Done_FreeType(library);
 	return font;
-error_font:
-	destroySWFFont(font);
+//error_font:
+//	destroySWFFont(font);
 error_face:
 	FT_Done_Face(face);
 error_ft:
