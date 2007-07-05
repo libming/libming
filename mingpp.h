@@ -769,20 +769,11 @@ class SWFFont : public SWFBlock
   SWFFont()
     { this->font = newSWFFont(); }
 
-  SWFFont(FILE *file)
+  SWFFont(FILE *file) // deprecated 
     { this->font = loadSWFFontFromFile(file); }
 
   SWFFont(char *path)
-    { this->font = loadSWFFontFromFile(fopen(path, "rb")); }
-
-  SWFFont(const char *name)
-  {
-    if(strlen(name) > 4 &&
-       strcmp(name + strlen(name) - 4, ".fdb") == 0)
-      this->font = loadSWFFontFromFile(fopen(name, "rb"));
-    else
-      this->font = (c_SWFFont)newSWFBrowserFont(name); // minguts fix
-  }
+    { this->font = newSWFFont_fromFile(path); }
 
   virtual ~SWFFont()
     { destroySWFFont(/*(c_SWFBlock)*/this->font); }
