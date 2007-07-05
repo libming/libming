@@ -392,9 +392,10 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 /***** SWFFont *****/
 
 SWFFont newSWFFont();
+SWFFont newSWFFont_fromFile(char *filename);
+
 /* pull font definition from fdb (font def block) file */
-SWFFont loadSWFFontFromFile(FILE *file);
-SWFFont loadSWFFontTTF(char *filename);
+SWFFont loadSWFFontFromFile(FILE *file) __deprecated;
 void destroySWFFont(SWFFont font);
 
 float SWFFont_getStringWidth(SWFFont font, const unsigned char *string);

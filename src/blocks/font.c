@@ -32,6 +32,7 @@
 #include "libming.h"
 #include "shape.h"
 #include "fdbfont.h"
+#include "ttffont.h"
 
 
 // #define HAS_MMAP 1
@@ -287,6 +288,69 @@ newSWFFont()
 	font->shapes = NULL;
 
 	return font;
+}
+
+// file magic: fonts:0 string  \000\001\000\000\000    TrueType font data
+static inline int true_type_check(char *header)
+{
+	if(header[0] == 0 && 
+		header[1] == 1 && 
+		header[2] == 0 && 
+		header[3] == 0 &&
+		header[4] == 0)
+		return 1;
+	return 0;
+}
+
+static inline int fdb_check(char *header)
+{
+	if(header[0] == 'f' && 
+		header[1] == 'd' &&
+		header[2] == 'b' &&
+		header[3] == '0')
+		return 1;
+	return 0;
+}
+
+/* load a font from file
+ * This function creates a new SWFFont object from a font file. It accepts 
+ * and autodetects FDB and TTF fonts.
+ * returns a SWFFont object if a valid fontfile is found, NULL otherwise 
+ */
+SWFFont newSWFFont_fromFile(char *filename /* filename for fontfile */)
+{
+	FILE *file;
+	char header[5];
+	file = fopen(filename, "rb");	
+	if(file == NULL)
+	{	
+		SWF_warn("open font file failed\n");
+		return NULL;
+	}
+	
+	if(fread(header, 5, 1, file) < 1)
+	{
+		fclose(file);
+		return NULL;
+	}
+	rewind(file);
+
+	if(true_type_check(header))
+	{
+		fclose(file);
+		return loadSWFFontTTF(filename);
+	}
+	else if(fdb_check(header))
+	{
+		SWFFont font = loadSWFFontFromFile(file);
+		fclose(file);
+		return font;
+	}
+	else
+	{
+		SWF_warn("Unknown font file\n");
+		return NULL;
+	}
 }
 
 
@@ -733,6 +797,8 @@ SWFFont_getCharacterKern(SWFFont font,
 
 	return 0;
 }
+
+
 
 
 /*

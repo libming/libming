@@ -24,5 +24,5 @@
 #ifndef SWF_TTFFONT_H_INCLUDED
 #define SWF_TTFFONT_H_INCLUDED
 
-
+SWFFont loadSWFFontTTF(char *);
 #endif /* SWF_TTFFONT_H_INCLUDED */
