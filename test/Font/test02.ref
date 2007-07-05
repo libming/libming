@@ -1,5 +1,5 @@
 File version: 5
-File size: 447
+File size: 412
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -12,13 +12,13 @@ Block length: 3
 
 Offset: 25 (0x0019)
 Block type: 48 (SWF_DEFINEFONT2)
-Block length: 370
+Block length: 335
 
  FontID: 2
- FontFlagsHasLayout: 1
+ FontFlagsHasLayout: 0
  FontFlagsShiftJis: 0
  FontFlagsSmallText: 0
- FontFlagsFlagANSI: 1
+ FontFlagsFlagANSI: 0
  FontFlagsWideOffsets: 0
  FontFlagsWideCodes: 0
  FontFlagsFlagsItalics: 0
@@ -133,19 +133,8 @@ Block length: 370
  CodeTable[000]: 61
  CodeTable[001]: 62
  CodeTable[002]: 63
- FontAscent: 950
- FontDecent: 241
- FontLeading: 0
- FontAdvanceTable[000]: 273
- FontAdvanceTable[001]: 28a
- FontAdvanceTable[002]: 233
- FontBoundsable: (not used)
- RECT:  (61,-573)x(534,14):11
- RECT:  (93,-778)x(594,14):11
- RECT:  (56,-573)x(499,14):11
- KerningCount: 0
 
-Offset: 401 (0x0191)
+Offset: 366 (0x016e)
 Block type: 11 (SWF_DEFINETEXT)
 Block length: 32
 
@@ -166,7 +155,7 @@ Block length: 32
    GlyphIndex[0] = 0002    GlyphAdvance[0] = 00db
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 435 (0x01b3)
+Offset: 400 (0x0190)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -182,12 +171,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 443 (0x01bb)
+Offset: 408 (0x0198)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 445 (0x01bd)
+Offset: 410 (0x019a)
 Block type: 0 (SWF_END)
 Block length: 0
 

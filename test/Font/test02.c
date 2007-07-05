@@ -2,12 +2,10 @@
 
 int main()
 {
-	FILE *fontfile;
-	
 	SWFMovie m = newSWFMovie();
 	SWFText text = newSWFText();
 	
-	SWFFont font = newSWFFont_fromFile("../Media/font01.fdb");
+	SWFFont font = newSWFFont_fromFile("../Media/test.ttf");
 	if(font == NULL)
 		exit(1);
 	
@@ -19,7 +17,7 @@ int main()
 	
 	SWFMovie_add(m, text);
 	SWFMovie_nextFrame(m);
-	SWFMovie_save(m, "test01.swf");
+	SWFMovie_save(m, "test02.swf");
 
 	return 0;
 }

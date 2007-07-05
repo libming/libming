@@ -2,26 +2,21 @@
 
 int main()
 {
-	FILE *fontfile;
-	
 	SWFMovie *m = new SWFMovie();
-	SWFText *text = new SWFText();
+	SWFText *text = new SWFText(1);
 	
-	fontfile = fopen("../Media/font01.fdb", "rb");
-	if(fontfile == NULL)
-		return -1;
-	
-	SWFFont *font = new SWFFont(fontfile);
+	SWFFont *font = new SWFFont("../Media/test.ttf");
 	if(font == NULL)
 		return -1;
 	
 	text->setFont( font);
 	text->setColor( 0, 0, 0, 0xff);
 	text->setHeight( 20);
+	text->moveTo(100,100);
 	text->addString( "abc", NULL);
 	m->add(text);
 	m->nextFrame();
-	m->save("test01.swf");
+	m->save("test02.swf");
 
 	return 0;
 }

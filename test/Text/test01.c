@@ -15,9 +15,9 @@ int main()
 		exit(1);
 	
 	SWFText_setFont(text, font);
-	SWFText_addString(text, "abc", NULL);
 	SWFText_setColor(text, 0, 0, 0, 0xff);
 	SWFText_setHeight(text, 20);
+	SWFText_addString(text, "abc", NULL);
 	SWFMovie_add(m, text);
 	SWFMovie_nextFrame(m);
 	SWFMovie_save(m, "test01.swf");

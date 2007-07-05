@@ -1,5 +1,5 @@
 File version: 5
-File size: 439
+File size: 443
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -35,10 +35,9 @@ Block length: 370
  NumFillBits: 1
  NumLineBits: 0
  StyleChangeRecord:
-  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
-  StateFillStyle0: 0 StateMoveTo: 1
-   LineStyle: 0
-   FillStyle1: 1
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
    MoveBits: 10  MoveDeltaX: 351  MoveDeltaY: -281
  Curved EdgeRecord: 6 Control(-112,0) Anchor(-43,25)
  Curved EdgeRecord: 5 Control(-43,26) Anchor(0,61)
@@ -76,10 +75,9 @@ Block length: 370
  NumFillBits: 1
  NumLineBits: 0
  StyleChangeRecord:
-  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
-  StateFillStyle0: 0 StateMoveTo: 1
-   LineStyle: 0
-   FillStyle1: 1
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
    MoveBits: 10  MoveDeltaX: 498  MoveDeltaY: -279
  Curved EdgeRecord: 6 Control(0,-102) Anchor(-42,-57)
  Curved EdgeRecord: 6 Control(-41,-58) Anchor(-73,0)
@@ -110,10 +108,9 @@ Block length: 370
  NumFillBits: 1
  NumLineBits: 0
  StyleChangeRecord:
-  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
-  StateFillStyle0: 0 StateMoveTo: 1
-   LineStyle: 0
-   FillStyle1: 1
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
    MoveBits: 11  MoveDeltaX: 499  MoveDeltaY: -538
  Straight EdgeRecord: (6) - (0, 86)
  Curved EdgeRecord: 5 Control(-39,-22) Anchor(-39,-10)
@@ -143,31 +140,32 @@ Block length: 370
  FontAdvanceTable[001]: 28a
  FontAdvanceTable[002]: 233
  FontBoundsable: (not used)
- RECT:  (-1024,-1024)x(1024,1024):12
- RECT:  (-1024,-1024)x(1024,1024):12
- RECT:  (-1024,-1024)x(1024,1024):12
+ RECT:  (61,-573)x(534,14):11
+ RECT:  (93,-778)x(594,14):11
+ RECT:  (56,-573)x(499,14):11
  KerningCount: 0
 
 Offset: 401 (0x0191)
 Block type: 33 (SWF_DEFINETEXT2)
-Block length: 24
+Block length: 28
 
  CharacterID: 1
- RECT:  (-240,-240)x(538,240):11
+ RECT:  (0,-303)x(691,5):11
  Matrix:    TranslateX      0 TranslateY      0
  GlyphBits: 2
  AdvanceBits: 9
  TextRecords: 2
- TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 1   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
+ TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 1   StyleFlagHasColor: 1   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
   FontID: 2
-  TextHeight: 240
+ RGBA: ( 0, 0, 0,ff)
+  TextHeight: 400
   GlyphCount: 3
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 0092
-   GlyphIndex[0] = 0001    GlyphAdvance[0] = 0098
-   GlyphIndex[0] = 0002    GlyphAdvance[0] = 0083
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 00f4
+   GlyphIndex[0] = 0001    GlyphAdvance[0] = 00fd
+   GlyphIndex[0] = 0002    GlyphAdvance[0] = 00db
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 427 (0x01ab)
+Offset: 431 (0x01af)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -183,12 +181,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 435 (0x01b3)
+Offset: 439 (0x01b7)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 437 (0x01b5)
+Offset: 441 (0x01b9)
 Block type: 0 (SWF_END)
 Block length: 0
 
