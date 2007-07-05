@@ -471,7 +471,7 @@ SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a)
 
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
-
+	
 	textRecord->flags |= SWF_TEXT_HAS_COLOR;
 	textRecord->r = r;
 	textRecord->g = g;

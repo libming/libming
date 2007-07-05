@@ -177,8 +177,6 @@ static inline int readFontLayout(SWFInput input, SWFFont font)
 
 	font->advances = (short *)malloc(
 			font->nGlyphs * sizeof(short));
-	font->bounds = (struct SWFRect_s *)malloc(
-			font->nGlyphs * sizeof(struct SWFRect_s));
 	font->ascent = SWFInput_getSInt16(input);
 	font->descent = SWFInput_getSInt16(input);
 	font->leading = SWFInput_getSInt16(input);
@@ -187,9 +185,10 @@ static inline int readFontLayout(SWFInput input, SWFFont font)
 	for (i = 0; i < font->nGlyphs; ++i )
 		font->advances[i] = SWFInput_getSInt16(input);
 
-	/* get bounds */
+	// temp hack
+	struct SWFRect_s __rect;
 	for (i = 0; i < font->nGlyphs; ++i )
-		readBounds(input, &font->bounds[i]);
+		readBounds(input, &__rect);
 
 		/* get kern table */
 	font->kernCount = SWFInput_getUInt16(input);

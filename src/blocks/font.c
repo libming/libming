@@ -172,8 +172,7 @@ completeSWFFontCharacter(SWFBlock block)
 				font->advances[inst->codeTable[i]]);
 	
 		for (i = 0; i < inst->nGlyphs; ++i)
-		{	SWFOutput_writeRect(buffer, 
-				&font->bounds[inst->codeTable[i]]);
+		{	SWFOutput_writeRect(buffer, SWFFont_getGlyphBounds(font, inst->codeTable[i]));
 			SWFOutput_byteAlign(buffer);
 		}
 		SWFOutput_writeUInt16(buffer, 0); /* no kerning */
@@ -220,9 +219,6 @@ destroySWFFont(SWFFont font)
 		if ( font->codeToGlyph.charMap != NULL )
 			free(font->codeToGlyph.charMap);
 	}
-
-	if ( font->bounds != NULL )
-		free(font->bounds);
 
 	if ( font->name != NULL )
 		free(font->name);
@@ -280,7 +276,6 @@ newSWFFont()
 	font->glyphToCode = NULL;
 	
 	font->advances = NULL;
-	font->bounds = NULL;
 
 	font->ascent = 0;
 	font->descent = 0;
@@ -683,7 +678,8 @@ SWFFont_getGlyphBounds(SWFFont font, unsigned short glyphcode)
 	if ( glyphcode >= font->nGlyphs )
 		SWF_error("SWFFont_getGlyphBounds: glyphcode >= nGlyphs");
 
-	return &font->bounds[glyphcode];
+	// return &font->bounds[glyphcode];
+	return SWFCharacter_getBounds(CHARACTER(font->shapes[glyphcode])); // &font->bounds[glyphcode];
 }
 
 

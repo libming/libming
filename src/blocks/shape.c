@@ -287,8 +287,8 @@ SWFOutput_writeGlyphShape(SWFOutput out, SWFShape shape)
 	{
 		if(!styleDone && shape->records[i].type == SHAPERECORD_STATECHANGE)
 		{
-			shape->records[i].record.stateChange->flags |=  SWF_SHAPE_LINESTYLEFLAG | SWF_SHAPE_FILLSTYLE1FLAG;
-			shape->records[i].record.stateChange->rightFill = 1;
+			shape->records[i].record.stateChange->flags |= SWF_SHAPE_FILLSTYLE0FLAG;
+			shape->records[i].record.stateChange->leftFill = 1;
 			styleDone = 1;
 		}	
 	

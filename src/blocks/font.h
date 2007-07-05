@@ -79,7 +79,6 @@ struct SWFFont_s
 
 	/* glyph metrics */
 	short* advances;
-	struct SWFRect_s* bounds;
 
 	/* font metrics */
 	short ascent;
@@ -87,7 +86,7 @@ struct SWFFont_s
 	short leading;
 	
 	union
- 	{
+	{
 		byte* charMap;
 		unsigned short** wideMap; /* array of 256 arrays of 256 shorts */
 	} codeToGlyph;

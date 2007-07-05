@@ -138,7 +138,6 @@ static void readGlyphs(SWFFont font, FT_Face face)
 	font->shapes = (SWFShape *)malloc(sizeof(SWFShape) * face->num_glyphs);
 	font->advances = (short *)malloc(sizeof(short) * face->num_glyphs);
 	font->glyphToCode = (unsigned short *)malloc(sizeof(unsigned short) * face->num_glyphs);
-	font->bounds = (struct SWFRect_s *)malloc(sizeof(struct SWFRect_s) * face->num_glyphs);
 	charcode = FT_Get_First_Char(face, &gindex );
 	while ( gindex != 0 ) 
 	{
@@ -164,11 +163,6 @@ static void readGlyphs(SWFFont font, FT_Face face)
 			font->flags |= SWF_FONT_WIDECODES;
 		font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
 
-		// hmm ? 
-		font->bounds[glyphCount].minX = -1024;
-		font->bounds[glyphCount].maxX = 1024;
-		font->bounds[glyphCount].minY = -1024;
-		font->bounds[glyphCount].maxY = 1024;
 		charcode = FT_Get_Next_Char(face, charcode, &gindex);
 		glyphCount++;
 	}
@@ -223,7 +217,7 @@ SWFFont loadSWFFontTTF(char *filename)
 	
 	FT_Set_Charmap(face, charmap);
 	font = newSWFFont();
-	font->flags = SWF_FONT_HASLAYOUT;
+	font->flags = 0;
 	font->name = strdup(face->family_name);
 	font->langCode = 0;
 	if( charmap->platform_id == TT_PLATFORM_APPLE_UNICODE ) 
