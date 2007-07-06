@@ -409,13 +409,15 @@ static int onFrame(SWFDisplayItem item, SWFBlockList blocklist)
 {
         int frame;
 	SWFPlaceObject2Block placeVideo;
+	SWFVideoStream stream;
+	SWFBlock video;
 
 	/* if item is new -> onInit already inserted a frame */	
 	if(item->flags != 0)
 		return 0;
 
-	SWFVideoStream stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);                
-	SWFBlock video = SWFVideoStream_getVideoFrame(stream);
+	stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);                
+	video = SWFVideoStream_getVideoFrame(stream);
 	if(video != NULL)
 	{
 		/* well it isn't really clear why we need the place-block here

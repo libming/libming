@@ -134,9 +134,8 @@ parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
 int
 parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec, int end)
 {
-  byteAlign ();
-
   int actionEnd, start;
+  byteAlign ();
 
   start = fileOffset;
   bcarec->CondActionSize = readUInt16 (f);
@@ -795,10 +794,10 @@ void
 parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level, int len)
 {
   int fillBits, lineBits;
-	
+  int end;	
   byteAlign ();
 
-  int end = fileOffset + len;
+  end = fileOffset + len;
   shape->NumFillBits = fillBits = readBits (f, 4);
   shape->NumLineBits = lineBits = readBits (f, 4);
   shape->ShapeRecords =
@@ -1602,8 +1601,9 @@ parseSWF_DEFINEFONT (FILE * f, int length)
 {
   int i;
   UI16  firstOffset;
+  int end;
   PAR_BEGIN (SWF_DEFINEFONT);
-  int end = fileOffset + length;
+  end = fileOffset + length;
 
   parserrec->FontID = readUInt16 (f);
   firstOffset = readUInt16 (f);
@@ -2032,14 +2032,15 @@ parseSWF_DEFINELOSSLESS2 (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEMORPHSHAPE (FILE * f, int length)
 {
+  int end, endEdges;
   PAR_BEGIN (SWF_DEFINEMORPHSHAPE);
-  int end = fileOffset + length;
+  end = fileOffset + length;
   parserrec->CharacterID = readUInt16 (f);
   parseSWF_RECT (f, &(parserrec->StartBounds));
   parseSWF_RECT (f, &(parserrec->EndBounds));
   
   parserrec->Offset = readUInt32 (f);
-  int endEdges = fileOffset + parserrec->Offset;
+  endEdges = fileOffset + parserrec->Offset;
 
   parseSWF_MORPHFILLSTYLES (f, &(parserrec->MorphFillStyles));
   parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles), 1);
@@ -2056,8 +2057,9 @@ parseSWF_DEFINEMORPHSHAPE (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_DEFINEMORPHSHAPE2 (FILE * f, int length)
 {
+  int end, endEdges;
   PAR_BEGIN (SWF_DEFINEMORPHSHAPE2);
-  int end = fileOffset + length;
+  end = fileOffset + length;
   
   parserrec->CharacterID = readUInt16 (f);
   parseSWF_RECT (f, &(parserrec->StartBounds));
@@ -2069,7 +2071,7 @@ parseSWF_DEFINEMORPHSHAPE2 (FILE * f, int length)
   parserrec->UsesScalingStrokes = readBits(f, 1);
   
   parserrec->Offset = readUInt32 (f);
-  int endEdges = fileOffset + parserrec->Offset + 4;
+  endEdges = fileOffset + parserrec->Offset + 4;
   parseSWF_MORPHFILLSTYLES (f, &(parserrec->MorphFillStyles));
   parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles), 2);
   
@@ -2755,10 +2757,10 @@ parseSWF_SOUNDSTREAMHEAD2 (FILE * f, int length)
 SWF_Parserstruct *
 parseSWF_STARTSOUND (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_STARTSOUND);
   SWF_SOUNDINFO *si;
   int i;
-
+  PAR_BEGIN (SWF_STARTSOUND);
+ 
   parserrec->SoundId = readUInt16 (f);
   si=&(parserrec->SoundInfo);
   si->Reserved = readBits (f, 2);

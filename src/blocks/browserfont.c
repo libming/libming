@@ -48,10 +48,10 @@ static void
 finishBrowserFont(SWFBrowserFont font)
 {
 	unsigned int i;
-
+	SWFOutput out;
 	SWF_assert(BLOCK(font)->swfVersion);
 
-	SWFOutput out = newSWFOutput();
+	out = newSWFOutput();
 	font->out = out;	
 	
 	SWFOutput_writeUInt16(out, CHARACTERID(font));

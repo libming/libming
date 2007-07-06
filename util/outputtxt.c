@@ -1278,8 +1278,8 @@ outputSWF_ZONERECORD(int i, struct SWF_ZONERECORD *zone)
 void 
 outputSWF_DEFINEFONTALIGNZONES (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN (SWF_DEFINEFONTALIGNZONES);
   int i;
+  OUT_BEGIN (SWF_DEFINEFONTALIGNZONES);
 
   iprintf("  FontID: %d\n", sblock->FontID);
   iprintf("  CSMTableHint %d\n", sblock->CSMTableHint);

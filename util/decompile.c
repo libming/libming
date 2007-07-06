@@ -1474,8 +1474,9 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 int
 decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
 {
+    struct SWF_ACTIONPUSHPARAM *data;
     OUT_BEGIN2(SWF_ACTIONSTOREREGISTER);
-    struct SWF_ACTIONPUSHPARAM *data=peek();
+    data=peek();
 
     if (!regs[sact->Register] || sact->Register==0 )	// ===internal===
     {
@@ -1701,8 +1702,9 @@ decompileJUMP(int n, SWF_ACTION *actions,int maxn)
 {
     int i=0,j=0;
     int offSave;
+    struct SWF_ACTIONIF *sactif;
     OUT_BEGIN2(SWF_ACTIONJUMP);
-    struct SWF_ACTIONIF *sactif=NULL;
+    sactif=NULL;
 
     if( isLogicalOp(n+1, actions, maxn) ||
         ( (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) &&
@@ -2060,10 +2062,10 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
 int
 decompileIF(int n, SWF_ACTION *actions,int maxn)
 {
-    int j,i=0;
-    OUT_BEGIN2(SWF_ACTIONIF);
     int offSave;
-struct strbufinfo origbuf;
+    int j,i=0;
+    struct strbufinfo origbuf;
+    OUT_BEGIN2(SWF_ACTIONIF);
     /*
      * IF is used in various way to implement different types
      * of loops. We try to detect these different types of loops
@@ -2445,10 +2447,10 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions,int maxn,int is_type2)
     int i,j,k,m,r;
     struct SWF_ACTIONPUSHPARAM *myregs[ 256 ];
     struct _stack *StackSave;    
-
-    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
-    struct SWF_ACTIONDEFINEFUNCTION2 *sactv2 = (struct SWF_ACTIONDEFINEFUNCTION2*)sact;
+    struct SWF_ACTIONDEFINEFUNCTION2 *sactv2;
     struct strbufinfo origbuf;
+    OUT_BEGIN2(SWF_ACTIONDEFINEFUNCTION);
+    sactv2 = (struct SWF_ACTIONDEFINEFUNCTION2*)sact;
 
     #ifdef DEBUG
     println("/* function followed by OP %x */", actions[n+1].SWF_ACTIONRECORD.ActionCode);
@@ -2780,9 +2782,10 @@ decompileDELETE(int n, SWF_ACTION *actions,int maxn,int is_type2)
 int
 decompileSETTARGET(int n, SWF_ACTION *actions,int maxn,int is_type2)
 {
-    OUT_BEGIN2(SWF_ACTIONSETTARGET);
     int action_cnt=0;
-    char *name = is_type2 ? getString(pop()) : sact->TargetName;
+    char *name;
+    OUT_BEGIN2(SWF_ACTIONSETTARGET);
+    name = is_type2 ? getString(pop()) : sact->TargetName;
     if (*name)
     {
      INDENT

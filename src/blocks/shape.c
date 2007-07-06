@@ -1003,8 +1003,9 @@ SWFShape_addGradientFillStyle(SWFShape shape, SWFGradient gradient, byte flags)
 SWFFillStyle
 SWFShape_addBitmapFillStyle(SWFShape shape, SWFBitmap bitmap, byte flags)
 {
+	SWFFillStyle fill;
 	SWFCharacter_addDependency((SWFCharacter)shape, (SWFCharacter)bitmap);
-	SWFFillStyle fill = newSWFBitmapFillStyle(bitmap, flags);
+	fill = newSWFBitmapFillStyle(bitmap, flags);
 	if(addFillStyle(shape, fill) < 0)
 	{
 		destroySWFFillStyle(fill);

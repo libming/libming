@@ -174,6 +174,7 @@ static SWFShape readGlyphShape(SWFInput input)
 static inline int readFontLayout(SWFInput input, SWFFont font)
 {
 	int i;
+	struct SWFRect_s __rect;
 
 	font->advances = (short *)malloc(
 			font->nGlyphs * sizeof(short));
@@ -186,7 +187,6 @@ static inline int readFontLayout(SWFInput input, SWFFont font)
 		font->advances[i] = SWFInput_getSInt16(input);
 
 	// temp hack
-	struct SWFRect_s __rect;
 	for (i = 0; i < font->nGlyphs; ++i )
 		readBounds(input, &__rect);
 

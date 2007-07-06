@@ -56,6 +56,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <stdarg.h>
 #include <errno.h>
 #include <unistd.h>
@@ -553,6 +554,10 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.36  2007/07/06 17:53:14  krechert
+ * fixed declaration after statement (C90)
+ * makes ming compile on MSVC again
+ *
  * Revision 1.35  2007/04/30 09:58:32  strk
  * Don't include getopt.h if it's not found. Patch by Nils Goroll <nils.goroll@mcs.de>.
  *
