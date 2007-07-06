@@ -90,6 +90,20 @@ void swf5ParseInit(const char *script, int debug, int version)
   swfVersion = version;
 }
 
+enum yytokentype read_int (const char *text, YYSTYPE *num)
+{
+  unsigned int i;
+
+  i = strtoul (text, NULL, 0);
+  if (i > 0x7FFFFFFF) {
+    /* note: this catches ERANGE, too */
+    num->doubleVal = atof(yytext);
+    return DOUBLE;
+  }
+  num->intVal = i;
+  return INTEGER;
+}
+
 %}
 
 %s asm
@@ -122,12 +136,9 @@ EXPONENT [eE][-+]?{DIGIT}+
 	BEGIN(AS_V6);
  }
 
-0x{HEXDIGIT}+		{ count(); swf5lval.intVal = strtoul(yytext, NULL, 0);
-				return INTEGER;	}
-0{OCTDIGIT}+		{ count(); swf5lval.intVal = strtoul(yytext, NULL, 0);
-				return INTEGER; }
-{DIGIT}+		{ count(); swf5lval.intVal = atoi(yytext);
-				return INTEGER;	}
+0x{HEXDIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
+0{OCTDIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
+{DIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
 {DIGIT}+"."{DIGIT}*{EXPONENT}?	{ count(); swf5lval.doubleVal = atof(yytext);
 				return DOUBLE; }
 {DIGIT}+*{EXPONENT}?		{ count(); swf5lval.intVal = atof(yytext);
