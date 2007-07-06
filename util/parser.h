@@ -50,8 +50,6 @@ struct Movie
 static inline void 
 Movie_addFontInfo(struct Movie *m, int ID, int count)
 {
-  return;
-  printf("numFonts %i, fonts %p\n", m->numFonts, m->fonts);
   m->fonts = realloc(m->fonts, (m->numFonts + 1) * sizeof(struct FontInfo));
   m->fonts[m->numFonts].ID = ID;
   m->fonts[m->numFonts].GlyphCount = count;

@@ -1256,10 +1256,36 @@ outputSWF_CSMTEXTSETTINGS (SWF_Parserstruct * pblock)
 }
 
 void 
+outputSWF_ZONEDATA(int j, struct SWF_ZONEDATA *data)
+{
+  iprintf("  ZoneData: %i\n", j);
+  iprintf("    AlignmentCoordinate %d\n", data->AlignmentCoordinate);
+  iprintf("    Range %d\n", data->Range);
+}
+
+void 
+outputSWF_ZONERECORD(int i, struct SWF_ZONERECORD *zone)
+{
+	int j;
+	iprintf("ZoneRecord %d\n", i);
+	iprintf("  NumZoneData %d\n", zone->NumZoneData);
+	for(j = 0; j < zone->NumZoneData; j++)
+		outputSWF_ZONEDATA(j, zone->ZoneData +i);
+	
+	iprintf("  ZoneMask X %d, Y %d\n", zone->ZoneMaskX, zone->ZoneMaskY);
+}
+
+void 
 outputSWF_DEFINEFONTALIGNZONES (SWF_Parserstruct * pblock)
 {
-  // OUT_BEGIN (SWF_DEFINEFONTALIGNZONES);
+  OUT_BEGIN (SWF_DEFINEFONTALIGNZONES);
+  int i;
 
+  iprintf("  FontID: %d\n", sblock->FontID);
+  iprintf("  CSMTableHint %d\n", sblock->CSMTableHint);
+  iprintf("  GlyphCount %d\n", sblock->GlyphCount);
+  for(i = 0; i < sblock->GlyphCount; i++)
+    outputSWF_ZONERECORD(i, sblock->ZoneTable + i);
 }
 
 void
