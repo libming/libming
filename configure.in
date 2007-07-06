@@ -291,7 +291,7 @@ if test -n "${PNGLIB}"; then
  	AC_DEFINE(USE_PNG, [1], [Use png library])
 fi
 
-CFLAGS="$CFLAGS -Wall"
+CFLAGS="$CFLAGS -Wall -Wdeclaration-after-statement"
 MACHINE=`uname -m`
 if test "$MACHINE" = "x86_64"; then
 	CFLAGS="$CFLAGS -fPIC"
