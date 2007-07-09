@@ -109,6 +109,10 @@ typedef enum
   SWF_FILEATTRIBUTES            = 69,
   SWF_METADATA                  = 77,
 
+  /* SWF9 tags */
+  SWF_SYMBOLCLASS               = 76,
+  SWF_DOABCDEFINE               = 82,
+
   /* Unconfirmed tags */
   SWF_REFLEX			= 777,
 
