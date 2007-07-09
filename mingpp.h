@@ -42,6 +42,7 @@ extern "C"
   #define SWFMorph        c_SWFMorph
   #define SWFText         c_SWFText
   #define SWFFont         c_SWFFont
+  #define SWFBrowserFont  c_SWFBrowserFont
   #define SWFTextField    c_SWFTextField
   #define SWFAction       c_SWFAction
   #define SWFButton       c_SWFButton
@@ -74,6 +75,7 @@ extern "C"
   #undef SWFGradient
   #undef SWFMorph
   #undef SWFFont
+  #undef SWFBrowserFont
   #undef SWFText
   #undef SWFTextField
   #undef SWFAction
@@ -130,8 +132,7 @@ class SWFInput
 class SWFBlock
 {
  public:
-  virtual c_SWFBlock getBlock()
-    { return NULL; }
+  virtual c_SWFBlock getBlock() = 0;
 };
 
 /*  SWFCharacter  */
@@ -798,6 +799,23 @@ class SWFFont : public SWFBlock
   SWF_DECLAREONLY(SWFFont);
 };
 
+/* SWFBrowserFont */
+class SWFBrowserFont : public SWFBlock
+{
+ public:
+  c_SWFBrowserFont bfont;
+  
+  SWFBrowserFont(char *name)
+    { this->bfont = newSWFBrowserFont(name); }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->bfont; }
+
+  virtual ~SWFBrowserFont()
+    { destroySWFBrowserFont(this->bfont); }
+  
+  SWF_DECLAREONLY(SWFBrowserFont);
+};
 
 /*  SWFShape  */
 
