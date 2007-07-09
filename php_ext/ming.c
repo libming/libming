@@ -2327,7 +2327,7 @@ PHP_METHOD(swfmovie, add)
 		block = (SWFBlock) getCharacter(*zchar TSRMLS_CC);
 	}
 
-	item = SWFMovie_add(movie, block);
+	item = SWFMovie_add_internal(movie, block);
 
 	if (item != NULL) {
 		/* try and create a displayitem object */
