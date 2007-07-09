@@ -10,7 +10,8 @@ SUBDIRS = Movie \
 	FillStyle \
 	Font	\
 	Text	\
-	Bitmap
+	Bitmap	\
+	BrowserFont
 
 EXTRA_DIST = \
 	dotests.pl \
