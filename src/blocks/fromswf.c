@@ -383,6 +383,18 @@ static void fillandlinestyles();
 static void linestyle();
 static void shape();
 
+static int drop_tag(TAG tp)
+{
+	switch(tp->type)
+	{
+		case SWF_FILEATTRIBUTES:
+		case SWF_METADATA:
+			return 1;
+		default:
+			return 0;
+	}
+}
+
 static int handle_tag(TAG tp)
 {	int id;
 	int displaylist = 0;
@@ -1176,6 +1188,13 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 	free(tp);
 	do
 	{	tp = readtag_file(swf);
+		if(drop_tag(tp))
+		{
+			if(tp->alloced)
+				free(tp->datbuf);
+			free(tp);
+			continue;
+		}
 		todisplay = handle_tag(tp);
 		type = tp->type;
 		out = todisplay ? display : defines;
