@@ -31,6 +31,15 @@
 #include FT_TRUETYPE_IDS_H
 #include FT_OUTLINE_H
 
+// Methods of FT_Outline_Funcs take a 'const FT_Vector*' in 2.2
+// and a non-const one in 2.1, so we use an FT_CONST macro to
+// support both
+#if FREETYPE_MAJOR == 2 && FREETYPE_MINOR < 2
+#define FT_CONST 
+#else
+#define FT_CONST const
+#endif
+
 #include "blocks/blocktypes.h"
 #include "parser.h"
 #include "swfoutput.h"
@@ -87,7 +96,7 @@ static int last_x,last_y;
 
 static int
 outl_moveto(
-	const FT_Vector *to,
+	FT_CONST FT_Vector *to,
 	void *unused
 )
 {
@@ -119,7 +128,7 @@ int	dy = -(int)(to->y*ratio_EM);
 
 static int
 outl_lineto(
-	const FT_Vector *to,
+	FT_CONST FT_Vector *to,
 	void *unused
 )
 {
@@ -158,8 +167,8 @@ int	dy = y-last_y;
 
 static int
 outl_conicto(
-	const FT_Vector *ctl,
-	const FT_Vector *to,
+	FT_CONST FT_Vector *ctl,
+	FT_CONST FT_Vector *to,
 	void *unused
 )
 {
@@ -195,9 +204,9 @@ int	dcy = cy-last_y;
 
 static int
 outl_cubicto(
-	const FT_Vector *ctl1,
-	const FT_Vector *ctl2,
-	const FT_Vector *to,
+	FT_CONST FT_Vector *ctl1,
+	FT_CONST FT_Vector *ctl2,
+	FT_CONST FT_Vector *to,
 	void *unused
 )
 {

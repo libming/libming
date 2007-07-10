@@ -33,6 +33,15 @@
 #include FT_TRUETYPE_IDS_H
 #include FT_OUTLINE_H
 
+// Methods of FT_Outline_Funcs take a 'const FT_Vector*' in 2.2
+// and a non-const one in 2.1, so we use an FT_CONST macro to
+// support both
+#if FREETYPE_MAJOR == 2 && FREETYPE_MINOR < 2
+#define FT_CONST 
+#else
+#define FT_CONST const
+#endif
+
 #include "shape.h"
 #include "font.h"
 
@@ -43,7 +52,7 @@ struct outl_data
 }; 
 
 static int
-outl_moveto(const FT_Vector *to, void *user)
+outl_moveto(FT_CONST FT_Vector *to, void *user)
 {
 	struct outl_data *data = (struct outl_data *)user;
 	SWFShape shape = data->shape;
@@ -58,7 +67,7 @@ outl_moveto(const FT_Vector *to, void *user)
 }
 
 static int
-outl_lineto(const FT_Vector *to, void *user)
+outl_lineto(FT_CONST FT_Vector *to, void *user)
 {
 	struct outl_data *data = (struct outl_data *)user;
 	SWFShape shape = data->shape;
@@ -72,7 +81,7 @@ outl_lineto(const FT_Vector *to, void *user)
 }
 
 static int
-outl_conicto(const FT_Vector *ctl, const FT_Vector *to, void *user)
+outl_conicto(FT_CONST FT_Vector *ctl, FT_CONST FT_Vector *to, void *user)
 {
 	struct outl_data *data = (struct outl_data *)user;
 	SWFShape shape = data->shape;
@@ -89,8 +98,8 @@ outl_conicto(const FT_Vector *ctl, const FT_Vector *to, void *user)
 }
 
 static int
-outl_cubicto(const FT_Vector *ctl1, const FT_Vector *ctl2,
-             const FT_Vector *to, void *user)
+outl_cubicto(FT_CONST FT_Vector *ctl1, FT_CONST FT_Vector *ctl2,
+             FT_CONST FT_Vector *to, void *user)
 {
 	FT_Vector midpnt;
 	int cx, cy, ax, ay;
