@@ -467,7 +467,7 @@ SWFFontCharacter_addCharToTable(SWFFontCharacter font, unsigned short c)
 
 	p = findCodeValue(c, font->codeTable, 0, font->nGlyphs);
 
-	if ( font->codeTable != NULL && font->codeTable[p] == c )
+	if ( font->codeTable != NULL && p != font->nGlyphs && font->codeTable[p] == c )
 		return;
 
 	if ( font->nGlyphs % CODETABLE_INCREMENT == 0 )
