@@ -18,7 +18,8 @@ AS_TESTS = \
 	GotoFrame.as	\
 	logor.as 	\
 	targetPath.as	\
-	FunctionInLoop.as
+	FunctionInLoop.as \
+	newline_comment.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -32,7 +33,8 @@ EXTRA_DIST = 		\
 	logor.ref	\
 	GotoFrame.ref	\
 	targetPath.ref  \
-	FunctionInLoop.ref
+	FunctionInLoop.ref \
+	newline_comment.ref \
 	$(AS_TESTS)
 
 CLEANFILES = *.pp *.swf
