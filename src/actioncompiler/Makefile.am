@@ -53,13 +53,13 @@ lex.swf5.c: $(srcdir)/swf5compiler.flex swf5compiler.tab.h
 	$(LEX) -Pswf5 $(srcdir)/swf5compiler.flex
 
 swf4compiler.tab.c: $(srcdir)/swf4compiler.y
-	bison -p swf4 $(srcdir)/swf4compiler.y
+	$(YACC) -p swf4 $(srcdir)/swf4compiler.y
 
 swf4compiler.tab.h: $(srcdir)/swf4compiler.y
-	bison --defines $(DEBUG) -p swf4 $(srcdir)/swf4compiler.y
+	$(YACC) --defines $(DEBUG) -p swf4 $(srcdir)/swf4compiler.y
 
 swf5compiler.tab.c: $(srcdir)/swf5compiler.y
-	bison -p swf5 $(srcdir)/swf5compiler.y
+	$(YACC) -p swf5 $(srcdir)/swf5compiler.y
 
 swf5compiler.tab.h: $(srcdir)/swf5compiler.y
-	bison --defines $(DEBUG) -p swf5 $(srcdir)/swf5compiler.y
+	$(YACC) --defines $(DEBUG) -p swf5 $(srcdir)/swf5compiler.y
