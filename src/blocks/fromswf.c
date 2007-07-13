@@ -1168,7 +1168,7 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 	SWFPrebuilt deps;
 	TAG tp;
 	struct swfile *swf;
-	int type, todisplay;
+	int type = 0, todisplay;
 	
 	swf = openswf(input);
 	if ( ! swf ) return NULL;
@@ -1188,6 +1188,7 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 	free(tp);
 	do
 	{	tp = readtag_file(swf);
+		type = tp->type;
 		if(drop_tag(tp))
 		{
 			if(tp->alloced)
@@ -1196,7 +1197,6 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 			continue;
 		}
 		todisplay = handle_tag(tp);
-		type = tp->type;
 		out = todisplay ? display : defines;
 		SWFOutput_writeBuffer(out, tp->hdr, tp->hdrlen);
 		if(tp->size)
