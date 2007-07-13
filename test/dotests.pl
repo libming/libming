@@ -123,11 +123,23 @@ sub doswftest($$$)
 	}
 
 	# Set some vaiable to ensure we pick up the just build library & modules
-	if( !$ENV{'USE_INSTALLED'} ) {
+	if( !$ENV{'USE_INSTALLED'} )
+	{
 		$ENV{'LD_LIBRARY_PATH'}=$TOP_BUILDDIR."/src/.libs";
-		$ENV{'PYTHONPATH'}=$TOP_BUILDDIR."/py_ext/build/lib.linux-i686-2.4";
+
+		# Find the proper PYTHONPATH
+		$ENV{'PYTHONPATH'} = "";
+		my $pattern = $TOP_BUILDDIR."/py_ext/build/lib*";
+		foreach (`ls -d $pattern`) {
+			chop;
+			$ENV{'PYTHONPATH'} .= ":".$_;
+		}
+
+		# Set the proper PERL5LIB 
 		$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/lib:".$TOP_BUILDDIR."/perl_ext/blib/arch/";
-	} else {
+	}
+	else
+	{
 		# Try to avoid the autogoo and run the test w/ installed libs
 		if( -x ".libs/".$testbuilder ) {
 			$testbuilder=".libs/".$testbuilder
