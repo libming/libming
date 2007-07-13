@@ -1,6 +1,351 @@
-2007-05-17 17:54  krechert
+2007-07-13 10:12  strk
 
-	* src/blocks/: input.c, input.h: readBits and friends for SWFInput
+	* src/actioncompiler/Makefile.am: Use $(YACC), not verbatim 'bison'
+
+2007-07-13 10:06  strk
+
+	* test/dotests.pl: Scan the build tree to find appropriate name of
+	  directory for proper setting of PYTHONPATH
+
+2007-07-13 09:41  krechert
+
+	* src/blocks/fromswf.c: bugfix: type might be uninitialized
+
+2007-07-13 05:56  krechert
+
+	* configure.in, macros/Makefile.am, macros/python.m4: propper
+	  python-dev checks
+
+2007-07-11 09:55  krechert
+
+	* test/actionscript/: Makefile.am, newline_comment.as,
+	  newline_comment.ref: tried to validate bug: [ 1515113 ] \n in
+	  comments blows AS compiler
+
+2007-07-11 09:46  krechert
+
+	* src/blocks/font.c: bugfix #1091659
+
+	  In the function addCharToTable, I guess there's a problem: you do
+	  'p = findCodeValue(c, font->codeTable, 0, font->nGlyphs);' which
+	  returns the index p of font->codeTable where the character c is.
+	  And if c is not found, then it returns the index where to add it
+	  (that is, at the end of font->codeTable).
+
+	  Then, you make a test to really knows if the character is at the
+	  'p' position: 'if (font->codeTable != NULL && font->codeTable[p]
+	  == c)' If it is found, the function returns. But this may be bad
+	  because as codeTable has 'p' elements (that is, the last index is
+	  'p-1'), you try to read somewhere in the memory.  And thus, if
+	  the test comes true, the function returns without inserting the
+	  new character.
+
+	  I guess you can correct this by adding another test: 'if
+	  (font->codeTable != NULL && p != font->nGlyphs &&
+	  font->codeTable[p] == c)'. Like that, the character is added.
+
+	  Submitted by: T JuJu
+
+2007-07-10 18:29  krechert
+
+	* src/blocks/fromswf.c: fileattributes and metadata should be
+	  unique in a movie closes:
+	  http://bugs.libming.org/show_bug.cgi?id=23
+
+2007-07-10 16:22  krechert
+
+	* src/blocks/ttffont.c, util/ttftofft.c: fix compiler warning
+
+2007-07-09 10:32  strk
+
+	* src/blocks/blocktypes.h: Add tag ids for SYMBOLCLASS and
+	  DOABCDEFINE (SWF9)
+
+2007-07-09 08:45  krechert
+
+	* configure.in, test/Makefile.am, test/BrowserFont/Makefile.am,
+	  test/BrowserFont/TestList, test/BrowserFont/test01-cxx.C,
+	  test/BrowserFont/test01.c, test/BrowserFont/test01.ref: simple
+	  BrowserFont testcase
+
+2007-07-09 08:22  krechert
+
+	* test/Font/.cvsignore: update .cvsignore
+
+2007-07-09 08:20  krechert
+
+	* mingpp.h: make SWFBlock abstract use separate SWFBrowserFont
+	  class
+
+2007-07-09 05:42  krechert
+
+	* php_ext/ming.c: use new internal api
+
+2007-07-06 16:34  krechert
+
+	* src/actioncompiler/swf5compiler.flex: Ming needs to autoconvert
+	  big ints to double by Benjamin Otte <otte@gnome.org>
+
+2007-07-06 14:00  krechert
+
+	* configure.in: warn for declaration after statement
+
+2007-07-06 13:53  krechert
+
+	* src/displaylist.c, src/movie.c, src/blocks/browserfont.c,
+	  src/blocks/fdbfont.c, src/blocks/flv.c, src/blocks/shape.c,
+	  src/blocks/videostream.c, util/decompile.c, util/makeswf.c,
+	  util/outputtxt.c, util/parser.c: fixed declaration after
+	  statement (C90) makes ming compile on MSVC again
+
+2007-07-06 08:38  krechert
+
+	* util/: outputtxt.c, parser.h: parse and output SWF8 font
+	  extensions
+
+2007-07-05 12:24  krechert
+
+	* test/: Font/Makefile.am, Font/TestList, Font/test01-cxx.C,
+	  Font/test01.c, Font/test01.ref, Font/test02-cxx.C, Font/test02.c,
+	  Font/test02.ref, Text/test01-cxx.C, Text/test01.c,
+	  Text/test01.ref: adapt testcases to new font api and font fixes
+
+2007-07-05 12:19  krechert
+
+	* mingpp.h: remove wacky decision based on filenames.
+
+2007-07-05 12:17  krechert
+
+	* src/: ming.h.in, blocks/font.c, blocks/ttffont.h: automagic
+	  detect font files. simplify public interface
+
+2007-07-05 10:27  krechert
+
+	* src/blocks/: fdbfont.c, font.c, font.h, shape.c, text.c,
+	  ttffont.c: use real shape bounds no layout by default fixed
+	  shaperecord flags for font glyphs
+
+2007-07-02 11:50  krechert
+
+	* src/actioncompiler/swf5compiler.flex: fixed small c&p error
+
+2007-07-02 11:30  krechert
+
+	* src/blocks/ttffont.c: don't use return value of a void function
+
+2007-07-02 11:14  krechert
+
+	* src/blocks/ttffont.c: no return -> void
+
+2007-07-02 11:09  krechert
+
+	* src/blocks/: fromswf.c, fromswf.h: fiexed possible bug on 64bit
+	  systems
+
+2007-06-28 18:04  krechert
+
+	* configure.in, test/Makefile.am, test/Bitmap/.cvsignore,
+	  test/Bitmap/Makefile.am, test/Bitmap/TestList,
+	  test/Bitmap/test01-cxx.C, test/Bitmap/test01.c,
+	  test/Bitmap/test01.ref: bitmap png test
+
+2007-06-28 17:40  krechert
+
+	* test/FillStyle/: Makefile.am, TestList, test05-cxx.C, test05.c,
+	  test05.ref: png fill test
+
+2007-06-28 15:13  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c: python bindings: 1)
+	  The nice Python (ming.py) binding does not have SWFVideoStream.
+	  2) The low-level Python binding (ming_wrap.c) has a bug in
+	  SWFVideoStream which causes an incorrect additional layer of
+	  pointer indirection on SWFVideoStream objects.
+
+	  submitted by: Joris van Rantwijk
+
+2007-06-28 15:02  krechert
+
+	* NEWS: news update
+
+2007-06-28 14:59  krechert
+
+	* mingpp.h, src/ming.h.in, src/movie.c: rename hidden functions to
+	  _internal use SWFMovieBlockType also for SWFMovie_replace()
+
+2007-06-28 14:31  krechert
+
+	* src/ming.h.in: introduce ttf font loading
+
+2007-06-28 14:30  krechert
+
+	* src/blocks/ttffont.c: whitespace fixes
+
+2007-06-28 14:20  krechert
+
+	* mingpp.h: use standard conform union initialization in c++. c++
+	  is typesafe anyway.
+
+2007-06-27 17:48  krechert
+
+	* src/: ming.h.in, movie.c: typesafe SWFMovie_add() for newer GCCs
+
+2007-06-26 18:18  krechert
+
+	* src/: Makefile.am, blocks/Makefile.am, blocks/font.h,
+	  blocks/ttffont.c, blocks/ttffont.h: ttf font support
+
+2007-06-26 17:54  krechert
+
+	* test/Media/test.ttf: ttf font used for tests
+
+2007-06-24 07:35  krechert
+
+	* configure.in, src/movie.c, src/blocks/fromswf.c,
+	  src/blocks/gifdbl.c, src/blocks/pngdbl.c, util/dbl2png.c,
+	  util/gif2dbl.c, util/gif2mask.c, util/main.c, util/png2dbl.c:
+	  USE_ZLIB and USE_GIF are only true iff headers and libs are
+	  present use USE_* conditionals instead of HAVE_*
+
+2007-06-22 14:34  krechert
+
+	* util/gif2dbl.c: include ming_config.h
+
+2007-06-21 16:01  krechert
+
+	* util/gif2dbl.c: bugfix from tamere <mrachdi@free.fr>: HAVE_ZLIB_H
+	  is defined not HAVE_LIBZ closes bug
+	  http://bugs.libming.net/show_bug.cgi?id=16
+
+2007-06-15 14:54  strk
+
+	* src/blocks/Makefile.am: Don't list read.c as a source file as
+	  we're not using it anymore (it's not even in the repository).
+	  Fixes bug #24 (bugzilla).
+
+2007-06-10 14:41  krechert
+
+	* src/blocks/: font.c, font.h, fdbfont.c: use shape backend
+
+2007-06-10 14:37  krechert
+
+	* src/blocks/read.c: remove read.c. use generic SWFInput code
+
+2007-06-10 14:34  krechert
+
+	* src/blocks/shape.c: use shape code for font shapes (dummy commit
+	  to add changelog entry)
+
+2007-06-10 14:31  krechert
+
+	* src/blocks/: shape.c, shape.h: handle font shapes
+
+2007-06-10 12:40  krechert
+
+	* configure.in, test/Makefile.am, test/Font/.cvsignore,
+	  test/Font/Makefile.am, test/Font/TestList,
+	  test/Font/test01-cxx.C, test/Font/test01.c, test/Font/test01.ref,
+	  test/Text/.cvsignore, test/Text/Makefile.am, test/Text/TestList,
+	  test/Text/test01-cxx.C, test/Text/test01.c, test/Text/test01.ref:
+	  Font and Text tests
+
+2007-06-10 12:38  krechert
+
+	* mingpp.h: allow SWFText version 1 with C++
+
+2007-06-10 09:48  krechert
+
+	* test/Media/font01.fdb: add test-font
+
+2007-05-28 13:19  strk
+
+	* test/actionscript/: FunctionInLoop.as, FunctionInLoop.ref,
+	  Makefile.am: Add the test that was failing before fixing bug #18
+	  (current testing framework won't build for SWF>6 though... we
+	  should fix this)
+
+2007-05-28 13:18  strk
+
+	* test/actionscript/ActionScriptTest.c: Copyright info, TODO item
+
+2007-05-28 13:07  strk
+
+	* src/actioncompiler/swf5compiler.y: Properly delete CTX_FUNCTION
+	  when SWF target > 6. Fixed bug #18 on bugzilla.
+
+2007-05-24 05:52  strk
+
+	* util/outputtxt.c: Print more info for REMOVEOBJECT and
+	  REMOVEOBJECT2
+
+2007-05-23 18:19  strk
+
+	* mingpp.h: Implement SWFMovie::replace
+
+2007-05-23 18:18  strk
+
+	* src/movie.c: Fix typo in SWFMovie_add function signature
+
+2007-05-23 11:59  krechert
+
+	* src/: displaylist.c, displaylist.h, movie.c, ming.h.in: return
+	  int instead of SWFDisplayItem
+
+2007-05-23 08:01  krechert
+
+	* test/Movie/replace/: test02-cxx.C, test02.c, test02.ref: complete
+	  replace test commit
+
+2007-05-22 14:26  strk
+
+	* src/displaylist.c: Fix bug in SWFDisplayItem_replace preventing
+	  to add event handlers and name to the replace PlaceObject2 tag
+	  (btw, it seems those have no effect, if confirmed we should raise
+	  a warning when doing so)
+
+2007-05-22 12:06  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/replace/.cvsignore, test/Movie/replace/Makefile.am,
+	  test/Movie/replace/TestList, test/Movie/replace/test01-cxx.C,
+	  test/Movie/replace/test01.c, test/Movie/replace/test01.ref:
+	  testcases for replace feature
+
+2007-05-22 11:28  krechert
+
+	* src/: displaylist.c, displaylist.h, ming.h.in, movie.c,
+	  blocks/placeobject.h: added experimental feature
+	  SWFMovie_replace();
+
+	  replaces the character for a given DisplayItem with an other
+	  character.  no newSWFRemoveObject2Block is written.
+
+2007-05-22 11:15  krechert
+
+	* mingpp.h: hide unsigned char <--> char casts from user
+
+2007-05-21 14:35  krechert
+
+	* mingpp.h: fix partly bug [ 924725 ] take 'const char *', rather
+	  than 'const unsigned char *' as C++ won't let you convert between
+	  these implicitly, quote strings "stirng" as usually 'const char
+	  *' as is std::string::c_str()
+
+	  patch by Gene Thomas
+
+2007-05-21 13:38  krechert
+
+	* src/blocks/text.c: fixes bug: [ 905571 ] endless loop in text.c
+
+2007-05-21 13:31  krechert
+
+	* src/ming.h.in: fixes bug [ 912003 ] duplicate declaration for
+	  SWFSoundInstance_setNoMultiple
+
+2007-05-21 12:14  krechert
+
+	* py_ext/setup.py.in: fixed Bug: [ 1684101 ] python bindings not
+	  linked against libpng submitted by Peter Shannon
 
 2007-05-17 14:16  krechert
 
