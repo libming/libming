@@ -1519,23 +1519,9 @@ PHP_METHOD(swffont, __construct)
 
 	convert_to_string_ex(zfile);
 
-	if (strcmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".fdb") == 0) {
-		php_stream * stream;
-		FILE * file;
-	
-		stream = php_stream_open_wrapper(Z_STRVAL_PP(zfile), "rb", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
-
-		if (stream == NULL) {
-			RETURN_FALSE;
-		}
-
-		if (FAILURE == php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&file, REPORT_ERRORS)) {
-			php_stream_close(stream);
-			RETURN_FALSE;
-		}
-	
-		font = loadSWFFontFromFile(file);
-		php_stream_close(stream);
+	if (strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".fdb") == 0 || 
+			strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".ttf") == 0) {
+		font = newSWFFont(Z_STRVAL_PP(zfile));
 	} else {
 		PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
 		font = (SWFFont)newSWFBrowserFont(Z_STRVAL_PP(zfile));
@@ -2327,7 +2313,7 @@ PHP_METHOD(swfmovie, add)
 		block = (SWFBlock) getCharacter(*zchar TSRMLS_CC);
 	}
 
-	item = SWFMovie_add_internal(movie, block);
+	item = SWFMovie_add_internal(movie, (SWFMovieBlockType)block);
 
 	if (item != NULL) {
 		/* try and create a displayitem object */
