@@ -55,9 +55,17 @@ noinst_HEADERS =	\
 
 noinst_LTLIBRARIES = libblock.la
 
+if USE_ZLIB
+
+if USE_GIF
+GIF_SOURCE=gifdbl.c	
+endif
+
 if USE_PNG
 PNG_SOURCE=pngdbl.c
 endif
+
+endif #zlib
 
 if USE_FREETYPE
 libblock_la_CFLAGS = $(FREETYPE_CFLAGS) $(AM_CFLAGS)
@@ -78,7 +86,6 @@ libblock_la_SOURCES = 	\
 	font.c		\
 	fontinfo.c	\
 	fromswf.c	\
-	gifdbl.c	\
 	gradient.c	\
 	imports.c	\
 	input.c		\
@@ -111,5 +118,6 @@ libblock_la_SOURCES = 	\
 	scalinggrid.c	\
 	tabindex.c	\
 	$(PNG_SOURCE)	\
+	$(GIF_SOURCE)   \
 	$(TTF_SOURCE)
 

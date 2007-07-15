@@ -8,12 +8,8 @@
 #include "ming_config.h"
 #include "libming.h"
 
-#if USE_GIF
 #include <gif_lib.h>
-
-#if USE_ZLIB
 #include <zlib.h>
-#endif
 
 #include "bitmap.h"
 #include "dbl.h"
@@ -194,15 +190,9 @@ readGif(GifFileType *file, dblData result)
 
 	result->data = malloc(outsize = (int)floor(size*1.01+12));
 
-#if USE_ZLIB
 	/* zlib-compress the gif data */
 	compress2(result->data, &outsize, data, size, 9);
 	result->length = outsize;
-#else
-	/* No zlib, so just copy the data to the result location */
-	memcpy(result->data, data, size);
-	result->length = size;
-#endif
 
 	free(data);
 	return 1;
@@ -247,4 +237,3 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input)
 	// ret->input = NULL;
 	return ret;
 }
-#endif
