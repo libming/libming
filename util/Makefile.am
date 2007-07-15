@@ -5,8 +5,6 @@ INCLUDES = -I$(top_srcdir)/src
 if USE_GIF
 if USE_ZLIB
 gifprograms = gif2mask gif2dbl
-else
-gifprograms =
 endif
 else
 gifprograms =

@@ -7,10 +7,7 @@
 #include <ming_config.h>
 
 #include <gif_lib.h>
-
-#ifdef USE_ZLIB
 #include <zlib.h>
-#endif
 
 #define max(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
 
@@ -93,15 +90,9 @@ int main(int argc, char *argv[])
 
   outdata = malloc(outsize = (int)floor(size*1.01+12));
 
-#ifdef USE_ZLIB
   /* zlib-compress the gif data */
   compress2(outdata, &outsize, data, size, 9);
   outsize = size;
-#else
-  /* No zlib, so just copy the data to the result location */
-  memcpy(outdata, data, size);
-  outsize = size;
-#endif
 
   /* dump to outfile */
 
