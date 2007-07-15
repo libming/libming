@@ -127,12 +127,15 @@ sub doswftest($$$)
 	{
 		$ENV{'LD_LIBRARY_PATH'}=$TOP_BUILDDIR."/src/.libs";
 
-		# Find the proper PYTHONPATH
-		$ENV{'PYTHONPATH'} = "";
-		my $pattern = $TOP_BUILDDIR."/py_ext/build/lib*";
-		foreach (`ls -d $pattern`) {
-			chop;
-			$ENV{'PYTHONPATH'} .= ":".$_;
+		if($do_test_python)
+		{
+			# Find the proper PYTHONPATH
+			$ENV{'PYTHONPATH'} = "";
+			my $pattern = $TOP_BUILDDIR."/py_ext/build/lib*";
+			foreach (`ls -d $pattern`) {
+				chop;
+				$ENV{'PYTHONPATH'} .= ":".$_;
+			}
 		}
 
 		# Set the proper PERL5LIB 
