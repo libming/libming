@@ -67,6 +67,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_DEFINEVIDEOSTREAM),
   BlockType (SWF_DOACTION),
   BlockType (SWF_ENABLEDEBUGGER),
+  BlockType (SWF_ENABLEDEBUGGER2),
   BlockType (SWF_END),
   BlockType (SWF_EXPORTASSETS),
   BlockType (SWF_FONTREF),

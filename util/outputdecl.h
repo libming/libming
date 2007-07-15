@@ -66,6 +66,7 @@ extern OUTPUTRET outputSWF_DEFINEVIDEO(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINEVIDEOSTREAM(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DOACTION(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_ENABLEDEBUGGER(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_ENABLEDEBUGGER2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_END(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_EXPORTASSETS(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_FONTREF(SWF_Parserstruct *pblock);

@@ -71,6 +71,7 @@ extern SWF_Parserstruct *parseSWF_DEFINEVIDEO(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEVIDEOSTREAM(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DOACTION(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_ENABLEDEBUGGER(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_ENABLEDEBUGGER2(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_END(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_EXPORTASSETS(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_FONTREF(FILE *f, int length);

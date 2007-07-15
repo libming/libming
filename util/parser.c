@@ -40,6 +40,10 @@ void silentSkipBytes(FILE *f, int length);
 #define PAR_END \
 	return (SWF_Parserstruct *)parserrec;
 
+#define SKIP \
+	printf("skipping %i bytes\n", length); \
+        readBytes(f, length);
+
 /* Parse Basic Flash types */
 
 void
@@ -117,8 +121,11 @@ parseSWF_BUTTONRECORD (FILE * f, struct SWF_BUTTONRECORD *brec, int level)
   if( brec->ButtonStateHitTest == 0 &&
       brec->ButtonStateDown == 0 &&
       brec->ButtonStateOver == 0 &&
-      brec->ButtonStateUp == 0 )
-	  return 0;
+      brec->ButtonStateUp == 0 &&
+      brec->ButtonHasBlendMode == 0 && 
+      brec->ButtonHasFilterList == 0 &&
+      brec->ButtonReserved == 0)
+	  return 0;  // CharacterEndFlag 
   brec->CharacterId = readUInt16 (f);
   brec->PlaceDepth = readUInt16 (f);
   parseSWF_MATRIX (f, &brec->PlaceMatrix);
@@ -1393,9 +1400,7 @@ SWF_Parserstruct *
 parseSWF_CHARACTERSET (FILE * f, int length)
 {
   PAR_BEGIN (SWF_CHARACTERSET);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -1445,9 +1450,7 @@ SWF_Parserstruct *
 parseSWF_DEFINEBITSPTR (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBITSPTR);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -1455,9 +1458,24 @@ SWF_Parserstruct *
 parseSWF_DEFINEBUTTON (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBUTTON);
+  parserrec->ButtonId = readUInt16 (f);
+  parserrec->numCharacters = 0;
+  parserrec->Characters = (SWF_BUTTONRECORD *)calloc(1, sizeof (SWF_BUTTONRECORD));
+  while (parseSWF_BUTTONRECORD (f, &(parserrec->Characters[parserrec->numCharacters++]), 1 ))
+  {
+    int size = (parserrec->numCharacters + 1) * sizeof(SWF_BUTTONRECORD);
+    parserrec->Characters = (SWF_BUTTONRECORD *) realloc (parserrec->Characters, size);
+  }
+  parserrec->CharacterEndFlag = 0; // handled by parseSWF_BUTTONRECORD
 
-  parserrec->chid = readUInt16 (f);
-
+  parserrec->Actions = (SWF_ACTION *) calloc (1, sizeof (SWF_ACTION));
+  parserrec->numActions = 0;
+  while (parseSWF_ACTIONRECORD (f, &(parserrec->numActions), parserrec->Actions))
+  {
+    int size = (++parserrec->numActions + 1) * sizeof(SWF_ACTION);
+    parserrec->Actions = (SWF_ACTION *) realloc (parserrec->Actions, size);
+  }
+  parserrec->ActionEndFlag = 0; 
   PAR_END;
 }
 
@@ -1516,9 +1534,7 @@ SWF_Parserstruct *
 parseSWF_DEFINEBUTTONCXFORM (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBUTTONCXFORM);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -1526,9 +1542,7 @@ SWF_Parserstruct *
 parseSWF_DEFINEBUTTONSOUND (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBUTTONSOUND);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -1536,9 +1550,7 @@ SWF_Parserstruct *
 parseSWF_DEFINECOMMANDOBJ (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINECOMMANDOBJ);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2266,9 +2278,7 @@ SWF_Parserstruct *
 parseSWF_DEFINETEXTFORMAT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINETEXTFORMAT);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2276,9 +2286,7 @@ SWF_Parserstruct *
 parseSWF_DEFINEVIDEO (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEVIDEO);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2328,11 +2336,19 @@ SWF_Parserstruct *
 parseSWF_ENABLEDEBUGGER (FILE * f, int length)
 {
   PAR_BEGIN (SWF_ENABLEDEBUGGER);
-
-  parserrec->chid = readUInt16 (f);
-
+  parserrec->Password = readString(f); 
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_ENABLEDEBUGGER2 (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_ENABLEDEBUGGER2);
+  parserrec->Reserved = readUInt16(f);
+  parserrec->Password = readString(f); 
+  PAR_END;
+}
+
 
 SWF_Parserstruct *
 parseSWF_END (FILE * f, int length)
@@ -2363,9 +2379,7 @@ SWF_Parserstruct *
 parseSWF_FONTREF (FILE * f, int length)
 {
   PAR_BEGIN (SWF_FONTREF);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2389,9 +2403,7 @@ SWF_Parserstruct *
 parseSWF_FRAMETAG (FILE * f, int length)
 {
   PAR_BEGIN (SWF_FRAMETAG);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2399,19 +2411,15 @@ SWF_Parserstruct *
 parseSWF_FREEALL (FILE * f, int length)
 {
   PAR_BEGIN (SWF_FREEALL);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
 SWF_Parserstruct *
 parseSWF_FREECHARACTER (FILE * f, int length)
 {
-  PAR_BEGIN (SWF_FREECHARACTER);
-
-  parserrec->chid = readUInt16 (f);
-
+  PAR_BEGIN (SWF_FREECHARACTER); 
+  SKIP;
   PAR_END;
 }
 
@@ -2419,9 +2427,7 @@ SWF_Parserstruct *
 parseSWF_GENCOMMAND (FILE * f, int length)
 {
   PAR_BEGIN (SWF_GENCOMMAND);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2479,9 +2485,7 @@ SWF_Parserstruct *
 parseSWF_NAMECHARACTER (FILE * f, int length)
 {
   PAR_BEGIN (SWF_NAMECHARACTER);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2489,7 +2493,7 @@ SWF_Parserstruct *
 parseSWF_PATHSAREPOSTSCRIPT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_PATHSAREPOSTSCRIPT);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2608,9 +2612,7 @@ SWF_Parserstruct *
 parseSWF_PREBUILT (FILE * f, int length)
 {
   PAR_BEGIN (SWF_PREBUILT);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2618,9 +2620,7 @@ SWF_Parserstruct *
 parseSWF_PREBUILTCLIP (FILE * f, int length)
 {
   PAR_BEGIN (SWF_PREBUILTCLIP);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 
@@ -2794,9 +2794,7 @@ SWF_Parserstruct *
 parseSWF_SYNCFRAME (FILE * f, int length)
 {
   PAR_BEGIN (SWF_SYNCFRAME);
-
-  parserrec->chid = readUInt16 (f);
-
+  SKIP;
   PAR_END;
 }
 

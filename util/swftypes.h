@@ -1039,6 +1039,7 @@ struct SWF_DEFINEBITSJPEG3
   UI8 *BitmapAlphaData;
 };
 
+// XXX: obsolete
 struct SWF_DEFINEBITSPTR
 {
   int chid;
@@ -1046,7 +1047,13 @@ struct SWF_DEFINEBITSPTR
 
 struct SWF_DEFINEBUTTON
 {
-  int chid;
+  UI16 ButtonId;
+  SWF_BUTTONRECORD *Characters;
+  int numCharacters;
+  UI8 CharacterEndFlag;
+  int numActions;
+  SWF_ACTION *Actions;
+  UI8 ActionEndFlag;
 };
 
 struct SWF_DEFINEBUTTON2
@@ -1064,14 +1071,25 @@ struct SWF_DEFINEBUTTON2
 
 struct SWF_DEFINEBUTTONCXFORM
 {
-  int chid;
+  UI16 ButtonId;
+  SWF_CXFORM ButtonColorTransform;
 };
 
 struct SWF_DEFINEBUTTONSOUND
 {
-  int chid;
+  UI16 CharacterID;
+  UI16 ButtonSoundChar0;
+  SWF_SOUNDINFO ButtonSoundInfo0;
+  UI16 ButtonSoundChar1;
+  SWF_SOUNDINFO ButtonSoundInfo1;
+  UI16 ButtonSoundChar2;
+  SWF_SOUNDINFO ButtonSoundInfo2;
+  UI16 ButtonSoundChar3;
+  SWF_SOUNDINFO ButtonSoundInfo3;
 };
 
+
+// XXX: obsolete ?
 struct SWF_DEFINECOMMANDOBJ
 {
   int chid;
@@ -1385,11 +1403,13 @@ struct SWF_DEFINETEXT2
   SWF_TEXTRECORD *TextRecords;
 };
 
+// XXX obsolete ?
 struct SWF_DEFINETEXTFORMAT
 {
   int chid;
 };
 
+// XXX obsolete ?
 struct SWF_DEFINEVIDEO
 {
   int chid;
@@ -1415,13 +1435,17 @@ struct SWF_DOACTION
 
 struct SWF_ENABLEDEBUGGER
 {
-  int chid;
+  STRING Password;
+};
+
+struct SWF_ENABLEDEBUGGER2
+{
+  UI16 Reserved;
+  STRING Password;
 };
 
 struct SWF_END
-{
-  int chid;
-};
+{ /* empty tag */ };
 
 struct SWF_EXPORTASSETS
 {
@@ -1430,6 +1454,7 @@ struct SWF_EXPORTASSETS
   STRING *Names;
 };
 
+// XXX obsolete ?
 struct SWF_FONTREF
 {
   int chid;
@@ -1441,21 +1466,25 @@ struct SWF_FRAMELABEL
   UI8		IsAnchor;
 };
 
+// XXX obsolete ?
 struct SWF_FRAMETAG
 {
   int chid;
 };
 
+// XXX obsolete ?
 struct SWF_FREEALL
 {
   int chid;
 };
 
+// XXX obsolete ?
 struct SWF_FREECHARACTER
 {
   int chid;
 };
 
+// XXX obsolete ?
 struct SWF_GENCOMMAND
 {
   int chid;
@@ -1486,11 +1515,13 @@ struct SWF_JPEGTABLES
   UI8 *JPEGData;
 };
 
+// XXX: obsolete?
 struct SWF_NAMECHARACTER
 {
   int chid;
 };
 
+// XXX: obsolete?
 struct SWF_PATHSAREPOSTSCRIPT
 {
   int chid;
@@ -1640,6 +1671,7 @@ struct SWF_STARTSOUND
   SWF_SOUNDINFO	SoundInfo;
 };
 
+// XXX: obsolete?
 struct SWF_SYNCFRAME
 {
   int chid;
@@ -1733,6 +1765,7 @@ typedef union SWF_Parserstruct
   struct SWF_DEFINEVIDEOSTREAM SWF_DEFINEVIDEOSTREAM;
   struct SWF_DOACTION SWF_DOACTION;
   struct SWF_ENABLEDEBUGGER SWF_ENABLEDEBUGGER;
+  struct SWF_ENABLEDEBUGGER2 SWF_ENABLEDEBUGGER2;
   struct SWF_END SWF_END;
   struct SWF_EXPORTASSETS SWF_EXPORTASSETS;
   struct SWF_FONTREF SWF_FONTREF;
