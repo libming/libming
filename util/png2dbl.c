@@ -7,9 +7,7 @@
 
 #include <png.h>
 
-#ifdef USE_ZLIB
 #include <zlib.h>
-#endif
 
 int verbose = 0;
 typedef unsigned char byte;
@@ -278,15 +276,9 @@ void writeDBL(FILE *f, struct pngdata png)
   }
 
   outdata = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
-#ifdef USE_ZLIB
   /* compress the RGB color table (if present) and image data one block */
   compress2(outdata, &outsize, data, alignedsize, 9);
   outsize = alignedsize;
-#else
-  /* No zlib, so just copy the data to the result location */
-  memcpy(outdata, data, alignedsize);
-  outsize = alignedsize;
-#endif
 
   /* write the remaining file size */
 

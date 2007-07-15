@@ -13,7 +13,10 @@ gifprograms =
 endif
 
 if USE_PNG
-pngprograms = png2dbl png2swf dbl2png
+pngprograms = png2swf
+if USE_ZLIB
+pngprograms += png2dbl dbl2png
+endif
 else
 pngprograms =
 endif
