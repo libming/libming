@@ -13,7 +13,7 @@ int main()
 	text->setColor( 0, 0, 0, 0xff);
 	text->setHeight( 20);
 	text->moveTo(100,100);
-	text->addString( "abc", NULL);
+	text->addString( "The quick brown fox jumps over the lazy dog. 1234567890", NULL);
 	m->add(text);
 	m->nextFrame();
 	m->save("test02.swf");
