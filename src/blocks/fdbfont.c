@@ -70,10 +70,10 @@ static inline void checkShapeHeader(SWFInput input,
 {
 	SWFInput_byteAlign(input);
 	if ( (*numFillBits = SWFInput_readBits(input, 4)) != 1 ) /* fill bits */
-		SWF_error("SWFShape_drawGlyph: bad file format (was expecting fill bits = 1)");
+		SWF_error("FdbFont read glyph: bad file format (was expecting fill bits = 1)\n");
 
 	if ( (*numLineBits = SWFInput_readBits(input, 4)) > 0 ) /* line bits */
-		SWF_error("SWFShape_drawGlyph: bad file format (was expecting line bits = 0)");
+		SWF_error("FdbFont read glyph: bad file format (was expecting line bits = 0)\n");
 }
 
 static inline void checkShapeStyle(SWFInput input, char style,
@@ -159,8 +159,7 @@ static SWFShape readGlyphShape(SWFInput input)
 	}
 	else if (style == 0)	/* no style, no move => space character */
 	{
-		destroySWFShape(shape);
-		return NULL;
+		return shape;
 	}
 	checkShapeStyle(input, style, numFillBits, numLineBits);
 	
