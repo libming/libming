@@ -19,7 +19,8 @@ AS_TESTS = \
 	logor.as 	\
 	targetPath.as	\
 	FunctionInLoop.as \
-	newline_comment.as
+	newline_comment.as \
+	newline_crlf.as 
 
 EXTRA_DIST = 		\
 	Function.ref	\

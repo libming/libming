@@ -1,0 +1,2 @@
+trace("test");
+trace("test");
