@@ -55,6 +55,8 @@ destroySWFProtect(SWFProtect protect)
 {
 	if( protect->out )
 		destroySWFOutput(protect->out );
+	if( protect->Password )
+		free(protect->Password);
 }
 
 
@@ -70,7 +72,10 @@ newSWFProtect(char *password)
 	BLOCK(protect)->dtor = (destroySWFBlockMethod) destroySWFProtect;
 
 	protect->out = newSWFOutput();
-	protect->Password = password;
+	if(password != NULL)
+		protect->Password = strdup(password);
+	else
+		protect->Password = NULL;
 
 	return (SWFBlock)protect;
 }
