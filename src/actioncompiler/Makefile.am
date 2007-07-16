@@ -28,7 +28,7 @@ noinst_HEADERS = \
 	assembler.h \
 	compile.h
 
-libactioncompiler_la_LIBADD = $(LEXLIB)
+libactioncompiler_la_LIBADD = # $(LEXLIB)
 
 AM_CPPFLAGS = -I$(srcdir)/..
 

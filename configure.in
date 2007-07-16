@@ -199,11 +199,12 @@ dnl Check for required programs
 dnl --------------------------------------------
 
 AC_PROG_YACC
+AC_PROG_LEX
 dnl It has been reported that using AM_PROG_LEX breaks the
 dnl build on Darwin by adding an -lfl flag which confuses
 dnl things. I couldn't find a broken build w/out this so
 dnl I'm commenting it out --strk;
-dnl AM_PROG_LEX
+
 AC_PROG_LIBTOOL
 if test x"$LIBTOOL" = x; then
 	AC_MSG_ERROR([could not detect libtool, bailing out])
