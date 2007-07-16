@@ -258,7 +258,7 @@ SWFFont loadSWFFontTTF(char *filename)
 	
 	ratio_EM = 1024.0 / face->units_per_EM;
 	font->ascent = (short)(face->ascender * ratio_EM);
-	font->descent = (short)(face->descender*ratio_EM);
+	font->descent = (short)(face->descender * -ratio_EM);
 	font->leading = ((face->height-face->ascender + face->descender) * ratio_EM);
 
 	SWFFont_buildReverseMapping(font);
