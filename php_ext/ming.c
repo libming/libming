@@ -1521,12 +1521,11 @@ PHP_METHOD(swffont, __construct)
 
 	if (strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".fdb") == 0 || 
 			strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".ttf") == 0) {
-		font = newSWFFont(Z_STRVAL_PP(zfile));
+		font = newSWFFont_fromFile(Z_STRVAL_PP(zfile));
 	} else {
 		PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
 		font = (SWFFont)newSWFBrowserFont(Z_STRVAL_PP(zfile));
 	}
-
 	ret = zend_list_insert(font, le_swffontp);
 
 	object_init_ex(getThis(), font_class_entry_ptr);
