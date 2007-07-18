@@ -168,9 +168,9 @@ static void readGlyphs(SWFFont font, FT_Face face)
 		}
 		font->shapes[glyphCount] = data.shape;
 		font->glyphToCode[glyphCount] = charcode;
+		font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
 		if(charcode > 255)
 			font->flags |= SWF_FONT_WIDECODES;
-		font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
 
 		charcode = FT_Get_Next_Char(face, charcode, &gindex);
 		glyphCount++;
@@ -203,13 +203,12 @@ SWFFont loadSWFFontTTF(char *filename)
 		goto error_ft;
 	}
 
+	/*
 	for(i=0; i < face->num_charmaps; i++) 
 	{
-		/*
 		printf("map %d encoding pid=%d eid=%d\n", i,
 			face->charmaps[i]->platform_id,
 			face->charmaps[i]->encoding_id);
-		*/
 		if( face->charmaps[i]->platform_id == TT_PLATFORM_MACINTOSH &&
 			face->charmaps[i]->encoding_id == TT_MAC_ID_ROMAN ) 
 		{
@@ -217,41 +216,24 @@ SWFFont loadSWFFontTTF(char *filename)
 			break;
 		}
 	}
-
+	
 	if( charmap == NULL ) 
 	{
 		SWF_warn("loadSWFFontTTF: Unable to find an ANSI charactermap.");
 		goto error_face;
 	}
-	
 	FT_Set_Charmap(face, charmap);
+	*/
+
 	font = newSWFFont();
-	font->flags = 0;
+	font->flags = SWF_FONT_WIDECODES;
 	font->name = strdup(face->family_name);
 	font->langCode = 0;
-	if( charmap->platform_id == TT_PLATFORM_APPLE_UNICODE ) 
-	{
-		font->flags |= SWF_FONT_SMALLTEXT;
-	} 
-	else if (charmap->platform_id == TT_PLATFORM_MICROSOFT )
-	{
-		switch( charmap->encoding_id )
-		{
-			case TT_MS_ID_UNICODE_CS:
-				font->flags |= SWF_FONT_SMALLTEXT;
-				break;
-			case TT_MS_ID_SJIS:
-				font->flags |= SWF_FONT_SHIFTJIS;
-				break;
-			default: /* Else assume it's ANSI */
-				font->flags |= SWF_FONT_ANSI;	
-		}
-	}
 
 	if( face->style_flags & FT_STYLE_FLAG_BOLD) 
 		font->flags |= SWF_FONT_ISBOLD ; 
 
-	if( face->style_flags&FT_STYLE_FLAG_ITALIC ) 
+	if( face->style_flags & FT_STYLE_FLAG_ITALIC ) 
 		font->flags |= SWF_FONT_ISITALIC;
 	
 	readGlyphs(font, face); 
