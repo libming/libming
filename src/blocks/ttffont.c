@@ -183,9 +183,8 @@ SWFFont loadSWFFontTTF(char *filename)
 	FT_Error error;
 	FT_Library library;
 	FT_Face face;
-	FT_CharMap charmap = NULL;
+	// FT_CharMap charmap = NULL;
 	SWFFont font;
-	int i;
 	double ratio_EM;
 	
 	if( FT_Init_FreeType( &library ) ) {
@@ -249,8 +248,8 @@ SWFFont loadSWFFontTTF(char *filename)
 	return font;
 //error_font:
 //	destroySWFFont(font);
-error_face:
-	FT_Done_Face(face);
+// error_face:
+//	FT_Done_Face(face);
 error_ft:
 	FT_Done_FreeType(library);
 	return NULL;
