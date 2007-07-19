@@ -1,5 +1,5 @@
 File version: 5
-File size: 88
+File size: 79
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -31,20 +31,19 @@ Block length: 14
 
 Offset: 41 (0x0029)
 Block type: 37 (SWF_DEFINEEDITTEXT)
-Block length: 33
+Block length: 24
 
  CharacterID: 1
  RECT:  (-40,-40)x(1240,440):12
- Flags:  HasText: 1  WordWrap: 0  Multiline: 1  Password: 0  ReadOnly: 1
-         HasTextColor: 1  HasMaxLength: 0  HasFont: 1  AutoSize: 0  HasLayout: 1
-         NoSelect: 1  Border: 0  HTML: 0  UseOutlines: 0
+ Flags:  HasText: 1  WordWrap: 0  Multiline: 0  Password: 0  ReadOnly: 0
+         HasTextColor: 1  HasMaxLength: 0  HasFont: 1  AutoSize: 0  HasLayout: 0
+         NoSelect: 0  Border: 0  HTML: 0  UseOutlines: 0
  Font:  FontID: 2  FontHeight: 400
  RGBA: ( 0, 0, 0,ff)
- Layout::  Align: 0  LeftMargin: 0  RightMargin: 0  Indent: 0  Leading: 40
  VariableName: 
  InitialText: abc
 
-Offset: 76 (0x004c)
+Offset: 67 (0x0043)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -60,12 +59,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 84 (0x0054)
+Offset: 75 (0x004b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 86 (0x0056)
+Offset: 77 (0x004d)
 Block type: 0 (SWF_END)
 Block length: 0
 
