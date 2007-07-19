@@ -29,6 +29,7 @@
 #include "browserfont.h"
 #include "font.h"
 
+
 typedef enum {Unresolved, BrowserFont, Font, FontChar, Imported} FontType;
 struct SWFTextField_s
 {
@@ -119,8 +120,9 @@ completeSWFTextField(SWFBlock block)
 
 	/* we're guessing how big the block's going to be.. */
 	SWFOutput out =
-		newSizedSWFOutput(42 + ((field->varName)?strlen(field->varName):0) +
-											((field->string)?strlen(field->string):0));
+		newSizedSWFOutput(42 
+			+ ((field->varName)?strlen(field->varName):0) 
+			+ ((field->string)?strlen(field->string):0));
 
 	field->out = out;
 
@@ -128,41 +130,33 @@ completeSWFTextField(SWFBlock block)
 
 	SWFOutput_writeUInt16(out, CHARACTERID(field));
 	SWFOutput_writeRect(out, CHARACTER(field)->bounds);
-
-// fix flags here...
-	if(field->fonttype == Imported)
-	{	if(!field->font.fontchar)
-			SWF_error("no font given for textfield\n");
-	}
-	else if(field->fonttype != BrowserFont)
-	{	if(!field->font.fontchar)
-			SWF_error("no font given for textfield\n");
-		else if((SWFFont_getFlags(SWFFontCharacter_getFont(field->font.fontchar)) & SWF_FONT_HASLAYOUT) == 0 ||
-				SWFFontCharacter_getNGlyphs(field->font.fontchar) == 0)
-			field->flags &= ~SWFTEXTFIELD_USEFONT;
-	}
-	else
-		field->flags &= ~SWFTEXTFIELD_USEFONT;
-	if(field->string && *field->string)
-		field->flags |= SWFTEXTFIELD_HASTEXT;
-
 	SWFOutput_writeUInt16(out, field->flags);
-	SWFOutput_writeUInt16(out, CHARACTERID(field->font.fontchar));
-	SWFOutput_writeUInt16(out, field->fontHeight);
-	SWFOutput_writeUInt8(out, field->r);
-	SWFOutput_writeUInt8(out, field->g);
-	SWFOutput_writeUInt8(out, field->b);
-	SWFOutput_writeUInt8(out, field->a);
+
+	if(field->flags & SWFTEXTFIELD_HASFONT)
+	{
+		SWFOutput_writeUInt16(out, CHARACTERID(field->font.fontchar));
+		SWFOutput_writeUInt16(out, field->fontHeight);
+	}
+
+	if(field->flags & SWFTEXTFIELD_HASCOLOR)
+	{
+		SWFOutput_writeUInt8(out, field->r);
+		SWFOutput_writeUInt8(out, field->g);
+		SWFOutput_writeUInt8(out, field->b);
+		SWFOutput_writeUInt8(out, field->a);
+	}
 
 	if ( field->flags & SWFTEXTFIELD_HASLENGTH )
 		SWFOutput_writeUInt16(out, field->length);
 
-	SWFOutput_writeUInt8(out, field->alignment);
-
-	SWFOutput_writeUInt16(out, field->leftMargin);
-	SWFOutput_writeUInt16(out, field->rightMargin);
-	SWFOutput_writeUInt16(out, field->indentation);
-	SWFOutput_writeUInt16(out, field->lineSpacing);
+	if(field->flags & SWFTEXTFIELD_HASLAYOUT)
+	{
+		SWFOutput_writeUInt8(out, field->alignment);
+		SWFOutput_writeUInt16(out, field->leftMargin);
+		SWFOutput_writeUInt16(out, field->rightMargin);
+		SWFOutput_writeUInt16(out, field->indentation);
+		SWFOutput_writeUInt16(out, field->lineSpacing);
+	}
 
 	SWFOutput_writeString(out, (byte*) field->varName);
 	if ( field->flags & SWFTEXTFIELD_HASTEXT )
@@ -221,7 +215,7 @@ newSWFTextField()
 	field->a = 0xff;
 	field->nLines = 1;
 
-	field->flags = 0x302d;
+	field->flags = 0;
 
 	field->font.font = NULL;
 	field->fonttype = Unresolved;
@@ -245,6 +239,21 @@ newSWFTextField()
 	return field;
 }
 
+static inline int checkSWFFontCharacter(SWFFontCharacter fc)
+{
+	int font_flags;
+	int nGlyphs;
+
+	SWFFont font = SWFFontCharacter_getFont(fc);
+	font_flags = SWFFont_getFlags(font);
+	nGlyphs = SWFFontCharacter_getNGlyphs(fc);
+	
+	if((font_flags & SWF_FONT_HASLAYOUT) == 0 && nGlyphs == 0)
+		return -1;
+
+	return 0;
+}
+
 /* font machinery:
 	if a regular font (outlines in fdb) is used, it is added to the textfield
 	as type Font and later converted to a FontChar
@@ -253,23 +262,41 @@ newSWFTextField()
  */
 void
 SWFTextField_setFont(SWFTextField field, SWFBlock font)
-{	
+{
+	if(font == NULL)
+		return;
+	
 	if ( BLOCK(font)->type == SWF_DEFINEEDITTEXT )
 	{
 		field->fonttype = BrowserFont;
 		field->font.browserFont = (SWFBrowserFont)font;
 		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
+		field->flags |= SWFTEXTFIELD_HASFONT;
 	}
 	else if ( BLOCK(font)->type == SWF_DEFINEFONT )
 	{
+		SWFFontCharacter fc = (SWFFontCharacter)font;
+		if(checkSWFFontCharacter(fc))	
+		{
+			SWF_warn("font is empty or has no layout information\n");
+			return;
+		}
 		field->fonttype = Imported;
-		field->font.fontchar = (SWFFontCharacter)font;
-		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
+		field->font.fontchar = fc;
+		SWFCharacter_addDependency(
+			(SWFCharacter)field, (SWFCharacter)font);
+		field->flags |= SWFTEXTFIELD_HASFONT | SWFTEXTFIELD_USEFONT;
 	}
 	else
 	{
+		if(!(SWFFont_getFlags((SWFFont)font) & SWF_FONT_HASLAYOUT))
+		{
+			SWF_warn("font is empty or has no layout information\n");
+			return;
+		}
 		field->fonttype = Font;
 		field->font.font = (SWFFont)font;
+		field->flags |= SWFTEXTFIELD_HASFONT | SWFTEXTFIELD_USEFONT;
 	}
 }
 
@@ -288,13 +315,11 @@ void
 SWFTextField_addChars(SWFTextField field, const char *string)
 {
 	int n, len = strlen(string);
-	if((field->fonttype == Font) && field->font.font &&
-	 (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	if(field->fonttype == Font || field->fonttype == FontChar)
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + len) * 2);
 		for(n = 0 ; n < len  ; n++)
 			field->embeds[field->embedlen++] = string[n] & 0xff;
-		field->flags |= SWFTEXTFIELD_USEFONT;
 	}
 }
 
@@ -303,14 +328,12 @@ SWFTextField_addUTF8Chars(SWFTextField field, const char *string)
 {
 	unsigned short *widestring;
 	int n, len;
-	if((field->fonttype == Font) && field->font.font &&
-	 (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	if(field->fonttype == FontChar || field->fonttype == Font)
 	{	len = UTF8ExpandString(string, &widestring);
 		field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + len) * 2);
 		for(n = 0 ; n < len  ; n++)
 			field->embeds[field->embedlen++] = widestring[n];
-		field->flags |= SWFTEXTFIELD_USEFONT;
 		free(widestring);
 	}
 }
@@ -339,7 +362,7 @@ SWFTextField_setScaledBounds(SWFTextField field, int width, int height)
 void
 SWFTextField_setFlags(SWFTextField field, int flags)
 {
-	field->flags = (flags & SWFTEXTFIELD_OFFMASK) | SWFTEXTFIELD_ONMASK;
+	field->flags |= flags; 
 }
 
 
@@ -350,6 +373,7 @@ SWFTextField_setColor(SWFTextField field, byte r, byte g, byte b, byte a)
 	field->g = g;
 	field->b = b;
 	field->a = a;
+	field->flags |= SWFTEXTFIELD_HASCOLOR;
 }
 
 
@@ -378,7 +402,7 @@ SWFTextField_addStringOnly(SWFTextField field, const char *string)
 	}
 	else
 		field->string = strdup(string);
-
+	field->flags |= SWFTEXTFIELD_HASTEXT;
 	resetBounds(field);
 }
 
@@ -390,8 +414,7 @@ SWFTextField_addString(SWFTextField field, const char *string)
 	l = strlen(string);
 
 	SWFTextField_addStringOnly(field, string);
-	if((field->flags & SWFTEXTFIELD_USEFONT) && (field->fonttype == FontChar) &&
-	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	if(field->fonttype == FontChar || field->fonttype == Font) 
 	{	field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + l) * 2);
 		for(n = 0 ; n < l  ; n++)
@@ -406,8 +429,7 @@ SWFTextField_addUTF8String(SWFTextField field, const char *string)
 	int l, n;
 
 	SWFTextField_addStringOnly(field, string);
-	if((field->flags & SWFTEXTFIELD_USEFONT) && (field->fonttype == FontChar) &&
-	 field->font.font && (SWFFont_getFlags(field->font.font) & SWF_FONT_HASLAYOUT))
+	if(field->fonttype == FontChar || field->fonttype == Font)
 	{	l = UTF8ExpandString(string, &widestring);
 		field->embeds = (unsigned short *)realloc(
 			field->embeds, (field->embedlen + l) * 2);
@@ -454,6 +476,7 @@ void
 SWFTextField_setScaledLeftMargin(SWFTextField field, int leftMargin)
 {
 	field->leftMargin = leftMargin;
+	field->flags |= SWFTEXTFIELD_HASLAYOUT;
 }
 
 
@@ -461,6 +484,7 @@ void
 SWFTextField_setScaledRightMargin(SWFTextField field, int rightMargin)
 {
 	field->rightMargin = rightMargin;
+	field->flags |= SWFTEXTFIELD_HASLAYOUT;
 }
 
 
@@ -468,6 +492,7 @@ void
 SWFTextField_setScaledIndentation(SWFTextField field, int indentation)
 {
 	field->indentation = indentation;
+	field->flags |= SWFTEXTFIELD_HASLAYOUT;
 }
 
 
@@ -475,6 +500,7 @@ void
 SWFTextField_setScaledLineSpacing(SWFTextField field, int lineSpacing)
 {
 	field->lineSpacing = lineSpacing;
+	field->flags |= SWFTEXTFIELD_HASLAYOUT;
 	resetBounds(field);
 }
 
@@ -483,6 +509,7 @@ void
 SWFTextField_setAlignment(SWFTextField field, SWFTextFieldAlignment alignment)
 {
 	field->alignment = alignment;
+	field->flags |= SWFTEXTFIELD_HASLAYOUT;
 }
 
 

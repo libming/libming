@@ -226,7 +226,7 @@ SWFFont loadSWFFontTTF(char *filename)
 	*/
 
 	font = newSWFFont();
-	font->flags = SWF_FONT_WIDECODES;
+	font->flags = SWF_FONT_WIDECODES | SWF_FONT_HASLAYOUT;
 	font->name = strdup(face->family_name);
 	font->langCode = 0;
 

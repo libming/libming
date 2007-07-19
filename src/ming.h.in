@@ -465,20 +465,20 @@ SWFFontCharacter SWFMovie_importFont(SWFMovie movie, const char *filename, const
 #define SWFTEXTFIELD_OFFMASK 0x3BFF /* off bits */
 /* Taken from textfield.h: #define SWFTEXTFIELD_OFFMASK 0x7BFF / off bits */
 
-#define SWFTEXTFIELD_HASFONT   (1<<0)   /* font and size given */
-#define SWFTEXTFIELD_HASLENGTH (1<<1)
-#define SWFTEXTFIELD_HASCOLOR  (1<<2)
-#define SWFTEXTFIELD_NOEDIT    (1<<3)
-#define SWFTEXTFIELD_PASSWORD  (1<<4)
-#define SWFTEXTFIELD_MULTILINE (1<<5)
-#define SWFTEXTFIELD_WORDWRAP  (1<<6)
-#define SWFTEXTFIELD_HASTEXT   (1<<7)   /* initial text present */
-#define SWFTEXTFIELD_USEFONT   (1<<8)
-#define SWFTEXTFIELD_HTML      (1<<9)
-#define SWFTEXTFIELD_DRAWBOX   (1<<11)
-#define SWFTEXTFIELD_NOSELECT  (1<<12)
-#define SWFTEXTFIELD_HASLAYOUT (1<<13)  /* align, margin, lspace, indent */
-#define SWFTEXTFIELD_AUTOSIZE  (1<<14)  /* SWF6 */
+#define SWFTEXTFIELD_HASFONT   (1<<0)   /* private */
+#define SWFTEXTFIELD_HASLENGTH (1<<1)   /* private */
+#define SWFTEXTFIELD_HASCOLOR  (1<<2)   /* private */ 
+#define SWFTEXTFIELD_NOEDIT    (1<<3)   /* disables editing */
+#define SWFTEXTFIELD_PASSWORD  (1<<4)   /* hides characters */
+#define SWFTEXTFIELD_MULTILINE (1<<5)   /* multiline and scrollable */
+#define SWFTEXTFIELD_WORDWRAP  (1<<6)   /* enable automatic line wrap */
+#define SWFTEXTFIELD_HASTEXT   (1<<7)   /* private */
+#define SWFTEXTFIELD_USEFONT   (1<<8)   /* private */
+#define SWFTEXTFIELD_HTML      (1<<9)   /* renders some HTML tags*/
+#define SWFTEXTFIELD_DRAWBOX   (1<<11)  /* draws a border */
+#define SWFTEXTFIELD_NOSELECT  (1<<12)  /* disabled selection */
+#define SWFTEXTFIELD_HASLAYOUT (1<<13)  /* private */
+#define SWFTEXTFIELD_AUTOSIZE  (1<<14)  /* resizes to textlen */
 
 typedef enum
 {
