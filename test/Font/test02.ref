@@ -1,5 +1,5 @@
 File version: 5
-File size: 3062
+File size: 3454
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -12,15 +12,15 @@ Block length: 3
 
 Offset: 25 (0x0019)
 Block type: 48 (SWF_DEFINEFONT2)
-Block length: 2875
+Block length: 3267
 
  FontID: 2
- FontFlagsHasLayout: 0
+ FontFlagsHasLayout: 1
  FontFlagsShiftJis: 0
  FontFlagsSmallText: 0
  FontFlagsFlagANSI: 0
  FontFlagsWideOffsets: 0
- FontFlagsWideCodes: 0
+ FontFlagsWideCodes: 1
  FontFlagsFlagsItalics: 0
  FontFlagsFlagsBold: 0
  LanguageCode: 0
@@ -1093,47 +1093,130 @@ Block length: 2875
  Straight EdgeRecord: (8) - (346, -402)
  Straight EdgeRecord: (8) - (-334, 0)
  Straight EdgeRecord: (6) - (0, -74)
- CodeTable[000]: 20
- CodeTable[001]: 2e
- CodeTable[002]: 30
- CodeTable[003]: 31
- CodeTable[004]: 32
- CodeTable[005]: 33
- CodeTable[006]: 34
- CodeTable[007]: 35
- CodeTable[008]: 36
- CodeTable[009]: 37
- CodeTable[010]: 38
- CodeTable[011]: 39
- CodeTable[012]: 54
- CodeTable[013]: 61
- CodeTable[014]: 62
- CodeTable[015]: 63
- CodeTable[016]: 64
- CodeTable[017]: 65
- CodeTable[018]: 66
- CodeTable[019]: 67
- CodeTable[020]: 68
- CodeTable[021]: 69
- CodeTable[022]: 6a
- CodeTable[023]: 6b
- CodeTable[024]: 6c
- CodeTable[025]: 6d
- CodeTable[026]: 6e
- CodeTable[027]: 6f
- CodeTable[028]: 70
- CodeTable[029]: 71
- CodeTable[030]: 72
- CodeTable[031]: 73
- CodeTable[032]: 74
- CodeTable[033]: 75
- CodeTable[034]: 76
- CodeTable[035]: 77
- CodeTable[036]: 78
- CodeTable[037]: 79
- CodeTable[038]: 7a
+ CodeTable[000]: 0020
+ CodeTable[001]: 002e
+ CodeTable[002]: 0030
+ CodeTable[003]: 0031
+ CodeTable[004]: 0032
+ CodeTable[005]: 0033
+ CodeTable[006]: 0034
+ CodeTable[007]: 0035
+ CodeTable[008]: 0036
+ CodeTable[009]: 0037
+ CodeTable[010]: 0038
+ CodeTable[011]: 0039
+ CodeTable[012]: 0054
+ CodeTable[013]: 0061
+ CodeTable[014]: 0062
+ CodeTable[015]: 0063
+ CodeTable[016]: 0064
+ CodeTable[017]: 0065
+ CodeTable[018]: 0066
+ CodeTable[019]: 0067
+ CodeTable[020]: 0068
+ CodeTable[021]: 0069
+ CodeTable[022]: 006a
+ CodeTable[023]: 006b
+ CodeTable[024]: 006c
+ CodeTable[025]: 006d
+ CodeTable[026]: 006e
+ CodeTable[027]: 006f
+ CodeTable[028]: 0070
+ CodeTable[029]: 0071
+ CodeTable[030]: 0072
+ CodeTable[031]: 0073
+ CodeTable[032]: 0074
+ CodeTable[033]: 0075
+ CodeTable[034]: 0076
+ CodeTable[035]: 0077
+ CodeTable[036]: 0078
+ CodeTable[037]: 0079
+ CodeTable[038]: 007a
+ FontAscent: 950
+ FontDecent: 241
+ FontLeading: 0
+ FontAdvanceTable[000]: 145
+ FontAdvanceTable[001]: 145
+ FontAdvanceTable[002]: 28b
+ FontAdvanceTable[003]: 28b
+ FontAdvanceTable[004]: 28b
+ FontAdvanceTable[005]: 28b
+ FontAdvanceTable[006]: 28b
+ FontAdvanceTable[007]: 28b
+ FontAdvanceTable[008]: 28b
+ FontAdvanceTable[009]: 28b
+ FontAdvanceTable[010]: 28b
+ FontAdvanceTable[011]: 28b
+ FontAdvanceTable[012]: 271
+ FontAdvanceTable[013]: 273
+ FontAdvanceTable[014]: 28a
+ FontAdvanceTable[015]: 233
+ FontAdvanceTable[016]: 28a
+ FontAdvanceTable[017]: 276
+ FontAdvanceTable[018]: 168
+ FontAdvanceTable[019]: 28a
+ FontAdvanceTable[020]: 289
+ FontAdvanceTable[021]: 11c
+ FontAdvanceTable[022]: 11c
+ FontAdvanceTable[023]: 251
+ FontAdvanceTable[024]: 11c
+ FontAdvanceTable[025]: 3e5
+ FontAdvanceTable[026]: 289
+ FontAdvanceTable[027]: 272
+ FontAdvanceTable[028]: 28a
+ FontAdvanceTable[029]: 28a
+ FontAdvanceTable[030]: 1a5
+ FontAdvanceTable[031]: 215
+ FontAdvanceTable[032]: 191
+ FontAdvanceTable[033]: 289
+ FontAdvanceTable[034]: 25e
+ FontAdvanceTable[035]: 345
+ FontAdvanceTable[036]: 25e
+ FontAdvanceTable[037]: 25e
+ FontAdvanceTable[038]: 219
+ FontBoundsable: (not used)
+ RECT:  (0,0)x(0,0):1
+ RECT:  (109,-127)x(215,0):9
+ RECT:  (67,-760)x(583,14):11
+ RECT:  (112,-746)x(557,0):11
+ RECT:  (75,-760)x(549,0):11
+ RECT:  (78,-760)x(569,14):11
+ RECT:  (50,-746)x(594,0):11
+ RECT:  (79,-746)x(562,14):11
+ RECT:  (71,-760)x(587,14):11
+ RECT:  (84,-746)x(564,0):11
+ RECT:  (69,-760)x(581,14):11
+ RECT:  (64,-760)x(579,14):11
+ RECT:  (-3,-746)x(628,0):11
+ RECT:  (61,-573)x(534,14):11
+ RECT:  (93,-778)x(594,14):11
+ RECT:  (56,-573)x(499,14):11
+ RECT:  (56,-778)x(557,14):11
+ RECT:  (56,-573)x(575,14):11
+ RECT:  (23,-778)x(380,0):11
+ RECT:  (56,-573)x(557,213):11
+ RECT:  (93,-778)x(562,0):11
+ RECT:  (96,-778)x(188,0):11
+ RECT:  (-18,-778)x(188,213):11
+ RECT:  (93,-778)x(590,0):11
+ RECT:  (96,-778)x(188,0):11
+ RECT:  (93,-573)x(910,0):11
+ RECT:  (93,-573)x(562,0):11
+ RECT:  (56,-573)x(570,14):11
+ RECT:  (93,-573)x(594,213):11
+ RECT:  (56,-573)x(557,213):11
+ RECT:  (93,-573)x(421,0):11
+ RECT:  (55,-573)x(483,14):11
+ RECT:  (27,-719)x(377,0):11
+ RECT:  (87,-560)x(556,14):11
+ RECT:  (30,-560)x(575,0):11
+ RECT:  (43,-560)x(794,0):11
+ RECT:  (29,-560)x(572,0):11
+ RECT:  (30,-560)x(575,213):11
+ RECT:  (44,-560)x(493,0):11
+ KerningCount: 0
 
-Offset: 2906 (0x0b5a)
+Offset: 3298 (0x0ce2)
 Block type: 11 (SWF_DEFINETEXT)
 Block length: 138
 
@@ -1206,7 +1289,7 @@ Block length: 138
    GlyphIndex[0] = 0002    GlyphAdvance[0] = 00fe
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 3050 (0x0bea)
+Offset: 3442 (0x0d72)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -1222,12 +1305,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 3058 (0x0bf2)
+Offset: 3450 (0x0d7a)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 3060 (0x0bf4)
+Offset: 3452 (0x0d7c)
 Block type: 0 (SWF_END)
 Block length: 0
 
