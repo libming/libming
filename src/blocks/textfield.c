@@ -347,7 +347,11 @@ void SWFTextField_setFontCharacter(SWFTextField field, SWFFontCharacter fontchar
 {
 	field->fonttype = FontChar;
 	field->font.fontchar = fontchar;
-	SWFFontCharacter_addWideChars(fontchar, field->embeds, field->embedlen);
+	if((field->flags & SWFTEXTFIELD_NOEDIT) == 0)
+		SWFFontCharacter_addAllChars(fontchar);
+	else
+		SWFFontCharacter_addWideChars(fontchar, 
+				field->embeds, field->embedlen);
 }
 	
 void

@@ -54,6 +54,9 @@ struct SWFFontCharacter_s
 
 	SWFFont font;
 	byte flags;
+	
+	/* add all font charactes. usefull for textfield */
+	byte dump;
 
 	// list of text records that reference this font
 	struct textList* textList;
@@ -66,9 +69,6 @@ struct SWFFontCharacter_s
 
 	SWFOutput out;
 };
-
-static void
-SWFFontCharacter_resolveTextCodes(SWFFontCharacter font);
 
 void
 SWFFont_buildReverseMapping(SWFFont font)
@@ -107,6 +107,12 @@ SWFFont_buildReverseMapping(SWFFont font)
 	}
 }
 
+static void
+SWFFontCharacter_resolveTextCodes(SWFFontCharacter);
+
+static void
+SWFFontCharacter_dumpTable(SWFFontCharacter);
+
 static int
 completeSWFFontCharacter(SWFBlock block)
 {
@@ -116,7 +122,10 @@ completeSWFFontCharacter(SWFBlock block)
 	int i, tablen, offset;
 	char c, *string;
 
-	SWFFontCharacter_resolveTextCodes(inst);
+	if(inst->dump)
+		SWFFontCharacter_dumpTable(inst);
+	else
+		SWFFontCharacter_resolveTextCodes(inst);
 	
 	SWF_assert(!inst->out);
 	inst->out = newSWFOutput();
@@ -373,7 +382,7 @@ newSWFFontCharacter(SWFFont font)
 
 	inst->nGlyphs = 0;
 	inst->codeTable = NULL;
-
+	inst->dump = 0;
 	inst->textList = NULL;
 	inst->currentList = NULL;
 	
@@ -548,6 +557,21 @@ SWFFontCharacter_findCharCode(SWFFontCharacter font, unsigned short c)
 	return -1;
 }
 
+static void 
+SWFFontCharacter_dumpTable(SWFFontCharacter fc)
+{
+	int i;
+	SWFFont font = fc->font;
+	for (i = 0; i < font->nGlyphs; ++i)
+	{
+		unsigned short charcode = font->glyphToCode[i];
+		SWFFontCharacter_addCharToTable(fc, charcode);
+	}
+
+	for (i = 0; i < fc->nGlyphs; ++i)
+		fc->codeTable[i] = 
+			SWFFont_findGlyphCode(font, fc->codeTable[i]);
+}
 
 static void
 SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
@@ -598,6 +622,11 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 	}
 }
 
+void
+SWFFontCharacter_addAllChars(SWFFontCharacter fc)
+{
+	fc->dump = 1;
+}
 
 const char*
 SWFFont_getName(SWFFont font)

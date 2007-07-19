@@ -457,13 +457,9 @@ SWFFontCharacter SWFMovie_addFont(SWFMovie movie, SWFFont font);
 void SWFFontCharacter_addChars(SWFFontCharacter font, const char *string);
 void SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string);
 SWFFontCharacter SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name);
-
+void SWFFontCharacter_addAllChars(SWFFontCharacter);
 
 /***** SWFTextField *****/
-
-#define SWFTEXTFIELD_ONMASK  0x2005 /* on bits */
-#define SWFTEXTFIELD_OFFMASK 0x3BFF /* off bits */
-/* Taken from textfield.h: #define SWFTEXTFIELD_OFFMASK 0x7BFF / off bits */
 
 #define SWFTEXTFIELD_HASFONT   (1<<0)   /* private */
 #define SWFTEXTFIELD_HASLENGTH (1<<1)   /* private */
