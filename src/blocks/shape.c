@@ -956,7 +956,7 @@ static int addFillStyle(SWFShape shape, SWFFillStyle fill)
 	for ( i=0; i<shape->nFills; ++i )
 	{
 		if ( SWFFillStyle_equals(fill, shape->fills[i]) )
-			return -1;
+			return i;
 	}
 
 	if ( shape->isEnded )
@@ -970,20 +970,32 @@ static int addFillStyle(SWFShape shape, SWFFillStyle fill)
 
 	shape->fills[shape->nFills] = fill;
 	++shape->nFills;
-	return 0;
+	return shape->nFills;
 }
 
 
 SWFFillStyle
 SWFShape_addSolidFillStyle(SWFShape shape, byte r, byte g, byte b, byte a)
 {
-	SWFFillStyle fill = newSWFSolidFillStyle(r, g, b, a);	
-	if(addFillStyle(shape, fill) < 0)
+	int  ret;
+
+	SWFFillStyle fill = newSWFSolidFillStyle(r, g, b, a);
+	
+	ret = addFillStyle(shape, fill);
+	if(ret < 0) /* error */
 	{
 		destroySWFFillStyle(fill);
 		return NULL;
 	}
-	return fill;	
+	else if(ret == shape->nFills)  /* new fill */
+	{
+		return fill;
+	}
+	else /* fill is known */ 
+	{
+		destroySWFFillStyle(fill);
+		return shape->fills[ret];
+	}
 }
 
 

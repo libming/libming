@@ -35,7 +35,11 @@ struct SWFFill_s
 SWFFill
 newSWFFill(SWFFillStyle fillstyle)
 {
-	SWFFill fill = (SWFFill)malloc(sizeof(struct SWFFill_s));
+	SWFFill fill;
+	if(fillstyle == NULL)
+		return NULL;
+
+	fill = (SWFFill)malloc(sizeof(struct SWFFill_s));
 
 	fill->fillstyle = fillstyle;
 	fill->position = newSWFPosition(SWFFillStyle_getMatrix(fill->fillstyle));
