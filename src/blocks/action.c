@@ -143,6 +143,18 @@ int SWFAction_compile(SWFAction action, int swfVersion)
 	return SWFOutput_getLength(action->out);
 }
 
+byte *SWFAction_getByteCode(SWFAction action, size_t *length)
+{
+	if(action == NULL) 
+		return NULL;
+
+	if(action->out == NULL)
+		SWFAction_compile(action, 5);
+
+	*length = SWFOutput_getLength(action->out);
+	return SWFOutput_getBuffer(action->out);
+}
+
 static int
 completeSWFAction(SWFBlock block)
 {

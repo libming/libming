@@ -592,6 +592,7 @@ SWFAction newSWFAction(const char *script);
 SWFAction newSWFAction_fromFile(const char *filename);
 SWFAction compileSWFActionCode(const char *script) __deprecated;
 void destroySWFAction(SWFAction action);
+byte *SWFAction_getByteCode(SWFAction action, size_t *length);
 
 
 /***** SWFButton *****/
