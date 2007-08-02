@@ -1,3 +1,136 @@
+2007-07-30 12:06  krechert
+
+	* src/: ming.h.in, blocks/action.c: get Action bytecode
+
+2007-07-22 15:20  krechert
+
+	* src/: fill.c, blocks/shape.c: bugfix: shapes keep their fill-list
+	  unique. improved handling of situations when an equal fill is
+	  detected.
+
+2007-07-19 17:52  krechert
+
+	* configure.in, test/Makefile.am: textfield tests
+
+2007-07-19 17:16  krechert
+
+	* test/BrowserFont/test01.ref: update ref. textfield flags have
+	  changed
+
+2007-07-19 17:11  krechert
+
+	* test/Font/test02.ref: update font ref. layout flag is set by
+	  default now
+
+2007-07-19 17:06  krechert
+
+	* src/: ming.h.in, blocks/font.c, blocks/textfield.c:
+	  SWFFontCharacter_addAllChars() adds uses all characters available
+	  in the embedded font.  textfields use the feature if an embedded
+	  font is used and readonly flags isn't set.
+
+2007-07-19 16:26  krechert
+
+	* src/blocks/ttffont.c: fixed warnings
+
+2007-07-19 15:53  krechert
+
+	* src/: ming.h.in, blocks/textfield.c, blocks/ttffont.c: remove
+	  fixed textfield flags fixed bugs when handling embedded fonts
+	  mark private texfield flags. these should not be set by users.
+
+2007-07-18 05:50  krechert
+
+	* src/blocks/ttffont.c: freetype selects unicode charmap by
+	  default.
+
+2007-07-16 14:09  krechert
+
+	* src/blocks/ttffont.c: ttf font descender should behave like its
+	  fdb font equivalent
+
+2007-07-16 09:42  krechert
+
+	* test/actionscript/: Makefile.am, newline_crlf.as,
+	  newline_crlf.ref: bug [ 993822 ] SWFAction doesn't like \r\n
+	  seems to be invalid or outdated
+
+2007-07-16 08:33  krechert
+
+	* configure.in: stop with error if YACC or LEX isn't found
+
+2007-07-16 08:04  krechert
+
+	* configure.in, src/actioncompiler/Makefile.am: Inserted
+	  AC_PROG_LEX again but removed $(LEXLIB) from
+	  libactioncompiler_la_LIBADD. If AC_PROG_LEX isn't used (like it
+	  was the case till now) $(LEXLIB) isn't set.
+
+2007-07-16 07:49  krechert
+
+	* src/actioncompiler/Makefile.am: fix actioncompiler build: $(YACC)
+	  uses bison -y by default. bisons yacc compat mode uses different
+	  nameing conventions.
+
+2007-07-16 06:03  krechert
+
+	* test/dotests.pl: ignore missing testcases for language bindings
+
+2007-07-16 05:50  krechert
+
+	* src/blocks/protect.c: copy password. otherwise php test fails
+
+2007-07-16 05:23  krechert
+
+	* php_ext/ming.c: use SWFFont_fromFile()
+
+2007-07-15 16:47  krechert
+
+	* test/dotests.pl: ls gives error messages if python is not enabled
+
+2007-07-15 15:57  krechert
+
+	* util/: Makefile.am, gif2mask.c: alpha masks require zlib
+	  compressed data. even with no compression zlib adds a header and
+	  crc data.
+
+2007-07-15 15:50  krechert
+
+	* src/blocks/: Makefile.am, gifdbl.c, pngdbl.c: dbl images require
+	  zlib compressed data. even with no compression zlib adds a header
+	  and crc data.
+
+2007-07-15 15:40  krechert
+
+	* util/: Makefile.am, dbl2png.c, gif2dbl.c, png2dbl.c: dbl images
+	  require zlib compressed data. even with no compression zlib add a
+	  header and crc data.
+
+2007-07-15 14:33  krechert
+
+	* src/blocks/fdbfont.c: bugfix: fdbfont reader should return an
+	  empty shape for space characters
+
+2007-07-15 14:30  krechert
+
+	* test/Font/: test01-cxx.C, test01.c, test01.ref, test02-cxx.C,
+	  test02.c, test02.ref: improved test string
+
+2007-07-15 10:26  krechert
+
+	* util/: blocktypes.c, outputdecl.h, parser.c, parserdecl.h,
+	  swftypes.h: generate output for DEFINEBUTTON and ENABLEDEBUGGER2
+	  skip unknown or unimplemented tags
+
+2007-07-15 10:24  krechert
+
+	* src/blocks/blocktypes.h: mark unknown, obsolete or undocumented
+	  tags
+
+2007-07-14 10:24  krechert
+
+	* php_ext/ming.c: fix compiler error allow tff fonts
+
 2007-07-13 10:12  strk
 
 	* src/actioncompiler/Makefile.am: Use $(YACC), not verbatim 'bison'
