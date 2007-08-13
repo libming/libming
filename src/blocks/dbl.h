@@ -32,7 +32,6 @@
 #include "ming.h"
 #include "character.h"
 
-#if (USE_GIF + USE_PNG)
 struct dbl_data
 {	int length;
 	byte hasalpha, format, format2;
@@ -55,6 +54,5 @@ struct SWFDBLBitmapData_s
 };
 
 SWFDBLBitmapData newSWFDBLBitmapData_fromData(dblData data);
-#endif
 
 #endif /* SWF_DBL_H_INCLUDED */

@@ -127,7 +127,6 @@ newSWFDBLBitmap_fromInput(SWFInput input)
 	return dbl;
 }
 
-#if (USE_GIF + USE_PNG)
 static void
 writeSWFDBLBitmapDataToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
@@ -203,7 +202,6 @@ newSWFDBLBitmapData_fromData(dblData data)
 
 	return dbl;
 }
-#endif
 
 static void
 destroySWFDBLBitmap_andInputs(SWFDBLBitmap bitmap)
