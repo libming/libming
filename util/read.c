@@ -155,6 +155,7 @@ char *readBytes(FILE *f,int size)
 
   return buf;
 }
+
 char *readString(FILE *f)
 {
   int len = 0, buflen = 256;
@@ -190,6 +191,32 @@ char *readString(FILE *f)
   *p = 0;
 
   return buf;
+}
+
+static inline int hasNextByte(unsigned int b)
+{
+	if(!(b & 0x80))
+		return 0;
+	return 1;
+}
+
+unsigned int readEncUInt32(FILE *f)
+{
+  unsigned int result = 0, temp;
+  int shift = 0;
+  do
+  {
+    if(shift > 28)
+    {	
+      printf("readEncUInt32: read exceeds 5 bytes\n");
+      return result;
+    }
+    temp = readUInt8(f);
+    result |= (0x7f & temp) << shift;
+    shift += 7;
+  } while (hasNextByte(temp));
+
+  return result;
 }
 
 char *readSizedString(FILE *f,int size)
@@ -290,8 +317,7 @@ void _dumpBytes(FILE *f, int length, int restore)
   if(restore) {
 	fseek(f,offset, SEEK_SET);
   	fileOffset = offset;
-	}
-
+  }
 }
 
 void dumpBytes(FILE *f, int length)
@@ -361,3 +387,5 @@ void dumpBuffer(unsigned char *buf, int length)
   putchar('\n');
   putchar('\n');
 }
+
+

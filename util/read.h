@@ -19,6 +19,7 @@ int readUInt16(FILE *f);
 int readSInt16(FILE *f);
 int readUInt32(FILE *f);
 int readSInt32(FILE *f);
+unsigned int readEncUInt32(FILE *f);
 char *readBytes(FILE *f,int size);
 char *readString(FILE *f);
 char *readSizedString(FILE *f,int size);
