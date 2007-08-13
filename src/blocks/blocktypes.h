@@ -90,6 +90,7 @@ typedef enum
   SWF_INITACTION		= 59,
   SWF_DEFINEVIDEOSTREAM		= 60,
   SWF_VIDEOFRAME		= 61,
+  SWF_SERIALNUMBER		= 41,
 
   /* SWF8 tags */
   SWF_FILEATTRIBUTES            = 69,
@@ -97,7 +98,9 @@ typedef enum
 
   /* SWF9 tags */
   SWF_SYMBOLCLASS               = 76,
-  SWF_DOABCDEFINE               = 82,
+  SWF_DOABC                     = 82,
+  SWF_DEFINEBINARYDATA		= 87,
+  SWF_DEFINESCENEANDFRAMEDATA   = 86,
 
   /* Unconfirmed tags */
   SWF_REFLEX			= 777,
@@ -116,7 +119,6 @@ typedef enum
   SWF_SYNCFRAME			= 29,
   SWF_CHARACTERSET		= 51,
   SWF_DEFINEBITSPTR		= 1023,
-  SWF_SERIALNUMBER		= 41,
 
 /* these are pseudo definitions that do not correspond to actual swf file tags */
   SWF_PREBUILTCLIP = 254,
