@@ -849,6 +849,7 @@ enum {
 	SWFBLEND_MODE_LAYER,
 	SWFBLEND_MODE_MULT,
 	SWFBLEND_MODE_SCREEN,
+	SWFBLEND_MODE_LIGHTEN,
 	SWFBLEND_MODE_DARKEN,
 	SWFBLEND_MODE_ADD,
 	SWFBLEND_MODE_SUB,
@@ -858,7 +859,8 @@ enum {
 	SWFBLEND_MODE_ERASE,
 	SWFBLEND_MODE_OVERLAY,
 	SWFBLEND_MODE_HARDLIGHT
- };
+};
+
 void SWFDisplayItem_setBlendMode(SWFDisplayItem item, int mode);
 void SWFDisplayItem_addFilter(SWFDisplayItem item, SWFFilter filter);
 /***** SWFFill *****/
