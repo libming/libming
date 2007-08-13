@@ -1608,8 +1608,15 @@ struct SWF_REMOVEOBJECT2
 };
 
 struct SWF_SERIALNUMBER
-{
-	STRING code;
+{ 
+  UI32 Id;
+  UI32 Edition;
+  UI8 Major;
+  UI8 Minor;
+  UI32 BuildL;
+  UI32 BuildH;
+  UI32 TimestampL;
+  UI32 TimestampH;
 };
 
 struct SWF_SETBACKGROUNDCOLOR
@@ -1700,7 +1707,8 @@ struct SWF_FILEATTRIBUTES
 {
 	UI8	Reserved:3;
 	UI8	HasMetadata:1;
-	UI8	Reserved2:3;
+	UI8	ActionScript3:1;
+	UI8	Reserved2:2;
 	UI8	UseNetwork:1;
 	UI16	Reserved3;
 	UI8	Reserved4;
@@ -1727,6 +1735,52 @@ struct SWF_SETTABINDEX
 {
 	UI16 Depth;
 	UI16 TabIndex;
+};
+
+struct SWF_DOABC
+{
+	UI32 Flags;
+	int DataLength;
+	UI8 *Data;	
+};
+
+struct AS_SYMBOL
+{
+	UI16 SymbolId;
+	STRING SymbolName;
+};
+
+struct SWF_SYMBOLCLASS
+{
+	UI16 SymbolCount;
+	struct AS_SYMBOL *SymbolList;
+};
+
+struct SWF_DEFINEBINARYDATA
+{	
+	UI32 Reserved;
+	int DataLength;
+	UI8 *Data;
+};
+
+struct SCENE_DATA
+{
+	UI32 Offset;
+	STRING Name;
+};
+
+struct FRAME_DATA
+{
+	UI32 FrameNum;
+	STRING FrameLabel;
+};
+
+struct SWF_DEFINESCENEANDFRAMEDATA
+{
+	UI32 SceneCount;
+	struct SCENE_DATA *Scenes;
+	UI32 FrameLabelCount;
+	struct FRAME_DATA *Frames;
 };
 
 typedef union SWF_Parserstruct
@@ -1803,5 +1857,9 @@ typedef union SWF_Parserstruct
   struct SWF_SCRIPTLIMITS SWF_SCRIPTLIMITS;
   struct SWF_DEFINESCALINGGRID SWF_DEFINESCALINGGRID;
   struct SWF_SETTABINDEX SWF_SETTABINDEX;
+  struct SWF_DOABC SWF_DOABC;
+  struct SWF_SYMBOLCLASS SWF_SYMBOLCLASS;
+  struct SWF_DEFINEBINARYDATA SWF_DEFINEBINARYDATA;
+  struct SWF_DEFINESCENEANDFRAMEDATA SWF_DEFINESCENEANDFRAMEDATA;
 } SWF_Parserstruct;
 #endif /* _SWFTYPES_H_ */

@@ -36,7 +36,6 @@ void silentSkipBytes(FILE *f, int length);
 	struct block *parserrec;\
 	parserrec=(struct block *)calloc(1,sizeof(struct block)); \
 
-
 #define PAR_END \
 	return (SWF_Parserstruct *)parserrec;
 
@@ -2663,9 +2662,14 @@ SWF_Parserstruct *
 parseSWF_SERIALNUMBER (FILE * f, int length)
 {
   PAR_BEGIN (SWF_SERIALNUMBER);
-
-  parserrec->code = readSizedString(f, length);
-
+  parserrec->Id = readUInt32(f);
+  parserrec->Edition = readUInt32(f);
+  parserrec->Major = readUInt8(f);
+  parserrec->Minor = readUInt8(f);
+  parserrec->BuildL = readUInt32(f);
+  parserrec->BuildH = readUInt32(f);
+  parserrec->TimestampL = readUInt32(f);
+  parserrec->TimestampH = readUInt32(f);
   PAR_END;
 }
 
@@ -2892,3 +2896,61 @@ parseSWF_SETTABINDEX (FILE * f, int length)
   parserrec->TabIndex = readUInt16(f);
   PAR_END;
 };
+
+SWF_Parserstruct *
+parseSWF_DOABC (FILE *f, int length)
+{	
+  PAR_BEGIN(SWF_DOABC); 
+  parserrec->Flags = readUInt32(f);
+  parserrec->Data = (UI8 *)readBytes(f, length - 4);
+  parserrec->DataLength = length - 4;
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_SYMBOLCLASS (FILE *f, int length)
+{
+  int i, count;
+  PAR_BEGIN(SWF_SYMBOLCLASS);
+  count = readUInt16(f);
+  parserrec->SymbolCount = count;
+  parserrec->SymbolList = malloc(count * sizeof(struct SWF_SYMBOLCLASS));
+  for(i = 0; i < count; i++)
+  {
+     parserrec->SymbolList[i].SymbolId = readUInt16(f);
+     parserrec->SymbolList[i].SymbolName = readString(f);
+  }
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_DEFINEBINARYDATA(FILE *f, int length)
+{
+  PAR_BEGIN(SWF_DEFINEBINARYDATA);
+  parserrec->Reserved = readUInt32(f);
+  parserrec->Data = (UI8 *)readBytes(f, length - 4);
+  parserrec->DataLength = length - 4;
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_DEFINESCENEANDFRAMEDATA(FILE *f, int length)
+{
+  int i;
+  PAR_BEGIN(SWF_DEFINESCENEANDFRAMEDATA);
+  parserrec->SceneCount = readEncUInt32(f);
+  parserrec->Scenes = malloc(sizeof(struct SCENE_DATA) * parserrec->SceneCount);
+  for(i = 0; i < parserrec->SceneCount; i++)
+  {
+    parserrec->Scenes[i].Offset = readEncUInt32(f);
+    parserrec->Scenes[i].Name = readString(f);
+  }
+  parserrec->FrameLabelCount = readEncUInt32(f);
+  parserrec->Frames = malloc(sizeof(struct FRAME_DATA) * parserrec->FrameLabelCount);
+  for(i = 0; i < parserrec->FrameLabelCount; i++)
+  {
+    parserrec->Frames[i].FrameNum = readEncUInt32(f); 
+    parserrec->Frames[i].FrameLabel = readString(f);
+  }
+  PAR_END;
+}

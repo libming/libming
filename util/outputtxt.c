@@ -113,6 +113,8 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SCRIPTLIMITS, outputSWF_SCRIPTLIMITS},
   {SWF_DEFINESCALINGGRID, outputSWF_DEFINESCALINGGRID},
   {SWF_SETTABINDEX, outputSWF_SETTABINDEX},
+  {SWF_DOABC, outputSWF_DOABC},
+  {SWF_SYMBOLCLASS, outputSWF_SYMBOLCLASS},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -134,7 +136,6 @@ iprintf(const char* fmt, ...)
 	vprintf(fmt, ap);
 	return;
 }
-
 
 /* Output basic Flash Types */
 
@@ -1755,9 +1756,11 @@ void
 outputSWF_SERIALNUMBER (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_SERIALNUMBER);
-
-  iprintf (" Code: %s\n", sblock->code);
-
+  iprintf("Version %d.%d.%d.%d\n", sblock->Id, sblock->Edition, 
+	sblock->Major, sblock->Minor);
+  iprintf("Build: %lu\n", (((long long)sblock->BuildH) << 32) + sblock->BuildL);
+  iprintf("Timestamp: %lu\n", 
+	(((long long)sblock->TimestampH) << 32) + sblock->TimestampL);
 }
 
 void
@@ -2062,6 +2065,28 @@ outputSWF_SETTABINDEX(SWF_Parserstruct *pblock)
   iprintf(" TabIndex: %d\n", sblock->TabIndex);
 }
 
+void
+outputSWF_DOABC(SWF_Parserstruct *pblock)
+{
+  OUT_BEGIN (SWF_DOABC);
+  iprintf(" ActionFlags: %d\n", sblock->Flags);
+  dumpBuffer(sblock->Data, sblock->DataLength);
+}
+
+void 
+outputSWF_SYMBOLCLASS(SWF_Parserstruct *pblock)
+{
+  int count, i;
+  OUT_BEGIN(SWF_SYMBOLCLASS);
+  count = sblock->SymbolCount;
+  iprintf("SymbolCount %i\n", count);
+  for(i = 0; i < count; i++)
+  {
+    iprintf(" Id: %i, Name: %s\n", 
+      sblock->SymbolList[i].SymbolId, sblock->SymbolList[i].SymbolName);
+  }
+
+}
 
 void
 printRect(struct Rect *r)
