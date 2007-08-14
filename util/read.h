@@ -26,6 +26,8 @@ char *readSizedString(FILE *f,int size);
 double readDouble(FILE *f);
 void dumpBytes(FILE *f, int length);
 void peekBytes(FILE *f, int length);
+void dumpBuffer(unsigned char *buf, int length);
+
 
 void dumpBuffer(unsigned char *buf, int length);
 
