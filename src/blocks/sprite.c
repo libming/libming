@@ -148,6 +148,7 @@ SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 	if ( block->type == SWF_SHOWFRAME ||
 			 block->type == SWF_PLACEOBJECT ||
 			 block->type == SWF_PLACEOBJECT2 ||
+			 block->type == SWF_PLACEOBJECT3 || 		
 			 block->type == SWF_REMOVEOBJECT ||
 			 block->type == SWF_REMOVEOBJECT2 ||
 			 block->type == SWF_DOACTION ||
