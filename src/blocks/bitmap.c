@@ -18,6 +18,7 @@
 */
 
 /* $Id$ */
+#include <stdlib.h>
 
 #include "bitmap.h"
 #include "rect.h"
@@ -26,6 +27,10 @@
 #include "error.h"
 #include "input.h"
 #include "libming.h"
+
+#if USE_ZLIB
+#include "zlib.h"
+#endif
 
 void destroySWFBitmap(SWFBitmap bitmap)
 {
@@ -82,6 +87,48 @@ SWFBitmap newSWFBitmap_fromInput(SWFInput input)
 	return NULL;
 }
 
+
+SWFBitmap newSWFBitmap_fromRawImg(unsigned char *raw, 
+                                  SWFRawImgFmt srcFmt, SWFBitmapFmt dstFmt,
+                                  unsigned short width, unsigned short height)
+{
+#if USE_ZLIB
+	struct dbl_data image;
+	uLongf insize, outsize;
+	int ret;
+	unsigned char *tmp;
+
+	switch(srcFmt)
+	{
+		case SWF_RAWIMG_ARGB:
+			tmp = raw;
+			break;
+		default:
+			SWF_warn("newSWFBitmap_fromRawImg: unknown img format\n");
+			return NULL;
+	}
+
+	image.width = width;
+	image.height = height;
+	image.hasalpha = 1;
+	image.format = 5;
+	
+	insize = width * height * 4;
+	outsize = compressBound(insize);
+	image.data = malloc(outsize);
+	ret = compress2(image.data, &outsize, (Bytef *)tmp, insize, 9);
+	if(ret != Z_OK)
+	{
+		free(image.data);
+		return NULL;
+	}
+	image.length = outsize;
+	return (SWFBitmap)newSWFDBLBitmapData_fromData(&image);
+#else
+	SWF_warn("newSWFBitmap_fromRawImg: depends on zlib support\n");
+	return NULL;
+#endif
+} 
 
 /*
  * Local variables:

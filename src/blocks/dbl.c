@@ -216,7 +216,6 @@ destroySWFDBLBitmap_andInputs(SWFDBLBitmap bitmap)
 	destroySWFCharacter((SWFCharacter) bitmap);
 }
 
-
 SWFDBLBitmap
 newSWFDBLBitmap(FILE* f)
 {
@@ -224,7 +223,6 @@ newSWFDBLBitmap(FILE* f)
 	BLOCK(dbl)->dtor = (destroySWFBlockMethod) destroySWFDBLBitmap_andInputs;
 	return dbl;
 }
-
 
 /*
  * Local variables:

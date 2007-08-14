@@ -211,9 +211,26 @@ float SWFCharacter_getHeight(SWFCharacter character);
 
 /***** SWFBitmap *****/
 
+typedef enum 
+{
+	SWF_DBL_COLORTABLE,
+	SWF_DBL_RGB15,
+	SWF_DBL_RGB24,
+	SWF_DBL_RGB32
+} SWFBitmapFmt;
+
+typedef enum {
+	SWF_RAWIMG_ARGB,
+} SWFRawImgFmt;
+
+
 typedef SWFCharacter SWFBitmap;
 
 SWFBitmap newSWFBitmap_fromInput(SWFInput input);
+SWFBitmap newSWFBitmap_fromRawImg(unsigned char *raw, 
+                                  SWFRawImgFmt srcFmt, SWFBitmapFmt dstFmt,
+                                  unsigned short width, unsigned short height);
+
 void destroySWFBitmap(SWFBitmap bitmap);
 
 int SWFBitmap_getWidth(SWFBitmap b);
