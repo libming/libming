@@ -34,7 +34,10 @@ SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
 	}				\
 }					\
 
-
+/* fix for cygwin compile */
+#ifndef __STRING
+#define __STRING(x) "x"
+#endif
 
 #define SWF_assert(__condition) 						\
 	if ( !(__condition) )							\
