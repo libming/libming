@@ -41,6 +41,7 @@
 #define FLOAT_Z_DVAL_PP(x) ((float)Z_DVAL_PP(x))
 #define BYTE_Z_LVAL_PP(x)  ((byte)Z_LVAL_PP(x))
 
+#ifndef HAVE_DESTROY_SWF_BLOCK
 void destroySWFBlock(SWFBlock block);
 #endif
 
