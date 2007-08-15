@@ -4887,35 +4887,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SWFFont_getShape(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SWFFont arg1 = (SWFFont) 0 ;
-  unsigned short arg2 ;
-  char *result = 0 ;
-  int res1 ;
-  unsigned short val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:SWFFont_getShape",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFont_getShape" "', argument " "1"" of type '" "SWFFont""'"); 
-  }
-  ecode2 = SWIG_AsVal_unsigned_SS_short(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFFont_getShape" "', argument " "2"" of type '" "unsigned short""'");
-  } 
-  arg2 = (unsigned short)(val2);
-  result = (char *)SWFFont_getShape(arg1,arg2);
-  resultobj = SWIG_FromCharPtr(result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_newSWFText(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFText result;
@@ -11390,7 +11361,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFFont_getAscent", _wrap_SWFFont_getAscent, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getDescent", _wrap_SWFFont_getDescent, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getLeading", _wrap_SWFFont_getLeading, METH_VARARGS, NULL},
-	 { (char *)"SWFFont_getShape", _wrap_SWFFont_getShape, METH_VARARGS, NULL},
 	 { (char *)"newSWFText", _wrap_newSWFText, METH_VARARGS, NULL},
 	 { (char *)"newSWFText2", _wrap_newSWFText2, METH_VARARGS, NULL},
 	 { (char *)"destroySWFText", _wrap_destroySWFText, METH_VARARGS, NULL},
