@@ -2031,7 +2031,7 @@ SWIG_Python_ConvertFunctionPtr(PyObject *obj, void **ptr, swig_type_info *ty) {
     void *vptr = 0;
     
     /* here we get the method pointer for callbacks */
-    char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
+    const char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
     const char *desc = doc ? strstr(doc, "swig_ptr: ") : 0;
     if (desc) {
       desc = ty ? SWIG_UnpackVoidPtr(desc + 10, &vptr, ty->name) : 0;
@@ -2494,7 +2494,7 @@ static swig_module_info swig_module = {swig_types, 25, 0, 0, 0, 0};
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
 
-  #include "ming.h"
+  #include "libming.h"
 
   void error( char *msg ) {};
 
@@ -10893,7 +10893,7 @@ SWIGINTERN PyObject *_wrap_SWFMovie_protect(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_protect" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = buf2;
-  SWFMovie_protect(arg1,(char const *)arg2);
+  SWFMovie_protect(arg1, arg2);
   resultobj = SWIG_Py_Void();
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
