@@ -441,10 +441,10 @@ identifier
 	| GETVARIABLE	{ $$ = strdup("getvariable"); }
 	| SETVARIABLE	{ $$ = strdup("setvariable"); }
 	| SETTARGETEXPRESSION	{ $$ = strdup("settargetexpression"); }
-	| DUPLICATEMOVIECLIP	{ $$ = strdup("duplicatemovieclip"); }
-	| REMOVEMOVIECLIP	{ $$ = strdup("removemovieclip"); }
-	| STARTDRAG	{ $$ = strdup("startdrag"); }
-	| STOPDRAG	{ $$ = strdup("stopdrag"); }
+	| DUPLICATEMOVIECLIP	{ $$ = strdup("duplicateMovieClip"); }
+	| REMOVEMOVIECLIP	{ $$ = strdup("removeMovieClip"); }
+	| STARTDRAG	{ $$ = strdup("startDrag"); }
+	| STOPDRAG	{ $$ = strdup("stopDrag"); }
 	| STRINGLESSTHAN	{ $$ = strdup("stringlessthan"); }
 	| MBLENGTH	{ $$ = strdup("mblength"); }
 	| MBSUBSTRING	{ $$ = strdup("mbsubstring"); }
@@ -455,8 +455,8 @@ identifier
 	| GETURL2	{ $$ = strdup("getURL2"); }
 	| POST	{ $$ = strdup("post"); }
 	| GET	{ $$ = strdup("get"); }
-	| LOADVARIABLES	{ $$ = strdup("loadvariables"); }
-	| LOADMOVIE	{ $$ = strdup("loadmovie"); }
+	| LOADVARIABLES	{ $$ = strdup("loadVariables"); }
+	| LOADMOVIE	{ $$ = strdup("loadMovie"); }
 	| EXTENDS	{ $$ = strdup("extends"); }
 	| GOTOANDSTOP	{ $$ = strdup("gotoAndStop"); }
 	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }

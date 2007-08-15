@@ -265,6 +265,8 @@ extends			{ count();	return EXTENDS;		}
 tonumber		{ count();	return TONUMBER;	}
 tostring		{ count();	return TOSTRING;	}
 targetpath		{ count();	return TARGETPATH;	}
+duplicatemovieclip	{ count();	return DUPLICATEMOVIECLIP; }
+removemovieclip		{ count();	return REMOVEMOVIECLIP; }
 }
 
 <AS_V6>{
