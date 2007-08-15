@@ -21,6 +21,7 @@
 #include "blocks/blocktypes.h"
 #include "action.h"
 #include "parser.h"
+#include "read.h"
 #include "decompile.h"
 #include "swfoutput.h"
 
