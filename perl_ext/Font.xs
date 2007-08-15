@@ -77,9 +77,4 @@ short
 SWFFont_getLeading(font)
 	SWF::Font	font
 
-char *
-SWFFont_getShape(font, code)
-	SWF::Font font
-	int code;
-	CLEANUP:
-		free(RETVAL);
+

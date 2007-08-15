@@ -243,7 +243,6 @@ float SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string);
 float SWFFont_getAscent(SWFFont font);
 float SWFFont_getDescent(SWFFont font);
 float SWFFont_getLeading(SWFFont font);
-char *SWFFont_getShape(SWFFont font, unsigned short code);
 
 
 /***** SWFText *****/

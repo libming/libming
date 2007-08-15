@@ -41,7 +41,6 @@
 #define FLOAT_Z_DVAL_PP(x) ((float)Z_DVAL_PP(x))
 #define BYTE_Z_LVAL_PP(x)  ((byte)Z_LVAL_PP(x))
 
-#ifndef HAVE_DESTROY_SWF_BLOCK
 void destroySWFBlock(SWFBlock block);
 #endif
 
@@ -1648,24 +1647,6 @@ PHP_METHOD(swffont, addChars)
 */
 /* }}} */
 
-/* {{{ proto string swffont::getShape(code)
-   Returns the glyph shape of a char as a text string */
-PHP_METHOD(swffont, getShape)
-{
-	zval **zcode;
-	char *result;
-
-	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zcode) == FAILURE)
-		WRONG_PARAM_COUNT;
-
-	convert_to_long_ex(zcode);
-
-	result = SWFFont_getShape(getFont(getThis() TSRMLS_CC), Z_LVAL_PP(zcode));
-	RETVAL_STRING(result, 1);
-	free(result);
-}
-/* }}} */
-
 #endif
 
 static zend_function_entry swffont_functions[] = {
@@ -1680,7 +1661,6 @@ static zend_function_entry swffont_functions[] = {
 	PHP_ME(swffont, getLeading,        NULL, 0)
 #ifdef HAVE_NEW_MING
 /*	PHP_ME(swffont, addchars,          NULL, 0)*/
-	PHP_ME(swffont, getShape,          NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
