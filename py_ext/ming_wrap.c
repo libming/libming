@@ -2293,7 +2293,7 @@ SWIG_Python_SetModule(swig_module_info *swig_module) {
 
 /* The python cached type query */
 SWIGRUNTIME PyObject *
-SWIG_Python_TypeCache() {
+SWIG_Python_TypeCache(void) {
   static PyObject *SWIG_STATIC_POINTER(cache) = PyDict_New();
   return cache;
 }
@@ -2760,7 +2760,7 @@ SWIG_AsVal_unsigned_SS_short (PyObject * obj, unsigned short *val)
 
 
 SWIGINTERN swig_type_info*
-SWIG_pchar_descriptor()
+SWIG_pchar_descriptor(void)
 {
   static int init = 0;
   static swig_type_info* info = 0;
@@ -12072,7 +12072,7 @@ extern "C" {
   }
   
   SWIGINTERN PyObject *
-  SWIG_globals() {
+  SWIG_globals(void) {
     static PyObject *_SWIG_globals = 0; 
     if (!_SWIG_globals) _SWIG_globals = SWIG_newvarlink();  
     return _SWIG_globals;
