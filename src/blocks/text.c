@@ -311,11 +311,15 @@ int
 SWFText_getScaledStringWidth(SWFText text, const char *string)
 {
 	SWFFont font;
-	int height = text->currentRecord->height;
+	int height;
 	unsigned short* widestr;
 	int len = strlen(string);
 	int n, ret;
+	
+	if(text->currentRecord == NULL)
+		return -1;
 
+	height = text->currentRecord->height;
 	widestr = (unsigned short *)malloc(2 * len);
 	for(n = 0 ; n < len ; n++)
 		widestr[n] = (unsigned char)string[n];
@@ -337,10 +341,14 @@ int
 SWFText_getScaledUTF8StringWidth(SWFText text, const char *string)
 {
 	SWFFont font;
-	int height = text->currentRecord->height;
+	int height;
 	unsigned short* widestr;
 	int len, ret;
 
+	if(text->currentRecord == NULL)
+		return -1;
+
+	height = text->currentRecord->height;
 	len = UTF8ExpandString(string, &widestr);
 	if ( text->currentRecord->isResolved )
 		font = SWFFontCharacter_getFont(text->currentRecord->font.fontchar);
@@ -359,8 +367,13 @@ int
 SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string)
 {
 	SWFFont font;
-	int height = text->currentRecord->height;
+	int height;
 	int len;
+
+	if(text->currentRecord == NULL)
+		return -1;
+	
+	height = text->currentRecord->height;
 
 	for(len = 0 ; *(string + len); len++)
 		;
@@ -379,26 +392,36 @@ SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string)
 short
 SWFText_getScaledAscent(SWFText text)
 {
-	SWFFont font = text->currentRecord->font.font;
-	int height = text->currentRecord->height;
+	SWFFont font;
+	int height;
+
+	if(text->currentRecord == NULL)
+		return -1;
 
 	if ( text->currentRecord->isBrowserFont )
 		return 0;
-	else
-		return SWFFont_getScaledAscent(font) * height / 1024;
+	
+	font = text->currentRecord->font.font;
+	height = text->currentRecord->height;
+	return SWFFont_getScaledAscent(font) * height / 1024;
 }
 
 
 short
 SWFText_getScaledDescent(SWFText text)
 {
-	SWFFont font = text->currentRecord->font.font;
-	int height = text->currentRecord->height;
+	SWFFont font;
+	int height;
+
+	if(text->currentRecord == NULL)
+		return -1;
 
 	if ( text->currentRecord->isBrowserFont )
 		return 0;
-	else
-		return SWFFont_getScaledDescent(font) * height / 1024;
+
+	font = text->currentRecord->font.font;
+	height = text->currentRecord->height;
+	return SWFFont_getScaledDescent(font) * height / 1024;
 }
 
 
