@@ -5238,8 +5238,9 @@ SWIGINTERN PyObject *_wrap_SWFText_getStringWidth(PyObject *SWIGUNUSEDPARM(self)
   unsigned char *arg2 = (unsigned char *) 0 ;
   float result;
   int res1 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  char *buf2 = 0;
+  int alloc2 = 0;
+  int res2 = 0;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5248,13 +5249,14 @@ SWIGINTERN PyObject *_wrap_SWFText_getStringWidth(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFText_getStringWidth" "', argument " "1"" of type '" "SWFText""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
+  res2 =  SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getStringWidth" "', argument " "2"" of type '" "unsigned char const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getStringWidth" "', argument " "2"" of type '" "char const *""'"); 
   }
-  arg2 = (unsigned char *)(argp2);
+  arg2 = (unsigned char *)(buf2);
   result = (float)SWFText_getStringWidth(arg1,(unsigned char const *)arg2);
   resultobj = SWIG_From_float((float)(result));
+  if(alloc2 == SWIG_NEWOBJ) free(buf2);
   return resultobj;
 fail:
   return NULL;
@@ -5267,8 +5269,9 @@ SWIGINTERN PyObject *_wrap_SWFText_getUTF8StringWidth(PyObject *SWIGUNUSEDPARM(s
   unsigned char *arg2 = (unsigned char *) 0 ;
   float result;
   int res1 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  char *buf2 = 0;
+  int alloc2 = 0;
+  int res2 = 0;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5277,13 +5280,14 @@ SWIGINTERN PyObject *_wrap_SWFText_getUTF8StringWidth(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFText_getUTF8StringWidth" "', argument " "1"" of type '" "SWFText""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
+  res2 =  SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getUTF8StringWidth" "', argument " "2"" of type '" "unsigned char const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getUTF8StringWidth" "', argument " "2"" of type '" "char const *""'"); 
   }
-  arg2 = (unsigned char *)(argp2);
+  arg2 = (unsigned char *)(buf2);
   result = (float)SWFText_getUTF8StringWidth(arg1,(unsigned char const *)arg2);
   resultobj = SWIG_From_float((float)(result));
+  if(alloc2 == SWIG_NEWOBJ) free(buf2);
   return resultobj;
 fail:
   return NULL;
