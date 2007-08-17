@@ -2071,7 +2071,6 @@ outputSWF_DOABC(SWF_Parserstruct *pblock)
 {
   OUT_BEGIN (SWF_DOABC);
   iprintf(" ActionFlags: %d\n", sblock->Flags);
-  dumpBuffer(sblock->Data, sblock->DataLength);
 }
 
 void 

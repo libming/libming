@@ -2902,8 +2902,6 @@ parseSWF_DOABC (FILE *f, int length)
 {	
   PAR_BEGIN(SWF_DOABC); 
   parserrec->Flags = readUInt32(f);
-  parserrec->Data = (UI8 *)readBytes(f, length - 4);
-  parserrec->DataLength = length - 4;
   PAR_END;
 }
 

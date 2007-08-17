@@ -26,6 +26,9 @@ typedef signed long	SI32;	/* Signed 32-bit integer value */
 typedef unsigned char	UI8;	/* Unsigned  8-bit integer value */
 typedef unsigned short	UI16;	/* Unsigned 16-bit integer value */
 typedef unsigned long	UI32;	/* Unsigned 32-bit integer value */
+typedef unsigned long 	U30;	/* Unsigned 30-bit variable-length encoded integer value */
+typedef unsigned long 	U32;	/* Unsigned 32-bit variable-length encoded integer value */
+typedef signed long	S32;	/* Signed 32-bit variable-length encoded integer value */
 
 typedef unsigned long	FIXED;	/* 32-bit 16.16 fixed-point number */
 typedef unsigned short	FIXED8;	/* 16-bit 8.8 fixed-point number */
@@ -1737,11 +1740,243 @@ struct SWF_SETTABINDEX
 	UI16 TabIndex;
 };
 
+struct ABC_OPTION_DETAIL
+{
+	U30 Val;
+	UI8 Kind;
+};
+
+struct ABC_OPTION_INFO
+{
+	U30 OptionCount;
+	struct ABC_OPTION_DETAIL *Option;	
+};
+
+struct ABC_PARAM_INFO
+{
+	U30 *ParamNames;
+};
+
+struct ABC_METHOD_INFO
+{
+	U30 ParamCount;
+	U30 ReturnType;
+	U30 *ParamType;
+	U30 Name;
+	UI8 Flags;
+	struct ABC_OPTION_INFO Options;
+	struct ABC_PARAM_INFO ParamNames;
+};	
+
+struct ABC_STRING_INFO
+{
+	U30 Size;
+	UI8 *UTF8String;
+};
+
+struct ABC_NS_INFO
+{
+	UI8 Kind;
+	U30 Name;
+};
+
+struct ABC_NS_SET_INFO
+{
+	U30 Count;
+	U30 *NS;
+};
+
+struct ABC_QNAME
+{
+	U30 NS;
+	U30 Name;
+};
+
+struct ABC_RTQNAME
+{
+	U30 Name;
+};
+
+struct ABC_RTQNAME_L
+{
+	// empty
+};
+
+struct ABC_MULTINAME
+{
+	U30 Name;
+	U30 NSSet;
+};
+
+struct ABC_MULTINAME_L
+{
+	U30 NSSet;
+};
+
+struct ABC_MULTINAME_INFO
+{
+	UI8 Kind;
+	union {
+		struct ABC_QNAME QName;
+		struct ABC_QNAME QNameA;
+		struct ABC_RTQNAME RTQName;
+		struct ABC_RTQNAME RTQNameA;
+		struct ABC_RTQNAME_L RTQNameL;
+		struct ABC_RTQNAME_L RTQNameLA;
+		struct ABC_MULTINAME Multiname;
+		struct ABC_MULTINAME MultinameA;
+		struct ABC_MULTINAME_L MultinameL;
+		struct ABC_MULTINAME_L MultinameLA;
+	} Data;
+
+};
+
+struct ABC_CONSTANT_POOL
+{
+	U30 IntCount;
+	S32 *Integers;
+	U30 UIntCount;
+	U32 *UIntegers;
+	U30 DoubleCount;
+	DOUBLE *Doubles;
+	U30 StringCount;
+	struct ABC_STRING_INFO *Strings;
+	U30 NamespaceCount;
+	struct ABC_NS_INFO *Namespaces;
+	U30 NamespaceSetCount;
+	struct ABC_NS_SET_INFO *NsSets;
+	U30 MultinameCount;
+	struct ABC_MULTINAME_INFO *Multinames;
+};
+
+struct ABC_ITEM_INFO
+{
+	U30 Key;
+	U30 Value;
+};
+
+struct ABC_METADATA_INFO
+{
+	U30 Name;
+	U30 ItemCount;
+	struct ABC_ITEM_INFO *Items;
+};
+
+
+struct ABC_TRAIT_SLOT
+{
+	U30 SlotId;
+	U30 TypeName;
+	U30 VIndex;
+	UI8 VKind;
+
+};
+
+struct ABC_TRAIT_CLASS
+{
+	U30 SlotId;
+	U30 ClassIndex;
+};
+
+struct ABC_TRAIT_FUNCTION
+{
+	U30 SlotId;
+	U30 Function;
+};
+
+struct ABC_TRAIT_METHOD
+{
+	U30 DispId;
+	U30 Method;
+};
+
+struct ABC_TRAITS_INFO
+{
+	U30 Name;
+	UI8 Kind;
+	union {
+		struct ABC_TRAIT_SLOT Slot;
+		struct ABC_TRAIT_CLASS Class;
+		struct ABC_TRAIT_FUNCTION Function;
+		struct ABC_TRAIT_METHOD Method;
+	} Data;
+	U30 MetadataCount;
+	U30 *Metadata;
+};
+
+struct ABC_INSTANCE_INFO
+{
+	U30 Name;
+	U30 SuperName;
+	UI8 Flags;
+	U30 ProtectedNs;
+	U30 InterfaceCount;
+	U30 *Interfaces;
+	U30 IInit;
+	U30 TraitCount;
+	struct ABC_TRAITS_INFO *Traits;
+};	
+
+struct ABC_CLASS_INFO
+{
+	U30 CInit;
+	U30 TraitCount;
+	struct ABC_TRAITS_INFO *Traits;
+};
+
+struct ABC_SCRIPT_INFO
+{
+	U30 Init;
+	U30 TraitCount;
+	struct ABC_TRAITS_INFO *Traits;
+};
+
+struct ABC_METHOD_BODY_INFO
+{
+	U30 Method;
+	U30 MaxStack;
+	U30 LocalCount;
+	U30 InitScopeDepth;
+	U30 MaxScopeDepth;
+	U30 CodeLength;
+	UI8 *Code;
+	U30 ExceptionCount;
+	struct ABC_EXCEPTION_INFO *Excpetions;
+	U30 TraitCount;
+	struct ABC_TRAIT_INFO *Traits;
+};
+
+struct ABC_EXCEPTION
+{
+	U30 From;
+	U30 To;
+	U30 Target;
+	U30 ExcType;
+	U30 VarName;
+};
+
+struct ABC_FILE
+{
+	UI16 Minor;
+	UI16 Major;
+	struct ABC_CONSTANT_POOL ConstantPool;
+	U30 MethodCount;
+	struct ABC_METHOD_INFO *Methods;
+	U30 MetadataCount;
+	struct ABC_METADATA_INFO *Metadata;
+	U30 ClassCount;
+	struct ABC_INSTANCE_INFO *Instances;
+	struct ABC_CLASS_INFO *Classes;
+	U30 ScriptCount;
+	struct ABC_SCRIPT_INFO *Scripts;
+	U30 MethodBodyCount;
+	struct ABC_METHOD_BODY_INFO *MethodBodys;	
+};
+
 struct SWF_DOABC
 {
 	UI32 Flags;
-	int DataLength;
-	UI8 *Data;	
+	struct ABC_FILE abcFile;
 };
 
 struct AS_SYMBOL
@@ -1765,21 +2000,21 @@ struct SWF_DEFINEBINARYDATA
 
 struct SCENE_DATA
 {
-	UI32 Offset;
+	U32 Offset;
 	STRING Name;
 };
 
 struct FRAME_DATA
 {
-	UI32 FrameNum;
+	U32 FrameNum;
 	STRING FrameLabel;
 };
 
 struct SWF_DEFINESCENEANDFRAMEDATA
 {
-	UI32 SceneCount;
+	U32 SceneCount;
 	struct SCENE_DATA *Scenes;
-	UI32 FrameLabelCount;
+	U32 FrameLabelCount;
 	struct FRAME_DATA *Frames;
 };
 
