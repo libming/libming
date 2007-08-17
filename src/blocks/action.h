@@ -39,7 +39,7 @@ SWFInitAction newSWFInitAction(SWFMovieClip clip, SWFAction action);
 void destroySWFAction(SWFAction action);
 void destroySWFInitAction(SWFInitAction action);
 
-int SWFAction_compile(SWFAction action, int swfVersion);
+int SWFAction_compile(SWFAction action, int swfVersion, int *length);
 void SWFOutput_writeAction(SWFOutput out, SWFAction action);
 
 

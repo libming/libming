@@ -353,7 +353,7 @@ int completeSWFButton(SWFBlock block)
 
 	for(i=0; i<button->nActions; ++i)
 	{
-		length = SWFAction_compile(button->actions[i].action, block->swfVersion);
+		SWFAction_compile(button->actions[i].action, block->swfVersion, &length);
 
 		if(i == button->nActions-1)
 			SWFOutput_writeUInt16(out, 0);

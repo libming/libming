@@ -88,7 +88,8 @@ static void writeActions(SWFPlaceObject2Block place)
 
 		for ( i=0; i<place->nActions; ++i )
 		{
-			int length = SWFAction_compile(place->actions[i], block->swfVersion);
+			int length;
+			SWFAction_compile(place->actions[i], block->swfVersion, &length);
 			if(block->swfVersion >= 6)
 				SWFOutput_writeUInt32(place->out, place->actionFlags[i]);
 			else

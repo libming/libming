@@ -92,7 +92,7 @@ void SWFOutput_writeAction(SWFOutput out, SWFAction action)
 } 
 
 
-int SWFAction_compile(SWFAction action, int swfVersion)
+int SWFAction_compile(SWFAction action, int swfVersion, int *length)
 {
 	char *script = NULL;
 	Buffer b;
@@ -140,26 +140,38 @@ int SWFAction_compile(SWFAction action, int swfVersion)
 		SWF_warn("Parser error: writing empty block\n");
 
         SWFOutput_writeUInt8(action->out, SWFACTION_END);
-	return SWFOutput_getLength(action->out);
+	*length = SWFOutput_getLength(action->out);
+
+	if(parserError)
+		return -1;
+		
+	return 0;
 }
 
 byte *SWFAction_getByteCode(SWFAction action, size_t *length)
 {
+	int ret = 0;
 	if(action == NULL) 
 		return NULL;
 
 	if(action->out == NULL)
-		SWFAction_compile(action, 5);
+		ret = SWFAction_compile(action, 5, (int *)length);
 
-	*length = SWFOutput_getLength(action->out);
+	if(ret < 0)
+	{	
+		*length = -1;
+		return NULL;
+	}
 	return SWFOutput_getBuffer(action->out);
 }
 
 static int
 completeSWFAction(SWFBlock block)
 {
+	int length;
 	SWFAction action = (SWFAction)block;
-	return SWFAction_compile(action, block->swfVersion);
+	SWFAction_compile(action, block->swfVersion, &length);
+	return length;
 }
 
 static int
@@ -168,7 +180,7 @@ completeSWFInitAction(SWFBlock block)
 	SWFInitAction init = (SWFInitAction)block;
 	int len;
 
-	len = SWFAction_compile(init->action, block->swfVersion);
+	SWFAction_compile(init->action, block->swfVersion, &len);
 	return len + 2;
 }
 
