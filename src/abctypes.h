@@ -161,21 +161,21 @@ typedef enum {
 	__subtract_i	= 0xc6,
 	__swap		= 0x2b,
 	__throw		= 0x03,
-	__typeof	= 0x95,
+	__abc_typeof	= 0x95,
 	__urshift	= 0xa7,
 } SWFAbcOpCode;
 
 /* ABC Constants */
-#define ABC_QNAME		0x07
-#define ABC_QNAMEA		0x0D
-#define ABC_RTQNAME		0x0F
-#define ABC_RTQNAME_A		0x10
-#define ABC_RTQNAME_L		0x11
-#define ABC_RTQNAME_LA		0x12
-#define ABC_MULTINAME		0x09
-#define ABC_MULTINAME_A		0x0E
-#define ABC_MULTINAME_L		0x1B
-#define ABC_MULTINAME_LA	0x1C
+#define ABC_CONST_QNAME		0x07
+#define ABC_CONST_QNAME_A	0x0D
+#define ABC_CONST_RTQNAME	0x0F
+#define ABC_CONST_RTQNAME_A	0x10
+#define ABC_CONST_RTQNAME_L	0x11
+#define ABC_CONST_RTQNAME_LA	0x12
+#define ABC_CONST_MULTINAME	0x09
+#define ABC_CONST_MULTINAME_A	0x0E
+#define ABC_CONST_MULTINAME_L	0x1B
+#define ABC_CONST_MULTINAME_LA	0x1C
 #define ABC_INT			0x03
 #define ABC_UINT		0x04
 #define ABC_DOUBLE		0x06
@@ -207,13 +207,13 @@ typedef enum {
 #define ABC_CLASS_PROTECTED_NS		0x08
 
 /* Trait Constants */
-#define ABC_TRAIT_SLOT			0x00
-#define ABC_TRAIT_METHOD		0x01
-#define ABC_TRAIT_GETTER		0x02
-#define ABC_TRAIT_SETTER		0x03
-#define ABC_TRAIT_CLASS			0x04
-#define ABC_TRAIT_FUNCTION		0x05
-#define ABC_TRAIT_CONST			0x06
+#define ABC_CONST_TRAIT_SLOT		0x00
+#define ABC_CONST_TRAIT_METHOD		0x01
+#define ABC_CONST_TRAIT_GETTER		0x02
+#define ABC_CONST_TRAIT_SETTER		0x03
+#define ABC_CONST_TRAIT_CLASS		0x04
+#define ABC_CONST_TRAIT_FUNCTION	0x05
+#define ABC_CONST_TRAIT_CONST		0x06
 
 #define ABC_TRAIT_ATTR_FINAL		0x01
 #define ABC_TRAIT_ATTR_OVERRIDE		0x02
