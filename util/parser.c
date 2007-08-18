@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "blocks/blocktypes.h"
+#include "abctypes.h"
 #include "action.h"
 #include "decompile.h"
 #include "parser.h"
@@ -2895,13 +2896,401 @@ parseSWF_SETTABINDEX (FILE * f, int length)
   parserrec->Depth = readUInt16(f);
   parserrec->TabIndex = readUInt16(f);
   PAR_END;
-};
+}
+
+void parseABC_STRING_INFO(struct ABC_STRING_INFO *sinfo, FILE *f)
+{
+  sinfo->Size = readEncUInt30(f);
+  sinfo->UTF8String = (UI8 *)readBytes(f, sinfo->Size);
+}
+
+void parseABC_NS_INFO(struct ABC_NS_INFO *nsinfo, FILE *f)
+{
+  nsinfo->Kind = readUInt8(f);
+  nsinfo->Name = readEncUInt30(f);
+}
+
+void parseABC_NS_SET_INFO(struct ABC_NS_SET_INFO *nsset, FILE *f)
+{
+  int i;
+  nsset->Count = readEncUInt30(f);
+  nsset->NS = malloc(sizeof(U30) * nsset->Count);
+  for(i = 0; i < nsset->Count; i++)
+    nsset->NS[i] = readEncUInt30(f);
+}
+
+void parseABC_QNAME(struct ABC_QNAME *qname, FILE *f)
+{
+  qname->NS = readEncUInt30(f);
+  qname->Name = readEncUInt30(f);
+}
+
+void parseABC_RTQNAME(struct ABC_RTQNAME *rtq, FILE *f)
+{
+  rtq->Name = readEncUInt30(f);
+}
+
+void parseABC_RTQNAME_L(struct ABC_RTQNAME_L *rtql, FILE *f)
+{
+
+}
+
+void parseABC_MULTINAME(struct ABC_MULTINAME *mn, FILE *f)
+{
+  mn->Name = readEncUInt30(f);
+  mn->NSSet = readEncUInt30(f);
+}
+
+void parseABC_MULTINAME_L(struct ABC_MULTINAME_L *mnl, FILE *f)
+{
+  mnl->NSSet = readEncUInt30(f);
+}
+
+void parseABC_MULTINAME_INFO(struct ABC_MULTINAME_INFO *minfo, FILE *f)
+{
+  minfo->Kind = readUInt8(f);
+  switch(minfo->Kind)
+  {
+    case ABC_CONST_QNAME:
+      parseABC_QNAME(&minfo->Data.QName, f);
+      break;
+    case ABC_CONST_QNAME_A:
+      parseABC_QNAME(&minfo->Data.QNameA, f);
+      break;
+    case ABC_CONST_RTQNAME:
+      parseABC_RTQNAME(&minfo->Data.RTQName, f);
+      break;
+    case ABC_CONST_RTQNAME_A:
+      parseABC_RTQNAME(&minfo->Data.RTQNameA, f);
+      break;
+    case ABC_CONST_RTQNAME_L:
+      parseABC_RTQNAME_L(&minfo->Data.RTQNameL, f);
+      break;
+    case ABC_CONST_RTQNAME_LA:
+      parseABC_RTQNAME_L(&minfo->Data.RTQNameLA, f);
+      break;
+    case ABC_CONST_MULTINAME:
+      parseABC_MULTINAME(&minfo->Data.Multiname, f);
+      break;
+    case ABC_CONST_MULTINAME_A:
+      parseABC_MULTINAME(&minfo->Data.MultinameA, f);
+      break;
+    case ABC_CONST_MULTINAME_L:
+      parseABC_MULTINAME_L(&minfo->Data.MultinameL, f);
+      break;
+    case ABC_CONST_MULTINAME_LA:
+      parseABC_MULTINAME_L(&minfo->Data.MultinameLA, f);
+      break;
+    default:
+      SWF_error("Unknow multiname kind %x\n", minfo->Kind);
+  }
+}
+
+void parseABC_CONSTANT_POOL(struct ABC_CONSTANT_POOL *cpool, FILE *f)
+{
+  cpool->IntCount = readEncUInt30(f);
+  if(cpool->IntCount > 0)
+  {
+    int i;
+    cpool->Integers = malloc(cpool->IntCount * sizeof(S32));
+    for(i = 0; i < cpool->IntCount; i++)
+      cpool->Integers[i] = readEncSInt32(f);
+  }
+
+  cpool->UIntCount = readEncUInt30(f);
+  if(cpool->UIntCount > 0)
+  {
+    int i;
+    cpool->UIntegers = malloc(cpool->UIntCount * sizeof(U32));
+    for(i = 0; i < cpool->UIntCount; i++)
+      cpool->UIntegers[i] = readEncUInt32(f);
+  }
+
+  cpool->DoubleCount = readEncUInt30(f);
+  if(cpool->DoubleCount > 0)
+  {
+    int i;
+    cpool->Doubles = malloc(cpool->DoubleCount * sizeof(DOUBLE));
+    for(i = 0; i < cpool->DoubleCount; i++)
+      cpool->Doubles[i] = readDouble(f);
+  }
+
+  cpool->StringCount = readEncUInt30(f);
+  if(cpool->StringCount > 0)
+  {
+    int i;
+    size_t s = cpool->StringCount * sizeof(struct ABC_STRING_INFO);
+    cpool->Strings = malloc(s);
+    for(i = 0; i < cpool->StringCount; i++)
+      parseABC_STRING_INFO(cpool->Strings + i, f);
+  }
+
+  cpool->NamespaceCount = readEncUInt30(f); 
+  if(cpool->NamespaceCount > 0)
+  {
+    int i;
+    size_t s = cpool->NamespaceCount * sizeof(struct ABC_NS_INFO);
+    cpool->Namespaces = malloc(s);
+    for(i = 0; i < cpool->NamespaceCount; i++)
+      parseABC_NS_INFO(cpool->Namespaces + i, f);
+  }
+
+  cpool->NamespaceSetCount = readEncUInt30(f);
+  if(cpool->NamespaceSetCount > 0)
+  {
+    int i;
+    size_t s = cpool->NamespaceSetCount * sizeof(struct ABC_NS_SET_INFO);
+    cpool->NsSets = malloc(s);
+    for(i = 0; i < cpool->NamespaceSetCount; i++)
+      parseABC_NS_SET_INFO(cpool->NsSets + i, f);
+  }
+
+  cpool->MultinameCount = readEncUInt30(f);
+  if(cpool->MultinameCount > 0)
+  {	
+    int i;
+    size_t s = cpool->MultinameCount * sizeof(struct ABC_MULTINAME_INFO);
+    cpool->Multinames = malloc(s);
+    for(i = 0; i < cpool->MultinameCount; i++)
+      parseABC_MULTINAME_INFO(cpool->Multinames + i, f);
+  }
+}
+
+void parseABC_OPTION_INFO(struct ABC_OPTION_INFO *oinfo, FILE *f)
+{
+  int i;
+  oinfo->OptionCount = readEncUInt30(f);
+  oinfo->Option = malloc(sizeof(struct ABC_OPTION_INFO) * oinfo->OptionCount);
+  for(i = 0; i < oinfo->OptionCount; i++)
+  {
+    oinfo->Option[i].Val = readEncUInt30(f);
+    oinfo->Option[i].Kind = readUInt8(f);
+  }
+}
+
+void parseABC_PARAM_INFO(struct ABC_PARAM_INFO *pinfo, U30 count, FILE *f)
+{
+  int i;
+  pinfo->ParamNames = malloc(count * sizeof(U30));
+  for(i = 0; i < count; i++)
+    pinfo->ParamNames[i] = readEncUInt30(f);
+}
+
+void parseABC_METHOD_INFO(struct ABC_METHOD_INFO *method, FILE *f)
+{
+  int i;
+
+  method->ParamCount = readEncUInt30(f);
+  method->ReturnType = readEncUInt30(f);
+  for(i = 0; i < method->ParamCount; i++)
+    method->ParamType[i] = readEncUInt30(f);
+  method->Name = readEncUInt30(f);
+  method->Flags = readUInt8(f);
+  parseABC_OPTION_INFO(&method->Options, f);
+  parseABC_PARAM_INFO(&method->ParamNames, method->ParamCount, f);
+}
+
+void parseABC_METADATA_INFO(struct ABC_METADATA_INFO *meta, FILE *f)
+{
+  int i;
+
+  meta->Name = readEncUInt30(f);
+  meta->ItemCount = readEncUInt30(f);
+  meta->Items = malloc(sizeof(struct ABC_ITEM_INFO) * meta->ItemCount);
+  for(i = 0; i < meta->ItemCount; i++)
+  {
+    meta->Items[i].Key = readEncUInt30(f);
+    meta->Items[i].Value = readEncUInt30(f);
+  }
+}
+
+void parseABC_TRAIT_SLOT(struct ABC_TRAIT_SLOT *slot, FILE *f)
+{
+  slot->SlotId = readEncUInt30(f);
+  slot->TypeName = readEncUInt30(f);
+  slot->VIndex = readEncUInt30(f);
+  slot->VKind = readUInt8(f);
+}
+
+void parseABC_TRAIT_CLASS(struct ABC_TRAIT_CLASS *class, FILE *f)
+{
+  class->SlotId = readEncUInt30(f);
+  class->ClassIndex = readEncUInt30(f);
+}
+
+void parseABC_TRAIT_FUNCTION(struct ABC_TRAIT_FUNCTION *func, FILE *f)
+{
+  func->SlotId = readEncUInt30(f);
+  func->Function = readEncUInt30(f);
+}
+
+void parseABC_TRAIT_METHOD(struct ABC_TRAIT_METHOD *m, FILE *f)
+{
+  m->DispId = readEncUInt30(f);
+  m->Method = readEncUInt30(f);
+}
+
+void parseABC_TRAITS_INFO(struct ABC_TRAITS_INFO *trait, FILE *f)
+{
+  int i;
+
+  trait->Name = readEncUInt30(f);
+  trait->Kind = readUInt8(f);
+  switch(trait->Kind & 0x0f) // lower 4-bits for type
+  {
+    case ABC_CONST_TRAIT_SLOT:
+    case ABC_CONST_TRAIT_CONST:
+      parseABC_TRAIT_SLOT(&trait->Data.Slot, f);
+      break;
+    case ABC_CONST_TRAIT_CLASS:
+      parseABC_TRAIT_CLASS(&trait->Data.Class, f);
+      break;
+    case ABC_CONST_TRAIT_FUNCTION:
+      parseABC_TRAIT_FUNCTION(&trait->Data.Function, f);
+      break;
+    case ABC_CONST_TRAIT_METHOD:
+    case ABC_CONST_TRAIT_GETTER:
+    case ABC_CONST_TRAIT_SETTER:
+      parseABC_TRAIT_METHOD(&trait->Data.Method, f);
+      break;
+    default:
+      SWF_error("Unknow trait %x\n", trait->Kind);
+  }
+  
+  trait->MetadataCount = readEncUInt30(f);
+  trait->Metadata = malloc(trait->MetadataCount * sizeof(U30));
+  for(i = 0; i < trait->MetadataCount; i++)
+    trait->Metadata[i] = readEncUInt30(f);
+}
+
+void parseABC_CLASS_INFO(struct ABC_CLASS_INFO *cinfo, FILE *f)
+{
+  int i;
+
+  cinfo->CInit = readEncUInt30(f);
+  cinfo->TraitCount = readEncUInt30(f);
+  cinfo->Traits = malloc(sizeof(struct ABC_TRAITS_INFO) * cinfo->TraitCount);
+  for(i = 0; i < cinfo->TraitCount; i++)
+    parseABC_TRAITS_INFO(cinfo->Traits + i, f);
+}
+
+void parseABC_SCRIPT_INFO(struct ABC_SCRIPT_INFO *sinfo, FILE *f)
+{
+  int i;
+
+  sinfo->Init = readEncUInt30(f);
+  sinfo->TraitCount = readEncUInt30(f);
+  sinfo->Traits = malloc(sizeof(struct ABC_TRAITS_INFO) * sinfo->TraitCount);
+  for(i = 0; i < sinfo->TraitCount; i++)
+    parseABC_TRAITS_INFO(sinfo->Traits + i, f);
+}
+
+
+void parseABC_INSTANCE_INFO(struct ABC_INSTANCE_INFO *inst, FILE *f)
+{
+  int i;
+
+  inst->Name = readEncUInt30(f);
+  inst->SuperName = readEncUInt30(f);
+  inst->Flags = readUInt8(f);
+  inst->ProtectedNs = readEncUInt30(f);
+
+  inst->InterfaceCount = readEncUInt30(f);
+  inst->Interfaces = malloc(inst->InterfaceCount * sizeof(U30));
+  for(i = 0; i < inst->InterfaceCount; i++)
+    inst->Interfaces[i] = readEncUInt30(f);
+
+  inst->IInit = readEncUInt30(f);
+
+  inst->TraitCount = readEncUInt30(f);
+  inst->Traits = malloc(inst->TraitCount * sizeof(struct ABC_TRAITS_INFO));
+  for(i = 0; i < inst->TraitCount; i++)
+    parseABC_TRAITS_INFO(inst->Traits + i, f);
+}
+
+void parseABC_EXCEPTION_INFO(struct ABC_EXCEPTION_INFO *ex, FILE *f)
+{
+  ex->From = readEncUInt30(f);
+  ex->To = readEncUInt30(f);
+  ex->Target = readEncUInt30(f);
+  ex->ExcType = readEncUInt30(f);
+  ex->VarName = readEncUInt30(f);
+}
+
+void parseABC_METHOD_BODY_INFO(struct ABC_METHOD_BODY_INFO *minfo, FILE *f)
+{
+  int i;
+
+  minfo->Method = readEncUInt30(f);
+  minfo->MaxStack = readEncUInt30(f);
+  minfo->LocalCount = readEncUInt30(f);
+  minfo->InitScopeDepth = readEncUInt30(f);
+  minfo->MaxScopeDepth = readEncUInt30(f);
+  minfo->CodeLength = readEncUInt30(f);
+  minfo->Code = (UI8 *)readBytes(f, minfo->CodeLength);
+ 
+  minfo->ExceptionCount = readEncUInt30(f);
+  minfo->Exceptions = malloc(minfo->ExceptionCount * sizeof(struct ABC_EXCEPTION_INFO));
+  for(i = 0; i < minfo->ExceptionCount; i++)
+    parseABC_EXCEPTION_INFO(minfo->Exceptions + i, f);
+
+  minfo->TraitCount = readEncUInt30(f);
+  minfo->Traits = malloc(sizeof(struct ABC_TRAITS_INFO) * minfo->TraitCount);
+  for(i = 0; i < minfo->TraitCount; i++)
+    parseABC_TRAITS_INFO(minfo->Traits + i, f);
+}
+
+void parseABC_FILE(struct ABC_FILE *abcFile, FILE *f)
+{
+  int i;
+  size_t size;
+
+  abcFile->Minor = readUInt16(f);
+  abcFile->Major = readUInt16(f);
+  
+  parseABC_CONSTANT_POOL(&abcFile->ConstantPool, f);
+   
+  abcFile->MethodCount = readEncUInt30(f);
+  size = abcFile->MethodCount * sizeof(struct ABC_METHOD_INFO);
+  abcFile->Methods = malloc(size);
+  for(i = 0; i < abcFile->MethodCount; i++)
+    parseABC_METHOD_INFO(abcFile->Methods + i, f);
+  
+  abcFile->MetadataCount = readEncUInt30(f);
+  size = abcFile->MetadataCount * sizeof(struct ABC_METADATA_INFO);
+  abcFile->Metadata = malloc(size);
+  for(i = 0; i < abcFile->MetadataCount; i++)
+    parseABC_METADATA_INFO(abcFile->Metadata + i, f);
+
+  abcFile->ClassCount = readEncUInt30(f);
+  size = abcFile->ClassCount * sizeof(struct ABC_INSTANCE_INFO);
+  abcFile->Instances = malloc(size);
+  size = abcFile->ClassCount * sizeof(struct ABC_CLASS_INFO);
+  abcFile->Classes = malloc(size);
+  for(i = 0; i < abcFile->ClassCount; i++)
+    parseABC_INSTANCE_INFO(abcFile->Instances + i, f);
+  for(i = 0; i < abcFile->ClassCount; i++)
+    parseABC_CLASS_INFO(abcFile->Classes + i, f);
+
+  abcFile->ScriptCount = readEncUInt30(f);
+  size = abcFile->ScriptCount * sizeof(struct ABC_SCRIPT_INFO);
+  abcFile->Scripts = malloc(size);
+  for(i = 0; i < abcFile->ScriptCount; i++)
+    parseABC_SCRIPT_INFO(abcFile->Scripts + i, f);
+
+  abcFile->MethodBodyCount = readEncUInt30(f);
+  size = abcFile->MethodBodyCount * sizeof(struct ABC_METHOD_BODY_INFO);
+  abcFile->MethodBodies = malloc(size);
+  for(i = 0; i < abcFile->MethodBodyCount; i++)
+    parseABC_METHOD_BODY_INFO(abcFile->MethodBodies + i, f);
+}
 
 SWF_Parserstruct *
 parseSWF_DOABC (FILE *f, int length)
 {	
   PAR_BEGIN(SWF_DOABC); 
   parserrec->Flags = readUInt32(f);
+  parseABC_FILE(&parserrec->AbcFile, f);
   PAR_END;
 }
 

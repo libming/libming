@@ -193,30 +193,75 @@ char *readString(FILE *f)
   return buf;
 }
 
+#define ENC_BITSPERBYTE 	7
+#define ENC_BYTEMASK 		0x7f
+#define ENC_U30_VERIFY		0xfc
+#define ENC_HIGHBIT		0x80
+
 static inline int hasNextByte(unsigned int b)
 {
-	if(!(b & 0x80))
+	if(!(b & ENC_HIGHBIT))
 		return 0;
 	return 1;
 }
 
-unsigned int readEncUInt32(FILE *f)
+long readEncSInt32(FILE *f)
 {
-  unsigned int result = 0, temp;
-  int shift = 0;
-  do
-  {
-    if(shift > 28)
-    {	
-      printf("readEncUInt32: read exceeds 5 bytes\n");
-      return result;
-    }
-    temp = readUInt8(f);
-    result |= (0x7f & temp) << shift;
-    shift += 7;
-  } while (hasNextByte(temp));
+	unsigned int result = 0, temp;
+	int shift = 0;
+	do
+	{
+		if(shift > 4 * ENC_BITSPERBYTE)
+		{	
+			printf("readEncSInt32: read exceeds 5 bytes\n");
+			return -1;
+		}
+		temp = readUInt8(f);	
+		result |= (ENC_BYTEMASK & temp) << shift;
+		shift += ENC_BITSPERBYTE;
+	} while (hasNextByte(temp));
+	return result;
+}
 
-  return result;
+unsigned long readEncUInt30(FILE *f)
+{
+	unsigned int result = 0, temp;
+	int shift = 0;
+	do
+	{
+		if(shift > 4 * ENC_BITSPERBYTE)
+		{	
+			printf("readEncUInt30: read exceeds 5 bytes\n");
+			return result;
+		}
+		temp = readUInt8(f);
+		result |= (ENC_BYTEMASK & temp) << shift;
+		shift += ENC_BITSPERBYTE;
+	} while (hasNextByte(temp));
+	
+	if((temp & ENC_U30_VERIFY) && shift > 4 * ENC_BITSPERBYTE)
+		printf("readEncUInt30: verification error\n"); 
+
+	return result;
+}
+
+unsigned long readEncUInt32(FILE *f)
+{
+	unsigned int result = 0, temp;
+	int shift = 0;
+	do
+	{
+		if(shift > 4 * ENC_BITSPERBYTE)
+		{	
+			printf("readEncUInt32: read exceeds 5 bytes\n");
+			return result;
+		}
+		temp = readUInt8(f);
+		result |= (ENC_BYTEMASK & temp) << shift;
+		shift += ENC_BITSPERBYTE;
+	} while (hasNextByte(temp));
+	
+	return result;
 }
 
 char *readSizedString(FILE *f,int size)

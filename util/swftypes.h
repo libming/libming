@@ -1931,6 +1931,15 @@ struct ABC_SCRIPT_INFO
 	struct ABC_TRAITS_INFO *Traits;
 };
 
+struct ABC_EXCEPTION_INFO
+{
+	U30 From;
+	U30 To;
+	U30 Target;
+	U30 ExcType;
+	U30 VarName;
+};
+
 struct ABC_METHOD_BODY_INFO
 {
 	U30 Method;
@@ -1941,18 +1950,9 @@ struct ABC_METHOD_BODY_INFO
 	U30 CodeLength;
 	UI8 *Code;
 	U30 ExceptionCount;
-	struct ABC_EXCEPTION_INFO *Excpetions;
+	struct ABC_EXCEPTION_INFO *Exceptions;
 	U30 TraitCount;
-	struct ABC_TRAIT_INFO *Traits;
-};
-
-struct ABC_EXCEPTION
-{
-	U30 From;
-	U30 To;
-	U30 Target;
-	U30 ExcType;
-	U30 VarName;
+	struct ABC_TRAITS_INFO *Traits;
 };
 
 struct ABC_FILE
@@ -1970,13 +1970,13 @@ struct ABC_FILE
 	U30 ScriptCount;
 	struct ABC_SCRIPT_INFO *Scripts;
 	U30 MethodBodyCount;
-	struct ABC_METHOD_BODY_INFO *MethodBodys;	
+	struct ABC_METHOD_BODY_INFO *MethodBodies;	
 };
 
 struct SWF_DOABC
 {
 	UI32 Flags;
-	struct ABC_FILE abcFile;
+	struct ABC_FILE AbcFile;
 };
 
 struct AS_SYMBOL
