@@ -534,6 +534,9 @@ class SWFMovie
     { return new SWFDisplayItem(SWFMovie_add_internal(this->movie, 
 		(SWFMovieBlockType){character->getBlock()})); }
 
+  void addExport(SWFBlock *exp, char *name)
+    {  SWFMovie_addExport(this->movie, exp->getBlock(), name); }
+
   void remove(SWFDisplayItem *item)
     { SWFMovie_remove(this->movie, item->item); }
 
