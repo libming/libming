@@ -51,6 +51,7 @@
 #include "blocks/metadata.h"
 #include "blocks/scriptlimits.h"
 #include "blocks/tabindex.h"
+#include "blocks/sprite.h"
 #include "libming.h"
 
 #ifdef USE_ZLIB
@@ -436,6 +437,19 @@ SWFMovie_writeExports(SWFMovie movie)
 			SWFMovie_addCharacterDependencies(movie, (SWFCharacter)b);
 			completeSWFBlock(b);
 			SWFMovie_addBlock(movie, b);
+			/* Workaround for movieclip exports:
+			 * initAction and scalingGrid are only written when 
+			 * placing the movieclip. These extra blocks should
+			 * not get lost if a MC is eported only 
+			 */
+			if(SWFBlock_getType(b) == SWF_DEFINESPRITE)
+			{
+				SWFSprite sprite = (SWFSprite)b;
+				if(sprite->grid)
+					SWFMovie_addBlock(movie, (SWFBlock)sprite->grid);
+				if(sprite->initAction)
+					SWFMovie_addBlock(movie, (SWFBlock)sprite->initAction);
+			}
 		}
 	}
 
