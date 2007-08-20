@@ -1,0 +1,59 @@
+File version: 5
+File size: 67
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (ff,ff,ff,ff)
+
+Offset: 25 (0x0019)
+Block type: 39 (SWF_DEFINESPRITE)
+Block length: 8
+
+ SpriteId: 1
+ FrameCount: 1
+ BlockCount: 2
+
+  Offset: 0 (0x0000)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 0 (0x0000)
+  Block type: 0 (SWF_END)
+  Block length: 0
+
+
+Offset: 35 (0x0023)
+Block type: 59 (SWF_INITACTION)
+Block length: 15
+
+ 4 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] 
+    SWFACTION_PUSH
+     [000]   Constant: 0 ""
+    SWFACTION_TRACE
+    SWFACTION_END
+
+Offset: 52 (0x0034)
+Block type: 56 (SWF_EXPORTASSETS)
+Block length: 9
+
+ num assets: 1
+ Asset[001]: test
+
+Offset: 63 (0x003f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 65 (0x0041)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
