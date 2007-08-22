@@ -1,4 +1,167 @@
-2007-07-30 12:06  krechert
+2007-08-20 12:20  krechert
+
+	* test/MovieClip/: .cvsignore, Makefile.am, TestList, test02-cxx.C,
+	  test02.c, test02.ref, test03-cxx.C, test03.c, test03.ref:
+	  testcases for movieclip/initaction export problems
+
+2007-08-20 12:14  krechert
+
+	* src/movie.c: workaround for initAction / scalingGrid blocks added
+	  to an exported and not placed  movieclip.
+
+2007-08-20 12:06  krechert
+
+	* mingpp.h: SWFMovie_addExport for C++
+
+2007-08-19 15:11  krechert
+
+	* test/Text/: .cvsignore, Makefile.am, TestList, test02-cxx.C,
+	  test02.c, test02.ref: added static text testcase with mixed font
+	  style
+
+2007-08-18 16:57  krechert
+
+	* util/: parser.c, read.c, read.h, swftypes.h: AS3 parser (initial
+	  version)
+
+2007-08-18 16:48  krechert
+
+	* src/abctypes.h: change some constant names to avoid clashes
+
+2007-08-17 18:04  krechert
+
+	* src/blocks/: action.c, action.h, button.c, placeobject.c: change
+	  SWFAction_getByteCode semantics: if there was a compiler error
+	  the function returns NULL and a length of -1.
+
+2007-08-17 12:40  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: ABC format types
+
+2007-08-17 12:37  krechert
+
+	* src/abctypes.h: opcodes and defines for the ABC format (aka. AS3
+	  bytecode)
+
+2007-08-16 14:35  krechert
+
+	* configure.in: test/actionscript/Makefile.am:46: compiling
+	  `ActionScriptTest.c' with per-target flags requires
+	  `AM_PROG_CC_C_O' in `configure.in'
+
+2007-08-16 11:41  krechert
+
+	* py_ext/ming_wrap.c: bugfix: #1370509 SWFFont.getStringWidth fails
+	  with type error
+
+2007-08-16 11:22  krechert
+
+	* src/blocks/text.c: don't segfault if querying an empty
+	  text-object.
+
+2007-08-15 17:07  krechert
+
+	* src/ming.h.in, py_ext/ming_wrap.c: use C99 prototypes (fixes
+	  warnings with py_ext compile)
+
+2007-08-15 16:59  krechert
+
+	* py_ext/ming_wrap.c: remove some compiler warnings
+
+2007-08-15 16:53  krechert
+
+	* py_ext/ming_wrap.c: remove warning
+
+2007-08-15 16:40  krechert
+
+	* py_ext/Makefile.am: Python/SWIG wrapper needs
+	  -fno-strict-aliasing CFLAG to avoid a lot of warnings.
+
+2007-08-15 15:25  krechert
+
+	* php_ext/ming.c: readded accidently removed line
+
+2007-08-15 14:54  krechert
+
+	* php_ext/ming.c, perl_ext/Font.xs, ming.i: remove call to obsolete
+	  SWFFont_getShape() method
+
+2007-08-15 14:48  krechert
+
+	* src/ming.h.in: remove prototype for obsolete methode
+	  SWFFont_getShape()
+
+2007-08-15 14:46  krechert
+
+	* py_ext/: ming_wrap.c, mingc.py: remove call to obsolete
+	  SWFFon_getShape() method
+
+2007-08-15 14:16  krechert
+
+	* src/ming.h.in: wrong blend mode enumeration
+
+2007-08-15 14:15  krechert
+
+	* src/ming.h.in: wrong enumeration for blend modes. (patch by
+	  Benjamin Otte)
+
+2007-08-15 12:03  krechert
+
+	* util/outputtxt.c: added missing include
+
+2007-08-15 11:52  krechert
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: add
+	  duplicateMovieClip and removeMovieClip fix case for some
+	  identifiers patch by Benjamin Otte.
+
+2007-08-14 11:13  krechert
+
+	* src/blocks/error.h: Undefined reference to ___STRING (cygwin).
+	  submitted by James A. <viper.xz@gmail.com>
+
+2007-08-14 11:10  krechert
+
+	* util/read.h: add missing declaration
+
+2007-08-14 10:58  krechert
+
+	* src/blocks/sprite.c: allow PlaceObject3 in sprites. patch by
+	  Benjamin Otte
+
+2007-08-14 10:51  krechert
+
+	* src/: ming.h.in, blocks/bitmap.c, blocks/dbl.c: create bitmaps
+	  from raw data introduced SWFRawImgFmt and SWFBitmapFmt
+
+2007-08-13 17:50  krechert
+
+	* src/ming.h.in, perl_ext/Constants.xs, php_ext/ming.c: added
+	  missing blend mode (noticed by Benjamin Otte)
+
+2007-08-13 17:42  krechert
+
+	* src/blocks/: dbl.c, dbl.h: remove unnecessary USE_* condition
+	  (patch by Benjamin Otte)
+
+2007-08-13 15:22  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: parse SWF9 tags parse SWFSERIALNUMBER
+
+2007-08-13 15:19  krechert
+
+	* src/blocks/blocktypes.h: Added SWF 9 tags SWF_SERIALNUMBER is
+	  actually useb by flex.
+
+2007-08-13 15:09  krechert
+
+	* util/: read.c, read.h: Read encoded integer with variable byte
+	  count. If hi-bit is set another byte follows. Each byte
+	  contributes 7 bits to the resulting value. A maximum of 5 bytes
+	  is allowed.
+
+2007-07-30 18:06  krechert
 
 	* src/: ming.h.in, blocks/action.c: get Action bytecode
 
