@@ -19,6 +19,19 @@ Block length: 44
      [000] 1
      [001] 2
     SWFACTION_TRY
+    Offset 36
+    CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 0
+    TrySize 0
+    CatchSize 0
+    FinallySize 0
+    CatchName 
+  Try Actions: 0
+
+  Catch Actions: 0
+
+  Finally Actions: 0
+  ## TRY END ##
+
     SWFACTION_PUSH
      [000]   Constant: 0 "1"
     SWFACTION_PUSH
@@ -26,6 +39,19 @@ Block length: 44
     SWFACTION_ADD2
     SWFACTION_TRACE
     SWFACTION_TRY
+    Offset 59
+    CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 0
+    TrySize 0
+    CatchSize 0
+    FinallySize 0
+    CatchName 
+  Try Actions: 0
+
+  Catch Actions: 0
+
+  Finally Actions: 0
+  ## TRY END ##
+
     SWFACTION_END
 
 Offset: 71 (0x0047)

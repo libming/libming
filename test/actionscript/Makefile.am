@@ -20,7 +20,8 @@ AS_TESTS = \
 	targetPath.as	\
 	FunctionInLoop.as \
 	newline_comment.as \
-	newline_crlf.as 
+	newline_crlf.as	\
+	TryCatch.as 
 
 EXTRA_DIST = 		\
 	Function.ref	\

@@ -1,0 +1,64 @@
+File version: 6
+File size: 107
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (ff,ff,ff,ff)
+
+Offset: 25 (0x0019)
+Block type: 12 (SWF_DOACTION)
+Block length: 72
+
+ 3 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] Error
+     [001] err
+     [002] done
+    SWFACTION_DEFINEFUNCTION
+    Name: test
+    NumParams: 0
+    CodeSize: 39
+    1 Action
+    SWFACTION_TRY
+    Offset 63
+    CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 0
+    TrySize 12
+    CatchSize 7
+    FinallySize 6
+    CatchName err
+  Try Actions: 3
+    SWFACTION_PUSH
+     [000]   Integer: 0
+     [001]   Constant: 0 "Error"
+    SWFACTION_NEWOBJECT
+    SWFACTION_THROW
+
+  Catch Actions: 3
+    SWFACTION_PUSH
+     [000]   Constant: 1 "err"
+    SWFACTION_GETVARIABLE
+    SWFACTION_TRACE
+
+  Finally Actions: 2
+    SWFACTION_PUSH
+     [000]   Constant: 2 "done"
+    SWFACTION_TRACE
+  ## TRY END ##
+
+    SWFACTION_END
+
+Offset: 103 (0x0067)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 105 (0x0069)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
