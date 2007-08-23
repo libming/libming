@@ -359,6 +359,46 @@ outputSWFACTION_GOTOFRAME2 (SWF_ACTION *act)
 	  printf ("  Scene bias : %u\n", sact->SceneBias);
 }
 
+void 
+outputSWFACTION_TRY (SWF_ACTION *act)
+{
+  int i;
+  OUT_BEGIN(SWF_ACTIONTRY);
+  
+  if( verbose )
+      printf ("    Length: %d\n", sact->Length);
+  printf("    Offset %i\n",(int) sact->Offset);
+  printf("    CatchInRegisterFlag %d, FinallyBlockFlag %d, CatchBlockFlag %d\n", 
+    sact->CatchInRegisterFlag, sact->FinallyBlockFlag, sact->CatchBlockFlag);
+  printf("    TrySize %d\n", sact->TrySize);
+  printf("    CatchSize %d\n", sact->CatchSize);
+  printf("    FinallySize %d\n", sact->FinallySize);
+  if(sact->CatchInRegisterFlag)
+    printf("    CatchRegister %i\n", sact->CatchRegister);
+  else
+    printf("    CatchName %s\n", sact->CatchName);
+
+  printf("  Try Actions: %i\n", sact->numTryActs);
+  for(i = 0; i < sact->numTryActs; i++)
+  {
+    outputSWF_ACTION(4, sact->TryActs + i);
+  }
+  printf("\n");
+ 
+  printf("  Catch Actions: %i\n", sact->numCatchActs);
+  for(i = 0; i < sact->numCatchActs; i++)
+  {
+    outputSWF_ACTION(4, sact->CatchActs + i);
+  }
+  printf("\n");
+  
+  printf("  Finally Actions: %i\n", sact->numFinallyActs);
+  for(i = 0; i < sact->numFinallyActs; i++)
+  {
+    outputSWF_ACTION(4, sact->FinallyActs + i);
+  }
+  printf("  ## TRY END ##\n\n");
+}
 
 #define ActionType( action ) \
 { action, #action, NULL }
@@ -471,7 +511,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_EXTENDS),
   ActionType (SWFACTION_CASTOP),
   ActionType (SWFACTION_IMPLEMENTSOP),
-  ActionType (SWFACTION_TRY),
+  ActionTypeLong (SWFACTION_TRY),
   ActionType (SWFACTION_THROW),
 };
 
