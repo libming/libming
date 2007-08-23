@@ -117,6 +117,17 @@ int completeSWFSoundInstance(SWFBlock block)
 		((flags & SWF_SOUNDINFO_HASENVELOPE) ? (1 + 8*sound->numEnvPoints) : 0);
 }
 
+void SWFSoundInstance_addEnvelope(SWFSoundInstance inst,
+                                  unsigned int mark44, short left, short right)
+{
+	inst->flags |= SWF_SOUNDINFO_HASLOOPS;
+	inst->envPoints = realloc(inst->envPoints, 
+		(inst->numEnvPoints + 1) * sizeof(envPoint));
+	inst->envPoints[inst->numEnvPoints].mark44 = mark44;
+	inst->envPoints[inst->numEnvPoints].level0 = left;
+	inst->envPoints[inst->numEnvPoints].level1 = right;
+	inst->numEnvPoints++;
+}
 
 SWFSoundInstance newSWFSoundInstance(SWFSound sound)
 {
