@@ -670,7 +670,7 @@ void SWFButtonRecord_scaleTo(SWFButtonRecord record, float scaleX, float scaleY)
 void SWFButtonRecord_skewX(SWFButtonRecord record, float skewX);
 void SWFButtonRecord_skewXTo(SWFButtonRecord record, float skewX);
 void SWFButtonRecord_skewY(SWFButtonRecord record, float skewY);
-void SWFButtinRecord_skewYTo(SWFButtonRecord record, float skewY);
+void SWFButtonRecord_skewYTo(SWFButtonRecord record, float skewY);
 
 /****** SWFVideo ******/
 

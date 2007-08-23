@@ -293,7 +293,7 @@ SWFButtonRecord_skewY(SWFButtonRecord record, float skewY)
 }
 
 void 
-SWFButtinRecord_skewYTo(SWFButtonRecord record, float skewY)
+SWFButtonRecord_skewYTo(SWFButtonRecord record, float skewY)
 {
 	SWFPosition_skewYTo(record->position, skewY);
 }
