@@ -1894,6 +1894,7 @@ struct ABC_TRAITS_INFO
 {
 	U30 Name;
 	UI8 Kind;
+	UI8 Attr;
 	union {
 		struct ABC_TRAIT_SLOT Slot;
 		struct ABC_TRAIT_CLASS Class;
@@ -1976,6 +1977,7 @@ struct ABC_FILE
 struct SWF_DOABC
 {
 	UI32 Flags;
+	STRING Name;
 	struct ABC_FILE AbcFile;
 };
 

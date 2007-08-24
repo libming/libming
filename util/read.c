@@ -205,17 +205,15 @@ static inline int hasNextByte(unsigned int b)
 	return 1;
 }
 
-long readEncSInt32(FILE *f)
+signed long readEncSInt32(FILE *f)
 {
-	unsigned int result = 0, temp;
+	signed long result = 0, temp;
 	int shift = 0;
 	do
 	{
 		if(shift > 4 * ENC_BITSPERBYTE)
-		{	
-			printf("readEncSInt32: read exceeds 5 bytes\n");
-			return -1;
-		}
+			break;
+
 		temp = readUInt8(f);	
 		result |= (ENC_BYTEMASK & temp) << shift;
 		shift += ENC_BITSPERBYTE;
@@ -225,37 +223,33 @@ long readEncSInt32(FILE *f)
 
 unsigned long readEncUInt30(FILE *f)
 {
-	unsigned int result = 0, temp;
+	unsigned long result = 0, temp;
 	int shift = 0;
 	do
 	{
 		if(shift > 4 * ENC_BITSPERBYTE)
-		{	
-			printf("readEncUInt30: read exceeds 5 bytes\n");
-			return result;
-		}
+			break;
+		
 		temp = readUInt8(f);
 		result |= (ENC_BYTEMASK & temp) << shift;
 		shift += ENC_BITSPERBYTE;
 	} while (hasNextByte(temp));
 	
-	if((temp & ENC_U30_VERIFY) && shift > 4 * ENC_BITSPERBYTE)
-		printf("readEncUInt30: verification error\n"); 
+	//if((temp & ENC_U30_VERIFY) && shift > 4 * ENC_BITSPERBYTE)
+	//	printf("readEncUInt30: verification error\n"); 
 
 	return result;
 }
 
 unsigned long readEncUInt32(FILE *f)
 {
-	unsigned int result = 0, temp;
+	unsigned long result = 0, temp;
 	int shift = 0;
 	do
 	{
 		if(shift > 4 * ENC_BITSPERBYTE)
-		{	
-			printf("readEncUInt32: read exceeds 5 bytes\n");
-			return result;
-		}
+			break;
+		
 		temp = readUInt8(f);
 		result |= (ENC_BYTEMASK & temp) << shift;
 		shift += ENC_BITSPERBYTE;

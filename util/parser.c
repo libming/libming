@@ -2988,72 +2988,47 @@ void parseABC_MULTINAME_INFO(struct ABC_MULTINAME_INFO *minfo, FILE *f)
 
 void parseABC_CONSTANT_POOL(struct ABC_CONSTANT_POOL *cpool, FILE *f)
 {
+  int i;
+  size_t s;
+ 
   cpool->IntCount = readEncUInt30(f);
-  if(cpool->IntCount > 0)
-  {
-    int i;
-    cpool->Integers = malloc(cpool->IntCount * sizeof(S32));
-    for(i = 0; i < cpool->IntCount; i++)
+  cpool->Integers = malloc(cpool->IntCount * sizeof(S32));
+  for(i = 1; i < cpool->IntCount; i++)
       cpool->Integers[i] = readEncSInt32(f);
-  }
 
   cpool->UIntCount = readEncUInt30(f);
-  if(cpool->UIntCount > 0)
-  {
-    int i;
-    cpool->UIntegers = malloc(cpool->UIntCount * sizeof(U32));
-    for(i = 0; i < cpool->UIntCount; i++)
-      cpool->UIntegers[i] = readEncUInt32(f);
-  }
+  cpool->UIntegers = malloc(cpool->UIntCount * sizeof(U32));
+  for(i = 1; i < cpool->UIntCount; i++)
+    cpool->UIntegers[i] = readEncUInt32(f);
 
   cpool->DoubleCount = readEncUInt30(f);
-  if(cpool->DoubleCount > 0)
-  {
-    int i;
-    cpool->Doubles = malloc(cpool->DoubleCount * sizeof(DOUBLE));
-    for(i = 0; i < cpool->DoubleCount; i++)
-      cpool->Doubles[i] = readDouble(f);
-  }
+  cpool->Doubles = malloc(cpool->DoubleCount * sizeof(DOUBLE));
+  for(i = 1; i < cpool->DoubleCount; i++)
+    cpool->Doubles[i] = readDouble(f);
 
   cpool->StringCount = readEncUInt30(f);
-  if(cpool->StringCount > 0)
-  {
-    int i;
-    size_t s = cpool->StringCount * sizeof(struct ABC_STRING_INFO);
-    cpool->Strings = malloc(s);
-    for(i = 0; i < cpool->StringCount; i++)
-      parseABC_STRING_INFO(cpool->Strings + i, f);
-  }
+  s = cpool->StringCount * sizeof(struct ABC_STRING_INFO);
+  cpool->Strings = malloc(s);
+  for(i = 1; i < cpool->StringCount; i++)
+    parseABC_STRING_INFO(cpool->Strings + i, f);
 
   cpool->NamespaceCount = readEncUInt30(f); 
-  if(cpool->NamespaceCount > 0)
-  {
-    int i;
-    size_t s = cpool->NamespaceCount * sizeof(struct ABC_NS_INFO);
-    cpool->Namespaces = malloc(s);
-    for(i = 0; i < cpool->NamespaceCount; i++)
-      parseABC_NS_INFO(cpool->Namespaces + i, f);
-  }
+  s = cpool->NamespaceCount * sizeof(struct ABC_NS_INFO);
+  cpool->Namespaces = malloc(s);
+  for(i = 1; i < cpool->NamespaceCount; i++)
+    parseABC_NS_INFO(cpool->Namespaces + i, f);
 
   cpool->NamespaceSetCount = readEncUInt30(f);
-  if(cpool->NamespaceSetCount > 0)
-  {
-    int i;
-    size_t s = cpool->NamespaceSetCount * sizeof(struct ABC_NS_SET_INFO);
-    cpool->NsSets = malloc(s);
-    for(i = 0; i < cpool->NamespaceSetCount; i++)
-      parseABC_NS_SET_INFO(cpool->NsSets + i, f);
-  }
+  s = cpool->NamespaceSetCount * sizeof(struct ABC_NS_SET_INFO);
+  cpool->NsSets = malloc(s);
+  for(i = 1; i < cpool->NamespaceSetCount; i++)
+    parseABC_NS_SET_INFO(cpool->NsSets + i, f);
 
   cpool->MultinameCount = readEncUInt30(f);
-  if(cpool->MultinameCount > 0)
-  {	
-    int i;
-    size_t s = cpool->MultinameCount * sizeof(struct ABC_MULTINAME_INFO);
-    cpool->Multinames = malloc(s);
-    for(i = 0; i < cpool->MultinameCount; i++)
-      parseABC_MULTINAME_INFO(cpool->Multinames + i, f);
-  }
+  s = cpool->MultinameCount * sizeof(struct ABC_MULTINAME_INFO);
+  cpool->Multinames = malloc(s);
+  for(i = 1; i < cpool->MultinameCount; i++)
+    parseABC_MULTINAME_INFO(cpool->Multinames + i, f);
 }
 
 void parseABC_OPTION_INFO(struct ABC_OPTION_INFO *oinfo, FILE *f)
@@ -3082,12 +3057,15 @@ void parseABC_METHOD_INFO(struct ABC_METHOD_INFO *method, FILE *f)
 
   method->ParamCount = readEncUInt30(f);
   method->ReturnType = readEncUInt30(f);
+  method->ParamType = malloc(sizeof(U30) * method->ParamCount);
   for(i = 0; i < method->ParamCount; i++)
     method->ParamType[i] = readEncUInt30(f);
   method->Name = readEncUInt30(f);
   method->Flags = readUInt8(f);
-  parseABC_OPTION_INFO(&method->Options, f);
-  parseABC_PARAM_INFO(&method->ParamNames, method->ParamCount, f);
+  if(method->Flags & ABC_METHOD_HAS_OPTIONAL)
+    parseABC_OPTION_INFO(&method->Options, f);
+  if(method->Flags & ABC_METHOD_HAS_PARAM_NAMES)
+    parseABC_PARAM_INFO(&method->ParamNames, method->ParamCount, f);
 }
 
 void parseABC_METADATA_INFO(struct ABC_METADATA_INFO *meta, FILE *f)
@@ -3109,7 +3087,8 @@ void parseABC_TRAIT_SLOT(struct ABC_TRAIT_SLOT *slot, FILE *f)
   slot->SlotId = readEncUInt30(f);
   slot->TypeName = readEncUInt30(f);
   slot->VIndex = readEncUInt30(f);
-  slot->VKind = readUInt8(f);
+  if(slot->VIndex)
+    slot->VKind = readUInt8(f);
 }
 
 void parseABC_TRAIT_CLASS(struct ABC_TRAIT_CLASS *class, FILE *f)
@@ -3136,6 +3115,7 @@ void parseABC_TRAITS_INFO(struct ABC_TRAITS_INFO *trait, FILE *f)
 
   trait->Name = readEncUInt30(f);
   trait->Kind = readUInt8(f);
+  trait->Attr = (trait->Kind & 0xf0) >> 4;
   switch(trait->Kind & 0x0f) // lower 4-bits for type
   {
     case ABC_CONST_TRAIT_SLOT:
@@ -3156,11 +3136,14 @@ void parseABC_TRAITS_INFO(struct ABC_TRAITS_INFO *trait, FILE *f)
     default:
       SWF_error("Unknow trait %x\n", trait->Kind);
   }
-  
-  trait->MetadataCount = readEncUInt30(f);
-  trait->Metadata = malloc(trait->MetadataCount * sizeof(U30));
-  for(i = 0; i < trait->MetadataCount; i++)
-    trait->Metadata[i] = readEncUInt30(f);
+
+  if(trait->Attr & ABC_TRAIT_ATTR_METADATA)
+  {
+    trait->MetadataCount = readEncUInt30(f);
+    trait->Metadata = malloc(trait->MetadataCount * sizeof(U30));
+    for(i = 0; i < trait->MetadataCount; i++)
+      trait->Metadata[i] = readEncUInt30(f);
+  }
 }
 
 void parseABC_CLASS_INFO(struct ABC_CLASS_INFO *cinfo, FILE *f)
@@ -3193,7 +3176,9 @@ void parseABC_INSTANCE_INFO(struct ABC_INSTANCE_INFO *inst, FILE *f)
   inst->Name = readEncUInt30(f);
   inst->SuperName = readEncUInt30(f);
   inst->Flags = readUInt8(f);
-  inst->ProtectedNs = readEncUInt30(f);
+
+  if(inst->Flags & ABC_CLASS_PROTECTED_NS)
+    inst->ProtectedNs = readEncUInt30(f);
 
   inst->InterfaceCount = readEncUInt30(f);
   inst->Interfaces = malloc(inst->InterfaceCount * sizeof(U30));
@@ -3290,6 +3275,7 @@ parseSWF_DOABC (FILE *f, int length)
 {	
   PAR_BEGIN(SWF_DOABC); 
   parserrec->Flags = readUInt32(f);
+  parserrec->Name = readString(f);
   parseABC_FILE(&parserrec->AbcFile, f);
   PAR_END;
 }
