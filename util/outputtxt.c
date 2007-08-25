@@ -24,9 +24,11 @@
 #include "read.h"
 #include "decompile.h"
 #include "swfoutput.h"
+#include "abctypes.h"
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 extern const char *blockName (SWFBlocktype header);
 
@@ -2066,11 +2068,375 @@ outputSWF_SETTABINDEX(SWF_Parserstruct *pblock)
   iprintf(" TabIndex: %d\n", sblock->TabIndex);
 }
 
+static void 
+outputNSSetConstant(struct ABC_FILE *abc, unsigned int index);
+static void 
+outputNamespaceConstant(struct ABC_FILE *abc, unsigned int index);
+static void 
+outputMultinameConstant(struct ABC_FILE *abc, unsigned int index);
+static void 
+outputStringConstant(struct ABC_FILE *abc, unsigned int strIndex);
+
+static void 
+outputABC_STRING_INFO(struct ABC_STRING_INFO *si)
+{
+  char *buffer, *bufp;
+  int i;
+  if(si->Size == 0)
+  {
+    iprintf("     ** empty ** (0)\n");
+    return;
+  }
+
+  // we don't deal with utf8 yet
+  buffer = malloc(si->Size+1);
+  memset(buffer, 0, si->Size+1);
+  bufp = buffer;
+  for(i = 0; i < si->Size; i++)
+  {
+    if(si->UTF8String[i] < 128)
+      *bufp++ = si->UTF8String[i];
+  }
+  iprintf("   '%s' (%i)\n", buffer, si->Size);
+  free(buffer);
+
+}
+
+static void 
+outputABC_QNAME(struct ABC_FILE *abc, struct ABC_QNAME *qn)
+{
+  outputNamespaceConstant(abc, qn->NS);
+  outputStringConstant(abc, qn->Name);
+}
+
+static void 
+outputABC_RTQNAME(struct ABC_FILE *abc, struct ABC_RTQNAME *rtq)
+{
+  outputStringConstant(abc, rtq->Name);
+}
+
+static void
+outputABC_MULTINAME(struct ABC_FILE *abc, struct ABC_MULTINAME *mn)
+{
+  outputStringConstant(abc, mn->Name);
+  outputNSSetConstant(abc, mn->NSSet);
+}
+
+static void
+outputABC_MULTINAME_L(struct ABC_FILE *abc, struct ABC_MULTINAME_L *ml)
+{
+  outputNSSetConstant(abc, ml->NSSet);
+}
+
+static void outputABC_MULTINAME_INFO(struct ABC_FILE *abc, 
+                                     struct ABC_MULTINAME_INFO *mi)
+{
+  switch(mi->Kind)
+  {
+    case ABC_CONST_QNAME:
+    case ABC_CONST_QNAME_A:
+      iprintf("    Multiname ABC_CONST_QNAME(A)");
+      outputABC_QNAME(abc, &mi->Data.QName);
+      break; 
+    case ABC_CONST_RTQNAME:
+    case ABC_CONST_RTQNAME_A:
+      iprintf("    Multiname ABC_CONST_RTQNAME(A)");
+      outputABC_RTQNAME(abc, &mi->Data.RTQName); 
+      break;
+    case ABC_CONST_RTQNAME_L:
+    case ABC_CONST_RTQNAME_LA:
+      iprintf("    Multiname ABC_CONST_MULTINAME(A)");
+      break;
+    case ABC_CONST_MULTINAME:
+    case ABC_CONST_MULTINAME_A:
+      iprintf("    Multiname ABC_CONST_MULTINAME(A)");
+      outputABC_MULTINAME(abc, &mi->Data.Multiname); 
+      break;
+    case ABC_CONST_MULTINAME_L:
+    case ABC_CONST_MULTINAME_LA:
+      iprintf("    Multiname ABC_CONST_MULTINAME(A)");
+      outputABC_MULTINAME_L(abc, &mi->Data.MultinameL); 
+      break;
+   }
+}
+
+static void 
+outputABC_NS_INFO(struct ABC_FILE *abc, struct ABC_NS_INFO *ns)
+{
+  iprintf("    Namespace Kind %x\n", ns->Kind);
+  outputStringConstant(abc, ns->Name);
+}
+
+static void 
+outputABC_NS_SET_INFO(struct ABC_FILE *abc, struct ABC_NS_SET_INFO *set)
+{
+  int i;
+  for(i = 0; i < set->Count; i++)
+  {
+    unsigned int index = set->NS[i];
+    outputNamespaceConstant(abc, index);
+  }
+}
+
+static void 
+outputNSSetConstant(struct ABC_FILE *abc, unsigned int index)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(index >= cp->NamespaceSetCount)
+  {
+    iprintf("ConstantPool NamespaceSetCount %u <= index %u\n",
+      cp->NamespaceSetCount, index);
+    return;
+  }
+
+  if(index == 0)
+  {
+    iprintf("*\n");
+    return;
+  }
+  outputABC_NS_SET_INFO(abc, cp->NsSets + index);
+}
+
+
+static void 
+outputNamespaceConstant(struct ABC_FILE *abc, unsigned int index)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(index >= cp->NamespaceCount)
+  {
+    iprintf("ConstantPool NamespaceCount %u <= index %u\n",
+      cp->NamespaceCount, index);
+    return;
+  }
+
+  if(index == 0)
+  {
+    iprintf("*\n");
+    return;
+  }
+  outputABC_NS_INFO(abc, cp->Namespaces + index);
+}
+
+static void 
+outputMultinameConstant(struct ABC_FILE *abc, unsigned int index)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(index >= cp->MultinameCount)
+  {
+    iprintf("ConstantPool MultinameCount %u <= index %u\n",
+      cp->MultinameCount, index);
+    return;
+  }
+
+  if(index == 0)
+  {
+    iprintf("Multiname index 0 is not allowed\n");
+    return;
+  }
+  outputABC_MULTINAME_INFO(abc, cp->Multinames + index);
+}
+
+static void 
+outputIntConstant(struct ABC_FILE *abc, unsigned int index)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(index >= cp->IntCount)
+  {
+    iprintf("ConstantPool IntCount %u <= index %u\n",
+      cp->IntCount, index);
+    return;
+  }
+
+  if(index == 0)
+  {
+    iprintf("Integer index 0 is not allowed\n");
+    return;
+  }
+  iprintf("Int %i\n", cp->Integers[index]);
+}
+
+static void 
+outputUIntConstant(struct ABC_FILE *abc, unsigned int index)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(index >= cp->UIntCount)
+  {
+    iprintf("ConstantPool UIntCount %u <= index %u\n",
+      cp->UIntCount, index);
+    return;
+  }
+
+  if(index == 0)
+  {
+    iprintf("UInteger index 0 is not allowed\n");
+    return;
+  }
+  iprintf("    UInt %u\n", cp->UIntegers[index]);
+}
+
+static void 
+outputDoubleConstant(struct ABC_FILE *abc, unsigned int index)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(index >= cp->DoubleCount)
+  {
+    iprintf("ConstantPool DoubleCount %u <= index %u\n",
+      cp->DoubleCount, index);
+    return;
+  }
+
+  if(index == 0)
+  {
+    iprintf("    NaN\n");
+    return;
+  }
+  iprintf("    Double %f\n", cp->Doubles[index]);
+}
+
+
+static void 
+outputStringConstant(struct ABC_FILE *abc, unsigned int strIndex)
+{
+  struct ABC_CONSTANT_POOL *cp = &abc->ConstantPool;
+  if(strIndex >= cp->StringCount)
+  {
+    iprintf("ConstantPool StringCount %u <= strIndex %u\n",
+      cp->StringCount, strIndex);
+    return;
+  }
+
+  if(strIndex == 0)
+  {
+    iprintf("    *\n");
+    return;
+  }
+  outputABC_STRING_INFO(cp->Strings + strIndex);
+}
+
+void outputABC_OPTION_INFO(struct ABC_FILE *abc, struct ABC_OPTION_INFO *o)
+{
+  int i;
+  for (i = 0; i < o->OptionCount; i++)
+  {
+    unsigned int index = o->Option[i].Val;
+    iprintf("   Option: ");
+    switch(o->Option[i].Kind)
+    {
+      case ABC_INT:
+        outputIntConstant(abc, index);
+        break;
+      case ABC_UINT:
+        outputUIntConstant(abc, index);
+        break;
+      case ABC_DOUBLE:
+        outputDoubleConstant(abc, index);
+        break;
+      case ABC_UTF8:
+        outputStringConstant(abc, index);
+        break;
+      case ABC_TRUE:
+        iprintf(" TRUE\n");
+        break;
+      case ABC_FALSE:
+        iprintf(" FALSE\n");
+        break;
+      case ABC_NULL:
+        iprintf(" NULL\n");
+        break;
+      case ABC_UNDEF:
+        iprintf(" UNDEF\n");
+        break;
+      case ABC_NAMESPACE:
+      case ABC_PACKAGE_NS:
+      case ABC_PACKAGE_INTERNAL_NS:
+      case ABC_PROTECTED_NS:
+      case ABC_EXPLICIT_NS:
+      case ABC_STATIC_PROTECTED_NS:
+      case ABC_PRIVATE_NS:
+        outputNamespaceConstant(abc, index);
+        break;
+      default:
+        iprintf("Option type %x unknown\n", o->Option[i].Kind);
+    }
+  }
+}
+
+void outputABC_METHOD_INFO(struct ABC_FILE *abc, struct ABC_METHOD_INFO *minfo)
+{
+  int i;
+  iprintf("   ParamCount %u\n", minfo->ParamCount);
+  iprintf("   ReturnType \n   {\n");
+  if(minfo->ReturnType)
+    outputMultinameConstant(abc, minfo->ReturnType);
+  else 
+    iprintf("    void\n");
+  iprintf("   }\n\n");
+  for(i = 0; i < minfo->ParamCount; i++)
+  {
+    unsigned int index = minfo->ParamType[i];
+    iprintf("    Parameter %i\n    {\n", i);
+    outputMultinameConstant(abc, index);
+    iprintf("    }\n");
+  }
+
+  iprintf("   Name (%u) ",  minfo->Name);
+  if(minfo->Name)
+    outputStringConstant(abc, minfo->Name);
+  else
+    iprintf("**no name**\n");
+
+  iprintf("   Flags %x\n", minfo->Flags);
+  if(minfo->Flags & ABC_METHOD_HAS_OPTIONAL)
+    outputABC_OPTION_INFO(abc, &minfo->Options);
+  if(minfo->Flags & ABC_METHOD_HAS_PARAM_NAMES)
+  {
+    int i;
+    iprintf("    Parameter Names:\n");
+    for(i = 0; i < minfo->ParamCount; i++)
+    {
+      int strIndex = minfo->ParamType[i];
+      outputStringConstant(abc, strIndex);
+    }
+  }
+}
+
+
+void outputABC_CONSTANT_POOL(struct ABC_CONSTANT_POOL *cpool)
+{
+  iprintf("  ConstantPool: \n");
+  iprintf("   Integers: %u, Unsigend %u Doubles %u\n", 
+    cpool->IntCount, cpool->UIntCount, cpool->DoubleCount);
+  iprintf("   Strings %u, Namespaces %u, NS-Sets %u, Multinames %u\n\n",
+    cpool->StringCount, cpool->NamespaceCount, cpool->NamespaceSetCount,
+    cpool->MultinameCount); 
+}
+
+void outputABC_FILE(struct ABC_FILE *abc)
+{
+  unsigned int i;
+
+  iprintf(" Version %i.%i\n", abc->Major, abc->Minor);
+  outputABC_CONSTANT_POOL(&abc->ConstantPool);
+
+  iprintf(" MethodCount %u\n", abc->MethodCount);
+  for(i = 0; i < abc->MethodCount; i++)
+  {
+    iprintf("  Method Info[%u]:\n", i);
+    outputABC_METHOD_INFO(abc, abc->Methods + i);
+    iprintf("  ### Method done ###\n\n");
+  }
+  iprintf(" ### Method Info done ###\n\n");
+
+  
+}
+
 void
 outputSWF_DOABC(SWF_Parserstruct *pblock)
 {
   OUT_BEGIN (SWF_DOABC);
-  iprintf(" ActionFlags: %d\n", sblock->Flags);
+  iprintf(" ActionFlags: %x\n", sblock->Flags);
+  iprintf(" Name %s\n", sblock->Name);
+  outputABC_FILE(&sblock->AbcFile);
 }
 
 void 
