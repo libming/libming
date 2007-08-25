@@ -2411,6 +2411,208 @@ void outputABC_CONSTANT_POOL(struct ABC_CONSTANT_POOL *cpool)
     cpool->MultinameCount); 
 }
 
+void 
+outputABC_METADATA_INFO(struct ABC_FILE *abc, struct ABC_METADATA_INFO *mi)
+{
+  unsigned int i;
+
+  iprintf("    Name: ");
+  outputStringConstant(abc, mi->Name);
+
+  for(i = 0; i < mi->ItemCount; i++)
+  {
+    iprintf("    Key (%u) ", mi->Items[i].Key);
+    outputStringConstant(abc, mi->Items[i].Key);
+    iprintf("    Value (%u) ", mi->Items[i].Value);
+    outputStringConstant(abc, mi->Items[i].Value);
+    iprintf("\n");
+  }
+}
+
+void 
+outputABC_TRAIT_SLOT(struct ABC_FILE *abc, struct ABC_TRAIT_SLOT *ts)
+{
+  iprintf("   Trait Slot\n");
+  iprintf("    SlotId %u\n", ts->SlotId);
+  iprintf("    Type Name ");
+  if(ts->TypeName)
+    outputMultinameConstant(abc, ts->TypeName);
+  else
+    iprintf(" * ");
+  iprintf("\n");
+  
+  iprintf("    VIndex %u\n", ts->VIndex);
+  if(ts->VIndex)
+    iprintf("    VKind %u\n", ts->VKind);
+}
+
+void
+outputABC_TRAIT_CLASS(struct ABC_FILE *abc, struct ABC_TRAIT_CLASS *tc)
+{
+  iprintf("   Trait Class\n");
+  iprintf("    SlotId %u\n", tc->SlotId);
+  iprintf("    Class Index %u\n", tc->ClassIndex);
+}
+
+void
+outputABC_TRAIT_FUNCTION(struct ABC_FILE *abc, struct ABC_TRAIT_FUNCTION *tf)
+{
+  iprintf("   Trait Function\n");
+  iprintf("    SlotId %u\n", tf->SlotId);
+  iprintf("    Method Index %u\n", tf->Function);
+}
+
+void
+outputABC_TRAIT_METHOD(struct ABC_FILE *abc, struct ABC_TRAIT_METHOD *tm)
+{
+  iprintf("   Trait Method\n");
+  iprintf("    DispId %u\n", tm->DispId);
+  iprintf("    Method Index %u\n", tm->Method);
+}
+
+
+void 
+outputABC_TRAITS_INFO(struct ABC_FILE *abc, struct ABC_TRAITS_INFO *ti)
+{
+  iprintf("    Name: ");
+  outputMultinameConstant(abc, ti->Name);
+  iprintf("\n");
+  
+  switch(ti->Kind & 0xf)
+  {
+    case ABC_CONST_TRAIT_SLOT:
+    case ABC_CONST_TRAIT_CONST:
+      outputABC_TRAIT_SLOT(abc, &ti->Data.Slot);
+      break;
+    case ABC_CONST_TRAIT_CLASS:
+      outputABC_TRAIT_CLASS(abc, &ti->Data.Class);
+      break;
+    case ABC_CONST_TRAIT_FUNCTION:
+      outputABC_TRAIT_FUNCTION(abc, &ti->Data.Function);
+      break;
+    case ABC_CONST_TRAIT_METHOD:
+    case ABC_CONST_TRAIT_GETTER:
+    case ABC_CONST_TRAIT_SETTER:
+      outputABC_TRAIT_METHOD(abc, &ti->Data.Method);
+      break;
+    default:
+      iprintf("unknown trait %x\n", ti->Kind);
+  }
+  
+  iprintf("    Trait Attr %x\n", ti->Attr);
+  if(ti->Attr & ABC_TRAIT_ATTR_METADATA)
+  {
+    unsigned int i;
+    iprintf("    Trait Metadata Num %u\n", ti->MetadataCount);
+    for(i = 0; i < ti->MetadataCount; i++)
+    {
+      iprintf("     Metadata[%u] -> %u\n", i, ti->Metadata[i]);
+    }
+  }
+}
+
+void 
+outputABC_INSTANCE_INFO(struct ABC_FILE *abc, struct ABC_INSTANCE_INFO *ii)
+{
+  unsigned int i; 
+
+  iprintf("    Name: ");
+  outputStringConstant(abc, ii->Name);
+  iprintf("    SuperName: ");
+  outputStringConstant(abc, ii->SuperName);
+  iprintf("    Flags %x\n", ii->Flags);
+  
+  if(ii->Flags & ABC_CLASS_PROTECTED_NS)
+  { 
+    iprintf("    Protected NS ");
+    outputNamespaceConstant(abc, ii->ProtectedNs);
+  }
+  
+  iprintf("    Interfaces: (%u)\n", ii->InterfaceCount);
+  for(i = 0; i < ii->InterfaceCount; i++)
+  {
+    iprintf("    Interface (%u)", i);
+    outputMultinameConstant(abc, ii->Interfaces[i]);
+  }
+  iprintf("    Init Method #%u\n", ii->IInit);
+
+  iprintf("    Traits (%u):\n", ii->TraitCount);
+  for(i = 0; i < ii->TraitCount; i++)
+  {
+    iprintf("    Trait %u:\n", i);
+    outputABC_TRAITS_INFO(abc, ii->Traits + i);
+  }
+}
+
+void 
+outputABC_CLASS_INFO(struct ABC_FILE *abc, struct ABC_CLASS_INFO *ci)
+{
+  unsigned int i;
+
+  iprintf("    Init Method #%u\n", ci->CInit);
+
+  iprintf("    Traits (%u):\n", ci->TraitCount);
+  for(i = 0; i < ci->TraitCount; i++)
+  {
+    iprintf("    Trait %u:\n", i);
+    outputABC_TRAITS_INFO(abc, ci->Traits + i);
+  }
+}
+
+void 
+outputABC_SCRIPT_INFO(struct ABC_FILE *abc, struct ABC_SCRIPT_INFO *si)
+{
+  unsigned int i;
+
+  iprintf("    Init Method #%u\n", si->Init);
+
+  iprintf("    Traits (%u):\n", si->TraitCount);
+  for(i = 0; i < si->TraitCount; i++)
+  {
+    iprintf("    Trait %u:\n", i);
+    outputABC_TRAITS_INFO(abc, si->Traits + i);
+  }
+}
+
+void
+outputABC_EXCEPTION_INFO(struct ABC_FILE *abc, struct ABC_EXCEPTION_INFO *ei)
+{
+  iprintf("    From: %u\n", ei->From);
+  iprintf("    To: %u\n", ei->To);
+  iprintf("    Target: %u\n", ei->Target);
+  iprintf("    ExcType: ");
+  outputStringConstant(abc, ei->ExcType);
+  iprintf("    VarName: ");
+  outputStringConstant(abc, ei->VarName); 
+}
+
+void 
+outputABC_METHOD_BODY_INFO(struct ABC_FILE *abc, struct ABC_METHOD_BODY_INFO *mb)
+{
+  unsigned int i;
+
+  iprintf("    Method Index -> %u\n", mb->Method);
+  iprintf("    Max Stack %u\n", mb->MaxStack);
+  iprintf("    LocalCount %u\n", mb->LocalCount);
+  iprintf("    InitScopeDepth %u\n", mb->InitScopeDepth);
+  iprintf("    MaxScopeDepth %u\n", mb->CodeLength);
+  iprintf("    CodeLength %u\n", mb->CodeLength);
+  
+  iprintf("    ExceptionCount %u\n", mb->ExceptionCount);
+  for(i = 0; i < mb->ExceptionCount; i++)
+  {
+    iprintf("    Exception [%u]: \n", i);
+    outputABC_EXCEPTION_INFO(abc, mb->Exceptions + i);
+  }
+
+  iprintf("    Traits (%u):\n", mb->TraitCount);
+  for(i = 0; i < mb->TraitCount; i++)
+  {
+    iprintf("    Trait [%u]:\n", i);
+    outputABC_TRAITS_INFO(abc, mb->Traits + i);
+  }
+}
+
 void outputABC_FILE(struct ABC_FILE *abc)
 {
   unsigned int i;
@@ -2427,7 +2629,50 @@ void outputABC_FILE(struct ABC_FILE *abc)
   }
   iprintf(" ### Method Info done ###\n\n");
 
+  iprintf(" MetadataCount %u\n", abc->MetadataCount);
+  for(i = 0; i < abc->MetadataCount; i++)
+  {
+    iprintf("  Metadata [%u]:\n", i);
+    outputABC_METADATA_INFO(abc, abc->Metadata + i);
+    iprintf("  ### Metadata done ###\n\n");
+  }
+  iprintf(" ### Metadata Info done ###\n\n");
+
+  iprintf(" InstanceCount %u\n", abc->ClassCount);
+  for(i = 0; i < abc->ClassCount; i++)
+  {
+    iprintf("  Instance [%u]:\n", i);
+    outputABC_INSTANCE_INFO(abc, abc->Instances + i);
+    iprintf("  ### Instance done ###\n\n");
+  }
+  iprintf(" ### Instances Info done ###\n\n");
   
+  iprintf(" ClassCount %u\n", abc->ClassCount);
+  for(i = 0; i < abc->ClassCount; i++)
+  {
+    iprintf("  Class [%u]:\n", i);
+    outputABC_CLASS_INFO(abc, abc->Classes + i);
+    iprintf("  ### Class done ###\n\n");
+  }
+  iprintf(" ### Class Info done ###\n\n");
+
+  iprintf(" ScriptCount %u\n", abc->ScriptCount);
+  for(i = 0; i < abc->ScriptCount; i++)
+  {
+    iprintf("  Script [%u]:\n", i);
+    outputABC_SCRIPT_INFO(abc, abc->Scripts + i);
+    iprintf("  ### Script done ###\n\n");
+  }
+  iprintf(" ### Script Info done ###\n\n");
+
+  iprintf(" MethodBodyCount %u\n", abc->MethodBodyCount);
+  for(i = 0; i < abc->MethodBodyCount; i++)
+  {
+    iprintf("  Method Body [%u]:\n", i);
+    outputABC_METHOD_BODY_INFO(abc, abc->MethodBodies + i);
+    iprintf("  ### Method Body done ###\n\n");
+  }
+  iprintf(" ### Method Body Info done ###\n\n"); 
 }
 
 void
@@ -2451,7 +2696,6 @@ outputSWF_SYMBOLCLASS(SWF_Parserstruct *pblock)
     iprintf(" Id: %i, Name: %s\n", 
       sblock->SymbolList[i].SymbolId, sblock->SymbolList[i].SymbolName);
   }
-
 }
 
 void
