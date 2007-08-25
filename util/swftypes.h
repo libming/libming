@@ -1568,11 +1568,14 @@ struct SWF_PLACEOBJECT3
   UI8 PlaceFlagHasMatrix:1;
   UI8 PlaceFlagHasCharacter:1;
   UI8 PlaceFlagMove:1;
-  UI8 Reserved:5;
+  UI8 Reserved:3;
+  UI8 PlaceFlagHasImage:1;
+  UI8 PlaceFlagHasClassName:1;
   UI8 PlaceFlagHasCacheAsBitmap:1;
   UI8 PlaceFlagHasBlendMode:1;
   UI8 PlaceFlagHasFilterList:1;
   UI16 Depth;
+  STRING ClassName;
   UI16 CharacterId;
   SWF_MATRIX Matrix;
   SWF_CXFORMWITHALPHA ColorTransform;

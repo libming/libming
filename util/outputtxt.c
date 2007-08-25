@@ -1677,10 +1677,17 @@ outputSWF_PLACEOBJECT3 (SWF_Parserstruct * pblock)
   iprintf(" PlaceFlagHasMatrix %d\n", sblock->PlaceFlagHasMatrix);
   iprintf(" PlaceFlagHasCharacter %d\n", sblock->PlaceFlagHasCharacter);
   iprintf(" PlaceFlagMove %d\n", sblock->PlaceFlagMove);
+  iprintf(" PlaceFlagHasImage %d\n", sblock->PlaceFlagHasImage);
+  iprintf(" PlaceFlagHasClassName %d\n", sblock->PlaceFlagHasClassName);
   iprintf(" PlaceFlagHasCacheAsbitmap %d\n", sblock->PlaceFlagHasCacheAsBitmap);
   iprintf(" PlaceFlagHasBlendMode %d\n", sblock->PlaceFlagHasBlendMode);
   iprintf(" PlaceFlagHasFilterList %d\n", sblock->PlaceFlagHasFilterList); 
   iprintf(" Depth %d\n", sblock->Depth);
+ 
+  if( sblock->PlaceFlagHasClassName ||
+      (sblock->PlaceFlagHasImage && sblock->PlaceFlagHasCharacter))
+    iprintf(" ClassName %s\n", sblock->ClassName);
+  
   if( sblock->PlaceFlagHasCharacter )
 	  iprintf( " CharacterId: %d\n", sblock->CharacterId );
   if( sblock->PlaceFlagHasMatrix )

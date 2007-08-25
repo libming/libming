@@ -2571,7 +2571,9 @@ parseSWF_PLACEOBJECT3 (FILE * f, int length)
   parserrec->PlaceFlagMove           = readBits (f, 1);
   
   byteAlign();
-  parserrec->Reserved                = readBits (f, 5);
+  parserrec->Reserved                = readBits (f, 3);
+  parserrec->PlaceFlagHasImage       = readBits (f, 1);
+  parserrec->PlaceFlagHasClassName   = readBits (f, 1);
   parserrec->PlaceFlagHasCacheAsBitmap = readBits (f, 1);
   parserrec->PlaceFlagHasBlendMode   = readBits(f, 1);
   parserrec->PlaceFlagHasFilterList  = readBits(f, 1);
@@ -2580,6 +2582,13 @@ parseSWF_PLACEOBJECT3 (FILE * f, int length)
   if( parserrec->PlaceFlagHasCharacter ) {
     parserrec->CharacterId = readUInt16 (f);
   }
+ 
+  if(parserrec->PlaceFlagHasClassName || 
+      (parserrec->PlaceFlagHasImage && parserrec->PlaceFlagHasCharacter))
+  {
+    parserrec->ClassName = readString(f);
+  }
+
   if( parserrec->PlaceFlagHasMatrix ) {
     parseSWF_MATRIX( f, &(parserrec->Matrix) ); 
   }
