@@ -30,6 +30,7 @@ struct SWFFileAttributes_s
         struct SWFBlock_s block;
         int hasMetadata;
         int useNetwork;
+	int hasABC;
 };
 
 typedef struct SWFFileAttributes_s* SWFFileAttributes;
