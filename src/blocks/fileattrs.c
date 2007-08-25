@@ -25,6 +25,7 @@
 #include "fileattrs.h"
 
 #define SWFFILEATTRIBUTES_HASMETADATA 0x10
+#define SWFFILEATTRIBUTES_HASABC      0x08
 #define SWFFILEATTRIBUTES_USENETWORK  0x01
 
 
@@ -39,6 +40,8 @@ writeSWFFileAttributesToMethod(SWFBlock block, SWFByteOutputMethod method, void*
 		flags |= SWFFILEATTRIBUTES_HASMETADATA;
 	if(fattrs->useNetwork)
 		flags |= SWFFILEATTRIBUTES_USENETWORK;
+	if(fattrs->hasABC)
+		flags |= SWFFILEATTRIBUTES_HASABC; 
 	
 	method(flags, data);
 	method(0, data);
