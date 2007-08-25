@@ -2031,8 +2031,8 @@ outputSWF_FILEATTRIBUTES(SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_FILEATTRIBUTES);
   
-  iprintf(" FileAttributes: HasMetaData %d, UseNetwork %d\n", 
-          sblock->HasMetadata, sblock->UseNetwork);
+  iprintf(" FileAttributes: HasMetaData %d, UseNetwork %d, HasAS3 %d\n", 
+          sblock->HasMetadata, sblock->UseNetwork, sblock->ActionScript3);
 }
 
 void 
