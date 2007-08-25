@@ -2952,34 +2952,24 @@ void parseABC_MULTINAME_INFO(struct ABC_MULTINAME_INFO *minfo, FILE *f)
   switch(minfo->Kind)
   {
     case ABC_CONST_QNAME:
+    case ABC_CONST_QNAME_A:
       parseABC_QNAME(&minfo->Data.QName, f);
       break;
-    case ABC_CONST_QNAME_A:
-      parseABC_QNAME(&minfo->Data.QNameA, f);
-      break;
     case ABC_CONST_RTQNAME:
+    case ABC_CONST_RTQNAME_A:
       parseABC_RTQNAME(&minfo->Data.RTQName, f);
       break;
-    case ABC_CONST_RTQNAME_A:
-      parseABC_RTQNAME(&minfo->Data.RTQNameA, f);
-      break;
     case ABC_CONST_RTQNAME_L:
+    case ABC_CONST_RTQNAME_LA:
       parseABC_RTQNAME_L(&minfo->Data.RTQNameL, f);
       break;
-    case ABC_CONST_RTQNAME_LA:
-      parseABC_RTQNAME_L(&minfo->Data.RTQNameLA, f);
-      break;
     case ABC_CONST_MULTINAME:
+    case ABC_CONST_MULTINAME_A:
       parseABC_MULTINAME(&minfo->Data.Multiname, f);
       break;
-    case ABC_CONST_MULTINAME_A:
-      parseABC_MULTINAME(&minfo->Data.MultinameA, f);
-      break;
     case ABC_CONST_MULTINAME_L:
-      parseABC_MULTINAME_L(&minfo->Data.MultinameL, f);
-      break;
     case ABC_CONST_MULTINAME_LA:
-      parseABC_MULTINAME_L(&minfo->Data.MultinameLA, f);
+      parseABC_MULTINAME_L(&minfo->Data.MultinameL, f);
       break;
     default:
       SWF_error("Unknow multiname kind %x\n", minfo->Kind);
