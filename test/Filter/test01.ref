@@ -53,6 +53,8 @@ Block length: 18
  PlaceFlagHasMatrix 1
  PlaceFlagHasCharacter 1
  PlaceFlagMove 0
+ PlaceFlagHasImage 0
+ PlaceFlagHasClassName 0
  PlaceFlagHasCacheAsbitmap 1
  PlaceFlagHasBlendMode 0
  PlaceFlagHasFilterList 1
