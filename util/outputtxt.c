@@ -61,6 +61,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
   {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
   {SWF_CSMTEXTSETTINGS, outputSWF_CSMTEXTSETTINGS},
+  {SWF_DEFINEFONTNAME, outputSWF_DEFINEFONTNAME},
   {SWF_DEFINEFONTALIGNZONES, outputSWF_DEFINEFONTALIGNZONES},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
@@ -1297,6 +1298,15 @@ outputSWF_DEFINEFONTALIGNZONES (SWF_Parserstruct * pblock)
   iprintf("  GlyphCount %d\n", sblock->GlyphCount);
   for(i = 0; i < sblock->GlyphCount; i++)
     outputSWF_ZONERECORD(i, sblock->ZoneTable + i);
+}
+
+void
+outputSWF_DEFINEFONTNAME (SWF_Parserstruct *pblock)
+{
+  OUT_BEGIN(SWF_DEFINEFONTNAME);
+  iprintf(" FontId: %d\n", sblock->FontId);
+  iprintf(" FontName: %s\n", sblock->FontName);
+  iprintf(" FontCopyright %s\n", sblock->FontCopyright);
 }
 
 void

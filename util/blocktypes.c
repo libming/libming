@@ -49,6 +49,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_DEFINEFONTINFO),
   BlockType (SWF_DEFINEFONTINFO2),
   BlockType (SWF_CSMTEXTSETTINGS),
+  BlockType (SWF_DEFINEFONTNAME),
   BlockType (SWF_DEFINEFONTALIGNZONES),
   BlockType (SWF_DEFINELOSSLESS),
   BlockType (SWF_DEFINELOSSLESS2),

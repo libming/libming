@@ -2010,6 +2010,16 @@ parseSWF_DEFINEFONTALIGNZONES(FILE *f, int length)
 }
 
 SWF_Parserstruct *
+parseSWF_DEFINEFONTNAME(FILE * f, int length)
+{
+  PAR_BEGIN(SWF_DEFINEFONTNAME);
+  parserrec->FontId = readUInt16(f);
+  parserrec->FontName = readString(f);
+  parserrec->FontCopyright = readString(f); 
+  PAR_END;
+}
+
+SWF_Parserstruct *
 parseSWF_DEFINELOSSLESS (FILE * f, int length)
 {
   int end = fileOffset + length;
