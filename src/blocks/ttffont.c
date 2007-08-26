@@ -178,7 +178,7 @@ static void readGlyphs(SWFFont font, FT_Face face)
 	font->nGlyphs = glyphCount;
 }
 
-SWFFont loadSWFFontTTF(char *filename)
+SWFFont loadSWFFontTTF(const char *filename)
 {
 	FT_Error error;
 	FT_Library library;

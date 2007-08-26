@@ -333,7 +333,7 @@ SWFFont loadSWFFontFromFile(FILE *file)
  * and autodetects FDB and TTF fonts.
  * returns a SWFFont object if a valid fontfile is found, NULL otherwise 
  */
-SWFFont newSWFFont_fromFile(char *filename /* filename for fontfile */)
+SWFFont newSWFFont_fromFile(const char *filename /* filename for fontfile */)
 {
 	FILE *file;
 	char header[5];

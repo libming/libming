@@ -85,6 +85,7 @@ typedef struct SWFVideoStream_s *SWFVideoStream;
 typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
 typedef struct SWFFilter_s * SWFFilter;
 typedef struct SWFButtonRecord_s* SWFButtonRecord;
+typedef struct SWFSymbolClass_s* SWFSymbolClass;
 
 union SWFMovieBlockType_u {
 	SWFBlock 		block;
@@ -409,7 +410,7 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 /***** SWFFont *****/
 
 SWFFont newSWFFont(void);
-SWFFont newSWFFont_fromFile(char *filename);
+SWFFont newSWFFont_fromFile(const char *filename);
 
 /* pull font definition from fdb (font def block) file */
 SWFFont loadSWFFontFromFile(FILE *file) __deprecated;
