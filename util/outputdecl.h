@@ -95,6 +95,7 @@ extern OUTPUTRET outputSWF_SOUNDSTREAMBLOCK(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_SOUNDSTREAMHEAD(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_SOUNDSTREAMHEAD2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_STARTSOUND(SWF_Parserstruct *pblock);
+extern OUTPUTRET outputSWF_STARTSOUND2(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_SYNCFRAME(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_INITACTION(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_VIDEOFRAME(SWF_Parserstruct *pblock);

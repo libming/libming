@@ -97,6 +97,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_SOUNDSTREAMHEAD),
   BlockType (SWF_SOUNDSTREAMHEAD2),
   BlockType (SWF_STARTSOUND),
+  BlockType (SWF_STARTSOUND2),
   BlockType (SWF_SYNCFRAME),
   BlockType (SWF_VIDEOFRAME),
   BlockType (SWF_REFLEX),

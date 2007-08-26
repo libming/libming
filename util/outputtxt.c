@@ -107,6 +107,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SOUNDSTREAMHEAD, outputSWF_SOUNDSTREAMHEAD},
   {SWF_SOUNDSTREAMHEAD2, outputSWF_SOUNDSTREAMHEAD2},
   {SWF_STARTSOUND, outputSWF_STARTSOUND},
+  {SWF_STARTSOUND2, outputSWF_STARTSOUND2},
   {SWF_SYNCFRAME, outputSWF_SYNCFRAME},
   {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
@@ -1996,6 +1997,14 @@ outputSWF_STARTSOUND (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_STARTSOUND);
   iprintf(" SoundId %d\n", sblock->SoundId);
+  outputSWF_SOUNDINFO(&sblock->SoundInfo);
+}
+
+void
+outputSWF_STARTSOUND2 (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_STARTSOUND2);
+  iprintf(" SoundClassName %s\n", sblock->SoundClassName);
   outputSWF_SOUNDINFO(&sblock->SoundInfo);
 }
 

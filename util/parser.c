@@ -2772,15 +2772,10 @@ parseSWF_SOUNDSTREAMHEAD2 (FILE * f, int length)
   PAR_END;
 }
 
-SWF_Parserstruct *
-parseSWF_STARTSOUND (FILE * f, int length)
+void parseSWF_SOUNDINFO(FILE *f, struct SWF_SOUNDINFO *si)
 {
-  SWF_SOUNDINFO *si;
   int i;
-  PAR_BEGIN (SWF_STARTSOUND);
- 
-  parserrec->SoundId = readUInt16 (f);
-  si=&(parserrec->SoundInfo);
+  
   si->Reserved = readBits (f, 2);
   si->SyncStop = readBits (f, 1);
   si->SyncNoMultiple = readBits (f, 1);
@@ -2804,6 +2799,26 @@ parseSWF_STARTSOUND (FILE * f, int length)
     	si->EnvelopeRecords[i].RightLevel = readUInt16 (f);
     	}
     }
+}
+
+SWF_Parserstruct *
+parseSWF_STARTSOUND (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_STARTSOUND);
+ 
+  parserrec->SoundId = readUInt16 (f);
+  parseSWF_SOUNDINFO(f, &parserrec->SoundInfo);
+
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_STARTSOUND2 (FILE * f, int length)
+{
+  PAR_BEGIN (SWF_STARTSOUND2);
+ 
+  parserrec->SoundClassName = readString (f);
+  parseSWF_SOUNDINFO(f, &parserrec->SoundInfo);
 
   PAR_END;
 }
