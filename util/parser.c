@@ -1570,19 +1570,23 @@ parseSWF_DEFINEEDITTEXT (FILE * f, int length)
   parserrec->HasTextColor = readBits (f, 1);
   parserrec->HasMaxLength = readBits (f, 1);
   parserrec->HasFont = readBits (f, 1);
-  parserrec->Reserved = readBits (f, 1);
+  parserrec->HasFontClass = readBits (f, 1);
   parserrec->AutoSize = readBits (f, 1);
   parserrec->HasLayout = readBits (f, 1);
   parserrec->NoSelect = readBits (f, 1);
   parserrec->Border = readBits (f, 1);
-  parserrec->Reserved2 = readBits (f, 1);
+  parserrec->WasStatic = readBits (f, 1);
   parserrec->HTML = readBits (f, 1);
   parserrec->UseOutlines = readBits (f, 1);
   if (parserrec->HasFont)
-    {
-      parserrec->FontID = readUInt16 (f);
-      parserrec->FontHeight = readUInt16 (f);
-    }
+    parserrec->FontID = readUInt16 (f);
+
+  if (parserrec->HasFontClass)
+    parserrec->FontClass = readString(f);
+  
+  if (parserrec->HasFont)
+    parserrec->FontHeight = readUInt16 (f);
+    
   if (parserrec->HasTextColor)
     {
       parseSWF_RGBA (f, &parserrec->TextColor);

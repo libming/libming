@@ -977,11 +977,13 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
   iprintf (" HasTextColor: %d ", sblock->HasTextColor);
   iprintf (" HasMaxLength: %d ", sblock->HasMaxLength);
   iprintf (" HasFont: %d ", sblock->HasFont);
+  iprintf (" HasFontClass: %d ", sblock->HasFontClass);
   iprintf (" AutoSize: %d ", sblock->AutoSize);
   iprintf (" HasLayout: %d\n", sblock->HasLayout);
   iprintf ("        ");
   iprintf (" NoSelect: %d ", sblock->NoSelect);
   iprintf (" Border: %d ", sblock->Border);
+  iprintf (" WasStatic: %d ", sblock->WasStatic);
   iprintf (" HTML: %d ", sblock->HTML);
   iprintf (" UseOutlines: %d\n", sblock->UseOutlines);
   if (sblock->HasFont)
@@ -990,6 +992,10 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
       iprintf (" FontID: %d ", sblock->FontID);
       iprintf (" FontHeight: %d\n", sblock->FontHeight);
     }
+
+  if (sblock->HasFontClass)
+    iprintf(" FontClass: %s\n", sblock->FontClass);
+
   if (sblock->HasTextColor)
     {
       outputSWF_RGBA (&sblock->TextColor,"");

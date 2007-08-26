@@ -1110,15 +1110,16 @@ struct SWF_DEFINEEDITTEXT
   UI8	HasTextColor:1;
   UI8	HasMaxLength:1;
   UI8	HasFont:1;
-  UI8	Reserved:1;
+  UI8	HasFontClass:1;
   UI8	AutoSize:1;
   UI8	HasLayout:1;
   UI8	NoSelect:1;
   UI8	Border:1;
-  UI8	Reserved2:1;
+  UI8	WasStatic:1;
   UI8	HTML:1;
   UI8	UseOutlines:1;
   UI16	FontID;
+  STRING FontClass;
   UI16	FontHeight;
   SWF_RGBA	TextColor;
   UI16	MaxLength;
