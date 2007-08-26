@@ -1337,7 +1337,8 @@ outputHeader (struct Movie *m)
   printf ("%s\n", newobj ("m", "Movie"));
   if( m->version != 5 ) {
   	printf ("#%s(%d);\n\n", newobj ("m", "Movie"), m->version);
-  	printf ("#add setversion here\n\n", "m", m->version);
+	// XXX:
+  	// printf ("#add setversion here\n\n", "m", m->version);
 	}
 #endif
   if( m->rate != 12.0 ) 
