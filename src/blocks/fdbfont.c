@@ -297,7 +297,7 @@ SWFFont loadSWFFontFromInput(SWFInput input)
 }
 
 /* pull font definition from fdb (font def block) file */
-SWFFont loadSWFFontFromFile(FILE *file)
+SWFFont loadSWFFont_fromFdbFile(FILE *file)
 {
 	SWFInput input;
 	SWFFont font;

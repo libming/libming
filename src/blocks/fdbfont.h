@@ -22,6 +22,6 @@
 #ifndef __FDB_FONT_H
 #define __FDB_FONT_H
 
-SWFFont loadSWFFontFromFile(FILE *file);
+SWFFont loadSWFFont_fromFdbFile(FILE *file);
 
 #endif
