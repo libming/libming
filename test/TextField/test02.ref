@@ -8733,8 +8733,8 @@ Block length: 19
  CharacterID: 1
  RECT:  (-40,-40)x(40,440):10
  Flags:  HasText: 0  WordWrap: 0  Multiline: 0  Password: 0  ReadOnly: 0
-         HasTextColor: 1  HasMaxLength: 0  HasFont: 1  AutoSize: 0  HasLayout: 0
-         NoSelect: 0  Border: 0  HTML: 0  UseOutlines: 1
+         HasTextColor: 1  HasMaxLength: 0  HasFont: 1  HasFontClass: 0  AutoSize: 0  HasLayout: 0
+         NoSelect: 0  Border: 0  WasStatic: 0  HTML: 0  UseOutlines: 1
  Font:  FontID: 2  FontHeight: 400
  RGBA: ( 0, 0, 0,ff)
  VariableName: 
