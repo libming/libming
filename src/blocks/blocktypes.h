@@ -101,7 +101,7 @@ typedef enum
   SWF_DOABC                     = 82,
   SWF_DEFINEBINARYDATA		= 87,
   SWF_DEFINESCENEANDFRAMEDATA   = 86,
-
+  SWF_STARTSOUND2		= 89,
   /* Unconfirmed tags */
   SWF_REFLEX			= 777,
 
