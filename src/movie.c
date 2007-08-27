@@ -52,6 +52,8 @@
 #include "blocks/scriptlimits.h"
 #include "blocks/tabindex.h"
 #include "blocks/sprite.h"
+#include "blocks/symbolclass.h"
+
 #include "libming.h"
 
 #ifdef USE_ZLIB
@@ -105,7 +107,11 @@ struct SWFMovie_s
 	SWFMetadata metadata;
 
 	/* Script limits */
-	SWFScriptLimits limits;	
+	SWFScriptLimits limits;
+
+	/* (exported) Symbol table (SWF >= 9) */
+	SWFSymbolClass symbolClass;
+	
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -203,6 +209,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 		movie->fattrs = NULL;
 	movie->metadata = NULL;
 	movie->limits = NULL;
+	movie->symbolClass = NULL;
 #if TRACK_ALLOCS
 	movie->gcnode = ming_gc_add_node(movie, (dtorfunctype) destroySWFMovie);
 #endif
@@ -673,6 +680,9 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	while ( movie->nFrames < movie->totalFrames )
 		SWFMovie_nextFrame(movie);
 
+	if(movie->symbolClass)
+		SWFMovie_addBlock(movie, (SWFBlock)movie->symbolClass);
+
 	SWFMovie_addBlock(movie, newSWFEndBlock());
 
 	// add five for the setbackground block..
@@ -927,6 +937,24 @@ SWFMovie_setTabIndex(SWFMovie movie,
 {
 	SWFTabIndex ti = newSWFTabIndex(depth, index);
 	SWFMovie_addBlock(movie, (SWFBlock) ti);
+}
+
+/* 
+ * assigns a symbolic name for a SWFCharacter
+ * Such classes are available for usage in other SWF files
+ * and can be referenced from inside the current movie.
+ *
+ * To assign a symbol to the root movie use NULL as character
+ * value.
+ */
+void 
+SWFMovie_assignSymbol(SWFMovie m, 
+                      SWFCharacter character /* target */,
+                      const char *name /* symbol */)
+{
+	if(m->symbolClass == NULL)
+		m->symbolClass = newSWFSymbolClass();
+	SWFSymbolClass_addSymbol(m->symbolClass, character, name);
 }
 /*
  * Local variables:

@@ -50,7 +50,8 @@ noinst_HEADERS =	\
 	metadata.h	\
 	scriptlimits.h	\
 	scalinggrid.h	\
-	tabindex.h	
+	tabindex.h	\
+	symbolclass.h	
 
 
 noinst_LTLIBRARIES = libblock.la
@@ -117,6 +118,7 @@ libblock_la_SOURCES = 	\
 	scriptlimits.c	\
 	scalinggrid.c	\
 	tabindex.c	\
+	symbolclass.c	\
 	$(PNG_SOURCE)	\
 	$(GIF_SOURCE)   \
 	$(TTF_SOURCE)
