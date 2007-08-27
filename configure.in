@@ -347,6 +347,7 @@ AC_OUTPUT([
 	test/Movie/setScriptLimits/Makefile
 	test/Movie/setNetworkAccess/Makefile
 	test/Movie/replace/Makefile
+	test/Movie/assignSymbol/Makefile
 	test/Filter/Makefile
 	test/Morph/Makefile
 	test/Video/Makefile

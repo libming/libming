@@ -13,5 +13,6 @@ SUBDIRS = \
 	setTabIndex	\
 	setScriptLimits \
 	setNetworkAccess \
-	replace	
+	replace		\
+	assignSymbol	
 
