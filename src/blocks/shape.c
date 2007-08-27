@@ -812,7 +812,7 @@ static void finishSetLine(SWFShape shape, int line, unsigned short width)
  * If join style is not miter, this value will be ignored.
  */
 void 
-SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
+SWFShape_setLineStyle2filled_internal(SWFShape shape, unsigned short width,
                        SWFFillStyle fill,
                        int flags, float miterLimit)
 {
@@ -834,7 +834,6 @@ SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
 
 	finishSetLine(shape, line, width);
 }
-
 
 
 /*
@@ -880,7 +879,7 @@ SWFShape_setLineStyle2filled(SWFShape shape, unsigned short width,
  * If join style is not miter, this value will be ignored.
  */
 void 
-SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
+SWFShape_setLineStyle2_internal(SWFShape shape, unsigned short width,
                        byte r, byte g, byte b, byte a,
                        int flags, float miterLimit)
 {
@@ -903,6 +902,7 @@ SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
 	finishSetLine(shape, line, width);
 }
 
+
 /*
  * set line width and line color
  *
@@ -913,7 +913,7 @@ SWFShape_setLineStyle2(SWFShape shape, unsigned short width,
  * external use is deprecated! use setLine instead ! 
  */
 void
-SWFShape_setLineStyle(SWFShape shape, unsigned short width,
+SWFShape_setLineStyle_internal(SWFShape shape, unsigned short width,
                       byte r, byte g, byte b, byte a)
 {
 	int line;

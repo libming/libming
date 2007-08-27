@@ -321,12 +321,6 @@ static inline int fdb_check(char *header)
 	return 0;
 }
 
-/* compat wraper: 
- * loadSWFFontFromFile is deprecated */
-SWFFont loadSWFFontFromFile(FILE *file)
-{
-	return loadSWFFont_fromFdbFile(file);
-}
 
 /* load a font from file
  * This function creates a new SWFFont object from a font file. It accepts 

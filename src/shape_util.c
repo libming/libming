@@ -42,6 +42,7 @@ float SWFCharacter_getHeight(SWFCharacter character)
 	return SWFCharacter_getScaledHeight(character) / Ming_scale;
 }
 
+
 /*
  * set line width and line color
  *
@@ -52,7 +53,7 @@ float SWFCharacter_getHeight(SWFCharacter character)
 void SWFShape_setLine(SWFShape shape, unsigned short width,
 					byte r, byte g, byte b, byte a)
 {
-	SWFShape_setLineStyle(shape, width * Ming_scale, r, g, b, a);
+	SWFShape_setLineStyle_internal(shape, width * Ming_scale, r, g, b, a);
 }
 
 /*
@@ -99,7 +100,8 @@ void SWFShape_setLine2(SWFShape shape, unsigned short width,
                        byte r, byte g, byte b, byte a,
                        int flags, float miterLimit)
 {
-	SWFShape_setLineStyle2(shape, width * Ming_scale, r, g, b, a, flags, miterLimit);
+	SWFShape_setLineStyle2_internal(shape, width * Ming_scale, 
+		r, g, b, a, flags, miterLimit);
 }
 
 /*
@@ -148,7 +150,8 @@ void SWFShape_setLine2Filled(SWFShape shape, unsigned short width,
                              SWFFillStyle fill,
                              int flags, float miterLimit)
 {
-	SWFShape_setLineStyle2filled(shape, width * Ming_scale, fill, flags, miterLimit);
+	SWFShape_setLineStyle2filled_internal(shape, width * Ming_scale, 
+		fill, flags, miterLimit);
 }
 
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a)

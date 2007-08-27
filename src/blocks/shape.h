@@ -89,4 +89,17 @@ SWFOutput_writeGlyphShape(SWFOutput out, SWFShape shape);
 
 SWFShape newSWFGlyphShape();
 
+void 
+SWFShape_setLineStyle2filled_internal(SWFShape shape, unsigned short width,
+                       SWFFillStyle fill,
+                       int flags, float miterLimit);
+
+void 
+SWFShape_setLineStyle2_internal(SWFShape shape, unsigned short width,
+                       byte r, byte g, byte b, byte a,
+                       int flags, float miterLimit);
+
+void
+SWFShape_setLineStyle_internal(SWFShape shape, unsigned short width,
+                      byte r, byte g, byte b, byte a);
 #endif /* SWF_SHAPE_H_INCLUDED */
