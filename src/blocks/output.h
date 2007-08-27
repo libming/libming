@@ -101,7 +101,8 @@ int SWFOutput_numBits(int num);
 
 int SWFOutput_numSBits(int num);
 
-
 void SWFOutput_writeString(SWFOutput out, const byte *string);
+
+void SWFOutput_writeEncUInt32(SWFOutput out, unsigned int i);
 
 #endif /* SWF_OUTPUT_H_INCLUDED */

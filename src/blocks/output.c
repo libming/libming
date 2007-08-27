@@ -470,6 +470,22 @@ SWFOutput_writeFloat16(SWFOutput out, float f)
 	SWFOutput_writeUInt16(out, i);
 }
 
+#define ENC_HIGH_BIT 0x80
+#define ENC_BYTE_MASK 0x7f
+
+void 
+SWFOutput_writeEncUInt32(SWFOutput out, unsigned int i)
+{
+	while(i > 0)
+	{
+		unsigned char temp = i & ENC_BYTE_MASK;
+		i = i >> 7;
+		if(i > 0)
+			temp |= ENC_HIGH_BIT;
+		SWFOutput_writeUInt8(out, temp);
+	}
+}
+
 /*
  * Local variables:
  * tab-width: 2
