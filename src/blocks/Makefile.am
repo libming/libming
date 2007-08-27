@@ -119,6 +119,7 @@ libblock_la_SOURCES = 	\
 	scalinggrid.c	\
 	tabindex.c	\
 	symbolclass.c	\
+	binary.c	\
 	$(PNG_SOURCE)	\
 	$(GIF_SOURCE)   \
 	$(TTF_SOURCE)

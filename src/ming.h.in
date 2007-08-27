@@ -86,6 +86,7 @@ typedef struct SWFPrebuiltClip_s *SWFPrebuiltClip;
 typedef struct SWFFilter_s * SWFFilter;
 typedef struct SWFButtonRecord_s* SWFButtonRecord;
 typedef struct SWFSymbolClass_s* SWFSymbolClass;
+typedef struct SWFBinaryData_s* SWFBinaryData;
 
 union SWFMovieBlockType_u {
 	SWFBlock 		block;
@@ -106,6 +107,7 @@ union SWFMovieBlockType_u {
 	SWFMovieClip		mc;
 	SWFVideoStream		stream;
 	SWFPrebuiltClip		prebuild;
+	SWFBinaryData		binary;
 };
 
 typedef union SWFMovieBlockType_u SWFMovieBlockType;
@@ -977,6 +979,10 @@ void SWFMovieClip_addInitAction(SWFMovieClip, SWFAction);
 void destroySWFPrebuiltClip(SWFPrebuiltClip clip);
 SWFPrebuiltClip newSWFPrebuiltClip_fromFile(const char *filename);
 SWFPrebuiltClip newSWFPrebuiltClip_fromInput(SWFInput input);
+
+/***** SWFBinaryData *****/
+
+SWFBinaryData newSWFBinaryData(unsigned char *blob, int length);
 
 /***** SWFMovie *****/
 
