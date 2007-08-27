@@ -603,6 +603,9 @@ class SWFMovie
   void setTabIndex(int depth, int index)
     { SWFMovie_setTabIndex(this->movie, depth, index); }
 
+  void assignSymbol(SWFCharacter *character, char *name)
+    { SWFMovie_assignSymbol(this->movie, (c_SWFCharacter)character->getBlock(), name); }
+
   SWF_DECLAREONLY(SWFMovie);
 };
 
