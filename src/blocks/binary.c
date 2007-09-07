@@ -47,7 +47,6 @@ completeSWFBinaryData(SWFBlock block)
 void
 destroySWFBinaryData(SWFBinaryData data)
 {
-	int i;
 	destroySWFOutput(data->out);
 	free(data);
 }
