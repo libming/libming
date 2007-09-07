@@ -87,6 +87,7 @@ typedef struct SWFFilter_s * SWFFilter;
 typedef struct SWFButtonRecord_s* SWFButtonRecord;
 typedef struct SWFSymbolClass_s* SWFSymbolClass;
 typedef struct SWFBinaryData_s* SWFBinaryData;
+typedef struct SWFSceneData_s* SWFSceneData;
 
 union SWFMovieBlockType_u {
 	SWFBlock 		block;
