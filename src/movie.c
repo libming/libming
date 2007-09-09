@@ -161,6 +161,10 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 
 	if(movie->limits)
 		destroySWFScriptLimits(movie->limits);
+
+	if(movie->symbolClass)
+		destroySWFSymbolClass(movie->symbolClass);
+
 #if TRACK_ALLOCS
 	ming_gc_remove_node(movie->gcnode);
 #endif

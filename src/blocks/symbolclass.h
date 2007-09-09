@@ -20,6 +20,8 @@
 #define __SYMBOL_CLASS_H_
 
 SWFSymbolClass newSWFSymbolClass();
+
 void SWFSymbolClass_addSymbol(SWFSymbolClass sclass, 
                          SWFCharacter character, const char *name);
+void destroySWFSymbolClass(SWFSymbolClass sclass);
 #endif
