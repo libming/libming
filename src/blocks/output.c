@@ -476,6 +476,11 @@ SWFOutput_writeFloat16(SWFOutput out, float f)
 void 
 SWFOutput_writeEncUInt32(SWFOutput out, unsigned int i)
 {
+	if(i == 0) // special case 
+	{
+		SWFOutput_writeUInt8(out, 0);
+		return;
+	}
 	while(i > 0)
 	{
 		unsigned char temp = i & ENC_BYTE_MASK;
