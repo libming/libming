@@ -120,6 +120,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SETTABINDEX, outputSWF_SETTABINDEX},
   {SWF_DOABC, outputSWF_DOABC},
   {SWF_SYMBOLCLASS, outputSWF_SYMBOLCLASS},
+  {SWF_DEFINESCENEANDFRAMEDATA, outputSWF_DEFINESCENEANDFRAMEDATA},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -2729,6 +2730,24 @@ outputSWF_SYMBOLCLASS(SWF_Parserstruct *pblock)
       sblock->SymbolList[i].SymbolId, sblock->SymbolList[i].SymbolName);
   }
 }
+
+void 
+outputSWF_DEFINESCENEANDFRAMEDATA(SWF_Parserstruct *pblock)
+{
+  int i;
+  OUT_BEGIN(SWF_DEFINESCENEANDFRAMEDATA);
+  iprintf(" SceneCount: %d\n", sblock->SceneCount);
+  for(i = 0; i < sblock->SceneCount; i++)
+    iprintf("  Scene #%d: Offset: %d, Name: %s\n", 
+	i, sblock->Scenes[i].Offset, sblock->Scenes[i].Name);
+
+  iprintf(" FrameLabelCount: %d\n", sblock->FrameLabelCount);
+  for(i = 0; i < sblock->FrameLabelCount; i++)
+    iprintf("  FrameLabel #%d: Frame: %d, Name: %s\n", 
+	i, sblock->Frames[i].FrameNum, sblock->Frames[i].FrameLabel);
+}
+
+
 
 void
 printRect(struct Rect *r)
