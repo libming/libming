@@ -606,6 +606,9 @@ class SWFMovie
   void assignSymbol(SWFCharacter *character, char *name)
     { SWFMovie_assignSymbol(this->movie, (c_SWFCharacter)character->getBlock(), name); }
 
+  void defineScene(unsigned int offset, const char *name)
+    { SWFMovie_defineScene(this->movie, offset, name); }
+
   SWF_DECLAREONLY(SWFMovie);
 };
 

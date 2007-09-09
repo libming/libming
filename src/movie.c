@@ -53,6 +53,7 @@
 #include "blocks/tabindex.h"
 #include "blocks/sprite.h"
 #include "blocks/symbolclass.h"
+#include "blocks/scenedata.h"
 
 #include "libming.h"
 
@@ -111,7 +112,9 @@ struct SWFMovie_s
 
 	/* (exported) Symbol table (SWF >= 9) */
 	SWFSymbolClass symbolClass;
-	
+
+	/* scene and frame definitions (SWF >= 9) */
+	SWFSceneData sceneData;	
 #if TRACK_ALLOCS
 	/* memory node for garbage collection */
 	mem_node *gcnode;
@@ -164,7 +167,9 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 
 	if(movie->symbolClass)
 		destroySWFSymbolClass(movie->symbolClass);
-
+	
+	if(movie->sceneData)
+		destroySWFSceneData(movie->sceneData);
 #if TRACK_ALLOCS
 	ming_gc_remove_node(movie->gcnode);
 #endif
@@ -214,6 +219,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	movie->metadata = NULL;
 	movie->limits = NULL;
 	movie->symbolClass = NULL;
+	movie->sceneData = NULL;
 #if TRACK_ALLOCS
 	movie->gcnode = ming_gc_add_node(movie, (dtorfunctype) destroySWFMovie);
 #endif
@@ -687,6 +693,9 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	if(movie->symbolClass)
 		SWFMovie_addBlock(movie, (SWFBlock)movie->symbolClass);
 
+	if(movie->sceneData)
+		SWFMovie_addBlock(movie, (SWFBlock)movie->sceneData);
+
 	SWFMovie_addBlock(movie, newSWFEndBlock());
 
 	// add five for the setbackground block..
@@ -959,6 +968,18 @@ SWFMovie_assignSymbol(SWFMovie m,
 	if(m->symbolClass == NULL)
 		m->symbolClass = newSWFSymbolClass();
 	SWFSymbolClass_addSymbol(m->symbolClass, character, name);
+}
+
+/*
+ * define scenes for the movies' main timeline
+ */
+void
+SWFMovie_defineScene(SWFMovie m, unsigned int offset /* frame offset */, 
+                  const char *name /* name of the scene */)
+{
+	if(m->sceneData == NULL)
+		m->sceneData = newSWFSceneData();
+	SWFSceneData_addScene(m->sceneData, offset, name);
 }
 /*
  * Local variables:

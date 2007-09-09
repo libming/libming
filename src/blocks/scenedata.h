@@ -18,8 +18,11 @@
 */
 #ifndef __SCENE_DATA_H_
 #define __SCENE_DATA_H_
+SWFSceneData newSWFSceneData();
 void 
 SWFSceneData_addScene(SWFSceneData sdata, unsigned int offset, const char *name);
 void 
 SWFSceneData_addFrameLabel(SWFSceneData sdata, unsigned int fnum, const char *label);
+void
+destroySWFSceneData(SWFSceneData sdata);
 #endif
