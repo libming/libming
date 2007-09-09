@@ -14,5 +14,6 @@ SUBDIRS = \
 	setScriptLimits \
 	setNetworkAccess \
 	replace		\
-	assignSymbol	
+	assignSymbol	\
+	defineScene		
 
