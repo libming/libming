@@ -3,6 +3,7 @@ SUBDIRS = \
 	blocks
 
 noinst_HEADERS =	\
+	abctypes.h	\
 	actiontypes.h	\
 	blocklist.h	\
 	displaylist.h	\
