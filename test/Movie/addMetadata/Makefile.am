@@ -10,8 +10,6 @@ LIBS=-lstdc++
 
 TESTS = dotests
 
-check_SCRIPTS = dotests
-
 C_PROGS =		\
 	test01		
 
