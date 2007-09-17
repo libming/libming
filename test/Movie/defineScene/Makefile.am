@@ -22,7 +22,9 @@ endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
-EXTRA_DIST = 		
+EXTRA_DIST = 		\
+	test01.ref	\
+	TestList
 
 check_PROGRAMS = \
 	$(TEST_PROGS)

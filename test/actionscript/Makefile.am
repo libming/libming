@@ -37,6 +37,8 @@ EXTRA_DIST = 		\
 	targetPath.ref  \
 	FunctionInLoop.ref \
 	newline_comment.ref \
+	newline_crlf.ref \
+	TryCatch.ref \
 	$(AS_TESTS)
 
 CLEANFILES = *.pp *.swf
