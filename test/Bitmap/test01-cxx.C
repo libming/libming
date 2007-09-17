@@ -3,7 +3,7 @@
 int main()
 {
 	SWFMovie *m = new SWFMovie(8);
-	SWFBitmap *bmp = new SWFBitmap("../Media/image01.png");
+	SWFBitmap *bmp = new SWFBitmap(MEDIADIR "/image01.png");
 
 	m->add(bmp);
 	m->save("test01.swf");
