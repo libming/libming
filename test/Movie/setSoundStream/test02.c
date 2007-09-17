@@ -6,14 +6,18 @@ int main() {
 	int i;
 	FILE *file;
 	
-	file = fopen("../../Media/video02.flv", "rb");
+	file = fopen(MEDIADIR "/video02.flv", "rb");
 	if(!file) {
-		return 0;
+		perror(MEDIADIR "/video02.flv");
+		return 1;
 	}
 		
 	stream = newSWFSoundStream(file);
 	if(!stream)
-		return 0;
+	{
+		fprintf(stderr, "Could not create SWFSoundStream\n");
+		return 1;
+	}
 	SWFMovie_setSoundStream(m, stream);
 	for(i = 0; i < 200; i++)
 		SWFMovie_nextFrame(m);

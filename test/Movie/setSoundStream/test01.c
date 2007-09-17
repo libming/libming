@@ -5,18 +5,28 @@ int main() {
 	SWFSoundStream stream;
 	int i;
 	FILE *file;
-	file = fopen("../../Media/audio01.mp3", "rb");
+	file = fopen(MEDIADIR "/audio01.mp3", "rb");
 	if(!file) {
-		return 0;
+		perror(MEDIADIR "/video02.flv");
+		return 1;
 	}
 		
 	stream = newSWFSoundStream(file);
 	if(!stream)
-		return 0;
+	{
+		fprintf(stderr, "Could not create SWFSoundStream\n");
+		return 1;
+	}
 	SWFMovie_setSoundStream(m, stream);
 	for(i = 0; i < 200; i++)
 		SWFMovie_nextFrame(m);
 
-	SWFMovie_save(m, "test01.swf");
+	int ret = SWFMovie_save(m, "test01.swf");
+	if ( ret == -1 )
+	{
+		fprintf(stderr, "Something went wrong during SWFMovie_save\n");
+		return 1;
+	}
+
 	return 0;
 }
