@@ -7,7 +7,7 @@ int main()
 	SWFMovie m = newSWFMovieWithVersion(9);
 	SWFText text = newSWFText();
 	
-	SWFFont font = newSWFFont_fromFile("../../Media/font01.fdb");
+	SWFFont font = newSWFFont_fromFile(MEDIADIR "/font01.fdb");
 	if(font == NULL)
 		exit(1);
 	
