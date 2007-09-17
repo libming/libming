@@ -3,7 +3,7 @@
 int main()
 {
 	SWFMovie *m = new SWFMovie(8);
-	SWFBitmap *bmp = new SWFBitmap("../Media/image01.jpeg");
+	SWFBitmap *bmp = new SWFBitmap(MEDIADIR "/image01.jpeg");
 
 
 	SWFFillStyle *fill =  SWFFillStyle::BitmapFillStyle(bmp, SWFFILL_TILED_BITMAP);

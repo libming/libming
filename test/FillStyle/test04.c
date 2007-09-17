@@ -1,11 +1,17 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <libming.h>
 
 int main()
 {
 	SWFMovie m = newSWFMovieWithVersion(8);
-	FILE *file = fopen("../Media/image01.dbl", "rb");
+	FILE *file = fopen(MEDIADIR "/image01.dbl", "rb");
 	if(file == NULL)
-		return -1;
+	{
+		perror(MEDIADIR "/image01.dbl");
+		exit(EXIT_FAILURE);
+	}
 
 	SWFDBLBitmap img = newSWFDBLBitmap(file);
 	SWFFillStyle fill = newSWFBitmapFillStyle((SWFCharacter)img, SWFFILL_CLIPPED_BITMAP);

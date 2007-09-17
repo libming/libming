@@ -1,9 +1,12 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <libming.h>
 
 int main()
 {
 	SWFMovie m = newSWFMovieWithVersion(8);
-	SWFDBLBitmapData img = newSWFDBLBitmapData_fromPngFile("../Media/image01.png");
+	SWFDBLBitmapData img = newSWFDBLBitmapData_fromPngFile(MEDIADIR "/image01.png");
 	
 	SWFFillStyle fill = newSWFBitmapFillStyle((SWFCharacter)img, SWFFILL_CLIPPED_BITMAP);
 	SWFShape shape = newSWFShape();

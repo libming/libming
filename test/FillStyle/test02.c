@@ -1,11 +1,17 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <libming.h>
 
 int main()
 {
 	SWFMovie m = newSWFMovieWithVersion(8);
-	FILE *file = fopen("../Media/image01.jpeg", "rb");
+	FILE *file = fopen(MEDIADIR "/image01.jpeg", "rb");
 	if(file == NULL)
-		return -1;
+	{
+		perror(MEDIADIR "/image01.jpeg");
+		exit(EXIT_FAILURE);
+	}
 
 	SWFJpegBitmap img = newSWFJpegBitmap(file);
 	SWFFillStyle fill = newSWFBitmapFillStyle((SWFCharacter)img, SWFFILL_TILED_BITMAP);
