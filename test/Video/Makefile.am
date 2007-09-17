@@ -4,7 +4,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/test \
-	-DMEDIADIR='"$(srcdir)/../../Media/"'
+	-DMEDIADIR='"$(srcdir)/../Media/"'
 
 LDADD = $(top_builddir)/src/libming.la
 LIBS=-lstdc++
