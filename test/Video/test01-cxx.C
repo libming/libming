@@ -5,7 +5,7 @@ int main()
 {
 	SWFMovie *m = new SWFMovie(7);
 	FILE *file;
-	file = fopen("../Media/video01.flv", "rb");
+	file = fopen(MEDIADIR "/video01.flv", "rb");
 	if(!file)
 		return 0;
 	

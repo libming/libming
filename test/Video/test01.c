@@ -5,13 +5,14 @@ int main() {
 	SWFVideoStream stream;
 	int i;
 	FILE *file;
-	file = fopen("../Media/video01.flv", "rb");
+	file = fopen(MEDIADIR "/video01.flv", "rb");
 	if(!file) 
-		return 0;
+		return 1;
 		
 	stream = newSWFVideoStream_fromFile(file);
 	if(!stream)
-		return 0;
+		return 1;
+
 	SWFVideoStream_setDimension(stream, 200,200);
 	int frames = SWFVideoStream_getNumFrames(stream);
         SWFMovie_add(m, (SWFBlock)stream);
