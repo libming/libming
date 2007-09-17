@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <libming.h>
 
 int main()
@@ -5,9 +8,12 @@ int main()
 	SWFMovie m = newSWFMovie();
 	SWFTextField text = newSWFTextField();
 	
-	SWFFont font = newSWFFont_fromFile("../Media/test.ttf");
+	SWFFont font = newSWFFont_fromFile(MEDIADIR "/test.ttf");
 	if(font == NULL)
-		exit(1);
+	{
+		perror(MEDIADIR "/test.tff");
+		exit(EXIT_FAILURE);
+	}
 	
 	SWFTextField_setFont(text, font);
 	SWFTextField_setColor(text, 0, 0, 0, 0xff);
