@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <libming.h>
 
 int main()
@@ -6,17 +9,26 @@ int main()
 	
 	SWFMovie m = newSWFMovie();
 	SWFText text = newSWFText2();
-	fontfile = fopen("../Media/font01.fdb", "rb");
+	fontfile = fopen(MEDIADIR "/font01.fdb", "rb");
 	if(fontfile == NULL)
-		exit(1);
+	{
+		perror(MEDIADIR "/font01.fdb");
+		exit(EXIT_FAILURE);
+	}
 	
 	SWFFont font = loadSWFFontFromFile(fontfile);
 	if(font == NULL)
-		exit(1);
+	{
+		fprintf(stderr, "Could not load SWFFont from file\n");
+		exit(EXIT_FAILURE);
+	}
 
-	SWFFont font2 = newSWFFont_fromFile("../Media/test.ttf");
+	SWFFont font2 = newSWFFont_fromFile(MEDIADIR "/test.ttf");
 	if(font2 == NULL)
-		exit(1);
+	{
+		perror(MEDIADIR "/test.ttf");
+		exit(EXIT_FAILURE);
+	}
 	
 	SWFText_setFont(text, font);
 	SWFText_setColor(text, 0, 0, 0, 0xff);

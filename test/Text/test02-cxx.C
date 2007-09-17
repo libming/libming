@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <mingpp.h>
 
 int main()
@@ -7,17 +10,26 @@ int main()
 	SWFMovie *m = new SWFMovie();
 	SWFText *text = new SWFText();
 	
-	fontfile = fopen("../Media/font01.fdb", "rb");
+	fontfile = fopen(MEDIADIR "/font01.fdb", "rb");
 	if(fontfile == NULL)
-		return -1;
+	{
+		perror(MEDIADIR "/font01.fdb");
+		exit(EXIT_FAILURE);
+	}
 	
 	SWFFont *font = new SWFFont(fontfile);
 	if(font == NULL)
-		return -1;
+	{
+		fprintf(stderr, "Could not create SWFFont from file\n");
+		exit(EXIT_FAILURE);
+	}
 
-	SWFFont *font2 = new SWFFont("../Media/test.ttf");
+	SWFFont *font2 = new SWFFont(MEDIADIR "/test.ttf");
 	if(font2 == NULL)
-		return -1;
+	{
+		perror(MEDIADIR "/test.ttf");
+		exit(EXIT_FAILURE);
+	}
 	
 	text->setFont( font);
 	text->setColor( 0, 0, 0, 0xff);
