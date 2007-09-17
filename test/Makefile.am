@@ -5,6 +5,7 @@ SUBDIRS = Movie \
 	Video \
 	Shape \
 	LineStyle \
+	Media \
 	MovieClip \
 	Gradient \
 	FillStyle \
