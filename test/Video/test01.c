@@ -7,11 +7,17 @@ int main() {
 	FILE *file;
 	file = fopen(MEDIADIR "/video01.flv", "rb");
 	if(!file) 
+	{
+		perror(MEDIADIR "/video01.flv");
 		return 1;
+	}
 		
 	stream = newSWFVideoStream_fromFile(file);
 	if(!stream)
+	{
+		printf(stderr, "Could not create SWFVideoStream from file\n");
 		return 1;
+	}
 
 	SWFVideoStream_setDimension(stream, 200,200);
 	int frames = SWFVideoStream_getNumFrames(stream);
