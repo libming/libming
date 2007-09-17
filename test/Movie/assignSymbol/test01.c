@@ -9,7 +9,10 @@ int main()
 	
 	SWFFont font = newSWFFont_fromFile(MEDIADIR "/font01.fdb");
 	if(font == NULL)
+	{
+		perror(MEDIADIR "/font01.fdb");
 		exit(1);
+	}
 	
 	SWFMovie_assignSymbol(m, (SWFCharacter)text, "mytext");
 	SWFText_setFont(text, font);
