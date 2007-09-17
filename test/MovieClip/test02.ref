@@ -32,7 +32,7 @@ Offset: 35 (0x0023)
 Block type: 59 (SWF_INITACTION)
 Block length: 15
 
- 4 Actions
+ 4 Init actions for character 1
     SWFACTION_CONSTANTPOOL
      [000] 
     SWFACTION_PUSH

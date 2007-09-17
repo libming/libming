@@ -2035,9 +2035,9 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 	OUT_BEGIN (SWF_INITACTION);
 
 #ifdef NODECOMPILE
-	iprintf(" %d Actions\n", sblock->numActions);
+	iprintf(" %d Init actions for character %u\n", sblock->numActions, sblock->SpriteId);
 	for(i=0;i<sblock->numActions;i++)
-	outputSWF_ACTION(i,&(sblock->Actions[i]));
+		outputSWF_ACTION(i,&(sblock->Actions[i]));
 #else
 	iprintf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
 #endif
