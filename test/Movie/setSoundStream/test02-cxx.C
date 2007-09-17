@@ -7,7 +7,7 @@ int main()
 	int i;
 	FILE *file;
 
-	file = fopen("../../Media/video02.flv", "rb");
+	file = fopen(MEDIADIR "/video02.flv", "rb");
 	if(!file) {
 		return 0;
 	}

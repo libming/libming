@@ -7,7 +7,7 @@ int main()
 	int i;
 	FILE *file;
 
-	file = fopen("../../Media/audio01.mp3", "rb");
+	file = fopen(MEDIADIR "/audio01.mp3", "rb");
 	if(!file) {
 		return 0;
 	}
