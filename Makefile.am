@@ -52,7 +52,7 @@ DIST_SUBDIRS = $(SUBDIRS) $(additionnal_dist_subdirs)
 include_HEADERS = mingpp.h
 
 COPYING: LICENSE
-	ln -s LICENSE COPYING
+	ln -fs $(srcdir)/LICENSE COPYING
 
 .PHONY: rpm
 rpm: dist
