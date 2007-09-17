@@ -5,7 +5,7 @@ int main()
 	SWFMovie *m = new SWFMovie();
 	SWFText *text = new SWFText(1);
 	
-	SWFFont *font = new SWFFont("../Media/test.ttf");
+	SWFFont *font = new SWFFont(MEDIADIR "/test.ttf");
 	if(font == NULL)
 		return -1;
 	

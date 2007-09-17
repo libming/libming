@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <libming.h>
 
 int main()
@@ -7,9 +10,12 @@ int main()
 	SWFMovie m = newSWFMovie();
 	SWFText text = newSWFText();
 	
-	SWFFont font = newSWFFont_fromFile("../Media/font01.fdb");
+	SWFFont font = newSWFFont_fromFile(MEDIADIR "/font01.fdb");
 	if(font == NULL)
-		exit(1);
+	{
+		perror(MEDIADIR "/font01.fdb");
+		exit(EXIT_FAILURE);
+	}
 	
 	SWFText_setFont(text, font);
 	SWFText_setColor(text, 0, 0, 0, 0xff);
