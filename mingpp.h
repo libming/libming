@@ -443,6 +443,9 @@ class SWFDisplayItem
 
   void setBlendMode(int mode)
     { SWFDisplayItem_setBlendMode(this->item, mode); }
+  
+  void setMatrix(float a, float b, float c, float d, float x, float y)
+    { SWFDisplayItem_setMatrix(this->item, a, b, c, d, x, y); }
 
   SWF_DECLAREONLY(SWFDisplayItem);
   SWFDisplayItem();
