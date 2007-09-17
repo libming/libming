@@ -331,6 +331,7 @@ AC_OUTPUT([
 	py_ext/setup.py
 	tcl_ext/Makefile
 	test/Makefile
+	test/Media/Makefile
 	test/Movie/Makefile
 	test/Movie/Background/Makefile
 	test/Movie/Dimension/Makefile
