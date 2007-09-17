@@ -1,8 +1,391 @@
-2007-08-20 12:20  krechert
+2007-09-17 05:14  krechert
 
-	* test/MovieClip/: .cvsignore, Makefile.am, TestList, test02-cxx.C,
-	  test02.c, test02.ref, test03-cxx.C, test03.c, test03.ref:
-	  testcases for movieclip/initaction export problems
+	* mingpp.h: expose setMatrix method
+
+2007-09-17 04:33  strk
+
+	* test/FillStyle/Makefile.am: Add missing file in the clean list
+
+2007-09-17 04:30  strk
+
+	* test/: BrowserFont/Makefile.am, Filter/Makefile.am,
+	  Gradient/Makefile.am, LineStyle/Makefile.am, Morph/Makefile.am,
+	  Movie/defineScene/Makefile.am, MovieClip/Makefile.am,
+	  Shape/Makefile.am, actionscript/Makefile.am: Distribute required
+	  files for 'make check' to work
+
+2007-09-17 04:00  strk
+
+	* test/TextField/: test01-cxx.C, test01.c, test02-cxx.C, test02.c:
+	  Use MEDIADIR, be nice on errors
+
+2007-09-17 04:00  strk
+
+	* test/TextField/Makefile.am: Provide MEDIADIR, distribute refs and
+	  TestList
+
+2007-09-17 03:56  strk
+
+	* test/Bitmap/: test01-cxx.C, test01.c: Use MEDIADIR macro, be nice
+	  on errors
+
+2007-09-17 03:55  strk
+
+	* test/Bitmap/Makefile.am: Provide MEDIADIR, distribute refs and
+	  TestList
+
+2007-09-17 03:50  strk
+
+	* test/Text/: test01-cxx.C, test01.c, test02-cxx.C, test02.c: Use
+	  MEDIADIR macro, try to be nicer on error
+
+2007-09-17 03:50  strk
+
+	* test/Text/Makefile.am: Provide MEDIADIR macro, distribute
+	  TestList and refs
+
+2007-09-17 03:35  strk
+
+	* test/Font/: test01-cxx.C, test01.c, test02-cxx.C, test02.c: Use
+	  MEDIADIR macro, try to be more friendly when something goes wrong
+
+2007-09-17 03:35  strk
+
+	* test/Font/Makefile.am: Distribute TestList and refs, provide
+	  MEDIADIR macro
+
+2007-09-17 03:29  strk
+
+	* test/FillStyle/: test02-cxx.C, test02.c, test03-cxx.C, test03.c,
+	  test04-cxx.C, test04.c, test05-cxx.C, test05.c: Use MEDIADIR,
+	  print errors and return a proper error code on errors.
+
+2007-09-17 03:29  strk
+
+	* test/FillStyle/Makefile.am: Provide a MEDIADIR macro, distribute
+	  TestList and refs
+
+2007-09-17 03:19  strk
+
+	* test/Video/test01.c: Print an error message if anything goes
+	  wrong (well, almost)
+
+2007-09-17 03:19  strk
+
+	* test/Video/Makefile.am: Oops, wrong MEDIADIR
+
+2007-09-17 03:16  strk
+
+	* test/Movie/assignSymbol/test01.c: print an error message if
+	  creation of SWF font from file failed
+
+2007-09-17 03:11  strk
+
+	* test/Video/: test01-cxx.C, test01.c: Use MEDIADIR macro to find
+	  files in media directory
+
+2007-09-17 03:10  strk
+
+	* test/Video/Makefile.am: Provide MEDIADIR macro, distribute
+	  TestList and refs
+
+2007-09-17 03:08  strk
+
+	* test/Movie/assignSymbol/: test01-cxx.C, test01.c: Use the
+	  MEDIADIR macro
+
+2007-09-17 03:07  strk
+
+	* test/Movie/assignSymbol/Makefile.am: Provide a MEDIADIR macro
+
+2007-09-17 03:01  strk
+
+	* test/Movie/assignSymbol/Makefile.am: Distribute refs and TestList
+
+2007-09-17 02:56  strk
+
+	* test/Movie/setTabIndex/Makefile.am: Distribute TestList and
+	  test01.ref
+
+2007-09-17 02:53  strk
+
+	* Makefile.am: Properly link LICENSE from source tree, and don't
+	  fail if a COPYING file is already there
+
+2007-09-17 02:49  strk
+
+	* test/Movie/setSoundStream/: test01-cxx.C, test02-cxx.C: Use
+	  MEDIADIR macro to find files in the media directory
+
+2007-09-17 02:46  strk
+
+	* test/Movie/setSoundStream/: test01.c, test02.c: Use MEDIADIR
+	  macro to find files in the media directory. Exit with an error if
+	  anything goes wrong.
+
+2007-09-17 02:46  strk
+
+	* test/Movie/setSoundStream/Makefile.am: Define MEDIADIR to point
+	  to the media directory in the source tree (for building in a
+	  separate dir)
+
+2007-09-17 02:16  strk
+
+	* configure.in: Create Makefile in test/Media dir
+
+2007-09-16 23:46  anderson
+
+	* test/: Makefile.am, Media/Makefile.am: Try to add the Media
+	  directory so the test can run from the distribution
+
+2007-09-14 16:44  anderson
+
+	* src/Makefile.am: include abctypes.h in the distribution
+
+2007-09-14 16:42  anderson
+
+	* test/Movie/addMetadata/Makefile.am: make dist fix
+
+2007-09-14 16:41  anderson
+
+	* test/Movie/setSoundStream/Makefile.am: Include the *.ref &
+	  TestList files in the distribution
+
+2007-09-14 15:17  anderson
+
+	* test/Movie/addMetadata/Makefile.am: The php & pl file haven't
+	  been created yet
+
+2007-09-14 14:39  anderson
+
+	* macros/Makefile.am: typo
+
+2007-09-09 10:17  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/defineScene/.cvsignore,
+	  test/Movie/defineScene/Makefile.am,
+	  test/Movie/defineScene/TestList,
+	  test/Movie/defineScene/test01-cxx.C,
+	  test/Movie/defineScene/test01.c,
+	  test/Movie/defineScene/test01.ref: defineScene testcase
+
+2007-09-09 10:13  krechert
+
+	* util/outputtxt.c: output SWF_DEFINESCENEANDFRAMEDATA
+
+2007-09-09 09:59  krechert
+
+	* mingpp.h, src/ming.h.in, src/movie.c, src/blocks/scenedata.h:
+	  integrade defineSceneData
+
+2007-09-09 09:57  krechert
+
+	* src/blocks/output.c: write encoded UInt32: handle special case
+	  '0'
+
+2007-09-09 08:24  krechert
+
+	* src/: movie.c, blocks/symbolclass.h: destroy symbolClass object
+	  if present
+
+2007-09-07 10:14  krechert
+
+	* src/: ming.h.in, blocks/Makefile.am, blocks/scenedata.c,
+	  blocks/scenedata.h: added SWF9 scene data support
+
+2007-09-07 09:18  krechert
+
+	* src/blocks/binary.c: remove unused variable
+
+2007-09-05 18:07  anderson
+
+	* test/Movie/assignSymbol/Makefile.am: Add a missing makefile
+
+2007-08-27 11:30  krechert
+
+	* src/: ming.h.in, blocks/Makefile.am, blocks/binary.c: SWF9:
+	  SWFBinaryData
+
+2007-08-27 10:41  krechert
+
+	* mingpp.h: added assignSymbol method
+
+2007-08-27 10:07  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/assignSymbol/.cvsignore,
+	  test/Movie/assignSymbol/TestList,
+	  test/Movie/assignSymbol/test01-cxx.C,
+	  test/Movie/assignSymbol/test01.c,
+	  test/Movie/assignSymbol/test01.ref: assignSymbol testcase
+
+2007-08-27 10:01  krechert
+
+	* test/BrowserFont/.cvsignore: added .cvsignore
+
+2007-08-27 09:16  krechert
+
+	* src/: blocks/Makefile.am, blocks/symbolclass.c,
+	  blocks/symbolclass.h, ming.h.in, movie.c: SWF9: SWFSymbolClass
+
+2007-08-27 09:10  krechert
+
+	* src/: Makefile.am, shape_util.c, compat.c, blocks/font.c,
+	  blocks/shape.c, blocks/shape.h: added compat file: temporary
+	  place to move external functions to internal functions. After 1-2
+	  stable releases the compat functions will be removed.
+
+2007-08-27 09:04  krechert
+
+	* src/ming.c: allow SWF 9 as movie version
+
+2007-08-27 09:01  krechert
+
+	* src/blocks/: output.c, output.h: write SWF9 variable length
+	  encoded int
+
+2007-08-26 15:06  krechert
+
+	* src/: font_util.c, ming.h.in, blocks/font.c, blocks/ttffont.c,
+	  blocks/ttffont.h: font_util:	Ming_loadFont use generic font
+	  loader fix some warnings
+
+2007-08-26 13:56  krechert
+
+	* src/blocks/: fdbfont.c, fdbfont.h, font.c: remove warinig for
+	  internal usage
+
+2007-08-26 13:44  krechert
+
+	* util/outputscript.c: remove warning
+
+2007-08-26 13:41  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: define, parse and output DefineFontName
+
+2007-08-26 12:20  krechert
+
+	* src/blocks/blocktypes.h: add missing SWF9 tag
+
+2007-08-26 09:02  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: parse, output, define StartSound2
+
+2007-08-26 09:00  krechert
+
+	* src/blocks/blocktypes.h: add StartSound2 BlockType
+
+2007-08-26 08:45  krechert
+
+	* test/: BrowserFont/test01.ref, TextField/test01.ref,
+	  TextField/test02.ref: update: SWF9 introduced new fields
+
+2007-08-26 08:43  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: parse and update SWF9
+	  updates
+
+2007-08-26 08:39  krechert
+
+	* test/FillStyle/.cvsignore: update
+
+2007-08-26 08:38  krechert
+
+	* test/: FillStyle/test01.ref, FillStyle/test02.ref,
+	  FillStyle/test03.ref, FillStyle/test04.ref, FillStyle/test05.ref,
+	  Bitmap/test01.ref: update due FileAttributes changed
+
+2007-08-26 08:34  krechert
+
+	* test/: LineStyle/test01.ref, LineStyle/test02.ref,
+	  Gradient/test01.ref, Gradient/test02.ref, Gradient/test03.ref,
+	  Gradient/test04.ref, Gradient/test05.ref, Gradient/test06.ref:
+	  update due FileAttributes changed
+
+2007-08-26 08:30  krechert
+
+	* test/: Morph/test01.ref, Morph/test02.ref, Shape/test01.ref:
+	  update due FileAttributes changed
+
+2007-08-26 08:28  krechert
+
+	* test/Filter/: test01.ref, test02.ref, test03.ref, test04.ref:
+	  update since PlaceObject3 has more fields now
+
+2007-08-26 08:21  krechert
+
+	* test/Movie/: setScriptLimits/test01.ref,
+	  setNetworkAccess/test01.ref, replace/test01.ref,
+	  replace/test02.ref: update due FileAttributes changed
+
+2007-08-26 08:16  krechert
+
+	* test/Movie/: new/test06.ref, addMetadata/test01.ref: update due
+	  FileAttributes changed
+
+2007-08-25 10:35  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: update PlaceObject3
+	  structure
+
+2007-08-25 10:33  krechert
+
+	* src/blocks/fileattrs.h: add hasABC flag support
+
+2007-08-25 10:18  krechert
+
+	* src/blocks/fileattrs.c: add actionscrip3 flag
+
+2007-08-25 10:03  krechert
+
+	* NEWS: update
+
+2007-08-25 09:58  krechert
+
+	* src/blocks/soundinstance.c: set envelope flag not loop
+
+2007-08-25 09:54  krechert
+
+	* util/: outputtxt.c, parser.c: parse and output AS3 flag in
+	  FileAttributs structure
+
+2007-08-25 09:50  krechert
+
+	* util/outputtxt.c: complete abcFile output
+
+2007-08-25 08:05  krechert
+
+	* util/outputtxt.c: output abcfile, constants and methods
+
+2007-08-25 08:04  krechert
+
+	* util/parser.c: simplify multiname parser
+
+2007-08-24 11:12  krechert
+
+	* util/: parser.c, read.c, swftypes.h: refinements and bugfixes
+
+2007-08-23 15:28  krechert
+
+	* src/: ming.h.in, blocks/soundinstance.c: added missing
+	  addEnvelopeMethod. Noticed by peterdd <flashfee@gmx.net>
+
+2007-08-23 14:47  krechert
+
+	* src/: ming.h.in, blocks/button.c: fix typo from peterdd
+	  <flashfee@gmx.net>
+
+2007-08-23 14:23  krechert
+
+	* test/actionscript/: ASM1.ref, Makefile.am, TryCatch.as,
+	  TryCatch.ref: added TryCatch testcase
+
+2007-08-23 14:18  krechert
+
+	* util/action.c: output try block
 
 2007-08-20 12:14  krechert
 
