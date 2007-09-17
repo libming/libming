@@ -50,6 +50,7 @@ CLEANFILES = dotests php.ini \
 	test01.swf	\
 	test02.swf	\
 	test03.swf	\
+	test04.swf	\
 	test05.swf
 
 include ../Makefile.inc
