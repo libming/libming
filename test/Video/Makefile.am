@@ -3,7 +3,8 @@ SUBDIRS =
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/test
+	-I$(top_srcdir)/test \
+	-DMEDIADIR='"$(srcdir)/../../Media/"'
 
 LDADD = $(top_builddir)/src/libming.la
 LIBS=-lstdc++
@@ -28,7 +29,11 @@ endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
-EXTRA_DIST = 		
+EXTRA_DIST = 		\
+	test01.ref	\
+	test02.ref	\
+	test03.ref	\
+	TestList
 
 check_PROGRAMS = \
 	$(TEST_PROGS)
