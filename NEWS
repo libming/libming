@@ -10,10 +10,13 @@
 	* Handling fonts as shapes
 	* Basic ttf font support 
 	* Typesafe SWFMovie_add / replace
-        * Add Envelopes to SoundInstance
+	* Add Envelopes to SoundInstance
 	* ABC (AS3) parser and output
 	* Parse SWF_SERIALNUMBER
-        * Parse SWF9 tags
+	* Parse SWF9 tags
+	* SWF9: DefineBinaryData
+	* SWF9: SymbolClass
+	* SWF9: DefineSceneData
 
 0.4.0.beta4 - 2007-03-27
 
