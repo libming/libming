@@ -172,7 +172,6 @@ SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags)
 	SWFFill fill =
 		newSWFFill(SWFShape_addBitmapFillStyle(shape, bitmap, flags));
 
-	SWFFill_scaleXYTo(fill, Ming_scale, Ming_scale);
 	return fill;
 }
 

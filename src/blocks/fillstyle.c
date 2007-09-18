@@ -93,7 +93,7 @@ newSWFGradientFillStyle(SWFGradient gradient, byte flags)
 		fill->type = SWFFILL_LINEAR_GRADIENT;
 
 	fill->data.gradient = gradient;
-	fill->matrix = newSWFMatrix(20.0, 0, 0, 20.0, 0, 0);
+	fill->matrix = newSWFMatrix(Ming_scale, 0, 0, Ming_scale, 0, 0);
 
 	return fill;
 }
@@ -110,7 +110,7 @@ newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 		fill->type = SWFFILL_TILED_BITMAP;
 
 	fill->data.bitmap = bitmap;
-	fill->matrix = newSWFMatrix(20.0, 0, 0, 20.0, 0, 0);
+	fill->matrix = newSWFMatrix(Ming_scale, 0, 0, Ming_scale, 0, 0);
 
 	return fill;
 }
