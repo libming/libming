@@ -887,8 +887,8 @@ void SWFDisplayItem_addFilter(SWFDisplayItem item, SWFFilter filter);
 
 /* adds a position object to manipulate SWFFillStyle's matrix */
 
-SWFFill newSWFFill(SWFFillStyle fillstyle) __deprecated;
-void destroySWFFill(SWFFill fill) __deprecated;
+SWFFill newSWFFill(SWFFillStyle fillstyle);
+void destroySWFFill(SWFFill fill);
 
 void SWFFill_skewX(SWFFill fill, float x) __deprecated;
 void SWFFill_skewXTo(SWFFill fill, float x) __deprecated;
