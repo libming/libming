@@ -1,11 +1,11 @@
-AC_INIT(ming, 0.4.0.rc1)
+AC_INIT(ming, 0.4.1.beta5)
 
 dnl -- Release version 
 dnl To avoid colation problems, the 0.4 release shall be 0.4.1
 
 MAJOR_VERSION=0
 MINOR_VERSION=4
-MICRO_VERSION=0.rc1
+MICRO_VERSION=0.beta5
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
@@ -19,8 +19,9 @@ AM_MAINTAINER_MODE
 
 dnl -- Version info for libtool
 INTERFACE_CURRENT=4
-INTERFACE_REVISION=0
 INTERFACE_AGE=4
+dnl -- Bump INTERFACE_REVISION when out of the "beta" loop 
+INTERFACE_REVISION=0
 
 AC_SUBST(INTERFACE_CURRENT)
 AC_SUBST(INTERFACE_REVISION)
