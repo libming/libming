@@ -1,3 +1,22 @@
+2007-09-18 05:59  krechert
+
+	* NEWS: update
+
+2007-09-18 05:42  krechert
+
+	* src/: shape_util.c, blocks/fillstyle.c: fill matrix is set within
+	  fillstyle
+
+2007-09-18 05:35  krechert
+
+	* src/ming.h.in: remove deprecated tag for new/destroySWFFill
+
+2007-09-17 18:00  strk
+
+	* test/MovieClip/test01.ref, test/MovieClip/test02.ref,
+	  test/MovieClip/test03.ref, util/outputtxt.c: Include character id
+	  in print of init actions. Updated refs accordingly.
+
 2007-09-17 05:14  krechert
 
 	* mingpp.h: expose setMatrix method
