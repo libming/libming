@@ -1,4 +1,4 @@
-AC_INIT(ming, 0.4.1.beta5)
+AC_INIT(ming, 0.4.0.beta5)
 
 dnl -- Release version 
 dnl To avoid colation problems, the 0.4 release shall be 0.4.1
