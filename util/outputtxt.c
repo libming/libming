@@ -1630,8 +1630,8 @@ outputSWF_JPEGTABLES (SWF_Parserstruct * pblock)
 void
 outputSWF_NAMECHARACTER (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_NAMECHARACTER);
-
+  OUT_BEGIN (SWF_NAMECHARACTER);
+  iprintf("  Name: %s\n", sblock->Name);
 }
 
 void

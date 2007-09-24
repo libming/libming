@@ -2499,7 +2499,7 @@ SWF_Parserstruct *
 parseSWF_NAMECHARACTER (FILE * f, int length)
 {
   PAR_BEGIN (SWF_NAMECHARACTER);
-  SKIP;
+  parserrec->Name = readString(f);
   PAR_END;
 }
 

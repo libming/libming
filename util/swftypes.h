@@ -1526,10 +1526,9 @@ struct SWF_JPEGTABLES
   UI8 *JPEGData;
 };
 
-// XXX: obsolete?
 struct SWF_NAMECHARACTER
 {
-  int chid;
+  STRING Name;
 };
 
 // XXX: obsolete?
