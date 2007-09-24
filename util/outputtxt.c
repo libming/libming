@@ -1631,6 +1631,7 @@ void
 outputSWF_NAMECHARACTER (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_NAMECHARACTER);
+  iprintf("  Id: %d\n", sblock->Id);
   iprintf("  Name: %s\n", sblock->Name);
 }
 

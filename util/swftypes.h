@@ -1528,6 +1528,7 @@ struct SWF_JPEGTABLES
 
 struct SWF_NAMECHARACTER
 {
+  UI16 Id;
   STRING Name;
 };
 
