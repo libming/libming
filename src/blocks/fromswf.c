@@ -1179,6 +1179,7 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 	SWFCharacter_addDependency((SWFCharacter)clip, (SWFCharacter)deps);
 	defines = deps->defines;
 	idoffset = SWF_gNumCharacters;
+	maxid = SWF_gNumCharacters;
 	// read the swf file here
 	tp = readtag_file(swf);
 		if(tp->type != SWF_SETBACKGROUNDCOLOR)
@@ -1206,7 +1207,7 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 		free(tp);
 	} while(type);
 	if(swf->compressed)
-		destroySWFInput(swf->input);	
+		destroySWFInput(swf->input);
 	SWF_gNumCharacters = maxid + 1;
 	CHARACTERID(clip) = SWF_gNumCharacters++;
 	return clip;
