@@ -13,7 +13,8 @@ SUBDIRS = Movie \
 	Text	\
 	Bitmap	\
 	BrowserFont \
-	TextField
+	TextField \
+	PrebuiltClip
 
 EXTRA_DIST = \
 	dotests.pl \
