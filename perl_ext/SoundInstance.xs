@@ -54,5 +54,12 @@ SWFSoundInstance_loopCount(inst, count)
 	int count
 	CODE:
 	SWFSoundInstance_setLoopCount(inst, count);
-	
 
+void 
+SWFSoundInstance_addEnvelope(inst, mark44, left, right)
+	SWF::SoundInstance inst
+	unsigned int mark44
+	short left
+	short right
+	CODE:
+	SWFSoundInstance_addEnvelope(inst, mark44, left, right);
