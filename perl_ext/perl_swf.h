@@ -32,6 +32,7 @@ typedef SWFSound           SWF__Sound;
 typedef SWFSoundInstance   SWF__SoundInstance;
 typedef SWFSoundStream     SWF__SoundStream;
 typedef SWFVideoStream	   SWF__VideoStream;
+typedef SWFPrebuiltClip	   SWF__PrebuiltClip;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef

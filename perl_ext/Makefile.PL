@@ -41,7 +41,8 @@ my @SWF_MODULES_NAMES = (
 	'SoundStream',
 	'Text',
 	'TextField',
-	'VideoStream'
+	'VideoStream',
+	'PrebuiltClip'
 );
 
 my @SWF_MODULES = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
