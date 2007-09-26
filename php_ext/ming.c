@@ -3616,6 +3616,22 @@ PHP_METHOD(swfsprite, removeScalingGrid)
 /* }}} */
 
 #endif
+// workaround to support SWFSprite and SWFMovieclip objects
+static zend_function_entry swfmovieclip_functions[] = {
+	PHP_ME(swfsprite, __construct,  	NULL, 0)
+	PHP_ME(swfsprite, add,				NULL, 0)
+	PHP_ME(swfsprite, remove,			NULL, 0)
+	PHP_ME(swfsprite, nextFrame,		NULL, 0)
+	PHP_ME(swfsprite, labelFrame,		NULL, 0)
+	PHP_ME(swfsprite, setFrames,		NULL, 0)
+#ifdef HAVE_NEW_MING
+	PHP_ME(swfsprite, startSound,		NULL, 0)
+	PHP_ME(swfsprite, stopSound,		NULL, 0)
+	PHP_ME(swfsprite, setScalingGrid, 	NULL, 0)
+	PHP_ME(swfsprite, removeScalingGrid, NULL, 0)
+#endif
+	{ NULL, NULL, NULL }
+};
 
 static zend_function_entry swfsprite_functions[] = {
 	PHP_ME(swfsprite, __construct,  	NULL, 0)
@@ -4486,7 +4502,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(button_class_entry, "SWFButton", swfbutton_functions);
 	INIT_CLASS_ENTRY(action_class_entry, "SWFAction", swfaction_functions);
 	INIT_CLASS_ENTRY(morph_class_entry, "SWFMorph", swfmorph_functions);
-	INIT_CLASS_ENTRY(movieclip_class_entry, "SWFMovieClip", swfsprite_functions);
+	INIT_CLASS_ENTRY(movieclip_class_entry, "SWFMovieClip", swfmovieclip_functions);
 	INIT_CLASS_ENTRY(sprite_class_entry, "SWFSprite", swfsprite_functions);
 	INIT_CLASS_ENTRY(sound_class_entry, "SWFSound", swfsound_functions);
 #ifdef HAVE_NEW_MING
