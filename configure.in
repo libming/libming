@@ -199,12 +199,15 @@ dnl --------------------------------------------
 dnl Check for required programs
 dnl --------------------------------------------
 
-AC_PROG_YACC
+
+dnl AC_PROG_YACC
+
+AC_CHECK_PROGS(YACC, 'bison -y' byacc yacc)
 if test x"$YACC" = x; then
 	AC_MSG_ERROR([could not detect yacc/bison, bailing out])
 fi
 
-AC_PROG_LEX
+AC_CHECK_PROGS(LEX, flex lex)
 if test x"$LEX" = x; then
 	AC_MSG_ERROR([could not detect lex/flex, bailing out])
 fi
