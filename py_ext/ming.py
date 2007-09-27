@@ -494,6 +494,9 @@ class SWFText(SWFBase):
     def addString(self, s, advance=None):
         mingc.SWFText_addString(self.this, s, advance)
 
+    def addUTF8String(self, s, advance=None):
+        mingc.SWFText_addUTF8String(self.this, s.encode("uft-8"), advance)
+
     def setSpacing(self, spacing):
         mingc.SWFText_setSpacing(self.this, spacing)
 
@@ -551,6 +554,9 @@ class SWFTextField(SWFBase):
 
     def addString(self, string):
         mingc.SWFTextField_addString(self.this, string)
+
+    def addUTF8String(self, string):
+        mingc.SWFTextField_addUTF8String(self.this, string.encode("utf-8"))
 
     def setHeight(self,  height):
         mingc.SWFTextField_setHeight(self.this,  height)
