@@ -316,7 +316,7 @@ class SWFMovie(SWFBase):
         mingc.SWFMovie_remove(self.this, item.this)
 
     def streamMp3(self, mp3):
-        sound = SWFSound(mp3)
+        sound = SWFSoundStream(mp3)
         self.blocks.append(sound)
         mingc.SWFMovie_setSoundStream(self.this, sound)
 
@@ -601,6 +601,12 @@ SWFTEXTFIELD_DRAWBOX   = mingc.SWFTEXTFIELD_DRAWBOX
 SWFTEXTFIELD_NOSELECT  = mingc.SWFTEXTFIELD_NOSELECT  
 SWFTEXTFIELD_HASLAYOUT = mingc.SWFTEXTFIELD_HASLAYOUT 
 SWFTEXTFIELD_AUTOSIZE  = mingc.SWFTEXTFIELD_AUTOSIZE
+
+class SWFSoundStream(SWFBase):
+	
+    def __init__(self, fname):
+        self.file = open(fname, "rb");
+        self.this = mingc.newSWFSoundStream(self.file)
 
 class SWFSound(SWFBase):
 
