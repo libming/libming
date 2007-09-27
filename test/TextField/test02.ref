@@ -1,16 +1,10 @@
 File version: 5
-File size: 22467
+File size: 22462
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 48 (SWF_DEFINEFONT2)
 Block length: 22403
 
@@ -8726,7 +8720,7 @@ Block length: 22403
  RECT:  (23,-778)x(549,0):11
  KerningCount: 0
 
-Offset: 22434 (0x57a2)
+Offset: 22429 (0x579d)
 Block type: 37 (SWF_DEFINEEDITTEXT)
 Block length: 19
 
@@ -8739,7 +8733,7 @@ Block length: 19
  RGBA: ( 0, 0, 0,ff)
  VariableName: 
 
-Offset: 22455 (0x57b7)
+Offset: 22450 (0x57b2)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -8755,12 +8749,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 22463 (0x57bf)
+Offset: 22458 (0x57ba)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 22465 (0x57c1)
+Offset: 22460 (0x57bc)
 Block type: 0 (SWF_END)
 Block length: 0
 

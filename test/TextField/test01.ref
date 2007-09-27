@@ -1,16 +1,10 @@
 File version: 5
-File size: 3394
+File size: 3389
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 48 (SWF_DEFINEFONT2)
 Block length: 3267
 
@@ -1216,7 +1210,7 @@ Block length: 3267
  RECT:  (44,-560)x(493,0):11
  KerningCount: 0
 
-Offset: 3298 (0x0ce2)
+Offset: 3293 (0x0cdd)
 Block type: 37 (SWF_DEFINEEDITTEXT)
 Block length: 78
 
@@ -1230,7 +1224,7 @@ Block length: 78
  VariableName: 
  InitialText: The quick brown fox jumps over the lazy dog. 1234567890
 
-Offset: 3382 (0x0d36)
+Offset: 3377 (0x0d31)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -1246,12 +1240,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 3390 (0x0d3e)
+Offset: 3385 (0x0d39)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 3392 (0x0d40)
+Offset: 3387 (0x0d3b)
 Block type: 0 (SWF_END)
 Block length: 0
 
