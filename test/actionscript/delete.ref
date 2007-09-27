@@ -1,16 +1,10 @@
 File version: 6
-File size: 67
+File size: 62
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 12 (SWF_DOACTION)
 Block length: 36
 
@@ -31,12 +25,12 @@ Block length: 36
     SWFACTION_POP
     SWFACTION_END
 
-Offset: 63 (0x003f)
+Offset: 58 (0x003a)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 65 (0x0041)
+Offset: 60 (0x003c)
 Block type: 0 (SWF_END)
 Block length: 0
 

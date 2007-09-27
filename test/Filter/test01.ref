@@ -1,16 +1,10 @@
 File version: 7
-File size: 91
+File size: 86
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 25
 
@@ -30,7 +24,7 @@ Block length: 25
  Straight EdgeRecord: (6) - (-100, 100)
   ENDSHAPE
 
-Offset: 52 (0x0034)
+Offset: 47 (0x002f)
 Block type: 34 (SWF_DEFINEBUTTON2)
 Block length: 13
 
@@ -41,7 +35,7 @@ Block length: 13
   CharacterID: 1
   PlaceDepth: 1
 
-Offset: 67 (0x0043)
+Offset: 62 (0x003e)
 Block type: 70 (SWF_PLACEOBJECT3)
 Block length: 18
 
@@ -67,12 +61,12 @@ Block length: 18
     BlurY: 5.000000
     Passes 2
 
-Offset: 87 (0x0057)
+Offset: 82 (0x0052)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 89 (0x0059)
+Offset: 84 (0x0054)
 Block type: 0 (SWF_END)
 Block length: 0
 

@@ -1,22 +1,16 @@
 File version: 8
-File size: 182
+File size: 177
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 10
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 69 (SWF_FILEATTRIBUTES)
 Block length: 4
 
  FileAttributes: HasMetaData 0, UseNetwork 1, HasAS3 0
 
-Offset: 31 (0x001f)
+Offset: 26 (0x001a)
 Block type: 46 (SWF_DEFINEMORPHSHAPE)
 Block length: 54
 
@@ -42,7 +36,7 @@ Block length: 54
    MoveBits: 8  MoveDeltaX: 100  MoveDeltaY: 100
  Straight EdgeRecord: (11) - (900, 2500)
 
-Offset: 87 (0x0057)
+Offset: 82 (0x0052)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 8
 
@@ -59,12 +53,12 @@ Block length: 8
  Matrix:    TranslateX      0 TranslateY      0
  Ratio: 0
 
-Offset: 97 (0x0061)
+Offset: 92 (0x005c)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 99 (0x0063)
+Offset: 94 (0x005e)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -79,12 +73,12 @@ Block length: 5
  Depth 1
  Ratio: 6553
 
-Offset: 106 (0x006a)
+Offset: 101 (0x0065)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 108 (0x006c)
+Offset: 103 (0x0067)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -99,12 +93,12 @@ Block length: 5
  Depth 1
  Ratio: 13107
 
-Offset: 115 (0x0073)
+Offset: 110 (0x006e)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 117 (0x0075)
+Offset: 112 (0x0070)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -119,12 +113,12 @@ Block length: 5
  Depth 1
  Ratio: 19660
 
-Offset: 124 (0x007c)
+Offset: 119 (0x0077)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 126 (0x007e)
+Offset: 121 (0x0079)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -139,12 +133,12 @@ Block length: 5
  Depth 1
  Ratio: 26214
 
-Offset: 133 (0x0085)
+Offset: 128 (0x0080)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 135 (0x0087)
+Offset: 130 (0x0082)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -159,12 +153,12 @@ Block length: 5
  Depth 1
  Ratio: 32767
 
-Offset: 142 (0x008e)
+Offset: 137 (0x0089)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 144 (0x0090)
+Offset: 139 (0x008b)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -179,12 +173,12 @@ Block length: 5
  Depth 1
  Ratio: 39321
 
-Offset: 151 (0x0097)
+Offset: 146 (0x0092)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 153 (0x0099)
+Offset: 148 (0x0094)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -199,12 +193,12 @@ Block length: 5
  Depth 1
  Ratio: 45874
 
-Offset: 160 (0x00a0)
+Offset: 155 (0x009b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 162 (0x00a2)
+Offset: 157 (0x009d)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -219,12 +213,12 @@ Block length: 5
  Depth 1
  Ratio: 52428
 
-Offset: 169 (0x00a9)
+Offset: 164 (0x00a4)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 171 (0x00ab)
+Offset: 166 (0x00a6)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -239,12 +233,12 @@ Block length: 5
  Depth 1
  Ratio: 58981
 
-Offset: 178 (0x00b2)
+Offset: 173 (0x00ad)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 180 (0x00b4)
+Offset: 175 (0x00af)
 Block type: 0 (SWF_END)
 Block length: 0
 
