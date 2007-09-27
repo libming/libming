@@ -1,22 +1,16 @@
 File version: 8
-File size: 146
+File size: 141
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 69 (SWF_FILEATTRIBUTES)
 Block length: 4
 
  FileAttributes: HasMetaData 0, UseNetwork 1, HasAS3 0
 
-Offset: 31 (0x001f)
+Offset: 26 (0x001a)
 Block type: 83 (SWF_DEFINESHAPE4)
 Block length: 97
 
@@ -77,7 +71,7 @@ Block length: 97
  Straight EdgeRecord: (10) - (0, -2000)
   ENDSHAPE
 
-Offset: 134 (0x0086)
+Offset: 129 (0x0081)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -93,12 +87,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 142 (0x008e)
+Offset: 137 (0x0089)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 144 (0x0090)
+Offset: 139 (0x008b)
 Block type: 0 (SWF_END)
 Block length: 0
 

@@ -1,16 +1,10 @@
 File version: 5
-File size: 783
+File size: 778
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 48 (SWF_DEFINEFONT2)
 Block length: 370
 
@@ -145,7 +139,7 @@ Block length: 370
  RECT:  (56,-573)x(499,14):11
  KerningCount: 0
 
-Offset: 401 (0x0191)
+Offset: 396 (0x018c)
 Block type: 48 (SWF_DEFINEFONT2)
 Block length: 319
 
@@ -272,7 +266,7 @@ Block length: 319
  RECT:  (23,-778)x(380,0):11
  KerningCount: 0
 
-Offset: 726 (0x02d6)
+Offset: 721 (0x02d1)
 Block type: 33 (SWF_DEFINETEXT2)
 Block length: 43
 
@@ -300,7 +294,7 @@ Block length: 43
    GlyphIndex[0] = 0002    GlyphAdvance[0] = 0119
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 771 (0x0303)
+Offset: 766 (0x02fe)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -316,12 +310,12 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 779 (0x030b)
+Offset: 774 (0x0306)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 781 (0x030d)
+Offset: 776 (0x0308)
 Block type: 0 (SWF_END)
 Block length: 0
 
