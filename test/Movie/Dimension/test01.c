@@ -7,7 +7,7 @@ main()
 SWFMovie m;
 
 m= newSWFMovie();
-
+SWFMovie_setBackground(m, 0xff, 0xff, 0xff);
 SWFMovie_setDimension(m, 640.00, 480.00);
 
 SWFMovie_save(m,"test01.swf");
