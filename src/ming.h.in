@@ -294,14 +294,17 @@ void SWFGradient_setFocalPoint(SWFGradient gradient, float focalPoint);
 
 /***** SWFFillStyle - a fill instance on a shape *****/
 
-#define SWFFILL_SOLID			0x00
-#define SWFFILL_GRADIENT		0x10
-#define SWFFILL_LINEAR_GRADIENT 	0x10
-#define SWFFILL_RADIAL_GRADIENT 	0x12
-#define SWFFILL_FOCAL_GRADIENT		0x13
-#define SWFFILL_BITMAP			0x40
-#define SWFFILL_TILED_BITMAP		0x40
-#define SWFFILL_CLIPPED_BITMAP		0x41
+#define SWFFILL_SOLID				0x00
+#define SWFFILL_GRADIENT			0x10
+#define SWFFILL_LINEAR_GRADIENT 		0x10
+#define SWFFILL_RADIAL_GRADIENT 		0x12
+#define SWFFILL_FOCAL_GRADIENT			0x13
+#define SWFFILL_BITMAP				0x40
+#define SWFFILL_TILED_BITMAP			0x40
+#define SWFFILL_CLIPPED_BITMAP			0x41
+#define SWFFILL_NONSMOOTHED_TILED_BITMAP 	0x42
+#define SWFFILL_NONSMOOTHED_CLIPPED_BITMAP 	0x43
+
 
 SWFFillStyle newSWFSolidFillStyle(byte r, byte g, byte b, byte a);
 SWFFillStyle newSWFGradientFillStyle(SWFGradient gradient, byte radial);

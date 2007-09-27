@@ -104,10 +104,18 @@ newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 {
 	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
 
-	if ( flags == SWFFILL_CLIPPED_BITMAP )
-		fill->type = SWFFILL_CLIPPED_BITMAP;
-	else
-		fill->type = SWFFILL_TILED_BITMAP;
+	switch(flags)
+	{
+		case SWFFILL_CLIPPED_BITMAP:
+		case SWFFILL_TILED_BITMAP:
+		case SWFFILL_NONSMOOTHED_TILED_BITMAP:
+		case SWFFILL_NONSMOOTHED_CLIPPED_BITMAP:
+			fill->type = flags;
+		default:
+			free(fill);
+			SWF_warn("newSWFBitmapFillStyle: not a valid Bitmap FillStyle\n");
+			return NULL;
+	}
 
 	fill->data.bitmap = bitmap;
 	fill->matrix = newSWFMatrix(Ming_scale, 0, 0, Ming_scale, 0, 0);
@@ -143,6 +151,8 @@ SWFFillStyle_equals(SWFFillStyle fill1, SWFFillStyle fill2)
 
 		case SWFFILL_TILED_BITMAP:
 		case SWFFILL_CLIPPED_BITMAP:
+		case SWFFILL_NONSMOOTHED_TILED_BITMAP:
+		case SWFFILL_NONSMOOTHED_CLIPPED_BITMAP:
 			return (fill1->data.bitmap == fill2->data.bitmap);
 
 		default:
