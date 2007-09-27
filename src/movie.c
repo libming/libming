@@ -97,9 +97,7 @@ struct SWFMovie_s
 	SWFFontCharacter* fonts;
 
 	/* background color */
-	byte r;
-	byte g;
-	byte b;
+	SWFBlock backgroundBlock;
 	
 	/* Fileattributes (necessary for version >= 8 */
 	SWFFileAttributes fattrs;
@@ -170,6 +168,10 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 	
 	if(movie->sceneData)
 		destroySWFSceneData(movie->sceneData);
+
+	if(movie->backgroundBlock)
+		destroySWFBlock(movie->backgroundBlock);
+
 #if TRACK_ALLOCS
 	ming_gc_remove_node(movie->gcnode);
 #endif
@@ -208,9 +210,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	movie->nFonts = 0;
 	movie->fonts = NULL;
 
-	movie->r = 0xff;
-	movie->g = 0xff;
-	movie->b = 0xff;
+	movie->backgroundBlock = NULL;
 
 	if(version >= 8)	
 		movie->fattrs = newSWFFileAttributes();
@@ -289,9 +289,9 @@ SWFMovie_setBackground(SWFMovie movie /* movie whose background is being set */,
 	byte g /* green value of background color */,
 	byte b /* blue value og background color */)
 {
-	movie->r = r;
-	movie->g = g;
-	movie->b = b;
+	if(movie->backgroundBlock)
+		destroySWFBlock(movie->backgroundBlock);
+	movie->backgroundBlock = (SWFBlock)newSWFSetBackgroundBlock(r, g, b);
 }
 
 
@@ -668,7 +668,7 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	int status;
 #endif
 	SWFOutput header, tempbuffer=0, buffer, swfbuffer;
-	SWFBlock backgroundBlock, lastBlock;
+	SWFBlock lastBlock;
 	unsigned long compresslength;
 
 	if ( movie->nExports > 0 )
@@ -710,9 +710,9 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	SWFOutput_writeUInt16(header, (int)floor(movie->rate*256));
 	SWFOutput_writeUInt16(header, movie->nFrames);
 
-	backgroundBlock = (SWFBlock)newSWFSetBackgroundBlock(movie->r, movie->g, movie->b);
-        writeSWFBlockToMethod(backgroundBlock, SWFOutputMethod, header);
-	destroySWFBlock(backgroundBlock);
+	if(movie->backgroundBlock)
+		writeSWFBlockToMethod(movie->backgroundBlock, SWFOutputMethod, header);
+	
 
 	/* SWF >= 8: first block _must_ be SWF_FILEATTRIBUTES */ 
 	if(movie->fattrs)
