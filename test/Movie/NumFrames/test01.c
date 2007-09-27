@@ -9,7 +9,7 @@ SWFMovie m;
 m= newSWFMovie();
 
 SWFMovie_setNumberOfFrames(m, 2);
-
+SWFMovie_setBackground(m, 0xff, 0xff, 0xff);
 SWFMovie_save(m,"test01.swf");
 
 return 0;
