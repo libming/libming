@@ -1,22 +1,16 @@
 File version: 9
-File size: 3434
+File size: 3429
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
-Block type: 9 (SWF_SETBACKGROUNDCOLOR)
-Block length: 3
-
- RGBA: (ff,ff,ff,ff)
-
-Offset: 25 (0x0019)
 Block type: 69 (SWF_FILEATTRIBUTES)
 Block length: 4
 
  FileAttributes: HasMetaData 0, UseNetwork 1, HasAS3 0
 
-Offset: 31 (0x001f)
+Offset: 26 (0x001a)
 Block type: 48 (SWF_DEFINEFONT2)
 Block length: 3228
 
@@ -1222,7 +1216,7 @@ Block length: 3228
  RECT:  (44,-560)x(493,0):11
  KerningCount: 0
 
-Offset: 3265 (0x0cc1)
+Offset: 3260 (0x0cbc)
 Block type: 11 (SWF_DEFINETEXT)
 Block length: 138
 
@@ -1295,7 +1289,7 @@ Block length: 138
    GlyphIndex[0] = 0002    GlyphAdvance[0] = 00fe
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 3409 (0x0d51)
+Offset: 3404 (0x0d4c)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -1311,19 +1305,19 @@ Block length: 6
  CharacterId: 1
  Matrix:    TranslateX      0 TranslateY      0
 
-Offset: 3417 (0x0d59)
+Offset: 3412 (0x0d54)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 3419 (0x0d5b)
+Offset: 3414 (0x0d56)
 Block type: 76 (SWF_SYMBOLCLASS)
 Block length: 11
 
 SymbolCount 1
  Id: 1, Name: mytext
 
-Offset: 3432 (0x0d68)
+Offset: 3427 (0x0d63)
 Block type: 0 (SWF_END)
 Block length: 0
 

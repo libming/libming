@@ -8,7 +8,7 @@ main()
 SWFMovie m;
 
 m = newSWFMovie();
-
+SWFMovie_setBackground(m, 0xff, 0xff, 0xff);
 SWFMovie_nextFrame(m);
 
 SWFMovie_add(m, (SWFBlock)compileSWFActionCode("var a = 1;"));
