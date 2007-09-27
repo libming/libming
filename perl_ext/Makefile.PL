@@ -191,6 +191,7 @@ sub get_mingconfig{
 			if (/USE_ZLIB/ and /1$/) {$lib.=" -lz"};
 			if (/USE_GIF/ and /1$/) {$lib.=" -lungif"};
 			if (/USE_PNG/ and /1$/) {$lib.=" -lpng"};
+			if (/USE_FREETYPE/ and /1$/) {$lib.=" -lfreetype"};
 	 }
 	 close(FH);
 	 return $lib;
