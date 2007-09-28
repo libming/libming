@@ -1,0 +1,95 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFShape_setLineStyle2_internal - set Linestyle2 introduce with SWF 8.</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFShape_setLineStyle2_internal - set Linestyle2 introduce with SWF 8.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFShape_setLineStyle2_internal
+(
+	SWFShape shape,
+	unsigned short width,
+	byte r,
+	byte g,
+	byte b,
+	byte a,
+	int flags,
+	float miterLimit
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFShape shape<dd>
+Not Documented.
+<dt>
+unsigned short width<dd>
+Not Documented.
+<dt>
+byte r<dd>
+Not Documented.
+<dt>
+byte g<dd>
+Not Documented.
+<dt>
+byte b<dd>
+Not Documented.
+<dt>
+byte a<dd>
+Not Documented.
+<dt>
+int flags<dd>
+Not Documented.
+<dt>
+float miterLimit<dd>
+Not Documented.
+</dl>
+<h1>DESCRIPTION</h1>
+Set line width in TWIPS
+WARNING: this is an internal interface
+external use is deprecated! use setLine2 instead !
+set color {r, g, b, a}.
+<h1>LINESTYLE2 EXTENDS LINESTYLE1 WITH SOME EXTRA FLAGS</h1>
+Line cap style: select one of the following flags (default is round cap style)
+SWF_LINESTYLE_CAP_ROUND
+SWF_LINESTYLE_CAP_NONE
+SWF_LINESTYLE_CAP_SQUARE
+<br>
+
+Line join style: select one of the following flags (default is round join style)
+SWF_LINESTYLE_JOIN_ROUND
+SWF_LINESTYLE_JOIN_BEVEL
+SWF_LINESTYLE_JOIN_MITER
+<br>
+
+Scaling flags: disable horizontal / vertical scaling
+SWF_LINESTYLE_FLAG_NOHSCALE
+SWF_LINESTYLE_FLAG_NOVSCALE
+<br>
+
+Enable pixel hinting to correct blurry vertical / horizontal lines
+<br>
+-&gt; All anchors will be aligned to full pixels
+SWF_LINESTYLE_FLAG_HINTING
+<br>
+
+Disable stroke closure: if no-close flag is set caps will be applied
+instead of joins
+SWF_LINESTYLE_FLAG_NOCLOSE
+<br>
+
+End-cap style: default round
+SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+SWF_LINESTYLE_FLAG_ENDCAP_NONE
+SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+<br>
+
+If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor
+must be set. Miter max length is then calculated as:
+max miter len = miter limit * width.
+If join style is not miter, this value will be ignored.
+
+</body>

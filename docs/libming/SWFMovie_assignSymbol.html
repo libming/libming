@@ -1,0 +1,38 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFMovie_assignSymbol - assigns a symbolic name for a SWFCharacter</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFMovie_assignSymbol - assigns a symbolic name for a SWFCharacter
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFMovie_assignSymbol
+(
+	SWFMovie m,
+	SWFCharacter character,
+	const char *name
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFMovie m<dd>
+Not Documented.
+<dt>
+SWFCharacter character<dd>
+Target.
+<dt>
+const char *name<dd>
+Symbol.
+</dl>
+<h1>DESCRIPTION</h1>
+Such classes are available for usage in other SWF files
+and can be referenced from inside the current movie.
+<br>
+
+To assign a symbol to the root movie use NULL as character
+value.
+
+</body>

@@ -1,0 +1,41 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFButton_addCharacter - adds a character</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFButton_addCharacter - adds a character
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFButtonRecord SWFButton_addCharacter
+(
+	SWFButton button,
+	SWFCharacter character,
+	byte state
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFButton button<dd>
+Button object.
+<dt>
+SWFCharacter character<dd>
+Character to be added.
+<dt>
+byte state<dd>
+State description.
+</dl>
+<h1>DESCRIPTION</h1>
+Add a character to a button for given states
+possible states:
+SWFBUTTON_HIT
+SWFBUTTON_DOWN
+SWFBUTTON_OVER
+SWFBUTTON_UP
+states can be combined using the binary or operator.
+<h1>RETURNS</h1>
+A SWFButtonRecord object which can be further modified.
+
+</body>
