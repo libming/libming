@@ -9,6 +9,15 @@ $SRCDIR="." unless $SRCDIR;
 my $BUILDDIR=$ENV{'builddir'};
 $BUILDDIR="." unless $BUILDDIR;
 
+
+my $MING_TOP_SRCDIR=abs_path($SRCDIR."/../");
+my $MING_TOP_BUILDDIR=abs_path($BUILDDIR."/../");
+
+print "SRCDIR: ".$SRCDIR."\n";
+print "BUILDDIR: ".$BUILDDIR."\n";
+print "MING_TOP_SRCDIR: ".$MING_TOP_SRCDIR."\n";
+print "MING_TOP_BUILDDIR: ".$MING_TOP_BUILDDIR."\n";
+
 my $CONFIG_PL = ${BUILDDIR}.'/t/config.pl';
 
 my @DEFAULT_DIR = qw(..);
@@ -47,32 +56,38 @@ my @SWF_MODULES_NAMES = (
 
 my @SWF_MODULES = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
 
-my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
+#my @XS_OBJECTS = map "${BUILDDIR}/$_", (@SWF_MODULES_NAMES, qw(swf_util, SWF));
+
+ my @LD_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
+ my $LD_OBJECTS = join ('$(OBJ_EXT) ' , (@LD_OBJECTS)) . '$(OBJ_EXT)';
+ my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@SWF_MODULES, qw(swf_util SWF))) . '$(OBJ_EXT)';
 
 #$MING_DIR is not the src-dir
 my ($MING_DIR, $ming_version);
+#foreach my $dir (@DEFAULT_DIR) {
+#    next unless -d $dir;
+#    my $abs_dir = abs_path($dir);
+#    $ming_version = get_ming_version($dir);
+#
+#    if( $ming_version ){
+#      $MING_DIR = $abs_dir;
+#			print STDERR $MING_DIR."\n";
+#      last;
+#    }
+#}
+#
+#$MING_DIR="../";
+#ask_ming_dir() unless ($MING_DIR);
 
-foreach my $dir (@DEFAULT_DIR) {
-    next unless -d $dir;
-    my $abs_dir = abs_path($dir);
-    $ming_version = get_ming_version($dir);
-
-    if( $ming_version ){
-      $MING_DIR = $abs_dir;
-			print STDERR $MING_DIR."\n";
-      last;
-    }
-}
-
-$MING_DIR="../";
-ask_ming_dir() unless ($MING_DIR);
+$MING_DIR=$MING_TOP_BUILDDIR;
+my $ming_version = get_ming_version($MING_TOP_SRCDIR);
 
 
-print "\nUsing ming version $ming_version in the ". abs_path($MING_DIR) ." directory.\n\n";
+print "\nUsing ming version $ming_version with source dir ". $MING_TOP_SRCDIR ." and build dir ". $MING_TOP_BUILDDIR .".\n\n";
 #compile() unless ming_is_compiled();
 print "ming library isn't compiled, it is needed for the perl module\n" unless ming_is_compiled();
 # 2006/01/24 (peterdd) now we can look into ming_config.h to get some info.
-my $libs=get_mingconfig($MING_DIR."/src/ming_config.h");
+my $libs=get_mingconfig($MING_TOP_BUILDDIR."/src/ming_config.h");
 write_swf_h($MING_DIR."/src/");
 write_config_test ($MING_DIR."/src/");
 write_bootxs();
@@ -95,10 +110,11 @@ WriteMakefile(
     clean   => {
         FILES   => "@do_clean",
     },
-    'MYEXTLIB'     => $MING_DIR . '/src/.libs/libming.a',
+    'MYEXTLIB'     => $MING_TOP_BUILDDIR . '/src/.libs/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
-    #'LIBS'         => [ "-lz" ],
-		'LIBS'         => [ $libs ],
+    'LDFROM'       => "$LD_OBJECTS",
+    'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR",
+    'LIBS'         => [ $libs ],
 );
 
 sub MY::install {
@@ -112,9 +128,19 @@ sub MY::install {
 	return $self->MM::install;
 }
 
-sub ming_is_compiled{
-	return undef unless (-e "$MING_DIR/src/.libs/libming.a");
-	return 1;
+sub ming_is_compiled
+{
+	my $libming = $MING_TOP_BUILDDIR."/src/libs/libming.a";
+
+	if ( -e $libming )
+	{
+		return 1;
+	}
+	else
+	{
+    		print "$libming doesn't exist.\n";
+		return undef;
+	}
 }
 
 # unused. At least it should take into account the configure flags by
@@ -122,8 +148,8 @@ sub ming_is_compiled{
 sub compile{
     print "Compiling ming ...\n";
     my $cur_dir = cwd;
-    chdir $MING_DIR;
-    system "./configure";
+    chdir $MING_TOP_BUILDDIR;
+    system $MING_TOP_SRCDIR."./configure";
     system "make";
     chdir $cur_dir;
 }
@@ -144,7 +170,7 @@ EOF
 		if(-d $src_dir) {
 			$ming_version = get_ming_version($src_dir);
 			if($ming_version){
-				$MING_DIR = $src_dir;
+				$MING_TOP_SRCDIR = $src_dir;
 				last;
 			}
 		}
@@ -154,6 +180,8 @@ EOF
 	}
 }
 
+## Find Ming version inside the configure.in found in the directory
+## given as first argument
 sub get_ming_version{
 	my $d = shift;
 	my $filename = shift || "configure.in";
@@ -231,19 +259,11 @@ sub write_bootxs (){
 # We don't really need this function anymore. 
 # We may add $dir to INC of WriteMakefile()
 sub write_swf_h {
-    my $srcdir = shift;
     local *FH;
     open FH, ">SWF.h" or die "can't open SWF.h $!";
     print FH <<EOF;
-/* ====================================================================
- * Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
- * This program is free software; you can redistribute it and/or modify
- * it under the same terms as Perl itself.
- * ====================================================================
- */
-
-#include "$srcdir/ming.h"
-#include "$srcdir/libming.h"
+#include "ming.h"
+#include "libming.h"
 EOF
     close FH;
 }
@@ -253,7 +273,7 @@ sub write_config_test {
     my $dir = shift;
     $dir = abs_path($dir);
     unlink ${CONFIG_PL};
-    mkdir "t";
+    mkdir $BUILDDIR."/t";
     local *FH;
     open FH, ">${CONFIG_PL}" or die "can't open ${CONFIG_PL} $!";
     print FH <<EOF;
