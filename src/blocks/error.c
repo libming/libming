@@ -32,7 +32,7 @@ warn_default(const char *msg, ...)
 	va_list args;
 
 	va_start(args, msg);
-	vprintf(msg, args);
+	vfprintf(stderr, msg, args);
 	va_end(args);
 }
 
@@ -43,7 +43,7 @@ error_default(const char *msg, ...)
 	va_list args;
 
 	va_start(args, msg);
-	vprintf(msg, args);
+	vfprintf(stderr, msg, args);
 	va_end(args);
 	exit(EXIT_FAILURE);
 }
