@@ -18,6 +18,8 @@ EXTRA_DIST = SWF/Action.pm SWF/Bitmap.pm SWF/Button.pm SWF/Constants.pm \
 		common/_sans.fdb common/README common/beep.wav \
 		mkdoc
 
+abs_builddir=$(shell cd $(top_builddir)/perl_ext; pwd)
+
 all: Makefile.perl
 	$(MAKE) -f Makefile.perl
 
@@ -25,7 +27,7 @@ install: Makefile.perl
 	$(MAKE) -f Makefile.perl install
 
 Makefile.perl: Makefile.PL
-	srcdir=$(srcdir) builddir=$(builddir) $(PERL) $< MAKEFILE=Makefile.perl
+	srcdir=$(srcdir) builddir=$(abs_builddir) $(PERL) $< MAKEFILE=Makefile.perl
 
 clean-local: Makefile.perl
 	$(MAKE) -f Makefile.perl realclean
