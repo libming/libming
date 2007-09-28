@@ -80,7 +80,6 @@ DOCSRC = \
 	blocks/placeobject.c \
 	blocks/pngdbl.c \
 	blocks/protect.c \
-	blocks/read.c \
 	blocks/rect.c \
 	blocks/shape.c \
 	blocks/sound.c \
@@ -89,7 +88,6 @@ DOCSRC = \
 	blocks/sprite.c \
 	blocks/text.c \
 	blocks/textfield.c \
-	blocks/ttffont.c \
 	blocks/utf8.c \
 	blocks/videostream.c \
 	blocklist.c \
