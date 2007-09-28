@@ -16,6 +16,7 @@ SWF/SoundStream.pm
 SWF/Sprite.pm
 SWF/Text.pm
 SWF/TextField.pm
+SWF/VideoStream.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
