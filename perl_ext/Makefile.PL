@@ -139,7 +139,7 @@ sub MY::install {
 
 sub ming_is_compiled
 {
-	my $libming = $MING_TOP_BUILDDIR."/src/libs/libming.a";
+	my $libming = $MING_TOP_BUILDDIR."/src/.libs/libming.a";
 
 	if ( -e $libming )
 	{
@@ -204,16 +204,16 @@ sub get_ming_version{
 	local *FH;
 	open FH, "$file" or die "can't open $file $!";
 
-	my ($version,$majorversion,$minorversion,$microversion);
+	my ($majorversion,$minorversion,$microversion);
 	foreach my $i (<FH>) {
 		if($i =~ /^MAJOR_VERSION=/) { $i =~ s/^MAJOR_VERSION=(.*)/$1/; chomp($majorversion=$i);}
 		elsif($i =~ /^MINOR_VERSION=/) { $i =~ s/^MINOR_VERSION=(.*)/$1/; chomp($minorversion=$i);}
 		elsif($i =~ /^MICRO_VERSION=/) { $i =~ s/^MICRO_VERSION=(.*)/$1/; chomp($microversion=$i);}
 	}
 	close(FH);
-	$version=$majorversion.'.'.$minorversion.'.'.$microversion;
+	my $version=$majorversion.'.'.$minorversion.'.'.$microversion;
 	print "SWF::VERSION = $version\n";
-	if ($version eq "") {return undef;}
+	if( $version  =~ /^\./ ) {return undef;}
 	else {return $version;}
 }
 
