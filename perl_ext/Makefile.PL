@@ -51,15 +51,17 @@ my @SWF_MODULES_NAMES = (
 	'Text',
 	'TextField',
 	'VideoStream',
-	'PrebuiltClip',
-	'swf_util',
-	'SWF'
+	'PrebuiltClip'
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
+ push @XS_OBJECTS, "${SRCDIR}/swf_util", "${SRCDIR}/SWF";
+ print "XS_OBJECTS: ". join(", ", @XS_OBJECTS) . "\n";
  my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@XS_OBJECTS)) . '$(OBJ_EXT)';
 
  my @LD_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
+ push @LD_OBJECTS, "${BUILDDIR}/swf_util", "${BUILDDIR}/SWF";
+ print "LD_OBJECTS: ". join(", ", @XS_OBJECTS) . "\n";
  my $LD_OBJECTS = join ('$(OBJ_EXT) ' , (@LD_OBJECTS)) . '$(OBJ_EXT)';
 
 #$MING_DIR is not the src-dir
