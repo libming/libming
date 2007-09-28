@@ -64,7 +64,7 @@ my @SWF_MODULES_NAMES = (
  my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@XS_OBJECTS)) . '$(OBJ_EXT)';
 
  my @LD_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
- #push @LD_OBJECTS, "${BUILDDIR}/swf_util", "${BUILDDIR}/SWF";
+ push @LD_OBJECTS, "${BUILDDIR}/swf_util", "${BUILDDIR}/SWF";
  #print "LD_OBJECTS: ". join(", ", @XS_OBJECTS) . "\n";
  my $LD_OBJECTS = join ('$(OBJ_EXT) ' , (@LD_OBJECTS)) . '$(OBJ_EXT)';
 
