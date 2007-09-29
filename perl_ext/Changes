@@ -1,5 +1,16 @@
 Revision history for Perl extension SWF.
 
+2007-09-29 
+	This file were never serious maintained.
+	Please see CVS on sourceforge project page:
+
+	http://sourceforge.net/cvs/?group_id=18365
+
+	or look at the ChangeLog file of the ming distribution
+	
+
+
+
 Tue Sep 25, 2001	  
            - added DisplayItem accessor methods
            - fixed SWF::Font::new method to accept browser fonts
