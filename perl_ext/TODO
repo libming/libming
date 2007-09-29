@@ -1,17 +1,28 @@
-This list should always be empty:
+=head1 TODO
 
-        - Fix Text.xs warnings (during compilation) 
+=head2 Feature Synchronization
 
+make all functions that ming provides to the perl-extension too.
+Currently missing: 
 
-Documentation:
-        - Add addChars(), addExport(), writeExports() methods
-        - Add documentation for $button->setMenu(flag) 
-	- add SWFShape_drawCubic and SWFShape_drawCubicTo ????
-	- SWF::Text
+ButtonRecord modifying functions 
 
-This is wish list:
+=head2 CPAN
 
-	1- Simple interface
-	2- XML
-	3- proper example + mod_perl examples
+Setup the build environment, files and directories for distribution on cpan 
+in a way that the ming-perl extension can be built on cpan automatically.
 
+=head1 Documentation
+
+write pod documentation for the SWF modules
+
+=head2 Tests
+
+There are currently some very few tests in t. But there is a growing number 
+of tests in ming lib itself, that can be run currently by
+
+./configure --enable-perl
+make
+make check
+
+They should be available when building on cpan too.
