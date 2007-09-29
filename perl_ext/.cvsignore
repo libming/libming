@@ -18,6 +18,7 @@ Gradient.c
 Morph.c
 Movie.c
 MovieClip.c
+PrebuiltClip.c
 Shape.c
 Sound.c
 SoundInstance.c
