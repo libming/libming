@@ -34,11 +34,11 @@ SWF::VideoStream - SWF Video class
 
 =head1 AUTHOR
 
-	developers of 
+	developers of ming 
 	ming.sourceforge.net
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Movie, SWF::Sound, SWF::Sprite
+SWF, SWF::Action, SWF::Movie, SWF::MovieClip, SWF::Sound
 
 =cut

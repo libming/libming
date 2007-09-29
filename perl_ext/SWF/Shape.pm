@@ -164,6 +164,7 @@ Soheil Seyfaie (soheil at users.sourceforge.net).
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text
+SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::MovieClip,SWF::Shape, 
+SWF::Sound, SWF::TextField, SWF::Text
 
 =cut

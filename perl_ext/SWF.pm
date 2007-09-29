@@ -15,7 +15,7 @@ require DynaLoader;
 
 $SWF::VERSION = '0.4.0-beta6_02';
 
-my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie PrebuiltClip Shape Sound Sprite Text TextField);
+my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie MovieClip PrebuiltClip Shape Sound Text TextField);
 
 bootstrap SWF $SWF::VERSION;
 
@@ -114,8 +114,9 @@ Soheil Seyfaie (soheil at users.sourceforge.net).
 =head1 SEE ALSO
 
 SWF.pm related modules: 
-SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::PrebuiltClip, SWF::Shape, 
-SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text, SWF::VideoStream
+SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, 
+SWF::Gradient, SWF::Morph, SWF::Movie, SWF::MovieClip, SWF::PrebuiltClip, 
+SWF::Shape, SWF::Sound, SWF::TextField, SWF::Text, SWF::VideoStream
 
 other projects:
 SWF::Builder  - a pure perl alternative to Ming

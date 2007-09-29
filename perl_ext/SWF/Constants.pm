@@ -122,9 +122,13 @@ This tag imports constants most commonly used by SWF::TextField.
 =head1 AUTHOR
 
 Soheil Seyfaie (soheil at users.sourceforge.net).
+Peter Liscovius
+
+and see AUTHORS in ming lib distribution (ming.sf.net)
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text
+SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Fill, SWF::Gradient, SWF::Movie, SWF::MovieClip, SWF::Shape, 
+SWF::Sound, SWF::TextField
 
 =cut

@@ -8,12 +8,12 @@ SWF/Font.pm
 SWF/Gradient.pm
 SWF/Morph.pm
 SWF/Movie.pm
+SWF/MovieClip.pm
 SWF/PrebuiltClip.pm
 SWF/Shape.pm
 SWF/Sound.pm
 SWF/SoundInstance.pm
 SWF/SoundStream.pm
-SWF/Sprite.pm
 SWF/Text.pm
 SWF/TextField.pm
 SWF/VideoStream.pm
@@ -70,3 +70,4 @@ examples/morph.cgi
 examples/shape.cgi
 examples/sprite.cgi
 examples/text.cgi
+META.yml                                 Module meta-data (added by MakeMaker)

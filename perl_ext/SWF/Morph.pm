@@ -64,6 +64,6 @@ Soheil Seyfaie (soheil@netcom.ca).
 
 =head1 SEE ALSO
 
-SWF, SWF::Button, SWF::DisplayItem, SWF::Shape, SWF::Sprite, SWF::Movie, .
+SWF, SWF::Button, SWF::DisplayItem, SWF::Shape,  SWF::Movie, SWF::MovieClip
 
 =cut
