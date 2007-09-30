@@ -77,6 +77,12 @@ This tag imports constants most commonly used by SWF::Fill.
     SWFFILL_TILED_BITMAP
     SWFFILL_CLIPPED_BITMAP
 
+available since SWF8:
+
+    SWFFILL_FOCAL_GRADIENT
+    SWFFILL_NONSMOOTHED_TILED_BITMAP
+    SWFFILL_NONSMOOTHED_CLIPPED_BITMAP
+
 =item Sound
 
 This tag imports constants most commonly used by SWF::Sound.
