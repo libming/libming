@@ -1171,11 +1171,11 @@ int SWFShape_getVersion(SWFShape shape)
 /* 
  * set render hinting flags
  * possible values:
- * SWF_SHAPE_USESCALINGSTROKES 	SWF_SHAPE_USENONSCALINGSTREOKES	
+ * SWF_SHAPE_USESCALINGSTROKES 	SWF_SHAPE_USENONSCALINGSTROKES	
  */
 void SWFShape_setRenderHintingFlags(SWFShape shape, int flags)
 {
-	flags &= (SWF_SHAPE_USESCALINGSTROKES | SWF_SHAPE_USENONSCALINGSTREOKES);
+	flags &= (SWF_SHAPE_USESCALINGSTROKES | SWF_SHAPE_USENONSCALINGSTROKES);
 	shape->flags = flags;
 	SWFShape_useVersion(shape, SWF_SHAPE4);
 }

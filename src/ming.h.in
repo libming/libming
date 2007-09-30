@@ -349,7 +349,7 @@ SWFLineStyle newSWFLineStyle2_filled(unsigned short width,
 #define SWF_SHAPE4 4
 
 #define SWF_SHAPE_USESCALINGSTROKES 	(1<<0)
-#define SWF_SHAPE_USENONSCALINGSTREOKES	(1<<1)
+#define SWF_SHAPE_USENONSCALINGSTROKES	(1<<1)
 
 SWFShape newSWFShape(void);
 /*
