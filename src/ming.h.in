@@ -118,7 +118,12 @@ typedef union SWFMovieBlockType_u SWFMovieBlockType;
                  (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ > 0)))
 #define __to_movie_block(x) (union SWFMovieBlockType_u)x
 #else
+/* looks like MSVC is not able to initialize a union in place */
+#ifdef _MSC_VER
+#define __to_movie_block(x) x
+#else /* end MSVC workaround */
 #define __to_movie_block(x) (union SWFMovieBlockType_u) { x }
+#endif
 #endif
 
 
