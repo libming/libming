@@ -14,7 +14,8 @@ SUBDIRS = Movie \
 	Bitmap	\
 	BrowserFont \
 	TextField \
-	PrebuiltClip
+	PrebuiltClip \
+	Button
 
 EXTRA_DIST = \
 	dotests.pl \

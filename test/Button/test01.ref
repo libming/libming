@@ -1,0 +1,158 @@
+File version: 5
+File size: 299
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 2
+
+Offset: 20 (0x0014)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 64
+
+ ShapeID: 2
+ RECT:  (-423,-420)x(417,420):10
+ FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyle:  Width: 40
+ RGBA: (ff, 0, 0,ff)
+ NumFillBits: 0
+ NumLineBits: 1
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   LineStyle: 1
+   MoveBits: 10  MoveDeltaX: 0  MoveDeltaY: -400
+ Curved EdgeRecord: 7 Control(160,0) Anchor(120,120)
+ Curved EdgeRecord: 7 Control(117,123) Anchor(0,160)
+ Curved EdgeRecord: 7 Control(0,160) Anchor(-120,120)
+ Curved EdgeRecord: 7 Control(-123,117) Anchor(-160,0)
+ Curved EdgeRecord: 7 Control(-160,0) Anchor(-120,-120)
+ Curved EdgeRecord: 7 Control(-117,-123) Anchor(0,-160)
+ Curved EdgeRecord: 7 Control(0,-160) Anchor(120,-120)
+ Curved EdgeRecord: 7 Control(123,-117) Anchor(160,0)
+  ENDSHAPE
+
+Offset: 90 (0x005a)
+Block type: 12 (SWF_DOACTION)
+Block length: 35
+
+ 7 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] _root
+     [001] stop
+    SWFACTION_PUSH
+     [000]   Integer: 0
+     [001]   Constant: 0 "_root"
+    SWFACTION_GETVARIABLE
+    SWFACTION_PUSH
+     [000]   Constant: 1 "stop"
+    SWFACTION_CALLMETHOD
+    SWFACTION_POP
+    SWFACTION_END
+expected actionEnd flag
+
+Offset: 127 (0x007f)
+Block type: 34 (SWF_DEFINEBUTTON2)
+Block length: 64
+
+ CharacterID: 1
+ TrackAsMenu: 0
+ ActionOffset: 10
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
+  CharacterID: 2
+  PlaceDepth: 1
+ BUTTONCONDACTION:   CondActionSize: 0
+  CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 1   CondOverUpToOverDown: 0   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
+ 6 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] _root
+     [001] gotoAndStop
+    SWFACTION_PUSH
+     [000]   Integer: 2
+     [001]   Integer: 1
+     [002]   Constant: 0 "_root"
+    SWFACTION_GETVARIABLE
+    SWFACTION_PUSH
+     [000]   Constant: 1 "gotoAndStop"
+    SWFACTION_CALLMETHOD
+    SWFACTION_POP
+
+Offset: 197 (0x00c5)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 9
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterId: 1
+ Matrix:    TranslateX   2000 TranslateY   2000
+
+Offset: 208 (0x00d0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 210 (0x00d2)
+Block type: 28 (SWF_REMOVEOBJECT2)
+Block length: 2
+
+ Depth: 1
+expected actionEnd flag
+
+Offset: 214 (0x00d6)
+Block type: 34 (SWF_DEFINEBUTTON2)
+Block length: 64
+
+ CharacterID: 3
+ TrackAsMenu: 0
+ ActionOffset: 10
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
+  CharacterID: 2
+  PlaceDepth: 1
+ BUTTONCONDACTION:   CondActionSize: 0
+  CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 0   CondOverUpToOverDown: 1   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
+ 6 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] _root
+     [001] gotoAndStop
+    SWFACTION_PUSH
+     [000]   Integer: 1
+     [001]   Integer: 1
+     [002]   Constant: 0 "_root"
+    SWFACTION_GETVARIABLE
+    SWFACTION_PUSH
+     [000]   Constant: 1 "gotoAndStop"
+    SWFACTION_CALLMETHOD
+    SWFACTION_POP
+
+Offset: 284 (0x011c)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 9
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 2
+ CharacterId: 3
+ Matrix:    TranslateX   1000 TranslateY   2000
+
+Offset: 295 (0x0127)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 297 (0x0129)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
