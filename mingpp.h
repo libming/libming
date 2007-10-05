@@ -1194,6 +1194,9 @@ class SWFButton : public SWFCharacter
   void removeScalingGrid()
     { SWFButton_removeScalingGrid(this->button); }
 
+  void addCharacter(SWFCharacter *character, byte flags)
+    { SWFButton_addCharacter(this->button, (c_SWFCharacter)character->getBlock(), flags); }
+
   SWF_DECLAREONLY(SWFButton);
 };
 
