@@ -31,7 +31,7 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* f,
 	sprintf(name, "font%i.fdb", fontnum++);
 
 	printf("Writing font '%s' to file '%s' (%i bytes)... ",
-		blockp->SWF_DEFINEFONT2.FontName, name, length);
+		blockp->block.SWF_DEFINEFONT2.FontName, name, length);
 	fflush(stdout);
 
   	out=fopen(name,"wb");

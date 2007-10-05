@@ -33,9 +33,13 @@ extern SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
 const char *blockName (SWFBlocktype header);
 void silentSkipBytes(FILE *f, int length);
 
-#define PAR_BEGIN(block) \
-	struct block *parserrec;\
-	parserrec=(struct block *)calloc(1,sizeof(struct block)); \
+#define PAR_BEGIN(block) 						\
+	struct block *parserrec; 					\
+	SWF_Parserstruct *pstruct; 					\
+	pstruct = calloc(1, sizeof(SWF_Parserstruct)); 			\
+	pstruct->length = length;					\
+	pstruct->offset = fileOffset;					\
+	parserrec= (struct block *)pstruct; 				\
 
 #define PAR_END \
 	return (SWF_Parserstruct *)parserrec;

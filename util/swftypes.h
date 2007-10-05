@@ -1389,7 +1389,7 @@ struct SWF_DEFINESPRITE
   UI16 FrameCount;
   UI16 BlockCount;
   UI16 *tagTypes;
-  union SWF_Parserstruct **Tags;
+  struct SWF_Parserstruct_s **Tags;
 };
 
 struct SWF_DEFINETEXT
@@ -2038,7 +2038,7 @@ struct SWF_DEFINESCENEANDFRAMEDATA
 	struct FRAME_DATA *Frames;
 };
 
-typedef union SWF_Parserstruct
+typedef union _inline_SWF_Parserstruct
 {
   struct SWF_CHARACTERSET SWF_CHARACTERSET;
   struct SWF_DEFINEBITS SWF_DEFINEBITS;
@@ -2118,5 +2118,14 @@ typedef union SWF_Parserstruct
   struct SWF_SYMBOLCLASS SWF_SYMBOLCLASS;
   struct SWF_DEFINEBINARYDATA SWF_DEFINEBINARYDATA;
   struct SWF_DEFINESCENEANDFRAMEDATA SWF_DEFINESCENEANDFRAMEDATA;
-} SWF_Parserstruct;
+} _inline_SWF_Parserstruct;
+
+struct SWF_Parserstruct_s
+{
+	_inline_SWF_Parserstruct block;
+	int offset;
+	int length;
+};
+typedef struct SWF_Parserstruct_s SWF_Parserstruct; 
+
 #endif /* _SWFTYPES_H_ */
