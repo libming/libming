@@ -73,6 +73,7 @@ Buffer bf, bc;
 %token <intVal> BOOLEAN
 %token <str> REGISTER
 
+%token BROKENSTRING
 /* these two are strdup'ed in compiler.flex, so free them up here */
 %token <str> STRING
 %token <str> IDENTIFIER

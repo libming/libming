@@ -71,6 +71,7 @@
 /* high level functions */
 %token TELLTARGET
 
+%token BROKENSTRING
 /* these three are strdup'ed in compiler.flex, so free them here */
 %token <str> STRING
 %token <str> NUMBER

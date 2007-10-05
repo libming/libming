@@ -295,13 +295,13 @@ finally			{ count(); return FINALLY; }
                                         unescape(swf5lval.str);
 					return STRING; 		}
 
-\"(\\.|[^\\"])*$	{ count();	swf5lval.str = strdup("");
+\"(\\.|[^\\"])*$	{ count();	swf5lval.str = NULL;
 					warning("Unterminated string!");
-					return STRING;		}
+					return BROKENSTRING;		}
 
-\'(\\.|[^\\'])*$	{ count();	swf5lval.str = strdup("");
+\'(\\.|[^\\'])*$	{ count();	swf5lval.str = NULL;
 					warning("Unterminated string!");
-					return STRING;		}
+					return BROKENSTRING;		}
 
 "/*"			{ count();	comment();		}
 "//"			{ count();	comment1();		}

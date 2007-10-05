@@ -194,13 +194,13 @@ this			{ count();      return THIS;	}
                                         unescape(swf4lval.str);
 					return STRING; 		}
 
-\"(\\.|[^\\"])*$	{ count();	swf4lval.str = strdup("");
+\"(\\.|[^\\"])*$	{ count();	swf4lval.str = NULL;
 					warning("Unterminated string!");
-					return STRING;		}
+					return BROKENSTRING;		}
 
-\'(\\.|[^\\'])*$	{ count();	swf4lval.str = strdup("");
+\'(\\.|[^\\'])*$	{ count();	swf4lval.str = NULL;
 					warning("Unterminated string!");
-					return STRING;		}
+					return BROKENSTRING;		}
 
 "/*"			{ count();	comment();		}
 "//"			{ count();	comment1();		}
