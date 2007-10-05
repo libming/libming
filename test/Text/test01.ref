@@ -145,7 +145,8 @@ Block length: 28
 
  CharacterID: 1
  RECT:  (0,-303)x(691,5):11
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
  GlyphBits: 2
  AdvanceBits: 9
  TextRecords: 2
@@ -173,7 +174,8 @@ Block length: 6
  PlaceFlagMove 0
  Depth 1
  CharacterId: 1
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
 
 Offset: 434 (0x01b2)
 Block type: 1 (SWF_SHOWFRAME)

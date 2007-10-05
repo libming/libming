@@ -90,7 +90,8 @@ Block length: 12
  PlaceFlagMove 0
  Depth 1
  CharacterId: 1
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
  Name: video
 
 Offset: 226 (0x00e2)

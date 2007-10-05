@@ -36,7 +36,8 @@ Block length: 6
  PlaceFlagMove 0
  Depth 1
  CharacterId: 1
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
 
 Offset: 6509 (0x196d)
 Block type: 1 (SWF_SHOWFRAME)

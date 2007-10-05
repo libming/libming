@@ -60,6 +60,9 @@ Block length: 64
  BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
   CharacterID: 2
   PlaceDepth: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
  BUTTONCONDACTION:   CondActionSize: 0
   CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 1   CondOverUpToOverDown: 0   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
  6 Actions
@@ -90,7 +93,8 @@ Block length: 9
  PlaceFlagMove 0
  Depth 1
  CharacterId: 1
- Matrix:    TranslateX   2000 TranslateY   2000
+  Matrix:
+   TranslateX   2000 TranslateY   2000
 
 Offset: 208 (0x00d0)
 Block type: 1 (SWF_SHOWFRAME)
@@ -114,6 +118,9 @@ Block length: 64
  BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
   CharacterID: 2
   PlaceDepth: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
  BUTTONCONDACTION:   CondActionSize: 0
   CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 0   CondOverUpToOverDown: 1   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
  6 Actions
@@ -144,7 +151,8 @@ Block length: 9
  PlaceFlagMove 0
  Depth 2
  CharacterId: 3
- Matrix:    TranslateX   1000 TranslateY   2000
+  Matrix:
+   TranslateX   1000 TranslateY   2000
 
 Offset: 295 (0x0127)
 Block type: 1 (SWF_SHOWFRAME)

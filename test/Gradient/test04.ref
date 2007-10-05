@@ -21,7 +21,8 @@ Block length: 95
    UsesScalingStrokes: 0
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 10
- Matrix: ScaleX 0.060989 ScaleY 0.060989
+  Matrix:
+   ScaleX 0.060989 ScaleY 0.060989
    TranslateX   1000 TranslateY   1000
  Gradient:  SpreadMode: 0
  InterpolationMode: 0
@@ -82,7 +83,8 @@ Block length: 6
  PlaceFlagMove 0
  Depth 1
  CharacterId: 1
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
 
 Offset: 135 (0x0087)
 Block type: 1 (SWF_SHOWFRAME)
