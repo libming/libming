@@ -34,6 +34,9 @@ Block length: 13
  BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
   CharacterID: 1
   PlaceDepth: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
 
 Offset: 62 (0x003e)
 Block type: 70 (SWF_PLACEOBJECT3)
@@ -54,7 +57,8 @@ Block length: 32
  PlaceFlagHasFilterList 1
  Depth 1
  CharacterId: 2
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
   NumberOfFilters 1
   Filter: DropShadow
  RGBA: ( 0, 0, 0,ff)

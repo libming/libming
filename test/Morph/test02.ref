@@ -54,7 +54,8 @@ Block length: 8
  PlaceFlagMove 0
  Depth 1
  CharacterId: 1
- Matrix:    TranslateX      0 TranslateY      0
+  Matrix:
+   TranslateX      0 TranslateY      0
  Ratio: 0
 
 Offset: 114 (0x0072)
