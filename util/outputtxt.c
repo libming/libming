@@ -169,19 +169,77 @@ outputSWF_RECT (SWF_RECT * rect)
 void
 outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
 {
-  iprintf (" Matrix: ");
+  iprintf ("  Matrix:\n");
   if (matrix->HasScale)
     {
-      iprintf ("ScaleX %f ", matrix->ScaleX);
+      iprintf ("   ScaleX %f ", matrix->ScaleX);
       iprintf ("ScaleY %f\n", matrix->ScaleY);
     }
   if (matrix->HasRotate)
     {
-      iprintf ("RotateSkew0 %f ", matrix->RotateSkew0);
+      iprintf ("   RotateSkew0 %f ", matrix->RotateSkew0);
       iprintf ("RotateSkew1 %f\n", matrix->RotateSkew1);
     }
   iprintf ("   TranslateX %6ld ", matrix->TranslateX);
   iprintf ("TranslateY %6ld\n", matrix->TranslateY);
+}
+
+void
+outputSWF_CXFORM(SWF_CXFORM * cxform, char *name){
+	iprintf("  ColorTransForm:\n");
+	if (cxform->HasMultTerms){
+		iprintf("   Mult:");
+		iprintf("%2x,", cxform->RedMultTerm);
+		iprintf("%2x,", cxform->GreenMultTerm);
+		iprintf("%2x,", cxform->BlueMultTerm);
+		/*
+		if (cxform->hasAlpha){
+			iprintf("%2x", cxform->AlphaMultTerm);	
+		}
+		*/
+		iprintf("\n");
+	}
+	
+	if (cxform->HasAddTerms){
+		iprintf("   Add:");	
+		iprintf("%2x,", cxform->RedAddTerm);
+		iprintf("%2x,", cxform->GreenAddTerm);
+		iprintf("%2x,", cxform->BlueAddTerm);
+		/*
+		if (cxform->hasAlpha){
+			iprintf("%2x", cxform->AlphaAddTerm);	
+		}
+		*/
+		iprintf("\n");
+	}
+}
+
+/* alpha could be handled in SWF_CXFORM / outputSWF_CXFORM too
+*  or is there a reason to make 
+* 2 parsefunctions /
+* 2 cxform structures
+* 2 outputfunctions
+* for that?
+*/
+void
+outputSWF_CXFORMWITHALPHA(SWF_CXFORMWITHALPHA * cxform, char *name){
+	iprintf("  ColorTransForm:\n");
+	if (cxform->HasMultTerms){
+		iprintf("   Mult:");
+		iprintf("%2x,", cxform->RedMultTerm);
+		iprintf("%2x,", cxform->GreenMultTerm);
+		iprintf("%2x,", cxform->BlueMultTerm);
+		iprintf("%2x",  cxform->AlphaMultTerm);
+		iprintf("\n");
+	}
+	if (cxform->HasAddTerms){
+		iprintf("   Add:");
+		iprintf("%2x,", cxform->RedAddTerm);
+		iprintf("%2x,", cxform->GreenAddTerm);
+		iprintf("%2x,", cxform->BlueAddTerm);
+		iprintf("%2x",  cxform->AlphaAddTerm);
+		iprintf("\n");
+	}	
 }
 
 void 
@@ -200,6 +258,8 @@ outputSWF_BUTTONRECORD (SWF_BUTTONRECORD *brec)
   iprintf ("  CharacterID: %d\n", brec->CharacterId);
   iprintf ("  PlaceDepth: %d\n", brec->PlaceDepth);
 
+	outputSWF_MATRIX(&brec->PlaceMatrix,"");
+	outputSWF_CXFORMWITHALPHA(&brec->ColorTransform,"");
   if( brec->ButtonHasBlendMode )
 	  iprintf("  BlendMode %d\n", brec->BlendMode );
   if( brec->ButtonHasFilterList )
@@ -1415,8 +1475,15 @@ outputSWF_DEFINESHAPE4 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINESOUND);
-
+  
+	OUT_BEGIN (SWF_DEFINESOUND);
+	iprintf(" CharacterId: %d\n", sblock->SoundId);
+	iprintf(" SoundFormat: %d\n", sblock->SoundFormat);
+	iprintf(" SoundRate: %d\n", sblock->SoundRate);
+	iprintf(" SoundSize: %d\n", sblock->SoundSize);
+	iprintf(" SoundType: %d\n", sblock->SoundType);
+	iprintf(" SoundSampleCount: %d\n", sblock->SoundSampleCount);
+	//iprintf(" SoundData: ");
 }
 
 void
