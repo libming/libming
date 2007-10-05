@@ -1,6 +1,6 @@
 BEGIN {$| = 1; print "1..3\n"; }
 
-use SWF qw(Sprite);
+use SWF qw(MovieClip);
 
 require 't/config.pl';
 
@@ -8,7 +8,7 @@ require 't/config.pl';
 my $p;
 
 eval{
-    $p = new SWF::Sprite();
+    $p = new SWF::MovieClip();
 };
 print "$@\n";
 ok($@);
