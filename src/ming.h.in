@@ -118,14 +118,8 @@ typedef union SWFMovieBlockType_u SWFMovieBlockType;
                  (__GNUC_MINOR__ == 3 && __GNUC_PATCHLEVEL__ > 0)))
 #define __to_movie_block(x) (union SWFMovieBlockType_u)x
 #else
-/* looks like MSVC is not able to initialize a union in place */
-#ifdef _MSC_VER
-#define __to_movie_block(x) x
-#else /* end MSVC workaround */
 #define __to_movie_block(x) (union SWFMovieBlockType_u) { x }
 #endif
-#endif
-
 
 /***** General Ming functions *****/
 
@@ -1031,12 +1025,30 @@ void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
 
 
 SWFDisplayItem SWFMovie_add_internal(SWFMovie movie, SWFMovieBlockType ublock);
+#ifndef _MSC_VER
 #define SWFMovie_add(__movie, __block) \
 	SWFMovie_add_internal((__movie), __to_movie_block((__block)))
+#else
+static inline SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
+{
+	SWFMovieBlockType ublock;
+	ublock.block = block;
+	return SWFMovie_add_internal(movie, ublock);
+}
+#endif
 
 int SWFMovie_replace_internal(SWFMovie movie, SWFDisplayItem item, SWFMovieBlockType block);
+#ifndef _MSC_VER
 #define SWFMovie_replace(__movie, __item, __block) \
 	SWFMovie_replace_internal((__movie), (__item), __to_movie_block((__block)))
+#else
+static inline int SWFMovie_replace(SWFMovie movie, SWFBlock block)
+{
+	SWFMovieBlockType ublock;
+	ublock.block = block;
+	return SWFMovie_replace_internal(movie, ublock);
+}
+#endif
 
 void SWFMovie_remove(SWFMovie movie, SWFDisplayItem item);
 
