@@ -148,15 +148,6 @@ substr		{ count();	return SUBSTR;	}
 
 getProperty	{ count();	return GETPROPERTY;	}
 
-  /* getURL2 methods */
-post		{ count();	swf4lval.getURLMethod = GETURL_METHOD_POST;
-				return GETURL_METHOD;	}
-get		{ count();	swf4lval.getURLMethod = GETURL_METHOD_GET;
-				return GETURL_METHOD;	}
-nosend		{ count();	swf4lval.getURLMethod = GETURL_METHOD_NOSEND;
-				return GETURL_METHOD;	}
-
-
   /* v3 functions */
 nextFrame	{ count();	return NEXTFRAME;	}
 prevFrame	{ count();	return PREVFRAME;	}

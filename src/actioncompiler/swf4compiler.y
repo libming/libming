@@ -78,7 +78,7 @@
 %token <str> IDENTIFIER
 %token <str> PATH
 
-%token <getURLMethod> GETURL_METHOD
+%type <getURLMethod> urlmethod
 
 %token EQ "=="
 %token LE "<="
@@ -388,6 +388,16 @@ break_stmt
 		  bufferWriteS16($$, MAGIC_BREAK_NUMBER); }
 	;
 
+
+urlmethod
+	: /* empty */		{ $$ = GETURL_METHOD_NOSEND; }
+	
+	| ',' STRING		{ if(strcmp($2, "GET") == 0)
+				    $$ = GETURL_METHOD_GET;
+				  else if(strcmp($2, "POST") == 0)
+				    $$ = GETURL_METHOD_POST; }
+	;
+
 void_function_call
 	: STOPDRAG '(' ')' /* no args */
 		{ $$ = newBuffer();
@@ -423,12 +433,12 @@ void_function_call
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, GETURL_METHOD_NOSEND); }
 
-	| GETURL '(' expr ',' expr ',' GETURL_METHOD ')'
+	| GETURL '(' expr ',' expr urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, $7); }
+		  bufferWriteU8($$, $6); }
 
 	| GETURL1 '(' STRING ',' STRING ')'
 		{ $$ = newBuffer();
@@ -439,33 +449,19 @@ void_function_call
 		  bufferWriteHardString($$, $5, strlen($5));
 		  bufferWriteU8($$, 0); }
 
-	| LOADMOVIE '(' expr ',' expr ')'
+	| LOADMOVIE '(' expr ',' expr urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, GETURL_METHOD_NOSEND | GETURL_LOADMOVIE); }
+		  bufferWriteU8($$, $6 | GETURL_LOADMOVIE); }
 
-	| LOADMOVIE '(' expr ',' expr ',' GETURL_METHOD ')'
+	| LOADVARIABLES '(' expr ',' expr urlmethod ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, $7 | GETURL_LOADMOVIE); }
-
-	| LOADVARIABLES '(' expr ',' expr ')'
-		{ $$ = $3;
-		  bufferConcat($$, $5);
-		  bufferWriteU8($$, SWFACTION_GETURL2);
-		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, GETURL_METHOD_NOSEND | 0xc0); }
-
-	| LOADVARIABLES '(' expr ',' expr ',' GETURL_METHOD ')'
-		{ $$ = $3;
-		  bufferConcat($$, $5);
-		  bufferWriteU8($$, SWFACTION_GETURL2);
-		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, $7 | 0xc0); }
+		  bufferWriteU8($$, 0xc0 + $6); }
 
 	/* startDrag(target, lock, [left, right, top, bottom]) */
 	| STARTDRAG '(' expr ',' expr ')'
