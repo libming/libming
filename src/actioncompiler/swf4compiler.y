@@ -458,14 +458,14 @@ void_function_call
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, GETURL_METHOD_NOSEND | GETURL_LOADVARIABLES); }
+		  bufferWriteU8($$, GETURL_METHOD_NOSEND | 0xc0); }
 
 	| LOADVARIABLES '(' expr ',' expr ',' GETURL_METHOD ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
-		  bufferWriteU8($$, $7 | GETURL_LOADVARIABLES); }
+		  bufferWriteU8($$, $7 | 0xc0); }
 
 	/* startDrag(target, lock, [left, right, top, bottom]) */
 	| STARTDRAG '(' expr ',' expr ')'
