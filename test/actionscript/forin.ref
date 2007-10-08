@@ -1,0 +1,80 @@
+File version: 6
+File size: 156
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 126
+
+ 21 Actions
+    SWFACTION_CONSTANTPOOL
+     [000] o
+     [001] Object
+     [002] x
+     [003] hi
+     [004] y
+    SWFACTION_PUSH
+     [000]   Constant: 0 "o"
+     [001]   Integer: 0
+     [002]   Constant: 1 "Object"
+    SWFACTION_NEWOBJECT
+    SWFACTION_SETVARIABLE
+    SWFACTION_PUSH
+     [000]   Constant: 0 "o"
+    SWFACTION_GETVARIABLE
+    SWFACTION_PUSH
+     [000]   Constant: 2 "x"
+     [001]   Constant: 3 "hi"
+    SWFACTION_SETMEMBER
+    SWFACTION_PUSH
+     [000]   Constant: 0 "o"
+    SWFACTION_ENUMERATE
+    SWFACTION_STOREREGISTER
+    Register: 0
+    SWFACTION_PUSH
+     [000]   NULL: 
+    SWFACTION_EQUALS2
+    SWFACTION_IF
+    BranchOffset: 18
+    4 Action
+    SWFACTION_PUSH
+     [000]   Constant: 2 "x"
+     [001]   Register: 0
+    SWFACTION_DEFINELOCAL
+    SWFACTION_JUMP
+    BranchOffset: -27
+    SWFACTION_JUMP
+    BranchOffset: -32
+    SWFACTION_PUSH
+     [000]   Constant: 0 "o"
+    SWFACTION_ENUMERATE
+    SWFACTION_STOREREGISTER
+    Register: 0
+    SWFACTION_PUSH
+     [000]   NULL: 
+    SWFACTION_EQUALS2
+    SWFACTION_IF
+    BranchOffset: 18
+    4 Action
+    SWFACTION_PUSH
+     [000]   Constant: 4 "y"
+     [001]   Register: 0
+    SWFACTION_SETVARIABLE
+    SWFACTION_JUMP
+    BranchOffset: -27
+    SWFACTION_JUMP
+    BranchOffset: -32
+    SWFACTION_END
+
+Offset: 152 (0x0098)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 154 (0x009a)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
