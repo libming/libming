@@ -154,6 +154,7 @@ static void readGlyphs(SWFFont font, FT_Face face)
 		if( FT_Load_Glyph(face, gindex, FT_LOAD_NO_BITMAP|FT_LOAD_NO_SCALE)) 
 		{
 			SWF_warn("readGlyphsTTF: Can't load glyph %d, skipped\n", gindex);
+			charcode = FT_Get_Next_Char(face, charcode, &gindex);
 			continue;
 		}
 		
@@ -164,6 +165,7 @@ static void readGlyphs(SWFFont font, FT_Face face)
 		{
 			SWF_warn("readGlyphsTTF: Can't decompose outline for glyph %d\n", gindex);
 			destroySWFShape(data.shape);
+			charcode = FT_Get_Next_Char(face, charcode, &gindex);
 			continue;
 		}
 		font->shapes[glyphCount] = data.shape;
