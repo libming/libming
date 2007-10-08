@@ -650,12 +650,12 @@ iter_stmt
 		  bufferConcat(b3, $7);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
-		  bufferConcat($$, b2);
 		  bufferWriteOp(b3, SWFACTION_JUMP);
 		  bufferWriteS16(b3, 2);
 		  bufferWriteS16(b3, -tmp);
-		  bufferResolveJumps(b3);
-		  bufferConcat($$, b3);
+		  bufferConcat(b2, b3);
+		  bufferResolveJumps(b2);
+		  bufferConcat($$, b2);
 		  delctx(CTX_FOR_IN);
 		  free($3); }
 
@@ -683,12 +683,12 @@ iter_stmt
 		  bufferConcat(b3, $8);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
 		  tmp = bufferLength(b2) + bufferLength(b3) + 5;
-		  bufferConcat($$, b2);
 		  bufferWriteOp(b3, SWFACTION_JUMP);
 		  bufferWriteS16(b3, 2);
 		  bufferWriteS16(b3, -tmp);
-		  bufferResolveJumps(b3);
-		  bufferConcat($$, b3);
+		  bufferConcat(b2, b3);
+		  bufferResolveJumps(b2);
+		  bufferConcat($$, b2);
 		  delctx(CTX_FOR_IN);
 		  free($4); }
 	;
