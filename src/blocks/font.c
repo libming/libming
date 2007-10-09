@@ -618,8 +618,17 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 
 	for ( i=0; i<font->nGlyphs; ++i )
 	{
-		// XXX - if font doesn't have the character?
-		font->codeTable[i] = SWFFont_findGlyphCode(font->font, font->codeTable[i]);
+		int code;
+		code = SWFFont_findGlyphCode(font->font, font->codeTable[i]);
+		if(code < 0)
+		{
+			SWF_warn("SWFFontCharacter_resolveTextCodes: Character not found %i\n", 
+				font->codeTable[i]);
+			SWF_warn("This is either an encoding error (likely)");
+			SWF_warn("or the used font does not provide all characters (unlikely)\n");
+			SWF_error("Stopped\n");
+		}
+		font->codeTable[i] = code;
 	}
 }
 
