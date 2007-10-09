@@ -173,11 +173,13 @@ static void readGlyphs(SWFFont font, FT_Face face)
 		font->advances[glyphCount] = (short)(face->glyph->advance.x * ratio_EM);
 		if(charcode > 255)
 			font->flags |= SWF_FONT_WIDECODES;
-
 		charcode = FT_Get_Next_Char(face, charcode, &gindex);
 		glyphCount++;
 	}
 	font->nGlyphs = glyphCount;
+
+	if(font->nGlyphs > 255) // XXX: very simple estimation right now
+		font->flags |=  SWF_FONT_WIDEOFFSETS;
 }
 
 SWFFont loadSWFFontTTF(const char *filename)
