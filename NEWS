@@ -1,3 +1,13 @@
+0.X.X
+	* Perl extension updates 
+	* Python extension updates
+	* Do not force bgColor
+	* Redirect SWF_warn and SWF_error to stderr
+	* Propper checks for YACC and LEX
+	* Complete Bitmap fillstyles
+	* Font fixes
+	* Actioncompiler fixes
+
 0.4.0.beta5 - 2007-09-18
 
 	* Add support for targetPath asm opcode.
