@@ -111,9 +111,10 @@ newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 		case SWFFILL_NONSMOOTHED_TILED_BITMAP:
 		case SWFFILL_NONSMOOTHED_CLIPPED_BITMAP:
 			fill->type = flags;
+			break;
 		default:
 			free(fill);
-			SWF_warn("newSWFBitmapFillStyle: not a valid Bitmap FillStyle\n");
+			SWF_warn("newSWFBitmapFillStyle: not a valid Bitmap FillStyle: %x\n", flags);
 			return NULL;
 	}
 
