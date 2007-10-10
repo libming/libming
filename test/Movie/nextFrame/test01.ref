@@ -20,13 +20,13 @@ Block type: 12 (SWF_DOACTION)
 Block length: 19
 
  4 Actions
-    SWFACTION_CONSTANTPOOL
+    29:SWFACTION_CONSTANTPOOL
      [000] a
-    SWFACTION_PUSH
+    36:SWFACTION_PUSH
      [000]   Constant: 0 "a"
      [001]   Integer: 1
-    SWFACTION_DEFINELOCAL
-    SWFACTION_END
+    46:SWFACTION_DEFINELOCAL
+    47:SWFACTION_END
 
 Offset: 48 (0x0030)
 Block type: 1 (SWF_SHOWFRAME)
