@@ -9,7 +9,7 @@ Block type: 12 (SWF_DOACTION)
 Block length: 164
 
  13 Actions
-    SWFACTION_CONSTANTPOOL
+    26:SWFACTION_CONSTANTPOOL
      [000] anonymous function() works
      [001] f1
      [002] function <name>() works
@@ -17,46 +17,46 @@ Block length: 164
      [004] Function
      [005] this
      [006] name
-    SWFACTION_DEFINEFUNCTION
+    109:SWFACTION_DEFINEFUNCTION
     Name: test
     NumParams: 0
     CodeSize: 6
     2 Action
-    SWFACTION_PUSH
+    121:SWFACTION_PUSH
      [000]   Constant: 2 "function <name>() works"
-    SWFACTION_RETURN
-    SWFACTION_DEFINEFUNCTION
+    126:SWFACTION_RETURN
+    127:SWFACTION_DEFINEFUNCTION
     Name: getName
     NumParams: 0
     CodeSize: 13
     5 Action
-    SWFACTION_PUSH
+    142:SWFACTION_PUSH
      [000]   Constant: 5 "this"
-    SWFACTION_GETVARIABLE
-    SWFACTION_PUSH
+    147:SWFACTION_GETVARIABLE
+    148:SWFACTION_PUSH
      [000]   Constant: 6 "name"
-    SWFACTION_GETMEMBER
-    SWFACTION_RETURN
-    SWFACTION_PUSH
+    153:SWFACTION_GETMEMBER
+    154:SWFACTION_RETURN
+    155:SWFACTION_PUSH
      [000]   Constant: 1 "f1"
-    SWFACTION_DEFINEFUNCTION
+    160:SWFACTION_DEFINEFUNCTION
     Name: 
     NumParams: 0
     CodeSize: 6
     2 Action
-    SWFACTION_PUSH
+    168:SWFACTION_PUSH
      [000]   Constant: 0 "anonymous function() works"
-    SWFACTION_RETURN
-    SWFACTION_DEFINELOCAL
-    SWFACTION_PUSH
+    173:SWFACTION_RETURN
+    174:SWFACTION_DEFINELOCAL
+    175:SWFACTION_PUSH
      [000]   Constant: 3 "test"
-    SWFACTION_GETVARIABLE
-    SWFACTION_PUSH
+    180:SWFACTION_GETVARIABLE
+    181:SWFACTION_PUSH
      [000]   Constant: 4 "Function"
-    SWFACTION_GETVARIABLE
-    SWFACTION_INSTANCEOF
-    SWFACTION_TRACE
-    SWFACTION_END
+    186:SWFACTION_GETVARIABLE
+    187:SWFACTION_INSTANCEOF
+    188:SWFACTION_TRACE
+    189:SWFACTION_END
 
 Offset: 190 (0x00be)
 Block type: 1 (SWF_SHOWFRAME)

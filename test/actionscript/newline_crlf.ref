@@ -9,15 +9,15 @@ Block type: 12 (SWF_DOACTION)
 Block length: 23
 
  6 Actions
-    SWFACTION_CONSTANTPOOL
+    22:SWFACTION_CONSTANTPOOL
      [000] test
-    SWFACTION_PUSH
+    32:SWFACTION_PUSH
      [000]   Constant: 0 "test"
-    SWFACTION_TRACE
-    SWFACTION_PUSH
+    37:SWFACTION_TRACE
+    38:SWFACTION_PUSH
      [000]   Constant: 0 "test"
-    SWFACTION_TRACE
-    SWFACTION_END
+    43:SWFACTION_TRACE
+    44:SWFACTION_END
 
 Offset: 45 (0x002d)
 Block type: 1 (SWF_SHOWFRAME)

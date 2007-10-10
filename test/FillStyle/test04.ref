@@ -1,5 +1,5 @@
 File version: 8
-File size: 70
+File size: 1693
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -11,29 +11,42 @@ Block length: 4
  FileAttributes: HasMetaData 0, UseNetwork 1, HasAS3 0
 
 Offset: 26 (0x001a)
+Block type: 20 (SWF_DEFINELOSSLESS)
+Block length: 1607
+
+ CharacterID 1
+ Bitmap format 5
+ Bitmap width 20 x height 20
+
+Offset: 1639 (0x0667)
 Block type: 32 (SWF_DEFINESHAPE3)
-Block length: 30
+Block length: 40
 
  ShapeID: 2
  RECT:  (-10,-10)x(2010,2010):12
- FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 41
+ BitmapID: 1
+  Matrix:
+   ScaleX 20.000000 ScaleY 20.000000
+   TranslateX      0 TranslateY      0
  LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
  LineStyle:  Width: 20
  RGBA: ( 0, 0, 0,ff)
- NumFillBits: 0
+ NumFillBits: 1
  NumLineBits: 1
  StyleChangeRecord:
   StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
   StateFillStyle0: 0 StateMoveTo: 0
    LineStyle: 1
-   FillStyle1: 0
+   FillStyle1: 1
  Straight EdgeRecord: (10) - (2000, 0)
  Straight EdgeRecord: (10) - (0, 2000)
  Straight EdgeRecord: (10) - (-2000, 0)
  Straight EdgeRecord: (10) - (0, -2000)
   ENDSHAPE
 
-Offset: 58 (0x003a)
+Offset: 1681 (0x0691)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -50,12 +63,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 66 (0x0042)
+Offset: 1689 (0x0699)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 68 (0x0044)
+Offset: 1691 (0x069b)
 Block type: 0 (SWF_END)
 Block length: 0
 

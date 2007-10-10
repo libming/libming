@@ -27,12 +27,12 @@ Block type: 59 (SWF_INITACTION)
 Block length: 15
 
  4 Init actions for character 1
-    SWFACTION_CONSTANTPOOL
+    34:SWFACTION_CONSTANTPOOL
      [000] 
-    SWFACTION_PUSH
+    40:SWFACTION_PUSH
      [000]   Constant: 0 ""
-    SWFACTION_TRACE
-    SWFACTION_END
+    45:SWFACTION_TRACE
+    46:SWFACTION_END
 
 Offset: 47 (0x002f)
 Block type: 26 (SWF_PLACEOBJECT2)

@@ -9,7 +9,7 @@ Block type: 12 (SWF_DOACTION)
 Block length: 1
 
  1 Actions
-    SWFACTION_END
+    22:SWFACTION_END
 
 Offset: 23 (0x0017)
 Block type: 1 (SWF_SHOWFRAME)

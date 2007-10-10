@@ -9,16 +9,16 @@ Block type: 12 (SWF_DOACTION)
 Block length: 72
 
  3 Actions
-    SWFACTION_CONSTANTPOOL
+    26:SWFACTION_CONSTANTPOOL
      [000] Error
      [001] err
      [002] done
-    SWFACTION_DEFINEFUNCTION
+    46:SWFACTION_DEFINEFUNCTION
     Name: test
     NumParams: 0
     CodeSize: 39
     1 Action
-    SWFACTION_TRY
+    58:SWFACTION_TRY
     Offset 58
     CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 0
     TrySize 12
@@ -26,25 +26,25 @@ Block length: 72
     FinallySize 6
     CatchName err
   Try Actions: 3
-    SWFACTION_PUSH
+    72:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 0 "Error"
-    SWFACTION_NEWOBJECT
-    SWFACTION_THROW
+    82:SWFACTION_NEWOBJECT
+    83:SWFACTION_THROW
 
   Catch Actions: 3
-    SWFACTION_PUSH
+    84:SWFACTION_PUSH
      [000]   Constant: 1 "err"
-    SWFACTION_GETVARIABLE
-    SWFACTION_TRACE
+    89:SWFACTION_GETVARIABLE
+    90:SWFACTION_TRACE
 
   Finally Actions: 2
-    SWFACTION_PUSH
+    91:SWFACTION_PUSH
      [000]   Constant: 2 "done"
-    SWFACTION_TRACE
+    96:SWFACTION_TRACE
   ## TRY END ##
 
-    SWFACTION_END
+    97:SWFACTION_END
 
 Offset: 98 (0x0062)
 Block type: 1 (SWF_SHOWFRAME)
