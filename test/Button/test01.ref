@@ -36,18 +36,18 @@ Block type: 12 (SWF_DOACTION)
 Block length: 35
 
  7 Actions
-    SWFACTION_CONSTANTPOOL
+    92:SWFACTION_CONSTANTPOOL
      [000] _root
      [001] stop
-    SWFACTION_PUSH
+    108:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 0 "_root"
-    SWFACTION_GETVARIABLE
-    SWFACTION_PUSH
+    118:SWFACTION_GETVARIABLE
+    119:SWFACTION_PUSH
      [000]   Constant: 1 "stop"
-    SWFACTION_CALLMETHOD
-    SWFACTION_POP
-    SWFACTION_END
+    124:SWFACTION_CALLMETHOD
+    125:SWFACTION_POP
+    126:SWFACTION_END
 expected actionEnd flag
 
 Offset: 127 (0x007f)
@@ -66,18 +66,18 @@ Block length: 64
  BUTTONCONDACTION:   CondActionSize: 0
   CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 1   CondOverUpToOverDown: 0   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
  6 Actions
-    SWFACTION_CONSTANTPOOL
+    150:SWFACTION_CONSTANTPOOL
      [000] _root
      [001] gotoAndStop
-    SWFACTION_PUSH
+    173:SWFACTION_PUSH
      [000]   Integer: 2
      [001]   Integer: 1
      [002]   Constant: 0 "_root"
-    SWFACTION_GETVARIABLE
-    SWFACTION_PUSH
+    188:SWFACTION_GETVARIABLE
+    189:SWFACTION_PUSH
      [000]   Constant: 1 "gotoAndStop"
-    SWFACTION_CALLMETHOD
-    SWFACTION_POP
+    194:SWFACTION_CALLMETHOD
+    195:SWFACTION_POP
 
 Offset: 197 (0x00c5)
 Block type: 26 (SWF_PLACEOBJECT2)
@@ -124,18 +124,18 @@ Block length: 64
  BUTTONCONDACTION:   CondActionSize: 0
   CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 0   CondOverUpToOverDown: 1   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
  6 Actions
-    SWFACTION_CONSTANTPOOL
+    237:SWFACTION_CONSTANTPOOL
      [000] _root
      [001] gotoAndStop
-    SWFACTION_PUSH
+    260:SWFACTION_PUSH
      [000]   Integer: 1
      [001]   Integer: 1
      [002]   Constant: 0 "_root"
-    SWFACTION_GETVARIABLE
-    SWFACTION_PUSH
+    275:SWFACTION_GETVARIABLE
+    276:SWFACTION_PUSH
      [000]   Constant: 1 "gotoAndStop"
-    SWFACTION_CALLMETHOD
-    SWFACTION_POP
+    281:SWFACTION_CALLMETHOD
+    282:SWFACTION_POP
 
 Offset: 284 (0x011c)
 Block type: 26 (SWF_PLACEOBJECT2)
