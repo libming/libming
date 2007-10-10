@@ -1,5 +1,5 @@
 File version: 5
-File size: 778
+File size: 786
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -141,14 +141,14 @@ Block length: 370
 
 Offset: 396 (0x018c)
 Block type: 48 (SWF_DEFINEFONT2)
-Block length: 319
+Block length: 327
 
  FontID: 3
  FontFlagsHasLayout: 1
  FontFlagsShiftJis: 0
  FontFlagsSmallText: 0
  FontFlagsFlagANSI: 0
- FontFlagsWideOffsets: 0
+ FontFlagsWideOffsets: 1
  FontFlagsWideCodes: 1
  FontFlagsFlagsItalics: 0
  FontFlagsFlagsBold: 0
@@ -156,10 +156,10 @@ Block length: 319
  FontNameLen: 19
  FontName: Bitstream Vera Sans
  NumGlyphs: 3
- OffsetTable[000]: 8
- OffsetTable[001]: 68
- OffsetTable[002]: c7
- CodeTableOffset: fc
+ OffsetTable[000]: 10
+ OffsetTable[001]: 70
+ OffsetTable[002]: cf
+ CodeTableOffset: 104
  Shape[000]
  NumFillBits: 1
  NumLineBits: 0
@@ -266,7 +266,7 @@ Block length: 319
  RECT:  (23,-778)x(380,0):11
  KerningCount: 0
 
-Offset: 721 (0x02d1)
+Offset: 729 (0x02d9)
 Block type: 33 (SWF_DEFINETEXT2)
 Block length: 43
 
@@ -295,7 +295,7 @@ Block length: 43
    GlyphIndex[0] = 0002    GlyphAdvance[0] = 0119
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 766 (0x02fe)
+Offset: 774 (0x0306)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -312,12 +312,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 774 (0x0306)
+Offset: 782 (0x030e)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 776 (0x0308)
+Offset: 784 (0x0310)
 Block type: 0 (SWF_END)
 Block length: 0
 

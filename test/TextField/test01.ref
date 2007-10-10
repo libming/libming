@@ -1,19 +1,19 @@
 File version: 5
-File size: 3389
+File size: 3469
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 48 (SWF_DEFINEFONT2)
-Block length: 3267
+Block length: 3347
 
  FontID: 2
  FontFlagsHasLayout: 1
  FontFlagsShiftJis: 0
  FontFlagsSmallText: 0
  FontFlagsFlagANSI: 0
- FontFlagsWideOffsets: 0
+ FontFlagsWideOffsets: 1
  FontFlagsWideCodes: 1
  FontFlagsFlagsItalics: 0
  FontFlagsFlagsBold: 0
@@ -21,46 +21,46 @@ Block length: 3267
  FontNameLen: 19
  FontName: Bitstream Vera Sans
  NumGlyphs: 39
- OffsetTable[000]: 50
- OffsetTable[001]: 52
- OffsetTable[002]: 60
- OffsetTable[003]: bb
- OffsetTable[004]: da
- OffsetTable[005]: 132
- OffsetTable[006]: 1af
- OffsetTable[007]: 1d9
- OffsetTable[008]: 234
- OffsetTable[009]: 2b2
- OffsetTable[010]: 2ca
- OffsetTable[011]: 36e
- OffsetTable[012]: 3eb
- OffsetTable[013]: 403
- OffsetTable[014]: 479
- OffsetTable[015]: 4d9
- OffsetTable[016]: 52d
- OffsetTable[017]: 58d
- OffsetTable[018]: 5ec
- OffsetTable[019]: 621
- OffsetTable[020]: 6a5
- OffsetTable[021]: 6e1
- OffsetTable[022]: 6fc
- OffsetTable[023]: 72d
- OffsetTable[024]: 750
- OffsetTable[025]: 75f
- OffsetTable[026]: 7c6
- OffsetTable[027]: 802
- OffsetTable[028]: 85a
- OffsetTable[029]: 8b9
- OffsetTable[030]: 919
- OffsetTable[031]: 94d
- OffsetTable[032]: 9c9
- OffsetTable[033]: 9ff
- OffsetTable[034]: a3b
- OffsetTable[035]: a55
- OffsetTable[036]: a81
- OffsetTable[037]: aa9
- OffsetTable[038]: adc
- CodeTableOffset: afa
+ OffsetTable[000]: a0
+ OffsetTable[001]: a2
+ OffsetTable[002]: b0
+ OffsetTable[003]: 10b
+ OffsetTable[004]: 12a
+ OffsetTable[005]: 182
+ OffsetTable[006]: 1ff
+ OffsetTable[007]: 229
+ OffsetTable[008]: 284
+ OffsetTable[009]: 302
+ OffsetTable[010]: 31a
+ OffsetTable[011]: 3be
+ OffsetTable[012]: 43b
+ OffsetTable[013]: 453
+ OffsetTable[014]: 4c9
+ OffsetTable[015]: 529
+ OffsetTable[016]: 57d
+ OffsetTable[017]: 5dd
+ OffsetTable[018]: 63c
+ OffsetTable[019]: 671
+ OffsetTable[020]: 6f5
+ OffsetTable[021]: 731
+ OffsetTable[022]: 74c
+ OffsetTable[023]: 77d
+ OffsetTable[024]: 7a0
+ OffsetTable[025]: 7af
+ OffsetTable[026]: 816
+ OffsetTable[027]: 852
+ OffsetTable[028]: 8aa
+ OffsetTable[029]: 909
+ OffsetTable[030]: 969
+ OffsetTable[031]: 99d
+ OffsetTable[032]: a19
+ OffsetTable[033]: a4f
+ OffsetTable[034]: a8b
+ OffsetTable[035]: aa5
+ OffsetTable[036]: ad1
+ OffsetTable[037]: af9
+ OffsetTable[038]: b2c
+ CodeTableOffset: b4a
  Shape[000]
  NumFillBits: 1
  NumLineBits: 0
@@ -1210,7 +1210,7 @@ Block length: 3267
  RECT:  (44,-560)x(493,0):11
  KerningCount: 0
 
-Offset: 3293 (0x0cdd)
+Offset: 3373 (0x0d2d)
 Block type: 37 (SWF_DEFINEEDITTEXT)
 Block length: 78
 
@@ -1224,7 +1224,7 @@ Block length: 78
  VariableName: 
  InitialText: The quick brown fox jumps over the lazy dog. 1234567890
 
-Offset: 3377 (0x0d31)
+Offset: 3457 (0x0d81)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -1241,12 +1241,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 3385 (0x0d39)
+Offset: 3465 (0x0d89)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 3387 (0x0d3b)
+Offset: 3467 (0x0d8b)
 Block type: 0 (SWF_END)
 Block length: 0
 
