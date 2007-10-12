@@ -182,29 +182,11 @@ static void readGlyphs(SWFFont font, FT_Face face)
 		font->flags |=  SWF_FONT_WIDEOFFSETS;
 }
 
-SWFFont loadSWFFontTTF(const char *filename)
+static SWFFont loadFontFromFace(FT_Face face)
 {
-	FT_Error error;
-	FT_Library library;
-	FT_Face face;
 	// FT_CharMap charmap = NULL;
 	SWFFont font;
 	double ratio_EM;
-	
-	if( FT_Init_FreeType( &library ) ) {
-		SWF_warn("loadSWFFontTTF: FreeType initialization failed\n");
-		return NULL;
-	}
-
-	if( (error = FT_New_Face( library, filename, 0, &face )) ) 
-	{
-		if ( error == FT_Err_Unknown_File_Format )
-			SWF_warn("loadSWFFontTTF: %s has format unknown to FreeType\n",
-				filename);
-		else
-			SWF_warn("loadSWFFontTTF: Cannot access %s ****\n", filename);
-		goto error_ft;
-	}
 
 	/*
 	for(i=0; i < face->num_charmaps; i++) 
@@ -247,13 +229,80 @@ SWFFont loadSWFFontTTF(const char *filename)
 	font->leading = ((face->height-face->ascender + face->descender) * ratio_EM);
 
 	SWFFont_buildReverseMapping(font);
+	return font;
+}
+
+SWFFontCollection loadTTFCollection(const char *filename)
+{
+	FT_Error error;
+	FT_Library library;
+	FT_Face face;
+	int numFaces, i;
+	SWFFontCollection collection;
+	SWFFont font;
+
+	if( FT_Init_FreeType( &library ) ) {
+		SWF_warn("loadSWFFontTTF: FreeType initialization failed\n");
+		return NULL;
+	}
+
+	if( (error = FT_New_Face(library, filename, 0, &face )) ) 
+	{
+		if ( error == FT_Err_Unknown_File_Format )
+			SWF_warn("loadTTFCollection: %s has format unknown to FreeType\n",
+				filename);
+		else
+			SWF_warn("loadTTFCollection: Cannot access %s ****\n", filename);
+		goto error_ft;
+	}
+	numFaces = face->num_faces;
+	collection = newSWFFontCollection();
+	
+	font = loadFontFromFace(face);
+	SWFFontCollection_addFont(collection, font);
+
+	for(i = 1; i < numFaces; i++)
+	{
+		if((error = FT_New_Face(library, filename, i, &face ))) 
+			goto error_ft;
+		font = loadFontFromFace(face);
+		SWFFontCollection_addFont(collection, font);
+	}
+	return collection;
+
+error_ft:
+	FT_Done_FreeType(library);
+	return NULL;	
+}
+
+SWFFont loadSWFFontTTF(const char *filename)
+{
+	FT_Error error;
+	FT_Library library;
+	FT_Face face;
+	SWFFont font;
+		
+	if( FT_Init_FreeType( &library ) ) {
+		SWF_warn("loadSWFFontTTF: FreeType initialization failed\n");
+		return NULL;
+	}
+
+	if( (error = FT_New_Face( library, filename, 0, &face )) ) 
+	{
+		if ( error == FT_Err_Unknown_File_Format )
+			SWF_warn("loadSWFFontTTF: %s has format unknown to FreeType\n",
+				filename);
+		else
+			SWF_warn("loadSWFFontTTF: Cannot access %s ****\n", filename);
+		goto error_ft;
+	}
+	
+	font = loadFontFromFace(face);
+	
 	FT_Done_Face(face);
 	FT_Done_FreeType(library);
 	return font;
-//error_font:
-//	destroySWFFont(font);
-// error_face:
-//	FT_Done_Face(face);
+
 error_ft:
 	FT_Done_FreeType(library);
 	return NULL;

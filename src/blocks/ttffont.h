@@ -23,6 +23,6 @@
 
 #ifndef SWF_TTFFONT_H_INCLUDED
 #define SWF_TTFFONT_H_INCLUDED
-
+SWFFontCollection loadTTFCollection(const char *filename);
 SWFFont loadSWFFontTTF(const char *);
 #endif /* SWF_TTFFONT_H_INCLUDED */

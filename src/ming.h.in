@@ -68,6 +68,7 @@ typedef struct SWFFont_s *SWFFont;
 typedef struct SWFText_s *SWFText;
 typedef struct SWFBrowserFont_s *SWFBrowserFont;
 typedef struct SWFFontCharacter_s *SWFFontCharacter;
+typedef struct SWFFontCollection_s *SWFFontCollection;
 typedef struct SWFTextField_s *SWFTextField;
 typedef struct SWFSoundStream_s *SWFSoundStream;
 typedef struct SWFSound_s *SWFSound;
@@ -431,8 +432,11 @@ float SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string);
 float SWFFont_getAscent(SWFFont font);
 float SWFFont_getDescent(SWFFont font);
 float SWFFont_getLeading(SWFFont font);
+const char* SWFFont_getName(SWFFont font);
+int SWFFont_getGlyphCount(SWFFont font);
 
-
+SWFFontCollection newSWFFontCollection_fromFile(const char *filename);
+SWFFont *SWFFontCollection_getFonts(SWFFontCollection collection, int *count);
 /***** SWFText *****/
 
 SWFText newSWFText(void);

@@ -34,14 +34,6 @@
 #include "fdbfont.h"
 #include "ttffont.h"
 
-
-// #define HAS_MMAP 1
-
-#ifdef HAS_MMAP
-	#include <unistd.h>
-	#include <sys/mman.h>
-#endif
-
 struct textList
 {
 	struct textList* next;
@@ -321,6 +313,49 @@ static inline int fdb_check(char *header)
 	return 0;
 }
 
+static inline int ttc_check(char *header)
+{
+	if(header[0] == 't' && 
+		header[1] == 't' && 
+		header[2] == 'c')
+		return 1;
+	return 0;
+}
+
+/* load a collection of fonts (experimental)
+ * currently only TTC (TTF collection) format is supported
+ */
+SWFFontCollection newSWFFontCollection_fromFile(const char *filename /* filename */)
+{
+	FILE *file;
+	char header[5];
+	file = fopen(filename, "rb");	
+	if(file == NULL)
+	{	
+		SWF_warn("open font file failed\n");
+		return NULL;
+	}
+	
+	if(fread(header, 5, 1, file) < 1)
+	{
+		fclose(file);
+		return NULL;
+	}
+	rewind(file);
+
+	if(ttc_check(header))
+	{
+		fclose(file);
+		return loadTTFCollection(filename);
+	}
+	else
+	{
+		SWF_warn("Unknown font file\n");
+		fclose(file);
+		return NULL;
+	}
+}
+
 
 /* load a font from file
  * This function creates a new SWFFont object from a font file. It accepts 
@@ -359,6 +394,7 @@ SWFFont newSWFFont_fromFile(const char *filename /* filename for fontfile */)
 	else
 	{
 		SWF_warn("Unknown font file\n");
+		fclose(file);
 		return NULL;
 	}
 }
@@ -651,6 +687,10 @@ SWFFont_getFlags(SWFFont font)
 	return font->flags;
 }
 
+int SWFFont_getGlyphCount(SWFFont font)
+{
+	return font->nGlyphs;
+}
 
 int
 SWFFontCharacter_getNGlyphs(SWFFontCharacter font)
@@ -837,8 +877,50 @@ SWFFont_getCharacterKern(SWFFont font,
 	return 0;
 }
 
+void SWFFontCollection_addFont(SWFFontCollection collection, SWFFont font)
+{
+	if(!collection || !font)
+		return;
 
+	collection->fontList = realloc(collection->fontList, 
+		(collection->numFonts + 1) * sizeof(SWFFont));
+	collection->fontList[collection->numFonts] = font;
+	collection->numFonts++;
+}
 
+void destroySWFFontCollection(SWFFontCollection collection)
+{
+	int i;
+	if(!collection)
+		return;
+
+	for(i = 0; i < collection->numFonts; i++)
+		destroySWFFont(collection->fontList[i]);
+	free(collection->fontList);
+	free(collection);
+}
+
+SWFFontCollection newSWFFontCollection()
+{
+	SWFFontCollection collection;
+
+	collection = malloc(sizeof(SWFFontCollection));
+	collection->fontList = NULL;
+	collection->numFonts = 0;
+
+	return collection;
+}
+
+SWFFont *SWFFontCollection_getFonts(SWFFontCollection collection, int *count)
+{
+	if(!collection)
+	{
+		*count = 0;
+		return NULL;
+	}
+	*count = collection->numFonts;
+	return collection->fontList;
+}
 
 /*
  * Local variables:

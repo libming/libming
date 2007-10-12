@@ -100,10 +100,19 @@ struct SWFFont_s
 	} kernTable;
 };
 
+struct SWFFontCollection_s
+{
+	SWFFont *fontList;
+	int numFonts;
+};
+
+
+void SWFFontCollection_addFont(SWFFontCollection collection, SWFFont font);
+void destroySWFFontCollection(SWFFontCollection collection);
+SWFFontCollection newSWFFontCollection();
 
 byte* SWFFont_findGlyph(SWFFont font, unsigned short c);
 
-const char* SWFFont_getName(SWFFont font);
 
 byte SWFFont_getFlags(SWFFont font);
 
