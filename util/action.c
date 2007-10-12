@@ -546,7 +546,7 @@ outputSWF_ACTION (int n, SWF_ACTION *act)
 	INDENT;
 	if( verbose )
   	    printf ("  Action: %d ", n );
-  	printf ("  %d:%s\n", action->Offset, actionName (action->ActionCode));
+  	printf ("  %lu:%s\n", action->Offset, actionName (action->ActionCode));
 	if( verbose ) {
 	    INDENT;
   	    printf ("  Offset: %lx\n", action->Offset );
