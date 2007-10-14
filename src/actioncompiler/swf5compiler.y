@@ -457,10 +457,14 @@ identifier
 	| POST	{ $$ = strdup("post"); }
 	| GET	{ $$ = strdup("get"); }
 	| LOADVARIABLES	{ $$ = strdup("loadVariables"); }
+	| LOADVARIABLESNUM { $$ = strdup("loadVariablesNum"); }
 	| LOADMOVIE	{ $$ = strdup("loadMovie"); }
+	| LOADMOVIENUM 	{ $$ = strdup("loadMovieNum"); }
 	| EXTENDS	{ $$ = strdup("extends"); }
 	| GOTOANDSTOP	{ $$ = strdup("gotoAndStop"); }
 	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }
+	| SETTARGET 	{ $$ = strdup("setTarget"); }
+	| CALLFRAME	{ $$ = strdup("callFrame"); }
 	;
 
 formals_list
