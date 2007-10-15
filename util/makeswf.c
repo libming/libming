@@ -127,7 +127,7 @@ static void embed_image(SWFMovie movie, char *f);
 static void embed_swf(SWFMovie movie, char *f);
 // return pointer to allocated memory (free it)
 static char* base_name(char* filename);
-
+extern int swf5debug, swf4debug;
 /* data */
 static char **import_specs;
 static int numimport_specs = 0;
@@ -152,6 +152,7 @@ usage (char *me, int ex)
 	fprintf(stderr, " -i <library.swf>:<sym>[,<sym>]>\n");
 	fprintf(stderr, " -h  Print this help screen\n");
 	fprintf(stderr, " -V  Print version and copyright info\n");
+	fprintf(stderr, " -d  debug parser\n");
 	exit(ex);
 }
 
@@ -208,6 +209,8 @@ main (int argc, char **argv)
 	int framerate = 12;
 	int usedfiles = 0;
 	struct stat statbuf;
+	int debug_parser = 0;	
+
 #ifdef HAVE_GETOPT_LONG
 	struct option opts[] =
 	{
@@ -222,6 +225,7 @@ main (int argc, char **argv)
 		{"import", 1, 0, 'i'},
 		{"version", 0, 0, 'V'},
 		{"help", 0, 0, 'h'},
+		{"debug", 0, 0, 'd'},
 		{0, 0, 0, 0}
 	};
 	int opts_idx;
@@ -241,7 +245,7 @@ main (int argc, char **argv)
 #define BUFSIZE 1024
 		char buf [BUFSIZE];
 
-		const char *optstring = "Vhps:r:D:I:v:c:i:o:";
+		const char *optstring = "Vhpds:r:D:I:v:c:i:o:";
 #ifdef HAVE_GETOPT_LONG
 		c = getopt_long (argc, argv, optstring, opts, &opts_idx);
 #else
@@ -301,6 +305,9 @@ main (int argc, char **argv)
 				buf[BUFSIZE-1]='\0';
 				makeswf_append_cpparg(buf);
 				break;
+			case 'd':
+				debug_parser = 1;
+				break;
 			case 'V':
 				printf("%s\n", RCSID);
 				printf("Copyright (C) 2001-2006 \"Sandro Santilli\" <strk@keybit.net>.\n");
@@ -340,6 +347,14 @@ main (int argc, char **argv)
 	printf("Output file name: %s\n", outputfile);
 	printf("Output compression level: %d\n", swfcompression);
 	printf("Output SWF version: %d\n", swfversion);
+	
+	if(debug_parser)
+	{
+		if(swfversion < 5)
+			swf4debug = 1;
+		else
+			swf5debug = 1;
+	}
 
    	/* 
 	 * Add imports
@@ -554,6 +569,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.37  2007/10/15 12:37:28  krechert
+ * add bison debugging support in makeswf
+ *
  * Revision 1.36  2007/07/06 17:53:14  krechert
  * fixed declaration after statement (C90)
  * makes ming compile on MSVC again
