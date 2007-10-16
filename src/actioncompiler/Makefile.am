@@ -43,7 +43,8 @@ EXTRA_DIST = \
 	swf5compiler.y
 
 CLEANFILES = \
-	swf4compiler.output
+	swf4compiler.output \
+	$(BUILT_SOURCES)
 
 
 lex.swf4.c: $(srcdir)/swf4compiler.flex swf4compiler.tab.h

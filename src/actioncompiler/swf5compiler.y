@@ -135,7 +135,7 @@ Buffer bf, bc;
 %type <action> anon_function_decl function_decl anycode
 %type <action> void_function_call function_call method_call
 %type <action> assign_stmt assign_stmts assign_stmts_opt
-%type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref
+%type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
 %type <lval> lvalue
 
@@ -530,7 +530,6 @@ obj_ref
 		{ if($1.obj)
 		  {
 		    $$ = $1.obj;
-
 		    if($1.ident)
 		      bufferConcat($$, $1.ident);
 		    else
@@ -546,6 +545,28 @@ obj_ref
 	| function_call
 	| method_call
 	;
+
+// this is a workaround for DELETE / DELETE2 OPs. (AS is broken!!!)
+obj_ref_for_delete_only
+	: lvalue
+		{ if($1.obj)
+		  {
+		    $$ = $1.obj;
+		    $$->hasObject = 1; 
+		    if($1.ident)
+		      bufferConcat($$, $1.ident);
+		    else
+		      bufferConcat($$, $1.memexpr);
+		  }
+		  else
+		  {
+		    $$ = $1.ident;
+		  }
+		}
+	| function_call
+	| method_call
+	;
+
 
 while_init
 	: WHILE
@@ -777,28 +798,14 @@ void_function_call
 		  bufferWriteOp($$, SWFACTION_TARGETPATH); 
 		  bufferWriteOp($$, SWFACTION_POP); }
 
-	| DELETE IDENTIFIER
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $2, strlen($2)+1);
-		  free($2);
-		  bufferWriteOp($$, SWFACTION_DELETE2);
-		  bufferWriteOp($$, SWFACTION_POP); }
-
-	| DELETE lvalue_expr '.' IDENTIFIER
+	| DELETE obj_ref_for_delete_only 
 		{ $$ = $2;
-		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		  bufferWriteString($$, $4, strlen($4)+1);
-		  free($4);
-		  bufferWriteOp($$, SWFACTION_DELETE);
-		  bufferWriteOp($$, SWFACTION_POP); }
-
-	| DELETE lvalue_expr '[' expr ']'
-		{ $$ = $2;
-		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		  bufferConcat($$, $4);
-		  // bufferWriteOp($$, SWFACTION_GETVARIABLE);
-		  bufferWriteOp($$, SWFACTION_DELETE); 
-		  bufferWriteOp($$, SWFACTION_POP); }
+		  if($2->hasObject)
+		    bufferWriteOp($$, SWFACTION_DELETE);
+		  else 
+		    bufferWriteOp($$, SWFACTION_DELETE2);
+		  bufferWriteOp($$, SWFACTION_POP); 
+		}
 
 	| TRACE '(' expr_or_obj ')'
 		{ $$ = $3;
@@ -1006,24 +1013,6 @@ function_call
 		  bufferWriteOp($$, SWFACTION_GETVARIABLE); 
 		  bufferWriteOp($$, SWFACTION_TARGETPATH); }
 
-
-	| DELETE IDENTIFIER
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $2, strlen($2)+1);
-		  free($2);
-		  bufferWriteOp($$, SWFACTION_DELETE2);  }
-
-	| DELETE lvalue_expr '.' IDENTIFIER
-		{ $$ = $2;
-		  bufferWriteString($$, $4, strlen($4)+1);
-		  free($4);
-		  bufferWriteOp($$, SWFACTION_DELETE); }
-
-	| DELETE lvalue_expr '[' expr ']'
-		{ $$ = $2;
-		  bufferConcat($$, $4);
-		  bufferWriteOp($$, SWFACTION_DELETE);  }
-
 	| EVAL '(' expr ')'
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_GETVARIABLE); }
@@ -1192,7 +1181,6 @@ lvalue_expr
 		{ if($1.obj)
 		  {
 		    $$ = $1.obj;
-
 		    if($1.ident)
 		      bufferConcat($$, $1.ident);
 		    else

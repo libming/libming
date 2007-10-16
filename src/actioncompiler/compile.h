@@ -106,6 +106,7 @@ struct _buffer
   int buffersize;
   int free;
   byte *pushloc;
+  int hasObject;  // simplify grammar (e.g. DELETE rule);
 };
 
 #define BUFFER_SIZE sizeof(struct _buffer)

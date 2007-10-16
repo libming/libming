@@ -253,6 +253,7 @@ Buffer newBuffer()
 	*(out->pos) = 0;
 	out->buffersize = out->free = BUFFER_INCREMENT;
 	out->pushloc = NULL;
+	out->hasObject = 0;
 
 	return out;
 }
