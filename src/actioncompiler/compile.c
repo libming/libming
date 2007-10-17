@@ -514,6 +514,39 @@ int bufferWriteInt(Buffer out, int i)
 	return len + 5;
 }
 
+int bufferWriteFloat(Buffer out, float f)
+{
+	int len = 0;
+	unsigned char *p = (unsigned char *)&f;
+
+	if(out->pushloc == NULL || swfVersion < 5)
+	{
+		len = 3;
+		bufferWritePushOp(out);
+		bufferWriteS16(out, 5);
+	}
+	else
+		bufferPatchPushLength(out, 5);
+
+	bufferWriteU8(out, PUSH_FLOAT);
+
+	if(byteorder == SWF_LITTLE_ENDIAN)
+	{
+		bufferWriteU8(out, p[0]);
+		bufferWriteU8(out, p[1]);
+		bufferWriteU8(out, p[2]);
+		bufferWriteU8(out, p[3]);
+	}
+	else
+	{
+		bufferWriteU8(out, p[3]);
+		bufferWriteU8(out, p[2]);
+		bufferWriteU8(out, p[1]);
+		bufferWriteU8(out, p[0]);
+	}
+	return len + 5;
+}
+
 int bufferWriteDouble(Buffer out, double d)
 {
 	int len = 0;
@@ -826,7 +859,7 @@ int bufferWriteSetProperty(Buffer out, char *string)
 
 	bufferWriteU8(out, SWFACTION_PUSH);
 	bufferWriteS16(out, 5);
-	bufferWriteU8(out, PUSH_PROPERTY);
+	bufferWriteU8(out, PUSH_FLOAT);
 	bufferWriteS16(out, 0);
 	bufferWriteS16(out, property);
 
@@ -837,7 +870,7 @@ int bufferWriteWTHITProperty(Buffer out)
 {
 	bufferWriteU8(out, SWFACTION_PUSH);
 	bufferWriteS16(out, 5);
-	bufferWriteU8(out, PUSH_PROPERTY);
+	bufferWriteU8(out, PUSH_FLOAT);
 	bufferWriteS16(out, 0);
 	bufferWriteS16(out, 0x4680);
 
@@ -886,9 +919,6 @@ int bufferWriteGetProperty(Buffer out, char *string)
 
 	return 4 + bufferWriteData(out, (byte*) property, strlen(property)+1);
 }
-
-
-
 
 /*
  * Local variables:

@@ -27,7 +27,7 @@ int yylex();
 enum
 {
   PUSH_STRING = 0,
-  PUSH_PROPERTY = 1,
+  PUSH_FLOAT = 1,
   PUSH_NULL = 2,
   PUSH_UNDEF = 3,
   PUSH_REGISTER = 4,
