@@ -83,7 +83,8 @@ outputSWFACTION_IF (SWF_ACTION *act)
       printf ("  Length: %d\n", sact->Length);
   }
   INDENT;
-  printf ("  BranchOffset: %d\n", sact->BranchOffset);
+  printf ("  BranchOffset: %d, TargetOffset: %lu\n", sact->BranchOffset, 
+		sact->Offset +  sact->Length + sact->BranchOffset + 3);
   INDENT;
   printf ("  %d Action\n", sact->numActions);
   if( verbose ) {
@@ -110,7 +111,8 @@ outputSWFACTION_JUMP (SWF_ACTION *act)
       printf ("  Length: %d\n", sact->Length);
   }
   INDENT;
-  printf ("  BranchOffset: %d\n", sact->BranchOffset);
+  printf ("  BranchOffset: %d, TargetOffset: %lu\n", sact->BranchOffset,
+		sact->Offset +  sact->Length + sact->BranchOffset + 3);
 }
 
 void
