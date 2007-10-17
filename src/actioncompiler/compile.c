@@ -864,9 +864,13 @@ const char *lookupGetProperty(char *string)
 	if(strcmp(string,"name")==0)		return "13";
 	if(strcmp(string,"droptarget")==0)	return "14";
 	if(strcmp(string,"url")==0)		return "15";
-	if(strcmp(string,"quality")==0)	return "16";
+	if(strcmp(string,"highquality")==0)	return "16";
 	if(strcmp(string,"focusrect")==0)	return "17";
 	if(strcmp(string,"soundbuftime")==0)	return "18";
+	// since SWF5
+	if(strcmp(string,"quality") == 0)	return "19";
+	if(strcmp(string,"xmouse") == 0)	return "20";
+	if(strcmp(string,"ymouse") == 0)	return "21";
 
 	SWF_error("No such property: %s\n", string);
 	return "";
@@ -882,6 +886,8 @@ int bufferWriteGetProperty(Buffer out, char *string)
 
 	return 4 + bufferWriteData(out, (byte*) property, strlen(property)+1);
 }
+
+
 
 
 /*
