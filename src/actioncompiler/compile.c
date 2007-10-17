@@ -452,6 +452,23 @@ int bufferWriteConstantString(Buffer out, char *string, int length)
 	}
 }
 
+/* allow pushing STRINGs for SWF>=5 */
+int bufferWritePushString(Buffer out, char *string, int length)
+{
+	int l, len = 0;
+	if(out->pushloc == NULL || swfVersion < 5)
+	{
+		len = 3;
+		bufferWritePushOp(out);
+		bufferWriteS16(out, length+1);
+	}
+	
+	bufferWriteU8(out, PUSH_STRING);
+	l = bufferWriteHardString(out, string, length);
+	bufferPatchPushLength(out, l + 1);	
+	return len + l + 1;
+}
+
 int bufferWriteString(Buffer out, char *string, int length)
 {
 	if(swfVersion < 5)
