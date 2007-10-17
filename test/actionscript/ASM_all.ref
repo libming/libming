@@ -69,11 +69,11 @@ Block length: 116
     107:SWFACTION_PUSH
      [000]   Constant: 1 "66"
     112:SWFACTION_JUMP
-    BranchOffset: 0
+    BranchOffset: 0, TargetOffset: 117
     117:SWFACTION_JUMP
-    BranchOffset: 1
+    BranchOffset: 1, TargetOffset: 123
     122:SWFACTION_IF
-    BranchOffset: 2
+    BranchOffset: 2, TargetOffset: 129
     1 Action
     127:SWFACTION_PUSH
      [000]   Constant: 2 "1"

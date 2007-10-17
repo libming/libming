@@ -20,7 +20,7 @@ Block length: 27
     0 Action
     42:SWFACTION_SETVARIABLE
     43:SWFACTION_JUMP
-    BranchOffset: -19
+    BranchOffset: -19, TargetOffset: 29
     48:SWFACTION_END
 
 Offset: 49 (0x0031)

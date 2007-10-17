@@ -37,16 +37,16 @@ Block length: 126
      [000]   NULL: 
     89:SWFACTION_EQUALS2
     90:SWFACTION_IF
-    BranchOffset: 18
+    BranchOffset: 18, TargetOffset: 113
     4 Action
     95:SWFACTION_PUSH
      [000]   Constant: 2 "x"
      [001]   Register: 0
     102:SWFACTION_DEFINELOCAL
     103:SWFACTION_JUMP
-    BranchOffset: -27
+    BranchOffset: -27, TargetOffset: 81
     108:SWFACTION_JUMP
-    BranchOffset: -32
+    BranchOffset: -32, TargetOffset: 81
     113:SWFACTION_PUSH
      [000]   Constant: 0 "o"
     118:SWFACTION_ENUMERATE
@@ -56,16 +56,16 @@ Block length: 126
      [000]   NULL: 
     127:SWFACTION_EQUALS2
     128:SWFACTION_IF
-    BranchOffset: 18
+    BranchOffset: 18, TargetOffset: 151
     4 Action
     133:SWFACTION_PUSH
      [000]   Constant: 4 "y"
      [001]   Register: 0
     140:SWFACTION_SETVARIABLE
     141:SWFACTION_JUMP
-    BranchOffset: -27
+    BranchOffset: -27, TargetOffset: 119
     146:SWFACTION_JUMP
-    BranchOffset: -32
+    BranchOffset: -32, TargetOffset: 119
     151:SWFACTION_END
 
 Offset: 152 (0x0098)
