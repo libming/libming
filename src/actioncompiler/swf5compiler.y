@@ -137,6 +137,7 @@ Buffer bf, bc;
 %type <action> assign_stmt assign_stmts assign_stmts_opt
 %type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
+%type <action> delete_call
 %type <lval> lvalue
 
 %type <exprlist> expr_list objexpr_list formals_list
@@ -798,14 +799,7 @@ void_function_call
 		  bufferWriteOp($$, SWFACTION_TARGETPATH); 
 		  bufferWriteOp($$, SWFACTION_POP); }
 
-	| DELETE obj_ref_for_delete_only 
-		{ $$ = $2;
-		  if($2->hasObject)
-		    bufferWriteOp($$, SWFACTION_DELETE);
-		  else 
-		    bufferWriteOp($$, SWFACTION_DELETE2);
-		  bufferWriteOp($$, SWFACTION_POP); 
-		}
+	
 
 	| TRACE '(' expr_or_obj ')'
 		{ $$ = $3;
@@ -1059,8 +1053,22 @@ function_call
 #endif
 		  $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TYPEOF); }
+	;
+
+
+/* legacy and built-in functions */
+delete_call
+	: DELETE obj_ref_for_delete_only 
+		{ $$ = $2;
+		  if($2->hasObject)
+		    bufferWriteOp($$, SWFACTION_DELETE);
+		  else 
+		    bufferWriteOp($$, SWFACTION_DELETE2);
+		  bufferWriteOp($$, SWFACTION_POP); 
+		}
 
 	;
+
 
 
 expr_list
@@ -1477,6 +1485,8 @@ primary
 	: anon_function_decl
 
 	| lvalue_expr
+	
+	| delete_call
 
 	| incdecop lvalue %prec "++"
 		{ if($2.obj)
@@ -1685,6 +1695,8 @@ assign_stmt
 
 	| void_function_call
 
+	| delete_call
+	
 	| function_call
 		{ $$ = $1;
 		  bufferWriteOp($$, SWFACTION_POP); }
