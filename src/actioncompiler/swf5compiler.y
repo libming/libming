@@ -779,29 +779,8 @@ level
 	;
 
 void_function_call
-	: identifier '(' expr_list ')'
-		{
-#ifdef DEBUG
-		  printf("void_function_call: IDENTIFIER '(' expr_list ')'\n");
-#endif
-		  $$ = $3.buffer;
-		  bufferWriteInt($$, $3.count);
-		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteOp($$, SWFACTION_CALLFUNCTION);
-		  bufferWriteOp($$, SWFACTION_POP);
-		  free($1); }
-
-	| TARGETPATH '(' IDENTIFIER ')'
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $3, strlen($3)+1);
-		  free($3);
-		  bufferWriteOp($$, SWFACTION_GETVARIABLE); 
-		  bufferWriteOp($$, SWFACTION_TARGETPATH); 
-		  bufferWriteOp($$, SWFACTION_POP); }
-
 	
-
-	| TRACE '(' expr_or_obj ')'
+	: TRACE '(' expr_or_obj ')'
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TRACE); }
 
