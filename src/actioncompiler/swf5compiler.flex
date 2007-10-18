@@ -200,6 +200,8 @@ loadVariablesNum	{ count();	return LOADVARIABLESNUM;	}
 loadMovieNum		{ count();	return LOADMOVIENUM;	}
 duplicateMovieClip	{ count();	return DUPLICATEMOVIECLIP; }
 removeMovieClip		{ count();	return REMOVEMOVIECLIP; }
+startDrag		{ count();	return STARTDRAG; }
+stopDrag		{ count(); 	return STOPDRAG; }
 
   /* assembler ops */
 <asm>{
