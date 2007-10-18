@@ -1,0 +1,41 @@
+File version: 6
+File size: 95
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 65
+
+ 9 Actions
+    26:SWFACTION_CONSTANTPOOL
+     [000] target
+     [001] 0
+     [002] myObject
+     [003] startDrag
+    59:SWFACTION_PUSH
+     [000]   Constant: 1 "0"
+     [001]   Integer: 1
+     [002]   Constant: 0 "target"
+    71:SWFACTION_STARTDRAG
+    72:SWFACTION_PUSH
+     [000]   Integer: 0
+     [001]   Constant: 2 "myObject"
+    82:SWFACTION_GETVARIABLE
+    83:SWFACTION_PUSH
+     [000]   Constant: 3 "startDrag"
+    88:SWFACTION_CALLMETHOD
+    89:SWFACTION_POP
+    90:SWFACTION_END
+
+Offset: 91 (0x005b)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 93 (0x005d)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

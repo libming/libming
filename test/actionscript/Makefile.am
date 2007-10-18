@@ -23,7 +23,8 @@ AS_TESTS = \
 	newline_crlf.as	\
 	TryCatch.as	\
 	forin.as	\
-	legacy_functions.as 
+	legacy_functions.as \
+	drag.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -43,6 +44,7 @@ EXTRA_DIST = 		\
 	TryCatch.ref \
 	forin.ref \
 	legacy_functions.ref \
+	drag.as		\
 	$(AS_TESTS)
 
 CLEANFILES = *.pp *.swf
