@@ -16,7 +16,8 @@ C_PROGS =		\
 	test03		\
 	test04		\
 	test05		\
-	test06
+	test06		\
+	test07
 
 CXX_PROGS =		\
 	test01-cxx	\
@@ -24,7 +25,8 @@ CXX_PROGS =		\
 	test03-cxx	\
 	test04-cxx	\
 	test05-cxx	\
-	test06-cxx
+	test06-cxx	\
+	test07-cxx
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
@@ -53,6 +55,10 @@ EXTRA_DIST = 		\
 	test06.php	\
 	test06.pl	\
 	test06.ref	\
+	test07.py	\
+	test07.php	\
+	test07.pl	\
+	test07.ref	\
 	TestList
 
 check_PROGRAMS = \
@@ -64,6 +70,7 @@ test03_cxx_SOURCES = test03-cxx.C
 test04_cxx_SOURCES = test04-cxx.C
 test05_cxx_SOURCES = test05-cxx.C
 test06_cxx_SOURCES = test06-cxx.C
+test07_cxx_SOURCES = test07-cxx.C
 
 CLEANFILES = dotests test0*.swf php.ini
 
