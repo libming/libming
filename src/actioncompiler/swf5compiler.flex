@@ -190,7 +190,7 @@ play			{ count();	return PLAY;		}
 stop			{ count();	return STOP;		}
 toggleQuality		{ count();	return TOGGLEQUALITY;	}
 stopSounds		{ count();	return STOPSOUNDS;	}
-callFrame		{ count();	return CALLFRAME;	}
+call			{ count();	return CALLFRAME;	}
 gotoAndPlay		{ count();	return GOTOANDPLAY;	}
 gotoAndStop		{ count();	return GOTOANDSTOP;	}
 setTarget		{ count();	return SETTARGET;	}
