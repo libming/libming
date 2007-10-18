@@ -710,13 +710,13 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	SWFOutput_writeUInt16(header, (int)floor(movie->rate*256));
 	SWFOutput_writeUInt16(header, movie->nFrames);
 
-	if(movie->backgroundBlock)
-		writeSWFBlockToMethod(movie->backgroundBlock, SWFOutputMethod, header);
-	
-
 	/* SWF >= 8: first block _must_ be SWF_FILEATTRIBUTES */ 
 	if(movie->fattrs)
 		writeSWFBlockToMethod((SWFBlock)movie->fattrs, SWFOutputMethod, header);
+
+	if(movie->backgroundBlock)
+		writeSWFBlockToMethod(movie->backgroundBlock, SWFOutputMethod, header);
+	
 	if(movie->limits)
 		writeSWFBlockToMethod((SWFBlock)movie->limits, SWFOutputMethod, header);	
 	SWFOutput_byteAlign(header);
