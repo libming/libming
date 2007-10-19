@@ -565,7 +565,9 @@ obj_ref_for_delete_only
 		  }
 		}
 	| function_call
+	| void_function_call
 	| method_call
+	| '(' obj_ref_for_delete_only ')' { $$ = $2; }
 	;
 
 
