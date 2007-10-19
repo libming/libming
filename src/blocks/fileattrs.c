@@ -88,7 +88,7 @@ newSWFFileAttributes()
         BLOCK(fattrs)->dtor = (destroySWFBlockMethod) destroySWFFileAttributes;
 	
 	fattrs->hasMetadata = 0;
-	fattrs->useNetwork = 1;
+	fattrs->useNetwork = 0;
         return fattrs;
 }
 
