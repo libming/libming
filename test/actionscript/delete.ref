@@ -1,14 +1,14 @@
 File version: 6
-File size: 185
+File size: 200
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 12 (SWF_DOACTION)
-Block length: 155
+Block length: 170
 
- 36 Actions
+ 43 Actions
     26:SWFACTION_CONSTANTPOOL
      [000] obj
      [001] field
@@ -69,14 +69,23 @@ Block length: 155
     177:SWFACTION_DELETE2
     178:SWFACTION_POP
     179:SWFACTION_DEFINELOCAL
-    180:SWFACTION_END
+    180:SWFACTION_PUSH
+     [000]   Constant: 0 "obj"
+    185:SWFACTION_GETVARIABLE
+    186:SWFACTION_PUSH
+     [000]   Constant: 7 "x"
+    191:SWFACTION_GETMEMBER
+    192:SWFACTION_TRACE
+    193:SWFACTION_DELETE2
+    194:SWFACTION_POP
+    195:SWFACTION_END
 
-Offset: 181 (0x00b5)
+Offset: 196 (0x00c4)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 183 (0x00b7)
+Offset: 198 (0x00c6)
 Block type: 0 (SWF_END)
 Block length: 0
 
