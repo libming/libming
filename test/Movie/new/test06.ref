@@ -8,7 +8,7 @@ Offset: 20 (0x0014)
 Block type: 69 (SWF_FILEATTRIBUTES)
 Block length: 4
 
- FileAttributes: HasMetaData 0, UseNetwork 1, HasAS3 0
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
 
 Offset: 26 (0x001a)
 Block type: 1 (SWF_SHOWFRAME)
