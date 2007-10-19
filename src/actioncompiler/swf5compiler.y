@@ -531,6 +531,7 @@ obj_ref
 		{ if($1.obj)
 		  {
 		    $$ = $1.obj;
+		    $$->hasObject = 1;
 		    if($1.ident)
 		      bufferConcat($$, $1.ident);
 		    else
@@ -658,7 +659,10 @@ iter_stmt
 		  int tmp;
 
 		  $$ = $4;
-		  bufferWriteOp($$, SWFACTION_ENUMERATE);	
+		  if($4->hasObject)
+		  	bufferWriteOp($$, SWFACTION_ENUMERATE2);
+		  else
+		  	bufferWriteOp($$, SWFACTION_ENUMERATE);	
 
 		  b2 = newBuffer();
 		  bufferWriteSetRegister(b2, 0);
@@ -692,7 +696,10 @@ iter_stmt
 		  int tmp;
 
 		  $$ = $5;
-		  bufferWriteOp($$, SWFACTION_ENUMERATE);	
+		  if($5->hasObject)
+		  	bufferWriteOp($$, SWFACTION_ENUMERATE2);	
+		  else
+		  	bufferWriteOp($$, SWFACTION_ENUMERATE);	
 
 		  b2 = newBuffer();
 		  bufferWriteSetRegister(b2, 0);
