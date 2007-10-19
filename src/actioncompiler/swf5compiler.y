@@ -465,7 +465,7 @@ identifier
 	| GOTOANDSTOP	{ $$ = strdup("gotoAndStop"); }
 	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }
 	| SETTARGET 	{ $$ = strdup("setTarget"); }
-	| CALLFRAME	{ $$ = strdup("callFrame"); }
+	| CALLFRAME		{ $$ = strdup("call"); }
 	;
 
 formals_list
