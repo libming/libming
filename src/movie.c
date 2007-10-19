@@ -890,8 +890,15 @@ SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name)
 
 
 /* 
- * sets SWF network permission
- * if flag is set to 0, a localy loaded movie will be able to access the network
+ * sets SWF network / fileaccess policy
+ * if the flag is set to 0 a localy loaded movie will be unable to access the network 
+ * but is allowed to access local files
+ *
+ * if the flag ist set to 1 a localy loaded movie will be unable to access local files
+ * but is allowed to access the network
+ *
+ * see also http://www.adobe.com/devnet/flash/articles/fplayer8_security.html 
+ * 
  * For SWF >= 8: default is 0
  */
 void 
