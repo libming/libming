@@ -7,6 +7,8 @@
 	* Complete Bitmap fillstyles
 	* Font fixes
 	* Actioncompiler fixes
+	* Fixed tog order issues
+	* Ming defaults now to local-with-filesystem sandbox for SWF>=8
 
 0.4.0.beta5 - 2007-09-18
 
