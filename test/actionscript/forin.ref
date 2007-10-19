@@ -1,79 +1,102 @@
 File version: 6
-File size: 156
+File size: 204
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 12 (SWF_DOACTION)
-Block length: 126
+Block length: 174
 
- 21 Actions
+ 30 Actions
     26:SWFACTION_CONSTANTPOOL
      [000] o
      [001] Object
      [002] x
      [003] hi
      [004] y
-    47:SWFACTION_PUSH
+     [005] foo
+     [006] bar
+    55:SWFACTION_PUSH
      [000]   Constant: 0 "o"
      [001]   Integer: 0
      [002]   Constant: 1 "Object"
-    59:SWFACTION_NEWOBJECT
-    60:SWFACTION_SETVARIABLE
-    61:SWFACTION_PUSH
+    67:SWFACTION_NEWOBJECT
+    68:SWFACTION_SETVARIABLE
+    69:SWFACTION_PUSH
      [000]   Constant: 0 "o"
-    66:SWFACTION_GETVARIABLE
-    67:SWFACTION_PUSH
+    74:SWFACTION_GETVARIABLE
+    75:SWFACTION_PUSH
      [000]   Constant: 2 "x"
      [001]   Constant: 3 "hi"
-    74:SWFACTION_SETMEMBER
-    75:SWFACTION_PUSH
+    82:SWFACTION_SETMEMBER
+    83:SWFACTION_PUSH
      [000]   Constant: 0 "o"
-    80:SWFACTION_ENUMERATE
-    81:SWFACTION_STOREREGISTER
+    88:SWFACTION_ENUMERATE
+    89:SWFACTION_STOREREGISTER
     Register: 0
-    85:SWFACTION_PUSH
+    93:SWFACTION_PUSH
      [000]   NULL: 
-    89:SWFACTION_EQUALS2
-    90:SWFACTION_IF
-    BranchOffset: 18, TargetOffset: 113
+    97:SWFACTION_EQUALS2
+    98:SWFACTION_IF
+    BranchOffset: 18, TargetOffset: 121
     4 Action
-    95:SWFACTION_PUSH
+    103:SWFACTION_PUSH
      [000]   Constant: 2 "x"
      [001]   Register: 0
-    102:SWFACTION_DEFINELOCAL
-    103:SWFACTION_JUMP
-    BranchOffset: -27, TargetOffset: 81
-    108:SWFACTION_JUMP
-    BranchOffset: -32, TargetOffset: 81
-    113:SWFACTION_PUSH
+    110:SWFACTION_DEFINELOCAL
+    111:SWFACTION_JUMP
+    BranchOffset: -27, TargetOffset: 89
+    116:SWFACTION_JUMP
+    BranchOffset: -32, TargetOffset: 89
+    121:SWFACTION_PUSH
      [000]   Constant: 0 "o"
-    118:SWFACTION_ENUMERATE
-    119:SWFACTION_STOREREGISTER
+    126:SWFACTION_ENUMERATE
+    127:SWFACTION_STOREREGISTER
     Register: 0
-    123:SWFACTION_PUSH
+    131:SWFACTION_PUSH
      [000]   NULL: 
-    127:SWFACTION_EQUALS2
-    128:SWFACTION_IF
-    BranchOffset: 18, TargetOffset: 151
+    135:SWFACTION_EQUALS2
+    136:SWFACTION_IF
+    BranchOffset: 18, TargetOffset: 159
     4 Action
-    133:SWFACTION_PUSH
+    141:SWFACTION_PUSH
      [000]   Constant: 4 "y"
      [001]   Register: 0
-    140:SWFACTION_SETVARIABLE
-    141:SWFACTION_JUMP
-    BranchOffset: -27, TargetOffset: 119
-    146:SWFACTION_JUMP
-    BranchOffset: -32, TargetOffset: 119
-    151:SWFACTION_END
+    148:SWFACTION_SETVARIABLE
+    149:SWFACTION_JUMP
+    BranchOffset: -27, TargetOffset: 127
+    154:SWFACTION_JUMP
+    BranchOffset: -32, TargetOffset: 127
+    159:SWFACTION_PUSH
+     [000]   Constant: 5 "foo"
+    164:SWFACTION_GETVARIABLE
+    165:SWFACTION_PUSH
+     [000]   Constant: 6 "bar"
+    170:SWFACTION_GETMEMBER
+    171:SWFACTION_ENUMERATE2
+    172:SWFACTION_STOREREGISTER
+    Register: 0
+    176:SWFACTION_PUSH
+     [000]   NULL: 
+    180:SWFACTION_EQUALS2
+    181:SWFACTION_IF
+    BranchOffset: 13, TargetOffset: 199
+    3 Action
+    186:SWFACTION_PUSH
+     [000]   Constant: 2 "x"
+     [001]   Register: 0
+    193:SWFACTION_SETVARIABLE
+    194:SWFACTION_JUMP
+    BranchOffset: -27, TargetOffset: 172
+    199:SWFACTION_END
 
-Offset: 152 (0x0098)
+Offset: 200 (0x00c8)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 154 (0x009a)
+Offset: 202 (0x00ca)
 Block type: 0 (SWF_END)
 Block length: 0
 

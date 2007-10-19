@@ -11,3 +11,9 @@ for (var x in o) {
 for (y in o) {
   continue;
 };
+
+// ENUMERATE2
+for(x in foo["bar"])
+{
+	;
+}
