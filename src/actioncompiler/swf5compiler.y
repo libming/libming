@@ -1045,7 +1045,6 @@ delete_call
 		    bufferWriteOp($$, SWFACTION_DELETE);
 		  else 
 		    bufferWriteOp($$, SWFACTION_DELETE2);
-		  bufferWriteOp($$, SWFACTION_POP); 
 		}
 
 	;
@@ -1677,6 +1676,8 @@ assign_stmt
 	| void_function_call
 
 	| delete_call
+		{ $$ = $1;
+		  bufferWriteOp($$, SWFACTION_POP); }
 	
 	| function_call
 		{ $$ = $1;
