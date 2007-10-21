@@ -197,7 +197,7 @@ outputSWFACTION_DEFINEFUNCTION (SWF_ACTION *act)
 void
 outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
 {
-  int i;
+  int i, registerCount = 1;
   OUT_BEGIN(SWF_ACTIONDEFINEFUNCTION2);
 
   if( verbose ) {
@@ -207,6 +207,22 @@ outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
   INDENT;
   printf ("  Name: %s\n", sact->FunctionName);
   INDENT;
+  printf ("  RegisterCount: %d\n", sact->RegisterCount);
+  INDENT;
+  printf ("  Preloaded Registers:\n");
+  if(sact->PreloadThisFlag)
+	printf("     Register %i: this\n", registerCount++);
+  if(sact->PreloadArgumentsFlag)
+ 	printf("     Register %i: arguments\n", registerCount++);
+  if(sact->PreloadSuperFlag)
+ 	printf("     Register %i: super\n", registerCount++);
+  if(sact->PreloadRootFlag)
+ 	printf("     Register %i: _root\n", registerCount++); 
+  if(sact->PreloadParentFlag)
+ 	printf("     Register %i: _parent\n", registerCount++);
+  if(sact->PreloadGlobalFlag)
+ 	printf("     Register %i: _global\n", registerCount++);
+  INDENT;
   printf ("  NumParams: %d\n", sact->NumParams);
   for(i=0;i<sact->NumParams;i++)
   {
@@ -215,6 +231,12 @@ outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
 			sact->Params[i].Register,
 			sact->Params[i].ParamName );
   }
+  INDENT;
+  printf ("  Flags: \n");
+  INDENT;
+  printf ("     Suppress: super %d, arguments %d, this %d\n", 
+		sact->SuppressSuperFlag, sact->SuppressArgumentsFlag, 
+		sact->SuppressThisFlag);
   INDENT;
   printf ("  CodeSize: %d\n", sact->CodeSize);
   INDENT;
