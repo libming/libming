@@ -443,7 +443,7 @@ SWFText newSWFText(void);
 SWFText newSWFText2(void);
 void destroySWFText(SWFText text);
 
-void SWFText_setFont(SWFText text, void* font);
+void SWFText_setFont(SWFText text, SWFFont font);
 void SWFText_setHeight(SWFText text, float height);
 void SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a);
 

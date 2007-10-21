@@ -1060,8 +1060,8 @@ class SWFText : public SWFCharacter
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->text; }
 
-  void setFont(SWFBlock *font)
-    { SWFText_setFont(this->text, font->getBlock()); }
+  void setFont(SWFFont *font)
+    { SWFText_setFont(this->text, font->font); }
 
   void setHeight(float height)
     { SWFText_setHeight(this->text, height); }

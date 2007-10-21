@@ -439,7 +439,7 @@ SWFText_getScaledLeading(SWFText text)
 
 
 void 
-SWFText_setFont(SWFText text, void* font)
+SWFText_setFont(SWFText text, SWFFont font)
 {
 	SWFTextRecord textRecord = text->currentRecord;
 
@@ -447,15 +447,7 @@ SWFText_setFont(SWFText text, void* font)
 		textRecord = SWFText_addTextRecord(text);
 
 	textRecord->flags |= SWF_TEXT_HAS_FONT;
-
-	/* XXX */
-	textRecord->isBrowserFont = (BLOCK(font)->type == SWF_DEFINEEDITTEXT);
-
-	if ( textRecord->isBrowserFont )
-		SWF_error("cannot use browser font for SWFText");
-//		textRecord->font.browserFont = (SWFBrowserFont)font;
-	else
-		textRecord->font.font = (SWFFont)font;
+	textRecord->font.font = font;
 }
 
 
