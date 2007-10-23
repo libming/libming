@@ -1,11 +1,11 @@
-AC_INIT(ming, 0.4.0.beta5)
+AC_INIT(ming, 0.4.0.beta6)
 
 dnl -- Release version 
 dnl To avoid colation problems, the 0.4 release shall be 0.4.1
 
 MAJOR_VERSION=0
 MINOR_VERSION=4
-MICRO_VERSION=0.beta5
+MICRO_VERSION=0.beta6
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
