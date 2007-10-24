@@ -122,10 +122,13 @@ vasprintf(char **ret, const char *format, va_list ap)
 
 /* prototypes */
 static void add_import_spec(char *spec);
+static void add_init_action(char *file, int frameno);
 static void add_init_action_spec(char *spec);
+static void compile_init_actions(int frameno);
 static int add_imports(void);
 static void embed_image(SWFMovie movie, char *f);
 static void embed_swf(SWFMovie movie, char *f);
+static void print_init_actions(int frameno, FILE* stream);
 // return pointer to allocated memory (free it)
 static char* base_name(char* filename);
 extern int swf5debug, swf4debug;
@@ -134,8 +137,16 @@ static char **import_specs;
 static int numimport_specs = 0;
 static int swfversion = DEFSWFVERSION;
 static const char *RCSID = "$Id$";
-char *class_file = NULL;
-SWFMovie mo;
+static SWFMovie mo;
+char *outputfile="out.swf";
+
+typedef struct {
+	char* file;
+	int frameno;
+} init_action;
+static init_action* init_actions = NULL;
+static int num_init_actions = 0;
+static int max_init_action_frame = 0;
 
 void
 usage (char *me, int ex)
@@ -205,7 +216,6 @@ FileType getFileType(char* filename)
 int
 main (int argc, char **argv)
 {
-	char *outputfile="out.swf";
 	int width=640, height=480;    /* default stage size */
 	int i;
 	int swfcompression = DEFSWFCOMPRESSION;
@@ -362,17 +372,6 @@ main (int argc, char **argv)
 			swf5debug = 1;
 	}
 	
-	if(class_file)
-	{
-		SWFAction action;
-		char ppfile[PATH_MAX];
-		SWFMovieClip clip = newSWFMovieClip();
-		sprintf(ppfile, "%s.class.pp", outputfile);
-		action = makeswf_compile_source(class_file, ppfile);
-		SWFMovieClip_addInitAction(clip, action);
-		SWFMovie_add(mo, clip);	
-	}
-
    	/* 
 	 * Add imports
 	 */
@@ -385,6 +384,8 @@ main (int argc, char **argv)
 		char ppfile[PATH_MAX];
 
 		FileType type = getFileType(filename);
+
+		compile_init_actions(i);
 
 		if ( type == SWF )
 		{
@@ -410,6 +411,15 @@ main (int argc, char **argv)
 		usedfiles++;
 		SWFMovie_nextFrame(mo);
 
+	}
+
+	if ( i <= max_init_action_frame )
+	{
+		fprintf(stderr, "WARNING: following init actions for frames > %d have been discarded:\n", i-1);
+		for (;i<=max_init_action_frame; ++i)
+		{
+			print_init_actions(i, stderr);
+		}
 	}
 
 	if ( ! usedfiles )
@@ -444,6 +454,71 @@ add_import_spec(char *spec)
 }
 
 static void
+add_init_action(char* file, int frameno)
+{
+	printf("Init action for frame %d in file %s\n", frameno, file);
+
+	++num_init_actions;
+	init_actions = (init_action*)realloc(init_actions, num_init_actions*sizeof(init_action));
+	init_action* ac = &(init_actions[num_init_actions-1]);
+
+	ac->file = file;
+	ac->frameno = frameno;
+	
+	if ( frameno > max_init_action_frame ) max_init_action_frame = frameno;
+}
+
+static void
+print_init_actions(int frameno, FILE* stream)
+{
+	int i;
+
+	for (i=0; i<num_init_actions; ++i)
+	{
+		init_action* ia = &(init_actions[i]);
+		if ( ia->frameno != frameno ) continue;
+		fprintf(stream, " %s:%d\n", ia->file, ia->frameno);
+	}
+
+}
+
+static void
+compile_init_actions(int frameno)
+{
+	int i;
+	int found=0;
+	SWFMovieClip clip = NULL;
+	SWFAction action;
+	char ppfile[PATH_MAX];
+
+	for (i=0; i<num_init_actions; ++i)
+	{
+		init_action* ia = &(init_actions[i]);
+		char* file;
+
+		if ( ia->frameno != frameno ) continue;
+		file = ia->file;
+
+		if ( ! found ) clip = newSWFMovieClip();
+
+
+		sprintf(ppfile, "%s.frame%d.init%d.pp", outputfile, frameno, found);
+		action = makeswf_compile_source(file, ppfile);
+
+
+		printf("Adding %s to frame %d init actions... ",
+					file, frameno);
+		SWFMovieClip_addInitAction(clip, action);
+		printf("done.\n"); 
+
+		++found;
+	}
+
+	/* Do we really need to add the clip in order for init actions to work ? */
+	if ( clip ) SWFMovie_add(mo, clip);	
+}
+
+static void
 add_init_action_spec(char *spec)
 {
 	struct stat statbuf;
@@ -465,23 +540,14 @@ add_init_action_spec(char *spec)
 		exit(EXIT_FAILURE);
 	}
 
-	/* TODO: check valid frame spec here */
-	if ( frameno != 0 )
+	/* check valid frame spec here */
+	if ( frameno < 0 )
 	{
-		fprintf(stderr, "ERROR: adding init actions for frame %d unsupported (can only add to first frame (0))\n", frameno);
-		frameno = 0;
+		fprintf(stderr, "ERROR: invalid frame number %d for init actions\n", frameno);
 		exit(EXIT_FAILURE);
 	}
 
-	if ( class_file != NULL )
-	{
-		fprintf(stderr, "ERROR: specifying multiple init actions is currently unsupported\n");
-		exit(EXIT_FAILURE);
-	}
-
-	printf("Init action for frame %d in file %s\n", frameno, file);
-
-	class_file = spec;
+	add_init_action(file, frameno);
 }
 
 static int
@@ -627,6 +693,10 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.41  2007/10/24 08:30:43  strk
+ * Add support for multiple init actions in same and/or different frames.
+ * Still unsupported adding init actions for frames for which we specify no content.
+ *
  * Revision 1.40  2007/10/24 07:49:55  strk
  * Exit with an error if multiple init actions are attempted to be added (still unsupported)
  *
