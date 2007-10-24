@@ -122,6 +122,7 @@ vasprintf(char **ret, const char *format, va_list ap)
 
 /* prototypes */
 static void add_import_spec(char *spec);
+static void add_init_action_spec(char *spec);
 static int add_imports(void);
 static void embed_image(SWFMovie movie, char *f);
 static void embed_swf(SWFMovie movie, char *f);
@@ -133,6 +134,7 @@ static char **import_specs;
 static int numimport_specs = 0;
 static int swfversion = DEFSWFVERSION;
 static const char *RCSID = "$Id$";
+char *class_file = NULL;
 SWFMovie mo;
 
 void
@@ -153,7 +155,7 @@ usage (char *me, int ex)
 	fprintf(stderr, " -h  Print this help screen\n");
 	fprintf(stderr, " -V  Print version and copyright info\n");
 	fprintf(stderr, " -d  debug parser\n");
-	fprintf(stderr, " -C  <AS_2.0_class_file>\n");
+	fprintf(stderr, " -a  <AS_file>[:<frameno>] - add init action for frame <frameno> (0-based, 0 if omitted)\n");
 	exit(ex);
 }
 
@@ -211,7 +213,6 @@ main (int argc, char **argv)
 	int usedfiles = 0;
 	struct stat statbuf;
 	int debug_parser = 0;	
-	char *class_file = NULL;
 #ifdef HAVE_GETOPT_LONG
 	struct option opts[] =
 	{
@@ -227,7 +228,7 @@ main (int argc, char **argv)
 		{"version", 0, 0, 'V'},
 		{"help", 0, 0, 'h'},
 		{"debug", 0, 0, 'd'},
-		{"class", 1, 0, 'C'},
+		{"init-action", 1, 0, 'a'},
 		{0, 0, 0, 0}
 	};
 	int opts_idx;
@@ -247,7 +248,7 @@ main (int argc, char **argv)
 #define BUFSIZE 1024
 		char buf [BUFSIZE];
 
-		const char *optstring = "Vhpds:r:D:I:v:c:i:o:C:";
+		const char *optstring = "Vhpds:r:D:I:v:c:i:o:a:";
 #ifdef HAVE_GETOPT_LONG
 		c = getopt_long (argc, argv, optstring, opts, &opts_idx);
 #else
@@ -310,8 +311,8 @@ main (int argc, char **argv)
 			case 'd':
 				debug_parser = 1;
 				break;
-			case 'C':
-				class_file = optarg;
+			case 'a':
+				add_init_action_spec(optarg);
 				break;
 			case 'V':
 				printf("%s\n", RCSID);
@@ -440,6 +441,41 @@ add_import_spec(char *spec)
 	}
 	import_specs[numimport_specs] = spec;
 	numimport_specs++;
+}
+
+static void
+add_init_action_spec(char *spec)
+{
+	struct stat statbuf;
+
+	int frameno = 0;
+	char *file = strtok(spec, ":");
+	char *framespec = strtok(NULL, ",");
+	if ( framespec ) frameno = atoi(framespec);
+
+	if ( -1 == stat(file, &statbuf) )
+	{
+		perror(file); 
+		exit(EXIT_FAILURE);
+	}
+
+	if ( ! S_ISREG(statbuf.st_mode) )
+	{
+		fprintf(stderr, "%s: is not a regular file\n", file);
+		exit(EXIT_FAILURE);
+	}
+
+	/* TODO: check valid frame spec here */
+	if ( frameno != 0 )
+	{
+		fprintf(stderr, "WARNING: adding init actions for frame %d unsupported (can only add to first frame (0))\n", frameno);
+		frameno = 0;
+		exit(EXIT_FAILURE);
+	}
+
+	printf("Init action for frame %d in file %s\n", frameno, file);
+
+	class_file = spec;
 }
 
 static int
@@ -585,6 +621,10 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.39  2007/10/24 07:46:30  strk
+ * Change -C flag to -a (--init-action) and support specifying a target frame number.
+ * Only frame0 is currently supported.
+ *
  * Revision 1.38  2007/10/18 09:17:59  krechert
  * add class definition support.
  * Class definitions are initialized by InitAction tags. These tags need a dummy movieclip they depend on.
