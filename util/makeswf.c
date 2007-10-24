@@ -499,8 +499,7 @@ compile_init_actions(int frameno)
 		if ( ia->frameno != frameno ) continue;
 		file = ia->file;
 
-		if ( ! found ) clip = newSWFMovieClip();
-
+		clip = newSWFMovieClip();
 
 		sprintf(ppfile, "%s.frame%d.init%d.pp", outputfile, frameno, found);
 		action = makeswf_compile_source(file, ppfile);
@@ -509,13 +508,12 @@ compile_init_actions(int frameno)
 		printf("Adding %s to frame %d init actions... ",
 					file, frameno);
 		SWFMovieClip_addInitAction(clip, action);
+	 	SWFMovie_add(mo, clip);	
 		printf("done.\n"); 
 
 		++found;
 	}
 
-	/* Do we really need to add the clip in order for init actions to work ? */
-	if ( clip ) SWFMovie_add(mo, clip);	
 }
 
 static void
@@ -693,6 +691,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.42  2007/10/24 08:38:47  strk
+ * Use a separate character definition for each init action block
+ *
  * Revision 1.41  2007/10/24 08:30:43  strk
  * Add support for multiple init actions in same and/or different frames.
  * Still unsupported adding init actions for frames for which we specify no content.
