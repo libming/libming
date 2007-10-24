@@ -4197,6 +4197,22 @@ PHP_METHOD(swftextfield, addString)
 }
 /* }}} */
 
+/* {{{ proto void swftextfield::addUTF8String(string str)
+   Adds the given UTF8 string to this textfield */
+PHP_METHOD(swftextfield, addUTF8String)
+{
+	zval **string;
+	SWFTextField field = getTextField(getThis() TSRMLS_CC);
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &string) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string_ex(string);
+	SWFTextField_addUTF8String(field, Z_STRVAL_PP(string));
+}
+/* }}} */
+
+
 #ifdef HAVE_NEW_MING
 /* {{{ proto void swftextfield::setPadding(float padding)
    Sets the padding of this textfield */
@@ -4246,6 +4262,7 @@ static zend_function_entry swftextfield_functions[] = {
 	PHP_ME(swftextfield, setColor,        NULL, 0)
 	PHP_ME(swftextfield, setName,         NULL, 0)
 	PHP_ME(swftextfield, addString,       NULL, 0)
+	PHP_ME(swftextfield, addUTF8String,   NULL, 0)
 #ifdef HAVE_NEW_MING
 	PHP_ME(swftextfield, setPadding,      NULL, 0)
 	PHP_ME(swftextfield, addChars,        NULL, 0)
