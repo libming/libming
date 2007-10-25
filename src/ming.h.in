@@ -75,6 +75,7 @@ typedef struct SWFSound_s *SWFSound;
 typedef struct SWFSoundInstance_s *SWFSoundInstance;
 typedef struct SWFCXform_s *SWFCXform;
 typedef struct SWFAction_s *SWFAction;
+typedef struct SWFInitAction_s *SWFInitAction;
 typedef struct SWFButton_s *SWFButton;
 typedef struct SWFSprite_s *SWFSprite;
 typedef struct SWFPosition_s *SWFPosition;
@@ -110,6 +111,7 @@ union SWFMovieBlockType_u {
 	SWFVideoStream		stream;
 	SWFPrebuiltClip		prebuild;
 	SWFBinaryData		binary;
+	SWFInitAction		init;
 };
 
 typedef union SWFMovieBlockType_u SWFMovieBlockType;
@@ -619,6 +621,11 @@ SWFAction newSWFAction_fromFile(const char *filename);
 SWFAction compileSWFActionCode(const char *script) __deprecated;
 void destroySWFAction(SWFAction action);
 byte *SWFAction_getByteCode(SWFAction action, size_t *length);
+
+SWFInitAction newSWFInitAction(SWFAction action);
+/* use with care */
+SWFInitAction newSWFInitAction_withId(SWFAction action, int id);
+
 
 
 /***** SWFButton *****/

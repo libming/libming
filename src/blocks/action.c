@@ -29,6 +29,7 @@
 #include "method.h"
 #include "libming.h"
 #include "character.h"
+#include "movieclip.h"
 #include "actioncompiler/compile.h"
 #include "actiontypes.h"
 
@@ -55,6 +56,7 @@ struct SWFInitAction_s
 	struct SWFBlock_s block;
 	int spriteId;
 	SWFAction action; 
+	SWFMovieClip clip;
 };
 
 static char *readActionFile(FILE *file)
@@ -228,6 +230,8 @@ void destroySWFInitAction(SWFInitAction init)
 	if(!init)
 		return;
 
+	if(init->clip)
+		destroySWFMovieClip(init->clip);
 	destroySWFAction(init->action);
 	free(init);
 }
@@ -270,15 +274,61 @@ SWFAction newSWFAction_fromFile(const char *filename)
 	return action;
 }
 
-SWFInitAction newSWFInitAction(SWFMovieClip clip, SWFAction action)
+SWFMovieClip SWFInitAction_getMovieClip(SWFInitAction action)
+{
+	return action->clip;
+}
+
+/*
+ * create a InitAction block with a given sprite's character id
+ *
+ * This function creates a InitAction block with a given sprite's character id.
+ * Use with care!
+ */
+SWFInitAction newSWFInitAction_withId(SWFAction action, int id /* mc character id */)
 {
 	SWFInitAction init = (SWFInitAction)malloc(sizeof(struct SWFInitAction_s));
 	SWFBlockInit(BLOCK(init));
-        BLOCK(init)->writeBlock = writeSWFInitActionToMethod;
-        BLOCK(init)->complete = completeSWFInitAction;
-        BLOCK(init)->dtor = (destroySWFBlockMethod) destroySWFInitAction;
+	BLOCK(init)->writeBlock = writeSWFInitActionToMethod;
+	BLOCK(init)->complete = completeSWFInitAction;
+	BLOCK(init)->dtor = (destroySWFBlockMethod) destroySWFInitAction;
+	BLOCK(init)->type = SWF_INITACTION;
+	init->clip = NULL;	// use external clip
+	init->spriteId = id;	
+	init->action = action;
+	return init;
+}
+
+/*
+ * create a InitAction block
+ *
+ * This function creates a InitAction block and defines an empty sprite/mc
+ * which is not placed. This functions is usefull for defining classes.
+ */
+SWFInitAction newSWFInitAction(SWFAction action)
+{
+	SWFInitAction init = (SWFInitAction)malloc(sizeof(struct SWFInitAction_s));
+	SWFBlockInit(BLOCK(init));
+	BLOCK(init)->writeBlock = writeSWFInitActionToMethod;
+	BLOCK(init)->complete = completeSWFInitAction;
+	BLOCK(init)->dtor = (destroySWFBlockMethod) destroySWFInitAction;
+	BLOCK(init)->type = SWF_INITACTION;
+	init->clip = newSWFMovieClip();
+	init->spriteId = CHARACTERID(init->clip);
+	init->action = action;
+	return init;
+}
+
+SWFInitAction newSWFInitAction_MovieClip(SWFMovieClip clip, SWFAction action)
+{
+	SWFInitAction init = (SWFInitAction)malloc(sizeof(struct SWFInitAction_s));
+	SWFBlockInit(BLOCK(init));
+	BLOCK(init)->writeBlock = writeSWFInitActionToMethod;
+	BLOCK(init)->complete = completeSWFInitAction;
+	BLOCK(init)->dtor = (destroySWFBlockMethod) destroySWFInitAction;
 	BLOCK(init)->type = SWF_INITACTION;
 	init->spriteId = CHARACTERID(clip);
+	init->clip = NULL; // use external clip
 	init->action = action;
 	return init;
 }

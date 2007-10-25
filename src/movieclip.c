@@ -213,13 +213,19 @@ SWFMovieClip_removeScalingGrid(SWFMovieClip clip)
 	}
 }
 
+/* 
+ * add an initAction block to a MovieClip
+ *
+ * These actions are executed *before* the MovieClip is available as
+ * a script object.
+ */
 void
 SWFMovieClip_addInitAction(SWFMovieClip clip, SWFAction action)
 {
 	if(clip->sprite.initAction)
 		destroySWFInitAction(clip->sprite.initAction);
 
-	clip->sprite.initAction = newSWFInitAction(clip, action);
+	clip->sprite.initAction = newSWFInitAction_MovieClip(clip, action);
 }
 /*
  * Local variables:
