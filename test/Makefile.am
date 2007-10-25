@@ -15,7 +15,8 @@ SUBDIRS = Movie \
 	BrowserFont \
 	TextField \
 	PrebuiltClip \
-	Button
+	Button	\
+	Action
 
 EXTRA_DIST = \
 	dotests.pl \

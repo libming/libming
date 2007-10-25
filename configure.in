@@ -370,6 +370,7 @@ AC_OUTPUT([
 	test/TextField/Makefile
 	test/PrebuiltClip/Makefile
 	test/Button/Makefile
+	test/Action/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config

@@ -1,0 +1,46 @@
+File version: 5
+File size: 51
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 39 (SWF_DEFINESPRITE)
+Block length: 8
+
+ SpriteId: 1
+ FrameCount: 1
+ BlockCount: 2
+
+  Offset: 0 (0x0000)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 0 (0x0000)
+  Block type: 0 (SWF_END)
+  Block length: 0
+
+
+Offset: 30 (0x001e)
+Block type: 59 (SWF_INITACTION)
+Block length: 15
+
+ 4 Init actions for character 1
+    34:SWFACTION_CONSTANTPOOL
+     [000] 
+    40:SWFACTION_PUSH
+     [000]   Constant: 0 ""
+    45:SWFACTION_TRACE
+    46:SWFACTION_END
+
+Offset: 47 (0x002f)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 49 (0x0031)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

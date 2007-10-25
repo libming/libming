@@ -1,0 +1,28 @@
+File version: 5
+File size: 41
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 59 (SWF_INITACTION)
+Block length: 15
+
+ 4 Init actions for character 99
+    24:SWFACTION_CONSTANTPOOL
+     [000] 
+    30:SWFACTION_PUSH
+     [000]   Constant: 0 ""
+    35:SWFACTION_TRACE
+    36:SWFACTION_END
+
+Offset: 37 (0x0025)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 39 (0x0027)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
