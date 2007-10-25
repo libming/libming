@@ -487,7 +487,6 @@ compile_init_actions(int frameno)
 {
 	int i;
 	int found=0;
-	SWFMovieClip clip = NULL;
 	SWFAction action;
 	char ppfile[PATH_MAX];
 
@@ -499,16 +498,13 @@ compile_init_actions(int frameno)
 		if ( ia->frameno != frameno ) continue;
 		file = ia->file;
 
-		clip = newSWFMovieClip();
-
 		sprintf(ppfile, "%s.frame%d.init%d.pp", outputfile, frameno, found);
 		action = makeswf_compile_source(file, ppfile);
 
 
 		printf("Adding %s to frame %d init actions... ",
 					file, frameno);
-		SWFMovieClip_addInitAction(clip, action);
-	 	SWFMovie_add(mo, clip);	
+	 	SWFMovie_add(mo, newSWFInitAction(action));	
 		printf("done.\n"); 
 
 		++found;
@@ -691,6 +687,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.43  2007/10/25 17:26:12  krechert
+ * use new InitAction api
+ *
  * Revision 1.42  2007/10/24 08:38:47  strk
  * Use a separate character definition for each init action block
  *
