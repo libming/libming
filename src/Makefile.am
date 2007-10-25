@@ -90,6 +90,15 @@ DOCSRC = \
 	blocks/textfield.c \
 	blocks/utf8.c \
 	blocks/videostream.c \
+	blocks/filter.c \
+	blocks/fileattrs.c \
+	blocks/metadata.c \
+	blocks/scriptlimits.c \
+	blocks/scalinggrid.c \
+	blocks/tabindex.c \
+	blocks/symbolclass.c \
+	blocks/binary.c	\
+	blocks/scenedata.c \
 	blocklist.c \
 	displaylist.c \
 	fill.c \
