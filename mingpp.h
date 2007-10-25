@@ -54,6 +54,7 @@ extern "C"
   #define SWFBlur         c_SWFBlur
   #define SWFShadow       c_SWFShadow
   #define SWFFilterMatrix c_SWFFilterMatrix
+  #define SWFInitAction   c_SWFInitAction
 
 // begin minguts 2004/08/31 ((((
   #define SWFFontCharacter c_SWFFontCharacter
@@ -92,6 +93,7 @@ extern "C"
   #undef SWFBlur
   #undef SWFShadow
   #undef SWFFilterMatrix
+  #undef SWFInitAction
 }
 
 #define SWF_DECLAREONLY(classname) \
@@ -228,6 +230,28 @@ class SWFAction : public SWFBlock
 
   SWF_DECLAREONLY(SWFAction);
   SWFAction();
+};
+
+/*  SWFAction  */
+
+class SWFInitAction : public SWFBlock
+{
+ public:
+  c_SWFInitAction init;
+
+  SWFInitAction(SWFAction *action)
+    { this->init = newSWFInitAction(action->action); }
+
+  SWFInitAction(SWFAction *action, int id)
+    { this->init = newSWFInitAction_withId(action->action, id); }
+
+  virtual ~SWFInitAction() {}
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->init; }
+
+  SWF_DECLAREONLY(SWFInitAction);
+  SWFInitAction();
 };
 
 
