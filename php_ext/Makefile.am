@@ -6,3 +6,6 @@ all: make_module.sh
 
 clean-local:
 	rm -rf tmp
+
+install:
+	$(INSTALL) -m 755 tmp/modules/ming.so `php-config --extension-dir`
