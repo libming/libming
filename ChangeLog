@@ -1,6 +1,824 @@
-2007-09-18 05:59  krechert
+2007-10-26 13:27  krechert
+
+	* php_ext/ming.c: Add SWFCharacter dummy class in PHP. Fixes
+	  http://bugs.libming.net/show_bug.cgi?id=38.
+
+2007-10-25 20:02  krechert
+
+	* src/Makefile.am: added new files
+
+2007-10-25 19:26  krechert
+
+	* util/makeswf.c: use new InitAction api
+
+2007-10-25 19:10  krechert
+
+	* configure.in, test/Makefile.am, test/Action/.cvsignore,
+	  test/Action/Makefile.am, test/Action/TestList,
+	  test/Action/test01-cxx.C, test/Action/test01.c,
+	  test/Action/test01.ref, test/Action/test02-cxx.C,
+	  test/Action/test02.c, test/Action/test02.ref: InitAction
+	  testcases
+
+2007-10-25 19:07  krechert
+
+	* mingpp.h: add InitAction support
+
+2007-10-25 19:06  krechert
+
+	* src/: ming.h.in, movie.c, movieclip.c, blocks/action.c,
+	  blocks/action.h: extend and expose InitAction interface
+
+2007-10-24 12:18  krechert
+
+	* php_ext/php_ming.h: sync header. not sure if needed
+
+2007-10-24 11:48  krechert
+
+	* php_ext/ming.c: added addUTF8String() textfield method
+
+2007-10-24 10:38  strk
+
+	* util/makeswf.c: Use a separate character definition for each init
+	  action block
+
+2007-10-24 10:30  strk
+
+	* util/makeswf.c: Add support for multiple init actions in same
+	  and/or different frames.  Still unsupported adding init actions
+	  for frames for which we specify no content.
+
+2007-10-24 09:49  strk
+
+	* util/makeswf.c: Exit with an error if multiple init actions are
+	  attempted to be added (still unsupported)
+
+2007-10-24 09:47  strk
+
+	* NEWS: add init action support new
+
+2007-10-24 09:46  strk
+
+	* docs/man/makeswf.1, util/makeswf.c: Change -C flag to -a
+	  (--init-action) and support specifying a target frame number.
+	  Only frame0 is currently supported.
+
+2007-10-23 09:16  strk
+
+	* NEWS, configure.in: Bump version to 0.4.0.beta6
+
+2007-10-21 17:11  krechert
+
+	* util/action.c: output more information for
+	  SDFACTION_DEFINEFUNCTION2
+
+2007-10-21 14:55  krechert
+
+	* mingpp.h, src/ming.h.in, src/blocks/text.c: text cleanup
+
+2007-10-19 17:48  krechert
+
+	* src/actioncompiler/swf5compiler.y: built-in function call should
+	  be translated as "call"
+
+2007-10-19 17:15  krechert
+
+	* test/actionscript/: forin.as, forin.ref: add ENUMERATE2 testcase
+
+2007-10-19 17:13  krechert
+
+	* src/actioncompiler/swf5compiler.y: use ENUMERATE2 when looping on
+	  object members like: for(x in obj.members)  ;
+
+2007-10-19 16:27  krechert
 
 	* NEWS: update
+
+2007-10-19 16:21  krechert
+
+	* src/movie.c: update security policy doc
+
+2007-10-19 16:13  krechert
+
+	* test/: FillStyle/test01.ref, FillStyle/test02.ref,
+	  FillStyle/test03.ref, FillStyle/test04.ref, FillStyle/test05.ref,
+	  Bitmap/test01.ref: update testcase because of ne security policy
+
+2007-10-19 16:09  krechert
+
+	* test/: LineStyle/test01.ref, LineStyle/test02.ref,
+	  Gradient/test01.ref, Gradient/test02.ref, Gradient/test03.ref,
+	  Gradient/test04.ref, Gradient/test05.ref, Gradient/test06.ref:
+	  update testcase because of ne security policy
+
+2007-10-19 16:06  krechert
+
+	* test/: Morph/test01.ref, Morph/test02.ref, Shape/test01.ref:
+	  update testcase because of ne security policy
+
+2007-10-19 16:02  krechert
+
+	* test/Movie/: assignSymbol/test01.ref, defineScene/test01.ref:
+	  update testcase because of ne security policy
+
+2007-10-19 15:58  krechert
+
+	* test/Movie/: new/test06.ref, new/test07.ref,
+	  addMetadata/test01.ref, setScriptLimits/test01.ref,
+	  replace/test01.ref, replace/test02.ref: update testcase because
+	  of ne security policy
+
+2007-10-19 15:47  krechert
+
+	* src/blocks/fileattrs.c: change security policy default to
+	  "local-with-filesystem" sandbox.  see
+	  http://www.adobe.com/devnet/flash/articles/fplayer8_security.html
+	  for more informations
+
+2007-10-19 15:00  krechert
+
+	* test/actionscript/delete.ref: resync delete.ref
+
+2007-10-19 13:34  krechert
+
+	* src/actioncompiler/swf5compiler.y: only POP stack in the void
+	  case
+
+2007-10-19 11:13  krechert
+
+	* test/actionscript/: delete.as, delete.ref: update new delete
+	  testcases
+
+2007-10-19 11:12  krechert
+
+	* src/actioncompiler/swf5compiler.y: catch more delete cases
+
+2007-10-18 18:49  krechert
+
+	* test/Movie/new/: .cvsignore, Makefile.am, TestList, test07-cxx.C,
+	  test07.c, test07.php, test07.pl, test07.py, test07.ref: tag order
+	  testcase
+
+2007-10-18 18:35  krechert
+
+	* src/actioncompiler/swf5compiler.y: removed redundant definitions
+	  -> reduces parser conflicts
+
+2007-10-18 17:57  krechert
+
+	* test/actionscript/: Makefile.am, drag.as, drag.ref,
+	  legacy_functions.ref: drag testcase (MC API and built-in)
+
+2007-10-18 17:55  krechert
+
+	* src/actioncompiler/swf5compiler.flex: add start/stopDrag built-in
+	  function support
+
+2007-10-18 16:55  krechert
+
+	* test/actionscript/: Makefile.am, legacy_functions.as,
+	  legacy_functions.ref: built-in functions
+
+2007-10-18 16:13  krechert
+
+	* src/actioncompiler/swf5compiler.flex: built-in function "call"
+	  should trigger SWFACTION_CALLFRAME while "callFrame" is not a
+	  built in function and should trigger SWFACTION_CALLFUNCTION
+
+2007-10-18 15:41  krechert
+
+	* test/actionscript/: delete.as, delete.ref: use delete's return
+	  value
+
+2007-10-18 15:38  krechert
+
+	* src/actioncompiler/swf5compiler.y: treat DELETE as a non-void
+	  function
+
+2007-10-18 15:03  krechert
+
+	* src/movie.c: make FileAttributs first block
+
+2007-10-18 11:17  krechert
+
+	* util/makeswf.c: add class definition support.  Class definitions
+	  are initialized by InitAction tags. These tags need a dummy
+	  movieclip they depend on.
+
+2007-10-17 17:08  krechert
+
+	* src/actioncompiler/: compile.c, compile.h: allow pushing STRINGs
+	  also for SWF>=5
+
+2007-10-17 16:48  krechert
+
+	* src/actioncompiler/: compile.c, compile.h: adding push FLOAT
+
+2007-10-17 15:58  krechert
+
+	* src/actioncompiler/compile.c: update properties values
+
+2007-10-17 13:54  krechert
+
+	* test/actionscript/: ASM_all.ref, FunctionInLoop.ref, forin.ref:
+	  update testcases
+
+2007-10-17 13:49  krechert
+
+	* util/action.c: output TargetOffsets for IF / JUMP OP-codes
+
+2007-10-16 16:02  strk
+
+	* config/install-sh: re-added with x bit set
+
+2007-10-16 16:01  strk
+
+	* config/install-sh: removed again, I'll try from my box the x bit
+
+2007-10-16 15:59  krechert
+
+	* config/install-sh: set exec flag
+
+2007-10-16 15:58  krechert
+
+	* config/install-sh: remove to be added again with exec flag
+
+2007-10-16 15:51  krechert
+
+	* config/install-sh: dummy change to set executable flag
+
+2007-10-16 13:56  krechert
+
+	* test/actionscript/: delete.as, delete.ref: added more DELETE
+	  cases
+
+2007-10-16 13:54  krechert
+
+	* src/actioncompiler/: Makefile.am, compile.c, compile.h,
+	  swf5compiler.y: bugfix: compile	delete s.length;
+	  delete _root.map.ways[wayselected].path[x][4];
+
+	  clean BUILT_FILES (e.g. *.tab*) with make clean simplify DELETE
+	  (less shift/reduce conflicts) DELETE is a void function
+
+2007-10-15 14:37  krechert
+
+	* util/makeswf.c: add bison debugging support in makeswf
+
+2007-10-14 15:12  krechert
+
+	* src/actioncompiler/swf5compiler.y: bugfix: trace(loadMovieNum)
+	  fails closes bug #27 in libming.net bugzilla
+
+2007-10-12 18:17  krechert
+
+	* src/: ming.h.in, blocks/font.c, blocks/font.h, blocks/ttffont.c,
+	  blocks/ttffont.h: experimental TTC (TrueType Collection) font
+	  support.  will upload a testcase if i find a ttc file with
+	  suitable license. Simple testcase looks like:
+
+	  int main() {	       int count, i;	     SWFFont *fonts;
+	   SWFFontCollection collection;
+
+		  collection = newSWFFontCollection_fromFile("test.ttc");
+		  fonts = SWFFontCollection_getFonts(collection, &count);
+		  for(i = 0; i < count; i++)
+		  {
+			  SWFFont font = fonts[i];
+			  printf("name: %s, glyphs %i\n",
+				  SWFFont_getName(font),
+	  SWFFont_getGlyphCount(font));
+		  }
+		  return 0;
+	  }
+
+2007-10-12 18:07  krechert
+
+	* util/action.c: fix warning
+
+2007-10-10 11:45  krechert
+
+	* test/Button/test01.ref: update AS testcases
+
+2007-10-10 11:43  krechert
+
+	* test/TextField/: test01.ref, test02.ref: use wide offset for some
+	  fonts
+
+2007-10-10 11:41  krechert
+
+	* test/Bitmap/test01.ref: testcase was broken
+
+2007-10-10 11:39  krechert
+
+	* test/Text/test02.ref: use wide offset for some fonts
+
+2007-10-10 11:35  krechert
+
+	* test/: FillStyle/test02.ref, FillStyle/test03.ref,
+	  FillStyle/test04.ref, FillStyle/test05.ref, Font/test02.ref:
+	  update AS testcases
+
+2007-10-10 11:31  krechert
+
+	* test/MovieClip/: test01.ref, test02.ref, test03.ref: update AS
+	  testcases
+
+2007-10-10 11:28  krechert
+
+	* test/: actionscript/ASM0.ref, actionscript/ASM1.ref,
+	  actionscript/ASM_all.ref, actionscript/ASM_extend.ref,
+	  actionscript/ASM_push.ref, actionscript/ASM_targetPath.ref,
+	  actionscript/Function.ref, actionscript/FunctionInLoop.ref,
+	  actionscript/GotoFrame.ref, actionscript/TryCatch.ref,
+	  actionscript/delete.ref, actionscript/forin.ref,
+	  actionscript/logor.ref, actionscript/newline_comment.ref,
+	  actionscript/newline_crlf.ref, actionscript/targetPath.ref,
+	  Video/test03.ref: update AS testcases
+
+2007-10-10 11:21  krechert
+
+	* test/Movie/: add/test01.ref, nextFrame/test01.ref,
+	  nextFrame/test02.ref: update AS testcases
+
+2007-10-10 11:07  strk
+
+	* util/action.c: Include global offset near each action name. Good
+	  enough for branch offset computation, not good for matching with
+	  gnash -va output (which sues local offsets). refs containing
+	  actions will need to be updated.
+
+2007-10-09 18:01  krechert
+
+	* NEWS: update
+
+2007-10-09 17:42  krechert
+
+	* src/blocks/fillstyle.c: fixed regression
+
+2007-10-09 17:09  krechert
+
+	* src/blocks/font.c: bugfix: abort font processing if a character
+	  can not be resolved. Until now the code produced an integer
+	  overflow
+
+2007-10-09 11:53  krechert
+
+	* src/blocks/ttffont.c: SWF_FONT_WIDEOFFSETS flag was never set.
+	  necessary for big fonts.  for now a very simple estimation is
+	  done.
+
+2007-10-09 00:17  krechert
+
+	* test/actionscript/: Makefile.am, forin.as, forin.ref: add for(i
+	  in o) continue testcase
+
+2007-10-08 23:19  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix infinite loop with for(x
+	  in o) continue; closes bugzilla bug #13
+
+2007-10-08 17:20  krechert
+
+	* src/blocks/ttffont.c: fix infinite loop in readGlyphs error
+	  handler
+
+2007-10-08 12:28  krechert
+
+	* src/ming.h.in: fix MSVC compile second try
+
+2007-10-08 12:16  krechert
+
+	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y: GetURL
+	  Method must be a string or empty
+
+2007-10-08 11:30  krechert
+
+	* src/actioncompiler/swf4compiler.y: fix loadVariables: set bit for
+	  target string
+
+2007-10-05 21:24  peterdd
+
+	* perl_ext/t/: movieclip.t, sprite.t: another roundtrip of removing
+	  the sprite terminology
+
+2007-10-05 16:08  krechert
+
+	* test/Button/test01.ref: update testcase due matrix output changes
+
+2007-10-05 16:04  krechert
+
+	* test/: BrowserFont/test01.ref, TextField/test01.ref,
+	  TextField/test02.ref, PrebuiltClip/test01.ref: update testcase
+	  due matrix output changes
+
+2007-10-05 16:00  krechert
+
+	* test/: FillStyle/test01.ref, FillStyle/test02.ref,
+	  FillStyle/test03.ref, FillStyle/test04.ref, FillStyle/test05.ref,
+	  Font/test01.ref, Font/test02.ref, Text/test01.ref,
+	  Text/test02.ref: update testcase due matrix output changes
+
+2007-10-05 15:57  krechert
+
+	* test/: MovieClip/test01.ref, MovieClip/test03.ref,
+	  Gradient/test01.ref, Gradient/test02.ref, Gradient/test03.ref,
+	  Gradient/test04.ref, Gradient/test05.ref, Gradient/test06.ref:
+	  update testcase due matrix output changes
+
+2007-10-05 15:53  krechert
+
+	* test/: Shape/test01.ref, LineStyle/test01.ref,
+	  LineStyle/test02.ref: update testcase due matrix output changes
+
+2007-10-05 15:50  krechert
+
+	* test/: Morph/test01.ref, Morph/test02.ref, Video/test01.ref,
+	  Video/test02.ref, Video/test03.ref: update testcase due matrix
+	  output changes
+
+2007-10-05 15:46  krechert
+
+	* test/: Movie/add/test02.ref, Movie/assignSymbol/test01.ref,
+	  Movie/replace/test01.ref, Movie/replace/test02.ref,
+	  Filter/test01.ref, Filter/test02.ref, Filter/test03.ref,
+	  Filter/test04.ref: update testcase due matrix output changes
+
+2007-10-05 15:22  krechert
+
+	* mingpp.h: update button methods
+
+2007-10-05 15:17  krechert
+
+	* util/: parser.c, outputfdb.c, swftypes.h: make SWFParserstruct a
+	  real struxt add offset and length to SWF_Parserstruct
+
+2007-10-05 13:35  peterdd
+
+	* util/outputtxt.c: added matrix and cxform output of
+	  buttonrecords, added definesound output
+
+2007-10-05 11:44  krechert
+
+	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y,
+	  swf5compiler.flex, swf5compiler.y: do not handle unterminated
+	  strings as emty strings. throw a syntax error instead!
+
+2007-10-02 13:07  krechert
+
+	* configure.in, test/Makefile.am, test/Button/.cvsignore,
+	  test/Button/Makefile.am, test/Button/TestList,
+	  test/Button/test01-cxx.C, test/Button/test01.c,
+	  test/Button/test01.ref: test SWFBUTTON_MOUSE[UP|DOWN]
+
+2007-10-02 11:18  krechert
+
+	* src/ming.h.in: workaround for MSVC
+
+2007-09-30 05:34  peterdd
+
+	* perl_ext/SWF/Constants.pm: add new constants for SWF::FILL
+
+2007-09-30 04:16  peterdd
+
+	* src/: ming.h.in, blocks/shape.c: fix typo for constant
+	  SWF_SHAPE_USENONSCALINGSTROKES
+
+2007-09-30 04:10  peterdd
+
+	* perl_ext/Constants.xs: sync with ming.h
+
+2007-09-29 21:58  peterdd
+
+	* perl_ext/: CREDITS, TODO: write something current to the TODO
+
+2007-09-29 21:24  peterdd
+
+	* perl_ext/: CREDITS, Changes: wrote something to the unmaintained
+	  Changes and CREDITS so cpan.org users can get a clue where the
+	  these infos are stored
+
+2007-09-29 10:28  peterdd
+
+	* perl_ext/.cvsignore: .cvsignore update META.yml
+
+2007-09-29 10:26  peterdd
+
+	* perl_ext/.cvsignore: .cvsignore update
+
+2007-09-29 10:21  peterdd
+
+	* perl_ext/SWF/: MovieClip.pm, Sprite.pm: removed Sprite.pm, now
+	  only MovieClip exists in terminology for users
+
+2007-09-29 10:08  peterdd
+
+	* perl_ext/: MANIFEST, Makefile.am, SWF.pm, SWF/Constants.pm,
+	  SWF/DisplayItem.pm, SWF/Morph.pm, SWF/Movie.pm, SWF/Shape.pm,
+	  SWF/TextField.pm, SWF/VideoStream.pm: finally want get rid of
+	  MovieClip-Sprite confusion
+
+2007-09-29 08:57  peterdd
+
+	* perl_ext/SWF/PrebuiltClip.pm: stub for the PrebuiltClip module
+
+2007-09-29 08:35  peterdd
+
+	* perl_ext/SWF.pm: update of SWF.pm
+
+2007-09-28 23:44  peterdd
+
+	* perl_ext/Makefile.PL: fix path to libming.a, brought a variable
+	  test back to life
+
+2007-09-28 23:04  peterdd
+
+	* perl_ext/MANIFEST: added SWF/VideoStream.pm
+
+2007-09-28 23:00  peterdd
+
+	* perl_ext/MANIFEST: updated MANIFEST, added SWF/PrebuiltClip.pm
+
+2007-09-28 18:44  strk
+
+	* perl_ext/Makefile.PL: Include SWF and swf_util in LDFROM
+
+2007-09-28 16:04  strk
+
+	* perl_ext/Makefile.PL: Have SWF.xs linked to the build tree (like
+	  is done for Makefile.PL) and build from there. This is a
+	  workaround to the fact I dunno how to make INCLUDE in an .xs know
+	  where to go find the file to be included: it seems it's always
+	  searched in the same dir the source code is. Any cleanup of this
+	  is highly welcome.
+
+2007-09-28 15:58  anderson
+
+	* docs/libming/: SWFButtonRecord_addFilter.html,
+	  SWFButtonRecord_setBlendMode.html, SWFButton_addAction.html,
+	  SWFButton_addCharacter.html, SWFButton_addShape.html,
+	  SWFButton_removeScalingGrid.html, SWFButton_setScalingGrid.html,
+	  SWFMovieClip_removeScalingGrid.html,
+	  SWFMovieClip_setScalingGrid.html, SWFMovie_addMetadata.html,
+	  SWFMovie_add_internal.html, SWFMovie_assignSymbol.html,
+	  SWFMovie_defineScene.html, SWFMovie_replace_internal.html,
+	  SWFMovie_setNetworkAccess.html, SWFMovie_setScriptLimits.html,
+	  SWFMovie_setTabIndex.html, SWFShape_getVersion.html,
+	  SWFShape_setLine.html, SWFShape_setLine2.html,
+	  SWFShape_setLine2Filled.html,
+	  SWFShape_setLineStyle2_internal.html,
+	  SWFShape_setLineStyle2filled_internal.html,
+	  SWFShape_setLineStyle_internal.html,
+	  SWFShape_setRenderHintingFlags.html, index.html,
+	  writeSWFButtonSoundToMethod.html: Add more documentation
+
+2007-09-28 15:41  strk
+
+	* perl_ext/Makefile.PL: We're almost there (I think). Next problem
+	  is having SWF.xs find Boot.xsh (which is in the build tree).
+
+2007-09-28 15:40  anderson
+
+	* src/Makefile.am: Remove problematic files from the list to scan
+	  for docs
+
+2007-09-28 14:33  strk
+
+	* perl_ext/Makefile.PL: Add SWF and swf_util as extension names.
+	  Seems to fix 'make check' too..
+
+2007-09-28 14:15  krechert
+
+	* src/blocks/error.c: output warnings and error messages to stderr
+	  not stdout. this should make life easier for CGI devs.
+
+2007-09-28 12:50  strk
+
+	* perl_ext/Makefile.PL: Fix build of othe perl extension in a
+	  separate dir
+
+2007-09-28 11:41  strk
+
+	* perl_ext/Makefile.am: Correctly set the 'builddir' environment
+	  variable when creating Makefile.perl
+
+2007-09-28 09:00  strk
+
+	* docs/man/makeswf.1: Document how to disable compression (-c -1)
+
+2007-09-28 00:27  krechert
+
+	* test/PrebuiltClip/test01.ref: update testcases: set bgColor
+
+2007-09-28 00:26  krechert
+
+	* test/TextField/: test01.ref, test02.ref: update testcase: set
+	  bgColor
+
+2007-09-28 00:22  krechert
+
+	* test/: Bitmap/test01.ref, BrowserFont/test01.ref: update
+	  testcases: set bgColor
+
+2007-09-28 00:17  krechert
+
+	* test/: Font/test01.ref, Font/test02.ref, Text/test01.ref,
+	  Text/test02.ref: update testcases: set bgColor
+
+2007-09-28 00:14  krechert
+
+	* test/: Gradient/test01.ref, Gradient/test02.ref,
+	  Gradient/test03.ref, Gradient/test04.ref, Gradient/test05.ref,
+	  Gradient/test06.ref, FillStyle/test01.ref, FillStyle/test02.ref,
+	  FillStyle/test03.ref, FillStyle/test04.ref, FillStyle/test05.ref:
+	  update testcases: set bgColor
+
+2007-09-28 00:10  krechert
+
+	* test/: LineStyle/test01.ref, LineStyle/test02.ref,
+	  MovieClip/test01.ref, MovieClip/test02.ref, MovieClip/test03.ref:
+	  update testcases: set bgColor
+
+2007-09-28 00:06  krechert
+
+	* test/: Video/test01.ref, Video/test02.ref, Video/test03.ref,
+	  Shape/test01.ref: update testcases: set bgColor
+
+2007-09-28 00:03  krechert
+
+	* test/: Filter/test01.ref, Filter/test02.ref, Filter/test03.ref,
+	  Filter/test04.ref, Morph/test01.ref, Morph/test02.ref: update
+	  testcases: set bgColor
+
+2007-09-27 23:59  krechert
+
+	* test/actionscript/: ASM0.ref, ASM1.ref, ASM_all.ref,
+	  ASM_extend.ref, ASM_push.ref, ASM_targetPath.ref, Function.ref,
+	  FunctionInLoop.ref, GotoFrame.ref, TryCatch.ref, delete.ref,
+	  logor.ref, newline_comment.ref, newline_crlf.ref, targetPath.ref:
+	  update testcases: set bgColor
+
+2007-09-27 23:51  krechert
+
+	* test/Movie/: addMetadata/test01.ref, assignSymbol/test01.ref,
+	  defineScene/test01.ref, nextFrame/test01.c, nextFrame/test02.c,
+	  replace/test01.ref, replace/test02.ref,
+	  setNetworkAccess/test01.ref, setScriptLimits/test01.ref,
+	  setSoundStream/test01.ref, setSoundStream/test02.ref,
+	  setTabIndex/test01.ref: update testcases: set bgColor
+
+2007-09-27 23:40  krechert
+
+	* test/Movie/Rate/test01.c: update testcase: set bgcolor
+
+2007-09-27 23:39  krechert
+
+	* test/Movie/Protect/: test01.c, test02.c: update testcase: set
+	  bgColor
+
+2007-09-27 21:22  krechert
+
+	* test/Movie/NumFrames/test01.c: set bgColor to c-testcase
+
+2007-09-27 21:18  krechert
+
+	* test/Movie/new/: test01.c, test02.c, test03.c, test04.c,
+	  test05.c, test06.ref: update and unify testcases
+
+2007-09-27 21:11  krechert
+
+	* test/Movie/FrameLabel/test01.c: update C-testcase: set bgColor
+
+2007-09-27 21:10  krechert
+
+	* test/Movie/Dimension/test01.c: c-testcase: set bgColor
+
+2007-09-27 21:08  krechert
+
+	* test/Movie/add/: test01.c, test02.c: update c-testcases. all
+	  other bindings set bgColor
+
+2007-09-27 19:45  krechert
+
+	* src/: ming.h.in, blocks/fillstyle.c: add missing bitmap
+	  fillstyles
+
+2007-09-27 19:29  krechert
+
+	* src/movie.c: don't force bgColor
+
+2007-09-27 19:07  krechert
+
+	* py_ext/ming.py: python update: SWFText(2) addUTFStrings.
+	  Contributed by y-fujii
+
+2007-09-27 19:02  krechert
+
+	* py_ext/ming.py: implemented SWFSoundStream object closes SF bug
+	  #1793128
+
+2007-09-27 18:32  krechert
+
+	* configure.in: YACC and LEX was not checked properly closes SF bug
+	  #1802828
+
+2007-09-27 17:56  krechert
+
+	* perl_ext/Makefile.PL: Perl module needs to be linked with
+	  -lfreetype
+
+2007-09-26 12:33  krechert
+
+	* php_ext/ming.c: added workaround to support SWFSprite and
+	  SWFMovieclip objects closes SF bug #1799388
+
+2007-09-26 11:44  krechert
+
+	* perl_ext/: Makefile.PL, PrebuiltClip.xs, perl_swf.h, typemap:
+	  added PrebuiltClip to perl_ext. Thanks to James Austin.  closes
+	  libming.net bug #35
+
+2007-09-26 11:20  krechert
+
+	* perl_ext/SoundInstance.xs: added addEnvelope to perl_ext closes
+	  SF bug #1799410
+
+2007-09-25 13:46  krechert
+
+	* configure.in, test/Makefile.am, test/PrebuiltClip/.cvsignore,
+	  test/PrebuiltClip/Makefile.am, test/PrebuiltClip/TestList,
+	  test/PrebuiltClip/test01-cxx.C, test/PrebuiltClip/test01.c,
+	  test/PrebuiltClip/test01.ref: testcase for prebuiltclip
+
+2007-09-25 13:13  krechert
+
+	* src/blocks/fromswf.c: Bugfix: SF #1799389 Importing empty
+	  prebuilt clip causes sprite numbering error
+
+2007-09-24 16:06  strk
+
+	* util/: outputtxt.c, parser.c, swftypes.h: Tag NAMECHARACTER (40)
+	  parsed based on how swfc (from SWFTools) writes it.
+
+2007-09-24 15:47  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: parse SWF_NAMECHARACTER
+
+2007-09-21 12:52  krechert
+
+	* src/blocks/bitmap.c: added workaround for compressBound (added in
+	  zlib 1.2.x)
+
+2007-09-21 12:50  krechert
+
+	* configure.in: removed compiler flag, since some older compilers
+	  do not support this
+
+2007-09-19 21:01  anderson
+
+	* configure.in: One more place to fix the version
+
+2007-09-18 17:12  strk
+
+	* NEWS, configure.in: Set versions to 0.4.0.beta4, and keep libtool
+	  versioning to 4:4:0
+
+2007-09-18 17:11  strk
+
+	* configure.in: don't forget AC_INIT version.... (should read more
+	  about it actually)
+
+2007-09-18 17:06  strk
+
+	* NEWS, configure.in: Hopefully the correct thing for release of
+	  today:	 - libtool version doesn't change since beta4	 -
+	  release version becomes 0.4.0.beta5 Basically, this is what it
+	  was in head before intervention.
+
+2007-09-18 16:38  strk
+
+	* NEWS: Change version to 0.4.1 in the NEWS
+
+2007-09-18 16:20  strk
+
+	* configure.in: Set INTERFACE_REVISION to 1 and MICRO_VERSION to 1
+
+2007-09-18 15:36  anderson
+
+	* NEWS, configure.in: Final changes for 0.4.0-rc1
+
+2007-09-18 11:59  krechert
+
+	* NEWS: update
+
+2007-09-18 11:42  krechert
+
+	* src/: shape_util.c, blocks/fillstyle.c: fill matrix is set within
+	  fillstyle
+
+2007-09-18 11:35  krechert
+
+	* src/ming.h.in: remove deprecated tag for new/destroySWFFill
 
 2007-09-18 05:42  krechert
 
