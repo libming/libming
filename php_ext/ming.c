@@ -79,6 +79,7 @@ static SWFVideoStream getVideoStream(zval *id TSRMLS_DC);
 #ifdef HAVE_SWFPREBUILTCLIP
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC);
 #endif
+static SWFCharacter getCharacterClass(zval *id TSRMLS_DC);
 
 #define PHP_MING_FILE_CHK(file) \
 	if ((PG(safe_mode) && !php_checkuid((file), NULL, CHECKUID_CHECK_FILE_AND_DIR)) || php_check_open_basedir((file) TSRMLS_CC)) {	\
@@ -181,6 +182,7 @@ static int le_swfvideostreamp;
 #ifdef HAVE_SWFPREBUILTCLIP
 static int le_swfprebuiltclipp;
 #endif
+static int le_swfcharacterp;
 
 static zend_class_entry *movie_class_entry_ptr;
 static zend_class_entry *shape_class_entry_ptr;
@@ -197,6 +199,7 @@ static zend_class_entry *morph_class_entry_ptr;
 static zend_class_entry *movieclip_class_entry_ptr;
 static zend_class_entry *sprite_class_entry_ptr;
 static zend_class_entry *sound_class_entry_ptr;
+static zend_class_entry *character_class_entry_ptr;
 #ifdef HAVE_NEW_MING
 static zend_class_entry *fontchar_class_entry_ptr;
 static zend_class_entry *soundinstance_class_entry_ptr;
@@ -205,7 +208,8 @@ static zend_class_entry *videostream_class_entry_ptr;
 #ifdef HAVE_SWFPREBUILTCLIP
 static zend_class_entry *prebuiltclip_class_entry_ptr;
 #endif
- 
+static zend_class_entry *character_class_entry_ptr;
+
 /* {{{ internal function SWFgetProperty
 */
 static void *SWFgetProperty(zval *id, char *name, int namelen, int proptype TSRMLS_DC)
@@ -236,7 +240,7 @@ static void *SWFgetProperty(zval *id, char *name, int namelen, int proptype TSRM
 }
 /* }}} */
 
-/* {{{ SWFCharacter - not a real class
+/* {{{ SWFCharacter 
 */
 
 /* {{{ internal function SWFCharacter getCharacter(zval *id)
@@ -281,6 +285,21 @@ static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFCharacter");
 		return NULL;
 }
+
+static SWFCharacter getCharacterClass(zval *id TSRMLS_DC)
+{
+	void *character = SWFgetProperty(id, "character", strlen("character"), le_swfcharacterp TSRMLS_CC);
+
+	if (!character) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFCharacter");
+	}
+	return (SWFCharacter)character;
+}
+
+static zend_function_entry swfcharacter_functions[] = {
+	{ NULL, NULL, NULL }
+};
+
 /* }}} */
 /* }}} */
 
@@ -2289,7 +2308,11 @@ PHP_METHOD(swfmovie, add)
 	/* XXX - SWFMovie_add deals w/ all block types.  Probably will need to add that.. */
 	if (Z_OBJCE_PP(zchar) == action_class_entry_ptr) {
 		block = (SWFBlock) getAction(*zchar TSRMLS_CC);
-	} else {
+	} 
+	else if(Z_OBJCE_PP(zchar) == character_class_entry_ptr) {
+		block = (SWFBlock) getCharacterClass(*zchar TSRMLS_CC);
+	}
+	else {
 		block = (SWFBlock) getCharacter(*zchar TSRMLS_CC);
 	}
 
@@ -2792,14 +2815,15 @@ PHP_METHOD(swfmovie, importChar)
 	convert_to_string_ex(libswf);
 	convert_to_string_ex(name);
 	movie = getMovie(getThis() TSRMLS_CC);
+	PHP_MING_FILE_CHK(Z_STRVAL_PP(libswf));
 	res = SWFMovie_importCharacter(movie, Z_STRVAL_PP(libswf), Z_STRVAL_PP(name));
 
 	if(res != NULL)
 	{
 		/* try and create a sprite object */
-    	ret = zend_list_insert(res, le_swfspritep);
-		object_init_ex(return_value, sprite_class_entry_ptr);
-		add_property_resource(return_value, "sprite", ret);
+    	ret = zend_list_insert(res, le_swfcharacterp);
+		object_init_ex(return_value, character_class_entry_ptr);
+		add_property_resource(return_value, "character", ret);
 		zend_list_addref(ret);
 	}	
 }
@@ -4374,7 +4398,7 @@ PHP_MINIT_FUNCTION(ming)
 #ifdef HAVE_SWFPREBUILTCLIP
 	zend_class_entry prebuiltclip_class_entry;
 #endif
-
+	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
 
 #define CONSTANT(s,c) REGISTER_LONG_CONSTANT((s), (c), CONST_CS | CONST_PERSISTENT)
@@ -4530,6 +4554,8 @@ PHP_MINIT_FUNCTION(ming)
 #ifdef HAVE_SWFPREBUILTCLIP
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
 #endif
+	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
+
 
 	shape_class_entry_ptr = zend_register_internal_class(&shape_class_entry TSRMLS_CC);
 	fill_class_entry_ptr = zend_register_internal_class(&fill_class_entry TSRMLS_CC);
@@ -4554,7 +4580,7 @@ PHP_MINIT_FUNCTION(ming)
 #ifdef HAVE_SWFPREBUILTCLIP
 	prebuiltclip_class_entry_ptr = zend_register_internal_class(&prebuiltclip_class_entry TSRMLS_CC);
 #endif
-
+	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
 }
 /* }}} */
