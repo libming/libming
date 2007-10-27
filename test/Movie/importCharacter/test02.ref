@@ -1,0 +1,47 @@
+File version: 8
+File size: 60
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
+
+Offset: 26 (0x001a)
+Block type: 71 (SWF_IMPORTASSETS2)
+Block length: 20
+
+ URL: test.swf
+ num assets: 1
+ Asset[001]: test
+
+Offset: 48 (0x0030)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterId: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 56 (0x0038)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 58 (0x003a)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

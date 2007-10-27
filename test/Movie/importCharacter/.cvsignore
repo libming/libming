@@ -1,0 +1,12 @@
+Makefile.in
+Makefile
+.deps
+.libs
+dotests
+php.ini
+test01
+test01-cxx
+test01.swf
+test02
+test02-cxx
+test02.swf

@@ -15,5 +15,6 @@ SUBDIRS = \
 	setNetworkAccess \
 	replace		\
 	assignSymbol	\
-	defineScene		
+	defineScene	\
+	importCharacter	
 
