@@ -93,15 +93,22 @@ void SWFOutput_writeAction(SWFOutput out, SWFAction action)
 	SWFOutput_writeBuffer(out, data, len);
 } 
 
-
-int SWFAction_compile(SWFAction action, int swfVersion, int *length)
+/*
+ * Starts AS compiler
+ * returns 0 on success, -1 otherwise.
+ */
+int SWFAction_compile(SWFAction action, int swfVersion, 
+                      int *length /* output length */)
 {
 	char *script = NULL;
 	Buffer b;
 	int parserError;
 
 	if(action->out != NULL)
-		return SWFOutput_getLength(action->out);
+	{
+		*length = SWFOutput_getLength(action->out);
+		return 0;
+	}
 
 	switch(action->inputType)
 	{
