@@ -89,6 +89,7 @@ newSWFFileAttributes()
 	
 	fattrs->hasMetadata = 0;
 	fattrs->useNetwork = 0;
+	fattrs->hasABC = 0;
         return fattrs;
 }
 
