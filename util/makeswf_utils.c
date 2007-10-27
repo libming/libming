@@ -126,12 +126,7 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 
 	printf("Compiling `%s'... ", filename);
 	ac = newSWFAction(code);
-	if(swfversion >= 5)
-		compiler_version = 5;
-	else 
-		compiler_version = 4;
-
-	if (SWFAction_compile(ac, compiler_version, &length))
+	if (SWFAction_compile(ac, swfversion, &length))
 	{
 		printf("failed:\n"); 
 		printCompileMessage(old_error_func);
@@ -250,6 +245,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.7  2007/10/27 15:12:58  krechert
+ * pass through real swf version
+ *
  * Revision 1.6  2007/10/27 15:03:14  krechert
  * handle compile errors. do not output empty swf files
  *
