@@ -7,10 +7,11 @@
 	* Propper checks for YACC and LEX
 	* Complete Bitmap fillstyles
 	* Font fixes
-	* Actioncompiler fixes
-	* Fixed tog order issues
+	* Actioncompiler fixes (delete, built-in functions, callFrame -> call())
+	* Fixed tag order issues
 	* Ming defaults now to local-with-filesystem sandbox for SWF>=8
 	* Add support for init actions in makeswf
+	* SWF8 support for fromswf / prebuiltclip
 
 0.4.0.beta5 - 2007-09-18
 
