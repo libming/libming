@@ -62,7 +62,6 @@ static void compileError(const char *fmt, ...);
 static void printCompileMessage(SWFMsgFunc);
 
 /* data */
-static int lastcompilefailed = 0;
 static char lastcompilemessage[MAXERRORMSG];
 static int swfversion = DEFSWFVERSION;
 
@@ -96,7 +95,7 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 	char *code;
 	char ppfile_fallback[PATH_MAX];        /* preprocessed file */
 	SWFMsgFunc old_error_func;
-
+	int compiler_version, length;
 	if ( dopreprocess )
 	{
 		if ( ! ppfile ) 
@@ -127,15 +126,20 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 
 	printf("Compiling `%s'... ", filename);
 	ac = newSWFAction(code);
-	if ( lastcompilefailed )
+	if(swfversion >= 5)
+		compiler_version = 5;
+	else 
+		compiler_version = 4;
+
+	if (SWFAction_compile(ac, compiler_version, &length))
 	{
 		printf("failed:\n"); 
 		printCompileMessage(old_error_func);
-		exit(EXIT_FAILURE);
+		return NULL;
 	}
 	else
 	{
-		printf("done.\n"); 
+		printf("successfully compiled %i bytes bytecode.\n");
 	}
 	free(code);
 
@@ -191,7 +195,6 @@ compileError(const char *fmt, ...)
 	memcpy(lastcompilemessage, msg, msglen);
 	free(msg);
 	lastcompilemessage[MAXERRORMSG-1] = '\0';
-	lastcompilefailed = 1;
 
 	return;
 }
@@ -247,6 +250,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.6  2007/10/27 15:03:14  krechert
+ * handle compile errors. do not output empty swf files
+ *
  * Revision 1.5  2007/04/30 09:58:32  strk
  * Don't include getopt.h if it's not found. Patch by Nils Goroll <nils.goroll@mcs.de>.
  *
