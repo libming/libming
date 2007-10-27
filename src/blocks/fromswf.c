@@ -371,7 +371,7 @@ static int change_id(TAG tp)
 // processing functions for handle()
 static void defineshape();
 static void definetext();
-static void placeobject2();
+static void placeobject();
 static void definebutton();
 static void definebutton2();
 static void definetextfield();
@@ -382,6 +382,7 @@ static void definebuttonsound();
 static void fillandlinestyles();
 static void linestyle();
 static void shape();
+static void morphlinestyle2();
 
 static int drop_tag(TAG tp)
 {
@@ -452,10 +453,14 @@ static int handle_tag(TAG tp)
 				tagnam = "stagProtect"; break;
 			case SWF_PLACEOBJECT2:
 				tagnam = "stagPlaceObject2"; break;
+			case SWF_PLACEOBJECT3:
+				tagnam = "stagPlaceObject3"; break;
 			case SWF_REMOVEOBJECT2:
 				tagnam = "stagRemoveObject2"; break;
 			case SWF_DEFINESHAPE3:
 				tagnam = "stagDefineShape3"; break;
+			case SWF_DEFINESHAPE4:
+				tagnam = "stagDefineShape4"; break;
 			case SWF_DEFINETEXT2:
 				tagnam = "stagDefineText2"; break;
 			case SWF_DEFINEBUTTON2:
@@ -476,8 +481,14 @@ static int handle_tag(TAG tp)
 				tagnam = "stagSoundStreamHead2"; break;
 			case SWF_DEFINEMORPHSHAPE:
 				tagnam = "stagDefineMorphShape"; break;
+			case SWF_DEFINEMORPHSHAPE2:
+				tagnam = "stagDefineMorphShape2"; break;
 			case SWF_DEFINEFONT2:
 				tagnam = "stagDefineFont2"; break;
+			case SWF_DEFINEFONT3:
+				tagnam = "stagDefineFont3"; break;
+			case SWF_DEFINEFONTALIGNZONES:
+				tagnam = "stagDefineFontAlignZones"; break;
 			case SWF_EXPORTASSETS:
 				tagnam = "stagExportAssets"; break;
 			/*case stagClipInit:	
@@ -488,6 +499,8 @@ static int handle_tag(TAG tp)
 				tagnam = "stagDefineVideoStrem"; break;
 			case SWF_VIDEOFRAME:
 				tagnam = "stagVideoFrame"; break;
+			case SWF_INITACTION:
+				tagnam = "stagInitAction"; break;
 		}
 		printf("tag %d %s\n", tp->type, tagnam);
 	}
@@ -521,6 +534,8 @@ static int handle_tag(TAG tp)
 		case SWF_STARTSOUND:
 		case SWF_NAMECHARACTER:
 		case SWF_DEFINEFONT2:
+		case SWF_DEFINEFONT3:
+		case SWF_DEFINEFONTALIGNZONES:
 		case SWF_DEFINEBUTTONCXFORM:
 		case SWF_DEFINEVIDEOSTREAM:
 		case SWF_VIDEOFRAME:
@@ -541,10 +556,16 @@ static int handle_tag(TAG tp)
 			defineshape(tp, 2);
 			break;
 		case SWF_PLACEOBJECT2:
-			placeobject2(tp);
+			placeobject(tp, 2);
+			break;
+		case SWF_PLACEOBJECT3:
+			placeobject(tp, 3);
 			break;
 		case SWF_DEFINESHAPE3:
 			defineshape(tp, 3);
+			break;
+		case SWF_DEFINESHAPE4:
+			defineshape(tp, 4);
 			break;
 		case SWF_DEFINETEXT2:
 			definetext(tp, 2);
@@ -562,7 +583,10 @@ static int handle_tag(TAG tp)
 			definesprite(tp);
 			break;
 		case SWF_DEFINEMORPHSHAPE:
-			definemorphshape(tp);
+			definemorphshape(tp, 1);
+			break;
+		case SWF_DEFINEMORPHSHAPE2:
+			definemorphshape(tp, 2);
 			break;
 		case SWF_EXPORTASSETS:
 			exportassets(tp);
@@ -584,12 +608,14 @@ static int handle_tag(TAG tp)
 		case SWF_SOUNDSTREAMBLOCK:
 		case SWF_DEFINEVIDEOSTREAM:
 		case SWF_VIDEOFRAME:
+		case SWF_INITACTION:
 		case SWF_FREECHARACTER:
 		case SWF_PLACEOBJECT:
 		case SWF_REMOVEOBJECT:
 		case SWF_STARTSOUND:
 		case SWF_NAMECHARACTER:
 		case SWF_PLACEOBJECT2:
+		case SWF_PLACEOBJECT3:
 			displaylist = 1;
 	}
 	return displaylist;
@@ -693,7 +719,7 @@ static void shaperecord(TAG tp, int nfillbits, int nlinebits, int lev)
 	}
 }
 
-static void gradient(TAG tp, int alpha)
+static void gradient(TAG tp, int alpha, int cod)
 {	int n, ngrad, r1;
 	
 	alignbits(tp);
@@ -704,6 +730,8 @@ static void gradient(TAG tp, int alpha)
 			printf("ratio %d\n", r1);
 		if(alpha) rgba((BITS) tp); else rgb((BITS) tp);
 	}
+	if (cod == 0x13)
+		readint2((BITS) tp);
 }
 
 static void fillstyle(TAG tp, int lev)
@@ -719,25 +747,31 @@ static void fillstyle(TAG tp, int lev)
 			if(verbose) printf("linear gradient fill\n"); break;
 		case 0x12:
 			if(verbose) printf("radial gradient fill:\n"); break;
+		case 0x13:
+			if(verbose) printf("focal gradient fill:\n"); break;
 		case 0x40:
 			if(verbose) printf("tiled bitmap fill:\n"); break;
 		case 0x41:
 			if(verbose) printf("clipped bitmap fill\n"); break;
+		case 0x42:
+			if(verbose) printf("tilled bitmap fill with hard edges\n"); break;
+		case 0x43:
+			if(verbose) printf("clipped bitmap fill with hard edges\n"); break;
 	}
 	if(cod == 0)
-		if(lev == 3) rgba((BITS) tp); else rgb((BITS) tp);
-	else if(cod == 0x10 || cod == 0x12)
+		if(lev >= 3) rgba((BITS) tp); else rgb((BITS) tp);
+	else if(cod == 0x10 || cod == 0x12 || cod == 0x13)
 	{	matrix((BITS) tp);
-		gradient(tp, lev == 3);
+		gradient(tp, lev >= 3, cod);
 	}
-	else if(cod == 0x40 || cod == 0x41)
+	else if(cod == 0x40 || cod == 0x41 || cod == 0x42 || cod == 0x43)
 	{	id = change_id(tp);
 		if(verbose)
 			printf("fill with id %d\n", id);
 		matrix((BITS) tp);
 	}
 	else
-		printf("UNEXPEDCED %x\n", cod);
+		printf("%s:%d: UNEXPEDCED %x\n", __FILE__, __LINE__, cod);
 }
 
 static void morphgradient(TAG tp)
@@ -770,22 +804,28 @@ static void morphfillstyle(TAG tp)
 			if(verbose) printf("linear gradient fill\n"); break;
 		case 0x12:
 			if(verbose) printf("radial gradient fill:\n"); break;
+		case 0x13:
+			if(verbose) printf("focal gradient fill:\n"); break;
 		case 0x40:
 			if(verbose) printf("tiled bitmap fill:\n"); break;
 		case 0x41:
 			if(verbose) printf("clipped bitmap fill\n"); break;
+		case 0x42:
+			if(verbose) printf("tilled bitmap fill with hard edges\n"); break;
+		case 0x43:
+			if(verbose) printf("clipped bitmap fill with hard edges\n"); break;
 	}
 	if(cod == 0)
 	{	rgba((BITS) tp);
 		rgba((BITS) tp);
 	}
-	else if(cod == 0x10 || cod == 0x12)
+	else if(cod == 0x10 || cod == 0x12 || cod == 0x13)
 	{	matrix((BITS) tp);
 		alignbits(tp);
 		matrix((BITS) tp);
 		morphgradient(tp);
 	}
-	else if(cod == 0x40 || cod == 0x41)
+	else if(cod == 0x40 || cod == 0x41 || cod == 0x42 || cod == 0x43)
 	{	id = change_id(tp);
 		if(verbose) printf("fill with id %d\n", id);
 		matrix((BITS) tp);
@@ -793,7 +833,7 @@ static void morphfillstyle(TAG tp)
 		matrix((BITS) tp);
 	}
 	else
-		printf("UNEXPEDCED %x\n", cod);
+		printf("%s:%d: UNEXPEDCED %x\n", __FILE__, __LINE__, cod);
 }
 
 static void fillandlinestyles(TAG tp, int lev)
@@ -814,7 +854,10 @@ static void fillandlinestyles(TAG tp, int lev)
 	if(verbose)
 		printf ("%d line styles\n", nline);
 	for(n = 0 ; n < nline ; n++)
-		linestyle(tp, lev);
+		if (lev == 4)
+			morphlinestyle2(tp);
+		else
+			linestyle(tp, lev);
 }
 
 static void linestyle(TAG tp, int lev)
@@ -822,7 +865,7 @@ static void linestyle(TAG tp, int lev)
 	w = readint2((BITS) tp);
 	if(verbose)
 		printf ("w %d\n", w);
-	if(lev == 3) rgba((BITS) tp); else rgb((BITS) tp);
+	if(lev >= 3) rgba((BITS) tp); else rgb((BITS) tp);
 }
 
 static void morphlinestyle(TAG tp)
@@ -834,13 +877,55 @@ static void morphlinestyle(TAG tp)
 	rgba((BITS) tp); rgba((BITS) tp);
 }
 
+static void morphlinestyle2(TAG tp)
+{	unsigned short w1;
+	int join_style;
+	int has_fill;
+	int is_morph = (tp->type == SWF_DEFINEMORPHSHAPE2);
+	w1 = readint2((BITS) tp);
+	if (is_morph) {
+		unsigned short w2;
+		w2 = readint2((BITS) tp);
+		if(verbose)
+			printf("w %d => %d\n", w1, w2);
+	} else {
+		if(verbose)
+			printf("w %d\n", w1);
+	}
+	getbits((BITS) tp, 2);
+	join_style = getbits((BITS) tp, 2);
+	has_fill = getbits((BITS) tp, 1);
+	getbits((BITS) tp, 11);
+	if (join_style == 2) {
+		readint2((BITS) tp);
+	} else {
+		if (has_fill) {
+			if (is_morph)
+				morphfillstyle(tp);
+			else
+				fillstyle(tp, 4);
+		} else {
+			rgba((BITS) tp);
+			if (is_morph)
+				rgba((BITS) tp);
+		}
+	}
+}
+
 static void defineshape(TAG tp, int lev)
 {	unsigned short id;
 
 	id = change_id(tp);
 	if(verbose)
 		printf("shape %d\n", id);
+	alignbits(tp);
 	rect((BITS) tp);
+	if(lev == 4) {
+		alignbits(tp);
+		rect((BITS) tp);
+		alignbits(tp);
+		tp->readc(tp);
+	}
 	fillandlinestyles(tp, lev);
 	shape(tp, lev);
 }
@@ -853,7 +938,7 @@ static void shape(TAG tp, int lev)
 	shaperecord(tp, nfillbits, nlinebits,lev);
 }
 
-static void definemorphshape(TAG tp)
+static void definemorphshape(TAG tp, int lev)
 {	unsigned short id, fcnt, lcnt;
 	unsigned long loff;
 	unsigned char *endp;
@@ -865,6 +950,11 @@ static void definemorphshape(TAG tp)
 	rect((BITS) tp);
 	alignbits(tp);
 	rect((BITS) tp);
+	if (lev == 2) {
+		rect((BITS) tp);
+		rect((BITS) tp);
+		tp->readc(tp);
+	}
 	loff = readint4((BITS) tp);
 	endp = tp->datptr + loff;
 	fcnt = tp->readc(tp);
@@ -883,7 +973,10 @@ static void definemorphshape(TAG tp)
 		printf ("%d line styles\n", lcnt);
 	for(n = 0 ; n < lcnt ; n++)
 	{	alignbits(tp);
-		morphlinestyle(tp);
+		if (lev == 2)
+			morphlinestyle2(tp);
+		else
+			morphlinestyle(tp);
 	}
 /*	for(n = 0 ; tp->datptr < endp ; n++)
 	{	alignbits(tp);
@@ -953,9 +1046,16 @@ static void definetext(TAG tp, int lev)
 	}
 }
 
-static void placeobject2(TAG tp)
+static void placeobject(TAG tp, int lv)
 {	int hasname, hasratio, hascxform, hasmatrix, haschar, hasmove, hasactions, hasmask;
 	short depth, charid;
+	int hasfilters, hasbitmapcaching, hasblendmode;
+	if (lv == 3) {
+		getbits((BITS)tp, 5);
+		hasbitmapcaching = getbits((BITS)tp, 1);
+		hasblendmode = getbits((BITS)tp, 1);
+		hasfilters = getbits((BITS)tp, 1);
+	}
 	hasactions = getbits((BITS)tp, 1);
 	hasmask = getbits((BITS)tp, 1);
 	hasname = getbits((BITS)tp, 1);
