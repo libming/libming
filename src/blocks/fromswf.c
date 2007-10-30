@@ -390,6 +390,7 @@ static int drop_tag(TAG tp)
 	{
 		case SWF_FILEATTRIBUTES:
 		case SWF_METADATA:
+		case SWF_DEFINESCENEANDFRAMEDATA: // only allowed in main timeline -> merge ?
 			return 1;
 		default:
 			return 0;
@@ -517,6 +518,9 @@ static int handle_tag(TAG tp)
 		case SWF_SOUNDSTREAMHEAD2:
 		case SWF_SOUNDSTREAMBLOCK:
 		case SWF_JPEGTABLES:
+		case SWF_SYMBOLCLASS:
+		case SWF_DOABC:
+		case SWF_DEFINEFONTNAME:
 		/*case stagClipInit:*/
 			break;
 		/* simple tags - one id at beginning */
@@ -540,6 +544,7 @@ static int handle_tag(TAG tp)
 		case SWF_DEFINEVIDEOSTREAM:
 		case SWF_VIDEOFRAME:
 		case SWF_INITACTION:
+		case SWF_DEFINEBINARYDATA:
 		/*case SWF_NEWFONTINFO:*/
 			id = change_id(tp);
 			if(verbose)
