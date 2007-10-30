@@ -11,7 +11,8 @@
 	* Fixed tag order issues
 	* Ming defaults now to local-with-filesystem sandbox for SWF>=8
 	* Add support for init actions in makeswf
-	* SWF8 support for fromswf / prebuiltclip
+	* SWF8 / 9 support for fromswf / prebuiltclip
+	* implements ASM op
 
 0.4.0.beta5 - 2007-09-18
 
