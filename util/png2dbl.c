@@ -278,8 +278,9 @@ void writeDBL(FILE *f, struct pngdata png)
   outdata = (unsigned char*) malloc(outsize = (int)floor(alignedsize*1.01+12));
   /* compress the RGB color table (if present) and image data one block */
   compress2(outdata, &outsize, data, alignedsize, 9);
-  outsize = alignedsize;
-
+#ifndef USE_ZLIB  
+  outsize = alignedsize;		/* if using zlib use the compress2() result value!  */
+#endif
   /* write the remaining file size */
 
   if(png.color_type == PNG_COLOR_TYPE_PALETTE)
