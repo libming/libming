@@ -66,5 +66,7 @@ setproperty
 //post // known as token, but unhandled
 //get // known as token, but unhandled
 //end // known as token, but unhandled
+implements
+extends
 };
 

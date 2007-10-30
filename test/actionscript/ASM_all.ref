@@ -1,14 +1,14 @@
 File version: 6
-File size: 146
+File size: 148
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 12 (SWF_DOACTION)
-Block length: 116
+Block length: 118
 
- 57 Actions
+ 59 Actions
     26:SWFACTION_CONSTANTPOOL
      [000] string
      [001] 66
@@ -84,14 +84,16 @@ Block length: 116
     138:SWFACTION_TOSTRING
     139:SWFACTION_GETPROPERTY
     140:SWFACTION_SETPROPERTY
-    141:SWFACTION_END
+    141:SWFACTION_IMPLEMENTSOP
+    142:SWFACTION_EXTENDS
+    143:SWFACTION_END
 
-Offset: 142 (0x008e)
+Offset: 144 (0x0090)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 144 (0x0090)
+Offset: 146 (0x0092)
 Block type: 0 (SWF_END)
 Block length: 0
 
