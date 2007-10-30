@@ -471,6 +471,9 @@ class SWFDisplayItem
   void setMatrix(float a, float b, float c, float d, float x, float y)
     { SWFDisplayItem_setMatrix(this->item, a, b, c, d, x, y); }
 
+  void setMaskLevel(int level)
+    { SWFDisplayItem_setMaskLevel(this->item, level); }
+
   SWF_DECLAREONLY(SWFDisplayItem);
   SWFDisplayItem();
 };
