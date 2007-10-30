@@ -269,6 +269,7 @@ tostring		{ count();	return TOSTRING;	}
 targetpath		{ count();	return TARGETPATH;	}
 duplicatemovieclip	{ count();	return DUPLICATEMOVIECLIP; }
 removemovieclip		{ count();	return REMOVEMOVIECLIP; }
+implements		{ count(); 	return IMPLEMENTS;	}
 }
 
 <AS_V6>{

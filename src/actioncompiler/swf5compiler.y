@@ -64,7 +64,7 @@ Buffer bf, bc;
 
 %token TRY THROW CATCH FINALLY
 
-%token EXTENDS
+%token EXTENDS IMPLEMENTS
 
 %token NULLVAL
 %token UNDEFINED
@@ -466,6 +466,7 @@ identifier
 	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }
 	| SETTARGET 	{ $$ = strdup("setTarget"); }
 	| CALLFRAME		{ $$ = strdup("call"); }
+	| IMPLEMENTS	{ $$ = strdup("implements"); }
 	;
 
 formals_list
@@ -1949,6 +1950,8 @@ opcode
 						     SWFACTION_EXTENDS); }
 	| TARGETPATH		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_TARGETPATH); }
+	| IMPLEMENTS		{ $$ = bufferWriteOp(asmBuffer, 
+						     SWFACTION_IMPLEMENTSOP); }
 
 	/* f4 ops */
 	| OLDADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }
