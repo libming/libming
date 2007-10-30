@@ -219,7 +219,7 @@ main (int argc, char **argv)
 	int width=640, height=480;    /* default stage size */
 	int i;
 	int swfcompression = DEFSWFCOMPRESSION;
-	int framerate = 12;
+	float framerate = 12.0;
 	int usedfiles = 0;
 	struct stat statbuf;
 	int debug_parser = 0;	
@@ -296,7 +296,7 @@ main (int argc, char **argv)
 				}
 				break;
 			case 'r':
-				if ( sscanf(optarg, "%d", &framerate) != 1 )
+				if ( sscanf(optarg, "%f", &framerate) != 1 )
 				{
 					usage(argv[0], EXIT_FAILURE);
 				}
@@ -687,6 +687,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.44  2007/10/30 12:17:08  krechert
+ * set framerate as float
+ *
  * Revision 1.43  2007/10/25 17:26:12  krechert
  * use new InitAction api
  *
