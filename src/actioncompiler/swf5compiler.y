@@ -11,6 +11,7 @@
 #include "actiontypes.h"
 #include "assembler.h"
 
+#define YYERROR_VERBOSE 1
 #define YYPARSE_PARAM buffer
 //#define DEBUG 1
 
@@ -40,6 +41,7 @@ Buffer bf, bc;
 	Buffer obj, ident, memexpr;
   } lval;
 }
+
 
 /* tokens etc. */
 
