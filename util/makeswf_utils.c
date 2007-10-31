@@ -152,11 +152,12 @@ printCompileMessage(SWFMsgFunc func)
 {
    char *ptr1;
 
-   printf("  %s\n", strtok(lastcompilemessage, "\n"));
+   fprintf(stderr, "  %s\n", strtok(lastcompilemessage, "\n"));
    while  ( (ptr1=strtok(NULL, "\n")) )
    {
-      func("  %s\n", ptr1);
+      fprintf(stderr, "  %s\n", ptr1);
    }
+   func("\n");
 }
 
 
@@ -245,6 +246,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.8  2007/10/31 16:53:29  krechert
+ * x
+ *
  * Revision 1.7  2007/10/27 15:12:58  krechert
  * pass through real swf version
  *
