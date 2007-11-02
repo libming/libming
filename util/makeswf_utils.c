@@ -95,7 +95,7 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 	char *code;
 	char ppfile_fallback[PATH_MAX];        /* preprocessed file */
 	SWFMsgFunc old_error_func;
-	int compiler_version, length;
+	int length;
 	if ( dopreprocess )
 	{
 		if ( ! ppfile ) 
@@ -134,7 +134,7 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 	}
 	else
 	{
-		printf("successfully compiled %i bytes bytecode.\n");
+		printf("successfully compiled %i bytes bytecode.\n", length);
 	}
 	free(code);
 
@@ -246,6 +246,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.9  2007/11/02 10:18:08  krechert
+ * fix warnings
+ *
  * Revision 1.8  2007/10/31 16:53:29  krechert
  * x
  *
