@@ -38,7 +38,6 @@ SWFInitAction newSWFInitAction_MovieClip(SWFMovieClip clip, SWFAction action);
 void destroySWFAction(SWFAction action);
 void destroySWFInitAction(SWFInitAction action);
 
-int SWFAction_compile(SWFAction action, int swfVersion, int *length);
 void SWFOutput_writeAction(SWFOutput out, SWFAction action);
 
 SWFMovieClip SWFInitAction_getMovieClip(SWFInitAction action);

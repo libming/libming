@@ -618,6 +618,7 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 /***** SWFAction *****/
 SWFAction newSWFAction(const char *script);
 SWFAction newSWFAction_fromFile(const char *filename);
+int SWFAction_compile(SWFAction action, int swfVersion, int *length);
 SWFAction compileSWFActionCode(const char *script) __deprecated;
 void destroySWFAction(SWFAction action);
 byte *SWFAction_getByteCode(SWFAction action, size_t *length);
