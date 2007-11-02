@@ -111,6 +111,22 @@ struct _buffer
 
 #define BUFFER_SIZE sizeof(struct _buffer)
 
+struct exprlist_s
+{
+	Buffer buffer;
+	int count;
+};
+
+struct function_s
+{
+	char *name;
+	struct exprlist_s params;
+	Buffer code;
+	int flags;
+};
+typedef struct function_s *ASFunction;
+
+
 struct switchcase
 {	Buffer cond, action;
 	int condlen, actlen, isbreak;
@@ -181,19 +197,6 @@ int bufferWriteGetProperty(Buffer out, char *string);
 int bufferWriteSetProperty(Buffer out, char *string);
 int bufferWriteWTHITProperty(Buffer out);
 
-/**
- * @param func_name
- * 	Function name, NULL for anonymous functions.
- *
- * @param num_regs
- * 	Number of registers.
- *
- * @param flags
- * 	See SWFDefineFunction2Flags enum.
- */
-void bufferWriteDefineFunction2(Buffer out, char *func_name,
-		Buffer args, Buffer code, int flags, int num_regs);
-
 /* concat b to a, destroy b */
 char *stringConcat(char *a, char *b);
 
@@ -202,6 +205,9 @@ void bufferResolveJumps(Buffer out);
 void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 
 void bufferPatchPushLength(Buffer buffer, int len);
+
+int bufferWriteFunction(Buffer out, ASFunction function, int version);
+ASFunction newASFunction();
 
 /* rather than setting globals... */
 void swf4ParseInit(const char *string, int debug, int version);

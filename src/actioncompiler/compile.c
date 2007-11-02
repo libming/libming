@@ -161,88 +161,6 @@ int bufferWriteConstants(Buffer out)
 	return len+3;
 }
 
-void bufferWriteDefineFunction2(Buffer out, char *func_name, Buffer args, Buffer code, int flags, int num_regs)
-{
-	Buffer c;
-	char buf[1024];
-	int num_args = 0, i;
-	char *p = (char *) args->buffer;
-	
-	strcpy(buf, "");
-		
-	// REGISTERPARAM records
-	c = newBuffer();
-	// TODO: rewrite this function, all these calls to strncat
-	//       seem overkill to me
-	for(i = 0; i < bufferLength(args); i++)
-	{
-		if(p[i] == '\0')
-		{
-			bufferWriteU8(c, 0);
-			bufferWriteHardString(c, buf, strlen(buf)+1);	
-			strcpy(buf, "");
-			num_args++;
-		}
-		else
-		{
-			strncat(buf, &p[i], 1);
-		}
-	}
-
-	bufferWriteOp(out, SWFACTION_DEFINEFUNCTION2);
-
-	if(func_name == NULL)
-	{
-		size_t taglen =
-			+ 1			/* function name (empty) */
-			+ 2			/* arg count (short) */
-			+ 1			/* reg count (byte) */
-			+ 2			/* flags */
-			+ bufferLength(c)	/* swf_params */
-			+ 2 			/* body size */
-			;
-
-#ifdef MING_DEBUG_FUNCTION2
-		printf("adding anonymouse SWF_DEFINEFUNCTION2 nargs=%d flags=%d"
-				" arglen=%d codelen=%d taglen=%d\n",
-				num_args, flags, bufferLength(args),
-				bufferLength(code), taglen);
-#endif
-		bufferWriteS16(out, taglen);
-
-		bufferWriteU8(out, 0); /* empty function name */
-	}
-	else
-	{
-		size_t taglen = 0
-			+ strlen(func_name)+1	/* function name */
-			+ 2			/* arg count (short) */
-			+ 1			/* reg count (byte) */
-			+ 2			/* flags */
-			+ bufferLength(c)	/* swf_params */
-			+ 2 			/* body size */
-			;
-
-#ifdef MING_DEBUG_FUNCTION2
-		printf("adding named SWF_DEFINEFUNCTION2 name=%s nargs=%d flags=%d"
-				" regparamlen=%d arglen=%d codelen=%d taglen=%d\n",
-				func_name, num_args, flags,
-				bufferLength(c),
-				bufferLength(args),
-				bufferLength(code), taglen);
-#endif
-		bufferWriteS16(out, taglen);
-		bufferWriteHardString(out, func_name, strlen(func_name)+1);	 
-	}
-	bufferWriteS16(out, num_args); /* number of params */
- 	bufferWriteU8(out, num_regs); /* register count */
- 	bufferWriteS16(out, flags);    /* flags */
- 	//bufferWriteS16(out, 0);    /* flags */
- 	bufferConcat(out, c);
-	bufferWriteS16(out, bufferLength(code)); /* code size */
-	bufferConcat(out, code);
-}
-
 Buffer newBuffer()
 {
 	Buffer out = (Buffer)malloc(BUFFER_SIZE);
@@ -935,6 +853,150 @@ int bufferWriteGetProperty(Buffer out, char *string)
 	bufferWriteU8(out, PUSH_STRING);
 
 	return 4 + bufferWriteData(out, (byte*) property, strlen(property)+1);
+}
+
+/**
+ * @param func_name
+ * 	Function name, NULL for anonymous functions.
+ *
+ * @param num_regs
+ * 	Number of registers.
+ *
+ * @param flags
+ * 	See SWFDefineFunction2Flags enum.
+ */
+static int bufferWriteDefineFunction2(Buffer out, char *func_name, 
+		Buffer args, Buffer code, int flags, int num_regs)
+{
+	Buffer c;
+	char buf[1024];
+	int num_args = 0, i;
+	char *p = (char *) args->buffer;
+	size_t taglen;	
+	strcpy(buf, "");
+		
+	// REGISTERPARAM records
+	c = newBuffer();
+	// TODO: rewrite this function, all these calls to strncat
+	//       seem overkill to me
+	for(i = 0; i < bufferLength(args); i++)
+	{
+		if(p[i] == '\0')
+		{
+			bufferWriteU8(c, 0);
+			bufferWriteHardString(c, buf, strlen(buf)+1);	
+			strcpy(buf, "");
+			num_args++;
+		}
+		else
+		{
+			strncat(buf, &p[i], 1);
+		}
+	}
+
+	bufferWriteOp(out, SWFACTION_DEFINEFUNCTION2);
+
+	if(func_name == NULL)
+	{
+		taglen =
+			+ 1			/* function name (empty) */
+			+ 2			/* arg count (short) */
+			+ 1			/* reg count (byte) */
+			+ 2			/* flags */
+			+ bufferLength(c)	/* swf_params */
+			+ 2 			/* body size */
+			;
+
+#ifdef MING_DEBUG_FUNCTION2
+		printf("adding anonymouse SWF_DEFINEFUNCTION2 nargs=%d flags=%d"
+				" arglen=%d codelen=%d taglen=%d\n",
+				num_args, flags, bufferLength(args),
+				bufferLength(code), taglen);
+#endif
+		bufferWriteS16(out, taglen);
+
+		bufferWriteU8(out, 0); /* empty function name */
+	}
+	else
+	{
+		taglen = 0
+			+ strlen(func_name)+1	/* function name */
+			+ 2			/* arg count (short) */
+			+ 1			/* reg count (byte) */
+			+ 2			/* flags */
+			+ bufferLength(c)	/* swf_params */
+			+ 2 			/* body size */
+			;
+
+#ifdef MING_DEBUG_FUNCTION2
+		printf("adding named SWF_DEFINEFUNCTION2 name=%s nargs=%d flags=%d"
+				" regparamlen=%d arglen=%d codelen=%d taglen=%d\n",
+				func_name, num_args, flags,
+				bufferLength(c),
+				bufferLength(args),
+				bufferLength(code), taglen);
+#endif
+		bufferWriteS16(out, taglen);
+		bufferWriteHardString(out, func_name, strlen(func_name)+1);	 
+	}
+	bufferWriteS16(out, num_args); /* number of params */
+ 	bufferWriteU8(out, num_regs); /* register count */
+ 	bufferWriteS16(out, flags);    /* flags */
+ 	//bufferWriteS16(out, 0);    /* flags */
+ 	bufferConcat(out, c);
+	bufferWriteS16(out, bufferLength(code)); /* code size */
+	bufferConcat(out, code);
+	return taglen;
+}
+
+void destroyASFunction(ASFunction func)
+{
+	free(func->name);
+	free(func);
+	delctx(CTX_FUNCTION); 
+}
+
+int bufferWriteFunction(Buffer out, ASFunction function, int version)
+{
+	int tagLen; 
+	
+	if(version == 2)
+	{
+		tagLen = bufferWriteDefineFunction2(out, function->name, 
+			function->params.buffer, function->code, function->flags, 0);
+	}
+	else
+	{
+		tagLen = 5; 
+		tagLen += bufferLength(function->params.buffer);
+		if(function->name != NULL)
+			tagLen += strlen(function->name); 
+	
+		bufferWriteOp(out, SWFACTION_DEFINEFUNCTION);
+		bufferWriteS16(out, tagLen);
+		if(function->name == NULL) 
+			bufferWriteU8(out, 0); /* empty function name */
+		else
+			bufferWriteHardString(out, function->name, strlen(function->name) +1 );
+		bufferWriteS16(out, function->params.count);
+		bufferConcat(out, function->params.buffer);
+		bufferWriteS16(out, bufferLength(function->code));
+		bufferConcat(out, function->code);
+	}
+	destroyASFunction(function);
+	return tagLen;
+}
+
+ASFunction newASFunction()
+{
+	ASFunction func;
+	addctx(CTX_FUNCTION);
+	func = malloc(sizeof(struct function_s));
+	func->flags = 0;
+	func->code = NULL;
+	func->params.count = -1;
+	func->name = NULL;
+	return func;
 }
 
 /*

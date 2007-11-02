@@ -28,14 +28,10 @@ Buffer bf, bc;
   int intVal;
   int len;
   double doubleVal;
-
-  struct
-  {
-    Buffer buffer;
-    int count;
-  } exprlist;
-  struct switchcase   switchcase;
-  struct switchcases switchcases;
+  ASFunction 		function;
+  struct exprlist_s 	exprlist;
+  struct switchcase	switchcase;
+  struct switchcases	switchcases;
   struct
   {
 	Buffer obj, ident, memexpr;
@@ -134,7 +130,7 @@ Buffer bf, bc;
 %type <action> try_catch_stmt throw_stmt
 %type <action> with_stmt
 %type <action> switch_stmt
-%type <action> anon_function_decl function_decl anycode
+%type <action> anycode
 %type <action> void_function_call function_call method_call
 %type <action> assign_stmt assign_stmts assign_stmts_opt
 %type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
@@ -152,6 +148,7 @@ Buffer bf, bc;
 
 %type <str> identifier
 
+%type <function> anon_function_decl function_decl
 %type <len> opcode opcode_list push_item with push_list
 
 /*
@@ -183,7 +180,12 @@ anycode
 	: stmt
 		{ bufferConcat(bc, $1); }
 	| function_decl
-		{ bufferConcat(bf, $1); }
+		{ 
+		  if(swfVersion > 6)
+			bufferWriteFunction(bf, $1, 2); 
+		  else
+			bufferWriteFunction(bf, $1, 1);
+		}
 	;
 
 stmts
@@ -489,38 +491,24 @@ formals_list
 		  free($3); }
 	;
 
-function_init
-	: FUNCTION
-		{ addctx(CTX_FUNCTION); }
+anon_function_decl
+	: FUNCTION '(' formals_list ')' stmt
+	{
+		$$ = newASFunction();
+		$$->name = NULL;
+		$$->params = $3;
+		$$->code = $5;
+	}
 	;
 
+
 function_decl
-	: function_init identifier '(' formals_list ')' stmt
+	: FUNCTION identifier '(' formals_list ')' stmt
 	{
-		$$ = newBuffer();
-		if(swfVersion > 6)
-		{
-			// TODO: let user control which flags to use ?
-			// Don't preload any variable in registers, or we'll need to track all uses of 
-			// those variables in this function context turning them into register accesses
-			int flags = 0;
-			int num_regs = 0;
-			bufferWriteDefineFunction2($$, $2, $4.buffer, $6, flags, num_regs);
-		}
-		else
-		{
-			bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
-			bufferWriteS16($$, strlen($2) +
-				bufferLength($4.buffer) + 5);
-			bufferWriteHardString($$, $2, strlen($2)+1);
-			bufferWriteS16($$, $4.count);
-			bufferConcat($$, $4.buffer);
-			bufferWriteS16($$, bufferLength($6));
-			bufferConcat($$, $6);
-		}
-		delctx(CTX_FUNCTION); 
-		free($2); 
-		// how to release $4 ?
+		$$ = newASFunction();
+		$$->name = $2;
+		$$->params = $4;
+		$$->code = $6;		
 	}
 	;
 
@@ -1079,32 +1067,6 @@ expr_list
 		  ++$$.count;  }
 	;
 
-anon_function_decl
-	: function_init '(' formals_list ')' stmt
-	{
-		$$ = newBuffer();
-		if(swfVersion > 6)
-		{
-			// TODO: let user control which flags to use ?
-			// Don't preload any variable in registers, or we'll need to track all uses of 
-			// those variables in this function context turning them into register accesses
-			int flags = 0;
-			int num_regs = 0;
-			bufferWriteDefineFunction2($$, NULL, $3.buffer, $5, flags, num_regs);
-		}
-		else
-		{
-			bufferWriteOp($$, SWFACTION_DEFINEFUNCTION);
-			bufferWriteS16($$, bufferLength($3.buffer) + 5); /* what's 5 here ? */
-			bufferWriteU8($$, 0); /* empty function name */
-			bufferWriteS16($$, $3.count);
-			bufferConcat($$, $3.buffer);
-			bufferWriteS16($$, bufferLength($5));
-			bufferConcat($$, $5);
-		}
-		delctx(CTX_FUNCTION); 
-	}
-	;
 
 method_call
 	: lvalue_expr '.' identifier '(' expr_list ')'
@@ -1473,6 +1435,13 @@ expr_or_obj
 
 primary
 	: anon_function_decl
+		{
+			$$ = newBuffer();
+			if(swfVersion > 6)
+				bufferWriteFunction($$, $1, 2);
+			else
+				bufferWriteFunction($$, $1, 1);
+		}
 
 	| lvalue_expr
 	
