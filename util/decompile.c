@@ -1893,6 +1893,8 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
   int jmpsize=0;					// debug helper
   int lastoff=0;					// debug helper
   int n_firstactions=maxn;				// array index of 1st case actions code
+  int lastcasestart=0;					// offs where last "case x:" begins
+  char *defa="[last]";					// debug helper for early "default:" 
   char *tmp=NULL;					// helper for pending output
   struct strbufinfo origbuf;				// pending output buffer
   struct _stack *StackSave;
@@ -1995,14 +1997,20 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
        break;						// ready
       else
       {
-       INDENT	
-       println("default:			// at %d start=%d ccsize=%d",actions[start].SWF_ACTIONRECORD.Offset, start, ccsize);
+       INDENT
+       if (actions[start].SWF_ACTIONRECORD.Offset>lastcasestart)
+	xsize+=ccsize;        
+       else
+	defa="[early]";
+       println("default:			// at %d %s start=%d ccsize=%d",actions[start].SWF_ACTIONRECORD.Offset,defa, start, ccsize);
       }
      }
      else
      {
       INDENT
-      println("case %s:			// at %d  start=%d ccsize=%d jmp=%d+%d+5",getString(pop()), actions[start].SWF_ACTIONRECORD.Offset,start,ccsize,lastoff,jmpsize);
+      xsize=ccsize;
+      lastcasestart=actions[start].SWF_ACTIONRECORD.Offset;
+      println("case %s:			// at %d  start=%d ccsize=%d jmp=%d+%d+5",getString(pop()), lastcasestart,start,ccsize,lastoff,jmpsize);
       swcopy=pop();
       //   SanityCheck(decompile_SWITCH,!strcmp(getName(swcopy),getName(sw)),"sw0 != sw");
      }
@@ -2016,10 +2024,6 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
     decompileActions( ccsize, &actions[start],gIndent+1);
     offseoloop=offSave;
     Stack=StackSave;
-    if (actions[i].SWF_ACTIONRECORD.ActionCode!=SWFACTION_JUMP) 
-      xsize=ccsize;
-    else
-      xsize+=ccsize;
 #if USE_LIB
     tmp=switchToOrigString(origbuf);
 #endif
