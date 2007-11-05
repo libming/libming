@@ -14,10 +14,9 @@ static int swf5debug;
 static const char *lexBuffer = NULL;
 static int lexBufferLen = 0;
 
-static int  sLineNumber = 0;
-static char szLine[1024];
+static int  sLineNumber = 0, realLine = 0;
 static char msgbufs[2][1024] = { {0}, {0} }, *msgline = {0};
-static int  column = 0;
+static int  column = 0, realColumn = 0, lastToken = 0;
 
 static void comment();
 static void comment1();
@@ -356,8 +355,7 @@ finally			{ count(); return FINALLY; }
 ":"			{ count();	return ':'; }
 "~"			{ count();	return '~'; }
 
-\r?\n			{ count();	strcpy(szLine, yytext + 1);
-					countline();	yyless(1);	}
+\r?\n			{ countline();	yyless(1);	}
 
 .			SWF_error("Unrecognized character: %s\n", yytext);
 
@@ -384,7 +382,7 @@ static void countline()
     msgline[1023] = 0;
    }
   }
-
+  
   ++sLineNumber;
   column = 0;
   msgline = msgbufs[sLineNumber & 1];
@@ -392,21 +390,17 @@ static void countline()
 
 static int LineNumber(void)
 {
-   return (sLineNumber + 1);
+   return realLine + 1;
 }
 
 static int ColumnNumber(void)
 {
-   return column;
+   return realColumn;
 }
 
 static char *LineText(void)
 {
-  if(column < 1023)
-    msgline[column] = 0;
-  else
-    msgline[1023] = 0;
-  return msgline;
+  return msgbufs[realLine & 1];
 }
 
 static void comment()
@@ -482,23 +476,21 @@ static void count(void)
 {
    int n;
 
-   // Count the characters to maintain the current column position
-   if (yytext[0] == '\n')
+   if(swf5debug) printf("%s", yytext);
+   if(realLine != sLineNumber)
    {
-      if (swf5debug) printf("\n");
+     if(column > 0 || realLine + 1 < sLineNumber)
+     {
+       realColumn = 0;
+       realLine = sLineNumber;
+     }
    }
-   else
+   realColumn += lastToken;
+   lastToken = 0;
+   for(n=0; n<yyleng; ++n, ++column, ++lastToken)
    {
-      if (swf5debug) printf("%s", yytext);
-
-      for(n=0; n<yyleng; ++n, ++column)
-      {
-	if(column < 1023)
-	  msgline[column] = yytext[n];
-      }
-
-      //-- keep writing the stuff to standard output
-      //column += yyleng;
+     if(column < 1023)
+       msgline[column] = yytext[n];
    }
 }
 
