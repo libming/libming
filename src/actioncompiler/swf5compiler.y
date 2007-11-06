@@ -29,6 +29,8 @@ Buffer bf, bc;
   int len;
   double doubleVal;
   ASFunction 		function;
+  ASClass		clazz;
+  ASClassMember		classMember;
   struct exprlist_s 	exprlist;
   struct switchcase	switchcase;
   struct switchcases	switchcases;
@@ -62,7 +64,7 @@ Buffer bf, bc;
 
 %token TRY THROW CATCH FINALLY
 
-%token EXTENDS IMPLEMENTS
+%token EXTENDS IMPLEMENTS CLASS
 
 %token NULLVAL
 %token UNDEFINED
@@ -136,7 +138,8 @@ Buffer bf, bc;
 %type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
 %type <action> delete_call
-%type <lval> lvalue
+%type <classMember> class_stmts class_stmt
+%type <lval> lvalue 
 
 %type <exprlist> expr_list objexpr_list formals_list
 
@@ -151,6 +154,7 @@ Buffer bf, bc;
 %type <function> anon_function_decl function_decl
 %type <len> opcode opcode_list push_item with push_list
 
+%type <clazz> class_decl
 /*
 %type <intVal> integer
 %type <doubleVal> double
@@ -186,6 +190,9 @@ anycode
 		  else
 			bufferWriteFunction(bf, $1, 1);
 		}
+
+	| class_decl
+		{ bufferWriteClass(bf, $1); }
 	;
 
 stmts
@@ -215,6 +222,22 @@ stmt
 	| with_stmt
 	| try_catch_stmt ';'
 	| throw_stmt
+	;
+
+class_stmts
+	: class_stmt 			{ $$ = $1; }
+	| class_stmts class_stmt 	{ $$ = $2; $2->next = $1; }
+
+class_stmt
+	: 		{ $$ = NULL; } 
+	| function_decl { $$ = newASClassMember_function($1); }
+	;
+
+class_decl 
+	: CLASS identifier '{' class_stmts '}'
+	{ 
+		$$ = newASClass($2, $4);
+	}
 	;
 
 throw_stmt
@@ -562,7 +585,6 @@ obj_ref_for_delete_only
 	| '(' obj_ref_for_delete_only ')' { $$ = $2; }
 	;
 
-
 while_init
 	: WHILE
 		{ addctx(CTX_LOOP); }
@@ -651,9 +673,9 @@ iter_stmt
 
 		  $$ = $4;
 		  if($4->hasObject)
-		  	bufferWriteOp($$, SWFACTION_ENUMERATE2);
+			bufferWriteOp($$, SWFACTION_ENUMERATE2);
 		  else
-		  	bufferWriteOp($$, SWFACTION_ENUMERATE);	
+			bufferWriteOp($$, SWFACTION_ENUMERATE);
 
 		  b2 = newBuffer();
 		  bufferWriteSetRegister(b2, 0);
@@ -688,9 +710,9 @@ iter_stmt
 
 		  $$ = $5;
 		  if($5->hasObject)
-		  	bufferWriteOp($$, SWFACTION_ENUMERATE2);	
+			bufferWriteOp($$, SWFACTION_ENUMERATE2);        
 		  else
-		  	bufferWriteOp($$, SWFACTION_ENUMERATE);	
+			bufferWriteOp($$, SWFACTION_ENUMERATE); 
 
 		  b2 = newBuffer();
 		  bufferWriteSetRegister(b2, 0);
@@ -779,7 +801,7 @@ level
 	;
 
 void_function_call
-	
+
 	: TRACE '(' expr_or_obj ')'
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TRACE); }
@@ -963,7 +985,6 @@ void_function_call
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_SETTARGET2); }
 
-
 	;
 
 
@@ -1034,7 +1055,6 @@ function_call
 		  bufferWriteOp($$, SWFACTION_TYPEOF); }
 	;
 
-
 /* legacy and built-in functions */
 delete_call
 	: DELETE obj_ref_for_delete_only 
@@ -1044,9 +1064,7 @@ delete_call
 		  else 
 		    bufferWriteOp($$, SWFACTION_DELETE2);
 		}
-
 	;
-
 
 
 expr_list
@@ -1066,7 +1084,6 @@ expr_list
 		  $$.buffer = tmp;
 		  ++$$.count;  }
 	;
-
 
 method_call
 	: lvalue_expr '.' identifier '(' expr_list ')'
@@ -1442,9 +1459,8 @@ primary
 			else
 				bufferWriteFunction($$, $1, 1);
 		}
-
 	| lvalue_expr
-	
+
 	| delete_call
 
 	| incdecop lvalue %prec "++"
@@ -1657,7 +1673,7 @@ assign_stmt
 	| delete_call
 		{ $$ = $1;
 		  bufferWriteOp($$, SWFACTION_POP); }
-	
+
 	| function_call
 		{ $$ = $1;
 		  bufferWriteOp($$, SWFACTION_POP); }

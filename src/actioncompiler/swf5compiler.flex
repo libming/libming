@@ -170,6 +170,7 @@ asm			{ count();	BEGIN(asm); return ASM;		}
 eval			{ count();	return EVAL;		}
 type[oO]f		{ count();	return TYPEOF; }
 instance[oO]f		{ count();	return INSTANCEOF; }
+class			{ count();	return CLASS; }
 
   /* legacy functions */
 random			{ count();	return RANDOM;	}
@@ -199,8 +200,8 @@ loadVariablesNum	{ count();	return LOADVARIABLESNUM;	}
 loadMovieNum		{ count();	return LOADMOVIENUM;	}
 duplicateMovieClip	{ count();	return DUPLICATEMOVIECLIP; }
 removeMovieClip		{ count();	return REMOVEMOVIECLIP; }
-startDrag		{ count();	return STARTDRAG; }
-stopDrag		{ count(); 	return STOPDRAG; }
+startDrag		{ count();	return STARTDRAG;	}
+stopDrag		{ count();	return STOPDRAG;	}
 
   /* assembler ops */
 <asm>{

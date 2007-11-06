@@ -126,6 +126,29 @@ struct function_s
 };
 typedef struct function_s *ASFunction;
 
+typedef enum
+{
+	UNDEF,
+	METHOD
+} ClassMemberType;
+
+struct class_member_s
+{
+	ClassMemberType type;
+	union
+	{
+		ASFunction function;
+	} element;
+	struct class_member_s *next;
+};
+typedef struct class_member_s *ASClassMember;
+
+struct class_s
+{
+	char *name;
+	ASClassMember members;
+};
+typedef struct class_s *ASClass;
 
 struct switchcase
 {	Buffer cond, action;
@@ -207,7 +230,12 @@ void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 void bufferPatchPushLength(Buffer buffer, int len);
 
 int bufferWriteFunction(Buffer out, ASFunction function, int version);
+int bufferWriteClass(Buffer out, ASClass clazz);
+
 ASFunction newASFunction();
+ASClassMember newASClassMember_function(ASFunction func);
+ASClass newASClass(char *name, ASClassMember members);
+ASClassMember newASClassMember_function(ASFunction func);
 
 /* rather than setting globals... */
 void swf4ParseInit(const char *string, int debug, int version);

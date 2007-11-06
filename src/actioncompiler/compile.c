@@ -994,9 +994,155 @@ ASFunction newASFunction()
 	func = malloc(sizeof(struct function_s));
 	func->flags = 0;
 	func->code = NULL;
-	func->params.count = -1;
+	func->params.count = 0;
+	func->params.buffer = NULL;
 	func->name = NULL;
 	return func;
+}
+
+void destroyASClass(ASClass clazz)
+{
+	ASClassMember member;
+	if(clazz->name)
+		free(clazz->name);
+	
+	member = clazz->members;
+	while(member)
+	{	
+		ASClassMember _this = member;
+		member = member->next;
+		free(_this);
+	}
+	free(clazz);
+}
+
+ASFunction ASClass_getConstructor(ASClass clazz)
+{
+	ASClassMember member;
+	member = clazz->members;
+	while(member)
+	{
+		ASFunction func;
+		ASClassMember _this = member;
+		member = member->next;
+
+		if(_this->type != METHOD)
+			continue;
+		func = _this->element.function;
+		if(!func || !func->name)
+			continue;
+		if(strcmp(func->name, clazz->name) != 0)
+			continue;
+		
+		_this->element.function = NULL;
+		return func;
+	}
+	return newASFunction(); // default empty constructor
+}
+
+static int bufferWriteClassConstructor(Buffer out, ASClass clazz)
+{
+	int len = 0;
+	ASFunction func;
+
+	/* class constructor */
+	len += bufferWriteString(out, "_global", strlen("_global") + 1);
+	len += bufferWriteOp(out, SWFACTION_GETVARIABLE);
+	len += bufferWriteString(out, clazz->name, strlen(clazz->name) + 1);
+	func = ASClass_getConstructor(clazz);
+	if(func->name)
+	{
+		free(func->name);
+		func->name = NULL;
+	}
+	len += bufferWriteFunction(out, func, 1);
+	len += bufferWriteSetRegister(out, 1);
+	len += bufferWriteOp(out, SWFACTION_SETMEMBER);
+	
+	len += bufferWriteRegister(out, 1);
+	len += bufferWriteString(out, "prototype", strlen("prototype") + 1);
+	len += bufferWriteOp(out, SWFACTION_GETMEMBER);
+	len += bufferWriteSetRegister(out, 2);
+	
+	len += bufferWriteOp(out, SWFACTION_POP);
+
+	return len;
+}
+
+static int bufferWriteClassMethods(Buffer out, ASClass clazz)
+{
+	ASClassMember member = clazz->members;
+	int len = 0;
+	while(member)
+	{
+		ASFunction func;
+		ASClassMember _this = member;
+		member = member->next;
+		if(_this->type != METHOD)
+			continue;
+		func = _this->element.function;
+		if(!func || !func->name)
+			continue;
+	
+		if(strcmp(func->name, clazz->name) != 0)
+		{
+			SWF_error("only one class constructor allowed\n");
+		}
+	
+		len += bufferWriteRegister(out, 2);
+		len += bufferWriteString(out, func->name, strlen(func->name) + 1);
+		free(func->name);
+		func->name = NULL;
+		len += bufferWriteFunction(out, func, 1);
+		len += bufferWriteOp(out, SWFACTION_SETMEMBER);
+		_this->element.function = NULL;
+	}
+	return len;
+}
+
+int bufferWriteClass(Buffer out, ASClass clazz)
+{
+	int len = 0;
+	len += bufferWriteClassConstructor(out, clazz);
+	len += bufferWriteClassMethods(out, clazz);
+	
+	/* set class properties */
+	len += bufferWriteInt(out, 1);
+	len += bufferWriteNull(out);
+	len += bufferWriteString(out, "_global", strlen("_global") + 1);
+	len += bufferWriteOp(out, SWFACTION_GETVARIABLE);
+
+	len += bufferWriteString(out, clazz->name, strlen(clazz->name) + 1);
+	len += bufferWriteOp(out, SWFACTION_GETMEMBER);
+
+	len += bufferWriteString(out, "prototype", strlen("prototype") + 1);
+	len += bufferWriteOp(out, SWFACTION_GETMEMBER);
+		
+	len += bufferWriteInt(out, 3);
+	len += bufferWriteString(out, "ASSetPropFlags", strlen("ASSetPropFlags") + 1);
+	len += bufferWriteOp(out, SWFACTION_CALLFUNCTION);
+	len += bufferWriteOp(out, SWFACTION_POP);
+
+	destroyASClass(clazz);
+	return len;
+}
+
+ASClass newASClass(char *name, ASClassMember members)
+{
+	ASClass clazz;
+	clazz = malloc(sizeof(struct class_s));
+	clazz->name = name;
+	clazz->members = members;
+	return clazz;	
+}
+
+ASClassMember newASClassMember_function(ASFunction func)
+{
+	ASClassMember member = malloc(sizeof(struct class_member_s));
+	member->element.function = func;
+	member->type = METHOD;
+	member->next = NULL; 
+	return member;
 }
 
 /*
