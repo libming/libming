@@ -1464,11 +1464,6 @@ SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC)
 }
 /* }}} */
 
-static void destroy_SWFFontCharacter_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
-{
-	destroySWFBlock((SWFBlock)resource->ptr);
-}
-
 /* {{{ proto void swffontcha::raddChars(string)
    adds characters to a font for exporting font */
 PHP_METHOD(swffontchar, addChars)
@@ -1531,7 +1526,6 @@ PHP_METHOD(swffont, __construct)
 	zval **zfile;
 	SWFFont font;
 	int ret;
-
 	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zfile) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
@@ -2874,11 +2868,10 @@ PHP_METHOD(swfmovie, addFont)
 	movie = getMovie(getThis() TSRMLS_CC);
 	font = getFont(*zfont TSRMLS_CC);
 	res = SWFMovie_addFont(movie, font);
-
 	if(res != NULL)
 	{
 		/* try and create a fontchar object */
-    	ret = zend_list_insert(res, le_swffontcharp);
+    		ret = zend_list_insert(res, le_swffontcharp);
 		object_init_ex(return_value, fontchar_class_entry_ptr);
 		add_property_resource(return_value, "fontcharacter", ret);
 		zend_list_addref(ret);
@@ -4523,7 +4516,7 @@ PHP_MINIT_FUNCTION(ming)
 
 	le_swfsoundp = zend_register_list_destructors_ex(destroy_SWFSound_resource, NULL, "SWFSound", module_number);
 #ifdef HAVE_NEW_MING
-	le_swffontcharp = zend_register_list_destructors_ex(destroy_SWFFontCharacter_resource, NULL, "SWFFontCharacter", module_number);
+	le_swffontcharp = zend_register_list_destructors_ex(NULL, NULL, "SWFFontCharacter", module_number);
 	le_swfsoundinstancep = zend_register_list_destructors_ex(NULL, NULL, "SWFSoundInstance", module_number);
 	le_swfvideostreamp = zend_register_list_destructors_ex(destroy_SWFVideoStream_resource, NULL, "SWFVideoStream", module_number);
 #endif
