@@ -24,7 +24,9 @@ AS_TESTS = \
 	TryCatch.as	\
 	forin.as	\
 	legacy_functions.as \
-	drag.as
+	drag.as		\
+	class_empty.as	\
+	class_method.as 
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -44,7 +46,9 @@ EXTRA_DIST = 		\
 	TryCatch.ref \
 	forin.ref \
 	legacy_functions.ref \
-	drag.as		\
+	drag.ref	\
+	class_empty.ref	\
+	class_method.ref \
 	$(AS_TESTS)
 
 CLEANFILES = *.pp *.swf
