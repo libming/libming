@@ -622,12 +622,14 @@ void lower(char *s)
 static enum ctx *ctx_stack = {0};
 static int ctx_count = {0}, ctx_len = {0};
 void addctx(enum ctx val)
-{	if(ctx_count >= ctx_len)
+{	
+	if(ctx_count >= ctx_len)
 		ctx_stack = (enum ctx*) realloc(ctx_stack, (ctx_len += 10) * sizeof(enum ctx));
 	ctx_stack[ctx_count++] = val;
 }
 void delctx(enum ctx val)
-{	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
+{	
+	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
 		SWF_error("consistency check in delctx");
 }
 
@@ -953,7 +955,6 @@ void destroyASFunction(ASFunction func)
 {
 	free(func->name);
 	free(func);
-	delctx(CTX_FUNCTION); 
 }
 
 int bufferWriteFunction(Buffer out, ASFunction function, int version)
@@ -990,7 +991,6 @@ int bufferWriteFunction(Buffer out, ASFunction function, int version)
 ASFunction newASFunction()
 {
 	ASFunction func;
-	addctx(CTX_FUNCTION);
 	func = malloc(sizeof(struct function_s));
 	func->flags = 0;
 	func->code = NULL;

@@ -149,9 +149,9 @@ Buffer bf, bc;
 %type <op> assignop incdecop
 %type <getURLMethod> urlmethod
 
-%type <str> identifier
+%type <str> identifier function_identifier
 
-%type <function> anon_function_decl function_decl
+%type <function> function_decl
 %type <len> opcode opcode_list push_item with push_list
 
 %type <clazz> class_decl
@@ -514,24 +514,19 @@ formals_list
 		  free($3); }
 	;
 
-anon_function_decl
-	: FUNCTION '(' formals_list ')' stmt
-	{
-		$$ = newASFunction();
-		$$->name = NULL;
-		$$->params = $3;
-		$$->code = $5;
-	}
+function_identifier
+	: 		{ addctx(CTX_FUNCTION); $$ = NULL; }
+	| identifier	{ addctx(CTX_FUNCTION); $$ = $1; }
 	;
 
-
 function_decl
-	: FUNCTION identifier '(' formals_list ')' stmt
+	: FUNCTION function_identifier '(' formals_list ')' stmt
 	{
 		$$ = newASFunction();
 		$$->name = $2;
 		$$->params = $4;
-		$$->code = $6;		
+		$$->code = $6;	
+		addctx(CTX_FUNCTION);	
 	}
 	;
 
@@ -1451,8 +1446,11 @@ expr_or_obj
 	;
 
 primary
-	: anon_function_decl
+	: function_decl
 		{
+			if($1->name != NULL)
+				swf5error("anonymous decl only. identifier allowed\n");
+
 			$$ = newBuffer();
 			if(swfVersion > 6)
 				bufferWriteFunction($$, $1, 2);
