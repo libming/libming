@@ -35,7 +35,7 @@ Block length: 317
      [000]   Constant: 1 "test"
     118:SWFACTION_PUSH
      [000]   String: ''
-    0:SWFACTION_GETURL2
+    123:SWFACTION_GETURL2
   Method: none
   Target: Window
   LoadVars: No
@@ -43,7 +43,7 @@ Block length: 317
     127:SWFACTION_PUSH
      [000]   Constant: 1 "test"
      [001]   Constant: 2 "window"
-    0:SWFACTION_GETURL2
+    134:SWFACTION_GETURL2
   Method: none
   Target: Window
   LoadVars: No
@@ -51,7 +51,7 @@ Block length: 317
     138:SWFACTION_PUSH
      [000]   Constant: 1 "test"
      [001]   Constant: 2 "window"
-    64:SWFACTION_GETURL2
+    145:SWFACTION_GETURL2
   Method: none
   Target: Sprite
   LoadVars: No
@@ -60,14 +60,14 @@ Block length: 317
      [000]   Constant: 1 "test"
      [001]   Constant: 2 "window"
     156:SWFACTION_GETVARIABLE
-    67:SWFACTION_GETURL2
+    157:SWFACTION_GETURL2
   Target: Sprite
   LoadVars: No
   Reserved bits: 0
     161:SWFACTION_PUSH
      [000]   Constant: 1 "test"
      [001]   Constant: 3 "_level1"
-    66:SWFACTION_GETURL2
+    168:SWFACTION_GETURL2
   Method: POST
   Target: Sprite
   LoadVars: No
@@ -76,7 +76,7 @@ Block length: 317
      [000]   Constant: 4 "url"
      [001]   Constant: 5 "object"
     179:SWFACTION_GETVARIABLE
-    1:SWFACTION_GETURL2
+    180:SWFACTION_GETURL2
   Method: GET
   Target: Window
   LoadVars: No
@@ -87,7 +87,7 @@ Block length: 317
      [002]   Constant: 5 "object"
     193:SWFACTION_GETVARIABLE
     194:SWFACTION_STRINGCONCAT
-    0:SWFACTION_GETURL2
+    195:SWFACTION_GETURL2
   Method: none
   Target: Window
   LoadVars: No
