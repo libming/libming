@@ -376,14 +376,6 @@ int swf5wrap()
 
 static void countline()
 {
-  if(sLineNumber != 0) {
-   if(column < 1023) {
-    msgline[column] = 0;
-   } else {
-    msgline[1023] = 0;
-   }
-  }
-  
   ++sLineNumber;
   column = 0;
   msgline = msgbufs[sLineNumber & 1];
@@ -493,6 +485,7 @@ static void count(void)
      if(column < 1023)
        msgline[column] = yytext[n];
    }
+   msgline[column + 1] = 0;
 }
 
 static void printprog()
