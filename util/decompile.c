@@ -2713,6 +2713,16 @@ decompileSTRINGCONCAT(int n, SWF_ACTION *actions,int maxn)
 }
 
 int
+decompileTHROW(int n, SWF_ACTION *actions,int maxn)
+{
+    INDENT
+    puts("throw ");
+    puts(getName(pop()));
+    println(";");
+    return 0;
+}
+
+int
 decompileREMOVECLIP(int n, SWF_ACTION *actions,int maxn)
 {
     INDENT
@@ -3100,6 +3110,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_CASTOP:
 	return decompileCAST(n, actions, maxn);
+
+      case SWFACTION_THROW:
+	return decompileTHROW(n, actions, maxn);
 
       default:
 	outputSWF_ACTION(n,&actions[n]);
