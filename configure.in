@@ -378,6 +378,9 @@ AC_OUTPUT([
 	ming.spec
 ])
 
+
+chmod +x "$srcdir"/config/install-sh
+
 echo "Config summary: "
 
 if test x"$CXX" != x; then
