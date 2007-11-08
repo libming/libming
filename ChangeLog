@@ -1,3 +1,161 @@
+2007-11-07 20:55  krechert
+
+	* src/actioncompiler/: compile.c, swf5compiler.y: fixes regression
+	  (determine if return is inside a function) remove
+	  anon_function_decl
+
+2007-11-07 18:49  krechert
+
+	* src/actioncompiler/swf5compiler.flex: always terminate string
+	  buffer
+
+2007-11-07 14:10  krechert
+
+	* test/actionscript/legacy_functions.ref: GetUrl2 offset was bogus
+
+2007-11-07 14:05  krechert
+
+	* util/swftypes.h: added missing Offset field to SWFACTION_GETURL2
+	  structure
+
+2007-11-07 00:09  krechert
+
+	* php_ext/ming.c: do not destroy SWFFontCharacter objects. These
+	  objects are created by the ming library, like SWFDisplayItem
+	  objects.
+
+2007-11-06 14:27  krechert
+
+	* test/actionscript/: Makefile.am, class_empty.as, class_empty.ref,
+	  class_method.as, class_method.ref: class testcases
+
+2007-11-06 14:19  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.flex,
+	  swf5compiler.y: AS2 class support: constructor and methods
+
+2007-11-05 14:12  krechert
+
+	* src/actioncompiler/swf5compiler.flex: improve error reporting:
+	  put column cursor _before_ the token which produces the syntax
+	  error.  also removed unused strcpy in newline rule.
+
+2007-11-04 19:54  akleine
+
+	* util/decompile.c: Fixed return value of decompile_SWITCH()
+	  function for some switch{} statements where "default:" is NOT the
+	  last clause
+
+2007-11-02 18:23  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.y:
+	  ASFunction abstraction and cleanup
+
+2007-11-02 11:18  krechert
+
+	* util/makeswf_utils.c: fix warnings
+
+2007-11-02 11:17  krechert
+
+	* src/: ming.h.in, blocks/action.h: expose SWFAction_compile()
+
+2007-11-02 11:08  krechert
+
+	* src/movie.c: fix warning
+
+2007-10-31 18:05  krechert
+
+	* src/actioncompiler/swf5compiler.y: verbose error output
+
+2007-10-31 17:53  krechert
+
+	* util/makeswf_utils.c: x
+
+2007-10-30 20:26  akleine
+
+	* util/png2dbl.c: Use compress2() result value again (for correct
+	  size of *.dbl files)
+
+2007-10-30 16:29  krechert
+
+	* mingpp.h: add mask wrapper to displayitem
+
+2007-10-30 13:26  krechert
+
+	* NEWS: update
+
+2007-10-30 13:25  krechert
+
+	* src/blocks/fromswf.c: support for SWF9 tags
+
+2007-10-30 13:17  krechert
+
+	* util/makeswf.c: set framerate as float
+
+2007-10-30 12:24  krechert
+
+	* test/actionscript/: ASM_all.as, ASM_all.ref: simple
+	  implements/extends ASM testcase
+
+2007-10-30 11:47  krechert
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: support
+	  "implements" as ASM op
+
+2007-10-27 17:12  krechert
+
+	* util/makeswf_utils.c: pass through real swf version
+
+2007-10-27 17:03  krechert
+
+	* util/makeswf_utils.c: handle compile errors. do not output empty
+	  swf files
+
+2007-10-27 17:02  krechert
+
+	* src/blocks/action.c: bugfix: if AS code is already compiled
+	  return success and set length pointer.
+
+2007-10-27 16:27  krechert
+
+	* NEWS: update
+
+2007-10-27 16:20  krechert
+
+	* src/blocks/fromswf.c: SWF8 support for fromswf submitted by
+	  sakamotosplhack at users.sourceforge.net
+
+2007-10-27 16:14  krechert
+
+	* src/blocks/fileattrs.c: bugfix: [ 1821118 ] Uninitialized
+	  variable in SWFFileAttributes.  submitted by
+	  sakamotosplhack@uses.sf.net
+
+2007-10-27 16:11  krechert
+
+	* configure.in, test/Movie/Makefile.am,
+	  test/Movie/importCharacter/.cvsignore,
+	  test/Movie/importCharacter/Makefile.am,
+	  test/Movie/importCharacter/TestList,
+	  test/Movie/importCharacter/test01-cxx.C,
+	  test/Movie/importCharacter/test01.c,
+	  test/Movie/importCharacter/test01.php,
+	  test/Movie/importCharacter/test01.ref,
+	  test/Movie/importCharacter/test02-cxx.C,
+	  test/Movie/importCharacter/test02.c,
+	  test/Movie/importCharacter/test02.php,
+	  test/Movie/importCharacter/test02.ref: SWF_IMPORT assets
+	  testcases
+
+2007-10-26 14:54  krechert
+
+	* php_ext/Makefile.am: add simple install rule in php_ext
+
+2007-10-26 14:37  strk
+
+	* Makefile.am: Sync ChangeLog, fix Changelog rule to work when run
+	  from a separate build tree
+
 2007-10-26 13:27  krechert
 
 	* php_ext/ming.c: Add SWFCharacter dummy class in PHP. Fixes
