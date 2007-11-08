@@ -131,6 +131,19 @@ outputSWFACTION_WAITFORFRAME (SWF_ACTION *act)
 }
 
 void
+outputSWFACTION_SETTARGET (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONSETTARGET);
+
+  if( verbose ) {
+      INDENT;
+      printf ("   Length: %d\n", sact->Length);
+  }
+  INDENT;
+  printf ("   TargetName: %s\n", sact->TargetName);
+}
+
+void
 outputSWFACTION_WITH (SWF_ACTION *act)
 {
   int i;
@@ -443,7 +456,7 @@ static struct SWFActionName actions[] = {
   ActionTypeLong (SWFACTION_GOTOFRAME),
   ActionType (SWFACTION_GETURL),
   ActionTypeLong (SWFACTION_WAITFORFRAME),
-  ActionType (SWFACTION_SETTARGET),
+  ActionTypeLong (SWFACTION_SETTARGET),
   ActionType (SWFACTION_GOTOLABEL),
   /* v4 actions */
   ActionTypeLong (SWFACTION_PUSH),
