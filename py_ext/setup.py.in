@@ -15,5 +15,5 @@ setup(name = "mingc", version = "@MING_VERSION@",
       ext_modules = [Extension("_mingc", ["ming_wrap.c"],
                      include_dirs=['/usr/local/include',os.path.join(os.path.join(curdir, '..'),'src')],
                      library_dirs=['../src/.libs','/usr/local/lib/'],
-                     libraries=['ming','z', 'png'])])
+                     libraries=['ming','z', 'png', 'ungif'])])
 
