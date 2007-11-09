@@ -5,19 +5,25 @@ import mingc
 mingc.Ming_init()
 
 def Ming_setCubicThreshold(t):
-    mingc.Ming_setCubicThreshold(t);
+    mingc.Ming_setCubicThreshold(t)
 
 def Ming_setScale(scale):
-    mingc.Ming_setScale(scale);
+    mingc.Ming_setScale(scale)
 
 def Ming_getScale():
-    return mingc.Ming_getScale();
+    return mingc.Ming_getScale()
 
 def Ming_useSWFVersion(num):
-    mingc.Ming_useSWFVersion(num);
+    mingc.Ming_useSWFVersion(num)
 
 def Ming_setSWFCompression( level ):
     return mingc.Ming_setSWFCompression( level )
+
+def Ming_useConstants(flag):
+   mingc.Ming_useConstants(flag)
+
+def Ming_collectGarbage():
+   mingc.Ming_collectGarbage()
 
 class SWFBase:
 
@@ -44,6 +50,11 @@ class SWFRect(SWFBase):
         return mingc.SWFRect_getHeight(self.this)
 
 
+SWF_SHAPE3			= mingc.SWF_SHAPE3
+SWF_SHAPE4			= mingc.SWF_SHAPE4
+SWF_SHAPE_USESCALINGSTROKES	= mingc.SWF_SHAPE_USESCALINGSTROKES
+SWF_SHAPE_USENONSCALINGSTROKES	= mingc.SWF_SHAPE_USENONSCALINGSTROKES
+
 class SWFShape(SWFBase):
 
     def __init__(self, o=None):
@@ -58,7 +69,10 @@ class SWFShape(SWFBase):
         mingc.destroySWFShape(self.this)
 
     def setLine(self, width, r, g, b, a=0xff):
-        return mingc.SWFShape_setLine(self.this, width, r, g, b, a)
+        mingc.SWFShape_setLine(self.this, width, r, g, b, a)
+
+    def setLine2(self, width, r, g, b, a, flags, miter):
+        mingc.SWFShape_setLine2(self.this, width, r, g, b, a, flags, miter)
 
     # I know there's probably a better way to do this..
     def addFill(self, arg1, arg2=0, arg3=None, arg4=0xff):
@@ -134,6 +148,12 @@ class SWFShape(SWFBase):
 
     def end(self):
         mingc.SWFShape_end(self.this)
+
+    def useVersion(self, version):
+        mingc.SWFShape_useVersion(self.this, version)
+
+    def getVersion(self):
+        return mingc.SWFShape_getVersion(self.this)
 
     # deprecated:
     def moveTo(self, x, y):
@@ -260,6 +280,12 @@ class SWFDisplayItem(SWFBase):
     def setMatrix(self, a, b, c, d, x, y):
         mingc.SWFDisplayItem_setMatrix(self.this, a, b, c, d, x, y)
 
+    def cacheAsBitmap(self, flag):
+        mingc.SWFDisplayItem_cacheAsBitmap(self.this, flag)
+
+    def setBlendMode(self, mode):
+        mingc.SWFDisplayItem_setBlendMode(self.this, flag)
+
     def addAction(self, actionScript, flags):
         mingc.SWFDisplayItem_addAction(self.this, actionScript, flags)
 
@@ -271,7 +297,24 @@ SWFACTION_MOUSEDOWN   = mingc.SWFACTION_MOUSEDOWN
 SWFACTION_MOUSEUP     = mingc.SWFACTION_MOUSEUP     
 SWFACTION_KEYDOWN     = mingc.SWFACTION_KEYDOWN     
 SWFACTION_KEYUP       = mingc.SWFACTION_KEYUP       
-SWFACTION_DATA        = mingc.SWFACTION_DATA        
+SWFACTION_DATA        = mingc.SWFACTION_DATA       
+
+SWFBLEND_MODE_NULL	= mingc.SWFBLEND_MODE_NULL
+SWFBLEND_MODE_NORMAL	= mingc.SWFBLEND_MODE_NORMAL
+SWFBLEND_MODE_LAYER 	= mingc.SWFBLEND_MODE_LAYER
+SWFBLEND_MODE_MULT	= mingc.SWFBLEND_MODE_MULT
+SWFBLEND_MODE_SCREEN	= mingc.SWFBLEND_MODE_SCREEN
+SWFBLEND_MODE_LIGHTEN	= mingc.SWFBLEND_MODE_LIGHTEN
+SWFBLEND_MODE_DARKEN	= mingc.SWFBLEND_MODE_DARKEN
+SWFBLEND_MODE_DIFF	= mingc.SWFBLEND_MODE_DIFF
+SWFBLEND_MODE_ADD	= mingc.SWFBLEND_MODE_ADD
+SWFBLEND_MODE_SUB	= mingc.SWFBLEND_MODE_SUB
+SWFBLEND_MODE_INV	= mingc.SWFBLEND_MODE_INV
+SWFBLEND_MODE_ALPHA	= mingc.SWFBLEND_MODE_ALPHA
+SWFBLEND_MODE_ERASE	= mingc.SWFBLEND_MODE_ERASE
+SWFBLEND_MODE_OVERLAY	= mingc.SWFBLEND_MODE_OVERLAY
+SWFBLEND_MODE_HARDLIGHT = mingc.SWFBLEND_MODE_HARDLIGHT
+
 
 class SWFMovie(SWFBase):
 
@@ -368,6 +411,20 @@ class SWFSprite(SWFBase):
     def labelFrame(self, label):
         mingc.SWFMovieClip_labelFrame(self.this, label)
 
+    def setNetworkAccess(self, flag):
+        mingc.SWFMovie_setNetworkAccess(self.this, flag)
+
+    def addMetadata(self, xmldata):
+        mingc.SWFMovie_addMetadata(self.this, xmldata)
+
+    def setScriptLimits(self, maxRecursion, timeout):
+        mingc.SWFMovie_setScriptLimits(self.this, maxRecursion, timeout)
+
+    def setTabInde(self, depth, index):
+        mingc.SWFMovie_setTabIndex(self.this, depth, index)
+
+    def defineScene(self, offset, name):
+        mingc.SWFMovie_defineScene(self.this, depth, index)
 
 # deprecated:
 class SWFMovieClip(SWFSprite):
@@ -396,20 +453,23 @@ class SWFMorphShape(SWFMorph):
     pass
 
 
+class SWFBrowserFont(SWFBase):
+
+    def __init__(self, name):
+       self.this = mingc.newSWFBrowserFont(name)
+       self.name = name
+
+    def __del__(self):
+       	mingc.destroySWFBrowserFont(self.this)		
+
+
 class SWFFont(SWFBase):
 
     def __init__(self, name):
-        if name[-4:] == '.fdb':
-            self.browserfont = 0
-            self.this = mingc.loadSWFFontFromFile(open(name, "rb"))
-        else:
-            self.browserfont = 1
-            self.this = mingc.newSWFBrowserFont(name)
-
+            self.this = mingc.newSWFFont_fromFile(name)
+            self.name = name
+        
     def __del__(self):
-        if self.browserfont:
-            mingc.destroySWFBrowserFont(self.this)
-        else:
             mingc.destroySWFFont(self.this)
 
     def getAscent(self):
@@ -479,7 +539,7 @@ class SWFText(SWFBase):
         mingc.destroySWFText(self.this)
 
     def setFont(self, font):
-        self.__fonts[font.this]=font
+        self.__fonts[font.name] = font
         mingc.SWFText_setFont(self.this, font.this)
 
     def setHeight(self, height):
@@ -536,9 +596,8 @@ class SWFTextField(SWFBase):
         mingc.destroySWFTextField(self.this)
 
     def setFont(self, font):
-	self.font = font
-        self.__fonts[font.this]=font
-        mingc.SWFTextField_setFont(self.this, font)
+        self.__fonts[font.name] = font
+        mingc.SWFTextField_setFont(self.this, font.this)
 
     def setBounds(self, width, height):
         mingc.SWFTextField_setBounds(self.this, width, height)
@@ -643,10 +702,21 @@ SWF_SOUND_STEREO            = mingc.SWF_SOUND_STEREO
 class SWFAction(SWFBase):
 
     def __init__(self, script):
-        self.this = mingc.compileSWFActionCode(script)
+        self.this = mingc.newSWFAction(script)
+
+
+class SWFInitAction(SWFBase):
+
+   def __init__(self, action):
+       self.this = mingc.newSWFInitAction(action.this)
 
     # assigned object will destroy this..
 
+SWF_GRADIENT_PAD	= mingc.SWF_GRADIENT_PAD
+SWF_GRADIENT_REFLECT	= mingc.SWF_GRADIENT_REFLECT
+SWF_GRADIENT_REPEAT	= mingc.SWF_GRADIENT_REPEAT
+SWF_GRADIENT_NORMAL	= mingc.SWF_GRADIENT_NORMAL
+SWF_GRADIENT_LINEAR	= mingc.SWF_GRADIENT_LINEAR
 
 class SWFGradient(SWFBase):
 
@@ -659,6 +729,14 @@ class SWFGradient(SWFBase):
     def addEntry(self, ratio, r, g, b, a=0xff):
         mingc.SWFGradient_addEntry(self.this, ratio, r, g, b, a)
 
+    def setSpreadMode(self, mode):
+        mingc.SWFGradient_setSpreadMode(self.this, mode)
+
+    def setInterpolationMode(self, mode):
+        mingc.SWFGradient_setInterpolationMode(self.this, mode)
+
+    def SWFGradient_setFocalPoint(self, fp):
+        mingc.SWFGradient_setFocalPoint(self.this, fp)
 
 class SWFButton(SWFBase):
 
@@ -688,6 +766,21 @@ class SWFButton(SWFBase):
     def addAction(self, action, flags):
         mingc.SWFButton_addAction(self.this, action, flags)
 
+    def addCharacter(self, character, flags):
+        return mingc.SWFButton_addCharacter(self.this, character, flags)
+
+    def addSound(self, sound, flags):
+        return mingc.SWFButton_addSound(self.this, sound.this, flags)
+
+    def setMenu(self, flag):
+        mingc.SWFButton_setMenu(self.this, flag)
+
+    def setScalingGrid(self, x, y, w, h):
+        mingc.SWFButton_setScalingGrid(self.this, x, y, w, h)
+
+    def removeScalingGrid(self):
+        mingc.SWFButton_removeScalingGrid(self.this)
+
 class SWFVideoStream(SWFBase):
     def __init__(self):
         self.this = mingc.newSWFVideoStream()
@@ -695,8 +788,10 @@ class SWFVideoStream(SWFBase):
         return mingc.SWFVideoStream_setDimension(self.this, w, h)
     def getNumFrames(self):
         return mingc.SWFVideoStream_getNumFrames(self.this)
-
-
+    def hasAudio(self):
+        return mingc.SWFVideoStream_hasAudio(self.this)
+    def __del__(self):
+        mingc.destroySWFVideoStream(this.self)
 def SWFBUTTON_KEYPRESS(c):
     return mingc.swfButton_keypress(c)
 
@@ -714,3 +809,9 @@ SWFBUTTON_MOUSEUP        = mingc.SWFBUTTON_MOUSEUP
 SWFBUTTON_MOUSEDOWN      = mingc.SWFBUTTON_MOUSEDOWN
 SWFBUTTON_MOUSEOUT       = mingc.SWFBUTTON_MOUSEOUT
 SWFBUTTON_MOUSEOVER      = mingc.SWFBUTTON_MOUSEOVER
+
+class SWFPrebuiltClip(SWFBase):
+    def __init__(self, filename):
+        self.this = newSWFPrebuiltClip_fromFile(filename)
+    def __del__(self):
+        destroySWFPrebuiltClip(self.this)
