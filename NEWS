@@ -13,6 +13,10 @@
 	* Add support for init actions in makeswf
 	* SWF8 / 9 support for fromswf / prebuiltclip
 	* implements ASM op
+	* ASFunction()
+	* AS Class support
+	* Removed SWFFontCharacter destructor from PHP wrapper
+	* py_ext update
 
 0.4.0.beta5 - 2007-09-18
 
