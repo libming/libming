@@ -129,7 +129,8 @@ typedef struct function_s *ASFunction;
 typedef enum
 {
 	UNDEF,
-	METHOD
+	METHOD,
+	BUFF
 } ClassMemberType;
 
 struct class_member_s
@@ -138,6 +139,7 @@ struct class_member_s
 	union
 	{
 		ASFunction function;
+		Buffer buffer;
 	} element;
 	struct class_member_s *next;
 };
@@ -236,7 +238,7 @@ ASFunction newASFunction();
 ASClassMember newASClassMember_function(ASFunction func);
 ASClass newASClass(char *name, ASClassMember members);
 ASClassMember newASClassMember_function(ASFunction func);
-
+ASClassMember newASClassMember_buffer(Buffer buf);
 /* rather than setting globals... */
 void swf4ParseInit(const char *string, int debug, int version);
 void swf5ParseInit(const char *string, int debug, int version);

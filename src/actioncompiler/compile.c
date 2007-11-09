@@ -1100,12 +1100,33 @@ static int bufferWriteClassMethods(Buffer out, ASClass clazz)
 	return len;
 }
 
+static int bufferWriteClassMembers(Buffer out, ASClass clazz)
+{
+	ASClassMember member = clazz->members;
+	int len = 0;
+	while(member)
+	{
+		Buffer buf;
+		ASClassMember _this = member;
+		member = member->next;
+		if(_this->type != BUFF)
+			continue;
+		buf = _this->element.buffer;
+		if(!buf)
+			continue;
+		bufferConcat(out, buf);	
+		_this->element.buffer = NULL;
+	}
+	return len;
+}
+
+
 int bufferWriteClass(Buffer out, ASClass clazz)
 {
 	int len = 0;
 	len += bufferWriteClassConstructor(out, clazz);
 	len += bufferWriteClassMethods(out, clazz);
-	
+ 	len += bufferWriteClassMembers(out, clazz);	
 	/* set class properties */
 	len += bufferWriteInt(out, 1);
 	len += bufferWriteNull(out);
@@ -1144,6 +1165,16 @@ ASClassMember newASClassMember_function(ASFunction func)
 	member->next = NULL; 
 	return member;
 }
+
+ASClassMember newASClassMember_buffer(Buffer buf)
+{
+	ASClassMember member = malloc(sizeof(struct class_member_s));
+	member->element.buffer = buf;
+	member->type = BUFF;
+	member->next = NULL; 
+	return member;
+}
+
 
 /*
  * Local variables:

@@ -137,7 +137,7 @@ Buffer bf, bc;
 %type <action> assign_stmt assign_stmts assign_stmts_opt
 %type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
-%type <action> delete_call
+%type <action> delete_call class_vars class_var primary_constant
 %type <classMember> class_stmts class_stmt
 %type <lval> lvalue 
 
@@ -224,13 +224,16 @@ stmt
 	| throw_stmt
 	;
 
+
+
 class_stmts
 	: class_stmt 			{ $$ = $1; }
 	| class_stmts class_stmt 	{ $$ = $2; $2->next = $1; }
 
 class_stmt
-	: 		{ $$ = NULL; } 
-	| function_decl { $$ = newASClassMember_function($1); }
+	: 			{ $$ = NULL; } 
+	| function_decl 	{ $$ = newASClassMember_function($1); }
+	| VAR class_vars ';' 	{ $$ = newASClassMember_buffer($2); }
 	;
 
 class_decl 
@@ -239,6 +242,30 @@ class_decl
 		$$ = newASClass($2, $4);
 	}
 	;
+
+class_vars
+	: class_var 
+
+	| class_vars ',' class_var
+		{ $$ = $1;
+		  bufferConcat($$, $3); }
+	;
+
+class_var
+	: identifier '=' primary_constant
+		{ $$ = newBuffer();
+		  bufferWriteRegister($$, 2);
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  free($1);
+		  bufferConcat($$, $3);
+		  bufferWriteOp($$, SWFACTION_SETMEMBER); }
+
+	| identifier
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  free($1);
+		  bufferWriteUndef($$);
+		  bufferWriteOp($$, SWFACTION_SETMEMBER); }
 
 throw_stmt
 	: THROW expr_or_obj ';'		{ $$ = $2; bufferWriteOp($$, SWFACTION_THROW); }
@@ -1460,7 +1487,9 @@ primary
 	| lvalue_expr
 
 	| delete_call
-
+		
+	| primary_constant
+	
 	| incdecop lvalue %prec "++"
 		{ if($2.obj)
 		  {
@@ -1558,34 +1587,10 @@ primary
 		{ $$ = newBuffer();
 		  bufferWriteInt($$, -$2); }
 
-	| INTEGER
-		{ $$ = newBuffer();
-		  bufferWriteInt($$, $1); }
-
 	| '-' DOUBLE %prec UMINUS
 		{ $$ = newBuffer();
 		  bufferWriteDouble($$, -$2); }
 
-	| DOUBLE
-		{ $$ = newBuffer();
-		  bufferWriteDouble($$, $1); }
-
-	| BOOLEAN
-		{ $$ = newBuffer();
-		  bufferWriteBoolean($$, $1); }
-
-	| NULLVAL
-		{ $$ = newBuffer();
-		  bufferWriteNull($$); }
-
-	| UNDEFINED
-		{ $$ = newBuffer();
-		  bufferWriteUndef($$); }
-
-	| STRING
-		{ $$ = newBuffer();
-		  bufferWriteString($$, $1, strlen($1)+1);
-		  free($1); }
 	| lvalue assignop expr
 		{ if($1.obj)
 		  {
@@ -1632,6 +1637,30 @@ primary
 		    bufferWriteRegister($$, 0);
 		  }
 		}
+	;
+
+primary_constant
+	: BOOLEAN
+		{ $$ = newBuffer();
+		  bufferWriteBoolean($$, $1); }
+	| NULLVAL
+		{ $$ = newBuffer();
+		  bufferWriteNull($$); }
+
+	| UNDEFINED
+		{ $$ = newBuffer();
+		  bufferWriteUndef($$); }
+
+	| STRING
+		{ $$ = newBuffer();
+		  bufferWriteString($$, $1, strlen($1)+1);
+		  free($1); }
+	| INTEGER
+		{ $$ = newBuffer();
+		  bufferWriteInt($$, $1); }
+	| DOUBLE
+		{ $$ = newBuffer();
+		  bufferWriteDouble($$, $1); }
 	;
 
 init_vars
