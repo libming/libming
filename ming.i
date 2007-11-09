@@ -44,9 +44,10 @@ typedef unsigned char byte;
   }
 }
 
-int Ming_init();
-void Ming_cleanup();
-void Ming_collectGarbage();
+int Ming_init(void);
+void Ming_cleanup(void);
+void Ming_collectGarbage(void);
+void Ming_useConstants(int flag);
 
 /* sets the threshold error for drawing cubic beziers.  Lower is more
    accurate, hence larger file size. */
@@ -54,7 +55,7 @@ void Ming_setCubicThreshold(int num);
 
 /* sets the overall scale, default is 20 */
 void Ming_setScale(float scale);
-float Ming_getScale();
+float Ming_getScale(void);
 
 /* set the version number to use */
 void Ming_useSWFVersion(int version);
@@ -62,7 +63,8 @@ void Ming_useSWFVersion(int version);
 typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
              *SWFShape, *SWFAction, *SWFGradient, *SWFButton, *SWFButtonRecord,
              *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
-             *SWFFont, *SWFText, *SWFTextField, *SWFVideoStream;
+             *SWFFont, *SWFText, *SWFTextField, *SWFVideoStream, *SWFBrowserFont,
+             *SWFPrebuiltClip, *SWFBinaryData, *SWFInitAction, *SWFFontCharacter;
 
 /*
  * Set output compression level.
@@ -146,13 +148,29 @@ SWFJpegWithAlpha newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha);
 
 /***** SWFGradient *****/
 
-SWFGradient newSWFGradient();
+typedef enum
+{
+        SWF_GRADIENT_PAD,
+        SWF_GRADIENT_REFLECT,
+        SWF_GRADIENT_REPEAT
+} GradientSpreadMode;
+
+typedef enum
+{
+        SWF_GRADIENT_NORMAL,
+        SWF_GRADIENT_LINEAR
+} GradientInterpolationMode;
+
+
+SWFGradient newSWFGradient(void);
 void destroySWFGradient(SWFGradient gradient);
 
 void SWFGradient_addEntry(SWFGradient gradient,
                           float ratio, byte r, byte g, byte b, byte a);
 
-
+void SWFGradient_setSpreadMode(SWFGradient gradient, GradientSpreadMode mode);
+void SWFGradient_setInterpolationMode(SWFGradient gradient, GradientInterpolationMode mode);
+void SWFGradient_setFocalPoint(SWFGradient gradient, float focalPoint);
 /***** SWFFillStyle - a fill instance on a shape *****/
 
 #define SWFFILL_SOLID                   0x00
@@ -174,10 +192,40 @@ SWFMatrix SWFFillStyle_getMatrix(SWFFillStyle fill);
 
 SWFLineStyle newSWFLineStyle(unsigned short width, byte r, byte g, byte b, byte a);
 
+#define SWF_LINESTYLE_CAP_ROUND         (0<<14)
+#define SWF_LINESTYLE_CAP_NONE          (1<<14)
+#define SWF_LINESTYLE_CAP_SQUARE        (2<<14)
+
+#define SWF_LINESTYLE_JOIN_ROUND        (0<<12)
+#define SWF_LINESTYLE_JOIN_BEVEL        (1<<12)
+#define SWF_LINESTYLE_JOIN_MITER        (2<<12)
+
+#define SWF_LINESTYLE_FLAG_NOHSCALE     (1<<10)
+#define SWF_LINESTYLE_FLAG_NOVSCALE     (1<<9)
+#define SWF_LINESTYLE_FLAG_HINTING      (1<<8)
+
+#define SWF_LINESTYLE_FLAG_NOCLOSE      (1<<2)
+
+#define SWF_LINESTYLE_FLAG_ENDCAP_ROUND  (0<<0)
+#define SWF_LINESTYLE_FLAG_ENDCAP_NONE   (1<<0)
+#define SWF_LINESTYLE_FLAG_ENDCAP_SQUARE (2<<0)
+
+SWFLineStyle newSWFLineStyle2(unsigned short width, byte r, byte g, byte b, byte a,
+                              int flags, float miterLimit);
+SWFLineStyle newSWFLineStyle2_filled(unsigned short width, 
+                                     SWFFillStyle fill, int flags, 
+                                     float miterLimit);
+
 
 /***** SWFShape *****/
 
-SWFShape newSWFShape();
+#define SWF_SHAPE3 3
+#define SWF_SHAPE4 4
+#define SWF_SHAPE_USESCALINGSTROKES     (1<<0)
+#define SWF_SHAPE_USENONSCALINGSTROKES  (1<<1)
+
+
+SWFShape newSWFShape(void);
 /*
  * returns a shape containing the bitmap in a filled rect
  * flag can be SWFFILL_CLIPPED_BITMAP or SWFFILL_TILED_BITMAP
@@ -186,6 +234,9 @@ SWFShape newSWFShapeFromBitmap(SWFBitmap bitmap, int flag);
 void destroySWFShape(SWFShape shape);
 
 void SWFShape_end(SWFShape shape);
+void SWFShape_useVersion(SWFShape shape, int version);
+int SWFShape_getVersion(SWFShape shape);
+void SWFShape_setRenderHintingFlags(SWFShape shape, int flags);
 
 void SWFShape_movePenTo(SWFShape shape, float x, float y);
 void SWFShape_movePen(SWFShape shape, float x, float y);
@@ -220,7 +271,7 @@ void SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill);
 
 /***** SWFMorph *****/
 
-SWFMorph newSWFMorphShape();
+SWFMorph newSWFMorphShape(void);
 void destroySWFMorph(SWFMorph morph);
 
 SWFShape SWFMorph_getShape1(SWFMorph morph);
@@ -229,7 +280,9 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 
 /***** SWFFont *****/
 
-SWFFont newSWFFont();
+SWFFont newSWFFont(void);
+SWFFont newSWFFont_fromFile(const char *filename);
+
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFFont font);
 
@@ -247,8 +300,8 @@ float SWFFont_getLeading(SWFFont font);
 
 /***** SWFText *****/
 
-SWFText newSWFText();
-SWFText newSWFText2();
+SWFText newSWFText(void);
+SWFText newSWFText2(void);
 void destroySWFText(SWFText text);
 
 void SWFText_setFont(SWFText text, void* font);
@@ -322,7 +375,7 @@ typedef enum
   SWFTEXTFIELD_ALIGN_JUSTIFY = 3
 } SWFTextFieldAlignment;
 
-SWFTextField newSWFTextField();
+SWFTextField newSWFTextField(void);
 void destroySWFTextField(SWFTextField textField);
 
 void SWFTextField_setFont(SWFTextField field, SWFBlock font);
@@ -426,10 +479,16 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 
 
 /***** SWFAction *****/
-
+SWFAction newSWFAction(const char *script);
+SWFAction newSWFAction_fromFile(const char *filename);
+int SWFAction_compile(SWFAction action, int swfVersion, int *length);
 SWFAction compileSWFActionCode(const char *script);
 void destroySWFAction(SWFAction action);
+byte *SWFAction_getByteCode(SWFAction action, size_t *length);
 
+SWFInitAction newSWFInitAction(SWFAction action);
+/* use with care */
+SWFInitAction newSWFInitAction_withId(SWFAction action, int id);
 
 /***** SWFButton *****/
 
@@ -468,7 +527,7 @@ void destroySWFAction(SWFAction action);
 #define SWFBUTTON_MOUSEOUT        SWFBUTTON_OVERUPTOIDLE
 #define SWFBUTTON_MOUSEOVER       SWFBUTTON_IDLETOOVERUP
 
-SWFButton newSWFButton();
+SWFButton newSWFButton(void);
 void destroySWFButton(SWFButton button);
 
 void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
@@ -484,12 +543,11 @@ SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
 SWFVideoStream newSWFVideoStream(void);
 void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height);
 int SWFVideoStream_getNumFrames(SWFVideoStream stream);
-
-
+int SWFVideoStream_hasAudio(SWFVideoStream stream);
 
 /***** SWFSprite *****/
 
-SWFSprite newSWFSprite();
+SWFSprite newSWFSprite(void);
 void destroySWFSprite(SWFSprite sprite);
 
 void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
@@ -584,6 +642,28 @@ void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 
 void SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags);
 
+void SWFDisplayItem_cacheAsBitmap(SWFDisplayItem item, int flag);
+
+enum {
+    SWFBLEND_MODE_NULL,
+    SWFBLEND_MODE_NORMAL,
+    SWFBLEND_MODE_LAYER,
+    SWFBLEND_MODE_MULT,
+    SWFBLEND_MODE_SCREEN,
+    SWFBLEND_MODE_LIGHTEN,
+    SWFBLEND_MODE_DARKEN,
+    SWFBLEND_MODE_DIFF,
+    SWFBLEND_MODE_ADD,
+    SWFBLEND_MODE_SUB,
+    SWFBLEND_MODE_INV,
+    SWFBLEND_MODE_ALPHA,
+    SWFBLEND_MODE_ERASE,
+    SWFBLEND_MODE_OVERLAY,
+    SWFBLEND_MODE_HARDLIGHT
+};
+
+void SWFDisplayItem_setBlendMode(SWFDisplayItem item, int mode);
+
 
 /***** SWFFill *****/
 
@@ -623,6 +703,15 @@ void SWFFill_setMatrix(SWFFill fill, float a, float b,
 void SWFShape_setLine(SWFShape shape, unsigned short width,
                       byte r, byte g, byte b, byte a);
 
+void SWFShape_setLine2Filled(SWFShape shape, unsigned short width,
+                             SWFFillStyle fill,
+                             int flags, float miterLimit);
+
+void SWFShape_setLine2(SWFShape shape, unsigned short width, 
+                       byte r, byte g, byte b, byte a,
+                       int flags, float miterLimit);
+
+
 SWFFill SWFShape_addSolidFill(SWFShape shape, byte r, byte g, byte b, byte a);
 SWFFill SWFShape_addGradientFill(SWFShape shape, SWFGradient gradient, byte flags);
 SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
@@ -651,7 +740,7 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 /***** SWFMovieClip *****/
 
-SWFMovieClip newSWFMovieClip();
+SWFMovieClip newSWFMovieClip(void);
 void destroySWFMovieClip(SWFMovieClip movieClip);
 
 void SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int frames);
@@ -667,20 +756,23 @@ SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 
 /***** SWFPrebuiltClip ****/
+void destroySWFPrebuiltClip(SWFPrebuiltClip clip);
 SWFPrebuiltClip newSWFPrebuiltClip_fromFile(const char *filename);
 SWFPrebuiltClip newSWFPrebuiltClip_fromInput(SWFInput input);
 
+/***** SWFBinaryData *****/
+
+SWFBinaryData newSWFBinaryData(unsigned char *blob, int length);
+
 /***** SWFMovie *****/
 
-SWFMovie newSWFMovie();
+SWFMovie newSWFMovie(void);
 SWFMovie newSWFMovieWithVersion(int version);
 void destroySWFMovie(SWFMovie movie);
 
 void SWFMovie_setRate(SWFMovie movie, float rate);
 void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
-
-void SWFMovie_protect(SWFMovie movie, const char *password);
 
 void SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name);
 
@@ -698,6 +790,15 @@ void SWFMovie_labelFrame(SWFMovie movie, const char *label);
 
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 int SWFMovie_save(SWFMovie movie, const char *filename);
+
+void SWFMovie_protect(SWFMovie movie, char *password);
+
+void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
+void SWFMovie_addMetadata(SWFMovie movie, char *xml);
+void SWFMovie_setScriptLimits(SWFMovie movie, int maxRecursion, int timeout);
+void SWFMovie_setTabIndex(SWFMovie movie, int depth, int i);
+void SWFMovie_defineScene(SWFMovie m, unsigned int offset, const char *name);
+
 
   /* deprecated */
   /*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
