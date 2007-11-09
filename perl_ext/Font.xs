@@ -29,14 +29,10 @@ SWFFont_new(package="SWF::Font", filename)
 	STRLEN len;
 	CODE:
 	filename = (char *) SvPV(ST(1), len);
-	if (strncasecmp(filename+len-4, ".fdb", 4) == 0){
-	    if (!(f = fopen(filename, "rb"))) {
-		fprintf(stderr, "Unable to open FDB file %s\n", filename);
-		XSRETURN_UNDEF;
-	    }else{
-		RETVAL = loadSWFFontFromFile(f);
-		fclose(f);
-	    }
+	if (strncasecmp(filename+len-4, ".fdb", 4) == 0 
+		|| strncmp(filename+len-4, ".ttf", 4) == 0 )
+	{
+		RETVAL = newSWFFont_fromFile(filename);
 	}
 	else
 	    RETVAL = newSWFBrowserFont(filename);
