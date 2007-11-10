@@ -9,7 +9,8 @@ EXTRA_DIST = SWF/Action.pm SWF/Bitmap.pm SWF/Button.pm SWF/Constants.pm \
 		DisplayItem.xs Exports.c Fill.xs Font.xs Gradient.xs MANIFEST \
 		Makefile.PL Morph.xs Movie.xs MovieClip.xs README SUPPORT \
 		SWF.pm SWF.xs Shape.xs Sound.xs SoundInstance.xs SoundStream.xs \
-		TODO Text.xs TextField.xs VideoStream.xs perl_swf.h swf_util.c \
+		TODO Text.xs TextField.xs VideoStream.xs FontCharacter.xs \
+		perl_swf.h swf_util.c \
 		typemap examples/action.cgi examples/alphafill.cgi \
 		examples/animation.cgi examples/glyph.cgi examples/jpegfill.cgi \
 		examples/keypress.cgi examples/morph.cgi examples/shape.cgi \

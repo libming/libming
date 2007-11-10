@@ -17,6 +17,7 @@ SWF/SoundStream.pm
 SWF/Text.pm
 SWF/TextField.pm
 SWF/VideoStream.pm
+SWF/FontCharacter.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
@@ -57,6 +58,7 @@ TODO
 Text.xs
 TextField.xs
 VideoStream.xs
+FontCharacter.xs
 perl_swf.h
 swf_util.c
 typemap

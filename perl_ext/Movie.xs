@@ -190,3 +190,24 @@ SWFMovie_setTabIndex(movie, depth, index)
 	SWF::Movie movie
 	int depth
 	int index
+
+SWF::FontCharacter
+SWFMovie_addFont(movie, font)
+	SWF::Movie movie
+	SWF::Font font = (SWF__Font) SvIV((SV*)SvRV(ST(1)));
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	RETVAL = SWFMovie_addFont(movie, font);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::FontCharacter", (void*)RETVAL);
+
+SWF::FontCharacter
+SWFMovie_importFont(movie, file, name)
+	SWF::Movie movie
+	const char *file
+	const char *name
+	CODE:
+	RETVAL = SWFMovie_importFont(movie, file, name);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::FontCharacter", (void*)RETVAL);
+
