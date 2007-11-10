@@ -25,12 +25,11 @@ SWFFont_new(package="SWF::Font", filename)
 	char *package
 	char *filename = NO_INIT
 	PREINIT:
-	FILE   *f;
 	STRLEN len;
 	CODE:
 	filename = (char *) SvPV(ST(1), len);
 	if (strncasecmp(filename+len-4, ".fdb", 4) == 0 
-		|| strncmp(filename+len-4, ".ttf", 4) == 0 )
+		|| strncasecmp(filename+len-4, ".ttf", 4) == 0 )
 	{
 		RETVAL = newSWFFont_fromFile(filename);
 	}
