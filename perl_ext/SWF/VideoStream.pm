@@ -12,7 +12,7 @@ use SWF();
 
 use strict;
 
-$SWF::Sound::VERSION = $SWF::VERSION;
+$SWF::VideoStream::VERSION = $SWF::VERSION;
 
 1;
 
