@@ -2443,6 +2443,45 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
     return 1;
 }
 
+int
+decompileTRY(int n, SWF_ACTION *actions,int maxn)
+{
+    OUT_BEGIN2(SWF_ACTIONTRY);
+    INDENT
+    println("try {");
+    decompileActions(sact->numTryActs, sact->TryActs,gIndent+1);
+    INDENT
+    println("}");
+    if (sact->numCatchActs)    
+    {
+     struct SWF_ACTIONPUSHPARAM *rsave=NULL;
+     INDENT
+     if( ! sact->CatchInRegisterFlag)
+      println("catch (%s) {",sact->CatchName);
+     else
+     {
+      char *t=malloc(5); /* Rddd */
+      sprintf(t,"R%d", sact->CatchRegister );
+      rsave=regs[sact->CatchRegister];
+      regs[sact->CatchRegister] = newVar(t);
+      println("catch (%s) {",t);
+     }
+     decompileActions(sact->numCatchActs, sact->CatchActs,gIndent+1);
+     INDENT
+     println("}");
+     if (rsave)
+      regs[sact->CatchRegister]=rsave;
+    } 
+    if (sact->numFinallyActs)
+    {
+     INDENT
+     println("finally () {");
+     decompileActions(sact->numFinallyActs, sact->FinallyActs,gIndent+1);
+     INDENT
+     println("}");
+    }
+    return 0;
+}
 
 
 int
@@ -3113,6 +3152,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 
       case SWFACTION_THROW:
 	return decompileTHROW(n, actions, maxn);
+
+      case SWFACTION_TRY:
+	return decompileTRY(n, actions, maxn);
 
       default:
 	outputSWF_ACTION(n,&actions[n]);
