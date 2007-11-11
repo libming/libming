@@ -774,17 +774,28 @@ int lookupSetProperty(char *string)
 {
 	lower(string);
 
-	if(strcmp(string,"x")==0)		return 0x0000;
-	if(strcmp(string,"y")==0)		return 0x3f80;
-	if(strcmp(string,"xscale")==0)	return 0x4000;
-	if(strcmp(string,"yscale")==0)	return 0x4040;
-	if(strcmp(string,"alpha")==0)		return 0x40c0;
-	if(strcmp(string,"visible")==0)	return 0x40e0;
-	if(strcmp(string,"rotation")==0)	return 0x4120;
-	if(strcmp(string,"name")==0)		return 0x4140;
-	if(strcmp(string,"quality")==0)	return 0x4180;
-	if(strcmp(string,"focusrect")==0)	return 0x4188;
-	if(strcmp(string,"soundbuftime")==0)	return 0x4190;
+	if(strcmp(string, "x") == 0)		return PROPERTY_X;
+	if(strcmp(string, "y") == 0)		return PROPERTY_Y;
+	if(strcmp(string, "xscale") == 0)	return PROPERTY_XSCALE;
+	if(strcmp(string, "yscale") == 0)	return PROPERTY_YSCALE;
+	if(strcmp(string, "currentframe") == 0) return PROPERTY_CURRENTFRAME;
+	if(strcmp(string, "totalframes") == 0)	return PROPERTY_TOTALFRAMES;
+	if(strcmp(string, "alpha") == 0)	return PROPERTY_ALPHA;
+	if(strcmp(string, "visible") == 0)	return PROPERTY_VISIBLE;
+	if(strcmp(string, "width") == 0)	return PROPERTY_WIDTH;
+	if(strcmp(string, "height") == 0)	return PROPERTY_HEIGHT;
+	if(strcmp(string, "rotation") == 0)	return PROPERTY_ROTATION;
+	if(strcmp(string, "target") == 0)	return PROPERTY_TARGET;
+	if(strcmp(string, "framesloaded") == 0)	return PROPERTY_FRAMESLOADED;
+	if(strcmp(string, "name") == 0)		return PROPERTY_NAME;
+	if(strcmp(string, "droptarget") == 0)	return PROPERTY_DROPTARGET;
+	if(strcmp(string, "url") == 0)		return PROPERTY_URL;
+	if(strcmp(string, "highquality") == 0)	return PROPERTY_HIGHQUALITY;
+	if(strcmp(string, "focusrect") == 0)	return PROPERTY_FOCUSRECT;
+	if(strcmp(string, "soundbuftime") == 0)	return PROPERTY_SOUNDBUFTIME;
+	if(strcmp(string, "quality")==0)	return PROPERTY_QUALITY;
+	if(strcmp(string, "xmouse") == 0)	return PROPERTY_XMOUSE;
+	if(strcmp(string, "ymouse") == 0)	return PROPERTY_YMOUSE;
 
 	SWF_error("No such property: %s\n", string);
 	return -1;
@@ -796,10 +807,7 @@ int bufferWriteSetProperty(Buffer out, char *string)
 
 	bufferWriteU8(out, SWFACTION_PUSH);
 	bufferWriteS16(out, 5);
-	bufferWriteU8(out, PUSH_FLOAT);
-	bufferWriteS16(out, 0);
-	bufferWriteS16(out, property);
-
+	bufferWriteFloat(out, property);
 	return 8;
 }
 
