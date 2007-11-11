@@ -1010,7 +1010,7 @@ void_function_call
 	| SETPROPERTY '(' expr ',' STRING ',' expr ')'
 		{
 			$$ = $3;
-			bufferWriteSetProperty($$, $5);
+			bufferWriteProperty($$, $5);
 			free($5);
 			bufferConcat($$, $7);
 			bufferWriteOp($$, SWFACTION_SETPROPERTY);	
@@ -1087,7 +1087,7 @@ function_call
 	| GETPROPERTY '(' expr ',' STRING ')'
 		{ $$ = newBuffer();
 		  bufferConcat($$, $3);
-		  bufferWriteGetProperty($$, $5);
+		  bufferWriteProperty($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  free($5); }
 	;

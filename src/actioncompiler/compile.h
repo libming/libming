@@ -218,8 +218,7 @@ int bufferWriteUndef(Buffer out);
 int bufferWriteBoolean(Buffer out, int val);
 int bufferWriteRegister(Buffer out, int num);
 int bufferWriteSetRegister(Buffer out, int num);
-int bufferWriteGetProperty(Buffer out, char *string);
-int bufferWriteSetProperty(Buffer out, char *string);
+int bufferWriteProperty(Buffer out, char *string);
 int bufferWriteWTHITProperty(Buffer out);
 
 /* concat b to a, destroy b */

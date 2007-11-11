@@ -622,7 +622,7 @@ function_call
 	| GETPROPERTY '(' expr ',' STRING ')'
 		{ $$ = newBuffer();
 		  bufferConcat($$, $3);
-		  bufferWriteGetProperty($$, $5);
+		  bufferWriteProperty($$, $5);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  free($5); }
 	;
@@ -688,7 +688,7 @@ rhs_expr
 	| sprite '.' IDENTIFIER
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteGetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  free($3);
 		  free($1); }
@@ -696,11 +696,11 @@ rhs_expr
 	| "++" sprite '.' IDENTIFIER
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteGetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteSetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteGetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteString($$, "1", 2);
 		  bufferWriteU8($$, SWFACTION_ADD);
 		  bufferWriteU8($$, SWFACTION_SETPROPERTY);
@@ -721,11 +721,11 @@ rhs_expr
 	| "--" sprite '.' IDENTIFIER
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteGetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteSetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteGetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteString($$, "1", 2);
 		  bufferWriteU8($$, SWFACTION_ADD);
 		  bufferWriteU8($$, SWFACTION_SETPROPERTY);
@@ -912,12 +912,12 @@ assign_stmt
 	| "++" sprite '.' IDENTIFIER
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteGetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  bufferWriteString($$, "1", 2);
 		  bufferWriteU8($$, SWFACTION_ADD);
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteSetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteU8($$, SWFACTION_SETPROPERTY);
 		  free($2);
 		  free($4); }
@@ -925,12 +925,12 @@ assign_stmt
 	| "--" sprite '.' IDENTIFIER
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteGetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  bufferWriteString($$, "1", 2);
 		  bufferWriteU8($$, SWFACTION_SUBTRACT);
 		  bufferWriteString($$, $2, strlen($2)+1);
-		  bufferWriteSetProperty($$, $4);
+		  bufferWriteProperty($$, $4);
 		  bufferWriteU8($$, SWFACTION_SETPROPERTY);
 		  free($2);
 		  free($4); }
@@ -970,7 +970,7 @@ assign_stmt
 	| sprite '.' IDENTIFIER '=' rhs_expr
                 { $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteSetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferConcat($$,$5);
 		  bufferWriteU8($$, SWFACTION_SETPROPERTY);
 		  free($1);
@@ -979,9 +979,9 @@ assign_stmt
 	| sprite '.' IDENTIFIER "*=" rhs_expr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteSetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteGetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_MULTIPLY);
@@ -992,9 +992,9 @@ assign_stmt
 	| sprite '.' IDENTIFIER "/=" rhs_expr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteSetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteGetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_DIVIDE);
@@ -1005,9 +1005,9 @@ assign_stmt
 	| sprite '.' IDENTIFIER "+=" rhs_expr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteSetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteGetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_ADD);
@@ -1018,9 +1018,9 @@ assign_stmt
 	| sprite '.' IDENTIFIER "-=" rhs_expr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteSetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteString($$, $1, strlen($1)+1);
-		  bufferWriteGetProperty($$, $3);
+		  bufferWriteProperty($$, $3);
 		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
 		  bufferConcat($$, $5);
 		  bufferWriteU8($$, SWFACTION_SUBTRACT);

@@ -801,7 +801,7 @@ int lookupSetProperty(char *string)
 	return -1;
 }
 
-int bufferWriteSetProperty(Buffer out, char *string)
+int bufferWriteProperty(Buffer out, char *string)
 {
 	int property = lookupSetProperty(string);
 
@@ -811,6 +811,7 @@ int bufferWriteSetProperty(Buffer out, char *string)
 	return 8;
 }
 
+// XXX: ???
 int bufferWriteWTHITProperty(Buffer out)
 {
 	bufferWriteU8(out, SWFACTION_PUSH);
@@ -820,49 +821,6 @@ int bufferWriteWTHITProperty(Buffer out)
 	bufferWriteS16(out, 0x4680);
 
 	return 8;
-}
-
-const char *lookupGetProperty(char *string)
-{
-	lower(string);
-
-	if(strcmp(string,"x")==0)		return "0";
-	if(strcmp(string,"y")==0)		return "1";
-	if(strcmp(string,"xscale")==0)	return "2";
-	if(strcmp(string,"yscale")==0)	return "3";
-	if(strcmp(string,"currentframe")==0)	return "4";
-	if(strcmp(string,"totalframes")==0)	return "5";
-	if(strcmp(string,"alpha")==0)		return "6";
-	if(strcmp(string,"visible")==0)	return "7";
-	if(strcmp(string,"width")==0)		return "8";
-	if(strcmp(string,"height")==0)	return "9";
-	if(strcmp(string,"rotation")==0)	return "10";
-	if(strcmp(string,"target")==0)	return "11";
-	if(strcmp(string,"framesloaded")==0)	return "12";
-	if(strcmp(string,"name")==0)		return "13";
-	if(strcmp(string,"droptarget")==0)	return "14";
-	if(strcmp(string,"url")==0)		return "15";
-	if(strcmp(string,"highquality")==0)	return "16";
-	if(strcmp(string,"focusrect")==0)	return "17";
-	if(strcmp(string,"soundbuftime")==0)	return "18";
-	// since SWF5
-	if(strcmp(string,"quality") == 0)	return "19";
-	if(strcmp(string,"xmouse") == 0)	return "20";
-	if(strcmp(string,"ymouse") == 0)	return "21";
-
-	SWF_error("No such property: %s\n", string);
-	return "";
-}
-
-int bufferWriteGetProperty(Buffer out, char *string)
-{
-	const char *property = lookupGetProperty(string);
-
-	bufferWriteU8(out, SWFACTION_PUSH);
-	bufferWriteS16(out, strlen(property)+2);
-	bufferWriteU8(out, PUSH_STRING);
-
-	return 4 + bufferWriteData(out, (byte*) property, strlen(property)+1);
 }
 
 /**
