@@ -948,7 +948,7 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 				param->p.String = readString(f);
 				break;
 			case 1: /* FLOAT */
-				param->p.Float = readUInt32(f);
+				param->p.Float = readFloat(f);
 				break;
 			case 2: /* NULL */
 			case 3: /* Undefined */

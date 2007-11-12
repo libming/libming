@@ -141,6 +141,19 @@ double readDouble(FILE *f)
   return *((double *)data);
 }
 
+float readFloat(FILE *f)
+{
+  char data[4];
+
+  data[0] = readUInt8(f);
+  data[1] = readUInt8(f);
+  data[2] = readUInt8(f);
+  data[3] = readUInt8(f);
+
+  return *((float *)data);
+}
+
+
 char *readBytes(FILE *f,int size)
 {
   int i;
