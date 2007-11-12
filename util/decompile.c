@@ -2389,15 +2389,18 @@ if(0)	    dumpRegs();
 	      /* There is an else clause also! 
 	         (action counter is set above)
 	       */
+	      struct _stack *StackSave=Stack;	/* decompile if and else blocks at same stack base */
 	      if  (has_lognot)
 	      {
                decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
                INDENT
 	       println("} else {");
 	      }	      
+	      Stack=StackSave;
               decompileActions(else_action_cnt  , &actions[n+1],gIndent+1);
 	      if  (!has_lognot)		/* the missing if-part just NOW */
 	      {
+		Stack=StackSave;
 		INDENT
 		println ("} else {" );
 		decompileActions(sact->numActions-1, sact->Actions,gIndent+1);
@@ -2446,12 +2449,22 @@ decompileWITH(int n, SWF_ACTION *actions,int maxn)
 int
 decompileTRY(int n, SWF_ACTION *actions,int maxn)
 {
+#ifdef DEBUG
+    struct _stack *StackSave=Stack;
+#endif    
     OUT_BEGIN2(SWF_ACTIONTRY);
     INDENT
     println("try {");
     decompileActions(sact->numTryActs, sact->TryActs,gIndent+1);
     INDENT
     println("}");
+#ifdef DEBUG
+    if (Stack!=StackSave)
+    {
+      println("/* Stack problem in try{} code above */");
+      Stack=StackSave;
+    }
+#endif
     if (sact->numCatchActs)    
     {
      struct SWF_ACTIONPUSHPARAM *rsave=NULL;
@@ -2471,6 +2484,13 @@ decompileTRY(int n, SWF_ACTION *actions,int maxn)
      println("}");
      if (rsave)
       regs[sact->CatchRegister]=rsave;
+#ifdef DEBUG
+     if (Stack!=StackSave)
+     {
+      println("/* Stack problem in catch{} code above */");
+      Stack=StackSave;
+     }
+#endif
     } 
     if (sact->numFinallyActs)
     {
@@ -2479,6 +2499,13 @@ decompileTRY(int n, SWF_ACTION *actions,int maxn)
      decompileActions(sact->numFinallyActs, sact->FinallyActs,gIndent+1);
      INDENT
      println("}");
+#ifdef DEBUG
+     if (Stack!=StackSave)
+     {
+      println("/* Stack problem in finally{} code above */");
+      Stack=StackSave;
+     }
+#endif
     }
     return 0;
 }
