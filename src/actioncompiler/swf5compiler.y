@@ -16,6 +16,7 @@
 //#define DEBUG 1
 
 Buffer bf, bc;
+static int classContext = 0;
 
 %}
 
@@ -232,7 +233,16 @@ stmt
 
 class_stmts
 	: class_stmt 			{ $$ = $1; }
-	| class_stmts class_stmt 	{ $$ = $2; $2->next = $1; }
+	| class_stmts class_stmt 	
+		{ 	
+			ASClassMember mb = $1;
+			$$ = $1;
+				
+			// keep declarations in order
+			while(mb->next)
+				mb = mb->next;
+			mb->next = $2;
+		}
 
 class_stmt
 	: 			{ $$ = NULL; } 
@@ -240,10 +250,20 @@ class_stmt
 	| VAR class_vars ';' 	{ $$ = newASClassMember_buffer($2); }
 	;
 
+class_init
+	: CLASS 
+	{
+		if(classContext)
+			swf5error("Nested classes are not allowed\n");
+		classContext = 1;
+	}
+	; 
+
 class_decl 
-	: CLASS identifier '{' class_stmts '}'
+	: class_init identifier '{' class_stmts '}'
 	{ 
 		$$ = newASClass($2, $4);
+		classContext = 0;
 	}
 	;
 
