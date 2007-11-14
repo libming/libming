@@ -38,7 +38,7 @@ void silentSkipBytes(FILE *f, int length);
 	SWF_Parserstruct *pstruct; 					\
 	pstruct = calloc(1, sizeof(SWF_Parserstruct)); 			\
 	pstruct->length = length;					\
-	pstruct->offset = fileOffset;					\
+	pstruct->offset = fileOffset - ( (length >= 63 ) ? 6 : 2) ;	\
 	parserrec= (struct block *)pstruct; 				\
 
 #define PAR_END \
