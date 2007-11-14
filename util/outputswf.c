@@ -1243,8 +1243,7 @@ destroySWFOutput(out);
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
-		int offset, int length)
+outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 {
   SWFOutput blkout;
   int i;

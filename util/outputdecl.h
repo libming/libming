@@ -112,4 +112,4 @@ extern OUTPUTRET outputSWF_DEFINEBINARYDATA(SWF_Parserstruct *pblock);
 extern OUTPUTRET outputSWF_DEFINESCENEANDFRAMEDATA(SWF_Parserstruct *pblock);
 extern void outputHeader(struct Movie *m);
 extern void outputTrailer(struct Movie *m);
-extern void outputBlock(int type, SWF_Parserstruct *blockp, FILE *stream, int offset, int lenght);
+extern void outputBlock(int type, SWF_Parserstruct *blockp, FILE *stream);

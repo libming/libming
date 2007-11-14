@@ -17,14 +17,15 @@ outputTrailer (struct Movie *m)
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp, FILE* f,
-		int offset, int length)
+outputBlock (int type, SWF_Parserstruct * blockp, FILE* f)
 {
 	static int fontnum=0;
 	FILE *out;
-	char buf[length];
 	char name[256];
 	int skipBytes;
+	int offset = blockp->offset;
+	int length = blockp->length;
+	char buf[length];
 
 	if ( type != SWF_DEFINEFONT2 ) return;
 

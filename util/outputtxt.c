@@ -1497,7 +1497,7 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   iprintf(" BlockCount: %d\n", sblock->BlockCount );
   ++INDENT;
   for(i=0;i<sblock->BlockCount;i++) {
-       outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
+       outputBlock(sblock->tagTypes[i], sblock->Tags[i], NULL);
   }
   --INDENT;
 
@@ -2843,10 +2843,11 @@ outputTrailer (struct Movie *m)
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
-		int offset, int length)
+outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 {
   int i;
+  int offset = blockp->offset;
+  int length = blockp->length;
 
   if (type < 0)
     return;

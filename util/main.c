@@ -292,7 +292,7 @@ main (int argc, char *argv[])
        }
 
        if( blockp ) {
-	       outputBlock( type, blockp, f, blockoffset, length );
+	       outputBlock( type, blockp, f);
 	       free(blockp);
        } else {
 	       error("Error parsing block (unknown block type: %d)\n", type);

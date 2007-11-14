@@ -957,7 +957,7 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   printf ("%s(); " COMMSTART " %d frames " COMMEND "\n",
 		  newobj (spritename, "MovieClip"), sblock->FrameCount);
   for(i=0;i<sblock->BlockCount;i++) {
-	  outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL, 0, 0 );
+	  outputBlock( sblock->tagTypes[i], sblock->Tags[i], NULL);
   }
   spritenum = 0;
 
@@ -1382,8 +1382,7 @@ outputTrailer (struct Movie *m)
 }
 
 void
-outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream,
-		int offset, int length)
+outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 {
   int i;
 

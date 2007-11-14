@@ -50,7 +50,8 @@ static double ratio_EM;
 
 struct Movie m;
 struct SWF_SETBACKGROUNDCOLOR bg = {{0}};
-struct SWF_DEFINEFONT2 swffont = {0};
+struct SWF_Parserstruct_s pblock;
+struct SWF_DEFINEFONT2 *swffont = &pblock.block.SWF_DEFINEFONT2;
 struct SWF_SHOWFRAME showframe = {0};
 
 static int BITS_LENGTH[] = {
@@ -337,12 +338,12 @@ outputHeader(&m);
 
 ratio_EM = 1024.0/face->units_per_EM;
 
-swffont.FontID = 1;
-swffont.FontName = strdup(face->family_name);
-swffont.FontNameLen=strlen(swffont.FontName);
+swffont->FontID = 1;
+swffont->FontName = strdup(face->family_name);
+swffont->FontNameLen=strlen(swffont->FontName);
 
 
-swffont.FontFlagsHasLayout=1;
+swffont->FontFlagsHasLayout=1;
 
 for(i=0; i < face->num_charmaps; i++) {
 /*
@@ -371,56 +372,56 @@ if( FT_Select_Charmap(face,FT_ENCODING_UNICODE) != 0 ) {
 
 FT_Set_Charmap(face, charmap);
 
-swffont.FontFlagsSmallText=0;
-swffont.FontFlagsFlagANSI = 1;
-swffont.FontFlagsShiftJis = 0;
+swffont->FontFlagsSmallText=0;
+swffont->FontFlagsFlagANSI = 1;
+swffont->FontFlagsShiftJis = 0;
 /* Need to figure out if this is UNIcode or ANSI */
 if( charmap->platform_id == TT_PLATFORM_APPLE_UNICODE ) {
-	swffont.FontFlagsSmallText=1;
-	swffont.FontFlagsFlagANSI = 0; 
+	swffont->FontFlagsSmallText=1;
+	swffont->FontFlagsFlagANSI = 0; 
 } else if (charmap->platform_id == TT_PLATFORM_MICROSOFT )
 	switch( charmap->encoding_id )
 	{
 	case TT_MS_ID_UNICODE_CS:
-		swffont.FontFlagsSmallText=1;
-		swffont.FontFlagsFlagANSI = 0; 
+		swffont->FontFlagsSmallText=1;
+		swffont->FontFlagsFlagANSI = 0; 
 		break;
 	case TT_MS_ID_SJIS:
-		swffont.FontFlagsShiftJis = 1;
-		swffont.FontFlagsFlagANSI = 0; 
+		swffont->FontFlagsShiftJis = 1;
+		swffont->FontFlagsFlagANSI = 0; 
 		break;
 	default:
 		/* Else assume it's ANSI */
-		swffont.FontFlagsFlagANSI = 1;
+		swffont->FontFlagsFlagANSI = 1;
 	}
 
-swffont.FontFlagsFlagsBold = 0;
-swffont.FontFlagsFlagsItalics = 0;
+swffont->FontFlagsFlagsBold = 0;
+swffont->FontFlagsFlagsItalics = 0;
 if( face->style_flags&FT_STYLE_FLAG_BOLD )
-	swffont.FontFlagsFlagsBold = 1;
+	swffont->FontFlagsFlagsBold = 1;
 
 if( face->style_flags&FT_STYLE_FLAG_ITALIC )
-	swffont.FontFlagsFlagsItalics = 1;
+	swffont->FontFlagsFlagsItalics = 1;
 
 
 /* Allocate the buffer space that we will be using */
 
 /* allocate space for the larger format to be safe */
-swffont.OffsetTable.UI32=(UI32 *)calloc(face->num_glyphs,sizeof(UI32));
+swffont->OffsetTable.UI32=(UI32 *)calloc(face->num_glyphs,sizeof(UI32));
 
-swffont.GlyphShapeTable=(SWF_SHAPE *)calloc(face->num_glyphs,sizeof(SWF_SHAPE));
+swffont->GlyphShapeTable=(SWF_SHAPE *)calloc(face->num_glyphs,sizeof(SWF_SHAPE));
 
-swffont.CodeTable=(int *)calloc(face->num_glyphs,sizeof(int));
+swffont->CodeTable=(int *)calloc(face->num_glyphs,sizeof(int));
 
-swffont.FontAdvanceTable=(SI16 *)calloc(face->num_glyphs,sizeof(SI16));
-swffont.FontBoundsTable=(SWF_RECT *)calloc(face->num_glyphs,sizeof(SWF_RECT));
+swffont->FontAdvanceTable=(SI16 *)calloc(face->num_glyphs,sizeof(SI16));
+swffont->FontBoundsTable=(SWF_RECT *)calloc(face->num_glyphs,sizeof(SWF_RECT));
 
 /* Now, loop through the glyphs and pull out the data for each one */
 
 i=0;
 charcode = FT_Get_First_Char(face, &gindex );
 while ( gindex != 0 ) {
-	swffont.CodeTable[i]=charcode;
+	swffont->CodeTable[i]=charcode;
 	maxcode=max(maxcode,charcode);
 	if( FT_Load_Glyph(face, gindex, FT_LOAD_NO_BITMAP|FT_LOAD_NO_SCALE) ) {
 		fprintf(stderr, "Can't load glyph %d, skipped\n", gindex);
@@ -428,7 +429,7 @@ while ( gindex != 0 ) {
                 }
 
 	/* Get the shape info */
-	shape=&(swffont.GlyphShapeTable[i]);
+	shape=&(swffont->GlyphShapeTable[i]);
 	shape->NumShapeRecords = 0;
 	shape->ShapeRecords = (SWF_SHAPERECORD *)calloc(1,sizeof(SWF_SHAPERECORD));
 	shape->NumFillBits = 1;
@@ -454,10 +455,10 @@ while ( gindex != 0 ) {
 	endrec->EndOfShape=0;
 
 	/* Fill in the FontAdvanceTable */
-	swffont.FontAdvanceTable[i] = (int)(face->glyph->advance.x*ratio_EM);
+	swffont->FontAdvanceTable[i] = (int)(face->glyph->advance.x*ratio_EM);
 
 	/* Fill in the FontBoundsTable even though it isn't used */
-	bbox=&(swffont.FontBoundsTable[i]);
+	bbox=&(swffont->FontBoundsTable[i]);
 	bbox->Nbits=12;
 	bbox->Xmin=-1024;
 	bbox->Xmax=1024;
@@ -468,19 +469,19 @@ while ( gindex != 0 ) {
 	charcode = FT_Get_Next_Char(face, charcode, &gindex);
 	i++;
 }
-swffont.NumGlyphs = i;
+swffont->NumGlyphs = i;
 
-swffont.FontAscent = (int)(face->ascender*ratio_EM);
-swffont.FontDecent = -(int)(face->descender*ratio_EM);
-swffont.FontLeading = (int)((face->height-face->ascender+face->descender)*ratio_EM);
+swffont->FontAscent = (int)(face->ascender*ratio_EM);
+swffont->FontDecent = -(int)(face->descender*ratio_EM);
+swffont->FontLeading = (int)((face->height-face->ascender+face->descender)*ratio_EM);
 
 if( maxcode > 256 )
-	swffont.FontFlagsWideCodes=1;
+	swffont->FontFlagsWideCodes=1;
 
 /* Now, loop through the kerning information and build up the kerning table */
 
 k=0;
-swffont.FontKerningTable=0;
+swffont->FontKerningTable=0;
 #if 0
 for(i=0;i<swffont.NumGlyphs;i++) {
 	for(j=0;j<swffont.NumGlyphs;j++) {
@@ -496,9 +497,11 @@ for(i=0;i<swffont.NumGlyphs;i++) {
 	}
 }
 #endif
-swffont.KerningCount = k;
+swffont->KerningCount = k;
 
-outputBlock(SWF_DEFINEFONT2,(SWF_Parserstruct *)&swffont,stdout,26,100);
+pblock.offset = 26;
+pblock.length = 100;
+outputBlock(SWF_DEFINEFONT2,&pblock,stdout);
 
 if( FT_Done_Face(face) ) {
 	fprintf(stderr, "Errors when closing the font file, ignored\n");
