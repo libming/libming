@@ -26,7 +26,8 @@ AS_TESTS = \
 	legacy_functions.as \
 	drag.as		\
 	class_empty.as	\
-	class_method.as 
+	class_method.as \
+	class_member.as 
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -49,6 +50,7 @@ EXTRA_DIST = 		\
 	drag.ref	\
 	class_empty.ref	\
 	class_method.ref \
+	class_member.ref \
 	$(AS_TESTS)
 
 CLEANFILES = *.pp *.swf
