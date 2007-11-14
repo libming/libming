@@ -220,6 +220,7 @@ int bufferWriteRegister(Buffer out, int num);
 int bufferWriteSetRegister(Buffer out, int num);
 int bufferWriteProperty(Buffer out, char *string);
 int bufferWriteWTHITProperty(Buffer out);
+int lookupProperty(char *string);
 
 /* concat b to a, destroy b */
 char *stringConcat(char *a, char *b);

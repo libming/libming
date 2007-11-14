@@ -770,32 +770,32 @@ void bufferResolveSwitch(Buffer buffer, struct switchcases *slp)
 	}
 }
 	
-int lookupSetProperty(char *string)
+int lookupProperty(char *string)
 {
 	lower(string);
 
-	if(strcmp(string, "x") == 0)		return PROPERTY_X;
-	if(strcmp(string, "y") == 0)		return PROPERTY_Y;
-	if(strcmp(string, "xscale") == 0)	return PROPERTY_XSCALE;
-	if(strcmp(string, "yscale") == 0)	return PROPERTY_YSCALE;
-	if(strcmp(string, "currentframe") == 0) return PROPERTY_CURRENTFRAME;
-	if(strcmp(string, "totalframes") == 0)	return PROPERTY_TOTALFRAMES;
-	if(strcmp(string, "alpha") == 0)	return PROPERTY_ALPHA;
-	if(strcmp(string, "visible") == 0)	return PROPERTY_VISIBLE;
-	if(strcmp(string, "width") == 0)	return PROPERTY_WIDTH;
-	if(strcmp(string, "height") == 0)	return PROPERTY_HEIGHT;
-	if(strcmp(string, "rotation") == 0)	return PROPERTY_ROTATION;
-	if(strcmp(string, "target") == 0)	return PROPERTY_TARGET;
-	if(strcmp(string, "framesloaded") == 0)	return PROPERTY_FRAMESLOADED;
-	if(strcmp(string, "name") == 0)		return PROPERTY_NAME;
-	if(strcmp(string, "droptarget") == 0)	return PROPERTY_DROPTARGET;
-	if(strcmp(string, "url") == 0)		return PROPERTY_URL;
-	if(strcmp(string, "highquality") == 0)	return PROPERTY_HIGHQUALITY;
-	if(strcmp(string, "focusrect") == 0)	return PROPERTY_FOCUSRECT;
-	if(strcmp(string, "soundbuftime") == 0)	return PROPERTY_SOUNDBUFTIME;
-	if(strcmp(string, "quality")==0)	return PROPERTY_QUALITY;
-	if(strcmp(string, "xmouse") == 0)	return PROPERTY_XMOUSE;
-	if(strcmp(string, "ymouse") == 0)	return PROPERTY_YMOUSE;
+	if(strcmp(string, "_x") == 0)		return PROPERTY_X;
+	if(strcmp(string, "_y") == 0)		return PROPERTY_Y;
+	if(strcmp(string, "_xscale") == 0)	return PROPERTY_XSCALE;
+	if(strcmp(string, "_yscale") == 0)	return PROPERTY_YSCALE;
+	if(strcmp(string, "_currentframe") == 0) return PROPERTY_CURRENTFRAME;
+	if(strcmp(string, "_totalframes") == 0)	return PROPERTY_TOTALFRAMES;
+	if(strcmp(string, "_alpha") == 0)	return PROPERTY_ALPHA;
+	if(strcmp(string, "_visible") == 0)	return PROPERTY_VISIBLE;
+	if(strcmp(string, "_width") == 0)	return PROPERTY_WIDTH;
+	if(strcmp(string, "_height") == 0)	return PROPERTY_HEIGHT;
+	if(strcmp(string, "_rotation") == 0)	return PROPERTY_ROTATION;
+	if(strcmp(string, "_target") == 0)	return PROPERTY_TARGET;
+	if(strcmp(string, "_framesloaded") == 0)	return PROPERTY_FRAMESLOADED;
+	if(strcmp(string, "_name") == 0)		return PROPERTY_NAME;
+	if(strcmp(string, "_droptarget") == 0)	return PROPERTY_DROPTARGET;
+	if(strcmp(string, "_url") == 0)		return PROPERTY_URL;
+	if(strcmp(string, "_highquality") == 0)	return PROPERTY_HIGHQUALITY;
+	if(strcmp(string, "_focusrect") == 0)	return PROPERTY_FOCUSRECT;
+	if(strcmp(string, "_soundbuftime") == 0)	return PROPERTY_SOUNDBUFTIME;
+	if(strcmp(string, "_quality")==0)	return PROPERTY_QUALITY;
+	if(strcmp(string, "_xmouse") == 0)	return PROPERTY_XMOUSE;
+	if(strcmp(string, "_ymouse") == 0)	return PROPERTY_YMOUSE;
 
 	SWF_error("No such property: %s\n", string);
 	return -1;
@@ -803,12 +803,8 @@ int lookupSetProperty(char *string)
 
 int bufferWriteProperty(Buffer out, char *string)
 {
-	int property = lookupSetProperty(string);
-
-	bufferWriteU8(out, SWFACTION_PUSH);
-	bufferWriteS16(out, 5);
-	bufferWriteFloat(out, property);
-	return 8;
+	int property = lookupProperty(string);
+	return bufferWriteFloat(out, property);
 }
 
 // XXX: ???

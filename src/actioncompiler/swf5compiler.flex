@@ -202,6 +202,33 @@ duplicateMovieClip	{ count();	return DUPLICATEMOVIECLIP; }
 removeMovieClip		{ count();	return REMOVEMOVIECLIP; }
 startDrag		{ count();	return STARTDRAG;	}
 stopDrag		{ count();	return STOPDRAG;	}
+setProperty		{ count();	return SETPROPERTY;	}
+getProperty		{ count();	return GETPROPERTY;	}
+
+  /* properties (legacy) */
+_x			{ count();	return _P_X; }
+_y 			{ count();	return _P_Y; }
+_xscale			{ count();	return _P_XSCALE; }
+_yscale			{ count();	return _P_YSCALE; }
+_currentframe		{ count();	return _P_CURRENTFRAME; }
+_totalframes		{ count();	return _P_TOTALFRAMES; }
+_alpha			{ count();	return _P_ALPHA; }
+_visible		{ count();	return _P_VISIBLE; }
+_width			{ count();	return _P_WIDTH; }
+_height			{ count();	return _P_HEIGHT; }
+_rotation		{ count();	return _P_ROTATION; }
+_target			{ count();	return _P_TARGET; }
+_framesloaded		{ count();	return _P_FRAMESLOADED; }
+_name 			{ count();	return _P_NAME;	}
+_droptarget		{ count();	return _P_DROPTARGET; }
+_url			{ count();	return _P_URL; }
+_highquality		{ count();	return _P_HIGHQUALITY; }
+_focusrect		{ count();	return _P_FOCUSRECT; }
+_soundbuftime		{ count();	return _P_SOUNDBUFTIME; }
+_quality		{ count();	return _P_QUALITY; }
+_xmouse			{ count();	return _P_XMOUSE; }
+_ymouse			{ count();	return _P_YMOUSE; }
+
 
   /* assembler ops */
 <asm>{

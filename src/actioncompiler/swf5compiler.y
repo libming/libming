@@ -103,6 +103,10 @@ Buffer bf, bc;
 %token SHREQ ">>="
 %token SHR2EQ ">>>="
 
+%token _P_X _P_Y _P_XSCALE _P_YSCALE _P_CURRENTFRAME _P_TOTALFRAMES _P_ALPHA
+%token _P_VISIBLE _P_WIDTH _P_HEIGHT _P_ROTATION _P_TARGET _P_FRAMESLOADED 
+%token _P_NAME _P_DROPTARGET _P_URL _P_HIGHQUALITY _P_FOCUSRECT _P_SOUNDBUFTIME
+%token _P_QUALITY _P_XMOUSE _P_YMOUSE
 
 /* ascending order of ops ..? */
 
@@ -140,7 +144,7 @@ Buffer bf, bc;
 %type <action> delete_call class_vars class_var primary_constant
 %type <classMember> class_stmts class_stmt
 %type <lval> lvalue 
-
+%type <intVal> property
 %type <exprlist> expr_list objexpr_list formals_list
 
 %type <switchcase> switch_case
@@ -519,8 +523,34 @@ identifier
 	| GOTOANDSTOP	{ $$ = strdup("gotoAndStop"); }
 	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }
 	| SETTARGET 	{ $$ = strdup("setTarget"); }
-	| CALLFRAME		{ $$ = strdup("call"); }
+	| CALLFRAME	{ $$ = strdup("call"); }
 	| IMPLEMENTS	{ $$ = strdup("implements"); }
+	| GETPROPERTY	{ $$ = strdup("getProperty"); }
+	| SETPROPERTY	{ $$ = strdup("setProperty"); }
+	
+	/* property names */ 
+	| _P_X			{ $$ = strdup("_x"); }
+	| _P_Y			{ $$ = strdup("_y"); }
+	| _P_XSCALE		{ $$ = strdup("_xscale"); }
+	| _P_YSCALE 		{ $$ = strdup("_yscale"); }
+	| _P_CURRENTFRAME	{ $$ = strdup("_currentframe"); }
+	| _P_TOTALFRAMES	{ $$ = strdup("_totalframes"); }
+	| _P_ALPHA		{ $$ = strdup("_alpha"); }
+	| _P_VISIBLE		{ $$ = strdup("_visible"); }
+	| _P_WIDTH 		{ $$ = strdup("_width"); }
+	| _P_HEIGHT		{ $$ = strdup("_height"); }
+	| _P_ROTATION		{ $$ = strdup("_rotation"); }
+	| _P_TARGET		{ $$ = strdup("_target"); }
+	| _P_FRAMESLOADED	{ $$ = strdup("_framesloaded"); }
+	| _P_NAME		{ $$ = strdup("_name"); }
+	| _P_DROPTARGET		{ $$ = strdup("_droptraget"); }
+	| _P_URL 		{ $$ = strdup("_url"); }
+	| _P_HIGHQUALITY	{ $$ = strdup("_highquality"); }
+	| _P_FOCUSRECT		{ $$ = strdup("_focusrect"); }
+	| _P_SOUNDBUFTIME	{ $$ = strdup("_soundbuftime"); }
+	| _P_QUALITY		{ $$ = strdup("_quality"); }
+	| _P_XMOUSE		{ $$ = strdup("_xmouse"); }
+	| _P_YMOUSE		{ $$ = strdup("_ymouse"); }
 	;
 
 formals_list
@@ -1007,11 +1037,10 @@ void_function_call
 		{ $$ = $3;
 		  bufferWriteOp($$, SWFACTION_SETTARGET2); }
 
-	| SETPROPERTY '(' expr ',' STRING ',' expr ')'
+	| SETPROPERTY '(' expr ',' property ',' expr ')'
 		{
 			$$ = $3;
-			bufferWriteProperty($$, $5);
-			free($5);
+			bufferWriteFloat($$, $5);
 			bufferConcat($$, $7);
 			bufferWriteOp($$, SWFACTION_SETPROPERTY);	
 		}
@@ -1084,12 +1113,12 @@ function_call
 		  $$ = $3;
 		  bufferWriteOp($$, SWFACTION_TYPEOF); }
 	
-	| GETPROPERTY '(' expr ',' STRING ')'
+	| GETPROPERTY '(' expr ',' property ')'
 		{ $$ = newBuffer();
 		  bufferConcat($$, $3);
-		  bufferWriteProperty($$, $5);
-		  bufferWriteU8($$, SWFACTION_GETPROPERTY);
-		  free($5); }
+		  bufferWriteFloat($$, $5);
+		  bufferWriteOp($$, SWFACTION_GETPROPERTY);
+		}
 	;
 
 /* legacy and built-in functions */
@@ -2031,5 +2060,30 @@ opcode
 
 	;
 
+property
+	: STRING	 	{ $$ = lookupProperty($1); } // Ming extension !
+	| _P_X 			{ $$ = PROPERTY_X; }
+	| _P_Y 			{ $$ = PROPERTY_Y; }
+	| _P_XSCALE		{ $$ = PROPERTY_XSCALE; }
+	| _P_YSCALE		{ $$ = PROPERTY_YSCALE; }
+	| _P_CURRENTFRAME	{ $$ = PROPERTY_CURRENTFRAME; }
+	| _P_TOTALFRAMES	{ $$ = PROPERTY_TOTALFRAMES; }
+	| _P_ALPHA		{ $$ = PROPERTY_ALPHA; }
+	| _P_VISIBLE		{ $$ = PROPERTY_VISIBLE; }
+	| _P_WIDTH		{ $$ = PROPERTY_WIDTH; }
+	| _P_HEIGHT		{ $$ = PROPERTY_HEIGHT; }
+	| _P_ROTATION		{ $$ = PROPERTY_ROTATION; }
+	| _P_TARGET		{ $$ = PROPERTY_TARGET; }
+	| _P_FRAMESLOADED	{ $$ = PROPERTY_FRAMESLOADED; }
+	| _P_NAME		{ $$ = PROPERTY_NAME; }
+	| _P_DROPTARGET		{ $$ = PROPERTY_DROPTARGET; }
+	| _P_URL		{ $$ = PROPERTY_URL; }
+	| _P_HIGHQUALITY	{ $$ = PROPERTY_HIGHQUALITY; }
+	| _P_FOCUSRECT		{ $$ = PROPERTY_FOCUSRECT; }
+	| _P_SOUNDBUFTIME	{ $$ = PROPERTY_SOUNDBUFTIME; }	
+	| _P_QUALITY		{ $$ = PROPERTY_QUALITY; }
+	| _P_XMOUSE		{ $$ = PROPERTY_XMOUSE; }
+	| _P_YMOUSE		{ $$ = PROPERTY_YMOUSE; }
+	;
 %%
 
