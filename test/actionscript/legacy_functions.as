@@ -23,4 +23,7 @@ gotoAndStop(1);
 gotoAndPlay("here");
 gotoAndStop("here");
 setTarget("xx");
-
+setProperty(_root, _x, 0);
+setProperty(_root, "_x", 0); // MING extension
+getProperty(_root, _y);
+getProperty(_root, "_y"); // MING extension
