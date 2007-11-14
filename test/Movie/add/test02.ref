@@ -18,12 +18,12 @@ Block length: 8
  FrameCount: 1
  BlockCount: 2
 
-  Offset: 0 (0x0000)
+  Offset: 31 (0x001f)
   Block type: 1 (SWF_SHOWFRAME)
   Block length: 0
 
 
-  Offset: 0 (0x0000)
+  Offset: 33 (0x0021)
   Block type: 0 (SWF_END)
   Block length: 0
 
