@@ -12,12 +12,12 @@ Block length: 8
  FrameCount: 1
  BlockCount: 2
 
-  Offset: 0 (0x0000)
+  Offset: 26 (0x001a)
   Block type: 1 (SWF_SHOWFRAME)
   Block length: 0
 
 
-  Offset: 0 (0x0000)
+  Offset: 28 (0x001c)
   Block type: 0 (SWF_END)
   Block length: 0
 
@@ -47,12 +47,12 @@ Block length: 8
  FrameCount: 1
  BlockCount: 2
 
-  Offset: 0 (0x0000)
+  Offset: 44 (0x002c)
   Block type: 1 (SWF_SHOWFRAME)
   Block length: 0
 
 
-  Offset: 0 (0x0000)
+  Offset: 46 (0x002e)
   Block type: 0 (SWF_END)
   Block length: 0
 
