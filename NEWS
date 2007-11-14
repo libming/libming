@@ -17,6 +17,8 @@
 	* AS Class support
 	* Removed SWFFontCharacter destructor from PHP wrapper
 	* py_ext update
+	* Class members
+	* outputBlock() usese length and offset from SWF_Parserstruct
 
 0.4.0.beta5 - 2007-09-18
 
