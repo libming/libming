@@ -12,4 +12,14 @@ class MyTestClass
 	{
 		;
 	}
+
+	private function test()
+	{
+		;
+	}
+
+	public function bar()
+	{
+		;
+	}
 }

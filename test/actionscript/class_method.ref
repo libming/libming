@@ -1,75 +1,94 @@
 File version: 6
-File size: 179
+File size: 215
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 12 (SWF_DOACTION)
-Block length: 149
+Block length: 185
 
- 24 Actions
+ 30 Actions
     26:SWFACTION_CONSTANTPOOL
      [000] _global
      [001] MyTestClass
      [002] prototype
      [003] test
-     [004] ASSetPropFlags
-    81:SWFACTION_PUSH
+     [004] bar
+     [005] ASSetPropFlags
+    85:SWFACTION_PUSH
      [000]   Constant: 0 "_global"
-    86:SWFACTION_GETVARIABLE
-    87:SWFACTION_PUSH
+    90:SWFACTION_GETVARIABLE
+    91:SWFACTION_PUSH
      [000]   Constant: 1 "MyTestClass"
-    92:SWFACTION_DEFINEFUNCTION
+    96:SWFACTION_DEFINEFUNCTION
     Name: 
     NumParams: 2
      [00] a
      [01] b
     CodeSize: 0
     0 Action
-    104:SWFACTION_STOREREGISTER
+    108:SWFACTION_STOREREGISTER
     Register: 1
-    108:SWFACTION_SETMEMBER
-    109:SWFACTION_PUSH
+    112:SWFACTION_SETMEMBER
+    113:SWFACTION_PUSH
      [000]   Register: 1
      [001]   Constant: 2 "prototype"
-    116:SWFACTION_GETMEMBER
-    117:SWFACTION_STOREREGISTER
+    120:SWFACTION_GETMEMBER
+    121:SWFACTION_STOREREGISTER
     Register: 2
-    121:SWFACTION_POP
-    122:SWFACTION_PUSH
+    125:SWFACTION_POP
+    126:SWFACTION_PUSH
      [000]   Register: 2
      [001]   Constant: 3 "test"
-    129:SWFACTION_DEFINEFUNCTION
+    133:SWFACTION_DEFINEFUNCTION
     Name: 
     NumParams: 0
     CodeSize: 0
     0 Action
-    137:SWFACTION_SETMEMBER
-    138:SWFACTION_PUSH
+    141:SWFACTION_SETMEMBER
+    142:SWFACTION_PUSH
+     [000]   Register: 2
+     [001]   Constant: 3 "test"
+    149:SWFACTION_DEFINEFUNCTION
+    Name: 
+    NumParams: 0
+    CodeSize: 0
+    0 Action
+    157:SWFACTION_SETMEMBER
+    158:SWFACTION_PUSH
+     [000]   Register: 2
+     [001]   Constant: 4 "bar"
+    165:SWFACTION_DEFINEFUNCTION
+    Name: 
+    NumParams: 0
+    CodeSize: 0
+    0 Action
+    173:SWFACTION_SETMEMBER
+    174:SWFACTION_PUSH
      [000]   Integer: 1
      [001]   NULL: 
      [002]   Constant: 0 "_global"
-    149:SWFACTION_GETVARIABLE
-    150:SWFACTION_PUSH
+    185:SWFACTION_GETVARIABLE
+    186:SWFACTION_PUSH
      [000]   Constant: 1 "MyTestClass"
-    155:SWFACTION_GETMEMBER
-    156:SWFACTION_PUSH
+    191:SWFACTION_GETMEMBER
+    192:SWFACTION_PUSH
      [000]   Constant: 2 "prototype"
-    161:SWFACTION_GETMEMBER
-    162:SWFACTION_PUSH
+    197:SWFACTION_GETMEMBER
+    198:SWFACTION_PUSH
      [000]   Integer: 3
-     [001]   Constant: 4 "ASSetPropFlags"
-    172:SWFACTION_CALLFUNCTION
-    173:SWFACTION_POP
-    174:SWFACTION_END
+     [001]   Constant: 5 "ASSetPropFlags"
+    208:SWFACTION_CALLFUNCTION
+    209:SWFACTION_POP
+    210:SWFACTION_END
 
-Offset: 175 (0x00af)
+Offset: 211 (0x00d3)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 177 (0x00b1)
+Offset: 213 (0x00d5)
 Block type: 0 (SWF_END)
 Block length: 0
 
