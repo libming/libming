@@ -1,7 +1,7 @@
 class MyTestClass {
-	var x = 0;
-	var y = 1;
-	public 	var z;
-	private var v;
+	var x:Number = 0;
+	var y:Number = 1;
+	public 	var z:Object;
+	private var v:Object;
 }
 

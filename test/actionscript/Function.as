@@ -26,4 +26,14 @@ trace(test instanceOf Function);
 // trace(test instanceOf function);
 
 // This is the one that failed with tknip patch for AS2 support
-function getName() { return this.name; }
+function getName():Object { return this.name; }
+
+var f1:String = function():String
+{
+	return "anonymous function() works";
+}; // we need a semicolon to end a statement !
+
+function foo(x:Number, y:Object)
+{
+	;
+}
