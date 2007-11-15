@@ -1118,7 +1118,7 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
       printf(COMMSTART " PlaceFlagHasCharacter " COMMEND "\n");
     sprintf(cname, "character%d", sblock->CharacterId );
     /* TODO: assign the return to a DisplayItem (for later handling of removeobject tags) */
-    printf ("%s(" VAR "%s);\n", methodcall ("m", "add"),
+    printf ("%s(" VAR "%s);\n", methodcall (spritenum?spritename:"m", "add"),
 	      cname);
   }
   if( sblock->PlaceFlagHasMatrix ) {
