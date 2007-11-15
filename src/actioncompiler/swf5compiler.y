@@ -274,24 +274,28 @@ access_attr
 	| PRIVATE
 	;
 
+type_attr
+	:
+	| ':' identifier
+
 class_vars
 	: class_var 
 
-	| class_vars ',' class_var
+	| class_vars ',' class_var 
 		{ $$ = $1;
 		  bufferConcat($$, $3); }
 	;
 
 class_var
-	: identifier '=' primary_constant
+	: identifier type_attr '=' primary_constant
 		{ $$ = newBuffer();
 		  bufferWriteRegister($$, 2);
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
-		  bufferConcat($$, $3);
+		  bufferConcat($$, $4);
 		  bufferWriteOp($$, SWFACTION_SETMEMBER); }
 
-	| identifier
+	| identifier type_attr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
@@ -585,13 +589,13 @@ formals_list
 		{ $$.buffer = newBuffer();
 		  $$.count = 0; }
 
-	| identifier
+	| identifier type_attr
 		{ $$.buffer = newBuffer();
 		  bufferWriteHardString($$.buffer, $1, strlen($1)+1);
 		  $$.count = 1;
 		  free($1); }
 
-	| formals_list ',' identifier
+	| formals_list ',' identifier type_attr
 		{ $$ = $1;
 		  bufferWriteHardString($$.buffer, $3, strlen($3)+1);
 		  ++$$.count;
@@ -604,12 +608,12 @@ function_identifier
 	;
 
 function_decl
-	: FUNCTION function_identifier '(' formals_list ')' stmt
+	: FUNCTION function_identifier '(' formals_list ')' type_attr stmt
 	{
 		$$ = newASFunction();
 		$$->name = $2;
 		$$->params = $4;
-		$$->code = $6;	
+		$$->code = $7;	
 		addctx(CTX_FUNCTION);	
 	}
 	;
@@ -1743,14 +1747,14 @@ init_vars
 	;
 
 init_var
-	: identifier '=' expr_or_obj
+	: identifier type_attr '=' expr_or_obj
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
-		  bufferConcat($$, $3);
+		  bufferConcat($$, $4);
 		  bufferWriteOp($$, SWFACTION_DEFINELOCAL); }
 
-	| identifier
+	| identifier type_attr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
