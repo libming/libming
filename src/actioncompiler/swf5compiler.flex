@@ -171,6 +171,8 @@ eval			{ count();	return EVAL;		}
 type[oO]f		{ count();	return TYPEOF; }
 instance[oO]f		{ count();	return INSTANCEOF; }
 class			{ count();	return CLASS; }
+public 			{ count();	return PUBLIC; }
+private			{ count();	return PRIVATE; }
 
   /* legacy functions */
 random			{ count();	return RANDOM;	}

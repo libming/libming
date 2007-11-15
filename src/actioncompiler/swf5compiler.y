@@ -61,11 +61,11 @@ static int classContext = 0;
 %token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET 
 %token LOADVARIABLES LOADMOVIE LOADVARIABLESNUM LOADMOVIENUM
 %token CALLFRAME STARTDRAG STOPDRAG GOTOANDSTOP GOTOANDPLAY SETTARGET 
-%token GETPROPERTY SETPROPERTY TONUMBER TOSTRING
+%token GETPROPERTY SETPROPERTY TONUMBER TOSTRING 
 
 %token TRY THROW CATCH FINALLY
 
-%token EXTENDS IMPLEMENTS CLASS
+%token EXTENDS IMPLEMENTS CLASS PUBLIC PRIVATE
 
 %token NULLVAL
 %token UNDEFINED
@@ -232,21 +232,22 @@ stmt
 
 
 class_stmts
-	: class_stmt 			{ $$ = $1; }
-	| class_stmts class_stmt 	
-		{ 	
-			ASClassMember mb = $1;
-			$$ = $1;
+	: access_attr class_stmt 			{ $$ = $2; }
+	| class_stmts access_attr class_stmt 	
+	{ 	
+		ASClassMember mb = $1;
+		$$ = $1;
 				
-			// keep declarations in order
-			while(mb->next)
-				mb = mb->next;
-			mb->next = $2;
-		}
+		// keep declarations in order
+		while(mb->next)
+			mb = mb->next;
+		mb->next = $3;
+	}
+	;
 
 class_stmt
-	: 			{ $$ = NULL; } 
-	| function_decl 	{ $$ = newASClassMember_function($1); }
+	: 					{ $$ = NULL; } 
+	| function_decl 		{ $$ = newASClassMember_function($1); }
 	| VAR class_vars ';' 	{ $$ = newASClassMember_buffer($2); }
 	;
 
@@ -265,6 +266,12 @@ class_decl
 		$$ = newASClass($2, $4);
 		classContext = 0;
 	}
+	;
+
+access_attr
+	:	// empty
+	| PUBLIC
+	| PRIVATE
 	;
 
 class_vars
