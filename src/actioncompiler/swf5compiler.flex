@@ -299,6 +299,7 @@ targetpath		{ count();	return TARGETPATH;	}
 duplicatemovieclip	{ count();	return DUPLICATEMOVIECLIP; }
 removemovieclip		{ count();	return REMOVEMOVIECLIP; }
 implements		{ count(); 	return IMPLEMENTS;	}
+cast			{ count();	return CAST;		}
 }
 
 <AS_V6>{

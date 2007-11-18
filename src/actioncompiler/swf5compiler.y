@@ -58,7 +58,7 @@ static int classContext = 0;
 %token STRINGEQ STRINGLENGTH SUBSTRING GETVARIABLE SETVARIABLE
 %token SETTARGETEXPRESSION  DUPLICATEMOVIECLIP REMOVEMOVIECLIP
 %token STRINGLESSTHAN MBLENGTH MBSUBSTRING MBORD MBCHR
-%token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET 
+%token BRANCHALWAYS BRANCHIFTRUE GETURL2 POST GET CAST 
 %token LOADVARIABLES LOADMOVIE LOADVARIABLESNUM LOADMOVIENUM
 %token CALLFRAME STARTDRAG STOPDRAG GOTOANDSTOP GOTOANDPLAY SETTARGET 
 %token GETPROPERTY SETPROPERTY TONUMBER TOSTRING 
@@ -558,6 +558,7 @@ identifier
 	| IMPLEMENTS	{ $$ = strdup("implements"); }
 	| GETPROPERTY	{ $$ = strdup("getProperty"); }
 	| SETPROPERTY	{ $$ = strdup("setProperty"); }
+	| CAST		{ $$ = strdup("cast"); }
 	
 	/* property names */ 
 	| _P_X			{ $$ = strdup("_x"); }
@@ -2041,6 +2042,8 @@ opcode
 						     SWFACTION_TARGETPATH); }
 	| IMPLEMENTS		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_IMPLEMENTSOP); }
+	| CAST			{ $$ = bufferWriteOp(asmBuffer,
+						     SWFACTION_CASTOP);	}
 
 	/* f4 ops */
 	| OLDADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }
