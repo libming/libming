@@ -297,6 +297,7 @@ class_var
 
 	| identifier type_attr
 		{ $$ = newBuffer();
+		  bufferWriteRegister($$, 2);
 		  bufferWriteString($$, $1, strlen($1)+1);
 		  free($1);
 		  bufferWriteUndef($$);
