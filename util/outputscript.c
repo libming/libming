@@ -344,11 +344,46 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 	    matrix->TranslateX, matrix->TranslateY);
 }
 
+static char*
+getEventString(SWF_CLIPEVENTFLAGS *clipevflags)
+{
+  if ( clipevflags->ClipEventKeyUp ) return ("SWFACTION_KEYUP");
+  if ( clipevflags->ClipEventKeyDown ) return ("SWFACTION_KEYDOWN");
+  if ( clipevflags->ClipEventMouseUp ) return ("SWFACTION_MOUSEUP");
+  if ( clipevflags->ClipEventMouseDown ) return ("SWFACTION_MOUSEDOWN");
+  if ( clipevflags->ClipEventMouseMove ) return ("SWFACTION_MOUSEMOVE");
+  if ( clipevflags->ClipEventUnload ) return ("SWFACTION_UNLOAD");
+  if ( clipevflags->ClipEventEnterFrame ) return ("SWFACTION_ENTERFRAME");
+  if ( clipevflags->ClipEventLoad ) return ("SWFACTION_ONLOAD");
+  if ( clipevflags->ClipEventDragOver ) return ("SWFACTION_DRAGOVER");
+  if ( clipevflags->ClipEventRollOut ) return ("SWFACTION_ROLLOUT");
+  if ( clipevflags->ClipEventRollOver ) return ("SWFACTION_ROLLOVER");
+  if ( clipevflags->ClipEventReleaseOutside ) return ("SWFACTION_RELEASEOUTSIDE");
+  if ( clipevflags->ClipEventRelease ) return ("SWFACTION_RELEASE");
+  if ( clipevflags->ClipEventPress ) return ("SWFACTION_PRESS");
+  if ( clipevflags->ClipEventInitialize ) return ("SWFACTION_INIT");
+  if ( clipevflags->ClipEventData ) return ("SWFACTION_DATA");
+  if ( clipevflags->ClipEventConstruct ) return ("SWFACTION_CONSTRUCT");
+  if ( clipevflags->ClipEventKeyPress ) return ("SWFACTION_KEYPRESS");
+  if ( clipevflags->ClipEventDragOut ) return ("SWFACTION_DRAGOUT");
+  return "unknown_flag";
+}
+
 void
 outputSWF_CLIPACTIONS (SWF_CLIPACTIONS * clipactions, char *sname)
 {
-	printf( COMMSTART " %d clip actions " COMMEND "\n", clipactions->NumClipRecords );
+  int i;
+/*  printf( COMMSTART " %d clip actions " COMMEND "\n", clipactions->NumClipRecords );*/
+  for (i = 0; i < clipactions->NumClipRecords-1 ; i++)
+  {
+    printf ("%s(%s(\"%s\"),%s);\n\n", methodcall (sname, "addAction"), newobj (NULL, "Action"), 
+	decompile5Action(clipactions->ClipActionRecords[i].numActions,
+	clipactions->ClipActionRecords[i].Actions, 0),
+	getEventString( &clipactions->ClipActionRecords[i].EventFlag)
+  );	
+ }
 }
+
 void
 outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *gname)
 {
@@ -1147,8 +1182,8 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
       printf(COMMSTART " PlaceFlagHasClipDepth " COMMEND "\n");
   }
   if( sblock->PlaceFlagHasClipActions ) {
-      printf(COMMSTART " PlaceFlagHasClipActions " COMMEND "\n");
-      outputSWF_CLIPACTIONS (&sblock->ClipActions, spritename);
+    sprintf(cname, "i%d", sblock->Depth );
+    outputSWF_CLIPACTIONS (&sblock->ClipActions, cname);
   }
 
 }
