@@ -1117,15 +1117,20 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   if( sblock->PlaceFlagHasCharacter ) {
       printf(COMMSTART " PlaceFlagHasCharacter " COMMEND "\n");
     sprintf(cname, "character%d", sblock->CharacterId );
-    /* TODO: assign the return to a DisplayItem (for later handling of removeobject tags) */
-    printf ("%s(" VAR "%s);\n", methodcall (spritenum?spritename:"m", "add"),
-	      cname);
+    if(sblock->Depth) 
+    {
+     printf ("" DECLOBJ(DisplayItem) "%s%d = %s(" VAR "%s)"STMNTEND"\n", "i" , sblock->Depth,
+	methodcall (spritenum?spritename:"m", "add"),     cname);
+    }
+    else	/* old code */
+     printf ("%s(" VAR "%s);\n", cname,methodcall (spritenum?spritename:"m", "add") );
   }
   if( sblock->PlaceFlagHasMatrix ) {
       printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
       printf(COMMSTART " outputSWF_MATRIX is broken, so it is being skipped.. " COMMEND "\n");
       /*
-      outputSWF_MATRIX (&sblock->Matrix, "m");
+      sprintf(cname, "i%d", sblock->Depth );
+      outputSWF_MATRIX (&sblock->Matrix, cname);
       */
   }
   if( sblock->PlaceFlagHasColorTransform ) {
@@ -1135,7 +1140,8 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
       printf(COMMSTART " PlaceFlagHasRatio " COMMEND "\n");
   }
   if( sblock->PlaceFlagHasName ) {
-      printf(COMMSTART " PlaceFlagHasName " COMMEND "\n");
+    sprintf(cname, "i%d", sblock->Depth );
+    printf("%s("SQ"%s"SQ")"STMNTEND"\n", methodcall(cname, "setName"), sblock->Name);
   }
   if( sblock->PlaceFlagHasClipDepth ) {
       printf(COMMSTART " PlaceFlagHasClipDepth " COMMEND "\n");
