@@ -9,8 +9,10 @@
 #include <stdlib.h>
 #include "compile.h"
 #include "actiontypes.h"
+#include "assembler.h"
 
 #define YYPARSE_PARAM buffer
+#define YYERROR_VERBOSE 1
 
 %}
 
@@ -19,6 +21,7 @@
   char *str;
   SWFActionFunction function;
   SWFGetUrl2Method getURLMethod;
+  int len;
 }
 
 /* tokens etc. */
@@ -67,6 +70,17 @@
 %token GOTOANDPLAY
 %token FRAMELOADED
 %token SETTARGET
+
+%token ASM
+
+/* v4 ASM */
+%token ASMADD ASMDIVIDE ASMMULTIPLY ASMEQUALS ASMLESS ASMLOGICALAND ASMLOGICALOR ASMLOGICALNOT 
+%token ASMSTRINGAND ASMSTRINGEQUALS ASMSTRINGEXTRACT ASMSTRINGLENGTH ASMMBSTRINGEXTRACT 
+%token ASMMBSTRINGLENGTH ASMPOP ASMPUSH ASMASCIITOCHAR ASMCHARTOASCII ASMTOINTEGER
+%token ASMCALL ASMIF ASMJUMP ASMGETVARIABLE ASMSETVARIABLE ASMGETURL2 ASMGETPROPERTY 
+%token ASMGOTOFRAME2 ASMREMOVESPRITE ASMSETPROPERTY ASMSETTARGET2 ASMSTARTDRAG
+%token ASMWAITFORFRAME2 ASMCLONESPRITE ASMENDDRAG ASMGETTIME ASMRANDOMNUMBER ASMTRACE
+%token ASMMBASCIITOCHAR ASMMBCHARTOASCII ASMSUBSTRACT ASMSTRINGLESS 
 
 /* high level functions */
 %token TELLTARGET
@@ -132,6 +146,8 @@
 %type <action> assign_stmts_opt
 %type <action> expr
 %type <action> program
+
+%type <len> opcode opcode_list push_item push_list
 
 /* make sure to free these, too! */
 %type <str>    sprite
@@ -891,6 +907,11 @@ lhs_expr
 assign_stmt
 	: pf_expr
 
+	| ASM '{'
+		{ asmBuffer = newBuffer(); }
+	  opcode_list '}'
+		{ $$ = asmBuffer; }
+
 	| void_function_call
 
 	| "++" lhs_expr
@@ -1031,6 +1052,84 @@ assign_stmt
 
 expr
 	: rhs_expr
+	;
+
+push_item
+	: STRING		{ $$ = bufferWriteU8(asmBuffer, PUSH_STRING);
+				  $$ += bufferWriteHardString(asmBuffer, $1, strlen($1) + 1); } 
+
+push_list
+	: push_item			{ $$ = $1; }
+	| push_list ',' push_item	{ $$ = $1 + $3; }
+
+
+opcode_list
+	: opcode
+	| opcode_list opcode	{ $$ = $1 + $2; }
+	;
+
+opcode
+	: ASMPUSH 		{ $$ = bufferWritePushOp(asmBuffer);
+				  $$ += bufferWriteS16(asmBuffer, 0); }
+	  push_list		{ $$ = $<len>2 + $3;
+			
+				  bufferPatchLength(asmBuffer, $3); }
+
+	| ASMADD		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ADD); }
+	| ASMSUBSTRACT		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SUBTRACT); }
+	| ASMMULTIPLY		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MULTIPLY); }
+	| ASMDIVIDE		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_DIVIDE); }
+	| ASMEQUALS		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_EQUAL); }
+	| ASMLESS		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_LESSTHAN); }
+	| ASMLOGICALAND		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_LOGICALAND); }
+	| ASMLOGICALOR		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_LOGICALOR); }
+	| ASMLOGICALNOT		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_LOGICALNOT); }
+	| ASMSTRINGAND		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGCONCAT); }
+	| ASMSTRINGEQUALS	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGEQ); }
+	| ASMSTRINGLENGTH	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGLENGTH); }
+	| ASMSTRINGEXTRACT	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SUBSTRING); }
+	| ASMMBSTRINGEXTRACT	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBSUBSTRING); }
+	| ASMMBSTRINGLENGTH	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBLENGTH); }
+	| ASMSTRINGLESS		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STRINGCOMPARE); }
+	| ASMPOP		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_POP); }
+	| ASMASCIITOCHAR	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_CHR); }
+	| ASMCHARTOASCII	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ORD); }
+	| ASMTOINTEGER		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_INT); }
+	| ASMMBASCIITOCHAR	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBCHR); }
+	| ASMMBCHARTOASCII	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_MBORD); }
+	| ASMCALL		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_CALLFRAME); }
+	| ASMGETVARIABLE	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_GETVARIABLE); }
+	| ASMSETVARIABLE	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SETVARIABLE); }
+	| ASMGETPROPERTY	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_GETPROPERTY); }
+	| ASMSETPROPERTY	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SETPROPERTY); }
+	| ASMREMOVESPRITE	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_REMOVECLIP); }
+	| ASMSETTARGET2		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_SETTARGET2); }
+	| ASMSTARTDRAG		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_STARTDRAG); }
+	| ASMENDDRAG		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_ENDDRAG); }
+	| ASMCLONESPRITE	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_DUPLICATECLIP); }
+	| ASMGETTIME		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_GETTIME); }
+	| ASMRANDOMNUMBER	{ $$ = bufferWriteOp(asmBuffer, SWFACTION_RANDOMNUMBER); }
+	| ASMTRACE		{ $$ = bufferWriteOp(asmBuffer, SWFACTION_TRACE); }
+	
+	| ASMIF	NUMBER		{ $$ = ( 
+					bufferWriteOp(asmBuffer, SWFACTION_IF)
+					+ bufferWriteS16(asmBuffer, 2)
+					+ bufferWriteS16(asmBuffer, atoi($2))); }
+	| ASMJUMP NUMBER	{ $$ =  ( 
+					bufferWriteOp(asmBuffer, SWFACTION_JUMP)
+					+ bufferWriteS16(asmBuffer, 2)
+					+ bufferWriteS16(asmBuffer, atoi($2))); }
+	| ASMGETURL2 NUMBER	{ $$ =  (bufferWriteOp(asmBuffer, SWFACTION_GETURL2)
+					+ bufferWriteS16(asmBuffer, 1) 
+					+ bufferWriteU8(asmBuffer, atoi($2))); }
+	| ASMGOTOFRAME2	NUMBER	{ $$ =  (bufferWriteOp(asmBuffer, SWFACTION_GOTOFRAME2) 
+					+ bufferWriteS16(asmBuffer, 1)
+					+ bufferWriteU8(asmBuffer, atoi($2))); 
+					/* SceneBias missing */ }
+	| ASMWAITFORFRAME2 NUMBER { $$ = (bufferWriteOp(asmBuffer, SWFACTION_WAITFORFRAME2) 
+					+ bufferWriteS16(asmBuffer, 1)
+					+ bufferWriteU8(asmBuffer, atoi($2))); }
+
 	;
 
 %%

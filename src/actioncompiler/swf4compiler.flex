@@ -9,7 +9,7 @@
 #include "blocks/error.h"
 #include "swf4compiler.tab.h" /* defines token types */
 
-static int swf4debug;
+int swf4debug;
 
 static const char *lexBuffer = NULL;
 static int lexBufferLen = 0;
@@ -89,6 +89,8 @@ void swf4ParseInit(const char *script, int debug, int version)
 
 %}
 
+%s asm
+
 %{
  // forward declaration needed by the following function
 #ifndef YY_PROTO
@@ -165,6 +167,53 @@ tellTarget	{ count();	return TELLTARGET;	}
 
 
 this			{ count();      return THIS;	}
+
+asm			{ count();	BEGIN(asm); return ASM;		}
+
+  /* assembler v4 ops */
+<asm>{
+add			{ count();	return ASMADD; }
+substract		{ count();	return ASMSUBSTRACT; }
+divide			{ count();	return ASMDIVIDE; }
+multiply		{ count();	return ASMMULTIPLY; }
+equals			{ count();	return ASMEQUALS; }
+less			{ count();	return ASMLESS; }
+logicaland		{ count();	return ASMLOGICALAND; }
+logicalor		{ count();	return ASMLOGICALOR; }
+logicalnot		{ count();	return ASMLOGICALNOT; }
+stringand		{ count();	return ASMSTRINGAND; }
+stringequals		{ count();	return ASMSTRINGEQUALS; }
+stringextract		{ count();	return ASMSTRINGEXTRACT; }
+stringlength		{ count();	return ASMSTRINGLENGTH; }
+mbstringextract		{ count();	return ASMMBSTRINGEXTRACT; }
+mbstringlength		{ count();	return ASMMBSTRINGLENGTH; }
+stringless		{ count();	return ASMSTRINGLESS; }
+pop			{ count();	return ASMPOP; }
+push			{ count();	return ASMPUSH; }
+asciitochar		{ count();	return ASMASCIITOCHAR; }
+chartoascii		{ count();	return ASMCHARTOASCII; }
+tointeger		{ count();	return ASMTOINTEGER; }
+mbasciitochar		{ count();	return ASMMBASCIITOCHAR; }
+mbchartoascii		{ count();	return ASMMBCHARTOASCII; }
+call			{ count();	return ASMCALL;	}
+asmif			{ count();	return ASMIF; }
+jump			{ count();	return ASMJUMP; }
+getvariable		{ count();	return ASMGETVARIABLE; }
+setvariable		{ count();	return ASMSETVARIABLE; }
+geturl2			{ count();	return ASMGETURL2; }
+getproperty		{ count();	return ASMGETPROPERTY; }
+gotoframe2		{ count();	return ASMGOTOFRAME2; }
+removesprite		{ count();	return ASMREMOVESPRITE; }
+setproperty		{ count();	return ASMSETPROPERTY; }
+settarget2		{ count();	return ASMSETTARGET2; }
+startdrag		{ count();	return ASMSTARTDRAG; }
+waitforframe2		{ count();	return ASMWAITFORFRAME2; }
+clonesprite		{ count();	return ASMCLONESPRITE; }
+enddrag			{ count();	return ASMENDDRAG; }
+gettime			{ count();	return ASMGETTIME; }
+randomnumber		{ count();	return ASMRANDOMNUMBER; }
+asmtrace		{ count();	return ASMTRACE; }
+}
 
 {ID}			{ count();	swf4lval.str = strdup(yytext);
 					return IDENTIFIER;	}
