@@ -6,7 +6,32 @@ AM_CPPFLAGS = \
 
 TESTS = ActionScriptTest
 
+#filename:swfversion
 AS_TESTS = \
+	Function.as:6		\
+	ASM0.as:6		\
+	ASM1.as:6		\
+	ASM_all.as:6		\
+	ASM_extend.as:6		\
+	ASM_push.as:6		\
+	ASM_targetPath.as:6 	\
+	delete.as:6		\
+	GotoFrame.as:6		\
+	logor.as:6 		\
+	targetPath.as:6		\
+	FunctionInLoop.as:6	\
+	newline_comment.as:6 	\
+	newline_crlf.as:6	\
+	TryCatch.as:6		\
+	forin.as:6		\
+	legacy_functions.as:6 	\
+	drag.as:6		\
+	class_empty.as:6	\
+	class_method.as:6 	\
+	class_member.as:6	
+
+
+AS_TEST_FILES = \
 	Function.as	\
 	ASM0.as		\
 	ASM1.as		\
@@ -51,7 +76,7 @@ EXTRA_DIST = 		\
 	class_empty.ref	\
 	class_method.ref \
 	class_member.ref \
-	$(AS_TESTS)
+	$(AS_TEST_FILES)
 
 CLEANFILES = *.pp *.swf
 

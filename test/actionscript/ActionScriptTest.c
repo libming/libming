@@ -41,13 +41,12 @@
 #include <limits.h>
 #include <makeswf.h>
 
-int swfversion=6;
-
 static SWFMovie
-compile(const char* filename, const char* ppfile)
+compile(const char* filename, const char* ppfile, int version)
 {
 	SWFAction ac;
-	SWFMovie mo = newSWFMovie();
+	SWFMovie mo = newSWFMovieWithVersion(version);
+	makeswf_set_swfversion(version);
 
 	ac = makeswf_compile_source(filename, ppfile);
 
@@ -58,7 +57,7 @@ compile(const char* filename, const char* ppfile)
 }
 
 static int
-do_test(const char* name)
+do_test(const char* name, int version)
 {
 	char source[PATH_MAX];
 	char ppfile[PATH_MAX];
@@ -68,7 +67,7 @@ do_test(const char* name)
 	snprintf(source, PATH_MAX, "%s/%s.as", TOP_SOURCEDIR, name);
 	source[PATH_MAX-1] = '\0';
 
-	SWFMovie m = compile(source, ppfile);
+	SWFMovie m = compile(source, ppfile, version);
 
 	return run_test(m, name);
 }
@@ -79,8 +78,10 @@ do_tests()
 	int failures=0;
 	const char *all_tests = AS_TESTS;
 	char testfile[PATH_MAX];
+	char vstr[2];
 	const char *from, *to, *end;
 	char *ptr;
+	int version;
 
 	from = all_tests;
 	end = from+strlen(all_tests);
@@ -101,18 +102,19 @@ do_tests()
 			from = to;
 			continue;
 		}
-
-		strncpy(testfile, from, len);
-		testfile[len]='\0';
+		vstr[0] = from[len - 1];
+		vstr[1] = '\0';
+		strncpy(testfile, from, len-2);
+		testfile[len-2]='\0';
 		/* strip the .as part (if any) */
-		if ( (ptr=strstr(testfile+len-3, ".as")) )
+		if ( (ptr=strstr(testfile+len-5, ".as")) )
 		{
 			*ptr='\0';
 		}
 
-		printf("Testing %s\n", testfile);
+		printf("Testing %s with swfversion %i\n", testfile, atoi(vstr));
 
-		failures += do_test(testfile);
+		failures += do_test(testfile, atoi(vstr));
 
 		from=to;
 
@@ -134,8 +136,6 @@ main()
 
 	// TODO: use multiple SWF target versions !
 
-	Ming_useSWFVersion(swfversion);
-	makeswf_set_swfversion(swfversion);
 	Ming_setSWFCompression(swfcompression);
 
 	return do_tests();
