@@ -389,7 +389,10 @@ SWFDisplayItem_setMatrix(SWFDisplayItem item,
 	SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
 }
 
-
+/*
+ * This function assigns a name to a display item.
+ * The assigend name can be used in AS as a reference to this item
+ */
 void
 SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 {
@@ -404,7 +407,12 @@ SWFDisplayItem_setName(SWFDisplayItem item, const char *name)
 	SWFPlaceObject2Block_setName(item->block, name);
 }
 
-
+/* 
+ * This function sets masklevel for the current display item
+ * This item masks other display items above it. If this items
+ * depth is 1 and its masklevel is set to 4, all items with depth
+ * >= 5 are masked.
+ */
 void
 SWFDisplayItem_setMaskLevel(SWFDisplayItem item, int masklevel)
 {
@@ -666,8 +674,17 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 	}
 }
 
+/* 
+ * This function writes the item object immediately to the blocklist.
+ * Usually MING waits with writing a display item until a frame is closed
+ * through a nextFrame() call, because a display items state could be altered 
+ * for the current frame. By using SWFDisplayItem_flush() MING does not wait 
+ * and writes the frame immediately. Therefore a user can influence the 
+ * swf tag oder. Changing a display items state after calling flush() takes 
+ * effect in the next frame.
+ */
 void 
-SWFDisplayItem_flush(SWFDisplayItem item)
+SWFDisplayItem_flush(SWFDisplayItem item /* item to write */)
 {
 	SWFCharacter character;
 	if(item == NULL)
