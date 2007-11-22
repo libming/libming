@@ -1,3 +1,232 @@
+2007-11-22 13:10  krechert
+
+	* src/: displaylist.c, displaylist.h, ming.h.in, movie.c,
+	  movieclip.c: added SWFDisplayItem_flush() writes a displayitem to
+	  the blocklist immediately instead of waiting for nextFrame().
+
+2007-11-22 13:06  krechert
+
+	* test/actionscript/: ASM_V4.as, ASM_V4.swf: added missing as file.
+	  removed swf instead
+
+2007-11-22 11:39  krechert
+
+	* test/actionscript/: ASM_V4.ref, ASM_V4.swf, Makefile.am: add asm
+	  v4 testcases
+
+2007-11-22 11:33  krechert
+
+	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y: complete
+	  ASM support for SWF4 action ops
+
+2007-11-22 11:27  krechert
+
+	* test/actionscript/: ActionScriptTest.c, Makefile.am: allow
+	  different SWF version targets for AS testcases
+
+2007-11-21 17:50  akleine
+
+	* util/outputscript.c: Continued work on outputSWF_PLACEOBJECT2()
+	  by adding output code for actions of clip events. Also added
+	  several output strings depending on SWF_CLIPEVENTFLAGS values.
+
+2007-11-21 09:34  akleine
+
+	* util/outputscript.c: Started work on a TODO in
+	  outputSWF_PLACEOBJECT2() : assign the return of an add()-method
+	  to a displayItem for using in setName() etc. and later using for
+	  matrix output
+
+2007-11-18 15:49  krechert
+
+	* test/actionscript/class_member.ref: update ref
+
+2007-11-18 15:48  krechert
+
+	* src/actioncompiler/swf5compiler.y: bugfix: push register
+
+2007-11-18 15:33  krechert
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: add ASM
+	  CastOp
+
+2007-11-15 18:25  akleine
+
+	* util/outputscript.c: in outputSWF_PLACEOBJECT2():  added bugfix
+	  on object which does add another object.
+
+2007-11-15 12:53  krechert
+
+	* test/actionscript/: Function.as, Function.ref, class_member.as:
+	  add testcases for typed functions, variables
+
+2007-11-15 12:52  krechert
+
+	* src/actioncompiler/swf5compiler.y: add (syntatic) type support
+
+2007-11-15 12:38  krechert
+
+	* test/actionscript/: class_member.as, class_member.ref,
+	  class_method.as, class_method.ref: added testcases with access
+	  attributes
+
+2007-11-15 12:33  krechert
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: added
+	  class access attribute support
+
+2007-11-14 20:07  krechert
+
+	* test/actionscript/: Makefile.am, class_member.as,
+	  class_member.ref: simple class member test
+
+2007-11-14 20:04  krechert
+
+	* NEWS: update
+
+2007-11-14 20:02  krechert
+
+	* src/actioncompiler/swf5compiler.y: keep class statements in order
+	  introduced class context
+
+2007-11-14 19:58  krechert
+
+	* test/Action/test01.ref: update sprite blocks' offset
+
+2007-11-14 19:55  krechert
+
+	* test/: MovieClip/test01.ref, MovieClip/test02.ref,
+	  MovieClip/test03.ref, PrebuiltClip/test01.ref: update sprite
+	  blocks' offset
+
+2007-11-14 19:53  krechert
+
+	* util/swftypes.h: add missing SWF_DEFINEMORPHSHAPE2 structure to
+	  union
+
+2007-11-14 19:32  krechert
+
+	* test/Movie/add/test02.ref: update sprite blocks' offset
+
+2007-11-14 19:31  krechert
+
+	* util/parser.c: fix blockoffset: set offset to include tag header
+
+2007-11-14 16:03  krechert
+
+	* util/: main.c, outputdecl.h, outputfdb.c, outputscript.c,
+	  outputswf.c, outputtxt.c, ttftofft.c: use length and offset from
+	  Parserstruct
+
+2007-11-14 13:52  krechert
+
+	* test/actionscript/: legacy_functions.as, legacy_functions.ref:
+	  added set/getProperty to legacy function
+
+2007-11-14 13:51  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.flex,
+	  swf5compiler.y: fix get/setProperty
+
+2007-11-12 20:30  akleine
+
+	* util/decompile.c: 1. Added some code to decompile if{} and else{}
+	  blocks    always at exactly the same stack base.  2. Added some
+	  debug helper for try{}-catch{}-finally{}.
+
+2007-11-12 13:35  krechert
+
+	* util/: parser.c, read.c, read.h: readFloat
+
+2007-11-11 21:17  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf4compiler.y,
+	  swf5compiler.y: property index is should be pushed as FLOAT
+
+2007-11-11 20:57  krechert
+
+	* src/actioncompiler/: compile.c, swf5compiler.y: add
+	  get/setProperty methods
+
+2007-11-11 20:56  krechert
+
+	* src/actiontypes.h: fix property values
+
+2007-11-11 11:58  akleine
+
+	* util/decompile.c: added code for SWFACTION_TARGETPATH
+
+2007-11-11 11:14  akleine
+
+	* util/decompile.c: Added new code for	"try/catch/finally" .  BTW
+	  this also avoids a segmentation fault in listswf_d.
+
+2007-11-10 19:42  krechert
+
+	* perl_ext/Font.xs: use strncase(), removed unused FILE *
+
+2007-11-10 19:39  krechert
+
+	* perl_ext/SWF/VideoStream.pm: fix c&p error
+
+2007-11-10 19:38  krechert
+
+	* perl_ext/SWF/FontCharacter.pm: add FontCharacter.pm
+
+2007-11-10 15:24  krechert
+
+	* test/BrowserFont/test01.py: python testcase
+
+2007-11-10 14:53  krechert
+
+	* perl_ext/.cvsignore: added FontcCharacter.c
+
+2007-11-10 14:51  krechert
+
+	* perl_ext/: FontCharacter.xs, MANIFEST, Makefile.PL, Makefile.am,
+	  Movie.xs, SWF.pm, perl_swf.h, typemap: added FontCharacter
+	  Object, SWFMovie_addFont() and SWFMovie_importFont()
+
+2007-11-09 19:09  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.y: set
+	  class members
+
+2007-11-09 17:15  krechert
+
+	* NEWS: update
+
+2007-11-09 16:43  krechert
+
+	* perl_ext/Font.xs: use generic SWFFont interface for filebased
+	  fonts
+
+2007-11-09 16:30  krechert
+
+	* py_ext/: ming.py, ming_wrap.c, mingc.py: updates, resync with
+	  main lib
+
+2007-11-09 16:16  krechert
+
+	* ming.i: update, added new functions
+
+2007-11-09 00:41  strk
+
+	* test/actionscript/legacy_functions.ref, util/action.c: Print
+	  target name for ACTION_SETTARGET, update .ref accordingly
+
+2007-11-08 19:54  akleine
+
+	* util/decompile.c: implemented code for SWFACTION_THROW
+
+2007-11-08 18:13  krechert
+
+	* configure.in: chmod config/install-sh (hack)
+
+2007-11-08 14:11  krechert
+
+	* py_ext/setup.py.in: added ungif lib
+
 2007-11-07 20:55  krechert
 
 	* src/actioncompiler/: compile.c, swf5compiler.y: fixes regression
