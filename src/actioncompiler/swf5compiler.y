@@ -464,8 +464,6 @@ switch_case
 
 identifier
 	: IDENTIFIER
-	| NEW		{ $$ = strdup("new"); }
-	| DELETE	{ $$ = strdup("delete"); }
 	| TARGETPATH	{ $$ = strdup("targetPath"); }
 	| RANDOM	{ $$ = strdup("random"); }
 	| GETTIMER	{ $$ = strdup("getTimer"); }
@@ -501,7 +499,6 @@ identifier
 	| INC	{ $$ = strdup("inc"); }
 	| DEC	{ $$ = strdup("dec"); }
 	| TYPEOF	{ $$ = strdup("typeof"); }
-	| INSTANCEOF	{ $$ = strdup("instanceof"); }
 	| ENUMERATE	{ $$ = strdup("enumerate"); }
 	| INITOBJECT	{ $$ = strdup("initobject"); }
 	| INITARRAY	{ $$ = strdup("initarray"); }
@@ -544,12 +541,10 @@ identifier
 	| LOADVARIABLESNUM { $$ = strdup("loadVariablesNum"); }
 	| LOADMOVIE	{ $$ = strdup("loadMovie"); }
 	| LOADMOVIENUM 	{ $$ = strdup("loadMovieNum"); }
-	| EXTENDS	{ $$ = strdup("extends"); }
 	| GOTOANDSTOP	{ $$ = strdup("gotoAndStop"); }
 	| GOTOANDPLAY	{ $$ = strdup("gotoAndPlay"); }
 	| SETTARGET 	{ $$ = strdup("setTarget"); }
 	| CALLFRAME	{ $$ = strdup("call"); }
-	| IMPLEMENTS	{ $$ = strdup("implements"); }
 	| GETPROPERTY	{ $$ = strdup("getProperty"); }
 	| SETPROPERTY	{ $$ = strdup("setProperty"); }
 	| CAST		{ $$ = strdup("cast"); }
@@ -1232,18 +1227,6 @@ incdecop
 	;
 
 
-/*
-integer
-	: '-' INTEGER %prec UMINUS	{ $$ = -$2; }
-	| INTEGER			{ $$ = $1; }
-	;
-
-double
-	: '-' DOUBLE %prec UMINUS	{ $$ = -$2; }
-	| DOUBLE			{ $$ = $1; }
-	;
-*/
-
 /* resolves an lvalue into a buffer */
 lvalue_expr
 	: lvalue
@@ -1293,6 +1276,8 @@ lvalue
 
 expr
 	: primary
+	
+	| primary_constant
 
 	| '-' expr %prec UMINUS
 		{ $$ = $2;
@@ -1557,9 +1542,7 @@ primary
 	| lvalue_expr
 
 	| delete_call
-		
-	| primary_constant
-	
+			
 	| incdecop lvalue %prec "++"
 		{ if($2.obj)
 		  {
@@ -1653,14 +1636,7 @@ primary
 	| '(' expr ')'
 		{ $$ = $2; }
 
-	| '-' INTEGER %prec UMINUS
-		{ $$ = newBuffer();
-		  bufferWriteInt($$, -$2); }
-
-	| '-' DOUBLE %prec UMINUS
-		{ $$ = newBuffer();
-		  bufferWriteDouble($$, -$2); }
-
+	
 	| lvalue assignop expr
 		{ if($1.obj)
 		  {
