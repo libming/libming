@@ -345,6 +345,20 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 }
 
 static char*
+getButtonCondString(SWF_BUTTONCONDACTION *flags)
+{
+  if ( flags->CondOverUpToOverDown ) return ("SWFBUTTON_MOUSEDOWN");
+  if ( flags->CondOverDownToOverUp ) return ("SWFBUTTON_MOUSEUP");
+  if ( flags->CondIdleToOverUp )     return ("SWFBUTTON_MOUSEOVER");
+  if ( flags->CondOverUpToIdle )     return ("SWFBUTTON_MOUSEOUT");
+  if ( flags->CondIdleToOverDown )   return ("SWFBUTTON_DRAGOVER");
+  if ( flags->CondOutDownToOverDown) return ("SWFBUTTON_DRAGOVER");
+  if ( flags->CondOutDownToIdle )    return ("SWFBUTTON_MOUSEUPOUTSIDE");
+  if ( flags->CondOverDownToIdle )   return ("SWFBUTTON_DRAGOUT");
+  return "unknown_flag";
+}
+
+static char*
 getEventString(SWF_CLIPEVENTFLAGS *clipevflags)
 {
   if ( clipevflags->ClipEventKeyUp ) return ("SWFACTION_KEYUP");
@@ -695,8 +709,24 @@ outputSWF_DEFINEBUTTON (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEBUTTON2);
+  int i;
+  char bname[64];
+  OUT_BEGIN (SWF_DEFINEBUTTON2);
 
+  sprintf (bname, "character%d", sblock->Buttonid);
+  printf ("%s()"STMNTEND"\n", newobj (bname, "Button"));
+  /*
+  for(i=0;i<sblock->numCharacters;i++) 
+  {
+    TODO: output SWF_BUTTONRECORD( &(sblock->Characters[i]) );
+  }
+  */
+  for(i=0;i<sblock->numActions;i++) 
+  {
+    printf ("%s(%s(\"%s\"),%s);\n\n", methodcall (bname, "addAction"), newobj (NULL, "Action"), 
+	decompile5Action(sblock->Actions[i].numActions,sblock->Actions[i].Actions,0),	
+	getButtonCondString(&sblock->Actions[i]) );	
+  }
 }
 
 void

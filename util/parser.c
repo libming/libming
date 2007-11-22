@@ -180,7 +180,7 @@ parseSWF_BUTTONCONDACTION (FILE * f, struct SWF_BUTTONCONDACTION *bcarec, int en
 
   if(fileOffset >= actionEnd)
   {
-	printf("expected actionEnd flag\n");
+/*	printf("expected actionEnd flag\n");*/
   	return bcarec->CondActionSize;
   }
 
