@@ -126,10 +126,18 @@ struct function_s
 };
 typedef struct function_s *ASFunction;
 
+struct variable_s	
+{	
+	char *name;
+	Buffer initCode;
+};
+typedef struct variable_s *ASVariable;
+
 typedef enum
 {
 	UNDEF,
-	METHOD,
+	METHOD,	
+	VARIABLE,
 	BUFF
 } ClassMemberType;
 
@@ -139,6 +147,7 @@ struct class_member_s
 	union
 	{
 		ASFunction function;
+		ASVariable var;
 		Buffer buffer;
 	} element;
 	struct class_member_s *next;
@@ -235,10 +244,15 @@ int bufferWriteFunction(Buffer out, ASFunction function, int version);
 int bufferWriteClass(Buffer out, ASClass clazz);
 
 ASFunction newASFunction();
-ASClassMember newASClassMember_function(ASFunction func);
+ASVariable newASVariable(char *, Buffer);
 ASClass newASClass(char *name, ASClassMember members);
+
+ASClassMember newASClassMember_function(ASFunction func);
 ASClassMember newASClassMember_function(ASFunction func);
 ASClassMember newASClassMember_buffer(Buffer buf);
+ASClassMember newASClassMember_variable(ASVariable var);
+void ASClassMember_append(ASClassMember m0, ASClassMember end);
+
 /* rather than setting globals... */
 void swf4ParseInit(const char *string, int debug, int version);
 void swf5ParseInit(const char *string, int debug, int version);

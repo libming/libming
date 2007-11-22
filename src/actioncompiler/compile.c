@@ -1062,22 +1062,37 @@ static int bufferWriteClassMethods(Buffer out, ASClass clazz)
 	return len;
 }
 
+static int bufferWriteClassVariable(Buffer out, ASVariable var)
+{
+	int len = 0;
+	if(var->initCode != NULL)
+	{
+		len += bufferWriteRegister(out, 2);
+		len += bufferWriteString(out, var->name, strlen(var->name)+1);
+		len += bufferConcat(out, var->initCode);
+		len += bufferWriteOp(out, SWFACTION_SETMEMBER); 
+	}
+	free(var->name);
+	free(var); // aka destroyASVariable
+	return len;
+}
+
 static int bufferWriteClassMembers(Buffer out, ASClass clazz)
 {
 	ASClassMember member = clazz->members;
 	int len = 0;
 	while(member)
 	{
-		Buffer buf;
+		ASVariable var;
 		ASClassMember _this = member;
 		member = member->next;
-		if(_this->type != BUFF)
+		if(_this->type != VARIABLE)
 			continue;
-		buf = _this->element.buffer;
-		if(!buf)
+		var = _this->element.var;
+		if(!var)
 			continue;
-		bufferConcat(out, buf);	
-		_this->element.buffer = NULL;
+		bufferWriteClassVariable(out, var);	
+		_this->element.var = NULL;
 	}
 	return len;
 }
@@ -1087,8 +1102,8 @@ int bufferWriteClass(Buffer out, ASClass clazz)
 {
 	int len = 0;
 	len += bufferWriteClassConstructor(out, clazz);
+	len += bufferWriteClassMembers(out, clazz);	
 	len += bufferWriteClassMethods(out, clazz);
- 	len += bufferWriteClassMembers(out, clazz);	
 	/* set class properties */
 	len += bufferWriteInt(out, 1);
 	len += bufferWriteNull(out);
@@ -1110,6 +1125,14 @@ int bufferWriteClass(Buffer out, ASClass clazz)
 	return len;
 }
 
+void ASClassMember_append(ASClassMember m0, ASClassMember end)
+{
+	ASClassMember mb = m0;
+	while(mb->next)
+		mb = mb->next;
+	mb->next = end;
+}
+
 ASClass newASClass(char *name, ASClassMember members)
 {
 	ASClass clazz;
@@ -1128,6 +1151,16 @@ ASClassMember newASClassMember_function(ASFunction func)
 	return member;
 }
 
+ASClassMember newASClassMember_variable(ASVariable var)
+{
+	ASClassMember member = malloc(sizeof(struct class_member_s));
+	member->element.var = var;
+	member->type = VARIABLE;
+	member->next = NULL; 
+	return member;
+}
+
+
 ASClassMember newASClassMember_buffer(Buffer buf)
 {
 	ASClassMember member = malloc(sizeof(struct class_member_s));
@@ -1136,8 +1169,13 @@ ASClassMember newASClassMember_buffer(Buffer buf)
 	member->next = NULL; 
 	return member;
 }
-
-
+ASVariable newASVariable(char *name, Buffer buf)
+{
+	ASVariable var = malloc(sizeof(struct variable_s));
+	var->name = name;
+	var->initCode = buf;
+	return var;
+}
 /*
  * Local variables:
  * tab-width: 2

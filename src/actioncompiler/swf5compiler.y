@@ -142,8 +142,8 @@ static int classContext = 0;
 %type <action> assign_stmt assign_stmts assign_stmts_opt
 %type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
-%type <action> delete_call class_vars class_var primary_constant
-%type <classMember> class_stmts class_stmt
+%type <action> delete_call primary_constant
+%type <classMember> class_stmts class_stmt class_vars class_var 
 %type <lval> lvalue 
 %type <intVal> property
 %type <exprlist> expr_list objexpr_list formals_list
@@ -160,6 +160,7 @@ static int classContext = 0;
 %type <len> opcode opcode_list push_item with push_list
 
 %type <clazz> class_decl
+
 /*
 %type <intVal> integer
 %type <doubleVal> double
@@ -235,20 +236,15 @@ class_stmts
 	: access_attr class_stmt 			{ $$ = $2; }
 	| class_stmts access_attr class_stmt 	
 	{ 	
-		ASClassMember mb = $1;
 		$$ = $1;
-				
-		// keep declarations in order
-		while(mb->next)
-			mb = mb->next;
-		mb->next = $3;
+		ASClassMember_append($1, $3);			
 	}
 	;
 
 class_stmt
-	: 					{ $$ = NULL; } 
-	| function_decl 		{ $$ = newASClassMember_function($1); }
-	| VAR class_vars ';' 	{ $$ = newASClassMember_buffer($2); }
+	: 			{ $$ = NULL; } 
+	| function_decl 	{ $$ = newASClassMember_function($1); }
+	| VAR class_vars ';' 	{ $$ = $2; }
 	;
 
 class_init
@@ -283,25 +279,22 @@ class_vars
 
 	| class_vars ',' class_var 
 		{ $$ = $1;
-		  bufferConcat($$, $3); }
+		  ASClassMember_append($1, $3); 
+		}
 	;
 
 class_var
 	: identifier type_attr '=' primary_constant
-		{ $$ = newBuffer();
-		  bufferWriteRegister($$, 2);
-		  bufferWriteString($$, $1, strlen($1)+1);
-		  free($1);
-		  bufferConcat($$, $4);
-		  bufferWriteOp($$, SWFACTION_SETMEMBER); }
-
+		{ 
+		  ASVariable v = newASVariable($1, $4); 
+		  $$ = newASClassMember_variable(v);
+		}	  
 	| identifier type_attr
-		{ $$ = newBuffer();
-		  bufferWriteRegister($$, 2);
-		  bufferWriteString($$, $1, strlen($1)+1);
-		  free($1);
-		  bufferWriteUndef($$);
-		  bufferWriteOp($$, SWFACTION_SETMEMBER); }
+		{ 
+			ASVariable v = newASVariable($1, NULL);
+			$$ = newASClassMember_variable(v);
+		}
+	;
 
 throw_stmt
 	: THROW expr_or_obj ';'		{ $$ = $2; bufferWriteOp($$, SWFACTION_THROW); }
