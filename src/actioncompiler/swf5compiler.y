@@ -143,7 +143,7 @@ static int classContext = 0;
 %type <action> expr expr_or_obj objexpr expr_opt inpart obj_ref obj_ref_for_delete_only
 %type <action> emptybraces level init_vars init_var primary lvalue_expr
 %type <action> delete_call primary_constant
-%type <classMember> class_stmts class_stmt class_vars class_var 
+%type <classMember> class_stmts class_stmt class_vars class_var class_body 
 %type <lval> lvalue 
 %type <intVal> property
 %type <exprlist> expr_list objexpr_list formals_list
@@ -231,20 +231,18 @@ stmt
 	;
 
 
-
 class_stmts
-	: access_attr class_stmt 			{ $$ = $2; }
-	| class_stmts access_attr class_stmt 	
+	: class_stmt
+	| class_stmts class_stmt
 	{ 	
 		$$ = $1;
-		ASClassMember_append($1, $3);			
+		ASClassMember_append($1, $2);			
 	}
 	;
 
 class_stmt
-	: 			{ $$ = NULL; } 
-	| function_decl 	{ $$ = newASClassMember_function($1); }
-	| VAR class_vars ';' 	{ $$ = $2; }
+	: access_attr function_decl 		{ $$ = newASClassMember_function($2); }
+	| access_attr VAR class_vars ';' 	{ $$ = $3; }
 	;
 
 class_init
@@ -256,10 +254,15 @@ class_init
 	}
 	; 
 
+class_body
+	: emptybraces {$$ = NULL; }
+	| '{' class_stmts '}' { $$ = $2; }
+	;	
+
 class_decl 
-	: class_init identifier '{' class_stmts '}'
+	: class_init identifier class_body
 	{ 
-		$$ = newASClass($2, $4);
+		$$ = newASClass($2, $3);
 		classContext = 0;
 	}
 	;
