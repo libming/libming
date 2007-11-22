@@ -28,8 +28,8 @@ AS_TESTS = \
 	drag.as:6		\
 	class_empty.as:6	\
 	class_method.as:6 	\
-	class_member.as:6	
-
+	class_member.as:6	\
+	ASM_V4.as:4
 
 AS_TEST_FILES = \
 	Function.as	\
@@ -52,7 +52,8 @@ AS_TEST_FILES = \
 	drag.as		\
 	class_empty.as	\
 	class_method.as \
-	class_member.as 
+	class_member.as \
+	ASM_V4.as
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -76,6 +77,7 @@ EXTRA_DIST = 		\
 	class_empty.ref	\
 	class_method.ref \
 	class_member.ref \
+	ASM_V4.ref	\
 	$(AS_TEST_FILES)
 
 CLEANFILES = *.pp *.swf
