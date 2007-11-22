@@ -579,7 +579,8 @@ SWFMovie_add_internal(SWFMovie movie /* movie to which the block will be added *
 		SWFCharacter_setFinished((SWFCharacter)block);
 		SWFMovie_addCharacterDependencies(movie, (SWFCharacter)block);
 
-		return SWFDisplayList_add(movie->displayList, (SWFCharacter)block);
+		return SWFDisplayList_add(movie->displayList, 
+			movie->blockList, (SWFCharacter)block);
 	}
 	else
 		SWFMovie_addBlock(movie, block);

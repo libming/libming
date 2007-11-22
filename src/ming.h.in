@@ -850,6 +850,8 @@ void SWFDisplayItem_setColorAdd(SWFDisplayItem item,
 void SWFDisplayItem_setColorMult(SWFDisplayItem item,
 				 float r, float g, float b, float a);
 
+void SWFDisplayItem_flush(SWFDisplayItem item);
+
 #define SWFDisplayItem_addColor SWFDisplayItem_setColorAdd
 #define SWFDisplayItem_multColor SWFDisplayItem_setColorMult
 

@@ -48,7 +48,7 @@ struct SWFDisplayList_s
 {
 	SWFSoundStream soundStream;
 	SWFDisplayItem head;
-	SWFDisplayItem tail;
+	SWFDisplayItem tail;	
 	byte isSprite;
 	int depth;
 };
@@ -129,7 +129,7 @@ SWFDisplayItem_replace(SWFDisplayItem item, SWFCharacter character)
 }
 
 SWFDisplayItem
-SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
+SWFDisplayList_add(SWFDisplayList list, SWFBlockList blocklist, SWFCharacter character)
 {
 	SWFDisplayItem item = (SWFDisplayItem) malloc(sizeof(struct SWFDisplayItem_s));
 
@@ -143,6 +143,7 @@ SWFDisplayList_add(SWFDisplayList list, SWFCharacter character)
 	item->block = newSWFPlaceObject2Block(item->depth);
 	item->character = character;
 	item->isPlaced = 0;
+	item->blocklist = blocklist;
 
 	SWFPlaceObject2Block_setCharacter(item->block, character);
 	SWFPlaceObject2Block_setMatrix(item->block, item->matrix);
@@ -665,6 +666,36 @@ SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist)
 	}
 }
 
+void 
+SWFDisplayItem_flush(SWFDisplayItem item)
+{
+	SWFCharacter character;
+	if(item == NULL)
+		return;
+	
+	character = item->character;
+	if (item->flags & ITEM_REMOVED)
+	{
+		SWFDisplayItem_removeFromList(item, item->blocklist);
+		return;
+	}
+		
+	if (character != NULL && !SWFBlock_isDefined((SWFBlock)character))
+	{
+		SWFBlockList_addBlock(item->blocklist, (SWFBlock)character);
+	}
+
+	if ( item->block != NULL )
+	{
+		if(!item->isPlaced && character->onPlace)
+			character->onPlace(item, item->blocklist);
+		SWFBlockList_addBlock(item->blocklist, (SWFBlock)item->block);
+		item->isPlaced = 1;
+	}
+
+	item->flags = 0;
+	item->block = NULL;
+}
 
 /*
  * Local variables:

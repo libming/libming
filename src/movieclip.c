@@ -143,7 +143,7 @@ SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 
 		SWFCharacter_setFinished((SWFCharacter)block);
 
-		return SWFDisplayList_add(clip->displayList, (SWFCharacter)block);
+		return SWFDisplayList_add(clip->displayList, clip->blockList, (SWFCharacter)block);
 	}
 	else
 	{

@@ -53,6 +53,8 @@ struct SWFDisplayItem_s
 	SWFPosition position;
 	SWFMatrix matrix;
 	struct SWFDisplayList_s *list;
+	
+	SWFBlockList blocklist;
 };
 
 
@@ -89,7 +91,7 @@ SWFDisplayList newSWFSpriteDisplayList();
 
 void SWFDisplayList_nextFrame(SWFDisplayList list);
 
-SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFCharacter shape);
+SWFDisplayItem SWFDisplayList_add(SWFDisplayList list, SWFBlockList blocklist, SWFCharacter shape);
 
 void SWFDisplayList_writeBlocks(SWFDisplayList list, SWFBlockList blocklist);
 
