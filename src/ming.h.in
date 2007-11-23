@@ -43,10 +43,6 @@ extern "C" {
 #define MING_VERSION        @MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@
 #define MING_VERSION_TEXT  "@MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@"
 
-/* do we enable gif / png functions? */
-#include "ming_config.h"
-
-
 /***** Type definitions - avoid cyclic dependencies ****/
 
 typedef unsigned char byte;
@@ -250,14 +246,11 @@ SWFDBLBitmap newSWFDBLBitmap(FILE *f);
 /* create a new DBL bitmap from the given input object */
 SWFDBLBitmap newSWFDBLBitmap_fromInput(SWFInput input);
 
-#if USE_GIF
 SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(const char *name);
 SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input);
-#endif
-#if USE_PNG
+
 SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(const char *name);
 SWFDBLBitmapData newSWFDBLBitmapData_fromPngInput(SWFInput input);
-#endif
 
 
 /***** SWFJpegBitmap extends SWFBitmap *****/

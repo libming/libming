@@ -20,8 +20,10 @@
 #ifndef SWF_MINGPP_H_INCLUDED
 #define SWF_MINGPP_H_INCLUDED
 
+/* why would we need to include these ??
 #include <stdio.h>
-#include <string.h>
+*/
+#include <cstring> /* for strlen used in SWFBitmap costructor */
 
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
@@ -730,19 +732,11 @@ class SWFBitmap : public SWFBlock
       if(strcasecmp(filename+strlen(filename)-4, ".dbl") == 0)
 	this->bitmap = (c_SWFBitmap) newSWFDBLBitmap(fopen(filename, "rb"));
 
-#if USE_GIF
-      
       else if(strcasecmp(filename+strlen(filename)-4, ".gif") == 0)
 	this->bitmap = (c_SWFBitmap) newSWFDBLBitmapData_fromGifFile(filename);
 
-#endif
-
-#if USE_PNG
-
       else if(strcasecmp(filename+strlen(filename)-4, ".png") == 0)
  		this->bitmap =   (c_SWFBitmap) newSWFDBLBitmapData_fromPngFile( filename );
-
-#endif
 
       else if(strcasecmp(filename+strlen(filename)-4, ".jpg") == 0 ||
 	(strlen(filename) > 5 && (strcasecmp(filename+strlen(filename)-5, ".jpeg") == 0)))
@@ -757,6 +751,8 @@ class SWFBitmap : public SWFBlock
       else
 	; // XXX - throw exception
     }
+
+	if ( ! this->bitmap ) throw "something went wrong";
   }
 
   SWFBitmap(SWFInput *input)
