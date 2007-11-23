@@ -57,17 +57,17 @@ noinst_HEADERS =	\
 
 noinst_LTLIBRARIES = libblock.la
 
-if USE_ZLIB
+#if USE_ZLIB
 
-if USE_GIF
+#if USE_GIF
 GIF_SOURCE=gifdbl.c	
-endif
+#endif
 
-if USE_PNG
+#if USE_PNG
 PNG_SOURCE=pngdbl.c
-endif
+#endif
 
-endif #zlib
+#endif #zlib
 
 if USE_FREETYPE
 libblock_la_CFLAGS = $(FREETYPE_CFLAGS) $(AM_CFLAGS)
