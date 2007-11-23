@@ -21,7 +21,7 @@ noinst_HEADERS =	\
 
 lib_LTLIBRARIES = libming.la
 
-include_HEADERS = ming.h ming_config.h
+include_HEADERS = ming.h
 
 libming_la_SOURCES = 	\
 	blocklist.c	\
