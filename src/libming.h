@@ -29,6 +29,8 @@
 #ifndef SWF_LIBMING_H_INCLUDED
 #define SWF_LIBMING_H_INCLUDED
 
+#include <math.h>
+
 
 #include "ming.h"
 #include "ming_config.h"
