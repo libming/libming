@@ -1,19 +1,36 @@
 /* $Id$ */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
 
 #include "ming_config.h"
 #include "libming.h"
 
-#include <gif_lib.h>
-#include <zlib.h>
+
+#ifndef USE_GIF // {
+
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input)
+{
+	SWF_error("newSWFDBLBitmapData_fromGifInput can't be used (no gif compiled into this build of Ming).\n");
+	return NULL;
+}
+
+SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(const char * fileName)
+{
+	SWF_error("newSWFDBLBitmapData_fromGifFile can't be used (no gif compiled into this build of Ming).\n");
+	return NULL;
+}
+
+#else // def USE_GIF }{
 
 #include "bitmap.h"
 #include "dbl.h"
 #include "input.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <gif_lib.h>
+#include <zlib.h>
 
 
 /*void error(char *msg)
@@ -237,3 +254,5 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input)
 	// ret->input = NULL;
 	return ret;
 }
+
+#endif // def USE_GIF }
