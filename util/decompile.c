@@ -3155,6 +3155,9 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
       case SWFACTION_STOPSOUNDS:
 	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"stopAllSounds");      
 
+      case SWFACTION_TOGGLEQUALITY:
+	return decompile_Null_ArgBuiltInFunctionCall(n, actions, maxn,"toggleHighQuality");      
+
       case SWFACTION_MBSUBSTRING:
       case SWFACTION_SUBSTRING:
       	return decompileSUBSTRING(n, actions, maxn);
@@ -3211,7 +3214,7 @@ char *
 decompile5Action(int n, SWF_ACTION *actions,int indent)
 {
 int j;
-  if( n == 1 )
+  if( !n  )
 	  return NULL;
 
   pool = NULL;
