@@ -1,16 +1,31 @@
-#include <stdlib.h>
-#include <math.h>
 
 #include "ming_config.h"
 #include "libming.h"
 
-#include <png.h>
-#include <zlib.h>
+#ifndef USE_PNG // {
+
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngInput(SWFInput input)
+{
+	SWF_error("newSWFDBLBitmapData_fromPngInput can't be used (no png compiled into this build of Ming).\n");
+	return NULL;
+}
+
+SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(const char * fileName)
+{
+	SWF_error("newSWFDBLBitmapData_fromPngFile can't be used (no png compiled into this build of Ming).\n");
+	return NULL;
+}
+
+#else // def USE_PNG }{
 
 #include "bitmap.h"
 #include "dbl.h"
 #include "input.h"
 
+#include <png.h>
+#include <zlib.h>
+#include <stdlib.h>
+#include <math.h>
 
 struct pngdata
 {
@@ -327,3 +342,5 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromPngInput(SWFInput input)
 	// ret->input = NULL;
 	return ret;
 }
+
+#endif // def USE_PNG }
