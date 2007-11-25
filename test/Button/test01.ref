@@ -48,7 +48,6 @@ Block length: 35
     124:SWFACTION_CALLMETHOD
     125:SWFACTION_POP
     126:SWFACTION_END
-expected actionEnd flag
 
 Offset: 127 (0x007f)
 Block type: 34 (SWF_DEFINEBUTTON2)
@@ -106,7 +105,6 @@ Block type: 28 (SWF_REMOVEOBJECT2)
 Block length: 2
 
  Depth: 1
-expected actionEnd flag
 
 Offset: 214 (0x00d6)
 Block type: 34 (SWF_DEFINEBUTTON2)
