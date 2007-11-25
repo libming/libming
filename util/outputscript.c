@@ -739,8 +739,32 @@ outputSWF_DEFINEBUTTONCXFORM (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBUTTONSOUND (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEBUTTONSOUND);
-
+  char bname[64];
+  char sname[64];
+  OUT_BEGIN (SWF_DEFINEBUTTONSOUND);
+  sprintf (bname, "character%d", sblock->CharacterID);
+  
+  if (sblock->ButtonSoundChar0)
+  {
+   sprintf (sname, VAR "character%d", sblock->ButtonSoundChar0);
+   printf ("%s(%s,%s);\n\n", methodcall (bname, "addSound"), sname, "SWFBUTTON_MOUSEOUT");
+  }
+  if (sblock->ButtonSoundChar1)
+  {
+   sprintf (sname, VAR "character%d", sblock->ButtonSoundChar1);
+   printf ("%s(%s,%s);\n\n", methodcall (bname, "addSound"), sname, "SWFBUTTON_MOUSEOVER");
+  }
+  if (sblock->ButtonSoundChar2)
+  {
+   sprintf (sname, VAR "character%d", sblock->ButtonSoundChar2);
+   printf ("%s(%s,%s);\n\n", methodcall (bname, "addSound"), sname, "SWFBUTTON_MOUSEDOWN");
+  }
+  if (sblock->ButtonSoundChar3)
+  {
+   sprintf (sname, VAR "character%d", sblock->ButtonSoundChar3);
+   printf ("%s(%s,%s);\n\n", methodcall (bname, "addSound"), sname, "SWFBUTTON_MOUSEUP");
+  }
+  /* todo proc soundinstance */
 }
 
 void
@@ -1005,8 +1029,10 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINESOUND);
-
+  char sname[64];
+  OUT_BEGIN (SWF_DEFINESOUND);
+  sprintf (sname, "character%d", sblock->SoundId);
+  printf ("%s(\"FIX_MY_PARAMS\")"STMNTEND"\n", newobj (sname, "Sound"));
 }
 
 void
