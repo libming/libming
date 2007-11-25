@@ -185,7 +185,7 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
 }
 
 void
-outputSWF_CXFORM(SWF_CXFORM * cxform, char *name){
+outputSWF_CXFORM(SWF_CXFORM * cxform){
 	iprintf("  ColorTransForm:\n");
 	if (cxform->HasMultTerms){
 		iprintf("   Mult:");
@@ -1005,9 +1005,13 @@ outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBUTTONCXFORM (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEBUTTONCXFORM);
-
+  OUT_BEGIN (SWF_DEFINEBUTTONCXFORM);
+  iprintf(" ButtonId %d\n", sblock->ButtonId);
+  outputSWF_CXFORM(&sblock->ButtonColorTransform);
 }
+
+void 
+outputSWF_SOUNDINFO (SWF_SOUNDINFO *info);
 
 void
 outputSWF_DEFINEBUTTONSOUND (SWF_Parserstruct * pblock)

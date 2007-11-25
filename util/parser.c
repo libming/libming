@@ -1538,7 +1538,8 @@ SWF_Parserstruct *
 parseSWF_DEFINEBUTTONCXFORM (FILE * f, int length)
 {
   PAR_BEGIN (SWF_DEFINEBUTTONCXFORM);
-  SKIP;
+  parserrec->ButtonId = readUInt16(f);
+  parseSWF_CXFORM(f, &parserrec->ButtonColorTransform);
   PAR_END;
 }
 
