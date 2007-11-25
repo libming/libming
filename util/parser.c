@@ -1542,124 +1542,29 @@ parseSWF_DEFINEBUTTONCXFORM (FILE * f, int length)
   PAR_END;
 }
 
+void parseSWF_SOUNDINFO(FILE *f, struct SWF_SOUNDINFO *si);
+
 SWF_Parserstruct *
 parseSWF_DEFINEBUTTONSOUND (FILE * f, int length)
 {
-  int i;
   PAR_BEGIN (SWF_DEFINEBUTTONSOUND);
   parserrec->CharacterID = readUInt16 (f);
   parserrec->ButtonSoundChar0 = readUInt16 (f);
   if (parserrec->ButtonSoundChar0)
-  {
-   parserrec->ButtonSoundInfo0.Reserved = readBits (f, 2);
-   parserrec->ButtonSoundInfo0.SyncStop = readBits (f, 1);
-   parserrec->ButtonSoundInfo0.SyncNoMultiple=readBits (f, 1);
-   parserrec->ButtonSoundInfo0.HasEnvelope=readBits (f, 1);
-   parserrec->ButtonSoundInfo0.HasLoops=readBits (f, 1);
-   parserrec->ButtonSoundInfo0.HasOutPoint=readBits (f, 1);
-   parserrec->ButtonSoundInfo0.HasInPoint=readBits (f, 1);
-   if (parserrec->ButtonSoundInfo0.HasInPoint)
-    parserrec->ButtonSoundInfo0.InPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo0.HasOutPoint)
-    parserrec->ButtonSoundInfo0.OutPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo0.HasLoops)
-    parserrec->ButtonSoundInfo0.LoopCount = readUInt16 (f);
-   if (parserrec->ButtonSoundInfo0.HasEnvelope)
-   {
-    parserrec->ButtonSoundInfo0.EnvPoints = readUInt8 (f);
-    for (i=0;i<parserrec->ButtonSoundInfo0.EnvPoints;i++)
-    {
-     /* todo process EnvelopeRecords */
-     readUInt32 (f);
-     readUInt16 (f);
-     readUInt16 (f);
-    }
-   }
-  }
+    parseSWF_SOUNDINFO(f, &parserrec->ButtonSoundInfo0);
+  
   parserrec->ButtonSoundChar1 = readUInt16 (f);
   if (parserrec->ButtonSoundChar1)
-  {
-   parserrec->ButtonSoundInfo1.Reserved = readBits (f, 2);
-   parserrec->ButtonSoundInfo1.SyncStop = readBits (f, 1);
-   parserrec->ButtonSoundInfo1.SyncNoMultiple=readBits (f, 1);
-   parserrec->ButtonSoundInfo1.HasEnvelope=readBits (f, 1);
-   parserrec->ButtonSoundInfo1.HasLoops=readBits (f, 1);
-   parserrec->ButtonSoundInfo1.HasOutPoint=readBits (f, 1);
-   parserrec->ButtonSoundInfo1.HasInPoint=readBits (f, 1);
-   if (parserrec->ButtonSoundInfo1.HasInPoint)
-    parserrec->ButtonSoundInfo1.InPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo1.HasOutPoint)
-    parserrec->ButtonSoundInfo1.OutPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo1.HasLoops)
-    parserrec->ButtonSoundInfo1.LoopCount = readUInt16 (f);
-   if (parserrec->ButtonSoundInfo1.HasEnvelope)
-   {
-    parserrec->ButtonSoundInfo1.EnvPoints = readUInt8 (f);
-    for (i=0;i<parserrec->ButtonSoundInfo1.EnvPoints;i++)
-    {
-     /* todo process EnvelopeRecords */
-     readUInt32 (f);
-     readUInt16 (f);
-     readUInt16 (f);
-    }
-   }
-  }
+    parseSWF_SOUNDINFO(f, &parserrec->ButtonSoundInfo1);
+  
   parserrec->ButtonSoundChar2 = readUInt16 (f);
   if (parserrec->ButtonSoundChar2)
-  {
-   parserrec->ButtonSoundInfo2.Reserved = readBits (f, 2);
-   parserrec->ButtonSoundInfo2.SyncStop = readBits (f, 1);
-   parserrec->ButtonSoundInfo2.SyncNoMultiple=readBits (f, 1);
-   parserrec->ButtonSoundInfo2.HasEnvelope=readBits (f, 1);
-   parserrec->ButtonSoundInfo2.HasLoops=readBits (f, 1);
-   parserrec->ButtonSoundInfo2.HasOutPoint=readBits (f, 1);
-   parserrec->ButtonSoundInfo2.HasInPoint=readBits (f, 1);
-   if (parserrec->ButtonSoundInfo2.HasInPoint)
-    parserrec->ButtonSoundInfo2.InPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo2.HasOutPoint)
-    parserrec->ButtonSoundInfo2.OutPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo2.HasLoops)
-    parserrec->ButtonSoundInfo2.LoopCount = readUInt16 (f);
-   if (parserrec->ButtonSoundInfo2.HasEnvelope)
-   {
-    parserrec->ButtonSoundInfo2.EnvPoints = readUInt8 (f);
-    for (i=0;i<parserrec->ButtonSoundInfo2.EnvPoints;i++)
-    {
-     /* todo process EnvelopeRecords */
-     readUInt32 (f);
-     readUInt16 (f);
-     readUInt16 (f);
-    }
-   }
-  }
+    parseSWF_SOUNDINFO(f, &parserrec->ButtonSoundInfo2);
+
   parserrec->ButtonSoundChar3 = readUInt16 (f);
   if (parserrec->ButtonSoundChar3)
-  {
-   parserrec->ButtonSoundInfo3.Reserved = readBits (f, 2);
-   parserrec->ButtonSoundInfo3.SyncStop = readBits (f, 1);
-   parserrec->ButtonSoundInfo3.SyncNoMultiple=readBits (f, 1);
-   parserrec->ButtonSoundInfo3.HasEnvelope=readBits (f, 1);
-   parserrec->ButtonSoundInfo3.HasLoops=readBits (f, 1);
-   parserrec->ButtonSoundInfo3.HasOutPoint=readBits (f, 1);
-   parserrec->ButtonSoundInfo3.HasInPoint=readBits (f, 1);
-   if (parserrec->ButtonSoundInfo3.HasInPoint)
-    parserrec->ButtonSoundInfo3.InPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo3.HasOutPoint)
-    parserrec->ButtonSoundInfo3.OutPoint = readUInt32 (f);
-   if (parserrec->ButtonSoundInfo3.HasLoops)
-    parserrec->ButtonSoundInfo3.LoopCount = readUInt16 (f);
-   if (parserrec->ButtonSoundInfo3.HasEnvelope)
-   {
-    parserrec->ButtonSoundInfo3.EnvPoints = readUInt8 (f);
-    for (i=0;i<parserrec->ButtonSoundInfo3.EnvPoints;i++)
-    {
-     /* todo process EnvelopeRecords */
-     readUInt32 (f);
-     readUInt16 (f);
-     readUInt16 (f);
-    }
-   }
-  } 
+    parseSWF_SOUNDINFO(f, &parserrec->ButtonSoundInfo3);
+ 
   PAR_END;
 }
 
