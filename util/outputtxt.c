@@ -1012,8 +1012,23 @@ outputSWF_DEFINEBUTTONCXFORM (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEBUTTONSOUND (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_DEFINEBUTTONSOUND);
-
+  OUT_BEGIN (SWF_DEFINEBUTTONSOUND);
+  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" ButtonSoundChar0 %d\n", sblock->ButtonSoundChar0);
+  if(sblock->ButtonSoundChar0)
+    outputSWF_SOUNDINFO (&sblock->ButtonSoundInfo0);
+  
+  iprintf(" ButtonSoundChar1 %d\n", sblock->ButtonSoundChar1);
+  if(sblock->ButtonSoundChar1)
+    outputSWF_SOUNDINFO (&sblock->ButtonSoundInfo1);
+  
+  iprintf(" ButtonSoundChar2 %d\n", sblock->ButtonSoundChar2);
+  if(sblock->ButtonSoundChar2)
+    outputSWF_SOUNDINFO (&sblock->ButtonSoundInfo2);
+  
+  iprintf(" ButtonSoundChar3 %d\n", sblock->ButtonSoundChar3);
+  if(sblock->ButtonSoundChar3)
+    outputSWF_SOUNDINFO (&sblock->ButtonSoundInfo3);
 }
 
 void
