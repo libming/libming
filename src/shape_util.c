@@ -30,15 +30,27 @@
 #include "libming.h"
 
 
-float
-SWFCharacter_getWidth(SWFCharacter character)
+/* This function returns a characters width.
+ * The characters width is return in px. If a character has no bounds
+ * -1 is returned.
+ */
+float SWFCharacter_getWidth(SWFCharacter character)
 {
+	if(character->bounds == NULL)
+		return -1;
+
 	return SWFCharacter_getScaledWidth(character) / Ming_scale;
 }
 
-
+/* This function returns a characters height.
+ * The characters height is return in px. If a character has no bounds
+ * -1 is returned.
+ */
 float SWFCharacter_getHeight(SWFCharacter character)
 {
+	if(character->bounds == NULL)
+		return -1;
+
 	return SWFCharacter_getScaledHeight(character) / Ming_scale;
 }
 
