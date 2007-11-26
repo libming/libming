@@ -21,10 +21,14 @@ MODULE = SWF::Text	PACKAGE = SWF::Text		PREFIX = SWFText_
 PROTOTYPES: ENABLE
 
 SWF::Text
-SWFText_new(package="SWF::Text")
+SWFText_new(package="SWF::Text", version=1)
 	char *package
+	int version
 	CODE:
-        RETVAL = newSWFText2();
+	if(version == 2)
+	        RETVAL = newSWFText2();
+	else
+		RETVAL = newSWFText();
         ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
