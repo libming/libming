@@ -24,7 +24,7 @@
 #include <stdio.h>
 */
 #include <cstring> /* for strlen used in SWFBitmap costructor */
-
+#include <stdexcept>
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
 
@@ -146,10 +146,11 @@ class SWFCharacter : public SWFBlock
  public:
   c_SWFCharacter character;
 
-// begin minguts 2004/08/31 (needed by new class SWFFontCharacter) ((((
-  SWFCharacter(c_SWFCharacter character)
-    { this->character = character; }
-// )))) end minguts 2004/08/31
+  SWFCharacter()
+  { character = NULL; }
+  
+  SWFCharacter(c_SWFCharacter c)
+  { character = c; }
 
   float getWidth()
     { return SWFCharacter_getWidth(this->character); }
@@ -157,15 +158,11 @@ class SWFCharacter : public SWFBlock
   float getHeight()
     { return SWFCharacter_getHeight(this->character); }
 
-// begin minguts 2004/08/31 (removed NULL , needed by new class SWFFontCharacter) ((((
   virtual c_SWFBlock getBlock()
-    { return (c_SWFBlock)this->character; }
-// )))) end minguts 2004/08/31
+    { return (c_SWFBlock)character; }
 
-  SWFCharacter() {} //needed for base classing
   SWF_DECLAREONLY(SWFCharacter);
 };
-// begin minguts 2004/08/31: added two new classes: "SWFFontCharacter" and "SWFPrebuiltClip" ((((
 /*  SWFFontCharacter */
 class SWFFontCharacter : public SWFCharacter
 {
@@ -173,7 +170,10 @@ class SWFFontCharacter : public SWFCharacter
   c_SWFFontCharacter fontcharacter;
 
   SWFFontCharacter(c_SWFFontCharacter fontcharacter)
-    { this->fontcharacter = fontcharacter; }
+  { 
+	this->fontcharacter = fontcharacter; 
+	this->character = (c_SWFCharacter)fontcharacter;
+  }
 
   virtual ~SWFFontCharacter()
     { }
@@ -181,11 +181,11 @@ class SWFFontCharacter : public SWFCharacter
   SWF_DECLAREONLY(SWFFontCharacter);
   SWFFontCharacter();
 };
-// 
+
 
 /*  SWFPrebuiltClip */
 
-class SWFPrebuiltClip : public SWFCharacter/* SWFBlock */
+class SWFPrebuiltClip : public SWFBlock
 {
  public:
   c_SWFPrebuiltClip prebuiltclip;
@@ -715,16 +715,14 @@ class SWFFill
 
 /*  SWFBitmap  */
 
-class SWFBitmap : public SWFBlock
+class SWFBitmap : public SWFCharacter
 {
  public:
   c_SWFBitmap bitmap;
 
-// begin minguts (added because caused windows to crash) 2004/08/31 ((((
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->bitmap; }
-// )))) end minguts 2004/08/31
-
+  
   SWFBitmap(const char *filename, const char *alpha=NULL)
   {
     if(strlen(filename) > 4)
@@ -751,8 +749,8 @@ class SWFBitmap : public SWFBlock
       else
 	; // XXX - throw exception
     }
-
-	if ( ! this->bitmap ) throw "something went wrong";
+    if ( ! this->bitmap ) throw "something went wrong";
+    this->character = (c_SWFCharacter)bitmap;
   }
 
   SWFBitmap(SWFInput *input)
@@ -761,11 +759,6 @@ class SWFBitmap : public SWFBlock
   virtual ~SWFBitmap()
     { destroySWFBitmap(this->bitmap); }
 
-  int getWidth()
-    { return SWFBitmap_getWidth(this->bitmap); }
-
-  int getHeight()
-    { return SWFBitmap_getHeight(this->bitmap); }
   SWF_DECLAREONLY(SWFBitmap);
   SWFBitmap();
 };
@@ -860,7 +853,10 @@ class SWFShape : public SWFCharacter
   c_SWFShape shape;
 
   SWFShape()
-    { this->shape = newSWFShape(); }
+  { 
+    this->shape = newSWFShape(); 
+    this->character = (c_SWFCharacter)shape;
+  }
 
   SWFShape(c_SWFShape shape)
     { this->shape = shape; }
@@ -964,7 +960,10 @@ class SWFSprite : public SWFCharacter
   c_SWFMovieClip clip;
 
   SWFSprite()
-    { this->clip = newSWFMovieClip(); }
+  { 
+    this->clip = newSWFMovieClip(); 
+    this->character = (c_SWFCharacter)clip;
+  }
 
   virtual ~SWFSprite()
     { destroySWFMovieClip(this->clip); }
@@ -1007,7 +1006,10 @@ class SWFMovieClip : public SWFCharacter
   c_SWFMovieClip clip;
 
   SWFMovieClip()
-    { this->clip = newSWFMovieClip(); }
+  { 
+    this->clip = newSWFMovieClip(); 
+    this->character = (c_SWFCharacter)clip;
+  }
 
   virtual ~SWFMovieClip()
     { destroySWFMovieClip(this->clip); }
@@ -1045,7 +1047,10 @@ class SWFMorph : public SWFCharacter
   c_SWFMorph morph;
 
   SWFMorph()
-    { this->morph = newSWFMorphShape(); }
+  { 
+    this->morph = newSWFMorphShape(); 
+    this->character = (c_SWFCharacter)morph;
+  }
 
   virtual ~SWFMorph()
     { destroySWFMorph(this->morph); }
@@ -1074,7 +1079,8 @@ class SWFText : public SWFCharacter
       if(version == 2)
         this->text = newSWFText2();
       else 
-        this->text = newSWFText(); 
+        this->text = newSWFText();
+      this->character = (c_SWFCharacter)text;
   }
 
   virtual ~SWFText()
@@ -1124,7 +1130,10 @@ class SWFTextField : public SWFCharacter
   c_SWFTextField textField;
 
   SWFTextField()
-    { this->textField = newSWFTextField(); }
+  { 
+    this->textField = newSWFTextField(); 
+    this->character = (c_SWFCharacter)textField;
+  }
 
   virtual ~SWFTextField()
     { destroySWFTextField(this->textField); }
@@ -1191,7 +1200,10 @@ class SWFButton : public SWFCharacter
   c_SWFButton button;
 
   SWFButton()
-    { this->button = newSWFButton(); }
+  { 
+    this->button = newSWFButton(); 
+    this->character = (c_SWFCharacter)button;
+  }
 
   virtual ~SWFButton()
     { destroySWFButton(this->button); }
@@ -1231,7 +1243,10 @@ class SWFVideoStream : public SWFCharacter
   c_SWFVideoStream stream;
 
   SWFVideoStream()
-    { this->stream = newSWFVideoStream(); }
+  { 
+    this->stream = newSWFVideoStream(); 
+    this->character = (c_SWFCharacter)stream;
+  }
 
   SWFVideoStream(const char *path)
     { this->stream = newSWFVideoStream_fromFile(fopen(path, "rb")); }
