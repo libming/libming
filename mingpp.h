@@ -57,6 +57,7 @@ extern "C"
   #define SWFShadow       c_SWFShadow
   #define SWFFilterMatrix c_SWFFilterMatrix
   #define SWFInitAction   c_SWFInitAction
+  #define SWFButtonRecord c_SWFButtonRecord
 
 // begin minguts 2004/08/31 ((((
   #define SWFFontCharacter c_SWFFontCharacter
@@ -96,6 +97,7 @@ extern "C"
   #undef SWFShadow
   #undef SWFFilterMatrix
   #undef SWFInitAction
+  #undef SWFButtonRecord
 }
 
 #define SWF_DECLAREONLY(classname) \
@@ -1191,6 +1193,56 @@ class SWFTextField : public SWFCharacter
   SWF_DECLAREONLY(SWFTextField);
 };
 
+class SWFButtonRecord
+{
+ friend class SWFButton;
+ public:
+  c_SWFButtonRecord record;
+
+  void addFilter(SWFFilter *f)
+    { SWFButtonRecord_addFilter(this->record, f->filter); }
+
+  void setDepth(int depth)
+    { SWFButtonRecord_setDepth(this->record, depth); }
+
+  void setBlendMode(int mode)
+    { SWFButtonRecord_setBlendMode(this->record, mode); }
+
+  void move(float x, float y)
+    { SWFButtonRecord_move(this->record, x, y); }
+
+  void moveTo(float x, float y)
+    { SWFButtonRecord_moveTo(this->record, x, y); }
+
+  void rotate(float deg)
+    { SWFButtonRecord_rotate(this->record, deg); }
+
+  void rotateTo(float deg)
+    { SWFButtonRecord_rotateTo(this->record, deg); }
+
+  void scale(float scaleX, float scaleY)
+    { SWFButtonRecord_scale(this->record, scaleX, scaleY); }
+
+  void scaleTo(float scaleX, float scaleY)
+    { SWFButtonRecord_scaleTo(this->record, scaleX, scaleY); }
+
+  void skewX(float skewX)
+    { SWFButtonRecord_skewX(this->record, skewX); }
+
+  void skewY(float skewY)
+    { SWFButtonRecord_skewY(this->record, skewY); }
+
+  void skewXTo(float skewX)
+    { SWFButtonRecord_skewXTo(this->record, skewX); }
+
+  void skewYTo(float skewY)
+    { SWFButtonRecord_skewYTo(this->record, skewY); }
+
+ private:
+  SWFButtonRecord(c_SWFButtonRecord record)
+	{ this->record = record; }
+  SWF_DECLAREONLY(SWFButtonRecord);	
+};
 
 /*  SWFButton  */
 
@@ -1211,8 +1263,8 @@ class SWFButton : public SWFCharacter
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->button; }
 
-  void addShape(SWFCharacter *character, byte flags)
-    { SWFButton_addShape(this->button, (c_SWFCharacter)character->getBlock(), flags); }
+  SWFButtonRecord* addShape(SWFCharacter *character, byte flags)
+    { SWFButton_addCharacter(this->button, (c_SWFCharacter)character->getBlock(), flags); }
 
   void addAction(SWFAction *action, int flags)
     { SWFButton_addAction(this->button, action->action, flags); }
@@ -1229,8 +1281,9 @@ class SWFButton : public SWFCharacter
   void removeScalingGrid()
     { SWFButton_removeScalingGrid(this->button); }
 
-  void addCharacter(SWFCharacter *character, byte flags)
-    { SWFButton_addCharacter(this->button, (c_SWFCharacter)character->getBlock(), flags); }
+  SWFButtonRecord* addCharacter(SWFCharacter *character, byte flags)
+    { return new SWFButtonRecord(
+        SWFButton_addCharacter(this->button, (c_SWFCharacter)character->getBlock(), flags)); }
 
   SWF_DECLAREONLY(SWFButton);
 };
