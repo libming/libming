@@ -68,5 +68,6 @@ setproperty
 //end // known as token, but unhandled
 implements
 extends
+fscommand2
 };
 

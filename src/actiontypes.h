@@ -132,10 +132,11 @@ typedef enum
 /* v7 actions */
   SWFACTION_DEFINEFUNCTION2         = 0x8E,
   SWFACTION_EXTENDS                 = 0x69,
-  SWFACTION_CASTOP                  = 0x2B,
-  SWFACTION_IMPLEMENTSOP            = 0x2C,
   SWFACTION_TRY                     = 0x8F,
   SWFACTION_THROW                   = 0x2A,
+  SWFACTION_CASTOP                  = 0x2B,
+  SWFACTION_IMPLEMENTSOP            = 0x2C,
+  SWFACTION_FSCOMMAND2              = 0x2D,
 
 } Action;
 

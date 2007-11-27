@@ -65,7 +65,7 @@ static int classContext = 0;
 
 %token TRY THROW CATCH FINALLY
 
-%token EXTENDS IMPLEMENTS CLASS PUBLIC PRIVATE
+%token EXTENDS IMPLEMENTS FSCOMMAND2 CLASS PUBLIC PRIVATE
 
 %token NULLVAL
 %token UNDEFINED
@@ -2015,6 +2015,8 @@ opcode
 						     SWFACTION_TARGETPATH); }
 	| IMPLEMENTS		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_IMPLEMENTSOP); }
+	| FSCOMMAND2		{ $$ = bufferWriteOp(asmBuffer, 
+						     SWFACTION_FSCOMMAND2); }
 	| CAST			{ $$ = bufferWriteOp(asmBuffer,
 						     SWFACTION_CASTOP);	}
 

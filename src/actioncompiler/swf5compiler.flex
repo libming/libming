@@ -299,6 +299,7 @@ targetpath		{ count();	return TARGETPATH;	}
 duplicatemovieclip	{ count();	return DUPLICATEMOVIECLIP; }
 removemovieclip		{ count();	return REMOVEMOVIECLIP; }
 implements		{ count(); 	return IMPLEMENTS;	}
+fscommand2		{ count(); 	return FSCOMMAND2;	}
 cast			{ count();	return CAST;		}
 }
 

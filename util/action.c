@@ -550,6 +550,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_IMPLEMENTSOP),
   ActionTypeLong (SWFACTION_TRY),
   ActionType (SWFACTION_THROW),
+  ActionType (SWFACTION_FSCOMMAND2),
 };
 
 static int numActions = sizeof (actions) / sizeof (struct SWFActionName);
