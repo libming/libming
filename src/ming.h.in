@@ -670,6 +670,7 @@ void SWFButton_setMenu(SWFButton button, int flag);
 void SWFButton_setScalingGrid(SWFButton b, int x, int y, int w, int h);
 void SWFButton_removeScalingGrid(SWFButton b);
 
+void SWFButtonRecord_setDepth(SWFButtonRecord b, int depth);
 void SWFButtonRecord_addFilter(SWFButtonRecord b, SWFFilter f);
 void SWFButtonRecord_setBlendMode(SWFButtonRecord b, int mode);
 void SWFButtonRecord_move(SWFButtonRecord record, float x, float y);

@@ -196,6 +196,12 @@ SWFButton_addCharacter(SWFButton button /* button object */,
 	return record;
 }
 
+void
+SWFButtonRecord_setDepth(SWFButtonRecord b, int depth)
+{
+	b->layer = depth;
+}
+
 /*
  * sets blend mode
  * Sets an alternative blend mode instead of default alpha blend. 
