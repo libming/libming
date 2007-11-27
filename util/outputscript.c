@@ -699,6 +699,49 @@ outputSWF_DEFINEBITSPTR (SWF_Parserstruct * pblock)
 
 }
 
+
+void
+outputSWF_BUTTONRECORD( SWF_BUTTONRECORD *brec, char *bname)
+{
+  int notFirst = 0;
+  char cname[64];
+  //char buttonstates[64];
+
+  OUT_BEGIN_EMPTY (SWF_BUTTONRECORD);
+
+  sprintf(cname, "character%d", brec->CharacterId);
+  printf ("%s(" VAR "%s,", methodcall(bname, "addCharacter"), cname);
+  if (brec->ButtonStateHitTest)
+  {
+    if (notFirst)
+      printf(" | ");
+    printf("SWFBUTTON_HIT");
+    notFirst = 1;
+  }
+  if (brec->ButtonStateDown)
+  {
+    if (notFirst)
+      printf(" | ");
+    printf("SWFBUTTON_DOWN");
+    notFirst = 1;
+  }
+  if (brec->ButtonStateOver)
+  {
+    if (notFirst)
+      printf(" | ");
+    printf("SWFBUTTON_OVER");
+    notFirst = 1;
+  }
+  if (brec->ButtonStateUp)
+  {
+    if (notFirst)
+      printf(" | ");
+    printf("SWFBUTTON_UP");
+    notFirst = 1;
+  }
+  printf (")"STMNTEND"\n");
+}
+
 void
 outputSWF_DEFINEBUTTON (SWF_Parserstruct * pblock)
 {
@@ -715,19 +758,18 @@ outputSWF_DEFINEBUTTON2 (SWF_Parserstruct * pblock)
 
   sprintf (bname, "character%d", sblock->Buttonid);
   printf ("%s()"STMNTEND"\n", newobj (bname, "Button"));
-  /*
-  for(i=0;i<sblock->numCharacters;i++) 
+  for(i=0;i < sblock->numCharacters;i++) 
   {
-    TODO: output SWF_BUTTONRECORD( &(sblock->Characters[i]) );
+    outputSWF_BUTTONRECORD( &(sblock->Characters[i]), bname );
   }
-  */
-  for(i=0;i<sblock->numActions;i++) 
+  for(i=0;i < sblock->numActions;i++) 
   {
     printf ("%s(%s(\"%s\"),%s);\n\n", methodcall (bname, "addAction"), newobj (NULL, "Action"), 
-	decompile5Action(sblock->Actions[i].numActions,sblock->Actions[i].Actions,0),	
+	decompile5Action(sblock->Actions[i].numActions, sblock->Actions[i].Actions,0),	
 	getButtonCondString(&sblock->Actions[i]) );	
   }
 }
+
 
 void
 outputSWF_DEFINEBUTTONCXFORM (SWF_Parserstruct * pblock)
