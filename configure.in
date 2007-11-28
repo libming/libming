@@ -38,7 +38,7 @@ AC_PROG_CC_C_O
 
 AC_ARG_ENABLE(
 [cpp],
-[  --enable-cpp           Enable C++ support],
+[  --enable-cpp            Enable C++ support (default: enabled)],
 [case "${enableval}" in
   yes) cpp_support=yes ;;
    no) cpp_support=no ;;
@@ -53,7 +53,7 @@ AC_PATH_PROG(PYTHON, python)
 AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHON" != x)
 AC_ARG_ENABLE(
 [python],
-[  --enable-python           Enable build of python extension],
+[  --enable-python         Enable build of python extension (default: disabled)],
 [case "${enableval}" in
   yes) python_ext=yes ;;
    no) python_ext=no ;;
@@ -81,7 +81,7 @@ AM_CONDITIONAL(HAVE_PERL, test x"$PERL" != x)
 
 AC_ARG_ENABLE(
 [perl],
-[  --enable-perl           Enable build of perl extension],
+[  --enable-perl           Enable build of perl extension (default: disabled)],
 [case "${enableval}" in
   yes) perl_ext=yes ;;
    no) perl_ext=no ;;
@@ -106,7 +106,7 @@ dnl AM_CONDITIONAL(HAVE_PHP, test x"$PHP" != x)
 
 AC_ARG_ENABLE(
 [php],
-[  --enable-php           Enable build of php extension],
+[  --enable-php            Enable build of php extension (default: disabled)],
 [case "${enableval}" in
   yes) php_ext=yes ;;
    no) php_ext=no ;;
@@ -130,7 +130,7 @@ AM_CONDITIONAL(HAVE_TCL, test x"$TCL" != x)
 
 AC_ARG_ENABLE(
 [tcl],
-[  --enable-tcl           Enable build of tcl extension],
+[  --enable-tcl            Enable build of tcl extension (default: disabled)],
 [case "${enableval}" in
   yes) tcl_ext=yes ;;
    no) tcl_ext=no ;;
