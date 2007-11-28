@@ -814,18 +814,18 @@ parseSWF_SHAPE (FILE * f, SWF_SHAPE * shape, int level, int len)
   shape->ShapeRecords =
     (SWF_SHAPERECORD *) calloc (1, sizeof (SWF_SHAPERECORD));
   shape->NumShapeRecords = 0;
-  while (fileOffset < end && parseSWF_SHAPERECORD
-	 (f, &(shape->ShapeRecords[shape->NumShapeRecords]), &fillBits,
-	  &lineBits, level))
-    {
-      shape->NumShapeRecords++;
-      shape->ShapeRecords = (SWF_SHAPERECORD *) realloc (shape->ShapeRecords,
-							 (shape->
-							  NumShapeRecords +
-							  1) *
-							 sizeof
-							 (SWF_SHAPERECORD));
-    }
+  while (fileOffset < end) 
+  {
+    size_t size;
+    SWF_SHAPERECORD *rec = &(shape->ShapeRecords[shape->NumShapeRecords]);
+    int ret = parseSWF_SHAPERECORD(f, rec, &fillBits, &lineBits, level);
+    if(!ret)
+	return;
+
+    shape->NumShapeRecords++;
+    size = (shape->NumShapeRecords + 1) * sizeof(SWF_SHAPERECORD);
+    shape->ShapeRecords = (SWF_SHAPERECORD *)realloc (shape->ShapeRecords, size);
+  }
 }
 
 void
@@ -1640,9 +1640,7 @@ parseSWF_DEFINEFONT (FILE * f, int length)
 {
   int i;
   UI16  firstOffset;
-  int end;
   PAR_BEGIN (SWF_DEFINEFONT);
-  end = fileOffset + length;
 
   parserrec->FontID = readUInt16 (f);
   firstOffset = readUInt16 (f);
@@ -1659,7 +1657,7 @@ parseSWF_DEFINEFONT (FILE * f, int length)
     if(i < firstOffset/2 - 1)
       len = parserrec->OffsetTable[i + 1] - parserrec->OffsetTable[i];
     else
-      len = end -  parserrec->OffsetTable[i];
+      len = length -  parserrec->OffsetTable[i];
     parseSWF_SHAPE(f, &(parserrec->GlyphShapeTable[i]), 1, len);
   }
   PAR_END;
