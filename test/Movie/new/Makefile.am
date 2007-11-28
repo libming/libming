@@ -6,7 +6,6 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/test
 
 LDADD = $(top_builddir)/src/libming.la
-LIBS=-lstdc++
 
 TESTS = dotests
 
@@ -18,7 +17,7 @@ C_PROGS =		\
 	test05		\
 	test06		\
 	test07
-
+if USE_CXX
 CXX_PROGS =		\
 	test01-cxx	\
 	test02-cxx	\
@@ -27,6 +26,15 @@ CXX_PROGS =		\
 	test05-cxx	\
 	test06-cxx	\
 	test07-cxx
+
+test01_cxx_SOURCES = test01-cxx.C
+test02_cxx_SOURCES = test02-cxx.C
+test03_cxx_SOURCES = test03-cxx.C
+test04_cxx_SOURCES = test04-cxx.C
+test05_cxx_SOURCES = test05-cxx.C
+test06_cxx_SOURCES = test06-cxx.C
+test07_cxx_SOURCES = test07-cxx.C
+endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
@@ -64,13 +72,6 @@ EXTRA_DIST = 		\
 check_PROGRAMS = \
 	$(TEST_PROGS)
 
-test01_cxx_SOURCES = test01-cxx.C
-test02_cxx_SOURCES = test02-cxx.C
-test03_cxx_SOURCES = test03-cxx.C
-test04_cxx_SOURCES = test04-cxx.C
-test05_cxx_SOURCES = test05-cxx.C
-test06_cxx_SOURCES = test06-cxx.C
-test07_cxx_SOURCES = test07-cxx.C
 
 CLEANFILES = dotests test0*.swf php.ini
 

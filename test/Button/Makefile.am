@@ -6,7 +6,6 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/test
 
 LDADD = $(top_builddir)/src/libming.la
-LIBS=-lstdc++
 
 TESTS = dotests
 

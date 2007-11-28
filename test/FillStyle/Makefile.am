@@ -7,7 +7,6 @@ AM_CPPFLAGS = \
 	-DMEDIADIR='"$(srcdir)/../Media/"'
 
 LDADD = $(top_builddir)/src/libming.la
-LIBS=-lstdc++
 
 TESTS = dotests
 
