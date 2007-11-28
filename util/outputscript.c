@@ -321,6 +321,8 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
   if (skew < -TOLERANCE || skew > TOLERANCE)
     printf ("$%s->skewXTo(%f);\n", fname, skew);
 
+  if (matrix->HasScale)
+  {
   if (xScale > 1.0 - TOLERANCE && xScale < 1.0 + TOLERANCE)
     xScale = 1.0;
 
@@ -335,8 +337,10 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 	printf ("%s(%f, %f);\n", methodcall (fname, "scaleTo"), xScale,
 		yScale);
     }
+  }
 
-  if (angle < -TOLERANCE || angle > TOLERANCE)
+  if (matrix->HasRotate)
+   if (angle < -TOLERANCE || angle > TOLERANCE)
     printf ("%s(%f);\n", methodcall (fname, "rotateTo"), angle);
 
   if (matrix->TranslateX != 0 || matrix->TranslateY != 0)
@@ -1260,11 +1264,12 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   }
   if( sblock->PlaceFlagHasMatrix ) {
       printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
-      printf(COMMSTART " outputSWF_MATRIX is broken, so it is being skipped.. " COMMEND "\n");
       /*
+      printf(COMMSTART " outputSWF_MATRIX is broken, so it is being skipped.. " COMMEND "\n");
+      */
       sprintf(cname, "i%d", sblock->Depth );
       outputSWF_MATRIX (&sblock->Matrix, cname);
-      */
+      
   }
   if( sblock->PlaceFlagHasColorTransform ) {
       printf(COMMSTART " PlaceFlagHasColorTransform " COMMEND "\n");
@@ -1436,6 +1441,7 @@ outputHeader (struct Movie *m)
   	printf ("%s();\n\n", newobj ("m", "Movie"));
   else
   	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
+  printf ("ming_setscale(1.0);\n");
 #endif
 #ifdef SWFPERL
   printf ("#!/usr/bin/perl -w\n");
@@ -1455,6 +1461,7 @@ outputHeader (struct Movie *m)
   	printf ("%s();\n\n", newobj ("m", "Movie"));
   else
   	printf ("$m = %s(%d);\n\n", "SWF::Movie::newSWFMovieWithVersion", m->version);
+  printf ("SWF::setScale(1.0);\n");
 #endif
 #ifdef SWFPYTHON
   printf ("#!/usr/bin/python\n");
@@ -1462,6 +1469,7 @@ outputHeader (struct Movie *m)
   if( m->version != 5 ) 
 	printf ("Ming_useSWFVersion(%d);\n\n", m->version);
   printf ("%s();\n\n", newobj ("m", "Movie"));
+  printf (COMMSTART "add setscale here" COMMEND "\n");
 #endif
 #ifdef SWFPLUSPLUS
   printf ("#include <mingpp.h>\n");
@@ -1470,6 +1478,7 @@ outputHeader (struct Movie *m)
   	printf ("%s();\n\n", newobj ("m", "Movie"));
   else
   	printf ("%s(%d);\n\n", newobj ("m", "Movie"), m->version);
+  printf ("Ming_setScale(1.0);\n");
 #endif
 #ifdef SWFTCL
   printf ("load mingc.so mingc\n");
@@ -1479,12 +1488,13 @@ outputHeader (struct Movie *m)
 	// XXX:
   	// printf ("#add setversion here\n\n", "m", m->version);
 	}
+  printf (COMMSTART "add setscale here" COMMEND "\n");
 #endif
   if( m->rate != 12.0 ) 
   	printf ("%s(%f);\n", methodcall ("m", "setRate"), m->rate);
   if( m->frame.xMax != 6400 || m->frame.yMax != 4800 )
-  	printf ("%s(%f, %f);\n", methodcall ("m", "setDimension"),
-			m->frame.xMax/20.0, m->frame.yMax/20.0);
+  	printf ("%s(%d, %d);\n", methodcall ("m", "setDimension"),
+			m->frame.xMax     , m->frame.yMax     );
   if( m->nFrames != 1 )
   	printf ("%s(%i);\n", methodcall ("m", "setFrames"), m->nFrames);
 }
