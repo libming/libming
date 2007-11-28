@@ -49,7 +49,9 @@ SUBDIRS =	\
 
 DIST_SUBDIRS = $(SUBDIRS) $(additionnal_dist_subdirs)
 
+if USE_CXX
 include_HEADERS = mingpp.h
+endif
 
 COPYING: LICENSE
 	ln -fs $(srcdir)/LICENSE COPYING
