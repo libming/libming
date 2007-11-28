@@ -35,13 +35,22 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_CC_C_O
+
+AC_ARG_ENABLE(
+[cpp],
+[  --enable-cpp           Enable C++ support],
+[case "${enableval}" in
+  yes) cpp_support=yes ;;
+   no) cpp_support=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-c++ option]) ;;
+esac],
+cpp_support=yes)
+
 dnl --------------------------------------------
 dnl Check if we should build python extension
 dnl --------------------------------------------
-
 AC_PATH_PROG(PYTHON, python)
 AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHON" != x)
-
 AC_ARG_ENABLE(
 [python],
 [  --enable-python           Enable build of python extension],
@@ -275,8 +284,8 @@ AC_CHECK_FUNC(sin, MATHLIB="", [
 
 AC_DEFINE(TRACK_ALLOCS, 1, [Define this if you want Ming to track all objects allocations. Ming will mantain a doubly linked list of allocated objects, call Ming_collectGarbage() to get rid of them all])
 
-AM_CONDITIONAL(USE_CXX, [test "x${CXX}" != x])
-if test -n "${CXX}"; then
+AM_CONDITIONAL(USE_CXX, [test "x${CXX}" != x -a "x${cpp_support}" = "xyes"])
+if test -n "${CXX}" -a "x${cpp_support}" = "xyes"; then
 	AC_DEFINE([USE_CXX], [1], [Use c++])
 fi
 
@@ -383,7 +392,7 @@ chmod +x "$srcdir"/config/install-sh
 
 echo "Config summary: "
 
-if test x"$CXX" != x; then
+if test x"$CXX" != x -a "x$cpp_support" = "xyes"; then
 	echo "  C++ enabled"
 else
 	echo "  C++ disabled"
