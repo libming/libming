@@ -1935,7 +1935,7 @@ parseSWF_DEFINEFONTINFO (FILE * f, int length)
   parserrec->FontFlagsBold = readBits (f, 1);
   parserrec->FontFlagsWideCodes = readBits (f, 1);
   if( parserrec->FontFlagsWideCodes )
-	  parserrec->nGlyph = end-(fileOffset/2);
+	  parserrec->nGlyph = (end-fileOffset)/2;
   else
 	  parserrec->nGlyph = end-fileOffset;
 
@@ -1967,7 +1967,7 @@ parseSWF_DEFINEFONTINFO2 (FILE * f, int length)
   parserrec->FontFlagsBold = readBits (f, 1);
   parserrec->FontFlagsWideCodes = readBits (f, 1);
   parserrec->LanguageCode = readUInt8(f);
-  parserrec->nGlyph = end-(fileOffset/2);
+  parserrec->nGlyph = (end-fileOffset)/2;
 
   parserrec->CodeTable = (UI16 *)malloc(parserrec->nGlyph*sizeof(UI16));
   for(i=0;i<parserrec->nGlyph;i++)
