@@ -11,7 +11,8 @@ TESTS = dotests
 
 C_PROGS =		\
 	test01		\
-	test02
+	test02		\
+	test03
 
 if USE_CXX
 CXX_PROGS =		\
@@ -25,10 +26,12 @@ endif
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
-	test02.pl	\
 	test01.ref	\
-	test02.ref	\
 	test02.php	\
+	test02.pl	\
+	test02.ref	\
+	test03.pl	\
+	test03.ref	\
 	TestList
 
 check_PROGRAMS = \
@@ -37,5 +40,6 @@ check_PROGRAMS = \
 CLEANFILES = dotests php.ini \
 	test01.swf 
 	test02.swf 
+	test03.swf
 
 include ../Makefile.inc

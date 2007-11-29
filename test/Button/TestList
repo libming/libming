@@ -1,2 +1,3 @@
 test01:swf: test SWFBUTTON_MOUSE[UP|DOWN]
 test02:swf: test SWFBUTTONRECORD
+test03:swf: test animated button states

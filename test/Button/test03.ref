@@ -1,0 +1,331 @@
+File version: 5
+File size: 249
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 38
+
+ ShapeID: 1
+ RECT:  (-1100,-500)x(1100,500):12
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 0
+ RGBA: (ff,ff, 0,ff)
+ LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyle:  Width: 200
+ RGBA: (ff, 0, 0,ff)
+ NumFillBits: 1
+ NumLineBits: 1
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
+  StateFillStyle0: 0 StateMoveTo: 1
+   LineStyle: 1
+   FillStyle1: 1
+   MoveBits: 11  MoveDeltaX: -1000  MoveDeltaY: -400
+ Straight EdgeRecord: (10) - (2000, 0)
+ Straight EdgeRecord: (9) - (0, 800)
+ Straight EdgeRecord: (10) - (-2000, 0)
+ Straight EdgeRecord: (9) - (0, -800)
+  ENDSHAPE
+
+Offset: 60 (0x003c)
+Block type: 39 (SWF_DEFINESPRITE)
+Block length: 81
+
+ SpriteId: 2
+ FrameCount: 6
+ BlockCount: 13
+
+  Offset: 70 (0x0046)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 6
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 1
+   PlaceFlagMove 0
+   Depth 1
+   CharacterId: 1
+    Matrix:
+     TranslateX      0   TranslateY      0
+
+  Offset: 78 (0x004e)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 80 (0x0050)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.799988   ScaleY 0.799988
+     TranslateX      0   TranslateY      0
+
+  Offset: 91 (0x005b)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 93 (0x005d)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.639999   ScaleY 0.639999
+     TranslateX      0   TranslateY      0
+
+  Offset: 104 (0x0068)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 106 (0x006a)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.511993   ScaleY 0.511993
+     TranslateX      0   TranslateY      0
+
+  Offset: 117 (0x0075)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 119 (0x0077)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.409592   ScaleY 0.409592
+     TranslateX      0   TranslateY      0
+
+  Offset: 130 (0x0082)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 132 (0x0084)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.327667   ScaleY 0.327667
+     TranslateX      0   TranslateY      0
+
+  Offset: 143 (0x008f)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 145 (0x0091)
+  Block type: 0 (SWF_END)
+  Block length: 0
+
+
+Offset: 147 (0x0093)
+Block type: 39 (SWF_DEFINESPRITE)
+Block length: 55
+
+ SpriteId: 3
+ FrameCount: 4
+ BlockCount: 9
+
+  Offset: 153 (0x0099)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 11
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 1
+   PlaceFlagMove 0
+   Depth 1
+   CharacterId: 1
+    Matrix:
+     ScaleX 0.199997   ScaleY 0.199997
+     TranslateX      0   TranslateY      0
+
+  Offset: 166 (0x00a6)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 168 (0x00a8)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.399994   ScaleY 0.399994
+     TranslateX      0   TranslateY      0
+
+  Offset: 179 (0x00b3)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 181 (0x00b5)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 9
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     ScaleX 0.599991   ScaleY 0.599991
+     TranslateX      0   TranslateY      0
+
+  Offset: 192 (0x00c0)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 194 (0x00c2)
+  Block type: 26 (SWF_PLACEOBJECT2)
+  Block length: 4
+
+   PlaceFlagHasClipActions 0
+   PlaceFlagHasClipDepth 0
+   PlaceFlagHasName 0
+   PlaceFlagHasRatio 0
+   PlaceFlagHasColorTransform 0
+   PlaceFlagHasMatrix 1
+   PlaceFlagHasCharacter 0
+   PlaceFlagMove 1
+   Depth 1
+    Matrix:
+     TranslateX      0   TranslateY      0
+
+  Offset: 200 (0x00c8)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 202 (0x00ca)
+  Block type: 0 (SWF_END)
+  Block length: 0
+
+
+Offset: 204 (0x00cc)
+Block type: 34 (SWF_DEFINEBUTTON2)
+Block length: 27
+
+ CharacterID: 4
+ TrackAsMenu: 0
+ ActionOffset: 0
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 0   ButtonStateOver: 0   ButtonStateUp: 1
+  CharacterID: 1
+  PlaceDepth: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 0   ButtonStateDown: 0   ButtonStateOver: 1   ButtonStateUp: 0
+  CharacterID: 2
+  PlaceDepth: 2
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 0   ButtonStateDown: 1   ButtonStateOver: 0   ButtonStateUp: 0
+  CharacterID: 3
+  PlaceDepth: 3
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
+
+Offset: 233 (0x00e9)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 10
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterId: 4
+  Matrix:
+   TranslateX   3000 TranslateY   2000
+
+Offset: 245 (0x00f5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 247 (0x00f7)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
