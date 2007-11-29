@@ -75,6 +75,7 @@ static SWFSound getSound(zval *id TSRMLS_DC);
 static SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC);
 static SWFSoundInstance getSoundInstance(zval *id TSRMLS_DC);
 static SWFVideoStream getVideoStream(zval *id TSRMLS_DC);
+static SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC);
@@ -178,6 +179,7 @@ static int le_swfsoundp;
 static int le_swffontcharp;
 static int le_swfsoundinstancep;
 static int le_swfvideostreamp;
+static int le_swfbuttonrecordp;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static int le_swfprebuiltclipp;
@@ -204,6 +206,7 @@ static zend_class_entry *character_class_entry_ptr;
 static zend_class_entry *fontchar_class_entry_ptr;
 static zend_class_entry *soundinstance_class_entry_ptr;
 static zend_class_entry *videostream_class_entry_ptr;
+static zend_class_entry *buttonrecord_class_entry_ptr;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static zend_class_entry *prebuiltclip_class_entry_ptr;
@@ -273,9 +276,10 @@ static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 		return (SWFCharacter)getFontCharacter(id TSRMLS_CC);
 	else if(Z_OBJCE_P(id) == soundinstance_class_entry_ptr)
 		return (SWFCharacter)getSoundInstance(id TSRMLS_CC);
-
 	else if(Z_OBJCE_P(id) == videostream_class_entry_ptr)
 		return (SWFCharacter)getVideoStream(id TSRMLS_CC);
+	else if(Z_OBJCE_P(id) == buttonrecord_class_entry_ptr)
+		return (SWFCharacter)getButtonRecord(id TSRMLS_CC);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	else if(Z_OBJCE_P(id) == prebuiltclip_class_entry_ptr)
@@ -490,6 +494,216 @@ static zend_function_entry swfbitmap_functions[] = {
 
 /* }}} */
 
+#ifdef HAVE_NEW_MING
+/* {{{ internal function */
+static
+SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC)
+{
+	void *record = SWFgetProperty(id, "buttonrecord", strlen("buttonrecord"), le_swfbuttonrecordp TSRMLS_CC);
+
+	if(!record)
+		php_error(E_ERROR, "called object is not an SWFButtonRecord!");
+
+	return (SWFButtonRecord)record;
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::setDepth(int depth)
+   sets a button characters depth */
+PHP_METHOD(swfbuttonrecord, setDepth)
+{
+	zval **depth;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &depth) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long_ex(depth);
+	SWFButtonRecord_setDepth(getButtonRecord(getThis() TSRMLS_CC), Z_LVAL_PP(depth));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::setBlendMode(int mode)
+   assigns a blend mode to a button's character */
+PHP_METHOD(swfbuttonrecord, setBlendMode)
+{
+	zval **mode;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &mode) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long_ex(mode);
+	SWFButtonRecord_setBlendMode(getButtonRecord(getThis() TSRMLS_CC), Z_LVAL_PP(mode));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::move(float x, float y)
+   relative placement */
+PHP_METHOD(swfbuttonrecord, move)
+{
+	zval **x, **y;
+
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &x, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(x);
+	convert_to_double_ex(y);
+	SWFButtonRecord_move(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::moveTo(float x, float y)
+   absolute placement */
+PHP_METHOD(swfbuttonrecord, moveTo)
+{
+	zval **x, **y;
+
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &x, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(x);
+	convert_to_double_ex(y);
+	SWFButtonRecord_moveTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::rotate(float deg)
+   relative rotation */
+PHP_METHOD(swfbuttonrecord, rotate)
+{
+	zval **deg;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &deg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(deg);
+	SWFButtonRecord_rotate(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(deg));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::rotateTo(float deg)
+   absolute rotation */
+PHP_METHOD(swfbuttonrecord, rotateTo)
+{
+	zval **deg;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &deg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(deg);
+	SWFButtonRecord_rotateTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(deg));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::scale(float x, float y)
+   relative scaling */
+PHP_METHOD(swfbuttonrecord, scale)
+{
+	zval **x, **y;
+
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &x, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(x);
+	convert_to_double_ex(y);
+	SWFButtonRecord_scale(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::scaleTo(float x, float y)
+   absolute scaling */
+PHP_METHOD(swfbuttonrecord, scaleTo)
+{
+	zval **x, **y;
+
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &x, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(x);
+	convert_to_double_ex(y);
+	SWFButtonRecord_scaleTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+}
+/* }}} */
+
+
+/* {{{ proto void swfbuttoncharacter::skewX(float x) */
+PHP_METHOD(swfbuttonrecord, skewX)
+{
+	zval **x;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &x) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(x);
+	SWFButtonRecord_skewX(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::skewXTo(float x) */
+PHP_METHOD(swfbuttonrecord, skewXTo)
+{
+	zval **x;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &x) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(x);
+	SWFButtonRecord_skewXTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::skewY(float y) */
+PHP_METHOD(swfbuttonrecord, skewY)
+{
+	zval **y;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(y);
+	SWFButtonRecord_skewY(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+}
+/* }}} */
+
+/* {{{ proto void swfbuttoncharacter::skewYTo(float y) */
+PHP_METHOD(swfbuttonrecord, skewYTo)
+{
+	zval **y;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_double_ex(y);
+	SWFButtonRecord_skewYTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+}
+/* }}} */
+
+static zend_function_entry swfbuttonrecord_functions[] = {
+	PHP_ME(swfbuttonrecord, setDepth,   NULL, 0)
+	PHP_ME(swfbuttonrecord, setBlendMode,  NULL, 0)
+	PHP_ME(swfbuttonrecord, move,  NULL, 0)
+	PHP_ME(swfbuttonrecord, moveTo,  NULL, 0)
+	PHP_ME(swfbuttonrecord, rotate,  NULL, 0)
+	PHP_ME(swfbuttonrecord, rotateTo,  NULL, 0)
+	PHP_ME(swfbuttonrecord, scale,  NULL, 0)
+	PHP_ME(swfbuttonrecord, scaleTo,  NULL, 0)
+	PHP_ME(swfbuttonrecord, skewX,  NULL, 0)
+	PHP_ME(swfbuttonrecord, skewXTo,  NULL, 0)
+	PHP_ME(swfbuttonrecord, skewY,  NULL, 0)
+	PHP_ME(swfbuttonrecord, skewYTo,  NULL, 0)
+	{ NULL, NULL, NULL }
+};
+#endif
+
 /* {{{ SWFButton
 */
 /* {{{ proto void swfbutton::__construct()
@@ -615,9 +829,37 @@ PHP_METHOD(swfbutton, addShape)
 /* }}} */
 
 #ifdef HAVE_NEW_MING
+/* {{{ proto swfbuttonrecord swfbutton::addCharacter(object SWFCharacter, int flags)
+   Sets the character to display for the condition described in flags */
+PHP_METHOD(swfbutton, addCharacter)
+{
+	zval **zchar, **flags;
+	SWFButtonRecord record;
+	SWFButton button = getButton(getThis() TSRMLS_CC);
+	SWFCharacter character;
+	int ret;
+
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &zchar, &flags) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	convert_to_object_ex(zchar);
+	character = getCharacter(*zchar TSRMLS_CC);
+	convert_to_long_ex(flags);
+	record = SWFButton_addCharacter(button, character, BYTE_Z_LVAL_PP(flags));
+
+	if(record != NULL)
+	{
+		ret = zend_list_insert(record, le_swfbuttonrecordp);
+		object_init_ex(return_value, buttonrecord_class_entry_ptr);
+		add_property_resource(return_value, "buttonrecord", ret);
+		zend_list_addref(ret);
+	}
+}
+/* }}} */
+
 /* {{{ proto void swfbutton::setMenu(int flag)
 	enable track as menu button behaviour */
-
 PHP_METHOD(swfbutton, setMenu)
 {
 	zval **zflag;
@@ -770,6 +1012,7 @@ static zend_function_entry swfbutton_functions[] = {
 	PHP_ME(swfbutton, addAction,     NULL, 0)
 #ifdef HAVE_NEW_MING
 	PHP_ME(swfbutton, addSound,      NULL, 0)
+	PHP_ME(swfbutton, addCharacter,  NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
@@ -4387,6 +4630,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry fontchar_class_entry;
 	zend_class_entry soundinstance_class_entry;
 	zend_class_entry videostream_class_entry;
+	zend_class_entry buttonrecord_class_entry;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	zend_class_entry prebuiltclip_class_entry;
@@ -4517,6 +4761,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfsoundp = zend_register_list_destructors_ex(destroy_SWFSound_resource, NULL, "SWFSound", module_number);
 #ifdef HAVE_NEW_MING
 	le_swffontcharp = zend_register_list_destructors_ex(NULL, NULL, "SWFFontCharacter", module_number);
+	le_swfbuttonrecordp = zend_register_list_destructors_ex(NULL, NULL, "SWFButtonRecord", module_number);
 	le_swfsoundinstancep = zend_register_list_destructors_ex(NULL, NULL, "SWFSoundInstance", module_number);
 	le_swfvideostreamp = zend_register_list_destructors_ex(destroy_SWFVideoStream_resource, NULL, "SWFVideoStream", module_number);
 #endif
@@ -4541,6 +4786,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(sound_class_entry, "SWFSound", swfsound_functions);
 #ifdef HAVE_NEW_MING
 	INIT_CLASS_ENTRY(fontchar_class_entry, "SWFFontChar", swffontchar_functions);
+	INIT_CLASS_ENTRY(buttonrecord_class_entry, "SWFButtonRecord", swfbuttonrecord_functions);
 	INIT_CLASS_ENTRY(soundinstance_class_entry, "SWFSoundInstance", swfsoundinstance_functions);
 	INIT_CLASS_ENTRY(videostream_class_entry, "SWFVideoStream", swfvideostream_functions);
 #endif
@@ -4567,6 +4813,7 @@ PHP_MINIT_FUNCTION(ming)
 	sound_class_entry_ptr = zend_register_internal_class(&sound_class_entry TSRMLS_CC);
 #ifdef HAVE_NEW_MING
 	fontchar_class_entry_ptr = zend_register_internal_class(&fontchar_class_entry TSRMLS_CC);
+	buttonrecord_class_entry_ptr = zend_register_internal_class(&buttonrecord_class_entry TSRMLS_CC);
 	soundinstance_class_entry_ptr = zend_register_internal_class(&soundinstance_class_entry TSRMLS_CC);
 	videostream_class_entry_ptr = zend_register_internal_class(&videostream_class_entry TSRMLS_CC);
 #endif

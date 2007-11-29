@@ -257,7 +257,23 @@ PHP_METHOD(swfbutton, addAction);
 
 #ifdef HAVE_NEW_MING
 PHP_METHOD(swfbutton, addSound);
+PHP_METHOD(swfbutton, addCharacter);
 #endif
+
+/* SWFButtonRecord */
+
+PHP_METHOD(swfbuttonrecord, setDepth);
+PHP_METHOD(swfbuttonrecord, setBlendMode);
+PHP_METHOD(swfbuttonrecord, move);
+PHP_METHOD(swfbuttonrecord, moveTo);
+PHP_METHOD(swfbuttonrecord, rotate);
+PHP_METHOD(swfbuttonrecord, rotateTo);
+PHP_METHOD(swfbuttonrecord, scale);
+PHP_METHOD(swfbuttonrecord, scaleTo);
+PHP_METHOD(swfbuttonrecord, skewX);
+PHP_METHOD(swfbuttonrecord, skewXTo);
+PHP_METHOD(swfbuttonrecord, skewY);
+PHP_METHOD(swfbuttonrecord, skewYTo);
 
 /* SWFAction */
 
