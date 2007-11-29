@@ -15,9 +15,11 @@ C_PROGS =		\
 
 if USE_CXX
 CXX_PROGS =		\
-	test01-cxx	
+	test01-cxx	\
+	test02-cxx	
 
 test01_cxx_SOURCES = test01-cxx.C
+test02_cxx_SOURCES = test02-cxx.C
 endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
