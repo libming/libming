@@ -1,0 +1,87 @@
+File version: 5
+File size: 125
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 34
+
+ ShapeID: 1
+ RECT:  (-10,-10)x(2010,810):12
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 0
+ RGBA: (ff,ff, 0,ff)
+ LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyle:  Width: 20
+ RGBA: (ff, 0, 0,ff)
+ NumFillBits: 1
+ NumLineBits: 1
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
+  StateFillStyle0: 0 StateMoveTo: 0
+   LineStyle: 1
+   FillStyle1: 1
+ Straight EdgeRecord: (10) - (2000, 0)
+ Straight EdgeRecord: (9) - (0, 800)
+ Straight EdgeRecord: (10) - (-2000, -800)
+  ENDSHAPE
+
+Offset: 56 (0x0038)
+Block type: 34 (SWF_DEFINEBUTTON2)
+Block length: 52
+
+ CharacterID: 2
+ TrackAsMenu: 0
+ ActionOffset: 0
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
+  CharacterID: 1
+  PlaceDepth: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 0   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 0
+  CharacterID: 1
+  PlaceDepth: 2
+  Matrix:
+   ScaleX 0.984802 ScaleY 0.984802
+   RotateSkew0 -0.173660 RotateSkew1 0.173645
+   TranslateX    400 TranslateY      0
+  ColorTransForm:
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 0   ButtonStateDown: 1   ButtonStateOver: 0   ButtonStateUp: 0
+  CharacterID: 1
+  PlaceDepth: 3
+  Matrix:
+   ScaleX 0.939682 ScaleY 0.939682
+   RotateSkew0 -0.342026 RotateSkew1 0.342010
+   TranslateX    800 TranslateY      0
+  ColorTransForm:
+
+Offset: 110 (0x006e)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 9
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterId: 2
+  Matrix:
+   TranslateX   1000 TranslateY   2000
+
+Offset: 121 (0x0079)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 123 (0x007b)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
