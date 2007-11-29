@@ -248,3 +248,11 @@ void
 SWFShape_drawCircle(shape, r)
         SWF::Shape shape
         float r
+
+void SWFShape_setLine(shape, w, r, g, b, a=0xff)
+	SWF::Shape shape
+	int w
+	unsigned char r
+	unsigned char g
+	unsigned char b
+	unsigned char a

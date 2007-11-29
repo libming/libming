@@ -27,13 +27,6 @@ sub setRightFill{
     return $self->xs_setRightFill($self->addSolidFill(@_));
 }
 
-sub setLine{
-    my $self = shift;
-
-    return $self->setLineStyle(0, 0, 0, 0) unless scalar @_;
-    $self->setLineStyle(@_);
-}
-
 1;
 
 __END__
