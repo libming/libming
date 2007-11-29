@@ -34,6 +34,7 @@ typedef SWFSoundStream     SWF__SoundStream;
 typedef SWFVideoStream	   SWF__VideoStream;
 typedef SWFPrebuiltClip	   SWF__PrebuiltClip;
 typedef SWFFontCharacter   SWF__FontCharacter;
+typedef SWFButtonRecord    SWF__ButtonRecord;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef

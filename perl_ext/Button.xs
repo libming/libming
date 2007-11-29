@@ -72,6 +72,41 @@ SWFButton_addShape(button, character, flags=0)
        }
 
 
+SWF::ButtonRecord
+SWFButton_addCharacter(button, character, flags=0)
+	SWF::Button	button
+	SWF::Character	character = NO_INIT
+	byte	flags
+        ALIAS:
+        SWF::Button::setOver   = 1
+        SWF::Button::setHit    = 2
+        SWF::Button::setUp     = 3
+        SWF::Button::setDown   = 4
+        CODE:
+        character = (SWF__Character) SvIV((SV*)SvRV(ST(1)));
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+        switch((ix = XSANY.any_i32)) {
+            case 0:
+               RETVAL = SWFButton_addCharacter(button, character, flags);
+               break;
+            case 1:
+               RETVAL = SWFButton_addCharacter(button, character, SWFBUTTON_OVER);
+               break;
+            case 2:
+               RETVAL = SWFButton_addCharacter(button, character, SWFBUTTON_HIT);
+               break;
+            case 3:
+               RETVAL = SWFButton_addCharacter(button, character, SWFBUTTON_UP);
+               break;
+            case 4:
+               RETVAL = SWFButton_addCharacter(button, character, SWFBUTTON_DOWN);
+               break;
+       }
+       ST(0) = sv_newmortal();
+       sv_setref_pv(ST(0), "SWF::ButtonRecord", (void*)RETVAL);
+
+
+
 void
 SWFButton_addAction(button, action, flags=SWFBUTTON_MOUSEUP)
 	SWF::Button	button

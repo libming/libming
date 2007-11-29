@@ -13,9 +13,9 @@ use Carp 'croak';
 require DynaLoader;
 @SWF::ISA = qw(DynaLoader);
 
-$SWF::VERSION = '0.4.0-beta6_02';
+$SWF::VERSION = '0.4.0-beta6';
 
-my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie MovieClip PrebuiltClip Shape Sound Text TextField FontCharacter);
+my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie MovieClip PrebuiltClip Shape Sound Text TextField FontCharacter ButtonRecord);
 
 bootstrap SWF $SWF::VERSION;
 

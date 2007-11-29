@@ -52,7 +52,8 @@ my @SWF_MODULES_NAMES = (
 	'TextField',
 	'VideoStream',
 	'PrebuiltClip',
-	'FontCharacter'
+	'FontCharacter',
+	'ButtonRecord'
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;

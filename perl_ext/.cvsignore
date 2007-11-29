@@ -28,3 +28,4 @@ Text.c
 TextField.c
 VideoStream.c
 FontCharacter.c
+ButtonRecord.c
