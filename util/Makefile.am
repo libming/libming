@@ -45,7 +45,6 @@ libutil_la_SOURCES =	\
 	action.c	\
 	blocktypes.c	\
 	decompile.c	\
-	main.c		\
 	parser.c	\
 	read.c 
 
@@ -64,38 +63,38 @@ noinst_HEADERS = \
 	swfoutput.h	\
 	swftypes.h
 
-listswf_SOURCES = outputtxt.c
+listswf_SOURCES = outputtxt.c main.c	
 listswf_LDADD = libutil.la $(top_builddir)/src/libming.la
 listswf_CFLAGS = -DNODECOMPILE
 
-listswf_d_SOURCES = outputtxt.c
+listswf_d_SOURCES = outputtxt.c main.c
 listswf_d_LDADD = libutil.la $(top_builddir)/src/libming.la
 
-swftophp_SOURCES = outputscript.c
+swftophp_SOURCES = outputscript.c main.c
 swftophp_LDADD = libutil.la $(top_builddir)/src/libming.la
 swftophp_CFLAGS = -DSWFPHP
 
-swftoperl_SOURCES = outputscript.c
+swftoperl_SOURCES = outputscript.c main.c
 swftoperl_LDADD = libutil.la $(top_builddir)/src/libming.la
 swftoperl_CFLAGS = -DSWFPERL
 
-swftopython_SOURCES = outputscript.c
+swftopython_SOURCES = outputscript.c main.c
 swftopython_LDADD = libutil.la $(top_builddir)/src/libming.la
 swftopython_CFLAGS = -DSWFPYTHON
 
-swftocxx_SOURCES = outputscript.c
+swftocxx_SOURCES = outputscript.c main.c
 swftocxx_LDADD = libutil.la $(top_builddir)/src/libming.la
 swftocxx_CFLAGS = -DSWFPLUSPLUS
 
-swftotcl_SOURCES = outputscript.c
+swftotcl_SOURCES = outputscript.c main.c
 swftotcl_LDADD = libutil.la $(top_builddir)/src/libming.la
 swftotcl_CFLAGS = -DSWFTCL
 
-listaction_SOURCES = outputtxt.c
+listaction_SOURCES = outputtxt.c main.c
 listaction_LDADD = libutil.la $(top_builddir)/src/libming.la
 listaction_CFLAGS = -DACTIONONLY -DNODECOMPILE
 
-listaction_d_SOURCES = outputtxt.c
+listaction_d_SOURCES = outputtxt.c main.c
 listaction_d_LDADD = libutil.la $(top_builddir)/src/libming.la
 listaction_d_CFLAGS = -DACTIONONLY 
 
@@ -111,8 +110,9 @@ listmp3_LDADD = $(top_builddir)/src/libming.la
 listjpeg_SOURCES = listjpeg.c
 listjpeg_LDADD = $(top_builddir)/src/libming.la
 
-makefdb_SOURCES = outputfdb.c
+makefdb_SOURCES = outputfdb.c main.c
 makefdb_LDADD = libutil.la $(top_builddir)/src/libming.la
+makefdb_CFLAGS = -DMAKE_FDB
 
 gif2mask_SOURCES = gif2mask.c
 gif2mask_LDADD = $(top_builddir)/src/libming.la

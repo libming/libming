@@ -177,7 +177,13 @@ cws2fws(FILE *f, uLong outsize)
 
 static void usage(char *prog)
 {
+#ifdef MAKE_FDB
+	fprintf(stderr,"%s: [-v] inputfile\n", prog);
+	fprintf(stderr,"<inputfile> should be a swf files containing font blocks (DEFINEFONT2).\n");
+	fprintf(stderr,"For every fontblock found a .fdb file is wirtten with the associated font name.\n\n");
+#else
 	fprintf(stderr,"%s: [-v] inputfile [swftargetfile]\n", prog);
+#endif
 }
 
 int
