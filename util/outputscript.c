@@ -709,12 +709,18 @@ outputSWF_BUTTONRECORD( SWF_BUTTONRECORD *brec, char *bname)
 {
   int notFirst = 0;
   char cname[64];
+  char brname[64];
   //char buttonstates[64];
 
   OUT_BEGIN_EMPTY (SWF_BUTTONRECORD);
 
   sprintf(cname, "character%d", brec->CharacterId);
-  printf ("%s(" VAR "%s,", methodcall(bname, "addCharacter"), cname);
+  sprintf(brname, "c%dbr%d", brec->CharacterId, brec->PlaceDepth);
+
+  //printf ("%s(" VAR "%s,", methodcall(bname, "addCharacter"), cname);
+  printf ( DECLOBJ(ButtonRecord) "%s = %s(" VAR "%s,",
+        brname, methodcall(bname, "addCharacter"), cname);
+
   if (brec->ButtonStateHitTest)
   {
     if (notFirst)
@@ -744,6 +750,9 @@ outputSWF_BUTTONRECORD( SWF_BUTTONRECORD *brec, char *bname)
     notFirst = 1;
   }
   printf (")"STMNTEND"\n");
+
+  // ButtonRecord uses same transformation function names as DisplayItem, so this should work.
+  outputSWF_MATRIX(&brec->PlaceMatrix, brname);
 }
 
 void
