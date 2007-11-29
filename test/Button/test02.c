@@ -6,7 +6,8 @@ int main()
 
 	SWFShape s = newSWFShape();
 	SWFShape_setLine(s, 1, 255, 0, 0, 255);
-	SWFShape_addSolidFill(s, 255, 255, 0, 255);
+	SWFFillStyle fill = newSWFSolidFillStyle(255, 255, 0, 255);
+	SWFShape_setRightFillStyle(s, fill);
 	SWFShape_drawLine(s, 100, 0);
 	SWFShape_drawLine(s, 0, 40);
 	SWFShape_drawLineTo(s, 0, 0);
