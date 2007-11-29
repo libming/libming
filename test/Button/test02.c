@@ -5,16 +5,16 @@ int main()
 	SWFMovie m = newSWFMovie();
 
 	SWFShape s = newSWFShape();
-	SWFShape_setLine(s, 20, 255, 0, 0, 255);
+	SWFShape_setLine(s, 1, 255, 0, 0, 255);
 	SWFShape_addSolidFill(s, 255, 255, 0, 255);
 	SWFShape_drawLine(s, 100, 0);
 	SWFShape_drawLine(s, 0, 40);
 	SWFShape_drawLineTo(s, 0, 0);
 
 	SWFButton b = newSWFButton();
-	SWFButton br1 = newSWFButtonRecord();
-	SWFButton br2 = newSWFButtonRecord();
-	SWFButton br3 = newSWFButtonRecord();
+	SWFButtonRecord br1;
+	SWFButtonRecord br2;
+	SWFButtonRecord br3;
 
 	br1 = SWFButton_addCharacter(b, (SWFCharacter)s, SWFBUTTON_HIT|SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
 
