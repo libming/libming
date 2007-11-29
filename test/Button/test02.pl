@@ -18,7 +18,7 @@ my $m = new SWF::Movie;
 
 my $s = new SWF::Shape;
 #$s->addSolidFill(255, 255, 0,255);
-$s->setLine(20, 255, 0, 0, 255);
+$s->setLine(1, 255, 0, 0, 255);
 $s->setRightFill(255, 255, 0, 255);
 $s->drawLine(100, 0);
 $s->drawLine(0, 40);
