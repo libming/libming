@@ -16,7 +16,8 @@ SUBDIRS = Movie \
 	TextField \
 	PrebuiltClip \
 	Button	\
-	Action
+	Action	\
+	Sound
 
 EXTRA_DIST = \
 	dotests.pl \

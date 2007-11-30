@@ -381,6 +381,7 @@ AC_OUTPUT([
 	test/PrebuiltClip/Makefile
 	test/Button/Makefile
 	test/Action/Makefile
+	test/Sound/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config
