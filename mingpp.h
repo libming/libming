@@ -485,7 +485,10 @@ class SWFDisplayItem
 
   void setMaskLevel(int level)
     { SWFDisplayItem_setMaskLevel(this->item, level); }
- 
+  
+  void flush()
+    { SWFDisplayItem_flush(this->item); }
+
  private:
   SWFDisplayItem(c_SWFDisplayItem item)
     { this->item = item; }
