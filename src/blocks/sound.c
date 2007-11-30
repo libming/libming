@@ -24,6 +24,7 @@
 
 #include "outputblock.h"
 #include "sound.h"
+#include "soundstream.h"
 #include "character.h"
 #include "method.h"
 #include "input.h"
@@ -41,12 +42,22 @@ struct SWFSound_s
 
 	SWFInput input;
 	byte *data;
+	struct SWFSoundStream_s *soundStream;
 };
 
 
 int
 getMP3Size(SWFInput input);
 
+int
+SWFSoundStream_getFlags(SWFSoundStream stream);
+
+int
+getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock);
+
+void
+writeSWFSoundWithSoundStreamToMethod(SWFSoundStream stream,
+	SWFByteOutputMethod method, void *data);
 
 static int
 soundDataSize(SWFSound sound)
@@ -143,6 +154,27 @@ completeDefineSWFSoundBlock(SWFBlock block)
 
 
 void
+writeSWFSoundWithSoundStreamToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
+{
+	SWFSound sound = (SWFSound)block;
+
+	methodWriteUInt16(CHARACTERID(sound), method, data);
+	method(sound->flags, data);
+
+	writeSWFSoundWithSoundStreamToMethod(sound->soundStream, method, data);
+}
+
+
+int
+completeDefineSWFSoundWithSoundStreamBlock(SWFBlock block)
+{
+	SWFSound sound = (SWFSound)block;
+
+	return getSWFSoundStreamLength(sound->soundStream, 0) + 9;
+}
+
+
+void
 destroySWFSound(SWFSound sound)
 {
 	destroySWFCharacter((SWFCharacter) sound);
@@ -184,6 +216,31 @@ newSWFSound_fromInput(SWFInput input, byte flags)
 
 	sound->input = input;
 	sound->flags = flags;
+	sound->soundStream = 0;
+
+	return sound;
+}
+
+
+SWFSound
+newSWFSound_fromSoundStream(SWFSoundStream stream)
+{
+	SWFSound sound = (SWFSound)malloc(sizeof(struct SWFSound_s));
+	SWFBlock block = (SWFBlock)sound;
+
+	SWFCharacterInit((SWFCharacter)sound);
+
+	CHARACTERID(sound) = ++SWF_gNumCharacters;
+
+	block->type = SWF_DEFINESOUND;
+
+	block->writeBlock = writeSWFSoundWithSoundStreamToStream;
+	block->complete = completeDefineSWFSoundWithSoundStreamBlock;
+	block->dtor = (destroySWFBlockMethod) destroySWFSound;
+
+	sound->input = 0;
+	sound->flags = SWFSoundStream_getFlags(stream);
+	sound->soundStream = stream;
 
 	return sound;
 }

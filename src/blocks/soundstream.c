@@ -22,11 +22,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <limits.h>
 
 #include "block.h"
 #include "soundstream.h"
 #include "output.h"
 #include "outputblock.h"
+#include "character.h"
 #include "sound.h"
 #include "method.h"
 #include "input.h"
@@ -396,7 +398,6 @@ getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 	else
 		channels = SWF_SOUNDSTREAM_STEREO;
 
-	/* XXX - this is a gross oversimplification */
 	switch ( flags & MP3_VERSION )
 	{
 		case MP3_VERSION_1:
@@ -487,6 +488,62 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	SWFOutput_writeUInt16(out, SWFSOUND_INITIAL_DELAY);
 	
 	return (SWFBlock)block;
+}
+
+
+int
+SWFSoundStream_getFlags(SWFSoundStream stream)
+{
+	if(stream->streamSource == STREAM_MP3)
+		return getStreamFlag_mp3File(stream, 1.0f, 0);
+	else if(stream->streamSource == STREAM_FLV)
+		return getStreamFlag_flv(stream, 1.0f, 0);
+	return 0;
+}
+
+
+int
+getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock)
+{
+	int source = stream->streamSource;
+	struct SWFSoundStreamBlock_s block;
+
+	if (streamblock == 0)
+		streamblock = &block;
+		
+	streamblock->stream = stream;
+	streamblock->length = 0;
+	streamblock->numFrames = 0;
+	stream->delay = INT_MAX - stream->samplesPerFrame - 1;
+	if(source == STREAM_MP3) {
+		fillStreamBlock_mp3(stream, streamblock);
+		streamblock->length = SWFInput_length(stream->source.mp3.input);
+	} else if(source == STREAM_FLV) {
+		FLVTag *tag = &stream->source.flv.tag; 
+		FLVTag_getPayloadInput(tag);
+		fillStreamBlock_flv(stream, streamblock);
+	}
+	return streamblock->length;
+}
+
+
+void
+writeSWFSoundWithSoundStreamToMethod(SWFSoundStream stream,
+                            SWFByteOutputMethod method, void *data)
+{
+	int source = stream->streamSource;
+	struct SWFSoundStreamBlock_s streamblock;
+
+	getSWFSoundStreamLength(stream, &streamblock);
+
+	methodWriteUInt32(streamblock.numFrames *
+		(stream->sampleRate > 32000 ? 1152 : 576), method, data);
+
+	methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);
+	if(source == STREAM_MP3)
+		write_mp3(&streamblock, method, data);
+	else if(source == STREAM_FLV)
+		write_flv(&streamblock, method, data);
 }
 
 
