@@ -189,6 +189,7 @@ int SWFMatrix_getTranslateY(SWFMatrix m);
 /* A generic input object.  Wraps files, buffers and streams; replaces
    standard file funcs */
 SWFInput newSWFInput_file(FILE *f);
+SWFInput newSWFInput_filename(const char *);
 SWFInput newSWFInput_stream(FILE *f);
 SWFInput newSWFInput_buffer(unsigned char *buffer, int length);
 SWFInput newSWFInput_allocedBuffer(unsigned char *buffer, int length);

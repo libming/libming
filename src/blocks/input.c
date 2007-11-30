@@ -332,6 +332,34 @@ newSWFInput_file(FILE *f)
 	return input;
 }
 
+static void SWFInput_dtor_close(SWFInput input)
+{
+	fclose((FILE *)input->data);
+	SWFInput_dtor(input);
+}
+
+
+SWFInput
+mewSWFInput_filename(const char *filename)
+{
+	FILE *file;
+	SWFInput input;
+	
+	file = fopen(filename, "rb");
+	if(file == NULL)
+	{
+		SWF_warn("mewSWFInput_filename: fopen failed\n");
+		return NULL;
+	}
+
+	input = newSWFInput_file(file);
+	if(input == NULL)
+		return NULL;
+
+	input->destroy = SWFInput_dtor_close;
+	return input;
+}
+
 
 /* SWFInput_buffer */
 
