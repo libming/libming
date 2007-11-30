@@ -340,7 +340,7 @@ static void SWFInput_dtor_close(SWFInput input)
 
 
 SWFInput
-mewSWFInput_filename(const char *filename)
+newSWFInput_filename(const char *filename)
 {
 	FILE *file;
 	SWFInput input;
