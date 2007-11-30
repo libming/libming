@@ -168,9 +168,20 @@ class SWFCharacter : public SWFBlock
 /*  SWFFontCharacter */
 class SWFFontCharacter : public SWFCharacter
 {
+ friend class SWFMovie;
  public:
   c_SWFFontCharacter fontcharacter;
+  
+  void addChars(const char *str)
+    { SWFFontCharacter_addChars(this->fontcharacter, str); }
 
+  void addUTF8Chars(const char *str)
+    { SWFFontCharacter_addUTF8Chars(this->fontcharacter, str); }
+
+  void addAllChars()
+    { SWFFontCharacter_addAllChars(this->fontcharacter); }
+
+ private:
   SWFFontCharacter(c_SWFFontCharacter fontcharacter)
   { 
 	this->fontcharacter = fontcharacter; 
