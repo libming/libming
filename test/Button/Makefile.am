@@ -17,10 +17,12 @@ C_PROGS =		\
 if USE_CXX
 CXX_PROGS =		\
 	test01-cxx	\
-	test02-cxx	
+	test02-cxx	\
+	test03-cxx	
 
 test01_cxx_SOURCES = test01-cxx.C
 test02_cxx_SOURCES = test02-cxx.C
+test03_cxx_SOURCES = test03-cxx.C
 endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
