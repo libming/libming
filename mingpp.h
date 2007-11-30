@@ -393,15 +393,12 @@ private:
 
 class SWFDisplayItem
 {
+ friend class SWFMovie;
+ friend class SWFMovieClip;
+ friend class SWFSprite;
  public:
   c_SWFDisplayItem item;
-
-  SWFDisplayItem(c_SWFDisplayItem item)
-    { this->item = item; }
-
-  virtual ~SWFDisplayItem()
-    { }
-
+ 
   void rotate(float degrees)
     { SWFDisplayItem_rotate(this->item, degrees); }
 
@@ -488,6 +485,13 @@ class SWFDisplayItem
 
   void setMaskLevel(int level)
     { SWFDisplayItem_setMaskLevel(this->item, level); }
+ 
+ private:
+  SWFDisplayItem(c_SWFDisplayItem item)
+    { this->item = item; }
+
+  virtual ~SWFDisplayItem()
+    { }
 
   SWF_DECLAREONLY(SWFDisplayItem);
   SWFDisplayItem();
