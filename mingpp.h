@@ -532,19 +532,39 @@ class SWFSound
   c_SWFSound sound;
 
   SWFSound(FILE *file, int flags)
-    { this->sound = newSWFSound(file, flags); }
+  { 
+	filep = NULL;
+	this->sound = newSWFSound(file, flags); 
+  }
 
   SWFSound(SWFInput *input, int flags)
-    { this->sound = newSWFSound_fromInput(input->input, flags); }
+  {
+	this->sound = newSWFSound_fromInput(input->input, flags); 
+	filep = NULL;
+  }
 
   SWFSound(char *filename, int flags)
-    { this->sound = newSWFSound(fopen(filename, "rb"), flags); }
+  { 
+	filep = fopen(filename, "rb");
+	this->sound = newSWFSound(filep, flags); 
+  }
   
   SWFSound(SWFSoundStream *stream)
-    { this->sound = newSWFSound_fromSoundStream(stream->sound); }
+  { 
+	this->sound = newSWFSound_fromSoundStream(stream->sound); 
+	filep = NULL;
+  }
 
   virtual ~SWFSound()
-    { destroySWFSound(this->sound); }
+  {
+	if(filep)
+		fclose(filep); 
+	destroySWFSound(this->sound); 
+  }
+ 
+ private:
+    FILE *filep;
+
   SWF_DECLAREONLY(SWFSound);
   SWFSound();
 };
