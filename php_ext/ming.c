@@ -2253,11 +2253,16 @@ PHP_METHOD(swfvideostream, __construct)
 			if(Z_TYPE_PP(zfile) != IS_RESOURCE)
   			{
 			    convert_to_string_ex(zfile);
-			    input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+			    if(strcasecmp(".flv", Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4) == 0)
+				input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+			    else // keep fingers crossed that it is file_get_contents() 
+				input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile)); 
 			    zend_list_addref(zend_list_insert(input, le_swfinputp));
   			}
   			else
+			{
 			    input = getInput(zfile TSRMLS_CC);
+			}
 		
 			stream = newSWFVideoStream_fromInput(input);
 			break;
