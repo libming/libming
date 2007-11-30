@@ -539,6 +539,9 @@ class SWFSound
 
   SWFSound(char *filename, int flags)
     { this->sound = newSWFSound(fopen(filename, "rb"), flags); }
+  
+  SWFSound(SWFSoundStream *stream)
+    { this->sound = newSWFSound_fromSoundStream(stream->sound); }
 
   virtual ~SWFSound()
     { destroySWFSound(this->sound); }
