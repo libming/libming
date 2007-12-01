@@ -1,3 +1,350 @@
+2007-12-01 05:04  peterdd
+
+	* perl_ext/MANIFEST: add SWF/ButtonRecord.pm, remove autoappended
+	  META.yml from cvs sources
+
+2007-12-01 04:59  peterdd
+
+	* perl_ext/SWF.pm: help CPAN analyzing the module
+
+2007-12-01 04:53  peterdd
+
+	* perl_ext/: Changes, README: rewrite of the installation
+	  procedure, comment in Changes
+
+2007-12-01 02:49  peterdd
+
+	* perl_ext/Makefile.am: pass configure prefix to Makefile.PL
+	  PREFIX, fix EXTRA_DIST
+
+2007-11-30 20:05  peterdd
+
+	* test/Media/150bpm.wav: a 44.1kHz stereo uncompressed PCM sample
+	  for sound, loops, envelope tests
+
+2007-11-30 17:55  krechert
+
+	* mingpp.h: don't leak file pointer
+
+2007-11-30 17:53  krechert
+
+	* configure.in, test/Makefile.am, test/Sound/Makefile.am,
+	  test/Sound/TestList, test/Sound/test01-cxx.C,
+	  test/Sound/test01.c, test/Sound/test01.ref,
+	  test/Sound/test02-cxx.C, test/Sound/test02.c,
+	  test/Sound/test02.ref: testcases for SWFSound with SoundStream.
+	  submitted by sakamotosplhack@sf.net
+	  http://sourceforge.net/tracker/index.php?func=detail&aid=1824403&group_id=18365&atid=118365
+
+2007-11-30 17:36  krechert
+
+	* mingpp.h: SWFSound from SoundStream (C++ wrapper)
+
+2007-11-30 17:35  krechert
+
+	* src/: ming.h.in, blocks/sound.c, blocks/soundstream.c:
+	  newSWFSound_fromSoundStream(SWFSoundStream stream); submitted by
+	  sakamotosplhack@sf.net
+	  http://sourceforge.net/tracker/index.php?func=detail&aid=1824403&group_id=18365&atid=118365
+
+2007-11-30 17:03  krechert
+
+	* php_ext/ming.c: SWFVideoStream constructor confuses most users:
+	  possible inputs were php file resource (fopen()) or a "binary
+	  string" of the file produced by get_file_contents(). Using the
+	  filename failed! This patch adds a simple and weak check for a
+	  proper file extension.
+
+2007-11-30 17:00  krechert
+
+	* test/Video/test01.php: php video testcase: init class with
+	  filename
+
+2007-11-30 16:57  krechert
+
+	* src/blocks/input.c: typo :(
+
+2007-11-30 16:46  krechert
+
+	* src/: ming.h.in, blocks/input.c: create input from filename
+
+2007-11-30 14:10  krechert
+
+	* mingpp.h: added SWFDisplayItem->flush()
+
+2007-11-30 14:03  krechert
+
+	* mingpp.h: make DisplayItem contructor and destructor private
+
+2007-11-30 13:47  krechert
+
+	* mingpp.h: add missing FontCharacter methods make FontCharacter
+	  constructor and destructor private
+
+2007-11-30 13:33  krechert
+
+	* test/Button/: .cvsignore, Makefile.am, test03-cxx.C: added c++
+	  testcase
+
+2007-11-29 19:33  peterdd
+
+	* test/Button/: .cvsignore, Makefile.am, TestList, test03.c,
+	  test03.pl, test03.ref: added test for animated button states
+
+2007-11-29 18:07  krechert
+
+	* test/Button/test02.pl: sync to new setLine()
+
+2007-11-29 18:07  krechert
+
+	* perl_ext/: Shape.xs, SWF/Shape.pm: use Shape->setLine() from
+	  shape util
+
+2007-11-29 18:00  krechert
+
+	* test/Button/: Makefile.am, test02.php: button record php testcase
+
+2007-11-29 17:48  krechert
+
+	* test/Button/: Makefile.am, test02-cxx.C: add C++ testcase
+
+2007-11-29 17:36  peterdd
+
+	* util/outputscript.c: add matrix output for ButtonRecord
+
+2007-11-29 17:35  krechert
+
+	* test/Button/test02.c: fixed fillstyle
+
+2007-11-29 17:27  krechert
+
+	* util/: Makefile.am, main.c: removed main.c from libutil sources
+	  in order. allows customizing main.c via define flags.
+
+2007-11-29 16:01  peterdd
+
+	* test/Button/test02.c: [no log message]
+
+2007-11-29 15:09  peterdd
+
+	* test/Button/: test02.c, test02.pl, test02.ref, .cvsignore,
+	  Makefile.am, TestList: add test for ButtonRecord
+
+2007-11-29 14:57  krechert
+
+	* util/: Makefile.am, ttftofft.c: this functionality is included in
+	  libming now.
+
+2007-11-29 14:54  krechert
+
+	* util/makefdb.c: this file was replaced by outputfdb.
+
+2007-11-29 12:50  krechert
+
+	* php_ext/: ming.c, php_ming.h: added ButtonRecord class to php_ext
+
+2007-11-29 01:11  krechert
+
+	* perl_ext/: .cvsignore, Button.xs, ButtonRecord.xs, Makefile.PL,
+	  Makefile.am, SWF.pm, perl_swf.h, typemap, SWF/ButtonRecord.pm:
+	  added ButtonRecord support
+
+2007-11-29 00:11  krechert
+
+	* util/parser.c: fix bug in definefontinfo[2] calculating glyph
+	  count
+
+2007-11-29 00:04  krechert
+
+	* util/parser.c: fixes DEFINEFONT block bounds and cleanup
+
+2007-11-28 21:32  akleine
+
+	* util/outputscript.c: 1. Added a setScale(1) call in top of
+	  generated file for Perl,    PHP,C++. (still to-do: Python,TCL)
+	  and removed hardcoded    division by 20.0 from setDimension()
+	  call,  because most	 output (like drawLine(), the matrix stuff
+	  etc...) uses TWIPS.	  (This Problem was first mentioned by
+	  strk at [Ming-dev], Fri, 16 Feb 2007).  2. Added some has..()
+	  -checks to outputSWF_MATRIX().  3. Added call of
+	  outputSWF_MATRIX() inside outputSWF_PLACEOBJECT2().  4. At all
+	  this gives some more useful results in swftoXXX.     (An other
+	  way would be adjusting all outputs from TWIPS to PIXEL.)
+
+2007-11-28 19:35  krechert
+
+	* configure.in: add default values to configure --help
+
+2007-11-28 19:23  krechert
+
+	* test/: Action/Makefile.am, Bitmap/Makefile.am,
+	  BrowserFont/Makefile.am, Button/Makefile.am,
+	  FillStyle/Makefile.am, Filter/Makefile.am, Font/Makefile.am,
+	  Gradient/Makefile.am, LineStyle/Makefile.am, Morph/Makefile.am,
+	  Movie/Background/Makefile.am, Movie/Dimension/Makefile.am,
+	  Movie/FrameLabel/Makefile.am, Movie/NumFrames/Makefile.am,
+	  Movie/Protect/Makefile.am, Movie/Rate/Makefile.am,
+	  Movie/add/Makefile.am, Movie/addMetadata/Makefile.am,
+	  Movie/assignSymbol/Makefile.am, Movie/defineScene/Makefile.am,
+	  Movie/importCharacter/Makefile.am, Movie/new/Makefile.am,
+	  Movie/nextFrame/Makefile.am, Movie/replace/Makefile.am,
+	  Movie/setNetworkAccess/Makefile.am,
+	  Movie/setScriptLimits/Makefile.am,
+	  Movie/setSoundStream/Makefile.am, Movie/setTabIndex/Makefile.am,
+	  MovieClip/Makefile.am, PrebuiltClip/Makefile.am,
+	  Shape/Makefile.am, Text/Makefile.am, TextField/Makefile.am,
+	  Video/Makefile.am: added USE_CXX conditional to c++ test where
+	  necessary.  removed stdc++ (global) dependecy
+
+2007-11-28 19:17  krechert
+
+	* Makefile.am: install c++-header only if c++ headers are enabled
+
+2007-11-28 19:17  krechert
+
+	* configure.in: added --enable-cpp=[yes|no] to configure
+	  (default=yes)
+
+2007-11-27 22:45  strk
+
+	* src/actiontypes.h, src/actioncompiler/swf5compiler.flex,
+	  src/actioncompiler/swf5compiler.y, test/actionscript/ASM_all.as,
+	  test/actionscript/ASM_all.ref, util/action.c: Add support for
+	  fscommand2 asm
+
+2007-11-27 19:06  krechert
+
+	* mingpp.h: added ButtonRecord class
+
+2007-11-27 18:26  peterdd
+
+	* util/outputscript.c: first step to output Buttonrecord info
+
+2007-11-27 09:55  company
+
+	* src/: blocks/button.c, ming.h.in: implement
+	  SWFButtonRecord_setDepth
+
+2007-11-26 12:45  krechert
+
+	* perl_ext/Text.xs: optional version flag for SWF::Text
+
+2007-11-26 12:40  krechert
+
+	* test/Font/: Makefile.am, test01.pl, test02.pl: perl Font/Text
+	  testcases
+
+2007-11-26 11:43  krechert
+
+	* mingpp.h: Init character member in all classes inherited from
+	  SWFCharacter.  Cleanup some code.  Fixes SF bug #1490709
+
+2007-11-26 11:41  krechert
+
+	* src/shape_util.c: handle characters with no bounds gracefully.
+	  fixes SF bug #1490709
+
+2007-11-25 15:48  krechert
+
+	* util/: outputtxt.c, parser.c: parseSWF_DEFINEBUTTONCXFORM removed
+	  unused name parameter in outputSWF_CXFROM
+	  outputSWF_DEFINEBUTTONCXFORM forward declaration of
+	  outputSWF_SOUNDINFO
+
+2007-11-25 15:40  krechert
+
+	* util/outputtxt.c: outputSWF_DEFINEBUTTONSOUND
+
+2007-11-25 15:33  krechert
+
+	* util/parser.c: removed duplicated code (parseSWF_SOUNDINFO())
+
+2007-11-25 15:25  krechert
+
+	* test/Button/test01.ref: remove warning from ref file
+
+2007-11-25 15:24  krechert
+
+	* util/parser.c: warn on possible malformed SWFs
+
+2007-11-25 13:06  akleine
+
+	* util/: outputscript.c, parser.c: continued work on buttons: added
+	  output of sound
+
+2007-11-23 21:54  akleine
+
+	* util/decompile.c: added code for SWFACTION_TOGGLEQUALITY and a
+	  minor bugfix
+
+2007-11-23 19:03  strk
+
+	* mingpp.h, src/ming.h.in: Don't base the exported interface on
+	  USE_{GIF,PNG}, don't rely on ming_config.h
+
+2007-11-23 19:03  strk
+
+	* src/blocks/Makefile.am: include pngdbl.c and gifdbl.c in lib no
+	  matter what value USE_{PNG,GIF} have
+
+2007-11-23 19:02  strk
+
+	* src/blocks/pngdbl.c: provide an implementation for the PNG
+	  interfaces even if USE_PNG is undefined, just warn and return
+	  NULL
+
+2007-11-23 19:02  strk
+
+	* src/blocks/gifdbl.c: provide an implementation for the GIF
+	  interfaces even if USE_GIF is undefined, just warn and return
+	  NULL
+
+2007-11-23 18:39  krechert
+
+	* test/Media/image01.gif: add gif image for testcases
+
+2007-11-23 18:38  krechert
+
+	* test/FillStyle/: .cvsignore, Makefile.am, TestList, test06-cxx.C,
+	  test06.c, test06.ref: add gif testcase
+
+2007-11-23 18:31  strk
+
+	* src/libming.h: include <math.h> befor echecking for availability
+	  of functions defined therein
+
+2007-11-23 18:12  krechert
+
+	* src/Makefile.am: do not distribute ming_config.h
+
+2007-11-22 21:01  akleine
+
+	* util/: outputscript.c, parser.c: swftoXXX: added initial code for
+	  handling buttons and showing button action script code
+
+2007-11-22 19:15  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix shift/reduce conflicts
+
+2007-11-22 18:33  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix reduce/reduce conflicts do
+	  not translate reserved words to identifiers
+
+2007-11-22 15:41  krechert
+
+	* test/actionscript/class_member.ref: unused membervariables were
+	  ignored
+
+2007-11-22 15:37  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.y:
+	  improved variable handling
+
+2007-11-22 13:24  krechert
+
+	* NEWS, src/displaylist.c: news update and some function docs
+
 2007-11-22 13:10  krechert
 
 	* src/: displaylist.c, displaylist.h, ming.h.in, movie.c,
