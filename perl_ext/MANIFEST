@@ -1,6 +1,7 @@
 SWF/Action.pm
 SWF/Bitmap.pm
 SWF/Button.pm
+SWF/ButtonRecord.pm
 SWF/Constants.pm
 SWF/DisplayItem.pm
 SWF/Fill.pm
@@ -28,10 +29,10 @@ t/filljpeg.t
 t/gradient.t
 t/png.t
 t/sound.t
-t/sprite.t
 Action.xs
 Bitmap.xs
 Button.xs
+ButtonRecord.xs
 CREDITS
 Changes
 Constants.xs
@@ -72,4 +73,3 @@ examples/morph.cgi
 examples/shape.cgi
 examples/sprite.cgi
 examples/text.cgi
-META.yml                                 Module meta-data (added by MakeMaker)
