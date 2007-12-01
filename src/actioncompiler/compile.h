@@ -196,6 +196,7 @@ SWFAction compileSWFActionCode(const char *script);
 Buffer newBuffer();
 void destroyBuffer(Buffer out);
 int bufferConcat(Buffer a, Buffer b);        /* destroys b. */
+int bufferConcatSimple(Buffer a, Buffer b);
 int bufferWriteBuffer(Buffer a, Buffer b);   /* doesn't. */
 
 /* utilities for writing */

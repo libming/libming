@@ -394,11 +394,11 @@ if_stmt
 		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($7)+5);
-		  bufferConcat($$, $7);
+		  bufferConcatSimple($$, $7);
 		  bufferWriteOp($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5));
-		  bufferConcat($$, $5); }
+		  bufferConcatSimple($$, $5); }
 
 	| IF '(' expr ')' stmt		%prec NOELSE
 		{ $$ = $3;
@@ -406,7 +406,7 @@ if_stmt
 		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($5));
-		  bufferConcat($$, $5); }
+		  bufferConcatSimple($$, $5); }
 	;
 
 expr_opt
@@ -1401,11 +1401,11 @@ expr
 		{ bufferWriteOp($1, SWFACTION_IF);
 		  bufferWriteS16($1, 2);
 		  bufferWriteS16($1, bufferLength($5)+5);
-		  bufferConcat($1, $5);
+		  bufferConcatSimple($1, $5);
 		  bufferWriteOp($1, SWFACTION_JUMP);
 		  bufferWriteS16($1, 2);
 		  bufferWriteS16($1, bufferLength($3));
-		  bufferConcat($1, $3); }
+		  bufferConcatSimple($1, $3); }
 
 	| lvalue '=' expr_or_obj
 		{ if($1.obj) /* obj[memexpr] or obj.ident */

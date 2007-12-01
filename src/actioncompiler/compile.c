@@ -278,6 +278,21 @@ int bufferWriteDataAndPush(Buffer a, Buffer b)
 	return length;
 }
 
+int bufferConcatSimple(Buffer a, Buffer b)
+{
+	int len = 0;
+
+	if(!a)
+		return 0;
+
+	if(b)
+	{	len = bufferWriteBuffer(a, b);
+		destroyBuffer(b);
+	}
+
+	return len;
+}
+
 int bufferConcat(Buffer a, Buffer b)
 {
 	int len = 0;
