@@ -50,7 +50,7 @@ __END__
 
 =head1 NAME
 
-SWF: an autoloadable interface module for Ming - a library for generating 
+SWF - an autoloadable interface module for Ming - a library for generating 
 ShockWave Flash format movies.
 
 =head1 SYNOPSIS
