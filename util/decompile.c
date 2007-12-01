@@ -924,10 +924,10 @@ int precedence(int op1,int op2)
 	SWFACTION_ADD,
 	SWFACTION_ADD2,
 	SWFACTION_MODULO,
-	SWFACTION_DIVIDE,
 	SWFACTION_MULTIPLY,
+	SWFACTION_DIVIDE,
 	SWFACTION_LOGICALNOT,
-	SWFACTION_PUSH
+	SWFACTION_PUSH			// FIXME: need more analysis on code after PUSH
 
  };
  unsigned char* f=memchr(ops,op1,sizeof(ops));
@@ -2285,6 +2285,7 @@ if(0)	    dumpRegs();
 	       #if USE_LIB
 		origbuf=setTempString();	/* switch to a temporary string buffer */
 	       #endif
+	       puts("(");
 	       puts(getName(pop()));
 	       puts(" ? ");
 	       decompileActions(else_action_cnt  , &actions[n+1],0);
@@ -2292,6 +2293,7 @@ if(0)	    dumpRegs();
 	       puts(" : ");
 	       decompileActions(sact->numActions-1, sact->Actions,0);
 	       puts(getName(pop()));
+	       puts(")");
 	       #if USE_LIB
 		push (newVar(dcgetstr()));	/* push for later assignment */
 		setOrigString(origbuf);		/* switch back to orig buffer */
