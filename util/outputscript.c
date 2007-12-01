@@ -715,7 +715,7 @@ outputSWF_BUTTONRECORD( SWF_BUTTONRECORD *brec, char *bname)
   OUT_BEGIN_EMPTY (SWF_BUTTONRECORD);
 
   sprintf(cname, "character%d", brec->CharacterId);
-  sprintf(brname, "c%dbr%d", brec->CharacterId, brec->PlaceDepth);
+  sprintf(brname, "%sbr%d", bname, brec->PlaceDepth);
 
   //printf ("%s(" VAR "%s,", methodcall(bname, "addCharacter"), cname);
   printf ( DECLOBJ(ButtonRecord) "%s = %s(" VAR "%s,",
