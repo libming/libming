@@ -8,9 +8,67 @@ SWF ("Flash") format movies.
 
 With this library you can create Flash movies on the fly with Perl.
 
+INSTALLATION using CPAN
+-----------------------
 
-INSTALLATION:
--------------
+This is currently not finished. So skip to 'INSTALLATION using automake'
+
+It is more a stub on CPAN to say 'Hey, here I am'.
+
+In future it should contain ming releases (c and perl parts) like DBD::SQLite, 
+so it can directly be installed over CPAN without extra efforts.
+
+
+INSTALLATION using automake
+---------------------------
+
+1. Get the sources from http://sourceforge.net/projects/ming
+
+2. Unpack the sources
+
+	   tar xvzf ming-perl-XXX.tar.gz 
+	or tar xvzf ming-perl-XXX.tar.bz2
+
+3. Change to ming root directory, not ming-perl-XXX/perl_ext:
+
+	cd ming-perl-XXX
+
+3b. When using CVS sources create the configure script if it not exists by
+
+	./autogen.sh
+
+
+4. Run the configure script
+
+	./configure --enable-perl --disable-cpp
+
+Hints: 
+   - type ./configure --help for all available options
+   - c++ is currently enabled by default
+
+Wait until this script finished successfully, else post to ming-users mailing list or bug report
+or install missing packages when this is the reason for the failure.
+
+5. Run make
+
+	make
+
+This compiles first ming itself, then language extensions and utils.
+Wait until this finished successfully, else post to ming-users mailing list or bug report
+
+6. Run make check
+	
+	make check
+
+This runs all existing tests for ming and the enabled extensions.
+When all tests pass without error go to next step, else post to ming-users mailing list or bug report
+
+7. make install
+
+
+
+INSTALLATION (old):
+---------------------
 
 Read these instructions all the way through before you start!
 
@@ -39,18 +97,25 @@ Read these instructions all the way through before you start!
 
 	b. perl Makefile.PL PREFIX=/path/to/your/directory
 
-4.  There are some cgi demos in the examples directory. THE EXAMPLES ARE NOT
-    PERLIASH (you can write it more succinctly in Perl). These examples were
-    created from PHP examples in the Ming distribution.
 
-5.  After install there is too some (still incomplete) documentation accessible by manpages.
-    E.g. type 
+
+AFTER INSTALLATION
+------------------
+
+There are a growing number of tests in several languages under the test/ directory.
+This is a good source for what can be done with ming.
+
+There are some cgi demos in the perl_ext/examples directory. THE EXAMPLES ARE NOT
+PERLIASH (you can write it more succinctly in Perl).
+
+After install there is too some (still incomplete) documentation accessible by manpages.
+E.g. type 
 		
-		man SWF
-		or
-		man SWF::Shape 
+	man SWF
+	or
+	man SWF::Shape 
 
-		Hint: The KDE file and web browser Konqueror formats manpages automatic as nice HTML-files.
+	Hint: The KDE file and web browser Konqueror formats manpages automatic as nice HTML-files.
 
 COPYRIGHT INFO
 --------------
