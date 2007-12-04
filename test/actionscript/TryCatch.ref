@@ -20,7 +20,7 @@ Block length: 72
     1 Action
     58:SWFACTION_TRY
     Offset 58
-    CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 0
+    CatchInRegisterFlag 0, FinallyBlockFlag 1, CatchBlockFlag 1
     TrySize 12
     CatchSize 7
     FinallySize 6
