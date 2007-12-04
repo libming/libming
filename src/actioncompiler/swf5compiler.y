@@ -306,7 +306,7 @@ throw_stmt
 try_catch_stmt
 	: TRY stmt					{ 	$$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, bufferLength($2)+8);
+									bufferWriteS16($$, 8);
 									bufferWriteU8($$, 0);
 									bufferWriteS16($$, bufferLength($2));
 									bufferWriteS16($$, 0);
@@ -316,8 +316,8 @@ try_catch_stmt
 								 }
 	| TRY stmt CATCH '(' identifier ')' stmt		{ $$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, bufferLength($2)+strlen($5)+bufferLength($7)+8);
-									bufferWriteU8($$, 0);
+									bufferWriteS16($$, 8+strlen($5));
+									bufferWriteU8($$, 1);
 									bufferWriteS16($$, bufferLength($2));
 									bufferWriteS16($$, bufferLength($7));
 									bufferWriteS16($$, 0);
@@ -327,19 +327,19 @@ try_catch_stmt
 								}
 	| TRY stmt FINALLY stmt		{	$$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, bufferLength($2)+bufferLength($4)+8);
-									bufferWriteU8($$, 0);
+									bufferWriteS16($$, 8);
+									bufferWriteU8($$, 2);
 									bufferWriteS16($$, bufferLength($2));
-									bufferWriteS16($$, bufferLength($4));
 									bufferWriteS16($$, 0);
+									bufferWriteS16($$, bufferLength($4));
 									bufferWriteU8($$, 0); /* catch name here? - empty string */
 									bufferConcat($$, $2);
 									bufferConcat($$, $4);
 								 }
 	| TRY stmt CATCH '(' identifier ')' stmt FINALLY stmt	{ $$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, bufferLength($2)+strlen($5)+bufferLength($7)+bufferLength($9)+8);
-									bufferWriteU8($$, 0);
+									bufferWriteS16($$, 8+strlen($5));
+									bufferWriteU8($$, 3);
 									bufferWriteS16($$, bufferLength($2));
 									bufferWriteS16($$, bufferLength($7));
 									bufferWriteS16($$, bufferLength($9));
