@@ -137,6 +137,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEFONT, outputSWF_DEFINEFONT},
   {SWF_DEFINEFONT2, outputSWF_DEFINEFONT2},
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
+  {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
   {SWF_DEFINELOSSLESS2, outputSWF_DEFINELOSSLESS2},
   {SWF_DEFINEMORPHSHAPE, outputSWF_DEFINEMORPHSHAPE},
@@ -1008,6 +1009,12 @@ outputSWF_DEFINEFONTINFO (SWF_Parserstruct * pblock)
 }
 
 void
+outputSWF_DEFINEFONTINFO2(SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN_EMPTY (SWF_DEFINEFONTINFO2);
+}
+
+void
 outputSWF_DEFINELOSSLESS (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN_EMPTY (SWF_DEFINELOSSLESS);
@@ -1511,7 +1518,7 @@ outputHeader (struct Movie *m)
 void
 outputTrailer (struct Movie *m)
 {
-  if( swftargetfile == NULL ) {
+	if( swftargetfile == NULL ) {
 #ifdef SWFPHP
 	printf ("\n\theader('Content-type: application/x-shockwave-flash');\n");
 #endif
@@ -1522,40 +1529,38 @@ outputTrailer (struct Movie *m)
 	printf ("#print('Content-type: application/x-shockwave-flash\\n\\n');\n");
 #endif
 	if( m->version > 5 ) {
- 		printf ("%s(%i);\n", methodcall ("m", "output"), 9);
+		printf ("%s(%i);\n", methodcall ("m", "output"), 9);
 	} else {
- 		printf ("%s();\n", methodcall ("m", "output"));
+		printf ("%s();\n", methodcall ("m", "output"));
 	}
-  } else {
- 	printf ("%s", methodcall ("m", "save"));
+	} else {
+	printf ("%s", methodcall ("m", "save"));
 	params (1, "\"%s\"", swftargetfile);
 	printf ( STMNTEND "\n");
-  }
+	}
 #ifdef SWFPHP
-  printf ("?>\n");
+	printf ("?>\n");
 #endif
 #ifdef SWFPLUSPLUS
-  printf ("}\n");
+	printf ("}\n");
 #endif
 }
 
 void
 outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 {
-  int i;
+	int i;
 
-  if (type < 0)
-    return;
+	if (type < 0)
+		return;
 
-  init_script();
+	init_script();
 
-  for (i = 0; i < numOutputs; i++)
-    {
-      if (outputs[i].type == type)
-	{
-	  return outputs[i].output (blockp);
+	for (i = 0; i < numOutputs; i++){
+		if (outputs[i].type == type){
+			return outputs[i].output (blockp);
+		}
 	}
-    }
-  printf("Unknown block type %d\n", type );
-  return;
+	printf( COMMSTART "Unknown block type %d" COMMEND "\n", type );
+	return;
 }
