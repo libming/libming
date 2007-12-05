@@ -968,7 +968,7 @@ if( sblock->HasLayout ) {
 	      sblock->LeftMargin);
       printf ("%s(%d);\n", methodcall (tname, "setRightMargin"),
 	      sblock->RightMargin);
-      printf ("%s(%d);\n", methodcall (tname, "setIndention"),
+      printf ("%s(%d);\n", methodcall (tname, "setIndentation"),
 	      sblock->Indent);
       printf ("%s(%d);\n", methodcall (tname, "setLineSpacing"),
 	      sblock->Leading);
