@@ -920,9 +920,9 @@ int precedence(int op1,int op2)
 	SWFACTION_SHIFTRIGHT,
 	SWFACTION_SHIFTRIGHT2,
 	SWFACTION_SHIFTLEFT,
-	SWFACTION_SUBTRACT,
 	SWFACTION_ADD,
 	SWFACTION_ADD2,
+	SWFACTION_SUBTRACT,
 	SWFACTION_MODULO,
 	SWFACTION_MULTIPLY,
 	SWFACTION_DIVIDE,
@@ -1692,7 +1692,7 @@ decompileRETURN(int n, SWF_ACTION *actions,int maxn)
     if (var->Type==4 && var->p.RegisterNumber==0)	/* REGISTER 0 used as helper variable */
      puts(getName(regs[0]));
     else
-     puts(getName(var));
+     decompilePUSHPARAM(var,1);                                                                                             
     println(";");
     return 0;
 }
