@@ -543,6 +543,22 @@ newVar3(char *var,char *var2, char *var3)
 	return v;
 }
 
+struct SWF_ACTIONPUSHPARAM *
+newVar5(char *var,char *var2, char *var3,char *var4,char *var5)
+{
+	struct SWF_ACTIONPUSHPARAM *v;
+
+	v=malloc(sizeof(struct SWF_ACTIONPUSHPARAM));
+	v->Type=10; /* VARIABLE */
+	v->p.String = malloc(strlen(var)+strlen(var2)+strlen(var3)+strlen(var4)+strlen(var5)+1);
+	strcpy(v->p.String,var);
+	strcat(v->p.String,var2);
+	strcat(v->p.String,var3);
+	strcat(v->p.String,var4);
+	strcat(v->p.String,var5);
+	return v;
+}
+
 void
 push(struct SWF_ACTIONPUSHPARAM *val)
 {
@@ -1305,7 +1321,11 @@ decompileSETPROPERTY(int n, SWF_ACTION *actions,int maxn)
 #ifdef DEBUG
  printf("*setProp* objName %s (type=%d) Prop (type=%d) =%x\n",getName(obj),obj->Type, idx->Type,getInt(idx));
 #endif
+    if (obj->Type==10)
+      puts("eval(");
     decompilePUSHPARAM(obj,0);
+    if (obj->Type==10)
+      puts(")");
     puts(".");
     puts(getProperty(getInt(idx)));
     printf(" = " );
@@ -1326,7 +1346,10 @@ decompileGETPROPERTY(int n, SWF_ACTION *actions,int maxn)
 #ifdef DEBUG
  printf("*GETProp* objName %s (type=%d) Prop (type=%d) =%x\n",getName(obj),obj->Type, idx->Type,getInt(idx));
 #endif
-    push( newVar3( getName(obj),".",getProperty(getInt(idx))));
+    if (obj->Type==10)
+     push( newVar5("eval(",getName(obj),".",getProperty(getInt(idx)),")"));
+    else
+     push( newVar3( getName(obj),".",getProperty(getInt(idx))));
     return 0;
 }
 
@@ -1630,7 +1653,13 @@ decompileGETVARIABLE(int n, SWF_ACTION *actions,int maxn)
     struct SWF_ACTIONPUSHPARAM *var;
 
     var = pop();
-    pushvar(newVar(getName(var)));
+#ifdef DEBUG
+    printf("*GETVariable* varName %s (type=%d)\n",getName(var),var->Type);
+#endif
+    if (var->Type == 10)
+     pushvar(newVar3("eval(",getName(var),")"));
+    else
+     pushvar(newVar(getName(var)));
 
     return 0;
 }
