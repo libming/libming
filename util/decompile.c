@@ -445,7 +445,7 @@ getInt(struct SWF_ACTIONPUSHPARAM *act)
   switch( act->Type ) 
   {
 	  case 1: /* FLOAT -- also used for PROPERTY storing */
-		return ((int)act->p.Float)>>16;
+		return ((int)act->p.Float);
 	  case 2: /* NULL */
   		return 0;
 	  case 4: /* REGISTER */
