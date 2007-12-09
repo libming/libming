@@ -1981,7 +1981,8 @@ decompile_SWITCH(int n, SWF_ACTION *actions,int maxn,int off1end)
     && actions[i-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_IF) )
    {
      start=i;
-     while (actions[start].SWF_ACTIONRECORD.Offset < actions[i].SWF_ACTIONRECORD.Offset+5+actions[i].SWF_ACTIONJUMP.BranchOffset)
+     while (actions[start].SWF_ACTIONRECORD.Offset < actions[i].SWF_ACTIONRECORD.Offset+5+actions[i].SWF_ACTIONJUMP.BranchOffset
+	&& start<maxn)
      {
       start++;						// count actions until start of "case x:"
      }
