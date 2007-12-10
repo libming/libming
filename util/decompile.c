@@ -2701,7 +2701,13 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
      println("// Problem getting method arguments (%d ignored) below:",nparam->p.Integer);
      nparam->p.Integer=0;
     }
-    push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
+#ifdef DEBUG
+    printf("*CALLMethod* objName=%s (type=%d) methName=%s (type=%d)\n",getName(obj),obj->Type,getName(meth),meth->Type);
+#endif
+    if (meth->Type==3) 	/* just undefined, like in "super();" */
+     push(newVar_N(getName(obj),"","","(", nparam->p.Integer,")"));
+    else
+     push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
      /* call method and throw away any result */
