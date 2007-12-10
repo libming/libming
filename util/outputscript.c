@@ -1177,8 +1177,17 @@ outputSWF_END (SWF_Parserstruct * pblock)
 void
 outputSWF_EXPORTASSETS (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_EXPORTASSETS);
+  int i;
+  char name[32];
+  OUT_BEGIN (SWF_EXPORTASSETS);
 
+  for (i = 0; i < sblock->Count; i++)
+  {
+   sprintf (name, VAR "character%d", sblock->Tags[i]);
+   printf ("%s" ARGSTART "%s" ARGSEP SQ "%s" SQ ARGEND STMNTEND "\n",
+     methodcall ("m", "addExport"),name,sblock->Names[i]);
+  }
+  printf ("%s" ARGSTART ARGEND STMNTEND "\n",methodcall ("m", "writeExports"));
 }
 
 void
