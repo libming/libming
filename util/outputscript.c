@@ -437,6 +437,7 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
 	      "); " COMMSTART "SWFFILL_SOLID" COMMEND "\n",
 	      fname,
 	      methodcall (parentname, "addSolidFill"), fname, fname, fname, fname);
+      printf ("%s" ARGSTART VAR "%s" ARGEND STMNTEND "\n; ",methodcall (parentname, "setRightFill"),fname);
       break;
     case 0x10:			/* Linear Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
