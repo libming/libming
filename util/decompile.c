@@ -1439,7 +1439,10 @@ decompileINCR_DECR(int n, SWF_ACTION *actions,int maxn,int is_incr)
 	   (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
 	    actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
 	    actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
-	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER ) )
+	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER &&
+	    ((struct SWF_ACTIONPUSH *)&actions[n-2].SWF_ACTIONRECORD)->NumParam >= 4 
+	    /* 4: a pair of get/set - FIXME: add more analysis about stack here */
+	    ) )
 	{		// incr/decr object variables with side effects
 	 is_postop= (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)?1:0;
 	 if (is_postop)
