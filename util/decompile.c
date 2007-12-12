@@ -406,7 +406,7 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
 		if(strlen(t)) /* Not a zero length string */
   			return t;
 		else
-  			return "_this";
+  			return "this";
 #if 0
 	  case 4: /* REGISTER */
                 t=malloc(4); /* Rdd */
@@ -421,7 +421,7 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
 		else
 		{
 		 t=realloc(t,6);
-		 return strcpy(t,"_this");
+		 return strcpy(t,"this");
   		}
 	  case 9: /* CONSTANT16 */
 		t=malloc(strlenext(pool[act->p.Constant16])+1);
@@ -431,7 +431,7 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
 		else
 		{
 		 t=realloc(t,6);
-		 return strcpy(t,"_this");
+		 return strcpy(t,"this");
 		}
 	  default: 
   		return getString(act);
