@@ -768,32 +768,6 @@ decompileWAITFORFRAME (SWF_ACTION *act)
 }
 
 
-void
-decompileGETURL (SWF_ACTION *act)
-{
-  OUT_BEGIN(SWF_ACTIONGETURL);
-
-  INDENT
-  println("getUrl('%s',%s);", sact->UrlString, sact->TargetString);
-}
-int
-decompileGETURL2 (SWF_ACTION *act)
-{
-    struct SWF_ACTIONPUSHPARAM *a;
-
-    OUT_BEGIN(SWF_ACTIONGETURL2);
-    INDENT
-    a = pop();
-    if (sact->f.FlagBits.SendVarsMethod)
-     puts("loadVars(");
-    else
-     puts("getUrl(");
-    puts(getString(pop()));
-    puts(",");
-    puts(getString(a));
-    println(");");
-    return 0;
-}
 
 static void
 decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
@@ -866,6 +840,50 @@ decompilePUSHPARAM (struct SWF_ACTIONPUSHPARAM *act, int wantstring)
   		printf ("  Unknown type: %d\n", act->Type);
 		break;
   }
+}
+
+void
+decompileGETURL (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONGETURL);
+
+  INDENT
+  println("getUrl('%s',%s);", sact->UrlString, sact->TargetString);
+}
+
+int
+decompileGETURL2 (SWF_ACTION *act)
+{
+    struct SWF_ACTIONPUSHPARAM *a,*b;
+    OUT_BEGIN(SWF_ACTIONGETURL2);
+    INDENT
+
+    a = pop();
+    b = pop();
+
+    if (sact->f.FlagBits.SendVarsMethod==3)
+      puts("loadVariables(");
+    else 
+      if (sact->f.FlagBits.SendVarsMethod==2)
+       puts("loadVariablesNum(");
+      else
+       if (sact->f.FlagBits.SendVarsMethod==1) 
+        puts("loadMovie(");
+       else
+        if (*getName(a)=='_')	// found a _level
+         puts("loadMovieNum(");	
+        else
+         puts("getURL(");
+         
+    decompilePUSHPARAM (b, 1);
+    puts(",");
+    decompilePUSHPARAM (a, 1);
+    if  (sact->f.FlagBits.LoadVariableFlag)
+     puts(",'GET'");
+    if (sact->f.FlagBits.LoadTargetFlag)
+     puts(",'POST'");
+    println(");");
+    return 0;
 }
 
 int
@@ -1522,9 +1540,15 @@ decompileSTOREREGISTER(int n, SWF_ACTION *actions,int maxn)
        {
 	INDENT
 	if (data->Type==11)
+	{
 	 println("%s;", r);
+	}
 	else
-	 println("%s = %s;",l,r); 
+	{
+	 printf("%s = ",l);
+	 decompilePUSHPARAM(data,1);
+	 println(";");
+	}
        }
       }
      }
