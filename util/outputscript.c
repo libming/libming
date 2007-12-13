@@ -349,6 +349,23 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 	    matrix->TranslateX, matrix->TranslateY);
 }
 
+static void
+outputSWF_CXFORMWITHALPHA(SWF_CXFORMWITHALPHA * cxform, char *name)
+{
+ if (cxform->HasMultTerms)
+ {
+  printf("%s" ARGSTART "%0.2f" ARGSEP "%0.2f" ARGSEP "%0.2f" ARGSEP "%0.2f" ARGEND STMNTEND "\n",
+    methodcall (name, "setColorMult"), cxform->RedMultTerm/256.0,
+    cxform->GreenMultTerm/256.0, cxform->BlueMultTerm/256.0, cxform->AlphaMultTerm/256.0);
+ }
+ if (cxform->HasAddTerms)
+ {
+  printf("%s" ARGSTART "%ld" ARGSEP "%ld" ARGSEP "%ld" ARGSEP "%ld" ARGEND STMNTEND "\n",
+    methodcall (name, "setColorAdd"),  cxform->RedAddTerm,
+    cxform->GreenAddTerm, cxform->BlueAddTerm, cxform->AlphaAddTerm);
+ }	
+}
+
 static char*
 getButtonCondString(SWF_BUTTONCONDACTION *flags)
 {
@@ -1290,15 +1307,12 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   }
   if( sblock->PlaceFlagHasMatrix ) {
       printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
-      /*
-      printf(COMMSTART " outputSWF_MATRIX is broken, so it is being skipped.. " COMMEND "\n");
-      */
       sprintf(cname, "i%d", sblock->Depth );
       outputSWF_MATRIX (&sblock->Matrix, cname);
-      
   }
   if( sblock->PlaceFlagHasColorTransform ) {
-      printf(COMMSTART " PlaceFlagHasColorTransform " COMMEND "\n");
+    sprintf(cname, "i%d", sblock->Depth);
+    outputSWF_CXFORMWITHALPHA(&sblock->ColorTransform, cname);
   }
   if( sblock->PlaceFlagHasRatio ) {
       printf(COMMSTART " PlaceFlagHasRatio " COMMEND "\n");

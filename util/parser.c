@@ -202,14 +202,14 @@ parseSWF_CXFORM (FILE * f, struct SWF_CXFORM *cxform)
   cxform->HasMultTerms = readBits (f, 1);
   cxform->Nbits = readBits (f, 4);
   if( cxform->HasMultTerms ) {
-    cxform->RedMultTerm = readBits(f, cxform->Nbits );
-    cxform->GreenMultTerm = readBits(f, cxform->Nbits );
-    cxform->BlueMultTerm = readBits(f, cxform->Nbits );
+    cxform->RedMultTerm = readSBits(f, cxform->Nbits );
+    cxform->GreenMultTerm = readSBits(f, cxform->Nbits );
+    cxform->BlueMultTerm = readSBits(f, cxform->Nbits );
   }
   if( cxform->HasAddTerms ) {
-    cxform->RedAddTerm = readBits(f, cxform->Nbits );
-    cxform->GreenAddTerm = readBits(f, cxform->Nbits );
-    cxform->BlueAddTerm = readBits(f, cxform->Nbits );
+    cxform->RedAddTerm = readSBits(f, cxform->Nbits );
+    cxform->GreenAddTerm = readSBits(f, cxform->Nbits );
+    cxform->BlueAddTerm = readSBits(f, cxform->Nbits );
   }
 }
 
@@ -222,16 +222,16 @@ parseSWF_CXFORMWITHALPHA (FILE * f, struct SWF_CXFORMWITHALPHA *cxform)
   cxform->HasMultTerms = readBits (f, 1);
   cxform->Nbits = readBits (f, 4);
   if( cxform->HasMultTerms ) {
-    cxform->RedMultTerm = readBits(f, cxform->Nbits );
-    cxform->GreenMultTerm = readBits(f, cxform->Nbits );
-    cxform->BlueMultTerm = readBits(f, cxform->Nbits );
-    cxform->AlphaMultTerm = readBits(f, cxform->Nbits );
+    cxform->RedMultTerm = readSBits(f, cxform->Nbits );
+    cxform->GreenMultTerm = readSBits(f, cxform->Nbits );
+    cxform->BlueMultTerm = readSBits(f, cxform->Nbits );
+    cxform->AlphaMultTerm = readSBits(f, cxform->Nbits );
   }
   if( cxform->HasAddTerms ) {
-    cxform->RedAddTerm = readBits(f, cxform->Nbits );
-    cxform->GreenAddTerm = readBits(f, cxform->Nbits );
-    cxform->BlueAddTerm = readBits(f, cxform->Nbits );
-    cxform->AlphaAddTerm = readBits(f, cxform->Nbits );
+    cxform->RedAddTerm = readSBits(f, cxform->Nbits );
+    cxform->GreenAddTerm = readSBits(f, cxform->Nbits );
+    cxform->BlueAddTerm = readSBits(f, cxform->Nbits );
+    cxform->AlphaAddTerm = readSBits(f, cxform->Nbits );
   }
 }
 

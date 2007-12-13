@@ -588,26 +588,26 @@ typedef struct SWF_CXFORM {
 	UI8	HasAddTerms:1;
 	UI8	HasMultTerms:1;
 	UI8	Nbits:4;
-	UI32	RedMultTerm;
-	UI32	GreenMultTerm;
-	UI32	BlueMultTerm;
-	UI32	RedAddTerm;
-	UI32	GreenAddTerm;
-	UI32	BlueAddTerm;
+	SI32	RedMultTerm;
+	SI32	GreenMultTerm;
+	SI32	BlueMultTerm;
+	SI32	RedAddTerm;
+	SI32	GreenAddTerm;
+	SI32	BlueAddTerm;
 } SWF_CXFORM;
 
 typedef struct SWF_CXFORMWITHALPHA {
 	UI8	HasAddTerms:1;
 	UI8	HasMultTerms:1;
 	UI8	Nbits:4;
-	UI32	RedMultTerm;
-	UI32	GreenMultTerm;
-	UI32	BlueMultTerm;
-	UI32	AlphaMultTerm;
-	UI32	RedAddTerm;
-	UI32	GreenAddTerm;
-	UI32	BlueAddTerm;
-	UI32	AlphaAddTerm;
+	SI32	RedMultTerm;
+	SI32	GreenMultTerm;
+	SI32	BlueMultTerm;
+	SI32	AlphaMultTerm;
+	SI32	RedAddTerm;
+	SI32	GreenAddTerm;
+	SI32	BlueAddTerm;
+	SI32	AlphaAddTerm;
 } SWF_CXFORMWITHALPHA;
 
 typedef struct SWF_BLURFILTER {
