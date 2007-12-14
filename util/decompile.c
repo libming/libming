@@ -2939,6 +2939,8 @@ decompileSETTARGET(int n, SWF_ACTION *actions,int maxn,int is_type2)
      {
 	if (actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET
 	 || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET2
+	 || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_DEFINEFUNCTION
+	 || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_DEFINEFUNCTION2
 	 || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_END) 
 	  break;
 	action_cnt++;
