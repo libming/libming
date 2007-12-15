@@ -567,7 +567,7 @@ identifier
 	| _P_TARGET		{ $$ = strdup("_target"); }
 	| _P_FRAMESLOADED	{ $$ = strdup("_framesloaded"); }
 	| _P_NAME		{ $$ = strdup("_name"); }
-	| _P_DROPTARGET		{ $$ = strdup("_droptraget"); }
+	| _P_DROPTARGET		{ $$ = strdup("_droptarget"); }
 	| _P_URL 		{ $$ = strdup("_url"); }
 	| _P_HIGHQUALITY	{ $$ = strdup("_highquality"); }
 	| _P_FOCUSRECT		{ $$ = strdup("_focusrect"); }
