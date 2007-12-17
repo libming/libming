@@ -229,6 +229,13 @@ makeswf_preprocess (const char *file, const char *out)
 {
 	char buf[1024];
 	int ret;
+	struct stat statbuf;
+
+	if ( -1 == stat(file, &statbuf) )
+	{
+		perror(file); 
+		exit(EXIT_FAILURE);
+	}
 
 	sprintf(buf, "%s -D__SWF_VERSION__=%d %s %s > %s", CPP,
 		swfversion, cppargs, file, out);
@@ -246,6 +253,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.10  2007/12/17 17:28:26  strk
+ * Check existance of input file before attempting to preprocess it
+ *
  * Revision 1.9  2007/11/02 10:18:08  krechert
  * fix warnings
  *
