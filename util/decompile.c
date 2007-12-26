@@ -2734,7 +2734,13 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions,int maxn)
     if (meth->Type==3) 	/* just undefined, like in "super();" */
      push(newVar_N(getName(obj),"","","(", nparam->p.Integer,")"));
     else
-     push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
+    {
+     if (meth->Type == 7 || meth->Type == 6 || meth->Type == 10 		/* INTEGER, DOUBLE  or VARIABLE */ 
+      || meth->Type == 4 || meth->Type == 12 )
+      push(newVar_N(getName(obj),"[",getName(meth),"](", nparam->p.Integer,")"));
+     else
+      push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
+    }
     if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
     {
      /* call method and throw away any result */
