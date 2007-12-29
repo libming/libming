@@ -382,7 +382,7 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
 	  case 10: /* VARIABLE */
   		return act->p.String;
 	  default: 
-  		printf ("  Can't get string for type: %d\n", act->Type);
+  		fprintf (stderr,"  Can't get string for type: %d\n", act->Type);
 		break;
   }
   return "";
@@ -455,7 +455,7 @@ getInt(struct SWF_ACTIONPUSHPARAM *act)
 	  case 7: /* INTEGER */
   		return act->p.Integer;
 	  default: 
-  		printf ("  Can't get int for type: %d\n", act->Type);
+  		fprintf (stderr,"  Can't get int for type: %d\n", act->Type);
 		break;
   }
   return 0;
@@ -748,14 +748,6 @@ decompileCONSTANTPOOL (SWF_ACTION *act)
   pool=sact->ConstantPool;
 }
 
-void
-decompileGOTOLABEL (SWF_ACTION *act)
-{
-  OUT_BEGIN(SWF_ACTIONGOTOLABEL);
-
-  INDENT
-  println("gotoLabel(%s);", sact->FrameLabel);
-}
 
 
 void
@@ -901,36 +893,66 @@ isStoreOp(int n, SWF_ACTION *actions,int maxn)
     }
 }
 
-void
-decompileGOTOFRAME (SWF_ACTION *act,int is_type2)
+int 
+decompileGOTOFRAME(int n, SWF_ACTION *actions,int maxn,int islabel)
 {
-  OUT_BEGIN(SWF_ACTIONGOTOFRAME);
-
+  int i=0;
+  struct SWF_ACTIONGOTOLABEL *sactv2;
+  OUT_BEGIN2(SWF_ACTIONGOTOFRAME);
+  sactv2 = (struct SWF_ACTIONGOTOLABEL*)sact;
   INDENT
-  if (is_type2)
+  if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PLAY)
   {
-   puts("gotoFrame(");
-   decompilePUSHPARAM(pop(),0);
-   println(");");
+    i=1;
+    puts("gotoAndPlay(");
   }
   else
-  println("gotoFrame(%d);", sact->Frame+1); /* GOTOFRAME arg is 0-based */
+  {
+    if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOP)
+      i=1;
+    puts("gotoAndStop(");
+  }
+  if (islabel)
+   println("'%s');", sactv2->FrameLabel);
+  else
+   println("%d);", sact->Frame+1); /* GOTOFRAME arg is 0-based */
+  return i;
 }
 
-/*
-int
-isArithmeticOp(int n, SWF_ACTION *actions,int maxn)
+int 
+decompileGOTOFRAME2(int n, SWF_ACTION *actions,int maxn)
 {
-    switch(actions[n].SWF_ACTIONRECORD.ActionCode)
-    {
-      case SWFACTION_ADD2:
-      case SWFACTION_GETMEMBER:
-        return 1;
-      default:
-        return 0;
-    }
+  int i=0;
+  OUT_BEGIN2(SWF_ACTIONGOTOFRAME2);
+  INDENT
+  if (n+1 < maxn)
+  {
+   if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PLAY ||
+       actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOP)
+   i=1;
+   if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PLAY)
+    puts("gotoAndPlay(");
+   else
+    if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOP)
+     puts("gotoAndStop(");
+    else
+     if (sact->f.FlagBits.PlayFlag)
+      puts("gotoAndPlay(");
+     else
+      puts("gotoAndStop(");
+  }
+  else 
+  {
+    if (sact->f.FlagBits.PlayFlag)
+     puts("gotoAndPlay(");
+    else
+     puts("gotoAndStop(");
+  }
+  decompilePUSHPARAM(pop(),0);
+  println(");");
+  return i;
 }
-*/
+
 
 int precedence(int op1,int op2)
 {
@@ -3003,16 +3025,13 @@ decompileAction(int n, SWF_ACTION *actions,int maxn)
 	return 0;
 
       case SWFACTION_GOTOLABEL:
-        decompileGOTOLABEL(&actions[n]);
-        return 0;
+        return decompileGOTOFRAME(n, actions, maxn,1);
 
       case SWFACTION_GOTOFRAME:
-        decompileGOTOFRAME(&actions[n],0);
-	return 0;
+	return decompileGOTOFRAME(n, actions, maxn,0);
 
       case SWFACTION_GOTOFRAME2:
-        decompileGOTOFRAME(&actions[n],1);
-	return 0;
+	return decompileGOTOFRAME2(n, actions, maxn);
 
       case SWFACTION_WAITFORFRAME:
         decompileWAITFORFRAME(&actions[n]);
