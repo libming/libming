@@ -25,6 +25,7 @@
 */
 #include <cstring> /* for strlen used in SWFBitmap costructor */
 #include <stdexcept>
+#include <iostream>
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
 
@@ -66,6 +67,12 @@ extern "C"
 
   #include <ming.h>
 
+/* 
+ * declaration from src/blocks/fdbfont.h. 
+ * internal function to maintain behavior of older ming-version
+ */
+SWFFont loadSWFFont_fromFdbFile(FILE *file);
+
   #undef SWFShape
   #undef SWFMovie
   #undef SWFDisplayItem
@@ -98,7 +105,7 @@ extern "C"
   #undef SWFFilterMatrix
   #undef SWFInitAction
   #undef SWFButtonRecord
-}
+} // extern C
 
 #define SWF_DECLAREONLY(classname) \
 	private: \
@@ -842,7 +849,10 @@ class SWFFont : public SWFBlock
     { this->font = newSWFFont(); }
 
   SWFFont(FILE *file) // deprecated 
-    { this->font = loadSWFFontFromFile(file); }
+  {
+	std::cerr << "SWFFont(FILE *file) is deprecated and will be removed in future releases." << std::endl;
+	this->font = loadSWFFont_fromFdbFile(file); 
+  }
 
   SWFFont(char *path)
     { this->font = newSWFFont_fromFile(path); }
