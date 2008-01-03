@@ -78,17 +78,17 @@ class SWFShape(SWFBase):
     def addFill(self, arg1, arg2=0, arg3=None, arg4=0xff):
         if arg3 != None:
             return SWFFill(mingc.SWFShape_addSolidFill(self.this, arg1, arg2, arg3, arg4))
-        if arg1.this[-11:] == 'SWFGradient':
+        if isinstance(arg1, SWFGradient):
             # XXX - have to keep reference to gradient so it's not disposed
             self.fills.append(arg1)
             return SWFFill(mingc.SWFShape_addGradientFill(self.this, arg1.this, arg2))
 
-        if arg1.this[-9:] == 'SWFBitmap':
+        if isinstance(arg1, SWFBitmap):
             # XXX - have to keep reference to bitmap so it's not disposed
             self.fills.append(arg1)
             return SWFFill(mingc.SWFShape_addBitmapFill(self.this, arg1.this, arg2))
 
-        if arg1.this[-13:] == 'SWFJpegBitmap':
+        if isinstance(arg1, SWFJpegBitmap):
             self.fills.append(arg1)
             return SWFFill(mingc.SWFShape_addBitmapFill(self.this, arg1.this, arg2))
 
