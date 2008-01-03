@@ -289,6 +289,9 @@ class SWFDisplayItem(SWFBase):
     def addAction(self, actionScript, flags):
         mingc.SWFDisplayItem_addAction(self.this, actionScript, flags)
 
+    def setMaskLevel(self, level):
+        mingc.SWFDisplayItem_setMaskLevel(self.this, level)
+
 SWFACTION_ONLOAD      = mingc.SWFACTION_ONLOAD      
 SWFACTION_ENTERFRAME  = mingc.SWFACTION_ENTERFRAME  
 SWFACTION_UNLOAD      = mingc.SWFACTION_UNLOAD      
