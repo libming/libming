@@ -418,8 +418,8 @@ parseSWF_FOCALGRADIENT (FILE * f, struct SWF_FOCALGRADIENT *gradient, int level)
   gradient->InterpolationMode = readBits(f, 2);
   gradient->NumGradients = readBits (f, 4);
   if(gradient->NumGradients > 15) {
-	  fprintf(stderr,"Something is out of sync in parseSWF_FOCALGRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
-	  exit(1);
+	  fprintf(stderr, "%d gradients in SWF_FOCALGRADIENT, expected a max of 15", gradient->NumGradients );
+	  /*exit(1);*/
   }
 
   for (i = 0; i < gradient->NumGradients; i++)
@@ -436,8 +436,8 @@ parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient, int level)
   gradient->InterpolationMode = readBits(f, 2);
   gradient->NumGradients = readBits (f, 4);
   if((gradient->NumGradients > 8  && level < 4) || (gradient->NumGradients > 15  && level == 4)) {
-	  fprintf(stderr,"Something is out of sync in parseSWF_GRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
-	  exit(1);
+	  fprintf(stderr, "%d gradients in SWF_GRADiENT, expected a max of %d", gradient->NumGradients, level<4 ? 8 : 15 );
+	  /*exit(1);*/
   }
 
   for (i = 0; i < gradient->NumGradients; i++)
@@ -750,8 +750,8 @@ parseSWF_MORPHGRADIENT (FILE * f, struct SWF_MORPHGRADIENT *gradient)
   int i;
   gradient->NumGradients = readUInt8 (f);
   if( gradient->NumGradients > 8 ) {
-	  fprintf(stderr,"Something is out of sync in parseSWF_MORPHGRADIENT!!!\nNumGradient %d\n", gradient->NumGradients );
-	  exit(1);
+	  fprintf(stderr, "%d gradients in SWF_MORPHGRADiENT, expected a max of 8", gradient->NumGradients);
+	  /*exit(1);*/
   }
   for (i = 0; i < gradient->NumGradients; i++)
     parseSWF_MORPHGRADIENTRECORD (f, &(gradient->GradientRecords[i]));
