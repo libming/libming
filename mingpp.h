@@ -864,10 +864,10 @@ class SWFFont : public SWFBlock
     { return (c_SWFBlock)this->font; }
 
   float getStringWidth(const char *string)
-    { return SWFFont_getStringWidth(this->font, (const unsigned char*)string); }
+    { return SWFFont_getStringWidth(this->font, string); }
 
   float getWidth(const char *string)
-    { return SWFFont_getStringWidth(this->font, (const unsigned char*)string); }
+    { return SWFFont_getStringWidth(this->font, string); }
 
   float getAscent()
     { return SWFFont_getAscent(this->font); }
@@ -1165,13 +1165,13 @@ class SWFText : public SWFCharacter
     { SWFText_setSpacing(this->text, spacing); }
 
   float getStringWidth(const char *string)
-    { return SWFText_getStringWidth(this->text, (const unsigned char *)string); }
+    { return SWFText_getStringWidth(this->text, string); }
 
   float getWidth(const char *string)
-    { return SWFText_getStringWidth(this->text, (const unsigned char *)string); }
+    { return SWFText_getStringWidth(this->text, string); }
 
   float getUTF8Width(const char *string)
-    { return SWFText_getUTF8StringWidth(this->text, (const unsigned char *)string); }
+    { return SWFText_getUTF8StringWidth(this->text, string); }
   SWF_DECLAREONLY(SWFText);
 };
 
