@@ -37,7 +37,4 @@ SWFFont Ming_loadFont(const char* path, const char* name);
 
 void Ming_cleanupFonts();
 
-float SWFFont_getWideStringWidth(SWFFont font, const unsigned short* string, 
-                                 int len);
-
 #endif /* SWF_FONT_UTIL_H_INCLUDED */
