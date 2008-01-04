@@ -55,13 +55,13 @@ SWFText_setFont(text, font)
 void
 SWFText_setHeight(text, height)
 	SWF::Text	text
-	int		height
+	float		height
 
 void
 SWFText_moveTo(text, x, y)
 	SWF::Text	text
-	int		x
-	int		y
+	float		x
+	float		y
 
 void
 SWFText_setColor(text, r, g, b, a=0xff)
@@ -95,19 +95,19 @@ SWFText_setSpacing(text, spacing)
 	SWF::Text	text
 	float		spacing
 
-int
+float 
 SWFText_getStringWidth(text, string)
 	SWF::Text	text
 	char *		string
         ALIAS:
         SWF::Text::getWidth = 1
 
-int
+float
 SWFText_getUTF8StringWidth(text, string)
 	SWF::Text text
 	char *	string
 
-int
+float
 SWFText_getWideStringWidth(text, string)
 	SWF::Text text
 	char *	string

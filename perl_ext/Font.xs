@@ -48,14 +48,14 @@ destroySWFFont(block)
         S_DEBUG(2, fprintf(stderr, "FONT DESTROY CALLED\n"));
 	destroySWFBlock((SWFBlock)block);
 
-int
+float
 SWFFont_getStringWidth(font, string)
 	SWF::Font	font
 	char *	string
         ALIAS:
         SWF::Font::getWidth = 1
 
-int
+float
 SWFFont_getUTF8StringWidth(font, string)
 	SWF::Font	font
 	char *	string
