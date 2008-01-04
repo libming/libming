@@ -421,6 +421,7 @@ SWFSound newSWFSound(FILE *file, byte flags);
 /* added by David McNab to facilitate Python access */
 SWFSound newSWFSoundFromFileno(int fd, byte flags);
 SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
+SWFSound newSWFSound_fromSoundStream(SWFSoundStream stream);
 void destroySWFSound(SWFSound sound);
 
 #define SWF_SOUND_COMPRESSION       0xf0
