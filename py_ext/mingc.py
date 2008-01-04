@@ -229,6 +229,7 @@ destroySWFSoundStream = _mingc.destroySWFSoundStream
 newSWFSound = _mingc.newSWFSound
 newSWFSoundFromFileno = _mingc.newSWFSoundFromFileno
 newSWFSound_fromInput = _mingc.newSWFSound_fromInput
+newSWFSound_fromSoundStream = _mingc.newSWFSound_fromSoundStream
 destroySWFSound = _mingc.destroySWFSound
 SWF_SOUND_COMPRESSION = _mingc.SWF_SOUND_COMPRESSION
 SWF_SOUND_NOT_COMPRESSED = _mingc.SWF_SOUND_NOT_COMPRESSED

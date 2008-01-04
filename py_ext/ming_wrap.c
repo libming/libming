@@ -5053,11 +5053,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFFont_getStringWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFFont arg1 = (SWFFont) 0 ;
-  unsigned char *arg2 = (unsigned char *) 0 ;
+  char *arg2 = (char *) 0 ;
   float result;
   int res1 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5066,15 +5067,17 @@ SWIGINTERN PyObject *_wrap_SWFFont_getStringWidth(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFont_getStringWidth" "', argument " "1"" of type '" "SWFFont""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFFont_getStringWidth" "', argument " "2"" of type '" "unsigned char const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFFont_getStringWidth" "', argument " "2"" of type '" "char const *""'");
   }
-  arg2 = (unsigned char *)(argp2);
-  result = (float)SWFFont_getStringWidth(arg1,(unsigned char const *)arg2);
+  arg2 = (char *)(buf2);
+  result = (float)SWFFont_getStringWidth(arg1,(char const *)arg2);
   resultobj = SWIG_From_float((float)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -5082,11 +5085,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFFont_getUTF8StringWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFFont arg1 = (SWFFont) 0 ;
-  unsigned char *arg2 = (unsigned char *) 0 ;
+  char *arg2 = (char *) 0 ;
   float result;
   int res1 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5095,15 +5099,17 @@ SWIGINTERN PyObject *_wrap_SWFFont_getUTF8StringWidth(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFont_getUTF8StringWidth" "', argument " "1"" of type '" "SWFFont""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFFont_getUTF8StringWidth" "', argument " "2"" of type '" "unsigned char const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFFont_getUTF8StringWidth" "', argument " "2"" of type '" "char const *""'");
   }
-  arg2 = (unsigned char *)(argp2);
-  result = (float)SWFFont_getUTF8StringWidth(arg1,(unsigned char const *)arg2);
+  arg2 = (char *)(buf2);
+  result = (float)SWFFont_getUTF8StringWidth(arg1,(char const *)arg2);
   resultobj = SWIG_From_float((float)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -5554,11 +5560,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFText_getStringWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFText arg1 = (SWFText) 0 ;
-  unsigned char *arg2 = (unsigned char *) 0 ;
+  char *arg2 = (char *) 0 ;
   float result;
   int res1 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5567,15 +5574,17 @@ SWIGINTERN PyObject *_wrap_SWFText_getStringWidth(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFText_getStringWidth" "', argument " "1"" of type '" "SWFText""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getStringWidth" "', argument " "2"" of type '" "unsigned char const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getStringWidth" "', argument " "2"" of type '" "char const *""'");
   }
-  arg2 = (unsigned char *)(argp2);
-  result = (float)SWFText_getStringWidth(arg1,(unsigned char const *)arg2);
+  arg2 = (char *)(buf2);
+  result = (float)SWFText_getStringWidth(arg1,(char const *)arg2);
   resultobj = SWIG_From_float((float)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -5583,11 +5592,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFText_getUTF8StringWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFText arg1 = (SWFText) 0 ;
-  unsigned char *arg2 = (unsigned char *) 0 ;
+  char *arg2 = (char *) 0 ;
   float result;
   int res1 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -5596,15 +5606,17 @@ SWIGINTERN PyObject *_wrap_SWFText_getUTF8StringWidth(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFText_getUTF8StringWidth" "', argument " "1"" of type '" "SWFText""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_char, 0 |  0 );
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getUTF8StringWidth" "', argument " "2"" of type '" "unsigned char const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFText_getUTF8StringWidth" "', argument " "2"" of type '" "char const *""'");
   }
-  arg2 = (unsigned char *)(argp2);
-  result = (float)SWFText_getUTF8StringWidth(arg1,(unsigned char const *)arg2);
+  arg2 = (char *)(buf2);
+  result = (float)SWFText_getUTF8StringWidth(arg1,(char const *)arg2);
   resultobj = SWIG_From_float((float)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -6648,6 +6660,34 @@ SWIGINTERN PyObject *_wrap_newSWFSound_fromInput(PyObject *SWIGUNUSEDPARM(self),
   } 
   arg2 = (byte)(val2);
   result = (SWFSound)newSWFSound_fromInput(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newSWFSound_fromSoundStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFSoundStream arg1 ;
+  SWFSound result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:newSWFSound_fromSoundStream",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFSoundStream,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newSWFSound_fromSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newSWFSound_fromSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'");
+    } else {
+      arg1 = *((SWFSoundStream *)(argp1));
+    }
+  }
+  result = (SWFSound)newSWFSound_fromSoundStream(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
   return resultobj;
 fail:
@@ -12320,6 +12360,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"newSWFSound", _wrap_newSWFSound, METH_VARARGS, NULL},
 	 { (char *)"newSWFSoundFromFileno", _wrap_newSWFSoundFromFileno, METH_VARARGS, NULL},
 	 { (char *)"newSWFSound_fromInput", _wrap_newSWFSound_fromInput, METH_VARARGS, NULL},
+	 { (char *)"newSWFSound_fromSoundStream", _wrap_newSWFSound_fromSoundStream, METH_VARARGS, NULL},
 	 { (char *)"destroySWFSound", _wrap_destroySWFSound, METH_VARARGS, NULL},
 	 { (char *)"SWFSoundInstance_setLoopInPoint", _wrap_SWFSoundInstance_setLoopInPoint, METH_VARARGS, NULL},
 	 { (char *)"SWFSoundInstance_setLoopOutPoint", _wrap_SWFSoundInstance_setLoopOutPoint, METH_VARARGS, NULL},

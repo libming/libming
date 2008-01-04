@@ -286,8 +286,8 @@ SWFFont newSWFFont_fromFile(const char *filename);
 SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFFont font);
 
-float SWFFont_getStringWidth(SWFFont font, const unsigned char *string);
-float SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string);
+float SWFFont_getStringWidth(SWFFont font, const char *string);
+float SWFFont_getUTF8StringWidth(SWFFont font, const char *string);
 
   /* deprecated? */
   float SWFFont_getWideStringWidth(SWFFont font, const unsigned short *string, int len);
@@ -317,8 +317,8 @@ void SWFText_addWideString(SWFText text, const unsigned short* string,
 
 void SWFText_setSpacing(SWFText text, float spacing);
 
-float SWFText_getStringWidth(SWFText text, const unsigned char* string);
-float SWFText_getUTF8StringWidth(SWFText text, const unsigned char* string);
+float SWFText_getStringWidth(SWFText text, const char* string);
+float SWFText_getUTF8StringWidth(SWFText text, const char* string);
 float SWFText_getWideStringWidth(SWFText text, const unsigned short* string);
 
   /* deprecated? */
