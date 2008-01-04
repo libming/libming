@@ -34,6 +34,7 @@ EXTRA_DIST = 		\
 	test03.ref	\
 	test01.pl	\
 	test02.pl	\
+	test03.pl	\
 	test01.py	\
 	test02.py	\
 	test03.py	\
