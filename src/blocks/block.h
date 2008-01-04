@@ -86,7 +86,7 @@ SWFBlock newSWFShowFrameBlock();
 SWFBlock newSWFEndBlock();
 
 /* return a new Protect block */
-SWFBlock newSWFProtect(char *);
+SWFBlock newSWFProtect(const char *);
 
 /* return a new empty block */
 SWFBlock newEmptySWFBlock();

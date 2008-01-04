@@ -35,6 +35,6 @@ struct SWFMetadata_s
 
 typedef struct SWFMetadata_s *SWFMetadata;
 
-SWFMetadata newSWFMetadata(char *xml);
+SWFMetadata newSWFMetadata(const char *xml);
 void destroySWFMetadata(SWFMetadata data);
 #endif

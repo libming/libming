@@ -61,7 +61,7 @@ destroySWFProtect(SWFProtect protect)
 
 
 SWFBlock
-newSWFProtect(char *password)
+newSWFProtect(const char *password)
 {
 	SWFProtect protect = (SWFProtect)malloc(sizeof(struct SWFProtect_s));
 

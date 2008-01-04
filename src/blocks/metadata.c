@@ -47,7 +47,7 @@ destroySWFMetadata(SWFMetadata metadata)
 }
 
 SWFMetadata
-newSWFMetadata(char *data)
+newSWFMetadata(const char *data)
 {
 	SWFMetadata metadata = (SWFMetadata)malloc(sizeof(struct SWFMetadata_s));
 
