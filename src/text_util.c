@@ -50,16 +50,16 @@ SWFText_moveTo(SWFText text, float x, float y)
 
 
 float
-SWFText_getStringWidth(SWFText text, const unsigned char *string)
+SWFText_getStringWidth(SWFText text, const char *string)
 {
-	return SWFText_getScaledStringWidth(text, (const char*) string)/Ming_scale;
+	return SWFText_getScaledStringWidth(text, string)/Ming_scale;
 }
 
 
 float
-SWFText_getUTF8StringWidth(SWFText text, const unsigned char *string)
+SWFText_getUTF8StringWidth(SWFText text, const char *string)
 {
-	return SWFText_getScaledUTF8StringWidth(text, (const char*) string)/Ming_scale;
+	return SWFText_getScaledUTF8StringWidth(text, string)/Ming_scale;
 }
 
 
@@ -92,16 +92,16 @@ SWFText_getLeading(SWFText text)
 
 
 float
-SWFFont_getStringWidth(SWFFont font, const unsigned char *string)
+SWFFont_getStringWidth(SWFFont font, const char *string)
 {
-	return SWFFont_getScaledStringWidth(font, (const char*) string) / Ming_scale;
+	return SWFFont_getScaledStringWidth(font, string) / Ming_scale;
 }
 
 
 float
-SWFFont_getUTF8StringWidth(SWFFont font, const unsigned char *string)
+SWFFont_getUTF8StringWidth(SWFFont font, const char *string)
 {
-	return SWFFont_getScaledUTF8StringWidth(font, (const char*) string) / Ming_scale;
+	return SWFFont_getScaledUTF8StringWidth(font, string) / Ming_scale;
 }
 
 
