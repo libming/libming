@@ -534,9 +534,12 @@ class JpegBitmap(SWFBitmap):
 
 class SWFText(SWFBase):
 
-    def __init__(self):
+    def __init__(self, version=2):
         self.__fonts={} # keep reference
-        self.this = mingc.newSWFText2()
+        if version == 2:
+            self.this = mingc.newSWFText2()
+        else:
+            self.this = mingc.newSWFText()
 
     def __del__(self):
         mingc.destroySWFText(self.this)
