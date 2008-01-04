@@ -303,7 +303,7 @@ SWFMovie_setBackground(SWFMovie movie /* movie whose background is being set */,
  */
 void
 SWFMovie_protect(SWFMovie movie /* movie to protect */,
-		char *password /* mds5 encoded password */)
+		const char *password /* mds5 encoded password */)
 {
 	SWFMovie_addBlock(movie, newSWFProtect(password));
 }
@@ -928,7 +928,7 @@ SWFMovie_setNetworkAccess(SWFMovie movie, int flag)
  * http://www.adobe.com/products/xmp
  */
 void
-SWFMovie_addMetadata(SWFMovie movie, char *xml)
+SWFMovie_addMetadata(SWFMovie movie, const char *xml)
 {
 	if(!movie->fattrs)
 		movie->fattrs = newSWFFileAttributes();

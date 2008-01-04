@@ -1074,10 +1074,10 @@ int SWFMovie_output_to_stream(SWFMovie movie, FILE *fp);
  * enable edit protections for a movie
  * This function adds a block that tells flash editors to not edit this movie.
  */
-void SWFMovie_protect(SWFMovie movie, char *password);
+void SWFMovie_protect(SWFMovie movie, const char *password);
 
 void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
-void SWFMovie_addMetadata(SWFMovie movie, char *xml);
+void SWFMovie_addMetadata(SWFMovie movie, const char *xml);
 void SWFMovie_setScriptLimits(SWFMovie movie, int maxRecursion, int timeout);
 void SWFMovie_setTabIndex(SWFMovie movie, int depth, int index);
 

@@ -792,10 +792,10 @@ void SWFMovie_labelFrame(SWFMovie movie, const char *label);
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 int SWFMovie_save(SWFMovie movie, const char *filename);
 
-void SWFMovie_protect(SWFMovie movie, char *password);
+void SWFMovie_protect(SWFMovie movie, const char *password);
 
 void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
-void SWFMovie_addMetadata(SWFMovie movie, char *xml);
+void SWFMovie_addMetadata(SWFMovie movie, const char *xml);
 void SWFMovie_setScriptLimits(SWFMovie movie, int maxRecursion, int timeout);
 void SWFMovie_setTabIndex(SWFMovie movie, int depth, int i);
 void SWFMovie_defineScene(SWFMovie m, unsigned int offset, const char *name);
