@@ -44,6 +44,7 @@ EXTRA_DIST = 		\
 	test04.ref	\
 	test05.ref	\
 	test06.ref	\
+	test04.py	\
 	TestList
 
 check_PROGRAMS = \
