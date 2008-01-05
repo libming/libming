@@ -454,7 +454,6 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
 	      "); " COMMSTART "SWFFILL_SOLID" COMMEND "\n",
 	      fname,
 	      methodcall (parentname, "addSolidFill"), fname, fname, fname, fname);
-      printf ("%s" ARGSTART VAR "%s" ARGEND STMNTEND "\n",methodcall (parentname, "setRightFill"),fname);
       break;
     case 0x10:			/* Linear Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
@@ -585,7 +584,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	  printf (COMMSTART " StateLineStyle: %ld " COMMEND "\n", shaperec->StyleChange.LineStyle);
 	  if (shaperec->StyleChange.LineStyle == 0)
 	    {
-	      printf ("%s(0);\n", methodcall (parentname, "setLine"));
+	      printf ("%s(0,0,0,0,0);\n", methodcall (parentname, "setLine"));
 	    }
 	  else
 	    {
@@ -632,7 +631,13 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	}
       if (shaperec->StyleChange.StateFillStyle0)
 	{
-	  printf (COMMSTART " FillStyle0: %ld " COMMEND "\n", shaperec->StyleChange.FillStyle0);
+	  printf ("%s(", methodcall (parentname, "setLeftFill"));
+	  if (shaperec->StyleChange.FillStyle0)
+	    {
+	      printf (VAR "%s_f%ld", parentname,
+		      shaperec->StyleChange.FillStyle0 - 1);
+	    }
+	  printf (");\n");
 	}
       if (shaperec->StyleChange.StateMoveTo)
 	{
