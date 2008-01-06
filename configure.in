@@ -36,6 +36,7 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_CC_C_O
 
+
 AC_ARG_ENABLE(
 [cpp],
 [  --enable-cpp            Enable C++ support (default: enabled)],
@@ -313,6 +314,16 @@ CFLAGS="$CFLAGS -Wall"
 MACHINE=`uname -m`
 if test "$MACHINE" = "x86_64"; then
 	CFLAGS="$CFLAGS -fPIC"
+fi
+
+dnl -------------------------------------------
+dnl Byteorder check
+dnl -------------------------------------------
+AC_C_BIGENDIAN
+if test x"$WORDS_BIGENDIAN" != x; then
+	CFLAGS="$CFLAGS -DSWF_BIG_ENDIAN"
+else
+	CFLAGS="$CFLAGS -DSWF_LITTLE_ENDIAN"
 fi
 
 AC_SUBST(SHCFLAGS)
