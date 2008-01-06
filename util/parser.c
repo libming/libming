@@ -1348,7 +1348,7 @@ parseSWF_COLORMATRIXFILTER(FILE *f, SWF_COLORMATRIXFILTER *filter)
 	int i;
 	
 	for(i = 0; i < 20; i++)
-		filter->Matrix[i] = readUInt32(f);
+		filter->Matrix[i] = readFloat(f);
 }
 
 void 
