@@ -40,31 +40,6 @@ int swfVersion = 0;
 static int nConstants = {0}, maxConstants = {0}, sizeConstants = {0};
 static char **constants = NULL;
 
-/* XXX - temp hack until we check at compile time */
-
-enum
-{
-	SWF_BIG_ENDIAN,
-	SWF_LITTLE_ENDIAN
-};
-
-static int byteorder;
-
-void checkByteOrder()
-{
-	unsigned int x;
-	unsigned char *p;
-
-	x = 0x01020304;
-	p = (unsigned char *)&x;
-
-	if(*p == 1)
-		byteorder = SWF_BIG_ENDIAN;
-	else
-		byteorder = SWF_LITTLE_ENDIAN;
-}
-
-
 char *stringConcat(char *a, char *b)
 {
 	if ( a != NULL )
@@ -446,20 +421,17 @@ int bufferWriteInt(Buffer out, int i)
 
 	bufferWriteU8(out, PUSH_INT);
 
-	if(byteorder == SWF_LITTLE_ENDIAN)
-	{
-		bufferWriteU8(out, p[0]);
-		bufferWriteU8(out, p[1]);
-		bufferWriteU8(out, p[2]);
-		bufferWriteU8(out, p[3]);
-	}
-	else
-	{
-		bufferWriteU8(out, p[3]);
-		bufferWriteU8(out, p[2]);
-		bufferWriteU8(out, p[1]);
-		bufferWriteU8(out, p[0]);
-	}
+#if SWF_LITTLE_ENDIAN
+	bufferWriteU8(out, p[0]);
+	bufferWriteU8(out, p[1]);
+	bufferWriteU8(out, p[2]);
+	bufferWriteU8(out, p[3]);
+#elif 
+	bufferWriteU8(out, p[3]);
+	bufferWriteU8(out, p[2]);
+	bufferWriteU8(out, p[1]);
+	bufferWriteU8(out, p[0]);
+#endif
 
 	return len + 5;
 }
@@ -480,20 +452,17 @@ int bufferWriteFloat(Buffer out, float f)
 
 	bufferWriteU8(out, PUSH_FLOAT);
 
-	if(byteorder == SWF_LITTLE_ENDIAN)
-	{
-		bufferWriteU8(out, p[0]);
-		bufferWriteU8(out, p[1]);
-		bufferWriteU8(out, p[2]);
-		bufferWriteU8(out, p[3]);
-	}
-	else
-	{
-		bufferWriteU8(out, p[3]);
-		bufferWriteU8(out, p[2]);
-		bufferWriteU8(out, p[1]);
-		bufferWriteU8(out, p[0]);
-	}
+#if SWF_LITTLE_ENDIAN
+	bufferWriteU8(out, p[0]);
+	bufferWriteU8(out, p[1]);
+	bufferWriteU8(out, p[2]);
+	bufferWriteU8(out, p[3]);	
+#else
+	bufferWriteU8(out, p[3]);
+	bufferWriteU8(out, p[2]);
+	bufferWriteU8(out, p[1]);
+	bufferWriteU8(out, p[0]);
+#endif
 	return len + 5;
 }
 
@@ -513,28 +482,25 @@ int bufferWriteDouble(Buffer out, double d)
 
 	bufferWriteU8(out, PUSH_DOUBLE);
 
-	if(byteorder == SWF_LITTLE_ENDIAN)
-	{
-		bufferWriteU8(out, p[4]);
-		bufferWriteU8(out, p[5]);
-		bufferWriteU8(out, p[6]);
-		bufferWriteU8(out, p[7]);
-		bufferWriteU8(out, p[0]);
-		bufferWriteU8(out, p[1]);
-		bufferWriteU8(out, p[2]);
-		bufferWriteU8(out, p[3]);
-	}
-	else
-	{
-		bufferWriteU8(out, p[3]);
-		bufferWriteU8(out, p[2]);
-		bufferWriteU8(out, p[1]);
-		bufferWriteU8(out, p[0]);
-		bufferWriteU8(out, p[7]);
-		bufferWriteU8(out, p[6]);
-		bufferWriteU8(out, p[5]);
-		bufferWriteU8(out, p[4]);
-	}
+#if SWF_LITTLE_ENDIAN
+	bufferWriteU8(out, p[4]);
+	bufferWriteU8(out, p[5]);
+	bufferWriteU8(out, p[6]);
+	bufferWriteU8(out, p[7]);
+	bufferWriteU8(out, p[0]);
+	bufferWriteU8(out, p[1]);
+	bufferWriteU8(out, p[2]);
+	bufferWriteU8(out, p[3]);
+#else
+	bufferWriteU8(out, p[3]);
+	bufferWriteU8(out, p[2]);
+	bufferWriteU8(out, p[1]);
+	bufferWriteU8(out, p[0]);
+	bufferWriteU8(out, p[7]);
+	bufferWriteU8(out, p[6]);
+	bufferWriteU8(out, p[5]);
+	bufferWriteU8(out, p[4]);
+#endif
 
 	return len + 9;
 }

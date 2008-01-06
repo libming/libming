@@ -74,7 +74,6 @@ static void unescape(char *buf)
 
 void swf4ParseInit(const char *script, int debug, int version)
 {
-  checkByteOrder();
   yyrestart(NULL);
 
   swf4debug = debug;
