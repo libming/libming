@@ -400,28 +400,49 @@ SWFOutput_writeFixed8(SWFOutput out, double val)
 	SWFOutput_writeUInt16(out, fixed);
 }
 
+
+
 void
 SWFOutput_writeFloat(SWFOutput out, float f)
 {
-	unsigned char buf[4];
-	float *pf = (float *)buf;
-	
-	*pf = f;
-
-	SWFOutput_writeUInt32(out, (unsigned int) *buf);
+	unsigned char *p = (unsigned char *)&f;
+#if SWF_LITTLE_ENDIAN
+	SWFOutput_writeUInt8(out, p[0]);
+	SWFOutput_writeUInt8(out, p[1]);
+	SWFOutput_writeUInt8(out, p[2]);
+	SWFOutput_writeUInt8(out, p[3]);
+#else
+	SWFOutput_writeUInt8(out, p[3]);
+	SWFOutput_writeUInt8(out, p[2]);
+	SWFOutput_writeUInt8(out, p[1]);
+	SWFOutput_writeUInt8(out, p[0]);
+#endif	
 }
 
 void
 SWFOutput_writeDouble(SWFOutput out, double d)
 {
-	unsigned int i;
-	unsigned char buf[8];
-	double *pd = (double *)buf;
+	unsigned char *p = (unsigned char *)&d;
 
-	*pd = d;
-
-	for(i = 7; i >= 0; i--)
-		SWFOutput_writeUInt8(out, buf[i]);
+#if SWF_LITTLE_ENDIAN
+	SWFOutput_writeUInt8(out, p[4]);
+	SWFOutput_writeUInt8(out, p[5]);
+	SWFOutput_writeUInt8(out, p[6]);
+	SWFOutput_writeUInt8(out, p[7]);
+	SWFOutput_writeUInt8(out, p[0]);
+	SWFOutput_writeUInt8(out, p[1]);
+	SWFOutput_writeUInt8(out, p[2]);
+	SWFOutput_writeUInt8(out, p[3]);
+#else
+	SWFOutput_writeUInt8(out, p[3]);
+	SWFOutput_writeUInt8(out, p[2]);
+	SWFOutput_writeUInt8(out, p[1]);
+	SWFOutput_writeUInt8(out, p[0]);
+	SWFOutput_writeUInt8(out, p[7]);
+	SWFOutput_writeUInt8(out, p[6]);
+	SWFOutput_writeUInt8(out, p[5]);
+	SWFOutput_writeUInt8(out, p[4]);
+#endif
 }
 
 #define FLOAT_SIGN_MASK 	0x80000000
