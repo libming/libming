@@ -497,7 +497,7 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray,
   count = (fillstylearray->FillStyleCount != 0xff) ?
     fillstylearray->FillStyleCount : fillstylearray->FillStyleCountExtended;
 
-  printf ("" COMMSTART " %d fillstyle(s)" COMMEND "\n", count);
+  printf ("" COMMSTART "%d fillstyle(s)" COMMEND "\n", count);
 
   for (i = 0; i < count; i++)
     {
@@ -578,7 +578,13 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	{
 	  return;
 	}
-
+      if (shaperec->StyleChange.StateNewStyles)
+      {
+	 /* output new styles changes before using */
+	 printf (COMMSTART "Some styles are CHANGED now:" COMMEND "\n");
+	 outputSWF_LINESTYLEARRAY (&(shaperec->StyleChange.LineStyles), parentname);
+	 outputSWF_FILLSTYLEARRAY (&(shaperec->StyleChange.FillStyles), parentname);
+      }
       if (shaperec->StyleChange.StateLineStyle)
 	{
 	  printf (COMMSTART " StateLineStyle: %ld " COMMEND "\n", shaperec->StyleChange.LineStyle);
@@ -608,24 +614,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	  printf ("%s(", methodcall (parentname, "setRightFill"));
 	  if (shaperec->StyleChange.FillStyle1)
 	    {
-/* This is supposed tocome from the parent SHAPE record
-		  SWF_FILLSTYLE *fill;
-		  fill=&(shaperec->StyleChange.FillStyles.FillStyles[shaperec->StyleChange.FillStyle1-1]);
-		  if( fill->FillStyleType == 0 ) {
-			  printf("%d, %d, %d, %d ",
-				fill->Color.red,
-				fill->Color.green,
-				fill->Color.blue,
-				fill->Color.alpha );
-
-		  } else {
-*/
-	      printf (VAR "%s_f%ld", parentname,
-		      shaperec->StyleChange.FillStyle1 - 1);
-/*
-		  }
-*/
-
+	      printf (VAR "%s_f%ld", parentname,shaperec->StyleChange.FillStyle1 - 1);
 	    }
 	  printf (");\n");
 	}
@@ -634,8 +623,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	  printf ("%s(", methodcall (parentname, "setLeftFill"));
 	  if (shaperec->StyleChange.FillStyle0)
 	    {
-	      printf (VAR "%s_f%ld", parentname,
-		      shaperec->StyleChange.FillStyle0 - 1);
+	      printf (VAR "%s_f%ld", parentname,shaperec->StyleChange.FillStyle0 - 1);
 	    }
 	  printf (");\n");
 	}
