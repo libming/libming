@@ -57,12 +57,6 @@ char *swftargetfile=NULL;
 
 int verbose = 0;
 
-void silentSkipBytes(FILE *f, int length)
-{
-  for(; length>0; --length)
-    readUInt8(f);
-}
-
 void readRect(FILE *f, struct Rect *s)
 {
   int nBits;

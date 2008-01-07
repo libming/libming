@@ -440,4 +440,10 @@ void dumpBuffer(unsigned char *buf, int length)
   putchar('\n');
 }
 
+void silentSkipBytes(FILE *f, int length)
+{
+  for(; length>0; --length)
+    readUInt8(f);
+}
+
 

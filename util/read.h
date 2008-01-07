@@ -30,7 +30,7 @@ float readFloat(FILE *f);
 void dumpBytes(FILE *f, int length);
 void peekBytes(FILE *f, int length);
 void dumpBuffer(unsigned char *buf, int length);
-
+void silentSkipBytes(FILE *f, int length);
 
 void dumpBuffer(unsigned char *buf, int length);
 
