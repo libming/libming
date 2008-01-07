@@ -418,7 +418,7 @@ parseSWF_FOCALGRADIENT (FILE * f, struct SWF_FOCALGRADIENT *gradient, int level)
   gradient->InterpolationMode = readBits(f, 2);
   gradient->NumGradients = readBits (f, 4);
   if(gradient->NumGradients > 15) {
-	  fprintf(stderr, "%d gradients in SWF_FOCALGRADIENT, expected a max of 15", gradient->NumGradients );
+	  fprintf(stderr, "%d gradients in SWF_FOCALGRADIENT, expected a max of 15\n", gradient->NumGradients );
 	  /*exit(1);*/
   }
 
@@ -436,7 +436,7 @@ parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient, int level)
   gradient->InterpolationMode = readBits(f, 2);
   gradient->NumGradients = readBits (f, 4);
   if((gradient->NumGradients > 8  && level < 4) || (gradient->NumGradients > 15  && level == 4)) {
-	  fprintf(stderr, "%d gradients in SWF_GRADiENT, expected a max of %d", gradient->NumGradients, level<4 ? 8 : 15 );
+	  fprintf(stderr, "%d gradients in SWF_GRADiENT, expected a max of %d\n", gradient->NumGradients, level<4 ? 8 : 15 );
 	  /*exit(1);*/
   }
 
