@@ -267,53 +267,50 @@ main (int argc, char *argv[])
   for (;;)
     {
       blockoffset = fileOffset;
-      /*
-      printf ("Block offset: %d\n", fileOffset);
-      */
+      
+//      printf ("Block offset: %d\n", fileOffset);
+      
       block = readUInt16 (f);
       type = block >> 6;
 
       length = block & ((1 << 6) - 1);
 
-      if (length == 63)		/* it's a long block. */
-	{
-		length = readUInt32 (f);
-	}
+      if (length == 63)		/* it's a long block. */ 
+      {
+         length = readUInt32 (f);
+      }
 
+//      printf ("Found Block: %s (%i), %i bytes\n", blockName (type), type, length);
+       
+      blockstart = fileOffset;
+      nextFrame = fileOffset+length;
 
-      /*
-       printf ("Found Block: %s, %i bytes\n", blockName (type), length);
-       */
-       blockstart = fileOffset;
-       nextFrame = fileOffset+length;
+      blockp= blockParse(f,length,type);
 
-       blockp=blockParse(f,length,type);
-
-       if( ftell(f) != nextFrame ) {
+      if( ftell(f) != nextFrame ) {
 		// will SEEK_SET later, so this is not a critical error
-		warning(" Stream out of sync after parse of blocktype %d (%s)."
+        warning(" Stream out of sync after parse of blocktype %d (%s)."
 			" %ld but expecting %d.\n",
 			type, blockName(type),
 			ftell(f),nextFrame);
-       }
+      }
 
-       if( blockp ) {
-	       outputBlock( type, blockp, f);
-	       free(blockp);
-       } else {
-	       error("Error parsing block (unknown block type: %d)\n", type);
-       }
-       
-       if (type == 0 || fileOffset >= m.size)
-           break;
+      if( blockp ) {
+        outputBlock( type, blockp, f);
+	free(blockp);
+      } else {
+	fprintf(stderr, "Error parsing block (unknown block type: %d, length %d)\n", type, length);
+      }
+
+      if (type == 0 || fileOffset >= m.size)
+        exit(1);
 	
-       fseek(f, nextFrame, SEEK_SET);
-
+      fseek(f, nextFrame, SEEK_SET);
+      fileOffset = ftell(f);
     }
+    putchar ('\n');
 
-  putchar ('\n');
-
-  if (fileOffset < m.size)
+    if (fileOffset < m.size)
     {
       warning ("extra garbage (i.e., we messed up in main): \n");
       dumpBytes (f, m.size - fileOffset);
