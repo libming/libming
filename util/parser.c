@@ -2022,7 +2022,7 @@ parseSWF_DEFINEFONTALIGNZONES(FILE *f, int length)
   parserrec->CSMTableHint = readBits(f, 2);
   parserrec->Reserved = readBits(f, 6);
   parserrec->GlyphCount = Movie_getFontGlyphCount(&m, parserrec->FontID);
-  if(parserrec->GlyphCount <= 0)
+  if(parserrec->GlyphCount < 0)
 	error("SWF_DEFINEFONTALIGNZONES: FontID %i not present\n", parserrec->FontID);
   parserrec->ZoneTable = malloc(sizeof(struct SWF_ZONERECORD) * parserrec->GlyphCount);
  
