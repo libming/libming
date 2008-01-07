@@ -1596,7 +1596,7 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 	for(i=0;i<sblock->numActions;i++)
 	outputSWF_ACTION(i,&(sblock->Actions[i]));
 #else
-	iprintf ("%s\n", decompile5Action(sblock->numActions,sblock->Actions,0));
+	iprintf ("%s\n", decompile5Action(sblock->numActions, sblock->Actions, 0));
 #endif
 
 }
@@ -2865,6 +2865,10 @@ void
 outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 {
   int i;
+
+  if(blockp == NULL)
+	return;
+
   int offset = blockp->offset;
   int length = blockp->length;
 
