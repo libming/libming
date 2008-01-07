@@ -137,12 +137,14 @@ blockParse (FILE *f, int length, SWFBlocktype header)
   int i;
 
   for (i = 0; i < numBlocks; i++)
+  {
+    if (blocks[i].type == header)
     {
-      if (blocks[i].type == header)
-	{
-	  return blocks[i].parser(f,length);
-	}
+      return blocks[i].parser(f,length);
     }
+  }
+  // if no block found skip length
+  silentSkipBytes(f, length);
   return NULL;
 
 }
