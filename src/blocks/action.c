@@ -164,7 +164,11 @@ byte *SWFAction_getByteCode(SWFAction action, size_t *length)
 		return NULL;
 
 	if(action->out == NULL)
-		ret = SWFAction_compile(action, 5, (int *)length);
+	{
+		SWF_warn("SWFAction_getByteCode: please use SWFAction_compile first\n");
+		SWF_warn("auto-compiling as SWF 7 code now...\n");
+		ret = SWFAction_compile(action, 7, (int *)length);
+	}
 
 	if(ret < 0)
 	{	
