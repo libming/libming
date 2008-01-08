@@ -808,6 +808,12 @@ class SWFBitmap : public SWFCharacter
 
   virtual ~SWFBitmap()
     { destroySWFBitmap(this->bitmap); }
+  
+  int getWidth()
+    { return SWFBitmap_getWidth(this->bitmap); }
+
+  int getHeight()
+    { return SWFBitmap_getHeight(this->bitmap); }
 
   SWF_DECLAREONLY(SWFBitmap);
   SWFBitmap();
