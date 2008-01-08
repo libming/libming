@@ -20,6 +20,7 @@
 
 #include "blocks/blocktypes.h"
 #include "parser.h"
+#include "read.h"
 
 struct SWFBlock
 {
