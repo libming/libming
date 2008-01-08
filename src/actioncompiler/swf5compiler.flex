@@ -515,7 +515,7 @@ static void count(void)
      if(column < 1023)
        msgline[column] = yytext[n];
    }
-   msgline[column + 1] = 0;
+   msgline[column] = 0;
 }
 
 static void printprog()
