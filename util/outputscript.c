@@ -580,7 +580,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	}
       if (shaperec->StyleChange.StateNewStyles)
       {
-	 /* output new styles changes before using */
+	 /* output new style changes before using */
 	 printf (COMMSTART "Some styles are CHANGED now:" COMMEND "\n");
 	 outputSWF_LINESTYLEARRAY (&(shaperec->StyleChange.LineStyles), parentname);
 	 outputSWF_FILLSTYLEARRAY (&(shaperec->StyleChange.FillStyles), parentname);
@@ -1288,15 +1288,14 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_PLACEOBJECT2);
 
   if( sblock->PlaceFlagHasCharacter ) {
-      printf(COMMSTART " PlaceFlagHasCharacter " COMMEND "\n");
     sprintf(cname, "character%d", sblock->CharacterId );
     if(sblock->Depth) 
     {
      printf ("" DECLOBJ(DisplayItem) "%s%d = %s(" VAR "%s)"STMNTEND"\n", "i" , sblock->Depth,
 	methodcall (spritenum?spritename:"m", "add"),     cname);
     }
-    else	/* old code */
-     printf ("%s(" VAR "%s);\n", cname,methodcall (spritenum?spritename:"m", "add") );
+    else
+     printf(COMMSTART " PlaceFlagHasCharacter and Depth == 0! " COMMEND "\n");
   }
   if( sblock->PlaceFlagHasMatrix ) {
       printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
@@ -1315,7 +1314,8 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
     printf("%s("SQ"%s"SQ")"STMNTEND"\n", methodcall(cname, "setName"), sblock->Name);
   }
   if( sblock->PlaceFlagHasClipDepth ) {
-      printf(COMMSTART " PlaceFlagHasClipDepth " COMMEND "\n");
+    sprintf(cname, "i%d", sblock->Depth );
+    printf("%s(%d)"STMNTEND"\n", methodcall(cname, "setMaskLevel"), sblock->ClipDepth);
   }
   if( sblock->PlaceFlagHasClipActions ) {
     sprintf(cname, "i%d", sblock->Depth );
