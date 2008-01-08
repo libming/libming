@@ -297,7 +297,7 @@ main (int argc, char *argv[])
       }
 
       if (type == 0 || fileOffset >= m.size)
-        exit(1);
+        break;
 	
       fseek(f, nextFrame, SEEK_SET);
       fileOffset = ftell(f);
