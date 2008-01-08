@@ -2,3 +2,4 @@ test01:swf: blur filter
 test02:swf: dropShadow filter 
 test03:swf: glow filter 
 test04:swf: bevel filter 
+test05:swf: color matrix filter

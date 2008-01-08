@@ -1,0 +1,103 @@
+File version: 9
+File size: 1792
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
+
+Offset: 26 (0x001a)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: (cc,cc,cc,ff)
+
+Offset: 31 (0x001f)
+Block type: 20 (SWF_DEFINELOSSLESS)
+Block length: 1607
+
+ CharacterID 2
+ Bitmap format 5
+ Bitmap width 20 x height 20
+
+Offset: 1644 (0x066c)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 32
+
+ ShapeID: 1
+ RECT:  (0,0)x(400,400):10
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 40
+ BitmapID: 2
+  Matrix:
+   ScaleX 20.000000 ScaleY 20.000000
+   TranslateX      0 TranslateY      0
+ LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 1
+  StateFillStyle0: 0 StateMoveTo: 0
+   FillStyle1: 1
+ Straight EdgeRecord: (8) - (400, 0)
+ Straight EdgeRecord: (8) - (0, 400)
+ Straight EdgeRecord: (8) - (-400, 0)
+ Straight EdgeRecord: (8) - (0, -400)
+  ENDSHAPE
+
+Offset: 1678 (0x068e)
+Block type: 34 (SWF_DEFINEBUTTON2)
+Block length: 13
+
+ CharacterID: 3
+ TrackAsMenu: 0
+ ActionOffset: 0
+ BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 1   ButtonStateDown: 1   ButtonStateOver: 1   ButtonStateUp: 1
+  CharacterID: 1
+  PlaceDepth: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+  ColorTransForm:
+
+Offset: 1693 (0x069d)
+Block type: 70 (SWF_PLACEOBJECT3)
+Block length: 89
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ PlaceFlagHasImage 0
+ PlaceFlagHasClassName 0
+ PlaceFlagHasCacheAsbitmap 1
+ PlaceFlagHasBlendMode 0
+ PlaceFlagHasFilterList 1
+ Depth 1
+ CharacterId: 3
+  Matrix:
+   TranslateX      0 TranslateY      0
+  NumberOfFilters 1
+  Filter: ColorMatrix
+    0.000000 0.100000 0.100000 0.100000 0.100000 
+    0.100000 0.100000 0.100000 0.100000 0.100000 
+    0.100000 0.100000 1.000000 0.100000 0.100000 
+    0.100000 0.100000 0.100000 1.000000 0.100000 
+
+Offset: 1788 (0x06fc)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1790 (0x06fe)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
