@@ -1935,7 +1935,7 @@ outputSWF_SOUNDSTREAMHEAD (SWF_Parserstruct * pblock)
   {
     case 0: tmp = "mono"; break;
     case 1: tmp = "stereo"; break;
-    default: tmp = "erreor";
+    default: tmp = "error";
   }
   iprintf("  PlaybackSoundType %s\n", tmp);
 
@@ -1968,7 +1968,7 @@ outputSWF_SOUNDSTREAMHEAD (SWF_Parserstruct * pblock)
   {
     case 0: tmp = "mono"; break;
     case 1: tmp = "stereo"; break;
-    default: tmp = "erreor";
+    default: tmp = "error";
   }
   iprintf("  StreamSoundType %s\n", tmp);
   iprintf("  StreamSoundSampleCount %i\n", sblock->StreamSoundSampleCount);
@@ -2003,7 +2003,7 @@ outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
   {
     case 0: tmp = "mono"; break;
     case 1: tmp = "stereo"; break;
-    default: tmp = "erreor";
+    default: tmp = "error";
   }
   iprintf("  PlaybackSoundType %s\n", tmp);
 
@@ -2040,7 +2040,7 @@ outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
   {
     case 0: tmp = "mono"; break;
     case 1: tmp = "stereo"; break;
-    default: tmp = "erreor";
+    default: tmp = "error";
   }
   iprintf("  StreamSoundType %s\n", tmp);
   iprintf("  StreamSoundSampleCount %i\n", sblock->StreamSoundSampleCount);
