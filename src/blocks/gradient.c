@@ -160,7 +160,7 @@ SWFOutput_writeGradientAsFilter(SWFOutput out, SWFGradient gradient)
 
 }
 
-#define GRADIENT_SIZE 32786.0
+#define GRADIENT_SIZE 32768.0
 
 void 
 SWFGradientMatrix_update(SWFMatrix matrix, SWFRect bounds)
