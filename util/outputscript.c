@@ -115,6 +115,8 @@ static int spframenum = 1;
 static int spritenum = 0;
 static char spritename[64];
 
+static SWF_RECT currentShapeBounds;	/* need it later for fill style scaling */
+
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
 	printf( "\n" COMMSTART " " #block " " COMMEND "\n");
@@ -1053,15 +1055,16 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINESHAPE);
   sprintf (name, "character%d", sblock->ShapeID);
 
-  printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
+  printf ("\n" COMMSTART " Shape %d (TYPE=1, RECT=%d,%d %d,%d)" COMMEND "\n", sblock->ShapeID,
+   (int)sblock->ShapeBounds.Xmin,(int)sblock->ShapeBounds.Xmax,(int)sblock->ShapeBounds.Ymin,(int)sblock->ShapeBounds.Ymax);
   printf ("%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
    * sure it will come up with the same answer.
    outputSWF_RECT(&sblock->ShapeBounds);
    */
+  currentShapeBounds=sblock->ShapeBounds;
   outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 1, name);
-
 }
 
 void
@@ -1071,13 +1074,15 @@ outputSWF_DEFINESHAPE2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINESHAPE2);
   sprintf (name, "character%d", sblock->ShapeID);
 
-  printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
+  printf ("\n" COMMSTART " Shape %d (TYPE=2, RECT=%d,%d %d,%d)" COMMEND "\n", sblock->ShapeID,
+   (int)sblock->ShapeBounds.Xmin,(int)sblock->ShapeBounds.Xmax,(int)sblock->ShapeBounds.Ymin,(int)sblock->ShapeBounds.Ymax);
   printf ("%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
    * sure it will come up with the same answer.
    outputSWF_RECT(&sblock->ShapeBounds);
    */
+  currentShapeBounds=sblock->ShapeBounds;
   outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 2, name);
 }
 
@@ -1088,13 +1093,15 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINESHAPE3);
   sprintf (name, "character%d", sblock->ShapeID);
 
-  printf ("\n\t" COMMSTART "  Shape %d " COMMEND "\n", sblock->ShapeID);
+  printf ("\n" COMMSTART " Shape %d (TYPE=3, RECT=%d,%d %d,%d)" COMMEND "\n", sblock->ShapeID,
+   (int)sblock->ShapeBounds.Xmin,(int)sblock->ShapeBounds.Xmax,(int)sblock->ShapeBounds.Ymin,(int)sblock->ShapeBounds.Ymax);
   printf ("%s();\n", newobj (name, "Shape"));
   /* There doesn't seem to be a way to use this in the API 
    * it is calculated internal to teh shape object, but I'm not
    * sure it will come up with the same answer.
    outputSWF_RECT(&sblock->ShapeBounds);
    */
+  currentShapeBounds=sblock->ShapeBounds;
   outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 3, name);
 
 }
