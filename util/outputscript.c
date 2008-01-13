@@ -115,8 +115,6 @@ static int spframenum = 1;
 static int spritenum = 0;
 static char spritename[64];
 
-static SWF_RECT currentShapeBounds;	/* need it later for fill style scaling */
-
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
 	printf( "\n" COMMSTART " " #block " " COMMEND "\n");
@@ -352,6 +350,19 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 }
 
 static void
+prepareSWF_MATRIX (SWF_MATRIX * matrix, SWF_RECT *shapeBounds)
+{
+ if (shapeBounds)
+  if (shapeBounds->Xmax-shapeBounds->Xmin && shapeBounds->Ymax-shapeBounds->Ymin) 
+  {
+   matrix->ScaleX*=(32768.0/(shapeBounds->Xmax-shapeBounds->Xmin));
+   matrix->ScaleY*=(32768.0/(shapeBounds->Ymax-shapeBounds->Ymin));
+   matrix->RotateSkew1*=(32768.0/(shapeBounds->Xmax-shapeBounds->Xmin));
+   matrix->RotateSkew0*=(32768.0/(shapeBounds->Ymax-shapeBounds->Ymin));
+  }
+}
+
+static void
 outputSWF_CXFORMWITHALPHA(SWF_CXFORMWITHALPHA * cxform, char *name)
 {
  if (cxform->HasMultTerms)
@@ -438,7 +449,7 @@ outputSWF_GRADIENT (SWF_GRADIENT * gradient, char *gname)
 }
 
 void
-outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
+outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF_RECT *shapeBounds)
 {
   char fname[64];
   char gname[64];
@@ -462,6 +473,8 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
       printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
 	      fname, methodcall (parentname, "addGradientFill"), gname);
+      if (shapeBounds)
+        prepareSWF_MATRIX(&fillstyle->GradientMatrix, shapeBounds);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
     case 0x12:			/* Radial Gradient Fill */
@@ -469,6 +482,8 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
       printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
 	      fname, methodcall (parentname, "addGradientFill"), gname);
+      if (shapeBounds)
+        prepareSWF_MATRIX(&fillstyle->GradientMatrix, shapeBounds);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
     case 0x40:			/* Repeating Bitmap Fill */
@@ -491,8 +506,8 @@ outputSWF_FILLSTYLE (SWF_FILLSTYLE * fillstyle, char *parentname, int i)
 }
 
 void
-outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray,
-			  char *parentname)
+outputSWF_FILLSTYLEARRAY_new (SWF_FILLSTYLEARRAY * fillstylearray,
+			  char *parentname,SWF_RECT *shapeBounds)
 {
   int i, count;
 
@@ -503,7 +518,7 @@ outputSWF_FILLSTYLEARRAY (SWF_FILLSTYLEARRAY * fillstylearray,
 
   for (i = 0; i < count; i++)
     {
-      outputSWF_FILLSTYLE (&(fillstylearray->FillStyles[i]), parentname, i);
+      outputSWF_FILLSTYLE_new (&(fillstylearray->FillStyles[i]), parentname, i,shapeBounds);
     }
 }
 
@@ -585,7 +600,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	 /* output new style changes before using */
 	 printf (COMMSTART "Some styles are CHANGED now:" COMMEND "\n");
 	 outputSWF_LINESTYLEARRAY (&(shaperec->StyleChange.LineStyles), parentname);
-	 outputSWF_FILLSTYLEARRAY (&(shaperec->StyleChange.FillStyles), parentname);
+	 outputSWF_FILLSTYLEARRAY_new (&(shaperec->StyleChange.FillStyles), parentname,NULL);
       }
       if (shaperec->StyleChange.StateLineStyle)
 	{
@@ -650,10 +665,10 @@ outputSWF_SHAPE (SWF_SHAPE * shape, char *name)
 }
 
 void
-outputSWF_SHAPEWITHSTYLE (SWF_SHAPEWITHSTYLE * shape, int level, char *name)
+outputSWF_SHAPEWITHSTYLE_new (SWF_SHAPEWITHSTYLE * shape, int level, char *name, SWF_RECT *shapeBounds )
 {
   int i;
-  outputSWF_FILLSTYLEARRAY (&(shape->FillStyles), name);
+  outputSWF_FILLSTYLEARRAY_new (&(shape->FillStyles), name, shapeBounds);
   outputSWF_LINESTYLEARRAY (&(shape->LineStyles), name);
   for (i = 0; i < shape->NumShapeRecords; i++)
     {
@@ -1063,8 +1078,7 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
    * sure it will come up with the same answer.
    outputSWF_RECT(&sblock->ShapeBounds);
    */
-  currentShapeBounds=sblock->ShapeBounds;
-  outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 1, name);
+  outputSWF_SHAPEWITHSTYLE_new (&sblock->Shapes, 1, name, &sblock->ShapeBounds);
 }
 
 void
@@ -1082,8 +1096,7 @@ outputSWF_DEFINESHAPE2 (SWF_Parserstruct * pblock)
    * sure it will come up with the same answer.
    outputSWF_RECT(&sblock->ShapeBounds);
    */
-  currentShapeBounds=sblock->ShapeBounds;
-  outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 2, name);
+  outputSWF_SHAPEWITHSTYLE_new (&sblock->Shapes, 2, name, &sblock->ShapeBounds);
 }
 
 void
@@ -1101,8 +1114,7 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
    * sure it will come up with the same answer.
    outputSWF_RECT(&sblock->ShapeBounds);
    */
-  currentShapeBounds=sblock->ShapeBounds;
-  outputSWF_SHAPEWITHSTYLE (&sblock->Shapes, 3, name);
+  outputSWF_SHAPEWITHSTYLE_new (&sblock->Shapes, 3, name, &sblock->ShapeBounds);
 
 }
 
