@@ -58,7 +58,7 @@ float SWFCharacter_getHeight(SWFCharacter character)
 /*
  * set line width and line color
  *
- * set line width in TWIPS
+ * set line width in px
  * set line color as {r, g, b, a}
  *
  */
