@@ -369,7 +369,7 @@ return_stmt
 		  $$ = newBuffer();
 		  while(--tmp >= 0)
 			bufferWriteOp($$, SWFACTION_POP);
-		  bufferWriteNull($$);
+		  bufferWriteUndef($$);
 		  bufferWriteOp($$, SWFACTION_RETURN); }
 
 	| RETURN expr_or_obj ';'
