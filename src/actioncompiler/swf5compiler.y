@@ -1298,13 +1298,22 @@ expr
 
 	| expr LOR expr
 		{ $$ = $1;
-		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_LOGICALOR); }
+		  bufferWriteOp($$, SWFACTION_PUSHDUP);
+		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
+		  bufferWriteOp($$, SWFACTION_IF);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($3)+1);
+		  bufferWriteOp($$, SWFACTION_POP);
+		  bufferConcat($$, $3); }
 
 	| expr LAN expr
 		{ $$ = $1;
-		  bufferConcat($$, $3);
-		  bufferWriteOp($$, SWFACTION_LOGICALAND); }
+		  bufferWriteOp($$, SWFACTION_PUSHDUP);
+		  bufferWriteOp($$, SWFACTION_IF);
+		  bufferWriteS16($$, 2);
+		  bufferWriteS16($$, bufferLength($3)+1);
+		  bufferWriteOp($$, SWFACTION_POP);
+		  bufferConcat($$, $3); }
 
 	| expr '*' expr
 		{ $$ = $1;
