@@ -36,6 +36,8 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_CC_C_O
 
+dnl necessary to make regenerating configure in maintainer-mode work
+AC_SUBST(ACLOCAL_AMFLAGS, "-I macros")
 
 AC_ARG_ENABLE(
 [cpp],
