@@ -648,9 +648,9 @@ embed_image(SWFMovie movie, char *f)
 
 	fill = SWFShape_addBitmapFill(shape, bm, SWFFILL_CLIPPED_BITMAP);
 	SWFShape_setRightFill(shape, fill);
-	SWFShape_drawLineTo(shape, 0, width);
-	SWFShape_drawLineTo(shape, height, width);
-	SWFShape_drawLineTo(shape, height, 0);
+	SWFShape_drawLineTo(shape, width, 0);
+	SWFShape_drawLineTo(shape, width, height);
+	SWFShape_drawLineTo(shape, 0, height);
 	SWFShape_drawLineTo(shape, 0, 0);
 
 	clip = newSWFMovieClip();
@@ -687,6 +687,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.45  2008/01/15 08:11:24  strk
+ * Fix bitmap embedding code to respect size of image (rather then swap dimensions)
+ *
  * Revision 1.44  2007/10/30 12:17:08  krechert
  * set framerate as float
  *
