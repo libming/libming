@@ -69,6 +69,10 @@ newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 {
 	SWFFillStyle fill = (SWFFillStyle)malloc(sizeof(struct SWFFillStyle_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == malloc)
+		return NULL;
+
 	fill->type = SWFFILL_SOLID;
 	fill->data.solid.r = r;
 	fill->data.solid.g = g;
