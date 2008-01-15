@@ -163,6 +163,11 @@ SWFShape
 newSWFGlyphShape()
 {
 	SWFShape shape = (SWFShape)malloc(sizeof(struct SWFShape_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == malloc)
+		return NULL;
+
 	SWFCharacterInit((SWFCharacter)shape);
 
 	BLOCK(shape)->writeBlock = NULL;
@@ -202,6 +207,10 @@ SWFShape
 newSWFShape()
 {
 	SWFShape shape = (SWFShape)malloc(sizeof(struct SWFShape_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == malloc)
+		return NULL;
 
 	SWFCharacterInit((SWFCharacter)shape);
 
