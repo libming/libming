@@ -1296,7 +1296,7 @@ expr
 		{ $$ = $2;
 		  bufferWriteOp($2, SWFACTION_LOGICALNOT); }
 
-	| expr LOR expr
+	| expr LAN expr
 		{ $$ = $1;
 		  bufferWriteOp($$, SWFACTION_PUSHDUP);
 		  bufferWriteOp($$, SWFACTION_LOGICALNOT);
@@ -1304,16 +1304,16 @@ expr
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($3)+1);
 		  bufferWriteOp($$, SWFACTION_POP);
-		  bufferConcat($$, $3); }
+		  bufferConcatSimple($$, $3); }
 
-	| expr LAN expr
+	| expr LOR expr
 		{ $$ = $1;
 		  bufferWriteOp($$, SWFACTION_PUSHDUP);
 		  bufferWriteOp($$, SWFACTION_IF);
 		  bufferWriteS16($$, 2);
 		  bufferWriteS16($$, bufferLength($3)+1);
 		  bufferWriteOp($$, SWFACTION_POP);
-		  bufferConcat($$, $3); }
+		  bufferConcatSimple($$, $3); }
 
 	| expr '*' expr
 		{ $$ = $1;
