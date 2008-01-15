@@ -19,7 +19,7 @@ Block length: 80
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 10
   Matrix:
-   ScaleX 0.060989 ScaleY 0.060989
+   ScaleX 0.061035 ScaleY 0.061035
    TranslateX   1000 TranslateY   1000
  Gradient:  SpreadMode: 0
  InterpolationMode: 0
