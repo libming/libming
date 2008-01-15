@@ -359,6 +359,8 @@ prepareSWF_MATRIX (SWF_MATRIX * matrix, SWF_RECT *shapeBounds)
    matrix->ScaleY*=(32768.0/(shapeBounds->Ymax-shapeBounds->Ymin));
    matrix->RotateSkew1*=(32768.0/(shapeBounds->Xmax-shapeBounds->Xmin));
    matrix->RotateSkew0*=(32768.0/(shapeBounds->Ymax-shapeBounds->Ymin));
+   matrix->TranslateX = (long)(matrix->TranslateX*32768) / (long)(shapeBounds->Xmax-shapeBounds->Xmin) - 16384;
+   matrix->TranslateY = (long)(matrix->TranslateY*32768) / (long)(shapeBounds->Ymax-shapeBounds->Ymin) - 16384;
   }
 }
 
