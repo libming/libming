@@ -70,7 +70,7 @@ newSWFSolidFillStyle(byte r, byte g, byte b, byte a)
 	SWFFillStyle fill = (SWFFillStyle)malloc(sizeof(struct SWFFillStyle_s));
 
 	/* If malloc failed, return NULL to signify this */
-	if (NULL == malloc)
+	if (NULL == fill)
 		return NULL;
 
 	fill->type = SWFFILL_SOLID;
@@ -88,6 +88,10 @@ SWFFillStyle
 newSWFGradientFillStyle(SWFGradient gradient, byte flags)
 {
 	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == fill)
+		return NULL;
 
 	if ( flags == SWFFILL_RADIAL_GRADIENT )
 		fill->type = SWFFILL_RADIAL_GRADIENT;
@@ -107,6 +111,10 @@ SWFFillStyle
 newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 {
 	SWFFillStyle fill = (SWFFillStyle) malloc(sizeof(struct SWFFillStyle_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == fill)
+		return NULL;
 
 	switch(flags)
 	{
