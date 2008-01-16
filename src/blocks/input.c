@@ -314,6 +314,10 @@ newSWFInput_file(FILE *f)
 
 	input = (SWFInput) malloc(sizeof(struct SWFInput_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == input)
+		return NULL;
+
 	input->getChar = SWFInput_file_getChar;
 	input->destroy = SWFInput_dtor;
 	input->eof = SWFInput_file_eof;
@@ -416,6 +420,10 @@ SWFInput
 newSWFInput_buffer(unsigned char* buffer, int length)
 {
 	SWFInput input = (SWFInput) malloc(sizeof(struct SWFInput_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == input)
+		return NULL;
 
 	input->getChar = SWFInput_buffer_getChar;
 	input->destroy = SWFInput_dtor;
@@ -616,7 +624,18 @@ newSWFInput_stream(FILE* f)
 {
 	SWFInput input = (SWFInput)malloc(sizeof(struct SWFInput_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == input)
+		return NULL;
+
 	struct SWFInputStreamData *data = (struct SWFInputStreamData *)malloc(sizeof(struct SWFInputStreamData));
+
+	/* If malloc failed, free memory allocated for input and return NULL to signify the failure */
+	if (NULL == data)
+	{
+		free(input);
+		return NULL;
+	}
 
 	input->getChar = SWFInput_stream_getChar;
 	input->destroy = SWFInput_stream_dtor;
@@ -735,17 +754,30 @@ newSWFInput_input(SWFInput in, unsigned int length)
 	SWFInput input;
 	struct SWFInputPtr *data;
 
-	if(in == NULL)
+	if (in == NULL)
 		return NULL;
 
 	input = (SWFInput)malloc(sizeof(struct SWFInput_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == input)
+		return NULL;
+
 	input->getChar = SWFInput_input_getChar;
 	input->destroy = SWFInput_input_dtor;
 	input->eof = SWFInput_input_eof;
 	input->read = SWFInput_input_read;
 	input->seek = SWFInput_input_seek;
-	
+
 	data = (struct SWFInputPtr *)malloc(sizeof(struct SWFInputPtr));
+
+	/* If malloc failed, free memory allocated for input and return NULL to signify the failure */
+	if (NULL == data)
+	{
+		free(input);
+		return NULL;
+	}
+
 	data->offset = SWFInput_tell(in);
 	data->input = in;
 
