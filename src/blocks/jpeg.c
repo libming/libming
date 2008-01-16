@@ -209,8 +209,7 @@ methodWriteJpegFile(SWFInput input, SWFByteOutputMethod method, void *data)
 
 
 void
-writeSWFJpegBitmapToMethod(SWFBlock block, 
-													 SWFByteOutputMethod method, void *data)
+writeSWFJpegBitmapToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFJpegBitmap jpeg = (SWFJpegBitmap)block;
 
@@ -220,8 +219,7 @@ writeSWFJpegBitmapToMethod(SWFBlock block,
 
 
 void
-writeSWFJpegWithAlphaToMethod(SWFBlock block,
-															SWFByteOutputMethod method, void *data)
+writeSWFJpegWithAlphaToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFJpegWithAlpha jpeg = (SWFJpegWithAlpha)block;
 	int c;
@@ -264,6 +262,10 @@ scanJpegFile(SWFInput input)
 	long pos, end;
 
 	struct jpegInfo* info = (struct jpegInfo*)malloc(sizeof(struct jpegInfo));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == info)
+		return NULL;
 
 	/* scan file, get height and width, make sure it looks valid,
 		 also figure length of block.. */
@@ -369,6 +371,10 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 
 	jpeg = (SWFJpegBitmap) malloc(sizeof(struct SWFJpegBitmap_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == jpeg)
+		return NULL;
+
 	SWFCharacterInit((SWFCharacter)jpeg);
 
 	CHARACTERID(jpeg) = ++SWF_gNumCharacters;
@@ -381,6 +387,10 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 	jpeg->input = input;
 
 	info = scanJpegFile(input);
+
+	/* If scanJpegFile() failed, return NULL to signify this */
+	if (NULL == info)
+		return NULL;
 
 	CHARACTER(jpeg)->bounds = newSWFRect(0, info->width, 0, info->height);
 
@@ -408,6 +418,11 @@ SWFJpegBitmap
 newSWFJpegBitmap(FILE *f)
 {
 	SWFJpegBitmap jpeg = newSWFJpegBitmap_fromInput(newSWFInput_file(f));
+
+	/* If newSWFJpegBitmap_fromInput() failed, return NULL to signify this */
+	if (NULL == jpeg)
+		return NULL;
+
 	BLOCK(jpeg)->dtor = (destroySWFBlockMethod) destroySWFJpegBitmap_andInputs;
 	return jpeg;
 }
@@ -423,6 +438,10 @@ newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 	int alen;
 
 	jpeg = (SWFJpegWithAlpha) malloc(sizeof(struct SWFJpegWithAlpha_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == jpeg)
+		return NULL;
 
 	SWFCharacterInit((SWFCharacter)jpeg);
 
@@ -466,8 +485,11 @@ SWFJpegWithAlpha
 newSWFJpegWithAlpha(FILE *f, FILE *alpha)
 {
 	SWFJpegWithAlpha jpeg =
-		newSWFJpegWithAlpha_fromInput(newSWFInput_file(f),
-																	newSWFInput_file(alpha));
+		newSWFJpegWithAlpha_fromInput(newSWFInput_file(f), newSWFInput_file(alpha));
+
+	/* If newSWFJpegBitmap_fromInput() failed, return NULL to signify this */
+	if (NULL == jpeg)
+		return NULL;
 
 	BLOCK(jpeg)->dtor = (destroySWFBlockMethod) destroySWFJpegAlpha_andInputs;
 	return jpeg;
