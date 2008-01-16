@@ -122,6 +122,11 @@ SWFBitmap newSWFBitmap_fromRawImg(unsigned char *raw,
 	insize = width * height * 4;
 	outsize = compressBound(insize);
 	image.data = malloc(outsize);
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == image.data)
+		return NULL;
+
 	ret = compress2(image.data, &outsize, (Bytef *)tmp, insize, 9);
 	if(ret != Z_OK)
 	{
