@@ -368,6 +368,7 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 {
 	SWFJpegBitmap jpeg;
 	struct jpegInfo *info;
+	SWFRect temp_rect;
 
 	jpeg = (SWFJpegBitmap) malloc(sizeof(struct SWFJpegBitmap_s));
 
@@ -395,16 +396,17 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 		return NULL;
 	}
 
-	CHARACTER(jpeg)->bounds = newSWFRect(0, info->width, 0, info->height);
+	temp_rect = newSWFRect(0, info->width, 0, info->height);
 
 	/* If newSWFRect() failed, return NULL to signify this */
-	if (NULL == jpeg->bounds)
+	if (NULL == temp_rect)
 	{
 		free(info);
 		free(jpeg);
 		return NULL;
 	}
 
+	CHARACTER(jpeg)->bounds = temp_rect;
 	jpeg->length = info->length + 4;
 
 	free(info);
@@ -444,6 +446,7 @@ newSWFJpegBitmap(FILE *f)
 SWFJpegWithAlpha
 newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 {
+	SWFRect temp_rect;
 	SWFJpegWithAlpha jpeg;
 	struct jpegInfo *info;
 	int alen;
@@ -468,8 +471,24 @@ newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 
 	info = scanJpegFile(input);
 
-	CHARACTER(jpeg)->bounds = newSWFRect(0, info->width, 0, info->height);
+	/* If scanJpegFile() failed, return NULL to signify this */
+	if (NULL == info)
+	{
+		free (jpeg);
+		return NULL;
+	}
 
+	temp_rect = newSWFRect(0, info->width, 0, info->height);
+
+	/* If newSWFRect() failed, return NULL to signify this */
+	if (NULL == temp_rect)
+	{
+		free(info);
+		free(jpeg);
+		return NULL;
+	}
+
+	CHARACTER(jpeg)->bounds = temp_rect;
 	jpeg->jpegLength = info->length + 2; /* ?? */
 
 	free(info);
