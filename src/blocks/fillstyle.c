@@ -103,6 +103,13 @@ newSWFGradientFillStyle(SWFGradient gradient, byte flags)
 	fill->data.gradient = gradient;
 	fill->matrix = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
 
+	/* If newSWFMatrix() failed, return NULL to signify this */
+	if (NULL == fill->matrix)
+	{
+		free(fill);
+		return NULL;
+	}
+
 	return fill;
 }
 
@@ -132,6 +139,13 @@ newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 
 	fill->data.bitmap = bitmap;
 	fill->matrix = newSWFMatrix(Ming_scale, 0, 0, Ming_scale, 0, 0);
+
+	/* If newSWFMatrix() failed, return NULL to signify this */
+	if (NULL == fill->matrix)
+	{
+		free(fill);
+		return NULL;
+	}
 
 	return fill;
 }
