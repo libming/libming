@@ -90,6 +90,10 @@ newSWFDisplayList()
 {
 	SWFDisplayList list = (SWFDisplayList)malloc(sizeof(struct SWFDisplayList_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == list)
+		return NULL;
+
 	list->isSprite = FALSE;
 	list->head = NULL;
 	list->tail = NULL;
@@ -104,6 +108,10 @@ SWFDisplayList
 newSWFSpriteDisplayList()
 {
 	SWFDisplayList list = (SWFDisplayList)malloc(sizeof(struct SWFDisplayList_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == list)
+		return NULL;
 
 	list->isSprite = TRUE;
 	list->head = NULL;
@@ -133,14 +141,44 @@ SWFDisplayList_add(SWFDisplayList list, SWFBlockList blocklist, SWFCharacter cha
 {
 	SWFDisplayItem item = (SWFDisplayItem) malloc(sizeof(struct SWFDisplayItem_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == item)
+		return NULL;
+
 	item->flags = ITEM_NEW;
 	item->next = NULL;
 	item->depth = ++list->depth;
 
 	item->matrix = newSWFMatrix(0, 0, 0, 0, 0, 0);
+
+	/* If newSWFMatrix() failed, return NULL to signify this */
+	if (NULL == item->matrix)
+	{
+		free(item);
+		return NULL;
+	}
+
 	item->position = newSWFPosition(item->matrix);
 
+	/* If newSWFPosition() failed, return NULL to signify this */
+	if (NULL == item->position)
+	{
+		destroySWFMatrix(item->matrix);
+		free(item);
+		return NULL;
+	}
+
 	item->block = newSWFPlaceObject2Block(item->depth);
+
+	/* If newSWFPlaceObject2Block() failed, return NULL to signify this */
+	if (NULL == item->block)
+	{
+		destroySWFPosition(item->position);
+		destroySWFMatrix(item->matrix);
+		free(item);
+		return NULL;
+	}
+
 	item->character = character;
 	item->isPlaced = 0;
 	item->blocklist = blocklist;
