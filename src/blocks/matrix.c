@@ -50,6 +50,10 @@ newSWFMatrix(float a, float b, float c, float d, int x, int y)
 {
 	SWFMatrix m = (SWFMatrix)malloc(sizeof(struct SWFMatrix_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == m)
+		return NULL;
+
 	m->scaleX = a;
 	m->rotate0 = b;
 	m->rotate1 = c;
@@ -137,6 +141,11 @@ SWFMatrix
 SWFMatrix_dup(SWFMatrix matrix)
 {
 	SWFMatrix m = (SWFMatrix)malloc(sizeof(struct SWFMatrix_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == m)
+		return NULL;
+
 	memcpy(m, matrix, sizeof(struct SWFMatrix_s));
 	return m;
 }
