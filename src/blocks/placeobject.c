@@ -234,6 +234,10 @@ newSWFPlaceObject2Block(int depth)
 {
 	SWFPlaceObject2Block place = (SWFPlaceObject2Block)malloc(sizeof(struct SWFPlaceObject2Block_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == place)
+		return NULL;
+
 	SWFBlockInit((SWFBlock)place);
 
 	BLOCK(place)->type = SWF_PLACEOBJECT2;
