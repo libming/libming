@@ -68,6 +68,10 @@ newSWFDBLBitmap_fromInput(SWFInput input)
 
 	dbl = (SWFDBLBitmap)malloc(sizeof(struct SWFDBLBitmap_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == dbl)
+		return NULL;
+
 	SWFCharacterInit((SWFCharacter)dbl);
 
 	CHARACTERID(dbl) = ++SWF_gNumCharacters;
@@ -170,6 +174,10 @@ newSWFDBLBitmapData_fromData(dblData data)
 
 	dbl = (SWFDBLBitmapData)malloc(sizeof(struct SWFDBLBitmapData_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == dbl)
+		return NULL;
+
 	SWFCharacterInit((SWFCharacter)dbl);
 
 	CHARACTERID(dbl) = ++SWF_gNumCharacters;
@@ -219,7 +227,18 @@ destroySWFDBLBitmap_andInputs(SWFDBLBitmap bitmap)
 SWFDBLBitmap
 newSWFDBLBitmap(FILE* f)
 {
-	SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput(newSWFInput_file(f));
+	SWFInput input = newSWFInput_file(f);
+
+	/* If newSWFInput_file() failed, return NULL to signify this */
+	if (NULL == input)
+		return NULL;
+
+	SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput(input);
+
+	/* If newSWFDBLBitmap_fromInput() failed, return NULL to signify this */
+	if (NULL == dbl)
+		return NULL;
+
 	BLOCK(dbl)->dtor = (destroySWFBlockMethod) destroySWFDBLBitmap_andInputs;
 	return dbl;
 }
