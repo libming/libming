@@ -1416,7 +1416,7 @@ void
 outputSWF_DEFINEMORPHSHAPE (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEMORPHSHAPE);
-  iprintf(" CharcterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID %d\n", sblock->CharacterID);
   outputSWF_RECT(&(sblock->StartBounds));
   outputSWF_RECT(&(sblock->EndBounds));
   iprintf("  Offset %d\n", sblock->Offset);
@@ -1430,7 +1430,7 @@ void
 outputSWF_DEFINEMORPHSHAPE2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEMORPHSHAPE2);
-  iprintf(" CharcterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID %d\n", sblock->CharacterID);
   outputSWF_RECT(&(sblock->StartBounds));
   outputSWF_RECT(&(sblock->EndBounds));
   outputSWF_RECT(&(sblock->StartEdgeBounds));
