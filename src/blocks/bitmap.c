@@ -102,6 +102,7 @@ SWFBitmap newSWFBitmap_fromRawImg(unsigned char *raw,
 	struct dbl_data image;
 	uLongf insize, outsize;
 	int ret;
+	SWFBitmap return_data;
 	unsigned char *tmp;
 
 	switch(srcFmt)
@@ -134,7 +135,17 @@ SWFBitmap newSWFBitmap_fromRawImg(unsigned char *raw,
 		return NULL;
 	}
 	image.length = outsize;
-	return (SWFBitmap)newSWFDBLBitmapData_fromData(&image);
+
+	return_data = (SWFBitmap)newSWFDBLBitmapData_fromData(&image);
+
+	/* If newSWFDBLBitmapData_fromData() failed, return NULL to signify this */
+	if (NULL == return_data)
+	{
+		free(image.data);
+		return NULL;
+	}
+
+	return return_data;
 #else
 	SWF_warn("newSWFBitmap_fromRawImg: depends on zlib support\n");
 	return NULL;
