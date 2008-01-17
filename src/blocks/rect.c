@@ -66,6 +66,10 @@ newSWFRect(int minX, int maxX, int minY, int maxY)
 {
 	SWFRect rect = (SWFRect)malloc(sizeof(struct SWFRect_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == rect)
+		return NULL;
+
 	rect->minX = min(minX, maxX);
 	rect->maxX = max(minX, maxX);
 	rect->minY = min(minY, maxY);
