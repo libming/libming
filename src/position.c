@@ -41,6 +41,10 @@ newSWFPosition(SWFMatrix matrix)
 {
 	SWFPosition p = (SWFPosition)malloc(sizeof(struct SWFPosition_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == p)
+		return NULL;
+
 	p->x = 0;
 	p->y = 0;
 	p->xScale = 1.0;
