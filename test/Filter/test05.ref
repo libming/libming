@@ -28,7 +28,7 @@ Offset: 1644 (0x066c)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 32
 
- ShapeID: 1
+ CharacterID: 1
  RECT:  (0,0)x(400,400):10
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 40

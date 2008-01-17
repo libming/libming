@@ -20,7 +20,7 @@ Offset: 402 (0x0192)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 40
 
- ShapeID: 2
+ CharacterID: 2
  RECT:  (-10,-10)x(2010,2010):12
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 40

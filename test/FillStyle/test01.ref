@@ -14,7 +14,7 @@ Offset: 26 (0x001a)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 35
 
- ShapeID: 1
+ CharacterID: 1
  RECT:  (-10,-10)x(2010,2010):12
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 0

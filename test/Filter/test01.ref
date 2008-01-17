@@ -8,7 +8,7 @@ Offset: 20 (0x0014)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 25
 
- ShapeID: 1
+ CharacterID: 1
  RECT:  (-40,100)x(100,240):9
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
  LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0

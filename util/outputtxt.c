@@ -1017,7 +1017,7 @@ void
 outputSWF_DEFINEBUTTONSOUND (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEBUTTONSOUND);
-  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
   iprintf(" ButtonSoundChar0 %d\n", sblock->ButtonSoundChar0);
   if(sblock->ButtonSoundChar0)
     outputSWF_SOUNDINFO (&sblock->ButtonSoundInfo0);
@@ -1393,7 +1393,7 @@ void
 outputSWF_DEFINELOSSLESS (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINELOSSLESS);
-  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
   iprintf(" Bitmap format %d\n", sblock->BitmapFormat);
   iprintf(" Bitmap width %d x height %d\n", sblock->BitmapWidth, sblock->BitmapHeight);
   
@@ -1405,7 +1405,7 @@ void
 outputSWF_DEFINELOSSLESS2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINELOSSLESS2);
-  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
   iprintf(" Bitmap format %d\n", sblock->BitmapFormat);
   iprintf(" Bitmap width %d x height %d\n", sblock->BitmapWidth, sblock->BitmapHeight);
   if(sblock->BitmapFormat == 3)                                                                                                                                                    
@@ -1416,7 +1416,7 @@ void
 outputSWF_DEFINEMORPHSHAPE (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEMORPHSHAPE);
-  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
   outputSWF_RECT(&(sblock->StartBounds));
   outputSWF_RECT(&(sblock->EndBounds));
   iprintf("  Offset %d\n", sblock->Offset);
@@ -1430,7 +1430,7 @@ void
 outputSWF_DEFINEMORPHSHAPE2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEMORPHSHAPE2);
-  iprintf(" CharacterID %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
   outputSWF_RECT(&(sblock->StartBounds));
   outputSWF_RECT(&(sblock->EndBounds));
   outputSWF_RECT(&(sblock->StartEdgeBounds));
@@ -1451,7 +1451,7 @@ outputSWF_DEFINESHAPE (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE);
 
-  iprintf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" CharacterID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),1,"");
 }
@@ -1461,7 +1461,7 @@ outputSWF_DEFINESHAPE2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE2);
 
-  iprintf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" CharacterID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),2,"");
 
@@ -1472,7 +1472,7 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE3);
 
-  iprintf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" CharacterID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_SHAPEWITHSTYLE (&(sblock->Shapes),2,"");
 
@@ -1483,7 +1483,7 @@ outputSWF_DEFINESHAPE4 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINESHAPE4);
 
-  iprintf (" ShapeID: %d\n", sblock->ShapeID);
+  iprintf (" CharacterID: %d\n", sblock->ShapeID);
   outputSWF_RECT (&(sblock->ShapeBounds));
   outputSWF_RECT (&(sblock->EdgeBounds));
   iprintf("   UsesNonScalingStrokes: %d\n", sblock->UsesNonScalingStrokes);

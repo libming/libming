@@ -14,7 +14,7 @@ Offset: 26 (0x001a)
 Block type: 83 (SWF_DEFINESHAPE4)
 Block length: 95
 
- ShapeID: 1
+ CharacterID: 1
  RECT:  (-10,-10)x(2010,2010):12
  RECT:  (0,0)x(2000,2000):12
    UsesNonScalingStrokes: 0

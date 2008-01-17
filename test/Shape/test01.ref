@@ -14,7 +14,7 @@ Offset: 26 (0x001a)
 Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 8
 
- ShapeID: 1
+ CharacterID: 1
  RECT:  (0,0)x(0,0):1
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
  LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
@@ -43,7 +43,7 @@ Offset: 44 (0x002c)
 Block type: 83 (SWF_DEFINESHAPE4)
 Block length: 11
 
- ShapeID: 2
+ CharacterID: 2
  RECT:  (0,0)x(0,0):1
  RECT:  (0,0)x(0,0):1
    UsesNonScalingStrokes: 0
