@@ -390,9 +390,20 @@ newSWFJpegBitmap_fromInput(SWFInput input)
 
 	/* If scanJpegFile() failed, return NULL to signify this */
 	if (NULL == info)
+	{
+		free (jpeg);
 		return NULL;
+	}
 
 	CHARACTER(jpeg)->bounds = newSWFRect(0, info->width, 0, info->height);
+
+	/* If newSWFRect() failed, return NULL to signify this */
+	if (NULL == jpeg->bounds)
+	{
+		free(info);
+		free(jpeg);
+		return NULL;
+	}
 
 	jpeg->length = info->length + 4;
 
