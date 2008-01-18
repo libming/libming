@@ -88,8 +88,7 @@ struct SWFTextRecord_s
 
 
 static void
-writeSWFTextToMethod(SWFBlock block,
-										 SWFByteOutputMethod method, void *data)
+writeSWFTextToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFText text = (SWFText)block;
 	int length = 0;
@@ -166,7 +165,13 @@ destroySWFText(SWFText text)
 SWFText
 newSWFText()
 {
+	SWFRect temp_rect;
+
 	SWFText text = (SWFText)malloc(sizeof(struct SWFText_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == text)
+		return NULL;
 
 	SWFCharacterInit((SWFCharacter)text);
 
@@ -177,9 +182,27 @@ newSWFText()
 	BLOCK(text)->complete = completeSWFText;
 	BLOCK(text)->dtor = (destroySWFBlockMethod) destroySWFText;
 
-	CHARACTER(text)->bounds = newSWFRect(0,0,0,0);
+	temp_rect = newSWFRect(0,0,0,0);
+
+	/* If newSWFRect() failed, return NULL to signify this */
+	if (NULL == temp_rect)
+	{
+		free(text);
+		return NULL;
+	}
+
+	CHARACTER(text)->bounds = temp_rect;
 
 	text->out = newSWFOutput();
+
+	/* If newSWFOutput() failed, return NULL to signify this */
+	if (NULL == text->out)
+	{
+		destroySWFRect(temp_rect);
+		free(text);
+		return NULL;
+	}
+
 	text->currentRecord = NULL;
 	text->initialRecord = NULL;
 	text->matrix = NULL;
@@ -198,6 +221,11 @@ SWFText
 newSWFText2()
 {
 	SWFText text = newSWFText();
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == text)
+		return NULL;
+
 	BLOCK(text)->type = SWF_DEFINETEXT2;
 	return text;
 }
@@ -207,6 +235,11 @@ SWFTextRecord
 SWFText_addTextRecord(SWFText text)
 {
 	SWFTextRecord textRecord = (SWFTextRecord)malloc(sizeof(struct SWFTextRecord_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == text)
+		return NULL;
+
 	SWFTextRecord current = text->currentRecord;
 
 	textRecord->flags = 0;
@@ -321,6 +354,11 @@ SWFText_getScaledStringWidth(SWFText text, const char *string)
 
 	height = text->currentRecord->height;
 	widestr = (unsigned short *)malloc(2 * len);
+
+	/* If malloc failed, return -1 to signify this */
+	if (NULL == text)
+		return -1;
+
 	for(n = 0 ; n < len ; n++)
 		widestr[n] = (unsigned char)string[n];
 
@@ -446,6 +484,10 @@ SWFText_setFont(SWFText text, SWFFont font)
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
 
+	/* If SWFText_addTextRecord() failed, return early */
+	if (NULL == textRecord)
+		return;
+
 	textRecord->flags |= SWF_TEXT_HAS_FONT;
 	textRecord->font.font = font;
 }
@@ -475,6 +517,10 @@ SWFText_setScaledSpacing(SWFText text, int spacing)
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
 
+	/* If SWFText_addTextRecord() failed, return early */
+	if (NULL == textRecord)
+		return;
+
 	textRecord->spacing = spacing;
 }
 
@@ -486,7 +532,11 @@ SWFText_setColor(SWFText text, byte r, byte g, byte b, byte a)
 
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
-	
+
+	/* If SWFText_addTextRecord() failed, return early */
+	if (NULL == textRecord)
+		return;
+
 	textRecord->flags |= SWF_TEXT_HAS_COLOR;
 	textRecord->r = r;
 	textRecord->g = g;
@@ -502,6 +552,10 @@ SWFText_scaledMoveTo(SWFText text, int x, int y)
 
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
+
+	/* If SWFText_addTextRecord() failed, return early */
+	if (NULL == textRecord)
+		return;
 
 	if ( x != 0 )
 	{
@@ -533,12 +587,24 @@ SWFText_addWideString(SWFText text, const unsigned short* widestring,
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
 
+	/* If SWFText_addTextRecord() failed, return early */
+	if (NULL == textRecord)
+		return;
+
 	if ( textRecord->font.font == NULL )
 		SWF_error("font must be set before calling addString");
 
 	textRecord->advance = advance;
 	textRecord->strlen = len;
 	textRecord->string = (unsigned short*)malloc(sizeof(unsigned short) * len);
+
+	/* If malloc failed, return early */
+	if (NULL == textRecord->string)
+	{
+		destroySWFTextRecord(textRecord);
+		return;
+	}
+
 	memcpy(textRecord->string, widestring, sizeof(unsigned short) * len);
 }
 
@@ -557,6 +623,10 @@ SWFText_addUTF8String(SWFText text, const char* string, int* advance)
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
 
+	/* If SWFText_addTextRecord() failed, return early */
+	if (NULL == textRecord)
+		return;
+
 	if ( textRecord->font.font == NULL )
 		SWF_error("font must be set before calling addString");
 
@@ -572,6 +642,11 @@ SWFText_addString(SWFText text, const char* string, int* advance)
 	int len = strlen(string);
 	int i;
 	unsigned short* widestring = (unsigned short*) malloc(len * sizeof(unsigned short) );
+
+	/* If malloc() failed, return early */
+	if (NULL == widestring)
+		return;
+
 	for ( i = 0; i < len; ++i )
 		widestring[i] = string[i] & 0xff;
 	SWFText_addWideString(text, widestring, len, advance);
@@ -597,6 +672,11 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 	if ( textRecord->advance == NULL )
 	{
 		textRecord->advance = (int*)malloc(sizeof(int) * len);
+
+		/* If malloc() failed, return early */
+		if (NULL == textRecord->advance)
+			return;
+
 		memset(textRecord->advance, 0, sizeof(int) * len);
 	}
 
