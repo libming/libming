@@ -295,7 +295,8 @@ destroySWFTextRecord(SWFTextRecord record)
 	if ( record->advance != NULL )
 		free(record->advance);
 
-	free(record);
+	if ( record != NULL )
+		free(record);
 }
 
 
