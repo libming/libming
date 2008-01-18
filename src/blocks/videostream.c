@@ -125,6 +125,11 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream /* associated video stream */
 	}
 	
 	block = (SWFVideoFrame) malloc(sizeof(struct SWFVideoFrame_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == block)
+		return NULL;
+
 	SWFBlockInit((SWFBlock)block);
 
 	BLOCK(block)->complete = completeSWFVideoFrame;
