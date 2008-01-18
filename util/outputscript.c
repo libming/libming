@@ -293,7 +293,9 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
   c = matrix->RotateSkew1;
   d = matrix->ScaleY;
 
-  xScale = sqrt (a * a + c * c);
+  xScale = sqrt (a * a + c * c);	/* always >= 0 */
+  if (a<0)
+   xScale *= -1;			/* preserve sign if needed */
   yScale = (a * d - b * c) / xScale;
   skew = (a * b + c * d) / (a * a + c * c);
 
