@@ -45,8 +45,20 @@ newSWFOutput()
 {
 	SWFOutput out = (SWFOutput) malloc(sizeof(struct SWFOutput_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == out)
+		return NULL;
+
 	out->next = NULL;
 	out->buffer = (byte*) malloc(OUTPUT_BUFFER_INCREMENT);
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == out->buffer)
+	{
+		free(out);
+		return NULL;
+	}
+
 	out->pos = out->buffer;
 	*(out->pos) = 0;
 	out->buffersize = out->free = OUTPUT_BUFFER_INCREMENT;
@@ -64,8 +76,20 @@ newSizedSWFOutput(int size)
 {
 	SWFOutput out = (SWFOutput)malloc(sizeof(struct SWFOutput_s));
 
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == out)
+		return NULL;
+
 	out->next = NULL;
 	out->buffer = (byte*) malloc(size+1);
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == out->buffer)
+	{
+		free(out);
+		return NULL;
+	}
+
 	out->pos = out->buffer;
 	*(out->pos) = 0;
 	out->buffersize = out->free = size+1;
