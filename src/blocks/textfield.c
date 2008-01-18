@@ -193,7 +193,13 @@ destroySWFTextField(SWFTextField field)
 SWFTextField
 newSWFTextField()
 {
+	SWFRect temp_rect;
+
 	SWFTextField field = (SWFTextField)malloc(sizeof(struct SWFTextField_s));
+
+	/* If malloc failed, return NULL to signify this */
+	if (NULL == field)
+		return NULL;
 
 	SWFCharacterInit((SWFCharacter)field);
 
@@ -203,7 +209,16 @@ newSWFTextField()
 	BLOCK(field)->type = SWF_DEFINEEDITTEXT;
 
 	CHARACTERID(field) = ++SWF_gNumCharacters;
-	CHARACTER(field)->bounds = newSWFRect(-40, 280, -40, 280);
+	temp_rect = newSWFRect(-40, 280, -40, 280);
+
+	/* If newSWFRect() failed, return NULL to signify this */
+	if (NULL == temp_rect)
+	{
+		free(field);
+		return NULL;
+	}
+
+	CHARACTER(field)->bounds = temp_rect;
 
 	field->out = NULL;
 
