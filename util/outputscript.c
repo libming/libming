@@ -114,6 +114,8 @@ static int framenum = 1;
 static int spframenum = 1;
 static int spritenum = 0;
 static char spritename[64];
+static int offsetX=0;
+static int offsetY=0;
 
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
@@ -1323,6 +1325,11 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   if( sblock->PlaceFlagHasMatrix ) {
       printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
       sprintf(cname, "i%d", sblock->Depth );
+      if (!spritenum)				/* coordinate translation on main movie */
+      {
+       sblock->Matrix.TranslateX-=offsetX;
+       sblock->Matrix.TranslateY-=offsetY;
+      }
       outputSWF_MATRIX (&sblock->Matrix, cname);
   }
   if( sblock->PlaceFlagHasColorTransform ) {
@@ -1488,6 +1495,12 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 void
 outputHeader (struct Movie *m)
 {
+  int npending=0;
+  if( m->version == 4 ) 
+  {
+    m->version=5;		/* a note for user follows after language dependent part */
+    npending=1;
+  }
 #ifdef SWFPHP
   if( swftargetfile != NULL ) {
 	printf ("#!/usr/bin/php\n");
@@ -1546,11 +1559,19 @@ outputHeader (struct Movie *m)
 	}
   printf (COMMSTART "add setscale here" COMMEND "\n");
 #endif
+  if( npending ) 
+    printf( "\n" COMMSTART " Note: using v5+ syntax for script blocks (original SWF file version was 4)! " COMMEND "\n\n");
   if( m->rate != 12.0 ) 
   	printf ("%s(%f);\n", methodcall ("m", "setRate"), m->rate);
   if( m->frame.xMax != 6400 || m->frame.yMax != 4800 )
   	printf ("%s(%d, %d);\n", methodcall ("m", "setDimension"),
-			m->frame.xMax     , m->frame.yMax     );
+ 			m->frame.xMax - m->frame.xMin, m->frame.yMax - m->frame.yMin);
+  if (m->frame.xMin || m->frame.yMin)
+  {
+    offsetX= m->frame.xMin;
+    offsetY= m->frame.yMin;
+    printf( "\n" COMMSTART " Note: xMin and/or yMin are not 0! " COMMEND "\n\n");
+  }
   if( m->nFrames != 1 )
   	printf ("%s(%i);\n", methodcall ("m", "setFrames"), m->nFrames);
 }
