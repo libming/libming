@@ -20,6 +20,8 @@
 
 #include <math.h>
 #include <stdarg.h>
+#include <string.h>
+
 #include "blocks/blocktypes.h"
 #include "decompile.h"
 #include "parser.h"
@@ -116,6 +118,9 @@ static int spritenum = 0;
 static char spritename[64];
 static int offsetX=0;
 static int offsetY=0;
+static int *fontcodeptr=NULL;
+static int fontcodearrsize=0;
+static int fontcodeID=0;
 
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
@@ -1032,7 +1037,20 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 
   sprintf (fname, "f%d", sblock->FontID);
   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
-
+  if (fontcodeptr)
+  {
+   printf ("\n" COMMSTART " Currently only one fontcode table supported " COMMEND "\n");
+  }
+  else	/* save important part for later usage in outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2() */
+  {   
+   if (NULL != (fontcodeptr=malloc(sblock->NumGlyphs*sizeof(int))))
+   {
+    memcpy(fontcodeptr,sblock->CodeTable,sblock->NumGlyphs*sizeof(int));
+    fontcodearrsize=sblock->NumGlyphs;
+    fontcodeID=sblock->FontID;
+    printf ("\n" COMMSTART "font code table inited for f%d" COMMEND "\n",sblock->FontID);
+   }
+  }
 }
 
 void
@@ -1152,18 +1170,85 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 
 }
 
+static void
+outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,int bsize)
+{
+  int i=0;
+  if ( trec->TextRecordType == 0 )
+    return;
+  if (trec->StyleFlagHasFont)
+  {
+   printf("\n%s(" VAR "f%d);\n", methodcall (tname, "setFont"), trec->FontID);
+   printf("%s(%d);\n",methodcall(tname,"setHeight"),trec->TextHeight);
+  }
+  if( trec->StyleFlagHasColor )
+  {
+   if (level==2)
+    printf ("%s(0x%02x, 0x%02x, 0x%02x, 0x%02x);\n",methodcall (tname, "setColor"),
+      trec->TextColor.red,trec->TextColor.green,trec->TextColor.blue, trec->TextColor.alpha);
+   else
+    printf ("%s(0x%02x, 0x%02x, 0x%02x);\n",methodcall (tname, "setColor"),
+      trec->TextColor.red,trec->TextColor.green,trec->TextColor.blue);
+  }
+  if( trec->StyleFlagHasYOffset || trec->StyleFlagHasXOffset ) 
+  {
+    printf ("%s(%d, %d);\n", methodcall (tname, "moveTo"),trec->XOffset,trec->YOffset);
+  }
+  if (fontcodeID==trec->FontID)
+  {
+   for(i=0;i<trec->GlyphCount && i<bsize ;i++)
+   {
+    int off=(&(trec->GlyphEntries[i]))->GlyphIndex[0];
+    if (off<fontcodearrsize)
+     buffer[i]=fontcodeptr[    (&(trec->GlyphEntries[i]))->GlyphIndex[0]  ];
+    else
+     buffer[i]='?';
+    /* printf ( "#   GlyphIndex[0] = %c \n",(char)(&(trec->GlyphEntries[i]))->GlyphIndex[0] ); */
+   }
+  }
+  else
+    buffer[i]='?';
+  buffer[i+1]='\0'; 
+}
+
 void
 outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINETEXT);
+  int i;
+  char name[32];
+  char buffer[64];   
+  OUT_BEGIN (SWF_DEFINETEXT);
+  sprintf (name, "character%d", sblock->CharacterID);
+  printf ("%s();\n", newobj (name, "Text"));
 
+  for(i=0;i<sblock->numTextRecords;i++) 
+  {
+   if ( sblock->TextRecords[i].TextRecordType  )
+   {
+     outputSWF_TEXT_RECORD(&(sblock->TextRecords[i]), 1,name,buffer,64 );
+     printf ("%s(\"%s\");\n", methodcall (name, "addString"),buffer);
+   }
+  }
 }
 
 void
 outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINETEXT2);
+  int i;
+  char name[32];
+  char buffer[64];
+  OUT_BEGIN (SWF_DEFINETEXT2);
+  sprintf (name, "character%d", sblock->CharacterID);
+  printf ("%s();\n", newobj (name, "Text"));
 
+  for(i=0;i<sblock->numTextRecords;i++) 
+  {
+   if ( sblock->TextRecords[i].TextRecordType  )
+   {
+     outputSWF_TEXT_RECORD(&(sblock->TextRecords[i]), 2,name,buffer,64 );
+     printf ("%s(\"%s\");\n", methodcall (name, "addString"),buffer);
+   }
+  }
 }
 
 void
