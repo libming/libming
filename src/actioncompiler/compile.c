@@ -610,8 +610,11 @@ void addctx(enum ctx val)
 }
 void delctx(enum ctx val)
 {	
-	if(ctx_count <= 0 || ctx_stack[--ctx_count] != val)
-		SWF_error("consistency check in delctx");
+	if(ctx_count <= 0)  
+		SWF_error("consistency check in delctx: stack empty!\n");
+	else if (ctx_stack[--ctx_count] != val)
+		SWF_error("consistency check in delctx: val %i != %i\n", ctx_stack[ctx_count], val);
+
 }
 
 int chkctx(enum ctx val)
