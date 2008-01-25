@@ -8,7 +8,7 @@ Offset: 20 (0x0014)
 Block type: 14 (SWF_DEFINESOUND)
 Block length: 1041668
 
- CharacterId: 1
+ CharacterID: 1
  SoundFormat: 2
  SoundRate: 2
  SoundSize: 1

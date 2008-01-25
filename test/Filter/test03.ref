@@ -56,7 +56,7 @@ Block length: 24
  PlaceFlagHasBlendMode 0
  PlaceFlagHasFilterList 1
  Depth 1
- CharacterId: 2
+ CharacterID: 2
   Matrix:
    TranslateX      0 TranslateY      0
   NumberOfFilters 1

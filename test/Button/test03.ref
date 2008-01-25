@@ -51,7 +51,7 @@ Block length: 81
    PlaceFlagHasCharacter 1
    PlaceFlagMove 0
    Depth 1
-   CharacterId: 1
+   CharacterID: 1
     Matrix:
      TranslateX      0   TranslateY      0
 
@@ -196,7 +196,7 @@ Block length: 55
    PlaceFlagHasCharacter 1
    PlaceFlagMove 0
    Depth 1
-   CharacterId: 1
+   CharacterID: 1
     Matrix:
      ScaleX 0.199997   ScaleY 0.199997
      TranslateX      0   TranslateY      0
@@ -315,7 +315,7 @@ Block length: 10
  PlaceFlagHasCharacter 1
  PlaceFlagMove 0
  Depth 1
- CharacterId: 4
+ CharacterID: 4
   Matrix:
    TranslateX   3000 TranslateY   2000
 

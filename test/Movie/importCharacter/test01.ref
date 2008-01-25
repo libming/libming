@@ -25,7 +25,7 @@ Block length: 6
  PlaceFlagHasCharacter 1
  PlaceFlagMove 0
  Depth 1
- CharacterId: 1
+ CharacterID: 1
   Matrix:
    TranslateX      0 TranslateY      0
 
