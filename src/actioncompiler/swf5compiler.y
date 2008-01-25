@@ -607,7 +607,7 @@ function_decl
 		$$->name = $2;
 		$$->params = $4;
 		$$->code = $7;	
-		addctx(CTX_FUNCTION);	
+		delctx(CTX_FUNCTION);	
 	}
 	;
 
