@@ -950,21 +950,21 @@ void
 outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEBITS);
-  iprintf(" CharacterId: %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
 }
 
 void
 outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEBITSJPEG2);
-  iprintf(" CharacterId: %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
 }
 
 void
 outputSWF_DEFINEBITSJPEG3 (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_DEFINEBITSJPEG3);
-  iprintf(" CharacterId: %d\n", sblock->CharacterID);
+  iprintf(" CharacterID: %d\n", sblock->CharacterID);
   iprintf(" AlphaDataOffset %d\n", sblock->AlphaDataOffset);
 }
 
@@ -1496,7 +1496,7 @@ outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 {
   
 	OUT_BEGIN (SWF_DEFINESOUND);
-	iprintf(" CharacterId: %d\n", sblock->SoundId);
+	iprintf(" CharacterID: %d\n", sblock->SoundId);
 	iprintf(" SoundFormat: %d\n", sblock->SoundFormat);
 	iprintf(" SoundRate: %d\n", sblock->SoundRate);
 	iprintf(" SoundSize: %d\n", sblock->SoundSize);
@@ -1751,7 +1751,7 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
   iprintf(" PlaceFlagMove %d\n", sblock->PlaceFlagMove);
   iprintf(" Depth %d\n", sblock->Depth);
   if( sblock->PlaceFlagHasCharacter )
-	  iprintf( " CharacterId: %d\n", sblock->CharacterId );
+	  iprintf( " CharacterID: %d\n", sblock->CharacterId );
   if( sblock->PlaceFlagHasMatrix )
 	outputSWF_MATRIX (&(sblock->Matrix), "");
 /*
@@ -1794,7 +1794,7 @@ outputSWF_PLACEOBJECT3 (SWF_Parserstruct * pblock)
     iprintf(" ClassName %s\n", sblock->ClassName);
   
   if( sblock->PlaceFlagHasCharacter )
-	  iprintf( " CharacterId: %d\n", sblock->CharacterId );
+	  iprintf( " CharacterID: %d\n", sblock->CharacterId );
   if( sblock->PlaceFlagHasMatrix )
 	outputSWF_MATRIX (&(sblock->Matrix), "");
 /*
@@ -1854,7 +1854,7 @@ outputSWF_REMOVEOBJECT (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_REMOVEOBJECT);
 
-  iprintf(" CharacterId: %d\n", sblock->CharacterId);
+  iprintf(" CharacterID: %d\n", sblock->CharacterId);
   iprintf(" Depth: %d\n", sblock->Depth);
 
 }
