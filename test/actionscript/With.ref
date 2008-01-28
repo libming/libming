@@ -1,0 +1,42 @@
+File version: 6
+File size: 88
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 62
+
+ 5 Actions
+    22:SWFACTION_CONSTANTPOOL
+     [000] mc
+     [001] startDrag
+     [002] trace in with
+    54:SWFACTION_PUSH
+     [000]   Constant: 0 "mc"
+    59:SWFACTION_GETVARIABLE
+    60:SWFACTION_WITH
+    Size: 18
+  ****WITH-begin
+      65:SWFACTION_PUSH
+       [000]   Integer: 0
+       [001]   Constant: 1 "startDrag"
+      75:SWFACTION_CALLFUNCTION
+      76:SWFACTION_POP
+      77:SWFACTION_PUSH
+       [000]   Constant: 2 "trace in with"
+      82:SWFACTION_TRACE
+  ****WITH-end
+    83:SWFACTION_END
+
+Offset: 84 (0x0054)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 86 (0x0056)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
