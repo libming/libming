@@ -118,9 +118,14 @@ static int spritenum = 0;
 static char spritename[64];
 static int offsetX=0;
 static int offsetY=0;
-static int *fontcodeptr=NULL;
-static int fontcodearrsize=0;
-static int fontcodeID=0;
+
+struct FONTINFO {		/* a linked list for all our font code info: */
+ int *fontcodeptr;		/* built in outputSWF_DEFINEFONT2(), used in outputSWF_TEXT_RECORD() */
+ int fontcodearrsize;
+ int fontcodeID;
+ struct FONTINFO *next;
+};
+static struct FONTINFO *fip; 	/* start point of list */
 
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
@@ -1033,22 +1038,29 @@ void
 outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 {
   char fname[64];
+  struct FONTINFO *fi=fip;
   OUT_BEGIN (SWF_DEFINEFONT2);
 
   sprintf (fname, "f%d", sblock->FontID);
   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
-  if (fontcodeptr)
-  {
-   printf ("\n" COMMSTART " Currently only one fontcode table supported " COMMEND "\n");
+
+  if (!fi) 
+    fi=fip=calloc(1,sizeof(struct FONTINFO));
+  else
+  {  
+   while (fi->next)
+     fi=fi->next; 
+   fi->next=calloc(1,sizeof(struct FONTINFO));
+   fi=fi->next;
   }
-  else	/* save important part for later usage in outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2() */
-  {   
-   if (NULL != (fontcodeptr=malloc(sblock->NumGlyphs*sizeof(int))))
+  if (fi)   /* save important part for later usage in outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2() */
+  {
+   if (NULL != (fi->fontcodeptr=malloc(sblock->NumGlyphs*sizeof(int))))
    {
-    memcpy(fontcodeptr,sblock->CodeTable,sblock->NumGlyphs*sizeof(int));
-    fontcodearrsize=sblock->NumGlyphs;
-    fontcodeID=sblock->FontID;
-    printf ("\n" COMMSTART "font code table inited for f%d" COMMEND "\n",sblock->FontID);
+    memcpy(fi->fontcodeptr,sblock->CodeTable,sblock->NumGlyphs*sizeof(int));
+    fi->fontcodearrsize=sblock->NumGlyphs;
+    fi->fontcodeID=sblock->FontID;
+    printf (COMMSTART " init font %d code table" COMMEND "\n",sblock->FontID);
    }
   }
 }
@@ -1171,14 +1183,15 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
 }
 
 static void
-outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,int bsize)
+outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,int bsize,int id)
 {
   int i=0;
+  struct FONTINFO *fi=fip;
   if ( trec->TextRecordType == 0 )
     return;
   if (trec->StyleFlagHasFont)
   {
-   printf("\n%s(" VAR "f%d);\n", methodcall (tname, "setFont"), trec->FontID);
+   printf("%s(" VAR "f%d);\n", methodcall (tname, "setFont"), trec->FontID);
    printf("%s(%d);\n",methodcall(tname,"setHeight"),trec->TextHeight);
   }
   if( trec->StyleFlagHasColor )
@@ -1194,38 +1207,49 @@ outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,
   {
     printf ("%s(%d, %d);\n", methodcall (tname, "moveTo"),trec->XOffset,trec->YOffset);
   }
-  if (fontcodeID==trec->FontID)
+
+  while (fi)
   {
-   for(i=0;i<trec->GlyphCount && i<bsize ;i++)
+   if (trec->FontID) 
+    id=trec->FontID;
+   if (fi->fontcodeID==id)
    {
-    int off=(&(trec->GlyphEntries[i]))->GlyphIndex[0];
-    if (off<fontcodearrsize)
-     buffer[i]=fontcodeptr[    (&(trec->GlyphEntries[i]))->GlyphIndex[0]  ];
-    else
-     buffer[i]='?';
-    /* printf ( "#   GlyphIndex[0] = %c \n",(char)(&(trec->GlyphEntries[i]))->GlyphIndex[0] ); */
+    for(i=0;i<trec->GlyphCount && i<bsize ;i++)
+    {
+     int off=(&(trec->GlyphEntries[i]))->GlyphIndex[0];
+     if (off<fi->fontcodearrsize)
+      buffer[i]=fi->fontcodeptr[off];
+     else
+      buffer[i]='?';		/* fallback to dummy A */
+     /* printf ( COMMSTART "GlyphIndex[0] = %d  char = %d " COMMEND"\n",off,fi->fontcodeptr[off] ); */
+    } 
+    buffer[i+1]='\0'; 
+    return;
    }
+   else
+    fi=fi->next;
   }
-  else
-    buffer[i]='?';
-  buffer[i+1]='\0'; 
+  buffer[0]='X';		/* fallback to dummy B */
+  buffer[1]='\0'; 
 }
 
 void
 outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 {
-  int i;
+  int i,id=0;
   char name[32];
   char buffer[64];   
   OUT_BEGIN (SWF_DEFINETEXT);
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("%s();\n", newobj (name, "Text"));
-
   for(i=0;i<sblock->numTextRecords;i++) 
   {
+   if (!id && sblock->TextRecords[i].FontID)
+     id=sblock->TextRecords[i].FontID;
    if ( sblock->TextRecords[i].TextRecordType  )
    {
-     outputSWF_TEXT_RECORD(&(sblock->TextRecords[i]), 1,name,buffer,64 );
+     memset(buffer,0,64);
+     outputSWF_TEXT_RECORD(&(sblock->TextRecords[i]), 1,name,buffer,64,id );
      printf ("%s(\"%s\");\n", methodcall (name, "addString"),buffer);
    }
   }
@@ -1234,18 +1258,20 @@ outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
 {
-  int i;
+  int i,id=0;
   char name[32];
   char buffer[64];
   OUT_BEGIN (SWF_DEFINETEXT2);
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("%s();\n", newobj (name, "Text"));
-
   for(i=0;i<sblock->numTextRecords;i++) 
   {
+   if (!id && sblock->TextRecords[i].FontID)
+     id=sblock->TextRecords[i].FontID;
    if ( sblock->TextRecords[i].TextRecordType  )
    {
-     outputSWF_TEXT_RECORD(&(sblock->TextRecords[i]), 2,name,buffer,64 );
+     memset(buffer,0,64);
+     outputSWF_TEXT_RECORD(&(sblock->TextRecords[i]), 2,name,buffer,64,id );
      printf ("%s(\"%s\");\n", methodcall (name, "addString"),buffer);
    }
   }
