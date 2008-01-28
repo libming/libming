@@ -178,6 +178,7 @@ new			{ count();	return NEW;		}
 delete			{ count();	return DELETE;		}
 targetPath		{ count();	return TARGETPATH;	}
 return			{ count();	return RETURN;		}
+this			{ count(); 	return THIS;		}
 with			{ count();
 			  /* do not lex legacy functions in with-blocks */
 			  yy_push_state(STATE_PURE);

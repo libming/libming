@@ -63,7 +63,7 @@ static int classContext = 0;
 %token CALLFRAME STARTDRAG STOPDRAG GOTOANDSTOP GOTOANDPLAY SETTARGET 
 %token GETPROPERTY SETPROPERTY TONUMBER TOSTRING 
 
-%token TRY THROW CATCH FINALLY
+%token TRY THROW CATCH FINALLY THIS
 
 %token EXTENDS IMPLEMENTS FSCOMMAND2 CLASS PUBLIC PRIVATE
 
@@ -551,6 +551,8 @@ identifier
 	| GETPROPERTY	{ $$ = strdup("getProperty"); }
 	| SETPROPERTY	{ $$ = strdup("setProperty"); }
 	| CAST		{ $$ = strdup("cast"); }
+	/* temp hack to keep things working */
+	| THIS		{ $$ = strdup("this"); }
 	
 	/* property names */ 
 	| _P_X			{ $$ = strdup("_x"); }
