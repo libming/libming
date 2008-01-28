@@ -14,7 +14,7 @@ Offset: 26 (0x001a)
 Block type: 46 (SWF_DEFINEMORPHSHAPE)
 Block length: 54
 
- CharcterID 1
+ CharacterID: 1
  RECT:  (100,100)x(1040,640):12
  RECT:  (100,100)x(1040,2640):13
   Offset 23

@@ -20,7 +20,7 @@ Offset: 31 (0x001f)
 Block type: 20 (SWF_DEFINELOSSLESS)
 Block length: 1607
 
- CharacterID 2
+ CharacterID: 2
  Bitmap format 5
  Bitmap width 20 x height 20
 
