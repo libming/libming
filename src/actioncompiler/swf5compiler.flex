@@ -23,6 +23,8 @@ static void comment1();
 static void count();
 static void countline();
 static void warning(char *msg);
+static int yy_first_time = 1;
+static int yy_new_state;
 
 #define YY_INPUT(buf,result,max_size) result=lexBufferInput(buf, max_size)
 
@@ -103,9 +105,11 @@ enum yytokentype read_int (const char *text, YYSTYPE *num)
 }
 
 %}
+%option stack
 
-%s asm
-%s AS_V6
+%x STATE_ASM
+%x STATE_LEGACY
+%x STATE_PURE
 
 %{
  // forward declaration needed by the following function
@@ -129,11 +133,18 @@ EXPONENT [eE][-+]?{DIGIT}+
 
 %%
 
- // Only reset start condition if in INITIAL state
- if(YY_START == INITIAL && swfVersion >= 6) {
-	BEGIN(AS_V6);
- }
+%{
+if (yy_first_time) {
+	/* start in legacy state */
+	yy_push_state(STATE_LEGACY);
+	yy_first_time = 0;
+	
+	/* suppress unused warning for static declared function */
+	yy_top_state();
+}
+%}
 
+<*>{
 0x{HEXDIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
 0{OCTDIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
 {DIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
@@ -147,6 +158,9 @@ false			{ count(); swf5lval.intVal = 0;
 				return BOOLEAN;	}
 null			{ count();	return NULLVAL;		}
 undefined		{ count();	return UNDEFINED;	}
+}
+
+<STATE_PURE,STATE_LEGACY>{
 break			{ count();	return BREAK;		}
 continue		{ count();	return CONTINUE;	}
 function		{ count();	return FUNCTION;	}
@@ -164,22 +178,45 @@ new			{ count();	return NEW;		}
 delete			{ count();	return DELETE;		}
 targetPath		{ count();	return TARGETPATH;	}
 return			{ count();	return RETURN;		}
-with			{ count();	return WITH;		}
-asm			{ count();	BEGIN(asm); return ASM;		}
+with			{ count();
+			  /* do not lex legacy functions in with-blocks */
+			  yy_push_state(STATE_PURE);
+			  yy_new_state = 1;	
+			  return WITH;		
+			}
+
+  /* switch state to ASM */
+asm 			{ count();	
+				yy_push_state(STATE_ASM); 
+				yy_new_state = 1;	
+				return ASM;
+			}
+
 eval			{ count();	return EVAL;		}
 type[oO]f		{ count();	return TYPEOF; }
 instance[oO]f		{ count();	return INSTANCEOF; }
+trace			{ count();	return TRACE;	}
 class			{ count();	return CLASS; }
 public 			{ count();	return PUBLIC; }
 private			{ count();	return PRIVATE; }
 
+  /* SWF >= 6: lex always as reserved word complain later */
+try			{ count(); 	return TRY; }
+catch			{ count(); 	return CATCH; }
+throw			{ count(); 	return THROW; }
+finally			{ count(); 	return FINALLY; }
+"===" 			{ count(); 	return EEQ; }
+"!==" 			{ count(); 	return NEE; }
+}
+
   /* legacy functions */
+  /* in some blocks legacy function names should not be lexed (e.g. with) */
+<STATE_LEGACY>{
 random			{ count();	return RANDOM;	}
 getTimer		{ count();	return GETTIMER;	}
 length			{ count();	return LENGTH;	}
 concat			{ count();	return CONCAT;	}
 substr			{ count();	return SUBSTR;	}
-trace			{ count();	return TRACE;	}
 int			{ count();	return INT;	}
 ord			{ count();	return ORD;	}
 chr			{ count();	return CHR;	}
@@ -229,10 +266,10 @@ _soundbuftime		{ count();	return _P_SOUNDBUFTIME; }
 _quality		{ count();	return _P_QUALITY; }
 _xmouse			{ count();	return _P_XMOUSE; }
 _ymouse			{ count();	return _P_YMOUSE; }
-
+}
 
   /* assembler ops */
-<asm>{
+<STATE_ASM>{
 dup			{ count();	return DUP; }
 swap			{ count();	return SWAP; }
 pop			{ count();	return POP; }
@@ -300,21 +337,13 @@ removemovieclip		{ count();	return REMOVEMOVIECLIP; }
 implements		{ count(); 	return IMPLEMENTS;	}
 fscommand2		{ count(); 	return FSCOMMAND2;	}
 cast			{ count();	return CAST;		}
-}
-
-<AS_V6>{
-try			{ count(); return TRY; }
-catch			{ count(); return CATCH; }
-throw			{ count(); return THROW; }
-finally			{ count(); return FINALLY; }
-"===" 			{ count(); return EEQ; }
-"!==" 			{ count(); return NEE; }
-}
-
-<asm>r\:{DIGIT}+	{ count(); swf5lval.str = strdup(yytext+2);
+r\:{DIGIT}+		{ count(); swf5lval.str = strdup(yytext+2);
 				return REGISTER; }
+trace			{ count();	return TRACE;	}
+}
 
-
+  /* rules action in any state */
+<*>{
 {ID}			{ count();	swf5lval.str = strdup(yytext);
 					return IDENTIFIER;	}
 
@@ -378,8 +407,28 @@ finally			{ count(); return FINALLY; }
 ")"			{ count();	return ')'; }
 "["			{ count();	return '['; }
 "]"			{ count();	return ']'; }
-"{"			{ count();	return '{'; }
-"}"			{ count();	BEGIN(0); return '}'; }
+
+"{"			{ count();	
+			  if(yy_new_state)
+			  {
+				// if yy_new_state state was already pushed
+				// and will be poped by closing '}'
+				yy_new_state = 0;
+			  }
+			  else
+			  {
+				// push current state on top of stack
+				// preserves state when closing '}' pops stack
+			  	yy_push_state(YY_START); 
+			  }
+			  return '{'; 
+			}
+
+"}"			{ count();	
+			  yy_pop_state(); 
+			  return '}'; 
+			}
+
 ","			{ count();	return ','; }
 "."			{ count();	return '.'; }
 "?"			{ count();	return '?'; }
@@ -389,6 +438,7 @@ finally			{ count(); return FINALLY; }
 \r?\n			{ countline();	yyless(1);	}
 
 .			SWF_error("Unrecognized character: %s\n", yytext);
+}
 
 %%
 static int getinput() {
