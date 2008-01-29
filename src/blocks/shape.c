@@ -59,7 +59,6 @@ struct curveToRecord
 };
 typedef struct curveToRecord *CurveToRecord;
 
-
 typedef enum
 {
 	SHAPERECORD_STATECHANGE,
@@ -415,7 +414,68 @@ SWFShape_addStyleHeader(SWFShape shape)
 	fill/line types in advance.
 */
 
+static void scaleShapeRecord(ShapeRecord record, float scale)
+{
+	switch(record.type)
+	{
+		case SHAPERECORD_STATECHANGE:
+			record.record.stateChange->moveToX *= scale;
+			record.record.stateChange->moveToY *= scale;
+			break;
+		case SHAPERECORD_LINETO:
+			record.record.lineTo->dx *= scale;
+			record.record.lineTo->dy *= scale;
+			break;
+		case SHAPERECORD_CURVETO:
+			record.record.curveTo->controlx *= scale;
+			record.record.curveTo->controly *= scale;
+			record.record.curveTo->anchorx *= scale;
+			record.record.curveTo->anchory *= scale;
+			break;
+	}
+}
+
 #define SHAPERECORD_INCREMENT 32
+
+/* copy shaperecord from other shape */
+static ShapeRecord addShapeRecord(SWFShape shape, ShapeRecord record)
+{
+	if ( shape->nRecords % SHAPERECORD_INCREMENT == 0 )
+	{
+		shape->records = (ShapeRecord*) realloc(shape->records,
+					 sizeof(ShapeRecord) *
+					 (shape->nRecords + SHAPERECORD_INCREMENT));
+	}
+
+	switch ( record.type )
+	{
+		case SHAPERECORD_STATECHANGE:
+		{
+			StateChangeRecord change = (StateChangeRecord)calloc(1,sizeof(struct stateChangeRecord));
+			*change = *record.record.stateChange;
+			shape->records[shape->nRecords].record.stateChange = change;
+			break;
+		}
+		case SHAPERECORD_LINETO:
+		{
+			LineToRecord lineTo = (LineToRecord) calloc(1,sizeof(struct lineToRecord));
+			*lineTo = *record.record.lineTo;
+			shape->records[shape->nRecords].record.lineTo = lineTo;
+			break;
+		}
+		case SHAPERECORD_CURVETO:
+		{
+			CurveToRecord curveTo = (CurveToRecord) calloc(1,sizeof(struct curveToRecord));
+			*curveTo = *record.record.curveTo;
+			shape->records[shape->nRecords].record.curveTo = curveTo;
+			break;
+		}
+	}
+	shape->records[shape->nRecords].type = record.type;
+	shape->nRecords++;
+	return shape->records[shape->nRecords-1];
+
+}
 
 static ShapeRecord
 newShapeRecord(SWFShape shape, shapeRecordType type)
@@ -1146,9 +1206,25 @@ SWFShape_getScaledPenY(SWFShape shape)
 
 void
 SWFShape_drawScaledGlyph(SWFShape shape,
-												 SWFFont font, unsigned short c, int size)
+                         SWFFont font, unsigned short c, int size)
 {
+	int i;
+	if(font == NULL)
+		return;
 	
+	SWFShape glyph = SWFFont_getGlyph(font, c);
+	if(glyph == NULL)
+	{
+		SWF_warn("SWFShape_drawScaledGlyph: no glyph for code %i found \n", c);
+		return;
+	}
+
+
+	for(i = 0; i < glyph->nRecords; i++)
+	{
+		ShapeRecord rec = addShapeRecord(shape, glyph->records[i]);
+		scaleShapeRecord(rec, size/1024.0);
+	}
 }
 
 /*

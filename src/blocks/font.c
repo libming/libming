@@ -769,7 +769,6 @@ SWFFont_getScaledStringWidth(SWFFont font, const char* string)
 		widestr[n] = (unsigned char)string[n];
 	width = SWFFont_getScaledWideStringWidth(font, widestr, len);
 	free(widestr);
-
 	return width;
 }
 
@@ -875,6 +874,17 @@ SWFFont_getCharacterKern(SWFFont font,
 		}
 
 	return 0;
+}
+
+SWFShape *SWFFont_getGlyph(SWFFont font, unsigned short c)
+{
+	int index;
+
+	index = SWFFont_findGlyphCode(font, c);
+	if(index < 0)
+		return NULL;
+
+	return font->shapes[index];	
 }
 
 void SWFFontCollection_addFont(SWFFontCollection collection, SWFFont font)

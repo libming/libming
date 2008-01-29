@@ -111,8 +111,7 @@ void SWFFontCollection_addFont(SWFFontCollection collection, SWFFont font);
 void destroySWFFontCollection(SWFFontCollection collection);
 SWFFontCollection newSWFFontCollection();
 
-byte* SWFFont_findGlyph(SWFFont font, unsigned short c);
-
+SWFShape *SWFFont_getGlyph(SWFFont font, unsigned short c);
 
 byte SWFFont_getFlags(SWFFont font);
 
