@@ -120,7 +120,7 @@ static int offsetX=0;
 static int offsetY=0;
 
 struct FONTINFO {		/* a linked list for all our font code info: */
- int *fontcodeptr;		/* built in outputSWF_DEFINEFONT2(), used in outputSWF_TEXT_RECORD() */
+ int *fontcodeptr;		/* built in several outputSWF_DEFINEFONTxxxx(), used in outputSWF_TEXT_RECORD() */
  int fontcodearrsize;
  int fontcodeID;
  struct FONTINFO *next;
@@ -1034,15 +1034,10 @@ outputSWF_DEFINEFONT (SWF_Parserstruct * pblock)
 
 }
 
-void
-outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
+/* save important part for later usage in outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2() */
+static void saveFontInfo(int id,int numglyph,int *codetable,UI16 *ct16)
 {
-  char fname[64];
   struct FONTINFO *fi=fip;
-  OUT_BEGIN (SWF_DEFINEFONT2);
-
-  sprintf (fname, "f%d", sblock->FontID);
-  printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
 
   if (!fi) 
     fi=fip=calloc(1,sizeof(struct FONTINFO));
@@ -1053,29 +1048,54 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
    fi->next=calloc(1,sizeof(struct FONTINFO));
    fi=fi->next;
   }
-  if (fi)   /* save important part for later usage in outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2() */
+  if (fi)   
   {
-   if (NULL != (fi->fontcodeptr=malloc(sblock->NumGlyphs*sizeof(int))))
+   if (NULL != (fi->fontcodeptr=malloc(numglyph * sizeof(int))))
    {
-    memcpy(fi->fontcodeptr,sblock->CodeTable,sblock->NumGlyphs*sizeof(int));
-    fi->fontcodearrsize=sblock->NumGlyphs;
-    fi->fontcodeID=sblock->FontID;
-    printf (COMMSTART " init font %d code table" COMMEND "\n",sblock->FontID);
+    int i;
+    for (i=0;i<numglyph;i++)
+    {
+     fi->fontcodeptr[i]=codetable ? codetable[i] : ct16[i];
+    }
+    fi->fontcodearrsize=numglyph;
+    fi->fontcodeID=id;
+    printf (COMMSTART " init font %d code table" COMMEND "\n",id);
    }
   }
+}
+
+
+void
+outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
+{
+  char fname[64];
+  OUT_BEGIN (SWF_DEFINEFONT2);
+
+  sprintf (fname, "f%d", sblock->FontID);
+  printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+  saveFontInfo(sblock->FontID,sblock->NumGlyphs,sblock->CodeTable,NULL);
 }
 
 void
 outputSWF_DEFINEFONTINFO (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEFONTINFO);
+  char fname[64];
+  OUT_BEGIN (SWF_DEFINEFONTINFO);
 
+  sprintf (fname, "f%d", sblock->FontID);
+  printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+  saveFontInfo(sblock->FontID,sblock->nGlyph,NULL,sblock->CodeTable);
 }
 
 void
 outputSWF_DEFINEFONTINFO2(SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEFONTINFO2);
+  char fname[64];
+  OUT_BEGIN (SWF_DEFINEFONTINFO2);
+
+  sprintf (fname, "f%d", sblock->FontID);
+  printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+  saveFontInfo(sblock->FontID,sblock->nGlyph,NULL,sblock->CodeTable);
 }
 
 void
