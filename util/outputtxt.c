@@ -1362,7 +1362,7 @@ outputSWF_ZONERECORD(int i, struct SWF_ZONERECORD *zone)
 	iprintf("ZoneRecord %d\n", i);
 	iprintf("  NumZoneData %d\n", zone->NumZoneData);
 	for(j = 0; j < zone->NumZoneData; j++)
-		outputSWF_ZONEDATA(j, zone->ZoneData +i);
+		outputSWF_ZONEDATA(j, zone->ZoneData + j);
 	
 	iprintf("  ZoneMask X %d, Y %d\n", zone->ZoneMaskX, zone->ZoneMaskY);
 }
