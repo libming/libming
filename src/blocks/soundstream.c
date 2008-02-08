@@ -43,6 +43,7 @@
 #define STREAM_MP3 1
 #define STREAM_FLV 2
 
+
 struct StreamSourceMp3
 {
 	int start;
@@ -54,7 +55,9 @@ struct StreamSourceFlv
 	FLVStream *stream;
 	FLVTag tag;
 	int tagOffset;
+	int flags;
 };
+#define FLV_AUDIO_CODEC(__stream) (((__stream)->source.flv.flags & 0xf0) >> 4)
 
 struct SWFSoundStream_s
 {
@@ -64,6 +67,7 @@ struct SWFSoundStream_s
 	int samplesPerFrame;
 	int sampleRate;
 	byte freeInput;
+	float frameRate;
 	
 	union {
 	/* either an MP3 file -> handled by SWFInput */
@@ -78,7 +82,7 @@ struct SWFSoundStreamBlock_s
 	struct SWFBlock_s block;
 
 	SWFSoundStream stream;
-	int numFrames;
+	int numSamples;
 	int delay;
 	int length;
 };
@@ -116,7 +120,12 @@ void skipMP3(SWFSoundStream stream, float skip)
 int
 completeSWFSoundStream(SWFBlock block)
 {
-	return ((SWFSoundStreamBlock)block)->length + 4;
+	SWFSoundStreamBlock streamblock = (SWFSoundStreamBlock)block;
+	if(streamblock->stream->streamSource == STREAM_MP3 || 
+		FLV_AUDIO_CODEC(streamblock->stream) == AUDIO_CODEC_MP3)
+		return streamblock->length + 4;
+	else
+		return streamblock->length;
 }
 
 
@@ -186,50 +195,52 @@ writeSWFSoundStreamToMethod(SWFBlock block,
 	SWFSoundStreamBlock streamblock = (SWFSoundStreamBlock)block;
 	int source = streamblock->stream->streamSource;
 	
-	methodWriteUInt16(streamblock->numFrames *
-                          (streamblock->stream->sampleRate > 32000 ? 1152 : 576),
-                          method, data);
-
-	methodWriteUInt16(streamblock->delay, method, data);
 	if(source == STREAM_MP3)
+	{
+		methodWriteUInt16(streamblock->numSamples, method, data);
+		methodWriteUInt16(streamblock->delay, method, data);
 		write_mp3(streamblock, method, data);
+	}
 	else if(source == STREAM_FLV)
+	{
+		if(FLV_AUDIO_CODEC(streamblock->stream) == AUDIO_CODEC_MP3)
+		{
+			methodWriteUInt16(streamblock->numSamples, method, data);
+			methodWriteUInt16(streamblock->delay, method, data);
+		}
 		write_flv(streamblock, method, data);
+	}
 }
 
-
-static void 
-fillStreamBlock_flv(SWFSoundStream stream, SWFSoundStreamBlock block)
+static int
+fillBlock_flv_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 {
 	FLVStream *flv = stream->source.flv.stream;
 	FLVTag *tag = &stream->source.flv.tag; 
 	int tagOffset = stream->source.flv.tagOffset;
-	int delay, length;
-        int frameSize, ret;
+	int delay, length, frameSize, ret;
 	SWFInput input;
 
-	
 	block->delay = stream->delay;
 	delay = stream->delay + stream->samplesPerFrame;
 
 	if(tagOffset < 0)
 	{
 		ret = FLVStream_nextTagType(flv, tag, NULL, FLV_AUDIOTAG);
-	
 		if(ret < 0)
 		{
 			SWF_warn("fillStreamBlock_flv: not a valid flv audio stream\n");
-			goto stream_finished;
+			return -1;
 		}
 	}
 	
 	input = FLVTag_getPayloadInput(tag);
 	if(input == NULL)
-		goto stream_finished;
+		return -1;
 		
 	if(tagOffset > 0)
 		SWFInput_seek(input, tagOffset, SEEK_SET);
-	
+
 	if ( stream->sampleRate > 32000 )
 		frameSize = 1152;
 	else
@@ -239,33 +250,99 @@ fillStreamBlock_flv(SWFSoundStream stream, SWFSoundStreamBlock block)
 	{
 		length = nextMP3Frame(input);	
 		if (length < 0) /* parse error: not a valid mp3 frame */
-			goto stream_finished;
+			return -1;
 		else if(length == 0) /* eof */
 		{
 			ret = FLVStream_nextTagType(flv, tag, tag, FLV_AUDIOTAG);
 			if(ret < 0)
-				goto stream_finished;
+				return -1;
 			
 			input = FLVTag_getPayloadInput(tag);
 			if(input == NULL)
-				goto stream_finished;
+				return -1;
 		}
 		else 
 		{
-			++block->numFrames;
+			block->numSamples += frameSize;
 			block->length += length;
 			delay -= frameSize;
 		}
 	}
-
 	stream->source.flv.tag = *tag;
 	stream->source.flv.tagOffset = SWFInput_tell(input);
 	stream->delay = delay;
-	return;
+	return 0;
+}
 
-stream_finished:
-	stream->isFinished = TRUE;
-        SWFSoundStream_rewind(stream);
+static int
+fillBlock_flv_nelly(SWFSoundStream stream, SWFSoundStreamBlock block)
+{
+	FLVStream *flv = stream->source.flv.stream;
+	FLVTag *tag = &stream->source.flv.tag; 
+	int length, samples, ret;
+	SWFInput input;
+	int tagOffset = stream->source.flv.tagOffset;
+
+	if(tagOffset < 0)
+	{
+		ret = FLVStream_nextTagType(flv, tag, NULL, FLV_AUDIOTAG);
+		if(ret < 0)
+		{
+			SWF_warn("fillStreamBlock_flv: not a valid flv audio stream\n");
+			return -1;
+		}
+	}
+	
+	input = FLVTag_getPayloadInput(tag);
+	if(input == NULL)
+		return -1;
+
+	samples = stream->samplesPerFrame;
+	while (samples > 0)
+	{
+		length = SWFInput_length(input);	
+		if (length < 0)
+			return -1;
+
+		samples -= length * 64;
+		block->length += length;
+		if(samples > 0) 		{
+			ret = FLVStream_nextTagType(flv, tag, tag, FLV_AUDIOTAG);
+			if(ret < 0)
+				return -1;
+			
+			input = FLVTag_getPayloadInput(tag);
+			if(input == NULL)
+				return -1;
+		}
+	}
+	stream->source.flv.tag = *tag;
+	stream->source.flv.tagOffset = 0;
+	return 0;
+}
+
+
+static void 
+fillStreamBlock_flv(SWFSoundStream stream, SWFSoundStreamBlock block)
+{
+	int ret;
+	
+	if(FLV_AUDIO_CODEC(stream) == AUDIO_CODEC_MP3)
+		ret = fillBlock_flv_mp3(stream, block);
+	else if(FLV_AUDIO_CODEC(stream) == AUDIO_CODEC_NELLY || 
+		FLV_AUDIO_CODEC(stream) == AUDIO_CODEC_NELLY_MONO)
+		ret = fillBlock_flv_nelly(stream, block);
+	else
+	{
+		SWF_warn("unsupported codec %i\n", FLV_AUDIO_CODEC(stream));
+		ret = -1;
+	}
+			
+	if(ret < 0)
+	{
+		stream->isFinished = TRUE;
+		SWFSoundStream_rewind(stream);
+	}
 }
 
 static void 
@@ -287,7 +364,7 @@ fillStreamBlock_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 
 	while ( delay > frameSize )
 	{
-		++block->numFrames;
+		block->numSamples += frameSize;
 		length = nextMP3Frame(stream->source.mp3.input);
 		if ( length <= 0 )
 		{
@@ -322,7 +399,7 @@ SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 
 	block->stream = stream;
 	block->length = 0;
-	block->numFrames = 0;
+	block->numSamples = 0;
 
 	if(stream->streamSource == STREAM_MP3)
 		fillStreamBlock_mp3(stream, block);
@@ -454,6 +531,7 @@ getStreamFlag_flv(SWFSoundStream stream, float frameRate, float skip)
 	
 	flags = tag.hdr.audio.samplingRate | tag.hdr.audio.sampleSize;
 	flags |= tag.hdr.audio.channel | tag.hdr.audio.format;
+	stream->source.flv.flags = flags;
 
 	skip_msec = round(skip * 1000);
 	if(FLVStream_setStreamOffset(stream->source.flv.stream, skip_msec) < 0)
@@ -468,14 +546,15 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 {
 	int flags = 0;
 
-	SWFOutput out = newSizedSWFOutput(6);
-	SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD);
+	SWFOutput out = newSizedSWFOutput(4);
+	SWFOutputBlock block = newSWFOutputBlock(out, SWF_SOUNDSTREAMHEAD2);
 	
 	if(stream->streamSource == STREAM_MP3)
 		flags = getStreamFlag_mp3File(stream, frameRate, skip);
 	else if(stream->streamSource == STREAM_FLV)
 		flags = getStreamFlag_flv(stream, frameRate, skip);
 	
+	stream->frameRate = frameRate;	
 	if(flags < 0)
 	{
 		destroySWFOutputBlock(block);
@@ -485,7 +564,8 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	SWFOutput_writeUInt8(out, flags & 0x0f); 
 	SWFOutput_writeUInt8(out, flags);
 	SWFOutput_writeUInt16(out, stream->samplesPerFrame);
-	SWFOutput_writeUInt16(out, SWFSOUND_INITIAL_DELAY);
+	if(((flags & 0xf0) >> 4) == 2)	// MP3 only
+		SWFOutput_writeUInt16(out, SWFSOUND_INITIAL_DELAY);
 	
 	return (SWFBlock)block;
 }
@@ -513,7 +593,7 @@ getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock)
 		
 	streamblock->stream = stream;
 	streamblock->length = 0;
-	streamblock->numFrames = 0;
+	streamblock->numSamples = 0;
 	stream->delay = INT_MAX - stream->samplesPerFrame - 1;
 	if(source == STREAM_MP3) {
 		fillStreamBlock_mp3(stream, streamblock);
@@ -536,8 +616,7 @@ writeSWFSoundWithSoundStreamToMethod(SWFSoundStream stream,
 
 	getSWFSoundStreamLength(stream, &streamblock);
 
-	methodWriteUInt32(streamblock.numFrames *
-		(stream->sampleRate > 32000 ? 1152 : 576), method, data);
+	methodWriteUInt32(streamblock.numSamples, method, data);
 
 	methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);
 	if(source == STREAM_MP3)
@@ -579,6 +658,7 @@ newSWFSoundStream_fromInput(SWFInput input)
 		stream->streamSource = STREAM_FLV;
 		stream->source.flv.stream = flvStream;
 		stream->source.flv.tagOffset = -1;
+		stream->source.flv.flags = 0;
 	}
 	
 	stream->delay = SWFSOUND_INITIAL_DELAY;
