@@ -876,7 +876,7 @@ SWFFont_getCharacterKern(SWFFont font,
 	return 0;
 }
 
-SWFShape *SWFFont_getGlyph(SWFFont font, unsigned short c)
+SWFShape SWFFont_getGlyph(SWFFont font, unsigned short c)
 {
 	int index;
 
