@@ -57,6 +57,14 @@ Import named symbols from the given SWF file and store them into a
 \fB\-a --init-action\fR <source.as>[:<frameno>]
 Compile the given source AS file as an init action for frame <frameno>.
 .TP
+\fB\-n --network-access\fR network|file
+Force addition of a networkAccess flag with given value.
+For SWF8 or higher the FileAttribute tag is mandatory so will be present anyway,
+with a default of 'file' access. You can use this flag to both change the default
+for SWF8+ and to provide the optional tag for SWF8-.
+The tag basically determine the resources sandbox to use when the movie is loaded
+from the filesystem, in an exclusive manner.
+.TP
 \fB\-h\fR 
 Print quick help.
 .TP
