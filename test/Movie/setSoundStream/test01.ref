@@ -5,7 +5,7 @@ Frame rate: 12.000000 / sec.
 Total frames: 200
 
 Offset: 20 (0x0014)
-Block type: 18 (SWF_SOUNDSTREAMHEAD)
+Block type: 45 (SWF_SOUNDSTREAMHEAD2)
 Block length: 6
 
   PlaybackSoundRate 22 kHz
