@@ -167,6 +167,7 @@ usage (char *me, int ex)
 	fprintf(stderr, " -V  Print version and copyright info\n");
 	fprintf(stderr, " -d  debug parser\n");
 	fprintf(stderr, " -a  <AS_file>[:<frameno>] - add init action for frame <frameno> (0-based, 0 if omitted)\n");
+	fprintf(stderr, " -n  network|file - restrict sandbox access from locally-loaded movies (automatically restricted to file for SWF>=8)\n");
 	exit(ex);
 }
 
@@ -220,6 +221,16 @@ main (int argc, char **argv)
 	int i;
 	int swfcompression = DEFSWFCOMPRESSION;
 	float framerate = 12.0;
+	/*
+	 * Allow network access from locally-loaded movies.
+	 *
+	 *   0 = file access
+	 *   1 = network access
+	 *  -1 = unspecified (omit the tag if SWF < 8, file access otherwise)
+	 *
+	 *  By default is unspecified.
+	 */
+	int networkAccess = -1;
 	int usedfiles = 0;
 	struct stat statbuf;
 	int debug_parser = 0;	
@@ -233,6 +244,7 @@ main (int argc, char **argv)
 		{"includepath", 1, 0, 'I'},
 		{"define", 1, 0, 'D'},
 		{"size", 1, 0, 's'},
+		{"network-access", 1, 0, 'n'},
 		{"output", 1, 0, 'o'},
 		{"import", 1, 0, 'i'},
 		{"version", 0, 0, 'V'},
@@ -258,7 +270,7 @@ main (int argc, char **argv)
 #define BUFSIZE 1024
 		char buf [BUFSIZE];
 
-		const char *optstring = "Vhpds:r:D:I:v:c:i:o:a:";
+		const char *optstring = "Vhpds:r:D:I:v:c:i:o:a:n:";
 #ifdef HAVE_GETOPT_LONG
 		c = getopt_long (argc, argv, optstring, opts, &opts_idx);
 #else
@@ -277,6 +289,23 @@ main (int argc, char **argv)
 					usage(argv[0], EXIT_FAILURE);
 				}
 				break;
+			case 'n':
+			{
+				if ( ! strcasecmp(optarg, "network") )
+				{
+					networkAccess = 1;
+				}
+				else if ( ! strcasecmp(optarg, "file") )
+				{
+					networkAccess = 0;
+				}
+				else
+				{
+					fprintf(stderr, "Network access must be 'network' or 'file'\n");
+					exit(1);
+				}
+				break;
+			}
 			case 'v':
 				if ( sscanf(optarg, "%d", &swfversion) != 1 )
 				{
@@ -357,6 +386,7 @@ main (int argc, char **argv)
 	Ming_setSWFCompression(swfcompression);
 
 	mo = newSWFMovie();
+	if ( networkAccess >= 0 ) SWFMovie_setNetworkAccess(mo, networkAccess);
 	SWFMovie_setDimension(mo, (float)width, (float)height);
 	SWFMovie_setRate(mo, framerate);
 
@@ -687,6 +717,10 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.46  2008/02/08 09:19:57  strk
+ * Add -n switch to force NetworkAccess flag in a file attribute tag.
+ * See http://bugs.libming.org/show_bug.cgi?id=37
+ *
  * Revision 1.45  2008/01/15 08:11:24  strk
  * Fix bitmap embedding code to respect size of image (rather then swap dimensions)
  *
