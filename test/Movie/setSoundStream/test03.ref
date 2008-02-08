@@ -1,0 +1,2024 @@
+File version: 7
+File size: 52828
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 200
+
+Offset: 20 (0x0014)
+Block type: 45 (SWF_SOUNDSTREAMHEAD2)
+Block length: 4
+
+  PlaybackSoundRate 22 kHz
+  PlaybackSoundSize 16 bit
+  PlaybackSoundType mono
+  StreamSoundCompression Nellymoser
+  StreamSoundRate 22 kHz
+  StreamSoundSize 16 bit
+  StreamSoundType mono
+  StreamSoundSampleCount 1837
+
+Offset: 26 (0x001a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 288 (0x0120)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 290 (0x0122)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 552 (0x0228)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 554 (0x022a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 816 (0x0330)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 818 (0x0332)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 1080 (0x0438)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1082 (0x043a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 1344 (0x0540)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1346 (0x0542)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 1608 (0x0648)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1610 (0x064a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 1872 (0x0750)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1874 (0x0752)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 2136 (0x0858)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 2138 (0x085a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 2400 (0x0960)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 2402 (0x0962)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 2664 (0x0a68)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 2666 (0x0a6a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 2928 (0x0b70)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 2930 (0x0b72)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 3192 (0x0c78)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 3194 (0x0c7a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 3456 (0x0d80)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 3458 (0x0d82)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 3720 (0x0e88)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 3722 (0x0e8a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 3984 (0x0f90)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 3986 (0x0f92)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 4248 (0x1098)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 4250 (0x109a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 4512 (0x11a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 4514 (0x11a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 4776 (0x12a8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 4778 (0x12aa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 5040 (0x13b0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 5042 (0x13b2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 5304 (0x14b8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 5306 (0x14ba)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 5568 (0x15c0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 5570 (0x15c2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 5832 (0x16c8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 5834 (0x16ca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 6096 (0x17d0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 6098 (0x17d2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 6360 (0x18d8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 6362 (0x18da)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 6624 (0x19e0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 6626 (0x19e2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 6888 (0x1ae8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 6890 (0x1aea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 7152 (0x1bf0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 7154 (0x1bf2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 7416 (0x1cf8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 7418 (0x1cfa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 7680 (0x1e00)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 7682 (0x1e02)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 7944 (0x1f08)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 7946 (0x1f0a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 8208 (0x2010)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8210 (0x2012)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 8472 (0x2118)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8474 (0x211a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 8736 (0x2220)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8738 (0x2222)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 9000 (0x2328)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 9002 (0x232a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 9264 (0x2430)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 9266 (0x2432)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 9528 (0x2538)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 9530 (0x253a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 9792 (0x2640)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 9794 (0x2642)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 10056 (0x2748)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 10058 (0x274a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 10320 (0x2850)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 10322 (0x2852)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 10584 (0x2958)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 10586 (0x295a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 10848 (0x2a60)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 10850 (0x2a62)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 11112 (0x2b68)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 11114 (0x2b6a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 11376 (0x2c70)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 11378 (0x2c72)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 11640 (0x2d78)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 11642 (0x2d7a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 11904 (0x2e80)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 11906 (0x2e82)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 12168 (0x2f88)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 12170 (0x2f8a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 12432 (0x3090)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 12434 (0x3092)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 12696 (0x3198)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 12698 (0x319a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 12960 (0x32a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 12962 (0x32a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 13224 (0x33a8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 13226 (0x33aa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 13488 (0x34b0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 13490 (0x34b2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 13752 (0x35b8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 13754 (0x35ba)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 14016 (0x36c0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 14018 (0x36c2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 14280 (0x37c8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 14282 (0x37ca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 14544 (0x38d0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 14546 (0x38d2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 14808 (0x39d8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 14810 (0x39da)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 15072 (0x3ae0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 15074 (0x3ae2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 15336 (0x3be8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 15338 (0x3bea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 15600 (0x3cf0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 15602 (0x3cf2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 15864 (0x3df8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 15866 (0x3dfa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 16128 (0x3f00)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 16130 (0x3f02)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 16392 (0x4008)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 16394 (0x400a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 16656 (0x4110)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 16658 (0x4112)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 16920 (0x4218)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 16922 (0x421a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 17184 (0x4320)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 17186 (0x4322)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 17448 (0x4428)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 17450 (0x442a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 17712 (0x4530)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 17714 (0x4532)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 17976 (0x4638)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 17978 (0x463a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 18240 (0x4740)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 18242 (0x4742)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 18504 (0x4848)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 18506 (0x484a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 18768 (0x4950)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 18770 (0x4952)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 19032 (0x4a58)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 19034 (0x4a5a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 19296 (0x4b60)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 19298 (0x4b62)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 19560 (0x4c68)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 19562 (0x4c6a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 19824 (0x4d70)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 19826 (0x4d72)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 20088 (0x4e78)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 20090 (0x4e7a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 20352 (0x4f80)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 20354 (0x4f82)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 20616 (0x5088)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 20618 (0x508a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 20880 (0x5190)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 20882 (0x5192)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 21144 (0x5298)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 21146 (0x529a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 21408 (0x53a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 21410 (0x53a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 21672 (0x54a8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 21674 (0x54aa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 21936 (0x55b0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 21938 (0x55b2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 22200 (0x56b8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 22202 (0x56ba)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 22464 (0x57c0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 22466 (0x57c2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 22728 (0x58c8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 22730 (0x58ca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 22992 (0x59d0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 22994 (0x59d2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 23256 (0x5ad8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 23258 (0x5ada)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 23520 (0x5be0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 23522 (0x5be2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 23784 (0x5ce8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 23786 (0x5cea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 24048 (0x5df0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 24050 (0x5df2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 24312 (0x5ef8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 24314 (0x5efa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 24576 (0x6000)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 24578 (0x6002)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 24840 (0x6108)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 24842 (0x610a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 25104 (0x6210)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 25106 (0x6212)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 25368 (0x6318)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 25370 (0x631a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 25632 (0x6420)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 25634 (0x6422)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 25896 (0x6528)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 25898 (0x652a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 26160 (0x6630)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 26162 (0x6632)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 26424 (0x6738)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 26426 (0x673a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 26688 (0x6840)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 26690 (0x6842)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 26952 (0x6948)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 26954 (0x694a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 27216 (0x6a50)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 27218 (0x6a52)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 27480 (0x6b58)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 27482 (0x6b5a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 27744 (0x6c60)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 27746 (0x6c62)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 28008 (0x6d68)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 28010 (0x6d6a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 28272 (0x6e70)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 28274 (0x6e72)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 28536 (0x6f78)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 28538 (0x6f7a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 28800 (0x7080)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 28802 (0x7082)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 29064 (0x7188)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 29066 (0x718a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 29328 (0x7290)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 29330 (0x7292)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 29592 (0x7398)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 29594 (0x739a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 29856 (0x74a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 29858 (0x74a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 30120 (0x75a8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 30122 (0x75aa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 30384 (0x76b0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 30386 (0x76b2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 30648 (0x77b8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 30650 (0x77ba)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 30912 (0x78c0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 30914 (0x78c2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 31176 (0x79c8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 31178 (0x79ca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 31440 (0x7ad0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 31442 (0x7ad2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 31704 (0x7bd8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 31706 (0x7bda)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 31968 (0x7ce0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 31970 (0x7ce2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 32232 (0x7de8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 32234 (0x7dea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 32496 (0x7ef0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 32498 (0x7ef2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 32760 (0x7ff8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 32762 (0x7ffa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 33024 (0x8100)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 33026 (0x8102)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 33288 (0x8208)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 33290 (0x820a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 33552 (0x8310)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 33554 (0x8312)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 33816 (0x8418)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 33818 (0x841a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 34080 (0x8520)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 34082 (0x8522)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 34344 (0x8628)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 34346 (0x862a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 34608 (0x8730)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 34610 (0x8732)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 34872 (0x8838)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 34874 (0x883a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 35136 (0x8940)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 35138 (0x8942)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 35400 (0x8a48)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 35402 (0x8a4a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 35664 (0x8b50)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 35666 (0x8b52)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 35928 (0x8c58)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 35930 (0x8c5a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 36192 (0x8d60)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 36194 (0x8d62)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 36456 (0x8e68)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 36458 (0x8e6a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 36720 (0x8f70)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 36722 (0x8f72)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 36984 (0x9078)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 36986 (0x907a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 37248 (0x9180)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 37250 (0x9182)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 37512 (0x9288)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 37514 (0x928a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 37776 (0x9390)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 37778 (0x9392)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 38040 (0x9498)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 38042 (0x949a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 38304 (0x95a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 38306 (0x95a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 38568 (0x96a8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 38570 (0x96aa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 38832 (0x97b0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 38834 (0x97b2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 39096 (0x98b8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 39098 (0x98ba)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 39360 (0x99c0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 39362 (0x99c2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 39624 (0x9ac8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 39626 (0x9aca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 39888 (0x9bd0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 39890 (0x9bd2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 40152 (0x9cd8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 40154 (0x9cda)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 40416 (0x9de0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 40418 (0x9de2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 40680 (0x9ee8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 40682 (0x9eea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 40944 (0x9ff0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 40946 (0x9ff2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 41208 (0xa0f8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 41210 (0xa0fa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 41472 (0xa200)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 41474 (0xa202)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 41736 (0xa308)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 41738 (0xa30a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 42000 (0xa410)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 42002 (0xa412)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 42264 (0xa518)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 42266 (0xa51a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 42528 (0xa620)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 42530 (0xa622)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 42792 (0xa728)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 42794 (0xa72a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 43056 (0xa830)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 43058 (0xa832)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 43320 (0xa938)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 43322 (0xa93a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 43584 (0xaa40)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 43586 (0xaa42)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 43848 (0xab48)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 43850 (0xab4a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 44112 (0xac50)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 44114 (0xac52)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 44376 (0xad58)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 44378 (0xad5a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 44640 (0xae60)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 44642 (0xae62)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 44904 (0xaf68)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 44906 (0xaf6a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 45168 (0xb070)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 45170 (0xb072)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 45432 (0xb178)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 45434 (0xb17a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 45696 (0xb280)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 45698 (0xb282)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 45960 (0xb388)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 45962 (0xb38a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 46224 (0xb490)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 46226 (0xb492)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 46488 (0xb598)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 46490 (0xb59a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 46752 (0xb6a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 46754 (0xb6a2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 47016 (0xb7a8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 47018 (0xb7aa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 47280 (0xb8b0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 47282 (0xb8b2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 47544 (0xb9b8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 47546 (0xb9ba)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 47808 (0xbac0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 47810 (0xbac2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 48072 (0xbbc8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 48074 (0xbbca)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 48336 (0xbcd0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 48338 (0xbcd2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 48600 (0xbdd8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 48602 (0xbdda)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 48864 (0xbee0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 48866 (0xbee2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 49128 (0xbfe8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 49130 (0xbfea)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 49392 (0xc0f0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 49394 (0xc0f2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 49656 (0xc1f8)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 49658 (0xc1fa)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 49920 (0xc300)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 49922 (0xc302)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 50184 (0xc408)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 50186 (0xc40a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 50448 (0xc510)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 50450 (0xc512)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 50712 (0xc618)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 50714 (0xc61a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 50976 (0xc720)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 50978 (0xc722)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 51240 (0xc828)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 51242 (0xc82a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 51504 (0xc930)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 51506 (0xc932)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 51768 (0xca38)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 51770 (0xca3a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 52032 (0xcb40)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 52034 (0xcb42)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 52296 (0xcc48)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 52298 (0xcc4a)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 52560 (0xcd50)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 52562 (0xcd52)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 256
+
+
+Offset: 52824 (0xce58)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 52826 (0xce5a)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
