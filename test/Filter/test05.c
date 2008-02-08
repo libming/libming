@@ -24,10 +24,10 @@ int main(void)
 	}
 	SWFMovie_setBackground(m, 0xcc, 0xcc, 0xcc);
 	shape = newSWFShape();
-	f = fopen("../Media/image01.dbl", "rb");
+	f = fopen(MEDIADIR "/image01.dbl", "rb");
 	if(!f)
 	{
-		fprintf(stderr, "Could not open ../Media/image01.dbl\n");
+		fprintf(stderr, "Could not open " MEDIADIR "/image01.dbl\n");
 		return EXIT_FAILURE;
 	}
 
@@ -50,8 +50,6 @@ int main(void)
 	item = SWFMovie_add(m, b);
 	SWFDisplayItem_addFilter(item, filter);
 
-	printf("Saving movie\n");
 	SWFMovie_save(m, "test05.swf");
-	printf("done.\n");
 	return EXIT_SUCCESS;
 }

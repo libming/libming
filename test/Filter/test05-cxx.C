@@ -20,7 +20,7 @@ int main()
 	
 	shape = new SWFShape();
 	
-	bm = new SWFBitmap("../Media/image01.dbl");
+	bm = new SWFBitmap(MEDIADIR"/image01.dbl");
 	
 	fs = SWFFillStyle::BitmapFillStyle(bm, SWFFILL_TILED_BITMAP);
 	
