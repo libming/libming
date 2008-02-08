@@ -92,7 +92,7 @@ void swf5ParseInit(const char *script, int debug, int version)
 
 enum yytokentype read_int (const char *text, YYSTYPE *num)
 {
-  unsigned int i;
+  unsigned long i;
 
   i = strtoul (text, NULL, 0);
   if (i > 0x7FFFFFFF) {
