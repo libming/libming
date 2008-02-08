@@ -1,4 +1,6 @@
 #include <libming.h>
+#include <stdlib.h>
+
 #define SIZE 20
 
 int main(void)
@@ -16,12 +18,18 @@ int main(void)
 	Ming_init();
 	m = newSWFMovieWithVersion(9);
 	if(m == NULL)
-		return 0;
+	{
+		fprintf(stderr, "Could not create SWF movie with version 9\n");
+		return EXIT_FAILURE;
+	}
 	SWFMovie_setBackground(m, 0xcc, 0xcc, 0xcc);
 	shape = newSWFShape();
 	f = fopen("../Media/image01.dbl", "rb");
 	if(!f)
-		return 0;
+	{
+		fprintf(stderr, "Could not open ../Media/image01.dbl\n");
+		return EXIT_FAILURE;
+	}
 
 	bm = (SWFBitmap) newSWFDBLBitmap(f);
 	fill = newSWFBitmapFillStyle(bm, SWFFILL_TILED_BITMAP);
@@ -42,6 +50,8 @@ int main(void)
 	item = SWFMovie_add(m, b);
 	SWFDisplayItem_addFilter(item, filter);
 
+	printf("Saving movie\n");
 	SWFMovie_save(m, "test05.swf");
-	return 0;
+	printf("done.\n");
+	return EXIT_SUCCESS;
 }
