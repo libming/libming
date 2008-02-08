@@ -21,133 +21,153 @@
 
 #include "libming.h"
 #include "input.h"
+#include "mp3.h"
+#include "error.h"
 
 
-#define MP3_FRAME_SYNC			 0xFFE00000
+// [version][idx]
+static unsigned short mp3_samplingrate_tbl[4][4] =
+{ 
+	// mpeg 2.5
+	{ 11025, 12000, 8000, 0},
+	// reserved
+	{ 0, 0, 0, 0},
+	// mpeg 2
+	{ 22050, 24000, 16000, 0},
+	// mpeg 1
+	{ 44100, 48000, 32000, 0}
+};
 
-#define MP3_VERSION					 0x00180000
-#define MP3_VERSION_25			 0x00000000
-#define MP3_VERSION_RESERVED 0x00080000
-#define MP3_VERSION_2				 0x00100000
-#define MP3_VERSION_1				 0x00180000
+// [version][layer][idx]
+static unsigned short mp3_bitrate_tbl[4][4][16] = 
+{
+	// mpeg 2.5
+	{ 
+		// reserved
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		// layer 3
+		{ 0, 8, 16, 24,	32, 40,	48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+		// layer 2
+		{ 0, 8, 16, 24,	32, 40,	48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+		// layer 1
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	},
+	
+	// reserved
+	{ 
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	},
 
-#define MP3_LAYER						 0x00060000
-#define MP3_LAYER_RESERVED	 0x00000000
-#define MP3_LAYER_3					 0x00020000
-#define MP3_LAYER_2					 0x00040000
-#define MP3_LAYER_1					 0x00060000
+	// mpeg version 2
+	{
+		// reserved
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		// layer 3
+		{ 0, 8, 16, 24,	32, 40,	48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+		// layer 2
+		{ 0, 8, 16, 24,	32, 40,	48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
+		// layer 1
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
-#define MP3_PROTECT					 0x00010000 /* 16-bit CRC after header */
+	},
+	// mpeg version 1
+	{ 
+		// reserved
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		// layer 3	
+		{ 0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0},
+		// layer 2
+		{ 0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0 },
+		// layer 1
+		{ 0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 382, 416, 448, 0}
+	}
+};
 
-#define MP3_BITRATE					 0x0000F000
-#define MP3_BITRATE_SHIFT		 12
 
-int mp1l1_bitrate_table[] = { 0,	 32,	 64,	96, 128, 160, 192, 224,
-						256, 288, 320, 352, 382, 416, 448 };
+#define CHECK_STREAM(__in)			\
+	do {					\
+		if(SWFInput_eof(__in))		\
+			return 0;		\
+	} while(0);
+	
+/*
+ * reads a MP3 header 
+ * returns:
+ * 	0 if EOF
+ * 	-1 if invalid header; stream is unaltered
+ * 	1 on success
+ */	
+int readMP3Header(SWFInput input, struct mp3_header *mp3h)
+{
+	int frameSync, br, sr;
+	if(SWFInput_length(input) - SWFInput_tell(input) < 4)
+		return 0;
+	
+	frameSync = SWFInput_readBits(input, 11);
+	CHECK_STREAM(input);
 
-int mp1l2_bitrate_table[] = { 0,	 32,	 48,	56,	 64,	80,	 96, 112,
-						128, 160, 192, 224, 256, 320, 384 };
+	mp3h->version = SWFInput_readBits(input, 2);
+	mp3h->layer = SWFInput_readBits(input, 2);
+	SWFInput_readBits(input, 1); // protect bit
+	CHECK_STREAM(input);
 
-int mp1l3_bitrate_table[] = { 0,		32,	 40,	48,	 56,	64,	 80,	96,
-						112, 128, 160, 192, 224, 256, 320 };
+	br = SWFInput_readBits(input, 4);
+	sr = SWFInput_readBits(input, 2);
+	mp3h->bitrate = mp3_bitrate_tbl[mp3h->version][mp3h->layer][br];
+	mp3h->samplingRate = mp3_samplingrate_tbl[mp3h->version][sr];
+	mp3h->padding = SWFInput_readBits(input, 1);
+	SWFInput_readBits(input, 1); // private bit
+	CHECK_STREAM(input);
+	
+	mp3h->channelMode = SWFInput_readBits(input, 2);
+	SWFInput_readBits(input, 2); // extension
+	SWFInput_readBits(input, 3); // copyright, orig, emphasis
+	CHECK_STREAM(input);
+	SWFInput_byteAlign(input);
+	if((frameSync & 0x7ff) != 0x7ff)
+	{
+		SWFInput_seek(input, -4, SEEK_CUR);  
+		return -1;
+	}
 
-int mp2l1_bitrate_table[] = { 0,		32,	 48,	56,	 64,	80,	 96, 112,
-						128, 144, 160, 176, 192, 224, 256 };
+	if(mp3h->version == 1 || mp3h->layer == 0)
+	{
+		SWFInput_seek(input, -4, SEEK_CUR);  
+		return -1;
+	}
 
-int mp2l23_bitrate_table[] = { 0,		 8,	 16,	24,	 32,	40,	 48,	56,
-						 64,	80,	 96, 112, 128, 144, 160 };
-
-#define MP3_SAMPLERATE			 0x00000C00
-#define MP3_SAMPLERATE_SHIFT 10
-
-int mp1_samplerate_table[] = { 44100, 48000, 32000 };
-int mp2_samplerate_table[] = { 22050, 24000, 16000 }; /* is this right?? */
-int mp25_samplerate_table[] = { 11025, 12000, 8000 }; /* less samples in > versions? */
-
-#define MP3_PADDING					 0x00000200 /* if set, add an extra slot - 4 bytes
-						 for layer 1, 1 byte for 2+3 */
-
-#define MP3_CHANNEL					 0x000000C0
-#define MP3_CHANNEL_STEREO	 0x00000000
-#define MP3_CHANNEL_JOINT		 0x00000040
-#define MP3_CHANNEL_DUAL		 0x00000080
-#define MP3_CHANNEL_MONO		 0x000000C0
-
-/* rest of the header info doesn't affect frame size.. */
+	return 0;
+}
 
 int nextMP3Frame(SWFInput input)
 {
-	unsigned long flags;
 	int frameLen;
-	int bitrate = 0, bitrate_idx, samplerate, samplerate_idx;
-	int version, layer, padding;
+	int bitrate, samplerate, padding;
+	struct mp3_header mp3h;
 
-	/* get 4-byte header, bigendian */
-
-	flags = SWFInput_getUInt32_BE(input);
-
+	if(readMP3Header(input, &mp3h) < 0)
+		return -1;
+	
 	if(SWFInput_eof(input))
 		return 0;
+	
+	if(mp3h.samplingRate == 0 || mp3h.bitrate == 0)
+		SWF_error("invalid mp3 file\n");
 
-	if((flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC)
-		return -1;
-
-	bitrate_idx = (flags & MP3_BITRATE) >> MP3_BITRATE_SHIFT;
-	samplerate_idx = (flags & MP3_SAMPLERATE) >> MP3_SAMPLERATE_SHIFT;
-
-	switch(flags & MP3_VERSION)
+	if(mp3h.version == MP3_VERSION_1)
 	{
-		case MP3_VERSION_1:	 version = 1; break;
-		case MP3_VERSION_2:	 version = 2; break;
-		case MP3_VERSION_25: version = 25; break;
-		default: return -1;
-	}
-	switch(flags & MP3_LAYER)
-	{
-		case MP3_LAYER_1: layer = 1; break;
-		case MP3_LAYER_2: layer = 2; break;
-		case MP3_LAYER_3: layer = 3; break;
-		default: return -1;
-	}
-
-	if(version == 1)
-	{
-		samplerate = mp1_samplerate_table[samplerate_idx];
-
-		if(layer == 1)
-			bitrate = mp1l1_bitrate_table[bitrate_idx];
-
-		else if(layer == 2)
-			bitrate = mp1l2_bitrate_table[bitrate_idx];
-
-		else if(layer == 3)
-			bitrate = mp1l3_bitrate_table[bitrate_idx];
+		mp3h.padding <<= 2;
+		frameLen = 144 * mp3h.bitrate * 1000 
+				/ mp3h.samplingRate + mp3h.padding;
 	}
 	else
-	{
-		if(version == 2)
-			samplerate = mp2_samplerate_table[samplerate_idx];
-		else
-			samplerate = mp25_samplerate_table[samplerate_idx];
-
-		if(layer == 1)
-			bitrate = mp2l1_bitrate_table[bitrate_idx];
-		else
-			bitrate = mp2l23_bitrate_table[bitrate_idx];
-	}
-
-	padding = (flags & MP3_PADDING) ? 1 : 0;
-
-	if(layer == 1)
-		padding <<= 2;
-
-	if(version == 1)
-		frameLen = 144 * bitrate * 1000 / samplerate + padding;
-	else
-		frameLen = 72 * bitrate * 1000 / samplerate + padding;
+		frameLen = 72 * mp3h.bitrate * 1000 
+			/ mp3h.samplingRate + mp3h.padding;
 
 	SWFInput_seek(input, frameLen-4, SEEK_CUR);
-
 	return frameLen;
 }
 
