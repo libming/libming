@@ -9,12 +9,12 @@ int main()
 
 	file = fopen(MEDIADIR "/audio01.mp3", "rb");
 	if(!file) {
-		return 0;
+		return EXIT_FAILURE;
 	}
 
 	stream = new SWFSoundStream(file);
 	if(!stream)
-		return 0;
+		return EXIT_FAILURE;
 
 	m->setSoundStream(stream);
 	for(i = 0; i < 200; i++)
