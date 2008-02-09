@@ -69,5 +69,6 @@ setproperty
 implements
 extends
 fscommand2
+new
 };
 
