@@ -271,6 +271,7 @@ _ymouse			{ count();	return _P_YMOUSE; }
 
   /* assembler ops */
 <STATE_ASM>{
+new			{ count();	return NEW;		}
 dup			{ count();	return DUP; }
 swap			{ count();	return SWAP; }
 pop			{ count();	return POP; }
