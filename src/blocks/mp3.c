@@ -145,7 +145,6 @@ int readMP3Header(SWFInput input, struct mp3_header *mp3h)
 int nextMP3Frame(SWFInput input)
 {
 	int frameLen;
-	int bitrate, samplerate, padding;
 	struct mp3_header mp3h;
 
 	if(readMP3Header(input, &mp3h) < 0)
