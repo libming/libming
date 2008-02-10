@@ -1455,7 +1455,7 @@ expr
 expr_or_obj
 	: expr
 
-	| NEW IDENTIFIER
+	| NEW identifier
 		{
 #ifdef DEBUG
 		  printf("NEW %s\n", $2);
