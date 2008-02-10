@@ -37,3 +37,8 @@ function foo(x:Number, y:Object)
 {
 	;
 }
+
+function bar()
+{
+	return new this;
+}
