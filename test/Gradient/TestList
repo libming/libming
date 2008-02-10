@@ -4,3 +4,4 @@ test03:swf: > 8 control points SWF_SHAPE3
 test04:swf: SWF8 supports up to 15 controlpoints 
 test05:swf: SWF8 supports spread and interpolation mode settings
 test06:swf: FocalGradient 
+test07:swf: RadialGradient 

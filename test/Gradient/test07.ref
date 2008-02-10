@@ -1,0 +1,81 @@
+File version: 8
+File size: 134
+Frame size: (0,10000)x(0,9000)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 21 (0x0015)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
+
+Offset: 27 (0x001b)
+Block type: 9 (SWF_SETBACKGROUNDCOLOR)
+Block length: 3
+
+ RGBA: ( 0, 0, 0,ff)
+
+Offset: 32 (0x0020)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 81
+
+ CharacterID: 1
+ RECT:  (-1098,-1100)x(1102,1100):12
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 12
+  Matrix:
+   ScaleX 0.067139 ScaleY 0.067139
+   TranslateX      0 TranslateY      0
+ Gradient:  SpreadMode: 0
+ InterpolationMode: 0
+ NumGradients: 2
+ Ratio: 0
+ RGBA: (ff,ff,ff,ff)
+ Ratio: 255
+ RGBA: (ff,ff,ff, 0)
+ LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 1
+  StateFillStyle0: 0 StateMoveTo: 1
+   FillStyle1: 1
+   MoveBits: 12  MoveDeltaX: 0  MoveDeltaY: -1100
+ Curved EdgeRecord: 8 Control(460,0) Anchor(320,320)
+ Curved EdgeRecord: 8 Control(322,318) Anchor(0,460)
+ Curved EdgeRecord: 8 Control(0,460) Anchor(-320,320)
+ Curved EdgeRecord: 8 Control(-318,322) Anchor(-460,0)
+ Curved EdgeRecord: 8 Control(-460,0) Anchor(-320,-320)
+ Curved EdgeRecord: 8 Control(-322,-318) Anchor(0,-460)
+ Curved EdgeRecord: 8 Control(0,-460) Anchor(320,-320)
+ Curved EdgeRecord: 8 Control(318,-322) Anchor(460,0)
+  ENDSHAPE
+
+Offset: 119 (0x0077)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 9
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX   2000 TranslateY   2000
+
+Offset: 130 (0x0082)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 132 (0x0084)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
