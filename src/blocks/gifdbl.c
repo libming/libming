@@ -5,7 +5,7 @@
 #include "libming.h"
 
 
-#ifndef USE_GIF // {
+#if !(USE_GIF) // {
 
 SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input)
 {
