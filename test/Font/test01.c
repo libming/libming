@@ -5,8 +5,6 @@
 
 int main()
 {
-	FILE *fontfile;
-	
 	SWFMovie m = newSWFMovie();
 	SWFText text = newSWFText();
 	
