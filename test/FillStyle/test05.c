@@ -7,8 +7,19 @@ int main()
 {
 	SWFMovie m = newSWFMovieWithVersion(8);
 	SWFDBLBitmapData img = newSWFDBLBitmapData_fromPngFile(MEDIADIR "/image01.png");
+	if ( ! img )
+	{
+		fprintf(stderr, "Could not create bitmap from png file "MEDIADIR"/image01.png\n");
+		return EXIT_FAILURE;
+	}
 	
 	SWFFillStyle fill = newSWFBitmapFillStyle((SWFCharacter)img, SWFFILL_CLIPPED_BITMAP);
+	if ( ! fill )
+	{
+		fprintf(stderr, "Could not create bitmap from file "MEDIADIR"/image01.png\n");
+		return EXIT_FAILURE;
+	}
+
 	SWFShape shape = newSWFShape();
 	SWFShape_setRightFillStyle(shape, fill);
 	
