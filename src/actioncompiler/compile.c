@@ -426,7 +426,7 @@ int bufferWriteInt(Buffer out, int i)
 	bufferWriteU8(out, p[1]);
 	bufferWriteU8(out, p[2]);
 	bufferWriteU8(out, p[3]);
-#elif 
+#else 
 	bufferWriteU8(out, p[3]);
 	bufferWriteU8(out, p[2]);
 	bufferWriteU8(out, p[1]);
