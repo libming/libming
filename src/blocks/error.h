@@ -23,6 +23,7 @@ void error_default(const char *msg, ...);
 SWFMsgFunc setSWFWarnFunction(SWFMsgFunc warn);
 SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
 
+#ifndef _MSC_VER
 #define SWF_warnOnce(msg, va...)	\
 {					\
 	static int __warned = 0;	\
@@ -32,7 +33,10 @@ SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
 		SWF_warn((msg), ##va);	\
 		__warned = 1;		\
 	}				\
-}					\
+}
+#else
+#define SWF_warnOnce SWF_warn
+#endif					
 
 /* fix for cygwin compile */
 #ifndef __STRING
