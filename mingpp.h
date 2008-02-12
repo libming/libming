@@ -721,9 +721,10 @@ class SWFMovie
     { SWFMovie_setSoundStream(this->movie, sound->sound); /* wogl */ }
 
   SWFDisplayItem *add(SWFBlock *character)
-  { 
-    c_SWFDisplayItem item = SWFMovie_add_internal(this->movie, 
-		(SWFMovieBlockType){character->getBlock()});
+  {
+    SWFMovieBlockType ublock;
+    ublock.block = character->getBlock();
+    c_SWFDisplayItem item = SWFMovie_add_internal(this->movie, ublock);
     if(item == NULL)
       return NULL;
     return new SWFDisplayItem(item); 
@@ -736,8 +737,11 @@ class SWFMovie
     { SWFMovie_remove(this->movie, item->item); }
 
   bool replace(SWFDisplayItem *item, SWFBlock *character)
-    { return SWFMovie_replace_internal(this->movie, item->item, 
-		(SWFMovieBlockType){character->getBlock()}); }
+  { 
+    SWFMovieBlockType ublock;
+    ublock.block = character->getBlock();
+    return SWFMovie_replace_internal(this->movie, item->item, ublock); 
+  }
 
   void nextFrame()
     { SWFMovie_nextFrame(this->movie); }
