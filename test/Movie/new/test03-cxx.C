@@ -2,6 +2,7 @@
 
 
 main(){
+try {
 SWFMovie* m = new SWFMovie();
 
 
@@ -14,4 +15,11 @@ m->nextFrame(); // end of frame 1
 // SWF_END 
 
 m->save("test03.swf");
+}
+catch(SWFException &e)
+{
+std::cerr << "SWFException: " << e.what() << std::endl << std::endl;
+return EXIT_FAILURE;
+}
+return 0;
 }
