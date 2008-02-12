@@ -567,6 +567,10 @@ class SWFDisplayItem
   
   void flush()
     { SWFDisplayItem_flush(this->item); }
+  
+  // FIXME: http://bugs.libming.net/show_bug.cgi?id=48
+  virtual ~SWFDisplayItem()
+    { }
 
  private:
   SWFDisplayItem(c_SWFDisplayItem item)
@@ -575,9 +579,6 @@ class SWFDisplayItem
     if(this->item == NULL)
       throw SWFException("SWFDisplayItem()");
   }
-
-  virtual ~SWFDisplayItem()
-    { }
 
   SWF_DECLAREONLY(SWFDisplayItem);
   SWFDisplayItem();
