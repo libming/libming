@@ -1,4 +1,5 @@
 #include <libming.h>
+#include <stdlib.h>
 
 int main()
 {
@@ -11,7 +12,7 @@ int main()
 	if(font == NULL)
 	{
 		perror(MEDIADIR "/font01.fdb");
-		exit(1);
+		return EXIT_FAILURE;
 	}
 	
 	SWFMovie_assignSymbol(m, (SWFCharacter)text, "mytext");

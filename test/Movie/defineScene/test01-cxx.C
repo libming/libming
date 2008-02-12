@@ -3,15 +3,22 @@
 int main()
 {
 	int i;
-	SWFMovie *m = new SWFMovie(9);
+	try {
+		SWFMovie *m = new SWFMovie(9);
 	
-	for(i = 0; i < 10; i++)
-		m->nextFrame();
+	
+		for(i = 0; i < 10; i++)
+			m->nextFrame();
 
-	m->defineScene(0, "test0");
-	m->defineScene(5, "test1");
-	m->save("test01.swf");
-
+		m->defineScene(0, "test0");
+		m->defineScene(5, "test1");
+		m->save("test01.swf");
+	}
+	catch(SWFException &e)
+	{
+		std::cerr << "SWFException: " << e.what() << std::endl << std::endl;
+		return EXIT_FAILURE;
+	}
 	return 0;
 }
 	
