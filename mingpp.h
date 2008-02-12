@@ -26,6 +26,7 @@
 #include <cstring> /* for strlen used in SWFBitmap costructor */
 #include <stdexcept>
 #include <iostream>
+#include <string>
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
 
@@ -112,6 +113,27 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
 	classname(const classname&); \
 	const classname& operator=(const classname&)
 
+
+class SWFException : public std::exception
+{
+public:
+	SWFException(const char *m)
+	{ 
+		this->message = m;
+	}
+
+	virtual ~SWFException() throw () 
+	{ }
+		
+	virtual const char *what()
+	{
+		return this->message.c_str();
+	}	
+private:
+	std::string message;
+};
+
+
 /*  SWFInput  */
 
 class SWFInput
@@ -120,10 +142,18 @@ class SWFInput
   c_SWFInput input;
 
   SWFInput(FILE *f)
-    { this->input = newSWFInput_file(f); }
+  { 
+    this->input = newSWFInput_file(f); 
+    if(this->input == NULL) 
+      throw SWFException("SWFInput(FILE *f)\n");
+  }
 
   SWFInput(unsigned char *buffer, int length)
-    { this->input = newSWFInput_buffer(buffer, length); }
+  { 
+    this->input = newSWFInput_buffer(buffer, length); 
+    if(this->input == NULL)
+      throw SWFException("SWFInput(unsigned char *buffer, int length)\n");
+  }
 
   SWFInput(unsigned char *buffer, int length, int alloced)
   {
@@ -131,6 +161,9 @@ class SWFInput
       this->input = newSWFInput_allocedBuffer(buffer, length);
     else
       this->input = newSWFInput_buffer(buffer, length);
+
+    if(this->input == NULL)
+      SWFException("SWFInput(unsigned char *buffer, int length, int alloced)\n");
   }
 
   virtual ~SWFInput() { destroySWFInput(this->input); }
@@ -211,7 +244,11 @@ class SWFPrebuiltClip : public SWFBlock
   c_SWFPrebuiltClip prebuiltclip;
 
   SWFPrebuiltClip(c_SWFPrebuiltClip prebuiltclip)
-    { this->prebuiltclip = prebuiltclip; }
+  { 
+    if(prebuiltclip == NULL)
+      throw SWFException("new SWFPrebuiltClip: prebuiltclip == NULL)");
+    this->prebuiltclip = prebuiltclip; 
+  }
 
   virtual ~SWFPrebuiltClip()
     { }
@@ -226,7 +263,10 @@ class SWFPrebuiltClip : public SWFBlock
        strcmp(name + strlen(name) - 4, ".swf") == 0)
       this->prebuiltclip = newSWFPrebuiltClip_fromFile(name);
     else
-      this->prebuiltclip = 0 ; // needs to be fixed - but how ????
+      this->prebuiltclip = NULL;
+   
+    if(this->prebuiltclip == NULL)
+      throw SWFException("SWFPrebuiltClip(const char *name)");
   }
   SWF_DECLAREONLY(SWFPrebuiltClip);
   SWFPrebuiltClip();
@@ -242,7 +282,11 @@ class SWFAction : public SWFBlock
   c_SWFAction action;
 
   SWFAction(const char *script)
-    { this->action = newSWFAction(script); }
+  { 
+    this->action = newSWFAction(script); 
+    if(this->action == NULL)
+      throw SWFException("SWFAction(const char *script)");
+  }
 
   // movies, buttons, etc. destroy the c_SWFAction..
   virtual ~SWFAction() {}
@@ -254,7 +298,7 @@ class SWFAction : public SWFBlock
   SWFAction();
 };
 
-/*  SWFAction  */
+/*  SWFInitAction  */
 
 class SWFInitAction : public SWFBlock
 {
@@ -262,10 +306,18 @@ class SWFInitAction : public SWFBlock
   c_SWFInitAction init;
 
   SWFInitAction(SWFAction *action)
-    { this->init = newSWFInitAction(action->action); }
+  { 
+    this->init = newSWFInitAction(action->action); 
+    if(this->init == NULL)
+      throw SWFException("SWFInitAction(SWFAction *action)");
+  }
 
   SWFInitAction(SWFAction *action, int id)
-    { this->init = newSWFInitAction_withId(action->action, id); }
+  { 
+    this->init = newSWFInitAction_withId(action->action, id); 
+    if(this->init == NULL)
+      throw SWFException("SWFInitAction(SWFAction *action, int id)");
+  }
 
   virtual ~SWFInitAction() {}
 
@@ -285,7 +337,11 @@ class SWFGradient
   c_SWFGradient gradient;
 
   SWFGradient()
-    { this->gradient = newSWFGradient(); }
+  { 
+    this->gradient = newSWFGradient(); 
+    if(this->gradient == NULL)
+      throw SWFGradient();
+  }
 
   virtual ~SWFGradient()
     { destroySWFGradient(this->gradient); }
@@ -312,7 +368,11 @@ class SWFBlur
   c_SWFBlur blur;
   
   SWFBlur(float blurX, float blurY, int passes)
-    {  this->blur = newSWFBlur(blurX, blurY, passes); }
+  {  
+    this->blur = newSWFBlur(blurX, blurY, passes); 
+    if(this->blur == NULL)
+      throw SWFException("SWFBlur(float blurX, float blurY, int passes)");
+  }
 
   ~SWFBlur()
     { destroySWFBlur(blur); }
@@ -327,7 +387,11 @@ class SWFShadow
   c_SWFShadow shadow;
 
   SWFShadow(float angle, float distance, float strength)
-    { this->shadow = newSWFShadow(angle, distance, strength); }
+  { 
+    this->shadow = newSWFShadow(angle, distance, strength); 
+    if(this->shadow == NULL)
+      throw SWFException("SWFShadow(float angle, float distance, float strength)");
+  }
 
   ~SWFShadow()
     { destroySWFShadow(shadow); }
@@ -342,7 +406,11 @@ class SWFFilterMatrix
   c_SWFFilterMatrix matrix;
 
   SWFFilterMatrix(int cols, int rows, float *vals)
-    { this->matrix = newSWFFilterMatrix(cols, rows, vals); }
+  { 
+    this->matrix = newSWFFilterMatrix(cols, rows, vals); 
+    if(this->matrix == NULL)
+      throw SWFException("SWFFilterMatrix(int cols, int rows, float *vals)");
+  }
 
   ~SWFFilterMatrix()
     { destroySWFFilterMatrix(matrix); }
@@ -389,7 +457,11 @@ class SWFFilter
 
 private:
   SWFFilter(c_SWFFilter filter)
-    {  this->filter = filter; } 
+  {  
+    this->filter = filter;
+    if(this->filter == NULL)
+      throw SWFException("SWFFilter(c_SWFFilter filter)");
+  } 
   SWF_DECLAREONLY(SWFFilter);
   SWFFilter();
 };
@@ -498,7 +570,11 @@ class SWFDisplayItem
 
  private:
   SWFDisplayItem(c_SWFDisplayItem item)
-    { this->item = item; }
+  { 
+    this->item = item; 
+    if(this->item == NULL)
+      throw SWFException("SWFDisplayItem()");
+  }
 
   virtual ~SWFDisplayItem()
     { }
@@ -516,13 +592,25 @@ class SWFSoundStream
   c_SWFSoundStream sound;
 
   SWFSoundStream(FILE *file)
-    { this->sound = newSWFSoundStream(file); }
+  { 
+    this->sound = newSWFSoundStream(file); 
+    if(this->sound == NULL)
+      throw SWFException("SWFSoundStream(FILE *file)");
+  }
 
   SWFSoundStream(SWFInput *input)
-    { this->sound = newSWFSoundStream_fromInput(input->input); }
+  { 
+    this->sound = newSWFSoundStream_fromInput(input->input); 
+    if(this->sound == NULL)
+      throw SWFException("SWFSoundStream(SWFInput *input)");
+  }
 
   SWFSoundStream(char *filename)
-    { this->sound = newSWFSoundStream(fopen(filename, "rb")); }
+  { 
+    this->sound = newSWFSoundStream(fopen(filename, "rb")); 
+    if(this->sound == NULL)
+      throw SWFException("SWFSoundStream(char *filename)");
+  }
 
   virtual ~SWFSoundStream()
     { destroySWFSoundStream(this->sound); }
@@ -541,25 +629,36 @@ class SWFSound
   SWFSound(FILE *file, int flags)
   { 
 	filep = NULL;
-	this->sound = newSWFSound(file, flags); 
+	this->sound = newSWFSound(file, flags);
+	if(this->sound == NULL)
+		throw SWFException("SWFSound(FILE *file, int flags)");
   }
 
   SWFSound(SWFInput *input, int flags)
   {
 	this->sound = newSWFSound_fromInput(input->input, flags); 
 	filep = NULL;
+	if(this->sound == NULL)
+		throw SWFException("SWFSound(SWFInput *input, int flags)");
   }
 
   SWFSound(char *filename, int flags)
   { 
 	filep = fopen(filename, "rb");
-	this->sound = newSWFSound(filep, flags); 
+	this->sound = newSWFSound(filep, flags);
+	if(this->sound == NULL)
+	{
+		fclose(filep);
+		throw SWFException("SWFSound(char *filename, int flags)");
+	}
   }
   
   SWFSound(SWFSoundStream *stream)
   { 
 	this->sound = newSWFSound_fromSoundStream(stream->sound); 
 	filep = NULL;
+	if(this->sound == NULL)
+		throw SWFException("SWFSound(SWFSoundStream *stream)");
   }
 
   virtual ~SWFSound()
@@ -585,10 +684,18 @@ class SWFMovie
   c_SWFMovie movie;
 
   SWFMovie()
-    { this->movie = newSWFMovie(); }
+  { 
+    this->movie = newSWFMovie();
+    if(this->movie == NULL)
+      throw SWFException("SWFMovie()");
+  }
 
   SWFMovie(int version)
-    { this->movie = newSWFMovieWithVersion(version); }
+  { 
+    this->movie = newSWFMovieWithVersion(version);
+    if(this->movie == NULL)
+      throw SWFException("SWFMovie(int version)");
+  }
 
   virtual ~SWFMovie()
     { destroySWFMovie(this->movie); }
@@ -613,8 +720,13 @@ class SWFMovie
     { SWFMovie_setSoundStream(this->movie, sound->sound); /* wogl */ }
 
   SWFDisplayItem *add(SWFBlock *character)
-    { return new SWFDisplayItem(SWFMovie_add_internal(this->movie, 
-		(SWFMovieBlockType){character->getBlock()})); }
+  { 
+    c_SWFDisplayItem item = SWFMovie_add_internal(this->movie, 
+		(SWFMovieBlockType){character->getBlock()});
+    if(item == NULL)
+      return NULL;
+    return new SWFDisplayItem(item); 
+  }
 
   void addExport(SWFBlock *exp, char *name)
     {  SWFMovie_addExport(this->movie, exp->getBlock(), name); }
@@ -703,7 +815,11 @@ class SWFFill
   c_SWFFill fill;
 
   SWFFill(c_SWFFill fill)
-    { this->fill = fill; }
+  { 
+    this->fill = fill; 
+    if(this->fill == NULL)
+      throw SWFException("SWFFill");
+  }
 
   // shape destroys c_SWFFill object
   virtual ~SWFFill() 
@@ -797,14 +913,21 @@ class SWFBitmap : public SWFCharacter
       }
 
       else
-	; // XXX - throw exception
+	bitmap = NULL;
     }
-    if ( ! this->bitmap ) throw "something went wrong";
+    if ( ! this->bitmap ) 
+      throw SWFException("SWFBitmap(const char *filename, const char *alpha=NULL)");
+
     this->character = (c_SWFCharacter)bitmap;
   }
 
   SWFBitmap(SWFInput *input)
-    { this->bitmap = newSWFBitmap_fromInput(input->input); }
+  { 
+    this->bitmap = newSWFBitmap_fromInput(input->input);
+    if(this->bitmap == NULL)
+      throw SWFException("SWFBitmap(SWFInput *input)");
+    this->character = (c_SWFCharacter)bitmap;
+  }
 
   virtual ~SWFBitmap()
     { destroySWFBitmap(this->bitmap); }
@@ -838,7 +961,11 @@ class SWFFillStyle
 
  private:
   SWFFillStyle(c_SWFFillStyle fill)
-    { this->fill = fill; }
+  { 
+    this->fill = fill; 
+    if(this->fill == NULL)
+      throw SWFException("SWFFillStyle");
+  }
   SWF_DECLAREONLY(SWFFillStyle);
   SWFFillStyle();
 };   
@@ -852,16 +979,26 @@ class SWFFont : public SWFBlock
   c_SWFFont font;
 
   SWFFont()
-    { this->font = newSWFFont(); }
+  { 
+    this->font = newSWFFont(); 
+    if(this->font == NULL)
+      throw SWFException("SWFFont()");
+  }
 
   SWFFont(FILE *file) // deprecated 
   {
 	std::cerr << "SWFFont(FILE *file) is deprecated and will be removed in future releases." << std::endl;
-	this->font = loadSWFFont_fromFdbFile(file); 
+	this->font = loadSWFFont_fromFdbFile(file);
+	if(this->font == NULL)
+		throw SWFException("SWFFont(FILE *file)");
   }
 
   SWFFont(char *path)
-    { this->font = newSWFFont_fromFile(path); }
+  { 
+    this->font = newSWFFont_fromFile(path); 
+    if(this->font == NULL)
+      throw SWFException("SWFFont(char *path)");
+  }
 
   virtual ~SWFFont()
     { destroySWFFont(/*(c_SWFBlock)*/this->font); }
@@ -893,7 +1030,11 @@ class SWFBrowserFont : public SWFBlock
   c_SWFBrowserFont bfont;
   
   SWFBrowserFont(char *name)
-    { this->bfont = newSWFBrowserFont(name); }
+  { 
+    this->bfont = newSWFBrowserFont(name); 
+    if(this->bfont == NULL)
+      throw SWFException("SWFBrowserFont(char *name)");
+  }
 
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->bfont; }
@@ -905,7 +1046,6 @@ class SWFBrowserFont : public SWFBlock
 };
 
 /*  SWFShape  */
-
 class SWFShape : public SWFCharacter
 {
  public:
@@ -913,12 +1053,19 @@ class SWFShape : public SWFCharacter
 
   SWFShape()
   { 
-    this->shape = newSWFShape(); 
+    this->shape = newSWFShape();
+    if(this->shape == NULL)
+      throw SWFException("SWFShape()");
+
     this->character = (c_SWFCharacter)shape;
   }
 
   SWFShape(c_SWFShape shape)
-    { this->shape = shape; }
+  { 
+    this->shape = shape;
+    if(this->shape == NULL)
+      throw SWFException("SWFShape(c_SWFShape shape)");
+  }
 
   virtual ~SWFShape()
     { destroySWFShape(this->shape); }
@@ -1020,7 +1167,10 @@ class SWFSprite : public SWFCharacter
 
   SWFSprite()
   { 
-    this->clip = newSWFMovieClip(); 
+    this->clip = newSWFMovieClip();
+    if(this->clip == NULL)
+      throw SWFException("SWFSprite()");
+ 
     this->character = (c_SWFCharacter)clip;
   }
 
@@ -1034,7 +1184,12 @@ class SWFSprite : public SWFCharacter
     { SWFMovieClip_setNumberOfFrames(this->clip, nFrames); }
 
   SWFDisplayItem *add(SWFBlock *character)
-    { return new SWFDisplayItem(SWFMovieClip_add(this->clip, character->getBlock())); }
+  { 
+    c_SWFDisplayItem item = SWFMovieClip_add(this->clip, character->getBlock());
+    if(item == NULL)
+      return NULL;
+    return new SWFDisplayItem(item); 
+  }
 
   void remove(SWFDisplayItem *item)
     { SWFMovieClip_remove(this->clip, item->item); }
@@ -1066,7 +1221,10 @@ class SWFMovieClip : public SWFCharacter
 
   SWFMovieClip()
   { 
-    this->clip = newSWFMovieClip(); 
+    this->clip = newSWFMovieClip();
+    if(this->clip == NULL)
+      throw SWFException("SWFMovieClip()");
+
     this->character = (c_SWFCharacter)clip;
   }
 
@@ -1080,7 +1238,13 @@ class SWFMovieClip : public SWFCharacter
     { SWFMovieClip_setNumberOfFrames(this->clip, nFrames); }
 
   SWFDisplayItem *add(SWFBlock *character)
-    { return new SWFDisplayItem(SWFMovieClip_add(this->clip, character->getBlock())); }
+  {
+    c_SWFDisplayItem item = SWFMovieClip_add(this->clip, character->getBlock());
+    if(item == NULL)
+      return NULL;
+    else
+      return new SWFDisplayItem(item); 
+  }
 
   void remove(SWFDisplayItem *item)
     { SWFMovieClip_remove(this->clip, item->item); }
@@ -1107,7 +1271,10 @@ class SWFMorph : public SWFCharacter
 
   SWFMorph()
   { 
-    this->morph = newSWFMorphShape(); 
+    this->morph = newSWFMorphShape();
+    if(this->morph == NULL)
+      throw SWFException("SWFMorph()");
+
     this->character = (c_SWFCharacter)morph;
   }
 
@@ -1139,6 +1306,8 @@ class SWFText : public SWFCharacter
         this->text = newSWFText2();
       else 
         this->text = newSWFText();
+      if(this->text == NULL)
+        throw SWFException("SWFText()");
       this->character = (c_SWFCharacter)text;
   }
 
@@ -1190,7 +1359,9 @@ class SWFTextField : public SWFCharacter
 
   SWFTextField()
   { 
-    this->textField = newSWFTextField(); 
+    this->textField = newSWFTextField();
+    if(this->textField == NULL)
+      throw SWFException("SWFTextField()");
     this->character = (c_SWFCharacter)textField;
   }
 
@@ -1297,7 +1468,11 @@ class SWFButtonRecord
 
  private:
   SWFButtonRecord(c_SWFButtonRecord record)
-	{ this->record = record; }
+  { 
+    this->record = record; 
+    if(this->record == NULL)
+      throw SWFException("ButtonRecord");
+  }
   SWF_DECLAREONLY(SWFButtonRecord);	
 };
 
@@ -1310,7 +1485,9 @@ class SWFButton : public SWFCharacter
 
   SWFButton()
   { 
-    this->button = newSWFButton(); 
+    this->button = newSWFButton();
+    if(this->button == NULL)
+      throw SWFException("SWFButton()");
     this->character = (c_SWFCharacter)button;
   }
 
@@ -1354,15 +1531,25 @@ class SWFVideoStream : public SWFCharacter
 
   SWFVideoStream()
   { 
-    this->stream = newSWFVideoStream(); 
+    this->stream = newSWFVideoStream();
+    if(this->stream == NULL) 
+      throw SWFException("newSWFVideoStream()");
     this->character = (c_SWFCharacter)stream;
   }
 
   SWFVideoStream(const char *path)
-    { this->stream = newSWFVideoStream_fromFile(fopen(path, "rb")); }
+  { 
+    this->stream = newSWFVideoStream_fromFile(fopen(path, "rb")); 
+    if(this->stream == NULL)
+      throw SWFException("SWFVideoStream(const char *path)");
+  }
 
   SWFVideoStream(FILE *file)
-    { this->stream = newSWFVideoStream_fromFile(file); }
+  { 
+    this->stream = newSWFVideoStream_fromFile(file); 
+    if(this->stream == NULL)
+      throw SWFException(" SWFVideoStream(FILE *file)");
+  }
 
   virtual ~SWFVideoStream()
     { destroySWFVideoStream(this->stream); }
