@@ -138,19 +138,20 @@ int readMP3Header(SWFInput input, struct mp3_header *mp3h)
 		SWFInput_seek(input, -4, SEEK_CUR);  
 		return -1;
 	}
-
-	return 0;
+	return 1;
 }
 
 int nextMP3Frame(SWFInput input)
 {
-	int frameLen;
+	int frameLen, ret;
 	struct mp3_header mp3h;
 
-	if(readMP3Header(input, &mp3h) < 0)
+	ret = readMP3Header(input, &mp3h);
+	
+	if(ret < 0)
 		return -1;
 	
-	if(SWFInput_eof(input))
+	if(ret == 0 || SWFInput_eof(input))
 		return 0;
 	
 	if(mp3h.samplingRate == 0 || mp3h.bitrate == 0)

@@ -139,14 +139,11 @@ newSWFBitmapFillStyle(SWFBitmap bitmap, byte flags)
 
 	fill->data.bitmap = bitmap;
 	fill->matrix = newSWFMatrix(Ming_scale, 0, 0, Ming_scale, 0, 0);
-
-	/* If newSWFMatrix() failed, return NULL to signify this */
-	if (NULL == fill->matrix)
+	if (fill->matrix == NULL)
 	{
 		free(fill);
 		return NULL;
 	}
-
 	return fill;
 }
 

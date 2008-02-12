@@ -567,7 +567,7 @@ getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock)
 	int source = stream->streamSource;
 	struct SWFSoundStreamBlock_s block;
 
-	if (streamblock == 0)
+	if (streamblock == NULL)
 		streamblock = &block;
 		
 	streamblock->stream = stream;
