@@ -19,6 +19,7 @@
  *
  ****************************************************************************/
 
+#if USE_FREETYPE
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -307,3 +308,4 @@ error_ft:
 	FT_Done_FreeType(library);
 	return NULL;
 }
+#endif // USE_FREETYPE

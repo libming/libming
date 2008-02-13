@@ -346,7 +346,11 @@ SWFFontCollection newSWFFontCollection_fromFile(const char *filename /* filename
 	if(ttc_check(header))
 	{
 		fclose(file);
+#if USE_FREETYPE
 		return loadTTFCollection(filename);
+#else 
+		return NULL;
+#endif
 	}
 	else
 	{
@@ -383,11 +387,19 @@ SWFFont newSWFFont_fromFile(const char *filename /* filename for fontfile */)
 	if(true_type_check(header))
 	{
 		fclose(file);
+#if USE_FREETYPE
 		return loadSWFFontTTF(filename);
+#else
+		return NULL;
+#endif
 	}
 	else if(fdb_check(header))
 	{
+#if USE_FREETYPE
 		SWFFont font = loadSWFFont_fromFdbFile(file);
+#else
+		SWFFont font = NULL;
+#endif
 		fclose(file);
 		return font;
 	}
