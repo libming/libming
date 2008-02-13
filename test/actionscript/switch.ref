@@ -1,0 +1,77 @@
+File version: 6
+File size: 140
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 110
+
+ 25 Actions
+    26:SWFACTION_CONSTANTPOOL
+     [000] x
+     [001] y
+     [002] x || y
+     [003] z
+    44:SWFACTION_PUSH
+     [000]   Constant: 0 "x"
+    49:SWFACTION_GETVARIABLE
+    50:SWFACTION_PUSHDUP
+    51:SWFACTION_PUSH
+     [000]   Constant: 1 "y"
+    56:SWFACTION_GETVARIABLE
+    57:SWFACTION_EQUALS2
+    58:SWFACTION_LOGICALNOT
+    59:SWFACTION_IF
+    BranchOffset: 11, TargetOffset: 75
+    3 Action
+    64:SWFACTION_PUSH
+     [000]   Constant: 1 "y"
+    69:SWFACTION_TRACE
+    70:SWFACTION_JUMP
+    BranchOffset: 14, TargetOffset: 89
+    75:SWFACTION_PUSHDUP
+    76:SWFACTION_PUSH
+     [000]   Constant: 0 "x"
+    81:SWFACTION_GETVARIABLE
+    82:SWFACTION_EQUALS2
+    83:SWFACTION_LOGICALNOT
+    84:SWFACTION_IF
+    BranchOffset: 11, TargetOffset: 100
+    3 Action
+    89:SWFACTION_PUSH
+     [000]   Constant: 2 "x || y"
+    94:SWFACTION_TRACE
+    95:SWFACTION_JUMP
+    BranchOffset: 34, TargetOffset: 134
+    100:SWFACTION_PUSHDUP
+    101:SWFACTION_PUSH
+     [000]   Constant: 3 "z"
+    106:SWFACTION_GETVARIABLE
+    107:SWFACTION_EQUALS2
+    108:SWFACTION_LOGICALNOT
+    109:SWFACTION_IF
+    BranchOffset: 10, TargetOffset: 124
+    2 Action
+    114:SWFACTION_JUMP
+    BranchOffset: 15, TargetOffset: 134
+    119:SWFACTION_JUMP
+    BranchOffset: 0, TargetOffset: 124
+    124:SWFACTION_JUMP
+    BranchOffset: 5, TargetOffset: 134
+    129:SWFACTION_JUMP
+    BranchOffset: 0, TargetOffset: 134
+    134:SWFACTION_POP
+    135:SWFACTION_END
+
+Offset: 136 (0x0088)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 138 (0x008a)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

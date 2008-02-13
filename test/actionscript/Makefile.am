@@ -31,7 +31,8 @@ AS_TESTS = \
 	class_member.as:6	\
 	ASM_V4.as:4		\
 	condition.as:6		\
-	With.as:6
+	With.as:6		\
+	switch.as:6
 
 AS_TEST_FILES = \
 	Function.as	\
@@ -57,7 +58,9 @@ AS_TEST_FILES = \
 	class_member.as \
 	ASM_V4.as	\
 	condition.as	\
-	with.as
+	With.as		\
+	switch.as	
+	
 
 EXTRA_DIST = 		\
 	Function.ref	\
@@ -84,6 +87,7 @@ EXTRA_DIST = 		\
 	ASM_V4.ref	\
 	condition.ref	\
 	With.ref	\
+	switch.ref	\
 	$(AS_TEST_FILES)
 
 CLEANFILES = *.pp *.swf
