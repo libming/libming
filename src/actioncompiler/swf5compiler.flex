@@ -158,6 +158,7 @@ false			{ count(); swf5lval.intVal = 0;
 				return BOOLEAN;	}
 null			{ count();	return NULLVAL;		}
 undefined		{ count();	return UNDEFINED;	}
+type[oO]f		{ count();	return TYPEOF; }
 }
 
 <STATE_PURE,STATE_LEGACY>{
@@ -194,7 +195,6 @@ asm 			{ count();
 			}
 
 eval			{ count();	return EVAL;		}
-type[oO]f		{ count();	return TYPEOF; }
 instance[oO]f		{ count();	return INSTANCEOF; }
 trace			{ count();	return TRACE;	}
 class			{ count();	return CLASS; }
