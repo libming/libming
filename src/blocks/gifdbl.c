@@ -3,7 +3,7 @@
 
 #include "ming_config.h"
 #include "libming.h"
-
+#include "error.h"
 
 #if !(USE_GIF) // {
 
