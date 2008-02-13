@@ -1,4 +1,5 @@
 #include <libming.h>
+#include <stdlib.h>
 
 int main() {
 	SWFMovie m = newSWFMovieWithVersion(7);
@@ -9,14 +10,14 @@ int main() {
 	if(!file) 
 	{
 		perror(MEDIADIR "/video01.flv");
-		return 1;
+		return EXIT_FAILURE;
 	}
 		
 	stream = newSWFVideoStream_fromFile(file);
 	if(!stream)
 	{
 		printf(stderr, "Could not create SWFVideoStream from file\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	SWFVideoStream_setDimension(stream, 200,200);

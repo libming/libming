@@ -2,6 +2,7 @@
  
 int main ()
 {
+try {
   SWFMovie *movie;
   SWFVideoStream *video1;
   SWFVideoStream *video2;
@@ -15,5 +16,12 @@ int main ()
   movie->add ( video2);
  
   movie->save ("test02.swf");
-  return 0;
+}
+catch(SWFException &e)
+{
+	std::cerr << "SWFException: " << e.what() << std::endl << std::endl;
+	return EXIT_FAILURE;
+}
+return 0;
+
 }
