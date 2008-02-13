@@ -33,6 +33,7 @@
 #include "shape.h"
 #include "fdbfont.h"
 #include "ttffont.h"
+#include "ming_config.h"
 
 struct textList
 {
