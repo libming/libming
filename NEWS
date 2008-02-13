@@ -24,6 +24,8 @@
 	* Improved ButtonRecord handling
 	* SWFSound_fromSoundStream()
 	* Many improvements in decompiler and swftoXXX tools
+	* C++ might throw a SWFException
+	* Support for embedded Nellymoser sound
 
 0.4.0.beta5 - 2007-09-18
 
