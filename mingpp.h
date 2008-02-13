@@ -27,6 +27,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <list>
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
 
@@ -60,11 +61,8 @@ extern "C"
   #define SWFFilterMatrix c_SWFFilterMatrix
   #define SWFInitAction   c_SWFInitAction
   #define SWFButtonRecord c_SWFButtonRecord
-
-// begin minguts 2004/08/31 ((((
   #define SWFFontCharacter c_SWFFontCharacter
   #define SWFPrebuiltClip c_SWFPrebuiltClip
-// )))) end minguts 2004/08/31
 
   #include <ming.h>
 
@@ -568,10 +566,7 @@ class SWFDisplayItem
   void flush()
     { SWFDisplayItem_flush(this->item); }
   
-  // FIXME: http://bugs.libming.net/show_bug.cgi?id=48
-  virtual ~SWFDisplayItem()
-    { }
-
+  
  private:
   SWFDisplayItem(c_SWFDisplayItem item)
   { 
@@ -579,6 +574,7 @@ class SWFDisplayItem
     if(this->item == NULL)
       throw SWFException("SWFDisplayItem()");
   }
+  ~SWFDisplayItem() { }
 
   SWF_DECLAREONLY(SWFDisplayItem);
   SWFDisplayItem();
@@ -727,7 +723,9 @@ class SWFMovie
     c_SWFDisplayItem item = SWFMovie_add_internal(this->movie, ublock);
     if(item == NULL)
       return NULL;
-    return new SWFDisplayItem(item); 
+    SWFDisplayItem *_item_ = new SWFDisplayItem(item);
+    itemList.push_back(_item_);
+    return _item_; 
   }
 
   void addExport(SWFBlock *exp, char *name)
@@ -756,6 +754,7 @@ class SWFMovie
   {
     int oldlevel = Ming_setSWFCompression(level);
     int ret = SWFMovie_output_to_stream(this->movie, stdout);
+    cleanUp();
     Ming_setSWFCompression(oldlevel);
     return ret;
   }
@@ -765,6 +764,7 @@ class SWFMovie
     int oldlevel = Ming_setSWFCompression(level);
     int result = SWFMovie_save(this->movie,filename);
     Ming_setSWFCompression(oldlevel);
+    cleanUp();
     return result;
   }
 
@@ -773,22 +773,17 @@ class SWFMovie
   void stopSound(SWFSound *sound)
     { SWFMovie_stopSound(this->movie, sound->sound); }
 
-// begin minguts 2004/08/31 ((((
-	SWFCharacter *importCharacter(const char *filename, const char *name)
-	{ return new SWFCharacter(SWFMovie_importCharacter(this->movie, filename, name));}
-	SWFFontCharacter *importFont(const char *filename, const char *name)
-	{ return new SWFFontCharacter(SWFMovie_importFont(this->movie, filename, name)); }
-// )))) end minguts 2004/08/31
+  SWFCharacter *importCharacter(const char *filename, const char *name)
+    { return new SWFCharacter(SWFMovie_importCharacter(this->movie, filename, name)); }
+
+  SWFFontCharacter *importFont(const char *filename, const char *name)
+  { return new SWFFontCharacter(SWFMovie_importFont(this->movie, filename, name)); }
 
   void protect()
-	{
-		SWFMovie_protect(this->movie, NULL);
-	}
+  { SWFMovie_protect(this->movie, NULL);}
 
   void protect(char *password)
-	{
-		SWFMovie_protect(this->movie,password);
-	}
+  { SWFMovie_protect(this->movie,password); }
   
   void addMetadata(char *xml)
     { SWFMovie_addMetadata(this->movie, xml); }
@@ -809,6 +804,15 @@ class SWFMovie
     { SWFMovie_defineScene(this->movie, offset, name); }
 
   SWF_DECLAREONLY(SWFMovie);
+ private:
+
+  void cleanUp()
+  {
+    std::list<SWFDisplayItem *>::iterator iter = itemList.begin();
+    for(; iter != itemList.end(); iter++)
+      delete (*iter);
+  }
+  std::list<SWFDisplayItem *> itemList;
 };
 
 
