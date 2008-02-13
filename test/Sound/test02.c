@@ -1,4 +1,5 @@
 #include <libming.h>
+#include <stdlib.h>
 
 int main() {
 	SWFMovie m = newSWFMovieWithVersion(7);
@@ -9,14 +10,14 @@ int main() {
 	file = fopen(MEDIADIR "/video02.flv", "rb");
 	if(!file) {
 		perror(MEDIADIR "/video02.flv");
-		return 1;
+		return EXIT_FAILURE;
 	}
 		
 	sound = newSWFSound_fromSoundStream(newSWFSoundStream(file));
 	if(!sound)
 	{
 		fprintf(stderr, "Could not create SWFSound\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
 	SWFMovie_startSound(m, sound);
 
@@ -24,7 +25,7 @@ int main() {
 	if ( ret == -1 )
 	{
 		fprintf(stderr, "Something went wrong during SWFMovie_save\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	return 0;

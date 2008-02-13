@@ -7,14 +7,21 @@ int main()
 	SWFMovie *m;
 	SWFAction *a;
 
-	m = new SWFMovie();
-	a = new SWFAction("trace('');");
-	mc = new SWFMovieClip();
+	try {
+		m = new SWFMovie();
+		a = new SWFAction("trace('');");
+		mc = new SWFMovieClip();
 
-	mc->addInitAction(a);
+		mc->addInitAction(a);
 	
-	m->add(mc);
+		m->add(mc);
 
-	m->save("test01.swf");
+		m->save("test01.swf");
+	}
+	catch(SWFException &e)
+	{
+		std::cerr << "SWFException: " << e.what() << std::endl << std::endl;
+		return EXIT_FAILURE;
+	}
 	return 0;
 }

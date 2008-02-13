@@ -2,22 +2,26 @@
 
 int main()
 {
-	SWFMovie *m = new SWFMovie(7);
-	SWFSound *sound;
-	int i;
-	FILE *file;
+	try {
+		SWFMovie *m = new SWFMovie(7);
+		SWFSound *sound;
+		int i;
+		FILE *file;
 
-	file = fopen(MEDIADIR "/video02.flv", "rb");
-	if(!file) {
-		return 0;
+		file = fopen(MEDIADIR "/video02.flv", "rb");
+		if(!file) {
+			return EXIT_FAILURE;
+		}
+
+		sound = new SWFSound(new SWFSoundStream(file));
+		m->startSound(sound);
+
+		m->save("test02.swf");
 	}
-
-	sound = new SWFSound(new SWFSoundStream(file));
-	if(!sound)
-		return 0;
-
-	m->startSound(sound);
-
-	m->save("test02.swf");
+	catch(SWFException &e)
+	{
+		std::cerr << "SWFException: " << e.what() << std::endl << std::endl;
+		return EXIT_FAILURE;
+	}
 	return 0;
 }
