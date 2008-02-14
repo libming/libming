@@ -223,7 +223,7 @@ typedef enum
 } SWFBitmapFmt;
 
 typedef enum {
-	SWF_RAWIMG_ARGB,
+	SWF_RAWIMG_ARGB
 } SWFRawImgFmt;
 
 

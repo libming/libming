@@ -136,7 +136,7 @@ typedef enum
   SWFACTION_THROW                   = 0x2A,
   SWFACTION_CASTOP                  = 0x2B,
   SWFACTION_IMPLEMENTSOP            = 0x2C,
-  SWFACTION_FSCOMMAND2              = 0x2D,
+  SWFACTION_FSCOMMAND2              = 0x2D
 
 } Action;
 
