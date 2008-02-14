@@ -253,7 +253,7 @@ destroySWFFontCharacter(SWFFontCharacter font)
 
 	if ( font->codeTable != NULL )
 		free(font->codeTable);
-	if( font->out != NULL);
+	if( font->out != NULL)
 		destroySWFOutput(font->out);
 	free(font);
 }
