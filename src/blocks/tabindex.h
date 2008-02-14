@@ -31,7 +31,7 @@ struct SWFTabIndex_s
 
 typedef struct SWFTabIndex_s* SWFTabIndex;
 
-SWFTabIndex newSWFTabIndex();
+SWFTabIndex newSWFTabIndex(int depth, int index);
 void destroySWFTabIndex(SWFTabIndex);
 #endif
 
