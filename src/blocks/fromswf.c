@@ -238,7 +238,7 @@ static void putint4(unsigned char *p, int val)
 struct swfile
 {	char lastch;
 	char bitoff;
-	unsigned char (*readc)();
+	unsigned char (*readc)(struct swfile *);
 
 	char *name;	
 	unsigned char vers[4];
@@ -306,7 +306,7 @@ static struct swfile *openswf(SWFInput input)
 struct swftag
 {	char lastch;
 	char bitoff;
-	unsigned char (*readc)();
+	unsigned char (*readc)(struct swftag *sp);
 
 	short type; int size;
 	unsigned char hdr[6]; short hdrlen;
@@ -369,20 +369,20 @@ static int change_id(TAG tp)
 }
 
 // processing functions for handle()
-static void defineshape();
-static void definetext();
-static void placeobject();
-static void definebutton();
-static void definebutton2();
-static void definetextfield();
-static void definesprite();
-static void definemorphshape();
-static void exportassets();
-static void definebuttonsound();
-static void fillandlinestyles();
-static void linestyle();
-static void shape();
-static void morphlinestyle2();
+static void defineshape(TAG tp, int lev);
+static void definetext(TAG tp, int lev);
+static void placeobject(TAG tp, int lv);
+static void definebutton(TAG tp);
+static void definebutton2(TAG tp);
+static void definetextfield(TAG tp);
+static void definesprite(TAG tp);
+static void definemorphshape(TAG tp,int lev);
+static void exportassets(TAG tp);
+static void definebuttonsound(TAG tp);
+static void fillandlinestyles(TAG tp, int lev);
+static void linestyle(TAG tp, int lev);
+static void shape(TAG tp, int lev);
+static void morphlinestyle2(TAG tp);
 
 static int drop_tag(TAG tp)
 {
