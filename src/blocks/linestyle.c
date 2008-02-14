@@ -223,7 +223,7 @@ static inline void writeLineStyle1(SWFOutput out, SWFLineStyle line, int shapeTy
 		SWFOutput_writeUInt8(out, line->a);
 }
 
-static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, int shapeType)
+static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, SWFBlocktype shapeType)
 {
 	SWFOutput_writeUInt16(out, line->width);
 	SWFOutput_writeUInt8(out, (line->flags >> 8));
