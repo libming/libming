@@ -240,7 +240,6 @@ static int setH263StreamDimension(SWFVideoStream stream, FLVTag *tag)
 		default:
 			return setH263CustomDimension(stream, input, flags);
 	}
-	return -1;
 }				
 
 static int setScreenStreamDimension(SWFVideoStream stream, FLVTag *tag) 
