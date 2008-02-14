@@ -122,7 +122,7 @@ SWFBitmap newSWFBitmap_fromRawImg(unsigned char *raw,
 	
 	insize = width * height * 4;
 	outsize = compressBound(insize);
-	image.data = malloc(outsize);
+	image.data = (unsigned char*) malloc(outsize);
 
 	/* If malloc failed, return NULL to signify this */
 	if (NULL == image.data)

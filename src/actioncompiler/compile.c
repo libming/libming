@@ -937,7 +937,7 @@ int bufferWriteFunction(Buffer out, ASFunction function, int version)
 ASFunction newASFunction()
 {
 	ASFunction func;
-	func = malloc(sizeof(struct function_s));
+	func = (ASFunction) malloc(sizeof(struct function_s));
 	func->flags = 0;
 	func->code = NULL;
 	func->params.count = 0;
@@ -1120,7 +1120,7 @@ void ASClassMember_append(ASClassMember m0, ASClassMember end)
 ASClass newASClass(char *name, ASClassMember members)
 {
 	ASClass clazz;
-	clazz = malloc(sizeof(struct class_s));
+	clazz = (ASClass) malloc(sizeof(struct class_s));
 	clazz->name = name;
 	clazz->members = members;
 	return clazz;	
@@ -1128,7 +1128,7 @@ ASClass newASClass(char *name, ASClassMember members)
 
 ASClassMember newASClassMember_function(ASFunction func)
 {
-	ASClassMember member = malloc(sizeof(struct class_member_s));
+	ASClassMember member = (ASClassMember) malloc(sizeof(struct class_member_s));
 	member->element.function = func;
 	member->type = METHOD;
 	member->next = NULL; 
@@ -1137,7 +1137,7 @@ ASClassMember newASClassMember_function(ASFunction func)
 
 ASClassMember newASClassMember_variable(ASVariable var)
 {
-	ASClassMember member = malloc(sizeof(struct class_member_s));
+	ASClassMember member = (ASClassMember) malloc(sizeof(struct class_member_s));
 	member->element.var = var;
 	member->type = VARIABLE;
 	member->next = NULL; 
@@ -1147,7 +1147,7 @@ ASClassMember newASClassMember_variable(ASVariable var)
 
 ASClassMember newASClassMember_buffer(Buffer buf)
 {
-	ASClassMember member = malloc(sizeof(struct class_member_s));
+	ASClassMember member = (ASClassMember) malloc(sizeof(struct class_member_s));
 	member->element.buffer = buf;
 	member->type = BUFF;
 	member->next = NULL; 
@@ -1155,7 +1155,7 @@ ASClassMember newASClassMember_buffer(Buffer buf)
 }
 ASVariable newASVariable(char *name, Buffer buf)
 {
-	ASVariable var = malloc(sizeof(struct variable_s));
+	ASVariable var = (ASVariable) malloc(sizeof(struct variable_s));
 	var->name = name;
 	var->initCode = buf;
 	return var;

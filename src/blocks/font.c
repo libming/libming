@@ -905,7 +905,7 @@ void SWFFontCollection_addFont(SWFFontCollection collection, SWFFont font)
 	if(!collection || !font)
 		return;
 
-	collection->fontList = realloc(collection->fontList, 
+	collection->fontList = (SWFFont*)realloc(collection->fontList, 
 		(collection->numFonts + 1) * sizeof(SWFFont));
 	collection->fontList[collection->numFonts] = font;
 	collection->numFonts++;
@@ -927,7 +927,7 @@ SWFFontCollection newSWFFontCollection()
 {
 	SWFFontCollection collection;
 
-	collection = malloc(sizeof(SWFFontCollection));
+	collection = (SWFFontCollection) malloc(sizeof(SWFFontCollection));
 	collection->fontList = NULL;
 	collection->numFonts = 0;
 
