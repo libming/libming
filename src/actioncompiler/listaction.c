@@ -546,23 +546,23 @@ int printActionRecord(Buffer f)
       break;
     case SWFACTION_TRY:
     { //int flag = readUInt8(f);
-	int try, catch, finally;
+	int Try, Catch, finally;
 	char *name;
     	  readUInt8(f);
-	  try = readUInt16(f);
-	  catch = readUInt16(f);
+	  Try = readUInt16(f);
+	  Catch = readUInt16(f);
 	  finally = readUInt16(f);
       name = readString(f);  // if ((flag&4) == 0)
 	// catch var or reg here
       println("try");
       ++gIndent;
-	  if(try)
-      	printDoAction(f, try);
+	  if(Try)
+      	printDoAction(f, Try);
       --gIndent;
-	  if(catch)
+	  if(Catch)
       {	print("catch ("); print(name); println(" )");
         ++gIndent;
-	    printDoAction(f, catch);
+	    printDoAction(f, Catch);
 	    --gIndent;
 	  }
 	  if(finally)
