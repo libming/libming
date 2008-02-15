@@ -193,7 +193,7 @@ newSWFMovieWithVersion(int version /* Flash version */)
 	movie = (SWFMovie) malloc(sizeof(struct SWFMovie_s));
 
 	/* If malloc failed, return NULL to signify this */
-	if (NULL == malloc)
+	if (movie == NULL)
 		return NULL;
 
 	movie->version = version;
