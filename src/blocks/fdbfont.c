@@ -236,8 +236,6 @@ SWFFont loadSWFFontFromInput(SWFInput input)
 {
 	SWFFont font; 
 	int namelen, flags, i, nGlyphs;
-	unsigned int *glyphOffset;
-	unsigned int codeTableOffset;
 
 	if(input == NULL)
 		return NULL;
@@ -260,18 +258,17 @@ SWFFont loadSWFFontFromInput(SWFInput input)
 
 	font->nGlyphs = nGlyphs;
 	font->glyphToCode = (unsigned short*)malloc(nGlyphs * sizeof(short));	
-	glyphOffset = (unsigned int *)malloc(nGlyphs * sizeof(unsigned int));
 	if ( flags & SWF_FONT_WIDEOFFSETS )
 	{
 		for (i=0; i < nGlyphs; ++i)
-			glyphOffset[i] = SWFInput_getUInt32(input);
-		codeTableOffset = SWFInput_getUInt32(input);
+			SWFInput_getUInt32(input); // glyph offset
+		SWFInput_getUInt32(input); // code table offset
 	}
 	else
 	{
 		for(i=0; i < nGlyphs; ++i)
-			glyphOffset[i] = SWFInput_getUInt16(input);
-		codeTableOffset = SWFInput_getUInt16(input);
+			SWFInput_getUInt16(input); // glyph offset
+		SWFInput_getUInt16(input); // code table offset
 	}
 
 	font->shapes = (SWFShape *)malloc(nGlyphs * sizeof(SWFShape));
