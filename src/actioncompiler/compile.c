@@ -648,6 +648,7 @@ int chkctx(enum ctx val)
 						return -1;
 					default: ; /* computers are stupid */
 				}
+			return -1;
 		case CTX_CONTINUE:
 			for(n = ctx_count ; --n >= 0 ; )
 				switch(ctx_stack[n])
@@ -658,9 +659,8 @@ int chkctx(enum ctx val)
 						return -1;
 					default: ; /* computers are stupid */
 				}
-		default: ; /* computers are stupid */
+		default: return -1;; /* computers are stupid */
 	}
-	return 0;
 }
 
 /* replace MAGIC_CONTINUE_NUMBER and MAGIC_BREAK_NUMBER with jumps to
