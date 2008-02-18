@@ -158,11 +158,11 @@ completeSWFFontCharacter(SWFBlock block)
 	
 	for (i = 0; i < inst->nGlyphs; ++i)
 	{
-		unsigned short c = font->glyphToCode[inst->codeTable[i]];
+		unsigned short code = font->glyphToCode[inst->codeTable[i]];
 		if (inst->flags & SWF_FONT_WIDECODES)
-			SWFOutput_writeUInt16(buffer, c);
+			SWFOutput_writeUInt16(buffer, code);
 		else
-			SWFOutput_writeUInt8(buffer, c);
+			SWFOutput_writeUInt8(buffer, code);
 	}
 	
 	/* write font layout */
