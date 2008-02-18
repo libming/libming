@@ -13,7 +13,6 @@ static inline int SWFFilter_testBlockType(int type)
 		case SWF_DEFINETEXT:
 		case SWF_DEFINETEXT2:
 			return 1;
-			break;
 		default: return 0;
 	}
 }
