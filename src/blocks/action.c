@@ -157,7 +157,7 @@ int SWFAction_compile(SWFAction action, int swfVersion,
 	return 0;
 }
 
-byte *SWFAction_getByteCode(SWFAction action, size_t *length)
+byte *SWFAction_getByteCode(SWFAction action, int *length)
 {
 	int ret = 0;
 	if(action == NULL) 
