@@ -76,10 +76,10 @@ struct FLVTag_s
 {
 	struct FLVStream_s 	*stream;
 	int 			tagType;
-	unsigned long 		dataSize;
-	unsigned long 		timeStamp;
-	unsigned long 		offset;
-	unsigned long		data;
+	long 		dataSize;
+	long 		timeStamp;
+	long 		offset;
+	long		data;
 	union {
 		struct video_hdr video;
 		struct audio_hdr audio;
