@@ -52,7 +52,7 @@ static inline int readVideoHdr(FLVStream *flv, FLVTag *tag)
 	return 0;
 }
 
-unsigned long FLVStream_skipTagData(FLVStream *flv, FLVTag *tag)
+long FLVStream_skipTagData(FLVStream *flv, FLVTag *tag)
 {
 	if(flv == NULL || tag == NULL)
 		return -1;
