@@ -84,10 +84,10 @@ SWFSymbolClass_addSymbol(SWFSymbolClass sclass,
 		return;
 	
 	size = (sclass->numSymbols + 1) * sizeof(int);
-	sclass->cIds = realloc(sclass->cIds, size);
+	sclass->cIds = (int*)realloc(sclass->cIds, size);
 	
 	size = (sclass->numSymbols + 1) * sizeof(char *);
-	sclass->names = realloc(sclass->names, size);
+	sclass->names = (char **)realloc(sclass->names, size);
 
 	sclass->names[sclass->numSymbols] = strdup(name);
 	if(character == NULL)
@@ -100,7 +100,7 @@ SWFSymbolClass_addSymbol(SWFSymbolClass sclass,
 
 SWFSymbolClass newSWFSymbolClass()
 {
-        SWFSymbolClass sclass = malloc(sizeof(struct SWFSymbolClass_s));
+        SWFSymbolClass sclass = (SWFSymbolClass)malloc(sizeof(struct SWFSymbolClass_s));
 
         SWFBlockInit(BLOCK(sclass));
         BLOCK(sclass)->type = SWF_SYMBOLCLASS;

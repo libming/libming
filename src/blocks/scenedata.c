@@ -95,9 +95,9 @@ destroySWFSceneData(SWFSceneData sdata)
 void 
 SWFSceneData_addScene(SWFSceneData sdata, unsigned int offset, const char *name)
 {
-	sdata->sceneName = realloc(sdata->sceneName, 
+	sdata->sceneName = (char **)realloc(sdata->sceneName, 
 		(sdata->sceneCount + 1) * sizeof(char *));
-	sdata->sceneOffset = realloc(sdata->sceneOffset,
+	sdata->sceneOffset = (unsigned int*) realloc(sdata->sceneOffset,
 		(sdata->sceneCount + 1) * sizeof(unsigned int));
 	sdata->sceneName[sdata->sceneCount] = strdup(name);
 	sdata->sceneOffset[sdata->sceneCount] = offset;
@@ -108,9 +108,9 @@ void
 SWFSceneData_addFrameLabel(SWFSceneData sdata, unsigned int fnum, 
                            const char *label)
 {
-	sdata->frameLabel = realloc(sdata->frameLabel, 
+	sdata->frameLabel = (char **)realloc(sdata->frameLabel, 
 		(sdata->frameLabelCount + 1) * sizeof(char *));
-	sdata->frameNumber = realloc(sdata->frameNumber,
+	sdata->frameNumber = (unsigned int*)realloc(sdata->frameNumber,
 		(sdata->frameLabelCount + 1) * sizeof(unsigned int));
 	sdata->frameLabel[sdata->frameLabelCount] = strdup(label);
 	sdata->frameNumber[sdata->frameLabelCount] = fnum;

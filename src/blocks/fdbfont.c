@@ -259,7 +259,7 @@ SWFFont loadSWFFontFromInput(SWFInput input)
 	nGlyphs = SWFInput_getUInt16(input);
 
 	font->nGlyphs = nGlyphs;
-	font->glyphToCode = malloc(nGlyphs * sizeof(short));	
+	font->glyphToCode = (unsigned short*)malloc(nGlyphs * sizeof(short));	
 	glyphOffset = (unsigned int *)malloc(nGlyphs * sizeof(unsigned int));
 	if ( flags & SWF_FONT_WIDEOFFSETS )
 	{

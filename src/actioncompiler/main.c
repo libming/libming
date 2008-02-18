@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
   SWF_error = print_error;
   SWF_warn = print_warn;
 
-  buffer = malloc(BUFFER_INC);
+  buffer = (char *)malloc(BUFFER_INC);
   bufferLen = 0;
 
   while (argc > 1) {
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
   while((size = fread(buffer+bufferLen, 1, BUFFER_INC, f)) == BUFFER_INC)
   {
-    buffer = realloc(buffer, bufferLen+2*BUFFER_INC);
+    buffer = (char *)realloc(buffer, bufferLen+2*BUFFER_INC);
     bufferLen += BUFFER_INC;
   }
 

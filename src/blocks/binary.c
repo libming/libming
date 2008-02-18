@@ -53,7 +53,7 @@ destroySWFBinaryData(SWFBinaryData data)
 
 SWFBinaryData newSWFBinaryData(unsigned char *blob, int length)
 {
-        SWFBinaryData data = malloc(sizeof(struct SWFBinaryData_s));
+        SWFBinaryData data = (SWFBinaryData)malloc(sizeof(struct SWFBinaryData_s));
 
       	SWFCharacterInit((SWFCharacter)data);
         BLOCK(data)->type = SWF_DEFINEBINARYDATA;
