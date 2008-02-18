@@ -40,13 +40,13 @@ struct label labels[256];
 
 
 static int
-findLabel(char *label)
+findLabel(char *l)
 {
 	int i;
 
 	for ( i=0; i<nLabels; ++i )
 	{
-		if ( strcmp(label, labels[i].name) == 0 )
+		if ( strcmp(l, labels[i].name) == 0 )
 			return i;
 	}
 
@@ -55,13 +55,13 @@ findLabel(char *label)
 
 
 static void
-addLabel(char *label)
+addLabel(char *l)
 {
-	int i = findLabel(label);
+	int i = findLabel(l);
 
 	if ( i == -1 )
 	{
-		labels[nLabels].name = strdup(label);
+		labels[nLabels].name = strdup(l);
 		labels[nLabels].offset = len;
 		++nLabels;
 	}
@@ -71,14 +71,14 @@ addLabel(char *label)
 
 
 int
-bufferBranchTarget(Buffer output, char *label)
+bufferBranchTarget(Buffer output, char *l)
 {
-	int i = findLabel(label);
+	int i = findLabel(l);
 
 	if ( i == -1 )
 	{
 		i = nLabels;
-		addLabel(label);
+		addLabel(l);
 	}
 
 	return bufferWriteS16(output, i);
