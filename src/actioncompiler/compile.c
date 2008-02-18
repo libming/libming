@@ -47,6 +47,8 @@ char *stringConcat(char *a, char *b)
 		if ( b != NULL )
 		{
 			a = (char*)realloc(a, strlen(a)+strlen(b)+1);
+			if(a == NULL)
+				return NULL;
 			strcat(a, b);
 			free(b);
 		}
@@ -139,6 +141,8 @@ int bufferWriteConstants(Buffer out)
 Buffer newBuffer()
 {
 	Buffer out = (Buffer)malloc(BUFFER_SIZE);
+	if(out == NULL)
+		return NULL;
 	memset(out, 0, BUFFER_SIZE);
 
 	out->buffer = (byte*)malloc(BUFFER_INCREMENT);
