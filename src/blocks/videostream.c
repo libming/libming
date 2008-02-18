@@ -45,7 +45,7 @@ struct SWFVideoStream_s
 	FLVStream *flv;
 	FLVTag *lastTag;
 		
-	unsigned int numFrames;	
+	int numFrames;	
 	unsigned int frame;
 	int width;
 	int height;
