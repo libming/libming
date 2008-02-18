@@ -325,7 +325,7 @@ int bufferWriteS16(Buffer out, int data)
 	return 2;
 }
 
-int bufferWriteHardString(Buffer out, char *string, int length)
+int bufferWriteHardString(Buffer out, const char *string, int length)
 {
 	int i;
 
@@ -335,7 +335,7 @@ int bufferWriteHardString(Buffer out, char *string, int length)
 	return length;
 }
 
-int bufferWriteConstantString(Buffer out, char *string, int length)
+int bufferWriteConstantString(Buffer out, const char *string, int length)
 {
 	int n;
 
@@ -381,7 +381,7 @@ int bufferWritePushString(Buffer out, char *string, int length)
 	return len + l + 1;
 }
 
-int bufferWriteString(Buffer out, char *string, int length)
+int bufferWriteString(Buffer out, const char *string, int length)
 {
 	if(swfVersion < 5)
 	{
