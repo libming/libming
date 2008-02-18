@@ -927,7 +927,7 @@ SWFFontCollection newSWFFontCollection()
 {
 	SWFFontCollection collection;
 
-	collection = (SWFFontCollection) malloc(sizeof(SWFFontCollection));
+	collection = (SWFFontCollection) malloc(sizeof(struct SWFFontCollection_s));
 	collection->fontList = NULL;
 	collection->numFonts = 0;
 
