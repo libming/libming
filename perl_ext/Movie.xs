@@ -145,12 +145,13 @@ SWFMovie_remove(movie, item)
         SWF::DisplayItem item
 
 void
-SWFMovie_setSoundStream(movie, sound)
+SWFMovie_setSoundStream(movie, sound, skip=0.0)
 	SWF::Movie movie
 	SWF::SoundStream sound
+	float skip
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
-	SWFMovie_setSoundStream(movie, sound);
+	SWFMovie_setSoundStreamAt(movie, sound, skip);
 
 SWF::SoundInstance
 SWFMovie_startSound(movie, sound) 
@@ -211,3 +212,37 @@ SWFMovie_importFont(movie, file, name)
 	ST(0) = sv_newmortal();
 	sv_setref_pv(ST(0), "SWF::FontCharacter", (void*)RETVAL);
 
+SWF::Character
+SWFMovie_importCharacter(movie, url, name)
+	SWF::Movie movie
+	const char *url
+	const char *name
+	CODE:
+	RETVAL = SWFMovie_importCharacter(movie, url, name);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Character", (void*)RETVAL);
+
+void
+SWFMovie_assignSymbol(movie, character, name)
+	SWF::Movie movie
+	SWF::Character character
+	const char *name
+
+void 
+SWFMovie_defineScene(movie, offset, name)
+	SWF::Movie movie
+	unsigned int offset
+	const char *name
+
+int 
+SWFMovie_replace(movie, item, block)
+	SWF::Movie movie
+	SWF::DisplayItem item
+	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
+	PREINIT:
+	SWFMovieBlockType ublock;
+	CODE:	
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	ublock.block = block;
+	RETVAL = SWFMovie_replace_internal(movie, item, ublock);
+	
