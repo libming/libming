@@ -713,8 +713,13 @@ class SWFMovie
   void setBackground(byte r, byte g, byte b)
     { SWFMovie_setBackground(this->movie, r, g, b); }
 
-  void setSoundStream(SWFSoundStream *sound)
-    { SWFMovie_setSoundStream(this->movie, sound->sound); /* wogl */ }
+  void setSoundStream(SWFSoundStream *sound, float skip=0.0)
+  {
+    if(skip > 0)
+      SWFMovie_setSoundStreamAt(this->movie, sound->sound, skip);
+    else
+      SWFMovie_setSoundStream(this->movie, sound->sound); 
+  }
 
   SWFDisplayItem *add(SWFBlock *character)
   {
