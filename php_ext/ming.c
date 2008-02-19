@@ -2908,6 +2908,40 @@ PHP_METHOD(swfmovie, setTabIndex)
 }
 /* }}} */
 
+/* {{{ proto void swfmovie::assignSymbol(SWFCharacter character, string name)
+ * */
+PHP_METHOD(swfmovie, assignSymbol)
+{
+  zval **zchar, **name;
+  SWFCharacter character;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+  
+  if( ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &zchar, &name) == FAILURE) 
+        WRONG_PARAM_COUNT; 
+   
+  convert_to_string_ex(name);
+  convert_to_object_ex(zchar);
+  character = getCharacter(*zchar TSRMLS_CC);
+  SWFMovie_assignSymbol(movie, character, Z_STRVAL_PP(name));
+}
+/* }}} */
+
+/* {{{ proto void swfmovie::defineScene(int offset, string name)
+ * */
+PHP_METHOD(swfmovie, defineScene)
+{
+  zval **offset, **name;
+  SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+  
+  if( ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &offset, &name) == FAILURE) 
+        WRONG_PARAM_COUNT; 
+   
+  convert_to_string_ex(name);
+  convert_to_long_ex(offset);
+  SWFMovie_defineScene(movie, Z_LVAL_PP(offset), Z_STRVAL_PP(name));
+}
+/* }}} */
+
 /* {{{ proto void swfmovie::setNetworkAccess(int flag)
  * */  
 PHP_METHOD(swfmovie, setNetworkAccess)
@@ -3126,6 +3160,30 @@ PHP_METHOD(swfmovie, addFont)
 	}	
 }
 /* }}} */
+
+/* {{{ void swfmovie_replace */
+PHP_METHOD(swfmovie, replace)
+{
+	SWFMovie movie;
+	zval **zitem, **zblock;
+	SWFDisplayItem item;
+	SWFBlock block;
+	SWFMovieBlockType ublock;
+
+	if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &zitem, &zblock) == FAILURE)
+	    WRONG_PARAM_COUNT;
+	
+	convert_to_object_ex(zitem);
+	convert_to_object_ex(zblock);
+	item = getDisplayItem(*zitem TSRMLS_CC);
+
+	block = (SWFBlock) getCharacter(*zblock TSRMLS_CC);
+	movie =  getMovie(getThis() TSRMLS_CC);
+	ublock.block = block;
+
+	SWFMovie_replace_internal(movie, item, ublock);
+}
+/* }}} */
 #endif
 
 static zend_function_entry swfmovie_functions[] = {
@@ -3155,6 +3213,10 @@ static zend_function_entry swfmovie_functions[] = {
 	PHP_ME(swfmovie, setNetworkAccess,	NULL, 0)
 	PHP_ME(swfmovie, setScriptLimits,	NULL, 0)
 	PHP_ME(swfmovie, setTabIndex,		NULL, 0)
+	PHP_ME(swfmovie, assignSymbol,		NULL, 0)
+	PHP_ME(swfmovie, defineScene,		NULL, 0)
+	PHP_ME(swfmovie, namedAnchor,		NULL, 0)
+	PHP_ME(swfmovie, replace,		NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
