@@ -298,7 +298,6 @@ SWFMovie_setBackground(SWFMovie movie /* movie whose background is being set */,
 	movie->backgroundBlock = (SWFBlock)newSWFSetBackgroundBlock(r, g, b);
 }
 
-
 /*
  * enable edit protections for a movie
  * This function adds a block that tells flash editors to require a password
@@ -380,6 +379,9 @@ SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
  * Assigns a name to a SWFBlock object.
  * Creates an exportlibrary with named symbols to be imported by other 
  * SWF movies.
+ * Call SWFMovie_writeExports() when you're done with the exports
+ * to actually write the tag. If you don't the tag will be added
+ * at the END of the SWF.
  * see also SWFMovie_importCharacter, SWFMovie_importFont
  */
 void
@@ -444,7 +446,13 @@ SWFMovie_addCharacterDependencies(SWFMovie movie, SWFCharacter character)
 	}
 }
 
-
+/*
+ * Write the EXPORTASSET tag with informations gathered by calls to
+ * SWFMovie_addExport.
+ *
+ * Call this function to control insertion of the EXPORTASSET tag, which
+ * is otherwise written at the END of the SWF.
+ */
 void
 SWFMovie_writeExports(SWFMovie movie)
 {
