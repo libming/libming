@@ -389,6 +389,24 @@ class SWFMovie(SWFBase):
     def addExport(self, clipObj, libName):
         return mingc.SWFMovie_addExport(self.this, clipObj, libName)
 
+    def assignSymbol(self, character, name)
+	mingc.SWFMovie_assignSymbol(self.this, character.this, name)
+	
+    def setNetworkAccess(self, flag):
+        mingc.SWFMovie_setNetworkAccess(self.this, flag)
+
+    def addMetadata(self, xmldata):
+        mingc.SWFMovie_addMetadata(self.this, xmldata)
+
+    def setScriptLimits(self, maxRecursion, timeout):
+        mingc.SWFMovie_setScriptLimits(self.this, maxRecursion, timeout)
+
+    def setTabIndex(self, depth, index):
+        mingc.SWFMovie_setTabIndex(self.this, depth, index)
+
+    def defineScene(self, offset, name):
+        mingc.SWFMovie_defineScene(self.this, offset, index)
+
 class SWFSprite(SWFBase):
 
     def __init__(self):
@@ -413,21 +431,6 @@ class SWFSprite(SWFBase):
 
     def labelFrame(self, label):
         mingc.SWFMovieClip_labelFrame(self.this, label)
-
-    def setNetworkAccess(self, flag):
-        mingc.SWFMovie_setNetworkAccess(self.this, flag)
-
-    def addMetadata(self, xmldata):
-        mingc.SWFMovie_addMetadata(self.this, xmldata)
-
-    def setScriptLimits(self, maxRecursion, timeout):
-        mingc.SWFMovie_setScriptLimits(self.this, maxRecursion, timeout)
-
-    def setTabInde(self, depth, index):
-        mingc.SWFMovie_setTabIndex(self.this, depth, index)
-
-    def defineScene(self, offset, name):
-        mingc.SWFMovie_defineScene(self.this, depth, index)
 
 # deprecated:
 class SWFMovieClip(SWFSprite):

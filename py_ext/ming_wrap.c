@@ -5754,33 +5754,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SWFMovie_addFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SWFMovie arg1 = (SWFMovie) 0 ;
-  SWFFont arg2 = (SWFFont) 0 ;
-  SWFFontCharacter result;
-  int res1 ;
-  int res2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:SWFMovie_addFont",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_addFont" "', argument " "1"" of type '" "SWFMovie""'"); 
-  }
-  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_addFont" "', argument " "2"" of type '" "SWFFont""'"); 
-  }
-  result = (SWFFontCharacter)SWFMovie_addFont(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_SWFFontCharacter_addChars(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFFontCharacter arg1 = (SWFFontCharacter) 0 ;
@@ -5839,50 +5812,6 @@ SWIGINTERN PyObject *_wrap_SWFFontCharacter_addUTF8Chars(PyObject *SWIGUNUSEDPAR
   return resultobj;
 fail:
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_SWFMovie_importFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SWFMovie arg1 = (SWFMovie) 0 ;
-  char *arg2 = (char *) 0 ;
-  char *arg3 = (char *) 0 ;
-  SWFFontCharacter result;
-  int res1 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_importFont",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_importFont" "', argument " "1"" of type '" "SWFMovie""'"); 
-  }
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_importFont" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = (char *)(buf2);
-  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFMovie_importFont" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = (char *)(buf3);
-  result = (SWFFontCharacter)SWFMovie_importFont(arg1,(char const *)arg2,(char const *)arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
-  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
-  return resultobj;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
   return NULL;
 }
 
@@ -11292,49 +11221,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SWFMovie_setSoundStreamAt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SWFMovie arg1 = (SWFMovie) 0 ;
-  SWFSoundStream arg2 ;
-  float arg3 ;
-  int res1 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  float val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_setSoundStreamAt",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "1"" of type '" "SWFMovie""'"); 
-  }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'");
-    } else {
-      arg2 = *((SWFSoundStream *)(argp2));
-    }
-  }
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "3"" of type '" "float""'");
-  } 
-  arg3 = (float)(val3);
-  SWFMovie_setSoundStreamAt(arg1,arg2,arg3);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_SWFMovieClip_startSound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovieClip arg1 = (SWFMovieClip) 0 ;
@@ -11756,6 +11642,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFMovie_setSoundStreamAt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  SWFSoundStream arg2 ;
+  float arg3 ;
+  int res1 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_setSoundStreamAt",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'");
+    } else {
+      arg2 = *((SWFSoundStream *)(argp2));
+    }
+  }
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  SWFMovie_setSoundStreamAt(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFMovie_startSound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovie arg1 = (SWFMovie) 0 ;
@@ -12143,14 +12072,16 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SWFMovie_defineScene(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SWFMovie_importFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovie arg1 = (SWFMovie) 0 ;
-  unsigned int arg2 ;
+  char *arg2 = (char *) 0 ;
   char *arg3 = (char *) 0 ;
+  SWFFontCharacter result;
   int res1 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   int res3 ;
   char *buf3 = 0 ;
   int alloc3 = 0 ;
@@ -12158,27 +12089,56 @@ SWIGINTERN PyObject *_wrap_SWFMovie_defineScene(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_defineScene",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_importFont",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_defineScene" "', argument " "1"" of type '" "SWFMovie""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_importFont" "', argument " "1"" of type '" "SWFMovie""'"); 
   }
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFMovie_defineScene" "', argument " "2"" of type '" "unsigned int""'");
-  } 
-  arg2 = (unsigned int)(val2);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_importFont" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = (char *)(buf2);
   res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFMovie_defineScene" "', argument " "3"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFMovie_importFont" "', argument " "3"" of type '" "char const *""'");
   }
   arg3 = (char *)(buf3);
-  SWFMovie_defineScene(arg1,arg2,(char const *)arg3);
-  resultobj = SWIG_Py_Void();
+  result = (SWFFontCharacter)SWFMovie_importFont(arg1,(char const *)arg2,(char const *)arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMovie_addFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  SWFFont arg2 = (SWFFont) 0 ;
+  SWFFontCharacter result;
+  int res1 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFMovie_addFont",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_addFont" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_addFont" "', argument " "2"" of type '" "SWFFont""'"); 
+  }
+  result = (SWFFontCharacter)SWFMovie_addFont(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -12223,6 +12183,134 @@ SWIGINTERN PyObject *_wrap_SWFMovie_importCharacter(PyObject *SWIGUNUSEDPARM(sel
 fail:
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMovie_assignSymbol(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  SWFCharacter arg2 = (SWFCharacter) 0 ;
+  char *arg3 = (char *) 0 ;
+  int res1 ;
+  int res2 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_assignSymbol",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_assignSymbol" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_assignSymbol" "', argument " "2"" of type '" "SWFCharacter""'"); 
+  }
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFMovie_assignSymbol" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = (char *)(buf3);
+  SWFMovie_assignSymbol(arg1,arg2,(char const *)arg3);
+  resultobj = SWIG_Py_Void();
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return resultobj;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMovie_defineScene(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  unsigned int arg2 ;
+  char *arg3 = (char *) 0 ;
+  int res1 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFMovie_defineScene",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_defineScene" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFMovie_defineScene" "', argument " "2"" of type '" "unsigned int""'");
+  } 
+  arg2 = (unsigned int)(val2);
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFMovie_defineScene" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = (char *)(buf3);
+  SWFMovie_defineScene(arg1,arg2,(char const *)arg3);
+  resultobj = SWIG_Py_Void();
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return resultobj;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMovie_namedAnchor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  char *arg2 = (char *) 0 ;
+  int res1 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFMovie_namedAnchor",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_namedAnchor" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_namedAnchor" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = (char *)(buf2);
+  SWFMovie_namedAnchor(arg1,(char const *)arg2);
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMovie_writeExports(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMovie_writeExports",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_writeExports" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  SWFMovie_writeExports(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -12329,10 +12417,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFText_getLeading", _wrap_SWFText_getLeading, METH_VARARGS, NULL},
 	 { (char *)"newSWFBrowserFont", _wrap_newSWFBrowserFont, METH_VARARGS, NULL},
 	 { (char *)"destroySWFBrowserFont", _wrap_destroySWFBrowserFont, METH_VARARGS, NULL},
-	 { (char *)"SWFMovie_addFont", _wrap_SWFMovie_addFont, METH_VARARGS, NULL},
 	 { (char *)"SWFFontCharacter_addChars", _wrap_SWFFontCharacter_addChars, METH_VARARGS, NULL},
 	 { (char *)"SWFFontCharacter_addUTF8Chars", _wrap_SWFFontCharacter_addUTF8Chars, METH_VARARGS, NULL},
-	 { (char *)"SWFMovie_importFont", _wrap_SWFMovie_importFont, METH_VARARGS, NULL},
 	 { (char *)"newSWFTextField", _wrap_newSWFTextField, METH_VARARGS, NULL},
 	 { (char *)"destroySWFTextField", _wrap_destroySWFTextField, METH_VARARGS, NULL},
 	 { (char *)"SWFTextField_setFont", _wrap_SWFTextField_setFont, METH_VARARGS, NULL},
@@ -12498,7 +12584,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovieClip_add", _wrap_SWFMovieClip_add, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_remove", _wrap_SWFMovieClip_remove, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_setSoundStream", _wrap_SWFMovieClip_setSoundStream, METH_VARARGS, NULL},
-	 { (char *)"SWFMovie_setSoundStreamAt", _wrap_SWFMovie_setSoundStreamAt, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_startSound", _wrap_SWFMovieClip_startSound, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_stopSound", _wrap_SWFMovieClip_stopSound, METH_VARARGS, NULL},
 	 { (char *)"destroySWFPrebuiltClip", _wrap_destroySWFPrebuiltClip, METH_VARARGS, NULL},
@@ -12514,6 +12599,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovie_addExport", _wrap_SWFMovie_addExport, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setBackground", _wrap_SWFMovie_setBackground, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setSoundStream", _wrap_SWFMovie_setSoundStream, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_setSoundStreamAt", _wrap_SWFMovie_setSoundStreamAt, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_startSound", _wrap_SWFMovie_startSound, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_stopSound", _wrap_SWFMovie_stopSound, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_add", _wrap_SWFMovie_add, METH_VARARGS, NULL},
@@ -12527,8 +12613,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovie_addMetadata", _wrap_SWFMovie_addMetadata, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setScriptLimits", _wrap_SWFMovie_setScriptLimits, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setTabIndex", _wrap_SWFMovie_setTabIndex, METH_VARARGS, NULL},
-	 { (char *)"SWFMovie_defineScene", _wrap_SWFMovie_defineScene, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_importFont", _wrap_SWFMovie_importFont, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_addFont", _wrap_SWFMovie_addFont, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_importCharacter", _wrap_SWFMovie_importCharacter, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_assignSymbol", _wrap_SWFMovie_assignSymbol, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_defineScene", _wrap_SWFMovie_defineScene, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_namedAnchor", _wrap_SWFMovie_namedAnchor, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_writeExports", _wrap_SWFMovie_writeExports, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
