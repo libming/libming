@@ -389,7 +389,7 @@ class SWFMovie(SWFBase):
     def addExport(self, clipObj, libName):
         return mingc.SWFMovie_addExport(self.this, clipObj, libName)
 
-    def assignSymbol(self, character, name)
+    def assignSymbol(self, character, name):
 	mingc.SWFMovie_assignSymbol(self.this, character.this, name)
 	
     def setNetworkAccess(self, flag):
