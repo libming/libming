@@ -672,9 +672,82 @@ class SWFSound
   SWFSound();
 };
 
+/*  SWFFont  */
+
+class SWFFont : public SWFBlock
+{
+ public:
+  c_SWFFont font;
+
+  SWFFont()
+  { 
+    this->font = newSWFFont(); 
+    if(this->font == NULL)
+      throw SWFException("SWFFont()");
+  }
+
+  SWFFont(FILE *file) // deprecated 
+  {
+	std::cerr << "SWFFont(FILE *file) is deprecated and will be removed in future releases." << std::endl;
+	this->font = loadSWFFont_fromFdbFile(file);
+	if(this->font == NULL)
+		throw SWFException("SWFFont(FILE *file)");
+  }
+
+  SWFFont(char *path)
+  { 
+    this->font = newSWFFont_fromFile(path); 
+    if(this->font == NULL)
+      throw SWFException("SWFFont(char *path)");
+  }
+
+  virtual ~SWFFont()
+    { destroySWFFont(/*(c_SWFBlock)*/this->font); }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->font; }
+
+  float getStringWidth(const char *string)
+    { return SWFFont_getStringWidth(this->font, string); }
+
+  float getWidth(const char *string)
+    { return SWFFont_getStringWidth(this->font, string); }
+
+  float getAscent()
+    { return SWFFont_getAscent(this->font); }
+
+  float getDescent()
+    { return SWFFont_getDescent(this->font); }
+
+  float getLeading()
+    { return SWFFont_getLeading(this->font); }
+  SWF_DECLAREONLY(SWFFont);
+};
+
+/* SWFBrowserFont */
+class SWFBrowserFont : public SWFBlock
+{
+ public:
+  c_SWFBrowserFont bfont;
+  
+  SWFBrowserFont(char *name)
+  { 
+    this->bfont = newSWFBrowserFont(name); 
+    if(this->bfont == NULL)
+      throw SWFException("SWFBrowserFont(char *name)");
+  }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->bfont; }
+
+  virtual ~SWFBrowserFont()
+    { destroySWFBrowserFont(this->bfont); }
+  
+  SWF_DECLAREONLY(SWFBrowserFont);
+};
+
 
 /*  SWFMovie  */
-
 class SWFMovie
 {
  public:
@@ -784,6 +857,9 @@ class SWFMovie
   SWFFontCharacter *importFont(const char *filename, const char *name)
   { return new SWFFontCharacter(SWFMovie_importFont(this->movie, filename, name)); }
 
+  SWFFontCharacter *addFont(SWFFont *font)
+  { return new SWFFontCharacter(SWFMovie_addFont(this->movie, font->font)); }
+
   void protect()
   { SWFMovie_protect(this->movie, NULL);}
 
@@ -807,6 +883,9 @@ class SWFMovie
 
   void defineScene(unsigned int offset, const char *name)
     { SWFMovie_defineScene(this->movie, offset, name); }
+
+  void writeExports()
+    { SWFMovie_writeExports(this->movie); }
 
   SWF_DECLAREONLY(SWFMovie);
  private:
@@ -983,81 +1062,6 @@ class SWFFillStyle
   SWF_DECLAREONLY(SWFFillStyle);
   SWFFillStyle();
 };   
-
-
-/*  SWFFont  */
-
-class SWFFont : public SWFBlock
-{
- public:
-  c_SWFFont font;
-
-  SWFFont()
-  { 
-    this->font = newSWFFont(); 
-    if(this->font == NULL)
-      throw SWFException("SWFFont()");
-  }
-
-  SWFFont(FILE *file) // deprecated 
-  {
-	std::cerr << "SWFFont(FILE *file) is deprecated and will be removed in future releases." << std::endl;
-	this->font = loadSWFFont_fromFdbFile(file);
-	if(this->font == NULL)
-		throw SWFException("SWFFont(FILE *file)");
-  }
-
-  SWFFont(char *path)
-  { 
-    this->font = newSWFFont_fromFile(path); 
-    if(this->font == NULL)
-      throw SWFException("SWFFont(char *path)");
-  }
-
-  virtual ~SWFFont()
-    { destroySWFFont(/*(c_SWFBlock)*/this->font); }
-
-  c_SWFBlock getBlock()
-    { return (c_SWFBlock)this->font; }
-
-  float getStringWidth(const char *string)
-    { return SWFFont_getStringWidth(this->font, string); }
-
-  float getWidth(const char *string)
-    { return SWFFont_getStringWidth(this->font, string); }
-
-  float getAscent()
-    { return SWFFont_getAscent(this->font); }
-
-  float getDescent()
-    { return SWFFont_getDescent(this->font); }
-
-  float getLeading()
-    { return SWFFont_getLeading(this->font); }
-  SWF_DECLAREONLY(SWFFont);
-};
-
-/* SWFBrowserFont */
-class SWFBrowserFont : public SWFBlock
-{
- public:
-  c_SWFBrowserFont bfont;
-  
-  SWFBrowserFont(char *name)
-  { 
-    this->bfont = newSWFBrowserFont(name); 
-    if(this->bfont == NULL)
-      throw SWFException("SWFBrowserFont(char *name)");
-  }
-
-  c_SWFBlock getBlock()
-    { return (c_SWFBlock)this->bfont; }
-
-  virtual ~SWFBrowserFont()
-    { destroySWFBrowserFont(this->bfont); }
-  
-  SWF_DECLAREONLY(SWFBrowserFont);
-};
 
 /*  SWFShape  */
 class SWFShape : public SWFCharacter
