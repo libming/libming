@@ -376,6 +376,12 @@ SWFMovie_addBlock(SWFMovie movie, SWFBlock block)
 }
 
 
+/* 
+ * Assigns a name to a SWFBlock object.
+ * Creates an exportlibrary with named symbols to be imported by other 
+ * SWF movies.
+ * see also SWFMovie_importCharacter, SWFMovie_importFont
+ */
 void
 SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 {
@@ -592,13 +598,22 @@ SWFMovie_add_internal(SWFMovie movie /* movie to which the block will be added *
 	return NULL;
 }
 
-
+/* 
+ * Removes a SWFDisplayItem from the movie stage.
+ * A SWFDisplayItem stays on stage until it gets removed. This function 
+ * removes the item. The item is displayed until the current frame.
+ */
 void
 SWFMovie_remove(SWFMovie movie , SWFDisplayItem item)
 {
 	SWFDisplayItem_removeFromList(item, movie->blockList);
 }
 
+/* 
+ * Includes streaming sound to a movie. Sound is skiped by skip seconds.
+ * The skip parameter describes the time in seconds (float) to be skiped.
+ * See also SWFMovie_setSoundStream, newSWFSoundStream
+ */
 void
 SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip)
 {
@@ -611,13 +626,23 @@ SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip)
 	}
 }
 
+/* 
+ * Includes streaming sound to a movie. 
+ * Streaming (embedded) sound is played in sync with movie frames. 
+ * See also SWFMovie_setSoundStreamAt, newSWFSoundStream
+ */
 void
 SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream stream)
 {
 	SWFMovie_setSoundStreamAt(movie, stream, 0);
 }
 
-
+/*
+ * Starts playing event-sound (SWFSound)
+ *
+ * returns a SWFSoundInstance object.
+ * see also SWFSoundInstance, SWFSound, SWFMovie_stopSound
+ */
 SWFSoundInstance
 SWFMovie_startSound(SWFMovie movie, SWFSound sound)
 {
@@ -631,7 +656,11 @@ SWFMovie_startSound(SWFMovie movie, SWFSound sound)
 	return inst;
 }
 
-
+/*
+ * Stops playing event sound (SWFSound)
+ *
+ * see also SWFSoundInstance, SWFSound, SWFMovie_startSound
+ */
 void
 SWFMovie_stopSound(SWFMovie movie, SWFSound sound)
 {
@@ -644,7 +673,11 @@ SWFMovie_stopSound(SWFMovie movie, SWFSound sound)
 	SWFMovie_addBlock(movie, (SWFBlock)inst);
 }
 
-
+/*
+ * Add a new frame to the current movie.
+ * This function adds a new frame to the current movie. All items added, removed
+ * manipulated effect this frame and probably following frames.
+ */
 void
 SWFMovie_nextFrame(SWFMovie movie)
 {
@@ -793,6 +826,10 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	return swfbuffer;
 }
 
+/*
+ * Oputput a movie with SWFByteOutputMethod
+ * returns the number of bytes written.
+ */
 int
 SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 {
@@ -812,6 +849,10 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 	return swflength;
 }
 
+/*
+ * Save movie to file 
+ * returns the number of bytes written. -1 on error.
+ */
 int
 SWFMovie_save(SWFMovie movie, const char *filename)
 {
@@ -828,6 +869,10 @@ SWFMovie_save(SWFMovie movie, const char *filename)
 	return count;
 }
 
+/*
+ * Output movie to FILE stream 
+ * returns the number of bytes written
+ */
 int
 SWFMovie_output_to_stream(SWFMovie movie, FILE *fp)
 {
@@ -869,8 +914,17 @@ SWFMovie_addImport(SWFMovie movie, const char *filename, const char *name, int i
 	return movie->imports[n];
 }
 
+/* 
+ * Import a character to the movie
+ * Imports characters from an other movie. filename (URL) points to a SWF 
+ * file with exported characters. 
+ *
+ * returns a SWFCharacter object
+ */
 SWFCharacter
-SWFMovie_importCharacter(SWFMovie movie, const char *filename, const char *name)
+SWFMovie_importCharacter(SWFMovie movie, 
+                         const char *filename /* URL to movie */, 
+                         const char *name /* idetifier of character */)
 {
 	SWFCharacter res;
 	SWFImportBlock importer;
@@ -888,6 +942,11 @@ SWFMovie_importCharacter(SWFMovie movie, const char *filename, const char *name)
 	return res;
 }
 
+/* 
+ * Import a font from an other SWFFile
+ * see also SWFMovie_importCharacter
+ * returns a SWFFontCharacter object
+ */
 SWFFontCharacter
 SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name)
 {
