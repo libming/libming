@@ -475,10 +475,8 @@ void destroySWFBrowserFont(SWFBrowserFont browserFont);
 
 /***** SWFFontCharacter *****/
 
-SWFFontCharacter SWFMovie_addFont(SWFMovie movie, SWFFont font);
 void SWFFontCharacter_addChars(SWFFontCharacter font, const char *string);
 void SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string);
-SWFFontCharacter SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name);
 void SWFFontCharacter_addAllChars(SWFFontCharacter);
 
 /***** SWFTextField *****/
@@ -980,7 +978,6 @@ SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
 
 void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate);
-void SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip);
 SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_setScalingGrid(SWFMovieClip clip, int x, int y, int w, int h);
@@ -1011,9 +1008,11 @@ void SWFMovie_assignSymbol(SWFMovie m, SWFCharacter character, const char *name)
 void SWFMovie_defineScene(SWFMovie m, unsigned int offset, const char *name);
 void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b);
 void SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
+void SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip);
 SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
-
+SWFFontCharacter SWFMovie_addFont(SWFMovie movie, SWFFont font);
+SWFFontCharacter SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name);
 SWFDisplayItem SWFMovie_add_internal(SWFMovie movie, SWFMovieBlockType ublock);
 #ifndef _MSC_VER
 #define SWFMovie_add(__movie, __block) \

@@ -311,6 +311,10 @@ SWFMovie_protect(SWFMovie movie /* movie to protect */,
 	SWFMovie_addBlock(movie, newSWFProtect(password));
 }
 
+/* 
+ * Adds a font to a movie.
+ * retursn a SWFFontCharacter object
+ */
 SWFFontCharacter
 SWFMovie_addFont(SWFMovie movie, SWFFont font)
 {
