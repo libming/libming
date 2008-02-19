@@ -1,8 +1,6 @@
 #include <libming.h>
 
-static char *test = "test01";
-
-main()
+int main()
 {
 SWFMovie m;
 

@@ -43,9 +43,9 @@ int main()
 
 	SWFButton b = newSWFButton();
 
-	SWFButtonRecord br1 = SWFButton_addCharacter(b, (SWFCharacter)s, SWFBUTTON_HIT|SWFBUTTON_UP);
-	SWFButtonRecord br2 = SWFButton_addCharacter(b, (SWFCharacter)mc1, SWFBUTTON_OVER);
-	SWFButtonRecord br3 = SWFButton_addCharacter(b, (SWFCharacter)mc2, SWFBUTTON_DOWN);
+	SWFButton_addCharacter(b, (SWFCharacter)s, SWFBUTTON_HIT|SWFBUTTON_UP);
+	SWFButton_addCharacter(b, (SWFCharacter)mc1, SWFBUTTON_OVER);
+	SWFButton_addCharacter(b, (SWFCharacter)mc2, SWFBUTTON_DOWN);
 
 	SWFDisplayItem d;
 	d = SWFMovie_add(m, b);

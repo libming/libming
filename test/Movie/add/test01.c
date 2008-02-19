@@ -1,7 +1,5 @@
 #include <libming.h>
 
-static char *test = "test01";
-
 int
 main()
 {
