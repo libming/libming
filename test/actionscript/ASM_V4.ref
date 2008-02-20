@@ -33,9 +33,9 @@ Block length: 67
     47:SWFACTION_MBORD
     48:SWFACTION_CALLFRAME
     51:SWFACTION_GETURL2
-  Method: none
+  Method: GET
   Target: Window
-  LoadVars: Yes
+  LoadVars: No
   Reserved bits: 1
     55:SWFACTION_GETPROPERTY
     56:SWFACTION_GOTOFRAME2

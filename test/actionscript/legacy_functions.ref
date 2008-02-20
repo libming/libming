@@ -53,8 +53,8 @@ Block length: 395
      [000]   Constant: 1 "test"
      [001]   Constant: 2 "window"
     151:SWFACTION_GETURL2
-  Method: none
-  Target: Sprite
+  Method: POST
+  Target: Window
   LoadVars: No
   Reserved bits: 0
     155:SWFACTION_PUSH
@@ -62,8 +62,9 @@ Block length: 395
      [001]   Constant: 2 "window"
     162:SWFACTION_GETVARIABLE
     163:SWFACTION_GETURL2
+  Method: POST
   Target: Sprite
-  LoadVars: No
+  LoadVars: Yes
   Reserved bits: 0
     167:SWFACTION_PUSH
      [000]   Constant: 1 "test"
@@ -78,9 +79,9 @@ Block length: 395
      [001]   Constant: 5 "object"
     185:SWFACTION_GETVARIABLE
     186:SWFACTION_GETURL2
-  Method: GET
+  Method: none
   Target: Window
-  LoadVars: No
+  LoadVars: Yes
   Reserved bits: 0
     190:SWFACTION_PUSH
      [000]   Constant: 4 "url"

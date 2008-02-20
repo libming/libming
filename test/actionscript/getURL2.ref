@@ -1,0 +1,68 @@
+File version: 6
+File size: 144
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 114
+
+ 12 Actions
+    26:SWFACTION_CONSTANTPOOL
+     [000] http://localhost/varsswf.php?a=1
+     [001] cont
+     [002] _level1
+     [003] window
+    84:SWFACTION_PUSH
+     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
+     [001]   Constant: 1 "cont"
+    91:SWFACTION_GETURL2
+  Method: POST
+  Target: Window
+  LoadVars: Yes
+  Reserved bits: 0
+    95:SWFACTION_PUSH
+     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
+     [001]   Constant: 2 "_level1"
+    102:SWFACTION_GETURL2
+  Method: POST
+  Target: Window
+  LoadVars: No
+  Reserved bits: 0
+    106:SWFACTION_PUSH
+     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
+     [001]   Constant: 1 "cont"
+    113:SWFACTION_GETURL2
+  Method: GET
+  Target: Sprite
+  LoadVars: Yes
+  Reserved bits: 0
+    117:SWFACTION_PUSH
+     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
+     [001]   Constant: 2 "_level1"
+    124:SWFACTION_GETURL2
+  Method: GET
+  Target: Sprite
+  LoadVars: No
+  Reserved bits: 0
+    128:SWFACTION_PUSH
+     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
+     [001]   Constant: 3 "window"
+    135:SWFACTION_GETURL2
+  Method: GET
+  Target: Window
+  LoadVars: No
+  Reserved bits: 0
+    139:SWFACTION_END
+
+Offset: 140 (0x008c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 142 (0x008e)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
