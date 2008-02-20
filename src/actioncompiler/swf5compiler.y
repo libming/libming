@@ -857,10 +857,12 @@ urlmethod
 
 	| ',' POST		{ $$ = GETURL_METHOD_POST; }
 
-	| ',' STRING		{ if(strcmp($2, "GET") == 0)
+	| ',' STRING		{ if(strcasecmp($2, "GET") == 0)
 				    $$ = GETURL_METHOD_GET;
-				  else if(strcmp($2, "POST") == 0)
-				    $$ = GETURL_METHOD_POST; }
+				  else if(strcasecmp($2, "POST") == 0)
+				    $$ = GETURL_METHOD_POST;
+				  else $$ = GETURL_METHOD_NOSEND;
+				}
 	;
 
 level
