@@ -414,31 +414,11 @@ SWFShape_addStyleHeader(SWFShape shape)
 	fill/line types in advance.
 */
 
-static void scaleShapeRecord(ShapeRecord record, float scale)
-{
-	switch(record.type)
-	{
-		case SHAPERECORD_STATECHANGE:
-			record.record.stateChange->moveToX *= scale;
-			record.record.stateChange->moveToY *= scale;
-			break;
-		case SHAPERECORD_LINETO:
-			record.record.lineTo->dx *= scale;
-			record.record.lineTo->dy *= scale;
-			break;
-		case SHAPERECORD_CURVETO:
-			record.record.curveTo->controlx *= scale;
-			record.record.curveTo->controly *= scale;
-			record.record.curveTo->anchorx *= scale;
-			record.record.curveTo->anchory *= scale;
-			break;
-	}
-}
-
 #define SHAPERECORD_INCREMENT 32
 
-/* copy shaperecord from other shape */
-static ShapeRecord addShapeRecord(SWFShape shape, ShapeRecord record)
+/* copy shaperecord from other shape */ 
+static ShapeRecord addShapeRecord(SWFShape shape, ShapeRecord record, 
+                                  int *vx, int *vy, float scale)
 {
 	if ( shape->nRecords % SHAPERECORD_INCREMENT == 0 )
 	{
@@ -451,23 +431,56 @@ static ShapeRecord addShapeRecord(SWFShape shape, ShapeRecord record)
 	{
 		case SHAPERECORD_STATECHANGE:
 		{
-			StateChangeRecord change = (StateChangeRecord)calloc(1,sizeof(struct stateChangeRecord));
+			StateChangeRecord change = (StateChangeRecord)
+				calloc(1,sizeof(struct stateChangeRecord));
 			*change = *record.record.stateChange;
 			shape->records[shape->nRecords].record.stateChange = change;
+			change->moveToX += shape->xpos;
+			change->moveToY += shape->ypos;
+			change->moveToX *= scale;
+			change->moveToY *= scale;
+
+			*vx = change->moveToX;
+			*vy = change->moveToY;
 			break;
 		}
 		case SHAPERECORD_LINETO:
 		{
-			LineToRecord lineTo = (LineToRecord) calloc(1,sizeof(struct lineToRecord));
+			LineToRecord lineTo = (LineToRecord)
+				calloc(1,sizeof(struct lineToRecord));
 			*lineTo = *record.record.lineTo;
+			lineTo->dx *= scale;
+			lineTo->dy *= scale;
 			shape->records[shape->nRecords].record.lineTo = lineTo;
+
+			*vx += lineTo->dx;
+			*vy += lineTo->dy;
+			SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
+				 *vx, *vy, shape->lineWidth);
+			SWFRect_includePoint(shape->edgeBounds, *vx, *vy, 0);
 			break;
 		}
 		case SHAPERECORD_CURVETO:
 		{
-			CurveToRecord curveTo = (CurveToRecord) calloc(1,sizeof(struct curveToRecord));
+			CurveToRecord curveTo = (CurveToRecord) 
+				calloc(1,sizeof(struct curveToRecord));
 			*curveTo = *record.record.curveTo;
+			curveTo->controlx *= scale;
+			curveTo->controly *= scale;
+			curveTo->anchorx *= scale;
+			curveTo->anchory *= scale;
 			shape->records[shape->nRecords].record.curveTo = curveTo;
+			
+			*vx += curveTo->controlx;
+			*vy += curveTo->controly;
+			SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
+				 *vx, *vy, shape->lineWidth);
+			SWFRect_includePoint(shape->edgeBounds, *vx, *vy, 0);
+			*vx += curveTo->anchorx;
+			*vy += curveTo->anchory;
+			SWFRect_includePoint(SWFCharacter_getBounds(CHARACTER(shape)),
+				 *vx, *vy, shape->lineWidth);
+			SWFRect_includePoint(shape->edgeBounds, *vx, *vy, 0);
 			break;
 		}
 	}
@@ -1208,7 +1221,7 @@ void
 SWFShape_drawScaledGlyph(SWFShape shape,
                          SWFFont font, unsigned short c, int size)
 {
-	int i;
+	int i, vx, vy;
 	if(font == NULL)
 		return;
 	
@@ -1219,12 +1232,10 @@ SWFShape_drawScaledGlyph(SWFShape shape,
 		return;
 	}
 
-
+	vx = shape->xpos;
+	vy = shape->ypos;
 	for(i = 0; i < glyph->nRecords; i++)
-	{
-		ShapeRecord rec = addShapeRecord(shape, glyph->records[i]);
-		scaleShapeRecord(rec, size/1024.0);
-	}
+		addShapeRecord(shape, glyph->records[i], &vx, &vy, size/1024.0);
 }
 
 /*
