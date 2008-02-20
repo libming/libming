@@ -1053,10 +1053,11 @@ parseSWF_ACTIONRECORD(FILE * f, int *thisactionp, SWF_ACTION *actions)
 	case SWFACTION_GETURL2:
 		{
 		ACT_BEGIN(SWF_ACTIONGETURL2)
-		act->f.FlagBits.SendVarsMethod = readBits(f,2);
-		act->f.FlagBits.Reserved = readBits(f,4);
+		// act->f.Flags = readUInt8(f);
 		act->f.FlagBits.LoadTargetFlag = readBits(f,1);
 		act->f.FlagBits.LoadVariableFlag = readBits(f,1);
+		act->f.FlagBits.Reserved = readBits(f,4);
+		act->f.FlagBits.SendVarsMethod = readBits(f,2);
 		break;
 		}
 	case SWFACTION_GOTOFRAME2:
