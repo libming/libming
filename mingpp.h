@@ -63,6 +63,7 @@ extern "C"
   #define SWFButtonRecord c_SWFButtonRecord
   #define SWFFontCharacter c_SWFFontCharacter
   #define SWFPrebuiltClip c_SWFPrebuiltClip
+  #define SWFSoundInstance c_SWFSoundInstance
 
   #include <ming.h>
 
@@ -93,10 +94,8 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
   #undef SWFSoundStream
   #undef SWFInput
   #undef SWFSound
-// begin minguts 2004/08/31 ((((
   #undef SWFFontCharacter
   #undef SWFPrebuiltClip 
-// )))) end minguts 2004/08/31
   #undef SWFVideoStream
   #undef SWFFilter
   #undef SWFBlur
@@ -104,6 +103,7 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
   #undef SWFFilterMatrix
   #undef SWFInitAction
   #undef SWFButtonRecord
+  #undef SWFSoundInstance
 } // extern C
 
 #define SWF_DECLAREONLY(classname) \
@@ -746,6 +746,39 @@ class SWFBrowserFont : public SWFBlock
   SWF_DECLAREONLY(SWFBrowserFont);
 };
 
+class SWFSoundInstance
+{
+ friend class SWFMovie;
+ friend class SWFMovieClip;
+
+ public:
+  c_SWFSoundInstance instance;
+ 
+  void setNoMultiple()
+  { SWFSoundInstance_setNoMultiple(this->instance); }
+
+  void setLoopInPoint(unsigned int point)
+  { SWFSoundInstance_setLoopInPoint(this->instance, point); }
+  
+  void setLoopOutPoint(unsigned int point)
+  {  SWFSoundInstance_setLoopOutPoint(this->instance, point); }
+
+  void setLoopCount(int count)
+  {  SWFSoundInstance_setLoopCount(this->instance, count); }
+
+  void addEnvelope(unsigned int mark44, short left, short right)
+  { SWFSoundInstance_addEnvelope(this->instance, mark44, left, right); }
+
+ private:
+  SWFSoundInstance(c_SWFSoundInstance inst)
+  {
+    if(inst == NULL)
+      throw SWFException("SWFSoundInstance(c_SWFSoundInstance inst)");
+
+    this->instance = inst;
+  }
+ SWF_DECLAREONLY(SWFSoundInstance);
+};
 
 /*  SWFMovie  */
 class SWFMovie
@@ -846,8 +879,8 @@ class SWFMovie
     return result;
   }
 
-  void startSound(SWFSound *sound)
-    { SWFMovie_startSound(this->movie, sound->sound); }
+  SWFSoundInstance *startSound(SWFSound *sound)
+    { return new SWFSoundInstance(SWFMovie_startSound(this->movie, sound->sound)); }
   void stopSound(SWFSound *sound)
     { SWFMovie_stopSound(this->movie, sound->sound); }
 
@@ -1177,7 +1210,6 @@ class SWFShape : public SWFCharacter
 
 
 /*  SWFMovieClip  */
-
 class SWFMovieClip : public SWFCharacter
 {
  public:
@@ -1227,6 +1259,12 @@ class SWFMovieClip : public SWFCharacter
 
   void removeScalingGrid()
     { SWFMovieClip_removeScalingGrid(this->clip); }
+
+   SWFSoundInstance *startSound(SWFSound *sound)
+    { return new SWFSoundInstance(SWFMovieClip_startSound(this->clip, sound->sound)); }
+
+  void stopSound(SWFSound *sound)
+    { SWFMovieClip_stopSound(this->clip, sound->sound); }
 
   SWF_DECLAREONLY(SWFMovieClip);
 };
