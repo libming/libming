@@ -103,3 +103,14 @@ void
 SWFMovieClip_addInitAction(movieclip, action)
 	SWF::MovieClip movieclip
 	SWF::Action action
+
+void
+SWFMovieClip_setSoundStream(movie, sound, rate, skip=0.0)
+	SWF::MovieClip movie
+	SWF::SoundStream sound
+	int rate
+	float skip
+	CODE:
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	SWFMovieClip_setSoundStreamAt(movie, sound, rate, skip);
+
