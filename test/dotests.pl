@@ -75,8 +75,21 @@ while (@BINDINGS)
 		print STDERR "Unrecognized binding: '$arg'\n";
 		usage();
 	}
-
 }
+
+@BUILD_OPTIONS = split(' ', $ENV{'BUILD_OPTIONS'});
+sub check_options
+{
+	$arg = shift();
+	foreach $opt (@BUILD_OPTIONS)
+	{
+		if(lc($opt) eq lc($arg))
+		{
+			return 1;	
+		}
+	}
+	return 0;
+} 
 
 if ( $VERBOSE ) {
 	print "Test c: ", $do_test_c, "\n";
@@ -101,7 +114,6 @@ sub doswftest($$$)
 	# Use absolute paths
 	$testbuilder="./".$testbuilder unless ( $testbuilder =~ m@^/@ );
 	$testswf=$pwd."/".$testswf unless ( $testswf =~ m@^/@ );
-
 	if( ! -r $testbuilder ) {
 		printf  STDERR "$test ignored. $testbuilder does not exist\n";
 		# ++$failures;
@@ -189,7 +201,12 @@ sub dotestset($$$)
 	open($TESTLIST,"<$srcdir/TestList") || die "Can't find $srcdir/TestList";
 	while(<$TESTLIST>) {
 		@test = split(':');
-		if( $test[1] eq "swf" ) {
+		if(!$test[1])
+		{
+			print STDERR "Don't know how to handle test type ".$test[1]."\n";
+		}
+		@test_opt = split(',', $test[1]);
+		if( $test_opt[0] eq "swf" && (!$test_opt[1] || check_options($test_opt[1]))) {
 
 			$test = $test[0];
 			$testswf = $builddir."/".$test.".swf";

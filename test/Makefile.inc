@@ -13,6 +13,16 @@ if USE_CXX
 CXXBINDINGS = cxx
 endif
 
+BUILD_OPTIONS =
+
+if USE_GIF
+BUILD_OPTIONS += "GIF"
+endif
+
+if USE_PNG
+BUILD_OPTIONS += "PNG"
+endif
+
 BINDINGS = "c $(CXXBINDINGS) $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 
 #
@@ -39,7 +49,7 @@ gen: refs $(SWFS) php.ini
 
 .PHONY: dotests php.ini
 dotests: $(top_srcdir)/test/dotests.pl php.ini
-	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
+	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' BUILD_OPTIONS='$(BUILD_OPTIONS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
 	chmod +x $@
 
 php.ini: 
