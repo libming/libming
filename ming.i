@@ -340,10 +340,8 @@ void destroySWFBrowserFont(SWFBrowserFont browserFont);
 
 /***** SWFFontCharacter *****/
 
-SWFFontCharacter SWFMovie_addFont(SWFMovie movie, SWFFont font);
 void SWFFontCharacter_addChars(SWFFontCharacter font, const char *string);
 void SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string);
-SWFFontCharacter SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name);
 
 
 /***** SWFTextField *****/
@@ -750,9 +748,8 @@ void SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label);
 
 SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
-
+void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate, float skipSound);
 void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate);
-void SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip);
 SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);
 
@@ -780,6 +777,7 @@ void SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name);
 void SWFMovie_setBackground(SWFMovie movie, byte r, byte g, byte b);
 
 void SWFMovie_setSoundStream(SWFMovie movie, SWFSoundStream sound);
+void SWFMovie_setSoundStreamAt(SWFMovie movie, SWFSoundStream stream, float skip);
 SWFSoundInstance SWFMovie_startSound(SWFMovie movie, SWFSound sound);
 void SWFMovie_stopSound(SWFMovie movie, SWFSound sound);
 
@@ -798,10 +796,13 @@ void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
 void SWFMovie_addMetadata(SWFMovie movie, const char *xml);
 void SWFMovie_setScriptLimits(SWFMovie movie, int maxRecursion, int timeout);
 void SWFMovie_setTabIndex(SWFMovie movie, int depth, int i);
-void SWFMovie_defineScene(SWFMovie m, unsigned int offset, const char *name);
 
-
-  /* deprecated */
-  /*int SWFMovie_outputC(SWFMovie movie, SWFByteOutputMethod method, void *data, int level);*/
+SWFFontCharacter SWFMovie_importFont(SWFMovie movie, const char *filename, const char *name);
+SWFFontCharacter SWFMovie_addFont(SWFMovie movie, SWFFont font);
 
 SWFCharacter SWFMovie_importCharacter(SWFMovie movie, const char *filename, const char *name);
+void SWFMovie_assignSymbol(SWFMovie m, SWFCharacter character, const char *name);
+void SWFMovie_defineScene(SWFMovie m, unsigned int offset, const char *name);
+void SWFMovie_namedAnchor(SWFMovie movie, const char *label);
+void SWFMovie_writeExports(SWFMovie movie);
+
