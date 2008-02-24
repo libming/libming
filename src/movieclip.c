@@ -47,7 +47,9 @@ struct SWFMovieClip_s
 #endif
 };
 
-
+/*
+ * destroy a SWFMovieClip instance
+ */
 void
 destroySWFMovieClip(SWFMovieClip movieClip)
 {
@@ -61,7 +63,13 @@ destroySWFMovieClip(SWFMovieClip movieClip)
 
 }
 
-
+/*
+ * create a new SWFMovieClip (Sprite) instance
+ * A SWFMovieClip is a movie inside a movie. It supports 
+ * adding and removing displayable objects, actions and sound
+ *
+ * returns a SWFMovieClip instance.
+ */
 SWFMovieClip
 newSWFMovieClip()
 {
@@ -78,18 +86,35 @@ newSWFMovieClip()
 }
 
 
+/*
+ * set the frame count of a movie
+ * This function sets the frame count for the movieclip. If the number of
+ * frames specified here exceeds the number of frame created when adding
+ * content to the movie, then blank frames will be added to the movieclip to
+ * pad it to the specified frame count.
+ */
 void
 SWFMovieClip_setNumberOfFrames(SWFMovieClip clip, int totalFrames)
 {
 	SWFSprite_setNumberOfFrames((SWFSprite)clip, totalFrames);
 }
 
-
+/* 
+ * Includes streaming sound to a movie. 
+ * Streaming (embedded) sound is played in sync with movie frames. 
+ * The skip parameter describes the time in seconds (float) to be skiped.
+ * The rate parameter describes the parent movies framerate.
+ *
+ * See also SWFMovie_setSoundStream, SWFMovie_setSoundStreamAt, newSWFSoundStream,
+ * SWFMovieClip_setSoundStream
+ */
 void
-SWFMovieClip_setSoundStream(SWFMovieClip clip,
-														SWFSoundStream sound, float rate)
+SWFMovieClip_setSoundStreamAt(SWFMovieClip clip, 
+                              SWFSoundStream sound /* soundstream object */, 
+                              float rate /* framerate */, 
+                              float skip /* skip in seconds */)
 {
-	SWFBlock block = SWFSoundStream_getStreamHead(sound, rate, 0);
+	SWFBlock block = SWFSoundStream_getStreamHead(sound, rate, skip);
 	
 	if ( block != NULL )
 	{
@@ -98,7 +123,26 @@ SWFMovieClip_setSoundStream(SWFMovieClip clip,
 	}
 }
 
+/* 
+ * Includes streaming sound to a movie. 
+ * Streaming (embedded) sound is played in sync with movie frames. 
+ *
+ * See also SWFMovie_setSoundStream, SWFMovie_setSoundStreamAt, newSWFSoundStream,
+ * SWFMovieClip_setSoundStreamAt
+ */
+void
+SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate)
+{
+	SWFMovieClip_setSoundStreamAt(clip, sound, rate, 0);
+}
 
+
+/*
+ * Starts playing event-sound (SWFSound)
+ *
+ * returns a SWFSoundInstance object.
+ * see also SWFSoundInstance, SWFSound, SWFMovieClip_stopSound
+ */
 SWFSoundInstance
 SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound)
 {
@@ -111,6 +155,11 @@ SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound)
 }
 
 
+/*
+ * Stops playing event sound (SWFSound)
+ *
+ * see also SWFSoundInstance, SWFSound, SWFMovieClip_startSound
+ */
 void
 SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound)
 {
@@ -120,7 +169,11 @@ SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound)
 												(SWFBlock)newSWFSoundInstance_stop(sound));
 }
 
-
+/*
+ * Adds a block to a movie.
+ * This function adds a block or character to a movieclip.
+ * returns a SWFDisplayItem 
+ */
 SWFDisplayItem
 SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 {
@@ -154,21 +207,32 @@ SWFMovieClip_add(SWFMovieClip clip, SWFBlock block)
 	return NULL;
 }
 
-
+/* 
+ * Removes a SWFDisplayItem from the movieclips stage.
+ * A SWFDisplayItem stays on stage until it gets removed. This function 
+ * removes the item. The item is displayed until the current frame.
+ */
 void
 SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item)
 {
 	SWFDisplayItem_remove(item);
 }
 
-
+/*
+ * Add a label Frame
+ * This function adds a labelFrame to current frame of the movieclip.
+ */
 void
 SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label)
 {
 	SWFSprite_addBlock((SWFSprite)clip, (SWFBlock)newSWFFrameLabelBlock(label));
 }
 
-
+/*
+ * Add a new frame to the current movie.
+ * This function adds a new frame to the current movie. All items added, removed
+ * manipulated effect this frame and probably following frames.
+ */
 void
 SWFMovieClip_nextFrame(SWFMovieClip clip)
 {

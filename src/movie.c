@@ -699,7 +699,7 @@ SWFMovie_nextFrame(SWFMovie movie)
 
 /*
  * Add a label Frame
- * This function adds a labelFrame to the movie.
+ * This function adds a labelFrame to the movie's current frame.
  */
 void
 SWFMovie_labelFrame(SWFMovie movie /* Movie to which the label is added */,
