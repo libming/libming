@@ -3912,6 +3912,49 @@ PHP_METHOD(swfsprite, stopSound)
 }
 /* }}} */
 
+/* {{{ proto long swfmovieclip::setSoundStream(mixed file, rate[, skip])
+   Sets sound stream of the SWF movieClip. The parameter can be stream or string. */
+PHP_METHOD(swfsprite, setSoundStream)
+{
+	zval **zfile, **zskip, **zrate;
+	float skip;
+	SWFSoundStream sound;
+	SWFInput input;
+	SWFMovieClip mc = getSprite(getThis() TSRMLS_CC);
+
+	switch (ZEND_NUM_ARGS()) 
+	{
+	case 2:
+		if(zend_get_parameters_ex(2, &zfile, &zrate) == FAILURE) 
+			WRONG_PARAM_COUNT;
+		skip = 0;
+		break;
+	case 3:
+		if(zend_get_parameters_ex(3, &zfile, &zrate, &zskip) == FAILURE) 
+			WRONG_PARAM_COUNT;
+		convert_to_double_ex(zskip);
+		skip = FLOAT_Z_DVAL_PP(zskip);
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+	}
+	
+	convert_to_long_ex(zrate);
+	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
+		convert_to_string_ex(zfile);
+		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+		zend_list_addref(zend_list_insert(input, le_swfinputp));
+	} else {
+		input = getInput(zfile TSRMLS_CC);
+	}
+
+	sound = newSWFSoundStream_fromInput(input);
+	SWFMovieClip_setSoundStreamAt(mc, sound, Z_LVAL_PP(zrate), skip);
+	RETURN_LONG(SWFSoundStream_getFrames(sound));
+}
+/* }}} */
+
+
 /* {{{ proto void swfsprite::setScalingGrid(int x, int y, int w, int h) */
 PHP_METHOD(swfsprite, setScalingGrid)
 {
@@ -3942,12 +3985,29 @@ PHP_METHOD(swfsprite, removeScalingGrid)
 }
 /* }}} */
 
+/* {{{ proto void swfsprite::addInitAction(action) */
+PHP_METHOD(swfsprite, addInitAction)
+{
+	zval **zaction;
+
+	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
+	SWFAction action;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zaction) == FAILURE) 
+		WRONG_PARAM_COUNT;
+	
+	convert_to_object_ex(zaction);
+	action = getAction(*zaction TSRMLS_CC);
+	SWFMovieClip_addInitAction(sprite, action);
+}
+/* }}} */
 #endif
+
 // workaround to support SWFSprite and SWFMovieclip objects
 static zend_function_entry swfmovieclip_functions[] = {
 	PHP_ME(swfsprite, __construct,  	NULL, 0)
-	PHP_ME(swfsprite, add,				NULL, 0)
-	PHP_ME(swfsprite, remove,			NULL, 0)
+	PHP_ME(swfsprite, add,			NULL, 0)
+	PHP_ME(swfsprite, remove,		NULL, 0)
 	PHP_ME(swfsprite, nextFrame,		NULL, 0)
 	PHP_ME(swfsprite, labelFrame,		NULL, 0)
 	PHP_ME(swfsprite, setFrames,		NULL, 0)
@@ -3955,15 +4015,17 @@ static zend_function_entry swfmovieclip_functions[] = {
 	PHP_ME(swfsprite, startSound,		NULL, 0)
 	PHP_ME(swfsprite, stopSound,		NULL, 0)
 	PHP_ME(swfsprite, setScalingGrid, 	NULL, 0)
-	PHP_ME(swfsprite, removeScalingGrid, NULL, 0)
+	PHP_ME(swfsprite, removeScalingGrid, 	NULL, 0)
+	PHP_ME(swfsprite, setSoundStream, 	NULL, 0)
+	PHP_ME(swfsprite, addInitAction,	NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
 
 static zend_function_entry swfsprite_functions[] = {
 	PHP_ME(swfsprite, __construct,  	NULL, 0)
-	PHP_ME(swfsprite, add,				NULL, 0)
-	PHP_ME(swfsprite, remove,			NULL, 0)
+	PHP_ME(swfsprite, add,			NULL, 0)
+	PHP_ME(swfsprite, remove,		NULL, 0)
 	PHP_ME(swfsprite, nextFrame,		NULL, 0)
 	PHP_ME(swfsprite, labelFrame,		NULL, 0)
 	PHP_ME(swfsprite, setFrames,		NULL, 0)
@@ -3971,7 +4033,9 @@ static zend_function_entry swfsprite_functions[] = {
 	PHP_ME(swfsprite, startSound,		NULL, 0)
 	PHP_ME(swfsprite, stopSound,		NULL, 0)
 	PHP_ME(swfsprite, setScalingGrid, 	NULL, 0)
-	PHP_ME(swfsprite, removeScalingGrid, NULL, 0)
+	PHP_ME(swfsprite, removeScalingGrid, 	NULL, 0)
+	PHP_ME(swfsprite, setSoundStream, 	NULL, 0)
+	PHP_ME(swfsprite, addInitAction,	NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
