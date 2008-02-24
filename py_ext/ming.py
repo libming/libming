@@ -361,14 +361,18 @@ class SWFMovie(SWFBase):
     def remove(self, item):
         mingc.SWFMovie_remove(self.this, item.this)
 
-    def streamMp3(self, mp3):
+    def replace(self, item, block):
+        self.blocks.append(block)
+        mingc.SWFMovie_replace(self.this, item.this, block.this)
+
+    def streamMp3(self, mp3, skip=0.0):
         sound = SWFSoundStream(mp3)
         self.blocks.append(sound)
-        mingc.SWFMovie_setSoundStream(self.this, sound)
+        mingc.SWFMovie_setSoundStreamAt(self.this, sound, skip)
 
-    def setSoundStream(self, sound):
+    def setSoundStream(self, sound, skip=0.0):
         self.blocks.append(sound)
-        mingc.SWFMovie_setSoundStream(self.this, sound.this);
+        mingc.SWFMovie_setSoundStreamAt(self.this, sound.this, skip);
 
     def output(self):
         return mingc.SWFMovie_simpleOutput(self.this)
@@ -382,12 +386,18 @@ class SWFMovie(SWFBase):
     def labelFrame(self, label):
         mingc.SWFMovie_labelFrame(self.this, label)
 
+    def namedAnchor(self, label):
+        mingc.SWFMovie_namedAnchor(self.this, label)
+
     # deprecated:
     def simpleOutput(self):
         return mingc.SWFMovie_simpleOutput(self.this)
 
     def addExport(self, clipObj, libName):
         return mingc.SWFMovie_addExport(self.this, clipObj, libName)
+
+    def writeExports(self):
+        mingc.SWFMovie_writeExports(self.this)
 
     def assignSymbol(self, character, name):
 	mingc.SWFMovie_assignSymbol(self.this, character.this, name)
@@ -406,6 +416,19 @@ class SWFMovie(SWFBase):
 
     def defineScene(self, offset, name):
         mingc.SWFMovie_defineScene(self.this, offset, index)
+
+    def addFont(self, font):
+        return SWFFontCharacter(mingc.SWFMovie_addFont(self.this, font.this))
+
+    def importFont(self, filename, name):
+        return SWFFontCharacter(mingc.SWFMovie_importFont(self.this, filename, name))
+
+    def startSound(self, sound):
+        return SWFSoundInstance(mingc.SWFMovie_startSound(self.this, sound.this))
+
+    def stopSound(self, sound):
+        mingc.SWFMovie_stopSound(self.this, sound.this)
+
 
 class SWFSprite(SWFBase):
 
@@ -494,6 +517,16 @@ class SWFFont(SWFBase):
     def getWidth(self, string):
         return mingc.SWFFont_getStringWidth(self.this, string)
 
+class SWFFontCharacter(SWFBase):
+     
+     def addChars(self, string):
+         mingc.SWFFontCharacter_addChars(self.this, string)
+
+     def addUTF8Chars(self, string):
+         mingc.SWFFontCharacter_addUTF8Chars(self.this, string)
+
+     def addAllChars(self, string):
+         mingc.SWFFontCharacter_addAllChars(self.this)
 
 class SWFBitmap(SWFBase):
 
@@ -707,6 +740,23 @@ SWF_SOUND_16BITS            = mingc.SWF_SOUND_16BITS
 SWF_SOUND_CHANNELS          = mingc.SWF_SOUND_CHANNELS          
 SWF_SOUND_MONO              = mingc.SWF_SOUND_MONO              
 SWF_SOUND_STEREO            = mingc.SWF_SOUND_STEREO            
+
+class SWFSoundInstance(SWFBase):
+
+    def setNoMultiple(self):
+        mingc.SWFSoundInstance_setNoMultiple(self.this)
+
+    def setLoopInPoint(self, point):
+        mingc.SWFSoundInstance_setLoopInPoint(self.this, point)
+
+    def setLoopOutPoint(self, point):
+        mingc.SWFSoundInstance_setLoopOutPoint(self.this, point)
+
+    def setLoopCount(self, count):
+        mingc.SWFSoundInstance_setLoopCount(self.this, count)
+
+    def addEnvelope(self, mark44, left, right):
+        mingc.SWFSoundInstance_addEnvelope(self.this, mark44, left, right)
 
 class SWFAction(SWFBase):
 
