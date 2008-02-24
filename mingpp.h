@@ -1266,7 +1266,7 @@ class SWFMovieClip : public SWFCharacter
   void stopSound(SWFSound *sound)
     { SWFMovieClip_stopSound(this->clip, sound->sound); }
 
-  void setSoundStream(SWFSoundStream *sound, int rate, float skip=0.0)
+  void setSoundStream(SWFSoundStream *sound, float rate, float skip=0.0)
   { SWFMovieClip_setSoundStreamAt(this->clip, sound->sound, rate, skip); }
 
   SWF_DECLAREONLY(SWFMovieClip);

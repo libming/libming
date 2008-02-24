@@ -108,7 +108,7 @@ void
 SWFMovieClip_setSoundStream(movie, sound, rate, skip=0.0)
 	SWF::MovieClip movie
 	SWF::SoundStream sound
-	int rate
+	float rate
 	float skip
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));

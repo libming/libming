@@ -3939,7 +3939,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long_ex(zrate);
+	convert_to_double_ex(zrate);
 	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
 		convert_to_string_ex(zfile);
 		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
@@ -3949,7 +3949,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 	}
 
 	sound = newSWFSoundStream_fromInput(input);
-	SWFMovieClip_setSoundStreamAt(mc, sound, Z_LVAL_PP(zrate), skip);
+	SWFMovieClip_setSoundStreamAt(mc, sound, Z_DVAL_PP(zrate), skip);
 	RETURN_LONG(SWFSoundStream_getFrames(sound));
 }
 /* }}} */
