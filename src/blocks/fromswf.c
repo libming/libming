@@ -58,6 +58,9 @@ SWFPrebuiltClipLength(SWFBlock block)
 	return SWFOutput_getLength(clip->display);
 }
 
+/*
+ * destroys a SWFPrebuiltClip instance
+ */
 void
 destroySWFPrebuiltClip(SWFPrebuiltClip clip)
 {	destroySWFOutput(clip->display);
@@ -1266,6 +1269,9 @@ static void definebuttonsound(TAG tp)
 
 extern int SWF_gNumCharacters;
 
+/* 
+ * load and create a SWF File as MovieClip 
+ */
 SWFPrebuiltClip
 newSWFPrebuiltClip_fromInput(SWFInput input)
 {	SWFPrebuiltClip clip;
@@ -1318,6 +1324,9 @@ newSWFPrebuiltClip_fromInput(SWFInput input)
 	return clip;
 }
 
+/* 
+ * load SWF file which can be used as a MovieClip
+ */
 SWFPrebuiltClip
 newSWFPrebuiltClip_fromFile(const char *filename)
 {	FILE *fp;
