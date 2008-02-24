@@ -748,7 +748,7 @@ void SWFMovieClip_labelFrame(SWFMovieClip clip, const char *label);
 
 SWFDisplayItem SWFMovieClip_add(SWFMovieClip clip, SWFBlock block);
 void SWFMovieClip_remove(SWFMovieClip clip, SWFDisplayItem item);
-void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate, float skipSound);
+void SWFMovieClip_setSoundStreamAt(SWFMovieClip clip, SWFSoundStream sound, float rate, float skipSound);
 void SWFMovieClip_setSoundStream(SWFMovieClip clip, SWFSoundStream sound, float rate);
 SWFSoundInstance SWFMovieClip_startSound(SWFMovieClip clip, SWFSound sound);
 void SWFMovieClip_stopSound(SWFMovieClip clip, SWFSound sound);

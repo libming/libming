@@ -449,6 +449,7 @@ SWFMovieClip_nextFrame = _mingc.SWFMovieClip_nextFrame
 SWFMovieClip_labelFrame = _mingc.SWFMovieClip_labelFrame
 SWFMovieClip_add = _mingc.SWFMovieClip_add
 SWFMovieClip_remove = _mingc.SWFMovieClip_remove
+SWFMovieClip_setSoundStreamAt = _mingc.SWFMovieClip_setSoundStreamAt
 SWFMovieClip_setSoundStream = _mingc.SWFMovieClip_setSoundStream
 SWFMovieClip_startSound = _mingc.SWFMovieClip_startSound
 SWFMovieClip_stopSound = _mingc.SWFMovieClip_stopSound

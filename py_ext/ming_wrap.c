@@ -11178,6 +11178,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFMovieClip_setSoundStreamAt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovieClip arg1 = (SWFMovieClip) 0 ;
+  SWFSoundStream arg2 ;
+  float arg3 ;
+  float arg4 ;
+  int res1 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  float val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:SWFMovieClip_setSoundStreamAt",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "1"" of type '" "SWFMovieClip""'"); 
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'");
+    } else {
+      arg2 = *((SWFSoundStream *)(argp2));
+    }
+  }
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "4"" of type '" "float""'");
+  } 
+  arg4 = (float)(val4);
+  SWFMovieClip_setSoundStreamAt(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFMovieClip_setSoundStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovieClip arg1 = (SWFMovieClip) 0 ;
@@ -12583,6 +12635,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovieClip_labelFrame", _wrap_SWFMovieClip_labelFrame, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_add", _wrap_SWFMovieClip_add, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_remove", _wrap_SWFMovieClip_remove, METH_VARARGS, NULL},
+	 { (char *)"SWFMovieClip_setSoundStreamAt", _wrap_SWFMovieClip_setSoundStreamAt, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_setSoundStream", _wrap_SWFMovieClip_setSoundStream, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_startSound", _wrap_SWFMovieClip_startSound, METH_VARARGS, NULL},
 	 { (char *)"SWFMovieClip_stopSound", _wrap_SWFMovieClip_stopSound, METH_VARARGS, NULL},

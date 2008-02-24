@@ -455,6 +455,26 @@ class SWFSprite(SWFBase):
     def labelFrame(self, label):
         mingc.SWFMovieClip_labelFrame(self.this, label)
 
+    def setScalingGrid(self, x, y, w, h):
+        mingc.SWFMovieClip_setScalingGrid(self.this, x, y, w, h)
+
+    def removeScalingGrid(self):
+        mingc.SWFMovieClip_removeScalingGrid(self.this)
+
+    def addInitAction(self, action):
+        self.blocks.append(block)
+        mingc.SWFMovieClip_addInitAction(self.this, action.this)
+
+    def startSound(self, sound):
+        return SWFSoundInstance(mingc.SWFMovieClip_startSound(self.this, sound.this))
+
+    def stopSound(self, sound):
+        mingc.SWFMovieClip_stopSound(self.this, sound.this)
+
+    def setSoundStream(self, sound, rate, skip=0.0):
+        self.blocks.append(sound)
+        mingc.SWFMovieClip_setSoundStreamAt(self.this, sound.this, rate, skip);
+
 # deprecated:
 class SWFMovieClip(SWFSprite):
     pass
@@ -823,7 +843,7 @@ class SWFButton(SWFBase):
         mingc.SWFButton_addShape(self.this, character, flags)
 
     def addAction(self, action, flags):
-        mingc.SWFButton_addAction(self.this, action, flags)
+        mingc.SWFButton_addAction(self.this, action.this, flags)
 
     def addCharacter(self, character, flags):
         return mingc.SWFButton_addCharacter(self.this, character, flags)
