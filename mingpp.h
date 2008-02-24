@@ -1176,60 +1176,6 @@ class SWFShape : public SWFCharacter
 };
 
 
-/*  SWFSprite  */
-
-class SWFSprite : public SWFCharacter
-{
- public:
-  c_SWFMovieClip clip;
-
-  SWFSprite()
-  { 
-    this->clip = newSWFMovieClip();
-    if(this->clip == NULL)
-      throw SWFException("SWFSprite()");
- 
-    this->character = (c_SWFCharacter)clip;
-  }
-
-  virtual ~SWFSprite()
-    { destroySWFMovieClip(this->clip); }
-
-  c_SWFBlock getBlock()
-    { return (c_SWFBlock)this->clip; }
-
-  void setNumberOfFrames(int nFrames)
-    { SWFMovieClip_setNumberOfFrames(this->clip, nFrames); }
-
-  SWFDisplayItem *add(SWFBlock *character)
-  { 
-    c_SWFDisplayItem item = SWFMovieClip_add(this->clip, character->getBlock());
-    if(item == NULL)
-      return NULL;
-    return new SWFDisplayItem(item); 
-  }
-
-  void remove(SWFDisplayItem *item)
-    { SWFMovieClip_remove(this->clip, item->item); }
-
-  void nextFrame()
-    { SWFMovieClip_nextFrame(this->clip); }
-
-  void labelFrame(char *label)
-    { SWFMovieClip_labelFrame(this->clip, label); }
-
-  void setScalingGrid(int x, int y, int w, int h)
-    { SWFMovieClip_setScalingGrid(this->clip, x, y, w, h); }
-
-  void removeScalingGrid()
-    { SWFMovieClip_removeScalingGrid(this->clip); }
-
-  void addInitAction(SWFAction* a)
-    { SWFMovieClip_addInitAction(this->clip, a->action); }
-
-  SWF_DECLAREONLY(SWFSprite);
-};
-
 /*  SWFMovieClip  */
 
 class SWFMovieClip : public SWFCharacter
@@ -1276,7 +1222,20 @@ class SWFMovieClip : public SWFCharacter
   void addInitAction(SWFAction* a)
     { SWFMovieClip_addInitAction(this->clip, a->action); }
 
+  void setScalingGrid(int x, int y, int w, int h)
+    { SWFMovieClip_setScalingGrid(this->clip, x, y, w, h); }
+
+  void removeScalingGrid()
+    { SWFMovieClip_removeScalingGrid(this->clip); }
+
   SWF_DECLAREONLY(SWFMovieClip);
+};
+
+/*  SWFSprite  */
+/* deprecated ! */
+class SWFSprite : public SWFMovieClip
+{
+  SWF_DECLAREONLY(SWFSprite);
 };
 
 
