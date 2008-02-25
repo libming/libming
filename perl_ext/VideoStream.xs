@@ -39,6 +39,9 @@ void SWFVideoStream_setDimension(stream, width, height)
 	SWF::VideoStream stream
 	int width
 	int height
+
+int SWFVideoStream_hasAudio(stream)
+	SWF::VideoStream stream
 		
 
 
