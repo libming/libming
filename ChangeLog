@@ -1,3 +1,1199 @@
+2008-02-25 17:51  krechert
+
+	* src/blocks/font.c: added docs
+
+2008-02-25 17:46  krechert
+
+	* perl_ext/FontCharacter.xs, php_ext/ming.c: FontCharacter updates
+
+2008-02-25 17:35  krechert
+
+	* src/blocks/soundinstance.c: added docs
+
+2008-02-25 13:57  krechert
+
+	* py_ext/ming.py: fix SWFPrebuiltClip add SWFBinaryData
+
+2008-02-25 13:52  krechert
+
+	* src/blocks/binary.c: add documentation
+
+2008-02-25 13:47  krechert
+
+	* mingpp.h: add SWFBinaryData class
+
+2008-02-25 13:43  krechert
+
+	* src/ming.h.in: add destroySWFBinaryData as public interface
+
+2008-02-25 13:34  krechert
+
+	* php_ext/: ming.c, php_ming.h: add SWFBinaryData class to PHP
+
+2008-02-25 13:10  krechert
+
+	* perl_ext/: BinaryData.xs, MANIFEST, Makefile.PL, SWF.pm,
+	  perl_swf.h, typemap, SWF/BinaryData.pm: BinaryData support in
+	  perl
+
+2008-02-25 00:10  krechert
+
+	* test/FillStyle/TestList: test06 needs gif support
+
+2008-02-24 23:38  krechert
+
+	* test/: Makefile.inc, dotests.pl: improve testsuite to handle test
+	  preconditions example: FillStyle/test06.X must only be executed
+	  if GIF condtiontion is set in the TestList file.  The
+	  correstponding line looks like this test06:swf,gif:Description
+
+2008-02-24 18:38  krechert
+
+	* src/blocks/fromswf.c: add docs
+
+2008-02-24 18:25  krechert
+
+	* mingpp.h, perl_ext/MovieClip.xs, php_ext/ming.c: fix types
+
+2008-02-24 18:16  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py:
+	  swfmovieclip updates
+
+2008-02-24 18:12  krechert
+
+	* ming.i: resync
+
+2008-02-24 16:39  krechert
+
+	* mingpp.h: add setSoundStream to SWFMovieClip class
+
+2008-02-24 16:36  krechert
+
+	* mingpp.h: added SWFSoundInstance class fixed SWFMovie_startSound
+	  added SWFMovieClip start/stop Sound
+
+2008-02-24 16:20  krechert
+
+	* mingpp.h: mark SWFSprite as depreacted remove duplicate code
+
+2008-02-24 16:06  krechert
+
+	* perl_ext/MovieClip.xs: added missing movieclip method
+
+2008-02-24 15:58  krechert
+
+	* php_ext/ming.c: add missing SWFMovieClip methods
+
+2008-02-24 15:37  krechert
+
+	* src/: ming.h.in, movie.c, movieclip.c: documenation update added
+	  SWFMovieClips_setSoundStreamAt
+
+2008-02-24 15:06  krechert
+
+	* py_ext/ming.py: added SWFSoundInstance and SWFFontCharacter class
+	  added missing SWFMovie methods
+
+2008-02-20 18:57  krechert
+
+	* src/actioncompiler/swf5compiler.flex: remove static flag for
+	  swf5debug
+
+2008-02-20 18:48  krechert
+
+	* src/actioncompiler/swf5compiler.y: don't parse urlmethod case
+	  sensitive default to GETURL_METHOD_NOSEND if nothing matches
+
+2008-02-20 18:45  krechert
+
+	* util/parser.c: specs are wrong on getURL2. changed parser to real
+	  world files
+
+2008-02-20 18:42  krechert
+
+	* test/actionscript/: ASM_V4.ref, Makefile.am, getURL2.as,
+	  getURL2.ref, legacy_functions.ref: fixing listswf and compiler
+	  changed testref added new getURL2 testcases
+
+2008-02-20 12:37  krechert
+
+	* src/blocks/shape.c: fix drawing glyphs at a relative position fix
+	  shape bounds closes SF bug #1892682
+
+2008-02-19 19:30  krechert
+
+	* py_ext/ming.py: added missing :
+
+2008-02-19 19:29  krechert
+
+	* py_ext/: ming.py, ming_wrap.c, mingc.py: added SWFMovie methods
+
+2008-02-19 19:04  krechert
+
+	* php_ext/ming.c: added missing SWFMovie methods
+
+2008-02-19 18:26  krechert
+
+	* perl_ext/Movie.xs: add missing SWF::Movie methods
+
+2008-02-19 18:03  krechert
+
+	* mingpp.h: added addFont() and writeExports()
+
+2008-02-19 17:44  krechert
+
+	* src/: ming.h.in, movie.c: put all SWFMovie functions to a common
+	  place.  add docs to addFont() function
+
+2008-02-19 17:37  krechert
+
+	* src/: ming.h.in, movie.c: move docs to .c file
+
+2008-02-19 17:23  krechert
+
+	* mingpp.h: added setSoundStreamAt
+
+2008-02-19 16:32  krechert
+
+	* src/movie.c: added missing doc entries
+
+2008-02-19 15:13  krechert
+
+	* test/: Movie/Rate/test01.c, Movie/add/test01.c, Button/test03.c:
+	  fix warnings
+
+2008-02-18 17:04  krechert
+
+	* src/blocks/videostream.c: use signed value to signal error
+	  condition
+
+2008-02-18 16:57  krechert
+
+	* src/blocks/font.c: allocate enough memory for structure
+
+2008-02-18 16:55  krechert
+
+	* src/blocks/flv.h: make members unsigned to signal possible error
+
+2008-02-18 16:48  krechert
+
+	* src/blocks/font.c: double decleared variable c
+
+2008-02-18 16:39  krechert
+
+	* src/blocks/flv.c: return signed value to signal error condition
+
+2008-02-18 16:32  krechert
+
+	* src/blocks/fdbfont.c: remove unnecessary variables
+
+2008-02-18 15:21  krechert
+
+	* src/blocks/filter.h: removed redundant break-stmt
+
+2008-02-18 15:19  krechert
+
+	* src/blocks/binary.c: removed unused include
+
+2008-02-18 15:15  krechert
+
+	* src/: ming.h.in, blocks/action.c: change length pointer to signed
+	  type. if an error happens -1 is set
+
+2008-02-18 15:05  krechert
+
+	* src/actioncompiler/: compile.c, compile.h: make string arg const.
+	  no more complains about things like this bufferWriteString(out,
+	  "ASSetPropFlags", strlen("ASSetPropFlags") + 1);
+
+2008-02-18 14:47  krechert
+
+	* src/actioncompiler/compile.c: control flow might fall through
+
+2008-02-18 14:36  krechert
+
+	* src/actioncompiler/compile.c: NULL check after malloc
+
+2008-02-18 14:30  krechert
+
+	* src/actioncompiler/assembler.c: C++: arg label hides global
+	  symbol label
+
+2008-02-18 14:22  krechert
+
+	* src/: actioncompiler/main.c, blocks/binary.c, blocks/fdbfont.c,
+	  blocks/filter.c, blocks/scenedata.c, blocks/symbolclass.c: second
+	  patch with missing casts after malloc by Wolfgang Glunz
+
+2008-02-15 14:48  krechert
+
+	* src/movie.c: :)
+
+2008-02-14 15:58  krechert
+
+	* NEWS: update
+
+2008-02-14 14:57  krechert
+
+	* src/blocks/linestyle.c: use enumeration type
+
+2008-02-14 14:56  krechert
+
+	* src/blocks/videostream.c: remove useless return
+
+2008-02-14 14:35  krechert
+
+	* src/blocks/tabindex.h: fix prototype
+
+2008-02-14 12:59  krechert
+
+	* src/actioncompiler/listaction.c: do not confuse c++ compilers.
+	  change try/catch to upper-case Patch by Wolfgang Glunz
+
+2008-02-14 12:57  krechert
+
+	* src/blocks/fromswf.c: fix prototypes Patch by Wolfgang Glunz
+
+2008-02-14 12:55  krechert
+
+	* src/: actiontypes.h, ming.h.in: cleanup enumerations patch by
+	  Wolfgang Glunz
+
+2008-02-14 12:52  krechert
+
+	* src/: actioncompiler/compile.c, blocks/bitmap.c, blocks/font.c,
+	  blocks/soundinstance.c: add casts patch by Wolfgang Glunz
+
+2008-02-14 12:08  krechert
+
+	* src/blocks/font.c: bugfix: empty statement after if-clause
+	  reported by Wolfgang Glunz
+
+2008-02-13 15:26  krechert
+
+	* test/actionscript/: Makefile.am, switch.as, switch.ref: add
+	  switch testcase
+
+2008-02-13 15:25  krechert
+
+	* src/actioncompiler/swf5compiler.flex: add typeof to ASM state
+
+2008-02-13 15:20  krechert
+
+	* NEWS: update
+
+2008-02-13 14:26  krechert
+
+	* mingpp.h: close bug: http://bugs.libming.net/show_bug.cgi?id=48
+
+2008-02-13 13:22  krechert
+
+	* src/blocks/gifdbl.c: include error.h to define SWF_error
+	  prototype
+
+2008-02-13 11:39  krechert
+
+	* src/blocks/: font.c, ttffont.c: include config_file for USE_*
+	  defines
+
+2008-02-13 11:33  krechert
+
+	* src/blocks/: font.c, ttffont.c: make ming compile if freetype
+	  support is disabled.
+
+2008-02-13 11:17  krechert
+
+	* test/Video/: test01-cxx.C, test01.c, test02-cxx.C, test03-cxx.C:
+	  error handling
+
+2008-02-13 11:13  krechert
+
+	* test/TextField/: test01-cxx.C, test02-cxx.C: error handling
+
+2008-02-13 11:05  krechert
+
+	* test/: Sound/test01-cxx.C, Sound/test01.c, Sound/test02-cxx.C,
+	  Sound/test02.c, Text/test01-cxx.C, Text/test02-cxx.C: error
+	  handling
+
+2008-02-13 10:58  krechert
+
+	* test/: MovieClip/test01-cxx.C, MovieClip/test02-cxx.C,
+	  MovieClip/test03-cxx.C, PrebuiltClip/test01-cxx.C,
+	  Shape/test01-cxx.C: error handling
+
+2008-02-13 10:54  krechert
+
+	* test/Movie/setTabIndex/test01-cxx.C: error handling
+
+2008-02-13 00:23  krechert
+
+	* src/actioncompiler/compile.c: #elif -> else
+
+2008-02-13 00:19  krechert
+
+	* src/blocks/error.h: MSVC dow not linke var args in macros
+	  reported by Wolfgang Glunz
+
+2008-02-13 00:11  krechert
+
+	* src/blocks/gifdbl.c: use #if !(USE_GIF) instead of #ifndef to
+	  catch USE-GIF == 0 reported by Wolfgang Glunz
+
+2008-02-12 23:48  krechert
+
+	* mingpp.h: MSVC does not like the union-cast. Anyway we do not
+	  need this trick in C++.  reported by Wolfgang Glunz
+
+2008-02-12 23:33  krechert
+
+	* src/ming.h.in: fix MSVC workaround: replace takes 3 arguments
+	  reported by Wolfgang Glunz.
+
+2008-02-12 23:18  krechert
+
+	* mingpp.h: http://bugs.libming.net/show_bug.cgi?id=48
+
+2008-02-12 20:34  krechert
+
+	* test/Movie/setSoundStream/: test01-cxx.C, test02-cxx.C,
+	  test03-cxx.C: error handling
+
+2008-02-12 19:31  krechert
+
+	* test/Movie/: setNetworkAccess/test01-cxx.C,
+	  setScriptLimits/test01-cxx.C: error handling
+
+2008-02-12 19:27  krechert
+
+	* test/Movie/: Protect/test01-cxx.C, Protect/test02-cxx.C,
+	  Rate/test01-cxx.C, replace/test01-cxx.C, replace/test02-cxx.C:
+	  error handling
+
+2008-02-12 19:23  krechert
+
+	* test/Movie/: new/test01-cxx.C, new/test02-cxx.C,
+	  new/test03-cxx.C, new/test04-cxx.C, new/test05-cxx.C,
+	  new/test06-cxx.C, new/test07-cxx.C, nextFrame/test01-cxx.C,
+	  nextFrame/test02-cxx.C, NumFrames/test01-cxx.C: error handling
+
+2008-02-12 19:16  krechert
+
+	* test/Movie/: FrameLabel/test01-cxx.C, FrameLabel/test02-cxx.C,
+	  importCharacter/test01-cxx.C, importCharacter/test02-cxx.C: error
+	  handling
+
+2008-02-12 19:10  krechert
+
+	* test/Movie/: defineScene/test01-cxx.C, Dimension/test01-cxx.C:
+	  error handling
+
+2008-02-12 19:06  krechert
+
+	* test/Movie/: assignSymbol/test01-cxx.C, assignSymbol/test01.c,
+	  Background/test01-cxx.C, Background/test02-cxx.C,
+	  Background/test03-cxx.C: error handling
+
+2008-02-12 19:01  krechert
+
+	* test/Movie/: add/test01-cxx.C, add/test01.c, add/test02-cxx.C,
+	  addMetadata/test01-cxx.C: error handling
+
+2008-02-12 18:57  krechert
+
+	* test/Morph/: test01-cxx.C, test02-cxx.C: error handling
+
+2008-02-12 18:51  krechert
+
+	* test/: Gradient/test01-cxx.C, Gradient/test02-cxx.C,
+	  Gradient/test03-cxx.C, Gradient/test04-cxx.C,
+	  Gradient/test05-cxx.C, Gradient/test06-cxx.C,
+	  Gradient/test07-cxx.C, LineStyle/test01-cxx.C,
+	  LineStyle/test02-cxx.C: error handling
+
+2008-02-12 18:40  krechert
+
+	* test/Font/: test01-cxx.C, test01.c, test02-cxx.C, test03-cxx.C:
+	  error handling
+
+2008-02-12 18:36  krechert
+
+	* test/Filter/: test01-cxx.C, test01.c, test02.c, test03-cxx.C,
+	  test03.c, test04-cxx.C, test04.c, test05-cxx.C: error handling
+
+2008-02-12 18:25  krechert
+
+	* test/FillStyle/: test01-cxx.C, test02-cxx.C, test03-cxx.C,
+	  test04-cxx.C, test05-cxx.C, test06-cxx.C: error handling
+
+2008-02-12 18:09  krechert
+
+	* test/Button/: test01-cxx.C, test02-cxx.C, test03-cxx.C: error
+	  handling
+
+2008-02-12 18:04  krechert
+
+	* test/BrowserFont/: test01-cxx.C, test01.c: error handling fix
+	  warning
+
+2008-02-12 18:00  krechert
+
+	* test/Bitmap/: test01-cxx.C, test01.c: added error handling
+
+2008-02-12 17:58  krechert
+
+	* test/Action/: test01-cxx.C, test02-cxx.C: catch SWFException
+
+2008-02-12 17:50  krechert
+
+	* mingpp.h: introduce SWFException to C++ wrappers
+
+2008-02-12 17:46  krechert
+
+	* src/blocks/: fillstyle.c, mp3.c, soundstream.c: bugfix:
+	  check mp3 header result	  return 1 on success
+
+2008-02-12 14:21  strk
+
+	* test/FillStyle/: test05.c, test06.c: handle null-returns from
+	  bitmap creation functions
+
+2008-02-10 16:11  krechert
+
+	* test/Gradient/: Makefile.am, TestList, test01.ref, test02.ref,
+	  test03.ref, test04.ref, test05.ref, test06.ref, test07-cxx.C,
+	  test07.c, test07.ref: gradients are centred at (0,0) added new
+	  RADIAL_GRADIENT testcase by Pawel Karwowski.
+
+2008-02-10 16:10  krechert
+
+	* src/blocks/gradient.c: gradients are centred at (0,0) fixes:
+	  http://bugs.libming.org/show_bug.cgi?id=47 Thanks to Pawel
+	  Karwowski!
+
+2008-02-10 15:44  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix "this as reserved word"
+	  regression
+
+2008-02-10 15:43  krechert
+
+	* test/actionscript/: Function.as, Function.ref: testcase for "this
+	  as reserved word" regression
+
+2008-02-09 13:19  krechert
+
+	* src/blocks/mp3.c: removed unused vars
+
+2008-02-09 13:19  krechert
+
+	* test/actionscript/: ASM_all.as, ASM_all.ref: update asm ops:
+	  added new
+
+2008-02-09 13:18  krechert
+
+	* src/actioncompiler/swf5compiler.flex: addd NEW as ASM op
+
+2008-02-08 23:11  krechert
+
+	* src/blocks/: input.c, mp3.c, mp3.h, soundstream.c: cleanup mp3
+	  code
+
+2008-02-08 23:10  company
+
+	* src/actioncompiler/swf5compiler.flex: strtoul returns a long, not
+	  an int.
+
+	  Breaks on 64bit platforms.
+
+2008-02-08 14:12  krechert
+
+	* test/Movie/setSoundStream/: .cvsignore, Makefile.am, TestList,
+	  test03-cxx.C, test03.c, test03.ref: nellymoser testcase
+
+2008-02-08 14:09  krechert
+
+	* test/Movie/setSoundStream/: test01-cxx.C, test01.c, test02.c,
+	  test02-cxx.C: exit with failure
+
+2008-02-08 14:07  krechert
+
+	* test/Movie/setSoundStream/: test01.ref, test02.ref: use
+	  soundstreamhead2 as default
+
+2008-02-08 13:44  krechert
+
+	* src/blocks/: flv.h, soundstream.c: allow embedded nellymoser
+	  sound from flv
+
+2008-02-08 13:42  krechert
+
+	* test/Media/nellymoser.flv: added nellymoser flv for testcases
+
+2008-02-08 13:34  krechert
+
+	* src/blocks/: font.c, font.h: function returns a plain pointer
+
+2008-02-08 12:18  strk
+
+	* test/Filter/: Makefile.am, test05-cxx.C, test05.c: Use MEDIADIR
+	  to find media (supporting off-sourcetree buils)
+
+2008-02-08 12:11  strk
+
+	* test/Filter/test05.c: print an error, and exit with a failure
+	  code if things go wrong
+
+2008-02-08 10:53  strk
+
+	* docs/man/makeswf.1: Add info about the new -n switch (reviews
+	  welcome)
+
+2008-02-08 10:19  strk
+
+	* util/makeswf.c: Add -n switch to force NetworkAccess flag in a
+	  file attribute tag.  See
+	  http://bugs.libming.org/show_bug.cgi?id=37
+
+2008-01-30 19:02  akleine
+
+	* util/outputscript.c: extended my new font stuff to
+	  outputSWF_DEFINEFONTINFO() and outputSWF_DEFINEFONTINFO2()
+
+2008-01-30 12:38  krechert
+
+	* util/outputtxt.c: fixed typo/stupid bug
+
+2008-01-30 08:15  vapour
+
+	* src/ming.h.in: Typo fix for a comment.
+
+2008-01-29 01:16  krechert
+
+	* src/blocks/: font.c, font.h, shape.c: make drawGlyph work again
+
+2008-01-28 17:00  akleine
+
+	* util/outputscript.c: enhanced outputSWF_DEFINEFONT2(),
+	  outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2()
+
+2008-01-28 11:49  krechert
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: introduce
+	  this as reserved keyword
+
+2008-01-28 11:48  krechert
+
+	* test/: Bitmap/test01.ref, FillStyle/test04.ref,
+	  FillStyle/test05.ref, FillStyle/test06.ref, Filter/test05.ref,
+	  Morph/test01.ref, Morph/test02.ref: resync ref after renaming of
+	  character id field
+
+2008-01-28 11:04  krechert
+
+	* test/actionscript/ASM_targetPath.as: asm op is lowercase
+
+2008-01-28 11:03  krechert
+
+	* test/actionscript/: Makefile.am, With.as, With.ref: testcase to
+	  verify bug #47: legacy functions hide ACTIONCALLMETHOD in with
+	  block
+
+2008-01-28 11:01  krechert
+
+	* src/actioncompiler/swf5compiler.flex: split flex into clean
+	  context states (ASM, PURE, LEGACY) fixes bugzilla bug #43
+
+2008-01-25 19:10  strk
+
+	* test/: Bitmap/test01.ref, BrowserFont/test01.ref,
+	  Button/test01.ref, Button/test02.ref, Button/test03.ref,
+	  FillStyle/test01.ref, FillStyle/test02.ref, FillStyle/test03.ref,
+	  FillStyle/test04.ref, FillStyle/test05.ref, FillStyle/test06.ref,
+	  Filter/test01.ref, Filter/test02.ref, Filter/test03.ref,
+	  Filter/test04.ref, Filter/test05.ref, Font/test01.ref,
+	  Font/test02.ref, Font/test03.ref, Gradient/test01.ref,
+	  Gradient/test02.ref, Gradient/test03.ref, Gradient/test04.ref,
+	  Gradient/test05.ref, Gradient/test06.ref, LineStyle/test01.ref,
+	  LineStyle/test02.ref, Morph/test01.ref, Morph/test02.ref,
+	  Movie/add/test02.ref, Movie/assignSymbol/test01.ref,
+	  Movie/importCharacter/test01.ref,
+	  Movie/importCharacter/test02.ref, Movie/replace/test01.ref,
+	  Movie/replace/test02.ref, MovieClip/test01.ref,
+	  MovieClip/test03.ref, PrebuiltClip/test01.ref, Shape/test01.ref,
+	  Sound/test01.ref, Sound/test02.ref, Text/test01.ref,
+	  Text/test02.ref, TextField/test01.ref, TextField/test02.ref,
+	  Video/test01.ref, Video/test02.ref, Video/test03.ref:
+	  CharacterId: => CharacterID:
+
+2008-01-25 18:45  krechert
+
+	* src/actioncompiler/compile.c: improved debug output for stack
+	  failures
+
+2008-01-25 18:40  krechert
+
+	* src/actioncompiler/swf5compiler.y: bugfix: delctx for functions
+	  was never called
+
+2008-01-25 16:58  strk
+
+	* util/outputtxt.c: CharacterId => CharacterID
+
+2008-01-24 21:09  akleine
+
+	* util/outputscript.c: Started work on outputSWF_DEFINETEXT() and
+	  outputSWF_DEFINETEXT2(), both needs some extending of
+	  outputSWF_DEFINEFONT2().
+
+2008-01-20 16:43  akleine
+
+	* util/outputscript.c: 1. added note for decompiling script blocks
+	  of v4 files 2. added specials for movies with xMin or xMax values
+	  !=0
+
+2008-01-18 22:01  akleine
+
+	* util/outputscript.c: bugfix: possible negative scaling factor in
+	  outputSWF_MATRIX()
+
+2008-01-18 18:45  vapour
+
+	* src/blocks/videostream.c: Updated SWFVideoStream_getVideoFrame()
+	  to check for malloc failure.
+
+2008-01-18 18:42  vapour
+
+	* src/blocks/textfield.c: Updated newSWFTextField() to check for
+	  malloc failure.
+
+2008-01-18 16:43  vapour
+
+	* src/blocks/text.c: Adjusted destroySWFTextRecord() to check if
+	  it's been given a NULL pointer before trying to free it.
+
+2008-01-18 11:28  vapour
+
+	* src/blocks/text.c: Added checks for malloc() and other failures
+	  to many functions.
+
+2008-01-18 11:02  vapour
+
+	* src/blocks/output.c: Added check for malloc() failure to
+	  newSWFOutput() and newSizedSWFOutput().
+
+2008-01-17 15:38  vapour
+
+	* src/blocks/jpeg.c: Updated newSWFJpegWithAlpha_fromInput() to
+	  check for failure of scanJpegFile() and newSWFRect().  Also put
+	  in a quick fix for a compile failure.
+
+2008-01-17 15:30  vapour
+
+	* src/blocks/jpeg.c: Updated newSWFJpegBitmap_fromInput() to check
+	  for newSWFRect() failure.
+
+2008-01-17 15:26  vapour
+
+	* src/blocks/rect.c: Updated newSWFRect() to check for malloc()
+	  failure.
+
+2008-01-17 15:23  vapour
+
+	* src/blocks/fillstyle.c: Updated newSWFBitmapFillStyle() and
+	  newSWFGradientFillStyle() to check for newSWFMatrix() failure.
+
+2008-01-17 15:19  vapour
+
+	* src/blocks/bitmap.c: Updated newSWFBitmap_fromRawImg() to check
+	  for failure of newSWFDBLBitmapData_fromData().
+
+2008-01-17 15:13  vapour
+
+	* src/blocks/dbl.c: Added checks for malloc() failure to
+	  newSWFDBLBitmap(), newSWFDBLBitmap_fromInput(), and
+	  newSWFDBLBitmapData_fromData().
+
+2008-01-17 15:01  vapour
+
+	* src/displaylist.c: Added checks for malloc() failure to
+	  newSWFDisplayList(), newSWFSpriteDisplayList(), and
+	  SWFDisplayList_add().
+
+2008-01-17 14:55  vapour
+
+	* src/blocks/placeobject.c: Added checks for malloc() failure to
+	  newSWFPlaceObject2Block().
+
+2008-01-17 14:49  vapour
+
+	* src/position.c: Added checks for malloc() failure to
+	  newSWFPosition().
+
+2008-01-17 14:46  vapour
+
+	* src/blocks/matrix.c: Added checks for malloc() failure to
+	  newSWFMatrix() and SWFMatrix_dup().
+
+2008-01-17 11:20  strk
+
+	* test/Bitmap/test01.ref, test/Button/test01.ref,
+	  test/Button/test02.ref, test/Button/test03.ref,
+	  test/FillStyle/test01.ref, test/FillStyle/test02.ref,
+	  test/FillStyle/test03.ref, test/FillStyle/test04.ref,
+	  test/FillStyle/test05.ref, test/FillStyle/test06.ref,
+	  test/Filter/test01.ref, test/Filter/test02.ref,
+	  test/Filter/test03.ref, test/Filter/test04.ref,
+	  test/Filter/test05.ref, test/Gradient/test01.ref,
+	  test/Gradient/test02.ref, test/Gradient/test03.ref,
+	  test/Gradient/test04.ref, test/Gradient/test05.ref,
+	  test/Gradient/test06.ref, test/LineStyle/test01.ref,
+	  test/LineStyle/test02.ref, test/Movie/replace/test01.ref,
+	  test/Movie/replace/test02.ref, test/Shape/test01.ref,
+	  util/outputtxt.c: Make listswf output consistent in giving ID of
+	  character definitions: always use "CharacterID: #" format
+
+2008-01-17 11:14  strk
+
+	* util/outputtxt.c: typo: CharcterID => CharacterID (for morph
+	  shapes)
+
+2008-01-16 06:22  vapour
+
+	* src/blocks/input.c: Updated newSWFInput_file(),
+	  newSWFInput_buffer(), newSWFInput_stream(), and
+	  newSWFInput_input() to check for malloc() failure.
+
+2008-01-16 06:00  vapour
+
+	* src/blocks/jpeg.c: Removed embedded carriage return in definition
+	  of writeSWFJpegBitmapToMethod() and
+	  writeSWFJpegWithAlphaToMethod().
+
+	  Added checks for malloc() failure to scanJpegFile(),
+	  newSWFJpegBitmap_fromInput(), newSWFJpegBitmap(), and
+	  newSWFJpegWithAlpha_fromInput().
+
+	  Added check for failure to newSWFJpegWithAlpha().
+
+2008-01-16 05:36  vapour
+
+	* src/blocks/bitmap.c: Updated newSWFBitmap_fromRawImg() to return
+	  NULL on malloc() failure.
+
+2008-01-15 21:18  akleine
+
+	* util/outputscript.c: added XY coordinate value translation of
+	  gradient fill style matrix
+
+2008-01-15 17:06  vapour
+
+	* src/blocks/shape.c: Fixed stupid typos I introduced.	Thanks
+	  Sandro. ;->
+
+2008-01-15 17:04  vapour
+
+	* src/blocks/fillstyle.c: Fixed a stupid typo I introduced.  Thanks
+	  Sandro. ;-> Added further malloc failure checks.
+
+2008-01-15 13:26  vapour
+
+	* src/blocks/shape.c: newSWFShape() now returns NULL if an error
+	  occurs when trying to allocate memory.
+
+2008-01-15 13:24  vapour
+
+	* src/blocks/fillstyle.c: newSWFSolidFillStyle() now returns NULL
+	  if an error occurs when trying to allocate memory.
+
+2008-01-15 11:47  krechert
+
+	* test/Gradient/: test01.ref, test02.ref, test03.ref, test04.ref,
+	  test05.ref, test06.ref: update ref after typo fix in gradient.c
+
+2008-01-15 11:46  company
+
+	* test/actionscript/logor.ref: update testcase again
+
+2008-01-15 11:45  company
+
+	* src/actioncompiler/swf5compiler.y: fix various problems with the
+	  || and && fixes: - I confused || and && (oops) - disable push
+	  action merging. This could lead to jumps pointing into the middle
+	  of a Push action
+
+2008-01-15 09:52  company
+
+	* test/actionscript/logor.ref: update reference output
+
+2008-01-15 09:11  strk
+
+	* util/makeswf.c: Fix bitmap embedding code to respect size of
+	  image (rather then swap dimensions)
+
+2008-01-14 18:32  company
+
+	* src/actioncompiler/swf5compiler.y: Enumerate finished the stack
+	  with an undefined value, not with null
+
+2008-01-14 18:28  company
+
+	* src/actioncompiler/swf5compiler.y: use lazy evaluation for && and
+	  || constructs.  This mirrors the behavior used by Adobe
+	  compilers.
+
+2008-01-14 16:50  company
+
+	* configure.in: make auto-rerunning aclocal have the right
+	  arguments
+
+2008-01-13 18:36  vapour
+
+	* src/movie.c: Added check for malloc failure in
+	  newSWFMovieWithVersion.  Returns NULL on failure.
+
+2008-01-13 18:24  vapour
+
+	* INSTALL: Updated web site URL and with todays date.
+
+2008-01-13 18:23  vapour
+
+	* README: Now refers to the INSTALL text file, as we don't have an
+	  INSTALL.txt.
+
+2008-01-13 18:22  vapour
+
+	* README: Updated website, flash version supported, and with todays
+	  date.
+
+2008-01-13 15:57  akleine
+
+	* util/outputscript.c: initial draft on gradient fillstyle scaling
+	  factor using current shape bounds
+
+2008-01-13 13:06  krechert
+
+	* src/shape_util.c: fix comment about witdh value units
+
+2008-01-13 10:57  akleine
+
+	* util/outputscript.c: added some info about shape rectangle size
+
+2008-01-12 18:21  akleine
+
+	* src/blocks/gradient.c: typo fix
+
+2008-01-10 17:27  strk
+
+	* util/outputtxt.c: typos: erreor => error
+
+2008-01-08 21:12  akleine
+
+	* util/outputscript.c: Added setMaskLevel() call inside
+	  outputSWF_PLACEOBJECT2() function if the 'PlaceFlagHasClipDepth'
+	  flag is set.
+
+2008-01-08 13:32  krechert
+
+	* test/Filter/: .cvsignore, Makefile.am, TestList, test05-cxx.C,
+	  test05.c, test05.ref: add ColorMatrixFilter testcase
+
+2008-01-08 13:30  krechert
+
+	* mingpp.h: use SWFBitmap_getHeight/Width() from C-lib.
+
+2008-01-08 13:19  krechert
+
+	* util/main.c: cleanup deugging leftover
+
+2008-01-08 13:07  krechert
+
+	* util/blocktypes.c: add missing header
+
+2008-01-08 09:40  krechert
+
+	* src/actioncompiler/swf5compiler.flex: fix dirty buffer
+
+2008-01-08 00:01  krechert
+
+	* util/blocktypes.c: skip bytes for unknown blocks
+
+2008-01-07 23:55  krechert
+
+	* util/: main.c, read.c, read.h: skip bytes for unknown blocks
+
+2008-01-07 23:42  krechert
+
+	* util/main.c: set fileoffset after seek
+
+2008-01-07 22:39  krechert
+
+	* util/parser.c: add endline after warning
+
+2008-01-07 19:06  krechert
+
+	* src/blocks/action.c: autocompile code as SWF7 and warn user to
+	  use SWFAction_compile first
+
+2008-01-07 18:41  krechert
+
+	* util/parser.c: glyphcount of 0 is not an error
+
+2008-01-07 18:12  krechert
+
+	* util/outputtxt.c: check if blockp is NULL
+
+2008-01-06 19:01  krechert
+
+	* src/blocks/output.c: fix writeFloat/Double. closes SF bug
+	  #1865070: SWFFilterMatrix does not work
+
+2008-01-06 18:52  krechert
+
+	* src/actioncompiler/: compile.c, swf4compiler.flex,
+	  swf5compiler.flex: remove runtime check for byteorder
+
+2008-01-06 18:51  krechert
+
+	* configure.in: compiletime check for byteorder
+
+2008-01-06 17:59  krechert
+
+	* util/parser.c: matrix elements are float types
+
+2008-01-06 11:44  akleine
+
+	* util/outputscript.c: Continued work on fillstyles and linstyles
+
+2008-01-05 12:56  akleine
+
+	* util/outputscript.c: Shape fill stuff: replaced 'experimental
+	  code' from CVS 1.53 with better one
+
+2008-01-04 22:28  krechert
+
+	* test/Sound/.cvsignore: missing .cvsignore
+
+2008-01-04 22:25  krechert
+
+	* test/Font/: Makefile.am, test03.pl: added perl testcase for
+	  string width
+
+2008-01-04 22:23  krechert
+
+	* test/Font/: .cvsignore, test03.ref: added missing ref file
+
+2008-01-04 22:19  krechert
+
+	* perl_ext/: Font.xs, Text.xs: fix wrong argument types
+
+2008-01-04 21:59  krechert
+
+	* src/font_util.h: removed duplicated declaration
+
+2008-01-04 21:23  krechert
+
+	* test/Font/: Makefile.am, TestList, test01.py, test02.py,
+	  test03-cxx.C, test03.c, test03.py: more testcases
+
+2008-01-04 21:12  krechert
+
+	* ming.i, py_ext/ming_wrap.c, py_ext/mingc.py: fix SF bug 1862172:
+	  TypeError in method 'SWFFont_getStringWidth'
+
+2008-01-04 21:09  krechert
+
+	* mingpp.h: remove unnecessary casts
+
+2008-01-04 21:02  krechert
+
+	* src/blocks/: block.h, metadata.c, metadata.h, protect.c: use
+	  const char * as parameter to avoid difficulties with new swig
+	  version
+
+2008-01-04 20:54  krechert
+
+	* src/ming.h.in, src/movie.c, ming.i: use const char * as parameter
+	  to avoid difficulties with new swig version
+
+2008-01-04 20:31  krechert
+
+	* ming.i: SF bug #1845919: Add newSWFSound_fromSoundStream to
+	  ming.i Thanks to sakamoto
+
+2008-01-04 20:29  krechert
+
+	* test/FillStyle/Makefile.am: add pyhon test to DIST
+
+2008-01-04 20:27  krechert
+
+	* src/: ming.h.in, text_util.c: "strings" should be (char *)
+
+2008-01-04 20:00  krechert
+
+	* py_ext/ming.py: allow SWFText version 1 objects
+
+2008-01-03 23:19  krechert
+
+	* py_ext/ming.py: added missing SWFDisplayItem method. Patch by
+	  Gerrit Riessen.
+
+2008-01-03 23:16  krechert
+
+	* test/FillStyle/test04.py: python fillstyle testcase
+
+2008-01-03 23:05  krechert
+
+	* py_ext/ming.py: proper type checking. patch by Gerrit Riessen
+
+2008-01-03 20:19  krechert
+
+	* mingpp.h: remove some useless warnings
+
+2008-01-03 19:41  krechert
+
+	* src/ming.h.in: remove deprecated tag from SWFFill functions. Work
+	  on all fill-types now.
+
+2008-01-03 19:39  krechert
+
+	* src/blocks/: fillstyle.c, gradient.c: allow transformation on
+	  gradient fills
+
+2008-01-03 12:35  strk
+
+	* util/parser.c: Don't abort parsing if an unexpected number of
+	  gradients is found
+
+2007-12-29 10:29  akleine
+
+	* util/decompile.c: rewrote gotoFrame/gotoLabel functions
+
+2007-12-26 19:30  akleine
+
+	* util/decompile.c: Fixed a bug in decompileCALLMETHOD(). Thanks to
+	  'strk' for reporting.
+
+2007-12-17 18:28  strk
+
+	* util/makeswf_utils.c: Check existance of input file before
+	  attempting to preprocess it
+
+2007-12-15 13:00  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix typo: caused a regression
+	  when using _droptarget as a member variable.
+
+2007-12-14 12:06  akleine
+
+	* util/parser.c: continue with empty block in case of branch
+	  problem
+
+2007-12-14 12:03  akleine
+
+	* util/decompile.c: bugfix in decompileSETTARGET()
+
+2007-12-13 10:16  akleine
+
+	* util/: outputscript.c, parser.c, swftypes.h: 1. changed
+	  ColorAddTerms and ColorMultTerms to signed integer	in
+	  structures SWF_CXFORM, SWF_CXFORMWITHALPHA (swftypes.h) 2. ditto
+	  changed some readBits() to readSBits() in parser.c 3. added
+	  ColorTransform processing to outputscript.c
+
+2007-12-12 19:09  akleine
+
+	* util/decompile.c: fixed old typo bug: changed '_this' to 'this'
+
+2007-12-12 13:13  akleine
+
+	* util/decompile.c: 1. rewrote function decompileGETURL2() 2.
+	  bugfix in decompileSTOREREGISTER()
+
+2007-12-11 15:38  akleine
+
+	* util/outputscript.c: typo fix
+
+2007-12-11 15:38  akleine
+
+	* util/decompile.c: enhanced recognition of inline (side effect)
+	  increment/decrement operations .. else run into fallback code
+
+2007-12-11 09:58  akleine
+
+	* util/outputscript.c: experimental add of setRightFill() call in
+	  outputSWF_FILLSTYLE (tnx Peter!)
+
+2007-12-10 10:52  akleine
+
+	* util/decompile.c: in decompileCALLMETHOD(): added a special case
+	  for constructors etc.
+
+2007-12-10 09:59  akleine
+
+	* util/outputscript.c: added initial draft for
+	  outputSWF_EXPORTASSETS()
+
+2007-12-09 13:24  akleine
+
+	* util/decompile.c: keep action index always inside limit
+
+2007-12-08 18:46  akleine
+
+	* util/decompile.c: Solved property value problem.  Thanks to Peter
+	  for bug report!
+
+2007-12-06 17:46  akleine
+
+	* NEWS, util/decompile.c: implemented eval() calls where they are
+	  appropriate
+
+2007-12-05 18:36  akleine
+
+	* util/decompile.c: 2 bugfixes: decompileRETURN result value and
+	  operator precedence
+
+2007-12-05 05:44  peterdd
+
+	* util/outputscript.c: fix a typo
+
+2007-12-05 02:11  peterdd
+
+	* util/outputscript.c: add stub for fontinfo2 script generation
+
+2007-12-04 12:10  company
+
+	* test/actionscript/TryCatch.ref: update test
+
+2007-12-04 11:33  company
+
+	* src/actioncompiler/swf5compiler.y: make Try action work correctly
+	  (patch by Pekka Lampila)
+
+2007-12-01 21:13  akleine
+
+	* util/decompile.c: two bugfixes related to operator precedence
+
+2007-12-01 17:45  krechert
+
+	* test/actionscript/: Makefile.am, condition.as, condition.ref:
+	  testcase for conditional expression
+
+2007-12-01 16:06  krechert
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.y: do
+	  combine PUSH ops in condition stmts.
+
+2007-12-01 15:53  peterdd
+
+	* util/outputscript.c: fix naming pattern for ButtonRecord
+	  variables
+
+2007-12-01 15:31  krechert
+
+	* NEWS: update
+
 2007-12-01 05:04  peterdd
 
 	* perl_ext/MANIFEST: add SWF/ButtonRecord.pm, remove autoappended
