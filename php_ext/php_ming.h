@@ -66,6 +66,8 @@ PHP_METHOD(swfvideostream, getnumframes);
 
 PHP_METHOD(swfprebuiltclip, init);
 
+PHP_METHOD(swfbinarydata, init);
+
 PHP_METHOD(swffill, init);
 PHP_METHOD(swffill, moveTo);
 PHP_METHOD(swffill, scaleTo);

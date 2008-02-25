@@ -81,6 +81,7 @@ static SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC);
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC);
 #endif
 static SWFCharacter getCharacterClass(zval *id TSRMLS_DC);
+static SWFBinaryData getBinaryData(zval *id TSRMLS_DC);
 
 #define PHP_MING_FILE_CHK(file) \
 	if ((PG(safe_mode) && !php_checkuid((file), NULL, CHECKUID_CHECK_FILE_AND_DIR)) || php_check_open_basedir((file) TSRMLS_CC)) {	\
@@ -180,6 +181,7 @@ static int le_swffontcharp;
 static int le_swfsoundinstancep;
 static int le_swfvideostreamp;
 static int le_swfbuttonrecordp;
+static int le_swfbinarydatap;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static int le_swfprebuiltclipp;
@@ -207,6 +209,7 @@ static zend_class_entry *fontchar_class_entry_ptr;
 static zend_class_entry *soundinstance_class_entry_ptr;
 static zend_class_entry *videostream_class_entry_ptr;
 static zend_class_entry *buttonrecord_class_entry_ptr;
+static zend_class_entry *binarydata_class_entry_ptr;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static zend_class_entry *prebuiltclip_class_entry_ptr;
@@ -2343,6 +2346,66 @@ static zend_function_entry swfvideostream_functions[] = {
 };
 
 /* }}} */
+
+/* {{{ SWFBinaryData
+ */
+
+/* {{{ proto class swfbinarydata_init(string, length)
+    Returns a SWFBinaryData object */
+PHP_METHOD(swfbinarydata, __construct)
+{
+	zval **zdata, **zlen;
+	SWFBinaryData bd = NULL;
+	int ret;
+
+	switch(ZEND_NUM_ARGS()) {
+		case 1:
+			if(zend_get_parameters_ex(2, &zdata, &zlen) == FAILURE)
+				WRONG_PARAM_COUNT;
+	
+			/* this is not perfect for binary data... but will work for now */
+			convert_to_string_ex(zdata);
+			convert_to_long_ex(zlen);		
+			bd = newSWFBinaryData(Z_STRVAL_PP(zdata), Z_LVAL_PP(zlen));
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+	
+	if(bd) {
+		ret = zend_list_insert(bd, le_swfbinarydatap);
+		object_init_ex(getThis(), binarydata_class_entry_ptr);
+		add_property_resource(getThis(), "binarydata", ret);
+		zend_list_addref(ret);
+	}
+}
+/* }}} */
+
+/* {{{ internal function getBinaryData
+   Returns the SWFBinaryData object contained in zval *id */
+static SWFBinaryData getBinaryData(zval *id TSRMLS_DC)
+{
+	void *bd = SWFgetProperty(id, "binarydata", strlen("binarydata"), le_swfbinarydatap TSRMLS_CC);
+	if(!bd)
+		php_error(E_ERROR, "called object is not an SWFBinaryData!");
+	return (SWFBinaryData)bd;
+}
+/* }}} */
+
+/* {{{ internal function destroy_SWFBinaryData */
+static void destroy_SWFBinaryData_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFBinaryData((SWFBinaryData)resource->ptr);
+}
+/* }}} */
+
+static zend_function_entry swfbinarydata_functions[] = {
+	PHP_ME(swfbinarydata, __construct, NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
 #endif
 
 #ifdef HAVE_SWFPREBUILTCLIP
@@ -2422,6 +2485,7 @@ static zend_function_entry swfprebuiltclip_functions[] = {
 #endif
 
 /* }}} */
+
 
 /* {{{ SWFMovie
 */
@@ -4762,6 +4826,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry soundinstance_class_entry;
 	zend_class_entry videostream_class_entry;
 	zend_class_entry buttonrecord_class_entry;
+	zend_class_entry binarydata_class_entry;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	zend_class_entry prebuiltclip_class_entry;
@@ -4895,6 +4960,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfbuttonrecordp = zend_register_list_destructors_ex(NULL, NULL, "SWFButtonRecord", module_number);
 	le_swfsoundinstancep = zend_register_list_destructors_ex(NULL, NULL, "SWFSoundInstance", module_number);
 	le_swfvideostreamp = zend_register_list_destructors_ex(destroy_SWFVideoStream_resource, NULL, "SWFVideoStream", module_number);
+	le_swfbinarydatap = zend_register_list_destructors_ex(destroy_SWFBinaryData_resource, NULL, "SWFBinaryData", module_number);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	le_swfprebuiltclipp = zend_register_list_destructors_ex(destroy_SWFPrebuiltClip_resource, NULL, "SWFPrebuiltClip", module_number);
@@ -4920,6 +4986,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(buttonrecord_class_entry, "SWFButtonRecord", swfbuttonrecord_functions);
 	INIT_CLASS_ENTRY(soundinstance_class_entry, "SWFSoundInstance", swfsoundinstance_functions);
 	INIT_CLASS_ENTRY(videostream_class_entry, "SWFVideoStream", swfvideostream_functions);
+	INIT_CLASS_ENTRY(binarydata_class_entry, "SWFBinaryData", swfbinarydata_functions);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
@@ -4947,6 +5014,7 @@ PHP_MINIT_FUNCTION(ming)
 	buttonrecord_class_entry_ptr = zend_register_internal_class(&buttonrecord_class_entry TSRMLS_CC);
 	soundinstance_class_entry_ptr = zend_register_internal_class(&soundinstance_class_entry TSRMLS_CC);
 	videostream_class_entry_ptr = zend_register_internal_class(&videostream_class_entry TSRMLS_CC);
+	binarydata_class_entry_ptr = zend_register_internal_class(&binarydata_class_entry TSRMLS_CC);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	prebuiltclip_class_entry_ptr = zend_register_internal_class(&prebuiltclip_class_entry TSRMLS_CC);
