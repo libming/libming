@@ -64,6 +64,7 @@ extern "C"
   #define SWFFontCharacter c_SWFFontCharacter
   #define SWFPrebuiltClip c_SWFPrebuiltClip
   #define SWFSoundInstance c_SWFSoundInstance
+  #define SWFBinaryData	  c_SWFBinaryData
 
   #include <ming.h>
 
@@ -104,6 +105,7 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
   #undef SWFInitAction
   #undef SWFButtonRecord
   #undef SWFSoundInstance
+  #undef SWFBinaryData
 } // extern C
 
 #define SWF_DECLAREONLY(classname) \
@@ -1540,6 +1542,26 @@ class SWFButton : public SWFCharacter
   SWF_DECLAREONLY(SWFButton);
 };
 
+/* SWFBinaryData */
+class SWFBinaryData : public SWFBlock
+{
+ public:
+  c_SWFBinaryData data;
+
+  SWFBinaryData(unsigned char *data, int length)
+  {
+    this->data = newSWFBinaryData(data, length);
+    if(this->data == NULL)
+      throw SWFException("SWFBinaryData(char *data, int length)");
+  }
+
+  virtual ~SWFBinaryData()
+    { destroySWFBinaryData(this->data); }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->data; }
+  SWF_DECLAREONLY(SWFBinaryData);
+};
 
 /* SWFVideoStream */
 class SWFVideoStream : public SWFCharacter
