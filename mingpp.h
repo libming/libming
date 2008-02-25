@@ -1600,6 +1600,9 @@ class SWFVideoStream : public SWFCharacter
   int getNumFrames()
     { return SWFVideoStream_getNumFrames(this->stream); }
 
+  int hasAudio()
+    { return SWFVideoStream_hasAudio(this->stream); }
+
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->stream; }
 
