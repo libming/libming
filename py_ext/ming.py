@@ -891,6 +891,12 @@ SWFBUTTON_MOUSEOVER      = mingc.SWFBUTTON_MOUSEOVER
 
 class SWFPrebuiltClip(SWFBase):
     def __init__(self, filename):
-        self.this = newSWFPrebuiltClip_fromFile(filename)
+        self.this = mingc.newSWFPrebuiltClip_fromFile(filename)
     def __del__(self):
-        destroySWFPrebuiltClip(self.this)
+        mingc.destroySWFPrebuiltClip(self.this)
+
+class SWFBinaryData(SWFBase):
+    def __init__(self, string, len):
+        self.this = mingc.newSWFBinaryData(string, len)
+    def __del__(self):
+        mingc.destroySWFBinaryData(self.this)
