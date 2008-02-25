@@ -43,6 +43,9 @@ completeSWFBinaryData(SWFBlock block)
 	return SWFOutput_getLength(data->out);
 }
 
+/*
+ * destroys a SWFBinaryData instance
+ */
 void
 destroySWFBinaryData(SWFBinaryData data)
 {
@@ -50,6 +53,14 @@ destroySWFBinaryData(SWFBinaryData data)
 	free(data);
 }
 
+/* 
+ * creates an SWFBlock with arbitrary binary data
+ * This SWFBlock allows to embed arbitrary binary data to a SWF file.
+ * With SWFMovie_assignSymbol() this data can be used as a ByteArray in 
+ * AS3 classes. 
+ * returns a SWFBinaryData instance
+ * see also SWFMovie_assignSymbol, destroySWFBinaryData
+ */
 SWFBinaryData newSWFBinaryData(unsigned char *blob, int length)
 {
         SWFBinaryData data = (SWFBinaryData)malloc(sizeof(struct SWFBinaryData_s));
