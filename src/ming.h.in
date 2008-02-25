@@ -994,6 +994,7 @@ SWFPrebuiltClip newSWFPrebuiltClip_fromInput(SWFInput input);
 /***** SWFBinaryData *****/
 
 SWFBinaryData newSWFBinaryData(unsigned char *blob, int length);
+void destroySWFBinaryData(SWFBinaryData data);
 
 /***** SWFMovie *****/
 
