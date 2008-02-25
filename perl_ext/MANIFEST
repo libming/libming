@@ -60,6 +60,7 @@ Text.xs
 TextField.xs
 VideoStream.xs
 FontCharacter.xs
+BinaryData.xs
 perl_swf.h
 swf_util.c
 typemap

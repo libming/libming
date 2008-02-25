@@ -53,7 +53,8 @@ my @SWF_MODULES_NAMES = (
 	'VideoStream',
 	'PrebuiltClip',
 	'FontCharacter',
-	'ButtonRecord'
+	'ButtonRecord',
+	'BinaryData'
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
