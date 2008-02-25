@@ -557,6 +557,11 @@ SWFFontCharacter_addWideChars(SWFFontCharacter font, unsigned short *string, int
 		SWFFontCharacter_addCharToTable(font, *string++);
 }
 
+/*
+ * add all utf-8 characters in the given string to the SWF file.
+ * The font-block in the resulting SWF file will include all the 
+ * utf-8 characters in the given string.
+ */
 void
 SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string)
 {
@@ -567,6 +572,11 @@ SWFFontCharacter_addUTF8Chars(SWFFontCharacter font, const char *string)
 	free(widestring);
 }
 
+/*
+ * add all characters in the given string to the SWF file.
+ * The font-block in the resulting SWF file will include all the 
+ * characters in the given string.
+ */
 void
 SWFFontCharacter_addChars(SWFFontCharacter font, const char *string)
 {
@@ -681,6 +691,10 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 	}
 }
 
+/*
+ * adds all characters/glyphs to the SWF 
+ * This function is usefull if an full export of the font is intended.
+ */
 void
 SWFFontCharacter_addAllChars(SWFFontCharacter fc)
 {
