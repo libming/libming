@@ -30,6 +30,9 @@ void SWFFontCharacter_addUTF8Chars(font, string)
 	SWF::FontCharacter font
 	const char *string
 
+void SWFFontCharacter_addAllChars(font)
+	SWF::FontCharacter font
+
 void
 SWFFontCharacter_DESTROY(fc)
 	SWF::FontCharacter	fc

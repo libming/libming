@@ -1741,9 +1741,22 @@ PHP_METHOD(swffontchar, addUTF8Chars)
 }
 /* }}} */
 
+/* {{{ proto void swffontchar::addAllChars()
+ *    adds all characters to a font for exporting font */
+
+PHP_METHOD(swffontchar, addAllChars)
+{
+	if(ZEND_NUM_ARGS() != 0 )
+		WRONG_PARAM_COUNT;
+
+	SWFFontCharacter_addAllChars(getFontCharacter(getThis() TSRMLS_CC));
+}
+/* }}} */
+
 static zend_function_entry swffontchar_functions[] = {
 	PHP_ME(swffontchar, addChars,   NULL, 0)
 	PHP_ME(swffontchar, addUTF8Chars,  NULL, 0)
+	PHP_ME(swffontchar, addAllChars, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 
