@@ -65,6 +65,7 @@ extern "C"
   #define SWFPrebuiltClip c_SWFPrebuiltClip
   #define SWFSoundInstance c_SWFSoundInstance
   #define SWFBinaryData	  c_SWFBinaryData
+  #define SWFMatrix	  c_SWFMatrix
 
   #include <ming.h>
 
@@ -106,6 +107,7 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
   #undef SWFButtonRecord
   #undef SWFSoundInstance
   #undef SWFBinaryData
+  #undef SWFMatrix
 } // extern C
 
 #define SWF_DECLAREONLY(classname) \
@@ -133,6 +135,40 @@ private:
 	std::string message;
 };
 
+/* SWFMatrix */
+class SWFMatrix
+{
+ friend class SWFDisplayItem;
+ public:
+  c_SWFMatrix matrix;
+
+  float getScaleX()
+  { return SWFMatrix_getScaleX(this->matrix); }
+
+  float getScaleY()
+  { return SWFMatrix_getScaleY(this->matrix); }
+
+  float getRotate0()
+  { return SWFMatrix_getRotate0(this->matrix); }
+ 
+  float getRotate1()
+  { return SWFMatrix_getRotate1(this->matrix); }
+
+  int getTranslateX()
+  { return SWFMatrix_getTranslateX(this->matrix); }
+
+  int getTranslateY()
+  { return SWFMatrix_getTranslateY(this->matrix); }
+
+ private:
+  SWFMatrix(c_SWFMatrix matrix)
+  {
+    if(matrix == NULL)
+      throw SWFException("SWFMatrix(c_SWFMatrix matrix)");
+    this->matrix = matrix;
+  }
+ SWF_DECLAREONLY(SWFMatrix);
+};
 
 /*  SWFInput  */
 
