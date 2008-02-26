@@ -27,6 +27,7 @@ SWF::PrebuiltClip				T_PTROBJ
 SWF::FontCharacter				T_PTROBJ
 SWF::ButtonRecord				T_PTROBJ
 SWF::BinaryData					T_PTROBJ
+SWF::InitAction					T_PTROBJ
 
 INPUT
 T_PTRINT

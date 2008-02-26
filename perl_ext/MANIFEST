@@ -19,6 +19,8 @@ SWF/Text.pm
 SWF/TextField.pm
 SWF/VideoStream.pm
 SWF/FontCharacter.pm
+SWF/BinaryData.pm
+SWF/InitAction.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t

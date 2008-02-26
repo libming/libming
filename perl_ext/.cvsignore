@@ -29,3 +29,5 @@ TextField.c
 VideoStream.c
 FontCharacter.c
 ButtonRecord.c
+BinaryData.c
+InitAction.c
