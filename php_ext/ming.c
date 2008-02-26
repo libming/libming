@@ -369,6 +369,16 @@ PHP_METHOD(swfaction, __construct)
 /* no destructor for SWFAction, it's not a character */
 /* }}} */
 
+PHP_METHOD(swfaction, compile)
+{
+	SWFAction action;
+	zval **version;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &version) == FAILURE) 
+		WRONG_PARAM_COUNT;
+	
+}
+
 /* {{{ internal function getAction
    Returns the SWFAction object contained in zval *id */
 static SWFAction getAction(zval *id TSRMLS_DC)
@@ -383,7 +393,8 @@ static SWFAction getAction(zval *id TSRMLS_DC)
 /* }}} */
 
 static zend_function_entry swfaction_functions[] = {
-	PHP_ME(swfaction, __construct,         NULL, 0)
+	PHP_ME(swfaction, __construct,          NULL, 0)
+	PHP_ME(swfaction, compile,	 	NULL, 0)
 	{ NULL, NULL, NULL }
 };
 /* }}} */
@@ -2349,12 +2360,24 @@ PHP_METHOD(swfvideostream, getnumframes)
 	RETURN_LONG(SWFVideoStream_getNumFrames(getVideoStream(getThis() TSRMLS_CC)));
 }
 /* }}} */
+
+/* {{{ hasAudio */
+PHP_METHOD(swfvideostream, hasaudio) 
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	RETURN_LONG(SWFVideoStream_hasAudio(getVideoStream(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
 		
 		
 static zend_function_entry swfvideostream_functions[] = {
 	PHP_ME(swfvideostream, 	__construct,	NULL, 0)
 	PHP_ME(swfvideostream, setdimension, NULL, 0)
 	PHP_ME(swfvideostream, getnumframes, NULL, 0)
+	PHP_ME(swfvideostream, hasaudio, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 

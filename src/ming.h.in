@@ -617,6 +617,7 @@ void destroySWFAction(SWFAction action);
 byte *SWFAction_getByteCode(SWFAction action, int *length);
 
 SWFInitAction newSWFInitAction(SWFAction action);
+void destroySWFInitAction(SWFInitAction init);
 /* use with care */
 SWFInitAction newSWFInitAction_withId(SWFAction action, int id);
 

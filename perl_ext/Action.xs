@@ -34,3 +34,12 @@ SWFAction_DESTROY(action)
 	SWF::Action	action
 	CODE:
         S_DEBUG(2, fprintf(stderr, "Action DESTROY CALLED\n"));
+
+int 
+SWFAction_compile(action, version)
+	SWF::Action	action
+	int version
+	PREINIT:
+	int len;
+	CODE:
+	RETVAL = SWFAction_compile(action, version, &len);

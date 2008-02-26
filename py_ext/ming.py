@@ -783,6 +783,8 @@ class SWFAction(SWFBase):
     def __init__(self, script):
         self.this = mingc.newSWFAction(script)
 
+    def compile(swfVersion):
+        return mingc.SWFAction_compilel(self.this, swfVersion, NULL)
 
 class SWFInitAction(SWFBase):
 
