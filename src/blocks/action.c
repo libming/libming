@@ -106,7 +106,8 @@ int SWFAction_compile(SWFAction action, int swfVersion,
 
 	if(action->out != NULL)
 	{
-		*length = SWFOutput_getLength(action->out);
+		if(length != NULL)
+			*length = SWFOutput_getLength(action->out);
 		return 0;
 	}
 
@@ -149,7 +150,8 @@ int SWFAction_compile(SWFAction action, int swfVersion,
 		SWF_warn("Parser error: writing empty block\n");
 
         SWFOutput_writeUInt8(action->out, SWFACTION_END);
-	*length = SWFOutput_getLength(action->out);
+	if(length != NULL)
+		*length = SWFOutput_getLength(action->out);
 
 	if(parserError)
 		return -1;
