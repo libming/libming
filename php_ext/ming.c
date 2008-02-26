@@ -1574,7 +1574,6 @@ PHP_METHOD(swfdisplayitem, cacheAsBitmap)
 
 /* {{{ proto void swfdisplayitem::setBlendMode(int mode)
    adds blending to item */
-
 PHP_METHOD(swfdisplayitem, setBlendMode)
 {
 	zval **mode;
@@ -1585,6 +1584,30 @@ PHP_METHOD(swfdisplayitem, setBlendMode)
 	convert_to_long_ex(mode);
 
 	SWFDisplayItem_cacheAsBitmap(getDisplayItem(getThis() TSRMLS_CC), Z_LVAL_PP(mode));
+}
+/* }}} */
+
+/* {{{ proto int swfdisplayitem::setDepth()
+   gets the items depth */
+PHP_METHOD(swfdisplayitem, getDepth)
+{
+	int ret;
+
+	if(ZEND_NUM_ARGS() != 0) 
+		WRONG_PARAM_COUNT;
+
+	ret = SWFDisplayItem_getDepth(getDisplayItem(getThis() TSRMLS_CC));
+	RETURN_LONG(ret);
+}
+/* }}} */
+
+/* {{{ proto int swfdisplayitem::flush() */
+PHP_METHOD(swfdisplayitem, flush)
+{
+	if(ZEND_NUM_ARGS() != 0) 
+		WRONG_PARAM_COUNT;
+
+	SWFDisplayItem_flush(getDisplayItem(getThis() TSRMLS_CC));
 }
 /* }}} */
 
@@ -1620,7 +1643,9 @@ static zend_function_entry swfdisplayitem_functions[] = {
 	PHP_ME(swfdisplayitem, getYSkew,    NULL, 0)
 	PHP_ME(swfdisplayitem, getRot,      NULL, 0)
 	PHP_ME(swfdisplayitem, cacheAsBitmap, NULL, 0)
-    PHP_ME(swfdisplayitem, setBlendMode, NULL, 0)
+	PHP_ME(swfdisplayitem, setBlendMode, NULL, 0)
+	PHP_ME(swfdisplayitem, getDepth,    NULL, 0)
+	PHP_ME(swfdisplayitem, flush,    NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
