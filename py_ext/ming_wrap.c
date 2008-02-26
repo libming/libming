@@ -3293,6 +3293,126 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFMatrix_getScaleX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMatrix arg1 = (SWFMatrix) 0 ;
+  float result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMatrix_getScaleX",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMatrix_getScaleX" "', argument " "1"" of type '" "SWFMatrix""'"); 
+  }
+  result = (float)SWFMatrix_getScaleX(arg1);
+  resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMatrix_getRotate0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMatrix arg1 = (SWFMatrix) 0 ;
+  float result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMatrix_getRotate0",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMatrix_getRotate0" "', argument " "1"" of type '" "SWFMatrix""'"); 
+  }
+  result = (float)SWFMatrix_getRotate0(arg1);
+  resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMatrix_getRotate1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMatrix arg1 = (SWFMatrix) 0 ;
+  float result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMatrix_getRotate1",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMatrix_getRotate1" "', argument " "1"" of type '" "SWFMatrix""'"); 
+  }
+  result = (float)SWFMatrix_getRotate1(arg1);
+  resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMatrix_getScaleY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMatrix arg1 = (SWFMatrix) 0 ;
+  float result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMatrix_getScaleY",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMatrix_getScaleY" "', argument " "1"" of type '" "SWFMatrix""'"); 
+  }
+  result = (float)SWFMatrix_getScaleY(arg1);
+  resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMatrix_getTranslateX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMatrix arg1 = (SWFMatrix) 0 ;
+  int result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMatrix_getTranslateX",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMatrix_getTranslateX" "', argument " "1"" of type '" "SWFMatrix""'"); 
+  }
+  result = (int)SWFMatrix_getTranslateX(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMatrix_getTranslateY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMatrix arg1 = (SWFMatrix) 0 ;
+  int result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMatrix_getTranslateY",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMatrix_getTranslateY" "', argument " "1"" of type '" "SWFMatrix""'"); 
+  }
+  result = (int)SWFMatrix_getTranslateY(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_newSWFInput_file(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   FILE *arg1 = (FILE *) 0 ;
@@ -12646,6 +12766,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Ming_useSWFVersion", _wrap_Ming_useSWFVersion, METH_VARARGS, NULL},
 	 { (char *)"Ming_setSWFCompression", _wrap_Ming_setSWFCompression, METH_VARARGS, NULL},
 	 { (char *)"fileOutputMethod", _wrap_fileOutputMethod, METH_VARARGS, NULL},
+	 { (char *)"SWFMatrix_getScaleX", _wrap_SWFMatrix_getScaleX, METH_VARARGS, NULL},
+	 { (char *)"SWFMatrix_getRotate0", _wrap_SWFMatrix_getRotate0, METH_VARARGS, NULL},
+	 { (char *)"SWFMatrix_getRotate1", _wrap_SWFMatrix_getRotate1, METH_VARARGS, NULL},
+	 { (char *)"SWFMatrix_getScaleY", _wrap_SWFMatrix_getScaleY, METH_VARARGS, NULL},
+	 { (char *)"SWFMatrix_getTranslateX", _wrap_SWFMatrix_getTranslateX, METH_VARARGS, NULL},
+	 { (char *)"SWFMatrix_getTranslateY", _wrap_SWFMatrix_getTranslateY, METH_VARARGS, NULL},
 	 { (char *)"newSWFInput_file", _wrap_newSWFInput_file, METH_VARARGS, NULL},
 	 { (char *)"newSWFInput_stream", _wrap_newSWFInput_stream, METH_VARARGS, NULL},
 	 { (char *)"newSWFInput_buffer", _wrap_newSWFInput_buffer, METH_VARARGS, NULL},

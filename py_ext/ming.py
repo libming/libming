@@ -49,6 +49,25 @@ class SWFRect(SWFBase):
     def getHeight(self):
         return mingc.SWFRect_getHeight(self.this)
 
+class SWFMatrix(SWFBase):
+    
+    def getScaleX(self):
+        return mingc.SWFMatrix_getScaleX(self.this)
+
+    def getScaleY(self):
+        return mingc.SWFMatrix_getScaleY(self.this)
+
+    def getRotate0(self):
+        return mingc.SWFMatrix_getRotate0(self.this)
+
+    def getRotate1(self):
+        return mingc.SWFMatrix_getRotate1(self.this)
+
+    def getTranslateX(self):
+        return mingc.SWFMatrix_getTranslateX(self.this)
+
+    def getTranslateY(self):
+        return mingc.SWFMatrix_getTranslateY(self.this)
 
 SWF_SHAPE3			= mingc.SWF_SHAPE3
 SWF_SHAPE4			= mingc.SWF_SHAPE4
@@ -355,6 +374,12 @@ class SWFDisplayItem(SWFBase):
 
     def flush(self):
         mingc.SWFDisplayItem_flush(self.this)
+
+    def endMask(self):
+        mingc.SWFDisplayItem_endMask(self.this)
+
+    def getMatrix(self):
+        return SWFMatrix(mingc.SWFDisplayItem_getMatrix(self.this)) 
 
 SWFACTION_ONLOAD      = mingc.SWFACTION_ONLOAD      
 SWFACTION_ENTERFRAME  = mingc.SWFACTION_ENTERFRAME  
