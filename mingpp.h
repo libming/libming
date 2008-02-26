@@ -294,6 +294,12 @@ class SWFAction : public SWFBlock
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->action; }
 
+  int compile(int swfVersion, int *length)
+    { return SWFAction_compile(this->action, swfVersion, length); }
+
+  unsigned char *getByteCode(int *len)
+    { return SWFAction_getByteCode(this->action, len); }
+  
   SWF_DECLAREONLY(SWFAction);
   SWFAction();
 };
