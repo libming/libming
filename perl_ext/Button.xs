@@ -55,19 +55,19 @@ SWFButton_addShape(button, character, flags=0)
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
         switch((ix = XSANY.any_i32)) {
             case 0:
-               SWFButton_addShape(button, character, flags);
+               SWFButton_addCharacter(button, character, flags);
                break;
             case 1:
-               SWFButton_addShape(button, character, SWFBUTTON_OVER);
+               SWFButton_addCharacter(button, character, SWFBUTTON_OVER);
                break;
             case 2:
-               SWFButton_addShape(button, character, SWFBUTTON_HIT);
+               SWFButton_addCharacter(button, character, SWFBUTTON_HIT);
                break;
             case 3:
-               SWFButton_addShape(button, character, SWFBUTTON_UP);
+               SWFButton_addCharacter(button, character, SWFBUTTON_UP);
                break;
             case 4:
-               SWFButton_addShape(button, character, SWFBUTTON_DOWN);
+               SWFButton_addCharacter(button, character, SWFBUTTON_DOWN);
                break;
        }
 
