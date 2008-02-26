@@ -94,10 +94,12 @@ void SWFOutput_writeAction(SWFOutput out, SWFAction action)
 } 
 
 /*
- * Starts AS compiler
+ * Compiles the current script stored in this SWFAction instance.
  * returns 0 on success, -1 otherwise.
+ * the length of the compiled bytecode is storen in the length pointer (if not NULL).
  */
-int SWFAction_compile(SWFAction action, int swfVersion, 
+int SWFAction_compile(SWFAction action, 
+                      int swfVersion /* target SWF version */, 
                       int *length /* output length */)
 {
 	char *script = NULL;
@@ -159,6 +161,13 @@ int SWFAction_compile(SWFAction action, int swfVersion,
 	return 0;
 }
 
+/* 
+ * Returns the compiled bytecode.
+ * If not already compiled the script will compiled for SWF V7.
+ *
+ * Returns NULL in case of an error. Length pointer stores the length of 
+ * the compiled bytecode.
+ */
 byte *SWFAction_getByteCode(SWFAction action, int *length)
 {
 	int ret = 0;
@@ -215,6 +224,9 @@ writeSWFInitActionToMethod(SWFBlock block, SWFByteOutputMethod method, void* dat
 	SWFOutput_writeToMethod(init->action->out, method, data);
 }
 
+/*
+ * Destroys a SWFAction instance
+ */
 void destroySWFAction(SWFAction action)
 {
 	if(!action)
@@ -264,6 +276,12 @@ static SWFAction createEmptyAction()
 	return action;
 }
 
+/*
+ * Creates a new SWFAction object.
+ * Takes a String containing AS[2] source code.
+ *
+ * returns a SWFAction instance.
+ */
 SWFAction newSWFAction(const char *script)
 {
 	SWFAction action = createEmptyAction();
@@ -273,7 +291,12 @@ SWFAction newSWFAction(const char *script)
 	return action;
 }
 
-
+/*
+ * Creates a new SWFAction object.
+ * Takes a filename pointing to a file containing AS[2] source code.
+ *
+ * return a SWFAction instance.
+ */
 SWFAction newSWFAction_fromFile(const char *filename)
 {
 	SWFAction action = createEmptyAction();
