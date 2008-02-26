@@ -202,6 +202,28 @@ int
 SWFDisplayItem_getDepth(item)
 	SWF::DisplayItem item
 
+void 
+SWFDisplayItem_flush(item)
+	SWF::DisplayItem item
+
+void 
+SWFDisplayItem_setMatrix(item, a, b, c, d, x, y)
+	SWF::DisplayItem item
+	int a
+	int b
+	int c
+	int d
+	float x
+	float y
+
+SWF::Character
+SWFDisplayItem_getCharacter(item)
+	SWF::DisplayItem item 
+	CODE:
+	RETVAL = SWFDisplayItem_getCharacter(item);
+	ST(0) = sv_newmortal();
+	sv_setref_pv(ST(0), "SWF::Character", (void*)RETVAL);
+
 void
 SWFDisplayItem_DESTROY(item)
 	SWF::DisplayItem	item
