@@ -87,7 +87,7 @@ void swf4ParseInit(const char *script, int debug, int version)
 }
 
 %}
-
+%option never-interactive
 %s asm
 
 %{

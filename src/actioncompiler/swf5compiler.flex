@@ -105,6 +105,7 @@ enum yytokentype read_int (const char *text, YYSTYPE *num)
 }
 
 %}
+%option never-interactive
 %option stack
 
 %x STATE_ASM
