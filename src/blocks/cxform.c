@@ -39,7 +39,9 @@ struct SWFCXform_s
 	int aAdd;
 };
 
-
+/* 
+ * creates a new color transform with the given parameters 
+ */
 SWFCXform
 newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
 						 float rMult, float gMult, float bMult, float aMult)
@@ -59,21 +61,29 @@ newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
 	return cXform;
 }
 
-
+/* 
+ * creates a new color transform with the given additive parameters and
+   default multiplicative 
+ */
 SWFCXform
 newSWFAddCXform(int rAdd, int gAdd, int bAdd, int aAdd)
 {
 	return newSWFCXform(rAdd, gAdd, bAdd, aAdd, 1.0, 1.0, 1.0, 1.0);
 }
 
-
+/* 
+ * creates a new color transform with the given multiplicative parameters
+   and default additive 
+ */
 SWFCXform
 newSWFMultCXform(float rMult, float gMult, float bMult, float aMult)
 {
 	return newSWFCXform(0, 0, 0, 0, rMult, gMult, bMult, aMult);
 }
 
-
+/* 
+ * set the additive part of the color transform to the given parameters 
+ */
 void
 SWFCXform_setColorAdd(SWFCXform cXform, int rAdd, int gAdd, int bAdd, int aAdd)
 {
@@ -83,7 +93,10 @@ SWFCXform_setColorAdd(SWFCXform cXform, int rAdd, int gAdd, int bAdd, int aAdd)
 	cXform->aAdd = aAdd;
 }
 
-
+/* 
+ * set the multiplicative part of the color transform to the given
+   parameters 
+ */
 void
 SWFCXform_setColorMult(SWFCXform cXform,
 											 float rMult, float gMult, float bMult, float aMult)
@@ -94,7 +107,9 @@ SWFCXform_setColorMult(SWFCXform cXform,
 	cXform->aMult = (int)floor(256*aMult);
 }
 
-
+/*
+ * destroys a SWFCXform instance
+ */
 void
 destroySWFCXform(SWFCXform cXform)
 {
