@@ -66,6 +66,7 @@ extern "C"
   #define SWFSoundInstance c_SWFSoundInstance
   #define SWFBinaryData	  c_SWFBinaryData
   #define SWFMatrix	  c_SWFMatrix
+  #define SWFCXform	  c_SWFCXform
 
   #include <ming.h>
 
@@ -108,6 +109,7 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
   #undef SWFSoundInstance
   #undef SWFBinaryData
   #undef SWFMatrix
+  #undef SWFCXform
 } // extern C
 
 #define SWF_DECLAREONLY(classname) \
@@ -168,6 +170,47 @@ class SWFMatrix
     this->matrix = matrix;
   }
  SWF_DECLAREONLY(SWFMatrix);
+};
+
+class SWFCXform
+{
+ public:
+  c_SWFCXform cx;
+
+  SWFCXform(int rAdd, int gAdd, int bAdd, int aAdd, float rMult, float gMult, float bMult, float aMult)
+  {
+    this->cx =  newSWFCXform(rAdd, gAdd, bAdd, aAdd, rMult, gMult, bMult, aMult);
+    if(this->cx == NULL)
+      throw SWFException("SWFCXform(int rAdd, int gAdd,...)");
+  }
+
+  void setColorAdd(int rAdd, int gAdd, int bAdd, int aAdd)
+  { SWFCXform_setColorAdd(this->cx, rAdd, gAdd, bAdd, aAdd); }
+
+  void setColorMult(float rMult, float gMult, float bMult, float aMult)
+  { SWFCXform_setColorMult(this->cx, rMult, gMult, bMult, aMult); }
+
+  ~ SWFCXform()
+  { destroySWFCXform(cx); }
+
+  static SWFCXform *AddCXForm(int rAdd, int gAdd, int bAdd, int aAdd)
+  { return new SWFCXform(newSWFAddCXform(rAdd, gAdd, bAdd, aAdd));  }
+
+  static SWFCXform *MultCXForm(float rMult, float gMult, float bMult, float aMult)
+ { return new SWFCXform(newSWFMultCXform(rMult, gMult, bMult, aMult)); }
+
+  
+
+ private:
+  SWFCXform(c_SWFCXform cx)
+  {
+    if(cx == NULL)
+      throw SWFException("SWFCXform(c_SWFCXform cx)");
+
+    this->cx = cx;
+  }
+  SWF_DECLAREONLY(SWFCXform);
+
 };
 
 /*  SWFInput  */
@@ -604,12 +647,23 @@ class SWFDisplayItem
   void setMatrix(float a, float b, float c, float d, float x, float y)
     { SWFDisplayItem_setMatrix(this->item, a, b, c, d, x, y); }
 
+  SWFMatrix getMatrix()
+    { return SWFMatrix(SWFDisplayItem_getMatrix(this->item)); }
+
   void setMaskLevel(int level)
     { SWFDisplayItem_setMaskLevel(this->item, level); }
+
+  void endMask()
+    { SWFDisplayItem_endMask(this->item); }
   
   void flush()
     { SWFDisplayItem_flush(this->item); }
-  
+ 
+  SWFCharacter *getCharacter()
+    { return new SWFCharacter(SWFDisplayItem_getCharacter(this->item)); }
+
+  void setCXform(SWFCXform *cx)
+    { SWFDisplayItem_setCXform(this->item, cx->cx); } 
   
  private:
   SWFDisplayItem(c_SWFDisplayItem item)
