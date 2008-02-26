@@ -784,7 +784,7 @@ class SWFAction(SWFBase):
         self.this = mingc.newSWFAction(script)
 
     def compile(swfVersion):
-        return mingc.SWFAction_compilel(self.this, swfVersion, NULL)
+        return mingc.SWFAction_compile(self.this, swfVersion, NULL)
 
 class SWFInitAction(SWFBase):
 
@@ -872,7 +872,8 @@ class SWFVideoStream(SWFBase):
     def hasAudio(self):
         return mingc.SWFVideoStream_hasAudio(self.this)
     def __del__(self):
-        mingc.destroySWFVideoStream(this.self)
+        mingc.destroySWFVideoStream(self.this)
+
 def SWFBUTTON_KEYPRESS(c):
     return mingc.swfButton_keypress(c)
 
