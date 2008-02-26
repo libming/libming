@@ -402,7 +402,7 @@ PHP_METHOD(swfaction, __construct)
 	}
 	
 	convert_to_string_ex(script);
-	action = compileSWFActionCode(Z_STRVAL_PP(script));
+	action = newSWFAction(Z_STRVAL_PP(script));
 
 	if (!action) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Couldn't compile actionscript");
@@ -813,7 +813,7 @@ PHP_METHOD(swfbutton, setHit)
 
 	convert_to_object_ex(zchar);
 	character = getCharacter(*zchar TSRMLS_CC);
-	SWFButton_addShape(button, character, SWFBUTTONRECORD_HITSTATE);
+	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_HITSTATE);
 }
 /* }}} */
 
@@ -831,7 +831,7 @@ PHP_METHOD(swfbutton, setOver)
 	
 	convert_to_object_ex(zchar);
 	character = getCharacter(*zchar TSRMLS_CC);
-	SWFButton_addShape(button, character, SWFBUTTONRECORD_OVERSTATE);
+	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_OVERSTATE);
 }
 /* }}} */
 
@@ -849,7 +849,7 @@ PHP_METHOD(swfbutton, setUp)
 	
 	convert_to_object_ex(zchar);
 	character = getCharacter(*zchar TSRMLS_CC);
-	SWFButton_addShape(button, character, SWFBUTTONRECORD_UPSTATE);
+	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_UPSTATE);
 }
 /* }}} */
 
@@ -867,7 +867,7 @@ PHP_METHOD(swfbutton, setDown)
 	
 	convert_to_object_ex(zchar);
 	character = getCharacter(*zchar TSRMLS_CC);
-	SWFButton_addShape(button, character, SWFBUTTONRECORD_DOWNSTATE);
+	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_DOWNSTATE);
 }
 /* }}} */
 
@@ -886,7 +886,7 @@ PHP_METHOD(swfbutton, addShape)
 	convert_to_object_ex(zchar);
 	character = getCharacter(*zchar TSRMLS_CC);
 	convert_to_long_ex(flags);
-	SWFButton_addShape(button, character, BYTE_Z_LVAL_PP(flags));
+	SWFButton_addCharacter(button, character, BYTE_Z_LVAL_PP(flags));
 }
 /* }}} */
 
