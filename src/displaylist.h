@@ -60,15 +60,7 @@ struct SWFDisplayItem_s
 
 /* display item */
 
-SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item);
-
-void SWFDisplayItem_endMask(SWFDisplayItem item);
-
-SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
-
 void SWFDisplayItem_removeFromList(SWFDisplayItem, SWFBlockList); 
-
-/* display list */
 
 void destroySWFDisplayList(SWFDisplayList displayList);
 
