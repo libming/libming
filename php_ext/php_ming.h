@@ -280,6 +280,11 @@ PHP_METHOD(swfbuttonrecord, skewYTo);
 /* SWFAction */
 
 PHP_METHOD(swfaction, init);
+PHP_METHOD(swfaction, compile);
+
+/* SWFInitAction */
+
+PHP_METHOD(swfinitaction, init);
 
 /* SWFMorph */
 

@@ -68,6 +68,7 @@ static SWFTextField getTextField(zval *id TSRMLS_DC);
 static SWFDisplayItem getDisplayItem(zval *id TSRMLS_DC);
 static SWFButton getButton(zval *id TSRMLS_DC);
 static SWFAction getAction(zval *id TSRMLS_DC);
+static SWFInitAction getInitAction(zval *id TSRMLS_DC);
 static SWFMorph getMorph(zval *id TSRMLS_DC);
 static SWFMovieClip getSprite(zval *id TSRMLS_DC);
 static SWFSound getSound(zval *id TSRMLS_DC);
@@ -182,6 +183,7 @@ static int le_swfsoundinstancep;
 static int le_swfvideostreamp;
 static int le_swfbuttonrecordp;
 static int le_swfbinarydatap;
+static int le_swfinitactionp;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static int le_swfprebuiltclipp;
@@ -210,6 +212,7 @@ static zend_class_entry *soundinstance_class_entry_ptr;
 static zend_class_entry *videostream_class_entry_ptr;
 static zend_class_entry *buttonrecord_class_entry_ptr;
 static zend_class_entry *binarydata_class_entry_ptr;
+static zend_class_entry *initaction_class_entry_ptr;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 static zend_class_entry *prebuiltclip_class_entry_ptr;
@@ -338,6 +341,51 @@ static SWFInput getInput(zval **zfile TSRMLS_DC)
 	return input;
 }
 /* }}} */
+
+/* {{{ SWFInitAction
+*/
+/* {{{ proto void swfinitaction::__construct(action)
+   Creates a new SWFInitAction object */
+PHP_METHOD(swfinitaction, __construct)
+{
+	SWFInitAction init;
+	zval **zaction;
+	int ret;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zaction) == FAILURE)
+		WRONG_PARAM_COUNT;
+	
+	convert_to_object_ex(zaction);
+	init = newSWFInitAction(getAction(*zaction TSRMLS_CC));
+
+	ret = zend_list_insert(init, le_swfinitactionp);
+	object_init_ex(getThis(), initaction_class_entry_ptr);
+	add_property_resource(getThis(), "initaction", ret);
+	zend_list_addref(ret);
+}
+/* no destructor for SWFInitAction, it's not a character */
+/* }}} */
+
+/* {{{ internal function getInitAction
+   Returns the SWFInitAction object contained in zval *id */
+static SWFInitAction getInitAction(zval *id TSRMLS_DC)
+{
+	void *action = SWFgetProperty(id, "initaction", 
+		strlen("initaction"), le_swfinitactionp TSRMLS_CC);
+
+	if (!action) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFInitAction");
+	}
+	return (SWFInitAction)action;
+}
+/* }}} */
+
+static zend_function_entry swfinitaction_functions[] = {
+	PHP_ME(swfinitaction, __construct,          NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
 
 /* {{{ SWFAction
 */
@@ -4863,6 +4911,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry videostream_class_entry;
 	zend_class_entry buttonrecord_class_entry;
 	zend_class_entry binarydata_class_entry;
+	zend_class_entry initaction_class_entry;
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	zend_class_entry prebuiltclip_class_entry;
@@ -4997,6 +5046,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfsoundinstancep = zend_register_list_destructors_ex(NULL, NULL, "SWFSoundInstance", module_number);
 	le_swfvideostreamp = zend_register_list_destructors_ex(destroy_SWFVideoStream_resource, NULL, "SWFVideoStream", module_number);
 	le_swfbinarydatap = zend_register_list_destructors_ex(destroy_SWFBinaryData_resource, NULL, "SWFBinaryData", module_number);
+	le_swfinitactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFInitAction", module_number);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	le_swfprebuiltclipp = zend_register_list_destructors_ex(destroy_SWFPrebuiltClip_resource, NULL, "SWFPrebuiltClip", module_number);
@@ -5023,6 +5073,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(soundinstance_class_entry, "SWFSoundInstance", swfsoundinstance_functions);
 	INIT_CLASS_ENTRY(videostream_class_entry, "SWFVideoStream", swfvideostream_functions);
 	INIT_CLASS_ENTRY(binarydata_class_entry, "SWFBinaryData", swfbinarydata_functions);
+	INIT_CLASS_ENTRY(action_class_entry, "SWFInitAction", swfinitaction_functions);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
@@ -5051,6 +5102,7 @@ PHP_MINIT_FUNCTION(ming)
 	soundinstance_class_entry_ptr = zend_register_internal_class(&soundinstance_class_entry TSRMLS_CC);
 	videostream_class_entry_ptr = zend_register_internal_class(&videostream_class_entry TSRMLS_CC);
 	binarydata_class_entry_ptr = zend_register_internal_class(&binarydata_class_entry TSRMLS_CC);
+	initaction_class_entry_ptr = zend_register_internal_class(&initaction_class_entry TSRMLS_CC);
 #endif
 #ifdef HAVE_SWFPREBUILTCLIP
 	prebuiltclip_class_entry_ptr = zend_register_internal_class(&prebuiltclip_class_entry TSRMLS_CC);
