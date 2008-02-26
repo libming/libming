@@ -59,7 +59,7 @@ newSWFDBLBitmap(package="SWF::Bitmap", filename)
              fprintf(stderr, "Unable to open %s\n", filename);
              ST(0) = &sv_undef;
          }else{
-                RETVAL = newSWFDBLBitmap(dbl);
+                RETVAL = (SWFBitmap)newSWFDBLBitmap(dbl);
                 ST(0) = sv_newmortal();
                 sv_setref_pv(ST(0), package, (void*)RETVAL);
          }
@@ -83,7 +83,7 @@ newSWFJpegWithAlpha(package="SWF::Bitmap", filename, mask)
                 ST(0) = &sv_undef;
             }
             else{
-                RETVAL = newSWFJpegWithAlpha(f, alpha);
+                RETVAL = (SWFBitmap)newSWFJpegWithAlpha(f, alpha);
                 ST(0) = sv_newmortal();
                 sv_setref_pv(ST(0), package, (void*)RETVAL);
            }
@@ -100,7 +100,7 @@ newSWFJpegBitmap(package="SWF::Bitmap", filename)
 		fprintf(stderr, "Unable to open %s\n", filename);
 		ST(0) = &sv_undef;
 	}else{
-        	RETVAL = newSWFJpegBitmap(f);
+        	RETVAL = (SWFBitmap)newSWFJpegBitmap(f);
 	        ST(0) = sv_newmortal();
         	sv_setref_pv(ST(0), package, (void*)RETVAL);
 	}
