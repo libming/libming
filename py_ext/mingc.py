@@ -48,6 +48,16 @@ except AttributeError:
 del types
 
 
+new_intp = _mingc.new_intp
+copy_intp = _mingc.copy_intp
+delete_intp = _mingc.delete_intp
+intp_assign = _mingc.intp_assign
+intp_value = _mingc.intp_value
+new_floatp = _mingc.new_floatp
+copy_floatp = _mingc.copy_floatp
+delete_floatp = _mingc.delete_floatp
+floatp_assign = _mingc.floatp_assign
+floatp_value = _mingc.floatp_value
 Ming_init = _mingc.Ming_init
 Ming_cleanup = _mingc.Ming_cleanup
 Ming_collectGarbage = _mingc.Ming_collectGarbage

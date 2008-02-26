@@ -292,6 +292,70 @@ class SWFDisplayItem(SWFBase):
     def setMaskLevel(self, level):
         mingc.SWFDisplayItem_setMaskLevel(self.this, level)
 
+    def getPositionX(self):
+	x = mingc.new_floatp()
+	y = mingc.new_floatp()
+	mingc.SWFDisplayItem_getPosition(self.this, x, y)
+	ret = mingc.floatp_value(x)
+	mingc.delete_floatp(x)
+	mingc.delete_floatp(y)
+	return ret
+
+    def getPositionY(self):
+	x = mingc.new_floatp()
+	y = mingc.new_floatp()
+	mingc.SWFDisplayItem_getPosition(self.this, x, y)
+	ret = mingc.floatp_value(y)
+	mingc.delete_floatp(x)
+	mingc.delete_floatp(y)
+	return ret
+
+    def getRotation(self):
+        rot = mingc.new_floatp()
+	mingc.SWFDisplayItem_getRotation(self.this, rot)
+	ret = mingc.floatp_value(rot)
+	mingc.delete_floatp(rot)
+	return ret
+
+    def getScaleX(self):
+        sx = mingc.new_floatp()
+        sy = mingc.new_floatp()
+        mingc.SWFDisplayItem_getScale(self.this, sx, sy)
+        ret = mingc.floatp_value(sx)
+        mingc.delete_floatp(sx)
+        mingc.delete_floatp(sy)
+        return ret
+
+    def getScaleY(self):
+        sx = mingc.new_floatp()
+        sy = mingc.new_floatp()
+        mingc.SWFDisplayItem_getScale(self.this, sx, sy)
+        ret = mingc.floatp_value(sy)
+        mingc.delete_floatp(sx)
+        mingc.delete_floatp(sy)
+        return ret
+
+    def getSkewX(self):
+        sx = mingc.new_floatp()
+        sy = mingc.new_floatp()
+        mingc.SWFDisplayItem_getSkew(self.this, sx, sy)
+        ret = mingc.floatp_value(sx)
+        mingc.delete_floatp(sx)
+        mingc.delete_floatp(sy)
+        return ret
+
+    def getSkewY(self):
+        sx = mingc.new_floatp()
+        sy = mingc.new_floatp()
+        mingc.SWFDisplayItem_getSkew(self.this, sx, sy)
+        ret = mingc.floatp_value(sy)
+        mingc.delete_floatp(sx)
+        mingc.delete_floatp(sy)
+        return ret
+
+    def flush(self):
+        mingc.SWFDisplayItem_flush(self.this)
+
 SWFACTION_ONLOAD      = mingc.SWFACTION_ONLOAD      
 SWFACTION_ENTERFRAME  = mingc.SWFACTION_ENTERFRAME  
 SWFACTION_UNLOAD      = mingc.SWFACTION_UNLOAD      

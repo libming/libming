@@ -1,6 +1,7 @@
 
 %module mingc
 %include typemaps.i
+%include cpointer.i
 
 %{
   #include "ming.h"
@@ -43,6 +44,9 @@ typedef unsigned char byte;
     $1 = (int *)RARRAY($input)->ptr;
   }
 }
+
+%pointer_functions(int, intp);
+%pointer_functions(float, floatp);
 
 int Ming_init(void);
 void Ming_cleanup(void);
