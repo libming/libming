@@ -1454,14 +1454,14 @@ PHP_METHOD(swfdisplayitem, endMask)
 
 PHP_METHOD(swfdisplayitem, getX)
 {
-	float ret;
+	float x, y;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_x(item);
-	RETURN_DOUBLE(ret);
+	SWFDisplayItem_getPosition(item, &x, &y);
+	RETURN_DOUBLE(x);
 }
 /* }}} */
 
@@ -1469,14 +1469,14 @@ PHP_METHOD(swfdisplayitem, getX)
 
 PHP_METHOD(swfdisplayitem, getY)
 {
-	float ret;
+	float x, y;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_y(item);
-	RETURN_DOUBLE(ret);
+	SWFDisplayItem_getPosition(item, &x, &y);
+	RETURN_DOUBLE(y);
 }
 /* }}} */
 
@@ -1484,14 +1484,14 @@ PHP_METHOD(swfdisplayitem, getY)
 
 PHP_METHOD(swfdisplayitem, getXScale)
 {
-	float ret;
+	float sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_xScale(item);
-	RETURN_DOUBLE(ret);
+	SWFDisplayItem_getScale(item, &sx, &sy);
+	RETURN_DOUBLE(sx);
 }
 /* }}} */
 
@@ -1499,14 +1499,14 @@ PHP_METHOD(swfdisplayitem, getXScale)
 
 PHP_METHOD(swfdisplayitem, getYScale)
 {
-	float ret;
+	float sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_yScale(item);
-	RETURN_DOUBLE(ret);
+	SWFDisplayItem_getScale(item, &sx, &sy);
+	RETURN_DOUBLE(sy);
 }
 /* }}} */
 
@@ -1514,14 +1514,14 @@ PHP_METHOD(swfdisplayitem, getYScale)
 
 PHP_METHOD(swfdisplayitem, getXSkew)
 {
-	float ret;
+	float sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_xSkew(item);
-	RETURN_DOUBLE(ret);
+	SWFDisplayItem_getSkew(item, &sx, &sy);
+	RETURN_DOUBLE(sx);
 }
 /* }}} */
 
@@ -1529,14 +1529,14 @@ PHP_METHOD(swfdisplayitem, getXSkew)
 
 PHP_METHOD(swfdisplayitem, getYSkew)
 {
-	float ret;
+	float sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_ySkew(item);
-	RETURN_DOUBLE(ret);
+	SWFDisplayItem_getSkew(item, &sx, &sy);
+	RETURN_DOUBLE(sy);
 }
 /* }}} */
 
@@ -1550,7 +1550,7 @@ PHP_METHOD(swfdisplayitem, getRot)
 	if(ZEND_NUM_ARGS() != 0)
 		WRONG_PARAM_COUNT;
 
-	ret = SWFDisplayItem_get_rot(item);
+	SWFDisplayItem_getRotation(item, &ret);
 	RETURN_DOUBLE(ret);
 }
 /* }}} */

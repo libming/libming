@@ -535,49 +535,6 @@ SWFDisplayItem_addAction(SWFDisplayItem item, SWFAction action, int flags)
 	SWFPlaceObject2Block_addAction(item->block, action, flags);
 }
 
-/*
- * Methods for reading position data
- *  - added by David McNab <david@rebirthing.co.nz>
- */
-
-float SWFDisplayItem_get_x(SWFDisplayItem item)
-{
-  float x;
-  x = SWFPosition_getX(item->position);
-  return x;
-}
-
-float SWFDisplayItem_get_y(SWFDisplayItem item)
-{
-  return SWFPosition_getY(item->position);
-}
-
-float SWFDisplayItem_get_xScale(SWFDisplayItem item)
-{
-  return SWFPosition_getXScale(item->position);
-}
-
-float SWFDisplayItem_get_yScale(SWFDisplayItem item)
-{
-  return SWFPosition_getYScale(item->position);
-}
-
-float SWFDisplayItem_get_xSkew(SWFDisplayItem item)
-{
-  return SWFPosition_getXSkew(item->position);
-}
-
-float SWFDisplayItem_get_ySkew(SWFDisplayItem item)
-{
-  return SWFPosition_getYSkew(item->position);
-}
-
-float SWFDisplayItem_get_rot(SWFDisplayItem item)
-{
-  return SWFPosition_getRotation(item->position);
-}
-
-
 /* 
  * adds a surface filter
  * Adds a bitmap filter to the display object. 

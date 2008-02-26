@@ -64,19 +64,6 @@ SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item);
 
 void SWFDisplayItem_endMask(SWFDisplayItem item);
 
-/*
- * Methods for reading position data
- *  - added by David McNab <david@rebirthing.co.nz>
- */
-
-float SWFDisplayItem_get_x(SWFDisplayItem item);
-float SWFDisplayItem_get_y(SWFDisplayItem item);
-float SWFDisplayItem_get_xScale(SWFDisplayItem item);
-float SWFDisplayItem_get_yScale(SWFDisplayItem item);
-float SWFDisplayItem_get_xSkew(SWFDisplayItem item);
-float SWFDisplayItem_get_ySkew(SWFDisplayItem item);
-float SWFDisplayItem_get_rot(SWFDisplayItem item);
-
 SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
 
 void SWFDisplayItem_removeFromList(SWFDisplayItem, SWFBlockList); 
