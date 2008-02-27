@@ -15,7 +15,7 @@ require DynaLoader;
 
 $SWF::VERSION = '0.4.0-beta6';
 
-my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie MovieClip PrebuiltClip Shape Sound Text TextField FontCharacter ButtonRecord BinaryData InitAction Matrix Blur Shadow);
+my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie MovieClip PrebuiltClip Shape Sound Text TextField FontCharacter ButtonRecord BinaryData InitAction Matrix Blur Shadow FilterMatrix);
 
 bootstrap SWF $SWF::VERSION;
 

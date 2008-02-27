@@ -24,6 +24,7 @@ SWF/InitAction.pm
 SWF/Shadow.pm
 SWF/Blur.pm
 SWF/Matrix.pm
+SWF/FilterMatrix.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
@@ -70,6 +71,7 @@ InitAction.xs
 Matrix.xs
 Shadow.xs
 Blur.xs
+FilterMatrix.xs
 perl_swf.h
 swf_util.c
 typemap

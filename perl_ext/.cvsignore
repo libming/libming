@@ -34,3 +34,4 @@ InitAction.c
 Matrix.c
 Shadow.c
 Blur.c
+FilterMatrix.c
