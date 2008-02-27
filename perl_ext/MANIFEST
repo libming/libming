@@ -21,6 +21,9 @@ SWF/VideoStream.pm
 SWF/FontCharacter.pm
 SWF/BinaryData.pm
 SWF/InitAction.pm
+SWF/Shadow.pm
+SWF/Blur.pm
+SWF/Matrix.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
@@ -63,6 +66,10 @@ TextField.xs
 VideoStream.xs
 FontCharacter.xs
 BinaryData.xs
+InitAction.xs
+Matrix.xs
+Shadow.xs
+Blur.xs
 perl_swf.h
 swf_util.c
 typemap

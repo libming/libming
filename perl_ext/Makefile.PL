@@ -55,7 +55,10 @@ my @SWF_MODULES_NAMES = (
 	'FontCharacter',
 	'ButtonRecord',
 	'BinaryData',
-	'InitAction'
+	'InitAction',
+	'Matrix',
+	'Shadow',
+	'Blur'
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;

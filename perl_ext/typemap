@@ -28,6 +28,9 @@ SWF::FontCharacter				T_PTROBJ
 SWF::ButtonRecord				T_PTROBJ
 SWF::BinaryData					T_PTROBJ
 SWF::InitAction					T_PTROBJ
+SWF::Matrix					T_PTROBJ
+SWF::Shadow					T_PTROBJ
+SWF::Blur					T_PTROBJ
 
 INPUT
 T_PTRINT

@@ -216,6 +216,14 @@ SWFDisplayItem_setMatrix(item, a, b, c, d, x, y)
 	float x
 	float y
 
+SWF::Matrix
+SWFDisplayItem_getMatrix(item)
+	SWF::DisplayItem item
+	CODE:
+	RETVAL = SWFDisplayItem_getMatrix(item);
+	ST(0) = sv_newmortal();
+        sv_setref_pv(ST(0), "SWF::Matrix", (void*)RETVAL);
+
 SWF::Character
 SWFDisplayItem_getCharacter(item)
 	SWF::DisplayItem item 

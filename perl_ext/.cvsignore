@@ -31,3 +31,6 @@ FontCharacter.c
 ButtonRecord.c
 BinaryData.c
 InitAction.c
+Matrix.c
+Shadow.c
+Blur.c
