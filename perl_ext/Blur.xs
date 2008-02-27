@@ -16,7 +16,7 @@
 #include "SWF.h"
 #include "perl_swf.h"
 
-MODULE = SWF::Blur	PACKAGE = SWF::Blur		PREFIX = Blur_
+MODULE = SWF::Blur	PACKAGE = SWF::Blur		PREFIX = SWFBlur_
 PROTOTYPES: ENABLE
 
 SWF::Blur
