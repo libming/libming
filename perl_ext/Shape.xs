@@ -229,13 +229,14 @@ SWFShape_xs_setRightFill(shape, fill=NULL)
 	SWFShape_setRightFill(shape, fill);
 
 void
-SWFShape_drawGlyph(shape, font, c)
+SWFShape_drawGlyph(shape, font, c, size=0)
         SWF::Shape shape
         SWF::Font font
         int c
+	int size
 	CODE:
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
-	SWFShape_drawGlyph(shape, font, c);
+	SWFShape_drawSizedGlyph(shape, font, c, size);
 
 void
 SWFShape_drawArc(shape, r, startAngle, endAngle)
@@ -256,3 +257,21 @@ void SWFShape_setLine(shape, w, r, g, b, a=0xff)
 	unsigned char g
 	unsigned char b
 	unsigned char a
+
+void 
+SWFShape_useVersion(shape, version)
+	SWF::Shape shape
+	int version
+
+int 
+SWFShape_getVersion(shape)
+	SWF::Shape shape
+
+void
+SWFShape_setRenderHintingFlags(shape, flags)
+	SWF::Shape shape
+	int flags
+
+void 
+SWFShape_hideLine(shape)
+	SWF::Shape shape
