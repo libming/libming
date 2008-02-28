@@ -275,3 +275,14 @@ SWFShape_setRenderHintingFlags(shape, flags)
 void 
 SWFShape_hideLine(shape)
 	SWF::Shape shape
+
+void 
+SWFShape_drawCharacterBounds(shape, character)
+	SWF::Shape shape
+	SWF::Character character = NO_INIT
+	PREINIT:
+	IV tmp;
+	CODE:
+	tmp = SvIV((SV*)SvRV(ST(1)));
+	character = INT2PTR(SWF__Character, tmp);
+	SWFShape_drawCharacterBounds(shape, character);
