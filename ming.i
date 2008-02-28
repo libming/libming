@@ -539,11 +539,28 @@ SWFInitAction newSWFInitAction_withId(SWFAction action, int id);
 
 SWFButton newSWFButton(void);
 void destroySWFButton(SWFButton button);
-
 void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
+SWFButtonRecord SWFButton_addCharacter(SWFButton, SWFCharacter, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 SWFSoundInstance SWFButton_addSound(SWFButton button, SWFSound action, byte flags);
 void SWFButton_setMenu(SWFButton button, int flag);
+void SWFButton_setScalingGrid(SWFButton b, int x, int y, int w, int h);
+void SWFButton_removeScalingGrid(SWFButton b);
+
+/** SWFButton **/
+void SWFButtonRecord_setDepth(SWFButtonRecord b, int depth);
+void SWFButtonRecord_addFilter(SWFButtonRecord b, SWFFilter f);
+void SWFButtonRecord_setBlendMode(SWFButtonRecord b, int mode);
+void SWFButtonRecord_move(SWFButtonRecord record, float x, float y);
+void SWFButtonRecord_moveTo(SWFButtonRecord record, float x, float y);
+void SWFButtonRecord_rotate(SWFButtonRecord record, float deg);
+void SWFButtonRecord_rotateTo(SWFButtonRecord record, float deg);
+void SWFButtonRecord_scale(SWFButtonRecord record, float scaleX, float scaleY);
+void SWFButtonRecord_scaleTo(SWFButtonRecord record, float scaleX, float scaleY);
+void SWFButtonRecord_skewX(SWFButtonRecord record, float skewX);
+void SWFButtonRecord_skewXTo(SWFButtonRecord record, float skewX);
+void SWFButtonRecord_skewY(SWFButtonRecord record, float skewY);
+void SWFButtonRecord_skewYTo(SWFButtonRecord record, float skewY);
 
 
 /****** SWFVideo ******/

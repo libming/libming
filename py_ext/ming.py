@@ -946,6 +946,45 @@ class SWFButton(SWFBase):
     def removeScalingGrid(self):
         mingc.SWFButton_removeScalingGrid(self.this)
 
+class SWFButtonRecord(SWFBase):
+
+    def setDepth(self, depth):
+        mingc.SWFButtonRecord_setDepth(self.this, depth)
+
+    def setBlendMode(self, mode):
+        mingc.SWFButtonRecord_setBlendMode(self.this, mode)
+
+    def move(self, x, y):
+        mingc.SWFButtonRecord_move(self.this, x, y)
+
+    def moveTo(self, x, y):
+        mingc.SWFButtonRecord_moveTo(self.this, x, y)
+
+    def rotate(self, deg):
+        mingc.SWFButtonRecord_rotate(self.this, deg)
+
+    def rotateTo(self, deg):
+        mingc.SWFButtonRecord_rotateTo(self.this, deg)
+
+    def scale(self, sx, sy):
+        mingc.SWFButtonRecord_scale(self.this, sx, sy)
+
+    def scaleTo(self, sx, sy):
+        mingc.SWFButtonRecord_scaleTo(self.this, sx, sy)
+
+    def skewX(self, sx):
+        mingc.SWFButtonRecord_skewX(self.this, sx)
+
+    def skewXTo(self, sx):
+        mingc.SWFButtonRecord_skewXTo(self.this, sx)
+
+    def skewY(self, sy):
+        mingc.SWFButtonRecord_skewY(self.this, sy)
+
+    def skewYTo(self, sy):
+        mingc.SWFButtonRecord_skewXTo(self.this, sy)
+
+
 class SWFVideoStream(SWFBase):
     def __init__(self):
         self.this = mingc.newSWFVideoStream()

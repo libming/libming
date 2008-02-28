@@ -2454,26 +2454,27 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_SWFCXform swig_types[3]
 #define SWIGTYPE_p_SWFDBLBitmap swig_types[4]
 #define SWIGTYPE_p_SWFFillStyle swig_types[5]
-#define SWIGTYPE_p_SWFInput swig_types[6]
-#define SWIGTYPE_p_SWFJpegBitmap swig_types[7]
-#define SWIGTYPE_p_SWFJpegWithAlpha swig_types[8]
-#define SWIGTYPE_p_SWFLineStyle swig_types[9]
-#define SWIGTYPE_p_SWFPosition swig_types[10]
-#define SWIGTYPE_p_SWFSoundInstance swig_types[11]
-#define SWIGTYPE_p_SWFSoundStream swig_types[12]
-#define SWIGTYPE_p_SWFSprite swig_types[13]
-#define SWIGTYPE_p_SWFTextFieldAlignment swig_types[14]
-#define SWIGTYPE_p__swfPosition swig_types[15]
-#define SWIGTYPE_p_char swig_types[16]
-#define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[17]
-#define SWIGTYPE_p_float swig_types[18]
-#define SWIGTYPE_p_int swig_types[19]
-#define SWIGTYPE_p_size_t swig_types[20]
-#define SWIGTYPE_p_unsigned_char swig_types[21]
-#define SWIGTYPE_p_unsigned_short swig_types[22]
-#define SWIGTYPE_p_void swig_types[23]
-static swig_type_info *swig_types[25];
-static swig_module_info swig_module = {swig_types, 24, 0, 0, 0, 0};
+#define SWIGTYPE_p_SWFFilter swig_types[6]
+#define SWIGTYPE_p_SWFInput swig_types[7]
+#define SWIGTYPE_p_SWFJpegBitmap swig_types[8]
+#define SWIGTYPE_p_SWFJpegWithAlpha swig_types[9]
+#define SWIGTYPE_p_SWFLineStyle swig_types[10]
+#define SWIGTYPE_p_SWFPosition swig_types[11]
+#define SWIGTYPE_p_SWFSoundInstance swig_types[12]
+#define SWIGTYPE_p_SWFSoundStream swig_types[13]
+#define SWIGTYPE_p_SWFSprite swig_types[14]
+#define SWIGTYPE_p_SWFTextFieldAlignment swig_types[15]
+#define SWIGTYPE_p__swfPosition swig_types[16]
+#define SWIGTYPE_p_char swig_types[17]
+#define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[18]
+#define SWIGTYPE_p_float swig_types[19]
+#define SWIGTYPE_p_int swig_types[20]
+#define SWIGTYPE_p_size_t swig_types[21]
+#define SWIGTYPE_p_unsigned_char swig_types[22]
+#define SWIGTYPE_p_unsigned_short swig_types[23]
+#define SWIGTYPE_p_void swig_types[24]
+static swig_type_info *swig_types[26];
+static swig_module_info swig_module = {swig_types, 25, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -7769,6 +7770,42 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFButton_addCharacter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButton arg1 = (SWFButton) 0 ;
+  SWFCharacter arg2 = (SWFCharacter) 0 ;
+  byte arg3 ;
+  SWFButtonRecord result;
+  int res1 ;
+  int res2 ;
+  unsigned char val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFButton_addCharacter",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButton_addCharacter" "', argument " "1"" of type '" "SWFButton""'"); 
+  }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFButton_addCharacter" "', argument " "2"" of type '" "SWFCharacter""'"); 
+  }
+  ecode3 = SWIG_AsVal_unsigned_SS_char(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButton_addCharacter" "', argument " "3"" of type '" "byte""'");
+  } 
+  arg3 = (byte)(val3);
+  result = (SWFButtonRecord)SWFButton_addCharacter(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFButton_addAction(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButton arg1 = (SWFButton) 0 ;
@@ -7861,6 +7898,486 @@ SWIGINTERN PyObject *_wrap_SWFButton_setMenu(PyObject *SWIGUNUSEDPARM(self), PyO
   } 
   arg2 = (int)(val2);
   SWFButton_setMenu(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButton_setScalingGrid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButton arg1 = (SWFButton) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:SWFButton_setScalingGrid",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButton_setScalingGrid" "', argument " "1"" of type '" "SWFButton""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButton_setScalingGrid" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButton_setScalingGrid" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFButton_setScalingGrid" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFButton_setScalingGrid" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  SWFButton_setScalingGrid(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButton_removeScalingGrid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButton arg1 = (SWFButton) 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFButton_removeScalingGrid",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButton_removeScalingGrid" "', argument " "1"" of type '" "SWFButton""'"); 
+  }
+  SWFButton_removeScalingGrid(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_setDepth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  int arg2 ;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_setDepth",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_setDepth" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_setDepth" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  SWFButtonRecord_setDepth(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_addFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  SWFFilter arg2 ;
+  int res1 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_addFilter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_addFilter" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFFilter,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFButtonRecord_addFilter" "', argument " "2"" of type '" "SWFFilter""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFButtonRecord_addFilter" "', argument " "2"" of type '" "SWFFilter""'");
+    } else {
+      arg2 = *((SWFFilter *)(argp2));
+    }
+  }
+  SWFButtonRecord_addFilter(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_setBlendMode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  int arg2 ;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_setBlendMode",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_setBlendMode" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_setBlendMode" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  SWFButtonRecord_setBlendMode(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_move(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  float arg3 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFButtonRecord_move",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_move" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_move" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_move" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  SWFButtonRecord_move(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_moveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  float arg3 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFButtonRecord_moveTo",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_moveTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_moveTo" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_moveTo" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  SWFButtonRecord_moveTo(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_rotate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_rotate",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_rotate" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_rotate" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  SWFButtonRecord_rotate(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_rotateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_rotateTo",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_rotateTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_rotateTo" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  SWFButtonRecord_rotateTo(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_scale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  float arg3 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFButtonRecord_scale",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_scale" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_scale" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_scale" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  SWFButtonRecord_scale(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_scaleTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  float arg3 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFButtonRecord_scaleTo",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_scaleTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_scaleTo" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_scaleTo" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  SWFButtonRecord_scaleTo(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_skewX",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewX" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewX" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  SWFButtonRecord_skewX(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewXTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_skewXTo",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewXTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewXTo" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  SWFButtonRecord_skewXTo(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_skewY",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewY" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewY" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  SWFButtonRecord_skewY(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewYTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
+  float arg2 ;
+  int res1 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFButtonRecord_skewYTo",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewYTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
+  }
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewYTo" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  SWFButtonRecord_skewYTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -12915,9 +13432,25 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"newSWFButton", _wrap_newSWFButton, METH_VARARGS, NULL},
 	 { (char *)"destroySWFButton", _wrap_destroySWFButton, METH_VARARGS, NULL},
 	 { (char *)"SWFButton_addShape", _wrap_SWFButton_addShape, METH_VARARGS, NULL},
+	 { (char *)"SWFButton_addCharacter", _wrap_SWFButton_addCharacter, METH_VARARGS, NULL},
 	 { (char *)"SWFButton_addAction", _wrap_SWFButton_addAction, METH_VARARGS, NULL},
 	 { (char *)"SWFButton_addSound", _wrap_SWFButton_addSound, METH_VARARGS, NULL},
 	 { (char *)"SWFButton_setMenu", _wrap_SWFButton_setMenu, METH_VARARGS, NULL},
+	 { (char *)"SWFButton_setScalingGrid", _wrap_SWFButton_setScalingGrid, METH_VARARGS, NULL},
+	 { (char *)"SWFButton_removeScalingGrid", _wrap_SWFButton_removeScalingGrid, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_setDepth", _wrap_SWFButtonRecord_setDepth, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_addFilter", _wrap_SWFButtonRecord_addFilter, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_setBlendMode", _wrap_SWFButtonRecord_setBlendMode, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_move", _wrap_SWFButtonRecord_move, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_moveTo", _wrap_SWFButtonRecord_moveTo, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_rotate", _wrap_SWFButtonRecord_rotate, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_rotateTo", _wrap_SWFButtonRecord_rotateTo, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_scale", _wrap_SWFButtonRecord_scale, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_scaleTo", _wrap_SWFButtonRecord_scaleTo, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_skewX", _wrap_SWFButtonRecord_skewX, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_skewXTo", _wrap_SWFButtonRecord_skewXTo, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_skewY", _wrap_SWFButtonRecord_skewY, METH_VARARGS, NULL},
+	 { (char *)"SWFButtonRecord_skewYTo", _wrap_SWFButtonRecord_skewYTo, METH_VARARGS, NULL},
 	 { (char *)"newSWFVideoStream_fromFile", _wrap_newSWFVideoStream_fromFile, METH_VARARGS, NULL},
 	 { (char *)"newSWFVideoStream_fromInput", _wrap_newSWFVideoStream_fromInput, METH_VARARGS, NULL},
 	 { (char *)"newSWFVideoStream", _wrap_newSWFVideoStream, METH_VARARGS, NULL},
@@ -13079,6 +13612,7 @@ static swig_type_info _swigt__p_GradientSpreadMode = {"_p_GradientSpreadMode", "
 static swig_type_info _swigt__p_SWFCXform = {"_p_SWFCXform", "SWFCXform *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFDBLBitmap = {"_p_SWFDBLBitmap", "SWFDBLBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFFillStyle = {"_p_SWFFillStyle", "SWFFillStyle *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_SWFFilter = {"_p_SWFFilter", "SWFFilter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFInput = {"_p_SWFInput", "SWFInput *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFJpegBitmap = {"_p_SWFJpegBitmap", "SWFJpegBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFJpegWithAlpha = {"_p_SWFJpegWithAlpha", "SWFJpegWithAlpha *", 0, 0, (void*)0, 0};
@@ -13105,6 +13639,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_SWFCXform,
   &_swigt__p_SWFDBLBitmap,
   &_swigt__p_SWFFillStyle,
+  &_swigt__p_SWFFilter,
   &_swigt__p_SWFInput,
   &_swigt__p_SWFJpegBitmap,
   &_swigt__p_SWFJpegWithAlpha,
@@ -13131,6 +13666,7 @@ static swig_cast_info _swigc__p_GradientSpreadMode[] = {  {&_swigt__p_GradientSp
 static swig_cast_info _swigc__p_SWFCXform[] = {  {&_swigt__p_SWFCXform, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFDBLBitmap[] = {  {&_swigt__p_SWFDBLBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFFillStyle[] = {  {&_swigt__p_SWFFillStyle, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_SWFFilter[] = {  {&_swigt__p_SWFFilter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFInput[] = {  {&_swigt__p_SWFInput, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFJpegBitmap[] = {  {&_swigt__p_SWFJpegBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFJpegWithAlpha[] = {  {&_swigt__p_SWFJpegWithAlpha, 0, 0, 0},{0, 0, 0, 0}};
@@ -13157,6 +13693,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_SWFCXform,
   _swigc__p_SWFDBLBitmap,
   _swigc__p_SWFFillStyle,
+  _swigc__p_SWFFilter,
   _swigc__p_SWFInput,
   _swigc__p_SWFJpegBitmap,
   _swigc__p_SWFJpegWithAlpha,
