@@ -59,7 +59,8 @@ my @SWF_MODULES_NAMES = (
 	'Matrix',
 	'Shadow',
 	'Blur',
-	'FilterMatrix'
+	'FilterMatrix',
+	'Filter'
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;

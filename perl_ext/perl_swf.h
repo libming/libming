@@ -41,6 +41,7 @@ typedef SWFMatrix     	   SWF__Matrix;
 typedef SWFBlur     	   SWF__Blur;
 typedef SWFShadow     	   SWF__Shadow;
 typedef SWFFilterMatrix	   SWF__FilterMatrix;
+typedef SWFFilter	   SWF__Filter;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef

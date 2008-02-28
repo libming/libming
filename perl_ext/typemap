@@ -32,6 +32,7 @@ SWF::Matrix					T_PTROBJ
 SWF::Shadow					T_PTROBJ
 SWF::Blur					T_PTROBJ
 SWF::FilterMatrix				T_PTROBJ
+SWF::Filter					T_PTROBJ
 
 INPUT
 T_PTRINT

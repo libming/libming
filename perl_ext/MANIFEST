@@ -25,6 +25,7 @@ SWF/Shadow.pm
 SWF/Blur.pm
 SWF/Matrix.pm
 SWF/FilterMatrix.pm
+SWF/Filter.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
@@ -72,6 +73,7 @@ Matrix.xs
 Shadow.xs
 Blur.xs
 FilterMatrix.xs
+Filter.xs
 perl_swf.h
 swf_util.c
 typemap

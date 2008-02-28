@@ -1,0 +1,41 @@
+# ====================================================================
+# Copyright (c) 2008 Klaus Rechert All rights reserved.
+# This program is free software; you can redistribute it and/or modify
+# it under the same terms as Perl itself.
+# ====================================================================
+
+# $Author$
+# $Id$
+
+package SWF::Filter;
+use SWF ();
+
+$SWF::Filter::VERSION = $SWF::VERSION;
+1;
+
+__END__
+
+=head1 NAME
+
+SWF::Filter - SWF filter class
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+
+=head1 METHODS
+
+=over 4
+
+
+=back
+
+=head1 AUTHOR
+
+
+=head1 SEE ALSO
+
+SWF, .
+
+=cut

@@ -35,3 +35,4 @@ Matrix.c
 Shadow.c
 Blur.c
 FilterMatrix.c
+Filter.c
