@@ -931,6 +931,7 @@ class SWFButton(SWFBase):
         mingc.SWFButton_addAction(self.this, action.this, flags)
 
     def addCharacter(self, character, flags):
+        self.shapes.append(character)
         return mingc.SWFButton_addCharacter(self.this, character, flags)
 
     def addSound(self, sound, flags):
