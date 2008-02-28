@@ -41,6 +41,21 @@ SWFGradient_addEntry(gradient, ratio, r, g, b, a=0xff)
 	byte		a
 
 void
+SWFGradient_setSpreadMode(gradient, mode)
+	SWF::Gradient gradient
+	int mode
+
+void
+SWFGradient_setInterpolationMode(gradient, mode)
+	SWF::Gradient gradient
+	int mode
+
+void 
+SWFGradient_setFocalPoint(gradient, focalPoint)
+	SWF::Gradient gradient
+	float focalPoint
+
+void
 destroySWFGradient(gradient)
 	SWF::Gradient	gradient
 	ALIAS:
