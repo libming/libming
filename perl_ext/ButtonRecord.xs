@@ -84,6 +84,10 @@ void SWFButtonRecord_skewYTo(record, skewY)
 	SWF::ButtonRecord record
 	float skewY
 
+void
+SWFButtonRecord_addFilter(record, filter)
+	SWF::ButtonRecord record
+	SWF::Filter filter
 
 void SWFButtonRecord_DESTROY(br)
 	SWF::ButtonRecord br

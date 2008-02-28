@@ -233,6 +233,11 @@ SWFDisplayItem_getCharacter(item)
 	sv_setref_pv(ST(0), "SWF::Character", (void*)RETVAL);
 
 void
+SWFDisplayItem_addFilter(item, filter)
+	SWF::DisplayItem item
+	SWF::Filter filter
+
+void
 SWFDisplayItem_DESTROY(item)
 	SWF::DisplayItem	item
 	CODE:
