@@ -132,9 +132,6 @@ class SWFShape(SWFBase):
     def drawLine(self, dx, dy):
         mingc.SWFShape_drawLine(self.this, dx, dy)
 
-    def drawRect(self, rect):
-        mingc.SWFShape_drawRect(self.this, rect.this);
-
     def drawArc(self, x, y, r, startAngle, endAngle):
         mingc.SWFShape_drawArc(self.this, x, y, r, startAngle, endAngle)
 
@@ -174,23 +171,6 @@ class SWFShape(SWFBase):
     def getVersion(self):
         return mingc.SWFShape_getVersion(self.this)
 
-    # deprecated:
-    def moveTo(self, x, y):
-        mingc.SWFShape_moveTo(self.this, x, y)
-
-    def lineTo(self, x, y):
-        mingc.SWFShape_lineTo(self.this, x, y)
-
-    def lineToRelative(self, dx, dy):
-        mingc.SWFShape_lineToRelative(self.this, dx, dy)
-
-    def curveTo(self, controlx, controly, anchorx, anchory):
-        mingc.SWFShape_curveTo(self.this, controlx, controly, anchorx, anchory)
-
-    def curveToRelative(self, controldx, controldy, anchordx, anchordy):
-        mingc.SWFShape_curveToRelative(self.this, controldx, controldy,
-                                       anchordx, anchordy)
-
     def addSolidFill(self, r, g, b, a=0xff):
         return mingc.SWFShape_addSolidFill(self.this, r, g, b, a)
 
@@ -200,8 +180,19 @@ class SWFShape(SWFBase):
     def addBitmapFill(self, bitmap, flags):
         return mingc.SWFShape_addBitmapFill(self.this, bitmap.this, flags)
 
-# addFill flags:
+    def setRenderHintingFlags(self, flags):
+        mingc.SWFShape_setRenderHintingFlags(self.this, flags)
 
+    def getPenX(self):
+        mingc.SWFShape_getPenX(self.this)
+
+    def getPenY(self):
+        mingc.SWFShape_getPenY(self.this)
+
+    def hideLine(self):
+        mingc.SWFShape_hideLine(self.this)
+ 
+# addFill flags:
 SWFFILL_SOLID		= mingc.SWFFILL_SOLID		
 SWFFILL_GRADIENT	= mingc.SWFFILL_GRADIENT	
 SWFFILL_LINEAR_GRADIENT = mingc.SWFFILL_LINEAR_GRADIENT 
@@ -209,6 +200,9 @@ SWFFILL_RADIAL_GRADIENT = mingc.SWFFILL_RADIAL_GRADIENT
 SWFFILL_BITMAP		= mingc.SWFFILL_BITMAP		
 SWFFILL_TILED_BITMAP	= mingc.SWFFILL_TILED_BITMAP	
 SWFFILL_CLIPPED_BITMAP	= mingc.SWFFILL_CLIPPED_BITMAP
+#hinting flags
+SWF_SHAPE_USESCALINGSTROKES    = mingc.SWF_SHAPE_USESCALINGSTROKES
+SWF_SHAPE_USENONSCALINGSTROKES = mingc.SWF_SHAPE_USENONSCALINGSTROKES
 
 class SWFFill(SWFBase):
 
