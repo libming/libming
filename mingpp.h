@@ -1246,6 +1246,9 @@ class SWFShape : public SWFCharacter
   void drawCubicTo(float ax, float ay, float bx, float by, float cx, float cy)
     { SWFShape_drawCubicTo(this->shape, ax, ay, bx, by, cx, cy); }
 
+  void getPen(float *x, float *y)
+    { SWFShape_getPen(this->shape, x, y); }
+
   void end()
     { SWFShape_end(this->shape); }
 
@@ -1273,13 +1276,11 @@ class SWFShape : public SWFCharacter
   void setLine(unsigned short width, byte r, byte g, byte b, byte a=0xff)
     { SWFShape_setLine(this->shape, width, r, g, b, a); }
 
-// begin minguts 2004/08/31 ((((
   void drawCharacterBounds(SWFCharacter *character)
 	{ SWFShape_drawCharacterBounds(this->shape, character->character); }
 
   void setLineStyle(unsigned short width, byte r, byte g, byte b, byte a=0xff) // alias for setline
 	{ setLine(width, r, g, b, a); }
-// )))) end minguts 2004/08/31
 
   void setLine2(unsigned short width, SWFFillStyle *fill, int flags, float miterLimit)
     {  SWFShape_setLine2Filled(this->shape, width, fill->fill, flags, miterLimit); }
@@ -1298,6 +1299,15 @@ class SWFShape : public SWFCharacter
 
   void useVersion(int version)
     { SWFShape_useVersion(this->shape, version); }
+
+  int getVersion()
+    { return SWFShape_getVersion(this->shape); }
+
+  void setRenderingHintingFlags(int flags)
+    { SWFShape_setRenderHintingFlags(this->shape, flags); }
+
+  void hideLine()
+    { SWFShape_hideLine(this->shape); }
 
   // deprecated?
   void drawFontGlyph(SWFFont *font, unsigned short c)
