@@ -237,6 +237,11 @@ SWFDisplayItem_addFilter(item, filter)
 	SWF::DisplayItem item
 	SWF::Filter filter
 
+void 
+SWFDisplayItem_setCXform(item, cx)
+	SWF::DisplayItem item
+	SWF::CXform cx
+
 void
 SWFDisplayItem_DESTROY(item)
 	SWF::DisplayItem	item
