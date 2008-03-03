@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
+#include <cstdlib>
+#include <cstdio>
 #include <mingpp.h>
 
 int main()

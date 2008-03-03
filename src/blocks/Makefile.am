@@ -27,6 +27,7 @@ noinst_HEADERS =	\
 	matrix.h	\
 	method.h	\
 	morph.h		\
+	mp3.h		\
 	outputblock.h	\
 	output.h	\
 	placeobject.h	\

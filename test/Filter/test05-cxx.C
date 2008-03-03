@@ -1,4 +1,5 @@
 #include <mingpp.h>
+#include <cstdlib>
 
 #define SIZE 20
 int main()

@@ -40,8 +40,8 @@ check_PROGRAMS = \
 	$(TEST_PROGS)
 
 CLEANFILES = dotests php.ini \
-	test01.swf 
-	test02.swf 
+	test01.swf \
+	test02.swf \
 	test03.swf
 
 include ../Makefile.inc

@@ -1,4 +1,5 @@
 #include <mingpp.h>
+#include <cstdlib>
 
 // static char *test = "test03";
 

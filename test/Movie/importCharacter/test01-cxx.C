@@ -1,4 +1,5 @@
 #include <mingpp.h>
+#include <cstdlib>
 
 
 int main()

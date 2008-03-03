@@ -1,4 +1,6 @@
 #include <mingpp.h>
+#include <cstdlib>
+#include <cstdio>
 
 int main()
 {
