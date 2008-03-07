@@ -2845,6 +2845,9 @@ printRect(struct Rect *r)
 void
 outputHeader (struct Movie *m)
 {
+
+	setNewLineString("\n");
+
 	iprintf("File version: %i\n", m->version);
 	iprintf("File size: %i\n", m->size);
 
