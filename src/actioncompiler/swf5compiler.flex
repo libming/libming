@@ -280,6 +280,8 @@ push			{ count();	return PUSH; }
 setregister		{ count();	return SETREGISTER; }
 callfunction		{ count();	return CALLFUNCTION; }
 callmethod		{ count();	return CALLMETHOD; }
+newobject		{ count();	return NEWOBJECT; }
+newmethod		{ count();	return NEWMETHOD; }
 and			{ count();	return AND; }
 or			{ count();	return OR; }
 xor			{ count();	return XOR; }
