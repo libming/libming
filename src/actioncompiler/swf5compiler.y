@@ -717,32 +717,29 @@ iter_stmt
 		  else
 		    $$ = newBuffer();
 
-		  if($7)
-		  {
-                    bufferWriteOp($$, SWFACTION_JUMP);
-                    bufferWriteS16($$, 2);
-                    bufferWriteS16($$, bufferLength($7));
-		  }
-		  else
-		    $7 = newBuffer();
+		  if($10)
+		    bufferConcat($10, $7);
+		  else if ($7)
+		    $10 = $7;
 
 		  if($5)
 		  {
-		    bufferConcat($7, $5);
-                    bufferWriteOp($7, SWFACTION_LOGICALNOT);
-                    bufferWriteOp($7, SWFACTION_IF);
-                    bufferWriteS16($7, 2);
-                    bufferWriteS16($7, bufferLength($10)+5);
+                    bufferWriteOp($5, SWFACTION_LOGICALNOT);
+                    bufferWriteOp($5, SWFACTION_IF);
+                    bufferWriteS16($5, 2);
+                    bufferWriteS16($5, bufferLength($10)+5);
+		    bufferConcat($5, $10);
                   }
+		  else
+		    $5 = $10;
 
-                  bufferConcat($7, $10);
-                  bufferWriteOp($7, SWFACTION_JUMP);
-                  bufferWriteS16($7, 2);
-                  bufferWriteS16($7, -(bufferLength($7)+2));
-                  bufferResolveJumps($7);
+                  bufferWriteOp($5, SWFACTION_JUMP);
+                  bufferWriteS16($5, 2);
+                  bufferWriteS16($5, -(bufferLength($5)+2));
+                  bufferResolveJumps($5);
 
-                  bufferConcat($$, $7);
-				  delctx(CTX_LOOP);
+                  bufferConcat($$, $5);
+		  delctx(CTX_LOOP);
                 }
 
 	| FOR '(' identifier inpart ')' for_in_init stmt
