@@ -155,6 +155,7 @@ SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 			 block->type == SWF_STARTSOUND ||
 			 block->type == SWF_FRAMELABEL ||
 			 block->type == SWF_SOUNDSTREAMHEAD ||
+			 block->type == SWF_SOUNDSTREAMHEAD2 ||
 			 block->type == SWF_SOUNDSTREAMBLOCK ||
 			 block->type == SWF_END )
 	{
