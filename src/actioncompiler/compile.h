@@ -236,7 +236,9 @@ int lookupProperty(char *string);
 char *stringConcat(char *a, char *b);
 
 /* resolve magic number standins to relative offsets */
-void bufferResolveJumps(Buffer out);
+#define bufferResolveJumps(buf) bufferResolveJumpsFull(buf, \
+    buf->pos, buf->buffer)
+void bufferResolveJumpsFull(Buffer out, byte *break_ptr, byte *continue_ptr);
 void bufferResolveSwitch(Buffer buffer, struct switchcases *slp);
 
 void bufferPatchPushLength(Buffer buffer, int len);

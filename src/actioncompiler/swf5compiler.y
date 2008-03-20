@@ -712,13 +712,15 @@ iter_stmt
 
 	| FOR '(' assign_stmts_opt ';' expr_opt ';' assign_stmts_opt ')' for_init stmt
 		{
+		  int continue_len;
 		  if($3)
 		    $$ = $3;
 		  else
 		    $$ = newBuffer();
 
+		  continue_len = bufferLength ($7);
 		  if($10)
-		    bufferConcat($10, $7);
+		    bufferConcatSimple($10, $7);
 		  else if ($7)
 		    $10 = $7;
 
@@ -736,7 +738,11 @@ iter_stmt
                   bufferWriteOp($5, SWFACTION_JUMP);
                   bufferWriteS16($5, 2);
                   bufferWriteS16($5, -(bufferLength($5)+2));
-                  bufferResolveJumps($5);
+		  /* need to jump to last part of for stmt in continue case */
+		  if (continue_len)
+		    bufferResolveJumpsFull($5, $5->pos, $5->pos - continue_len - 5);
+		  else
+		    bufferResolveJumps($5);
 
                   bufferConcat($$, $5);
 		  delctx(CTX_LOOP);

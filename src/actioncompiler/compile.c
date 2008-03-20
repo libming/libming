@@ -668,7 +668,7 @@ int chkctx(enum ctx val)
 /* jump offset is relative to end of jump instruction */
 /* I can't believe this actually worked */
 
-void bufferResolveJumps(Buffer out)
+void bufferResolveJumpsFull(Buffer out, byte *break_ptr, byte *continue_ptr)
 {
 	byte *p = out->buffer;
 	int l, target;
@@ -684,14 +684,14 @@ void bufferResolveJumps(Buffer out)
 	if(*p == MAGIC_CONTINUE_NUMBER_LO &&
 		 *(p+1) == MAGIC_CONTINUE_NUMBER_HI)
 	{
-		target = out->buffer - (p+2);
+		target = continue_ptr - (p+2);
 		*p = target & 0xff;
 		*(p+1) = (target>>8) & 0xff;
 	}
 	else if(*p == MAGIC_BREAK_NUMBER_LO &&
 		*(p+1) == MAGIC_BREAK_NUMBER_HI)
 	{
-		target = out->pos - (p+2);
+		target = break_ptr - (p+2);
 		*p = target & 0xff;
 		*(p+1) = (target>>8) & 0xff;
 	}
