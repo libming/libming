@@ -375,29 +375,28 @@ parseSWF_CLIPACTIONRECORD (FILE * f, struct SWF_CLIPACTIONRECORD *carec)
 }
 
 void
-parseSWF_CLIPACTIONS (FILE * f, struct SWF_CLIPACTIONS *clipact)
+parseSWF_CLIPACTIONS (FILE * f, struct SWF_CLIPACTIONS *clipact, int end)
 {
   byteAlign ();
-
   clipact->Reserved = readUInt16 (f);
   parseSWF_CLIPEVENTFLAGS( f, &(clipact->AllEventFlags) );
-  /* parseSWF_CLIPACTIONRECORD( f, &(clipact->ClipActionRecords) ); */
+  
   clipact->ClipActionRecords =
     (SWF_CLIPACTIONRECORD *) calloc (1, sizeof (SWF_CLIPACTIONRECORD));
   clipact->NumClipRecords = 0;
   while (parseSWF_CLIPACTIONRECORD
 	 (f, &(clipact->ClipActionRecords[clipact->NumClipRecords++]) ) )
-    {
-      clipact->ClipActionRecords = (SWF_CLIPACTIONRECORD *) realloc (clipact->ClipActionRecords,
+  {
+    if(fileOffset >= end)
+      return;
+    clipact->ClipActionRecords = (SWF_CLIPACTIONRECORD *) realloc (clipact->ClipActionRecords,
 							 (clipact->
 							  NumClipRecords +
 							  1) *
 							 sizeof
 							 (SWF_CLIPACTIONRECORD));
-    }
-  /*
-  clipact->ClipActionEndFlag = readUInt32 (f);
-  */
+  }
+  clipact->ClipActionEndFlag = readUInt16(f);
 }
 
 void
@@ -2557,7 +2556,7 @@ parseSWF_PLACEOBJECT2 (FILE * f, int length)
   PAR_BEGIN (SWF_PLACEOBJECT2);
 
   byteAlign();
-
+  int end = fileOffset + length;
   parserrec->PlaceFlagHasClipActions = readBits (f, 1);
   parserrec->PlaceFlagHasClipDepth   = readBits (f, 1);
   parserrec->PlaceFlagHasName        = readBits (f, 1);
@@ -2586,7 +2585,7 @@ parseSWF_PLACEOBJECT2 (FILE * f, int length)
     parserrec->ClipDepth = readUInt16 (f);
   }
   if( parserrec->PlaceFlagHasClipActions ) {
-    parseSWF_CLIPACTIONS( f, &(parserrec->ClipActions) ); 
+    parseSWF_CLIPACTIONS( f, &(parserrec->ClipActions), end); 
   }
 
   PAR_END;
@@ -2598,7 +2597,7 @@ parseSWF_PLACEOBJECT3 (FILE * f, int length)
   PAR_BEGIN (SWF_PLACEOBJECT3);
 
   byteAlign();
-
+  int end = fileOffset + length;
   parserrec->PlaceFlagHasClipActions = readBits (f, 1);
   parserrec->PlaceFlagHasClipDepth   = readBits (f, 1);
   parserrec->PlaceFlagHasName        = readBits (f, 1);
@@ -2649,7 +2648,7 @@ parseSWF_PLACEOBJECT3 (FILE * f, int length)
     parserrec->BlendMode = readUInt8 (f);
   }
   if( parserrec->PlaceFlagHasClipActions ) {
-    parseSWF_CLIPACTIONS( f, &(parserrec->ClipActions) ); 
+    parseSWF_CLIPACTIONS( f, &(parserrec->ClipActions), end); 
   }
    
   PAR_END;

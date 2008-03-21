@@ -24,8 +24,6 @@ extern void parseSWF_RECT(FILE *f, struct SWF_RECT *rect);
 extern void parseSWF_MATRIX(FILE *f, struct SWF_MATRIX *matrix);
 extern void parseSWF_CXFORMWITHALPHA(FILE *f, struct SWF_CXFORMWITHALPHA *cxform);
 extern int parseSWF_CLIPEVENTFLAGS(FILE *f, struct SWF_CLIPEVENTFLAGS *cflags);
-extern int parseSWF_CLIPACTIONRECORD(FILE *f, struct SWF_CLIPACTIONRECORD *carec);
-extern void parseSWF_CLIPACTIONS(FILE *f, struct SWF_CLIPACTIONS *clipact);
 extern void parseSWF_GRADIENTRECORD(FILE *f, struct SWF_GRADIENTRECORD *gradientrec, int level);
 extern void parseSWF_GRADIENT(FILE *f, struct SWF_GRADIENT *gradient, int level);
 extern int parseSWF_SHAPERECORD(FILE *f, SWF_SHAPERECORD *shape, int *fillBits, int *lineBits, int level);
