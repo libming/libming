@@ -428,19 +428,19 @@ getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 {
 	struct mp3_header mp3h;	
 	SWFInput input = stream->source.mp3.input;
-	
+	int ret;
 	int rate=0, channels, flags, start = 0;
 
 	/* 
 	 * skip stream until first MP3 header which starts with 0xffe 
 	 */
-	while(readMP3Header(input, &mp3h) < 0)
+	while((ret = readMP3Header(input, &mp3h)) < 0)
 	{
 		SWFInput_seek(input, 1, SEEK_CUR);
 		start++;
 	}
 
-	if(SWFInput_eof(input))
+	if(ret == 0 || SWFInput_eof(input))
 		return -1;
 
 	stream->source.mp3.start = start;
