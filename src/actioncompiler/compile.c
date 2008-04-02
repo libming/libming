@@ -624,7 +624,15 @@ void delctx(enum ctx val)
 int chkctx(enum ctx val)
 {	int n, ret = 0;
 	switch(val)
-	{	case CTX_FUNCTION:
+	{	
+		case CTX_FOR_IN:
+			for(n = ctx_count; --n >= 0; )
+			{
+				if(ctx_stack[n] == CTX_FOR_IN)
+						ret++;
+			}
+			return ret;
+		case CTX_FUNCTION:
 			for(n = ctx_count ; --n >= 0 ; )
 				switch(ctx_stack[n])
 				{	case CTX_SWITCH:

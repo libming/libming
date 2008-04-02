@@ -759,7 +759,7 @@ iter_stmt
 			bufferWriteOp($$, SWFACTION_ENUMERATE);
 
 		  b2 = newBuffer();
-		  bufferWriteSetRegister(b2, 0);
+		  bufferWriteSetRegister(b2, chkctx(CTX_FOR_IN));
 		  bufferWriteOp(b2, SWFACTION_PUSH);
 		  bufferWriteS16(b2, 1);
 		  bufferWriteU8(b2, 2);
@@ -771,7 +771,7 @@ iter_stmt
 /* basically a lvalue could be used here rather than an ident !!! */
 /* probably by using reg1 for the test rather than reg0 */
 		  bufferWriteString(b3, $3, strlen($3)+1);
-		  bufferWriteRegister(b3, 0);
+		  bufferWriteRegister(b3, chkctx(CTX_FOR_IN));
 		  bufferWriteOp(b3, SWFACTION_SETVARIABLE);
 		  bufferConcat(b3, $7);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
@@ -796,7 +796,7 @@ iter_stmt
 			bufferWriteOp($$, SWFACTION_ENUMERATE); 
 
 		  b2 = newBuffer();
-		  bufferWriteSetRegister(b2, 0);
+		  bufferWriteSetRegister(b2, chkctx(CTX_FOR_IN));
 		  bufferWriteOp(b2, SWFACTION_PUSH);
 		  bufferWriteS16(b2, 1);
 		  bufferWriteU8(b2, 2);
@@ -807,7 +807,7 @@ iter_stmt
 
 		  b3 = newBuffer();
 		  bufferWriteString(b3, $4, strlen($4)+1);
-		  bufferWriteRegister(b3, 0);
+		  bufferWriteRegister(b3, chkctx(CTX_FOR_IN));
 		  bufferWriteOp(b3, SWFACTION_DEFINELOCAL);
 		  bufferConcat(b3, $8);
 		  bufferWriteS16(b2, bufferLength(b3) + 5);
