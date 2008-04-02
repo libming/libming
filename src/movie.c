@@ -157,17 +157,8 @@ destroySWFMovie(SWFMovie movie /* Movie to be destroyed */)
 	if(movie->fattrs)
 		destroySWFFileAttributes(movie->fattrs);
 
-	if(movie->metadata)
-		destroySWFMetadata(movie->metadata);
-
 	if(movie->limits)
 		destroySWFScriptLimits(movie->limits);
-
-	if(movie->symbolClass)
-		destroySWFSymbolClass(movie->symbolClass);
-	
-	if(movie->sceneData)
-		destroySWFSceneData(movie->sceneData);
 
 	if(movie->backgroundBlock)
 		destroySWFBlock(movie->backgroundBlock);
