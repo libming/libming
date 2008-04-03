@@ -37,7 +37,8 @@ AC_PROG_INSTALL
 AC_PROG_CC_C_O
 
 dnl necessary to make regenerating configure in maintainer-mode work
-AC_SUBST(ACLOCAL_AMFLAGS, "-I macros")
+dnl set in Makefile.am for autoreconf too
+dnl AC_SUBST(ACLOCAL_AMFLAGS, "-I macros")
 
 AC_ARG_ENABLE(
 [cpp],

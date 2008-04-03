@@ -9,6 +9,7 @@
 # requirement to 1.4d, but we didn't check it
 #
 AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip 1.4d
+ACLOCAL_AMFLAGS = -I macros
 
 additionnal_dist_subdirs = 
 
