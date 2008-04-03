@@ -139,11 +139,6 @@ WriteMakefile(
 sub MY::install {
 	my $self = shift;
 	write_myconfig_file($self->{INSTALLSITEARCH});
-
-	for (qw(ming.h libming.a)){
-		$self->{PM}->{"$MING_DIR/$_"} = '$(INST_ARCHLIB)' . "/auto/SWF/include/$_";
-	}
-	$self->{PM}->{'perl_swf.h'} = '$(INST_ARCHLIB)' . "/auto/SWF/include/perl_swf.h";
 	return $self->MM::install;
 }
 
