@@ -328,6 +328,14 @@ outputSWFACTION_PUSH (SWF_ACTION *act)
 }
 
 void
+outputSWFACTION_GETURL (SWF_ACTION *act)
+{
+  OUT_BEGIN(SWF_ACTIONGETURL);
+  printf("   UrlSring: %s\n", sact->UrlString);
+  printf("   TargetString: %s\n", sact->TargetString);
+}
+
+void
 outputSWFACTION_GETURL2 (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONGETURL2);
@@ -454,7 +462,7 @@ static struct SWFActionName actions[] = {
   ActionType (SWFACTION_STOPSOUNDS),
   /* Actions with additional Data */
   ActionTypeLong (SWFACTION_GOTOFRAME),
-  ActionType (SWFACTION_GETURL),
+  ActionTypeLong (SWFACTION_GETURL),
   ActionTypeLong (SWFACTION_WAITFORFRAME),
   ActionTypeLong (SWFACTION_SETTARGET),
   ActionType (SWFACTION_GOTOLABEL),
