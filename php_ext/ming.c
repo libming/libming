@@ -77,8 +77,6 @@ static SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC);
 static SWFSoundInstance getSoundInstance(zval *id TSRMLS_DC);
 static SWFVideoStream getVideoStream(zval *id TSRMLS_DC);
 static SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC);
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC);
 #endif
 static SWFCharacter getCharacterClass(zval *id TSRMLS_DC);
@@ -184,8 +182,6 @@ static int le_swfvideostreamp;
 static int le_swfbuttonrecordp;
 static int le_swfbinarydatap;
 static int le_swfinitactionp;
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 static int le_swfprebuiltclipp;
 #endif
 static int le_swfcharacterp;
@@ -213,8 +209,6 @@ static zend_class_entry *videostream_class_entry_ptr;
 static zend_class_entry *buttonrecord_class_entry_ptr;
 static zend_class_entry *binarydata_class_entry_ptr;
 static zend_class_entry *initaction_class_entry_ptr;
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 static zend_class_entry *prebuiltclip_class_entry_ptr;
 #endif
 static zend_class_entry *character_class_entry_ptr;
@@ -286,8 +280,6 @@ static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 		return (SWFCharacter)getVideoStream(id TSRMLS_CC);
 	else if(Z_OBJCE_P(id) == buttonrecord_class_entry_ptr)
 		return (SWFCharacter)getButtonRecord(id TSRMLS_CC);
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 	else if(Z_OBJCE_P(id) == prebuiltclip_class_entry_ptr)
 		return (SWFCharacter)getPrebuiltClip(id TSRMLS_CC);
 #endif
@@ -2515,9 +2507,6 @@ static zend_function_entry swfbinarydata_functions[] = {
 };
 /* }}} */
 
-#endif
-
-#ifdef HAVE_SWFPREBUILTCLIP
 /* {{{ SWFPrebuiltClip */
 /* {{{ proto class swfprebuiltclip_init([file])
     Returns a SWFPrebuiltClip object */
@@ -4937,8 +4926,6 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry buttonrecord_class_entry;
 	zend_class_entry binarydata_class_entry;
 	zend_class_entry initaction_class_entry;
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 	zend_class_entry prebuiltclip_class_entry;
 #endif
 	zend_class_entry character_class_entry;
@@ -5072,8 +5059,6 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfvideostreamp = zend_register_list_destructors_ex(destroy_SWFVideoStream_resource, NULL, "SWFVideoStream", module_number);
 	le_swfbinarydatap = zend_register_list_destructors_ex(destroy_SWFBinaryData_resource, NULL, "SWFBinaryData", module_number);
 	le_swfinitactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFInitAction", module_number);
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 	le_swfprebuiltclipp = zend_register_list_destructors_ex(destroy_SWFPrebuiltClip_resource, NULL, "SWFPrebuiltClip", module_number);
 #endif
 
@@ -5099,8 +5084,6 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(videostream_class_entry, "SWFVideoStream", swfvideostream_functions);
 	INIT_CLASS_ENTRY(binarydata_class_entry, "SWFBinaryData", swfbinarydata_functions);
 	INIT_CLASS_ENTRY(action_class_entry, "SWFInitAction", swfinitaction_functions);
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
@@ -5128,8 +5111,6 @@ PHP_MINIT_FUNCTION(ming)
 	videostream_class_entry_ptr = zend_register_internal_class(&videostream_class_entry TSRMLS_CC);
 	binarydata_class_entry_ptr = zend_register_internal_class(&binarydata_class_entry TSRMLS_CC);
 	initaction_class_entry_ptr = zend_register_internal_class(&initaction_class_entry TSRMLS_CC);
-#endif
-#ifdef HAVE_SWFPREBUILTCLIP
 	prebuiltclip_class_entry_ptr = zend_register_internal_class(&prebuiltclip_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
