@@ -2,5 +2,5 @@ test01:swf: create simple solid fill
 test02:swf: bitmap fill (jpeg / TILED)
 test03:swf: bitmap fill (jpeg / CLIPPED)
 test04:swf: bitmap fill (dbl / CLIPPED)
-test05:swf: bitmap fill (png / CLIPPED)
+test05:swf,png: bitmap fill (png / CLIPPED)
 test06:swf,gif: bitmap fill (gif / CLIPPED)

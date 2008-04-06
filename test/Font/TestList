@@ -1,3 +1,3 @@
 test01:swf: simple fdb font test 
-test02:swf: simple ttf font test 
-test03:swf: font string width 
+test02:swf,freetype: simple ttf font test 
+test03:swf,freetype: font string width 
