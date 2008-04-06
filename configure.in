@@ -217,12 +217,16 @@ dnl AC_PROG_YACC
 
 AC_CHECK_PROGS(YACC, 'bison -y' byacc yacc)
 if test x"$YACC" = x; then
-	AC_MSG_ERROR([could not detect yacc/bison, bailing out])
+	echo "To compile ming please install bison:"
+	echo " as .deb user: sudo apt-get install bison"
+	AC_MSG_ERROR([Could not detect yacc/bison!])
 fi
 
 AC_CHECK_PROGS(LEX, flex lex)
 if test x"$LEX" = x; then
-	AC_MSG_ERROR([could not detect lex/flex, bailing out])
+	echo "To compile ming please install flex:"
+	echo " as .deb user: sudo apt-get install flex" 
+	AC_MSG_ERROR([Could not find lex/flex!])
 fi
 
 AC_PROG_LIBTOOL
@@ -233,23 +237,40 @@ fi
 dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
 
-dnl Check for the freetype library
-AC_ARG_WITH(freetype-config, [  --with-freetype-config=PROG   Use FreeType configuration program PROG], freetype_config=$withval, freetype_config=yes)
+AC_ARG_ENABLE(
+[freetype],
+[  --enable-freetype       Enable freetype support (default: enabled)],
+[case "${enableval}" in
+  yes) freetype_support=yes ;;
+   no) freetype_support=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-freetype option]) ;;
+esac],
+freetype_support=yes)
 
-if test "$freetype_config" = "yes"; then 
-        AC_PATH_PROG(ft_config,freetype-config,no)
-        if test "$ft_config" = "no"; then
-                AC_MSG_ERROR([You must have freetype installed; see http://www.freetype.org/])
-        fi
-else
-        ft_config="$freetype_config"
+if test "$freetype_support" = "yes"; then
+	dnl Check for the freetype library
+	AC_ARG_WITH(freetype-config, [  --with-freetype-config=PROG   Use FreeType configuration program PROG], freetype_config=$withval, freetype_config=)
+
+	if test "$freetype_config" = "yes"; then 
+		AC_PATH_PROG(ft_config,freetype-config,no)
+        	if test "$ft_config" = "no"; then
+			echo "To compile ming please install freetype:"
+			echo " as .deb user: sudo apt-get install libfreetype6 libfreetype6-dev"
+			echo ""
+			echo "or disable the freetype configuration option:"
+			echo " --disable-freetype"
+                	AC_MSG_ERROR([Could not detect freetype-config!])
+        	fi
+	else
+        	ft_config="$freetype_config"
+	fi
+
+	FREETYPE_CFLAGS="`$ft_config --cflags`"
+	FREETYPE_LIBS="`$ft_config --libs`"
+
+	AC_SUBST(FREETYPE_LIBS)
+	AC_SUBST(FREETYPE_CFLAGS)
 fi
-
-FREETYPE_CFLAGS="`$ft_config --cflags`"
-FREETYPE_LIBS="`$ft_config --libs`"
-
-AC_SUBST(FREETYPE_LIBS)
-AC_SUBST(FREETYPE_CFLAGS)
 
 dnl Check for the gif or ungif libraries
 AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", GIFLIB="")
