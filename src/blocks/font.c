@@ -396,11 +396,7 @@ SWFFont newSWFFont_fromFile(const char *filename /* filename for fontfile */)
 	}
 	else if(fdb_check(header))
 	{
-#if USE_FREETYPE
 		SWFFont font = loadSWFFont_fromFdbFile(file);
-#else
-		SWFFont font = NULL;
-#endif
 		fclose(file);
 		return font;
 	}
