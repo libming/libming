@@ -1,2 +1,2 @@
 test01:swf: SWFText version 2  
-test02:swf: SWFText version 2 mixing font styles 
+test02:swf,freetype: SWFText version 2 mixing font styles 
