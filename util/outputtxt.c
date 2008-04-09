@@ -1511,7 +1511,7 @@ outputSWF_DEFINESPRITE (SWF_Parserstruct * pblock)
   int i;
   OUT_BEGIN (SWF_DEFINESPRITE);
 
-  iprintf(" SpriteId: %d\n", sblock->SpriteId );
+  iprintf(" CharacterID: %d\n", sblock->SpriteId );
   iprintf(" FrameCount: %d\n", sblock->FrameCount );
   iprintf(" BlockCount: %d\n", sblock->BlockCount );
   ++INDENT;
