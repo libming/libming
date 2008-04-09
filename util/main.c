@@ -43,8 +43,8 @@
 
 #include "blocks/blocktypes.h"
 #include "action.h"
-#include "read.h"
 #include "parser.h"
+#include "read.h"
 #include "swfoutput.h"
 
 SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
@@ -56,19 +56,6 @@ FILE *tempfile;
 char *swftargetfile=NULL;
 struct Movie m;
 int verbose = 0;
-
-void readRect(FILE *f, struct Rect *s)
-{
-	int nBits;
-
-	byteAlign();
-
-	nBits = readBits(f, 5);
-	s->xMin = readSBits(f, nBits);
-	s->xMax = readSBits(f, nBits);
-	s->yMin = readSBits(f, nBits);
-	s->yMax = readSBits(f, nBits);
-}
 
 /*
  * Compressed swf-files have a 8 Byte uncompressed header and a
@@ -273,14 +260,14 @@ main (int argc, char *argv[])
 	for (;;)
 	{
 		blockoffset = fileOffset;
-      
+
 		// printf ("Block offset: %d %d\n", fileOffset, m.size);
-      
+
 		// sanity check
 		if(m.size - fileOffset < 2)
 		{
-			warning("sudden file end: read block header failed @%lu fileSize %lu\n", 
-				fileOffset, m.size)
+			warning("sudden file end: read block header failed @%i fileSize %i\n", 
+				fileOffset, m.size);
 			break;
 		}
 		block = readUInt16 (f);

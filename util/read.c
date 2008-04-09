@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "parser.h"
+
 int fileOffset = 0;
 
 void error(char *s, ...)
@@ -91,6 +93,18 @@ int readSBits(FILE *f, int number)
     return num - (1<<number);
   else
     return num;
+}
+
+void readRect(FILE *f, struct Rect *s)
+{
+  int nBits;
+  byteAlign();
+
+  nBits = readBits(f, 5);
+  s->xMin = readSBits(f, nBits);
+  s->xMax = readSBits(f, nBits);
+  s->yMin = readSBits(f, nBits);
+  s->yMax = readSBits(f, nBits);
 }
 
 int readUInt8(FILE *f)
