@@ -54,23 +54,21 @@ char *filename;
 char tmp_name[PATH_MAX];
 FILE *tempfile;
 char *swftargetfile=NULL;
-
+struct Movie m;
 int verbose = 0;
 
 void readRect(FILE *f, struct Rect *s)
 {
-  int nBits;
+	int nBits;
 
-  byteAlign();
+	byteAlign();
 
-  nBits = readBits(f, 5);
-  s->xMin = readSBits(f, nBits);
-  s->xMax = readSBits(f, nBits);
-  s->yMin = readSBits(f, nBits);
-  s->yMax = readSBits(f, nBits);
+	nBits = readBits(f, 5);
+	s->xMin = readSBits(f, nBits);
+	s->xMax = readSBits(f, nBits);
+	s->yMin = readSBits(f, nBits);
+	s->yMax = readSBits(f, nBits);
 }
-
-struct Movie m;
 
 /*
  * Compressed swf-files have a 8 Byte uncompressed header and a
@@ -183,18 +181,20 @@ static void usage(char *prog)
 int
 main (int argc, char *argv[])
 {
-  SWF_Parserstruct *blockp;
-  FILE *f;
-  char first;
-  int block, type, blockstart, blockoffset, length, nextFrame=0;
-  int compressed = 0;
+	SWF_Parserstruct *blockp;
+	FILE *f;
+	struct stat stat_buf;
+	char first;
+	int block, type, blockstart, blockoffset, length, nextFrame=0;
+	int compressed = 0;
 
-  setbuf(stdout,NULL);
-  switch( argc ) {
-	  case 2:
+	setbuf(stdout, NULL);
+	switch( argc ) 
+	{
+	case 2:
 		filename = argv[1];
 		break;
-	  case 3:
+	case 3:
   		if (strcmp (argv[1], "-v") == 0) {
 			verbose = 1;
 			filename = argv[2];
@@ -203,8 +203,8 @@ main (int argc, char *argv[])
 			swftargetfile = argv[2];
 		}
 		break;
-	  case 4:
-  		if (strcmp (argv[1], "-v") != 0) {
+	case 4:
+		if (strcmp (argv[1], "-v") != 0) {
 			usage(argv[0]);
 			exit(1);
 		}
@@ -212,111 +212,129 @@ main (int argc, char *argv[])
 		filename = argv[2];
 		swftargetfile = argv[3];
 		break;
-	  case 0:
-	  case 1:
-	 default:
+	case 0:
+	case 1:
+	default:
 		usage(argv[0]);
 		exit(1);
-  }
-  if (!(f = fopen (filename, "rb")))
-    {
-      fprintf(stderr,"Sorry, can't seem to read the file '%s'\n",filename);
-      usage(argv[0]);
-      exit(1);
-    }
-
-  first = readUInt8 (f);
-  compressed = (first == ('C')) ? 1 : 0;
-  if (!
-      ((first == 'C' || first == 'F') && readUInt8 (f) == 'W'
-       && readUInt8 (f) == 'S'))
-    {
-      error ("Doesn't look like a swf file to me..\n");
-    }
+	}
+	
+	if (!(f = fopen (filename, "rb")))
+	{
+		fprintf(stderr,"Sorry, can't seem to read the file '%s'\n",filename);
+		usage(argv[0]);
+		exit(1);
+	}
+	
+	first = readUInt8 (f);
+	compressed = (first == ('C')) ? 1 : 0;
+	if (!((first == 'C' || first == 'F') && readUInt8 (f) == 'W'
+		&& readUInt8 (f) == 'S'))
+	{
+		error ("Doesn't look like a swf file to me..\n");
+	}
 
 	m.version = readUInt8 (f);
 	m.size = readUInt32 (f);
 	m.soundStreamFmt = -1;
-        m.fonts = NULL;
-        m.numFonts = 0;
+	m.fonts = NULL;
+	m.numFonts = 0;
 	if (compressed)
 	{
 		int unzipped = cws2fws (f, m.size);
 		if (m.size != (unzipped + 8))
 		{
 			warning ("m.size: %i != %i+8  Maybe wrong value in swfheader.\n", m.size, unzipped + 8);
+			m.size = unzipped +8;
 		}
 		fclose (f);
 		f = tempfile;
-	        fseek(f,8,SEEK_SET);
+		fseek(f,8,SEEK_SET);
 	}
-
+	else 
+	{
+		if(fstat(fileno(f), &stat_buf) < 0) // verify file size!
+		{
+			perror("stat failed: ");
+			return -1;
+		}	
+		if(m.size != stat_buf.st_size)
+		{
+			warning("header indicates a filesize of %lu but filesize is %lu\n", m.size, stat_buf.st_size);
+			m.size = stat_buf.st_size; 
+		}
+	}
 	readRect (f, &(m.frame));
 
 	m.rate = readUInt8 (f) / 256.0 + readUInt8 (f);
 	m.nFrames = readUInt16 (f);
-
 	outputHeader(&m);
 
-  for (;;)
-    {
-      blockoffset = fileOffset;
+	for (;;)
+	{
+		blockoffset = fileOffset;
       
-//      printf ("Block offset: %d\n", fileOffset);
+		// printf ("Block offset: %d %d\n", fileOffset, m.size);
       
-      block = readUInt16 (f);
-      type = block >> 6;
+		// sanity check
+		if(m.size - fileOffset < 2)
+		{
+			warning("sudden file end: read block header failed @%lu fileSize %lu\n", 
+				fileOffset, m.size)
+			break;
+		}
+		block = readUInt16 (f);
+		type = block >> 6;
 
-      length = block & ((1 << 6) - 1);
+		length = block & ((1 << 6) - 1);
 
-      if (length == 63)		/* it's a long block. */ 
-      {
-         length = readUInt32 (f);
-      }
+		if (length == 63)		/* it's a long block. */ 
+		{
+			length = readUInt32 (f);
+		}
+		
+		//      printf ("Found Block: %s (%i), %i bytes\n", blockName (type), type, length);
+		blockstart = fileOffset;
+		nextFrame = fileOffset+length;
 
-//      printf ("Found Block: %s (%i), %i bytes\n", blockName (type), type, length);
-       
-      blockstart = fileOffset;
-      nextFrame = fileOffset+length;
+		blockp= blockParse(f,length,type);
 
-      blockp= blockParse(f,length,type);
+		if( ftell(f) != nextFrame ) 
+		{
+			// will SEEK_SET later, so this is not a critical error
+		        warning(" Stream out of sync after parse of blocktype %d (%s)."
+				" %ld but expecting %d.\n", type, blockName(type),
+				ftell(f),nextFrame);
+		}
 
-      if( ftell(f) != nextFrame ) {
-		// will SEEK_SET later, so this is not a critical error
-        warning(" Stream out of sync after parse of blocktype %d (%s)."
-			" %ld but expecting %d.\n",
-			type, blockName(type),
-			ftell(f),nextFrame);
-      }
+		if( blockp ) 
+		{
+			outputBlock( type, blockp, f);
+			free(blockp);	
+		} else {
+			warning("Error parsing block (unknown block type: %d, length %d)\n", 
+				type, length);
+		}
 
-      if( blockp ) {
-        outputBlock( type, blockp, f);
-	free(blockp);
-      } else {
-	fprintf(stderr, "Error parsing block (unknown block type: %d, length %d)\n", type, length);
-      }
-
-      if (type == 0 || fileOffset >= m.size)
-        break;
+		if (type == 0 || fileOffset >= m.size)
+			break;
 	
-      fseek(f, nextFrame, SEEK_SET);
-      fileOffset = ftell(f);
-    }
-    putchar ('\n');
+		fseek(f, nextFrame, SEEK_SET);
+		fileOffset = ftell(f);
+	}
+	putchar ('\n');
 
-    if (fileOffset < m.size)
-    {
-      warning ("extra garbage (i.e., we messed up in main): \n");
-      dumpBytes (f, m.size - fileOffset);
-      printf ("\n\n");
-    }
-
-  outputTrailer(&m);
-
-  fclose (f);
-  if (compressed)
-    {
-      unlink (tmp_name);
-    }
-  exit (0);
+	if (fileOffset < m.size)
+	{
+		warning ("extra garbage (i.e., we messed up in main): \n");
+		dumpBytes (f, m.size - fileOffset);
+		printf ("\n\n");
+	}
+	outputTrailer(&m);
+	fclose (f);
+	if (compressed)
+	{
+		unlink (tmp_name);
+	}
+	exit (0);
 }
