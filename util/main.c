@@ -165,6 +165,17 @@ static void usage(char *prog)
 #endif
 }
 
+static int filelen_check_fails(int minLength)
+{
+	if(m.size - fileOffset < minLength)
+	{
+		warning("sudden file end: read failed @%i fileSize %i, request %i\n", 
+				fileOffset, m.size, minLength);
+		return -1;
+	}
+	return 0;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -182,7 +193,7 @@ main (int argc, char *argv[])
 		filename = argv[1];
 		break;
 	case 3:
-  		if (strcmp (argv[1], "-v") == 0) {
+		if (strcmp (argv[1], "-v") == 0) {
 			verbose = 1;
 			filename = argv[2];
 		} else {
@@ -263,13 +274,8 @@ main (int argc, char *argv[])
 
 		// printf ("Block offset: %d %d\n", fileOffset, m.size);
 
-		// sanity check
-		if(m.size - fileOffset < 2)
-		{
-			warning("sudden file end: read block header failed @%i fileSize %i\n", 
-				fileOffset, m.size);
+		if(filelen_check_fails(2))
 			break;
-		}
 		block = readUInt16 (f);
 		type = block >> 6;
 
@@ -277,14 +283,18 @@ main (int argc, char *argv[])
 
 		if (length == 63)		/* it's a long block. */ 
 		{
+			if(filelen_check_fails(4))
+				break;
 			length = readUInt32 (f);
 		}
 		
 		//      printf ("Found Block: %s (%i), %i bytes\n", blockName (type), type, length);
 		blockstart = fileOffset;
 		nextFrame = fileOffset+length;
-
-		blockp= blockParse(f,length,type);
+		
+		if(filelen_check_fails(length))
+			break;
+		blockp= blockParse(f, length, type);
 
 		if( ftell(f) != nextFrame ) 
 		{
