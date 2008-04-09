@@ -12,16 +12,27 @@
 
 #include "ming.h"
 
-/* XXX - error calls should be macros to save the file/lineno */
-
-extern SWFMsgFunc SWF_warn;
-extern SWFMsgFunc SWF_error;
+extern SWFMsgFunc _SWF_warn;
+extern SWFMsgFunc _SWF_error;
 
 void warn_default(const char *msg, ...);
 void error_default(const char *msg, ...);
 
 SWFMsgFunc setSWFWarnFunction(SWFMsgFunc warn);
 SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
+
+#define SWF_warn(msg, va...) 		\
+do {					\
+	if(_SWF_warn)			\
+		_SWF_warn((msg), ##va); \
+} while(0)
+
+#define SWF_error(msg, va...) 		\
+do {					\
+	if(_SWF_error)			\
+		_SWF_error((msg), ##va); \
+} while(0)
+
 
 #ifndef _MSC_VER
 #define SWF_warnOnce(msg, va...)	\
@@ -30,12 +41,12 @@ SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
 					\
 	if(!__warned)			\
 	{				\
-		SWF_warn((msg), ##va);	\
+		_SWF_warn((msg), ##va);	\
 		__warned = 1;		\
 	}				\
 }
 #else
-#define SWF_warnOnce SWF_warn
+#define SWF_warnOnce _SWF_warn
 #endif					
 
 /* fix for cygwin compile */

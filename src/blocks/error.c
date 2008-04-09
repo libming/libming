@@ -49,14 +49,14 @@ error_default(const char *msg, ...)
 }
 
 
-SWFMsgFunc SWF_warn = warn_default;
-SWFMsgFunc SWF_error = error_default;
+SWFMsgFunc _SWF_warn = warn_default; //NULL;
+SWFMsgFunc _SWF_error = error_default;
 
 SWFMsgFunc
 setSWFWarnFunction(SWFMsgFunc warnfunc)
 {
-	SWFMsgFunc old = SWF_error;
-	SWF_warn = warnfunc;
+	SWFMsgFunc old = _SWF_warn;
+	_SWF_warn = warnfunc;
 	return old;
 }
 
@@ -64,8 +64,8 @@ setSWFWarnFunction(SWFMsgFunc warnfunc)
 SWFMsgFunc
 setSWFErrorFunction(SWFMsgFunc errorfunc)
 {
-	SWFMsgFunc old = SWF_error;
-	SWF_error = errorfunc;
+	SWFMsgFunc old = _SWF_error;
+	_SWF_error = errorfunc;
 	return old;
 }
 
