@@ -8,7 +8,7 @@ Offset: 20 (0x0014)
 Block type: 39 (SWF_DEFINESPRITE)
 Block length: 8
 
- SpriteId: 1
+ CharacterID: 1
  FrameCount: 1
  BlockCount: 2
 
@@ -43,7 +43,7 @@ Offset: 38 (0x0026)
 Block type: 39 (SWF_DEFINESPRITE)
 Block length: 8
 
- SpriteId: 3
+ CharacterID: 3
  FrameCount: 1
  BlockCount: 2
 

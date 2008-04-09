@@ -34,7 +34,7 @@ Offset: 60 (0x003c)
 Block type: 39 (SWF_DEFINESPRITE)
 Block length: 81
 
- SpriteId: 2
+ CharacterID: 2
  FrameCount: 6
  BlockCount: 13
 
@@ -179,7 +179,7 @@ Offset: 147 (0x0093)
 Block type: 39 (SWF_DEFINESPRITE)
 Block length: 55
 
- SpriteId: 3
+ CharacterID: 3
  FrameCount: 4
  BlockCount: 9
 
