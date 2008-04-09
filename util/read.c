@@ -8,27 +8,6 @@
 
 int fileOffset = 0;
 
-void error(char *s, ...)
-{
-  va_list ap;
-  va_start(ap, s);
-  fflush(stdout);
-  vprintf(s, ap);
-  va_end(ap);
-  putchar('\n');
-  fflush(stdout);
-  exit(-1);
-}
-
-void warning(char *s, ...)
-{
-  va_list ap;
-  va_start(ap, s);
-  vprintf(s, ap);
-  va_end(ap);
-  putchar('\n');
-}
-
 int buffer;
 int bufbits = 0; /* # of bits in buffer */
 

@@ -81,19 +81,19 @@ cws2fws(FILE *f, uLong outsize)
 
 	if ( tmp_fd == -1 )
 	{
-		error("Couldn't create tempfile.\n");
+		SWF_error("Couldn't create tempfile.\n");
 	}
 
 	tempfile = fdopen(tmp_fd, "w+");
 	if ( ! tempfile )
 	{
-		error("fdopen: %s", strerror(errno));
+		SWF_error("fdopen: %s", strerror(errno));
 	}
 
 
 	if( stat(filename, &statbuffer) == -1 )
 	{
-		error("stat() failed on input file");
+		SWF_error("stat() failed on input file");
 	}
 	
 	insize = statbuffer.st_size-8;
@@ -101,38 +101,38 @@ cws2fws(FILE *f, uLong outsize)
 	if(!inbuffer){ error("malloc() failed"); }
 	if ( ! fread(inbuffer, insize, 1, f) )
 	{
-		error("Error reading input file");
+		SWF_error("Error reading input file");
 	}
 	
 	/* We don't trust the value in the swfheader. */
 	outbuffer=NULL;
 	do{
 		outbuffer = realloc(outbuffer, outsize);	
-		if (!outbuffer) { error("malloc(%lu) failed",outsize); }
+		if (!outbuffer) { SWF_error("malloc(%lu) failed",outsize); }
 
 #ifdef USE_ZLIB
 		/* uncompress the data */
 		err=uncompress(outbuffer,&outsize,inbuffer,insize);
 #else // ndef USE_ZLIB
 		/* No zlib, so we can't uncompress the data */
-		error("No zlib support compiled in, "
+		SWF_error("No zlib support compiled in, "
 			"cannot read compressed SWF");
 #endif
 		switch(err){
 			case Z_MEM_ERROR:
-				error("Not enough memory.\n");
+				SWF_error("Not enough memory.\n");
 				break;
 			case Z_BUF_ERROR:
-				fprintf(stderr,"resizing outbuffer..\n");
+				SWF_warn("resizing outbuffer..\n");
 				outsize*=2;
 				continue;
 			case Z_DATA_ERROR:
-				error("Data corrupted. Couldn't uncompress.\n");
+				SWF_error("Data corrupted. Couldn't uncompress.\n");
 				break;
 			case Z_OK:
 				break;
 			default:
-				error("Unknown returnvalue of uncompress:%i\n",
+				SWF_error("Unknown returnvalue of uncompress:%i\n",
 					err);
 				break;
 		}
@@ -147,7 +147,7 @@ cws2fws(FILE *f, uLong outsize)
 
 	if ( outsize != fwrite(outbuffer, 1, outsize, tempfile) )
 	{
-		error("Error writing uncompressed");
+		SWF_error("Error writing uncompressed");
 	}
 
 	rewind(tempfile);
@@ -169,7 +169,7 @@ static int filelen_check_fails(int minLength)
 {
 	if(m.size - fileOffset < minLength)
 	{
-		warning("sudden file end: read failed @%i fileSize %i, request %i\n", 
+		SWF_warn("sudden file end: read failed @%i fileSize %i, request %i\n", 
 				fileOffset, m.size, minLength);
 		return -1;
 	}
@@ -229,7 +229,7 @@ main (int argc, char *argv[])
 	if (!((first == 'C' || first == 'F') && readUInt8 (f) == 'W'
 		&& readUInt8 (f) == 'S'))
 	{
-		error ("Doesn't look like a swf file to me..\n");
+		SWF_error ("Doesn't look like a swf file to me..\n");
 	}
 
 	m.version = readUInt8 (f);
@@ -242,7 +242,7 @@ main (int argc, char *argv[])
 		int unzipped = cws2fws (f, m.size);
 		if (m.size != (unzipped + 8))
 		{
-			warning ("m.size: %i != %i+8  Maybe wrong value in swfheader.\n", m.size, unzipped + 8);
+			SWF_warn ("m.size: %i != %i+8  Maybe wrong value in swfheader.\n", m.size, unzipped + 8);
 			m.size = unzipped +8;
 		}
 		fclose (f);
@@ -258,7 +258,7 @@ main (int argc, char *argv[])
 		}	
 		if(m.size != stat_buf.st_size)
 		{
-			warning("header indicates a filesize of %lu but filesize is %lu\n", m.size, stat_buf.st_size);
+			SWF_warn("header indicates a filesize of %lu but filesize is %lu\n", m.size, stat_buf.st_size);
 			m.size = stat_buf.st_size; 
 		}
 	}
@@ -299,7 +299,7 @@ main (int argc, char *argv[])
 		if( ftell(f) != nextFrame ) 
 		{
 			// will SEEK_SET later, so this is not a critical error
-		        warning(" Stream out of sync after parse of blocktype %d (%s)."
+		        SWF_warn(" Stream out of sync after parse of blocktype %d (%s)."
 				" %ld but expecting %d.\n", type, blockName(type),
 				ftell(f),nextFrame);
 		}
@@ -309,7 +309,7 @@ main (int argc, char *argv[])
 			outputBlock( type, blockp, f);
 			free(blockp);	
 		} else {
-			warning("Error parsing block (unknown block type: %d, length %d)\n", 
+			SWF_warn("Error parsing block (unknown block type: %d, length %d)\n", 
 				type, length);
 		}
 
@@ -323,7 +323,7 @@ main (int argc, char *argv[])
 
 	if (fileOffset < m.size)
 	{
-		warning ("extra garbage (i.e., we messed up in main): \n");
+		SWF_warn("extra garbage (i.e., we messed up in main): \n");
 		dumpBytes (f, m.size - fileOffset);
 		printf ("\n\n");
 	}

@@ -7,8 +7,6 @@ typedef unsigned char boolean;
 #define true (boolean)1
 #define false (boolean)0
 
-void error(const char *s, ...);
-void warning(const char *s, ...);
 char *indent();
 void byteAlign();
 int readBits(FILE *f, int number);

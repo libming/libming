@@ -27,6 +27,7 @@
 #include "decompile.h"
 #include "parser.h"
 #include "read.h"
+#include "error.h"
 
 extern struct Movie m;
 extern SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
@@ -730,7 +731,7 @@ parseSWF_MORPHLINESTYLES (FILE * f, SWF_MORPHLINESTYLES * linestyle,
       else if(version == 2)
         parseSWF_MORPHLINESTYLE2 (f, &(linestyle->LineStyles2[i]));
       else
-        error("parseSWF_MORPHLINESTYLES: unknow MORPH version\n"); 
+        SWF_error("parseSWF_MORPHLINESTYLES: unknow MORPH version\n"); 
     }
 }
 
@@ -1517,7 +1518,7 @@ parseSWF_DEFINEBUTTON2 (FILE * f, int length)
   parserrec->CharacterEndFlag = readUInt8 (f);
   if ( parserrec->CharacterEndFlag != 0 )
   {
-    warning(" CharacterEndFlag in DefineButton2 != 0");
+    SWF_warn(" CharacterEndFlag in DefineButton2 != 0");
   }
 
   parserrec->numActions = 0;
@@ -2023,7 +2024,7 @@ parseSWF_DEFINEFONTALIGNZONES(FILE *f, int length)
   parserrec->Reserved = readBits(f, 6);
   parserrec->GlyphCount = Movie_getFontGlyphCount(&m, parserrec->FontID);
   if(parserrec->GlyphCount < 0)
-	error("SWF_DEFINEFONTALIGNZONES: FontID %i not present\n", parserrec->FontID);
+	SWF_error("SWF_DEFINEFONTALIGNZONES: FontID %i not present\n", parserrec->FontID);
   parserrec->ZoneTable = malloc(sizeof(struct SWF_ZONERECORD) * parserrec->GlyphCount);
  
   for(i = 0; i < parserrec->GlyphCount; i++)
@@ -2094,7 +2095,7 @@ parseSWF_DEFINEMORPHSHAPE (FILE * f, int length)
   parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles), 1);
   
   if(parserrec->Offset == 0)
-    error("parseSWF_DEFINEMORPHSHAPE: offset == 0!\n");
+    SWF_error("parseSWF_DEFINEMORPHSHAPE: offset == 0!\n");
   
   parseSWF_SHAPE (f, &(parserrec->StartEdges), 0, endEdges - fileOffset);
   parseSWF_SHAPE (f, &(parserrec->EndEdges), 0, end - fileOffset);
@@ -2124,7 +2125,7 @@ parseSWF_DEFINEMORPHSHAPE2 (FILE * f, int length)
   parseSWF_MORPHLINESTYLES (f, &(parserrec->MorphLineStyles), 2);
   
   if(parserrec->Offset == 0)
-    error("parseSWF_DEFINEMORPHSHAPE2: offset == 0!\n");
+    SWF_error("parseSWF_DEFINEMORPHSHAPE2: offset == 0!\n");
   
   parseSWF_SHAPE (f, &(parserrec->StartEdges), 0, endEdges - fileOffset);
   parseSWF_SHAPE (f, &(parserrec->EndEdges), 0, end - fileOffset);

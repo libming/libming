@@ -41,6 +41,7 @@
 #include "read.h"
 #include "action.h"
 #include "swftypes.h"
+#include "../src/blocks/error.h"
 
 #ifndef HAVE_VASPRINTF
 /* Workaround for the lack of vasprintf()
@@ -614,7 +615,7 @@ struct SWF_ACTIONPUSHPARAM * pop()
 #ifdef DEBUGSTACK		/* continue w stack dummy */
 	if( Stack == NULL ) push(newVar("// *** pop(): INTERNAL STACK ERROR FOUND ***"));
 #else
-	if( Stack == NULL ) error("Stack blown!! - pop");
+	if( Stack == NULL ) SWF_error("Stack blown!! - pop");
 #endif
 	t=Stack;
 	Stack=t->next;
@@ -630,7 +631,7 @@ struct SWF_ACTIONPUSHPARAM * peek()
 #ifdef DEBUGSTACK		/* continue w stack dummy */
 	if( Stack == NULL ) push(newVar("// *** peek(): INTERNAL STACK ERROR FOUND ***"));
 #else
-	if( Stack == NULL ) error("Stack blown!! - peek");
+	if( Stack == NULL ) SWF_error("Stack blown!! - peek");
 #endif
 	return Stack->val;
 }
@@ -733,7 +734,7 @@ char * decompile5Action(int n, SWF_ACTION *actions,int indent);
 
 
 #define SanityCheck(curact,test,msg ) \
-    if(!(test) ) error( "SanityCheck failed in %s\n %s\n", #curact, msg );
+    if(!(test) ) SWF_error( "SanityCheck failed in %s\n %s\n", #curact, msg );
 
 #define OUT_BEGIN(block) \
 	                struct block *sact = (struct block *)act;
@@ -3009,7 +3010,7 @@ decompileCAST(int n, SWF_ACTION *actions,int maxn)
 int
 decompileAction(int n, SWF_ACTION *actions,int maxn)
 {
-    if( n > maxn ) error("Action overflow!!");
+    if( n > maxn ) SWF_error("Action overflow!!");
 
 #ifdef DEBUG
     fprintf(stderr,"%d:\tACTION[%3.3d]: %s\n",actions[n].SWF_ACTIONRECORD.Offset, n, actionName(actions[n].SWF_ACTIONRECORD.ActionCode));
