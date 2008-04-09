@@ -32,9 +32,9 @@ libactioncompiler_la_LIBADD = # $(LEXLIB)
 
 AM_CPPFLAGS = -I$(srcdir)/..
 
-noinst_PROGRAMS = test
-test_SOURCES = main.c 
-test_LDADD = libactioncompiler.la
+#noinst_PROGRAMS = test
+#test_SOURCES = main.c 
+#test_LDADD = libactioncompiler.la
 
 EXTRA_DIST = \
 	swf4compiler.flex \
