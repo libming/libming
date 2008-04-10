@@ -98,7 +98,7 @@ cws2fws(FILE *f, uLong outsize)
 	
 	insize = statbuffer.st_size-8;
 	inbuffer = malloc(insize);
-	if(!inbuffer){ error("malloc() failed"); }
+	if(!inbuffer){ SWF_error("malloc() failed"); }
 	if ( ! fread(inbuffer, insize, 1, f) )
 	{
 		SWF_error("Error reading input file");
@@ -176,56 +176,13 @@ static int filelen_check_fails(int minLength)
 	return 0;
 }
 
-int
-main (int argc, char *argv[])
+static int readMovieHeader(FILE *f, int *compressed)
 {
-	SWF_Parserstruct *blockp;
-	FILE *f;
-	struct stat stat_buf;
 	char first;
-	int block, type, blockstart, blockoffset, length, nextFrame=0;
-	int compressed = 0;
-
-	setbuf(stdout, NULL);
-	switch( argc ) 
-	{
-	case 2:
-		filename = argv[1];
-		break;
-	case 3:
-		if (strcmp (argv[1], "-v") == 0) {
-			verbose = 1;
-			filename = argv[2];
-		} else {
-			filename = argv[1];
-			swftargetfile = argv[2];
-		}
-		break;
-	case 4:
-		if (strcmp (argv[1], "-v") != 0) {
-			usage(argv[0]);
-			exit(1);
-		}
-		verbose = 1;
-		filename = argv[2];
-		swftargetfile = argv[3];
-		break;
-	case 0:
-	case 1:
-	default:
-		usage(argv[0]);
-		exit(1);
-	}
-	
-	if (!(f = fopen (filename, "rb")))
-	{
-		fprintf(stderr,"Sorry, can't seem to read the file '%s'\n",filename);
-		usage(argv[0]);
-		exit(1);
-	}
+	struct stat stat_buf;
 	
 	first = readUInt8 (f);
-	compressed = (first == ('C')) ? 1 : 0;
+	*compressed = (first == ('C')) ? 1 : 0;
 	if (!((first == 'C' || first == 'F') && readUInt8 (f) == 'W'
 		&& readUInt8 (f) == 'S'))
 	{
@@ -237,7 +194,7 @@ main (int argc, char *argv[])
 	m.soundStreamFmt = -1;
 	m.fonts = NULL;
 	m.numFonts = 0;
-	if (compressed)
+	if (*compressed)
 	{
 		int unzipped = cws2fws (f, m.size);
 		if (m.size != (unzipped + 8))
@@ -267,7 +224,13 @@ main (int argc, char *argv[])
 	m.rate = readUInt8 (f) / 256.0 + readUInt8 (f);
 	m.nFrames = readUInt16 (f);
 	outputHeader(&m);
+	return 0;
+}
 
+static void readMovie(FILE *f)
+{
+	int block, type, blockstart, blockoffset, length, nextFrame=0;
+	SWF_Parserstruct *blockp;
 	for (;;)
 	{
 		blockoffset = fileOffset;
@@ -328,6 +291,57 @@ main (int argc, char *argv[])
 		printf ("\n\n");
 	}
 	outputTrailer(&m);
+}
+
+
+int
+main (int argc, char *argv[])
+{
+	FILE *f;
+	int compressed = 0;
+
+	setbuf(stdout, NULL);
+	switch( argc ) 
+	{
+	case 2:
+		filename = argv[1];
+		break;
+	case 3:
+		if (strcmp (argv[1], "-v") == 0) {
+			verbose = 1;
+			filename = argv[2];
+		} else {
+			filename = argv[1];
+			swftargetfile = argv[2];
+		}
+		break;
+	case 4:
+		if (strcmp (argv[1], "-v") != 0) {
+			usage(argv[0]);
+			exit(1);
+		}
+		verbose = 1;
+		filename = argv[2];
+		swftargetfile = argv[3];
+		break;
+	case 0:
+	case 1:
+	default:
+		usage(argv[0]);
+		exit(1);
+	}
+	
+	if (!(f = fopen (filename, "rb")))
+	{
+		fprintf(stderr,"Sorry, can't seem to read the file '%s'\n",filename);
+		usage(argv[0]);
+		exit(1);
+	}
+	
+	if(readMovieHeader(f, &compressed))
+		SWF_error("reading movie header failed\n");
+	
+	readMovie(f);
 	fclose (f);
 	if (compressed)
 	{
