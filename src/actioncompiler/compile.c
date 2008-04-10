@@ -640,12 +640,15 @@ int chkctx(enum ctx val)
 			for(n = ctx_count ; --n >= 0 ; )
 				switch(ctx_stack[n])
 				{	case CTX_SWITCH:
+						return CTX_SWITCH;
 					case CTX_LOOP:
-						return 0;
+						return CTX_LOOP;
 					case CTX_FOR_IN:
-						return 1;
+						return CTX_FOR_IN;
 					case CTX_FUNCTION:
 						return -1;
+					case CTX_BREAK:
+						return CTX_BREAK;
 					default: ; /* computers are stupid */
 				}
 			return -1;

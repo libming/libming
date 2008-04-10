@@ -445,20 +445,29 @@ switch_cases
 	;
 
 switch_case
-	: CASE expr ':' stmts BREAK ';'
+	: CASE expr ':' stmts
 		{ $$.cond = $2;
 		  $$.action = $4;
-		  $$.isbreak = 1; }
-
-	| CASE expr ':' stmts
-		{ $$.cond = $2;
-		  $$.action = $4;
-		  $$.isbreak = 0; }
+		  if(chkctx(CTX_BREAK) == CTX_BREAK)
+		  {
+			delctx(CTX_BREAK);
+		  	$$.isbreak = 1;
+		  }
+		  else
+			$$.isbreak = 0; 
+		}
 
 	| DEFAULT ':' stmts
 		{ $$.cond = NULL;
 		  $$.action = $3;
-		  $$.isbreak = 0; }
+		  if(chkctx(CTX_BREAK) == CTX_BREAK)
+	          {
+			delctx(CTX_BREAK);
+		  	$$.isbreak = 1;
+		  }
+		  else
+			$$.isbreak = 0;
+		}
 	;
 
 
@@ -842,15 +851,24 @@ cont_stmt
 // break is possible if there is a CTX_LOOP, CTX_FOR_IN or CTX_SWITCH
 break_stmt
 	: BREAK ';'
-		{ int tmp = chkctx(CTX_BREAK);
-		  if(tmp < 0)
-			swf5error("break outside switch / loop");
+		{ int context = chkctx(CTX_BREAK);
 		  $$ = newBuffer();
-		  if(tmp)	/* break out of a for .. in */
-			bufferWriteOp($$, SWFACTION_POP);
-		  bufferWriteOp($$, SWFACTION_JUMP);
-		  bufferWriteS16($$, 2);
-		  bufferWriteS16($$, MAGIC_BREAK_NUMBER); }
+		  if(context == CTX_FOR_IN || context == CTX_LOOP)
+		  {
+		  	if(CTX_FOR_IN)	/* break out of a for .. in */
+				bufferWriteOp($$, SWFACTION_POP);
+		  	bufferWriteOp($$, SWFACTION_JUMP);
+		  	bufferWriteS16($$, 2);
+		  	bufferWriteS16($$, MAGIC_BREAK_NUMBER); 
+		  }
+		  else if(context == CTX_SWITCH)
+		  {
+			addctx(CTX_BREAK);	
+		  }
+		  else
+			swf5error("break outside switch / loop");
+		}
+
 	;
 
 urlmethod
