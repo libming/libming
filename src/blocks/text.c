@@ -83,6 +83,7 @@ struct SWFTextRecord_s
 	unsigned short* string;
 
 	int* advance;
+	int advAllocated;
 	int nAdvanceBits;
 };
 
@@ -249,6 +250,7 @@ SWFText_addTextRecord(SWFText text)
 	textRecord->x = 0;
 	textRecord->y = 0;
 	textRecord->advance = NULL;
+	textRecord->advAllocated = 0;
 	textRecord->nAdvanceBits = 0;
 
 	if ( current == NULL )
@@ -292,7 +294,7 @@ destroySWFTextRecord(SWFTextRecord record)
 	if ( record->string != NULL )
 		free(record->string);
 
-	if ( record->advance != NULL )
+	if ( record->advance != NULL && record->advAllocated)
 		free(record->advance);
 
 	if ( record != NULL )
@@ -669,15 +671,14 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 	if(!len) return;	// do not try to calculate 1st char of null string
 
 	/* compute advances (spacing) from spacing, advance and kern table */
-
 	if ( textRecord->advance == NULL )
 	{
 		textRecord->advance = (int*)malloc(sizeof(int) * len);
-
 		/* If malloc() failed, return early */
 		if (NULL == textRecord->advance)
 			return;
 
+		textRecord->advAllocated = 1;
 		memset(textRecord->advance, 0, sizeof(int) * len);
 	}
 
