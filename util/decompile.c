@@ -567,7 +567,7 @@ push(struct SWF_ACTIONPUSHPARAM *val)
 #ifdef DEBUG
 	printf("*push* type=%d\n",val->Type);
 #endif
-	t = calloc(1,sizeof(Stack));
+	t = calloc(1,sizeof(*Stack));
 	t->type = val->Type;
 	t->val = val;
 	t->next = Stack;
@@ -582,7 +582,7 @@ pushdup()
 #ifdef DEBUG
 	printf("*pushdup*\n");
 #endif
-	t = calloc(1,sizeof(Stack));
+	t = calloc(1,sizeof(*Stack));
 	t->type = Stack->type;
 	t->val =  Stack->val;
 	t->next = Stack;
@@ -597,7 +597,7 @@ pushvar(struct SWF_ACTIONPUSHPARAM *val)
 #ifdef DEBUG
 	printf("*pushvar*\n");
 #endif
-	t = calloc(1,sizeof(Stack));
+	t = calloc(1,sizeof(*Stack));
 	t->type = 'v';
 	t->val = val;
 	t->next = Stack;
