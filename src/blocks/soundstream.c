@@ -107,7 +107,7 @@ void skipMP3(SWFSoundStream stream, float skip)
 	while(skipFrames > 0) {
 		l = nextMP3Frame(stream->source.mp3.input);
 		if (l < 0) {
-			printf("no more frames to skip \n");
+			SWF_warn("no more frames to skip \n");
 			break;
 		}
 		--skipFrames;
@@ -247,8 +247,11 @@ fillBlock_flv_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 	while ( delay > frameSize)
 	{
 		length = nextMP3Frame(input);	
-		if (length < 0) /* parse error: not a valid mp3 frame */
+		if (length < 0)
+		{
+			SWF_warn("parse error: not a valid mp3 frame\n");
 			return -1;
+		}
 		else if(length == 0) /* eof */
 		{
 			ret = FLVStream_nextTagType(flv, tag, tag, FLV_AUDIOTAG);

@@ -129,7 +129,7 @@ int readMP3Header(SWFInput input, struct mp3_header *mp3h)
 	SWFInput_byteAlign(input);
 	if((frameSync & 0x7ff) != 0x7ff)
 	{
-		SWFInput_seek(input, -4, SEEK_CUR);  
+		SWFInput_seek(input, -4, SEEK_CUR);
 		return -1;
 	}
 
@@ -156,7 +156,6 @@ int nextMP3Frame(SWFInput input)
 	
 	if(mp3h.samplingRate == 0 || mp3h.bitrate == 0)
 		SWF_error("invalid mp3 file\n");
-
 	if(mp3h.version == MP3_VERSION_1)
 	{
 		mp3h.padding <<= 2;
