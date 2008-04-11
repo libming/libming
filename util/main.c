@@ -337,10 +337,11 @@ main (int argc, char *argv[])
 		usage(argv[0]);
 		exit(1);
 	}
-	
+
 	if(readMovieHeader(f, &compressed))
 		SWF_error("reading movie header failed\n");
-	
+	if(compressed)	
+		f = tempfile;
 	readMovie(f);
 	fclose (f);
 	if (compressed)
