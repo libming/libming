@@ -57,6 +57,7 @@ char *swftargetfile=NULL;
 struct Movie m;
 int verbose = 0;
 
+#if USE_ZLIB
 /*
  * Compressed swf-files have a 8 Byte uncompressed header and a
  * zlib-compressed body. 
@@ -110,14 +111,8 @@ cws2fws(FILE *f, uLong outsize)
 		outbuffer = realloc(outbuffer, outsize);	
 		if (!outbuffer) { SWF_error("malloc(%lu) failed",outsize); }
 
-#ifdef USE_ZLIB
 		/* uncompress the data */
 		err=uncompress(outbuffer,&outsize,inbuffer,insize);
-#else // ndef USE_ZLIB
-		/* No zlib, so we can't uncompress the data */
-		SWF_error("No zlib support compiled in, "
-			"cannot read compressed SWF");
-#endif
 		switch(err){
 			case Z_MEM_ERROR:
 				SWF_error("Not enough memory.\n");
@@ -153,6 +148,7 @@ cws2fws(FILE *f, uLong outsize)
 	rewind(tempfile);
 	return (int)outsize;
 }
+#endif
 
 static void usage(char *prog)
 {
@@ -196,6 +192,7 @@ static int readMovieHeader(FILE *f, int *compressed)
 	m.numFonts = 0;
 	if (*compressed)
 	{
+#if USE_ZLIB
 		int unzipped = cws2fws (f, m.size);
 		if (m.size != (unzipped + 8))
 		{
@@ -205,6 +202,12 @@ static int readMovieHeader(FILE *f, int *compressed)
 		fclose (f);
 		f = tempfile;
 		fseek(f,8,SEEK_SET);
+#else
+
+		/* No zlib, so we can't uncompress the data */
+		SWF_error("No zlib support compiled in, "
+			"cannot read compressed SWF");
+#endif
 	}
 	else 
 	{
