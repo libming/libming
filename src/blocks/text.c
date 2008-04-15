@@ -706,7 +706,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 		textRecord->advance[i] = adv * textRecord->height / 1024;
 
 		textRecord->nAdvanceBits = max(textRecord->nAdvanceBits,
-																	 SWFOutput_numSBits(textRecord->advance[i]));
+			SWFOutput_numSBits(textRecord->advance[i]));
 
 	}
 }
