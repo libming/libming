@@ -1494,15 +1494,31 @@ outputSWF_DEFINESHAPE4 (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 {
-  
 	OUT_BEGIN (SWF_DEFINESOUND);
 	iprintf(" CharacterID: %d\n", sblock->SoundId);
-	iprintf(" SoundFormat: %d\n", sblock->SoundFormat);
-	iprintf(" SoundRate: %d\n", sblock->SoundRate);
-	iprintf(" SoundSize: %d\n", sblock->SoundSize);
-	iprintf(" SoundType: %d\n", sblock->SoundType);
+	
+	iprintf(" SoundFormat: ");
+	switch(sblock->SoundFormat)
+	{
+		case 0:	iprintf("uncompressed\n"); break;
+		case 1: iprintf("ADPCM\n"); break;
+		case 2: iprintf("MP3\n"); break;
+		case 3: iprintf("uncompressed (LE)\n"); break;
+		case 6: iprintf("Nellymoser\n"); break;
+		default: iprintf("unknow ID %d\n", sblock->SoundFormat);
+	}
+	
+	iprintf(" SoundRate: ");
+	switch(sblock->SoundRate)
+	{
+		case 0: iprintf("5.5 KHz\n"); break;
+		case 1: iprintf("11 KHz\n"); break;
+		case 2: iprintf("22 KHz\n"); break;
+		case 3: iprintf("44 KHz\n"); break;
+	}
+	iprintf(" SoundSize: %s\n", sblock->SoundSize?"16-bit":"8-bit");
+	iprintf(" SoundType: %s\n", sblock->SoundType?"Stereo":"Mono");
 	iprintf(" SoundSampleCount: %d\n", sblock->SoundSampleCount);
-	//iprintf(" SoundData: ");
 }
 
 void
