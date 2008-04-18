@@ -113,3 +113,4 @@ extern SWF_Parserstruct *parseSWF_DOABC(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_SYMBOLCLASS(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINEBINARYDATA(FILE *f, int length);
 extern SWF_Parserstruct *parseSWF_DEFINESCENEANDFRAMEDATA(FILE *f, int length);
+extern SWF_Parserstruct *parseSWF_UNKNOWNBLOCK(FILE *f, int length);

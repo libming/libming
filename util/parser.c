@@ -3380,3 +3380,12 @@ parseSWF_DEFINESCENEANDFRAMEDATA(FILE *f, int length)
   }
   PAR_END;
 }
+
+SWF_Parserstruct *
+parseSWF_UNKNOWNBLOCK(FILE *f, int length)
+{
+  PAR_BEGIN(SWF_UNKNOWNBLOCK);
+  parserrec->Data = (UI8 *)readBytes(f, length);
+  PAR_END;
+}
+

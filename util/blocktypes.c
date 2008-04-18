@@ -128,7 +128,7 @@ blockName (SWFBlocktype header)
 	  return blocks[i].name;
 	}
     }
-  return "Confused Block Type";	/* Should never get here */
+  return "Unknown Block Type";	/* Should never get here */
 
 }
 
@@ -144,8 +144,5 @@ blockParse (FILE *f, int length, SWFBlocktype header)
       return blocks[i].parser(f,length);
     }
   }
-  // if no block found skip length
-  silentSkipBytes(f, length);
-  return NULL;
-
+  return parseSWF_UNKNOWNBLOCK(f, length);
 }

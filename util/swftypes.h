@@ -2039,6 +2039,11 @@ struct SWF_DEFINESCENEANDFRAMEDATA
 	struct FRAME_DATA *Frames;
 };
 
+struct SWF_UNKNOWNBLOCK
+{
+	UI8 *Data;
+};
+
 typedef union _inline_SWF_Parserstruct
 {
   struct SWF_CHARACTERSET SWF_CHARACTERSET;
@@ -2120,6 +2125,7 @@ typedef union _inline_SWF_Parserstruct
   struct SWF_SYMBOLCLASS SWF_SYMBOLCLASS;
   struct SWF_DEFINEBINARYDATA SWF_DEFINEBINARYDATA;
   struct SWF_DEFINESCENEANDFRAMEDATA SWF_DEFINESCENEANDFRAMEDATA;
+  struct SWF_UNKNOWNBLOCK SWF_UNKNOWNBLOCK;
 } _inline_SWF_Parserstruct;
 
 struct SWF_Parserstruct_s

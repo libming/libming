@@ -80,6 +80,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEVIDEOSTREAM, outputSWF_DEFINEVIDEOSTREAM},
   {SWF_DOACTION, outputSWF_DOACTION},
   {SWF_ENABLEDEBUGGER, outputSWF_ENABLEDEBUGGER},
+  {SWF_ENABLEDEBUGGER2, outputSWF_ENABLEDEBUGGER2},
   {SWF_END, outputSWF_END},
   {SWF_EXPORTASSETS, outputSWF_EXPORTASSETS},
   {SWF_FONTREF, outputSWF_FONTREF},
@@ -1620,9 +1621,17 @@ outputSWF_DOACTION (SWF_Parserstruct * pblock)
 void
 outputSWF_ENABLEDEBUGGER (SWF_Parserstruct * pblock)
 {
-  //OUT_BEGIN (SWF_ENABLEDEBUGGER);
-
+  OUT_BEGIN (SWF_ENABLEDEBUGGER);
+  iprintf(" Password: %s\n", sblock->Password);
 }
+
+void
+outputSWF_ENABLEDEBUGGER2 (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_ENABLEDEBUGGER2);
+  iprintf(" Password: %s\n", sblock->Password);
+}
+
 
 void
 outputSWF_END (SWF_Parserstruct * pblock)
@@ -2850,6 +2859,14 @@ outputSWF_DEFINESCENEANDFRAMEDATA(SWF_Parserstruct *pblock)
 	i, sblock->Frames[i].FrameNum, sblock->Frames[i].FrameLabel);
 }
 
+void 
+outputSWF_UNKNOWNBLOCK(SWF_Parserstruct *pblock)
+{
+  OUT_BEGIN(SWF_UNKNOWNBLOCK);
+  if(sblock->Data == NULL)
+	return;
+  dumpBuffer(sblock->Data, pblock->length);
+}
 
 
 void
@@ -2911,9 +2928,10 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
     {
       if (outputs[i].type == type)
 	{
-	  return outputs[i].output (blockp);
+	  outputs[i].output (blockp);
+	  return;
 	}
     }
-  iprintf("Unknown block type %d\n", type );
+  outputSWF_UNKNOWNBLOCK(blockp);
   return;
 }
