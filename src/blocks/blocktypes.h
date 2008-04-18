@@ -91,6 +91,7 @@ typedef enum
   SWF_DEFINEVIDEOSTREAM		= 60,
   SWF_VIDEOFRAME		= 61,
   SWF_SERIALNUMBER		= 41,
+  SWF_DEBUGID			= 63,
 
   /* SWF8 tags */
   SWF_FILEATTRIBUTES            = 69,
@@ -103,6 +104,7 @@ typedef enum
   SWF_DEFINESCENEANDFRAMEDATA   = 86,
   SWF_STARTSOUND2		= 89,
   SWF_DEFINEFONTNAME		= 88,
+
   /* Unconfirmed tags */
   SWF_REFLEX			= 777,
 
