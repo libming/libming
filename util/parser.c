@@ -3382,6 +3382,14 @@ parseSWF_DEFINESCENEANDFRAMEDATA(FILE *f, int length)
 }
 
 SWF_Parserstruct *
+parseSWF_DEBUGID(FILE *f, int length)
+{
+  PAR_BEGIN(SWF_DEBUGID);
+  parserrec->UUID = (UI8 *)readBytes(f, length);
+  PAR_END;
+}
+
+SWF_Parserstruct *
 parseSWF_UNKNOWNBLOCK(FILE *f, int length)
 {
   PAR_BEGIN(SWF_UNKNOWNBLOCK);

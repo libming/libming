@@ -122,6 +122,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DOABC, outputSWF_DOABC},
   {SWF_SYMBOLCLASS, outputSWF_SYMBOLCLASS},
   {SWF_DEFINESCENEANDFRAMEDATA, outputSWF_DEFINESCENEANDFRAMEDATA},
+  {SWF_DEBUGID, outputSWF_DEBUGID},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -2857,6 +2858,17 @@ outputSWF_DEFINESCENEANDFRAMEDATA(SWF_Parserstruct *pblock)
   for(i = 0; i < sblock->FrameLabelCount; i++)
     iprintf("  FrameLabel #%d: Frame: %d, Name: %s\n", 
 	i, sblock->Frames[i].FrameNum, sblock->Frames[i].FrameLabel);
+}
+
+void 
+outputSWF_DEBUGID(SWF_Parserstruct *pblock)
+{
+  int i;
+  OUT_BEGIN(SWF_DEBUGID);
+  iprintf(" UUID: ");
+  for(i = 0; i < pblock->length; i++)
+    iprintf("%x ", sblock->UUID[i]);
+  iprintf("\n");
 }
 
 void 

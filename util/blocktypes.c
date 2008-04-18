@@ -112,6 +112,7 @@ static struct SWFBlock blocks[] = {
   BlockType (SWF_SYMBOLCLASS),
   BlockType (SWF_DEFINESCENEANDFRAMEDATA),
   BlockType (SWF_DEFINEBINARYDATA),
+  BlockType (SWF_DEBUGID),
 };
 
 static int numBlocks = sizeof (blocks) / sizeof (struct SWFBlock);
