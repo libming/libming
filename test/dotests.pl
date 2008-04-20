@@ -188,6 +188,7 @@ sub doswftest($$$)
 	return 1;
 }
 
+sub dotestset($$$);
 sub dotestset($$$)
 {
 	local($depth,$srcdir,$builddir) = @_;
