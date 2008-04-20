@@ -9,10 +9,10 @@ Block type: 14 (SWF_DEFINESOUND)
 Block length: 695075
 
  CharacterID: 1
- SoundFormat: 2
- SoundRate: 2
- SoundSize: 1
- SoundType: 1
+ SoundFormat: MP3
+ SoundRate: 22 KHz
+ SoundSize: 16-bit
+ SoundType: Stereo
  SoundSampleCount: 1916352
 
 Offset: 695101 (0xa9b3d)
