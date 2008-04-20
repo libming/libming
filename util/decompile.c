@@ -728,7 +728,7 @@ newVar_N2(char *var,char *var2, char *var3,char *var4,int pop_counter,char *fina
 /* End Package */
 
 static int gIndent;
-void decompileActions(int n, SWF_ACTION *actions,int indent);
+static void decompileActions(int n, SWF_ACTION *actions,int indent);
 char * decompile5Action(int n, SWF_ACTION *actions,int indent);
 
 /******************************************************************************/
@@ -3465,7 +3465,7 @@ decompileActions(int n, SWF_ACTION *actions, int indent)
 	gIndent = svindent;
 }
 
-static char *
+char *
 decompile5Action(int n, SWF_ACTION *actions,int indent)
 {
 	int j;
