@@ -887,14 +887,7 @@ urlmethod
 	;
 
 level
-	: INTEGER
-		{ char *lvlstring = (char*) malloc(12*sizeof(char));
-		  sprintf(lvlstring, "_level%d", $1);
-		  $$ = newBuffer();
-		  bufferWriteString($$, lvlstring, strlen(lvlstring)+1);
-		  free(lvlstring); }
-
-	| expr
+	: expr
 		{ $$ = newBuffer();
 		  bufferWriteString($$, "_level", 7);
 		  bufferConcat($$, $1);
