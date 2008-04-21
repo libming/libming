@@ -1,67 +1,71 @@
 File version: 6
-File size: 144
+File size: 155
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 12 (SWF_DOACTION)
-Block length: 114
+Block length: 125
 
- 12 Actions
+ 14 Actions
     26:SWFACTION_CONSTANTPOOL
      [000] http://localhost/varsswf.php?a=1
      [001] cont
-     [002] _level1
+     [002] _level
      [003] window
-    84:SWFACTION_PUSH
+    83:SWFACTION_PUSH
      [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
      [001]   Constant: 1 "cont"
-    91:SWFACTION_GETURL2
+    90:SWFACTION_GETURL2
   Method: POST
   Target: Window
   LoadVars: Yes
   Reserved bits: 0
-    95:SWFACTION_PUSH
+    94:SWFACTION_PUSH
      [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
-     [001]   Constant: 2 "_level1"
-    102:SWFACTION_GETURL2
+     [001]   Constant: 2 "_level"
+     [002]   Integer: 1
+    106:SWFACTION_STRINGCONCAT
+    107:SWFACTION_GETURL2
   Method: POST
   Target: Window
   LoadVars: No
   Reserved bits: 0
-    106:SWFACTION_PUSH
+    111:SWFACTION_PUSH
      [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
      [001]   Constant: 1 "cont"
-    113:SWFACTION_GETURL2
+    118:SWFACTION_GETURL2
   Method: GET
   Target: Sprite
   LoadVars: Yes
   Reserved bits: 0
-    117:SWFACTION_PUSH
+    122:SWFACTION_PUSH
      [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
-     [001]   Constant: 2 "_level1"
-    124:SWFACTION_GETURL2
-  Method: GET
-  Target: Sprite
-  LoadVars: No
-  Reserved bits: 0
-    128:SWFACTION_PUSH
-     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
-     [001]   Constant: 3 "window"
+     [001]   Constant: 2 "_level"
+     [002]   Integer: 1
+    134:SWFACTION_STRINGCONCAT
     135:SWFACTION_GETURL2
   Method: GET
+  Target: Sprite
+  LoadVars: No
+  Reserved bits: 0
+    139:SWFACTION_PUSH
+     [000]   Constant: 0 "http://localhost/varsswf.php?a=1"
+     [001]   Constant: 3 "window"
+    146:SWFACTION_GETURL2
+  Method: GET
   Target: Window
   LoadVars: No
   Reserved bits: 0
-    139:SWFACTION_END
+    150:SWFACTION_END
 
-Offset: 140 (0x008c)
+Offset: 151 (0x0097)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 142 (0x008e)
+Offset: 153 (0x0099)
 Block type: 0 (SWF_END)
 Block length: 0
 
