@@ -41,6 +41,11 @@ static int classContext = 0;
   } lval;
 }
 
+/* 
+ * we expect 53 shift/reduce conflicts
+ * see also: http://www.gnu.org/software/bison/manual/html_mono/bison.html#Shift_002fReduce
+ */
+%expect 53
 
 /* tokens etc. */
 
