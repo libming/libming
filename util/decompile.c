@@ -890,10 +890,22 @@ decompileGETURL2 (SWF_ACTION *act)
 	return 0;
 }
 
+static inline int OpCode(SWF_ACTION *actions, int n, int maxn)
+{
+	if(!n || n >= maxn)
+	{
+#if DEBUG
+		SWF_warn("OpCode: want %i, max %i\n", n, maxn);
+#endif
+		return -999;
+	}
+	return actions[n].SWF_ACTIONRECORD.ActionCode;
+}
+
 static int
 isStoreOp(int n, SWF_ACTION *actions,int maxn)
 {
-	switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+	switch(OpCode(actions, n, maxn))
 	{
 	case SWFACTION_STOREREGISTER:
 	case SWFACTION_SETVARIABLE:
@@ -913,14 +925,14 @@ decompileGOTOFRAME(int n, SWF_ACTION *actions,int maxn,int islabel)
 	OUT_BEGIN2(SWF_ACTIONGOTOFRAME);
 	sactv2 = (struct SWF_ACTIONGOTOLABEL*)sact;
 	INDENT
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PLAY)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_PLAY)
 	{
 		i=1;
 		puts("gotoAndPlay(");
 	}
 	else
 	{
-		if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOP)
+		if (OpCode(actions, n+1, maxn) == SWFACTION_STOP)
 			i=1;
 		puts("gotoAndStop(");
 	}
@@ -933,21 +945,21 @@ decompileGOTOFRAME(int n, SWF_ACTION *actions,int maxn,int islabel)
 }
 
 static int 
-decompileGOTOFRAME2(int n, SWF_ACTION *actions,int maxn)
+decompileGOTOFRAME2(int n, SWF_ACTION *actions, int maxn)
 {
 	int i=0;
 	OUT_BEGIN2(SWF_ACTIONGOTOFRAME2);
 	INDENT
 	if (n+1 < maxn)
 	{
-		if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PLAY ||
-		    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOP)
+		if (OpCode(actions, n+1, maxn) == SWFACTION_PLAY ||
+		    OpCode(actions, n+1, maxn) == SWFACTION_STOP)
 			i=1;
-		if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PLAY)
+		if (OpCode(actions, n+1, maxn) == SWFACTION_PLAY)
 			puts("gotoAndPlay(");
 		else
 		{
-			if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOP)
+			if (OpCode(actions, n+1, maxn) == SWFACTION_STOP)
 				puts("gotoAndStop(");
 			else
 			{
@@ -1018,22 +1030,16 @@ check_switch(int firstcode)
 }
 #endif
 
-#define CHECK_OPS(__want)	\
-do {				\
-	if(__want >=  maxn) {	\
-		return 0;	\
-	}			\
-} while(0);			\
-			
 
 static int
 decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 {
 	struct SWF_ACTIONPUSHPARAM *left, *right;
-	int op_l, op_r;
+	int op_l = OpCode(actions, n, maxn);
+	int op_r = OpCode(actions, n+1, maxn);
 	right=pop();
 	left=pop();
-	switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+	switch(OpCode(actions, n, maxn))
 	{
 	/*
 	case SWFACTION_GETMEMBER:
@@ -1041,9 +1047,6 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 		break;
 	*/
 	case SWFACTION_INSTANCEOF:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left)," instanceof ",getString(right)));
 		else
@@ -1051,117 +1054,78 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 		break;
 	case SWFACTION_ADD:
 	case SWFACTION_ADD2:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"+",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"+",getString(right),0,")"));
 		break;
 	case SWFACTION_SUBTRACT:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"-",getString(right)));	      
 		else
 			push(newVar_N("(",getString(left),"-",getString(right),0,")"));
 		break;
 	case SWFACTION_MULTIPLY:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"*",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"*",getString(right),0,")"));
 		break;
 	case SWFACTION_DIVIDE:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"/",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"/",getString(right),0,")"));
 		break;
 	case SWFACTION_MODULO:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"%",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"%",getString(right),0,")"));
 		break;
 	case SWFACTION_SHIFTLEFT:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"<<",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"<<",getString(right),0,")"));
 		break;
 	case SWFACTION_SHIFTRIGHT:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),">>",getString(right)));
 		else
 			push(newVar_N("(",getString(left),">>",getString(right),0,")"));
 		break;
 	case SWFACTION_SHIFTRIGHT2:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),">>>",getString(right)));
 		else
 			push(newVar_N("(",getString(left),">>>",getString(right),0,")"));
 		break;
 	case SWFACTION_LOGICALAND:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"&&",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"&&",getString(right),0,")"));
 		break;
 	case SWFACTION_LOGICALOR:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"||",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"||",getString(right),0,")"));
 		break;
 	case SWFACTION_BITWISEAND:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"&",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"&",getString(right),0,")"));
 		break;
 	case SWFACTION_BITWISEOR:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"|",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"|",getString(right),0,")"));
 		break;
 	case SWFACTION_BITWISEXOR:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"^",getString(right)));
 		else
@@ -1169,67 +1133,50 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 		break;
 	case SWFACTION_EQUALS2:	/* including negation */
 	case SWFACTION_EQUAL:
-		CHECK_OPS(n+2);
-		if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-		    actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF )
+		if( OpCode(actions, n+1, maxn) == SWFACTION_LOGICALNOT &&
+		    OpCode(actions, n+2, maxn) != SWFACTION_IF)
 		{
-			op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-			op_r = actions[n+2].SWF_ACTIONRECORD.ActionCode;
+			op_r = OpCode(actions, n+1, maxn);
 			if (precedence(op_l, op_r))
 				push(newVar3(getString(left),"!=",getString(right)));
 			else
 				push(newVar_N("(",getString(left),"!=",getString(right),0,")"));
 			return 1; /* due negation op */
 		}
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"==",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"==",getString(right),0,")"));
 		break;
 	case SWFACTION_LESS2:
-		CHECK_OPS(n+2);
-		if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-		    actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) 
+		if( OpCode(actions, n+1, maxn)  == SWFACTION_LOGICALNOT &&
+		    OpCode(actions, n+2, maxn) != SWFACTION_IF ) 
 		{
-			op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-			op_r = actions[n+2].SWF_ACTIONRECORD.ActionCode;
+			op_r = OpCode(actions, n+2, maxn);
 			if (precedence(op_l, op_r))
 				push(newVar3(getString(left),">=",getString(right)));
 			else
 				push(newVar_N("(",getString(left),">=",getString(right),0,")"));
 			return 1; /* due negation op */
 		}
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"<",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"<",getString(right),0,")"));
 		break;
 	case SWFACTION_GREATER:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),">",getString(right)));
 		else
 			push(newVar_N("(",getString(left),">",getString(right),0,")"));
 		break;
 	case SWFACTION_LESSTHAN:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"<",getString(right)));
 		else
 			push(newVar_N("(",getString(left),"<",getString(right),0,")"));
 		break;
-		case SWFACTION_STRINGEQ:
-		CHECK_OPS(n+1);
-		op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-		op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
+	case SWFACTION_STRINGEQ:
 		if (precedence(op_l, op_r))
 			push(newVar3(getString(left),"==",getString(right)));
 		else
@@ -1239,9 +1186,8 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 		puts("STRINGCOMPARE");
 		break;
 	case SWFACTION_STRICTEQUALS:
-		CHECK_OPS(n+1);
 #ifdef DECOMP_SWITCH
-		if  (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
+		if  (OpCode(actions, n, maxn) == SWFACTION_IF)
 		{
 			int code = actions[n+1].SWF_ACTIONIF.Actions[0].SWF_ACTIONRECORD.ActionCode;
 			if(check_switch(code))
@@ -1252,20 +1198,16 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 			}
 		}
 #endif
-		CHECK_OPS(n+2);
-		if( actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-		    actions[n+2].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF ) 
+		if( OpCode(actions, n+1, maxn) == SWFACTION_LOGICALNOT &&
+		    OpCode(actions, n+2, maxn) != SWFACTION_IF ) 
 		{
-			op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-			op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
+			op_r = OpCode(actions, n+2, maxn);
 			if (precedence(op_l, op_r))
 				push(newVar3(getString(left),"!==",getString(right)));
 			else
 				push(newVar_N("(",getString(left),"!==",getString(right),0,")"));
 			return 1; /* due negation op */
 		} else {
-			op_l = actions[n].SWF_ACTIONRECORD.ActionCode;
-			op_r = actions[n+1].SWF_ACTIONRECORD.ActionCode;
 			if (precedence(op_l, op_r))
 				push(newVar3(getString(left),"===",getString(right)));
 			else
@@ -1280,9 +1222,9 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 }
 
 static int
-isLogicalOp(int n, SWF_ACTION *actions,int maxn)
+isLogicalOp(int n, SWF_ACTION *actions, int maxn)
 {
-	switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+	switch(OpCode(actions, n, maxn))
 	{
 	case SWFACTION_LESSTHAN:
 	case SWFACTION_LOGICALAND:
@@ -1391,16 +1333,15 @@ static int
 decompileLogicalNot(int n, SWF_ACTION *actions, int maxn)
 {
 #ifdef STATEMENT_CLASS
-	if( n+2 < maxn &&
-	    actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE &&
-	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT &&
-	    actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF ) 
+	if(OpCode(actions, n-1, maxn) == SWFACTION_GETVARIABLE &&
+	   OpCode(actions, n+1, maxn) == SWFACTION_LOGICALNOT &&
+	   OpCode(actions, n+2, maxn) == SWFACTION_IF ) 
 	{
 		/* It's a class statement  -- skip over both NOTs */
 		return 1;
 	}
 #endif
-	if(n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF )
+	if(OpCode(actions, n+1, maxn) != SWFACTION_IF )
 		push(newVar2("!",getString(pop())));
 	return 0;
 }
@@ -1507,7 +1448,7 @@ decompileCALLFRAME(int n, SWF_ACTION *actions, int maxn)
 static int
 decompileGETTIME(int n, SWF_ACTION *actions, int maxn)
 {
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		INDENT
 		println("getTimer();");
@@ -1527,20 +1468,19 @@ decompileINCR_DECR(int n, SWF_ACTION *actions, int maxn, int is_incr)
 	struct SWF_ACTIONPUSHPARAM *var=pop();
 	char *dblop=is_incr ? "++":"--";
 
-	if( n > 0 && n + 2 < maxn && 
-	   (( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
-	     || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP 
-	     || actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
-	     || ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE
-	          &&  actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER
-	          &&  actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)))
+	if((OpCode(actions, n, maxn) == SWFACTION_PUSHDUP
+	     || OpCode(actions, n+1, maxn) == SWFACTION_PUSHDUP 
+	     || OpCode(actions, n+1, maxn) == SWFACTION_SETVARIABLE)
+	     || ( OpCode(actions, n-1, maxn) == SWFACTION_GETVARIABLE
+	          &&  OpCode(actions, n+1, maxn) == SWFACTION_STOREREGISTER
+	          &&  OpCode(actions, n+1, maxn) == SWFACTION_SETVARIABLE))
 	{
-		is_postop=(actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)?1:0;
+		is_postop=(OpCode(actions, n-1, maxn) == SWFACTION_PUSHDUP)?1:0;
 		if (is_postop)
 			var = newVar2(getString(var),dblop);
 		else
 			var = newVar2(dblop,getString(var));
-		if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETVARIABLE)
+		if (OpCode(actions, n+1, maxn) == SWFACTION_SETVARIABLE)
 		{
 			var->Type=11;	/* later trigger printing variable inc/dec */	
 		}
@@ -1557,30 +1497,29 @@ decompileINCR_DECR(int n, SWF_ACTION *actions, int maxn, int is_incr)
 	}
 	else
 	{
-		if( n > 0 && n + 2 < maxn && 
-		    ((actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
-		    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER &&
-		    actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER ) ||
-		   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER &&
-	    	    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER &&
-		    actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) ||
-		   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
-		    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)  ||
-		   (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
-		    actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
-		    actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER &&
-		    actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER &&
+		if((OpCode(actions, n-1, maxn) == SWFACTION_GETMEMBER &&
+		    OpCode(actions, n+1, maxn) == SWFACTION_STOREREGISTER &&
+		    OpCode(actions, n+2, maxn) == SWFACTION_SETMEMBER ) ||
+		   (OpCode(actions, n-1, maxn) == SWFACTION_STOREREGISTER &&
+	    	    OpCode(actions, n+1, maxn) == SWFACTION_SETMEMBER &&
+		    OpCode(actions, n+2, maxn) == SWFACTION_PUSH ) ||
+		   (OpCode(actions, n-1, maxn) == SWFACTION_PUSH &&
+		    OpCode(actions, n+1, maxn) == SWFACTION_SETMEMBER)  ||
+		   (OpCode(actions, n-3, maxn) == SWFACTION_GETMEMBER &&
+		    OpCode(actions, n-2, maxn) == SWFACTION_PUSH &&
+		    OpCode(actions, n-1, maxn) == SWFACTION_GETMEMBER &&
+		    OpCode(actions, n+1, maxn) == SWFACTION_SETMEMBER &&
 	    	((struct SWF_ACTIONPUSH *)&actions[n-2].SWF_ACTIONRECORD)->NumParam >= 4 
-	    		/* 4: a pair of get/set - FIXME: add more analysis about stack here */)))
+	    		/* 4: a pair of get/set - FIXME: add more analysis about stack here */))
 		{		// incr/decr object variables with side effects
-			is_postop= (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_SETMEMBER)?1:0;
+			is_postop= (OpCode(actions, n+1, maxn) == SWFACTION_SETMEMBER)?1:0;
 			if (is_postop)
 				var = newVar2(getString(var),dblop);
 			else
 				var = newVar2(dblop,getString(var));
-			if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) 
+			if (is_postop && OpCode(actions, n-1, maxn) == SWFACTION_PUSH) 
 				pop();
-			if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER ) 
+			if(OpCode(actions, n+1, maxn) == SWFACTION_GETMEMBER) 
 				pop();
 			
 			pop();
@@ -1591,21 +1530,21 @@ decompileINCR_DECR(int n, SWF_ACTION *actions, int maxn, int is_incr)
 			push(var);
 			push(var);
 		
-			if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH ) 
+			if (is_postop && OpCode(actions, n-1, maxn) == SWFACTION_PUSH ) 
 				push(var);
-			if (is_postop && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER ) 
+			if (is_postop && OpCode(actions, n-1, maxn) == SWFACTION_GETMEMBER ) 
 				push(var);
 		}
 		else
 		{
-			if( n > 0 && n + 3 < maxn &&
-			   actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH &&
-			   actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER &&
+			if(OpCode(actions, n-1, maxn) == SWFACTION_PUSH &&
+			   OpCode(actions, n+1, maxn) == SWFACTION_STOREREGISTER &&
 			   regs[actions[n+1].SWF_ACTIONSTOREREGISTER.Register]->Type == PUSH_VARIABLE)
 			{
 				var = newVar2(dblop,getString(var));
-				if ((actions[n+2].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP && actions[n-1].SWF_ACTIONPUSH.NumParam==1) ||
-				     actions[n+3].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+				if ((OpCode(actions, n+2, maxn) == SWFACTION_POP 
+				     && actions[n-1].SWF_ACTIONPUSH.NumParam==1) 
+				    || OpCode(actions, n+3, maxn) == SWFACTION_POP)
 				{
 					var->Type=11;	// later print inc/dec
 				}
@@ -1774,7 +1713,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions, int maxn)
 	else
 	{
 		puts(".");
-		if (n && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER)
+		if (OpCode(actions, n-1, maxn) == SWFACTION_STOREREGISTER)
 		{
 			struct SWF_ACTIONSTOREREGISTER *sactv2 = (struct SWF_ACTIONSTOREREGISTER*)&actions[n-1];
 			if (sactv2->Register==0)
@@ -1886,19 +1825,18 @@ decompileJUMP(int n, SWF_ACTION *actions, int maxn)
 	OUT_BEGIN2(SWF_ACTIONJUMP);
 	sactif=NULL;
 
-	if((n+1 < maxn && isLogicalOp(n+1, actions, maxn)) ||
-	   ( n+2 < maxn && (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) &&
-	     isLogicalOp(n+2, actions, maxn) ) ) 
+	if(isLogicalOp(n+1, actions, maxn) ||
+	   (OpCode(actions, n+1, maxn) == SWFACTION_PUSH && isLogicalOp(n+2, actions, maxn)))
 	{
 		/* Probably the start of a do {} while(), so skip it */
 		return 0;
 	}
 
 	/* Probably the end of a switch{}, so skip it */
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 		return 1;
 
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_JUMP) 
+	if (OpCode(actions, n+1, maxn) == SWFACTION_JUMP) 
 	{
 		if (actions[n+1].SWF_ACTIONJUMP.BranchOffset==0)
 			return 1;
@@ -1921,7 +1859,7 @@ decompileJUMP(int n, SWF_ACTION *actions, int maxn)
 			// at least one should push on stack
 #endif
 	 
-			if (actions[n+i+j].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
+			if (OpCode(actions, n+i+j, maxn) == SWFACTION_IF)
 			{
 				sactif = (struct SWF_ACTIONIF *)&(actions[n+i+j]);
 				/* chk whether last jump does lead us back to start of loop */
@@ -1964,7 +1902,7 @@ decompileJUMP(int n, SWF_ACTION *actions, int maxn)
 		{	// leaving block @last op with value on stack: a return x;
 			return decompileRETURN(n, actions,maxn);
 		}
-		if (n+2 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH && 
+		if (n+2 < maxn && OpCode(actions, n+1, maxn) == SWFACTION_PUSH && 
 			actions[n+2].SWF_ACTIONRECORD.Offset == actions[n+1].SWF_ACTIONRECORD.Offset+sact->BranchOffset)
 		{
 			return 1; 	// jump to short to be a 'break': but an internal jump over a push
@@ -2010,7 +1948,7 @@ static int
 decompileENUMERATE(int n, SWF_ACTION *actions, int maxn, int is_type2)
 {
 	int i=0;
-	while (i < maxn && i < 5 && actions[n+i].SWF_ACTIONRECORD.ActionCode != SWFACTION_IF)
+	while (i < maxn && i < 5 && OpCode(actions, n+i, maxn))
 		i++;
 	
 	INDENT  
@@ -2100,7 +2038,7 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 		if (actions[i+1].SWF_ACTIONRECORD.Offset==off1end)
 		{
 			// println("found #off end first= %d",i+1);
-			if (actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP)
+			if (OpCode(actions, i, maxn) == SWFACTION_JUMP)
 			{
 				maxoff=actions[i].SWF_ACTIONJUMP.BranchOffset+actions[i].SWF_ACTIONJUMP.Offset+5;
 				j=1;
@@ -2117,7 +2055,7 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 	{
 		for (i=maxn-1;i>=0;i--)			// seek from end of block last op of switch{}
 		{
-			if (actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP && !actions[i].SWF_ACTIONJUMP.BranchOffset)
+			if (OpCode(actions, i, maxn) == SWFACTION_JUMP && !actions[i].SWF_ACTIONJUMP.BranchOffset)
 			{
 				maxoff=actions[i].SWF_ACTIONRECORD.Offset+5;
 				j=2;
@@ -2148,10 +2086,10 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 	i=1;
 	do 					// here we go into main loop
 	{
-		if((actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_IF
-		   && actions[i-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_STRICTEQUALS )
-		   ||(actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP
-		   && actions[i-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_IF) )
+		if((OpCode(actions, i, maxn) == SWFACTION_IF
+		   && OpCode(actions, i-1, maxn) == SWFACTION_STRICTEQUALS )
+		   ||(OpCode(actions, i, maxn) == SWFACTION_JUMP
+		   && OpCode(actions, i-1, maxn) == SWFACTION_IF) )
 		{
 			start=i;
 			while (start<maxn 
@@ -2171,7 +2109,7 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 				        ccsize,actions[ccsize+start].SWF_ACTIONRECORD.Offset,
 				        actionName(actions[ccsize+start].SWF_ACTIONRECORD.ActionCode));
 #endif
-				if (actions[ccsize+start].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP)
+				if (OpCode(actions, ccsize+start, maxn) == SWFACTION_JUMP)
 				{
 					if (maxoff == actions[ccsize+start].SWF_ACTIONJUMP.Offset+5 + actions[ccsize+start].SWF_ACTIONJUMP.BranchOffset)
 					{
@@ -2289,11 +2227,10 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 	*/
 
 #ifdef STATEMENT_CLASS
-	if(n >= 4 && 
-	  (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
-	  (actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
-	  (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETVARIABLE) &&
-	  (actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) ) 
+	if((OpCode(actions, n-1, maxn) == SWFACTION_LOGICALNOT) &&
+	   (OpCode(actions, n-2, maxn) == SWFACTION_LOGICALNOT) &&
+	   (OpCode(actions, n-3, maxn) == SWFACTION_GETVARIABLE) &&
+	   (OpCode(actions, n-4, maxn) == SWFACTION_PUSH) ) 
 	{
 	    /* It's really a class definition */
 		INDENT
@@ -2306,11 +2243,11 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 		return 0;
 	}
 
-	if( n >= 4 &&
-	   (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
-	   (actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT) &&
-	   (actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_GETMEMBER) &&
-	   (actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH) ) 
+	if( 
+	   (OpCode(actions, n-1, maxn) == SWFACTION_LOGICALNOT) &&
+	   (OpCode(actions, n-2, maxn) == SWFACTION_LOGICALNOT) &&
+	   (OpCode(actions, n-3, maxn) == SWFACTION_GETMEMBER) &&
+	   (OpCode(actions, n-4, maxn) == SWFACTION_PUSH) ) 
 	{
 	    /* It's really a class definition */
 		INDENT
@@ -2363,15 +2300,15 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 	}
 
 	j=0;
-	while (actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE  && 
-	        actions[n-j].SWF_ACTIONRECORD.ActionCode != SWFACTION_ENUMERATE2 && j<n && j<5) 
+	while (OpCode(actions, n-j, maxn) != SWFACTION_ENUMERATE  && 
+	        OpCode(actions, n-j, maxn) != SWFACTION_ENUMERATE2 && j<n && j<5) 
 	{
 		j++;		// check for a pending ENUMERATE
 	}
 	
-	if ((actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE ||
-	  actions[n-j].SWF_ACTIONRECORD.ActionCode == SWFACTION_ENUMERATE2 ) && 
-	  actions[n-j+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STOREREGISTER )
+	if ((OpCode(actions, n-j, maxn) == SWFACTION_ENUMERATE ||
+	     OpCode(actions, n-j, maxn) == SWFACTION_ENUMERATE2 ) && 
+	      OpCode(actions, n-j+1, maxn) == SWFACTION_STOREREGISTER )
 	{
 		struct SWF_ACTIONPUSHPARAM *var;
 		int x;
@@ -2536,11 +2473,11 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 		/* at this point let's check for conditioned jumps that are NOT 'if':
 	      	currently that is code for the locical operations  && and ||
 	   	*/
-			if (actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
+			if (OpCode(actions, n-1, maxn) == SWFACTION_PUSHDUP)
 				is_logor=1;
 			
-			if (actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP
-			    && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_LOGICALNOT)
+			if (OpCode(actions, n-2, maxn)== SWFACTION_PUSHDUP
+			    && OpCode(actions, n-1, maxn) == SWFACTION_LOGICALNOT)
 			{
 				is_logand=1;
 			}
@@ -2568,7 +2505,7 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 			return 0;
 		}
 #ifdef DECOMP_SWITCH
-		if ( actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_STRICTEQUALS
+		if ( OpCode(actions, n-1, maxn) == SWFACTION_STRICTEQUALS
 		     && check_switch(sact->Actions[0].SWF_ACTIONRECORD.ActionCode) )
 		{
 			union SWF_ACTION *xact,*xact0;
@@ -2603,11 +2540,11 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 			if (actions[maxn-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
 				lastopsize+=actions[maxn-1].SWF_ACTIONIF.BranchOffset + 3; /* +3 see parser.c: "Action + Length bytes not included in the length" */
 			
-			if (n-4 >= 0 && offseoloop 
+			if (offseoloop 
 			    &&  ! (has_lognot
-			    && actions[n-2].SWF_ACTIONRECORD.ActionCode == SWFACTION_EQUALS2 
-			    && actions[n-3].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH
-			    && actions[n-4].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSHDUP)
+			    && OpCode(actions, n-2, maxn) == SWFACTION_EQUALS2 
+			    && OpCode(actions, n-3, maxn) == SWFACTION_PUSH
+			    && OpCode(actions, n-4, maxn) == SWFACTION_PUSHDUP)
 			    && limit > actions[maxn-1].SWF_ACTIONRECORD.Offset+lastopsize)
 			{
 				/* the jump leads outside this limit, so it is a simple 'if'
@@ -2761,7 +2698,7 @@ decompileDEFINEFUNCTION(int n, SWF_ACTION *actions, int maxn, int is_type2)
 	if(n+1 < maxn)
 	{
 		println("/* function followed by OP %x */", 
-		        actions[n+1].SWF_ACTIONRECORD.ActionCode);
+		        OpCode(actions, n+1, maxn));
 	}
 #endif
 #if USE_LIB
@@ -2931,7 +2868,7 @@ decompileCALLMETHOD(int n, SWF_ACTION *actions, int maxn)
 		else
 			push(newVar_N(getName(obj),".",getName(meth),"(", nparam->p.Integer,")"));
 	}
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		/* call method and throw away any result */
 		INDENT
@@ -2961,7 +2898,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions, int maxn)
 		nparam->p.Integer=0;
 	}
 	push(newVar_N("","",getName(meth),"(", nparam->p.Integer,")"));
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		/* call function and throw away any result */
 		INDENT
@@ -2985,7 +2922,7 @@ static int
 decompileSingleArgBuiltInFunctionCall(int n, SWF_ACTION *actions, int maxn, char *functionname)
 {
 	push(newVar_N("","",functionname,"(", 1,")"));
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		/* call function and throw away any result */
 		INDENT
@@ -3014,7 +2951,7 @@ static int
 decompileSUBSTRING(int n, SWF_ACTION *actions,int maxn)
 {
 	push(newVar_N("","","substr","(", 3,")"));
-	if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		/* call function and throw away any result */
 		INDENT
@@ -3029,7 +2966,7 @@ static int
 decompileSTRINGCONCAT(int n, SWF_ACTION *actions, int maxn)
 {
 	push(newVar_N("","","concat","(", 2,")"));
-	if (actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		/* call function and throw away any result */
 		INDENT
@@ -3112,7 +3049,7 @@ decompileDELETE(int n, SWF_ACTION *actions, int maxn, int is_type2)
 		push(newVar_N("delete(",getName(pop()),".",getName(pop()), 0,")"));
 
 
-	if (n+1 < maxn && actions[n+1].SWF_ACTIONRECORD.ActionCode == SWFACTION_POP)
+	if (OpCode(actions, n+1, maxn) == SWFACTION_POP)
 	{
 		/* call delete() with its args and throw away any result */
 		INDENT
@@ -3136,11 +3073,11 @@ decompileSETTARGET(int n, SWF_ACTION *actions, int maxn, int is_type2)
 		println("tellTarget('%s') {" ,name);
 		while(action_cnt+n<maxn)
 		{
-			if (actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET
-			    || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_SETTARGET2
-			    || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_DEFINEFUNCTION
-			    || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_DEFINEFUNCTION2
-			    || actions[n+1+action_cnt].SWF_ACTIONRECORD.ActionCode==SWFACTION_END) 
+			if (OpCode(actions, n+1+action_cnt, maxn)==SWFACTION_SETTARGET
+			    || OpCode(actions, n+1+action_cnt, maxn)==SWFACTION_SETTARGET2
+			    || OpCode(actions, n+1+action_cnt, maxn)==SWFACTION_DEFINEFUNCTION
+			    || OpCode(actions, n+1+action_cnt, maxn)==SWFACTION_DEFINEFUNCTION2
+			    || OpCode(actions, n+1+action_cnt, maxn)==SWFACTION_END) 
 			{
 				break;
 			}
