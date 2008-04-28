@@ -230,7 +230,7 @@ sub get_mingconfig{
 	 open(FH, "$file") or die "can't open $file $!";
 	 while(<FH>){
       next unless /^#define/;
-			if (/USE_ZLIB/ and /1$/) {$lib.=" -lz"};
+			if (/USE_ZLIB/ and /1$/) { $lib.=" -lz"};
 			if (/USE_GIF/ and /1$/) {$lib.=" -lungif"};
 			if (/USE_PNG/ and /1$/) {$lib.=" -lpng"};
 			if (/USE_FREETYPE/ and /1$/) {$lib.=" -lfreetype"};
