@@ -57,3 +57,28 @@ SWFFont loadSWFFontFromFile(FILE *file)
 {
 	return loadSWFFont_fromFdbFile(file);
 }
+
+
+/*
+ * provide ming-0.3.x ABI compatibility
+ */
+#ifdef SWFMovie_add
+#undef SWFMovie_add
+SWFDisplayItem SWFMovie_add(SWFMovie movie, SWFBlock block)
+{
+	SWFMovieBlockType ublock;
+	ublock.block = block;
+	return SWFMovie_add_internal(movie, ublock);
+}
+
+#endif
+
+#ifdef SWFMovie_replace
+#undef SWFMovie_replace
+static inline int SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock block)
+{
+	SWFMovieBlockType ublock;
+	ublock.block = block;
+	return SWFMovie_replace_internal(movie, item, ublock);
+}
+#endif
