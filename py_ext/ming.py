@@ -35,6 +35,20 @@ class SWFBase:
         setattr(self, name, val)
 
 
+class SWFCXform(SWFBase):
+	
+    def __init__(rAdd=0, gAdd=0, bAdd=0, aAdd=0, rMult=1.0, gMult=1.0, bMult=1.0, aMult=1.0):
+        self.this = mingc.newSWFCXform(rAdd, gAdd, bAdd, aAdd, rMult, gMult, bMult, aMult)
+
+    def __del__(self):
+        mingc.destroySWFCXform(self.this)
+
+    def setColorAdd(self, rAdd, gAdd, bAdd, aAdd=0xff):
+        mingc.SWFCXform_setColorAdd(self.this, rAdd, gAdd, bAdd, aAdd)
+
+    def setColorMult(self, rMult, gMult, bMult, aMult):
+        mingc.SWFCXform_setColorMult(self.this, rMult, gMult, bMult, aMult)
+
 class SWFRect(SWFBase):
 
     def __init__(self, minX, maxX, minY, maxY):
@@ -820,9 +834,13 @@ class SWFSoundStream(SWFBase):
 
 class SWFSound(SWFBase):
 
-    def __init__(self, fname):
-        self.file = open(fname, "rb")
-        self.this = mingc.newSWFSound(self.file)
+    def __init__(self, arg):
+        self.arg = arg;
+        if isinstance(arg, SWFSoundStream):
+            self.this = mingc.newSWFSound_fromSoundStream(arg)
+        else:
+            self.file = open(arg, "rb")
+            self.this = mingc.newSWFSound(self.file)
 
     # display list destroys this..
 
