@@ -834,13 +834,13 @@ class SWFSoundStream(SWFBase):
 
 class SWFSound(SWFBase):
 
-    def __init__(self, arg):
+    def __init__(self, arg, flags=0):
         self.arg = arg;
         if isinstance(arg, SWFSoundStream):
             self.this = mingc.newSWFSound_fromSoundStream(arg)
         else:
             self.file = open(arg, "rb")
-            self.this = mingc.newSWFSound(self.file)
+            self.this = mingc.newSWFSound(self.file, flags)
 
     # display list destroys this..
 
