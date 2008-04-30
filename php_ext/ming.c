@@ -78,9 +78,9 @@ static SWFSoundInstance getSoundInstance(zval *id TSRMLS_DC);
 static SWFVideoStream getVideoStream(zval *id TSRMLS_DC);
 static SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC);
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC);
-#endif
 static SWFCharacter getCharacterClass(zval *id TSRMLS_DC);
 static SWFBinaryData getBinaryData(zval *id TSRMLS_DC);
+#endif
 
 #define PHP_MING_FILE_CHK(file) \
 	if ((PG(safe_mode) && !php_checkuid((file), NULL, CHECKUID_CHECK_FILE_AND_DIR)) || php_check_open_basedir((file) TSRMLS_CC)) {	\
@@ -183,6 +183,7 @@ static int le_swfbuttonrecordp;
 static int le_swfbinarydatap;
 static int le_swfinitactionp;
 static int le_swfprebuiltclipp;
+static int le_swfsoundstreamp;
 #endif
 static int le_swfcharacterp;
 
@@ -210,6 +211,7 @@ static zend_class_entry *buttonrecord_class_entry_ptr;
 static zend_class_entry *binarydata_class_entry_ptr;
 static zend_class_entry *initaction_class_entry_ptr;
 static zend_class_entry *prebuiltclip_class_entry_ptr;
+static zend_class_entry *soundstream_class_entry_ptr;
 #endif
 static zend_class_entry *character_class_entry_ptr;
 
@@ -271,7 +273,6 @@ static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 	else if(Z_OBJCE_P(id) == sound_class_entry_ptr)
 		return (SWFCharacter)getSound(id TSRMLS_CC);
 #ifdef HAVE_NEW_MING
-
 	else if(Z_OBJCE_P(id) == fontchar_class_entry_ptr)
 		return (SWFCharacter)getFontCharacter(id TSRMLS_CC);
 	else if(Z_OBJCE_P(id) == soundinstance_class_entry_ptr)
@@ -2161,6 +2162,76 @@ static zend_function_entry swfmorph_functions[] = {
 
 /* }}} */
 
+/* {{{ SWFSoundStream
+ */
+
+/* {{{ proto class soundstream_init(file)
+ */
+PHP_METHOD(swfsoundstream, __construct)
+{
+	zval **zfile;
+	SWFSoundStream sound = NULL;
+	SWFInput input;
+	int ret;
+
+	switch(ZEND_NUM_ARGS()) 
+	{
+	case 1:
+		if(zend_get_parameters_ex(1, &zfile) == FAILURE)
+			WRONG_PARAM_COUNT;
+			
+		if(Z_TYPE_PP(zfile) != IS_RESOURCE)
+		{
+			convert_to_string_ex(zfile);
+			input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+			zend_list_addref(zend_list_insert(input, le_swfinputp));
+		}
+		else
+			input = getInput(zfile TSRMLS_CC);
+		
+		sound = newSWFSoundStream_fromInput(input);
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+		break;
+	}
+	
+	if(sound) {
+		ret = zend_list_insert(sound, le_swfsoundstreamp);
+		object_init_ex(getThis(), soundstream_class_entry_ptr);
+		add_property_resource(getThis(), "soundstream", ret);
+		zend_list_addref(ret);
+	}
+}
+/* }}} */
+
+/* {{{ internal function getSoundStream
+   Returns the SWFSoundStream object contained in zval *id */
+static SWFSoundStream getSoundStream(zval *id TSRMLS_DC)
+{
+	void *sound = SWFgetProperty(id, "soundstream", strlen("soundstream"), 
+	                             le_swfsoundstreamp TSRMLS_CC);
+	if(!sound)
+		php_error(E_ERROR, "called object is not an SWFSoundStream!");
+	return (SWFSoundStream)sound;
+}
+/* }}} */
+
+/* {{{ internal function destroy_SWFSoundStream */
+static void destroy_SWFSoundStream_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFSoundStream((SWFSoundStream)resource->ptr);
+}
+/* }}} */
+
+static zend_function_entry swfsoundstream_functions[] = {
+	PHP_ME(swfsoundstream, __construct, NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+
+
 /* {{{ SWFSound */
 /* {{{ internal function SWFSound getSound(zval *id)
    Returns the Sound object in zval *id */
@@ -2181,8 +2252,9 @@ SWFSound getSound(zval *id TSRMLS_DC)
 PHP_METHOD(swfsound, __construct)
 {
 	zval **zfile, **zflags;
-	SWFSound sound;
+	SWFSound sound = NULL;
 	SWFInput input;
+	SWFSoundStream stream;
 	int flags;
 	int ret;
 
@@ -2190,7 +2262,9 @@ PHP_METHOD(swfsound, __construct)
 	{
 		if(zend_get_parameters_ex(1, &zfile) == FAILURE)
 			WRONG_PARAM_COUNT;
-		flags = 0;
+		convert_to_object_ex(zfile);
+		stream = getSoundStream(*zfile TSRMLS_CC);
+		sound = newSWFSound_fromSoundStream(stream);
 	}
 	else if(ZEND_NUM_ARGS() == 2)
 	{
@@ -2198,31 +2272,29 @@ PHP_METHOD(swfsound, __construct)
 			WRONG_PARAM_COUNT;
 		convert_to_long_ex(zflags);
 		flags = Z_LVAL_PP(zflags);
+
+		if(Z_TYPE_PP(zfile) != IS_RESOURCE)
+		{
+			convert_to_string_ex(zfile);
+			PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
+			input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+			zend_list_addref(zend_list_insert(input, le_swfinputp));
+		}
+		else
+			input = getInput(zfile TSRMLS_CC);
+
+		sound = newSWFSound_fromInput(input, flags);
 	}
 	else
 		WRONG_PARAM_COUNT;
 
-	if(Z_TYPE_PP(zfile) != IS_RESOURCE)
-	{
-		convert_to_string_ex(zfile);
-		PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
-		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
-		zend_list_addref(zend_list_insert(input, le_swfinputp));
+	if(sound != NULL)
+	{	
+		ret = zend_list_insert(sound, le_swfsoundp);
+		object_init_ex(getThis(), sound_class_entry_ptr);
+		add_property_resource(getThis(), "sound", ret);
+		zend_list_addref(ret);
 	}
-	else
-		input = getInput(zfile TSRMLS_CC);
-
-#ifdef HAVE_NEW_MING
-	sound = newSWFSound_fromInput(input, flags);
-#else
-	sound = newSWFSound_fromInput(input);
-#endif
-
-	ret = zend_list_insert(sound, le_swfsoundp);
-
-	object_init_ex(getThis(), sound_class_entry_ptr);
-	add_property_resource(getThis(), "sound", ret);
-	zend_list_addref(ret);
 }
 
 static void destroy_SWFSound_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
@@ -2460,7 +2532,7 @@ PHP_METHOD(swfbinarydata, __construct)
 	int ret;
 
 	switch(ZEND_NUM_ARGS()) {
-		case 1:
+		case 2:
 			if(zend_get_parameters_ex(2, &zdata, &zlen) == FAILURE)
 				WRONG_PARAM_COUNT;
 	
@@ -3259,7 +3331,7 @@ PHP_METHOD(swfmovie, importChar)
 	if(res != NULL)
 	{
 		/* try and create a sprite object */
-    	ret = zend_list_insert(res, le_swfcharacterp);
+		ret = zend_list_insert(res, le_swfcharacterp);
 		object_init_ex(return_value, character_class_entry_ptr);
 		add_property_resource(return_value, "character", ret);
 		zend_list_addref(ret);
@@ -3287,7 +3359,7 @@ PHP_METHOD(swfmovie, importFont)
 	if(res != NULL)
 	{
 		/* try and create a fontchar object */
-    	ret = zend_list_insert(res, le_swffontcharp);
+		ret = zend_list_insert(res, le_swffontcharp);
 		object_init_ex(return_value, fontchar_class_entry_ptr);
 		add_property_resource(return_value, "fontcharacter", ret);
 		zend_list_addref(ret);
@@ -3315,7 +3387,7 @@ PHP_METHOD(swfmovie, addFont)
 	if(res != NULL)
 	{
 		/* try and create a fontchar object */
-    		ret = zend_list_insert(res, le_swffontcharp);
+		ret = zend_list_insert(res, le_swffontcharp);
 		object_init_ex(return_value, fontchar_class_entry_ptr);
 		add_property_resource(return_value, "fontcharacter", ret);
 		zend_list_addref(ret);
@@ -4927,6 +4999,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry binarydata_class_entry;
 	zend_class_entry initaction_class_entry;
 	zend_class_entry prebuiltclip_class_entry;
+	zend_class_entry soundstream_class_entry;
 #endif
 	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
@@ -5060,6 +5133,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfbinarydatap = zend_register_list_destructors_ex(destroy_SWFBinaryData_resource, NULL, "SWFBinaryData", module_number);
 	le_swfinitactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFInitAction", module_number);
 	le_swfprebuiltclipp = zend_register_list_destructors_ex(destroy_SWFPrebuiltClip_resource, NULL, "SWFPrebuiltClip", module_number);
+	le_swfsoundstreamp = zend_register_list_destructors_ex(destroy_SWFSoundStream_resource, NULL, "SWFSoundStream", module_number);
 #endif
 
 	INIT_CLASS_ENTRY(shape_class_entry, "SWFShape", swfshape_functions);
@@ -5085,6 +5159,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(binarydata_class_entry, "SWFBinaryData", swfbinarydata_functions);
 	INIT_CLASS_ENTRY(initaction_class_entry, "SWFInitAction", swfinitaction_functions);
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
+	INIT_CLASS_ENTRY(soundstream_class_entry, "SWFSoundStream", swfsoundstream_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
 
@@ -5112,6 +5187,7 @@ PHP_MINIT_FUNCTION(ming)
 	binarydata_class_entry_ptr = zend_register_internal_class(&binarydata_class_entry TSRMLS_CC);
 	initaction_class_entry_ptr = zend_register_internal_class(&initaction_class_entry TSRMLS_CC);
 	prebuiltclip_class_entry_ptr = zend_register_internal_class(&prebuiltclip_class_entry TSRMLS_CC);
+	soundstream_class_entry_ptr = zend_register_internal_class(&soundstream_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
