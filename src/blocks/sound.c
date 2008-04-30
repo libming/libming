@@ -180,7 +180,29 @@ destroySWFSound(SWFSound sound)
 	destroySWFCharacter((SWFCharacter) sound);
 }
 
-
+/*
+ * Creates a new EventSound object.
+ *
+ * The sound to be played is contained in a file and specified with flags.
+ *
+ * Flags must contain a sound format, sampling rate, size (in bits) and channels.
+ *
+ * Possible sound formats are:
+ * - SWF_SOUND_NOT_COMPRESSED 
+ * - SWF_SOUND_ADPCM_COMPRESSED
+ * - SWF_SOUND_MP3_COMPRESSED
+ * - SWF_SOUND_NOT_COMPRESSED_LE
+ * - SWF_SOUND_NELLY_COMPRESSED
+ *
+ * Sampling rate must be one of the following values:
+ * - SWF_SOUND_5KHZ
+ * - SWF_SOUND_11KHZ
+ * - SWF_SOUND_22KHZ
+ * - SWF_SOUND_44KHZ
+ *
+ * Sound size is either SWF_SOUND_8BITS or SWF_SOUND_16BITS
+ * Channels are either SWF_SOUND_MONO or SWF_SOUND_STEREO
+ */
 SWFSound
 newSWFSound(FILE *f, byte flags)
 {
@@ -189,14 +211,12 @@ newSWFSound(FILE *f, byte flags)
 
 /* added by David McNab <david@rebirthing.co.nz> */
 /* required so that python can pass in file descriptors instead of FILE* streams */
-
 SWFSound
 newSWFSoundFromFileno(int fd, byte flags)
 {
-  FILE *fp = fdopen(fd, "r");
-  return newSWFSound(fp, flags);
+	FILE *fp = fdopen(fd, "r");
+	return newSWFSound(fp, flags);
 }
-
 
 SWFSound
 newSWFSound_fromInput(SWFInput input, byte flags)
@@ -221,7 +241,11 @@ newSWFSound_fromInput(SWFInput input, byte flags)
 	return sound;
 }
 
-
+/*
+ * Creates an Event Sound object from a given SoundStream object
+ *
+ * see also newSWFSoundStream()
+ */
 SWFSound
 newSWFSound_fromSoundStream(SWFSoundStream stream)
 {
