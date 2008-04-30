@@ -5083,7 +5083,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(soundinstance_class_entry, "SWFSoundInstance", swfsoundinstance_functions);
 	INIT_CLASS_ENTRY(videostream_class_entry, "SWFVideoStream", swfvideostream_functions);
 	INIT_CLASS_ENTRY(binarydata_class_entry, "SWFBinaryData", swfbinarydata_functions);
-	INIT_CLASS_ENTRY(action_class_entry, "SWFInitAction", swfinitaction_functions);
+	INIT_CLASS_ENTRY(initaction_class_entry, "SWFInitAction", swfinitaction_functions);
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
