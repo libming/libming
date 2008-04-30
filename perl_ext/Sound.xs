@@ -22,23 +22,35 @@ PROTOTYPES: ENABLE
 
 
 SWF::Sound
-SWFSound_new(package="SWF::Sound", filename, flags=0)
-       char *package
-       char *filename
-       int flags
-       PREINIT:
-       FILE    *f;
-       CODE:
-       if (items < 1)
-           fprintf(stderr, "SWF::Sound called with one argument\n\n");
-       if (!(f = fopen(filename, "rb"))) {
-               fprintf(stderr, "Unable to open %s\n", filename);
-               ST(0) = &sv_undef;
-       } else {
-               RETVAL = newSWFSound(f, flags);
-               ST(0) = sv_newmortal();
-               sv_setref_pv(ST(0), package, (void*)RETVAL);
-       }
+SWFSound_new(package="SWF::Sound", arg, flags=0)
+	char *package
+	int flags
+	PREINIT:
+	FILE    *f;
+	char *filename;
+	SWFSoundStream stream;
+	CODE:
+	if (items < 1)
+		fprintf(stderr, "SWF::Sound called with one argument\n\n");
+
+	if(flags == 0 && sv_derived_from(ST(1), "SWF::SoundStream"))
+	{
+		stream = (SWF__SoundStream)SvPVX(ST(1));
+		RETVAL = newSWFSound_fromSoundStream(stream);
+		ST(0) = sv_newmortal();	
+	}
+	else
+	{
+		filename = (char *)SvPVX(ST(1));
+		if (!(f = fopen(filename, "rb"))) {
+			fprintf(stderr, "Unable to open %s\n", filename);
+			ST(0) = &sv_undef;
+		} else {
+			RETVAL = newSWFSound(f, flags);
+			sv_setref_pv(ST(0), package, (void*)RETVAL);
+		}
+	}
+	
 
 void
 destroySWFSound(sound)
