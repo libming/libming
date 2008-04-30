@@ -943,7 +943,7 @@ class SWFButton(SWFBase):
 
     def addShape(self, character, flags):
         self.shapes.append(character)
-        mingc.SWFButton_addShape(self.this, character, flags)
+        mingc.SWFButton_addCharacter(self.this, character, flags)
 
     def addAction(self, action, flags):
         mingc.SWFButton_addAction(self.this, action.this, flags)

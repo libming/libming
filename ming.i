@@ -79,7 +79,6 @@ int Ming_setSWFCompression(int level);
 /* a generic output method.  specific instances dump output to file,
    send to stdout, etc. */
 typedef void (*SWFByteOutputMethod)(byte b, void *data);
-void fileOutputMethod(byte b, void *data);
 
 
 /***** SWFBlock *****/
@@ -265,8 +264,6 @@ void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
 void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
                         float anchordx, float anchordy);
 
-void SWFShape_setLineStyle(SWFShape shape, unsigned short width,
-                          byte r, byte g, byte b, byte a);
 void SWFShape_hideLine(SWFShape shape);
 
 SWFFillStyle SWFShape_addSolidFillStyle(SWFShape shape,
@@ -294,7 +291,6 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 SWFFont newSWFFont(void);
 SWFFont newSWFFont_fromFile(const char *filename);
 
-SWFFont loadSWFFontFromFile(FILE *file);
 void destroySWFFont(SWFFont font);
 
 float SWFFont_getStringWidth(SWFFont font, const char *string);
@@ -492,9 +488,8 @@ void SWFCXform_setColorMult(SWFCXform cXform,
 SWFAction newSWFAction(const char *script);
 SWFAction newSWFAction_fromFile(const char *filename);
 int SWFAction_compile(SWFAction action, int swfVersion, int *length);
-SWFAction compileSWFActionCode(const char *script);
 void destroySWFAction(SWFAction action);
-byte *SWFAction_getByteCode(SWFAction action, size_t *length);
+byte *SWFAction_getByteCode(SWFAction action, int *length);
 
 SWFInitAction newSWFInitAction(SWFAction action);
 /* use with care */
@@ -539,7 +534,6 @@ SWFInitAction newSWFInitAction_withId(SWFAction action, int id);
 
 SWFButton newSWFButton(void);
 void destroySWFButton(SWFButton button);
-void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags);
 SWFButtonRecord SWFButton_addCharacter(SWFButton, SWFCharacter, byte flags);
 void SWFButton_addAction(SWFButton button, SWFAction action, int flags);
 SWFSoundInstance SWFButton_addSound(SWFButton button, SWFSound action, byte flags);
