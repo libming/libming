@@ -3233,6 +3233,38 @@ PHP_METHOD(swfmovie, streamMP3)
 }
 /* }}} */
 
+/* {{{ proto long swfmovie::setSoundStream
+   Sets sound stream of the SWF movie. The parameter must be a SoundStream object */
+PHP_METHOD(swfmovie, setSoundStream)
+{
+	zval **zstream, **zskip;
+	float skip;
+	SWFSoundStream sound;
+	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+	switch (ZEND_NUM_ARGS()) 
+	{
+	case 1:
+		if(zend_get_parameters_ex(1, &zstream) == FAILURE) 
+			WRONG_PARAM_COUNT;
+		skip = 0;
+		break;
+	case 2:
+		if(zend_get_parameters_ex(1, &zstream, &zskip) == FAILURE) 
+			WRONG_PARAM_COUNT;
+		convert_to_double_ex(zskip);
+		skip = FLOAT_Z_DVAL_PP(zskip);
+		break;
+	default:
+		WRONG_PARAM_COUNT;	
+	}
+
+	convert_to_object_ex(zstream);
+	sound = getSoundStream(*zstream TSRMLS_CC);	
+	SWFMovie_setSoundStreamAt(movie, sound, skip);
+	RETURN_LONG(SWFSoundStream_getFrames(sound));
+}
+/* }}} */
+
 /* {{{ swfmovie_addexport */
 
 PHP_METHOD(swfmovie, addExport)
@@ -3435,6 +3467,7 @@ static zend_function_entry swfmovie_functions[] = {
 	PHP_ME(swfmovie, setFrames,         NULL, 0)
 #ifdef HAVE_NEW_MING
 	PHP_ME(swfmovie, streamMP3,         NULL, 0)
+	PHP_ME(swfmovie, setSoundStream,    NULL, 0)
 	PHP_ME(swfmovie, addExport,         NULL, 0)
 	PHP_ME(swfmovie, writeExports,      NULL, 0)
 	PHP_ME(swfmovie, startSound,        NULL, 0)
