@@ -420,6 +420,7 @@ AC_OUTPUT([
 	test/Button/Makefile
 	test/Action/Makefile
 	test/Sound/Makefile
+	test/SoundStream/Makefile
 	macros/Makefile
 	util/Makefile
 	util/ming-config

@@ -17,7 +17,8 @@ SUBDIRS = Movie \
 	PrebuiltClip \
 	Button	\
 	Action	\
-	Sound
+	Sound	\
+	SoundStream
 
 EXTRA_DIST = \
 	dotests.pl \
