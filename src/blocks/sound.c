@@ -48,9 +48,6 @@ struct SWFSound_s
 
 
 int
-getMP3Size(SWFInput input);
-
-int
 SWFSoundStream_getFlags(SWFSoundStream stream);
 
 int
@@ -109,12 +106,14 @@ soundDataSize(SWFSound sound)
 	else if ((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
 	{
 		int pos = SWFInput_tell(sound->input);
-		int samples = getMP3Size(sound->input);
+		int samples = -1;
+		getMP3Samples(sound->input, sound->flags, &samples);
 		SWFInput_seek(sound->input, pos, SEEK_SET);
 		return samples;
 	}
-	else /* ??? */
+	else 
 	{
+		SWF_warn("SWFSound: can't determine sampleCount\n");
 		return 0;
 	}
 }

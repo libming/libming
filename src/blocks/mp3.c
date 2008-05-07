@@ -170,7 +170,7 @@ int nextMP3Frame(SWFInput input)
 	return frameLen;
 }
 
-int getMP3Flags(SWFInput input, int *flags)
+int getMP3Flags(SWFInput input, byte *flags)
 {
 	struct mp3_header mp3h;	
 	int rate=0, channels, start = 0;
@@ -215,9 +215,36 @@ int getMP3Flags(SWFInput input, int *flags)
 	return offset;	
 }
 
-int getMP3Size(SWFInput input)
+int getMP3Samples(SWFInput input, int flags, int *wanted)
 {
-	return 0; // XXX
+	int frameSize, length;
+	int numSamples = 0;
+	int totalLength = 0;
+
+	switch(flags & SWF_SOUND_RATE)
+	{
+	case SWF_SOUND_44KHZ:
+		frameSize = 1152;
+		break;
+	case SWF_SOUND_22KHZ:
+	case SWF_SOUND_11KHZ:
+		frameSize = 576;
+		break;
+	default:
+		*wanted = 0;
+		return -1;
+	}
+
+	while(*wanted < 0 || numSamples < *wanted) 
+	{
+		length = nextMP3Frame(input);
+		if(length <= 0)
+			break;	
+		totalLength += length;
+		numSamples += frameSize;
+	}
+	*wanted = numSamples;			
+	return totalLength;
 }
 
 
