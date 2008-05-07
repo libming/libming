@@ -187,6 +187,8 @@ destroySWFSound(SWFSound sound)
  * The sound to be played is contained in a file and specified with flags.
  *
  * Flags must contain a sound format, sampling rate, size (in bits) and channels.
+ * If the file contains mp3 data it is not necessary to specify sampling rate, 
+ * sound size and channels.
  *
  * Possible sound formats are:
  * - SWF_SOUND_NOT_COMPRESSED 
@@ -219,6 +221,7 @@ newSWFSoundFromFileno(int fd, byte flags)
 	return newSWFSound(fp, flags);
 }
 
+
 SWFSound
 newSWFSound_fromInput(SWFInput input, byte flags)
 {
@@ -237,6 +240,14 @@ newSWFSound_fromInput(SWFInput input, byte flags)
 
 	sound->input = input;
 	sound->flags = flags;
+	if((sound->flags&SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED)
+	{
+		if(getMP3Flags(input, &sound->flags) < 0)
+		{
+			free(sound);
+			return NULL;
+		}
+	}
 	sound->soundStream = 0;
 	sound->seekSamples = SWFSOUND_INITIAL_DELAY;
 	return sound;

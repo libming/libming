@@ -428,51 +428,29 @@ int SWFSoundStream_getFrames(SWFSoundStream stream)
 static int
 getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 {
-	struct mp3_header mp3h;	
 	SWFInput input = stream->source.mp3.input;
-	int ret;
-	int rate=0, channels, flags, start = 0;
-
-	/* 
-	 * skip stream until first MP3 header which starts with 0xffe 
-	 */
-	while((ret = readMP3Header(input, &mp3h)) < 0)
-	{
-		SWFInput_seek(input, 1, SEEK_CUR);
-		start++;
-	}
-
-	if(ret == 0 || SWFInput_eof(input))
+	int ret, flags, start;
+	
+	start = getMP3Flags(input, &flags);
+	if(start < 0)
 		return -1;
 
 	stream->source.mp3.start = start;
-	SWFInput_seek(input, start, SEEK_SET);
-	if (mp3h.channelMode == MP3_CHANNEL_MONO )
-		channels = SWF_SOUNDSTREAM_MONO;
-	else
-		channels = SWF_SOUNDSTREAM_STEREO;
-
-	switch ( mp3h.version )
+	switch ( flags & SWF_SOUND_RATE )
 	{
-		case MP3_VERSION_1:
+		case SWF_SOUND_44KHZ:
 			stream->sampleRate = 44100; 
-			rate = SWF_SOUNDSTREAM_44KHZ; 
 			break;
 
-		case MP3_VERSION_2:
+		case SWF_SOUND_22KHZ:
 			stream->sampleRate = 22050; 
-			rate = SWF_SOUNDSTREAM_22KHZ; 
 			break;
 
-		case MP3_VERSION_25:
+		case SWF_SOUND_11KHZ:
 			stream->sampleRate = 11025; 
-			rate = SWF_SOUNDSTREAM_11KHZ; 
 			break;
 	}
 
-	flags =
-		SWF_SOUNDSTREAM_MP3_COMPRESSED | rate | SWF_SOUNDSTREAM_16BITS | channels;
-	
 	stream->samplesPerFrame = (int)floor(stream->sampleRate / frameRate);
 	skipMP3(stream, skip);
 	return flags;

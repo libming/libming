@@ -51,4 +51,5 @@ struct mp3_header
 
 int nextMP3Frame(SWFInput input);
 int readMP3Header(SWFInput input, struct mp3_header *mp3h);
+int getMP3Flags(SWFInput input, int *flags);
 #endif

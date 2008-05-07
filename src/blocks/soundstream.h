@@ -33,25 +33,6 @@
 
 typedef struct SWFSoundStreamBlock_s *SWFSoundStreamBlock;
 
-#define SWF_SOUNDSTREAM_COMPRESSION      0xf0
-#define SWF_SOUNDSTREAM_NOT_COMPRESSED   (0<<4)
-#define SWF_SOUNDSTREAM_ADPCM_COMPRESSED (1<<4)
-#define SWF_SOUNDSTREAM_MP3_COMPRESSED   (2<<4)
-
-#define SWF_SOUNDSTREAM_RATE             0x0c
-#define SWF_SOUNDSTREAM_5KHZ             (0<<2)
-#define SWF_SOUNDSTREAM_11KHZ            (1<<2)
-#define SWF_SOUNDSTREAM_22KHZ            (2<<2)
-#define SWF_SOUNDSTREAM_44KHZ            (3<<2)
-
-#define SWF_SOUNDSTREAM_BITS             0x02
-#define SWF_SOUNDSTREAM_8BITS            (0<<1)
-#define SWF_SOUNDSTREAM_16BITS           (1<<1)
-
-#define SWF_SOUNDSTREAM_CHANNELS         0x01
-#define SWF_SOUNDSTREAM_MONO             (0<<0)
-#define SWF_SOUNDSTREAM_STEREO           (1<<0)
-
 SWFBlock SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip);
 
 SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream sound);

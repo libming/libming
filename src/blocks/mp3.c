@@ -170,6 +170,50 @@ int nextMP3Frame(SWFInput input)
 	return frameLen;
 }
 
+int getMP3Flags(SWFInput input, int *flags)
+{
+	struct mp3_header mp3h;	
+	int rate=0, channels, start = 0;
+	int ret;
+	int offset = 0;
+
+	/* 
+	 * skip stream until first MP3 header which starts with 0xffe 
+	 */
+	while((ret = readMP3Header(input, &mp3h)) < 0)
+	{
+		SWFInput_seek(input, 1, SEEK_CUR);
+		offset++;
+	}
+
+	if(ret == 0 || SWFInput_eof(input))
+		return -1;
+
+	SWFInput_seek(input, start, SEEK_SET);
+	if (mp3h.channelMode == MP3_CHANNEL_MONO )
+		channels = SWF_SOUND_MONO;
+	else
+		channels = SWF_SOUND_STEREO;
+
+	switch ( mp3h.version )
+	{
+		case MP3_VERSION_1:
+			rate = SWF_SOUND_44KHZ; 
+			break;
+
+		case MP3_VERSION_2:
+			rate = SWF_SOUND_22KHZ; 
+			break;
+
+		case MP3_VERSION_25:
+			rate = SWF_SOUND_11KHZ; 
+			break;
+	}
+
+	*flags =
+		SWF_SOUND_MP3_COMPRESSED | rate | SWF_SOUND_16BITS | channels;
+	return offset;	
+}
 
 int getMP3Size(SWFInput input)
 {
