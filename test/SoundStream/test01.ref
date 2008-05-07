@@ -1,0 +1,77 @@
+File version: 7
+File size: 902
+Frame size: (0,6400)x(0,4800)
+Frame rate: 1.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 39 (SWF_DEFINESPRITE)
+Block length: 864
+
+ CharacterID: 1
+ FrameCount: 2
+ BlockCount: 5
+
+  Offset: 30 (0x001e)
+  Block type: 45 (SWF_SOUNDSTREAMHEAD2)
+  Block length: 6
+
+    PlaybackSoundRate 22 kHz
+    PlaybackSoundSize 16 bit
+    PlaybackSoundType mono
+    StreamSoundCompression MP3
+    StreamSoundRate 22 kHz
+    StreamSoundSize 16 bit
+    StreamSoundType mono
+    StreamSoundSampleCount 22050
+    LatencySeek 1663
+
+  Offset: 38 (0x0026)
+  Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+  Block length: 840
+
+    Mp3: SampleCount 4608
+    Mp3: SeekSamples 1663
+
+  Offset: 884 (0x0374)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 886 (0x0376)
+  Block type: 1 (SWF_SHOWFRAME)
+  Block length: 0
+
+
+  Offset: 888 (0x0378)
+  Block type: 0 (SWF_END)
+  Block length: 0
+
+
+Offset: 890 (0x037a)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 898 (0x0382)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 900 (0x0384)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
