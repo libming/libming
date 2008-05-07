@@ -10,5 +10,6 @@ EXTRA_DIST = 		\
 	test.ttf	\
 	nellymoser.flv	\
 	video01.flv	\
-	video02.flv
+	video02.flv	\
+	sound1.mp3
 
