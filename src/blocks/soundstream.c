@@ -363,7 +363,6 @@ fillStreamBlock_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 		frameSize = 576;
 	while ( delay > frameSize )
 	{
-		block->numSamples += frameSize;
 		length = nextMP3Frame(stream->source.mp3.input);
 		if ( length <= 0 )
 		{
@@ -371,7 +370,7 @@ fillStreamBlock_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 			SWFSoundStream_rewind(stream);
 			break;
 		}
-
+		block->numSamples += frameSize;
 		block->length += length;
 		delay -= frameSize;
 	}
@@ -429,7 +428,8 @@ static int
 getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 {
 	SWFInput input = stream->source.mp3.input;
-	int ret, flags, start;
+	int start;
+	byte flags;
 	
 	start = getMP3Flags(input, &flags);
 	if(start < 0)
