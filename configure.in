@@ -34,7 +34,10 @@ AC_CANONICAL_HOST
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
-AC_PROG_CC_C_O
+
+dnl AM_PROG_CC_C_O seems to be the better choice when working with automake
+dnl AC_PROG_CC_C_O
+AM_PROG_CC_C_O
 
 dnl necessary to make regenerating configure in maintainer-mode work
 dnl set in Makefile.am for autoreconf too
