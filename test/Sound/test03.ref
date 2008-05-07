@@ -1,33 +1,33 @@
 File version: 7
-File size: 695110
+File size: 880
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 14 (SWF_DEFINESOUND)
-Block length: 695075
+Block length: 845
 
  CharacterID: 1
  SoundFormat: MP3
  SoundRate: 22 KHz
  SoundSize: 16-bit
- SoundType: Stereo
- SoundSampleCount: 1915776
+ SoundType: Mono
+ SoundSampleCount: 4608
 
-Offset: 695101 (0xa9b3d)
+Offset: 871 (0x0367)
 Block type: 15 (SWF_STARTSOUND)
 Block length: 3
 
  SoundId 1
   SoundInfo:
 
-Offset: 695106 (0xa9b42)
+Offset: 876 (0x036c)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 695108 (0xa9b44)
+Offset: 878 (0x036e)
 Block type: 0 (SWF_END)
 Block length: 0
 
