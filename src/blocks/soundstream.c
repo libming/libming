@@ -29,7 +29,6 @@
 #include "output.h"
 #include "outputblock.h"
 #include "character.h"
-#include "sound.h"
 #include "method.h"
 #include "input.h"
 #include "libming.h"
@@ -43,7 +42,6 @@
 
 #define STREAM_MP3 1
 #define STREAM_FLV 2
-
 
 struct StreamSourceMp3
 {
@@ -64,6 +62,7 @@ struct SWFSoundStream_s
 {
 	byte isFinished;
 	byte streamSource;
+	int initialDelay;
 	int delay;
 	int samplesPerFrame;
 	int sampleRate;
@@ -547,11 +546,15 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	SWFOutput_writeUInt8(out, flags);
 	SWFOutput_writeUInt16(out, stream->samplesPerFrame);
 	if(((flags & 0xf0) >> 4) == 2)	// MP3 only
-		SWFOutput_writeUInt16(out, SWFSOUND_INITIAL_DELAY);
+		SWFOutput_writeUInt16(out, stream->initialDelay);
 	
 	return (SWFBlock)block;
 }
 
+void SWFSoundStream_setInitialMp3Delay(SWFSoundStream stream, int delay)
+{
+	stream->initialDelay = delay;
+}
 
 int
 SWFSoundStream_getFlags(SWFSoundStream stream)
@@ -600,7 +603,7 @@ writeSWFSoundWithSoundStreamToMethod(SWFSoundStream stream,
 
 	methodWriteUInt32(streamblock.numSamples, method, data);
 
-	methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);
+	methodWriteUInt16(stream->initialDelay, method, data);
 	if(source == STREAM_MP3)
 		write_mp3(&streamblock, method, data);
 	else if(source == STREAM_FLV)
@@ -642,7 +645,8 @@ newSWFSoundStream_fromInput(SWFInput input)
 		stream->source.flv.tagOffset = -1;
 		stream->source.flv.flags = 0;
 	}
-	
+
+	stream->initialDelay = SWFSOUND_INITIAL_DELAY;
 	stream->delay = SWFSOUND_INITIAL_DELAY;
 	stream->isFinished = FALSE;
 	stream->samplesPerFrame = 0;

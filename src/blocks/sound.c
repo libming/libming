@@ -29,6 +29,7 @@
 #include "method.h"
 #include "input.h"
 #include "libming.h"
+#include "mp3.h"
 
 struct SWFSound_s
 {
@@ -37,7 +38,7 @@ struct SWFSound_s
 	byte flags;
 	byte isFinished;
 	int numSamples;
-	int delay;
+	int seekSamples;
 	int samplesPerFrame;
 
 	SWFInput input;
@@ -133,7 +134,7 @@ writeSWFSoundToStream(SWFBlock block, SWFByteOutputMethod method, void *data)
 	methodWriteUInt32(soundDataSize(sound), method, data);
 
 	if ( (sound->flags & SWF_SOUND_COMPRESSION) == SWF_SOUND_MP3_COMPRESSED )
-		methodWriteUInt16(SWFSOUND_INITIAL_DELAY, method, data);	// XXX - delay?
+		methodWriteUInt16(sound->seekSamples, method, data);	
 
 	/* write samples */
 	for ( i=0; i<l; ++i )
@@ -237,7 +238,7 @@ newSWFSound_fromInput(SWFInput input, byte flags)
 	sound->input = input;
 	sound->flags = flags;
 	sound->soundStream = 0;
-
+	sound->seekSamples = SWFSOUND_INITIAL_DELAY;
 	return sound;
 }
 

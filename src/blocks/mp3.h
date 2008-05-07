@@ -37,6 +37,8 @@
 #define MP3_CHANNEL_DUAL		2
 #define MP3_CHANNEL_MONO		3
 
+#define SWFSOUND_INITIAL_DELAY 1663 
+
 struct mp3_header
 {
 	unsigned int version;
