@@ -169,8 +169,9 @@ int
 completeDefineSWFSoundWithSoundStreamBlock(SWFBlock block)
 {
 	SWFSound sound = (SWFSound)block;
-
-	return getSWFSoundStreamLength(sound->soundStream, 0) + 9;
+	int len = getSWFSoundStreamLength(sound->soundStream, 0) + 9;
+	SWFSoundStream_rewind(sound->soundStream);
+	return len;
 }
 
 
