@@ -540,7 +540,7 @@ SWFSoundStream newSWFSoundStream(FILE *file);
 /* added by David McNab <david@rebirthing.co.nz> */
 SWFSoundStream newSWFSoundStreamFromFileno(int fd);
 SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
-int SWFSoundStream_getFrames(SWFSoundStream sound);
+int SWFSoundStream_getFrames(SWFSoundStream sound) __deprecated;
 void destroySWFSoundStream(SWFSoundStream soundStream);
 
 

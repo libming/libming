@@ -393,11 +393,15 @@ SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 	return (SWFBlock)block;
 }
 
+
 int SWFSoundStream_getFrames(SWFSoundStream stream)
 {	
 	int n, frameSize;
-	if(stream->streamSource == STREAM_FLV)
+	if(stream->streamSource == STREAM_FLV || stream->samplesPerFrame == 0)
+	{
+		SWF_warn("SWFSoundStream_getFrames works only if stream was assigned to a movie\n");
 		return -1;
+	}
 	
 	if ( stream->sampleRate > 32000 )
 		frameSize = 1152;
