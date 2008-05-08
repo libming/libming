@@ -15,7 +15,7 @@ mylibs = ['ming']
 if "@ZLIB@":
 	mylibs.append('z')
 
-if "@PNGLIB":
+if "@PNGLIB@":
 	mylibs.append('png')
 
 if "@GIFLIB@":
