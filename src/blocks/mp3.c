@@ -235,7 +235,7 @@ int getMP3Samples(SWFInput input, int flags, int *wanted)
 		return -1;
 	}
 
-	while(*wanted < 0 || numSamples < *wanted) 
+	while(*wanted < 0 || numSamples < *wanted - frameSize) 
 	{
 		length = nextMP3Frame(input);
 		if(length <= 0)
