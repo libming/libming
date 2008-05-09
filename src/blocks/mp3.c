@@ -23,6 +23,7 @@
 #include "input.h"
 #include "mp3.h"
 #include "error.h"
+#include "sound.h"
 
 
 // [version][idx]
@@ -92,6 +93,7 @@ static unsigned short mp3_bitrate_tbl[4][4][16] =
 		if(SWFInput_eof(__in))		\
 			return 0;		\
 	} while(0);
+
 	
 /*
  * reads a MP3 header 
@@ -170,6 +172,10 @@ int nextMP3Frame(SWFInput input)
 	return frameLen;
 }
 
+/*
+ * returns the sound flags used within ming
+ * stream is set to the first mp3 frame header.
+ */
 int getMP3Flags(SWFInput input, byte *flags)
 {
 	struct mp3_header mp3h;	
@@ -247,7 +253,25 @@ int getMP3Samples(SWFInput input, int flags, int *wanted)
 	return totalLength;
 }
 
+/*
+ * Returns the length of a mp3 stream in ms. The duration is
+ * measured in ms. The stream is unaltered.
+ */
+unsigned int getMP3Duration(SWFInput input)
+{
+	int start, flags, samples = -1;
+	int sampleRate;
 
+	start = SWFInput_tell(input);
+	if(getMP3Flags(input, (byte *)&flags) < 0)
+		return 0;
+	if(getMP3Samples(input, flags, &samples) <= 0)
+		return 0;
+	
+	sampleRate = SWFSound_getSampleRate(flags);
+	SWFInput_seek(input, start, SEEK_SET);
+	return samples * 1000.0	/ sampleRate;
+}
 /*
  * Local variables:
  * tab-width: 2

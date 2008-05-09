@@ -42,4 +42,19 @@ SWFBlock newDefineSWFSoundBlock(SWFSound sound);
 
 void SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data);
 
+static inline int SWFSound_getSampleRate(int flags)
+{
+	switch ( flags & SWF_SOUND_RATE)
+	{
+		case SWF_SOUND_44KHZ:
+			return 44100;
+		case SWF_SOUND_22KHZ:
+			return 22050;
+		case SWF_SOUND_11KHZ:
+			return 11025; 
+		default:
+			return 0;
+	}
+}
+
 #endif /* SWF_SOUND_H_INCLUDED */

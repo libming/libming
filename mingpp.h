@@ -707,6 +707,11 @@ class SWFSoundStream
       throw SWFException("SWFSoundStream(char *filename)");
   }
 
+  unsigned int getDuration()
+  {
+    return SWFSoundStream_getDuration(this->sound);
+  }
+
   virtual ~SWFSoundStream()
     { destroySWFSoundStream(this->sound); }
   SWF_DECLAREONLY(SWFSoundStream);

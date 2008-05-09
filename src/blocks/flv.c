@@ -186,6 +186,23 @@ int FLVStream_nextTagType(FLVStream *flv, FLVTag *tag, FLVTag *prev, int type)
 
 }
 
+unsigned int FLVStream_getDuration(FLVStream *flv, int type)
+{
+	unsigned int duration = 0;
+	FLVTag tag, *p_tag = NULL;
+	
+	while(FLVStream_nextTag(flv, &tag, p_tag) == 0) 
+	{
+		if(tag.tagType == type)
+		{
+			/* optimistic approach */
+			duration = tag.timeStamp; 
+		}
+		p_tag = &tag;
+	}
+	return duration;
+}
+
 int FLVStream_getNumFrames(FLVStream *flv, int type)
 {
 	int numFrames = 0;

@@ -96,4 +96,5 @@ FLVStream *FLVStream_fromInput(SWFInput input);
 void destroyFLVStream(FLVStream *flv);
 SWFInput FLVTag_getPayloadInput(FLVTag *tag);
 int FLVStream_setStreamOffset(FLVStream *flv, unsigned int msecs);
+unsigned int FLVStream_getDuration(FLVStream *flv, int type);
 #endif

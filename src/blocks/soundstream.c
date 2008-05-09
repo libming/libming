@@ -35,6 +35,7 @@
 #include "flv.h"
 #include "error.h"
 #include "mp3.h"
+#include "sound.h"
 
 #ifndef round 
 #define round
@@ -390,10 +391,43 @@ SWFSoundStream_getStreamBlock(SWFSoundStream stream)
 		fillStreamBlock_mp3(stream, block);
 	else if(stream->streamSource == STREAM_FLV)
 		fillStreamBlock_flv(stream, block);
+	
+	if(block->length == 0)
+	{
+		free(block);
+		return NULL;
+	}
+	
 	return (SWFBlock)block;
 }
 
 
+/*
+ * returns the duration of a stream in ms
+ *
+ * This function returns the duration of a given stream in ms
+ */
+unsigned int SWFSoundStream_getDuration(SWFSoundStream stream)
+{	
+	if(stream->streamSource == STREAM_MP3)
+		return getMP3Duration(stream->source.mp3.input);
+	else if(stream->streamSource == STREAM_FLV)
+		return FLVStream_getDuration(stream->source.flv.stream, FLV_AUDIOTAG);
+	else
+		return 0;
+}
+
+/* 
+ * DEPRECATED!
+ * returns the number of movie frames for a given sound stream
+ *
+ * This function returns the number of movie frames necessary to 
+ * play the full sound stream. 
+ * Works only if the sound stream object was added to a movie and the stream 
+ * source is a mp3 file.
+ *
+ * Use SWFSoundStream_getDuration() instead.
+ */
 int SWFSoundStream_getFrames(SWFSoundStream stream)
 {	
 	int n, frameSize;
@@ -427,21 +461,7 @@ getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 		return -1;
 
 	stream->source.mp3.start = start;
-	switch ( flags & SWF_SOUND_RATE )
-	{
-		case SWF_SOUND_44KHZ:
-			stream->sampleRate = 44100; 
-			break;
-
-		case SWF_SOUND_22KHZ:
-			stream->sampleRate = 22050; 
-			break;
-
-		case SWF_SOUND_11KHZ:
-			stream->sampleRate = 11025; 
-			break;
-	}
-
+	stream->sampleRate = SWFSound_getSampleRate(flags); 
 	stream->flags = flags; // XXX: fixme
 	stream->samplesPerFrame = (int)floor(stream->sampleRate / frameRate);
 	skipMP3(stream, skip);

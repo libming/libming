@@ -542,6 +542,7 @@ SWFSoundStream newSWFSoundStreamFromFileno(int fd);
 SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 int SWFSoundStream_getFrames(SWFSoundStream sound) __deprecated;
 void destroySWFSoundStream(SWFSoundStream soundStream);
+unsigned int SWFSoundStream_getDuration(SWFSoundStream);
 
 
 /***** SWFSound *****/
