@@ -68,7 +68,8 @@ typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
              *SWFShape, *SWFAction, *SWFGradient, *SWFButton, *SWFButtonRecord,
              *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
              *SWFFont, *SWFText, *SWFTextField, *SWFVideoStream, *SWFBrowserFont,
-             *SWFPrebuiltClip, *SWFBinaryData, *SWFInitAction, *SWFFontCharacter;
+             *SWFPrebuiltClip, *SWFBinaryData, *SWFInitAction, *SWFFontCharacter, 
+             *SWFSoundStream;
 
 /*
  * Set output compression level.
@@ -418,7 +419,7 @@ SWFSoundStream newSWFSoundStreamFromFileno(int fd);
 SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 int SWFSoundStream_getFrames(SWFSoundStream sound);
 void destroySWFSoundStream(SWFSoundStream soundStream);
-
+unsigned int SWFSoundStream_getDuration(SWFSoundStream);
 
 /***** SWFSound *****/
 
