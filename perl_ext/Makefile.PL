@@ -277,7 +277,6 @@ sub write_swf_h {
     open FH, ">SWF.h" or die "can't open SWF.h $!";
     print FH <<EOF;
 #include "ming.h"
-#include "libming.h"
 EOF
     close FH;
 }
