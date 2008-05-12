@@ -151,7 +151,7 @@ if (yy_first_time) {
 {DIGIT}+		{ count(); return read_int (yytext, &swf5lval); }
 {DIGIT}+"."{DIGIT}*{EXPONENT}?	{ count(); swf5lval.doubleVal = atof(yytext);
 				return DOUBLE; }
-{DIGIT}+*{EXPONENT}?		{ count(); swf5lval.intVal = atof(yytext);
+{DIGIT}+*{EXPONENT}?		{ count(); swf5lval.doubleVal = atof(yytext);
 				return DOUBLE;	}
 true			{ count();swf5lval.intVal = 1;
 				return BOOLEAN;	}
