@@ -86,8 +86,8 @@ SWFText_addUTF8String(text, string, advance=NULL)
 void
 SWFText_addWideString(text, string, strlen, advance=NULL)
 	SWF::Text	text
-	char *		string
-	int			strlen
+	short *		string
+	int		strlen
 	int *		advance
 
 void
@@ -110,7 +110,7 @@ SWFText_getUTF8StringWidth(text, string)
 float
 SWFText_getWideStringWidth(text, string)
 	SWF::Text text
-	char *	string
+	short *	string
 
 short
 SWFText_getAscent(text)

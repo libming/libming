@@ -1,4 +1,5 @@
 byte						T_U_CHAR
+short *						T_PTRSHORT
 #FILE *                  			T_IN
 int *						T_PTRINT
 float						T_FLOAT
@@ -20,8 +21,8 @@ SWF::MovieClip                                  T_PTROBJ
 SWF::Morph                                      T_PTROBJ
 SWF::TextField					T_PTROBJ
 SWF::Sound					T_PTROBJ
-SWF::SoundStream					T_PTROBJ
-SWF::SoundInstance					T_PTROBJ
+SWF::SoundStream				T_PTROBJ
+SWF::SoundInstance				T_PTROBJ
 SWF::VideoStream				T_PTROBJ
 SWF::PrebuiltClip				T_PTROBJ
 SWF::FontCharacter				T_PTROBJ
@@ -38,3 +39,7 @@ SWF::CXform					T_PTROBJ
 INPUT
 T_PTRINT
         $var = (int *)SvIV($arg)
+
+INPUT 
+T_PTRSHORT
+	$var = (short *)SvPV_nolen($arg)
