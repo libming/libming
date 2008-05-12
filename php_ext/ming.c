@@ -2224,8 +2224,21 @@ static void destroy_SWFSoundStream_resource(zend_rsrc_list_entry *resource TSRML
 }
 /* }}} */
 
+/* {{{
+   returns the duration of the sound stream */
+PHP_METHOD(swfsoundstream, getDuration) 
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	RETURN_LONG(SWFSoundStream_getDuration(getSoundStream(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+
 static zend_function_entry swfsoundstream_functions[] = {
 	PHP_ME(swfsoundstream, __construct, NULL, 0)
+	PHP_ME(swfsoundstream, getDuration, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 /* }}} */
@@ -3229,7 +3242,7 @@ PHP_METHOD(swfmovie, streamMP3)
 	
 	sound = newSWFSoundStream_fromInput(input);
 	SWFMovie_setSoundStreamAt(movie, sound, skip);
-	RETURN_LONG(SWFSoundStream_getFrames(sound));
+	RETURN_LONG(SWFSoundStream_getDuration(sound) / SWFMovie_getRate(movie));
 }
 /* }}} */
 
@@ -3261,7 +3274,7 @@ PHP_METHOD(swfmovie, setSoundStream)
 	convert_to_object_ex(zstream);
 	sound = getSoundStream(*zstream TSRMLS_CC);	
 	SWFMovie_setSoundStreamAt(movie, sound, skip);
-	RETURN_LONG(SWFSoundStream_getFrames(sound));
+	RETURN_LONG(SWFSoundStream_getDuration(sound) / SWFMovie_getRate(movie));
 }
 /* }}} */
 
@@ -4184,7 +4197,7 @@ PHP_METHOD(swfsprite, stopSound)
 PHP_METHOD(swfsprite, setSoundStream)
 {
 	zval **zfile, **zskip, **zrate;
-	float skip;
+	float skip, rate;
 	SWFSoundStream sound;
 	SWFInput input;
 	SWFMovieClip mc = getSprite(getThis() TSRMLS_CC);
@@ -4207,6 +4220,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 	}
 	
 	convert_to_double_ex(zrate);
+	rate = FLOAT_Z_DVAL_PP(zrate);
 	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
 		convert_to_string_ex(zfile);
 		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
@@ -4217,7 +4231,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 
 	sound = newSWFSoundStream_fromInput(input);
 	SWFMovieClip_setSoundStreamAt(mc, sound, Z_DVAL_PP(zrate), skip);
-	RETURN_LONG(SWFSoundStream_getFrames(sound));
+	RETURN_LONG(SWFSoundStream_getDuration(sound) / rate);
 }
 /* }}} */
 
