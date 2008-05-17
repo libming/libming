@@ -166,7 +166,12 @@ sub doswftest($$$)
 	chomp($swfdir = `dirname $testswf`);
 	chdir($swfdir);
 	print "Executing '$testbuilder $SRCDIR' in $swfdir\n";
-	system($testbuilder." ".$SRCDIR);
+	if ( system($testbuilder." ".$SRCDIR) )
+	{
+		printf  STDERR "Invokation of test builder '$testbuilder' returned $!\n";
+		++$failures;
+		return 0;
+	}
 	chdir($cwd);
 
 
