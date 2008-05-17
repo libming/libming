@@ -2,10 +2,13 @@
 
 use SWF qw(:ALL);
 
+die "Usage: ".$0." <sourcedir>\n" unless @ARGV;
+$mediadir="$ARGV[0]/../Media";
+
 $m = new SWF::Movie();
 $t = new SWF::Text();
 
-$f = new SWF::Font("../Media/font01.fdb");
+$f = new SWF::Font($mediadir."/font01.fdb");
 $t->setFont($f);
 $t->setColor(0,0,0,0xff);
 $t->setHeight(20);
