@@ -1,4 +1,5 @@
 #include <libming.h>
+#include <stdlib.h>
 
 int main()
 {
@@ -9,4 +10,6 @@ int main()
 	SWFMovie_add(m, (SWFBlock)shape1);
 	SWFMovie_add(m, (SWFBlock)shape2);
 	SWFMovie_save(m, "test01.swf");
+
+	return EXIT_SUCCESS;
 }
