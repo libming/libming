@@ -168,7 +168,8 @@ SWFBlock_isCharacter(SWFBlock block)
 			 type == SWF_DEFINEFONT || type == SWF_DEFINEFONT2 ||
 			 type == SWF_DEFINEEDITTEXT ||
 			 type == SWF_DEFINEVIDEOSTREAM ||
-			 type == SWF_PREBUILTCLIP)
+			 type == SWF_PREBUILTCLIP ||
+			 type == SWF_DEFINESOUND)
 	{
 		return TRUE;
 	}

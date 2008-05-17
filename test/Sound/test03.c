@@ -28,5 +28,9 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
+	//SWFSound destroy SWFInput created from file
+	destroySWFSound(sound);
+	destroySWFMovie(m);
+	
 	return 0;
 }

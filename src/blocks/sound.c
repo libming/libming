@@ -40,6 +40,7 @@ struct SWFSound_s
 	int numSamples;
 	int seekSamples;
 	int samplesPerFrame;
+	byte freeInput;
 
 	SWFInput input;
 	byte *data;
@@ -178,6 +179,8 @@ completeDefineSWFSoundWithSoundStreamBlock(SWFBlock block)
 void
 destroySWFSound(SWFSound sound)
 {
+	if (sound->freeInput)
+		destroySWFInput(sound->input);
 	destroySWFCharacter((SWFCharacter) sound);
 }
 
@@ -209,7 +212,9 @@ destroySWFSound(SWFSound sound)
 SWFSound
 newSWFSound(FILE *f, byte flags)
 {
-	return newSWFSound_fromInput(newSWFInput_file(f), flags);
+	SWFSound s = newSWFSound_fromInput(newSWFInput_file(f), flags);
+	s->freeInput = TRUE;
+	return s;
 }
 
 /* added by David McNab <david@rebirthing.co.nz> */
@@ -250,6 +255,7 @@ newSWFSound_fromInput(SWFInput input, byte flags)
 	}
 	sound->soundStream = 0;
 	sound->seekSamples = SWFSOUND_INITIAL_DELAY;
+	sound->freeInput = FALSE;
 	return sound;
 }
 
