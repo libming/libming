@@ -165,8 +165,8 @@ sub doswftest($$$)
 	chomp($cwd = `pwd`);
 	chomp($swfdir = `dirname $testswf`);
 	chdir($swfdir);
-	print "Executing $testbuilder in $swfdir\n";
-	system($testbuilder);
+	print "Executing '$testbuilder $SRCDIR' in $swfdir\n";
+	system($testbuilder." ".$SRCDIR);
 	chdir($cwd);
 
 
