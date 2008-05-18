@@ -254,7 +254,10 @@ class_init
 	: CLASS 
 	{
 		if(classContext)
+		{
 			swf5error("Nested classes are not allowed\n");
+			YYABORT;
+		}
 		classContext = 1;
 	}
 	; 
@@ -369,8 +372,11 @@ with_stmt
 return_stmt
 	: RETURN ';'
 		{ int tmp = chkctx(CTX_FUNCTION);
-		  if(tmp < 0)
+		  if(tmp < 0) 
+		  {
 			swf5error("return outside function");
+			YYABORT;
+		  }
 		  $$ = newBuffer();
 		  while(--tmp >= 0)
 			bufferWriteOp($$, SWFACTION_POP);
@@ -380,7 +386,10 @@ return_stmt
 	| RETURN expr_or_obj ';'
 		{ int tmp = chkctx(CTX_FUNCTION);
 		  if(tmp < 0)
+		  {
 			swf5error("return outside function");
+			YYABORT;
+		  }
 		  $$ = newBuffer();
 		  while(--tmp >= 0)
 			bufferWriteOp($$, SWFACTION_POP);
@@ -845,8 +854,12 @@ assign_stmts_opt
 // on the stack
 cont_stmt
 	: CONTINUE ';'
-		{ if(chkctx(CTX_CONTINUE) < 0)
+		{ 
+		  if(chkctx(CTX_CONTINUE) < 0)
+		  {
 			swf5error("continue outside loop");
+			YYABORT;
+		  }
 		  $$ = newBuffer();
 		  bufferWriteOp($$, SWFACTION_JUMP);
 		  bufferWriteS16($$, 2);
@@ -871,7 +884,10 @@ break_stmt
 			addctx(CTX_BREAK);	
 		  }
 		  else
+		  {
 			swf5error("break outside switch / loop");
+			YYABORT;
+		  }
 		}
 
 	;
@@ -1566,8 +1582,10 @@ primary
 	: function_decl
 		{
 			if($1->name != NULL)
-				swf5error("anonymous decl only. identifier allowed\n");
-
+			{
+				swf5error("anonymous decl only. identifier not allowed");
+				YYABORT;
+			}
 			$$ = newBuffer();
 			if(swfVersion > 6)
 				bufferWriteFunction($$, $1, 2);
