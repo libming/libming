@@ -252,8 +252,7 @@ freetype_support=yes)
 
 if test "$freetype_support" = "yes"; then
 	dnl Check for the freetype library
-	AC_ARG_WITH(freetype-config, [  --with-freetype-config=PROG   Use FreeType configuration program PROG], freetype_config=$withval, freetype_config=)
-
+	AC_ARG_WITH(freetype-config, [  --with-freetype-config=PROG   Use FreeType configuration program PROG], freetype_config=$withval, freetype_config=yes)
 	if test "$freetype_config" = "yes"; then 
 		AC_PATH_PROG(ft_config,freetype-config,no)
         	if test "$ft_config" = "no"; then
