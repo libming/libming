@@ -8,4 +8,5 @@ clean-local:
 	rm -rf tmp
 
 install:
-	$(INSTALL) -m 755 tmp/modules/ming.so `php-config --extension-dir`
+	$(INSTALL) -d `dirname $(prefix)`/`php-config --extension-dir`
+	$(INSTALL) -m 755 tmp/modules/ming.so `dirname $(prefix)`/`php-config --extension-dir`

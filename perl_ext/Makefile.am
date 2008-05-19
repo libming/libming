@@ -35,7 +35,7 @@ all: Makefile.perl
 	$(MAKE) -f Makefile.perl
 
 install: Makefile.perl
-	$(MAKE) -f Makefile.perl install
+	$(MAKE) -f Makefile.perl install PREFIX=$(prefix)
 
 Makefile.perl: Makefile.PL
 	srcdir=$(srcdir) builddir=$(abs_builddir) $(PERL) $< PREFIX=$(prefix) FIRST_MAKEFILE=Makefile.perl
