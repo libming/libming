@@ -113,7 +113,7 @@ DOCSRC = \
 	text_util.c
 
 docs::
-	c2man -o../docs/man -i"ming.h" -x"SEE ALSO" -I. -D__restrict="" -D__builtin_va_list="int" $(DOCSRC)
+	c2man -o../docs/man -i"ming.h" -x"SEE ALSO" -I. -D__USE_GNU -D__restrict="" -D__builtin_va_list="int" $(DOCSRC)
 	c2man -o../docs/libming -i"ming.h" -x"SEE ALSO" -Th -I. -D__restrict="" -D__builtin_va_list="int" $(DOCSRC)
 
 pkgconfigdir = $(libdir)/pkgconfig

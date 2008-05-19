@@ -29,6 +29,7 @@ endif
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
+	test01.php	\
 	test01.ref	\
 	test02.ref	\
 	test03.ref	\

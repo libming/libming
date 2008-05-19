@@ -12,7 +12,7 @@ MAINTAINERCLEANFILES = ming_wrap.c
 
 CLEANFILES = test.swf
 
-EXTRA_DIST = test.tcl ming_wrap.c
+EXTRA_DIST = test.tcl ming_wrap.c MANIFEST
 
 ming_wrap.c: ../ming.i
 	swig -I.. -tcl ming.i
