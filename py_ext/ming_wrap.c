@@ -2469,19 +2469,18 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_SWFLineStyle swig_types[10]
 #define SWIGTYPE_p_SWFPosition swig_types[11]
 #define SWIGTYPE_p_SWFSoundInstance swig_types[12]
-#define SWIGTYPE_p_SWFSoundStream swig_types[13]
-#define SWIGTYPE_p_SWFSprite swig_types[14]
-#define SWIGTYPE_p_SWFTextFieldAlignment swig_types[15]
-#define SWIGTYPE_p__swfPosition swig_types[16]
-#define SWIGTYPE_p_char swig_types[17]
-#define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[18]
-#define SWIGTYPE_p_float swig_types[19]
-#define SWIGTYPE_p_int swig_types[20]
-#define SWIGTYPE_p_unsigned_char swig_types[21]
-#define SWIGTYPE_p_unsigned_short swig_types[22]
-#define SWIGTYPE_p_void swig_types[23]
-static swig_type_info *swig_types[25];
-static swig_module_info swig_module = {swig_types, 24, 0, 0, 0, 0};
+#define SWIGTYPE_p_SWFSprite swig_types[13]
+#define SWIGTYPE_p_SWFTextFieldAlignment swig_types[14]
+#define SWIGTYPE_p__swfPosition swig_types[15]
+#define SWIGTYPE_p_char swig_types[16]
+#define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[17]
+#define SWIGTYPE_p_float swig_types[18]
+#define SWIGTYPE_p_int swig_types[19]
+#define SWIGTYPE_p_unsigned_char swig_types[20]
+#define SWIGTYPE_p_unsigned_short swig_types[21]
+#define SWIGTYPE_p_void swig_types[22]
+static swig_type_info *swig_types[24];
+static swig_module_info swig_module = {swig_types, 23, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2879,6 +2878,21 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 
 
 
+
+
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)(value)); 
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_unsigned_SS_int  (unsigned int value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
+}
 
 
 SWIGINTERN int
@@ -6654,8 +6668,8 @@ SWIGINTERN PyObject *_wrap_newSWFSoundStream(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     arg1 = PyFile_AsFile(obj0);
   }
-  result = newSWFSoundStream(arg1);
-  resultobj = SWIG_NewPointerObj((SWFSoundStream *)memcpy((SWFSoundStream *)malloc(sizeof(SWFSoundStream)),&result,sizeof(SWFSoundStream)), SWIGTYPE_p_SWFSoundStream, SWIG_POINTER_OWN |  0 );
+  result = (SWFSoundStream)newSWFSoundStream(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6676,8 +6690,8 @@ SWIGINTERN PyObject *_wrap_newSWFSoundStreamFromFileno(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "newSWFSoundStreamFromFileno" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = (int)(val1);
-  result = newSWFSoundStreamFromFileno(arg1);
-  resultobj = SWIG_NewPointerObj((SWFSoundStream *)memcpy((SWFSoundStream *)malloc(sizeof(SWFSoundStream)),&result,sizeof(SWFSoundStream)), SWIGTYPE_p_SWFSoundStream, SWIG_POINTER_OWN |  0 );
+  result = (SWFSoundStream)newSWFSoundStreamFromFileno(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6704,36 +6718,8 @@ SWIGINTERN PyObject *_wrap_newSWFSoundStream_fromInput(PyObject *SWIGUNUSEDPARM(
       arg1 = *((SWFInput *)(argp1));
     }
   }
-  result = newSWFSoundStream_fromInput(arg1);
-  resultobj = SWIG_NewPointerObj((SWFSoundStream *)memcpy((SWFSoundStream *)malloc(sizeof(SWFSoundStream)),&result,sizeof(SWFSoundStream)), SWIGTYPE_p_SWFSoundStream, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_SWFSoundStream_getFrames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SWFSoundStream arg1 ;
-  int result;
-  void *argp1 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:SWFSoundStream_getFrames",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFSoundStream_getFrames" "', argument " "1"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFSoundStream_getFrames" "', argument " "1"" of type '" "SWFSoundStream""'");
-    } else {
-      arg1 = *((SWFSoundStream *)(argp1));
-    }
-  }
-  result = (int)SWFSoundStream_getFrames(arg1);
-  resultobj = SWIG_From_int((int)(result));
+  result = (SWFSoundStream)newSWFSoundStream_fromInput(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6742,25 +6728,37 @@ fail:
 
 SWIGINTERN PyObject *_wrap_destroySWFSoundStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  SWFSoundStream arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
+  SWFSoundStream arg1 = (SWFSoundStream) 0 ;
+  int res1 ;
   PyObject * obj0 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:destroySWFSoundStream",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "destroySWFSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'");
-    } else {
-      arg1 = *((SWFSoundStream *)(argp1));
-    }
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'"); 
   }
   destroySWFSoundStream(arg1);
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFSoundStream_getDuration(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFSoundStream arg1 = (SWFSoundStream) 0 ;
+  unsigned int result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFSoundStream_getDuration",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFSoundStream_getDuration" "', argument " "1"" of type '" "SWFSoundStream""'"); 
+  }
+  result = (unsigned int)SWFSoundStream_getDuration(arg1);
+  resultobj = SWIG_From_unsigned_SS_int((unsigned int)(result));
   return resultobj;
 fail:
   return NULL;
@@ -6868,23 +6866,15 @@ fail:
 
 SWIGINTERN PyObject *_wrap_newSWFSound_fromSoundStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  SWFSoundStream arg1 ;
+  SWFSoundStream arg1 = (SWFSoundStream) 0 ;
   SWFSound result;
-  void *argp1 ;
-  int res1 = 0 ;
+  int res1 ;
   PyObject * obj0 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:newSWFSound_fromSoundStream",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newSWFSound_fromSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newSWFSound_fromSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'");
-    } else {
-      arg1 = *((SWFSoundStream *)(argp1));
-    }
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newSWFSound_fromSoundStream" "', argument " "1"" of type '" "SWFSoundStream""'"); 
   }
   result = (SWFSound)newSWFSound_fromSoundStream(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
@@ -11907,12 +11897,11 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFMovieClip_setSoundStreamAt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovieClip arg1 = (SWFMovieClip) 0 ;
-  SWFSoundStream arg2 ;
+  SWFSoundStream arg2 = (SWFSoundStream) 0 ;
   float arg3 ;
   float arg4 ;
   int res1 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
   float val3 ;
   int ecode3 = 0 ;
   float val4 ;
@@ -11927,16 +11916,9 @@ SWIGINTERN PyObject *_wrap_SWFMovieClip_setSoundStreamAt(PyObject *SWIGUNUSEDPAR
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "1"" of type '" "SWFMovieClip""'"); 
   }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'");
-    } else {
-      arg2 = *((SWFSoundStream *)(argp2));
-    }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovieClip_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
   }
   ecode3 = SWIG_AsVal_float(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -11959,11 +11941,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFMovieClip_setSoundStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovieClip arg1 = (SWFMovieClip) 0 ;
-  SWFSoundStream arg2 ;
+  SWFSoundStream arg2 = (SWFSoundStream) 0 ;
   float arg3 ;
   int res1 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
   float val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -11975,16 +11956,9 @@ SWIGINTERN PyObject *_wrap_SWFMovieClip_setSoundStream(PyObject *SWIGUNUSEDPARM(
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovieClip_setSoundStream" "', argument " "1"" of type '" "SWFMovieClip""'"); 
   }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovieClip_setSoundStream" "', argument " "2"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovieClip_setSoundStream" "', argument " "2"" of type '" "SWFSoundStream""'");
-    } else {
-      arg2 = *((SWFSoundStream *)(argp2));
-    }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovieClip_setSoundStream" "', argument " "2"" of type '" "SWFSoundStream""'"); 
   }
   ecode3 = SWIG_AsVal_float(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -12389,10 +12363,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFMovie_setSoundStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovie arg1 = (SWFMovie) 0 ;
-  SWFSoundStream arg2 ;
+  SWFSoundStream arg2 = (SWFSoundStream) 0 ;
   int res1 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -12401,16 +12374,9 @@ SWIGINTERN PyObject *_wrap_SWFMovie_setSoundStream(PyObject *SWIGUNUSEDPARM(self
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_setSoundStream" "', argument " "1"" of type '" "SWFMovie""'"); 
   }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_setSoundStream" "', argument " "2"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovie_setSoundStream" "', argument " "2"" of type '" "SWFSoundStream""'");
-    } else {
-      arg2 = *((SWFSoundStream *)(argp2));
-    }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_setSoundStream" "', argument " "2"" of type '" "SWFSoundStream""'"); 
   }
   SWFMovie_setSoundStream(arg1,arg2);
   resultobj = SWIG_Py_Void();
@@ -12423,11 +12389,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFMovie_setSoundStreamAt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovie arg1 = (SWFMovie) 0 ;
-  SWFSoundStream arg2 ;
+  SWFSoundStream arg2 = (SWFSoundStream) 0 ;
   float arg3 ;
   int res1 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
   float val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -12439,16 +12404,9 @@ SWIGINTERN PyObject *_wrap_SWFMovie_setSoundStreamAt(PyObject *SWIGUNUSEDPARM(se
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "1"" of type '" "SWFMovie""'"); 
   }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFSoundStream,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'");
-    } else {
-      arg2 = *((SWFSoundStream *)(argp2));
-    }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_setSoundStreamAt" "', argument " "2"" of type '" "SWFSoundStream""'"); 
   }
   ecode3 = SWIG_AsVal_float(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -13232,8 +13190,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"newSWFSoundStream", _wrap_newSWFSoundStream, METH_VARARGS, NULL},
 	 { (char *)"newSWFSoundStreamFromFileno", _wrap_newSWFSoundStreamFromFileno, METH_VARARGS, NULL},
 	 { (char *)"newSWFSoundStream_fromInput", _wrap_newSWFSoundStream_fromInput, METH_VARARGS, NULL},
-	 { (char *)"SWFSoundStream_getFrames", _wrap_SWFSoundStream_getFrames, METH_VARARGS, NULL},
 	 { (char *)"destroySWFSoundStream", _wrap_destroySWFSoundStream, METH_VARARGS, NULL},
+	 { (char *)"SWFSoundStream_getDuration", _wrap_SWFSoundStream_getDuration, METH_VARARGS, NULL},
 	 { (char *)"newSWFSound", _wrap_newSWFSound, METH_VARARGS, NULL},
 	 { (char *)"newSWFSoundFromFileno", _wrap_newSWFSoundFromFileno, METH_VARARGS, NULL},
 	 { (char *)"newSWFSound_fromInput", _wrap_newSWFSound_fromInput, METH_VARARGS, NULL},
@@ -13445,7 +13403,6 @@ static swig_type_info _swigt__p_SWFJpegWithAlpha = {"_p_SWFJpegWithAlpha", "SWFJ
 static swig_type_info _swigt__p_SWFLineStyle = {"_p_SWFLineStyle", "SWFLineStyle *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFPosition = {"_p_SWFPosition", "SWFPosition *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFSoundInstance = {"_p_SWFSoundInstance", "SWFSoundInstance *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_SWFSoundStream = {"_p_SWFSoundStream", "SWFSoundStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFSprite = {"_p_SWFSprite", "SWFSprite *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFTextFieldAlignment = {"_p_SWFTextFieldAlignment", "enum SWFTextFieldAlignment *|SWFTextFieldAlignment *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p__swfPosition = {"_p__swfPosition", "struct _swfPosition *|_swfPosition *", 0, 0, (void*)0, 0};
@@ -13455,7 +13412,7 @@ static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_FILE,
@@ -13471,7 +13428,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_SWFLineStyle,
   &_swigt__p_SWFPosition,
   &_swigt__p_SWFSoundInstance,
-  &_swigt__p_SWFSoundStream,
   &_swigt__p_SWFSprite,
   &_swigt__p_SWFTextFieldAlignment,
   &_swigt__p__swfPosition,
@@ -13497,7 +13453,6 @@ static swig_cast_info _swigc__p_SWFJpegWithAlpha[] = {  {&_swigt__p_SWFJpegWithA
 static swig_cast_info _swigc__p_SWFLineStyle[] = {  {&_swigt__p_SWFLineStyle, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFPosition[] = {  {&_swigt__p_SWFPosition, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFSoundInstance[] = {  {&_swigt__p_SWFSoundInstance, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_SWFSoundStream[] = {  {&_swigt__p_SWFSoundStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFSprite[] = {  {&_swigt__p_SWFSprite, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFTextFieldAlignment[] = {  {&_swigt__p_SWFTextFieldAlignment, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p__swfPosition[] = {  {&_swigt__p__swfPosition, 0, 0, 0},{0, 0, 0, 0}};
@@ -13523,7 +13478,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_SWFLineStyle,
   _swigc__p_SWFPosition,
   _swigc__p_SWFSoundInstance,
-  _swigc__p_SWFSoundStream,
   _swigc__p_SWFSprite,
   _swigc__p_SWFTextFieldAlignment,
   _swigc__p__swfPosition,

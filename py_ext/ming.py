@@ -829,8 +829,11 @@ SWFTEXTFIELD_AUTOSIZE  = mingc.SWFTEXTFIELD_AUTOSIZE
 class SWFSoundStream(SWFBase):
 	
     def __init__(self, fname):
-        self.file = open(fname, "rb");
+        self.file = open(fname, "rb")
         self.this = mingc.newSWFSoundStream(self.file)
+
+    def getDuration(self):
+        return mingc.SWFSoundStream_getDuration(self.this)
 
 class SWFSound(SWFBase):
 

@@ -417,7 +417,6 @@ SWFSoundStream newSWFSoundStream(FILE *file);
 /* added by David McNab <david@rebirthing.co.nz> */
 SWFSoundStream newSWFSoundStreamFromFileno(int fd);
 SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
-int SWFSoundStream_getFrames(SWFSoundStream sound);
 void destroySWFSoundStream(SWFSoundStream soundStream);
 unsigned int SWFSoundStream_getDuration(SWFSoundStream);
 
