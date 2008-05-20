@@ -244,6 +244,16 @@ SWFMovie_setRate(SWFMovie movie /* movie to adjust */,
 }
 
 /*
+ * get the frame rate of a movie
+ * This function gets the frame rate for the movie.
+ */
+float
+SWFMovie_getRate(SWFMovie movie /* movie to adjust */)
+{
+	return movie->rate;
+}
+
+/*
  * set the dimensions of a movie
  * This function sets the dimensions for the movie.
  */
