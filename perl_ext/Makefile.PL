@@ -66,11 +66,7 @@ my @SWF_MODULES_NAMES = (
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
  push @XS_OBJECTS, "${SRCDIR}/swf_util";
- # SWF.xs will be copied-or-linked to build tree 
- # since I haven't found  a way to tell INCLUDE: where to
- # find the included file otherwise...
- push @XS_OBJECTS, "${BUILDDIR}/SWF";
- #print "XS_OBJECTS: ". join(", ", @XS_OBJECTS) . "\n";
+ push @XS_OBJECTS, "${SRCDIR}/SWF";
  my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@XS_OBJECTS)) . '$(OBJ_EXT)';
 
  my @LD_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
@@ -262,7 +258,7 @@ EOConf
 
 sub write_bootxs (){
     local *FH;
-    open FH, ">Boot.xsh" or die "can't open Boot.xsh $!";
+    open FH, ">${SRCDIR}/Boot.xsh" or die "can't open Boot.xsh $!";
     print FH "BOOT:\n{\n";
     print FH join "\n", map "extern void boot_SWF__$_(CV *cv);", @SWF_MODULES_NAMES;
     print FH "\n", join "\n", map "callXS(boot_SWF__$_, cv, mark);", @SWF_MODULES_NAMES;
