@@ -132,7 +132,7 @@ WriteMakefile(
     'MYEXTLIB'     => $MING_TOP_BUILDDIR . '/src/.libs/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
     'LDFROM'       => "$LD_OBJECTS",
-    'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR",
+    'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR -I$MING_TOP_BUILDDIR/src",
     'LIBS'         => [ $libs ],
 );
 
