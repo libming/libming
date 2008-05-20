@@ -151,8 +151,8 @@ sub doswftest($$$)
 			}
 		}
 
-		# Set the proper PERL5LIB (SRCDIR contains SWF.pm, which is all we need)
-		$ENV{'PERL5LIB'}=$TOP_SRCDIR."/perl_ext";
+		# Set the proper PERL5LIB (SRCDIR contains SWF.pm, while SWF.so is in BUILDDIR...)
+		$ENV{'PERL5LIB'}=$TOP_SRCDIR."/perl_ext:".$TOP_BUILDDIR."/perl_ext/blib/arch/auto/SWF/";
 	}
 	else
 	{
