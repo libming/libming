@@ -53,7 +53,7 @@ gen: refs $(SWFS) php.ini
 
 .PHONY: dotests php.ini
 dotests: $(top_srcdir)/test/dotests.pl php.ini
-	echo "top_builddir=$(top_builddir) builddir=$(PWD) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' BUILD_OPTIONS='$(BUILD_OPTIONS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
+	echo "top_builddir=$(top_builddir) builddir=$(PWD) top_srcdir=$(top_srcdir) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' BUILD_OPTIONS='$(BUILD_OPTIONS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
 	chmod +x $@
 
 php.ini: 
