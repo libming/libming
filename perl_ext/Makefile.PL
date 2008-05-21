@@ -74,6 +74,12 @@ my @SWF_MODULES_NAMES = (
  #print "LD_OBJECTS: ". join(", ", @XS_OBJECTS) . "\n";
  my $LD_OBJECTS = join ('$(OBJ_EXT) ' , (@LD_OBJECTS)) . '$(OBJ_EXT)';
 
+my $PM_HASH;
+foreach my $val ( @SWF_MODULES_NAMES ) {
+	$PM_HASH->{"${SRCDIR}/SWF/$val.pm"} = "blib/lib/SWF/$val.pm";
+}
+$PM_HASH->{"${SRCDIR}/SWF.pm"} = "blib/lib/SWF.pm";
+
 #$MING_DIR is not the src-dir
 my ($MING_DIR, $ming_version);
 #foreach my $dir (@DEFAULT_DIR) {
@@ -130,6 +136,7 @@ WriteMakefile(
     'LDFROM'       => "$LD_OBJECTS",
     'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR -I$MING_TOP_BUILDDIR/src",
     'LIBS'         => [ $libs ],
+    'PM'	   => $PM_HASH,
 );
 
 sub MY::install {
