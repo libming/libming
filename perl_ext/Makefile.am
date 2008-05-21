@@ -38,11 +38,15 @@ install: Makefile.perl
 	$(MAKE) -f Makefile.perl install PREFIX=$(prefix)
 
 Makefile.perl: Makefile.PL
+	cp -r $(srcdir)/SWF $(builddir)
+	cp $(srcdir)/SWF.pm $(builddir)
 	srcdir=$(srcdir) builddir=$(abs_builddir) $(PERL) $< PREFIX=$(prefix) FIRST_MAKEFILE=Makefile.perl
 
 clean-local: Makefile.perl
 	$(MAKE) -f Makefile.perl realclean
 	rm -f Makefile.perl
+	rm -rf SWF
+	rm -f SWF.pm
 
 distclean-local:
 	rm -f t/config.pl
