@@ -61,7 +61,7 @@ my @SWF_MODULES_NAMES = (
 	'Blur',
 	'FilterMatrix',
 	'Filter',
-	'CXform'
+	'CXform',
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
@@ -79,6 +79,8 @@ foreach my $val ( @SWF_MODULES_NAMES ) {
 	$PM_HASH->{"${SRCDIR}/SWF/$val.pm"} = "blib/lib/SWF/$val.pm";
 }
 $PM_HASH->{"${SRCDIR}/SWF.pm"} = "blib/lib/SWF.pm";
+#also install Sprite.pm (deprecated) for compat reasons
+$PM_HASH->{"${SRCDIR}/SWF/Sprite.pm"} = "blib/lib/SWF/Sprite.pm";
 
 #$MING_DIR is not the src-dir
 my ($MING_DIR, $ming_version);
