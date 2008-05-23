@@ -24,6 +24,7 @@
 #include <float.h>
 #include <string.h>
 
+#include "error.h"
 #include "libming.h"
 #include "matrix.h"
 
@@ -205,6 +206,10 @@ SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 
 		SWFOutput_writeBits(out, 1, 1);
 		nBits = max(SWFOutput_numSBits(xScale), SWFOutput_numSBits(yScale));
+		if(nBits >= 32)
+			SWF_error("SWFMatrix_scale: number is to big. "
+				  " Requested %i bits\n", nBits);
+		
 		SWFOutput_writeBits(out, nBits, 5);
 		SWFOutput_writeSBits(out, xScale, nBits);
 		SWFOutput_writeSBits(out, yScale, nBits);
@@ -221,6 +226,10 @@ SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 
 		SWFOutput_writeBits(out, 1, 1);
 		nBits = max(SWFOutput_numSBits(rot0), SWFOutput_numSBits(rot1));
+		if(nBits >= 32)
+			SWF_error("SWFMatrix_rotate: number is to big. "
+				  " Requested %i bits\n", nBits);
+
 		SWFOutput_writeBits(out, nBits, 5);
 		SWFOutput_writeSBits(out, rot0, nBits);
 		SWFOutput_writeSBits(out, rot1, nBits);
@@ -230,6 +239,10 @@ SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 	{
 		nBits = max(SWFOutput_numSBits(matrix->translateX),
 		SWFOutput_numSBits(matrix->translateY));
+
+		if(nBits >= 32)
+			SWF_error("SWFMatrix_translate: number is to big. "
+				  " Requested %i bits\n", nBits);
 	}
 	else
 		nBits = 0;
