@@ -28,6 +28,9 @@
 	* Support for embedded Nellymoser sound
 	* AS: in with-blocks legacy functions o not work
 	* Compiles again with MSVC
+	* simplified SWFSound usage with mp3 files
+	* SWFSoundStream_getDuration replaces SWFSoundStream_getFrames()
+	* perl_ext build changes
 
 0.4.0.beta5 - 2007-09-18
 
