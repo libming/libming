@@ -7,11 +7,12 @@ EXTRA_DIST = SWF/Action.pm SWF/BinaryData.pm SWF/Bitmap.pm SWF/Blur.pm \
 		SWF/Shape.pm SWF/Shadow.pm SWF/Sound.pm \
 		SWF/SoundInstance.pm SWF/SoundStream.pm SWF/MovieClip.pm \
 		SWF/Text.pm SWF/TextField.pm SWF/VideoStream.pm SWF/Sprite.pm \
+		SWF/BrowserFont.pm \
 		t/00_basic.t t/01_shape.t t/03_movie.t t/button.t t/drag.t \
 		t/fill.t t/filljpeg.t t/gradient.t t/movieclip.t t/png.t \
 		t/sound.t \
 		Action.xs BinaryData.xs Bitmap.xs Blur.xs Button.xs CREDITS \
-		Changes Constants.xs CXform.xs \
+		Changes Constants.xs CXform.xs BrowserFont.xs \
 		DisplayItem.xs Exports.c Fill.xs FilterMatrix.xs Filter.xs \
 		Font.xs Gradient.xs InitAction.xs MANIFEST Makefile.PL \
 		Matrix.xs Morph.xs Movie.xs MovieClip.xs PrebuiltClip.xs \

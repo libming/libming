@@ -43,6 +43,7 @@ typedef SWFShadow     	   SWF__Shadow;
 typedef SWFFilterMatrix	   SWF__FilterMatrix;
 typedef SWFFilter	   SWF__Filter;
 typedef SWFCXform	   SWF__CXform;
+typedef SWFBrowserFont	   SWF__BrowserFont;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef

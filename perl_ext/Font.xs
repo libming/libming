@@ -34,7 +34,7 @@ SWFFont_new(package="SWF::Font", filename)
 		RETVAL = newSWFFont_fromFile(filename);
 	}
 	else
-	    RETVAL = newSWFBrowserFont(filename);
+	    XSRETURN_UNDEF;
 
 	ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);

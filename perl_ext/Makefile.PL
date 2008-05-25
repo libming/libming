@@ -62,6 +62,7 @@ my @SWF_MODULES_NAMES = (
 	'FilterMatrix',
 	'Filter',
 	'CXform',
+	'BrowserFont',
 );
 
  my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;

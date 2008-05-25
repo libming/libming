@@ -28,6 +28,7 @@ SWF/FilterMatrix.pm
 SWF/Filter.pm
 SWF/CXform.pm
 SWF/Sprite.pm
+SWF/BrowserFont.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
@@ -77,6 +78,7 @@ Blur.xs
 FilterMatrix.xs
 Filter.xs
 CXform.xs
+BrowserFont.xs
 perl_swf.h
 swf_util.c
 typemap
