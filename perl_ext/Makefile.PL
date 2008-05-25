@@ -65,15 +65,20 @@ my @SWF_MODULES_NAMES = (
 	'BrowserFont',
 );
 
- my @XS_OBJECTS = map "${SRCDIR}/$_", @SWF_MODULES_NAMES;
- push @XS_OBJECTS, "${SRCDIR}/swf_util";
- push @XS_OBJECTS, "${SRCDIR}/SWF";
- my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@XS_OBJECTS)) . '$(OBJ_EXT)';
+my @XS_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
+push @XS_OBJECTS, "${SRCDIR}/swf_util";
+push @XS_OBJECTS, "${BUILDDIR}/SWF";
+my $XS_OBJECTS = join ('$(OBJ_EXT) ' , (@XS_OBJECTS)) . '$(OBJ_EXT)';
 
- my @LD_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
- push @LD_OBJECTS, "${BUILDDIR}/swf_util", "${BUILDDIR}/SWF";
- #print "LD_OBJECTS: ". join(", ", @XS_OBJECTS) . "\n";
- my $LD_OBJECTS = join ('$(OBJ_EXT) ' , (@LD_OBJECTS)) . '$(OBJ_EXT)';
+my $XS_DEP_FILES = "";
+foreach my $val ( @SWF_MODULES_NAMES ) {
+	$XS_DEP_FILES .= "$BUILDDIR/$val.xs: \n\tln -s $SRCDIR/$val.xs .\n";
+}
+$XS_DEP_FILES .= "$BUILDDIR/SWF.xs: \n\tln -s $SRCDIR/SWF.xs .\n";
+
+my @LD_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;
+push @LD_OBJECTS, "${BUILDDIR}/swf_util", "${BUILDDIR}/SWF";
+my $LD_OBJECTS = join ('$(OBJ_EXT) ' , (@LD_OBJECTS)) . '$(OBJ_EXT)';
 
 my $PM_HASH;
 foreach my $val ( @SWF_MODULES_NAMES ) {
@@ -122,11 +127,7 @@ write_config_test ($MING_DIR."/src/");
 write_bootxs();
 
 sub MY::postamble {
-    return 
-        "Makefile.PL: $SRCDIR/Makefile.PL\n".
-        "\tln -s $SRCDIR/Makefile.PL .\n".
-        "SWF.xs: $SRCDIR/SWF.xs\n".
-        "\tln -s $SRCDIR/SWF.xs .\n";
+	"$XS_DEP_FILES";
 }
 
 
@@ -145,10 +146,11 @@ WriteMakefile(
     'MYEXTLIB'     => $MING_TOP_BUILDDIR . '/src/.libs/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
     'LDFROM'       => "$LD_OBJECTS",
-    'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR -I$MING_TOP_BUILDDIR/src",
+    'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR -I$MING_TOP_BUILDDIR/src -I$SRCDIR",
     'LIBS'         => [ $libs ],
     'PM'	   => $PM_HASH,
     'MAN3PODS'	   => $MAN3_HASH,
+    'TYPEMAPS'     => ["$SRCDIR/typemap"],
 );
 
 sub MY::install {
@@ -277,7 +279,7 @@ EOConf
 
 sub write_bootxs (){
     local *FH;
-    open FH, ">${SRCDIR}/Boot.xsh" or die "can't open Boot.xsh $!";
+    open FH, ">${BUILDDIR}/Boot.xsh" or die "can't open Boot.xsh $!";
     print FH "BOOT:\n{\n";
     print FH join "\n", map "extern void boot_SWF__$_(CV *cv);", @SWF_MODULES_NAMES;
     print FH "\n", join "\n", map "callXS(boot_SWF__$_, cv, mark);", @SWF_MODULES_NAMES;
