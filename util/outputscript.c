@@ -877,6 +877,7 @@ outputSWF_DEFINECOMMANDOBJ (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
 {
+  struct FONTINFO *fi=fip;
   int notFirst = 0;
   char tname[64];
   OUT_BEGIN (SWF_DEFINEEDITTEXT);
@@ -975,6 +976,27 @@ if( sblock->HasLayout ) {
 	      sblock->FontID);
       printf ("%s(%d);\n", methodcall (tname, "setHeight"),
 	      sblock->FontHeight);
+      while (fi)
+      {
+       int i;
+       if (fi->fontcodeID==sblock->FontID)
+       {
+        printf ("%s(" SQ , methodcall (tname, "addChars"));
+        for(i=0;i<fi->fontcodearrsize;i++)
+        {
+         #ifdef SWFPERL
+         if (fi->fontcodeptr[i]=='\'' || fi->fontcodeptr[i]=='\\' || fi->fontcodeptr[i]=='@' || fi->fontcodeptr[i]=='%' )
+          printf ("\\");
+         #endif
+         if (fi->fontcodeptr[i]<256)
+          printf ("%c",fi->fontcodeptr[i]);
+        } 
+        printf (SQ ");\n" );
+        break;
+       }
+       else
+        fi=fi->next;
+      }
     }
   if (sblock->HasTextColor)
     {
