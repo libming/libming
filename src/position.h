@@ -33,31 +33,15 @@
 
 struct SWFPosition_s
 {
-	float x;
-	float y;
-	float xScale;
-	float yScale;
-	float xSkew;
-	float ySkew;
-	float rot;
+	double x;
+	double y;
+	double xScale;
+	double yScale;
+	double xSkew;
+	double ySkew;
+	double rot;
 	SWFMatrix matrix;
 };
 
-SWFMatrix SWFPosition_getMatrix(SWFPosition p);
-float SWFPosition_getRotation(SWFPosition position);
-float SWFPosition_getX(SWFPosition position);
-float SWFPosition_getY(SWFPosition position);
-
-void SWFPosition_getXY(SWFPosition position, float* outX, float* outY);
-
-float SWFPosition_getXScale(SWFPosition position);
-float SWFPosition_getYScale(SWFPosition position);
-
-void SWFPosition_getXYScale(SWFPosition position, float* outXScale, float* outYScale);
-
-float SWFPosition_getXSkew(SWFPosition position);
-float SWFPosition_getYSkew(SWFPosition position);
-
-void SWFPosition_getXYSkew(SWFPosition position, float* outXSkew, float* outYSkew);
 
 #endif /* SWF_POSITION_H_INCLUDED */

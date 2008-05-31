@@ -30,8 +30,8 @@
 
 typedef struct
 {
-	float x;
-	float y;
+	double x;
+	double y;
 } point;
 
 typedef struct
@@ -49,13 +49,13 @@ typedef struct
 	point c;
 } quadratic;
 
-static void halfpointCubic(cubic *c, float *x, float *y)
+static void halfpointCubic(cubic *c, double *x, double *y)
 {
 	*x = (c->a.x + 3*c->b.x + 3*c->c.x + c->d.x) / 8;
 	*y = (c->a.y + 3*c->b.y + 3*c->c.y + c->d.y) / 8;
 }
 
-static void halfpointQuadratic(quadratic *q, float *x, float *y)
+static void halfpointQuadratic(quadratic *q, double *x, double *y)
 {
 	*x = (q->a.x + 2*q->b.x + q->c.x) / 4;
 	*y = (q->a.y + 2*q->b.y + q->c.y) / 4;
@@ -63,12 +63,12 @@ static void halfpointQuadratic(quadratic *q, float *x, float *y)
 
 #define abs(f) ((f)>0?(f):-(f))
 
-static float errorPoints(float ax, float ay, float bx, float by)
+static double errorPoints(double ax, double ay, double bx, double by)
 {
 	return abs(ax-bx) + abs(ay-by);
 }
 
-static void subdivideCubicLeft(cubic *New, cubic *old, float t)
+static void subdivideCubicLeft(cubic *New, cubic *old, double t)
 {
 	SWF_assert(t>0.0 && t<1.0);
 
@@ -91,7 +91,7 @@ static void subdivideCubicLeft(cubic *New, cubic *old, float t)
 	New->d.y = t*New->c.y + (1-t)*New->d.y;
 }
 
-static void subdivideCubicRight(cubic *New, cubic *old, float t)
+static void subdivideCubicRight(cubic *New, cubic *old, double t)
 {
 	SWF_assert(t>0.0 && t<1.0);
 
@@ -134,7 +134,7 @@ static int SWFShape_approxCubic(SWFShape shape, cubic *c)
 {
 	quadratic q;
 
-	float cx, cy, qx, qy;
+	double cx, cy, qx, qy;
 
 	if(c->b.x == c->a.x && c->b.y == c->a.y)
 	{
@@ -159,10 +159,10 @@ static int SWFShape_approxCubic(SWFShape shape, cubic *c)
 	}
 	else
 	{
-		float bcrossa = c->b.x*c->a.y - c->a.x*c->b.y;
-		float ccrossd = c->c.x*c->d.y - c->d.x*c->c.y;
+		double bcrossa = c->b.x*c->a.y - c->a.x*c->b.y;
+		double ccrossd = c->c.x*c->d.y - c->d.x*c->c.y;
 
-		float denom = (c->a.y-c->b.y)*(c->d.x-c->c.x) -
+		double denom = (c->a.y-c->b.y)*(c->d.x-c->c.x) -
 			(c->a.x-c->b.x)*(c->d.y-c->c.y);
 
 		if(denom == 0)
@@ -218,23 +218,22 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 
 	double d = b*b - 4*a*c;
 
-	float t1 = 0.0, t2 = 1.0;
+	double t1 = 0.0, t2 = 1.0;
 	int nCurves = 0;
 
-	cubic pts = { { (float)ax, (float)ay }, { (float)bx, (float)by },
-								{ (float)cx, (float)cy }, { (float)dx, (float)dy } };
+	cubic pts = { { ax, ay }, { bx, by }, {cx, cy }, { dx, dy } };
 	cubic New;
 
 	if ( d > 0 )
 	{
 		/* two roots */
 
-		t1 = (float)((-b-sqrt(d))/(2*a));
-		t2 = (float)((-b+sqrt(d))/(2*a));
+		t1 = (-b-sqrt(d))/(2*a);
+		t2 = (-b+sqrt(d))/(2*a);
 
 		if ( a < 0 )
 		{
-			float tmp = t2;
+			double tmp = t2;
 			t2 = t1;
 			t1 = tmp;
 		}
@@ -242,7 +241,7 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 	else if ( d == 0 )
 	{
 		/* singular root */
-		t1 = (float)(-b/(2*a));
+		t1 = -b/(2*a);
 	}
 
 	/* use subdivision method to build t=0..t1, t=t1..t2, t=t2..1 curves */
@@ -289,8 +288,8 @@ int SWFShape_drawScaledCubicTo(SWFShape shape, int bx, int by,
 /* returns number of splines used */
 
 int
-SWFShape_drawCubic(SWFShape shape, float bx, float by,
-			 float cx, float cy, float dx, float dy)
+SWFShape_drawCubic(SWFShape shape, double bx, double by,
+			 double cx, double cy, double dx, double dy)
 {
 	int sax = SWFShape_getScaledPenX(shape);
 	int say = SWFShape_getScaledPenY(shape);
@@ -304,8 +303,8 @@ SWFShape_drawCubic(SWFShape shape, float bx, float by,
 	return SWFShape_drawScaledCubicTo(shape, sbx, sby, scx, scy, sdx, sdy);
 }
 
-int SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
-			 float cx, float cy, float dx, float dy)
+int SWFShape_drawCubicTo(SWFShape shape, double bx, double by,
+			 double cx, double cy, double dx, double dy)
 {
 	return SWFShape_drawScaledCubicTo(shape,
 						(int)rint(bx*Ming_scale),

@@ -283,7 +283,7 @@ SWFDisplayItem_getMatrix(SWFDisplayItem item)
 
 
 void
-SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
+SWFDisplayItem_move(SWFDisplayItem item, double x, double y)
 {
 	checkBlock(item);
 	SWFPosition_move(item->position, x, y);
@@ -292,7 +292,7 @@ SWFDisplayItem_move(SWFDisplayItem item, float x, float y)
 
 
 void
-SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
+SWFDisplayItem_moveTo(SWFDisplayItem item,  double x, double y)
 {
 	checkBlock(item);
 	SWFPosition_moveTo(item->position, x, y);
@@ -301,7 +301,7 @@ SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y)
 
 
 void
-SWFDisplayItem_getPosition(SWFDisplayItem item, float *x, float *y)
+SWFDisplayItem_getPosition(SWFDisplayItem item, double *x, double *y)
 {
 	// returns the current position of this display item into the provided
 	// pointers, respects NULL values
@@ -312,7 +312,7 @@ SWFDisplayItem_getPosition(SWFDisplayItem item, float *x, float *y)
 
 
 void
-SWFDisplayItem_rotate(SWFDisplayItem item, float degrees)
+SWFDisplayItem_rotate(SWFDisplayItem item, double degrees)
 {
 	checkBlock(item);
 	SWFPosition_rotate(item->position, degrees);
@@ -321,7 +321,7 @@ SWFDisplayItem_rotate(SWFDisplayItem item, float degrees)
 
 
 void
-SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees)
+SWFDisplayItem_rotateTo(SWFDisplayItem item, double degrees)
 {
 	checkBlock(item);
 	SWFPosition_rotateTo(item->position, degrees);
@@ -330,7 +330,7 @@ SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees)
 
 
 void
-SWFDisplayItem_getRotation(SWFDisplayItem item, float *degrees)
+SWFDisplayItem_getRotation(SWFDisplayItem item, double *degrees)
 {
 	// returns the current rotation of this display item into the given
 	// pointer, respects NULL value
@@ -343,7 +343,7 @@ SWFDisplayItem_getRotation(SWFDisplayItem item, float *degrees)
 
 
 void
-SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale)
+SWFDisplayItem_scale(SWFDisplayItem item, double xScale, double yScale)
 {
 	checkBlock(item);
 	SWFPosition_scaleXY(item->position, xScale, yScale);
@@ -352,7 +352,7 @@ SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale)
 
 
 void
-SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale)
+SWFDisplayItem_scaleTo(SWFDisplayItem item, double xScale, double yScale)
 {
 	checkBlock(item);
 	SWFPosition_scaleXYTo(item->position, xScale, yScale);
@@ -361,7 +361,7 @@ SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale)
 
 
 void
-SWFDisplayItem_getScale(SWFDisplayItem item, float *xScale, float *yScale)
+SWFDisplayItem_getScale(SWFDisplayItem item, double *xScale, double *yScale)
 {
 	// returns the current x- and y-scale of this display item into the given
 	// pointers, respects NULL values
@@ -372,7 +372,7 @@ SWFDisplayItem_getScale(SWFDisplayItem item, float *xScale, float *yScale)
 
 
 void
-SWFDisplayItem_skewX(SWFDisplayItem item, float x)
+SWFDisplayItem_skewX(SWFDisplayItem item, double x)
 {
 	checkBlock(item);
 	SWFPosition_skewX(item->position, x);
@@ -381,7 +381,7 @@ SWFDisplayItem_skewX(SWFDisplayItem item, float x)
 
 
 void
-SWFDisplayItem_skewXTo(SWFDisplayItem item, float x)
+SWFDisplayItem_skewXTo(SWFDisplayItem item, double x)
 {
 	checkBlock(item);
 	SWFPosition_skewXTo(item->position, x);
@@ -390,7 +390,7 @@ SWFDisplayItem_skewXTo(SWFDisplayItem item, float x)
 
 
 void
-SWFDisplayItem_skewY(SWFDisplayItem item, float y)
+SWFDisplayItem_skewY(SWFDisplayItem item, double y)
 {
 	checkBlock(item);
 	SWFPosition_skewY(item->position, y);
@@ -399,7 +399,7 @@ SWFDisplayItem_skewY(SWFDisplayItem item, float y)
 
 
 void
-SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
+SWFDisplayItem_skewYTo(SWFDisplayItem item, double y)
 {
 	checkBlock(item);
 	SWFPosition_skewYTo(item->position, y);
@@ -408,7 +408,7 @@ SWFDisplayItem_skewYTo(SWFDisplayItem item, float y)
 
 
 void
-SWFDisplayItem_getSkew(SWFDisplayItem item, float *xSkew, float *ySkew)
+SWFDisplayItem_getSkew(SWFDisplayItem item, double *xSkew, double *ySkew)
 {
 	// returns the current x- and y-skew of this display item into the given
 	// pointers, respects NULL values
@@ -420,7 +420,7 @@ SWFDisplayItem_getSkew(SWFDisplayItem item, float *xSkew, float *ySkew)
 
 void
 SWFDisplayItem_setMatrix(SWFDisplayItem item,
-												 float a, float b, float c, float d, float x, float y)
+                         double a, double b, double c, double d, double x, double y)
 {
 	checkBlock(item);
 	SWFPosition_setMatrix(item->position, a, b, c, d, x, y);

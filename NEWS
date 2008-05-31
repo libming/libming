@@ -30,7 +30,8 @@
 	* Compiles again with MSVC
 	* simplified SWFSound usage with mp3 files
 	* SWFSoundStream_getDuration replaces SWFSoundStream_getFrames()
-	* perl_ext build changes
+	* perl_ext build changes (build out of tree)
+	* API float->double transition
 
 0.4.0.beta5 - 2007-09-18
 

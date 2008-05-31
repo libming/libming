@@ -209,7 +209,7 @@ void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character)
 }
 
 
-void SWFShape_drawCircle(SWFShape shape, float r)
+void SWFShape_drawCircle(SWFShape shape, double r)
 {
 	SWFShape_drawArc(shape, r, 0, 360);
 }
@@ -218,36 +218,35 @@ void SWFShape_drawCircle(SWFShape shape, float r)
 /* draw an arc of radius r, centered at (x,y), from angle startAngle to angle
 	 endAngle (measured in degrees clockwise from due north) */
 
-void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle)
+void SWFShape_drawArc(SWFShape shape, double r, double startAngle, double endAngle)
 {
 	int i;
-	float controlx, controly, anchorx, anchory, x, y;
+	double controlx, controly, anchorx, anchory, x, y;
 
 	/* first determine number of segments, 8 at most */
 	int nSegs = (int)(1 + floor(7*(endAngle-startAngle)/360));
 
 	/* subangle is half the angle of each segment */
-	float subangle = M_PI*(endAngle-startAngle)/nSegs/360;
+	double subangle = M_PI*(endAngle-startAngle)/nSegs/360;
 
-	float angle = M_PI*startAngle/180;
+	double angle = M_PI*startAngle/180;
 
-	x = (float)rint(r*sin(angle));
-	y = (float)-rint(r*cos(angle));
+	x = rint(r*sin(angle));
+	y = -rint(r*cos(angle));
 
 	SWFShape_movePen(shape, x, y);
 
 	for ( i=0; i<nSegs; ++i )
 	{
 		angle += subangle;
-		controlx = (float)(r*sin(angle)/cos(subangle));
-		controly = (float)(-r*cos(angle)/cos(subangle));
+		controlx = (r*sin(angle)/cos(subangle));
+		controly = (-r*cos(angle)/cos(subangle));
 		angle += subangle;
-		anchorx = (float)(r*sin(angle));
-		anchory = (float)(-r*cos(angle));
+		anchorx = (r*sin(angle));
+		anchory = (-r*cos(angle));
 
-		SWFShape_drawCurve(shape,
-					 (float)rint(controlx)-x, (float)rint(controly)-y,
-					 (float)rint(anchorx-controlx), (float)rint(anchory-controly));
+		SWFShape_drawCurve(shape, rint(controlx)-x, rint(controly)-y,
+		                   rint(anchorx-controlx), rint(anchory-controly));
 
 		x = anchorx;
 		y = anchory;
@@ -257,54 +256,54 @@ void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle)
 
 /* x,y relative to shape origin */
 
-void SWFShape_movePenTo(SWFShape shape, float x, float y)
+void SWFShape_movePenTo(SWFShape shape, double x, double y)
 {
 	SWFShape_moveScaledPenTo(shape, (int)rint(x*Ming_scale),
 				 (int)rint(y*Ming_scale));
 }
 
 
-void SWFShape_movePen(SWFShape shape, float dx, float dy)
+void SWFShape_movePen(SWFShape shape, double dx, double dy)
 {
 	SWFShape_moveScaledPen(shape, (int)rint(dx*Ming_scale),
 			 (int)rint(dy*Ming_scale));
 }
 
-float SWFShape_getPenX(SWFShape shape)
+double SWFShape_getPenX(SWFShape shape)
 {
-	return (float)(SWFShape_getScaledPenX(shape)/Ming_scale);
+	return SWFShape_getScaledPenX(shape)/Ming_scale;
 }
 
-float SWFShape_getPenY(SWFShape shape)
+double SWFShape_getPenY(SWFShape shape)
 {
-	return (float)(SWFShape_getScaledPenY(shape)/Ming_scale);
-}
-
-
-
-void SWFShape_getPen(SWFShape shape, float* penX, float* penY)
-{
-        *penX = (float)(SWFShape_getScaledPenX(shape)/ Ming_scale);
-        *penY = (float)(SWFShape_getScaledPenY(shape)/ Ming_scale);
+	return SWFShape_getScaledPenY(shape)/Ming_scale;
 }
 
 
-void SWFShape_drawLineTo(SWFShape shape, float x, float y)
+
+void SWFShape_getPen(SWFShape shape, double* penX, double* penY)
+{
+        *penX = SWFShape_getScaledPenX(shape)/ Ming_scale;
+        *penY = SWFShape_getScaledPenY(shape)/ Ming_scale;
+}
+
+
+void SWFShape_drawLineTo(SWFShape shape, double x, double y)
 {
 	SWFShape_drawScaledLineTo(shape, (int)rint(x*Ming_scale),
 					(int)rint(y*Ming_scale));
 }
 
 
-void SWFShape_drawLine(SWFShape shape, float dx, float dy)
+void SWFShape_drawLine(SWFShape shape, double dx, double dy)
 {
 	SWFShape_drawScaledLine(shape, (int)rint(dx*Ming_scale),
 				(int)rint(dy*Ming_scale));
 }
 
 
-void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
-				float anchorx, float anchory)
+void SWFShape_drawCurveTo(SWFShape shape, double controlx, double controly,
+				double anchorx, double anchory)
 {
 	SWFShape_drawScaledCurveTo(shape,
 					 (int)rint(controlx*Ming_scale),
@@ -314,8 +313,8 @@ void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
 }
 
 
-void SWFShape_drawCurve(SWFShape shape,	float controldx, float controldy,
-			float anchordx, float anchordy)
+void SWFShape_drawCurve(SWFShape shape,	double controldx, double controldy,
+			double anchordx, double anchordy)
 {
 	SWFShape_drawScaledCurve(shape,
 				 (int)rint(controldx*Ming_scale),

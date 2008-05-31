@@ -62,9 +62,9 @@ newSWFPosition(SWFMatrix matrix)
 static void
 updateMatrix(SWFPosition p)
 {
-	float cRot = (float)cos(p->rot*M_PI/180);
-	float sRot = (float)sin(p->rot*M_PI/180);
-	float xS = p->xSkew, yS = p->ySkew;
+	double cRot = cos(p->rot*M_PI/180);
+	double sRot = sin(p->rot*M_PI/180);
+	double xS = p->xSkew, yS = p->ySkew;
 	SWFMatrix m = p->matrix;
 	if ( ! m )
 	{
@@ -82,7 +82,7 @@ updateMatrix(SWFPosition p)
 
 
 void
-SWFPosition_skewX(SWFPosition p, float x)
+SWFPosition_skewX(SWFPosition p, double x)
 {
 	p->xSkew += x;
 	updateMatrix(p);
@@ -90,7 +90,7 @@ SWFPosition_skewX(SWFPosition p, float x)
 
 
 void
-SWFPosition_skewXTo(SWFPosition p, float x)
+SWFPosition_skewXTo(SWFPosition p, double x)
 {
 	p->xSkew = x;
 	updateMatrix(p);
@@ -98,7 +98,7 @@ SWFPosition_skewXTo(SWFPosition p, float x)
 
 
 void
-SWFPosition_skewY(SWFPosition p, float y)
+SWFPosition_skewY(SWFPosition p, double y)
 {
 	p->ySkew += y;
 	updateMatrix(p);
@@ -106,7 +106,7 @@ SWFPosition_skewY(SWFPosition p, float y)
 
 
 void
-SWFPosition_skewYTo(SWFPosition p, float y)
+SWFPosition_skewYTo(SWFPosition p, double y)
 {
 	p->ySkew = y;
 	updateMatrix(p);
@@ -114,7 +114,7 @@ SWFPosition_skewYTo(SWFPosition p, float y)
 
 
 void
-SWFPosition_scaleX(SWFPosition p, float x)
+SWFPosition_scaleX(SWFPosition p, double x)
 {
 	p->xScale *= x;
 	updateMatrix(p);
@@ -122,7 +122,7 @@ SWFPosition_scaleX(SWFPosition p, float x)
 
 
 void
-SWFPosition_scaleXTo(SWFPosition p, float x)
+SWFPosition_scaleXTo(SWFPosition p, double x)
 {
 	p->xScale = x;
 	updateMatrix(p);
@@ -130,7 +130,7 @@ SWFPosition_scaleXTo(SWFPosition p, float x)
 
 
 void
-SWFPosition_scaleY(SWFPosition p, float y)
+SWFPosition_scaleY(SWFPosition p, double y)
 {
 	p->yScale *= y;
 	updateMatrix(p);
@@ -138,7 +138,7 @@ SWFPosition_scaleY(SWFPosition p, float y)
 
 
 void
-SWFPosition_scaleYTo(SWFPosition p, float y)
+SWFPosition_scaleYTo(SWFPosition p, double y)
 {
 	p->yScale = y;
 	updateMatrix(p);
@@ -146,7 +146,7 @@ SWFPosition_scaleYTo(SWFPosition p, float y)
 
 
 void
-SWFPosition_rotate(SWFPosition p, float degrees)
+SWFPosition_rotate(SWFPosition p, double degrees)
 {
 	p->rot += degrees;
 	updateMatrix(p);
@@ -154,7 +154,7 @@ SWFPosition_rotate(SWFPosition p, float degrees)
 
 
 void
-SWFPosition_rotateTo(SWFPosition p, float degrees)
+SWFPosition_rotateTo(SWFPosition p, double degrees)
 {
 	p->rot = degrees;
 	updateMatrix(p);
@@ -162,7 +162,7 @@ SWFPosition_rotateTo(SWFPosition p, float degrees)
 
 
 void
-SWFPosition_move(SWFPosition p, float x, float y)
+SWFPosition_move(SWFPosition p, double x, double y)
 {
 	p->x += x;
 	p->y += y;
@@ -171,7 +171,7 @@ SWFPosition_move(SWFPosition p, float x, float y)
 
 
 void
-SWFPosition_moveTo(SWFPosition p, float x, float y)
+SWFPosition_moveTo(SWFPosition p, double x, double y)
 {
 	p->x = x;
 	p->y = y;
@@ -180,7 +180,7 @@ SWFPosition_moveTo(SWFPosition p, float x, float y)
 
 
 void
-SWFPosition_scaleXY(SWFPosition p, float x, float y)
+SWFPosition_scaleXY(SWFPosition p, double x, double y)
 {
 	p->xScale *= x;
 	p->yScale *= y;
@@ -189,7 +189,7 @@ SWFPosition_scaleXY(SWFPosition p, float x, float y)
 
 
 void
-SWFPosition_scaleXYTo(SWFPosition p, float x, float y)
+SWFPosition_scaleXYTo(SWFPosition p, double x, double y)
 {
 	p->xScale = x;
 	p->yScale = y;
@@ -198,8 +198,7 @@ SWFPosition_scaleXYTo(SWFPosition p, float x, float y)
 
 
 void
-SWFPosition_setMatrix(SWFPosition p,
-											float a, float b, float c, float d, float x, float y)
+SWFPosition_setMatrix(SWFPosition p, double a, double b, double c, double d, double x, double y)
 {
 	/* set the transform matrix, but don't touch the position properties-
 		 you won't want to use the two in conjunction, anyway */
@@ -216,21 +215,21 @@ SWFPosition_getMatrix(SWFPosition p)
 }
 
 
-float
+double
 SWFPosition_getRotation(SWFPosition position)
 {
 	return position->rot;
 }
 
 
-float
+double
 SWFPosition_getX(SWFPosition position)
 {
 	return position->x;
 }
 
 
-float
+double
 SWFPosition_getY(SWFPosition position)
 {
 	return position->y;
@@ -238,7 +237,7 @@ SWFPosition_getY(SWFPosition position)
 
 
 void
-SWFPosition_getXY(SWFPosition position, float* outX, float* outY)
+SWFPosition_getXY(SWFPosition position, double* outX, double* outY)
 {
 	if ( outX != NULL )
 		*outX = position->x;
@@ -248,14 +247,14 @@ SWFPosition_getXY(SWFPosition position, float* outX, float* outY)
 }
 
 
-float
+double
 SWFPosition_getXScale(SWFPosition position)
 {
 	return position->xScale;
 }
 
 
-float
+double
 SWFPosition_getYScale(SWFPosition position)
 {
 	return position->yScale;
@@ -263,7 +262,7 @@ SWFPosition_getYScale(SWFPosition position)
 
 
 void
-SWFPosition_getXYScale(SWFPosition position, float* outXScale, float* outYScale)
+SWFPosition_getXYScale(SWFPosition position, double* outXScale, double* outYScale)
 {
 	if ( outXScale != NULL )
 		*outXScale = position->xScale;
@@ -273,14 +272,14 @@ SWFPosition_getXYScale(SWFPosition position, float* outXScale, float* outYScale)
 }
 
 
-float
+double
 SWFPosition_getXSkew(SWFPosition position)
 {
 	return position->xSkew;
 }
 
 
-float
+double
 SWFPosition_getYSkew(SWFPosition position)
 {
 	return position->ySkew;
@@ -288,7 +287,7 @@ SWFPosition_getYSkew(SWFPosition position)
 
 
 void
-SWFPosition_getXYSkew(SWFPosition position, float* outXSkew, float* outYSkew)
+SWFPosition_getXYSkew(SWFPosition position, double* outXSkew, double* outYSkew)
 {
 	if ( outXSkew )
 		*outXSkew = position->xSkew;
