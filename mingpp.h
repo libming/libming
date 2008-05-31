@@ -144,16 +144,16 @@ class SWFMatrix
  public:
   c_SWFMatrix matrix;
 
-  float getScaleX()
+  double getScaleX()
   { return SWFMatrix_getScaleX(this->matrix); }
 
-  float getScaleY()
+  double getScaleY()
   { return SWFMatrix_getScaleY(this->matrix); }
 
-  float getRotate0()
+  double getRotate0()
   { return SWFMatrix_getRotate0(this->matrix); }
  
-  float getRotate1()
+  double getRotate1()
   { return SWFMatrix_getRotate1(this->matrix); }
 
   int getTranslateX()
@@ -563,52 +563,52 @@ class SWFDisplayItem
  public:
   c_SWFDisplayItem item;
  
-  void rotate(float degrees)
+  void rotate(double degrees)
     { SWFDisplayItem_rotate(this->item, degrees); }
 
-  void rotateTo(float degrees)
+  void rotateTo(double degrees)
     { SWFDisplayItem_rotateTo(this->item, degrees); }
 
-  void getRotation(float *degrees)
+  void getRotation(double *degrees)
     { SWFDisplayItem_getRotation(this->item, degrees); }
 
-  void move(float x, float y)
+  void move(double x, double y)
     { SWFDisplayItem_move(this->item, x, y); }
 
-  void moveTo(float x, float y)
+  void moveTo(double x, double y)
     { SWFDisplayItem_moveTo(this->item, x, y); }
 
-  void getPosition(float *x, float *y)
+  void getPosition(double *x, double *y)
     { SWFDisplayItem_getPosition(this->item, x, y); }
 
-  void scale(float xScale, float yScale)
+  void scale(double xScale, double yScale)
     { SWFDisplayItem_scale(this->item, xScale, yScale); }
 
-  void scale(float scale)
+  void scale(double scale)
     { SWFDisplayItem_scale(this->item, scale, scale); }
 
-  void scaleTo(float xScale, float yScale)
+  void scaleTo(double xScale, double yScale)
     { SWFDisplayItem_scaleTo(this->item, xScale, yScale); }
 
-  void scaleTo(float scale)
+  void scaleTo(double scale)
     { SWFDisplayItem_scaleTo(this->item, scale, scale); }
 
-  void getScale(float *xScale, float *yScale)
+  void getScale(double *xScale, double *yScale)
     { SWFDisplayItem_getScale(this->item, xScale, yScale); }
 
-  void skewX(float skew)
+  void skewX(double skew)
     { SWFDisplayItem_skewX(this->item, skew); }
 
-  void skewXTo(float skew)
+  void skewXTo(double skew)
     { SWFDisplayItem_skewXTo(this->item, skew); }
 
-  void skewY(float skew)
+  void skewY(double skew)
     { SWFDisplayItem_skewY(this->item, skew); }
 
-  void skewYTo(float skew)
+  void skewYTo(double skew)
     { SWFDisplayItem_skewYTo(this->item, skew); }
 
-  void getSkew(float *xSkew, float *ySkew)
+  void getSkew(double *xSkew, double *ySkew)
     { SWFDisplayItem_getSkew(this->item, xSkew, ySkew); }
 
   int getDepth()
@@ -644,7 +644,7 @@ class SWFDisplayItem
   void setBlendMode(int mode)
     { SWFDisplayItem_setBlendMode(this->item, mode); }
   
-  void setMatrix(float a, float b, float c, float d, float x, float y)
+  void setMatrix(double a, double b, double c, double d, double x, double y)
     { SWFDisplayItem_setMatrix(this->item, a, b, c, d, x, y); }
 
   SWFMatrix getMatrix()
@@ -1227,31 +1227,31 @@ class SWFShape : public SWFCharacter
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->shape; }
 
-  void movePen(float x, float y)
+  void movePen(double x, double y)
     { SWFShape_movePen(this->shape, x, y); }
 
-  void movePenTo(float x, float y)
+  void movePenTo(double x, double y)
     { SWFShape_movePenTo(this->shape, x, y); }
 
-  void drawLine(float x, float y)
+  void drawLine(double x, double y)
     { SWFShape_drawLine(this->shape, x, y); }
 
-  void drawLineTo(float x, float y)
+  void drawLineTo(double x, double y)
     { SWFShape_drawLineTo(this->shape, x, y); }
 
-  void drawCurve(float cx, float cy, float ax, float ay)
+  void drawCurve(double cx, double cy, double ax, double ay)
     { SWFShape_drawCurve(this->shape, cx, cy, ax, ay); }
 
-  void drawCurveTo(float cx, float cy, float ax, float ay)
+  void drawCurveTo(double cx, double cy, double ax, double ay)
     { SWFShape_drawCurveTo(this->shape, cx, cy, ax, ay); }
 
-  void drawCubic(float ax, float ay, float bx, float by, float cx, float cy)
+  void drawCubic(double ax, double ay, double bx, double by, double cx, double cy)
     { SWFShape_drawCubic(this->shape, ax, ay, bx, by, cx, cy); }
 
-  void drawCubicTo(float ax, float ay, float bx, float by, float cx, float cy)
+  void drawCubicTo(double ax, double ay, double bx, double by, double cx, double cy)
     { SWFShape_drawCubicTo(this->shape, ax, ay, bx, by, cx, cy); }
 
-  void getPen(float *x, float *y)
+  void getPen(double *x, double *y)
     { SWFShape_getPen(this->shape, x, y); }
 
   void end()
@@ -1293,10 +1293,10 @@ class SWFShape : public SWFCharacter
   void setLine2(unsigned short width, byte r, byte g, byte b, byte a, int flags, float miterLimit)
     {  SWFShape_setLine2(this->shape, width, r, g, b, a, flags, miterLimit); }
 
-  void drawArc(float r, float startAngle, float endAngle)
+  void drawArc(double r, double startAngle, double endAngle)
     { SWFShape_drawArc(this->shape, r, startAngle, endAngle); }
 
-  void drawCircle(float r)
+  void drawCircle(double r)
     { SWFShape_drawCircle(this->shape, r); }
 
   void drawGlyph(SWFFont *font, unsigned short c, int size=0)
