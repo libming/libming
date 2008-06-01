@@ -249,21 +249,19 @@ void SWFShape_useVersion(SWFShape shape, int version);
 int SWFShape_getVersion(SWFShape shape);
 void SWFShape_setRenderHintingFlags(SWFShape shape, int flags);
 
-void SWFShape_movePenTo(SWFShape shape, float x, float y);
-void SWFShape_movePen(SWFShape shape, float x, float y);
+void SWFShape_movePenTo(SWFShape shape, double x, double y);
+void SWFShape_movePen(SWFShape shape, double x, double y);
 
 float SWFShape_getPenX(SWFShape shape);
 float SWFShape_getPenY(SWFShape shape);
-void SWFShape_getPen(SWFShape shape, float* penX, float* penY);
+void SWFShape_getPen(SWFShape shape, double* penX, double* penY);
 
 /* x,y relative to shape origin */
-void SWFShape_drawLineTo(SWFShape shape, float x, float y);
-void SWFShape_drawLine(SWFShape shape, float dx, float dy);
+void SWFShape_drawLineTo(SWFShape shape, double x, double y);
+void SWFShape_drawLine(SWFShape shape, double dx, double dy);
 
-void SWFShape_drawCurveTo(SWFShape shape, float controlx, float controly,
-                          float anchorx, float anchory);
-void SWFShape_drawCurve(SWFShape shape, float controldx, float controldy,
-                        float anchordx, float anchordy);
+void SWFShape_drawCurveTo(SWFShape shape, double controlx, double controly, double anchorx, double anchory);
+void SWFShape_drawCurve(SWFShape shape, double controldx, double controldy, double anchordx, double anchordy);
 
 void SWFShape_hideLine(SWFShape shape);
 
@@ -545,17 +543,16 @@ void SWFButton_removeScalingGrid(SWFButton b);
 void SWFButtonRecord_setDepth(SWFButtonRecord b, int depth);
 void SWFButtonRecord_addFilter(SWFButtonRecord b, SWFFilter f);
 void SWFButtonRecord_setBlendMode(SWFButtonRecord b, int mode);
-void SWFButtonRecord_move(SWFButtonRecord record, float x, float y);
-void SWFButtonRecord_moveTo(SWFButtonRecord record, float x, float y);
-void SWFButtonRecord_rotate(SWFButtonRecord record, float deg);
-void SWFButtonRecord_rotateTo(SWFButtonRecord record, float deg);
-void SWFButtonRecord_scale(SWFButtonRecord record, float scaleX, float scaleY);
-void SWFButtonRecord_scaleTo(SWFButtonRecord record, float scaleX, float scaleY);
-void SWFButtonRecord_skewX(SWFButtonRecord record, float skewX);
-void SWFButtonRecord_skewXTo(SWFButtonRecord record, float skewX);
-void SWFButtonRecord_skewY(SWFButtonRecord record, float skewY);
-void SWFButtonRecord_skewYTo(SWFButtonRecord record, float skewY);
-
+void SWFButtonRecord_move(SWFButtonRecord record, double x, double y);
+void SWFButtonRecord_moveTo(SWFButtonRecord record, double x, double y);
+void SWFButtonRecord_rotate(SWFButtonRecord record, double deg);
+void SWFButtonRecord_rotateTo(SWFButtonRecord record, double deg);
+void SWFButtonRecord_scale(SWFButtonRecord record, double scaleX, double scaleY);
+void SWFButtonRecord_scaleTo(SWFButtonRecord record, double scaleX, double scaleY);
+void SWFButtonRecord_skewX(SWFButtonRecord record, double skewX);
+void SWFButtonRecord_skewXTo(SWFButtonRecord record, double skewX);
+void SWFButtonRecord_skewY(SWFButtonRecord record, double skewY);
+void SWFButtonRecord_skewYTo(SWFButtonRecord record, double skewY);
 
 /****** SWFVideo ******/
 
@@ -575,67 +572,66 @@ void SWFSprite_addBlock(SWFSprite sprite, SWFBlock block);
 
 
 /***** SWFPosition *****/
-
-struct _swfPosition
-{
-  int x;
-  int y;
-  float xScale;
-  float yScale;
-  float xSkew;
-  float ySkew;
-  float rot;
-  SWFMatrix matrix;
-};
-
-#define SWF_POSITION_SIZE sizeof(struct _swfPosition)
-
 SWFPosition newSWFPosition(SWFMatrix matrix);
 void destroySWFPosition(SWFPosition position);
 
-void SWFPosition_skewX(SWFPosition position, float x);
-void SWFPosition_skewXTo(SWFPosition position, float x);
-void SWFPosition_skewY(SWFPosition position, float y);
-void SWFPosition_skewYTo(SWFPosition position, float y);
+void SWFPosition_skewX(SWFPosition position, double x);
+void SWFPosition_skewXTo(SWFPosition position, double x);
+void SWFPosition_skewY(SWFPosition position, double y);
+void SWFPosition_skewYTo(SWFPosition position, double y);
 
-void SWFPosition_scaleX(SWFPosition position, float x);
-void SWFPosition_scaleXTo(SWFPosition position, float x);
-void SWFPosition_scaleY(SWFPosition position, float y);
-void SWFPosition_scaleYTo(SWFPosition position, float y);
-void SWFPosition_scaleXY(SWFPosition position, float x, float y);
-void SWFPosition_scaleXYTo(SWFPosition position, float x, float y);
+void SWFPosition_scaleX(SWFPosition position, double x);
+void SWFPosition_scaleXTo(SWFPosition position, double x);
+void SWFPosition_scaleY(SWFPosition position, double y);
+void SWFPosition_scaleYTo(SWFPosition position, double y);
+void SWFPosition_scaleXY(SWFPosition position, double x, double y);
+void SWFPosition_scaleXYTo(SWFPosition position, double x, double y);
 
-void SWFPosition_setMatrix(SWFPosition p, float a, float b, float c, float d,
-                           float x, float y);
+SWFMatrix SWFPosition_getMatrix(SWFPosition p);
+void SWFPosition_setMatrix(SWFPosition p, double a, double b, double c, double d,
+                           double x, double y);
 
-void SWFPosition_rotate(SWFPosition position, float degrees);
-void SWFPosition_rotateTo(SWFPosition position, float degrees);
+void SWFPosition_rotate(SWFPosition position, double degrees);
+void SWFPosition_rotateTo(SWFPosition position, double degrees);
 
-void SWFPosition_move(SWFPosition position, float x, float y);
-void SWFPosition_moveTo(SWFPosition position, float x, float y);
+void SWFPosition_move(SWFPosition position, double x, double y);
+void SWFPosition_moveTo(SWFPosition position, double x, double y);
 
+double SWFPosition_getRotation(SWFPosition position);
+double SWFPosition_getX(SWFPosition position);
+double SWFPosition_getY(SWFPosition position);
+
+void SWFPosition_getXY(SWFPosition position, double* outX, double* outY);
+
+double SWFPosition_getXScale(SWFPosition position);
+double SWFPosition_getYScale(SWFPosition position);
+
+void SWFPosition_getXYScale(SWFPosition position, double* outXScale, double* outYScale);
+
+double SWFPosition_getXSkew(SWFPosition position);
+double SWFPosition_getYSkew(SWFPosition position);
+
+void SWFPosition_getXYSkew(SWFPosition position, double* outXSkew, double* outYSkew);
 
 /***** SWFDisplayItem *****/
+void SWFDisplayItem_move(SWFDisplayItem item, double x, double y);
+void SWFDisplayItem_moveTo(SWFDisplayItem item, double x, double y);
+void SWFDisplayItem_rotate(SWFDisplayItem item, double degrees);
+void SWFDisplayItem_rotateTo(SWFDisplayItem item, double degrees);
+void SWFDisplayItem_scale(SWFDisplayItem item, double xScale, double yScale);
+void SWFDisplayItem_scaleTo(SWFDisplayItem item, double xScale, double yScale);
+void SWFDisplayItem_skewX(SWFDisplayItem item, double x);
+void SWFDisplayItem_skewXTo(SWFDisplayItem item, double x);
+void SWFDisplayItem_skewY(SWFDisplayItem item, double y);
+void SWFDisplayItem_skewYTo(SWFDisplayItem item, double y);
 
-void SWFDisplayItem_move(SWFDisplayItem item, float x, float y);
-void SWFDisplayItem_moveTo(SWFDisplayItem item, float x, float y);
-void SWFDisplayItem_rotate(SWFDisplayItem item, float degrees);
-void SWFDisplayItem_rotateTo(SWFDisplayItem item, float degrees);
-void SWFDisplayItem_scale(SWFDisplayItem item, float xScale, float yScale);
-void SWFDisplayItem_scaleTo(SWFDisplayItem item, float xScale, float yScale);
-void SWFDisplayItem_skewX(SWFDisplayItem item, float x);
-void SWFDisplayItem_skewXTo(SWFDisplayItem item, float x);
-void SWFDisplayItem_skewY(SWFDisplayItem item, float y);
-void SWFDisplayItem_skewYTo(SWFDisplayItem item, float y);
+void SWFDisplayItem_getPosition(SWFDisplayItem item, double * x, double * y);
+void SWFDisplayItem_getRotation(SWFDisplayItem item, double * degrees);
+void SWFDisplayItem_getScale(SWFDisplayItem item, double * xScale, double * yScale);
+void SWFDisplayItem_getSkew(SWFDisplayItem item, double * xSkew, double * ySkew);
 
-void SWFDisplayItem_getPosition(SWFDisplayItem item, float * x, float * y);
-void SWFDisplayItem_getRotation(SWFDisplayItem item, float * degrees);
-void SWFDisplayItem_getScale(SWFDisplayItem item, float * xScale, float * yScale);
-void SWFDisplayItem_getSkew(SWFDisplayItem item, float * xSkew, float * ySkew);
-
-void SWFDisplayItem_setMatrix(SWFDisplayItem i, float a, float b,
-                              float c, float d, float x, float y);
-
+SWFMatrix SWFDisplayItem_getMatrix(SWFDisplayItem item);
+void SWFDisplayItem_setMatrix(SWFDisplayItem i, double a, double b, double c, double d, double x, double y);
 int SWFDisplayItem_getDepth(SWFDisplayItem item);
 void SWFDisplayItem_setDepth(SWFDisplayItem item, int depth);
 void SWFDisplayItem_remove(SWFDisplayItem item);
@@ -740,8 +736,8 @@ SWFFill SWFShape_addBitmapFill(SWFShape shape, SWFBitmap bitmap, byte flags);
 void SWFShape_setLeftFill(SWFShape shape, SWFFill fill);
 void SWFShape_setRightFill(SWFShape shape, SWFFill fill);
 
-void SWFShape_drawArc(SWFShape shape, float r, float startAngle, float endAngle);
-void SWFShape_drawCircle(SWFShape shape, float r);
+void SWFShape_drawArc(SWFShape shape, double r, double startAngle, double endAngle);
+void SWFShape_drawCircle(SWFShape shape, double r);
 
 /* draw character c from font font into shape shape at size size */
 void SWFShape_drawGlyph(SWFShape shape, SWFFont font, unsigned short c);
@@ -752,10 +748,8 @@ void SWFShape_drawSizedGlyph(SWFShape shape, SWFFont font, unsigned short c, int
 
 /* approximate a cubic bezier with quadratic segments */
 /* returns the number of segments used */
-int SWFShape_drawCubic(SWFShape shape, float bx, float by,
-                       float cx, float cy, float dx, float dy);
-int SWFShape_drawCubicTo(SWFShape shape, float bx, float by,
-                         float cx, float cy, float dx, float dy);
+int SWFShape_drawCubic(SWFShape shape, double bx, double by, double cx, double cy, double dx, double dy);
+int SWFShape_drawCubicTo(SWFShape shape, double bx, double by, double cx, double cy, double dx, double dy);
 void SWFShape_drawCharacterBounds(SWFShape shape, SWFCharacter character);
 
 

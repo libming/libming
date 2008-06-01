@@ -2471,8 +2471,8 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_SWFSoundInstance swig_types[12]
 #define SWIGTYPE_p_SWFSprite swig_types[13]
 #define SWIGTYPE_p_SWFTextFieldAlignment swig_types[14]
-#define SWIGTYPE_p__swfPosition swig_types[15]
-#define SWIGTYPE_p_char swig_types[16]
+#define SWIGTYPE_p_char swig_types[15]
+#define SWIGTYPE_p_double swig_types[16]
 #define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[17]
 #define SWIGTYPE_p_float swig_types[18]
 #define SWIGTYPE_p_int swig_types[19]
@@ -4658,12 +4658,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_movePenTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -4674,16 +4674,16 @@ SWIGINTERN PyObject *_wrap_SWFShape_movePenTo(PyObject *SWIGUNUSEDPARM(self), Py
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_movePenTo" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_movePenTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_movePenTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_movePenTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_movePenTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFShape_movePenTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4695,12 +4695,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_movePen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -4711,16 +4711,16 @@ SWIGINTERN PyObject *_wrap_SWFShape_movePen(PyObject *SWIGUNUSEDPARM(self), PyOb
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_movePen" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_movePen" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_movePen" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_movePen" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_movePen" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFShape_movePen(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4772,8 +4772,8 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_getPen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float *arg2 = (float *) 0 ;
-  float *arg3 = (float *) 0 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
   int res1 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -4788,16 +4788,16 @@ SWIGINTERN PyObject *_wrap_SWFShape_getPen(PyObject *SWIGUNUSEDPARM(self), PyObj
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_getPen" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_float, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFShape_getPen" "', argument " "2"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFShape_getPen" "', argument " "2"" of type '" "double *""'"); 
   }
-  arg2 = (float *)(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFShape_getPen" "', argument " "3"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFShape_getPen" "', argument " "3"" of type '" "double *""'"); 
   }
-  arg3 = (float *)(argp3);
+  arg3 = (double *)(argp3);
   SWFShape_getPen(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4809,12 +4809,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawLineTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -4825,16 +4825,16 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawLineTo(PyObject *SWIGUNUSEDPARM(self), P
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawLineTo" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawLineTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawLineTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawLineTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawLineTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFShape_drawLineTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4846,12 +4846,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -4862,16 +4862,16 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawLine(PyObject *SWIGUNUSEDPARM(self), PyO
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawLine" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawLine" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawLine" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawLine" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawLine" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFShape_drawLine(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4883,18 +4883,18 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawCurveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  float arg5 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  float val5 ;
+  double val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -4907,26 +4907,26 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawCurveTo(PyObject *SWIGUNUSEDPARM(self), 
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawCurveTo" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCurveTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCurveTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCurveTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCurveTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCurveTo" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCurveTo" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
-  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  arg4 = (double)(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCurveTo" "', argument " "5"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCurveTo" "', argument " "5"" of type '" "double""'");
   } 
-  arg5 = (float)(val5);
+  arg5 = (double)(val5);
   SWFShape_drawCurveTo(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -4938,18 +4938,18 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawCurve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  float arg5 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  float val5 ;
+  double val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -4962,26 +4962,26 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawCurve(PyObject *SWIGUNUSEDPARM(self), Py
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawCurve" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCurve" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCurve" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCurve" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCurve" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCurve" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCurve" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
-  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  arg4 = (double)(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCurve" "', argument " "5"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCurve" "', argument " "5"" of type '" "double""'");
   } 
-  arg5 = (float)(val5);
+  arg5 = (double)(val5);
   SWFShape_drawCurve(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -7893,12 +7893,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_move(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7909,16 +7909,16 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_move(PyObject *SWIGUNUSEDPARM(self), 
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_move" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_move" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_move" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_move" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_move" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFButtonRecord_move(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -7930,12 +7930,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_moveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7946,16 +7946,16 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_moveTo(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_moveTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_moveTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_moveTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_moveTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_moveTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFButtonRecord_moveTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -7967,9 +7967,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_rotate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7979,11 +7979,11 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_rotate(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_rotate" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_rotate" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_rotate" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFButtonRecord_rotate(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -7995,9 +7995,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_rotateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8007,11 +8007,11 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_rotateTo(PyObject *SWIGUNUSEDPARM(sel
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_rotateTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_rotateTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_rotateTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFButtonRecord_rotateTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8023,12 +8023,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_scale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8039,16 +8039,16 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_scale(PyObject *SWIGUNUSEDPARM(self),
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_scale" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_scale" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_scale" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_scale" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_scale" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFButtonRecord_scale(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8060,12 +8060,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_scaleTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8076,16 +8076,16 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_scaleTo(PyObject *SWIGUNUSEDPARM(self
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_scaleTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_scaleTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_scaleTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_scaleTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFButtonRecord_scaleTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFButtonRecord_scaleTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8097,9 +8097,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8109,11 +8109,11 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewX(PyObject *SWIGUNUSEDPARM(self),
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewX" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewX" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewX" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFButtonRecord_skewX(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8125,9 +8125,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewXTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8137,11 +8137,11 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewXTo(PyObject *SWIGUNUSEDPARM(self
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewXTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewXTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewXTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFButtonRecord_skewXTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8153,9 +8153,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8165,11 +8165,11 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewY(PyObject *SWIGUNUSEDPARM(self),
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewY" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewY" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewY" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFButtonRecord_skewY(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8181,9 +8181,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewYTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8193,11 +8193,11 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_skewYTo(PyObject *SWIGUNUSEDPARM(self
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_skewYTo" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewYTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFButtonRecord_skewYTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFButtonRecord_skewYTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8420,470 +8420,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__swfPosition_x_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_x_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_x_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_x_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = (int)(val2);
-  if (arg1) (arg1)->x = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_x_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_x_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_x_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (int) ((arg1)->x);
-  resultobj = SWIG_From_int((int)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_y_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_y_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_y_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_y_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = (int)(val2);
-  if (arg1) (arg1)->y = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_y_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_y_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_y_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (int) ((arg1)->y);
-  resultobj = SWIG_From_int((int)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_xScale_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_xScale_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_xScale_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_xScale_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = (float)(val2);
-  if (arg1) (arg1)->xScale = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_xScale_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_xScale_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_xScale_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (float) ((arg1)->xScale);
-  resultobj = SWIG_From_float((float)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_yScale_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_yScale_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_yScale_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_yScale_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = (float)(val2);
-  if (arg1) (arg1)->yScale = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_yScale_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_yScale_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_yScale_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (float) ((arg1)->yScale);
-  resultobj = SWIG_From_float((float)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_xSkew_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_xSkew_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_xSkew_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_xSkew_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = (float)(val2);
-  if (arg1) (arg1)->xSkew = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_xSkew_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_xSkew_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_xSkew_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (float) ((arg1)->xSkew);
-  resultobj = SWIG_From_float((float)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_ySkew_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_ySkew_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_ySkew_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_ySkew_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = (float)(val2);
-  if (arg1) (arg1)->ySkew = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_ySkew_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_ySkew_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_ySkew_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (float) ((arg1)->ySkew);
-  resultobj = SWIG_From_float((float)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_rot_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_rot_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_rot_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_swfPosition_rot_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = (float)(val2);
-  if (arg1) (arg1)->rot = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_rot_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  float result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_rot_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_rot_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (float) ((arg1)->rot);
-  resultobj = SWIG_From_float((float)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_matrix_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  SWFMatrix arg2 = (SWFMatrix) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_swfPosition_matrix_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_matrix_set" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, SWIG_POINTER_DISOWN);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "_swfPosition_matrix_set" "', argument " "2"" of type '" "SWFMatrix""'"); 
-  }
-  if (arg1) (arg1)->matrix = arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__swfPosition_matrix_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  SWFMatrix result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_swfPosition_matrix_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_swfPosition_matrix_get" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  result = (SWFMatrix) ((arg1)->matrix);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new__swfPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new__swfPosition")) SWIG_fail;
-  result = (struct _swfPosition *)(struct _swfPosition *) calloc(1, sizeof(struct _swfPosition));
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__swfPosition, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete__swfPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  struct _swfPosition *arg1 = (struct _swfPosition *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete__swfPosition",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__swfPosition, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete__swfPosition" "', argument " "1"" of type '" "struct _swfPosition *""'"); 
-  }
-  arg1 = (struct _swfPosition *)(argp1);
-  free((char *) arg1);
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_swfPosition_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char*)"O|swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p__swfPosition, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
 SWIGINTERN PyObject *_wrap_newSWFPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMatrix arg1 = (SWFMatrix) 0 ;
@@ -8934,10 +8470,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_skewX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8954,11 +8490,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_skewX(PyObject *SWIGUNUSEDPARM(self), PyO
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewX" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewX" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_skewX(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -8970,10 +8506,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_skewXTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8990,11 +8526,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_skewXTo(PyObject *SWIGUNUSEDPARM(self), P
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewXTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewXTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_skewXTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9006,10 +8542,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_skewY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9026,11 +8562,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_skewY(PyObject *SWIGUNUSEDPARM(self), PyO
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewY" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewY" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_skewY(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9042,10 +8578,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_skewYTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9062,11 +8598,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_skewYTo(PyObject *SWIGUNUSEDPARM(self), P
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewYTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_skewYTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_skewYTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9078,10 +8614,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_scaleX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9098,11 +8634,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_scaleX(PyObject *SWIGUNUSEDPARM(self), Py
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleX" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleX" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_scaleX(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9114,10 +8650,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_scaleXTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9134,11 +8670,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_scaleXTo(PyObject *SWIGUNUSEDPARM(self), 
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleXTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleXTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_scaleXTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9150,10 +8686,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_scaleY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9170,11 +8706,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_scaleY(PyObject *SWIGUNUSEDPARM(self), Py
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleY" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleY" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_scaleY(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9186,10 +8722,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_scaleYTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9206,11 +8742,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_scaleYTo(PyObject *SWIGUNUSEDPARM(self), 
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleYTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleYTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_scaleYTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9222,13 +8758,13 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_scaleXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9246,16 +8782,16 @@ SWIGINTERN PyObject *_wrap_SWFPosition_scaleXY(PyObject *SWIGUNUSEDPARM(self), P
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleXY" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleXY" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_scaleXY" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_scaleXY" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFPosition_scaleXY(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9267,13 +8803,13 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_scaleXYTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9291,18 +8827,46 @@ SWIGINTERN PyObject *_wrap_SWFPosition_scaleXYTo(PyObject *SWIGUNUSEDPARM(self),
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleXYTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_scaleXYTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_scaleXYTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_scaleXYTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFPosition_scaleXYTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  SWFMatrix result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getMatrix",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getMatrix" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getMatrix" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (SWFMatrix)SWFPosition_getMatrix(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -9312,25 +8876,25 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_setMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  float arg5 ;
-  float arg6 ;
-  float arg7 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  double arg7 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  float val5 ;
+  double val5 ;
   int ecode5 = 0 ;
-  float val6 ;
+  double val6 ;
   int ecode6 = 0 ;
-  float val7 ;
+  double val7 ;
   int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9352,36 +8916,36 @@ SWIGINTERN PyObject *_wrap_SWFPosition_setMatrix(PyObject *SWIGUNUSEDPARM(self),
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_setMatrix" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_setMatrix" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_setMatrix" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_setMatrix" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFPosition_setMatrix" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFPosition_setMatrix" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
-  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  arg4 = (double)(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFPosition_setMatrix" "', argument " "5"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFPosition_setMatrix" "', argument " "5"" of type '" "double""'");
   } 
-  arg5 = (float)(val5);
-  ecode6 = SWIG_AsVal_float(obj5, &val6);
+  arg5 = (double)(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFPosition_setMatrix" "', argument " "6"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFPosition_setMatrix" "', argument " "6"" of type '" "double""'");
   } 
-  arg6 = (float)(val6);
-  ecode7 = SWIG_AsVal_float(obj6, &val7);
+  arg6 = (double)(val6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFPosition_setMatrix" "', argument " "7"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFPosition_setMatrix" "', argument " "7"" of type '" "double""'");
   } 
-  arg7 = (float)(val7);
+  arg7 = (double)(val7);
   SWFPosition_setMatrix(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9393,10 +8957,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_rotate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9413,11 +8977,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_rotate(PyObject *SWIGUNUSEDPARM(self), Py
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_rotate" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_rotate" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_rotate(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9429,10 +8993,10 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_rotateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
+  double arg2 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9449,11 +9013,11 @@ SWIGINTERN PyObject *_wrap_SWFPosition_rotateTo(PyObject *SWIGUNUSEDPARM(self), 
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_rotateTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_rotateTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFPosition_rotateTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9465,13 +9029,13 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_move(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9489,16 +9053,16 @@ SWIGINTERN PyObject *_wrap_SWFPosition_move(PyObject *SWIGUNUSEDPARM(self), PyOb
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_move" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_move" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_move" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_move" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFPosition_move(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9510,13 +9074,13 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFPosition_moveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFPosition arg1 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   void *argp1 ;
   int res1 = 0 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9534,17 +9098,348 @@ SWIGINTERN PyObject *_wrap_SWFPosition_moveTo(PyObject *SWIGUNUSEDPARM(self), Py
       arg1 = *((SWFPosition *)(argp1));
     }
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_moveTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFPosition_moveTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_moveTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFPosition_moveTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFPosition_moveTo(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getRotation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getRotation",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getRotation" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getRotation" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getRotation(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getX",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getX" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getX" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getX(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getY",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getY" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getY" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getY(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFPosition_getXY",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getXY" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getXY" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFPosition_getXY" "', argument " "2"" of type '" "double *""'"); 
+  }
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFPosition_getXY" "', argument " "3"" of type '" "double *""'"); 
+  }
+  arg3 = (double *)(argp3);
+  SWFPosition_getXY(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getXScale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getXScale",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getXScale" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getXScale" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getXScale(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getYScale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getYScale",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getYScale" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getYScale" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getYScale(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getXYScale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFPosition_getXYScale",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getXYScale" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getXYScale" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFPosition_getXYScale" "', argument " "2"" of type '" "double *""'"); 
+  }
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFPosition_getXYScale" "', argument " "3"" of type '" "double *""'"); 
+  }
+  arg3 = (double *)(argp3);
+  SWFPosition_getXYScale(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getXSkew(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getXSkew",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getXSkew" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getXSkew" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getXSkew(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getYSkew(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double result;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFPosition_getYSkew",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getYSkew" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getYSkew" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  result = (double)SWFPosition_getYSkew(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFPosition_getXYSkew(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFPosition arg1 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFPosition_getXYSkew",&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFPosition,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFPosition_getXYSkew" "', argument " "1"" of type '" "SWFPosition""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFPosition_getXYSkew" "', argument " "1"" of type '" "SWFPosition""'");
+    } else {
+      arg1 = *((SWFPosition *)(argp1));
+    }
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFPosition_getXYSkew" "', argument " "2"" of type '" "double *""'"); 
+  }
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFPosition_getXYSkew" "', argument " "3"" of type '" "double *""'"); 
+  }
+  arg3 = (double *)(argp3);
+  SWFPosition_getXYSkew(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -9555,12 +9450,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_move(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9571,16 +9466,16 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_move(PyObject *SWIGUNUSEDPARM(self), P
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_move" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_move" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_move" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_move" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_move" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFDisplayItem_move(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9592,12 +9487,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_moveTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9608,16 +9503,16 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_moveTo(PyObject *SWIGUNUSEDPARM(self),
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_moveTo" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_moveTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_moveTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_moveTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_moveTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFDisplayItem_moveTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9629,9 +9524,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_rotate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9641,11 +9536,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_rotate(PyObject *SWIGUNUSEDPARM(self),
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_rotate" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_rotate" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_rotate" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFDisplayItem_rotate(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9657,9 +9552,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_rotateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9669,11 +9564,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_rotateTo(PyObject *SWIGUNUSEDPARM(self
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_rotateTo" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_rotateTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_rotateTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFDisplayItem_rotateTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9685,12 +9580,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_scale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9701,16 +9596,16 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_scale(PyObject *SWIGUNUSEDPARM(self), 
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_scale" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_scale" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_scale" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_scale" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_scale" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFDisplayItem_scale(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9722,12 +9617,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_scaleTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
-  float arg3 ;
+  double arg2 ;
+  double arg3 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9738,16 +9633,16 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_scaleTo(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_scaleTo" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_scaleTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_scaleTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_scaleTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_scaleTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
+  arg3 = (double)(val3);
   SWFDisplayItem_scaleTo(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9759,9 +9654,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9771,11 +9666,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewX(PyObject *SWIGUNUSEDPARM(self), 
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_skewX" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewX" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewX" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFDisplayItem_skewX(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9787,9 +9682,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewXTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9799,11 +9694,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewXTo(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_skewXTo" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewXTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewXTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFDisplayItem_skewXTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9815,9 +9710,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewY(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9827,11 +9722,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewY(PyObject *SWIGUNUSEDPARM(self), 
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_skewY" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewY" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewY" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFDisplayItem_skewY(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9843,9 +9738,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewYTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9855,11 +9750,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_skewYTo(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_skewYTo" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewYTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_skewYTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFDisplayItem_skewYTo(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9871,8 +9766,8 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_getPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float *arg2 = (float *) 0 ;
-  float *arg3 = (float *) 0 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
   int res1 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -9887,16 +9782,16 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_getPosition(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_getPosition" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_float, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getPosition" "', argument " "2"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getPosition" "', argument " "2"" of type '" "double *""'"); 
   }
-  arg2 = (float *)(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFDisplayItem_getPosition" "', argument " "3"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFDisplayItem_getPosition" "', argument " "3"" of type '" "double *""'"); 
   }
-  arg3 = (float *)(argp3);
+  arg3 = (double *)(argp3);
   SWFDisplayItem_getPosition(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9908,7 +9803,7 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_getRotation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float *arg2 = (float *) 0 ;
+  double *arg2 = (double *) 0 ;
   int res1 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -9920,11 +9815,11 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_getRotation(PyObject *SWIGUNUSEDPARM(s
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_getRotation" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_float, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getRotation" "', argument " "2"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getRotation" "', argument " "2"" of type '" "double *""'"); 
   }
-  arg2 = (float *)(argp2);
+  arg2 = (double *)(argp2);
   SWFDisplayItem_getRotation(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9936,8 +9831,8 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_getScale(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float *arg2 = (float *) 0 ;
-  float *arg3 = (float *) 0 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
   int res1 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -9952,16 +9847,16 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_getScale(PyObject *SWIGUNUSEDPARM(self
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_getScale" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_float, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getScale" "', argument " "2"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getScale" "', argument " "2"" of type '" "double *""'"); 
   }
-  arg2 = (float *)(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFDisplayItem_getScale" "', argument " "3"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFDisplayItem_getScale" "', argument " "3"" of type '" "double *""'"); 
   }
-  arg3 = (float *)(argp3);
+  arg3 = (double *)(argp3);
   SWFDisplayItem_getScale(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9973,8 +9868,8 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_getSkew(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float *arg2 = (float *) 0 ;
-  float *arg3 = (float *) 0 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
   int res1 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
@@ -9989,18 +9884,38 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_getSkew(PyObject *SWIGUNUSEDPARM(self)
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_getSkew" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_float, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getSkew" "', argument " "2"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_getSkew" "', argument " "2"" of type '" "double *""'"); 
   }
-  arg2 = (float *)(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
+  arg2 = (double *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFDisplayItem_getSkew" "', argument " "3"" of type '" "float *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SWFDisplayItem_getSkew" "', argument " "3"" of type '" "double *""'"); 
   }
-  arg3 = (float *)(argp3);
+  arg3 = (double *)(argp3);
   SWFDisplayItem_getSkew(arg1,arg2,arg3);
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFDisplayItem_getMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
+  SWFMatrix result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFDisplayItem_getMatrix",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_getMatrix" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
+  }
+  result = (SWFMatrix)SWFDisplayItem_getMatrix(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -10010,24 +9925,24 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_setMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  float arg5 ;
-  float arg6 ;
-  float arg7 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  double arg7 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  float val5 ;
+  double val5 ;
   int ecode5 = 0 ;
-  float val6 ;
+  double val6 ;
   int ecode6 = 0 ;
-  float val7 ;
+  double val7 ;
   int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -10042,36 +9957,36 @@ SWIGINTERN PyObject *_wrap_SWFDisplayItem_setMatrix(PyObject *SWIGUNUSEDPARM(sel
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_setMatrix" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_setMatrix" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFDisplayItem_setMatrix" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_setMatrix" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFDisplayItem_setMatrix" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFDisplayItem_setMatrix" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFDisplayItem_setMatrix" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
-  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  arg4 = (double)(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFDisplayItem_setMatrix" "', argument " "5"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFDisplayItem_setMatrix" "', argument " "5"" of type '" "double""'");
   } 
-  arg5 = (float)(val5);
-  ecode6 = SWIG_AsVal_float(obj5, &val6);
+  arg5 = (double)(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFDisplayItem_setMatrix" "', argument " "6"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFDisplayItem_setMatrix" "', argument " "6"" of type '" "double""'");
   } 
-  arg6 = (float)(val6);
-  ecode7 = SWIG_AsVal_float(obj6, &val7);
+  arg6 = (double)(val6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFDisplayItem_setMatrix" "', argument " "7"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFDisplayItem_setMatrix" "', argument " "7"" of type '" "double""'");
   } 
-  arg7 = (float)(val7);
+  arg7 = (double)(val7);
   SWFDisplayItem_setMatrix(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -11407,15 +11322,15 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawArc(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -11427,21 +11342,21 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawArc(PyObject *SWIGUNUSEDPARM(self), PyOb
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawArc" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawArc" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawArc" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawArc" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawArc" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawArc" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawArc" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
+  arg4 = (double)(val4);
   SWFShape_drawArc(arg1,arg2,arg3,arg4);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -11453,9 +11368,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawCircle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
+  double arg2 ;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -11465,11 +11380,11 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawCircle(PyObject *SWIGUNUSEDPARM(self), P
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawCircle" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCircle" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCircle" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
+  arg2 = (double)(val2);
   SWFShape_drawCircle(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -11560,25 +11475,25 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawCubic(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  float arg5 ;
-  float arg6 ;
-  float arg7 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  double arg7 ;
   int result;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  float val5 ;
+  double val5 ;
   int ecode5 = 0 ;
-  float val6 ;
+  double val6 ;
   int ecode6 = 0 ;
-  float val7 ;
+  double val7 ;
   int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -11593,36 +11508,36 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawCubic(PyObject *SWIGUNUSEDPARM(self), Py
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawCubic" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCubic" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCubic" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCubic" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCubic" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCubic" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCubic" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
-  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  arg4 = (double)(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCubic" "', argument " "5"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCubic" "', argument " "5"" of type '" "double""'");
   } 
-  arg5 = (float)(val5);
-  ecode6 = SWIG_AsVal_float(obj5, &val6);
+  arg5 = (double)(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFShape_drawCubic" "', argument " "6"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFShape_drawCubic" "', argument " "6"" of type '" "double""'");
   } 
-  arg6 = (float)(val6);
-  ecode7 = SWIG_AsVal_float(obj6, &val7);
+  arg6 = (double)(val6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFShape_drawCubic" "', argument " "7"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFShape_drawCubic" "', argument " "7"" of type '" "double""'");
   } 
-  arg7 = (float)(val7);
+  arg7 = (double)(val7);
   result = (int)SWFShape_drawCubic(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
@@ -11634,25 +11549,25 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFShape_drawCubicTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFShape arg1 = (SWFShape) 0 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  float arg5 ;
-  float arg6 ;
-  float arg7 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  double arg7 ;
   int result;
   int res1 ;
-  float val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  float val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  float val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  float val5 ;
+  double val5 ;
   int ecode5 = 0 ;
-  float val6 ;
+  double val6 ;
   int ecode6 = 0 ;
-  float val7 ;
+  double val7 ;
   int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -11667,36 +11582,36 @@ SWIGINTERN PyObject *_wrap_SWFShape_drawCubicTo(PyObject *SWIGUNUSEDPARM(self), 
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFShape_drawCubicTo" "', argument " "1"" of type '" "SWFShape""'"); 
   }
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCubicTo" "', argument " "2"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFShape_drawCubicTo" "', argument " "2"" of type '" "double""'");
   } 
-  arg2 = (float)(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  arg2 = (double)(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCubicTo" "', argument " "3"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFShape_drawCubicTo" "', argument " "3"" of type '" "double""'");
   } 
-  arg3 = (float)(val3);
-  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  arg3 = (double)(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCubicTo" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "SWFShape_drawCubicTo" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = (float)(val4);
-  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  arg4 = (double)(val4);
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCubicTo" "', argument " "5"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "SWFShape_drawCubicTo" "', argument " "5"" of type '" "double""'");
   } 
-  arg5 = (float)(val5);
-  ecode6 = SWIG_AsVal_float(obj5, &val6);
+  arg5 = (double)(val5);
+  ecode6 = SWIG_AsVal_double(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFShape_drawCubicTo" "', argument " "6"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "SWFShape_drawCubicTo" "', argument " "6"" of type '" "double""'");
   } 
-  arg6 = (float)(val6);
-  ecode7 = SWIG_AsVal_float(obj6, &val7);
+  arg6 = (double)(val6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFShape_drawCubicTo" "', argument " "7"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SWFShape_drawCubicTo" "', argument " "7"" of type '" "double""'");
   } 
-  arg7 = (float)(val7);
+  arg7 = (double)(val7);
   result = (int)SWFShape_drawCubicTo(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
@@ -13244,25 +13159,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"newSWFSprite", _wrap_newSWFSprite, METH_VARARGS, NULL},
 	 { (char *)"destroySWFSprite", _wrap_destroySWFSprite, METH_VARARGS, NULL},
 	 { (char *)"SWFSprite_addBlock", _wrap_SWFSprite_addBlock, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_x_set", _wrap__swfPosition_x_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_x_get", _wrap__swfPosition_x_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_y_set", _wrap__swfPosition_y_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_y_get", _wrap__swfPosition_y_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_xScale_set", _wrap__swfPosition_xScale_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_xScale_get", _wrap__swfPosition_xScale_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_yScale_set", _wrap__swfPosition_yScale_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_yScale_get", _wrap__swfPosition_yScale_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_xSkew_set", _wrap__swfPosition_xSkew_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_xSkew_get", _wrap__swfPosition_xSkew_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_ySkew_set", _wrap__swfPosition_ySkew_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_ySkew_get", _wrap__swfPosition_ySkew_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_rot_set", _wrap__swfPosition_rot_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_rot_get", _wrap__swfPosition_rot_get, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_matrix_set", _wrap__swfPosition_matrix_set, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_matrix_get", _wrap__swfPosition_matrix_get, METH_VARARGS, NULL},
-	 { (char *)"new__swfPosition", _wrap_new__swfPosition, METH_VARARGS, NULL},
-	 { (char *)"delete__swfPosition", _wrap_delete__swfPosition, METH_VARARGS, NULL},
-	 { (char *)"_swfPosition_swigregister", _swfPosition_swigregister, METH_VARARGS, NULL},
 	 { (char *)"newSWFPosition", _wrap_newSWFPosition, METH_VARARGS, NULL},
 	 { (char *)"destroySWFPosition", _wrap_destroySWFPosition, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_skewX", _wrap_SWFPosition_skewX, METH_VARARGS, NULL},
@@ -13275,11 +13171,22 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFPosition_scaleYTo", _wrap_SWFPosition_scaleYTo, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_scaleXY", _wrap_SWFPosition_scaleXY, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_scaleXYTo", _wrap_SWFPosition_scaleXYTo, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getMatrix", _wrap_SWFPosition_getMatrix, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_setMatrix", _wrap_SWFPosition_setMatrix, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_rotate", _wrap_SWFPosition_rotate, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_rotateTo", _wrap_SWFPosition_rotateTo, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_move", _wrap_SWFPosition_move, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_moveTo", _wrap_SWFPosition_moveTo, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getRotation", _wrap_SWFPosition_getRotation, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getX", _wrap_SWFPosition_getX, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getY", _wrap_SWFPosition_getY, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getXY", _wrap_SWFPosition_getXY, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getXScale", _wrap_SWFPosition_getXScale, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getYScale", _wrap_SWFPosition_getYScale, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getXYScale", _wrap_SWFPosition_getXYScale, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getXSkew", _wrap_SWFPosition_getXSkew, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getYSkew", _wrap_SWFPosition_getYSkew, METH_VARARGS, NULL},
+	 { (char *)"SWFPosition_getXYSkew", _wrap_SWFPosition_getXYSkew, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_move", _wrap_SWFDisplayItem_move, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_moveTo", _wrap_SWFDisplayItem_moveTo, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_rotate", _wrap_SWFDisplayItem_rotate, METH_VARARGS, NULL},
@@ -13294,6 +13201,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFDisplayItem_getRotation", _wrap_SWFDisplayItem_getRotation, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_getScale", _wrap_SWFDisplayItem_getScale, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_getSkew", _wrap_SWFDisplayItem_getSkew, METH_VARARGS, NULL},
+	 { (char *)"SWFDisplayItem_getMatrix", _wrap_SWFDisplayItem_getMatrix, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_setMatrix", _wrap_SWFDisplayItem_setMatrix, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_getDepth", _wrap_SWFDisplayItem_getDepth, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_setDepth", _wrap_SWFDisplayItem_setDepth, METH_VARARGS, NULL},
@@ -13405,8 +13313,8 @@ static swig_type_info _swigt__p_SWFPosition = {"_p_SWFPosition", "SWFPosition *"
 static swig_type_info _swigt__p_SWFSoundInstance = {"_p_SWFSoundInstance", "SWFSoundInstance *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFSprite = {"_p_SWFSprite", "SWFSprite *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFTextFieldAlignment = {"_p_SWFTextFieldAlignment", "enum SWFTextFieldAlignment *|SWFTextFieldAlignment *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p__swfPosition = {"_p__swfPosition", "struct _swfPosition *|_swfPosition *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_unsigned_char_p_void__void = {"_p_f_unsigned_char_p_void__void", "SWFByteOutputMethod|void (*)(unsigned char,void *)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
@@ -13430,8 +13338,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_SWFSoundInstance,
   &_swigt__p_SWFSprite,
   &_swigt__p_SWFTextFieldAlignment,
-  &_swigt__p__swfPosition,
   &_swigt__p_char,
+  &_swigt__p_double,
   &_swigt__p_f_unsigned_char_p_void__void,
   &_swigt__p_float,
   &_swigt__p_int,
@@ -13455,8 +13363,8 @@ static swig_cast_info _swigc__p_SWFPosition[] = {  {&_swigt__p_SWFPosition, 0, 0
 static swig_cast_info _swigc__p_SWFSoundInstance[] = {  {&_swigt__p_SWFSoundInstance, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFSprite[] = {  {&_swigt__p_SWFSprite, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFTextFieldAlignment[] = {  {&_swigt__p_SWFTextFieldAlignment, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p__swfPosition[] = {  {&_swigt__p__swfPosition, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_unsigned_char_p_void__void[] = {  {&_swigt__p_f_unsigned_char_p_void__void, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
@@ -13480,8 +13388,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_SWFSoundInstance,
   _swigc__p_SWFSprite,
   _swigc__p_SWFTextFieldAlignment,
-  _swigc__p__swfPosition,
   _swigc__p_char,
+  _swigc__p_double,
   _swigc__p_f_unsigned_char_p_void__void,
   _swigc__p_float,
   _swigc__p_int,
