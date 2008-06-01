@@ -38,7 +38,6 @@
 #include <math.h>
 #include <ming.h>
 
-#define FLOAT_Z_DVAL_PP(x) ((float)Z_DVAL_PP(x))
 #define BYTE_Z_LVAL_PP(x)  ((byte)Z_LVAL_PP(x))
 
 #ifndef HAVE_DESTROY_SWF_BLOCK
@@ -111,7 +110,7 @@ PHP_FUNCTION(ming_setScale)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(num);
-	Ming_setScale(FLOAT_Z_DVAL_PP(num));
+	Ming_setScale(Z_DVAL_PP(num));
 }
 /* }}} */
 
@@ -591,7 +590,7 @@ PHP_METHOD(swfbuttonrecord, setBlendMode)
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::move(float x, float y)
+/* {{{ proto void swfbuttoncharacter::move(double x, double y)
    relative placement */
 PHP_METHOD(swfbuttonrecord, move)
 {
@@ -603,11 +602,11 @@ PHP_METHOD(swfbuttonrecord, move)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFButtonRecord_move(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFButtonRecord_move(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::moveTo(float x, float y)
+/* {{{ proto void swfbuttoncharacter::moveTo(double x, double y)
    absolute placement */
 PHP_METHOD(swfbuttonrecord, moveTo)
 {
@@ -619,11 +618,11 @@ PHP_METHOD(swfbuttonrecord, moveTo)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFButtonRecord_moveTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFButtonRecord_moveTo(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::rotate(float deg)
+/* {{{ proto void swfbuttoncharacter::rotate(double deg)
    relative rotation */
 PHP_METHOD(swfbuttonrecord, rotate)
 {
@@ -634,11 +633,11 @@ PHP_METHOD(swfbuttonrecord, rotate)
 	}
 
 	convert_to_double_ex(deg);
-	SWFButtonRecord_rotate(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(deg));
+	SWFButtonRecord_rotate(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(deg));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::rotateTo(float deg)
+/* {{{ proto void swfbuttoncharacter::rotateTo(double deg)
    absolute rotation */
 PHP_METHOD(swfbuttonrecord, rotateTo)
 {
@@ -649,11 +648,11 @@ PHP_METHOD(swfbuttonrecord, rotateTo)
 	}
 
 	convert_to_double_ex(deg);
-	SWFButtonRecord_rotateTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(deg));
+	SWFButtonRecord_rotateTo(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(deg));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::scale(float x, float y)
+/* {{{ proto void swfbuttoncharacter::scale(double x, double y)
    relative scaling */
 PHP_METHOD(swfbuttonrecord, scale)
 {
@@ -665,11 +664,11 @@ PHP_METHOD(swfbuttonrecord, scale)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFButtonRecord_scale(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFButtonRecord_scale(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::scaleTo(float x, float y)
+/* {{{ proto void swfbuttoncharacter::scaleTo(double x, double y)
    absolute scaling */
 PHP_METHOD(swfbuttonrecord, scaleTo)
 {
@@ -681,12 +680,12 @@ PHP_METHOD(swfbuttonrecord, scaleTo)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFButtonRecord_scaleTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFButtonRecord_scaleTo(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
 
-/* {{{ proto void swfbuttoncharacter::skewX(float x) */
+/* {{{ proto void swfbuttoncharacter::skewX(double x) */
 PHP_METHOD(swfbuttonrecord, skewX)
 {
 	zval **x;
@@ -696,11 +695,11 @@ PHP_METHOD(swfbuttonrecord, skewX)
 	}
 
 	convert_to_double_ex(x);
-	SWFButtonRecord_skewX(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+	SWFButtonRecord_skewX(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(x));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::skewXTo(float x) */
+/* {{{ proto void swfbuttoncharacter::skewXTo(double x) */
 PHP_METHOD(swfbuttonrecord, skewXTo)
 {
 	zval **x;
@@ -710,11 +709,11 @@ PHP_METHOD(swfbuttonrecord, skewXTo)
 	}
 
 	convert_to_double_ex(x);
-	SWFButtonRecord_skewXTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+	SWFButtonRecord_skewXTo(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(x));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::skewY(float y) */
+/* {{{ proto void swfbuttoncharacter::skewY(double y) */
 PHP_METHOD(swfbuttonrecord, skewY)
 {
 	zval **y;
@@ -724,11 +723,11 @@ PHP_METHOD(swfbuttonrecord, skewY)
 	}
 
 	convert_to_double_ex(y);
-	SWFButtonRecord_skewY(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+	SWFButtonRecord_skewY(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfbuttoncharacter::skewYTo(float y) */
+/* {{{ proto void swfbuttoncharacter::skewYTo(double y) */
 PHP_METHOD(swfbuttonrecord, skewYTo)
 {
 	zval **y;
@@ -738,7 +737,7 @@ PHP_METHOD(swfbuttonrecord, skewYTo)
 	}
 
 	convert_to_double_ex(y);
-	SWFButtonRecord_skewYTo(getButtonRecord(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+	SWFButtonRecord_skewYTo(getButtonRecord(getThis() TSRMLS_CC), Z_DVAL_PP(y));
 }
 /* }}} */
 
@@ -1090,7 +1089,7 @@ static SWFDisplayItem getDisplayItem(zval *id TSRMLS_DC)
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::moveTo(int x, int y)
+/* {{{ proto void swfdisplayitem::moveTo(double x, double y)
    Moves this SWFDisplayItem to movie coordinates (x, y) */
 PHP_METHOD(swfdisplayitem, moveTo)
 {
@@ -1102,11 +1101,11 @@ PHP_METHOD(swfdisplayitem, moveTo)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFDisplayItem_moveTo(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFDisplayItem_moveTo(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::move(float dx, float dy)
+/* {{{ proto void swfdisplayitem::move(double dx, double dy)
    Displaces this SWFDisplayItem by (dx, dy) in movie coordinates */
 PHP_METHOD(swfdisplayitem, move)
 {
@@ -1118,11 +1117,11 @@ PHP_METHOD(swfdisplayitem, move)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFDisplayItem_move(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFDisplayItem_move(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::scaleTo(float xScale [, float yScale])
+/* {{{ proto void swfdisplayitem::scaleTo(double xScale [, double yScale])
    Scales this SWFDisplayItem by xScale in the x direction, yScale in the y, or both to xScale if only one arg */
 PHP_METHOD(swfdisplayitem, scaleTo)
 {
@@ -1133,21 +1132,21 @@ PHP_METHOD(swfdisplayitem, scaleTo)
 			WRONG_PARAM_COUNT;
 		}
 		convert_to_double_ex(x);
-		SWFDisplayItem_scaleTo(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(x));
+		SWFDisplayItem_scaleTo(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(x));
 	} else if (ZEND_NUM_ARGS() == 2) {
 		if (zend_get_parameters_ex(2, &x, &y) == FAILURE) {
 			WRONG_PARAM_COUNT;
 		}
 		convert_to_double_ex(x);
 		convert_to_double_ex(y);
-		SWFDisplayItem_scaleTo(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+		SWFDisplayItem_scaleTo(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 	} else {
 		WRONG_PARAM_COUNT;
 	}
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::scale(float xScale, float yScale)
+/* {{{ proto void swfdisplayitem::scale(double xScale, double yScale)
    Multiplies this SWFDisplayItem's current x scale by xScale, its y scale by yScale */
 PHP_METHOD(swfdisplayitem, scale)
 {
@@ -1159,11 +1158,11 @@ PHP_METHOD(swfdisplayitem, scale)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFDisplayItem_scale(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFDisplayItem_scale(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::rotateTo(float degrees)
+/* {{{ proto void swfdisplayitem::rotateTo(double degrees)
    Rotates this SWFDisplayItem the given (clockwise) degrees from its original orientation */
 PHP_METHOD(swfdisplayitem, rotateTo)
 {
@@ -1174,11 +1173,11 @@ PHP_METHOD(swfdisplayitem, rotateTo)
 	}
 
 	convert_to_double_ex(degrees);
-	SWFDisplayItem_rotateTo(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(degrees));
+	SWFDisplayItem_rotateTo(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(degrees));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::rotate(float degrees)
+/* {{{ proto void swfdisplayitem::rotate(double degrees)
    Rotates this SWFDisplayItem the given (clockwise) degrees from its current orientation */
 PHP_METHOD(swfdisplayitem, rotate)
 {
@@ -1189,11 +1188,11 @@ PHP_METHOD(swfdisplayitem, rotate)
 	}
 	
 	convert_to_double_ex(degrees);
-	SWFDisplayItem_rotate(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(degrees));
+	SWFDisplayItem_rotate(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(degrees));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::skewXTo(float xSkew)
+/* {{{ proto void swfdisplayitem::skewXTo(double xSkew)
    Sets this SWFDisplayItem's x skew value to xSkew */
 PHP_METHOD(swfdisplayitem, skewXTo)
 {
@@ -1204,11 +1203,11 @@ PHP_METHOD(swfdisplayitem, skewXTo)
 	}
 	
 	convert_to_double_ex(x);
-	SWFDisplayItem_skewXTo(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+	SWFDisplayItem_skewXTo(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::skewX(float xSkew)
+/* {{{ proto void swfdisplayitem::skewX(double xSkew)
    Adds xSkew to this SWFDisplayItem's x skew value */
 PHP_METHOD(swfdisplayitem, skewX)
 {
@@ -1219,11 +1218,11 @@ PHP_METHOD(swfdisplayitem, skewX)
 	}
 	
 	convert_to_double_ex(x);
-	SWFDisplayItem_skewX(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+	SWFDisplayItem_skewX(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(x));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::skewYTo(float ySkew)
+/* {{{ proto void swfdisplayitem::skewYTo(double ySkew)
    Sets this SWFDisplayItem's y skew value to ySkew */
 PHP_METHOD(swfdisplayitem, skewYTo)
 {
@@ -1234,11 +1233,11 @@ PHP_METHOD(swfdisplayitem, skewYTo)
 	}
 	
 	convert_to_double_ex(y);
-	SWFDisplayItem_skewYTo(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+	SWFDisplayItem_skewYTo(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::skewY(float ySkew)
+/* {{{ proto void swfdisplayitem::skewY(double ySkew)
    Adds ySkew to this SWFDisplayItem's y skew value */
 PHP_METHOD(swfdisplayitem, skewY)
 {
@@ -1249,11 +1248,11 @@ PHP_METHOD(swfdisplayitem, skewY)
 	}
 	
 	convert_to_double_ex(y);
-	SWFDisplayItem_skewY(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+	SWFDisplayItem_skewY(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfdisplayitem::setMatrix(float a, float b, float c, float d, float x, float y)
+/* {{{ proto void swfdisplayitem::setMatrix(double a, double b, double c, double d, double x, double y)
    Sets the item's transform matrix */
 PHP_METHOD(swfdisplayitem, setMatrix)
 {
@@ -1271,7 +1270,7 @@ PHP_METHOD(swfdisplayitem, setMatrix)
 	convert_to_double_ex(y);
 
 	SWFDisplayItem_setMatrix( getDisplayItem(getThis() TSRMLS_CC), 
-		FLOAT_Z_DVAL_PP(a), FLOAT_Z_DVAL_PP(b), FLOAT_Z_DVAL_PP(c), FLOAT_Z_DVAL_PP(d), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y)
+		Z_DVAL_PP(a), Z_DVAL_PP(b), Z_DVAL_PP(c), Z_DVAL_PP(d), Z_DVAL_PP(x), Z_DVAL_PP(y)
 	);
 }
 /* }}} */
@@ -1302,7 +1301,7 @@ PHP_METHOD(swfdisplayitem, setRatio)
 	}
 
 	convert_to_double_ex(ratio);
-	SWFDisplayItem_setRatio(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(ratio));
+	SWFDisplayItem_setRatio(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(ratio));
 }
 /* }}} */
 
@@ -1347,7 +1346,7 @@ PHP_METHOD(swfdisplayitem, multColor)
 			WRONG_PARAM_COUNT;
 		}
 		convert_to_double_ex(za);
-		a = FLOAT_Z_DVAL_PP(za);
+		a = Z_DVAL_PP(za);
 	} else if (ZEND_NUM_ARGS() == 3) {
 		if (zend_get_parameters_ex(3, &r, &g, &b) == FAILURE) {
 			WRONG_PARAM_COUNT;
@@ -1360,7 +1359,7 @@ PHP_METHOD(swfdisplayitem, multColor)
 	convert_to_double_ex(g);
 	convert_to_double_ex(b);
 
-	SWFDisplayItem_setColorMult(getDisplayItem(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(r), FLOAT_Z_DVAL_PP(g), FLOAT_Z_DVAL_PP(b), a);
+	SWFDisplayItem_setColorMult(getDisplayItem(getThis() TSRMLS_CC), Z_DVAL_PP(r), Z_DVAL_PP(g), Z_DVAL_PP(b), a);
 }
 /* }}} */
 
@@ -1447,7 +1446,7 @@ PHP_METHOD(swfdisplayitem, endMask)
 
 PHP_METHOD(swfdisplayitem, getX)
 {
-	float x, y;
+	double x, y;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1462,7 +1461,7 @@ PHP_METHOD(swfdisplayitem, getX)
 
 PHP_METHOD(swfdisplayitem, getY)
 {
-	float x, y;
+	double x, y;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1477,7 +1476,7 @@ PHP_METHOD(swfdisplayitem, getY)
 
 PHP_METHOD(swfdisplayitem, getXScale)
 {
-	float sx, sy;
+	double sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1492,7 +1491,7 @@ PHP_METHOD(swfdisplayitem, getXScale)
 
 PHP_METHOD(swfdisplayitem, getYScale)
 {
-	float sx, sy;
+	double sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1507,7 +1506,7 @@ PHP_METHOD(swfdisplayitem, getYScale)
 
 PHP_METHOD(swfdisplayitem, getXSkew)
 {
-	float sx, sy;
+	double sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1522,7 +1521,7 @@ PHP_METHOD(swfdisplayitem, getXSkew)
 
 PHP_METHOD(swfdisplayitem, getYSkew)
 {
-	float sx, sy;
+	double sx, sy;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1537,7 +1536,7 @@ PHP_METHOD(swfdisplayitem, getYSkew)
 
 PHP_METHOD(swfdisplayitem, getRot)
 {
-	float ret;
+	double ret;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if(ZEND_NUM_ARGS() != 0)
@@ -1688,7 +1687,7 @@ PHP_METHOD(swffill, moveTo)
 	
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFFill_moveTo(getFill(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFFill_moveTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
@@ -1703,14 +1702,14 @@ PHP_METHOD(swffill, scaleTo)
 			WRONG_PARAM_COUNT;
 		}
 		convert_to_double_ex(x);
-		SWFFill_scaleXYTo(getFill(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(x));
+		SWFFill_scaleXYTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(x));
 	} else if (ZEND_NUM_ARGS() == 2) {
 		if (zend_get_parameters_ex(2, &x, &y) == FAILURE) {
 			WRONG_PARAM_COUNT;
 		}
 		convert_to_double_ex(x);
 		convert_to_double_ex(y);
-		SWFFill_scaleXYTo(getFill(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+		SWFFill_scaleXYTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 	} else {
 		WRONG_PARAM_COUNT;
 	}
@@ -1727,7 +1726,7 @@ PHP_METHOD(swffill, rotateTo)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(degrees);
-	SWFFill_rotateTo(getFill(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(degrees));
+	SWFFill_rotateTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(degrees));
 }
 /* }}} */
 
@@ -1741,7 +1740,7 @@ PHP_METHOD(swffill, skewXTo)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(x);
-	SWFFill_skewXTo(getFill(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x));
+	SWFFill_skewXTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x));
 }
 /* }}} */
 
@@ -1755,7 +1754,7 @@ PHP_METHOD(swffill, skewYTo)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(y);
-	SWFFill_skewYTo(getFill(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(y));
+	SWFFill_skewYTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(y));
 }
 /* }}} */
 static zend_function_entry swffill_functions[] = {
@@ -2079,7 +2078,7 @@ PHP_METHOD(swfgradient, addEntry)
 	convert_to_long_ex(b);
 
 	SWFGradient_addEntry( getGradient(getThis() TSRMLS_CC), 
-		FLOAT_Z_DVAL_PP(ratio), BYTE_Z_LVAL_PP(r), BYTE_Z_LVAL_PP(g), BYTE_Z_LVAL_PP(b), a
+		Z_DVAL_PP(ratio), BYTE_Z_LVAL_PP(r), BYTE_Z_LVAL_PP(g), BYTE_Z_LVAL_PP(b), a
 	);
 }
 /* }}} */
@@ -3070,7 +3069,7 @@ PHP_METHOD(swfmovie, setRate)
 	}
 
 	convert_to_double_ex(rate);
-	SWFMovie_setRate(movie, FLOAT_Z_DVAL_PP(rate));
+	SWFMovie_setRate(movie, Z_DVAL_PP(rate));
 }
 /* }}} */
 
@@ -3087,7 +3086,7 @@ PHP_METHOD(swfmovie, setDimension)
 
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFMovie_setDimension(movie, FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFMovie_setDimension(movie, Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
@@ -3226,7 +3225,7 @@ PHP_METHOD(swfmovie, streamMP3)
 		 WRONG_PARAM_COUNT;
 	  }
 	  convert_to_double_ex(zskip);
-	  skip = FLOAT_Z_DVAL_PP(zskip);
+	  skip = Z_DVAL_PP(zskip);
 	  break;
     default:
       WRONG_PARAM_COUNT;
@@ -3265,7 +3264,7 @@ PHP_METHOD(swfmovie, setSoundStream)
 		if(zend_get_parameters_ex(1, &zstream, &zskip) == FAILURE) 
 			WRONG_PARAM_COUNT;
 		convert_to_double_ex(zskip);
-		skip = FLOAT_Z_DVAL_PP(zskip);
+		skip = Z_DVAL_PP(zskip);
 		break;
 	default:
 		WRONG_PARAM_COUNT;	
@@ -3759,7 +3758,7 @@ PHP_METHOD(swfshape, setRightFill)
 }
 /* }}} */
 
-/* {{{ proto void swfshape::movepento(float x, float y)
+/* {{{ proto void swfshape::movepento(double x, double y)
    Moves the pen to shape coordinates (x, y) */
 PHP_METHOD(swfshape, movePenTo)
 {
@@ -3770,11 +3769,11 @@ PHP_METHOD(swfshape, movePenTo)
 	}
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFShape_movePenTo(getShape(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFShape_movePenTo(getShape(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfshape::movepen(float x, float y)
+/* {{{ proto void swfshape::movepen(double x, double y)
    Moves the pen from its current location by vector (x, y) */
 PHP_METHOD(swfshape, movePen)
 {
@@ -3785,11 +3784,11 @@ PHP_METHOD(swfshape, movePen)
 	}
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFShape_movePen(getShape(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFShape_movePen(getShape(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawlineto(float x, float y)
+/* {{{ proto void swfshape::drawlineto(double x, double y)
    Draws a line from the current pen position to shape coordinates (x, y) in the current line style */
 PHP_METHOD(swfshape, drawLineTo)
 {
@@ -3800,11 +3799,11 @@ PHP_METHOD(swfshape, drawLineTo)
 	}
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFShape_drawLineTo(getShape(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFShape_drawLineTo(getShape(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawline(float dx, float dy)
+/* {{{ proto void swfshape::drawline(double dx, double dy)
    Draws a line from the current pen position (x, y) to the point (x+dx, y+dy) in the current line style */
 PHP_METHOD(swfshape, drawLine)
 {
@@ -3815,11 +3814,11 @@ PHP_METHOD(swfshape, drawLine)
 	}
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFShape_drawLine(getShape(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFShape_drawLine(getShape(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawcurveto(float ax, float ay, float bx, float by [, float dx, float dy])
+/* {{{ proto void swfshape::drawcurveto(double ax, double ay, double bx, double by [, double dx, double dy])
    Draws a curve from the current pen position (x,y) to the point (bx, by) in the current line style, using point (ax, ay) as a control point. Or draws a cubic bezier to point (dx, dy) with control points (ax, ay) and (bx, by) */
 PHP_METHOD(swfshape, drawCurveTo)
 {
@@ -3835,7 +3834,7 @@ PHP_METHOD(swfshape, drawCurveTo)
 		convert_to_double_ex(ay);
 
 		SWFShape_drawCurveTo(getShape(getThis() TSRMLS_CC),
-			FLOAT_Z_DVAL_PP(cx), FLOAT_Z_DVAL_PP(cy), FLOAT_Z_DVAL_PP(ax), FLOAT_Z_DVAL_PP(ay)
+			Z_DVAL_PP(cx), Z_DVAL_PP(cy), Z_DVAL_PP(ax), Z_DVAL_PP(ay)
 		);
 	
 	} else if (ZEND_NUM_ARGS() == 6) {
@@ -3852,7 +3851,7 @@ PHP_METHOD(swfshape, drawCurveTo)
 		convert_to_double_ex(dy);
 
 		RETURN_LONG(SWFShape_drawCubicTo(getShape(getThis() TSRMLS_CC), 
-			FLOAT_Z_DVAL_PP(bx), FLOAT_Z_DVAL_PP(by), FLOAT_Z_DVAL_PP(cx), FLOAT_Z_DVAL_PP(cy), FLOAT_Z_DVAL_PP(dx), FLOAT_Z_DVAL_PP(dy))
+			Z_DVAL_PP(bx), Z_DVAL_PP(by), Z_DVAL_PP(cx), Z_DVAL_PP(cy), Z_DVAL_PP(dx), Z_DVAL_PP(dy))
 		);
 	} else {
 		WRONG_PARAM_COUNT;
@@ -3860,7 +3859,7 @@ PHP_METHOD(swfshape, drawCurveTo)
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawcurve(float adx, float ady, float bdx, float bdy [, float cdx, float cdy])
+/* {{{ proto void swfshape::drawcurve(double adx, double ady, double bdx, double bdy [, double cdx, double cdy])
    Draws a curve from the current pen position (x, y) to the point (x+bdx, y+bdy) in the current line style, using point (x+adx, y+ady) as a control point or draws a cubic bezier to point (x+cdx, x+cdy) with control points (x+adx, y+ady) and (x+bdx, y+bdy) */
 PHP_METHOD(swfshape, drawCurve)
 {
@@ -3876,7 +3875,7 @@ PHP_METHOD(swfshape, drawCurve)
 		convert_to_double_ex(ay);
 
 		SWFShape_drawCurve(getShape(getThis() TSRMLS_CC), 
-			FLOAT_Z_DVAL_PP(cx), FLOAT_Z_DVAL_PP(cy), FLOAT_Z_DVAL_PP(ax), FLOAT_Z_DVAL_PP(ay)
+			Z_DVAL_PP(cx), Z_DVAL_PP(cy), Z_DVAL_PP(ax), Z_DVAL_PP(ay)
 		);
 
 	} else if (ZEND_NUM_ARGS() == 6) {
@@ -3893,7 +3892,7 @@ PHP_METHOD(swfshape, drawCurve)
 		convert_to_double_ex(dy);
 
 		RETURN_LONG( SWFShape_drawCubic(getShape(getThis() TSRMLS_CC),
-			 FLOAT_Z_DVAL_PP(bx), FLOAT_Z_DVAL_PP(by), FLOAT_Z_DVAL_PP(cx), FLOAT_Z_DVAL_PP(cy), FLOAT_Z_DVAL_PP(dx), FLOAT_Z_DVAL_PP(dy))
+			 Z_DVAL_PP(bx), Z_DVAL_PP(by), Z_DVAL_PP(cx), Z_DVAL_PP(cy), Z_DVAL_PP(dx), Z_DVAL_PP(dy))
 		);
 	} else {
 		WRONG_PARAM_COUNT;
@@ -3926,7 +3925,7 @@ PHP_METHOD(swfshape, drawGlyph)
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawcircle(float r)
+/* {{{ proto void swfshape::drawcircle(double r)
    Draws a circle of radius r centered at the current location, in a counter-clockwise fashion */
 PHP_METHOD(swfshape, drawCircle)
 {
@@ -3936,11 +3935,11 @@ PHP_METHOD(swfshape, drawCircle)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(r);
-	SWFShape_drawCircle(getShape(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(r));
+	SWFShape_drawCircle(getShape(getThis() TSRMLS_CC), Z_DVAL_PP(r));
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawarc(float r, float startAngle, float endAngle)
+/* {{{ proto void swfshape::drawarc(double r, double startAngle, double endAngle)
    Draws an arc of radius r centered at the current location, from angle startAngle to angle endAngle measured clockwise from 12 o'clock */
 PHP_METHOD(swfshape, drawArc)
 {
@@ -3954,11 +3953,11 @@ PHP_METHOD(swfshape, drawArc)
 	convert_to_double_ex(end);
 
 	/* convert angles to radians, since that's what php uses elsewhere */
-	SWFShape_drawArc(getShape(getThis() TSRMLS_CC), FLOAT_Z_DVAL_PP(r), FLOAT_Z_DVAL_PP(start), FLOAT_Z_DVAL_PP(end));
+	SWFShape_drawArc(getShape(getThis() TSRMLS_CC), Z_DVAL_PP(r), Z_DVAL_PP(start), Z_DVAL_PP(end));
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawcubic(float bx, float by, float cx, float cy, float dx, float dy)
+/* {{{ proto void swfshape::drawcubic(double bx, double by, double cx, double cy, double dx, double dy)
    Draws a cubic bezier curve using the current position and the three given points as control points */
 PHP_METHOD(swfshape, drawCubic)
 {
@@ -3975,12 +3974,12 @@ PHP_METHOD(swfshape, drawCubic)
 	convert_to_double_ex(dy);
 
 	RETURN_LONG( SWFShape_drawCubic(getShape(getThis() TSRMLS_CC), 
-		FLOAT_Z_DVAL_PP(bx), FLOAT_Z_DVAL_PP(by), FLOAT_Z_DVAL_PP(cx), FLOAT_Z_DVAL_PP(cy), FLOAT_Z_DVAL_PP(dx), FLOAT_Z_DVAL_PP(dy))
+		Z_DVAL_PP(bx), Z_DVAL_PP(by), Z_DVAL_PP(cx), Z_DVAL_PP(cy), Z_DVAL_PP(dx), Z_DVAL_PP(dy))
 	);
 }
 /* }}} */
 
-/* {{{ proto void swfshape::drawcubic(float bx, float by, float cx, float cy, float dx, float dy)
+/* {{{ proto void swfshape::drawcubic(double bx, double by, double cx, double cy, double dx, double dy)
    Draws a cubic bezier curve using the current position and the three given points as control points */
 PHP_METHOD(swfshape, drawCubicTo)
 {
@@ -3997,7 +3996,7 @@ PHP_METHOD(swfshape, drawCubicTo)
 	convert_to_double_ex(dy);
 
 	RETURN_LONG( SWFShape_drawCubicTo(getShape(getThis() TSRMLS_CC),
-		FLOAT_Z_DVAL_PP(bx), FLOAT_Z_DVAL_PP(by), FLOAT_Z_DVAL_PP(cx), FLOAT_Z_DVAL_PP(cy), FLOAT_Z_DVAL_PP(dx), FLOAT_Z_DVAL_PP(dy))
+		Z_DVAL_PP(bx), Z_DVAL_PP(by), Z_DVAL_PP(cx), Z_DVAL_PP(cy), Z_DVAL_PP(dx), Z_DVAL_PP(dy))
 	);
 }
 /* }}} */
@@ -4213,14 +4212,14 @@ PHP_METHOD(swfsprite, setSoundStream)
 		if(zend_get_parameters_ex(3, &zfile, &zrate, &zskip) == FAILURE) 
 			WRONG_PARAM_COUNT;
 		convert_to_double_ex(zskip);
-		skip = FLOAT_Z_DVAL_PP(zskip);
+		skip = Z_DVAL_PP(zskip);
 		break;
 	default:
 		WRONG_PARAM_COUNT;
 	}
 	
 	convert_to_double_ex(zrate);
-	rate = FLOAT_Z_DVAL_PP(zrate);
+	rate = Z_DVAL_PP(zrate);
 	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
 		convert_to_string_ex(zfile);
 		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
@@ -4384,7 +4383,7 @@ PHP_METHOD(swftext, setHeight)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(height);
-	SWFText_setHeight(text, FLOAT_Z_DVAL_PP(height));
+	SWFText_setHeight(text, Z_DVAL_PP(height));
 }
 /* }}} */
 
@@ -4399,7 +4398,7 @@ PHP_METHOD(swftext, setSpacing)
  		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(spacing);
-	SWFText_setSpacing(text, FLOAT_Z_DVAL_PP(spacing));
+	SWFText_setSpacing(text, Z_DVAL_PP(spacing));
 }
 /* }}} */
 
@@ -4446,7 +4445,7 @@ PHP_METHOD(swftext, moveTo)
 	}
 	convert_to_double_ex(x);
 	convert_to_double_ex(y);
-	SWFText_setXY(text, FLOAT_Z_DVAL_PP(x), FLOAT_Z_DVAL_PP(y));
+	SWFText_setXY(text, Z_DVAL_PP(x), Z_DVAL_PP(y));
 }
 /* }}} */
 
@@ -4700,7 +4699,7 @@ PHP_METHOD(swftextfield, setBounds)
 	}
 	convert_to_double_ex(width);
 	convert_to_double_ex(height);
-	SWFTextField_setBounds(field, FLOAT_Z_DVAL_PP(width), FLOAT_Z_DVAL_PP(height));
+	SWFTextField_setBounds(field, Z_DVAL_PP(width), Z_DVAL_PP(height));
 }
 /* }}} */
 
@@ -4730,7 +4729,7 @@ PHP_METHOD(swftextfield, setHeight)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(height);
-	SWFTextField_setHeight(field, FLOAT_Z_DVAL_PP(height));
+	SWFTextField_setHeight(field, Z_DVAL_PP(height));
 }
 /* }}} */
 
@@ -4745,7 +4744,7 @@ PHP_METHOD(swftextfield, setLeftMargin)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(margin);
-	SWFTextField_setLeftMargin(field, FLOAT_Z_DVAL_PP(margin));
+	SWFTextField_setLeftMargin(field, Z_DVAL_PP(margin));
 }
 /* }}} */
 
@@ -4760,7 +4759,7 @@ PHP_METHOD(swftextfield, setRightMargin)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(margin);
-	SWFTextField_setRightMargin(field, FLOAT_Z_DVAL_PP(margin));
+	SWFTextField_setRightMargin(field, Z_DVAL_PP(margin));
 }
 /* }}} */
 
@@ -4776,8 +4775,8 @@ PHP_METHOD(swftextfield, setMargins)
 	}
 	convert_to_double_ex(left);
 	convert_to_double_ex(right);
-	SWFTextField_setLeftMargin(field, FLOAT_Z_DVAL_PP(left));
-	SWFTextField_setRightMargin(field, FLOAT_Z_DVAL_PP(right));
+	SWFTextField_setLeftMargin(field, Z_DVAL_PP(left));
+	SWFTextField_setRightMargin(field, Z_DVAL_PP(right));
 }
 /* }}} */
 
@@ -4792,7 +4791,7 @@ PHP_METHOD(swftextfield, setIndentation)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(indent);
-	SWFTextField_setIndentation(field, FLOAT_Z_DVAL_PP(indent));
+	SWFTextField_setIndentation(field, Z_DVAL_PP(indent));
 }
 /* }}} */
 
@@ -4807,7 +4806,7 @@ PHP_METHOD(swftextfield, setLineSpacing)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_double_ex(spacing);
-	SWFTextField_setLineSpacing(field, FLOAT_Z_DVAL_PP(spacing));
+	SWFTextField_setLineSpacing(field, Z_DVAL_PP(spacing));
 }
 /* }}} */
 
