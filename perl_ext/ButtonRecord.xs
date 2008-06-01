@@ -33,56 +33,56 @@ void SWFButtonRecord_setBlendMode(record, mode)
 
 void SWFButtonRecord_move(record, x, y)
 	SWF::ButtonRecord record
-	float x
-	float y
+	double x
+	double y
 
 
 void SWFButtonRecord_moveTo(record, x, y)
 	SWF::ButtonRecord record
-	float x
-	float y
+	double x
+	double y
 
 
 void SWFButtonRecord_rotate(record, deg)
 	SWF::ButtonRecord record
-	float deg
+	double deg
 
 
 void SWFButtonRecord_rotateTo(record, deg)
 	SWF::ButtonRecord record
-	float deg
+	double deg
 
 
 void SWFButtonRecord_scale(record, scaleX, scaleY)
 	SWF::ButtonRecord record
-	float scaleX
-	float scaleY
+	double scaleX
+	double scaleY
 
 
 void SWFButtonRecord_scaleTo(record, scaleX, scaleY)
 	SWF::ButtonRecord record
-	float scaleX
-	float scaleY
+	double scaleX
+	double scaleY
 
 
 void SWFButtonRecord_skewX(record, skewX)
 	SWF::ButtonRecord record
-	float skewX
+	double skewX
 
 
 void SWFButtonRecord_skewXTo(record, skewX)
 	SWF::ButtonRecord record
-	float skewX
+	double skewX
 
 
 void SWFButtonRecord_skewY(record, skewY)
 	SWF::ButtonRecord record
-	float skewY
+	double skewY
 
 
 void SWFButtonRecord_skewYTo(record, skewY)
 	SWF::ButtonRecord record
-	float skewY
+	double skewY
 
 void
 SWFButtonRecord_addFilter(record, filter)

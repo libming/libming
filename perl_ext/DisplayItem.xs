@@ -39,21 +39,21 @@ SWFDisplayItem_addAction(item, action, flags)
 void
 SWFDisplayItem_moveTo(item, x, y)
 	SWF::DisplayItem item
-	int x 
-	int y
+	double x 
+	double y
 
 void
 SWFDisplayItem_move(item, x, y)
 	SWF::DisplayItem item
-	int x 
-	int y
+	double x 
+	double y
 
 
 void 
 SWFDisplayItem_scaleTo(item, x, ...)
         SWF::DisplayItem item
-        float            x
-        float            y   = NO_INIT
+        double            x
+        double            y   = NO_INIT
         CODE:
         y = (items > 2) ? (float)SvNV(ST(2)) : x; 
         SWFDisplayItem_scaleTo(item, x, y);
@@ -61,8 +61,8 @@ SWFDisplayItem_scaleTo(item, x, ...)
 void 
 SWFDisplayItem_scale(item, x, ...)
         SWF::DisplayItem item
-        float            x
-        float            y   = NO_INIT
+        double            x
+        double            y   = NO_INIT
         CODE:
         y = (items > 2) ? (float)SvNV(ST(2)) : x; 
         SWFDisplayItem_scale(item, x, y);
@@ -71,33 +71,33 @@ SWFDisplayItem_scale(item, x, ...)
 void 
 SWFDisplayItem_rotate(item, degrees)
 	SWF::DisplayItem item
-	float degrees
+	double degrees
 
 void 
 SWFDisplayItem_rotateTo(item, degrees)
 	SWF::DisplayItem item
-	float degrees
+	double degrees
 
 void 
 SWFDisplayItem_skewX(item, x)
         SWF::DisplayItem item 
-        float x
+        double x
 
 
 void
 SWFDisplayItem_skewXTo(item, x)
        SWF::DisplayItem item
-       float x
+       double x
 
 void 
 SWFDisplayItem_skewY(item, y)
         SWF::DisplayItem item
-        float y
+        double y
 
 void 
 SWFDisplayItem_skewYTo(item, y)
         SWF::DisplayItem item
-        float y
+        double y
 
 void
 SWFDisplayItem_setDepth(item, depth)
@@ -154,48 +154,48 @@ void
 SWFDisplayItem_getPosition(item)
     	SWF::DisplayItem item
 	PREINIT:
-        float           x;
-        float           y;
+        double           x;
+        double           y;
 	PPCODE:
 	SWFDisplayItem_getPosition(item, &x, &y);
 	EXTEND(SP, 2);
-	PUSHs(sv_2mortal(newSVnv((double)x)));
-	PUSHs(sv_2mortal(newSVnv((double)y)));
+	PUSHs(sv_2mortal(newSVnv(x)));
+	PUSHs(sv_2mortal(newSVnv(y)));
 
 void 
 SWFDisplayItem_getScale(item)
 	SWF::DisplayItem item
 	PREINIT:
-	float             xScale;
-	float             yScale;
+	double             xScale;
+	double             yScale;
 	PPCODE:
 	SWFDisplayItem_getScale(item, &xScale, &yScale);
 	EXTEND(SP, 2);
-	PUSHs(sv_2mortal(newSVnv((double)xScale)));
-	PUSHs(sv_2mortal(newSVnv((double)yScale)));
+	PUSHs(sv_2mortal(newSVnv(xScale)));
+	PUSHs(sv_2mortal(newSVnv(yScale)));
 
 void 
 SWFDisplayItem_getSkew(item)
 	SWF::DisplayItem item
 	PREINIT:
-	float             xSkew;
-	float             ySkew;
+	double             xSkew;
+	double             ySkew;
 	PPCODE:
 	SWFDisplayItem_getSkew(item, &xSkew, &ySkew);
 	EXTEND(SP, 2);
-	PUSHs(sv_2mortal(newSVnv((double)xSkew)));
-	PUSHs(sv_2mortal(newSVnv((double)ySkew)));
+	PUSHs(sv_2mortal(newSVnv(xSkew)));
+	PUSHs(sv_2mortal(newSVnv(ySkew)));
 
 
 void 
 SWFDisplayItem_getRotation(item)
 	SWF::DisplayItem item
 	PREINIT:
-	float    degrees;
+	double    degrees;
 	CODE:
 	SWFDisplayItem_getRotation(item, &degrees);
 	ST(0) = sv_newmortal();
-	sv_setnv(ST(0), (double)degrees);
+	sv_setnv(ST(0), degrees);
 
 
 int
@@ -209,12 +209,12 @@ SWFDisplayItem_flush(item)
 void 
 SWFDisplayItem_setMatrix(item, a, b, c, d, x, y)
 	SWF::DisplayItem item
-	int a
-	int b
-	int c
-	int d
-	float x
-	float y
+	double a
+	double b
+	double c
+	double d
+	double x
+	double y
 
 SWF::Matrix
 SWFDisplayItem_getMatrix(item)

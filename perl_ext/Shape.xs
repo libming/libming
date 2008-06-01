@@ -42,14 +42,14 @@ destroySWFShape(shape)
 void
 SWFShape_movePenTo(shape, x, y)
 	SWF::Shape	shape
-	float	x
-	float	y
+	double	x
+	double	y
 
 void 
 SWFShape_movePen(shape, x, y)
         SWF::Shape shape
-        float x
-        float y
+	double x
+	double y
 
 float
 SWFShape_getPenX(shape)
@@ -64,62 +64,62 @@ void
 SWFShape_getPen(shape)
         SWF::Shape shape
         PREINIT:
-        float           x;
-        float           y;
+        double           x;
+        double           y;
         PPCODE:
         SWFShape_getPen(shape, &x, &y);
         EXTEND(SP, 2);
-        PUSHs(sv_2mortal(newSVnv((double)x)));
-        PUSHs(sv_2mortal(newSVnv((double)y)));
+        PUSHs(sv_2mortal(newSVnv(x)));
+        PUSHs(sv_2mortal(newSVnv(y)));
 
 void
 SWFShape_drawLineTo(shape, x, y)
 	SWF::Shape	shape
-	float	x
-	float	y
+	double	x
+	double	y
 
 void
 SWFShape_drawLine(shape, dx, dy)
 	SWF::Shape	shape
-	float	dx
-	float	dy
+	double	dx
+	double	dy
 
 void
 SWFShape_drawCurveTo(shape, controlx, controly, anchorx, anchory)
 	SWF::Shape	shape
-	float		controlx
-	float		controly
-	float		anchorx
-	float		anchory
+	double		controlx
+	double		controly
+	double		anchorx
+	double		anchory
 
 void
 SWFShape_drawCurve(shape, controldx, controldy, anchordx, anchordy)
 	SWF::Shape	shape
-	float		controldx
-	float		controldy
-	float		anchordx
-	float		anchordy
+	double		controldx
+	double		controldy
+	double		anchordx
+	double		anchordy
 
 
 void
 SWFShape_drawCubicTo(shape, bx, by, cx, cy, dx, dy)
         SWF::Shape      shape
-        float           bx
-        float           by
-        float           cx
-        float           cy
-        float           dx
-        float           dy
+        double          bx
+        double          by
+        double          cx
+        double          cy
+        double          dx
+        double          dy
 
 void
 SWFShape_drawCubic(shape, bx, by, cx, cy, dx, dy)
         SWF::Shape      shape
-        float           bx
-        float           by
-        float           cx
-        float           cy
-        float           dx
-        float           dy
+        double           bx
+        double           by
+        double           cx
+        double           cy
+        double           dx
+        double           dy
 
 void
 SWFShape_end(shape)

@@ -26,19 +26,19 @@ SWFMatrix_DESTROY(m)
 	CODE:
         S_DEBUG(2, fprintf(stderr, "Matrix DESTROY CALLED\n"));
 
-float
+double
 SWFMatrix_getScaleX(m)
 	SWF::Matrix m
 
-float
+double
 SWFMatrix_getScaleY(m)
 	SWF::Matrix m
 
-float 
+double
 SWFMatrix_getRotate0(m)
 	SWF::Matrix m
 
-float 
+double 
 SWFMatrix_getRotate1(m)
 	SWF::Matrix m
 
