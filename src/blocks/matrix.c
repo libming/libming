@@ -75,7 +75,6 @@ SWFMatrix_set(SWFMatrix m, double a, double b, double c, double d, int x, int y)
 	m->scaleY = d;
 	m->translateX = x;
 	m->translateY = y;
-	printf("matrix_set %i\n", x);
 }
 
 
