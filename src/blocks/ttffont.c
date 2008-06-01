@@ -299,7 +299,6 @@ SWFFont loadSWFFontTTF(const char *filename)
 	}
 	
 	font = loadFontFromFace(face);
-	
 	FT_Done_Face(face);
 	FT_Done_FreeType(library);
 	return font;

@@ -136,12 +136,23 @@ void
 destroySWFShape(SWFShape shape)
 {
 	int i;
-
-	for ( i=0; i<shape->nFills; ++i )
-		destroySWFFillStyle(shape->fills[i]);
-
-	if ( shape->fills != NULL )
+	if(shape->fills != NULL)
+	{
+		for ( i=0; i<shape->nFills; ++i )
+			destroySWFFillStyle(shape->fills[i]);
 		free(shape->fills);
+	}
+	if(shape->records != NULL)
+	{
+		for(i = 0; i < shape->nRecords; i++)
+		{
+			free(shape->records[i].record.stateChange);
+		}
+	 	free(shape->records);
+	}
+
+	if(shape->edgeBounds != NULL)
+		free(shape->edgeBounds);
 
 	for ( i=0; i<shape->nLines; ++i )
 		free(shape->lines[i]);
@@ -305,8 +316,6 @@ SWFOutput_writeGlyphShape(SWFOutput out, SWFShape shape)
 		{
 			SWFShape_writeShapeRecord(shape, shape->records[i], out);
 		}
-
-		free(shape->records[i].record.stateChange); /* all in union are pointers */
 	}
 
 	SWFOutput_writeBits(out, 0, 6); /* end tag */

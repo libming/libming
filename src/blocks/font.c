@@ -195,12 +195,14 @@ writeSWFFontCharacterToMethod(SWFBlock block,
 
 void
 destroySWFFont(SWFFont font)
-{	// should not happen but seemingly does
-	if (!font)
-		return;
-	
+{	
 	if(font->shapes)
+	{
+		int i = 0;
+		for(i = 0; i < font->nGlyphs; i++)
+			destroySWFShape(font->shapes[i]);
 		free(font->shapes);
+	}
 
 	if ( font->flags & SWF_FONT_WIDECODES )
 	{
@@ -250,7 +252,7 @@ destroySWFFontCharacter(SWFFontCharacter font)
 		free(text);
 		text = next;
 	}
-
+	
 	if ( font->codeTable != NULL )
 		free(font->codeTable);
 	if( font->out != NULL)
@@ -350,6 +352,8 @@ SWFFontCollection newSWFFontCollection_fromFile(const char *filename /* filename
 #if USE_FREETYPE
 		return loadTTFCollection(filename);
 #else 
+		SWF_warn("SWFFont:: new SWFFont (ttf): "
+		         "freetype is not available.\n"); 
 		return NULL;
 #endif
 	}
@@ -389,8 +393,10 @@ SWFFont newSWFFont_fromFile(const char *filename /* filename for fontfile */)
 	{
 		fclose(file);
 #if USE_FREETYPE
-		return loadSWFFontTTF(filename);
+		return loadSWFFontTTF(filename);	
 #else
+		SWF_warn("SWFFont:: new SWFFont (ttf): "
+		         "freetype is not available.\n"); 
 		return NULL;
 #endif
 	}
