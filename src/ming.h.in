@@ -721,7 +721,6 @@ void SWFPosition_rotateTo(SWFPosition position, double degrees);
 void SWFPosition_move(SWFPosition position, double x, double y);
 void SWFPosition_moveTo(SWFPosition position, double x, double y);
 
-SWFMatrix SWFPosition_getMatrix(SWFPosition p);
 double SWFPosition_getRotation(SWFPosition position);
 double SWFPosition_getX(SWFPosition position);
 double SWFPosition_getY(SWFPosition position);
