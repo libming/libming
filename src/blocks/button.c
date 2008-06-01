@@ -245,61 +245,61 @@ SWFButtonRecord_addFilter(SWFButtonRecord record, SWFFilter filter)
 }
 
 void 
-SWFButtonRecord_move(SWFButtonRecord record, float x, float y)
+SWFButtonRecord_move(SWFButtonRecord record, double x, double y)
 {
 	SWFPosition_move(record->position, x, y);
 }
 
 void 
-SWFButtonRecord_moveTo(SWFButtonRecord record, float x, float y)
+SWFButtonRecord_moveTo(SWFButtonRecord record, double x, double y)
 {
 	SWFPosition_moveTo(record->position, x, y);
 }
 
 void 
-SWFButtonRecord_rotate(SWFButtonRecord record, float deg)
+SWFButtonRecord_rotate(SWFButtonRecord record, double deg)
 {
 	SWFPosition_rotate(record->position, deg);
 }
 
 void 
-SWFButtonRecord_rotateTo(SWFButtonRecord record, float deg)
+SWFButtonRecord_rotateTo(SWFButtonRecord record, double deg)
 {
 	SWFPosition_rotateTo(record->position, deg);
 }
 
 void 
-SWFButtonRecord_scale(SWFButtonRecord record, float scaleX, float scaleY)
+SWFButtonRecord_scale(SWFButtonRecord record, double scaleX, double scaleY)
 {
 	SWFPosition_scaleXY(record->position, scaleX, scaleY);
 }
 
 void 
-SWFButtonRecord_scaleTo(SWFButtonRecord record, float scaleX, float scaleY)
+SWFButtonRecord_scaleTo(SWFButtonRecord record, double scaleX, double scaleY)
 {
 	SWFPosition_scaleXYTo(record->position, scaleX, scaleY);
 }
 
 void 
-SWFButtonRecord_skewX(SWFButtonRecord record, float skewX)
+SWFButtonRecord_skewX(SWFButtonRecord record, double skewX)
 {
 	SWFPosition_skewX(record->position, skewX);
 }
 
 void 
-SWFButtonRecord_skewXTo(SWFButtonRecord record, float skewX)
+SWFButtonRecord_skewXTo(SWFButtonRecord record, double skewX)
 {
 	SWFPosition_skewXTo(record->position, skewX);
 }
 
 void 
-SWFButtonRecord_skewY(SWFButtonRecord record, float skewY)
+SWFButtonRecord_skewY(SWFButtonRecord record, double skewY)
 {
 	SWFPosition_skewY(record->position, skewY);
 }
 
 void 
-SWFButtonRecord_skewYTo(SWFButtonRecord record, float skewY)
+SWFButtonRecord_skewYTo(SWFButtonRecord record, double skewY)
 {
 	SWFPosition_skewYTo(record->position, skewY);
 }
