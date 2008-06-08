@@ -127,6 +127,7 @@ write_config_test ($MING_DIR."/src/");
 write_bootxs();
 
 sub MY::postamble {
+	"Makefile.PL: $SRCDIR/Makefile.PL\n\tln -s $SRCDIR/Makefile.PL .\n" .
 	"$XS_DEP_FILES";
 }
 
