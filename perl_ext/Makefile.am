@@ -28,9 +28,8 @@ EXTRA_DIST = SWF/Action.pm SWF/BinaryData.pm SWF/Bitmap.pm SWF/Blur.pm \
 		common/_sans.fdb common/README common/beep.wav \
 		mkdoc
 
-TMP_DIR=$(top_builddir)/perl_ext
-
-abs_builddir=`cd $(TMP_DIR); pwd`
+#TMP_DIR=$(top_builddir)/perl_ext
+#abs_builddir=`cd $(TMP_DIR); pwd`
 
 all: Makefile.perl
 	$(MAKE) -f Makefile.perl
