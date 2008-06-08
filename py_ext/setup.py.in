@@ -6,9 +6,9 @@
 from distutils.core import setup, Extension
 
 import os
-curdir = os.getcwd()
 
-print curdir
+srcdir = "@abs_srcdir@"
+curdir = os.getcwd()
 
 mylibs = ['ming']
 
@@ -23,8 +23,9 @@ if "@GIFLIB@":
 
 
 setup(name = "mingc", version = "@MING_VERSION@",
+      package_dir = {'': srcdir},
       py_modules = ['ming', 'mingc'],
-      ext_modules = [Extension("_mingc", ["ming_wrap.c"],
+      ext_modules = [Extension("_mingc", ["%s/ming_wrap.c" %srcdir],
                      include_dirs=['/usr/local/include',os.path.join(os.path.join(curdir, '..'),'src')],
                      library_dirs=['../src/.libs','/usr/local/lib/'],
                      libraries=mylibs)])
