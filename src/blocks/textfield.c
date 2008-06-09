@@ -280,8 +280,7 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 {
 	if(font == NULL)
 		return;
-	
-	if ( BLOCK(font)->type == SWF_DEFINEEDITTEXT )
+	if ( BLOCK(font)->type == SWF_BROWSERFONT )
 	{
 		field->fonttype = BrowserFont;
 		field->font.browserFont = (SWFBrowserFont)font;
@@ -317,7 +316,8 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 
 SWFFont
 SWFTextField_getUnresolvedFont(SWFTextField field)
-{	switch(field->fonttype)
+{	
+	switch(field->fonttype)
 	{	case Font:
 			return field->font.font;
 		default:
