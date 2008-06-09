@@ -71,7 +71,6 @@ yes
   ], [
     AC_DEFINE(HAVE_NEW_MING,  1, [ ]) 
     dnl FIXME: This is now unconditional..better check coming later.
-    AC_DEFINE(HAVE_MING_ZLIB, 1, [ ])
   ])
 
   dnl Check if SWFMovie_output() accepts the 4th parameter
