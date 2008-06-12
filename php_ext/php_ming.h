@@ -68,6 +68,14 @@ PHP_METHOD(swfprebuiltclip, init);
 
 PHP_METHOD(swfbinarydata, init);
 
+PHP_METHOD(swfshadow, init);
+
+PHP_METHOD(swfblur, init);
+
+PHP_METHOD(swffiltermatrix, init);
+
+PHP_METHOD(swffilter, init);
+
 PHP_METHOD(swffill, init);
 PHP_METHOD(swffill, moveTo);
 PHP_METHOD(swffill, scaleTo);
@@ -227,6 +235,7 @@ PHP_METHOD(swfdisplayitem, addColor);
 PHP_METHOD(swfdisplayitem, multColor);
 PHP_METHOD(swfdisplayitem, setName);
 PHP_METHOD(swfdisplayitem, addAction);
+PHP_METHOD(swfdisplayitem, addFilter);
 
 #ifdef HAVE_NEW_MING
 PHP_METHOD(swfdisplayitem, remove);
@@ -276,6 +285,7 @@ PHP_METHOD(swfbuttonrecord, skewX);
 PHP_METHOD(swfbuttonrecord, skewXTo);
 PHP_METHOD(swfbuttonrecord, skewY);
 PHP_METHOD(swfbuttonrecord, skewYTo);
+PHP_METHOD(swfbuttonrecord, addFilter);
 
 /* SWFAction */
 
