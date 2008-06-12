@@ -15,6 +15,7 @@
   | Authors: Dave Hayden <dave@opaque.net>                               |
   |          Frank M. Kromann <fmk@php.net>                              |
   |          Stuart R. Anderson <anderson@netsweng.com>                  |
+  |          Klaus Rechert <klaus@rechert.de>                            |
   +----------------------------------------------------------------------+
 */
 
@@ -79,6 +80,10 @@ static SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC);
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC);
 static SWFCharacter getCharacterClass(zval *id TSRMLS_DC);
 static SWFBinaryData getBinaryData(zval *id TSRMLS_DC);
+static SWFBlur getBlur(zval *id TSRMLS_DC);
+static SWFShadow getShadow(zval *id TSRMLS_DC);
+static SWFFilterMatrix getFilterMatrix(zval *id TSRMLS_DC);
+static SWFFilter getFilter(zval *id TSRMLS_DC);
 #endif
 
 #define PHP_MING_FILE_CHK(file) \
@@ -183,6 +188,10 @@ static int le_swfbinarydatap;
 static int le_swfinitactionp;
 static int le_swfprebuiltclipp;
 static int le_swfsoundstreamp;
+static int le_swffilterp;
+static int le_swfblurp;
+static int le_swfshadowp;
+static int le_swffiltermatrixp;
 #endif
 static int le_swfcharacterp;
 
@@ -211,6 +220,10 @@ static zend_class_entry *binarydata_class_entry_ptr;
 static zend_class_entry *initaction_class_entry_ptr;
 static zend_class_entry *prebuiltclip_class_entry_ptr;
 static zend_class_entry *soundstream_class_entry_ptr;
+static zend_class_entry *filter_class_entry_ptr;
+static zend_class_entry *blur_class_entry_ptr;
+static zend_class_entry *shadow_class_entry_ptr;
+static zend_class_entry *filtermatrix_class_entry_ptr;
 #endif
 static zend_class_entry *character_class_entry_ptr;
 
@@ -741,6 +754,20 @@ PHP_METHOD(swfbuttonrecord, skewYTo)
 }
 /* }}} */
 
+/* {{{ proto void swfbuttoncharacter::addFilter(SWFFilter f) */
+PHP_METHOD(swfbuttonrecord, addFilter)
+{
+	zval **filter;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &filter) == FAILURE)
+	{
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_object_ex(filter);
+	SWFButtonRecord_addFilter(getButtonRecord(getThis() TSRMLS_CC), getFilter( *filter TSRMLS_CC)); 
+}
+/* }}} */
+
 static zend_function_entry swfbuttonrecord_functions[] = {
 	PHP_ME(swfbuttonrecord, setDepth,   NULL, 0)
 	PHP_ME(swfbuttonrecord, setBlendMode,  NULL, 0)
@@ -754,6 +781,7 @@ static zend_function_entry swfbuttonrecord_functions[] = {
 	PHP_ME(swfbuttonrecord, skewXTo,  NULL, 0)
 	PHP_ME(swfbuttonrecord, skewY,  NULL, 0)
 	PHP_ME(swfbuttonrecord, skewYTo,  NULL, 0)
+	PHP_ME(swfbuttonrecord, addFilter, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 #endif
@@ -1603,6 +1631,19 @@ PHP_METHOD(swfdisplayitem, flush)
 }
 /* }}} */
 
+/* {{{ proto void swfdisplayitem::addFilter(SWFFilter filter) */
+PHP_METHOD(swfdisplayitem, addFilter)
+{
+	zval **filter;
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &filter) == FAILURE)
+	{
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_object_ex(filter);
+	SWFDisplayItem_addFilter(getDisplayItem(getThis() TSRMLS_CC), getFilter(*filter TSRMLS_CC)); 
+
+}
+
 #endif
 
 static zend_function_entry swfdisplayitem_functions[] = {
@@ -1638,6 +1679,7 @@ static zend_function_entry swfdisplayitem_functions[] = {
 	PHP_ME(swfdisplayitem, setBlendMode, NULL, 0)
 	PHP_ME(swfdisplayitem, getDepth,    NULL, 0)
 	PHP_ME(swfdisplayitem, flush,    NULL, 0)
+	PHP_ME(swfdisplayitem, addFilter,    NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
@@ -2017,6 +2059,185 @@ static zend_function_entry swffont_functions[] = {
 
 /* }}} */
 
+
+/* {{{ SWFFilterMatrix
+*/
+/* {{{ proto void swffiltermatrix::__construct(cols, rows, array:vals)
+   Creates a new SWFFilterMatrix object */
+PHP_METHOD(swffiltermatrix, __construct)
+{
+	zval **cols, **rows, **vals, **data;
+	SWFFilterMatrix matrix;
+	HashTable *arr_hash;
+	int ret, items, i;
+	float *values;
+	HashPosition pointer;
+
+	if (ZEND_NUM_ARGS() != 3)
+		WRONG_PARAM_COUNT;
+
+	if (zend_get_parameters_ex(3, &cols, &rows, &vals) == FAILURE) 
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(cols);
+	convert_to_long_ex(rows);
+	convert_to_array_ex(vals);
+
+	arr_hash = Z_ARRVAL_PP(vals);
+	items = zend_hash_num_elements(arr_hash);
+	if(items != Z_LVAL_PP(cols) * Z_LVAL_PP(rows))
+	{
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Can't create FilterMatrix."
+		"Not enough / too many items it array");
+	}
+	values = (float *)malloc(items * sizeof(float));
+	for(i = 0, zend_hash_internal_pointer_reset_ex(arr_hash, &pointer); 
+	    zend_hash_get_current_data_ex(arr_hash, (void**) &data, &pointer) == SUCCESS; 
+	    zend_hash_move_forward_ex(arr_hash, &pointer), i++) 
+	{
+		zval temp;
+		temp = **data;
+		zval_copy_ctor(&temp);
+		convert_to_double(&temp);
+		values[i] = Z_DVAL(temp);
+		zval_dtor(&temp);
+	}
+	
+	matrix = newSWFFilterMatrix(Z_LVAL_PP(cols), Z_LVAL_PP(rows), values);
+	free(values); // array is copied by libming
+	ret = zend_list_insert(matrix, le_swffiltermatrixp);
+	object_init_ex(getThis(), filtermatrix_class_entry_ptr);
+	add_property_resource(getThis(), "filtermatrix", ret);
+	zend_list_addref(ret);
+}
+
+static void destroy_SWFFilterMatrix_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFFilterMatrix((SWFFilterMatrix)resource->ptr);
+}
+/* }}} */
+
+/* {{{ internal function getFilterMatrix
+   Returns the SWFFilterMatrix object contained in zval *id */
+static SWFFilterMatrix getFilterMatrix(zval *id TSRMLS_DC)
+{
+	void *matrix = SWFgetProperty(id, "filtermatrix", strlen("filtermatrix"), le_swffiltermatrixp TSRMLS_CC);
+
+	if (!matrix) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFFilterMatrix");
+	}
+	return (SWFFilterMatrix)matrix;
+}
+/* }}} */
+static zend_function_entry swffiltermatrix_functions[] = {
+	PHP_ME(swffiltermatrix, __construct, 		NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+/* {{{ SWFShadow
+*/
+/* {{{ proto void swfshadow::__construct(angle, distance, strength)
+   Creates a new SWFShadow object */
+PHP_METHOD(swfshadow, __construct)
+{
+	zval **angle, **distance, **strength;
+	SWFShadow shadow;
+	int ret;
+
+	if (ZEND_NUM_ARGS() != 3)
+		WRONG_PARAM_COUNT;
+
+	if (zend_get_parameters_ex(3, &angle, &distance, &strength) == FAILURE) 
+		WRONG_PARAM_COUNT;
+
+	convert_to_double_ex(angle);
+	convert_to_double_ex(distance);
+	convert_to_double_ex(strength);
+
+	shadow = newSWFShadow(Z_DVAL_PP(angle), Z_DVAL_PP(distance), Z_DVAL_PP(strength));
+	ret = zend_list_insert(shadow, le_swfshadowp);
+	object_init_ex(getThis(), shadow_class_entry_ptr);
+	add_property_resource(getThis(), "shadow", ret);
+	zend_list_addref(ret);
+}
+
+static void destroy_SWFShadow_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFShadow((SWFShadow)resource->ptr);
+}
+/* }}} */
+
+/* {{{ internal function getShadow
+   Returns the SWFShadow object contained in zval *id */
+static SWFShadow getShadow(zval *id TSRMLS_DC)
+{
+	void *shadow = SWFgetProperty(id, "shadow", strlen("shadow"), le_swfshadowp TSRMLS_CC);
+
+	if (!shadow) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFShadow");
+	}
+	return (SWFShadow)shadow;
+}
+/* }}} */
+static zend_function_entry swfshadow_functions[] = {
+	PHP_ME(swfshadow, __construct, 		NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+/* {{{ SWFBlur
+*/
+/* {{{ proto void swfblur::__construct(blurX, blurY, passes)
+   Creates a new SWFBlur object */
+PHP_METHOD(swfblur, __construct)
+{
+	zval **blurX, **blurY, **passes;
+	SWFBlur blur;
+	int ret;
+
+	if (ZEND_NUM_ARGS() != 3)
+		WRONG_PARAM_COUNT;
+
+	if (zend_get_parameters_ex(3, &blurX, &blurY, &passes) == FAILURE) 
+		WRONG_PARAM_COUNT;
+
+	convert_to_double_ex(blurX);
+	convert_to_double_ex(blurY);
+	convert_to_long_ex(passes);
+
+	blur = newSWFBlur(Z_DVAL_PP(blurX), Z_DVAL_PP(blurY), Z_LVAL_PP(passes));
+	ret = zend_list_insert(blur, le_swfblurp);
+	object_init_ex(getThis(), blur_class_entry_ptr);
+	add_property_resource(getThis(), "blur", ret);
+	zend_list_addref(ret);
+}
+
+static void destroy_SWFBlur_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFBlur((SWFBlur)resource->ptr);
+}
+/* }}} */
+
+/* {{{ internal function getBlur
+   Returns the SWFBlur object contained in zval *id */
+static SWFBlur getBlur(zval *id TSRMLS_DC)
+{
+	void *blur = SWFgetProperty(id, "blur", strlen("blur"), le_swfblurp TSRMLS_CC);
+
+	if (!blur) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFBlur");
+	}
+	return (SWFBlur)blur;
+}
+/* }}} */
+static zend_function_entry swfblur_functions[] = {
+	PHP_ME(swfblur, __construct, 		NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+
 /* {{{ SWFGradient
 */
 /* {{{ proto void swfgradient::__construct()
@@ -2084,13 +2305,406 @@ PHP_METHOD(swfgradient, addEntry)
 }
 /* }}} */
 
+/* {{{ proto void swfgradient::setSpreadMode(mode)
+   supported mode values:
+   * SWF_GRADIENT_PAD  
+   * SWF_GRADIENT_REFLECT
+   * SWF_GRADIENT_REPEAT
+*/
+PHP_METHOD(swfgradient, setSpreadMode)
+{
+	zval **val;
+	if(ZEND_NUM_ARGS() != 1)
+		WRONG_PARAM_COUNT;
+
+	if (zend_get_parameters_ex(1, &val) == FAILURE) 
+		WRONG_PARAM_COUNT;
+	convert_to_long_ex(val);
+
+	SWFGradient_setSpreadMode(getGradient(getThis() TSRMLS_CC), Z_LVAL_PP(val)); 
+}
+/* }}} */
+
+/* {{{ proto void swfgradient::setInterpolationMode(mode)
+ * supported mode values:
+   * SWF_GRADIENT_NORMAL
+   * SWF_GRADIENT_LINEAR
+*/
+PHP_METHOD(swfgradient, setInterpolationMode)
+{
+	zval **val;
+	if(ZEND_NUM_ARGS() != 1)
+		WRONG_PARAM_COUNT;
+
+	if (zend_get_parameters_ex(1, &val) == FAILURE) 
+		WRONG_PARAM_COUNT;
+	convert_to_long_ex(val);
+
+	SWFGradient_setInterpolationMode(getGradient(getThis() TSRMLS_CC), Z_LVAL_PP(val)); 
+}
+/* }}} */
+
+/* {{{ proto void swfgradient::setFocalPoint(mode) */
+PHP_METHOD(swfgradient, setFocalPoint)
+{
+	zval **val;
+	if(ZEND_NUM_ARGS() != 1)
+		WRONG_PARAM_COUNT;
+
+	if (zend_get_parameters_ex(1, &val) == FAILURE) 
+		WRONG_PARAM_COUNT;
+	convert_to_double_ex(val);
+
+	SWFGradient_setFocalPoint(getGradient(getThis() TSRMLS_CC), Z_DVAL_PP(val)); 
+}
+/* }}} */
+
 static zend_function_entry swfgradient_functions[] = {
-	PHP_ME(swfgradient, __construct, NULL, 0)
-	PHP_ME(swfgradient, addEntry,    NULL, 0)
+	PHP_ME(swfgradient, __construct, 		NULL, 0)
+	PHP_ME(swfgradient, addEntry,    		NULL, 0)
+	PHP_ME(swfgradient, setSpreadMode,		NULL, 0)
+	PHP_ME(swfgradient, setInterpolationMode,	NULL, 0)
+	PHP_ME(swfgradient, setFocalPoint,		NULL, 0)
 	{ NULL, NULL, NULL }
 };
-
 /* }}} */
+
+/* {{{ SWFFilter
+*/
+
+/* helper functions */
+static SWFColor hashToColor(zval **colorHash)
+{
+	zval **data;
+	HashPosition pointer;
+	HashTable *arr_hash;
+	SWFColor c;
+	
+	arr_hash = Z_ARRVAL_PP(colorHash);
+	if(zend_hash_num_elements(arr_hash) < 3 || zend_hash_num_elements(arr_hash) > 4)
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "not a valid colorHash\n");
+
+	for(zend_hash_internal_pointer_reset_ex(arr_hash, &pointer); 
+	    zend_hash_get_current_data_ex(arr_hash, (void**) &data, &pointer) == SUCCESS; 
+	    zend_hash_move_forward_ex(arr_hash, &pointer)) 
+	{
+		zval temp;
+		char *key;
+		int key_len;
+		long index;
+		
+		temp = **data;
+		if (zend_hash_get_current_key_ex(arr_hash, &key, &key_len, &index, 0, &pointer) 
+			== HASH_KEY_IS_STRING)
+		{
+			zval_copy_ctor(&temp);
+			convert_to_long(&temp);
+			c.alpha = 0;
+			if(strcmp(key, "red") == 0)
+				c.red = Z_LVAL(temp);
+			else if (strcmp(key, "green") == 0)
+				c.green = Z_LVAL(temp);
+			else if (strcmp(key, "blue") == 0)
+				c.blue = Z_LVAL(temp);
+			else if (strcmp(key, "alpha") == 0)
+				c.alpha = Z_LVAL(temp);
+			else
+				php_error_docref(NULL TSRMLS_CC, E_ERROR, "not a valid colorHash\n");
+
+			zval_dtor(&temp);
+		}
+	}
+	return c;
+}
+
+static SWFFilter createDropShadowFilter(int argc, zval **argv[])
+{
+	zval **colorHash, **blur, **shadow, **flags;
+	SWFFilter filter;
+	SWFColor c;
+	
+	if(argc != 5)
+		WRONG_PARAM_COUNT;
+
+	colorHash = argv[1];
+	convert_to_array_ex(colorHash);
+	c = hashToColor(colorHash); 
+		
+	blur = argv[2];
+	convert_to_object_ex(blur);
+	
+	shadow = argv[3];
+	convert_to_object_ex(shadow);
+
+	flags = argv[4]; 
+	convert_to_long_ex(flags);
+
+	return newDropShadowFilter(c, getBlur(*blur TSRMLS_CC), 
+		getShadow(*shadow TSRMLS_CC), Z_LVAL_PP(flags));
+}
+
+static SWFFilter createBlurFilter(int argc, zval **argv[])
+{
+	zval **blur;
+	
+	if(argc != 2)
+		WRONG_PARAM_COUNT;
+
+	blur = argv[1];
+	convert_to_object_ex(blur);
+	
+	return newBlurFilter(getBlur(*blur TSRMLS_CC));
+}
+
+static SWFFilter createGlowFilter(int argc, zval **argv[])
+{
+	zval **color, **blur, **strength, **flags;
+	SWFColor c;
+	
+	if(argc != 5)
+		WRONG_PARAM_COUNT;
+	
+	color = argv[1];
+	convert_to_array_ex(color);
+	c = hashToColor(color);
+
+	blur = argv[2];
+	convert_to_object_ex(blur);
+
+	strength = argv[3];
+	convert_to_double_ex(strength);
+	
+	flags = argv[4]; 
+	convert_to_long_ex(flags);
+
+	return newGlowFilter(c, getBlur(*blur TSRMLS_CC), 
+		Z_DVAL_PP(strength), Z_LVAL_PP(flags));
+}
+
+static SWFFilter createBevelFilter(int argc, zval **argv[])
+{
+	zval **sColor, **hColor, **blur, **shadow, **flags;
+	SWFColor hc, sc;
+
+	if(argc != 6)
+		WRONG_PARAM_COUNT;
+
+	sColor = argv[1];
+	convert_to_array_ex(sColor);
+	sc = hashToColor(sColor);
+
+	hColor = argv[2];
+	convert_to_array_ex(hColor);
+	hc = hashToColor(hColor);
+
+	blur = argv[3];
+	convert_to_object_ex(blur);
+
+	shadow = argv[4];
+	convert_to_object_ex(shadow);
+
+	flags = argv[5]; 
+	convert_to_long_ex(flags);
+
+	return newBevelFilter(sc, hc, getBlur(*blur TSRMLS_CC),
+		getShadow(*shadow TSRMLS_CC), Z_LVAL_PP(flags));
+}
+
+static SWFFilter createGradientGlowFilter(int argc, zval **argv[])
+{
+	zval **gradient, **blur, **shadow, **flags;
+
+	if(argc != 5)
+		WRONG_PARAM_COUNT;		
+
+	gradient = argv[1];
+	convert_to_object_ex(gradient);
+
+	blur = argv[2];
+	convert_to_object_ex(blur);
+	
+	shadow = argv[3];
+	convert_to_object_ex(shadow);
+
+	flags = argv[4]; 
+	convert_to_long_ex(flags);
+
+	return newGradientGlowFilter(getGradient(*gradient TSRMLS_CC), 
+		getBlur(*blur TSRMLS_CC), getShadow(*shadow TSRMLS_CC), 
+		Z_LVAL_PP(flags));
+}
+
+static SWFFilter createConvolutionFilter(int argc, zval **argv[])
+{
+	zval **matrix, **div, **bias, **color, **flags;
+	SWFColor c;
+
+	if(argc != 6)
+		WRONG_PARAM_COUNT;
+
+	matrix = argv[1];
+	convert_to_object_ex(matrix);
+
+	div = argv[2];
+	convert_to_double_ex(div);
+
+	bias = argv[3];
+	convert_to_double_ex(bias);
+
+	color = argv[4];
+	convert_to_array_ex(color);
+	c = hashToColor(color);
+
+	flags = argv[5];
+	convert_to_long_ex(flags);
+	
+	return newConvolutionFilter(getFilterMatrix(*matrix TSRMLS_CC), Z_DVAL_PP(div),
+		Z_DVAL_PP(bias), c, Z_LVAL_PP(flags));	
+}
+
+static SWFFilter createColorMatrixFilter(int argc, zval **argv[])
+{
+	zval **matrix;
+
+	if(argc != 2)
+		WRONG_PARAM_COUNT;
+
+	matrix = argv[1];
+	convert_to_object_ex(matrix);
+
+	return newColorMatrixFilter(getFilterMatrix(*matrix TSRMLS_CC));
+}
+
+static SWFFilter createGradientBevelFilter(int argc, zval **argv[])
+{
+	zval **gradient, **blur, **shadow, **flags;
+
+	if(argc != 5)
+		WRONG_PARAM_COUNT;		
+
+	gradient = argv[1];
+	convert_to_object_ex(gradient);
+
+	blur = argv[2];
+	convert_to_object_ex(blur);
+	
+	shadow = argv[3];
+	convert_to_object_ex(shadow);
+
+	flags = argv[4]; 
+	convert_to_long_ex(flags);
+
+	return newGradientBevelFilter(getGradient(*gradient TSRMLS_CC), 
+		getBlur(*blur TSRMLS_CC), getShadow(*shadow TSRMLS_CC), 
+		Z_LVAL_PP(flags));
+}
+
+/* {{{ proto void swffilter::__construct(type, ...)
+   Creates a new SWFFilter object:
+   
+   Supported filter types:
+   * SWFFILTER_TYPE_DROPSHADOW
+     new SWFFilter(SWFFILTER_TYPE_DROPSHADOW, colorHash, blur, shadow, flags);
+   * SWFFILTER_TYPE_BLUR
+     new SWFFilter(SWFFILTER_TYPE_BLUR, blur);
+   * SWFFILTER_TYPE_GLOW
+     new SWFFilter(SWFFILTER_TYPE_GLOW, colorHash, blur, strenght:float, flags); 
+   * SWFFILTER_TYPE_BEVEL
+     new SWFFilter(SWFFILTER_TYPE_BEVEL, colorHash_shadow, colorHash_highlight, blur, shadow, flags); 
+   * SWFFILTER_TYPE_GRADIENTGLOW
+     new SWFFilter(SWFFILTER_TYPE_GRADIENTGLOW, gradient, blur, shadow, flags);
+   * SWFFILTER_TYPE_CONVOLUTION
+     new SWFFilter(SWFFILTER_TYPE_CONVOLUTION, filterMatrix, divisor:float, bias:float, colorHash, flags);
+   * SWFFILTER_TYPE_COLORMATRIX
+     new SWFFilter(SWFFILTER_TYPE_COLORMATRIX, filterMatrix);
+   * SWFFILTER_TYPE_GRADIENTBEVEL
+     new SWFFilter(SWFFILTER_TYPE_GRADIENTBEVEL, gradient, blur, shadow, flags);
+
+   Supported flags are:
+   * FILTER_FLAG_CLAMP
+   * FILTER_FLAG_PRESERVE_ALPHA
+
+   A colorHash must have the following entries:
+   'red'   => 0...255, 
+   'green' =>  0...255,
+   'blue'  => 0...255,
+   'alpha' => 0...255 (optional)
+*/
+PHP_METHOD(swffilter, __construct)
+{
+	zval **argv[6];
+	int argc = ZEND_NUM_ARGS();
+	int type, ret;
+	SWFFilter filter;
+	
+	if (argc > 6 || argc < 2 || zend_get_parameters_array_ex(argc ,argv) == FAILURE) 
+		WRONG_PARAM_COUNT;
+	
+
+	convert_to_long_ex(argv[0]);
+	type = Z_LVAL_PP(argv[0]);
+	switch(type)
+	{
+	case SWFFILTER_TYPE_DROPSHADOW:
+		filter = createDropShadowFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_BLUR:
+		filter = createBlurFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_GLOW:
+		filter = createGlowFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_BEVEL:
+		filter = createBevelFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_GRADIENTGLOW:
+		filter = createGradientGlowFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_CONVOLUTION:
+		filter = createConvolutionFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_COLORMATRIX:
+		filter  = createColorMatrixFilter(argc, argv);
+		break;
+	case SWFFILTER_TYPE_GRADIENTBEVEL:
+		filter = createGradientBevelFilter(argc, argv);
+		break;
+	default:
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "new SWFFilter: unknown type");	
+	}
+	ret = zend_list_insert(filter, le_swffilterp);
+	object_init_ex(getThis(), filter_class_entry_ptr);
+	add_property_resource(getThis(), "filter", ret);
+	zend_list_addref(ret);	
+}
+/* }}} */
+
+/* {{{ internal function getFilter
+   Returns the SWFFilter object contained in zval *id */
+static SWFFilter getFilter(zval *id TSRMLS_DC)
+{
+	void *filter = SWFgetProperty(id, "filter", 
+		strlen("filter"), le_swfinitactionp TSRMLS_CC);
+
+	if (!filter) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFFilter");
+	}
+	return (SWFFilter)filter;
+}
+/* }}} */
+
+static void destroy_SWFFilter_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFFilter((SWFFilter)resource->ptr);
+}
+
+static zend_function_entry swffilter_functions[] = {
+	PHP_ME(swffilter, __construct, NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+
 
 /* {{{ SWFMorph 
 */
@@ -5027,6 +5641,10 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry initaction_class_entry;
 	zend_class_entry prebuiltclip_class_entry;
 	zend_class_entry soundstream_class_entry;
+	zend_class_entry filter_class_entry;
+	zend_class_entry filtermatrix_class_entry;
+	zend_class_entry blur_class_entry;
+	zend_class_entry shadow_class_entry;
 #endif
 	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
@@ -5128,11 +5746,38 @@ PHP_MINIT_FUNCTION(ming)
 	CONSTANT("SWFBLEND_MODE_ADD", 			SWFBLEND_MODE_ADD);
 	CONSTANT("SWFBLEND_MODE_SUB",			SWFBLEND_MODE_SUB);
 	CONSTANT("SWFBLEND_MODE_DIFF", 			SWFBLEND_MODE_DIFF);
-  	CONSTANT("SWFBLEND_MODE_INV", 			SWFBLEND_MODE_INV);
+	CONSTANT("SWFBLEND_MODE_INV", 			SWFBLEND_MODE_INV);
 	CONSTANT("SWFBLEND_MODE_ALPHA", 		SWFBLEND_MODE_ALPHA);
 	CONSTANT("SWFBLEND_MODE_ERASE", 		SWFBLEND_MODE_ERASE);
 	CONSTANT("SWFBLEND_MODE_OVERLAY", 		SWFBLEND_MODE_OVERLAY);
-	CONSTANT("SWFBLEND_MODE_HARDLIGHT", 	SWFBLEND_MODE_HARDLIGHT);
+	CONSTANT("SWFBLEND_MODE_HARDLIGHT", 		SWFBLEND_MODE_HARDLIGHT);
+
+	/* filter types */
+	CONSTANT("SWFFILTER_TYPE_DROPSHADOW",		SWFFILTER_TYPE_DROPSHADOW);
+	CONSTANT("SWFFILTER_TYPE_BLUR",			SWFFILTER_TYPE_BLUR);
+	CONSTANT("SWFFILTER_TYPE_GLOW",			SWFFILTER_TYPE_GLOW);
+	CONSTANT("SWFFILTER_TYPE_BEVEL",		SWFFILTER_TYPE_BEVEL);
+	CONSTANT("SWFFILTER_TYPE_GRADIENTGLOW",		SWFFILTER_TYPE_GRADIENTGLOW);
+	CONSTANT("SWFFILTER_TYPE_CONVOLUTION", 		SWFFILTER_TYPE_CONVOLUTION);
+	CONSTANT("SWFFILTER_TYPE_COLORMATRIX",		SWFFILTER_TYPE_COLORMATRIX);
+	CONSTANT("SWFFILTER_TYPE_GRADIENTBEVEL", 	SWFFILTER_TYPE_GRADIENTBEVEL);	
+
+	/* filter flags */
+	CONSTANT("SWFFILTER_FLAG_CLAMP",		FILTER_FLAG_CLAMP);
+	CONSTANT("SWFFILTER_FLAG_PRESERVE_ALPHA",	FILTER_FLAG_PRESERVE_ALPHA);
+
+	/* filter modes */
+	CONSTANT("SWFFILTER_MODE_INNER",		FILTER_MODE_INNER);
+	CONSTANT("SWFFILTER_MODE_KO",			FILTER_MODE_KO);
+	CONSTANT("SWFFILTER_MODE_COMPOSITE",		FILTER_MODE_COMPOSITE);
+	CONSTANT("SWFFILTER_MODE_ONTOP",		FILTER_MODE_ONTOP);
+
+	/* new gradient features */
+	CONSTANT("SWF_GRADIENT_PAD",			SWF_GRADIENT_PAD);
+	CONSTANT("SWF_GRADIENT_REFLECT",		SWF_GRADIENT_REFLECT);
+	CONSTANT("SWF_GRADIENT_REPEAT", 		SWF_GRADIENT_REPEAT);
+	CONSTANT("SWF_GRADIENT_NORMAL",			SWF_GRADIENT_NORMAL);
+	CONSTANT("SWF_GRADIENT_LINEAR",			SWF_GRADIENT_LINEAR);
 #endif
 
 	le_swfshapep = zend_register_list_destructors_ex(destroy_SWFShape_resource, NULL, "SWFShape", module_number);
@@ -5161,6 +5806,8 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfinitactionp = zend_register_list_destructors_ex(NULL, NULL, "SWFInitAction", module_number);
 	le_swfprebuiltclipp = zend_register_list_destructors_ex(destroy_SWFPrebuiltClip_resource, NULL, "SWFPrebuiltClip", module_number);
 	le_swfsoundstreamp = zend_register_list_destructors_ex(destroy_SWFSoundStream_resource, NULL, "SWFSoundStream", module_number);
+	le_swffilterp = zend_register_list_destructors_ex(destroy_SWFFilter_resource, NULL, "SWFFilter", module_number);
+	le_swffiltermatrixp = zend_register_list_destructors_ex(destroy_SWFFilterMatrix_resource, NULL, "SWFFilterMatrix", module_number);
 #endif
 
 	INIT_CLASS_ENTRY(shape_class_entry, "SWFShape", swfshape_functions);
@@ -5187,6 +5834,10 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(initaction_class_entry, "SWFInitAction", swfinitaction_functions);
 	INIT_CLASS_ENTRY(prebuiltclip_class_entry, "SWFPrebuiltClip", swfprebuiltclip_functions);
 	INIT_CLASS_ENTRY(soundstream_class_entry, "SWFSoundStream", swfsoundstream_functions);
+	INIT_CLASS_ENTRY(filter_class_entry, "SWFFilter", swffilter_functions);
+	INIT_CLASS_ENTRY(filtermatrix_class_entry, "SWFFilterMatrix", swffiltermatrix_functions);
+	INIT_CLASS_ENTRY(shadow_class_entry, "SWFShadow", swfshadow_functions);
+	INIT_CLASS_ENTRY(blur_class_entry, "SWFBlur", swfblur_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
 
@@ -5215,6 +5866,10 @@ PHP_MINIT_FUNCTION(ming)
 	initaction_class_entry_ptr = zend_register_internal_class(&initaction_class_entry TSRMLS_CC);
 	prebuiltclip_class_entry_ptr = zend_register_internal_class(&prebuiltclip_class_entry TSRMLS_CC);
 	soundstream_class_entry_ptr = zend_register_internal_class(&soundstream_class_entry TSRMLS_CC);
+	filter_class_entry_ptr = zend_register_internal_class(&filter_class_entry TSRMLS_CC);
+	filtermatrix_class_entry_ptr = zend_register_internal_class(&filtermatrix_class_entry TSRMLS_CC);
+	shadow_class_entry_ptr = zend_register_internal_class(&shadow_class_entry TSRMLS_CC);
+	blur_class_entry_ptr = zend_register_internal_class(&blur_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
