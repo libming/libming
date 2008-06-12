@@ -236,6 +236,7 @@ PHP_METHOD(swfdisplayitem, multColor);
 PHP_METHOD(swfdisplayitem, setName);
 PHP_METHOD(swfdisplayitem, addAction);
 PHP_METHOD(swfdisplayitem, addFilter);
+PHP_METHOD(swfdisplayitem, flush);
 
 #ifdef HAVE_NEW_MING
 PHP_METHOD(swfdisplayitem, remove);
