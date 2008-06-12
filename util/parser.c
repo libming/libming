@@ -2240,8 +2240,8 @@ parseSWF_DEFINESPRITE (FILE * f, int length)
 	  parserrec->tagTypes[numblocks] = type;
 	  parserrec->Tags[numblocks++]=blockParse(f,splength,type);
 	  if( ftell(f) != nextFrame ) {
-	    printf(" Sprite Stream out of sync...\n");
-	    printf(" %ld but expecting %d\n", ftell(f),nextFrame);
+	    SWF_warn(" Sprite Stream out of sync...\n");
+	    SWF_warn(" %ld but expecting %d\n", ftell(f),nextFrame);
 	    fseek(f,blockstart,SEEK_SET);
 	    silentSkipBytes (f, (nextFrame-ftell(f)));
 	    fileOffset=ftell(f);
@@ -2251,7 +2251,8 @@ parseSWF_DEFINESPRITE (FILE * f, int length)
   }
   if(fileOffset < start + length)
   {  
-    printf("skiping excessive bytes after SWF_END\n");
+    SWF_warn("PARSER: parseSWF_DEFINESPRITE (ID %i): skiping excessive bytes after SWF_END.\n", 
+	parserrec->SpriteId);
     readBytes(f, start + length - fileOffset);
   } 
   parserrec->BlockCount = numblocks;
