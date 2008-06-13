@@ -235,10 +235,10 @@ PHP_METHOD(swfdisplayitem, addColor);
 PHP_METHOD(swfdisplayitem, multColor);
 PHP_METHOD(swfdisplayitem, setName);
 PHP_METHOD(swfdisplayitem, addAction);
-PHP_METHOD(swfdisplayitem, addFilter);
-PHP_METHOD(swfdisplayitem, flush);
 
 #ifdef HAVE_NEW_MING
+PHP_METHOD(swfdisplayitem, addFilter);
+PHP_METHOD(swfdisplayitem, flush);
 PHP_METHOD(swfdisplayitem, remove);
 PHP_METHOD(swfdisplayitem, setMaskLevel);
 PHP_METHOD(swfdisplayitem, endMask);
@@ -249,6 +249,7 @@ PHP_METHOD(swfdisplayitem, getYScale);
 PHP_METHOD(swfdisplayitem, getXSkew);
 PHP_METHOD(swfdisplayitem, getYSkew);
 PHP_METHOD(swfdisplayitem, getRot);
+PHP_METHOD(swfdisplayitem, getDepth);
 #endif
 
 /* SWFButton */
