@@ -4596,6 +4596,226 @@ PHP_METHOD(swfshape, drawCubicTo)
 }
 /* }}} */
 
+/* {{{ proto void swfshape::end() */
+PHP_METHOD(swfshape, end)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	SWFShape_end(getShape(getThis() TSRMLS_CC));
+}
+/* }}} */
+
+/* {{{ proto void swfshape::useVersion() 
+ * SWF_SHAPE3
+ * SWF_SHAPE4
+ */
+PHP_METHOD(swfshape, useVersion)
+{
+	zval **ver;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &ver) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(ver);
+	SWFShape_useVersion(getShape(getThis() TSRMLS_CC), Z_LVAL_PP(ver));
+}
+/* }}} */
+
+/* {{{ proto int swfshape::getVersion() */
+PHP_METHOD(swfshape, getVersion)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	
+	RETURN_LONG(SWFShape_getVersion(getShape(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto void swfshape::setRenderHintingFlags(flags) 
+ * SWF_SHAPE_USESCALINGSTROKES
+ * SWF_SHAPE_USENONSCALINGSTROKES
+ */
+PHP_METHOD(swfshape, setRenderHintingFlags)
+{
+	zval **flags;
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &flags) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(flags);
+
+	SWFShape_setRenderHintingFlags(getShape(getThis() TSRMLS_CC), Z_LVAL_PP(flags));
+}
+/* }}} */
+
+/* {{{ proto double swfshape::getPenX() */
+PHP_METHOD(swfshape, getPenX)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	RETURN_DOUBLE(SWFShape_getPenX(getShape(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto double swfshape::getPenY() */
+PHP_METHOD(swfshape, getPenY)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	RETURN_DOUBLE(SWFShape_getPenY(getShape(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto void swfshape::hideLine() */
+PHP_METHOD(swfshape, hideLine)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	SWFShape_hideLine(getShape(getThis() TSRMLS_CC));
+}
+/* }}} */
+
+/* {{{ proto void swfshape::drawCharacterBounds(character) */
+PHP_METHOD(swfshape, drawCharacterBounds)
+{
+	zval **character;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &character) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_object_ex(character);
+	SWFShape_drawCharacterBounds(getShape(getThis() TSRMLS_CC),
+		getCharacter(*character TSRMLS_CC));
+}
+/* }}} */
+
+/* {{{ proto void swfshape::setLine2(width, flags, miterLimit, r, g, b, [a]) 
+ * Line cap style: select one of the following flags (default is round cap style)
+ * SWF_LINESTYLE_CAP_ROUND 
+ * SWF_LINESTYLE_CAP_NONE
+ * SWF_LINESTYLE_CAP_SQUARE 
+ *
+ * Line join style: select one of the following flags (default is round join style)
+ * SWF_LINESTYLE_JOIN_ROUND
+ * SWF_LINESTYLE_JOIN_BEVEL 
+ * SWF_LINESTYLE_JOIN_MITER  
+ *
+ * Scaling flags: disable horizontal / vertical scaling
+ * SWF_LINESTYLE_FLAG_NOHSCALE
+ * SWF_LINESTYLE_FLAG_NOVSCALE 
+ *
+ * Enable pixel hinting to correct blurry vertical / horizontal lines
+ * -> all anchors will be aligned to full pixels
+ * SWF_LINESTYLE_FLAG_HINTING  
+ *
+ * Disable stroke closure: if no-close flag is set caps will be applied 
+ * instead of joins
+ * SWF_LINESTYLE_FLAG_NOCLOSE
+ *
+ * End-cap style: default round
+ * SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+ * SWF_LINESTYLE_FLAG_ENDCAP_NONE
+ * SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+ *
+ * If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor 
+ * must be set. Miter max length is then calculated as:
+ * max miter len = miter limit * width.
+ * If join style is not miter, this value will be ignored.
+ * */
+PHP_METHOD(swfshape, setLine2)
+{
+	zval **width, **flags, **limit, **r, **g, **b, **a;
+	int alpha = 0xff;
+	int ret;
+	switch(ZEND_NUM_ARGS())
+	{
+	case 6:
+		ret = zend_get_parameters_ex(6, &width, &flags, &limit, &r, &g, &b);
+		break;
+	case 7:
+		ret = zend_get_parameters_ex(7, &width, &flags, &limit, &r, &g, &b, &a);
+		convert_to_long_ex(a);
+		alpha = Z_LVAL_PP(a);
+		break;
+
+	default:
+		WRONG_PARAM_COUNT;
+	}
+
+	if(ret == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(width);
+	convert_to_long_ex(flags);
+	convert_to_double_ex(limit);
+	convert_to_long_ex(r);
+	convert_to_long_ex(g);
+	convert_to_long_ex(b);
+
+	SWFShape_setLine2(getShape(getThis() TSRMLS_CC), Z_LVAL_PP(width), 
+		Z_LVAL_PP(r), Z_LVAL_PP(g), Z_LVAL_PP(g), alpha, Z_LVAL_PP(flags),
+		Z_DVAL_PP(limit));
+}
+/* }}} */
+
+/* {{{ proto void swfshape::setLine2Filled(width, fill, flags, limit) 
+ * Line cap style: select one of the following flags (default is round cap style)
+ * SWF_LINESTYLE_CAP_ROUND 
+ * SWF_LINESTYLE_CAP_NONE
+ * SWF_LINESTYLE_CAP_SQUARE 
+ *
+ * Line join style: select one of the following flags (default is round join style)
+ * SWF_LINESTYLE_JOIN_ROUND
+ * SWF_LINESTYLE_JOIN_BEVEL 
+ * SWF_LINESTYLE_JOIN_MITER  
+ *
+ * Scaling flags: disable horizontal / vertical scaling
+ * SWF_LINESTYLE_FLAG_NOHSCALE
+ * SWF_LINESTYLE_FLAG_NOVSCALE 
+ *
+ * Enable pixel hinting to correct blurry vertical / horizontal lines
+ * -> all anchors will be aligned to full pixels
+ * SWF_LINESTYLE_FLAG_HINTING  
+ *
+ * Disable stroke closure: if no-close flag is set caps will be applied 
+ * instead of joins
+ * SWF_LINESTYLE_FLAG_NOCLOSE
+ *
+ * End-cap style: default round
+ * SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+ * SWF_LINESTYLE_FLAG_ENDCAP_NONE
+ * SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+ *
+ * If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor 
+ * must be set. Miter max length is then calculated as:
+ * max miter len = miter limit * width.
+ * If join style is not miter, this value will be ignored.
+ */
+PHP_METHOD(swfshape, setLine2Filled)
+{
+	zval **width, **fill, **flags, **limit;
+	SWFFill xfill;
+
+	if(ZEND_NUM_ARGS() != 4)
+		WRONG_PARAM_COUNT;
+
+	if(zend_get_parameters_ex(4, &width, &fill, &flags, &limit) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+
+	convert_to_long_ex(width);
+	convert_to_object_ex(fill);
+	convert_to_long_ex(flags);
+	convert_to_double_ex(limit);
+	xfill = getFill(*fill TSRMLS_CC);
+	SWFShape_setLine2Filled(getShape(getThis() TSRMLS_CC), Z_LVAL_PP(width),
+		SWFFill_getFillStyle(xfill), Z_LVAL_PP(flags), Z_DVAL_PP(limit));
+}
+/* }}} */
+
 static zend_function_entry swfshape_functions[] = {
 	PHP_ME(swfshape, __construct,        NULL, 0)
 	PHP_ME(swfshape, setLine,            NULL, 0)
@@ -4613,6 +4833,15 @@ static zend_function_entry swfshape_functions[] = {
 	PHP_ME(swfshape, drawArc,            NULL, 0)
 	PHP_ME(swfshape, drawCubic,          NULL, 0)
 	PHP_ME(swfshape, drawCubicTo,        NULL, 0)
+	PHP_ME(swfshape, end,                NULL, 0)
+	PHP_ME(swfshape, useVersion,         NULL, 0)
+	PHP_ME(swfshape, setRenderHintingFlags, NULL, 0)
+	PHP_ME(swfshape, getPenX,            NULL, 0)
+	PHP_ME(swfshape, getPenY,            NULL, 0)
+	PHP_ME(swfshape, hideLine,           NULL, 0)
+	PHP_ME(swfshape, drawCharacterBounds, NULL, 0)
+	PHP_ME(swfshape, setLine2,           NULL, 0)
+	PHP_ME(swfshape, setLine2Filled,     NULL, 0)	
 	{ NULL, NULL, NULL }
 };
 
@@ -5778,6 +6007,27 @@ PHP_MINIT_FUNCTION(ming)
 	CONSTANT("SWF_GRADIENT_REPEAT", 		SWF_GRADIENT_REPEAT);
 	CONSTANT("SWF_GRADIENT_NORMAL",			SWF_GRADIENT_NORMAL);
 	CONSTANT("SWF_GRADIENT_LINEAR",			SWF_GRADIENT_LINEAR);
+
+	/* shape options */
+	CONSTANT("SWF_SHAPE3",				SWF_SHAPE3);
+	CONSTANT("SWF_SHAPE4", 				SWF_SHAPE4);
+	CONSTANT("SWF_SHAPE_USESCALINGSTROKES",		SWF_SHAPE_USESCALINGSTROKES);
+	CONSTANT("SWF_SHAPE_USENONSCALINGSTROKES", 	SWF_SHAPE_USENONSCALINGSTROKES);
+
+	/* linestyle 2 flags */
+	CONSTANT("SWF_LINESTYLE_CAP_ROUND", 		SWF_LINESTYLE_CAP_ROUND);
+	CONSTANT("SWF_LINESTYLE_CAP_NONE", 		SWF_LINESTYLE_CAP_NONE);
+	CONSTANT("SWF_LINESTYLE_CAP_SQUARE",		SWF_LINESTYLE_CAP_SQUARE);
+	CONSTANT("SWF_LINESTYLE_JOIN_ROUND",		SWF_LINESTYLE_JOIN_ROUND);
+	CONSTANT("SWF_LINESTYLE_JOIN_BEVEL", 		SWF_LINESTYLE_JOIN_BEVEL);
+	CONSTANT("SWF_LINESTYLE_JOIN_MITER",		SWF_LINESTYLE_JOIN_MITER);
+	CONSTANT("SWF_LINESTYLE_FLAG_NOHSCALE",		SWF_LINESTYLE_FLAG_NOHSCALE);
+	CONSTANT("SWF_LINESTYLE_FLAG_NOVSCALE", 	SWF_LINESTYLE_FLAG_NOVSCALE);
+	CONSTANT("SWF_LINESTYLE_FLAG_HINTING",		SWF_LINESTYLE_FLAG_HINTING);
+	CONSTANT("SWF_LINESTYLE_FLAG_NOCLOSE",		SWF_LINESTYLE_FLAG_NOCLOSE);
+	CONSTANT("SWF_LINESTYLE_FLAG_ENDCAP_ROUND", 	SWF_LINESTYLE_FLAG_ENDCAP_ROUND);
+	CONSTANT("SWF_LINESTYLE_FLAG_ENDCAP_NONE", 	SWF_LINESTYLE_FLAG_ENDCAP_NONE);
+	CONSTANT("SWF_LINESTYLE_FLAG_ENDCAP_SQUARE", 	SWF_LINESTYLE_FLAG_ENDCAP_SQUARE);
 #endif
 
 	le_swfshapep = zend_register_list_destructors_ex(destroy_SWFShape_resource, NULL, "SWFShape", module_number);

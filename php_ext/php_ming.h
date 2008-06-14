@@ -102,6 +102,16 @@ PHP_METHOD(swfshape, drawarc);
 PHP_METHOD(swfshape, drawcircle);
 PHP_METHOD(swfshape, drawcubic);
 PHP_METHOD(swfshape, drawcubicto);
+PHP_METHOD(swfshape, end);
+PHP_METHOD(swfshape, useVersion);
+PHP_METHOD(swfshape, getVersion);
+PHP_METHOD(swfshape, setRenderHintingFlags);
+PHP_METHOD(swfshape, getPenX);
+PHP_METHOD(swfshape, getPenY);
+PHP_METHOD(swfshape, hideLine);
+PHP_METHOD(swfshape, drawCharacterBounds);
+PHP_METHOD(swfshape, setLine2);
+PHP_METHOD(swfshape, setLine2Filled);
 
 /* SWFMovie */
 
