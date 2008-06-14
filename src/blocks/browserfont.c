@@ -83,7 +83,9 @@ completeSWFBrowserFont(SWFBlock block)
 	return SWFOutput_getLength(font->out);
 }
 
-
+/**
+ * destroys a SWFBrowserFont instance.
+ */
 void
 destroySWFBrowserFont(SWFBrowserFont font)
 {
@@ -92,7 +94,11 @@ destroySWFBrowserFont(SWFBrowserFont font)
 	free(font);
 }
 
-
+/**
+ * creates a browser font instance
+ * This Function allows the usage of built in fonts like "_sans".
+ * Takes the name of the font as an argument.
+ */
 SWFBrowserFont
 newSWFBrowserFont(const char *name)
 {
