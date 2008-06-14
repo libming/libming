@@ -33,7 +33,4 @@
 
 #include "ming.h"
 
-
-SWFFillStyle SWFFill_getFillStyle(SWFFill fill);
-
 #endif /* SWF_FILL_H_INCLUDED */

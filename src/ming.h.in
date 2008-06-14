@@ -748,6 +748,18 @@ void SWFPosition_getXYSkew(SWFPosition position, double* outXSkew, double* outYS
 #define FILTER_FLAG_CLAMP          (1<<1)
 #define FILTER_FLAG_PRESERVE_ALPHA (1<<0)
 
+typedef enum
+{
+	SWFFILTER_TYPE_DROPSHADOW,
+	SWFFILTER_TYPE_BLUR,
+	SWFFILTER_TYPE_GLOW,
+	SWFFILTER_TYPE_BEVEL,
+	SWFFILTER_TYPE_GRADIENTGLOW,
+	SWFFILTER_TYPE_CONVOLUTION,
+	SWFFILTER_TYPE_COLORMATRIX,
+	SWFFILTER_TYPE_GRADIENTBEVEL
+} SWFFilterFmt;
+
 typedef struct SWFColor {
         unsigned char    red;
         unsigned char    green;
@@ -880,6 +892,7 @@ void SWFDisplayItem_addFilter(SWFDisplayItem item, SWFFilter filter);
 
 SWFFill newSWFFill(SWFFillStyle fillstyle);
 void destroySWFFill(SWFFill fill);
+SWFFillStyle SWFFill_getFillStyle(SWFFill fill);
 
 void SWFFill_skewX(SWFFill fill, float x);
 void SWFFill_skewXTo(SWFFill fill, float x);
