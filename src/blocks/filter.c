@@ -8,18 +8,6 @@
 
 #include "libming.h"
 
-enum
-{
-	DROP_SHADOW_FILTER,
-	BLUR_FILTER,
-	GLOW_FILTER,
-	BEVEL_FILTER,
-	GRADIENT_GLOW_FILTER,
-	CONVOLUTION_FILTER,
-	COLOR_MATRIX_FILTER,
-	GRADIENT_BEVEL_FILTER
-};
-
 
 struct Shadow_s
 {
@@ -354,28 +342,28 @@ SWFOutput_writeSWFFilter(SWFOutput out, SWFFilter filter)
 	SWFOutput_writeUInt8(out, filter->id);
 	switch(filter->id)
 	{
-		case DROP_SHADOW_FILTER:
+		case SWFFILTER_TYPE_DROPSHADOW:
 			writeDropShadowFilter(out, &filter->filter.dropShadow);
 			break;
-		case BLUR_FILTER:
+		case SWFFILTER_TYPE_BLUR:
 			writeBlurFilter(out, &filter->filter.blur);
 			break;
-		case GLOW_FILTER:
+		case SWFFILTER_TYPE_GLOW:
 			writeGlowFilter(out, &filter->filter.glow);
 			break;
-		case BEVEL_FILTER:
+		case SWFFILTER_TYPE_BEVEL:
 			writeBevelFilter(out, &filter->filter.bevel);
 			break;
-		case GRADIENT_GLOW_FILTER:
+		case SWFFILTER_TYPE_GRADIENTGLOW:
 			writeGradientGlowFilter(out, &filter->filter.gradientGlow);
 			break;
-		case CONVOLUTION_FILTER:
+		case SWFFILTER_TYPE_CONVOLUTION:
 			writeConvolutionFilter(out, &filter->filter.convolution);
 			break;
-		case COLOR_MATRIX_FILTER:
+		case SWFFILTER_TYPE_COLORMATRIX:
 			writeColorMatrixFilter(out, &filter->filter.colorMatrix);
 			break;
-		case GRADIENT_BEVEL_FILTER:
+		case SWFFILTER_TYPE_GRADIENTBEVEL:
 			writeGradientBevelFilter(out, &filter->filter.gradientBevel);
 			break;
 		default:
@@ -392,28 +380,28 @@ destroySWFFilter(SWFFilter filter)
 
 	switch(filter->id)
 	{
-		case DROP_SHADOW_FILTER:
+		case SWFFILTER_TYPE_DROPSHADOW:
 			// destroyDropShadowFilter(&filter->filter.dropShadow);
 			break;
-		case BLUR_FILTER:
+		case SWFFILTER_TYPE_BLUR:
 			// destroyBlurFilter(&filter->filter.blur);
 			break;
-		case GLOW_FILTER:
+		case SWFFILTER_TYPE_GLOW:
 			// destroyGlowFilter(&filter->filter.glow);
 			break;
-		case BEVEL_FILTER:
+		case SWFFILTER_TYPE_BEVEL:
 			//destroyBevelFilter(&filter->filter.bevel);
 			break;
-		case GRADIENT_GLOW_FILTER:
+		case SWFFILTER_TYPE_GRADIENTGLOW:
 			// destroyGradientGlowFilter(&filter->filter.gradientGlow);
 			break;
-		case CONVOLUTION_FILTER:
+		case SWFFILTER_TYPE_CONVOLUTION:
 			// destroyConvolutionFilter(&filter->filter.convolution);
 			break;
-		case COLOR_MATRIX_FILTER:
+		case SWFFILTER_TYPE_COLORMATRIX:
 			// destroyColorMatrixFilter(&filter->filter.colorMatrix);
 			break;
-		case GRADIENT_BEVEL_FILTER:
+		case SWFFILTER_TYPE_GRADIENTBEVEL:
 			// destroyGradientBevelFilter(&filter->filter.gradientBevel);
 			break;
 		default:
@@ -445,7 +433,7 @@ newColorMatrixFilter(SWFFilterMatrix matrix /* matrix */)
 	}	
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = COLOR_MATRIX_FILTER;
+	filter->id = SWFFILTER_TYPE_COLORMATRIX;
 
 	filter->filter.colorMatrix.matrix = matrix;
 
@@ -469,7 +457,7 @@ newConvolutionFilter(SWFFilterMatrix matrix /* matrix */,
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = CONVOLUTION_FILTER;
+	filter->id = SWFFILTER_TYPE_CONVOLUTION;
 
 	convolution = &filter->filter.convolution;
 
@@ -502,7 +490,7 @@ newGradientBevelFilter(SWFGradient gradient /* gradient */,
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = GRADIENT_BEVEL_FILTER;
+	filter->id = SWFFILTER_TYPE_GRADIENTBEVEL;
 
 	gBevel = &filter->filter.gradientBevel;
 
@@ -532,7 +520,7 @@ newGradientGlowFilter(SWFGradient gradient /* gradient */,
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = GRADIENT_GLOW_FILTER;
+	filter->id = SWFFILTER_TYPE_GRADIENTGLOW;
 
 	gGlow = &filter->filter.gradientGlow;
 
@@ -562,7 +550,7 @@ newBevelFilter(SWFColor shadowColor /* shadow color */,
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = BEVEL_FILTER;
+	filter->id = SWFFILTER_TYPE_BEVEL;
 
 	bevel = &filter->filter.bevel;
 
@@ -592,7 +580,7 @@ newGlowFilter(SWFColor color /* color of shadow */,
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = GLOW_FILTER;
+	filter->id = SWFFILTER_TYPE_GLOW;
 
 	glow = &filter->filter.glow;
 
@@ -617,7 +605,7 @@ newBlurFilter(SWFBlur blur /* blur */)
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = BLUR_FILTER;
+	filter->id = SWFFILTER_TYPE_BLUR;
 	b = &filter->filter.blur;
 	b->blur = blur;
 
@@ -641,7 +629,7 @@ newDropShadowFilter(SWFColor color /* color of shadow */,
 		return NULL;
 
 	filter = (SWFFilter)malloc(sizeof(struct SWFFilter_s));
-	filter->id = DROP_SHADOW_FILTER;
+	filter->id = SWFFILTER_TYPE_DROPSHADOW;
 
 	dropShadow = &filter->filter.dropShadow;
 	dropShadow->color = color;
