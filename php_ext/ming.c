@@ -526,15 +526,27 @@ PHP_METHOD(swfaction, __construct)
 /* no destructor for SWFAction, it's not a character */
 /* }}} */
 
+/* {{{ proto long swfaction::compile(version) */
 PHP_METHOD(swfaction, compile)
 {
-	SWFAction action;
 	zval **version;
+	int len, ret;
 
 	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &version) == FAILURE) 
 		WRONG_PARAM_COUNT;
 	
+	ret = SWFAction_compile(getAction(getThis() TSRMLS_CC), Z_LVAL_PP(version), &len);
+
+	if(ret != 0)
+	{
+		RETURN_LONG(-1);
+	}
+	else
+	{
+		RETURN_LONG(len);
+	}
 }
+/* }}} */
 
 /* {{{ internal function getAction
    Returns the SWFAction object contained in zval *id */
