@@ -37,3 +37,4 @@ Blur.c
 FilterMatrix.c
 Filter.c
 CXform.c
+BrowserFont.c
