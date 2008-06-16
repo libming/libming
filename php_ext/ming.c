@@ -1911,10 +1911,9 @@ PHP_METHOD(swffont, __construct)
 
 	if (strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".fdb") == 0 || 
 			strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".ttf") == 0) {
-		font = newSWFFont_fromFile(Z_STRVAL_PP(zfile));
-		printf("new font %p\n", font);
-	} else {
 		PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
+		font = newSWFFont_fromFile(Z_STRVAL_PP(zfile));
+	} else {
 		font = (SWFFont)newSWFBrowserFont(Z_STRVAL_PP(zfile));
 	}
 	ret = zend_list_insert(font, le_swffontp);
@@ -2684,7 +2683,7 @@ PHP_METHOD(swffilter, __construct)
 static SWFFilter getFilter(zval *id TSRMLS_DC)
 {
 	void *filter = SWFgetProperty(id, "filter", 
-		strlen("filter"), le_swfinitactionp TSRMLS_CC);
+		strlen("filter"), le_swffilterp TSRMLS_CC);
 
 	if (!filter) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFFilter");
@@ -3420,7 +3419,6 @@ PHP_METHOD(swfmovie, add)
 	}
 
 	item = SWFMovie_add_internal(movie, (SWFMovieBlockType)block);
-
 	if (item != NULL) {
 		/* try and create a displayitem object */
 		ret = zend_list_insert(item, le_swfdisplayitemp);
@@ -3932,8 +3930,7 @@ PHP_METHOD(swfmovie, startSound)
 }
 /* }}} */
 
-/* {{{ void swfmovie_stopsound */
-
+/* {{{ void swfmovie::stopsound(sound) */
 PHP_METHOD(swfmovie, stopSound)
 {
 	zval **zsound;
@@ -3950,12 +3947,11 @@ PHP_METHOD(swfmovie, stopSound)
 }
 /* }}} */
 
-/* {{{ void swfmovie_importChar */
-
+/* {{{ void swfmovie::importChar(filename, importname) */
 PHP_METHOD(swfmovie, importChar)
 {
 	SWFMovie movie;
-	SWFCharacter res;
+	SWFCharacter character;
 	int ret;
 	zval **libswf, **name;
 
@@ -3964,22 +3960,18 @@ PHP_METHOD(swfmovie, importChar)
 	convert_to_string_ex(libswf);
 	convert_to_string_ex(name);
 	movie = getMovie(getThis() TSRMLS_CC);
-	PHP_MING_FILE_CHK(Z_STRVAL_PP(libswf));
-	res = SWFMovie_importCharacter(movie, Z_STRVAL_PP(libswf), Z_STRVAL_PP(name));
-
-	if(res != NULL)
+	character = SWFMovie_importCharacter(movie, Z_STRVAL_PP(libswf), Z_STRVAL_PP(name));
+	if(character != NULL)
 	{
-		/* try and create a sprite object */
-		ret = zend_list_insert(res, le_swfcharacterp);
+		ret = zend_list_insert(character, le_swfcharacterp);
 		object_init_ex(return_value, character_class_entry_ptr);
 		add_property_resource(return_value, "character", ret);
 		zend_list_addref(ret);
-	}	
+	}
 }
 /* }}} */
 
 /* {{{ void swfmovie_importFont */
-
 PHP_METHOD(swfmovie, importFont)
 {
 	SWFMovie movie;
@@ -6057,7 +6049,10 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfprebuiltclipp = zend_register_list_destructors_ex(destroy_SWFPrebuiltClip_resource, NULL, "SWFPrebuiltClip", module_number);
 	le_swfsoundstreamp = zend_register_list_destructors_ex(destroy_SWFSoundStream_resource, NULL, "SWFSoundStream", module_number);
 	le_swffilterp = zend_register_list_destructors_ex(destroy_SWFFilter_resource, NULL, "SWFFilter", module_number);
+	le_swfblurp = zend_register_list_destructors_ex(destroy_SWFBlur_resource, NULL, "SWFBlur", module_number);
+	le_swfshadowp = zend_register_list_destructors_ex(destroy_SWFShadow_resource, NULL, "SWFShadow", module_number);
 	le_swffiltermatrixp = zend_register_list_destructors_ex(destroy_SWFFilterMatrix_resource, NULL, "SWFFilterMatrix", module_number);
+	le_swfcharacterp = zend_register_list_destructors_ex(NULL, NULL, "SWFCharacter", module_number);
 #endif
 
 	INIT_CLASS_ENTRY(shape_class_entry, "SWFShape", swfshape_functions);
