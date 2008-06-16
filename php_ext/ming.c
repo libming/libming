@@ -2398,7 +2398,7 @@ static SWFColor hashToColor(zval **colorHash)
 		{
 			zval_copy_ctor(&temp);
 			convert_to_long(&temp);
-			c.alpha = 0;
+			c.alpha = 0xff;
 			if(strcmp(key, "red") == 0)
 				c.red = Z_LVAL(temp);
 			else if (strcmp(key, "green") == 0)
@@ -2620,8 +2620,10 @@ static SWFFilter createGradientBevelFilter(int argc, zval **argv[])
      new SWFFilter(SWFFILTER_TYPE_GRADIENTBEVEL, gradient, blur, shadow, flags);
 
    Supported flags are:
-   * FILTER_FLAG_CLAMP
-   * FILTER_FLAG_PRESERVE_ALPHA
+   * SWFFILTER_FLAG_CLAMP
+   * SWFFILTER_FLAG_PRESERVE_ALPHA
+   * SWFFILTER_MODE_INNER
+   * SWFFILTER_MODE_KO
 
    A colorHash must have the following entries:
    'red'   => 0...255, 
