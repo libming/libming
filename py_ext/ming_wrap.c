@@ -10431,6 +10431,26 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFFill_getFillStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFill arg1 = (SWFFill) 0 ;
+  SWFFillStyle result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFFill_getFillStyle",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFill_getFillStyle" "', argument " "1"" of type '" "SWFFill""'"); 
+  }
+  result = SWFFill_getFillStyle(arg1);
+  resultobj = SWIG_NewPointerObj((SWFFillStyle *)memcpy((SWFFillStyle *)malloc(sizeof(SWFFillStyle)),&result,sizeof(SWFFillStyle)), SWIGTYPE_p_SWFFillStyle, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFFill_skewX(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFFill arg1 = (SWFFill) 0 ;
@@ -13217,6 +13237,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFDisplayItem_setBlendMode", _wrap_SWFDisplayItem_setBlendMode, METH_VARARGS, NULL},
 	 { (char *)"newSWFFill", _wrap_newSWFFill, METH_VARARGS, NULL},
 	 { (char *)"destroySWFFill", _wrap_destroySWFFill, METH_VARARGS, NULL},
+	 { (char *)"SWFFill_getFillStyle", _wrap_SWFFill_getFillStyle, METH_VARARGS, NULL},
 	 { (char *)"SWFFill_skewX", _wrap_SWFFill_skewX, METH_VARARGS, NULL},
 	 { (char *)"SWFFill_skewXTo", _wrap_SWFFill_skewXTo, METH_VARARGS, NULL},
 	 { (char *)"SWFFill_skewY", _wrap_SWFFill_skewY, METH_VARARGS, NULL},

@@ -688,6 +688,7 @@ void SWFDisplayItem_setBlendMode(SWFDisplayItem item, int mode);
 
 SWFFill newSWFFill(SWFFillStyle fillstyle);
 void destroySWFFill(SWFFill fill);
+SWFFillStyle SWFFill_getFillStyle(SWFFill fill); 
 
 void SWFFill_skewX(SWFFill fill, float x);
 void SWFFill_skewXTo(SWFFill fill, float x);

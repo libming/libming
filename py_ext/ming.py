@@ -107,6 +107,9 @@ class SWFShape(SWFBase):
     def setLine2(self, width, r, g, b, a, flags, miter):
         mingc.SWFShape_setLine2(self.this, width, r, g, b, a, flags, miter)
 
+    def setLine2Filled(self, width, fill, flags, miter):
+        mingc.SWFShape_setLine2Filled(self.this, width, mingc.SWFFill_getFillStyle(fill), flags, miter)
+
     # I know there's probably a better way to do this..
     def addFill(self, arg1, arg2=0, arg3=None, arg4=0xff):
         if arg3 != None:

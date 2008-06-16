@@ -412,6 +412,7 @@ SWFBLEND_MODE_HARDLIGHT = _mingc.SWFBLEND_MODE_HARDLIGHT
 SWFDisplayItem_setBlendMode = _mingc.SWFDisplayItem_setBlendMode
 newSWFFill = _mingc.newSWFFill
 destroySWFFill = _mingc.destroySWFFill
+SWFFill_getFillStyle = _mingc.SWFFill_getFillStyle
 SWFFill_skewX = _mingc.SWFFill_skewX
 SWFFill_skewXTo = _mingc.SWFFill_skewXTo
 SWFFill_skewY = _mingc.SWFFill_skewY
