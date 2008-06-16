@@ -84,6 +84,7 @@ static SWFBlur getBlur(zval *id TSRMLS_DC);
 static SWFShadow getShadow(zval *id TSRMLS_DC);
 static SWFFilterMatrix getFilterMatrix(zval *id TSRMLS_DC);
 static SWFFilter getFilter(zval *id TSRMLS_DC);
+static SWFCXform getCXform(zval *id TSRMLS_DC);
 #endif
 
 #define PHP_MING_FILE_CHK(file) \
@@ -192,6 +193,7 @@ static int le_swffilterp;
 static int le_swfblurp;
 static int le_swfshadowp;
 static int le_swffiltermatrixp;
+static int le_swfcxformp;
 #endif
 static int le_swfcharacterp;
 
@@ -224,6 +226,7 @@ static zend_class_entry *filter_class_entry_ptr;
 static zend_class_entry *blur_class_entry_ptr;
 static zend_class_entry *shadow_class_entry_ptr;
 static zend_class_entry *filtermatrix_class_entry_ptr;
+static zend_class_entry *cxform_class_entry_ptr;
 #endif
 static zend_class_entry *character_class_entry_ptr;
 
@@ -346,6 +349,107 @@ static SWFInput getInput(zval **zfile TSRMLS_DC)
 	return input;
 }
 /* }}} */
+
+/* {{{ SWFCXform
+*/
+/* {{{ proto void swfcxform::__construct([rAdd, gAdd, bAdd, aAdd, rMult, gMult, bMult, aMult]) */
+PHP_METHOD(swfcxform, __construct)
+{
+	SWFCXform cx;
+	zval **rAdd, **gAdd, **bAdd, **aAdd;
+	zval **rMult, **gMult, **bMult, **aMult;
+	int ret;
+
+	switch(ZEND_NUM_ARGS())
+	{
+	case 0:
+		cx = newSWFCXform(0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0);
+		break;
+	case 8:
+		ret = zend_get_parameters_ex(8, &rAdd, &gAdd, &bAdd, &aAdd, 
+			&rMult, &gMult, &bMult, &aMult);
+		if(ret == FAILURE)
+			WRONG_PARAM_COUNT;
+
+		convert_to_long_ex(rAdd);
+		convert_to_long_ex(gAdd);
+		convert_to_long_ex(bAdd);
+		convert_to_long_ex(aAdd);
+		convert_to_double_ex(rMult);
+		convert_to_double_ex(gMult);
+		convert_to_double_ex(bMult);
+		convert_to_double_ex(aMult);
+		cx = newSWFCXform(Z_LVAL_PP(rAdd), Z_LVAL_PP(gAdd), Z_LVAL_PP(bAdd), Z_LVAL_PP(aAdd),
+			Z_DVAL_PP(rMult), Z_DVAL_PP(gMult), Z_DVAL_PP(bMult), Z_DVAL_PP(aMult));
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+	}
+
+	ret = zend_list_insert(cx, le_swfcxformp);
+	object_init_ex(getThis(), cxform_class_entry_ptr);
+	add_property_resource(getThis(), "cx", ret);
+	zend_list_addref(ret);
+}
+/* }}} */
+
+/* {{{ proto void setColorAdd(r, g, b, a) */
+PHP_METHOD(swfcxform, setColorAdd)
+{
+	zval **rAdd, **gAdd, **bAdd, **aAdd;
+	if(ZEND_NUM_ARGS() != 4 
+		|| zend_get_parameters_ex(4, &rAdd, &gAdd, &bAdd, &aAdd) == FAILURE) 
+	{
+		WRONG_PARAM_COUNT;
+	}
+
+	SWFCXform_setColorAdd(getCXform(getThis() TSRMLS_CC), Z_LVAL_PP(rAdd), Z_LVAL_PP(gAdd), 
+		Z_LVAL_PP(bAdd), Z_LVAL_PP(aAdd));
+}
+/* }}} */
+
+/* {{{ proto void setColorMult(r, g, b, a) */
+PHP_METHOD(swfcxform, setColorMult)
+{
+	zval **rMult, **gMult, **bMult, **aMult;
+	if(ZEND_NUM_ARGS() != 4 
+		|| zend_get_parameters_ex(4, &rMult, &gMult, &bMult, &aMult) == FAILURE) 
+	{
+		WRONG_PARAM_COUNT;
+	}
+
+	SWFCXform_setColorMult(getCXform(getThis() TSRMLS_CC), Z_DVAL_PP(rMult), Z_DVAL_PP(gMult), 
+		Z_DVAL_PP(bMult), Z_DVAL_PP(aMult));
+}
+/* }}} */
+
+static void destroy_SWFCXform_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFCXform((SWFCXform)resource->ptr);
+}
+
+/* {{{ internal function getCXform */
+static SWFCXform getCXform(zval *id TSRMLS_DC)
+{
+	void *cx = SWFgetProperty(id, "cx", strlen("cx"), le_swfcxformp TSRMLS_CC);
+
+	if (!cx) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFCXform");
+	}
+	return (SWFCXform)cx;
+}
+/* }}} */
+
+static zend_function_entry swfcxform_functions[] = {
+	PHP_ME(swfcxform, __construct,          NULL, 0)
+	PHP_ME(swfcxform, setColorAdd,          NULL, 0)
+	PHP_ME(swfcxform, setColorMult,		NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+
+
 
 /* {{{ SWFInitAction
 */
@@ -1643,7 +1747,20 @@ PHP_METHOD(swfdisplayitem, addFilter)
 	SWFDisplayItem_addFilter(getDisplayItem(getThis() TSRMLS_CC), getFilter(*filter TSRMLS_CC)); 
 
 }
+/* }}} */
 
+/* {{{ proto void swfdisplayitem::setCXform(cx) */
+PHP_METHOD(swfdisplayitem, setCXform)
+{
+	zval **cx;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &cx) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_object_ex(cx);
+	SWFDisplayItem_setCXform(getDisplayItem(getThis() TSRMLS_CC), getCXform(*cx TSRMLS_CC));
+}
+/* }}} */
 #endif
 
 static zend_function_entry swfdisplayitem_functions[] = {
@@ -1680,6 +1797,7 @@ static zend_function_entry swfdisplayitem_functions[] = {
 	PHP_ME(swfdisplayitem, getDepth,    NULL, 0)
 	PHP_ME(swfdisplayitem, flush,    NULL, 0)
 	PHP_ME(swfdisplayitem, addFilter,    NULL, 0)
+	PHP_ME(swfdisplayitem, setCXform,    NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
@@ -5868,6 +5986,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry filtermatrix_class_entry;
 	zend_class_entry blur_class_entry;
 	zend_class_entry shadow_class_entry;
+	zend_class_entry cxform_class_entry;
 #endif
 	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
@@ -6055,6 +6174,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfshadowp = zend_register_list_destructors_ex(destroy_SWFShadow_resource, NULL, "SWFShadow", module_number);
 	le_swffiltermatrixp = zend_register_list_destructors_ex(destroy_SWFFilterMatrix_resource, NULL, "SWFFilterMatrix", module_number);
 	le_swfcharacterp = zend_register_list_destructors_ex(NULL, NULL, "SWFCharacter", module_number);
+	le_swfcxformp = zend_register_list_destructors_ex(destroy_SWFCXform_resource, NULL, "SWFCXform", module_number);
 #endif
 
 	INIT_CLASS_ENTRY(shape_class_entry, "SWFShape", swfshape_functions);
@@ -6085,6 +6205,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(filtermatrix_class_entry, "SWFFilterMatrix", swffiltermatrix_functions);
 	INIT_CLASS_ENTRY(shadow_class_entry, "SWFShadow", swfshadow_functions);
 	INIT_CLASS_ENTRY(blur_class_entry, "SWFBlur", swfblur_functions);
+	INIT_CLASS_ENTRY(cxform_class_entry, "SWFCXform", swfcxform_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
 
@@ -6117,6 +6238,7 @@ PHP_MINIT_FUNCTION(ming)
 	filtermatrix_class_entry_ptr = zend_register_internal_class(&filtermatrix_class_entry TSRMLS_CC);
 	shadow_class_entry_ptr = zend_register_internal_class(&shadow_class_entry TSRMLS_CC);
 	blur_class_entry_ptr = zend_register_internal_class(&blur_class_entry TSRMLS_CC);
+	cxform_class_entry_ptr = zend_register_internal_class(&cxform_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
