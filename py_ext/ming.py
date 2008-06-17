@@ -108,7 +108,7 @@ class SWFShape(SWFBase):
         mingc.SWFShape_setLine2(self.this, width, r, g, b, a, flags, miter)
 
     def setLine2Filled(self, width, fill, flags, miter):
-        mingc.SWFShape_setLine2Filled(self.this, width, mingc.SWFFill_getFillStyle(fill), flags, miter)
+        mingc.SWFShape_setLine2Filled(self.this, width, mingc.SWFFill_getFillStyle(fill.this), flags, miter)
 
     # I know there's probably a better way to do this..
     def addFill(self, arg1, arg2=0, arg3=None, arg4=0xff):
@@ -390,7 +390,11 @@ class SWFDisplayItem(SWFBase):
         mingc.SWFDisplayItem_endMask(self.this)
 
     def getMatrix(self):
-        return SWFMatrix(mingc.SWFDisplayItem_getMatrix(self.this)) 
+        return SWFMatrix(mingc.SWFDisplayItem_getMatrix(self.this))
+
+    def setCXform(self, cx)
+	mingc.SWFDisplayItem_setCXform(self.this, cx.this);
+         
 
 SWFACTION_ONLOAD      = mingc.SWFACTION_ONLOAD      
 SWFACTION_ENTERFRAME  = mingc.SWFACTION_ENTERFRAME  
