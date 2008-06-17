@@ -2508,6 +2508,11 @@ static SWFColor hashToColor(zval **colorHash)
 	HashPosition pointer;
 	HashTable *arr_hash;
 	SWFColor c;
+
+	c.alpha = 0xff;
+	c.red = 0;
+	c.green = 0;
+	c.blue = 0;
 	
 	arr_hash = Z_ARRVAL_PP(colorHash);
 	if(zend_hash_num_elements(arr_hash) < 3 || zend_hash_num_elements(arr_hash) > 4)
@@ -2519,8 +2524,8 @@ static SWFColor hashToColor(zval **colorHash)
 	{
 		zval temp;
 		char *key;
-		int key_len;
-		long index;
+		unsigned int key_len;
+		unsigned long index;
 		
 		temp = **data;
 		if (zend_hash_get_current_key_ex(arr_hash, &key, &key_len, &index, 0, &pointer) 
@@ -2528,7 +2533,6 @@ static SWFColor hashToColor(zval **colorHash)
 		{
 			zval_copy_ctor(&temp);
 			convert_to_long(&temp);
-			c.alpha = 0xff;
 			if(strcmp(key, "red") == 0)
 				c.red = Z_LVAL(temp);
 			else if (strcmp(key, "green") == 0)
@@ -2549,11 +2553,10 @@ static SWFColor hashToColor(zval **colorHash)
 static SWFFilter createDropShadowFilter(int argc, zval **argv[])
 {
 	zval **colorHash, **blur, **shadow, **flags;
-	SWFFilter filter;
 	SWFColor c;
 	
 	if(argc != 5)
-		WRONG_PARAM_COUNT;
+		return NULL;
 
 	colorHash = argv[1];
 	convert_to_array_ex(colorHash);
@@ -2577,7 +2580,7 @@ static SWFFilter createBlurFilter(int argc, zval **argv[])
 	zval **blur;
 	
 	if(argc != 2)
-		WRONG_PARAM_COUNT;
+		return NULL;
 
 	blur = argv[1];
 	convert_to_object_ex(blur);
@@ -2591,7 +2594,7 @@ static SWFFilter createGlowFilter(int argc, zval **argv[])
 	SWFColor c;
 	
 	if(argc != 5)
-		WRONG_PARAM_COUNT;
+		return NULL;
 	
 	color = argv[1];
 	convert_to_array_ex(color);
@@ -2616,7 +2619,7 @@ static SWFFilter createBevelFilter(int argc, zval **argv[])
 	SWFColor hc, sc;
 
 	if(argc != 6)
-		WRONG_PARAM_COUNT;
+		return NULL;
 
 	sColor = argv[1];
 	convert_to_array_ex(sColor);
@@ -2644,7 +2647,7 @@ static SWFFilter createGradientGlowFilter(int argc, zval **argv[])
 	zval **gradient, **blur, **shadow, **flags;
 
 	if(argc != 5)
-		WRONG_PARAM_COUNT;		
+		return NULL;		
 
 	gradient = argv[1];
 	convert_to_object_ex(gradient);
@@ -2669,7 +2672,7 @@ static SWFFilter createConvolutionFilter(int argc, zval **argv[])
 	SWFColor c;
 
 	if(argc != 6)
-		WRONG_PARAM_COUNT;
+		return NULL;
 
 	matrix = argv[1];
 	convert_to_object_ex(matrix);
@@ -2696,7 +2699,7 @@ static SWFFilter createColorMatrixFilter(int argc, zval **argv[])
 	zval **matrix;
 
 	if(argc != 2)
-		WRONG_PARAM_COUNT;
+		return NULL;
 
 	matrix = argv[1];
 	convert_to_object_ex(matrix);
@@ -2709,7 +2712,7 @@ static SWFFilter createGradientBevelFilter(int argc, zval **argv[])
 	zval **gradient, **blur, **shadow, **flags;
 
 	if(argc != 5)
-		WRONG_PARAM_COUNT;		
+		return NULL;		
 
 	gradient = argv[1];
 	convert_to_object_ex(gradient);
@@ -2766,9 +2769,9 @@ PHP_METHOD(swffilter, __construct)
 	zval **argv[6];
 	int argc = ZEND_NUM_ARGS();
 	int type, ret;
-	SWFFilter filter;
+	SWFFilter filter = NULL;
 	
-	if (argc > 6 || argc < 2 || zend_get_parameters_array_ex(argc ,argv) == FAILURE) 
+	if (argc > 6 || argc < 2 || zend_get_parameters_array_ex(argc, argv) == FAILURE) 
 		WRONG_PARAM_COUNT;
 	
 
@@ -2803,6 +2806,10 @@ PHP_METHOD(swffilter, __construct)
 	default:
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "new SWFFilter: unknown type");	
 	}
+	
+	if(filter == NULL)
+		WRONG_PARAM_COUNT;
+
 	ret = zend_list_insert(filter, le_swffilterp);
 	object_init_ex(getThis(), filter_class_entry_ptr);
 	add_property_resource(getThis(), "filter", ret);
@@ -3780,7 +3787,7 @@ PHP_METHOD(swfmovie, setBackground)
 	convert_to_long_ex(b);
 	SWFMovie_setBackground(movie, Z_LVAL_PP(r), Z_LVAL_PP(g), Z_LVAL_PP(b));
 }
-/* }}} * /
+/* }}} */
 
 /* {{{ proto void swfmovie::setRate(float rate)
    Sets movie rate */
