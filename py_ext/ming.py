@@ -808,6 +808,15 @@ class SWFTextField(SWFBase):
     def setLength(self, length):
         mingc.SWFTextField_setLength(self.this, length)
 
+    def addChars(self, string):
+        mingc.SWFTextField_addChars(self.this, string)
+
+    def setPadding(self, pad)
+        mingc.SWFTextField_setPadding(self.this, pad)
+
+    def setFieldHeight(self, height)
+        mingc.SWFTextField_setFieldHeight(self.this, height)
+
 # textfield alignment flags:
 SWFTEXTFIELD_ALIGN_LEFT    = mingc.SWFTEXTFIELD_ALIGN_LEFT
 SWFTEXTFIELD_ALIGN_RIGHT   = mingc.SWFTEXTFIELD_ALIGN_RIGHT
