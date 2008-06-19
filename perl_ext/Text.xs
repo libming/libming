@@ -112,14 +112,14 @@ SWFText_getWideStringWidth(text, string)
 	SWF::Text text
 	short *	string
 
-short
+float
 SWFText_getAscent(text)
 	SWF::Text	text
 
-short
+float
 SWFText_getDescent(text)
 	SWF::Text	text
 
-short
+float
 SWFText_getLeading(text)
 	SWF::Text	text
