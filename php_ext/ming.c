@@ -5390,7 +5390,7 @@ PHP_METHOD(swftext, __construct)
 		text = newSWFText2();
 		break;
 	case 1:
-		if(zeng_get_parameters_ex(1, &version) == FAILURE)
+		if(zend_get_parameters_ex(1, &version) == FAILURE)
 			WRONG_PARAM_COUNT;
 		convert_to_long_ex(version);
 		if(Z_LVAL_PP(version) == 1)
