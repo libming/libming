@@ -2456,31 +2456,36 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_FILE swig_types[0]
-#define SWIGTYPE_p_GradientInterpolationMode swig_types[1]
-#define SWIGTYPE_p_GradientSpreadMode swig_types[2]
-#define SWIGTYPE_p_SWFCXform swig_types[3]
-#define SWIGTYPE_p_SWFDBLBitmap swig_types[4]
-#define SWIGTYPE_p_SWFFillStyle swig_types[5]
-#define SWIGTYPE_p_SWFFilter swig_types[6]
-#define SWIGTYPE_p_SWFInput swig_types[7]
-#define SWIGTYPE_p_SWFJpegBitmap swig_types[8]
-#define SWIGTYPE_p_SWFJpegWithAlpha swig_types[9]
-#define SWIGTYPE_p_SWFLineStyle swig_types[10]
-#define SWIGTYPE_p_SWFPosition swig_types[11]
-#define SWIGTYPE_p_SWFSoundInstance swig_types[12]
-#define SWIGTYPE_p_SWFSprite swig_types[13]
-#define SWIGTYPE_p_SWFTextFieldAlignment swig_types[14]
-#define SWIGTYPE_p_char swig_types[15]
-#define SWIGTYPE_p_double swig_types[16]
-#define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[17]
-#define SWIGTYPE_p_float swig_types[18]
-#define SWIGTYPE_p_int swig_types[19]
-#define SWIGTYPE_p_unsigned_char swig_types[20]
-#define SWIGTYPE_p_unsigned_short swig_types[21]
-#define SWIGTYPE_p_void swig_types[22]
-static swig_type_info *swig_types[24];
-static swig_module_info swig_module = {swig_types, 23, 0, 0, 0, 0};
+#define SWIGTYPE_p_Blur_s swig_types[0]
+#define SWIGTYPE_p_FILE swig_types[1]
+#define SWIGTYPE_p_FilterMatrix_s swig_types[2]
+#define SWIGTYPE_p_GradientInterpolationMode swig_types[3]
+#define SWIGTYPE_p_GradientSpreadMode swig_types[4]
+#define SWIGTYPE_p_SWFCXform swig_types[5]
+#define SWIGTYPE_p_SWFColor swig_types[6]
+#define SWIGTYPE_p_SWFDBLBitmap swig_types[7]
+#define SWIGTYPE_p_SWFFillStyle swig_types[8]
+#define SWIGTYPE_p_SWFFilterFmt swig_types[9]
+#define SWIGTYPE_p_SWFInput swig_types[10]
+#define SWIGTYPE_p_SWFJpegBitmap swig_types[11]
+#define SWIGTYPE_p_SWFJpegWithAlpha swig_types[12]
+#define SWIGTYPE_p_SWFLineStyle swig_types[13]
+#define SWIGTYPE_p_SWFPosition swig_types[14]
+#define SWIGTYPE_p_SWFSoundInstance swig_types[15]
+#define SWIGTYPE_p_SWFSprite swig_types[16]
+#define SWIGTYPE_p_SWFTextFieldAlignment swig_types[17]
+#define SWIGTYPE_p_Shadow_s swig_types[18]
+#define SWIGTYPE_p_char swig_types[19]
+#define SWIGTYPE_p_double swig_types[20]
+#define SWIGTYPE_p_f_unsigned_char_p_void__void swig_types[21]
+#define SWIGTYPE_p_float swig_types[22]
+#define SWIGTYPE_p_floatArray swig_types[23]
+#define SWIGTYPE_p_int swig_types[24]
+#define SWIGTYPE_p_unsigned_char swig_types[25]
+#define SWIGTYPE_p_unsigned_short swig_types[26]
+#define SWIGTYPE_p_void swig_types[27]
+static swig_type_info *swig_types[29];
+static swig_module_info swig_module = {swig_types, 28, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2736,6 +2741,9 @@ SWIG_From_float  (float value)
 }
 
 
+typedef float floatArray;
+
+
 SWIGINTERN int
 SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
 {
@@ -2779,6 +2787,34 @@ SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val)
   return SWIG_TypeError;
 }
 
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+  if (SWIG_IsOK(res) && val) *val = (size_t)(v);
+  return res;
+}
+
+SWIGINTERN floatArray *new_floatArray(size_t nelements){
+    return (float *)malloc((nelements)*sizeof(float));
+  }
+SWIGINTERN void delete_floatArray(floatArray *self){
+    free((char*)self);
+  }
+SWIGINTERN float floatArray___getitem__(floatArray *self,size_t index){
+    return self[index];
+  }
+SWIGINTERN void floatArray___setitem__(floatArray *self,size_t index,float value){
+    self[index] = value;
+  }
+SWIGINTERN float *floatArray_cast(floatArray *self){
+    return self;
+  }
+SWIGINTERN floatArray *floatArray_frompointer(float *t){
+    return (floatArray *)(t);
+  }
 
 SWIGINTERN int
 SWIG_AsVal_unsigned_SS_char (PyObject * obj, unsigned char *val)
@@ -2908,6 +2944,13 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
     }
   }  
   return res;
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_unsigned_SS_char  (unsigned char value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
 }
 
 #ifdef __cplusplus
@@ -3128,6 +3171,171 @@ fail:
   return NULL;
 }
 
+
+SWIGINTERN PyObject *_wrap_new_floatArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  floatArray *result = 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_floatArray",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_floatArray" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = (size_t)(val1);
+  result = (floatArray *)new_floatArray(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_floatArray, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_floatArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  floatArray *arg1 = (floatArray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_floatArray",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_floatArray, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_floatArray" "', argument " "1"" of type '" "floatArray *""'"); 
+  }
+  arg1 = (floatArray *)(argp1);
+  delete_floatArray(arg1);
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_floatArray___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  floatArray *arg1 = (floatArray *) 0 ;
+  size_t arg2 ;
+  float result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:floatArray___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_floatArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "floatArray___getitem__" "', argument " "1"" of type '" "floatArray *""'"); 
+  }
+  arg1 = (floatArray *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "floatArray___getitem__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = (size_t)(val2);
+  result = (float)floatArray___getitem__(arg1,arg2);
+  resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_floatArray___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  floatArray *arg1 = (floatArray *) 0 ;
+  size_t arg2 ;
+  float arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:floatArray___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_floatArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "floatArray___setitem__" "', argument " "1"" of type '" "floatArray *""'"); 
+  }
+  arg1 = (floatArray *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "floatArray___setitem__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = (size_t)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "floatArray___setitem__" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  floatArray___setitem__(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_floatArray_cast(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  floatArray *arg1 = (floatArray *) 0 ;
+  float *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:floatArray_cast",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_floatArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "floatArray_cast" "', argument " "1"" of type '" "floatArray *""'"); 
+  }
+  arg1 = (floatArray *)(argp1);
+  result = (float *)floatArray_cast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_float, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_floatArray_frompointer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float *arg1 = (float *) 0 ;
+  floatArray *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:floatArray_frompointer",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "floatArray_frompointer" "', argument " "1"" of type '" "float *""'"); 
+  }
+  arg1 = (float *)(argp1);
+  result = (floatArray *)floatArray_frompointer(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_floatArray, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *floatArray_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O|swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_floatArray, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
 
 SWIGINTERN PyObject *_wrap_Ming_init(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -7831,10 +8039,9 @@ fail:
 SWIGINTERN PyObject *_wrap_SWFButtonRecord_addFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFButtonRecord arg1 = (SWFButtonRecord) 0 ;
-  SWFFilter arg2 ;
+  SWFFilter arg2 = (SWFFilter) 0 ;
   int res1 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -7843,16 +8050,9 @@ SWIGINTERN PyObject *_wrap_SWFButtonRecord_addFilter(PyObject *SWIGUNUSEDPARM(se
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFButtonRecord_addFilter" "', argument " "1"" of type '" "SWFButtonRecord""'"); 
   }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFFilter,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFButtonRecord_addFilter" "', argument " "2"" of type '" "SWFFilter""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SWFButtonRecord_addFilter" "', argument " "2"" of type '" "SWFFilter""'");
-    } else {
-      arg2 = *((SWFFilter *)(argp2));
-    }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFButtonRecord_addFilter" "', argument " "2"" of type '" "SWFFilter""'"); 
   }
   SWFButtonRecord_addFilter(arg1,arg2);
   resultobj = SWIG_Py_Void();
@@ -12986,6 +13186,870 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFColor_red_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFColor_red_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_red_set" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFColor_red_set" "', argument " "2"" of type '" "unsigned char""'");
+  } 
+  arg2 = (unsigned char)(val2);
+  if (arg1) (arg1)->red = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_red_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFColor_red_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_red_get" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  result = (unsigned char) ((arg1)->red);
+  resultobj = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_green_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFColor_green_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_green_set" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFColor_green_set" "', argument " "2"" of type '" "unsigned char""'");
+  } 
+  arg2 = (unsigned char)(val2);
+  if (arg1) (arg1)->green = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_green_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFColor_green_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_green_get" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  result = (unsigned char) ((arg1)->green);
+  resultobj = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_blue_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFColor_blue_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_blue_set" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFColor_blue_set" "', argument " "2"" of type '" "unsigned char""'");
+  } 
+  arg2 = (unsigned char)(val2);
+  if (arg1) (arg1)->blue = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_blue_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFColor_blue_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_blue_get" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  result = (unsigned char) ((arg1)->blue);
+  resultobj = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_alpha_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFColor_alpha_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_alpha_set" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFColor_alpha_set" "', argument " "2"" of type '" "unsigned char""'");
+  } 
+  arg2 = (unsigned char)(val2);
+  if (arg1) (arg1)->alpha = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFColor_alpha_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  unsigned char result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFColor_alpha_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFColor_alpha_get" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  result = (unsigned char) ((arg1)->alpha);
+  resultobj = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_SWFColor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_SWFColor")) SWIG_fail;
+  result = (SWFColor *)(SWFColor *) calloc(1, sizeof(SWFColor));
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_SWFColor, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_SWFColor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor *arg1 = (SWFColor *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_SWFColor",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SWFColor, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_SWFColor" "', argument " "1"" of type '" "SWFColor *""'"); 
+  }
+  arg1 = (SWFColor *)(argp1);
+  free((char *) arg1);
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *SWFColor_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O|swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_SWFColor, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_newSWFShadow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float arg1 ;
+  float arg2 ;
+  float arg3 ;
+  SWFShadow result;
+  float val1 ;
+  int ecode1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:newSWFShadow",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_float(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "newSWFShadow" "', argument " "1"" of type '" "float""'");
+  } 
+  arg1 = (float)(val1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "newSWFShadow" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "newSWFShadow" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  result = (SWFShadow)newSWFShadow(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Shadow_s, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_destroySWFShadow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFShadow arg1 = (SWFShadow) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:destroySWFShadow",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Shadow_s, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFShadow" "', argument " "1"" of type '" "SWFShadow""'"); 
+  }
+  arg1 = (SWFShadow)(argp1);
+  destroySWFShadow(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newSWFBlur(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float arg1 ;
+  float arg2 ;
+  int arg3 ;
+  SWFBlur result;
+  float val1 ;
+  int ecode1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:newSWFBlur",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_float(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "newSWFBlur" "', argument " "1"" of type '" "float""'");
+  } 
+  arg1 = (float)(val1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "newSWFBlur" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "newSWFBlur" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  result = (SWFBlur)newSWFBlur(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Blur_s, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_destroySWFBlur(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFBlur arg1 = (SWFBlur) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:destroySWFBlur",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFBlur" "', argument " "1"" of type '" "SWFBlur""'"); 
+  }
+  arg1 = (SWFBlur)(argp1);
+  destroySWFBlur(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newSWFFilterMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  float *arg3 = (float *) 0 ;
+  SWFFilterMatrix result;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:newSWFFilterMatrix",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "newSWFFilterMatrix" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "newSWFFilterMatrix" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "newSWFFilterMatrix" "', argument " "3"" of type '" "float *""'"); 
+  }
+  arg3 = (float *)(argp3);
+  result = (SWFFilterMatrix)newSWFFilterMatrix(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_FilterMatrix_s, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_destroySWFFilterMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFilterMatrix arg1 = (SWFFilterMatrix) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:destroySWFFilterMatrix",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_FilterMatrix_s, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFFilterMatrix" "', argument " "1"" of type '" "SWFFilterMatrix""'"); 
+  }
+  arg1 = (SWFFilterMatrix)(argp1);
+  destroySWFFilterMatrix(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_destroySWFFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFilter arg1 = (SWFFilter) 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:destroySWFFilter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFFilter" "', argument " "1"" of type '" "SWFFilter""'"); 
+  }
+  destroySWFFilter(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newColorMatrixFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFilterMatrix arg1 = (SWFFilterMatrix) 0 ;
+  SWFFilter result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:newColorMatrixFilter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_FilterMatrix_s, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newColorMatrixFilter" "', argument " "1"" of type '" "SWFFilterMatrix""'"); 
+  }
+  arg1 = (SWFFilterMatrix)(argp1);
+  result = (SWFFilter)newColorMatrixFilter(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newConvolutionFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFilterMatrix arg1 = (SWFFilterMatrix) 0 ;
+  float arg2 ;
+  float arg3 ;
+  SWFColor arg4 ;
+  int arg5 ;
+  SWFFilter result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:newConvolutionFilter",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_FilterMatrix_s, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newConvolutionFilter" "', argument " "1"" of type '" "SWFFilterMatrix""'"); 
+  }
+  arg1 = (SWFFilterMatrix)(argp1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "newConvolutionFilter" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = (float)(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "newConvolutionFilter" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  {
+    res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_SWFColor,  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "newConvolutionFilter" "', argument " "4"" of type '" "SWFColor""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newConvolutionFilter" "', argument " "4"" of type '" "SWFColor""'");
+    } else {
+      arg4 = *((SWFColor *)(argp4));
+    }
+  }
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "newConvolutionFilter" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  result = (SWFFilter)newConvolutionFilter(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newGradientBevelFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFGradient arg1 = (SWFGradient) 0 ;
+  SWFBlur arg2 = (SWFBlur) 0 ;
+  SWFShadow arg3 = (SWFShadow) 0 ;
+  int arg4 ;
+  SWFFilter result;
+  int res1 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:newGradientBevelFilter",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newGradientBevelFilter" "', argument " "1"" of type '" "SWFGradient""'"); 
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "newGradientBevelFilter" "', argument " "2"" of type '" "SWFBlur""'"); 
+  }
+  arg2 = (SWFBlur)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Shadow_s, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "newGradientBevelFilter" "', argument " "3"" of type '" "SWFShadow""'"); 
+  }
+  arg3 = (SWFShadow)(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "newGradientBevelFilter" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  result = (SWFFilter)newGradientBevelFilter(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newGradientGlowFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFGradient arg1 = (SWFGradient) 0 ;
+  SWFBlur arg2 = (SWFBlur) 0 ;
+  SWFShadow arg3 = (SWFShadow) 0 ;
+  int arg4 ;
+  SWFFilter result;
+  int res1 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:newGradientGlowFilter",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newGradientGlowFilter" "', argument " "1"" of type '" "SWFGradient""'"); 
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "newGradientGlowFilter" "', argument " "2"" of type '" "SWFBlur""'"); 
+  }
+  arg2 = (SWFBlur)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Shadow_s, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "newGradientGlowFilter" "', argument " "3"" of type '" "SWFShadow""'"); 
+  }
+  arg3 = (SWFShadow)(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "newGradientGlowFilter" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  result = (SWFFilter)newGradientGlowFilter(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newBevelFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor arg1 ;
+  SWFColor arg2 ;
+  SWFBlur arg3 = (SWFBlur) 0 ;
+  SWFShadow arg4 = (SWFShadow) 0 ;
+  int arg5 ;
+  SWFFilter result;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:newBevelFilter",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFColor,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newBevelFilter" "', argument " "1"" of type '" "SWFColor""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newBevelFilter" "', argument " "1"" of type '" "SWFColor""'");
+    } else {
+      arg1 = *((SWFColor *)(argp1));
+    }
+  }
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SWFColor,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "newBevelFilter" "', argument " "2"" of type '" "SWFColor""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newBevelFilter" "', argument " "2"" of type '" "SWFColor""'");
+    } else {
+      arg2 = *((SWFColor *)(argp2));
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "newBevelFilter" "', argument " "3"" of type '" "SWFBlur""'"); 
+  }
+  arg3 = (SWFBlur)(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_Shadow_s, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "newBevelFilter" "', argument " "4"" of type '" "SWFShadow""'"); 
+  }
+  arg4 = (SWFShadow)(argp4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "newBevelFilter" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  result = (SWFFilter)newBevelFilter(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newGlowFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor arg1 ;
+  SWFBlur arg2 = (SWFBlur) 0 ;
+  float arg3 ;
+  int arg4 ;
+  SWFFilter result;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:newGlowFilter",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFColor,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newGlowFilter" "', argument " "1"" of type '" "SWFColor""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newGlowFilter" "', argument " "1"" of type '" "SWFColor""'");
+    } else {
+      arg1 = *((SWFColor *)(argp1));
+    }
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "newGlowFilter" "', argument " "2"" of type '" "SWFBlur""'"); 
+  }
+  arg2 = (SWFBlur)(argp2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "newGlowFilter" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = (float)(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "newGlowFilter" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  result = (SWFFilter)newGlowFilter(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newBlurFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFBlur arg1 = (SWFBlur) 0 ;
+  SWFFilter result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:newBlurFilter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newBlurFilter" "', argument " "1"" of type '" "SWFBlur""'"); 
+  }
+  arg1 = (SWFBlur)(argp1);
+  result = (SWFFilter)newBlurFilter(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_newDropShadowFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFColor arg1 ;
+  SWFBlur arg2 = (SWFBlur) 0 ;
+  SWFShadow arg3 = (SWFShadow) 0 ;
+  int arg4 ;
+  SWFFilter result;
+  void *argp1 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:newDropShadowFilter",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_SWFColor,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newDropShadowFilter" "', argument " "1"" of type '" "SWFColor""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "newDropShadowFilter" "', argument " "1"" of type '" "SWFColor""'");
+    } else {
+      arg1 = *((SWFColor *)(argp1));
+    }
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Blur_s, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "newDropShadowFilter" "', argument " "2"" of type '" "SWFBlur""'"); 
+  }
+  arg2 = (SWFBlur)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Shadow_s, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "newDropShadowFilter" "', argument " "3"" of type '" "SWFShadow""'"); 
+  }
+  arg3 = (SWFShadow)(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "newDropShadowFilter" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  result = (SWFFilter)newDropShadowFilter(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFDisplayItem_addFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
+  SWFFilter arg2 = (SWFFilter) 0 ;
+  int res1 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFDisplayItem_addFilter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_addFilter" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
+  }
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFDisplayItem_addFilter" "', argument " "2"" of type '" "SWFFilter""'"); 
+  }
+  SWFDisplayItem_addFilter(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_intp", _wrap_new_intp, METH_VARARGS, NULL},
 	 { (char *)"copy_intp", _wrap_copy_intp, METH_VARARGS, NULL},
@@ -12997,6 +14061,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_floatp", _wrap_delete_floatp, METH_VARARGS, NULL},
 	 { (char *)"floatp_assign", _wrap_floatp_assign, METH_VARARGS, NULL},
 	 { (char *)"floatp_value", _wrap_floatp_value, METH_VARARGS, NULL},
+	 { (char *)"new_floatArray", _wrap_new_floatArray, METH_VARARGS, NULL},
+	 { (char *)"delete_floatArray", _wrap_delete_floatArray, METH_VARARGS, NULL},
+	 { (char *)"floatArray___getitem__", _wrap_floatArray___getitem__, METH_VARARGS, NULL},
+	 { (char *)"floatArray___setitem__", _wrap_floatArray___setitem__, METH_VARARGS, NULL},
+	 { (char *)"floatArray_cast", _wrap_floatArray_cast, METH_VARARGS, NULL},
+	 { (char *)"floatArray_frompointer", _wrap_floatArray_frompointer, METH_VARARGS, NULL},
+	 { (char *)"floatArray_swigregister", floatArray_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Ming_init", _wrap_Ming_init, METH_VARARGS, NULL},
 	 { (char *)"Ming_cleanup", _wrap_Ming_cleanup, METH_VARARGS, NULL},
 	 { (char *)"Ming_collectGarbage", _wrap_Ming_collectGarbage, METH_VARARGS, NULL},
@@ -13313,19 +14384,52 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovie_defineScene", _wrap_SWFMovie_defineScene, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_namedAnchor", _wrap_SWFMovie_namedAnchor, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_writeExports", _wrap_SWFMovie_writeExports, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_red_set", _wrap_SWFColor_red_set, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_red_get", _wrap_SWFColor_red_get, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_green_set", _wrap_SWFColor_green_set, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_green_get", _wrap_SWFColor_green_get, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_blue_set", _wrap_SWFColor_blue_set, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_blue_get", _wrap_SWFColor_blue_get, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_alpha_set", _wrap_SWFColor_alpha_set, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_alpha_get", _wrap_SWFColor_alpha_get, METH_VARARGS, NULL},
+	 { (char *)"new_SWFColor", _wrap_new_SWFColor, METH_VARARGS, NULL},
+	 { (char *)"delete_SWFColor", _wrap_delete_SWFColor, METH_VARARGS, NULL},
+	 { (char *)"SWFColor_swigregister", SWFColor_swigregister, METH_VARARGS, NULL},
+	 { (char *)"newSWFShadow", _wrap_newSWFShadow, METH_VARARGS, NULL},
+	 { (char *)"destroySWFShadow", _wrap_destroySWFShadow, METH_VARARGS, NULL},
+	 { (char *)"newSWFBlur", _wrap_newSWFBlur, METH_VARARGS, NULL},
+	 { (char *)"destroySWFBlur", _wrap_destroySWFBlur, METH_VARARGS, NULL},
+	 { (char *)"newSWFFilterMatrix", _wrap_newSWFFilterMatrix, METH_VARARGS, NULL},
+	 { (char *)"destroySWFFilterMatrix", _wrap_destroySWFFilterMatrix, METH_VARARGS, NULL},
+	 { (char *)"destroySWFFilter", _wrap_destroySWFFilter, METH_VARARGS, NULL},
+	 { (char *)"newColorMatrixFilter", _wrap_newColorMatrixFilter, METH_VARARGS, NULL},
+	 { (char *)"newConvolutionFilter", _wrap_newConvolutionFilter, METH_VARARGS, NULL},
+	 { (char *)"newGradientBevelFilter", _wrap_newGradientBevelFilter, METH_VARARGS, NULL},
+	 { (char *)"newGradientGlowFilter", _wrap_newGradientGlowFilter, METH_VARARGS, NULL},
+	 { (char *)"newBevelFilter", _wrap_newBevelFilter, METH_VARARGS, NULL},
+	 { (char *)"newGlowFilter", _wrap_newGlowFilter, METH_VARARGS, NULL},
+	 { (char *)"newBlurFilter", _wrap_newBlurFilter, METH_VARARGS, NULL},
+	 { (char *)"newDropShadowFilter", _wrap_newDropShadowFilter, METH_VARARGS, NULL},
+	 { (char *)"SWFDisplayItem_addFilter", _wrap_SWFDisplayItem_addFilter, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_floatArrayTo_p_float(void *x) {
+    return (void *)((float *)  ((floatArray *) x));
+}
+static swig_type_info _swigt__p_Blur_s = {"_p_Blur_s", "struct Blur_s *|SWFBlur", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_FILE = {"_p_FILE", "FILE *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_FilterMatrix_s = {"_p_FilterMatrix_s", "struct FilterMatrix_s *|SWFFilterMatrix", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_GradientInterpolationMode = {"_p_GradientInterpolationMode", "enum GradientInterpolationMode *|GradientInterpolationMode *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_GradientSpreadMode = {"_p_GradientSpreadMode", "enum GradientSpreadMode *|GradientSpreadMode *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFCXform = {"_p_SWFCXform", "SWFCXform *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_SWFColor = {"_p_SWFColor", "struct SWFColor *|SWFColor *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFDBLBitmap = {"_p_SWFDBLBitmap", "SWFDBLBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFFillStyle = {"_p_SWFFillStyle", "SWFFillStyle *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_SWFFilter = {"_p_SWFFilter", "SWFFilter *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_SWFFilterFmt = {"_p_SWFFilterFmt", "enum SWFFilterFmt *|SWFFilterFmt *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFInput = {"_p_SWFInput", "SWFInput *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFJpegBitmap = {"_p_SWFJpegBitmap", "SWFJpegBitmap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFJpegWithAlpha = {"_p_SWFJpegWithAlpha", "SWFJpegWithAlpha *", 0, 0, (void*)0, 0};
@@ -13334,23 +14438,28 @@ static swig_type_info _swigt__p_SWFPosition = {"_p_SWFPosition", "SWFPosition *"
 static swig_type_info _swigt__p_SWFSoundInstance = {"_p_SWFSoundInstance", "SWFSoundInstance *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFSprite = {"_p_SWFSprite", "SWFSprite *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SWFTextFieldAlignment = {"_p_SWFTextFieldAlignment", "enum SWFTextFieldAlignment *|SWFTextFieldAlignment *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Shadow_s = {"_p_Shadow_s", "struct Shadow_s *|SWFShadow", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_unsigned_char_p_void__void = {"_p_f_unsigned_char_p_void__void", "SWFByteOutputMethod|void (*)(unsigned char,void *)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_floatArray = {"_p_floatArray", "struct floatArray *|floatArray *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFFilter|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_Blur_s,
   &_swigt__p_FILE,
+  &_swigt__p_FilterMatrix_s,
   &_swigt__p_GradientInterpolationMode,
   &_swigt__p_GradientSpreadMode,
   &_swigt__p_SWFCXform,
+  &_swigt__p_SWFColor,
   &_swigt__p_SWFDBLBitmap,
   &_swigt__p_SWFFillStyle,
-  &_swigt__p_SWFFilter,
+  &_swigt__p_SWFFilterFmt,
   &_swigt__p_SWFInput,
   &_swigt__p_SWFJpegBitmap,
   &_swigt__p_SWFJpegWithAlpha,
@@ -13359,23 +14468,28 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_SWFSoundInstance,
   &_swigt__p_SWFSprite,
   &_swigt__p_SWFTextFieldAlignment,
+  &_swigt__p_Shadow_s,
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_f_unsigned_char_p_void__void,
   &_swigt__p_float,
+  &_swigt__p_floatArray,
   &_swigt__p_int,
   &_swigt__p_unsigned_char,
   &_swigt__p_unsigned_short,
   &_swigt__p_void,
 };
 
+static swig_cast_info _swigc__p_Blur_s[] = {  {&_swigt__p_Blur_s, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_FILE[] = {  {&_swigt__p_FILE, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_FilterMatrix_s[] = {  {&_swigt__p_FilterMatrix_s, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GradientInterpolationMode[] = {  {&_swigt__p_GradientInterpolationMode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GradientSpreadMode[] = {  {&_swigt__p_GradientSpreadMode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFCXform[] = {  {&_swigt__p_SWFCXform, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_SWFColor[] = {  {&_swigt__p_SWFColor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFDBLBitmap[] = {  {&_swigt__p_SWFDBLBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFFillStyle[] = {  {&_swigt__p_SWFFillStyle, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_SWFFilter[] = {  {&_swigt__p_SWFFilter, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_SWFFilterFmt[] = {  {&_swigt__p_SWFFilterFmt, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFInput[] = {  {&_swigt__p_SWFInput, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFJpegBitmap[] = {  {&_swigt__p_SWFJpegBitmap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFJpegWithAlpha[] = {  {&_swigt__p_SWFJpegWithAlpha, 0, 0, 0},{0, 0, 0, 0}};
@@ -13384,23 +14498,28 @@ static swig_cast_info _swigc__p_SWFPosition[] = {  {&_swigt__p_SWFPosition, 0, 0
 static swig_cast_info _swigc__p_SWFSoundInstance[] = {  {&_swigt__p_SWFSoundInstance, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFSprite[] = {  {&_swigt__p_SWFSprite, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SWFTextFieldAlignment[] = {  {&_swigt__p_SWFTextFieldAlignment, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Shadow_s[] = {  {&_swigt__p_Shadow_s, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_unsigned_char_p_void__void[] = {  {&_swigt__p_f_unsigned_char_p_void__void, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},  {&_swigt__p_floatArray, _p_floatArrayTo_p_float, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_floatArray[] = {  {&_swigt__p_floatArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_Blur_s,
   _swigc__p_FILE,
+  _swigc__p_FilterMatrix_s,
   _swigc__p_GradientInterpolationMode,
   _swigc__p_GradientSpreadMode,
   _swigc__p_SWFCXform,
+  _swigc__p_SWFColor,
   _swigc__p_SWFDBLBitmap,
   _swigc__p_SWFFillStyle,
-  _swigc__p_SWFFilter,
+  _swigc__p_SWFFilterFmt,
   _swigc__p_SWFInput,
   _swigc__p_SWFJpegBitmap,
   _swigc__p_SWFJpegWithAlpha,
@@ -13409,10 +14528,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_SWFSoundInstance,
   _swigc__p_SWFSprite,
   _swigc__p_SWFTextFieldAlignment,
+  _swigc__p_Shadow_s,
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_f_unsigned_char_p_void__void,
   _swigc__p_float,
+  _swigc__p_floatArray,
   _swigc__p_int,
   _swigc__p_unsigned_char,
   _swigc__p_unsigned_short,
@@ -14051,5 +15172,19 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SWFBLEND_MODE_ERASE",SWIG_From_int((int)(SWFBLEND_MODE_ERASE)));
   SWIG_Python_SetConstant(d, "SWFBLEND_MODE_OVERLAY",SWIG_From_int((int)(SWFBLEND_MODE_OVERLAY)));
   SWIG_Python_SetConstant(d, "SWFBLEND_MODE_HARDLIGHT",SWIG_From_int((int)(SWFBLEND_MODE_HARDLIGHT)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_MODE_INNER",SWIG_From_int((int)((1 << 7))));
+  SWIG_Python_SetConstant(d, "SWFFILTER_MODE_KO",SWIG_From_int((int)((1 << 6))));
+  SWIG_Python_SetConstant(d, "SWFFILTER_MODE_COMPOSITE",SWIG_From_int((int)((1 << 5))));
+  SWIG_Python_SetConstant(d, "SWFFILTER_MODE_ONTOP",SWIG_From_int((int)((1 << 4))));
+  SWIG_Python_SetConstant(d, "SWFFILTER_FLAG_CLAMP",SWIG_From_int((int)((1 << 1))));
+  SWIG_Python_SetConstant(d, "SWFFILTER_FLAG_PRESERVE_ALPHA",SWIG_From_int((int)((1 << 0))));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_DROPSHADOW",SWIG_From_int((int)(SWFFILTER_TYPE_DROPSHADOW)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_BLUR",SWIG_From_int((int)(SWFFILTER_TYPE_BLUR)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_GLOW",SWIG_From_int((int)(SWFFILTER_TYPE_GLOW)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_BEVEL",SWIG_From_int((int)(SWFFILTER_TYPE_BEVEL)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_GRADIENTGLOW",SWIG_From_int((int)(SWFFILTER_TYPE_GRADIENTGLOW)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_CONVOLUTION",SWIG_From_int((int)(SWFFILTER_TYPE_CONVOLUTION)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_COLORMATRIX",SWIG_From_int((int)(SWFFILTER_TYPE_COLORMATRIX)));
+  SWIG_Python_SetConstant(d, "SWFFILTER_TYPE_GRADIENTBEVEL",SWIG_From_int((int)(SWFFILTER_TYPE_GRADIENTBEVEL)));
 }
 

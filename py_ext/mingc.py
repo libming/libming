@@ -58,6 +58,27 @@ copy_floatp = _mingc.copy_floatp
 delete_floatp = _mingc.delete_floatp
 floatp_assign = _mingc.floatp_assign
 floatp_value = _mingc.floatp_value
+class floatArray(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, floatArray, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, floatArray, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        this = _mingc.new_floatArray(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _mingc.delete_floatArray
+    __del__ = lambda self : None;
+    def __getitem__(*args): return _mingc.floatArray___getitem__(*args)
+    def __setitem__(*args): return _mingc.floatArray___setitem__(*args)
+    def cast(*args): return _mingc.floatArray_cast(*args)
+    __swig_getmethods__["frompointer"] = lambda x: _mingc.floatArray_frompointer
+    if _newclass:frompointer = staticmethod(_mingc.floatArray_frompointer)
+floatArray_swigregister = _mingc.floatArray_swigregister
+floatArray_swigregister(floatArray)
+floatArray_frompointer = _mingc.floatArray_frompointer
+
 Ming_init = _mingc.Ming_init
 Ming_cleanup = _mingc.Ming_cleanup
 Ming_collectGarbage = _mingc.Ming_collectGarbage
@@ -488,5 +509,62 @@ SWFMovie_assignSymbol = _mingc.SWFMovie_assignSymbol
 SWFMovie_defineScene = _mingc.SWFMovie_defineScene
 SWFMovie_namedAnchor = _mingc.SWFMovie_namedAnchor
 SWFMovie_writeExports = _mingc.SWFMovie_writeExports
+SWFFILTER_MODE_INNER = _mingc.SWFFILTER_MODE_INNER
+SWFFILTER_MODE_KO = _mingc.SWFFILTER_MODE_KO
+SWFFILTER_MODE_COMPOSITE = _mingc.SWFFILTER_MODE_COMPOSITE
+SWFFILTER_MODE_ONTOP = _mingc.SWFFILTER_MODE_ONTOP
+SWFFILTER_FLAG_CLAMP = _mingc.SWFFILTER_FLAG_CLAMP
+SWFFILTER_FLAG_PRESERVE_ALPHA = _mingc.SWFFILTER_FLAG_PRESERVE_ALPHA
+SWFFILTER_TYPE_DROPSHADOW = _mingc.SWFFILTER_TYPE_DROPSHADOW
+SWFFILTER_TYPE_BLUR = _mingc.SWFFILTER_TYPE_BLUR
+SWFFILTER_TYPE_GLOW = _mingc.SWFFILTER_TYPE_GLOW
+SWFFILTER_TYPE_BEVEL = _mingc.SWFFILTER_TYPE_BEVEL
+SWFFILTER_TYPE_GRADIENTGLOW = _mingc.SWFFILTER_TYPE_GRADIENTGLOW
+SWFFILTER_TYPE_CONVOLUTION = _mingc.SWFFILTER_TYPE_CONVOLUTION
+SWFFILTER_TYPE_COLORMATRIX = _mingc.SWFFILTER_TYPE_COLORMATRIX
+SWFFILTER_TYPE_GRADIENTBEVEL = _mingc.SWFFILTER_TYPE_GRADIENTBEVEL
+class SWFColor(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SWFColor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SWFColor, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["red"] = _mingc.SWFColor_red_set
+    __swig_getmethods__["red"] = _mingc.SWFColor_red_get
+    if _newclass:red = _swig_property(_mingc.SWFColor_red_get, _mingc.SWFColor_red_set)
+    __swig_setmethods__["green"] = _mingc.SWFColor_green_set
+    __swig_getmethods__["green"] = _mingc.SWFColor_green_get
+    if _newclass:green = _swig_property(_mingc.SWFColor_green_get, _mingc.SWFColor_green_set)
+    __swig_setmethods__["blue"] = _mingc.SWFColor_blue_set
+    __swig_getmethods__["blue"] = _mingc.SWFColor_blue_get
+    if _newclass:blue = _swig_property(_mingc.SWFColor_blue_get, _mingc.SWFColor_blue_set)
+    __swig_setmethods__["alpha"] = _mingc.SWFColor_alpha_set
+    __swig_getmethods__["alpha"] = _mingc.SWFColor_alpha_get
+    if _newclass:alpha = _swig_property(_mingc.SWFColor_alpha_get, _mingc.SWFColor_alpha_set)
+    def __init__(self, *args): 
+        this = _mingc.new_SWFColor(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _mingc.delete_SWFColor
+    __del__ = lambda self : None;
+SWFColor_swigregister = _mingc.SWFColor_swigregister
+SWFColor_swigregister(SWFColor)
+
+newSWFShadow = _mingc.newSWFShadow
+destroySWFShadow = _mingc.destroySWFShadow
+newSWFBlur = _mingc.newSWFBlur
+destroySWFBlur = _mingc.destroySWFBlur
+newSWFFilterMatrix = _mingc.newSWFFilterMatrix
+destroySWFFilterMatrix = _mingc.destroySWFFilterMatrix
+destroySWFFilter = _mingc.destroySWFFilter
+newColorMatrixFilter = _mingc.newColorMatrixFilter
+newConvolutionFilter = _mingc.newConvolutionFilter
+newGradientBevelFilter = _mingc.newGradientBevelFilter
+newGradientGlowFilter = _mingc.newGradientGlowFilter
+newBevelFilter = _mingc.newBevelFilter
+newGlowFilter = _mingc.newGlowFilter
+newBlurFilter = _mingc.newBlurFilter
+newDropShadowFilter = _mingc.newDropShadowFilter
+SWFDisplayItem_addFilter = _mingc.SWFDisplayItem_addFilter
 
 

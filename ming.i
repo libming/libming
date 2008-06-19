@@ -2,6 +2,7 @@
 %module mingc
 %include typemaps.i
 %include cpointer.i
+%include carrays.i
 
 %{
   #include "ming.h"
@@ -47,6 +48,7 @@ typedef unsigned char byte;
 
 %pointer_functions(int, intp);
 %pointer_functions(float, floatp);
+%array_class(float, floatArray);
 
 int Ming_init(void);
 void Ming_cleanup(void);
@@ -69,7 +71,7 @@ typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
              *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
              *SWFFont, *SWFText, *SWFTextField, *SWFVideoStream, *SWFBrowserFont,
              *SWFPrebuiltClip, *SWFBinaryData, *SWFInitAction, *SWFFontCharacter, 
-             *SWFSoundStream;
+             *SWFSoundStream, *SWFFilter;
 
 /*
  * Set output compression level.
@@ -822,4 +824,68 @@ void SWFMovie_assignSymbol(SWFMovie m, SWFCharacter character, const char *name)
 void SWFMovie_defineScene(SWFMovie m, unsigned int offset, const char *name);
 void SWFMovie_namedAnchor(SWFMovie movie, const char *label);
 void SWFMovie_writeExports(SWFMovie movie);
+
+/***** SWFFilter ***********/
+
+#define SWFFILTER_MODE_INNER     (1<<7)
+#define SWFFILTER_MODE_KO        (1<<6)
+#define SWFFILTER_MODE_COMPOSITE (1<<5)
+#define SWFFILTER_MODE_ONTOP     (1<<4)
+
+#define SWFFILTER_FLAG_CLAMP          (1<<1)
+#define SWFFILTER_FLAG_PRESERVE_ALPHA (1<<0)
+
+typedef enum
+{
+        SWFFILTER_TYPE_DROPSHADOW,
+        SWFFILTER_TYPE_BLUR,
+        SWFFILTER_TYPE_GLOW,
+        SWFFILTER_TYPE_BEVEL,
+        SWFFILTER_TYPE_GRADIENTGLOW,
+        SWFFILTER_TYPE_CONVOLUTION,
+        SWFFILTER_TYPE_COLORMATRIX,
+        SWFFILTER_TYPE_GRADIENTBEVEL
+} SWFFilterFmt;
+
+typedef struct SWFColor {
+        unsigned char    red;
+        unsigned char    green;
+        unsigned char    blue;
+        unsigned char    alpha;
+} SWFColor;
+
+typedef struct Shadow_s *SWFShadow;
+SWFShadow newSWFShadow(float angle, float distance, float strength);
+void destroySWFShadow(SWFShadow s);
+
+typedef struct Blur_s *SWFBlur;
+SWFBlur newSWFBlur(float blurX, float blurY, int passes);
+void destroySWFBlur(SWFBlur b);
+
+typedef struct FilterMatrix_s *SWFFilterMatrix;
+SWFFilterMatrix newSWFFilterMatrix(int cols, int rows, float *vals);
+void destroySWFFilterMatrix(SWFFilterMatrix m);
+
+void destroySWFFilter(SWFFilter filter);
+SWFFilter newColorMatrixFilter(SWFFilterMatrix matrix);
+SWFFilter newConvolutionFilter(SWFFilterMatrix matrix, float divisor,
+                               float bias, SWFColor color, int flags);
+
+SWFFilter newGradientBevelFilter(SWFGradient gradient, SWFBlur blur,
+                                 SWFShadow shadow, int flags);
+
+SWFFilter newGradientGlowFilter(SWFGradient gradient, SWFBlur blur,
+                                SWFShadow shadow, int flags);
+
+SWFFilter newBevelFilter(SWFColor shadowColor, SWFColor highlightColor, 
+                         SWFBlur blur, SWFShadow shadow, int flags);
+
+SWFFilter newGlowFilter(SWFColor color, SWFBlur blur, 
+                        float strength, int flags);
+
+SWFFilter newBlurFilter(SWFBlur blur);
+SWFFilter newDropShadowFilter(SWFColor color, SWFBlur blur, 
+                              SWFShadow shadow, int flags);
+void SWFDisplayItem_addFilter(SWFDisplayItem item, SWFFilter filter);
+
 
