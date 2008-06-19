@@ -5872,6 +5872,34 @@ PHP_METHOD(swftextfield, addChars)
 
 }
 /* }}} */
+
+/* {{{ proto void swftextfield::setLength(len) */
+PHP_METHOD(swftextfield, setLength)
+{
+	zval **len;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &len) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(len);
+	SWFTextField_setLength(getTextField(getThis() TSRMLS_CC), Z_LVAL_PP(len));
+}
+/* }}} */
+
+/* {{{ proto void swftextfield::setLength(len) */
+PHP_METHOD(swftextfield, setFieldHeight)
+{
+	zval **h;
+
+	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &h) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(h);
+	SWFTextField_setFieldHeight(getTextField(getThis() TSRMLS_CC), 
+		Z_LVAL_PP(h));
+}
+/* }}} */
+
 #endif
 
 static zend_function_entry swftextfield_functions[] = {
@@ -5892,6 +5920,8 @@ static zend_function_entry swftextfield_functions[] = {
 #ifdef HAVE_NEW_MING
 	PHP_ME(swftextfield, setPadding,      NULL, 0)
 	PHP_ME(swftextfield, addChars,        NULL, 0)
+	PHP_ME(swftextfield, setLength,	      NULL, 0)
+	PHP_ME(swftextfield, setFieldHeight,  NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };

@@ -224,6 +224,8 @@ PHP_METHOD(swftextfield, addString);
 PHP_METHOD(swftextfield, addUTF8String);
 PHP_METHOD(swftextfield, setPadding);
 PHP_METHOD(swftextfield, addChars);
+PHP_METHOD(swftextfield, setLength);
+PHP_METHOD(swftextfield, setFieldHeight);
 
 /* SWFFontChar */
 
