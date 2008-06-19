@@ -145,3 +145,13 @@ SWFTextField_addUTF8Chars(field, string)
 	SWF::TextField	field
 	char *	string
 
+void 
+SWFTextField_setLength(field, len)
+	SWF::TextField field
+	int len
+
+void 
+SWFTextField_setFieldHeight(field, height)
+	SWF::TextField field
+	int height
+
