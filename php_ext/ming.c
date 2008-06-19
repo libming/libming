@@ -5377,13 +5377,32 @@ static zend_function_entry swfsprite_functions[] = {
 
 /* {{{ SWFText
 */
-/* {{{ proto void swftext::__construct()
+/* {{{ proto void swftext::__construct([version])
    Creates new SWFText object */
 PHP_METHOD(swftext, __construct)
 {
-	SWFText text = newSWFText2();
-	int ret = zend_list_insert(text, le_swftextp);
+	zval **version;
+	SWFText text;
 
+	switch(ZEND_NUM_ARGS())
+	{
+	case 0:
+		text = newSWFText2();
+		break;
+	case 1:
+		if(zeng_get_parameters_ex(1, &version) == FAILURE)
+			WRONG_PARAM_COUNT;
+		convert_to_long_ex(version);
+		if(version == 1)
+			text = newSWFText();
+		else
+			text = newSWFText2();
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+	}
+
+	int ret = zend_list_insert(text, le_swftextp);
 	object_init_ex(getThis(), text_class_entry_ptr);
 	add_property_resource(getThis(), "text", ret);
 	zend_list_addref(ret);
