@@ -392,7 +392,7 @@ class SWFDisplayItem(SWFBase):
     def getMatrix(self):
         return SWFMatrix(mingc.SWFDisplayItem_getMatrix(self.this))
 
-    def setCXform(self, cx)
+    def setCXform(self, cx):
 	mingc.SWFDisplayItem_setCXform(self.this, cx.this);
          
 
@@ -738,6 +738,9 @@ class SWFText(SWFBase):
     def getWidth(self, string):
         return mingc.SWFText_getStringWidth(self.this, string)
 
+    def getUTF8Width(self, s):
+        return mingc.SWFText_getUTF8StringWidth(self.this, s.encode("uft-8")) 
+
     # deprecated:
     def setXY(self, x, y):
         mingc.SWFText_setXY(self.this, x, y)
@@ -811,10 +814,10 @@ class SWFTextField(SWFBase):
     def addChars(self, string):
         mingc.SWFTextField_addChars(self.this, string)
 
-    def setPadding(self, pad)
+    def setPadding(self, pad):
         mingc.SWFTextField_setPadding(self.this, pad)
 
-    def setFieldHeight(self, height)
+    def setFieldHeight(self, height):
         mingc.SWFTextField_setFieldHeight(self.this, height)
 
 # textfield alignment flags:
