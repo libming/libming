@@ -1467,6 +1467,9 @@ class SWFText : public SWFCharacter
   void addUTF8String(const char *string, int *advance=NULL)
     { SWFText_addUTF8String(this->text, string, advance); }
 
+  void addWideString(const unsigned short *string, int len, int *advance = NULL)
+    { SWFText_addWideString(this->text, string, len, advance); }
+
   void setSpacing(float spacing)
     { SWFText_setSpacing(this->text, spacing); }
 
@@ -1476,8 +1479,20 @@ class SWFText : public SWFCharacter
   float getWidth(const char *string)
     { return SWFText_getStringWidth(this->text, string); }
 
+  float getWideStringWidth(const unsigned short *string)
+    { return SWFText_getWideStringWidth(this->text, string); }
+
   float getUTF8Width(const char *string)
     { return SWFText_getUTF8StringWidth(this->text, string); }
+
+  float getAscent()
+    { return SWFText_getAscent(this->text); }
+
+  float getDescent()
+    { return SWFText_getDescent(this->text); }
+  
+  float getLeading()
+    { return SWFText_getLeading(this->text); }
   SWF_DECLAREONLY(SWFText);
 };
 
