@@ -85,6 +85,7 @@ static SWFShadow getShadow(zval *id TSRMLS_DC);
 static SWFFilterMatrix getFilterMatrix(zval *id TSRMLS_DC);
 static SWFFilter getFilter(zval *id TSRMLS_DC);
 static SWFCXform getCXform(zval *id TSRMLS_DC);
+static SWFMatrix getMatrix(zval *id TSRMLS_DC);
 #endif
 
 #define PHP_MING_FILE_CHK(file) \
@@ -194,6 +195,7 @@ static int le_swfblurp;
 static int le_swfshadowp;
 static int le_swffiltermatrixp;
 static int le_swfcxformp;
+static int le_swfmatrixp;
 #endif
 static int le_swfcharacterp;
 
@@ -227,6 +229,7 @@ static zend_class_entry *blur_class_entry_ptr;
 static zend_class_entry *shadow_class_entry_ptr;
 static zend_class_entry *filtermatrix_class_entry_ptr;
 static zend_class_entry *cxform_class_entry_ptr;
+static zend_class_entry *matrix_class_entry_ptr;
 #endif
 static zend_class_entry *character_class_entry_ptr;
 
@@ -448,8 +451,83 @@ static zend_function_entry swfcxform_functions[] = {
 };
 /* }}} */
 
+/* {{{ SWFMatrix */
 
+static SWFMatrix getMatrix(zval *id TSRMLS_DC)
+{
+	void *matrix = SWFgetProperty(id, "matrix", strlen("matrix"), le_swfmatrixp TSRMLS_CC);
 
+	if(!matrix)
+	{
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFMatrix");
+	}
+	return (SWFMatrix)matrix;
+}
+
+/* {{{ proto double swfmatrix::getScaleX */
+PHP_METHOD(swfmatrix, getScaleX)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	RETURN_DOUBLE(SWFMatrix_getScaleX(getMatrix(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto double swfmatrix::getScaleX */
+PHP_METHOD(swfmatrix, getScaleY)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	RETURN_DOUBLE(SWFMatrix_getScaleY(getMatrix(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto double swfmatrix::getRotate0 */
+PHP_METHOD(swfmatrix, getRotate0)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	RETURN_DOUBLE(SWFMatrix_getRotate0(getMatrix(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto double swfmatrix::getRotate0 */
+PHP_METHOD(swfmatrix, getRotate1)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	RETURN_DOUBLE(SWFMatrix_getRotate1(getMatrix(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto double swfmatrix::getTranslateX */
+PHP_METHOD(swfmatrix, getTranslateX)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	RETURN_DOUBLE(SWFMatrix_getTranslateX(getMatrix(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto double swfmatrix::getTranslateY */
+PHP_METHOD(swfmatrix, getTranslateY)
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+	RETURN_DOUBLE(SWFMatrix_getTranslateY(getMatrix(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+static zend_function_entry swfmatrix_functions[] = {
+	PHP_ME(swfmatrix, getScaleX,		NULL, 0)
+	PHP_ME(swfmatrix, getScaleY,		NULL, 0)
+	PHP_ME(swfmatrix, getRotate0,		NULL, 0)
+	PHP_ME(swfmatrix, getRotate1, 		NULL, 0)
+	PHP_ME(swfmatrix, getTranslateX,	NULL, 0)
+	PHP_ME(swfmatrix, getTranslateY,	NULL, 0)
+	{NULL, NULL, NULL}
+};
+/* }}} */
 
 /* {{{ SWFInitAction
 */
@@ -1771,6 +1849,26 @@ PHP_METHOD(swfdisplayitem, setCXform)
 
 	convert_to_object_ex(cx);
 	SWFDisplayItem_setCXform(getDisplayItem(getThis() TSRMLS_CC), getCXform(*cx TSRMLS_CC));
+}
+/* }}} */
+
+/** {{{ proto void swfdisplayitem::getMatrix() */
+PHP_METHOD(swfdisplayitem, getMatrix)
+{
+	SWFMatrix m;
+	int ret;
+
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	m = SWFDisplayItem_getMatrix(getDisplayItem(getThis() TSRMLS_CC));
+	if(m != NULL)
+	{
+		ret = zend_list_insert(m, le_swfmatrixp);
+		object_init_ex(return_value, matrix_class_entry_ptr);
+		add_property_resource(return_value, "matrix", ret);
+		zend_list_addref(ret);
+	}
 }
 /* }}} */
 #endif
@@ -6036,6 +6134,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry blur_class_entry;
 	zend_class_entry shadow_class_entry;
 	zend_class_entry cxform_class_entry;
+	zend_class_entry matrix_class_entry;
 #endif
 	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
@@ -6222,6 +6321,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swffiltermatrixp = zend_register_list_destructors_ex(destroy_SWFFilterMatrix_resource, NULL, "SWFFilterMatrix", module_number);
 	le_swfcharacterp = zend_register_list_destructors_ex(NULL, NULL, "SWFCharacter", module_number);
 	le_swfcxformp = zend_register_list_destructors_ex(destroy_SWFCXform_resource, NULL, "SWFCXform", module_number);
+	le_swfmatrixp = zend_register_list_destructors_ex(NULL, NULL, "SWFMatrix", module_number);
 #endif
 
 	INIT_CLASS_ENTRY(shape_class_entry, "SWFShape", swfshape_functions);
@@ -6253,6 +6353,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(shadow_class_entry, "SWFShadow", swfshadow_functions);
 	INIT_CLASS_ENTRY(blur_class_entry, "SWFBlur", swfblur_functions);
 	INIT_CLASS_ENTRY(cxform_class_entry, "SWFCXform", swfcxform_functions);
+	INIT_CLASS_ENTRY(matrix_class_entry, "SWFMatrix", swfmatrix_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
 
@@ -6286,6 +6387,7 @@ PHP_MINIT_FUNCTION(ming)
 	shadow_class_entry_ptr = zend_register_internal_class(&shadow_class_entry TSRMLS_CC);
 	blur_class_entry_ptr = zend_register_internal_class(&blur_class_entry TSRMLS_CC);
 	cxform_class_entry_ptr = zend_register_internal_class(&cxform_class_entry TSRMLS_CC);
+	matrix_class_entry_ptr = zend_register_internal_class(&matrix_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
