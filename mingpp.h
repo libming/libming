@@ -1547,8 +1547,15 @@ class SWFTextField : public SWFCharacter
   void align(SWFTextFieldAlignment alignment)
     { SWFTextField_setAlignment(this->textField, alignment); }
 
+  void setFieldHeight(int height)
+    { SWFTextField_setFieldHeight(this->textField, height); }
+
   void setLength(int length)
     { SWFTextField_setLength(this->textField, length); }
+
+  void addChars(const char *string)
+    { SWFTextField_addChars(this->textField, string); }
+
   SWF_DECLAREONLY(SWFTextField);
 };
 
