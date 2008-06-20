@@ -653,7 +653,7 @@ SWFFilterList newSWFFilterList()
 void SWFFilterList_add(SWFFilterList list, SWFFilter filter)
 {
 	int count = list->numFilter;
-        list->filter = (SWFFilter*)realloc(list->filter, count + 1);
+        list->filter = (SWFFilter*)realloc(list->filter, (count + 1) * sizeof(SWFFilter));
         list->filter[count] = filter;
         list->numFilter++;
 }
