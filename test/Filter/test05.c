@@ -41,7 +41,7 @@ int main(void)
 	SWFShape_drawLine(shape, -w, 0);
 	SWFShape_drawLine(shape, 0, -h);
 
-	float tab[SIZE] = {0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,1.0,0.1,0.1,0.1,0.1,0.1,1.0,0.1};
+	float tab[SIZE] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
 	cmf = newSWFFilterMatrix(5, 4, tab);
 	filter = newColorMatrixFilter(cmf);
 	

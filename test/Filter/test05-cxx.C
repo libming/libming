@@ -33,7 +33,7 @@ int main()
 		shape->drawLine(0, -h);		
 
 
-		float tab[SIZE] = {0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,1.0,0.1,0.1,0.1,0.1,0.1,1.0,0.1};
+		float tab[SIZE] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
 	
 		cmf = new SWFFilterMatrix(5,4, tab);
 		f = SWFFilter::ColorMatrixFilter(cmf);
