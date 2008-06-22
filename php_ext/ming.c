@@ -72,6 +72,7 @@ static SWFInitAction getInitAction(zval *id TSRMLS_DC);
 static SWFMorph getMorph(zval *id TSRMLS_DC);
 static SWFMovieClip getSprite(zval *id TSRMLS_DC);
 static SWFSound getSound(zval *id TSRMLS_DC);
+static SWFInput getInput(zval *id TSRMLS_DC);
 #ifdef HAVE_NEW_MING
 static SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC);
 static SWFSoundInstance getSoundInstance(zval *id TSRMLS_DC);
@@ -215,6 +216,7 @@ static zend_class_entry *movieclip_class_entry_ptr;
 static zend_class_entry *sprite_class_entry_ptr;
 static zend_class_entry *sound_class_entry_ptr;
 static zend_class_entry *character_class_entry_ptr;
+static zend_class_entry *input_class_entry_ptr;
 #ifdef HAVE_NEW_MING
 static zend_class_entry *fontchar_class_entry_ptr;
 static zend_class_entry *soundinstance_class_entry_ptr;
@@ -306,6 +308,7 @@ static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFCharacter");
 		return NULL;
 }
+/* }}} */
 
 static SWFCharacter getCharacterClass(zval *id TSRMLS_DC)
 {
@@ -322,16 +325,14 @@ static zend_function_entry swfcharacter_functions[] = {
 };
 
 /* }}} */
-/* }}} */
 
-/* {{{ getInput - utility func for making an SWFInput from an fopened resource
-*/
 static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
 {
 	destroySWFInput((SWFInput)resource->ptr);
 }
 
-static SWFInput getInput(zval **zfile TSRMLS_DC)
+/* {{{ getInput_fromFileResource - utility func for making an SWFInput from an fopened resource */
+static SWFInput getInput_fromFileResource(zval **zfile TSRMLS_DC)
 {
 	FILE *file;
 	php_stream *stream;
@@ -339,7 +340,6 @@ static SWFInput getInput(zval **zfile TSRMLS_DC)
 
 	php_stream_from_zval_no_verify(stream, zfile);
 
-	if (stream == NULL)
 		return NULL;
 
 	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void *) &file, REPORT_ERRORS) != SUCCESS) {
@@ -351,6 +351,47 @@ static SWFInput getInput(zval **zfile TSRMLS_DC)
 	zend_list_addref(zend_list_insert(input, le_swfinputp));
 	return input;
 }
+/* }}} */
+
+/* {{{ internal function getInput */
+static SWFInput getInput(zval *id TSRMLS_DC)
+{
+	void *in = SWFgetProperty(id, "input", strlen("input"), le_swfinputp TSRMLS_CC);
+
+	if (!in) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Called object is not an SWFInput");
+	}
+	return (SWFInput)in;
+}
+/* }}} */
+
+
+/* {{{ proto void swfinput::__construct(string data) */
+PHP_METHOD(swfinput, __construct)
+{
+	SWFInput input;
+	zval **zdata;
+	int ret;
+
+	if(ZEND_NUM_ARGS() != 1)
+		WRONG_PARAM_COUNT;
+
+	if(zend_get_parameters_ex(1, &zdata) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_string_ex(zdata);
+	input = newSWFInput_bufferCopy((unsigned char *)Z_STRVAL_PP(zdata), Z_STRLEN_PP(zdata));
+
+	ret = zend_list_insert(input, le_swfinputp);
+	object_init_ex(getThis(), input_class_entry_ptr);
+	add_property_resource(getThis(), "input", ret);
+	zend_list_addref(ret);
+}
+
+static zend_function_entry swfinput_functions[] = {
+	PHP_ME(swfinput, __construct,          NULL, 0)
+	{ NULL, NULL, NULL }
+};
 /* }}} */
 
 /* {{{ SWFCXform
@@ -555,7 +596,7 @@ PHP_METHOD(swfinitaction, __construct)
 
 /* {{{ internal function getInitAction
    Returns the SWFInitAction object contained in zval *id */
-static SWFInitAction getInitAction(zval *id TSRMLS_DC)
+static inline SWFInitAction getInitAction(zval *id TSRMLS_DC)
 {
 	void *action = SWFgetProperty(id, "initaction", 
 		strlen("initaction"), le_swfinitactionp TSRMLS_CC);
@@ -648,14 +689,14 @@ static zend_function_entry swfaction_functions[] = {
 
 /* {{{ SWFBitmap 
 */
-/* {{{ proto void swfbitmap::__construct(mixed file [, mixed maskfile])
+/* {{{ proto void swfbitmap::__construct(filename or SWFInput [, maskfilename / SWFInput])
    Creates a new SWFBitmap object from jpg (with optional mask) or dbl file */
 PHP_METHOD(swfbitmap, __construct)
 {
 	zval **zfile, **zmask = NULL;
 	SWFBitmap bitmap;
 	SWFJpegWithAlpha bitmap_alpha;
-	SWFInput input, maskinput;
+	SWFInput input = NULL, maskinput = NULL;
 	int ret;
 
 	if (ZEND_NUM_ARGS() == 1) {
@@ -669,24 +710,51 @@ PHP_METHOD(swfbitmap, __construct)
 	} else {
 		WRONG_PARAM_COUNT;
 	}
-	
-	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
+
+	switch(Z_TYPE_PP(zfile))
+	{
+	case IS_RESOURCE:
+		input = getInput_fromFileResource(zfile TSRMLS_CC);
+		break;
+	case IS_OBJECT:
+		input = getInput(*zfile TSRMLS_CC);
+		break;	
+	case IS_STRING:
 		convert_to_string_ex(zfile);
-		PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
-		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+		input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+		if(input == NULL)
+			php_error(E_ERROR, "opening bitmap file failed");
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
-	} else {
-		input = getInput(zfile TSRMLS_CC);
+		break;
+
+	default:
+		php_error(E_ERROR, "swfbitmap::__construct: need either a filename, "
+		                   "a file ressource or SWFInput buffer.");
 	}
-	
+
 	if (zmask != NULL) {
-		if (Z_TYPE_PP(zmask) != IS_RESOURCE) {
+		switch(Z_TYPE_PP(zmask))
+		{
+		case IS_RESOURCE:
+			maskinput = getInput_fromFileResource(zmask TSRMLS_CC);
+			break;
+		case IS_OBJECT:
+			maskinput = getInput(*zmask TSRMLS_CC);
+			break;	
+		case IS_STRING:
 			convert_to_string_ex(zmask);
-			maskinput = newSWFInput_buffer(Z_STRVAL_PP(zmask), Z_STRLEN_PP(zmask));
+			maskinput = newSWFInput_filename(Z_STRVAL_PP(zmask));
+			if(maskinput == NULL)
+				php_error(E_ERROR, "opening mask file failed");
 			zend_list_addref(zend_list_insert(maskinput, le_swfinputp));
-		} else {
-			maskinput = getInput(zmask TSRMLS_CC);
+			break;
+
+		default:
+			php_error(E_ERROR, "swfbitmap::__construct: need either a filename, "
+			                   "a file ressource or SWFInput buffer.");
 		}
+
+		/* XXX: this is very optimistic! is it really a JPEG ?!? */
 		bitmap_alpha = newSWFJpegWithAlpha_fromInput(input, maskinput);
 		if(bitmap_alpha) {
 			ret = zend_list_insert(bitmap_alpha, le_swfbitmapp);
@@ -3015,36 +3083,42 @@ static zend_function_entry swfmorph_functions[] = {
 /* {{{ SWFSoundStream
  */
 
-/* {{{ proto class soundstream_init(file)
- */
+/* {{{ proto class soundstream::init(file) */
 PHP_METHOD(swfsoundstream, __construct)
 {
 	zval **zfile;
 	SWFSoundStream sound = NULL;
-	SWFInput input;
+	SWFInput input = NULL;
 	int ret;
 
-	switch(ZEND_NUM_ARGS()) 
-	{
-	case 1:
-		if(zend_get_parameters_ex(1, &zfile) == FAILURE)
-			WRONG_PARAM_COUNT;
-			
-		if(Z_TYPE_PP(zfile) != IS_RESOURCE)
-		{
-			convert_to_string_ex(zfile);
-			input = newSWFInput_filename(Z_STRVAL_PP(zfile));
-			zend_list_addref(zend_list_insert(input, le_swfinputp));
-		}
-		else
-			input = getInput(zfile TSRMLS_CC);
-		
-		sound = newSWFSoundStream_fromInput(input);
-		break;
-	default:
+	if(ZEND_NUM_ARGS() != 1) 
 		WRONG_PARAM_COUNT;
+		
+	if(zend_get_parameters_ex(1, &zfile) == FAILURE)
+		WRONG_PARAM_COUNT;
+	
+	switch(Z_TYPE_PP(zfile))
+	{
+	case IS_RESOURCE:
+		input = getInput_fromFileResource(zfile TSRMLS_CC);
 		break;
+	case IS_OBJECT:
+		input = getInput(*zfile TSRMLS_CC);
+		break;	
+	case IS_STRING:
+		convert_to_string_ex(zfile);
+		input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+		if(input == NULL)
+			php_error(E_ERROR, "opening sound file failed");
+		zend_list_addref(zend_list_insert(input, le_swfinputp));
+		break;
+
+	default:
+		php_error(E_ERROR, "soundstream::init: need either a filename, "
+		                   "a file ressource or SWFInput buffer.");
 	}
+		
+	sound = newSWFSoundStream_fromInput(input);
 	
 	if(sound) {
 		ret = zend_list_insert(sound, le_swfsoundstreamp);
@@ -3110,13 +3184,16 @@ SWFSound getSound(zval *id TSRMLS_DC)
 }
 
 /* }}} */
-/* {{{ proto void swfsound::__construct(string filename, int flags)
-   Creates a new SWFSound object from given file */
+/* {{{ proto void swfsound::__construct(string filename/SWFInput/SWFSoundstream[, int flags])
+   Creates a new SWFSound object from given file 
+   Takes either a Filename or SWFInput memory buffer AND flags or
+   a SWFSoundStream object with NO flags.
+*/
 PHP_METHOD(swfsound, __construct)
 {
 	zval **zfile, **zflags;
 	SWFSound sound = NULL;
-	SWFInput input;
+	SWFInput input = NULL;
 	SWFSoundStream stream;
 	int flags;
 	int ret;
@@ -3136,16 +3213,26 @@ PHP_METHOD(swfsound, __construct)
 		convert_to_long_ex(zflags);
 		flags = Z_LVAL_PP(zflags);
 
-		if(Z_TYPE_PP(zfile) != IS_RESOURCE)
+		switch(Z_TYPE_PP(zfile))
 		{
+		case IS_RESOURCE:
+			input = getInput_fromFileResource(zfile TSRMLS_CC);
+			break;
+		case IS_OBJECT:
+			input = getInput(*zfile TSRMLS_CC);
+			break;	
+		case IS_STRING:
 			convert_to_string_ex(zfile);
-			PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
-			input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
+			input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+			if(input == NULL)
+				php_error(E_ERROR, "opening sound file failed");
 			zend_list_addref(zend_list_insert(input, le_swfinputp));
-		}
-		else
-			input = getInput(zfile TSRMLS_CC);
+			break;
 
+		default:
+			php_error(E_ERROR, "swfsound::__construct: need either a filename, "
+			                   "a file ressource or SWFInput buffer.");
+		}
 		sound = newSWFSound_fromInput(input, flags);
 	}
 	else
@@ -3262,43 +3349,49 @@ static zend_function_entry swfsoundinstance_functions[] = {
 
 /* {{{ SWFVideoStream */
 
-/* {{{ proto class swfvideostream_init([file])
+/* {{{ proto class swfvideostream_init([filename])
    Returns a SWVideoStream object */
-
 PHP_METHOD(swfvideostream, __construct)
 {
 	zval **zfile = NULL;
 	SWFVideoStream stream;
-	SWFInput input;
+	SWFInput input = NULL;
 	int ret;
 
-	switch(ZEND_NUM_ARGS()) {
-		case 1:
-			if(zend_get_parameters_ex(1, &zfile) == FAILURE)
-				WRONG_PARAM_COUNT;
-	
-			if(Z_TYPE_PP(zfile) != IS_RESOURCE)
-  			{
-			    convert_to_string_ex(zfile);
-			    if(strcasecmp(".flv", Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4) == 0)
-				input = newSWFInput_filename(Z_STRVAL_PP(zfile));
-			    else // keep fingers crossed that it is file_get_contents() 
-				input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile)); 
-			    zend_list_addref(zend_list_insert(input, le_swfinputp));
-  			}
-  			else
-			{
-			    input = getInput(zfile TSRMLS_CC);
-			}
-		
-			stream = newSWFVideoStream_fromInput(input);
-			break;
-		case 0:
-			stream = newSWFVideoStream();
-			break;
-		default:
+	switch(ZEND_NUM_ARGS()) 
+	{
+	case 1:
+		if(zend_get_parameters_ex(1, &zfile) == FAILURE)
 			WRONG_PARAM_COUNT;
+	
+		switch(Z_TYPE_PP(zfile))
+		{
+		case IS_RESOURCE:
+			input = getInput_fromFileResource(zfile TSRMLS_CC);
 			break;
+		case IS_OBJECT:
+			input = getInput(*zfile TSRMLS_CC);
+			break;	
+		case IS_STRING:
+			convert_to_string_ex(zfile);
+			input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+			if(input == NULL)
+				php_error(E_ERROR, "opening sound video failed");
+			zend_list_addref(zend_list_insert(input, le_swfinputp));
+			break;
+
+		default:
+			php_error(E_ERROR, "swfvideostream_init: need either a filename, "
+			                   "a file ressource or SWFInput buffer.");
+		}
+		stream = newSWFVideoStream_fromInput(input);
+		break;
+	case 0:
+		stream = newSWFVideoStream();
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+		break;
 	}
 	
 	if(stream) {
@@ -3307,7 +3400,6 @@ PHP_METHOD(swfvideostream, __construct)
 		add_property_resource(getThis(), "videostream", ret);
 		zend_list_addref(ret);
 	}
-	
 }	
 
 static void destroy_SWFVideoStream_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
@@ -3318,14 +3410,11 @@ static void destroy_SWFVideoStream_resource(zend_rsrc_list_entry *resource TSRML
 
 /* {{{ internal function getVideoStream
    Returns the SWFVideoStream object contained in zval *id */
-                                                                                                                                             
 static SWFVideoStream getVideoStream(zval *id TSRMLS_DC)
 {
 	void *stream = SWFgetProperty(id, "videostream", 11, le_swfvideostreamp TSRMLS_CC);
-	                                                                                                                                         
 	if(!stream)
 		php_error(E_ERROR, "called object is not an SWFVideoStream!");
-	                                                                                                                                         
 	return (SWFVideoStream)stream;
 }
 
@@ -3338,7 +3427,7 @@ PHP_METHOD(swfvideostream, setdimension)
 	zval **x, **y;
 	SWFVideoStream stream = getVideoStream(getThis() TSRMLS_CC);
 	if(!stream)
-		 php_error(E_ERROR, "getVideoSTream returned NULL");
+		 php_error(E_ERROR, "getVideoStream returned NULL");
 
 	if( ZEND_NUM_ARGS() != 2 
 			|| zend_get_parameters_ex(2, &x, &y) == FAILURE )
@@ -3402,7 +3491,7 @@ PHP_METHOD(swfbinarydata, __construct)
 			/* this is not perfect for binary data... but will work for now */
 			convert_to_string_ex(zdata);
 			convert_to_long_ex(zlen);		
-			bd = newSWFBinaryData(Z_STRVAL_PP(zdata), Z_LVAL_PP(zlen));
+			bd = newSWFBinaryData((unsigned char *)Z_STRVAL_PP(zdata), Z_LVAL_PP(zlen));
 			break;
 		default:
 			WRONG_PARAM_COUNT;
@@ -3420,7 +3509,7 @@ PHP_METHOD(swfbinarydata, __construct)
 
 /* {{{ internal function getBinaryData
    Returns the SWFBinaryData object contained in zval *id */
-static SWFBinaryData getBinaryData(zval *id TSRMLS_DC)
+static inline SWFBinaryData getBinaryData(zval *id TSRMLS_DC)
 {
 	void *bd = SWFgetProperty(id, "binarydata", strlen("binarydata"), le_swfbinarydatap TSRMLS_CC);
 	if(!bd)
@@ -3443,41 +3532,43 @@ static zend_function_entry swfbinarydata_functions[] = {
 /* }}} */
 
 /* {{{ SWFPrebuiltClip */
-/* {{{ proto class swfprebuiltclip_init([file])
+/* {{{ proto class swfprebuiltclip_init(filename / SWFInput )
     Returns a SWFPrebuiltClip object */
-
 PHP_METHOD(swfprebuiltclip, __construct)
 {
 	zval **zfile = NULL;
 	SWFPrebuiltClip clip;
-	SWFInput input;
+	SWFInput input = NULL;
 	int ret;
 
-	switch(ZEND_NUM_ARGS()) {
-		case 1:
-			if(zend_get_parameters_ex(1, &zfile) == FAILURE)
-				WRONG_PARAM_COUNT;
-	
-			if(Z_TYPE_PP(zfile) != IS_RESOURCE)
-   			{
-			    convert_to_string_ex(zfile);
-			    input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
-			    zend_list_addref(zend_list_insert(input, le_swfinputp));
-   			}
-   			else
-			    input = getInput(zfile TSRMLS_CC);
+	if(ZEND_NUM_ARGS() != 1)
+		WRONG_PARAM_COUNT;
 		
-			clip = newSWFPrebuiltClip_fromInput(input);
-			break;
-/* not sure whether this makes sense
-   there would have to be a function to add contents
-		case 0:
-			clip = newSWFPrebuiltClip();
-			break; */
-		default:
-			WRONG_PARAM_COUNT;
-			break;
+	if(zend_get_parameters_ex(1, &zfile) == FAILURE)
+		WRONG_PARAM_COUNT;
+	
+	switch(Z_TYPE_PP(zfile))
+	{
+	case IS_RESOURCE:
+		input = getInput_fromFileResource(zfile TSRMLS_CC);
+		break;
+	case IS_OBJECT:
+		input = getInput(*zfile TSRMLS_CC);
+		break;	
+	case IS_STRING:
+		convert_to_string_ex(zfile);
+		input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+		if(input == NULL)
+			php_error(E_ERROR, "opening prebuilt clip file failed");
+		zend_list_addref(zend_list_insert(input, le_swfinputp));
+		break;
+
+	default:
+		php_error(E_ERROR, "swfprebuiltclip_init: need either a filename, "
+		                   "a file ressource or SWFInput buffer.");
 	}
+		
+	clip = newSWFPrebuiltClip_fromInput(input);
 	
 	if(clip) {
 		ret = zend_list_insert(clip, le_swfprebuiltclipp);
@@ -3497,18 +3588,15 @@ static void destroy_SWFPrebuiltClip_resource(zend_rsrc_list_entry *resource TSRM
 
 /* {{{ internal function getPrebuiltClip
    Returns the SWFPrebuiltClip object contained in zval *id */
-                                                                                                                                             
 static SWFPrebuiltClip getPrebuiltClip(zval *id TSRMLS_DC)
 {
 	void *clip = SWFgetProperty(id, "prebuiltclip", 12, le_swfprebuiltclipp TSRMLS_CC);
-                                                                     
 	if(!clip)
 		php_error(E_ERROR, "called object is not an SWFPrebuiltClip!");
-                                                                                                                                             
 	return (SWFPrebuiltClip)clip;
 }
-
 /* }}} */
+
 static zend_function_entry swfprebuiltclip_functions[] = {
 	PHP_ME(swfprebuiltclip, __construct, NULL, 0)
 	{ NULL, NULL, NULL }
@@ -3516,9 +3604,6 @@ static zend_function_entry swfprebuiltclip_functions[] = {
 
 /* }}} */
 #endif
-
-/* }}} */
-
 
 /* {{{ SWFMovie
 */
@@ -4033,42 +4118,55 @@ PHP_METHOD(swfmovie, setNetworkAccess)
 } 
 /* }}} */
 
-/* {{{ proto long swfmovie::streamMP3(mixed file)
+/* {{{ proto long swfmovie::streamMP3(mixed filename / SWFInput)
    Sets sound stream of the SWF movie. The parameter can be stream or string. */
 PHP_METHOD(swfmovie, streamMP3)
 {
 	zval **zfile, **zskip;
 	float skip;
 	SWFSoundStream sound;
-	SWFInput input;
+	SWFInput input = NULL;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
-    switch (ZEND_NUM_ARGS()) {
-    case 1:
-  	  if(zend_get_parameters_ex(1, &zfile) == FAILURE) {
+	switch (ZEND_NUM_ARGS()) {
+	case 1:
+		if(zend_get_parameters_ex(1, &zfile) == FAILURE) 
+			WRONG_PARAM_COUNT;
+		skip = 0;
+		break;
+	case 2:
+		if(zend_get_parameters_ex(2, &zfile, &zskip) == FAILURE) 
+			WRONG_PARAM_COUNT;
+	  
+		convert_to_double_ex(zskip);
+		skip = Z_DVAL_PP(zskip);
+		break;
+	default:
 		WRONG_PARAM_COUNT;
-	  }
-	  skip = 0;
-	  break;
-    case 2:
-	  if(zend_get_parameters_ex(2, &zfile, &zskip) == FAILURE) {
-		 WRONG_PARAM_COUNT;
-	  }
-	  convert_to_double_ex(zskip);
-	  skip = Z_DVAL_PP(zskip);
-	  break;
-    default:
-      WRONG_PARAM_COUNT;
-    }
-	
-	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
-		convert_to_string_ex(zfile);
-		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
-		zend_list_addref(zend_list_insert(input, le_swfinputp));
-	} else {
-		input = getInput(zfile TSRMLS_CC);
 	}
-	
+
+	switch(Z_TYPE_PP(zfile))
+	{
+	case IS_RESOURCE:
+		input = getInput_fromFileResource(zfile TSRMLS_CC);
+		break;
+	case IS_OBJECT:
+		input = getInput(*zfile TSRMLS_CC);
+		break;	
+	case IS_STRING:
+		convert_to_string_ex(zfile);
+		input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+		if(input == NULL)
+			php_error(E_ERROR, "opening mp3 file failed");
+
+		zend_list_addref(zend_list_insert(input, le_swfinputp));
+		break;
+
+	default:
+		php_error(E_ERROR, "swfmovie::streamMP3: need either a filename, "
+		                   "a file ressource or SWFInput buffer.");
+	}
+
 	sound = newSWFSoundStream_fromInput(input);
 	SWFMovie_setSoundStreamAt(movie, sound, skip);
 	RETURN_LONG(SWFSoundStream_getDuration(sound) / SWFMovie_getRate(movie));
@@ -5251,7 +5349,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 	zval **zfile, **zskip, **zrate;
 	float skip, rate;
 	SWFSoundStream sound;
-	SWFInput input;
+	SWFInput input = NULL;
 	SWFMovieClip mc = getSprite(getThis() TSRMLS_CC);
 
 	switch (ZEND_NUM_ARGS()) 
@@ -5273,14 +5371,27 @@ PHP_METHOD(swfsprite, setSoundStream)
 	
 	convert_to_double_ex(zrate);
 	rate = Z_DVAL_PP(zrate);
-	if (Z_TYPE_PP(zfile) != IS_RESOURCE) {
-		convert_to_string_ex(zfile);
-		input = newSWFInput_buffer(Z_STRVAL_PP(zfile), Z_STRLEN_PP(zfile));
-		zend_list_addref(zend_list_insert(input, le_swfinputp));
-	} else {
-		input = getInput(zfile TSRMLS_CC);
-	}
 
+	switch(Z_TYPE_PP(zfile))
+	{
+	case IS_RESOURCE:
+		input = getInput_fromFileResource(zfile TSRMLS_CC);
+		break;
+	case IS_OBJECT:
+		input = getInput(*zfile TSRMLS_CC);
+		break;	
+	case IS_STRING:
+		convert_to_string_ex(zfile);
+		input = newSWFInput_filename(Z_STRVAL_PP(zfile));
+		if(input == NULL)
+			php_error(E_ERROR, "opening sound file failed");
+		zend_list_addref(zend_list_insert(input, le_swfinputp));
+		break;
+
+	default:
+		php_error(E_ERROR, "swfmovieclip::setSoundStream: need either a filename, "
+		                   "a file ressource or SWFInput buffer.");
+	}
 	sound = newSWFSoundStream_fromInput(input);
 	SWFMovieClip_setSoundStreamAt(mc, sound, Z_DVAL_PP(zrate), skip);
 	RETURN_LONG(SWFSoundStream_getDuration(sound) / rate);
@@ -6154,6 +6265,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry shadow_class_entry;
 	zend_class_entry cxform_class_entry;
 	zend_class_entry matrix_class_entry;
+	zend_class_entry input_class_entry;
 #endif
 	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
@@ -6373,6 +6485,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(blur_class_entry, "SWFBlur", swfblur_functions);
 	INIT_CLASS_ENTRY(cxform_class_entry, "SWFCXform", swfcxform_functions);
 	INIT_CLASS_ENTRY(matrix_class_entry, "SWFMatrix", swfmatrix_functions);
+	INIT_CLASS_ENTRY(input_class_entry, "SWFInput", swfinput_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
 
@@ -6407,6 +6520,7 @@ PHP_MINIT_FUNCTION(ming)
 	blur_class_entry_ptr = zend_register_internal_class(&blur_class_entry TSRMLS_CC);
 	cxform_class_entry_ptr = zend_register_internal_class(&cxform_class_entry TSRMLS_CC);
 	matrix_class_entry_ptr = zend_register_internal_class(&matrix_class_entry TSRMLS_CC);
+	input_class_entry_ptr = zend_register_internal_class(&input_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
