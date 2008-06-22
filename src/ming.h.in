@@ -193,6 +193,7 @@ SWFInput newSWFInput_filename(const char *);
 SWFInput newSWFInput_stream(FILE *f);
 SWFInput newSWFInput_buffer(unsigned char *buffer, int length);
 SWFInput newSWFInput_allocedBuffer(unsigned char *buffer, int length);
+SWFInput newSWFInput_bufferCopy(unsigned char *buffer, int length);
 SWFInput newSWFInput_input(SWFInput in, unsigned int length);
 void destroySWFInput(SWFInput input);
 
