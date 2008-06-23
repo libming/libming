@@ -32,6 +32,8 @@
 	* SWFSoundStream_getDuration replaces SWFSoundStream_getFrames()
 	* perl_ext build changes (build out of tree)
 	* API float->double transition
+	* php_ext: SWFInput can wrap raw byte-streams 
+	* php_ext: API: external data can be passed as file-resource, SWFInput or filename
 
 0.4.0.beta5 - 2007-09-18
 
