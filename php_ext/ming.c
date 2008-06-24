@@ -2264,7 +2264,7 @@ PHP_METHOD(swffont, __construct)
 
 	if(font == NULL)
 	{
-		php_error(E_ERROR, "Loading font failed!"
+		php_error(E_ERROR, "Loading font failed! "
 		                   "Please use new SWFBrowserFont(string:fontname) "
 		                   "for player/browser fonts.");
 	
@@ -5933,7 +5933,7 @@ PHP_METHOD(swftextfield, setFont)
 	}
 	else if(Z_OBJCE_PP(font) == browserfont_class_entry_ptr)
 	{
-		SWFTextField_setFont(field, getBrowserFont(*font TSRMLS_CC));
+		SWFTextField_setFont(field, (SWFBlock)getBrowserFont(*font TSRMLS_CC));
 	}
 	else {
 		php_error(E_ERROR, "not a font object\n");
