@@ -28,6 +28,7 @@ int main() {
 		fprintf(stderr, "Something went wrong during SWFMovie_save\n");
 		return 1;
 	}
-
+	destroySWFSoundStream(stream);
+	destroySWFMovie(m);
 	return 0;
 }
