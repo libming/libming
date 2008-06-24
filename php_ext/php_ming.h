@@ -147,6 +147,8 @@ PHP_METHOD(swfmovie, stopSound);
 PHP_METHOD(swfmovie, importChar);
 PHP_METHOD(swfmovie, importFont);
 PHP_METHOD(swfmovie, addFont);
+PHP_METHOD(swfmovie, replace);
+PHP_METHOD(swfmovie, getRate);
 # endif
 
 /* SWFSprint */

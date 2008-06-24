@@ -909,6 +909,9 @@ class SWFMovie
   void setRate(float rate)
     { SWFMovie_setRate(this->movie, rate); }
 
+  float getRate()
+    { return SWFMovie_getRate(this->movie); }
+
   void setDimension(float x, float y)
     { SWFMovie_setDimension(this->movie, x, y); }
 

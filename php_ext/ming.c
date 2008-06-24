@@ -4444,6 +4444,13 @@ PHP_METHOD(swfmovie, replace)
 	SWFMovie_replace_internal(movie, item, ublock);
 }
 /* }}} */
+
+/* {{{ float swfmovie::getRate() */
+PHP_METHOD(swfmovie, getRate)
+{
+	RETURN_DOUBLE(SWFMovie_getRate(getMovie(getThis() TSRMLS_CC)));
+}
+/* }}} */
 #endif
 
 static zend_function_entry swfmovie_functions[] = {
@@ -4478,6 +4485,7 @@ static zend_function_entry swfmovie_functions[] = {
 	PHP_ME(swfmovie, defineScene,		NULL, 0)
 	PHP_ME(swfmovie, namedAnchor,		NULL, 0)
 	PHP_ME(swfmovie, replace,		NULL, 0)
+	PHP_ME(swfmovie, getRate,		NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
