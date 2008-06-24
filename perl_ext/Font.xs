@@ -23,19 +23,9 @@ PROTOTYPES: ENABLE
 SWF::Font
 SWFFont_new(package="SWF::Font", filename)
 	char *package
-	char *filename = NO_INIT
-	PREINIT:
-	STRLEN len;
+	char *filename
 	CODE:
-	filename = (char *) SvPV(ST(1), len);
-	if (strncasecmp(filename+len-4, ".fdb", 4) == 0 
-		|| strncasecmp(filename+len-4, ".ttf", 4) == 0 )
-	{
-		RETVAL = newSWFFont_fromFile(filename);
-	}
-	else
-	    XSRETURN_UNDEF;
-
+	RETVAL = newSWFFont_fromFile(filename);
 	ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
