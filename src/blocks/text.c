@@ -53,15 +53,12 @@ struct SWFTextRecord_s
 	struct SWFTextRecord_s *next;
 
 	byte flags;
-	BOOL isBrowserFont;
-
 	// if it's not a browser font, is it a font or a fontchar?
 	BOOL isResolved;
 
 	union
 	{
 		SWFFont font;
-		SWFBrowserFont browserFont;
 		SWFFontCharacter fontchar;
 	} font;
 
@@ -255,7 +252,6 @@ SWFText_addTextRecord(SWFText text)
 
 	if ( current == NULL )
 	{
-		textRecord->isBrowserFont = FALSE;
 		textRecord->isResolved = FALSE;
 		textRecord->font.font = NULL;
 		textRecord->spacing = 0;
@@ -269,7 +265,6 @@ SWFText_addTextRecord(SWFText text)
 	}
 	else
 	{
-		textRecord->isBrowserFont = current->isBrowserFont;
 		textRecord->isResolved = current->isResolved;
 		textRecord->font = current->font;
 		textRecord->spacing = current->spacing;
@@ -327,7 +322,7 @@ SWFTextRecord_getNextRecord(SWFTextRecord record)
 SWFFont
 SWFTextRecord_getUnresolvedFont(SWFTextRecord record)
 {
-	if ( !record->isBrowserFont && !record->isResolved )
+	if ( !record->isResolved )
 		return record->font.font;
 	
 	return NULL;
@@ -370,10 +365,7 @@ SWFText_getScaledStringWidth(SWFText text, const char *string)
 	else
 		font = text->currentRecord->font.font;
 
-	if ( text->currentRecord->isBrowserFont )
-		ret = 0;
-	else
-		ret = SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
+	ret = SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
 	free(widestr);
 	return ret;
 }
@@ -396,10 +388,7 @@ SWFText_getScaledUTF8StringWidth(SWFText text, const char *string)
 	else
 		font = text->currentRecord->font.font;
 
-	if ( text->currentRecord->isBrowserFont )
-		ret = 0;
-	else
-		ret = SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
+	ret = SWFFont_getScaledWideStringWidth(font, widestr, len) * height / 1024;
 	free(widestr);
 	return ret;
 }
@@ -423,10 +412,7 @@ SWFText_getScaledWideStringWidth(SWFText text, const unsigned short *string)
 	else
 		font = text->currentRecord->font.font;
 
-	if ( text->currentRecord->isBrowserFont )
-		return 0;
-	else
-		return SWFFont_getScaledWideStringWidth(font, string, len) * height / 1024;
+	return SWFFont_getScaledWideStringWidth(font, string, len) * height / 1024;
 }
 
 
@@ -439,9 +425,6 @@ SWFText_getScaledAscent(SWFText text)
 	if(text->currentRecord == NULL)
 		return -1;
 
-	if ( text->currentRecord->isBrowserFont )
-		return 0;
-	
 	font = text->currentRecord->font.font;
 	height = text->currentRecord->height;
 	return SWFFont_getScaledAscent(font) * height / 1024;
@@ -457,9 +440,6 @@ SWFText_getScaledDescent(SWFText text)
 	if(text->currentRecord == NULL)
 		return -1;
 
-	if ( text->currentRecord->isBrowserFont )
-		return 0;
-
 	font = text->currentRecord->font.font;
 	height = text->currentRecord->height;
 	return SWFFont_getScaledDescent(font) * height / 1024;
@@ -472,18 +452,13 @@ SWFText_getScaledLeading(SWFText text)
 	SWFFont font = text->currentRecord->font.font;
 	int height = text->currentRecord->height;
 
-	if ( text->currentRecord->isBrowserFont )
-		return 0;
-	else
-		return SWFFont_getScaledLeading(font) * height / 1024;
+	return SWFFont_getScaledLeading(font) * height / 1024;
 }
-
 
 void 
 SWFText_setFont(SWFText text, SWFFont font)
 {
 	SWFTextRecord textRecord = text->currentRecord;
-
 	if ( textRecord == NULL || textRecord->string != NULL )
 		textRecord = SWFText_addTextRecord(text);
 
@@ -732,17 +707,9 @@ SWFText_resolveCodes(SWFText text)
 		text->nAdvanceBits = max(text->nAdvanceBits, textRecord->nAdvanceBits);
 
 		if ( textRecord->flags & SWF_TEXT_HAS_FONT )
-		{
-			if ( textRecord->isBrowserFont )
-			{
-				/* XXX - assume browser fonts have 8bit glyph table? */
-				nGlyphBits = max(nGlyphBits, 8);
-			}
-			else
-			{
-				int fontGlyphs = SWFFontCharacter_getNGlyphs(textRecord->font.fontchar);
-				nGlyphBits = max(nGlyphBits, SWFOutput_numBits(fontGlyphs-1));
-			}
+		{	
+			int fontGlyphs = SWFFontCharacter_getNGlyphs(textRecord->font.fontchar);
+			nGlyphBits = max(nGlyphBits, SWFOutput_numBits(fontGlyphs-1));
 		}
 
 		textRecord = textRecord->next;
@@ -769,12 +736,7 @@ SWFText_resolveCodes(SWFText text)
 		SWFOutput_writeUInt8(out, textRecord->flags | SWF_TEXT_STATE_CHANGE);
 
 		if ( textRecord->flags & SWF_TEXT_HAS_FONT )
-		{
-			if ( textRecord->isBrowserFont )
-				SWFOutput_writeUInt16(out, CHARACTERID(textRecord->font.browserFont));
-			else
-				SWFOutput_writeUInt16(out, CHARACTERID(textRecord->font.fontchar));
-		}
+			SWFOutput_writeUInt16(out, CHARACTERID(textRecord->font.fontchar));
 
 		if ( textRecord->flags & SWF_TEXT_HAS_COLOR )
 		{
@@ -813,83 +775,46 @@ SWFText_resolveCodes(SWFText text)
 
 		SWFOutput_writeUInt8(out, len);
 
-		/* XXX - er, browser fonts in text objects crash the player..
-			 Maybe because there's no definefontinfo block? */
+		SWFFontCharacter fontchar = textRecord->font.fontchar;
+		SWFFont font = SWFFontCharacter_getFont(fontchar);
 
-		if ( textRecord->isBrowserFont )
+		if ( font == NULL )
+			SWF_error("Couldn't find font");
+
+		for ( i=0; i<len; ++i )
 		{
-			for ( i=0; i<len; ++i )
+			SWFRect glyphBounds;
+			int minX, maxX, minY, maxY;
+
+			unsigned short code =
+				SWFFontCharacter_getGlyphCode(fontchar, textRecord->string[i]);
+
+			glyphBounds = SWFFont_getGlyphBounds(font, code);
+			SWFRect_getBounds(glyphBounds, &minX, &maxX, &minY, &maxY);
+
+			SWFOutput_writeBits(out, textRecord->string[i],	nGlyphBits);
+			SWFOutput_writeBits(out, textRecord->advance[i], text->nAdvanceBits);
+
+			if ( CHARACTER(text)->bounds )
 			{
-				SWFOutput_writeBits(out, textRecord->string[i], nGlyphBits);
-				SWFOutput_writeBits(out, textRecord->advance[i], text->nAdvanceBits);
-
-				/* XXX - fudging the text character bounds since we don't
-					 have font metrics */
-
-				if ( CHARACTER(text)->bounds )
-				{
-					SWFRect_includePoint(CHARACTER(text)->bounds, curX, curY, 0);
-					SWFRect_includePoint(CHARACTER(text)->bounds,
-															 curX + curH, curY + curH, 0);
-				}
-				else
-				{
-					CHARACTER(text)->bounds =
-						newSWFRect(curX, curX + curH, curY, curY + curH);
-				}
-
-				curX += curH;
+				SWFRect_includePoint(CHARACTER(text)->bounds, curX + minX * curH / 1024, 
+				                     curY + minY * curH / 1024, 0);
+				SWFRect_includePoint(CHARACTER(text)->bounds, curX + maxX * curH / 1024, 
+				                     curY + maxY * curH / 1024, 0);
 			}
-		}
-		else
-		{
-			SWFFontCharacter fontchar = textRecord->font.fontchar;
-			SWFFont font = SWFFontCharacter_getFont(fontchar);
-
-			if ( font == NULL )
-				SWF_error("Couldn't find font");
-
-			for ( i=0; i<len; ++i )
+			else
 			{
-				SWFRect glyphBounds;
-				int minX, maxX, minY, maxY;
-
-				unsigned short code =
-					SWFFontCharacter_getGlyphCode(fontchar, textRecord->string[i]);
-
-				glyphBounds = SWFFont_getGlyphBounds(font, code);
-
-				SWFRect_getBounds(glyphBounds, &minX, &maxX, &minY, &maxY);
-
-				SWFOutput_writeBits(out, textRecord->string[i],	nGlyphBits);
-				SWFOutput_writeBits(out, textRecord->advance[i], text->nAdvanceBits);
-
-				if ( CHARACTER(text)->bounds )
-				{
-					SWFRect_includePoint(CHARACTER(text)->bounds,
-															 curX + minX * curH / 1024,
-															 curY + minY * curH / 1024, 0);
-
-					SWFRect_includePoint(CHARACTER(text)->bounds,
-															 curX + maxX * curH / 1024,
-															 curY + maxY * curH / 1024, 0);
-				}
-				else
-				{
-					CHARACTER(text)->bounds =
-						newSWFRect(curX + minX * curH /1024, curX + maxX * curH /1024,
-											 curY + minY * curH /1024, curY + maxY * curH /1024);
-				}
-
-				if ( textRecord->advance != NULL )
-					curX += textRecord->advance[i];
+				CHARACTER(text)->bounds = newSWFRect(curX + minX * curH /1024, 
+					curX + maxX * curH /1024, curY + minY * curH /1024, 
+					curY + maxY * curH /1024);
 			}
-		}
 
+			if ( textRecord->advance != NULL )
+				curX += textRecord->advance[i];
+		}
 		textRecord = textRecord->next;
 		destroySWFTextRecord(oldRecord);
 	}
-
 	SWFOutput_writeUInt8(out, 0); /* end text records */
 
 	text->nGlyphBits = nGlyphBits;
