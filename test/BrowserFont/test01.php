@@ -5,7 +5,7 @@
 $m = new SWFMovie();
 $tf = new SWFTextField();
 
-$font = new SWFFont("_sans");
+$font = new SWFBrowserFont("_sans");
 
 $tf->setFont($font);
 $tf->setColor(0, 0, 0);
