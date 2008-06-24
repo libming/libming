@@ -76,6 +76,10 @@ PHP_METHOD(swffiltermatrix, init);
 
 PHP_METHOD(swffilter, init);
 
+PHP_METHOD(swfbrowserfont, init);
+
+PHP_METHOD(swfinput, init);
+
 PHP_METHOD(swfcxform, init);
 PHP_METHOD(swfcxform, setColorAdd);
 PHP_METHOD(swfcxform, setColorMult);

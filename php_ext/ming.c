@@ -197,6 +197,7 @@ static int le_swfshadowp;
 static int le_swffiltermatrixp;
 static int le_swfcxformp;
 static int le_swfmatrixp;
+static int le_swfbrowserfontp;
 #endif
 static int le_swfcharacterp;
 
@@ -232,6 +233,7 @@ static zend_class_entry *shadow_class_entry_ptr;
 static zend_class_entry *filtermatrix_class_entry_ptr;
 static zend_class_entry *cxform_class_entry_ptr;
 static zend_class_entry *matrix_class_entry_ptr;
+static zend_class_entry *browserfont_class_entry_ptr;
 #endif
 static zend_class_entry *character_class_entry_ptr;
 
@@ -394,6 +396,55 @@ static zend_function_entry swfinput_functions[] = {
 };
 /* }}} */
 
+/* {{{ SWFBrowserFont */
+static SWFBrowserFont getBrowserFont(zval *id TSRMLS_DC)
+{
+	void *bf = SWFgetProperty(id, "browserfont", strlen("browserfont"), 
+			le_swfbrowserfontp TSRMLS_CC);
+
+	if(!bf)
+	{
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, 
+			"Called object is not an SWFBrowserFont");
+	}
+	return (SWFBrowserFont)bf;
+}
+
+/* {{{ proto swfbrowserfont::_construct(fontname) */
+PHP_METHOD(swfbrowserfont, __construct)
+{
+	zval **name;
+	int ret;
+	SWFBrowserFont font;
+
+	if(ZEND_NUM_ARGS() != 1)
+		WRONG_PARAM_COUNT;
+	
+	if(zend_get_parameters_ex(1, &name) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	convert_to_string_ex(name);
+	font = newSWFBrowserFont(Z_STRVAL_PP(name));
+	if(font)
+	{
+		ret = zend_list_insert(font, le_swfbrowserfontp);
+		object_init_ex(getThis(), browserfont_class_entry_ptr);
+		add_property_resource(getThis(), "browserfont", ret);
+		zend_list_addref(ret);
+	}
+}
+/* }}} */
+
+static void destroy_SWFBrowserFont_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+{
+	destroySWFBrowserFont((SWFBrowserFont)resource->ptr);
+}
+
+static zend_function_entry swfbrowserfont_functions[] = {
+	PHP_ME(swfbrowserfont, __construct,          NULL, 0)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
 /* {{{ SWFCXform
 */
 /* {{{ proto void swfcxform::__construct([rAdd, gAdd, bAdd, aAdd, rMult, gMult, bMult, aMult]) */
@@ -491,6 +542,9 @@ static zend_function_entry swfcxform_functions[] = {
 	{ NULL, NULL, NULL }
 };
 /* }}} */
+
+
+
 
 /* {{{ SWFMatrix */
 
@@ -2205,18 +2259,24 @@ PHP_METHOD(swffont, __construct)
 
 	convert_to_string_ex(zfile);
 
-	if (strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".fdb") == 0 || 
-			strcasecmp(Z_STRVAL_PP(zfile)+Z_STRLEN_PP(zfile)-4, ".ttf") == 0) {
-		PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
-		font = newSWFFont_fromFile(Z_STRVAL_PP(zfile));
-	} else {
-		font = (SWFFont)newSWFBrowserFont(Z_STRVAL_PP(zfile));
-	}
-	ret = zend_list_insert(font, le_swffontp);
+	PHP_MING_FILE_CHK(Z_STRVAL_PP(zfile));
+	font = newSWFFont_fromFile(Z_STRVAL_PP(zfile));
 
-	object_init_ex(getThis(), font_class_entry_ptr);
-	add_property_resource(getThis(), "font", ret);
-	zend_list_addref(ret);
+	if(font == NULL)
+	{
+		php_error(E_ERROR, "Loading font failed!"
+		                   "Please use new SWFBrowserFont(string:fontname) "
+		                   "for player/browser fonts.");
+	
+	}
+	
+	if(font)
+	{
+		ret = zend_list_insert(font, le_swffontp);
+		object_init_ex(getThis(), font_class_entry_ptr);
+		add_property_resource(getThis(), "font", ret);
+		zend_list_addref(ret);
+	}
 }
 
 static void destroy_SWFFont_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
@@ -5538,7 +5598,7 @@ static SWFText getText(zval *id TSRMLS_DC)
 }
 /* }}} */
 
-/* {{{ proto void swftext::setFont(object font)
+/* {{{ proto void swftext::setFont(SWFFont font)
    Sets this SWFText object's current font to given font */
 PHP_METHOD(swftext, setFont)
 {
@@ -5866,7 +5926,18 @@ PHP_METHOD(swftextfield, setFont)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_object_ex(font);
-	SWFTextField_setFont(field, getFontOrFontChar(*font TSRMLS_CC));
+	if(Z_OBJCE_PP(font) == font_class_entry_ptr 
+		|| Z_OBJCE_PP(font) == fontchar_class_entry_ptr)
+	{
+		SWFTextField_setFont(field, getFontOrFontChar(*font TSRMLS_CC));
+	}
+	else if(Z_OBJCE_PP(font) == browserfont_class_entry_ptr)
+	{
+		SWFTextField_setFont(field, getBrowserFont(*font TSRMLS_CC));
+	}
+	else {
+		php_error(E_ERROR, "not a font object\n");
+	}		
 }
 /* }}} */
 
@@ -6266,6 +6337,7 @@ PHP_MINIT_FUNCTION(ming)
 	zend_class_entry cxform_class_entry;
 	zend_class_entry matrix_class_entry;
 	zend_class_entry input_class_entry;
+	zend_class_entry browserfont_class_entry;
 #endif
 	zend_class_entry character_class_entry;
 	Ming_setErrorFunction((void *) php_ming_error);
@@ -6453,6 +6525,7 @@ PHP_MINIT_FUNCTION(ming)
 	le_swfcharacterp = zend_register_list_destructors_ex(NULL, NULL, "SWFCharacter", module_number);
 	le_swfcxformp = zend_register_list_destructors_ex(destroy_SWFCXform_resource, NULL, "SWFCXform", module_number);
 	le_swfmatrixp = zend_register_list_destructors_ex(NULL, NULL, "SWFMatrix", module_number);
+	le_swfbrowserfontp = zend_register_list_destructors_ex(destroy_SWFBrowserFont_resource, NULL, "SWFBrowserFont", module_number);
 #endif
 
 	INIT_CLASS_ENTRY(shape_class_entry, "SWFShape", swfshape_functions);
@@ -6486,6 +6559,7 @@ PHP_MINIT_FUNCTION(ming)
 	INIT_CLASS_ENTRY(cxform_class_entry, "SWFCXform", swfcxform_functions);
 	INIT_CLASS_ENTRY(matrix_class_entry, "SWFMatrix", swfmatrix_functions);
 	INIT_CLASS_ENTRY(input_class_entry, "SWFInput", swfinput_functions);
+	INIT_CLASS_ENTRY(browserfont_class_entry, "SWFBrowserFont", swfbrowserfont_functions);
 #endif
 	INIT_CLASS_ENTRY(character_class_entry, "SWFCharacter", swfcharacter_functions);
 
@@ -6521,6 +6595,7 @@ PHP_MINIT_FUNCTION(ming)
 	cxform_class_entry_ptr = zend_register_internal_class(&cxform_class_entry TSRMLS_CC);
 	matrix_class_entry_ptr = zend_register_internal_class(&matrix_class_entry TSRMLS_CC);
 	input_class_entry_ptr = zend_register_internal_class(&input_class_entry TSRMLS_CC);
+	browserfont_class_entry_ptr = zend_register_internal_class(&browserfont_class_entry TSRMLS_CC);
 #endif
 	character_class_entry_ptr = zend_register_internal_class(&character_class_entry TSRMLS_CC);
 	return SUCCESS;
