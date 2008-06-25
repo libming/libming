@@ -2320,26 +2320,18 @@ PHP_METHOD(swffont, getUTF8Width)
 	RETURN_DOUBLE(width);
 }
 
-/* }}} */
-/* not sure about 0 bytes !!!!!!!!! */
-/* {{{ proto int swffont::getWideWidth(string)
-   Calculates the width of the given string in this font at full height */
-/*
-PHP_METHOD(swffont, getWideWidth)
+/* {{{ proto int swffont::getglyphcount() */
+PHP_METHOD(swffont, getGlyphCount)
 {
-	zval **zstring;
-	float width;
-
-	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
-		WRONG_PARAM_COUNT;
-
-	convert_to_string_ex(zstring);
-
-	width = SWFFont_getWideStringWidth(getFont(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
-
-	RETURN_DOUBLE(width);
+        RETURN_LONG(SWFFont_getGlyphCount(getFont(getThis() TSRMLS_CC)));
 }
-*/
+/* }}} */
+
+/* {{{ proto string swffont::getname() */
+PHP_METHOD(swffont, getName)
+{
+        RETURN_STRING(SWFFont_getName(getFont(getThis() TSRMLS_CC)), 0);
+}
 /* }}} */
 #endif
 
@@ -2376,38 +2368,19 @@ PHP_METHOD(swffont, getLeading)
 }
 /* }}} */
 
-#ifdef HAVE_NEW_MING
-/* {{{ proto void swffont::addChars(string)
-   adds characters to a font required within textfields */
-/*
-PHP_METHOD(swffont, addChars)
-{
-	zval **zstring;
-
-	if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &zstring) == FAILURE)
-		WRONG_PARAM_COUNT;
-
-	convert_to_string_ex(zstring);
-
-	SWFFont_addChars(getFont(getThis() TSRMLS_CC), Z_STRVAL_PP(zstring));
-}
-*/
-/* }}} */
-
-#endif
 
 static zend_function_entry swffont_functions[] = {
 	PHP_ME(swffont, __construct,       NULL, 0)
 	PHP_ME(swffont, getWidth,          NULL, 0)
 #ifdef HAVE_NEW_MING
 	PHP_ME(swffont, getUTF8Width,      NULL, 0)
-/*	PHP_ME(swffont, getwidewidth,      NULL, 0)*/
 #endif
 	PHP_ME(swffont, getAscent,         NULL, 0)
 	PHP_ME(swffont, getDescent,        NULL, 0)
 	PHP_ME(swffont, getLeading,        NULL, 0)
 #ifdef HAVE_NEW_MING
-/*	PHP_ME(swffont, addchars,          NULL, 0)*/
+        PHP_ME(swffont, getGlyphCount,    NULL, 0)
+        PHP_ME(swffont, getName,           NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };

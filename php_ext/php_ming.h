@@ -169,22 +169,15 @@ PHP_METHOD(swfsprite, stopSound);
 
 PHP_METHOD(swffont, init);
 PHP_METHOD(swffont, getWidth);
-
-#ifdef HAVE_NEW_MING
-PHP_METHOD(swffont, getUTF8Width);
-/*PHP_METHOD(swffont, getWideWidth);*/
-#endif
-
 PHP_METHOD(swffont, getAscent);
 PHP_METHOD(swffont, getDescent);
 PHP_METHOD(swffont, getLeading);
-
 #ifdef HAVE_NEW_MING
-/*PHP_METHOD(swffont, addChars);*/
-PHP_METHOD(swffont, getShape);
+PHP_METHOD(swffont, getUTF8Width);
+PHP_METHOD(swffont, getGlyphCount);
+PHP_METHOD(swffont, getName);
 #endif
 
-PHP_METHOD(swffont, getLeading);
 
 /* SWFText */
 
