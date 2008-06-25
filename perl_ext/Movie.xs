@@ -48,6 +48,10 @@ SWFMovie_setRate(movie, rate)
 	SWF::Movie	movie
 	float	rate
 
+float 
+SWFMovie_getRate(movie)
+	SWF::Movie movie
+
 void
 SWFMovie_setDimension(movie, x, y)
 	SWF::Movie	movie

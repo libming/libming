@@ -788,6 +788,7 @@ SWFMovie newSWFMovieWithVersion(int version);
 void destroySWFMovie(SWFMovie movie);
 
 void SWFMovie_setRate(SWFMovie movie, float rate);
+float SWFMovie_getRate(SWFMovie movie);
 void SWFMovie_setDimension(SWFMovie movie, float x, float y);
 void SWFMovie_setNumberOfFrames(SWFMovie movie, int frames);
 

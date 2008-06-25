@@ -483,6 +483,7 @@ newSWFMovie = _mingc.newSWFMovie
 newSWFMovieWithVersion = _mingc.newSWFMovieWithVersion
 destroySWFMovie = _mingc.destroySWFMovie
 SWFMovie_setRate = _mingc.SWFMovie_setRate
+SWFMovie_getRate = _mingc.SWFMovie_getRate
 SWFMovie_setDimension = _mingc.SWFMovie_setDimension
 SWFMovie_setNumberOfFrames = _mingc.SWFMovie_setNumberOfFrames
 SWFMovie_addExport = _mingc.SWFMovie_addExport

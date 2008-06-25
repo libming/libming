@@ -12346,6 +12346,26 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFMovie_getRate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  float result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMovie_getRate",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_getRate" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  result = (float)SWFMovie_getRate(arg1);
+  resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFMovie_setDimension(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovie arg1 = (SWFMovie) 0 ;
@@ -14358,6 +14378,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"newSWFMovieWithVersion", _wrap_newSWFMovieWithVersion, METH_VARARGS, NULL},
 	 { (char *)"destroySWFMovie", _wrap_destroySWFMovie, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setRate", _wrap_SWFMovie_setRate, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_getRate", _wrap_SWFMovie_getRate, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setDimension", _wrap_SWFMovie_setDimension, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setNumberOfFrames", _wrap_SWFMovie_setNumberOfFrames, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_addExport", _wrap_SWFMovie_addExport, METH_VARARGS, NULL},

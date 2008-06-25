@@ -538,6 +538,9 @@ class SWFMovie(SWFBase):
     def setRate(self, rate):
         mingc.SWFMovie_setRate(self.this, rate)
 
+    def getRate(self):
+        mingc.SWFMovie_getRate(self.this)
+
     def setDimension(self, x, y):
         mingc.SWFMovie_setDimension(self.this, x, y)
 
