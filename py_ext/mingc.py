@@ -184,7 +184,6 @@ newSWFMorphShape = _mingc.newSWFMorphShape
 destroySWFMorph = _mingc.destroySWFMorph
 SWFMorph_getShape1 = _mingc.SWFMorph_getShape1
 SWFMorph_getShape2 = _mingc.SWFMorph_getShape2
-newSWFFont = _mingc.newSWFFont
 newSWFFont_fromFile = _mingc.newSWFFont_fromFile
 destroySWFFont = _mingc.destroySWFFont
 SWFFont_getStringWidth = _mingc.SWFFont_getStringWidth

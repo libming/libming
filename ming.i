@@ -289,7 +289,6 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 
 /***** SWFFont *****/
 
-SWFFont newSWFFont(void);
 SWFFont newSWFFont_fromFile(const char *filename);
 
 void destroySWFFont(SWFFont font);

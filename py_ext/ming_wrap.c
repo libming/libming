@@ -5509,19 +5509,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_newSWFFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SWFFont result;
-  
-  if (!PyArg_ParseTuple(args,(char *)":newSWFFont")) SWIG_fail;
-  result = (SWFFont)newSWFFont();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_newSWFFont_fromFile(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
@@ -14228,7 +14215,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"destroySWFMorph", _wrap_destroySWFMorph, METH_VARARGS, NULL},
 	 { (char *)"SWFMorph_getShape1", _wrap_SWFMorph_getShape1, METH_VARARGS, NULL},
 	 { (char *)"SWFMorph_getShape2", _wrap_SWFMorph_getShape2, METH_VARARGS, NULL},
-	 { (char *)"newSWFFont", _wrap_newSWFFont, METH_VARARGS, NULL},
 	 { (char *)"newSWFFont_fromFile", _wrap_newSWFFont_fromFile, METH_VARARGS, NULL},
 	 { (char *)"destroySWFFont", _wrap_destroySWFFont, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getStringWidth", _wrap_SWFFont_getStringWidth, METH_VARARGS, NULL},
