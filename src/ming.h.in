@@ -412,7 +412,6 @@ SWFShape SWFMorph_getShape2(SWFMorph morph);
 
 /***** SWFFont *****/
 
-SWFFont newSWFFont(void);
 SWFFont newSWFFont_fromFile(const char *filename);
 
 /* pull font definition from fdb (font def block) file */
