@@ -36,12 +36,32 @@ SWFFill_scaleTo(fill, x, ...)
         SWFFill_scaleXYTo(fill, x, y);
 
 void
+SWFFill_scale(fill, x, ...)
+	SWF::Fill       fill
+        float           x
+        float           y = NO_INIT
+        CODE:
+        y = (items > 2) ? (float)SvNV(ST(2)) : x; 
+        SWFFill_scaleXYTo(fill, x, y);
+
+void
 SWFFill_rotateTo(fill, degrees)
         SWF::Fill       fill
         float           degrees
 
 void
+SWFFill_rotate(fill, degrees)
+        SWF::Fill       fill
+        float           degrees
+
+
+void
 SWFFill_skewXTo(fill, x)
+        SWF::Fill       fill
+        float           x
+
+void
+SWFFill_skewX(fill, x)
         SWF::Fill       fill
         float           x
 
@@ -50,6 +70,20 @@ SWFFill_skewYTo(fill, y)
         SWF::Fill       fill
         float           y
 
+void
+SWFFill_skewY(fill, y)
+        SWF::Fill       fill
+        float           y
+
+void 
+SWFFill_setMatrix(fill, a, b, c, d, x, y)
+        SWF::Fill       fill
+        float           a
+        float           b
+        float           c
+        float           d
+        float           x
+        float           y
 
 void
 SWFFill_DESTROY(fill)
