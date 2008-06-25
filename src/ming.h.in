@@ -433,6 +433,9 @@ int SWFFont_getGlyphCount(SWFFont font);
 
 SWFFontCollection newSWFFontCollection_fromFile(const char *filename);
 SWFFont *SWFFontCollection_getFonts(SWFFontCollection collection, int *count);
+int SWFFontCollection_getFontCount(SWFFontCollection collection);
+SWFFont SWFFontCollection_getFont(SWFFontCollection collection, int index);
+
 /***** SWFText *****/
 
 SWFText newSWFText(void);

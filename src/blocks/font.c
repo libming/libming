@@ -950,6 +950,21 @@ SWFFontCollection newSWFFontCollection()
 	return collection;
 }
 
+int SWFFontCollection_getFontCount(SWFFontCollection collection)
+{
+	if(collection == NULL)
+		return -1;
+	return collection->numFonts;
+}
+
+SWFFont SWFFontCollection_getFont(SWFFontCollection collection, int index)
+{
+	if(index < 0 || index >= collection->numFonts)
+		return NULL;
+
+	return collection->fontList[index];
+}
+
 SWFFont *SWFFontCollection_getFonts(SWFFontCollection collection, int *count)
 {
 	if(!collection)
