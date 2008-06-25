@@ -1,7 +1,940 @@
-2008-03-03 13:02  pertusus
+2008-06-25 16:00  krechert
 
-	* test/, src/blocks/Makefile.am: add missing files
-	* test/: add c++ standard includes (cstdlib, cstdio).
+	* NEWS: update
+
+2008-06-25 15:58  krechert
+
+	* php_ext/: ming.c, php_ming.h: cleanup dead code SWFFont update
+
+2008-06-25 15:50  krechert
+
+	* mingpp.h, ming.i, py_ext/ming.py, py_ext/ming_wrap.c,
+	  py_ext/mingc.py, perl_ext/Font.xs: SWFFont updates
+
+2008-06-25 15:50  krechert
+
+	* src/ming.h.in: removed newSWFFont() as public function (causes
+	  various crashes)
+
+2008-06-25 14:36  krechert
+
+	* src/blocks/: block.c, blocktypes.h, font.c, textfield.c: make
+	  SWFTextField_setFont() more secure
+
+2008-06-25 12:10  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py,
+	  perl_ext/Movie.xs: SWFMovie::getRate
+
+2008-06-25 00:45  krechert
+
+	* test/SoundStream/: Makefile.am, TestList, test02-cxx.C, test02.c,
+	  test02.php, test02.ref: movieclip soundstream
+
+2008-06-25 00:41  krechert
+
+	* mingpp.h, php_ext/ming.c, php_ext/php_ming.h: SWFMovie::getRate
+
+2008-06-24 23:53  krechert
+
+	* test/Movie/setSoundStream/: test01.c, test01.php, test03.php:
+	  modified testcase to test more php interfaces added test03.php
+
+2008-06-24 23:49  krechert
+
+	* test/Movie/setSoundStream/test02.php: php testcase
+
+2008-06-24 23:42  krechert
+
+	* test/Movie/setSoundStream/test01.php: php soundstream test
+
+2008-06-24 23:34  krechert
+
+	* test/BrowserFont/test01.php: use browserfont
+
+2008-06-24 23:31  krechert
+
+	* php_ext/ming.c: fix warning
+
+2008-06-24 23:25  krechert
+
+	* php_ext/: ming.c, php_ming.h: added browserfont
+
+2008-06-24 21:38  krechert
+
+	* src/blocks/text.c: remove browserfont code from swftext.
+	  browserfonts can't be used with static textfields.
+
+2008-06-24 21:31  krechert
+
+	* perl_ext/Font.xs: let ming do the file check. caused failure with
+	  make check
+
+2008-06-23 11:17  krechert
+
+	* NEWS: update
+
+2008-06-23 11:14  krechert
+
+	* test/BrowserFont/test01.php: php testcase
+
+2008-06-22 16:15  krechert
+
+	* test/Filter/test05.php: php filtermatrix / filter testcase
+
+2008-06-22 16:14  krechert
+
+	* test/Filter/: test05-cxx.C, test05.c, test05.ref: make testcase
+	  simpler
+
+2008-06-22 16:13  krechert
+
+	* src/: ming.h.in, blocks/input.c: let ming allocate, copy and
+	  destroy memory
+
+2008-06-22 15:56  krechert
+
+	* php_ext/ming.c: Fix functions which take external data (e.g.
+	  bitmaps, sound, video ...) All these functions are more typesafe
+	  now. They take either a filename, a file ressource (php
+	  equivalent of FILE *) or a SWFInput object wrapping raw memory.
+
+2008-06-20 11:31  krechert
+
+	* src/blocks/filter.c: bugfix: allocate enough memory
+
+2008-06-19 20:25  krechert
+
+	* php_ext/ming.c, src/blocks/input.c: fix typo
+
+2008-06-19 17:53  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py:
+	  SWFFilter, SWFShadow, SWFBlur, SWFFilterMatrix
+
+2008-06-19 16:59  krechert
+
+	* py_ext/ming.py: compile fixes SWFText update
+
+2008-06-19 16:59  krechert
+
+	* php_ext/ming.c: bugfix: dont compare pointer and int
+
+2008-06-19 16:58  krechert
+
+	* mingpp.h: SWFText update
+
+2008-06-19 16:14  krechert
+
+	* perl_ext/Text.xs: SWFText update
+
+2008-06-19 16:14  krechert
+
+	* php_ext/ming.c: SWFText updates
+
+2008-06-19 15:58  krechert
+
+	* php_ext/ming.c: SWFMatrix and friends
+
+2008-06-19 13:55  krechert
+
+	* perl_ext/: Constants.xs, Shape.xs: remove private constants
+
+2008-06-19 13:54  krechert
+
+	* perl_ext/TextField.xs: textfield updates
+
+2008-06-19 13:49  krechert
+
+	* php_ext/ming.c: removed private constant
+
+2008-06-19 13:46  krechert
+
+	* php_ext/: ming.c, php_ming.h: textfield updates
+
+2008-06-19 13:37  krechert
+
+	* py_ext/ming.py: textfield updates
+
+2008-06-19 13:32  krechert
+
+	* mingpp.h: textfield updates
+
+2008-06-17 11:43  krechert
+
+	* py_ext/ming.py: added new method and bugfix
+
+2008-06-17 11:31  krechert
+
+	* php_ext/ming.c: fix some warnings
+
+2008-06-16 18:09  krechert
+
+	* src/ming.h.in: make SWFMovie_getRate() public
+
+2008-06-16 18:00  krechert
+
+	* php_ext/ming.c: added swfaction::compile
+
+2008-06-16 17:52  krechert
+
+	* php_ext/: ming.c, php_ming.h: added CXform
+
+2008-06-16 13:28  krechert
+
+	* test/Filter/: test01.php, test02.php, test03.php, test04.php:
+	  testing filter in php
+
+2008-06-16 12:40  krechert
+
+	* php_ext/ming.c: set 0xff as default alpha value update docs
+
+2008-06-16 11:52  krechert
+
+	* php_ext/ming.c: several bugfixes
+
+2008-06-16 11:45  krechert
+
+	* perl_ext/.cvsignore: add BrowserFont.c
+
+2008-06-16 11:41  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py: add
+	  setLine2Filled
+
+2008-06-14 15:16  krechert
+
+	* php_ext/: ming.c, php_ming.h: update shape functions
+
+2008-06-14 15:11  krechert
+
+	* src/: fill.h, ming.h.in: make SWFFill_getFillStyle() public make
+	  filter types public
+
+2008-06-14 15:10  krechert
+
+	* src/blocks/filter.c: better naming scheme
+
+2008-06-14 15:09  krechert
+
+	* src/blocks/browserfont.c: add docs
+
+2008-06-13 10:58  krechert
+
+	* php_ext/php_ming.h: update
+
+2008-06-12 21:18  krechert
+
+	* php_ext/php_ming.h: missing prototype
+
+2008-06-12 21:16  krechert
+
+	* php_ext/php_ming.h: add SWFBlur SWFShadow SWFFilterMatrix
+	  SWFFilter SWFButtonRecord_addFilter SWFDisplayItem_addFilter
+
+2008-06-12 21:09  krechert
+
+	* php_ext/ming.c: add SWFBlur SWFShadow SWFFilterMatrix SWFFilter
+	  SWFButtonRecord_addFilter SWFDisplayItem_addFilter
+
+2008-06-12 11:33  krechert
+
+	* util/parser.c: warn louder and with more details
+
+2008-06-09 23:50  krechert
+
+	* src/blocks/: blocktypes.h, browserfont.c, character.c,
+	  textfield.c: bugfix: if a browserfont is added to a textfield,
+	  the font is marked as a dependency of the textfield. the hack
+	  marking a font as a textfield causes an error.
+
+2008-06-09 23:10  krechert
+
+	* php_ext/: config.m4, ming.c: zlib is checked by the ming library
+
+2008-06-08 13:55  krechert
+
+	* py_ext/setup.py.in: build out-of tree
+
+2008-06-08 13:49  krechert
+
+	* perl_ext/Makefile.am: removed unnecssary path determination
+
+2008-06-08 12:28  krechert
+
+	* php_ext/Makefile.am: need to compile before installing
+
+2008-06-08 12:26  krechert
+
+	* perl_ext/Makefile.PL: link Makefile.PL to BUILDDIR
+
+2008-06-01 22:48  krechert
+
+	* src/blocks/: font.c, shape.c, ttffont.c: bugfix: SF #1960226:
+	  SWFFont memory leak
+
+2008-06-01 17:52  krechert
+
+	* php_ext/ming.c: remove useless FLOAT_Z_DVAL_PP macro
+	  float->double transition updated docs
+
+2008-06-01 16:27  krechert
+
+	* ming.i, py_ext/ming_wrap.c, py_ext/mingc.py: resync:
+	  float->double
+
+2008-06-01 16:20  krechert
+
+	* src/ming.h.in: removed dup-prototype
+
+2008-06-01 15:40  krechert
+
+	* perl_ext/: ButtonRecord.xs, DisplayItem.xs, Matrix.xs, Shape.xs:
+	  resync with c-lib: float->double
+
+2008-06-01 15:09  krechert
+
+	* src/: ming.h.in, blocks/button.c: float -> double
+
+2008-06-01 14:53  krechert
+
+	* src/blocks/matrix.c: remove printf
+
+2008-05-31 16:48  krechert
+
+	* mingpp.h: resync
+
+2008-05-31 16:26  krechert
+
+	* NEWS, configure.in, src/displaylist.c, src/ming.h.in,
+	  src/position.c, src/position.h, src/shape_cubic.c,
+	  src/shape_util.c, src/blocks/matrix.c, src/blocks/matrix.h: use
+	  double instead of float to avoid problems with large numbers
+
+2008-05-27 21:14  akleine
+
+	* util/outputscript.c: added addChars() call where needed
+
+2008-05-26 00:46  krechert
+
+	* perl_ext/Makefile.PL: out-of-tree build without touching SRCDIR
+
+2008-05-25 20:47  krechert
+
+	* perl_ext/: BrowserFont.xs, Font.xs, MANIFEST, Makefile.PL,
+	  Makefile.am, SWF.pm, perl_swf.h, typemap, SWF/BrowserFont.pm:
+	  added browserfont
+
+2008-05-23 13:37  krechert
+
+	* src/blocks/matrix.c: fix overflow when writing matrix
+
+2008-05-23 12:37  krechert
+
+	* NEWS: update
+
+2008-05-22 21:01  krechert
+
+	* perl_ext/Makefile.PL: hacked Makefile.PL to install man-pages
+	  correctly if out-of-tree build
+
+2008-05-22 20:46  krechert
+
+	* perl_ext/SWF.pm: Sprite is deprecated but still supported
+
+2008-05-22 19:24  krechert
+
+	* perl_ext/Makefile.PL: install Sprite.pm for compat reasons
+
+2008-05-22 19:12  strk
+
+	* perl_ext/SWF.pm: Stop exporting Sprite (obsoleted, right ?)
+
+2008-05-21 19:39  krechert
+
+	* perl_ext/Makefile.PL: make install out-of-tree
+
+2008-05-21 13:10  krechert
+
+	* perl_ext/Makefile.am: revert "install fix"
+
+2008-05-21 12:43  krechert
+
+	* perl_ext/Makefile.am: fix make install
+
+2008-05-20 22:06  fmk_ca
+
+	* src/movie.c: Adding missing getRate() function
+
+2008-05-20 19:18  strk
+
+	* test/dotests.pl: SWF.so is also needed in @INC, and found under
+	  build dir...
+
+2008-05-20 19:03  strk
+
+	* test/dotests.pl: set PERL5LIB to just top_srcdir/perl_ext, as all
+	  we need is SWF.pm
+
+2008-05-20 19:01  strk
+
+	* test/Makefile.inc: provide a top_srcdir env variable to
+	  dotests.pl invocation
+
+2008-05-20 18:17  krechert
+
+	* perl_ext/Makefile.PL: make perl_ext build out-of-tree
+
+2008-05-20 17:44  strk
+
+	* perl_ext/Makefile.PL: Add Ming top builddir/src to inc dirs
+	  (where ming.h is found)
+
+2008-05-19 17:11  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py:
+	  SoundStream updates
+
+2008-05-19 16:20  anderson
+
+	* perl_ext/Makefile.am, php_ext/Makefile.am: Need to pass a
+	  possibly overridden  into the perl & php build systems during
+	  install
+
+2008-05-19 16:06  anderson
+
+	* docs/man/Makefile.am, perl_ext/Makefile.am, src/Makefile.am,
+	  tcl_ext/Makefile.am, test/BrowserFont/Makefile.am,
+	  test/Media/Makefile.am, test/Movie/importCharacter/Makefile.am,
+	  test/Video/Makefile.am: Add several file that are missing in the
+	  distribution to EXTRA_DIST
+
+2008-05-18 16:08  krechert
+
+	* test/Makefile.inc: fix typo
+
+2008-05-18 15:59  krechert
+
+	* configure.in: fix freetype detection
+
+2008-05-18 15:38  krechert
+
+	* src/actioncompiler/swf5compiler.y: bugfix:
+	  http://bugs.libming.net/show_bug.cgi?id=52
+
+	  this bug is not related to the as-grammar. your example triggered
+	  an other issue. calling swf5error() in the action part of a bison
+	  file does not set the parser in an error state. Therefore
+	  swf5parse() returns success. This issues occurs only when
+	  fiddling with mings error reporting methods (like makeswf).
+
+2008-05-17 21:43  strk
+
+	* test/dotests.pl: Fail if test builder return non-success. Should
+	  fix bug #54 from bugzilla.
+
+2008-05-17 21:43  strk
+
+	* test/Shape/test01.c: add return from main
+
+2008-05-17 20:33  strk
+
+	* src/blocks/character.c, src/blocks/sound.c, test/Sound/test01.c,
+	  test/Sound/test02.c, test/Sound/test03.c: Apply patch in bug 53
+	  (bugzilla) by Johan Euphrosine <proppy@aminche.com>
+
+2008-05-17 20:10  strk
+
+	* test/Font/: test01.pl, test02.pl, test03.pl: Use first argument
+	  to find Media dir. Fixes make check in a separate build tree.
+
+2008-05-17 20:09  strk
+
+	* test/dotests.pl: Pass source dir as argument to test builders
+
+2008-05-12 17:52  krechert
+
+	* ming.i: added SoundStream
+
+2008-05-12 17:49  krechert
+
+	* src/ming.h.in: declare output method to make perl_ext compile
+
+2008-05-12 17:42  krechert
+
+	* perl_ext/: Text.xs, typemap: fixes warning
+
+2008-05-12 15:36  krechert
+
+	* perl_ext/Makefile.PL: don't use internal libming.h
+
+2008-05-12 15:33  krechert
+
+	* perl_ext/SoundStream.xs: added getDuration to SoundStream.xs
+
+2008-05-12 13:55  krechert
+
+	* php_ext/ming.c: removed used of deprecated method added
+	  SWFSoundStream_getDuration()
+
+2008-05-12 13:43  company
+
+	* src/actioncompiler/swf5compiler.flex: Put double values into
+	  doubleVal
+
+	  We can't return an int here anyway, because 1e100 just doesn't
+	  fit
+
+2008-05-09 18:41  krechert
+
+	* mingpp.h, src/ming.h.in, src/blocks/flv.c, src/blocks/flv.h,
+	  src/blocks/mp3.c, src/blocks/mp3.h, src/blocks/sound.h,
+	  src/blocks/soundstream.c: SWFSoundStream_getDuration
+	  SWFSoundStream cleanup
+
+2008-05-08 23:25  krechert
+
+	* py_ext/setup.py.in: added missing @
+
+2008-05-08 23:17  krechert
+
+	* src/: ming.h.in, blocks/soundstream.c: deprecate
+	  SWFSoundStreams_getFrames
+
+2008-05-08 12:56  krechert
+
+	* src/blocks/: sound.c, soundstream.c: cleanup
+
+2008-05-08 12:49  krechert
+
+	* test/Sound/.cvsignore: update
+
+2008-05-08 12:47  krechert
+
+	* src/blocks/mp3.c: always return less then requested samples
+
+2008-05-07 23:24  krechert
+
+	* src/blocks/: mp3.c, mp3.h, sound.c: count mp3 samples
+
+2008-05-07 23:22  krechert
+
+	* test/Sound/: Makefile.am, TestList, test01.ref, test03-cxx.C,
+	  test03.c, test03.ref: mp3 event sound
+
+2008-05-07 23:14  krechert
+
+	* configure.in, test/Makefile.am: soundstream test case
+
+2008-05-07 23:12  krechert
+
+	* test/SoundStream/: .cvsignore, Makefile.am, TestList,
+	  test01-cxx.C, test01.c, test01.ref: mp3 soundstream testcase
+
+2008-05-07 23:09  krechert
+
+	* test/Media/Makefile.am: add sound1.mp3 to extradist
+
+2008-05-07 23:07  krechert
+
+	* test/Media/sound1.mp3: add another mp3 file
+
+2008-05-07 23:06  krechert
+
+	* src/blocks/soundstream.c: fix warning fix sample count for small
+	  files
+
+2008-05-07 22:24  krechert
+
+	* src/blocks/: mp3.c, mp3.h, sound.c, soundstream.c, soundstream.h:
+	  added generic getMP3Flags() function unify mp3 handling determine
+	  flags for mp3 event sound
+
+2008-05-07 21:10  krechert
+
+	* src/blocks/: mp3.h, sound.c, sound.h, soundstream.c: Make mp3's
+	  initial delay configurable
+
+2008-05-07 17:15  krechert
+
+	* util/decompile.c: only print push-types in DEBUG-mode
+
+2008-05-07 14:26  krechert
+
+	* configure.in: changed AC_PROG_CC_C_O to AM_PROG_CC_C_O to make
+	  automake happy
+
+2008-05-07 12:36  krechert
+
+	* perl_ext/Makefile.am: automake -Wall does not like $(shell ...)
+	  since it is not portable
+
+2008-05-02 10:52  krechert
+
+	* php_ext/ming.c: SWFMovie_setSoundStream
+
+2008-04-30 18:59  krechert
+
+	* php_ext/ming.c: added SoundStream class extended Sound class
+
+2008-04-30 17:47  krechert
+
+	* test/Video/test01.php: do not forget to add the videostream to
+	  the movie
+
+2008-04-30 17:37  krechert
+
+	* php_ext/.cvsignore: update
+
+2008-04-30 17:32  krechert
+
+	* php_ext/ming.c: fixed regression (segmentation fault)
+
+2008-04-30 15:24  krechert
+
+	* perl_ext/Sound.xs: add newSWFSound_fromSoundStream()
+
+2008-04-30 15:23  krechert
+
+	* src/blocks/sound.c: add documentation
+
+2008-04-30 15:16  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py: fixe
+	  build and remove warnings
+
+2008-04-30 15:03  krechert
+
+	* py_ext/setup.py.in: link with gif, png, z only if available
+
+2008-04-29 23:59  krechert
+
+	* py_ext/ming.py: newSWFSound() takes two arguments
+
+2008-04-29 18:12  krechert
+
+	* py_ext/ming.py: added SWFCXform update SWFSound
+
+2008-04-29 14:33  krechert
+
+	* src/compat.c: add ming-0.3.x ABI compat symbols
+
+2008-04-28 12:09  krechert
+
+	* perl_ext/: MANIFEST, Makefile.PL, Makefile.am, SWF.pm,
+	  SWF/Sprite.pm: readded Sprite object. The usage of SWF::Sprite is
+	  deprecated but we don't want to break the API now.
+
+2008-04-21 17:08  krechert
+
+	* test/actionscript/: getURL2.ref, legacy_functions.ref: update
+	  ref: load*Num uses unique _level composition
+
+2008-04-21 16:15  krechert
+
+	* src/actioncompiler/swf5compiler.y: expect some shift/reduce
+	  conflicts... removes the useless warnings
+
+2008-04-21 15:51  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix reduce/reduce conflict:
+	  loadVariablesNum and loadMovieNum need a level argument. this can
+	  either be an expression or an integer. Internally it is converted
+	  to a string value starting with "_level".  Because INTEGER is a
+	  subset of expression this causes a reduce/reduce conflict.
+
+2008-04-21 12:19  krechert
+
+	* util/decompile.c: cleanup / added OpCode function
+
+2008-04-20 17:29  krechert
+
+	* test/dotests.pl: added prototype to get rid of a *stupid* perl
+	  warning
+
+2008-04-20 17:21  krechert
+
+	* util/decompile.c: use symbolic names for PUSH-types
+
+2008-04-20 16:57  krechert
+
+	* test/Sound/: test01.ref, test02.ref: update: verbose output of
+	  SWF_SOUND tags
+
+2008-04-20 15:24  krechert
+
+	* util/decompile.c: remove static attribute from decompileAction5
+
+2008-04-20 15:17  krechert
+
+	* util/decompile.c: fixed more memory bugs use a *single*
+	  codingstyle!
+
+2008-04-18 19:00  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: output SWF_DEBUGID
+
+2008-04-18 18:58  krechert
+
+	* src/blocks/blocktypes.h: add TAG 63
+
+2008-04-18 18:34  krechert
+
+	* util/: blocktypes.c, outputdecl.h, outputtxt.c, parser.c,
+	  parserdecl.h, swftypes.h: deal with unknown blocktypes
+
+2008-04-16 18:53  krechert
+
+	* util/outputtxt.c: verbose SWF_DEFINESOUND output
+
+2008-04-15 10:37  strk
+
+	* src/blocks/text.c: minor indent thing
+
+2008-04-13 23:56  krechert
+
+	* util/decompile.c: fixed several memory bugs
+
+2008-04-13 20:54  krechert
+
+	* util/main.c: fix build without zlib
+
+2008-04-11 18:34  krechert
+
+	* util/decompile.c: allocate memory for struct _stack instead for a
+	  pointer
+
+2008-04-11 18:32  krechert
+
+	* util/main.c: switch to tempfile if swf is compressed
+
+2008-04-11 18:06  krechert
+
+	* src/blocks/text.c: close bug 51 When SWFText_addString() is
+	  called with an 'advance' parameter, the function takes ownerhip
+	  of it, assuming it is a pointer to allocated memory.	Might be
+	  intended behaviour, but is confusing..
+
+2008-04-11 17:47  krechert
+
+	* src/blocks/: mp3.c, soundstream.c: improve file checking use
+	  SWF_warn instead of printf
+
+2008-04-11 00:34  krechert
+
+	* test/actionscript/switch.ref: update after break-stmt fi
+
+2008-04-11 00:32  krechert
+
+	* src/actioncompiler/: compile.c, swf5compiler.y: fix break-stmt in
+	  switch blocks
+
+2008-04-10 22:21  krechert
+
+	* util/main.c: spilt main()
+
+2008-04-10 00:34  krechert
+
+	* src/blocks/: error.c, error.h: make SWF_warn/error a macro.
+
+2008-04-10 00:30  krechert
+
+	* src/actioncompiler/Makefile.am: disable "test" for now
+
+2008-04-10 00:29  krechert
+
+	* util/: decompile.c, main.c, parser.c, read.c, read.h: do not
+	  duplicate error/warn methods
+
+2008-04-09 23:43  krechert
+
+	* src/blocks/pngdbl.c: include error.h do only warn and return NULL
+	  #ifdef -> #if
+
+2008-04-09 21:03  krechert
+
+	* test/: Action/test01.ref, Button/test03.ref,
+	  Movie/add/test02.ref, MovieClip/test01.ref, MovieClip/test02.ref,
+	  MovieClip/test03.ref, PrebuiltClip/test01.ref: SpriteID ->
+	  CharacterID
+
+2008-04-09 20:55  krechert
+
+	* test/TextField/TestList: added freetype as a precondition
+
+2008-04-09 20:43  krechert
+
+	* test/Bitmap/TestList: added png as precondition
+
+2008-04-09 20:41  krechert
+
+	* util/outputtxt.c: output CharacterID instead of SpriteID
+
+2008-04-09 20:39  krechert
+
+	* test/Text/TestList: add freetype as a precondition
+
+2008-04-09 20:36  krechert
+
+	* test/README: target is called "make refs"
+
+2008-04-09 18:48  krechert
+
+	* util/main.c: always check file length first before reading
+
+2008-04-09 18:36  krechert
+
+	* util/: main.c, read.c, read.h: cleanup fix compile error from
+	  previous commit
+
+2008-04-09 18:00  krechert
+
+	* util/main.c: unify codingstyle cleanup add sanity check before
+	  reading a block
+
+2008-04-07 00:39  krechert
+
+	* php_ext/: config.m4, ming.c: remove non-working m4 test for
+	  SWFPrebuiltClip php-wrapper was always built without
+	  SWFPrebuiltClip support
+
+2008-04-07 00:10  krechert
+
+	* test/: Gradient/.cvsignore, Media/.cvsignore: .cvsignore update
+
+2008-04-07 00:08  krechert
+
+	* test/: Makefile.inc, FillStyle/TestList, Font/TestList,
+	  Movie/assignSymbol/TestList: add freetype flag to buildoptions
+	  update Testlist conditions
+
+2008-04-07 00:06  krechert
+
+	* src/blocks/font.c: fdb fonts work well without freetype
+
+2008-04-06 23:39  krechert
+
+	* configure.in: give hints to install flex / bison make freetype
+	  usage optional
+
+2008-04-04 13:36  krechert
+
+	* util/action.c: verbose GETURL output
+
+2008-04-03 12:15  krechert
+
+	* configure.in, Makefile.am: move ACLOCAL_AMFLAGS to Makefile.am
+	  Patch by Patrice Dumas
+
+2008-04-03 12:11  krechert
+
+	* perl_ext/Makefile.PL: do not install libming.a and ming.h with
+	  perl wrapper Patch by Patrice Dumas
+
+2008-04-02 19:07  krechert
+
+	* src/actioncompiler/: compile.c, swf5compiler.y: revert for-in fix
+
+2008-04-02 18:41  krechert
+
+	* src/actioncompiler/: compile.c, swf5compiler.y: support nested
+	  for-in loops
+
+2008-04-02 18:21  krechert
+
+	* src/movie.c: don't destroy blocks which are in the movie's
+	  blocklist closes bug libming.net #50
+
+2008-03-26 17:02  krechert
+
+	* src/blocks/soundstream.c: bugfix: reading mp3Flags from files < 4
+	  bytes was broken
+
+2008-03-21 13:59  krechert
+
+	* util/: parser.c, parserdecl.h: quick fix to parse (malformed)
+	  placeobject's clipactions
+
+2008-03-20 11:34  krechert
+
+	* src/blocks/sprite.c: fix movieclip soundstream regression
+
+2008-03-20 11:02  company
+
+	* src/actioncompiler/: compile.c, compile.h, swf5compiler.y: fix
+	  continue in for loops
+
+2008-03-20 10:03  company
+
+	* src/actioncompiler/swf5compiler.y: simplify compiling for loops
+
+	  Tis should now also be more in line with what the official player
+	  does
+
+2008-03-16 16:20  company
+
+	* src/actioncompiler/: swf5compiler.flex, swf5compiler.y: add asm
+	  codes for NewObject and NewMethod bytecodes
+
+2008-03-08 00:03  strk
+
+	* util/outputtxt.c: Don't escape newlines in decompiled
+	  actionscript
+
+2008-03-03 13:49  krechert
+
+	* src/blocks/Makefile.am, test/Action/test01-cxx.C,
+	  test/Action/test02-cxx.C, test/Bitmap/test01-cxx.C,
+	  test/BrowserFont/test01-cxx.C, test/Button/Makefile.am,
+	  test/Button/test01-cxx.C, test/Button/test02-cxx.C,
+	  test/Button/test03-cxx.C, test/FillStyle/test01-cxx.C,
+	  test/FillStyle/test02-cxx.C, test/FillStyle/test03-cxx.C,
+	  test/FillStyle/test04-cxx.C, test/FillStyle/test05-cxx.C,
+	  test/FillStyle/test06-cxx.C, test/Filter/test01-cxx.C,
+	  test/Filter/test02-cxx.C, test/Filter/test03-cxx.C,
+	  test/Filter/test04-cxx.C, test/Filter/test05-cxx.C,
+	  test/Font/test01-cxx.C, test/Font/test02-cxx.C,
+	  test/Font/test03-cxx.C, test/Gradient/test01-cxx.C,
+	  test/Gradient/test02-cxx.C, test/Gradient/test03-cxx.C,
+	  test/Gradient/test04-cxx.C, test/Gradient/test05-cxx.C,
+	  test/Gradient/test06-cxx.C, test/Gradient/test07-cxx.C,
+	  test/LineStyle/test01-cxx.C, test/LineStyle/test02-cxx.C,
+	  test/Media/Makefile.am, test/Morph/test01-cxx.C,
+	  test/Morph/test02-cxx.C, test/Movie/Background/test01-cxx.C,
+	  test/Movie/Background/test02-cxx.C,
+	  test/Movie/Background/test03-cxx.C,
+	  test/Movie/Dimension/test01-cxx.C,
+	  test/Movie/FrameLabel/test01-cxx.C,
+	  test/Movie/FrameLabel/test02-cxx.C,
+	  test/Movie/NumFrames/test01-cxx.C,
+	  test/Movie/Protect/test01-cxx.C, test/Movie/Protect/test02-cxx.C,
+	  test/Movie/Rate/test01-cxx.C, test/Movie/add/test01-cxx.C,
+	  test/Movie/add/test02-cxx.C, test/Movie/addMetadata/test01-cxx.C,
+	  test/Movie/assignSymbol/test01-cxx.C,
+	  test/Movie/defineScene/test01-cxx.C,
+	  test/Movie/importCharacter/test01-cxx.C,
+	  test/Movie/importCharacter/test02-cxx.C,
+	  test/Movie/new/test01-cxx.C, test/Movie/new/test02-cxx.C,
+	  test/Movie/new/test03-cxx.C, test/Movie/new/test04-cxx.C,
+	  test/Movie/new/test05-cxx.C, test/Movie/new/test06-cxx.C,
+	  test/Movie/new/test07-cxx.C, test/Movie/nextFrame/test01-cxx.C,
+	  test/Movie/nextFrame/test02-cxx.C,
+	  test/Movie/replace/test01-cxx.C, test/Movie/replace/test02-cxx.C,
+	  test/Movie/setNetworkAccess/test01-cxx.C,
+	  test/Movie/setScriptLimits/test01-cxx.C,
+	  test/Movie/setSoundStream/test01-cxx.C,
+	  test/Movie/setSoundStream/test02-cxx.C,
+	  test/Movie/setSoundStream/test03-cxx.C,
+	  test/Movie/setTabIndex/test01-cxx.C, test/MovieClip/test01-cxx.C,
+	  test/MovieClip/test02-cxx.C, test/MovieClip/test03-cxx.C,
+	  test/PrebuiltClip/test01-cxx.C, test/Shape/test01-cxx.C,
+	  test/Sound/Makefile.am, test/Sound/test01-cxx.C,
+	  test/Sound/test02-cxx.C, test/Text/test01-cxx.C,
+	  test/Text/test02-cxx.C, test/TextField/test01-cxx.C,
+	  test/TextField/test02-cxx.C, test/Video/test01-cxx.C,
+	  test/Video/test02-cxx.C, test/Video/test03-cxx.C: patch for make
+	  distcheck and gcc 4.3 by Patrice Dumas
 
 2008-02-25 17:51  krechert
 

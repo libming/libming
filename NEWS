@@ -34,6 +34,8 @@
 	* API float->double transition
 	* php_ext: SWFInput can wrap raw byte-streams 
 	* php_ext: API: external data can be passed as file-resource, SWFInput or filename
+	* removed newSWFFont() as public function (causes various crashes)
+	* removed new SWFFont(...) usage with browserfonts in script languages. Use SWFBrowserFont class.
 
 0.4.0.beta5 - 2007-09-18
 
