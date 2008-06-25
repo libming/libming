@@ -324,17 +324,26 @@ SWF_SHAPE_USENONSCALINGSTROKES = mingc.SWF_SHAPE_USENONSCALINGSTROKES
 
 class SWFFill(SWFBase):
 
-    def __init__(self, o):
-        self.this = o
-
     def __del__(self):
         mingc.destroySWFFill(self.this)
+
+    def rotate(self, degrees):
+        mingc.SWFFill_rotate(self.this, degrees)
 
     def rotateTo(self, degrees):
         mingc.SWFFill_rotateTo(self.this, degrees)
 
+    def move(self, x, y):
+        mingc.SWFFill_move(self.this, x, y)
+
     def moveTo(self, x, y):
         mingc.SWFFill_moveTo(self.this, x, y)
+
+    def scale(self, xScale, yScale=None):
+        if yScale is None:
+            mingc.SWFFill_scaleXY(self.this, xScale, xScale)
+        else:
+            mingc.SWFFill_scaleXY(self.this, xScale, yScale)
 
     def scaleTo(self, xScale, yScale=None):
         if yScale is None:
@@ -342,17 +351,32 @@ class SWFFill(SWFBase):
         else:
             mingc.SWFFill_scaleXYTo(self.this, xScale, yScale)
 
+    def scaleX(self, xScale):
+        mingc.SWFFill_scaleX(self.this, xScale)
+
     def scaleXTo(self, xScale):
         mingc.SWFFill_scaleXTo(self.this, xScale)
+
+    def scaleY(self, yScale):
+        mingc.SWFFill_scaleY(self.this, yScale)
 
     def scaleYTo(self, yScale):
         mingc.SWFFill_scaleYTo(self.this, yScale)
 
+    def skewX(self, x):
+        mingc.SWFFill_skewX(self.this, x)
+
     def skewXTo(self, x):
-        mingc.SWFFill_skewXTo(self.this, x);
+        mingc.SWFFill_skewXTo(self.this, x)
+
+    def skewY(self, y):
+        mingc.SWFFill_skewY(self.this, y)
 
     def skewYTo(self, y):
         mingc.SWFFill_skewYTo(self.this, y)
+
+    def setMatrix(self, a, b, c, d, x, y):
+        mingc.SWFFill_setMatrix(self.this, a, b, c, d, x, y)
 
 
 class SWFDisplayItem(SWFBase):
