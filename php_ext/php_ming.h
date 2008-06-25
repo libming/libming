@@ -86,10 +86,15 @@ PHP_METHOD(swfcxform, setColorMult);
 
 PHP_METHOD(swffill, init);
 PHP_METHOD(swffill, moveTo);
+PHP_METHOD(swffill, move);
 PHP_METHOD(swffill, scaleTo);
+PHP_METHOD(swffill, scale);
 PHP_METHOD(swffill, rotateTo);
+PHP_METHOD(swffill, rotate);
 PHP_METHOD(swffill, skewXTo);
+PHP_METHOD(swffill, skewX);
 PHP_METHOD(swffill, skewYTo);
+PHP_METHOD(swffill, skewY);
 
 PHP_METHOD(swfgradient, init);
 PHP_METHOD(swfgradient, addEntry);

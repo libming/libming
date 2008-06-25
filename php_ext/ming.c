@@ -2083,6 +2083,23 @@ PHP_METHOD(swffill, moveTo)
 }
 /* }}} */
 
+/* {{{ proto void swffill::move(float dx, float dy)
+   Moves this SWFFill by (dx,dy) */
+PHP_METHOD(swffill, move)
+{
+	zval **x, **y;
+
+	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &x, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	convert_to_double_ex(x);
+	convert_to_double_ex(y);
+	SWFFill_move(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
+}
+/* }}} */
+
+
 /* {{{ proto void swffill::scaleTo(float xScale [, float yScale])
    Scales this SWFFill by xScale in the x direction, yScale in the y, or both to xScale if only one arg */
 PHP_METHOD(swffill, scaleTo)
@@ -2108,6 +2125,32 @@ PHP_METHOD(swffill, scaleTo)
 }
 /* }}} */
 
+/* {{{ proto void swffill::scale(float xScale [, float yScale])
+   Scales this SWFFill by xScale in the x direction, yScale in the y, or both to xScale if only one arg */
+PHP_METHOD(swffill, scale)
+{
+	zval **x, **y;
+
+	if (ZEND_NUM_ARGS() == 1) {
+		if (zend_get_parameters_ex(1, &x) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_double_ex(x);
+		SWFFill_scaleXY(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(x));
+	} else if (ZEND_NUM_ARGS() == 2) {
+		if (zend_get_parameters_ex(2, &x, &y) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_double_ex(x);
+		convert_to_double_ex(y);
+		SWFFill_scaleXY(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x), Z_DVAL_PP(y));
+	} else {
+		WRONG_PARAM_COUNT;
+	}
+}
+/* }}} */
+
+
 /* {{{ proto void swffill::rotateTo(float degrees)
    Rotates this SWFFill the given (clockwise) degrees from its original orientation */
 PHP_METHOD(swffill, rotateTo)
@@ -2122,6 +2165,21 @@ PHP_METHOD(swffill, rotateTo)
 }
 /* }}} */
 
+/* {{{ proto void swffill::rotate(float degrees)
+   Rotates this SWFFill the given (clockwise) degrees from its current orientation */
+PHP_METHOD(swffill, rotate)
+{
+	zval **degrees;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &degrees) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double_ex(degrees);
+	SWFFill_rotate(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(degrees));
+}
+/* }}} */
+
+
 /* {{{ proto void swffill::skewXTo(float xSkew)
    Sets this SWFFill's x skew value to xSkew */
 PHP_METHOD(swffill, skewXTo)
@@ -2133,6 +2191,20 @@ PHP_METHOD(swffill, skewXTo)
 	}
 	convert_to_double_ex(x);
 	SWFFill_skewXTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x));
+}
+/* }}} */
+
+/* {{{ proto void swffill::skewX(float xSkew)
+   Sets this SWFFill's x skew value to xSkew */
+PHP_METHOD(swffill, skewX)
+{
+	zval **x;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &x) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double_ex(x);
+	SWFFill_skewX(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(x));
 }
 /* }}} */
 
@@ -2149,13 +2221,56 @@ PHP_METHOD(swffill, skewYTo)
 	SWFFill_skewYTo(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(y));
 }
 /* }}} */
+
+/* {{{ proto void swffill::skewY(float ySkew)
+   Sets this SWFFill's y skew value to ySkew */
+PHP_METHOD(swffill, skewY)
+{
+	zval **y;
+
+	if (ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &y) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double_ex(y);
+	SWFFill_skewY(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(y));
+}
+/* }}} */
+
+/* {{{ proto void swffill::setMatrix(float a, float b, float c, float d, float x, float y)
+   Sets this SWFFill's y matrix values */
+PHP_METHOD(swffill, setMatrix)
+{
+	zval **a, **b, **c, **d, **x, **y;
+
+	if (ZEND_NUM_ARGS() != 6 
+		|| zend_get_parameters_ex(6, &a, &b, &c, &d, &x, &y) == FAILURE) 
+	{
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double_ex(a);
+	convert_to_double_ex(b);
+	convert_to_double_ex(c);
+	convert_to_double_ex(d);
+	convert_to_double_ex(x);
+	convert_to_double_ex(y);
+	SWFFill_setMatrix(getFill(getThis() TSRMLS_CC), Z_DVAL_PP(a), Z_DVAL_PP(b),
+		Z_DVAL_PP(c), Z_DVAL_PP(d), Z_DVAL_PP(x), Z_DVAL_PP(y));
+}
+/* }}} */
+
 static zend_function_entry swffill_functions[] = {
 	PHP_ME(swffill, __construct, NULL, 0)
 	PHP_ME(swffill, moveTo,      NULL, 0)
+	PHP_ME(swffill, move,        NULL, 0)
 	PHP_ME(swffill, scaleTo,     NULL, 0)
+	PHP_ME(swffill, scale,       NULL, 0)
 	PHP_ME(swffill, rotateTo,    NULL, 0)
+	PHP_ME(swffill, rotate,      NULL, 0)
 	PHP_ME(swffill, skewXTo,     NULL, 0)
+	PHP_ME(swffill, skewX,       NULL, 0)
 	PHP_ME(swffill, skewYTo,     NULL, 0)
+	PHP_ME(swffill, skewY,       NULL, 0)
+	PHP_ME(swffill, setMatrix,   NULL, 0)
 	{ NULL, NULL, NULL }
 };
 
