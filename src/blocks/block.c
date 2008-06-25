@@ -61,9 +61,15 @@ destroySWFBlock(SWFBlock block)
 int
 completeSWFBlock(SWFBlock block)
 {
-	if ( block->type == SWF_UNUSEDBLOCK )
+	switch(block->type)
+	{
+	case SWF_UNUSEDBLOCK:
+	case SWF_MINGFONT:
 		return 0;
-
+	default:
+		break;
+	}
+		
 	if ( !block->completed )
 	{
 		if ( block->complete )
@@ -90,9 +96,15 @@ writeSWFBlockToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 {
 	SWFBlocktype type = block->type;
 	unsigned int length;
-	
-	if ( type == SWF_UNUSEDBLOCK )
+
+	switch(block->type)
+	{
+	case SWF_UNUSEDBLOCK:
+	case SWF_MINGFONT:
 		return 0;
+	default:
+		break;
+	}
 
 	if ( !block->completed )
 		completeSWFBlock(block);

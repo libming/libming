@@ -124,6 +124,7 @@ typedef enum
   SWF_DEFINEBITSPTR		= 1023,
 
 /* these are pseudo definitions that do not correspond to actual swf file tags */
+  SWF_MINGFONT = 252,
   SWF_BROWSERFONT = 253,
   SWF_PREBUILTCLIP = 254,
   SWF_PREBUILT = 255

@@ -287,7 +287,8 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 		SWFCharacter_addDependency((SWFCharacter)field, (SWFCharacter)font);
 		field->flags |= SWFTEXTFIELD_HASFONT;
 	}
-	else if ( BLOCK(font)->type == SWF_DEFINEFONT )
+	else if ( BLOCK(font)->type == SWF_DEFINEFONT 
+		|| BLOCK(font)->type == SWF_DEFINEFONT2)
 	{
 		SWFFontCharacter fc = (SWFFontCharacter)font;
 		if(checkSWFFontCharacter(fc))	
@@ -301,7 +302,7 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 			(SWFCharacter)field, (SWFCharacter)font);
 		field->flags |= SWFTEXTFIELD_HASFONT | SWFTEXTFIELD_USEFONT;
 	}
-	else
+	else if (BLOCK(font)->type == SWF_MINGFONT)
 	{
 		if(!(SWFFont_getFlags((SWFFont)font) & SWF_FONT_HASLAYOUT))
 		{
@@ -312,6 +313,8 @@ SWFTextField_setFont(SWFTextField field, SWFBlock font)
 		field->font.font = (SWFFont)font;
 		field->flags |= SWFTEXTFIELD_HASFONT | SWFTEXTFIELD_USEFONT;
 	}
+	else
+		SWF_warn("SWFTextField_setFont: not a valid font object\n");
 }
 
 SWFFont

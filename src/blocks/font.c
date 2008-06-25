@@ -268,7 +268,7 @@ newSWFFont()
 
 	SWFBlockInit((SWFBlock)font);
 
-	BLOCK(font)->type = SWF_UNUSEDBLOCK;
+	BLOCK(font)->type = SWF_MINGFONT;
 	BLOCK(font)->writeBlock = NULL;
 	BLOCK(font)->complete = NULL;
 	BLOCK(font)->dtor = (destroySWFBlockMethod) destroySWFFont;
