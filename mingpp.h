@@ -1042,75 +1042,6 @@ class SWFMovie
 };
 
 
-/*  SWFFill  */
-
-class SWFFill
-{
- public:
-  c_SWFFill fill;
-
-  SWFFill(c_SWFFill fill)
-  { 
-    this->fill = fill; 
-    if(this->fill == NULL)
-      throw SWFException("SWFFill");
-  }
-
-  // shape destroys c_SWFFill object
-  virtual ~SWFFill() 
-	{ destroySWFFill(this->fill); }
-
-  void skewX(float x)
-    { SWFFill_skewX(this->fill, x); }
-
-  void skewXTo(float x)
-    { SWFFill_skewXTo(this->fill, x); }
-
-  void skewY(float y)
-    { SWFFill_skewY(this->fill, y); }
-
-  void skewYTo(float y)
-    { SWFFill_skewYTo(this->fill, y); }
-
-  void scaleX(float x)
-    { SWFFill_scaleX(this->fill, x); }
-
-  void scaleXTo(float x)
-    { SWFFill_scaleXTo(this->fill, x); }
-
-  void scaleY(float y)
-    { SWFFill_scaleY(this->fill, y); }
-
-  void scaleYTo(float y)
-    { SWFFill_scaleYTo(this->fill, y); }
-
-  void scale(float x, float y)
-    { SWFFill_scaleXY(this->fill, x, y); }
-
-  void scale(float scale)
-    { SWFFill_scaleXY(this->fill, scale, scale); }
-
-  void scaleTo(float x, float y)
-    { SWFFill_scaleXYTo(this->fill, x, y); }
-
-  void scaleTo(float scale)
-    { SWFFill_scaleXYTo(this->fill, scale, scale); }
-
-  void rotate(float degrees)
-    { SWFFill_rotate(this->fill, degrees); }
-
-  void rotateTo(float degrees)
-    { SWFFill_rotateTo(this->fill, degrees); }
-
-  void move(float x, float y)
-    { SWFFill_move(this->fill, x, y); }
-
-  void moveTo(float x, float y)
-    { SWFFill_move(this->fill, x, y); }
-  SWF_DECLAREONLY(SWFFill);
-  SWFFill();
-};
-
 
 
 
@@ -1177,9 +1108,9 @@ class SWFBitmap : public SWFCharacter
   SWFBitmap();
 };
 
-
 class SWFFillStyle
 {
+ friend class SWFFill;
  public:
   c_SWFFillStyle fill;
   
@@ -1204,6 +1135,84 @@ class SWFFillStyle
   SWF_DECLAREONLY(SWFFillStyle);
   SWFFillStyle();
 };   
+
+/*  SWFFill  */
+class SWFFill
+{
+ friend class SWFShape;
+ public:
+  c_SWFFill fill;
+
+    // shape destroys c_SWFFill object
+  virtual ~SWFFill() 
+	{ destroySWFFill(this->fill); }
+
+  void skewX(float x)
+    { SWFFill_skewX(this->fill, x); }
+
+  void skewXTo(float x)
+    { SWFFill_skewXTo(this->fill, x); }
+
+  void skewY(float y)
+    { SWFFill_skewY(this->fill, y); }
+
+  void skewYTo(float y)
+    { SWFFill_skewYTo(this->fill, y); }
+
+  void scaleX(float x)
+    { SWFFill_scaleX(this->fill, x); }
+
+  void scaleXTo(float x)
+    { SWFFill_scaleXTo(this->fill, x); }
+
+  void scaleY(float y)
+    { SWFFill_scaleY(this->fill, y); }
+
+  void scaleYTo(float y)
+    { SWFFill_scaleYTo(this->fill, y); }
+
+  void scale(float x, float y)
+    { SWFFill_scaleXY(this->fill, x, y); }
+
+  void scale(float scale)
+    { SWFFill_scaleXY(this->fill, scale, scale); }
+
+  void scaleTo(float x, float y)
+    { SWFFill_scaleXYTo(this->fill, x, y); }
+
+  void scaleTo(float scale)
+    { SWFFill_scaleXYTo(this->fill, scale, scale); }
+
+  void rotate(float degrees)
+    { SWFFill_rotate(this->fill, degrees); }
+
+  void rotateTo(float degrees)
+    { SWFFill_rotateTo(this->fill, degrees); }
+
+  void move(float x, float y)
+    { SWFFill_move(this->fill, x, y); }
+
+  void moveTo(float x, float y)
+    { SWFFill_move(this->fill, x, y); }
+
+  void setMatrix( float a, float b, float c, float d, float x, float y)
+    { SWFFill_setMatrix(this->fill, a, b, c, d, x, y); }
+
+  SWFFillStyle *getFillStyle()
+    { return new SWFFillStyle(SWFFill_getFillStyle(this->fill)); }
+
+  SWF_DECLAREONLY(SWFFill);
+  SWFFill(); 
+
+private:
+  SWFFill(c_SWFFill fill)
+  { 
+    this->fill = fill; 
+    if(this->fill == NULL)
+      throw SWFException("SWFFill");
+  }
+};
+
 
 /*  SWFShape  */
 class SWFShape : public SWFCharacter
