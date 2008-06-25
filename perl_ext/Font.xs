@@ -62,4 +62,12 @@ short
 SWFFont_getLeading(font)
 	SWF::Font	font
 
+const char *
+SWFFont_getName(font)
+        SWF::Font font
+
+int 
+SWFFont_getGlyphCount(font)
+        SWF::Font font
+
 

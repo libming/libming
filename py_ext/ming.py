@@ -740,12 +740,21 @@ class SWFFont(SWFBase):
     def getLeading(self):
         return mingc.SWFFont_getLeading(self.this)
 
+    def getUTF8StringWidth(self):
+        return mingc.SWFFont_getUTF8StringWidth(self.this, string.encode("utf-8"))
+
     def getStringWidth(self, string):
         return mingc.SWFFont_getStringWidth(self.this, string)
 
     # or: (?)
     def getWidth(self, string):
         return mingc.SWFFont_getStringWidth(self.this, string)
+
+    def getName(self):
+        return mingc.SWFFont_getName(self.this)
+
+    def getGlyphCount(self):
+        return mingc.SWFFont_getGlyphCount(self.this)
 
 class SWFFontCharacter(SWFBase):
      

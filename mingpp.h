@@ -782,13 +782,6 @@ class SWFFont : public SWFBlock
  public:
   c_SWFFont font;
 
-  SWFFont()
-  { 
-    this->font = newSWFFont(); 
-    if(this->font == NULL)
-      throw SWFException("SWFFont()");
-  }
-
   SWFFont(FILE *file) // deprecated 
   {
 	std::cerr << "SWFFont(FILE *file) is deprecated and will be removed in future releases." << std::endl;
@@ -816,6 +809,9 @@ class SWFFont : public SWFBlock
   float getWidth(const char *string)
     { return SWFFont_getStringWidth(this->font, string); }
 
+  float getUTF8StringWidth(const char *string)
+    { return SWFFont_getUTF8StringWidth(this->font, string); }
+
   float getAscent()
     { return SWFFont_getAscent(this->font); }
 
@@ -824,6 +820,13 @@ class SWFFont : public SWFBlock
 
   float getLeading()
     { return SWFFont_getLeading(this->font); }
+
+  const char *getName()
+    { return SWFFont_getName(this->font); }
+
+  int getGlyphCount()
+    { return SWFFont_getGlyphCount(this->font); }
+
   SWF_DECLAREONLY(SWFFont);
 };
 

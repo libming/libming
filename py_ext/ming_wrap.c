@@ -2916,6 +2916,30 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 
 
 
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_NewPointerObj((char *)(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+      return PyString_FromStringAndSize(carray, (int)(size));
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
+
+
 SWIGINTERNINLINE PyObject* 
 SWIG_From_unsigned_SS_long  (unsigned long value)
 {
@@ -5698,6 +5722,46 @@ SWIGINTERN PyObject *_wrap_SWFFont_getLeading(PyObject *SWIGUNUSEDPARM(self), Py
   }
   result = (float)SWFFont_getLeading(arg1);
   resultobj = SWIG_From_float((float)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFFont_getName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFont arg1 = (SWFFont) 0 ;
+  char *result = 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFFont_getName",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFont_getName" "', argument " "1"" of type '" "SWFFont""'"); 
+  }
+  result = (char *)SWFFont_getName(arg1);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFFont_getGlyphCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFont arg1 = (SWFFont) 0 ;
+  int result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFFont_getGlyphCount",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFont_getGlyphCount" "', argument " "1"" of type '" "SWFFont""'"); 
+  }
+  result = (int)SWFFont_getGlyphCount(arg1);
+  resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
   return NULL;
@@ -14173,6 +14237,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFFont_getAscent", _wrap_SWFFont_getAscent, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getDescent", _wrap_SWFFont_getDescent, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getLeading", _wrap_SWFFont_getLeading, METH_VARARGS, NULL},
+	 { (char *)"SWFFont_getName", _wrap_SWFFont_getName, METH_VARARGS, NULL},
+	 { (char *)"SWFFont_getGlyphCount", _wrap_SWFFont_getGlyphCount, METH_VARARGS, NULL},
 	 { (char *)"newSWFText", _wrap_newSWFText, METH_VARARGS, NULL},
 	 { (char *)"newSWFText2", _wrap_newSWFText2, METH_VARARGS, NULL},
 	 { (char *)"destroySWFText", _wrap_destroySWFText, METH_VARARGS, NULL},

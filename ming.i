@@ -304,6 +304,8 @@ float SWFFont_getUTF8StringWidth(SWFFont font, const char *string);
 float SWFFont_getAscent(SWFFont font);
 float SWFFont_getDescent(SWFFont font);
 float SWFFont_getLeading(SWFFont font);
+const char* SWFFont_getName(SWFFont font);
+int SWFFont_getGlyphCount(SWFFont font);
 
 
 /***** SWFText *****/
