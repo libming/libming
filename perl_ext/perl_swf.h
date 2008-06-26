@@ -44,6 +44,7 @@ typedef SWFFilterMatrix	   SWF__FilterMatrix;
 typedef SWFFilter	   SWF__Filter;
 typedef SWFCXform	   SWF__CXform;
 typedef SWFBrowserFont	   SWF__BrowserFont;
+typedef SWFFontCollection  SWF__FontCollection;
 
 #ifndef sv_undef
 #define sv_undef PL_sv_undef

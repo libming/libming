@@ -36,6 +36,7 @@ SWF::FilterMatrix				T_PTROBJ
 SWF::Filter					T_PTROBJ
 SWF::CXform					T_PTROBJ
 SWF::BrowserFont				T_PTROBJ
+SWF::FontCollection				T_PTROBJ
 
 INPUT
 T_PTRINT
