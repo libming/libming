@@ -183,6 +183,12 @@ PHP_METHOD(swffont, getGlyphCount);
 PHP_METHOD(swffont, getName);
 #endif
 
+/* SWFFontCollection */
+
+PHP_METHOD(swffontcollection, init);
+PHP_METHOD(swffontcollection, getFont);
+PHP_METHOD(swffontcollection, getFontCount);
+
 
 /* SWFText */
 
