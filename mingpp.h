@@ -48,6 +48,7 @@ extern "C"
   #define SWFText         c_SWFText
   #define SWFFont         c_SWFFont
   #define SWFBrowserFont  c_SWFBrowserFont
+  #define SWFFontCollection  c_SWFFontCollection
   #define SWFTextField    c_SWFTextField
   #define SWFAction       c_SWFAction
   #define SWFButton       c_SWFButton
@@ -90,6 +91,7 @@ SWFFont loadSWFFont_fromFdbFile(FILE *file);
   #undef SWFMorph
   #undef SWFFont
   #undef SWFBrowserFont
+  #undef SWFFontCollection
   #undef SWFText
   #undef SWFTextField
   #undef SWFAction
@@ -779,6 +781,7 @@ class SWFSound
 
 class SWFFont : public SWFBlock
 {
+ friend class SWFFontCollection;
  public:
   c_SWFFont font;
 
@@ -828,6 +831,14 @@ class SWFFont : public SWFBlock
     { return SWFFont_getGlyphCount(this->font); }
 
   SWF_DECLAREONLY(SWFFont);
+
+ private:
+  SWFFont(c_SWFFont font)
+  { 
+    this->font = font;
+    if(this->font == NULL)
+      throw SWFException("SWFFont(c_SWFFont)");
+  }
 };
 
 /* SWFBrowserFont */
@@ -850,6 +861,30 @@ class SWFBrowserFont : public SWFBlock
     { destroySWFBrowserFont(this->bfont); }
   
   SWF_DECLAREONLY(SWFBrowserFont);
+};
+
+class SWFFontCollection
+{
+ public:
+  c_SWFFontCollection fc;
+
+  SWFFontCollection(const char *filename)
+  {
+    this->fc = newSWFFontCollection_fromFile(filename);
+    if(this->fc == NULL)
+      throw SWFException("SWFFontCollection(filename)");
+  }
+
+  ~ SWFFontCollection()
+    { destroySWFFontCollection(this->fc); }
+
+  SWFFont *getFont(int index)
+    { return new SWFFont(SWFFontCollection_getFont(this->fc, index)); }
+
+  int getFontCount()
+    { return SWFFontCollection_getFontCount(this->fc); }
+
+  SWF_DECLAREONLY(SWFFontCollection);
 };
 
 class SWFSoundInstance
