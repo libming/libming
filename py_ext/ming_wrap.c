@@ -5755,6 +5755,99 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_newSWFFontCollection_fromFile(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  SWFFontCollection result;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:newSWFFontCollection_fromFile",&obj0)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "newSWFFontCollection_fromFile" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = (char *)(buf1);
+  result = (SWFFontCollection)newSWFFontCollection_fromFile((char const *)arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFFontCollection_getFontCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFontCollection arg1 = (SWFFontCollection) 0 ;
+  int result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFFontCollection_getFontCount",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFontCollection_getFontCount" "', argument " "1"" of type '" "SWFFontCollection""'"); 
+  }
+  result = (int)SWFFontCollection_getFontCount(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFFontCollection_getFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFontCollection arg1 = (SWFFontCollection) 0 ;
+  int arg2 ;
+  SWFFont result;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFFontCollection_getFont",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFFontCollection_getFont" "', argument " "1"" of type '" "SWFFontCollection""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFFontCollection_getFont" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (SWFFont)SWFFontCollection_getFont(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_destroySWFFontCollection(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFFontCollection arg1 = (SWFFontCollection) 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:destroySWFFontCollection",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroySWFFontCollection" "', argument " "1"" of type '" "SWFFontCollection""'"); 
+  }
+  destroySWFFontCollection(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_newSWFText(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFText result;
@@ -14225,6 +14318,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFFont_getLeading", _wrap_SWFFont_getLeading, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getName", _wrap_SWFFont_getName, METH_VARARGS, NULL},
 	 { (char *)"SWFFont_getGlyphCount", _wrap_SWFFont_getGlyphCount, METH_VARARGS, NULL},
+	 { (char *)"newSWFFontCollection_fromFile", _wrap_newSWFFontCollection_fromFile, METH_VARARGS, NULL},
+	 { (char *)"SWFFontCollection_getFontCount", _wrap_SWFFontCollection_getFontCount, METH_VARARGS, NULL},
+	 { (char *)"SWFFontCollection_getFont", _wrap_SWFFontCollection_getFont, METH_VARARGS, NULL},
+	 { (char *)"destroySWFFontCollection", _wrap_destroySWFFontCollection, METH_VARARGS, NULL},
 	 { (char *)"newSWFText", _wrap_newSWFText, METH_VARARGS, NULL},
 	 { (char *)"newSWFText2", _wrap_newSWFText2, METH_VARARGS, NULL},
 	 { (char *)"destroySWFText", _wrap_destroySWFText, METH_VARARGS, NULL},
@@ -14520,7 +14617,7 @@ static swig_type_info _swigt__p_floatArray = {"_p_floatArray", "struct floatArra
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFFilter|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFFontCollection|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFFilter|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Blur_s,

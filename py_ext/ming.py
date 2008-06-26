@@ -814,6 +814,21 @@ class SWFBitmap(SWFBase):
         return mingc.SWFBitmap_getHeight(self.this)
 
 
+class SWFFontCollection(SWFBase):
+
+    def __init__(self, filename):
+        self.this = mingc.newSWFFontCollection_fromFile(filename)
+
+    def __del__(self):
+        mingc.destroySWFFontCollection(self.this)
+
+    def getFontCount(self):
+        return mingc.SWFFontCollection_getFontCount(self.this)
+
+    def getFont(self, index):
+        return SWFFont(mingc.SWFFontCollection_getFont(self.this, index)) 
+
+
 # deprecated:
 class SWFDBLBitmap(SWFBitmap):
 

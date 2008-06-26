@@ -71,7 +71,7 @@ typedef void *SWFMovie, *SWFBlock, *SWFSound, *SWFDisplayItem, *SWFFill,
              *SWFBitmap, *SWFMovieClip, *SWFCharacter, *SWFMatrix, *SWFMorph,
              *SWFFont, *SWFText, *SWFTextField, *SWFVideoStream, *SWFBrowserFont,
              *SWFPrebuiltClip, *SWFBinaryData, *SWFInitAction, *SWFFontCharacter, 
-             *SWFSoundStream, *SWFFilter;
+             *SWFSoundStream, *SWFFilter, *SWFFontCollection;
 
 /*
  * Set output compression level.
@@ -305,6 +305,11 @@ float SWFFont_getDescent(SWFFont font);
 float SWFFont_getLeading(SWFFont font);
 const char* SWFFont_getName(SWFFont font);
 int SWFFont_getGlyphCount(SWFFont font);
+
+SWFFontCollection newSWFFontCollection_fromFile(const char *filename);
+int SWFFontCollection_getFontCount(SWFFontCollection collection);
+SWFFont SWFFontCollection_getFont(SWFFontCollection collection, int index);
+void destroySWFFontCollection(SWFFontCollection collection);
 
 
 /***** SWFText *****/
