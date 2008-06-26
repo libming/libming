@@ -609,6 +609,7 @@ int SWFAction_compile(SWFAction action, int swfVersion, int *length);
 SWFAction compileSWFActionCode(const char *script) __deprecated;
 void destroySWFAction(SWFAction action);
 byte *SWFAction_getByteCode(SWFAction action, int *length);
+int SWFAction_setDebug(SWFAction action, int debug);
 
 SWFInitAction newSWFInitAction(SWFAction action);
 void destroySWFInitAction(SWFInitAction init);

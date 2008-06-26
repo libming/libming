@@ -89,7 +89,7 @@ makeswf_set_swfversion(int value)
 }
 
 SWFAction
-makeswf_compile_source(const char* filename, const char* ppfile)
+makeswf_compile_source(const char* filename, const char* ppfile, int debug)
 {
 	SWFAction ac;
 	char *code;
@@ -126,6 +126,7 @@ makeswf_compile_source(const char* filename, const char* ppfile)
 
 	printf("Compiling `%s'... ", filename);
 	ac = newSWFAction(code);
+	SWFAction_setDebug(ac, debug);
 	if (SWFAction_compile(ac, swfversion, &length))
 	{
 		printf("failed:\n"); 
@@ -253,6 +254,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.11  2008/06/26 19:36:12  krechert
+ * fix linker error and make enabling SWFAction's debug mode generic
+ *
  * Revision 1.10  2007/12/17 17:28:26  strk
  * Check existance of input file before attempting to preprocess it
  *

@@ -48,7 +48,8 @@ struct SWFAction_s
 	{
 		FILE *file;
 		char *script;
-	} input;	
+	} input;
+	int debug;	
 };
 
 struct SWFInitAction_s
@@ -126,12 +127,12 @@ int SWFAction_compile(SWFAction action,
 
 	if(script != NULL && swfVersion == 4)
         {
-                swf4ParseInit(script, 0, swfVersion);
+                swf4ParseInit(script, action->debug, swfVersion);
 		parserError = swf4parse((void *)&b);
         }
         else if (script != NULL)
         {
-                swf5ParseInit(script, 0, swfVersion);
+                swf5ParseInit(script, action->debug, swfVersion);
 		parserError = swf5parse((void *)&b);
         }
 	else 
@@ -273,7 +274,24 @@ static SWFAction createEmptyAction()
         BLOCK(action)->dtor = (destroySWFBlockMethod) destroySWFAction;
 	action->inputType = INPUT_EMPTY;
 	action->out = NULL;
+	action->debug = 0;
 	return action;
+}
+
+/**
+ * enable verbose compiler output 
+ *
+ * Set debug value to 1 get very! verbose compile messages.
+ * @return old value
+ */
+int SWFAction_setDebug(SWFAction a, int debug /*debug switch*/)
+{
+	int oldval;
+	if(!a)
+		return -1;
+	oldval = a->debug;
+	a->debug = debug;
+	return oldval;
 }
 
 /*

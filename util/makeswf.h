@@ -27,6 +27,7 @@ void makeswf_append_cpparg(const char* buf);
  * If the preprocessing step is not skipped, preprocessed file is wrote
  * into the provided 'ppfile', or <filename>.pp if NULL.
  *
+ * The debug parameter, if set, enables SWFAction's debugmode. 
  */
-SWFAction makeswf_compile_source(const char* filename, const char* ppfile);
+SWFAction makeswf_compile_source(const char* filename, const char* ppfile, int debug);
 

@@ -124,14 +124,13 @@ vasprintf(char **ret, const char *format, va_list ap)
 static void add_import_spec(char *spec);
 static void add_init_action(char *file, int frameno);
 static void add_init_action_spec(char *spec);
-static void compile_init_actions(int frameno);
+static void compile_init_actions(int frameno, int debug);
 static int add_imports(void);
 static void embed_image(SWFMovie movie, char *f);
 static void embed_swf(SWFMovie movie, char *f);
 static void print_init_actions(int frameno, FILE* stream);
 // return pointer to allocated memory (free it)
 static char* base_name(char* filename);
-extern int swf5debug, swf4debug;
 /* data */
 static char **import_specs;
 static int numimport_specs = 0;
@@ -394,15 +393,7 @@ main (int argc, char **argv)
 	printf("Output compression level: %d\n", swfcompression);
 	printf("Output SWF version: %d\n", swfversion);
 	
-	if(debug_parser)
-	{
-		if(swfversion < 5)
-			swf4debug = 1;
-		else
-			swf5debug = 1;
-	}
-	
-   	/* 
+	 /* 
 	 * Add imports
 	 */
 	if ( numimport_specs ) add_imports();
@@ -415,7 +406,7 @@ main (int argc, char **argv)
 
 		FileType type = getFileType(filename);
 
-		compile_init_actions(i);
+		compile_init_actions(i, debug_parser);
 
 		if ( type == SWF )
 		{
@@ -432,7 +423,8 @@ main (int argc, char **argv)
 		else
 		{
 			sprintf(ppfile, "%s.frame%d.pp", outputfile, i);
-			ac = makeswf_compile_source(filename, ppfile);
+			ac = makeswf_compile_source(filename, ppfile, 
+				debug_parser);
 			printf("Adding %s to frame %d... ", filename, i);
 			SWFMovie_add(mo, (SWFBlock)ac);
 		}
@@ -513,7 +505,7 @@ print_init_actions(int frameno, FILE* stream)
 }
 
 static void
-compile_init_actions(int frameno)
+compile_init_actions(int frameno, int debug)
 {
 	int i;
 	int found=0;
@@ -529,7 +521,7 @@ compile_init_actions(int frameno)
 		file = ia->file;
 
 		sprintf(ppfile, "%s.frame%d.init%d.pp", outputfile, frameno, found);
-		action = makeswf_compile_source(file, ppfile);
+		action = makeswf_compile_source(file, ppfile, debug);
 
 
 		printf("Adding %s to frame %d init actions... ",
@@ -717,6 +709,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.47  2008/06/26 19:36:12  krechert
+ * fix linker error and make enabling SWFAction's debug mode generic
+ *
  * Revision 1.46  2008/02/08 09:19:57  strk
  * Add -n switch to force NetworkAccess flag in a file attribute tag.
  * See http://bugs.libming.org/show_bug.cgi?id=37
