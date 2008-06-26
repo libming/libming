@@ -27,7 +27,7 @@
 #include "decompile.h"
 #include "parser.h"
 #include "read.h"
-#include "error.h"
+#include "blocks/error.h"
 
 extern struct Movie m;
 extern SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
