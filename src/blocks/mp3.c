@@ -181,7 +181,6 @@ int getMP3Flags(SWFInput input, byte *flags)
 	struct mp3_header mp3h;	
 	int rate=0, channels, start = 0;
 	int ret;
-	int offset = 0;
 
 	/* 
 	 * skip stream until first MP3 header which starts with 0xffe 
@@ -189,7 +188,7 @@ int getMP3Flags(SWFInput input, byte *flags)
 	while((ret = readMP3Header(input, &mp3h)) < 0)
 	{
 		SWFInput_seek(input, 1, SEEK_CUR);
-		offset++;
+		start++;
 	}
 
 	if(ret == 0 || SWFInput_eof(input))
@@ -218,7 +217,7 @@ int getMP3Flags(SWFInput input, byte *flags)
 
 	*flags =
 		SWF_SOUND_MP3_COMPRESSED | rate | SWF_SOUND_16BITS | channels;
-	return offset;	
+	return start;	
 }
 
 int getMP3Samples(SWFInput input, int flags, int *wanted)
