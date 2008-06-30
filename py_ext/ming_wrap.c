@@ -9791,6 +9791,45 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFDisplayItem_getCharacter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
+  SWFCharacter result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFDisplayItem_getCharacter",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_getCharacter" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
+  }
+  result = (SWFCharacter)SWFDisplayItem_getCharacter(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFDisplayItem_endMask(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFDisplayItem_endMask",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFDisplayItem_endMask" "', argument " "1"" of type '" "SWFDisplayItem""'"); 
+  }
+  SWFDisplayItem_endMask(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFDisplayItem_move(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFDisplayItem arg1 = (SWFDisplayItem) 0 ;
@@ -14447,6 +14486,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFPosition_getXSkew", _wrap_SWFPosition_getXSkew, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_getYSkew", _wrap_SWFPosition_getYSkew, METH_VARARGS, NULL},
 	 { (char *)"SWFPosition_getXYSkew", _wrap_SWFPosition_getXYSkew, METH_VARARGS, NULL},
+	 { (char *)"SWFDisplayItem_getCharacter", _wrap_SWFDisplayItem_getCharacter, METH_VARARGS, NULL},
+	 { (char *)"SWFDisplayItem_endMask", _wrap_SWFDisplayItem_endMask, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_move", _wrap_SWFDisplayItem_move, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_moveTo", _wrap_SWFDisplayItem_moveTo, METH_VARARGS, NULL},
 	 { (char *)"SWFDisplayItem_rotate", _wrap_SWFDisplayItem_rotate, METH_VARARGS, NULL},
@@ -14617,7 +14658,7 @@ static swig_type_info _swigt__p_floatArray = {"_p_floatArray", "struct floatArra
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFFontCollection|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFFilter|SWFBinaryData|SWFBrowserFont|SWFFontCharacter|SWFCharacter", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_void = {"_p_void", "SWFMovieClip|SWFMovie|SWFFontCollection|SWFButtonRecord|SWFGradient|SWFDisplayItem|SWFShape|SWFBitmap|SWFText|SWFVideoStream|SWFFont|SWFButton|SWFMorph|SWFSoundStream|SWFTextField|void *|SWFPrebuiltClip|SWFMatrix|SWFFill|SWFSound|SWFInitAction|SWFAction|SWFFilter|SWFBinaryData|SWFBrowserFont|SWFCharacter|SWFFontCharacter", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Blur_s,

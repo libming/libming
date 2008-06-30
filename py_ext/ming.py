@@ -378,6 +378,13 @@ class SWFFill(SWFBase):
     def setMatrix(self, a, b, c, d, x, y):
         mingc.SWFFill_setMatrix(self.this, a, b, c, d, x, y)
 
+class SWFCharacter(SWFBase):
+
+    def getWidth(self):
+        mingc.SWFCharacter_getWidth(self.this)
+
+    def getHeight(self):
+        mingc.SWFCharacter_getHeight(self.this)
 
 class SWFDisplayItem(SWFBase):
 
@@ -523,6 +530,9 @@ class SWFDisplayItem(SWFBase):
     def addFilter(self, filter):
         mingc.SWFDisplayItem_addFilter(self.this, filter.this)
 
+    def getCharacter(self):
+        return SWFCharacter(mingc.SWFDisplayItem_getCharacter(self.this))
+
 SWFACTION_ONLOAD      = mingc.SWFACTION_ONLOAD      
 SWFACTION_ENTERFRAME  = mingc.SWFACTION_ENTERFRAME  
 SWFACTION_UNLOAD      = mingc.SWFACTION_UNLOAD      
@@ -662,6 +672,9 @@ class SWFMovie(SWFBase):
 
     def stopSound(self, sound):
         mingc.SWFMovie_stopSound(self.this, sound.this)
+
+    def importCharacter(self):
+        SWFCharacter(mingc.SWFMovie_importCharacter(self.this))
 
 
 class SWFSprite(SWFBase):
