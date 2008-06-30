@@ -48,7 +48,7 @@ compile(const char* filename, const char* ppfile, int version)
 	SWFMovie mo = newSWFMovieWithVersion(version);
 	makeswf_set_swfversion(version);
 
-	ac = makeswf_compile_source(filename, ppfile);
+	ac = makeswf_compile_source(filename, ppfile, 0);
 
 	SWFMovie_add(mo, (SWFBlock)ac);
 	SWFMovie_nextFrame(mo);
