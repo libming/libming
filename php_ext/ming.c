@@ -324,7 +324,23 @@ static SWFCharacter getCharacterClass(zval *id TSRMLS_DC)
 	return (SWFCharacter)character;
 }
 
+/* {{{ proto swfcharacter::getWidth() */
+PHP_METHOD(swfcharacter, getWidth)
+{
+        RETURN_DOUBLE(SWFCharacter_getWidth(getCharacter(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
+/* {{{ proto swfcharacter::getHeight() */
+PHP_METHOD(swfcharacter, getHeight)
+{
+        RETURN_DOUBLE(SWFCharacter_getHeight(getCharacter(getThis() TSRMLS_CC)));
+}
+/* }}} */
+
 static zend_function_entry swfcharacter_functions[] = {
+        PHP_ME(swfcharacter, getWidth,          NULL, 0)
+        PHP_ME(swfcharacter, getHeight,         NULL, 0)
 	{ NULL, NULL, NULL }
 };
 
@@ -1507,7 +1523,7 @@ static zend_function_entry swfbutton_functions[] = {
 
 /* }}} */
 
-/* {{{ SWFDisplayitem
+/* {{{ SWFDisplayItem
 */
 /* {{{ internal function getDisplayItem
    Returns the SWFDisplayItem contained in zval *id */
@@ -2083,6 +2099,27 @@ PHP_METHOD(swfdisplayitem, getMatrix)
 	}
 }
 /* }}} */
+
+/** {{{ proto void swfdisplayitem::getCharacter() */
+PHP_METHOD(swfdisplayitem, getCharacter)
+{
+	SWFCharacter c;
+	int ret;
+
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	c = SWFDisplayItem_getCharacter(getDisplayItem(getThis() TSRMLS_CC));
+	if(c != NULL)
+	{
+		ret = zend_list_insert(c, le_swfcharacterp);
+		object_init_ex(return_value, character_class_entry_ptr);
+		add_property_resource(return_value, "character", ret);
+		zend_list_addref(ret);
+	}
+}
+/* }}} */
+
 #endif
 
 static zend_function_entry swfdisplayitem_functions[] = {
@@ -2120,6 +2157,7 @@ static zend_function_entry swfdisplayitem_functions[] = {
 	PHP_ME(swfdisplayitem, flush,    NULL, 0)
 	PHP_ME(swfdisplayitem, addFilter,    NULL, 0)
 	PHP_ME(swfdisplayitem, setCXform,    NULL, 0)
+	PHP_ME(swfdisplayitem, getCharacter,    NULL, 0)
 #endif
 	{ NULL, NULL, NULL }
 };
