@@ -290,13 +290,13 @@ class SWFShape(SWFBase):
         return mingc.SWFShape_getVersion(self.this)
 
     def addSolidFill(self, r, g, b, a=0xff):
-        return mingc.SWFShape_addSolidFill(self.this, r, g, b, a)
+        return SWFFill(mingc.SWFShape_addSolidFill(self.this, r, g, b, a))
 
     def addGradientFill(self, gradient, flags):
-        return mingc.SWFShape_addGradientFill(self.this, gradient.this, flags)
+        return SWFFill(mingc.SWFShape_addGradientFill(self.this, gradient.this, flags))
 
     def addBitmapFill(self, bitmap, flags):
-        return mingc.SWFShape_addBitmapFill(self.this, bitmap.this, flags)
+        return SWFFill(mingc.SWFShape_addBitmapFill(self.this, bitmap.this, flags))
 
     def setRenderHintingFlags(self, flags):
         mingc.SWFShape_setRenderHintingFlags(self.this, flags)
@@ -1139,10 +1139,10 @@ class SWFButton(SWFBase):
 
     def addCharacter(self, character, flags):
         self.shapes.append(character)
-        return mingc.SWFButton_addCharacter(self.this, character, flags)
+        return SWFButtonRecord(mingc.SWFButton_addCharacter(self.this, character, flags))
 
     def addSound(self, sound, flags):
-        return mingc.SWFButton_addSound(self.this, sound.this, flags)
+        return SWFSoundInstance(mingc.SWFButton_addSound(self.this, sound.this, flags))
 
     def setMenu(self, flag):
         mingc.SWFButton_setMenu(self.this, flag)
