@@ -6,8 +6,9 @@ else
 	srcdir=$1
 fi
 
-mkdir tmp
+mkdir -p tmp/modules
 cp $srcdir/* tmp
+cp `php-config --extension-dir`/*.so tmp/modules 
 cd tmp
 phpize
 ./configure --with-ming
