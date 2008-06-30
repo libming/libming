@@ -266,16 +266,12 @@ class SWFBlock
 
 class SWFCharacter : public SWFBlock
 {
+ friend class SWFMovie;
+ friend class SWFDisplayItem;
  public:
   c_SWFCharacter character;
 
-  SWFCharacter()
-  { character = NULL; }
-  
-  SWFCharacter(c_SWFCharacter c)
-  { character = c; }
-
-  float getWidth()
+    float getWidth()
     { return SWFCharacter_getWidth(this->character); }
 
   float getHeight()
@@ -283,6 +279,14 @@ class SWFCharacter : public SWFBlock
 
   virtual c_SWFBlock getBlock()
     { return (c_SWFBlock)character; }
+
+ protected:
+  SWFCharacter()
+  { character = NULL; }
+  
+  SWFCharacter(c_SWFCharacter c)
+  { character = c; }
+
 
   SWF_DECLAREONLY(SWFCharacter);
 };
