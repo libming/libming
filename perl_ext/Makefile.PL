@@ -64,6 +64,7 @@ my @SWF_MODULES_NAMES = (
 	'CXform',
 	'BrowserFont',
 	'FontCollection',
+	'Character'
 );
 
 my @XS_OBJECTS = map "${BUILDDIR}/$_", @SWF_MODULES_NAMES;

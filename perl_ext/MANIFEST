@@ -30,6 +30,7 @@ SWF/CXform.pm
 SWF/Sprite.pm
 SWF/BrowserFont.pm
 SWF/FontCollection.pm
+SWF/Character.pm
 t/00_basic.t
 t/01_shape.t
 t/03_movie.t
@@ -81,6 +82,7 @@ Filter.xs
 CXform.xs
 BrowserFont.xs
 FontCollection.xs
+Character.xs
 perl_swf.h
 swf_util.c
 typemap

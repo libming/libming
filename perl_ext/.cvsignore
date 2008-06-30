@@ -39,3 +39,4 @@ Filter.c
 CXform.c
 BrowserFont.c
 FontCollection.c
+Character.c

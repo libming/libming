@@ -7,7 +7,7 @@ EXTRA_DIST = SWF/Action.pm SWF/BinaryData.pm SWF/Bitmap.pm SWF/Blur.pm \
 		SWF/Shape.pm SWF/Shadow.pm SWF/Sound.pm \
 		SWF/SoundInstance.pm SWF/SoundStream.pm SWF/MovieClip.pm \
 		SWF/Text.pm SWF/TextField.pm SWF/VideoStream.pm SWF/Sprite.pm \
-		SWF/BrowserFont.pm SWF/FontCollection.pm\
+		SWF/BrowserFont.pm SWF/FontCollection.pm SWF/Character.pm\
 		t/00_basic.t t/01_shape.t t/03_movie.t t/button.t t/drag.t \
 		t/fill.t t/filljpeg.t t/gradient.t t/movieclip.t t/png.t \
 		t/sound.t \
@@ -18,7 +18,7 @@ EXTRA_DIST = SWF/Action.pm SWF/BinaryData.pm SWF/Bitmap.pm SWF/Blur.pm \
 		Matrix.xs Morph.xs Movie.xs MovieClip.xs PrebuiltClip.xs \
 		README SUPPORT SWF.pm SWF.xs Shadow.xs Shape.xs Sound.xs \
 		SoundInstance.xs SoundStream.xs TODO Text.xs TextField.xs \
-		VideoStream.xs FontCharacter.xs ButtonRecord.xs \
+		VideoStream.xs FontCharacter.xs ButtonRecord.xs Character.xs\
 		perl_swf.h swf_util.c typemap examples/action.cgi \
 		examples/alphafill.cgi  examples/animation.cgi \
 		examples/glyph.cgi examples/jpegfill.cgi \
