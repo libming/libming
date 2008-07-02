@@ -1125,7 +1125,16 @@ class SWFBitmap : public SWFCharacter
 
     this->character = (c_SWFCharacter)bitmap;
   }
-
+  
+  SWFBitmap(unsigned char *raw, SWFRawImgFmt srcFmt, SWFBitmapFmt dstFmt, 
+            unsigned short width, unsigned short height)
+  {
+    this->bitmap = newSWFBitmap_fromRawImg(raw, srcFmt, dstFmt, width, height);
+    if ( ! this->bitmap ) 
+      throw SWFException("SWFBitmap(const char *filename, const char *alpha=NULL)");
+    this->character = (c_SWFCharacter)bitmap;
+  }
+  
   SWFBitmap(SWFInput *input)
   { 
     this->bitmap = newSWFBitmap_fromInput(input->input);
