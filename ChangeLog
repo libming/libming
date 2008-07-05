@@ -1,6 +1,85 @@
-2008-06-25 16:00  krechert
+2008-07-05 03:55  krechert
 
-	* NEWS: update
+	* test/SoundStream/test01.php: php testcase
+
+2008-07-02 16:28  krechert
+
+	* mingpp.h: c++: wrap newSWFBitmap_fromRawImg
+
+2008-06-30 16:57  peterdd
+
+	* perl_ext/SWF.pm: no commas here
+
+2008-06-30 16:07  krechert
+
+	* py_ext/ming.py: wrap returned c-objects in python objects
+
+2008-06-30 15:41  krechert
+
+	* perl_ext/: .cvsignore, Character.xs, MANIFEST, Makefile.PL,
+	  Makefile.am, SWF.pm, SWF/Character.pm: SWFCharacter
+
+2008-06-30 15:26  krechert
+
+	* php_ext/ming.c: SWFCharacter functions
+
+2008-06-30 15:25  krechert
+
+	* php_ext/make_module.sh: cp modules modules from host machine to
+	  build-dir make check fails on ubuntu (missing pdo.so) otherwise
+
+2008-06-30 14:53  krechert
+
+	* py_ext/: ming.py, ming_wrap.c, mingc.py: SWFCharacter and friends
+	  added missing prototype
+
+2008-06-30 14:38  krechert
+
+	* mingpp.h: fix access rights. SWFCharacter has no public
+	  constructor
+
+2008-06-30 14:37  krechert
+
+	* test/actionscript/ActionScriptTest.c: compile fix: add 3rd
+	  argument (debug = 0)
+
+2008-06-28 12:21  krechert
+
+	* src/blocks/mp3.c: bugfix: mp3 files with id3 tags didn't play.
+
+2008-06-26 17:26  krechert
+
+	* util/parser.c: fix darwin compile error
+
+2008-06-26 15:36  krechert
+
+	* src/ming.h.in, src/actioncompiler/swf4compiler.flex,
+	  src/actioncompiler/swf5compiler.flex, src/blocks/action.c,
+	  util/makeswf.c, util/makeswf.h, util/makeswf_utils.c: fix linker
+	  error and make enabling SWFAction's debug mode generic
+
+2008-06-26 10:52  krechert
+
+	* perl_ext/: .cvsignore, FontCollection.xs, MANIFEST, Makefile.PL,
+	  Makefile.am, SWF.pm, perl_swf.h, typemap, SWF/FontCollection.pm:
+	  FontCollection
+
+2008-06-26 09:15  krechert
+
+	* php_ext/: ming.c, php_ming.h: SWFFontCollection
+
+2008-06-26 08:42  krechert
+
+	* mingpp.h: SWFFontCollection support
+
+2008-06-26 08:32  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py:
+	  FontCollection support
+
+2008-06-26 08:18  krechert
+
+	* src/ming.h.in: add missing prototype
 
 2008-06-25 15:58  krechert
 
