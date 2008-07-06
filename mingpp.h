@@ -1714,7 +1714,7 @@ class SWFButton : public SWFCharacter
     { return (c_SWFBlock)this->button; }
 
   SWFButtonRecord* addShape(SWFCharacter *character, byte flags)
-    { SWFButton_addCharacter(this->button, (c_SWFCharacter)character->getBlock(), flags); }
+    { return new SWFButtonRecord(SWFButton_addCharacter(this->button, (c_SWFCharacter)character->getBlock(), flags)); }
 
   void addAction(SWFAction *action, int flags)
     { SWFButton_addAction(this->button, action->action, flags); }
