@@ -25,6 +25,7 @@ static void count();
 static void warning(char *msg);
 
 #define YY_INPUT(buf,result,max_size) result=lexBufferInput(buf, max_size)
+#define YY_NO_UNISTD_H
 
 /* thanks to the prolific and brilliant Raff: */
 static int lexBufferInput(char *buf, int max_size)

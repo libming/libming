@@ -27,6 +27,7 @@ static int yy_first_time = 1;
 static int yy_new_state;
 
 #define YY_INPUT(buf,result,max_size) result=lexBufferInput(buf, max_size)
+#define YY_NO_UNISTD_H
 
 /* thanks to the prolific and brilliant Raff: */
 static int lexBufferInput(char *buf, int max_size)
