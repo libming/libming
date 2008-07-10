@@ -15,6 +15,11 @@
 #define YYPARSE_PARAM buffer
 //#define DEBUG 1
 
+#ifdef _MSC_VER 
+#define strcasecmp stricmp 
+#endif
+
+
 Buffer bf, bc;
 static int classContext = 0;
 
