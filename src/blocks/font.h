@@ -106,6 +106,7 @@ struct SWFFontCollection_s
 	int numFonts;
 };
 
+SWFFont newSWFFont();
 
 void SWFFontCollection_addFont(SWFFontCollection collection, SWFFont font);
 void destroySWFFontCollection(SWFFontCollection collection);
