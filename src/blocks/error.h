@@ -21,18 +21,25 @@ void error_default(const char *msg, ...);
 SWFMsgFunc setSWFWarnFunction(SWFMsgFunc warn);
 SWFMsgFunc setSWFErrorFunction(SWFMsgFunc error);
 
+#ifndef _MSC_VER
 #define SWF_warn(msg, va...) 		\
 do {					\
 	if(_SWF_warn)			\
 		_SWF_warn((msg), ##va); \
 } while(0)
+#else
+#define SWF_warn _SWF_warn
+#endif
 
+#ifndef _MSC_VER
 #define SWF_error(msg, va...) 		\
 do {					\
 	if(_SWF_error)			\
 		_SWF_error((msg), ##va); \
 } while(0)
-
+#else
+#define SWF_error _SWF_error
+#endif
 
 #ifndef _MSC_VER
 #define SWF_warnOnce(msg, va...)	\
