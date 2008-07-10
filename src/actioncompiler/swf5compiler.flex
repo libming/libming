@@ -99,10 +99,10 @@ enum yytokentype read_int (const char *text, YYSTYPE *num)
   if (i > 0x7FFFFFFF) {
     /* note: this catches ERANGE, too */
     num->doubleVal = atof(yytext);
-    return DOUBLE;
+    return (enum yytokentype)DOUBLE;
   }
   num->intVal = i;
-  return INTEGER;
+  return (enum yytokentype)INTEGER;
 }
 
 %}
