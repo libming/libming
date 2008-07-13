@@ -3736,13 +3736,40 @@ PHP_METHOD(swfvideostream, hasaudio)
 }
 /* }}} */
 
-		
-		
+/* {{{ proto swfvideostream::nextFrame */
+PHP_METHOD(swfvideostream, nextFrame) 
+{
+	if(ZEND_NUM_ARGS() != 0)
+		WRONG_PARAM_COUNT;
+
+	RETURN_LONG(SWFVideoStream_nextFrame(getVideoStream(getThis() TSRMLS_CC)));
+}
+/* }}} */
+	
+/* {{{ proto swfvideostream::setFrameMode */	
+PHP_METHOD(swfvideostream, setFrameMode)
+{
+	zval **mode;
+	SWFVideoStream stream = getVideoStream(getThis() TSRMLS_CC);
+	if(!stream)
+		 php_error(E_ERROR, "getVideoStream returned NULL");
+
+	if( ZEND_NUM_ARGS() != 1 || zend_get_parameters_ex(1, &mode) == FAILURE )
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(mode);
+
+	RETURN_LONG(SWFVideoStream_setFrameMode(stream, Z_LVAL_PP(mode)));
+}
+/* }}} */
+	
 static zend_function_entry swfvideostream_functions[] = {
 	PHP_ME(swfvideostream, 	__construct,	NULL, 0)
 	PHP_ME(swfvideostream, setdimension, NULL, 0)
 	PHP_ME(swfvideostream, getnumframes, NULL, 0)
 	PHP_ME(swfvideostream, hasaudio, NULL, 0)
+	PHP_ME(swfvideostream, setFrameMode, NULL, 0)
+	PHP_ME(swfvideostream, nextFrame, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 
@@ -6715,6 +6742,10 @@ PHP_MINIT_FUNCTION(ming)
 	CONSTANT("SWF_LINESTYLE_FLAG_ENDCAP_ROUND", 	SWF_LINESTYLE_FLAG_ENDCAP_ROUND);
 	CONSTANT("SWF_LINESTYLE_FLAG_ENDCAP_NONE", 	SWF_LINESTYLE_FLAG_ENDCAP_NONE);
 	CONSTANT("SWF_LINESTYLE_FLAG_ENDCAP_SQUARE", 	SWF_LINESTYLE_FLAG_ENDCAP_SQUARE);
+
+        /* video stream modes */
+	CONSTANT("SWFVIDEOSTREAM_MODE_AUTO",            SWFVIDEOSTREAM_MODE_AUTO);
+	CONSTANT("SWFVIDEOSTREAM_MODE_MANUAL",          SWFVIDEOSTREAM_MODE_MANUAL);
 #endif
 
 	le_swfshapep = zend_register_list_destructors_ex(destroy_SWFShape_resource, NULL, "SWFShape", module_number);

@@ -63,6 +63,9 @@ PHP_METHOD(swfbitmap, getHeight);
 PHP_METHOD(swfvideostream, init);
 PHP_METHOD(swfvideostream, setdimention);
 PHP_METHOD(swfvideostream, getnumframes);
+PHP_METHOD(swfvideostream, hasaudio);
+PHP_METHOD(swfvideostream, setFrameMode);
+PHP_METHOD(swfvideostream, nextFrame);
 
 PHP_METHOD(swfprebuiltclip, init);
 
