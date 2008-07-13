@@ -86,7 +86,7 @@ my $PM_HASH;
 foreach my $val ( @SWF_MODULES_NAMES ) {
 	$PM_HASH->{"${SRCDIR}/SWF/$val.pm"} = "blib/lib/SWF/$val.pm";
 }
-$PM_HASH->{"${SRCDIR}/SWF.pm"} = "blib/lib/SWF.pm";
+$PM_HASH->{"${BUILDDIR}/SWF.pm"} = "blib/lib/SWF.pm";
 #also install Sprite.pm (deprecated) for compat reasons
 $PM_HASH->{"${SRCDIR}/SWF/Sprite.pm"} = "blib/lib/SWF/Sprite.pm";
 
@@ -94,7 +94,7 @@ my $MAN3_HASH;
 foreach my $val ( @SWF_MODULES_NAMES ) {
 	$MAN3_HASH->{"${SRCDIR}/SWF/$val.pm"} = "blib/man3/SWF::$val.3pm";
 }
-$MAN3_HASH->{"${SRCDIR}/SWF.pm"} = "blib/man3/SWF.3pm";
+$MAN3_HASH->{"${BUILDDIR}/SWF.pm"} = "blib/man3/SWF.3pm";
 #also install Sprite.3pm (deprecated) for compat reasons
 $MAN3_HASH->{"${SRCDIR}/SWF/Sprite.pm"} = "blib/man3/SWF::Sprite.3pm";
 
@@ -136,7 +136,7 @@ sub MY::postamble {
 
 WriteMakefile(
     'NAME'	   => 'SWF',
-    'VERSION_FROM' => $SRCDIR.'/SWF.pm',
+    'VERSION_FROM' => $BUILDDIR.'/SWF.pm',
     ( $] <  5.005 ? () :
       (
        ABSTRACT   => 'Perl interface to Ming -  a library for generating SWF ("Flash") format movies.',
