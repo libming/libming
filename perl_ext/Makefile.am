@@ -16,7 +16,7 @@ EXTRA_DIST = SWF/Action.pm SWF/BinaryData.pm SWF/Bitmap.pm SWF/Blur.pm \
 		DisplayItem.xs Exports.c Fill.xs FilterMatrix.xs Filter.xs \
 		Font.xs Gradient.xs InitAction.xs MANIFEST Makefile.PL \
 		Matrix.xs Morph.xs Movie.xs MovieClip.xs PrebuiltClip.xs \
-		README SUPPORT SWF.pm SWF.xs Shadow.xs Shape.xs Sound.xs \
+		README SUPPORT SWF.pm.in SWF.xs Shadow.xs Shape.xs Sound.xs \
 		SoundInstance.xs SoundStream.xs TODO Text.xs TextField.xs \
 		VideoStream.xs FontCharacter.xs ButtonRecord.xs Character.xs\
 		perl_swf.h swf_util.c typemap examples/action.cgi \

@@ -376,6 +376,7 @@ AC_OUTPUT([
 	src/ming.h
 	src/libming.pc
 	perl_ext/Makefile
+	perl_ext/SWF.pm
 	php_ext/Makefile
 	py_ext/Makefile
 	py_ext/setup.py

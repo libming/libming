@@ -13,7 +13,7 @@ use Carp 'croak';
 require DynaLoader;
 @SWF::ISA = qw(DynaLoader);
 
-$SWF::VERSION = '0.4.0-beta6';
+$SWF::VERSION = '@MING_VERSION@';
 
 my @EXPORT_OK = qw(Action Bitmap Button Constants DisplayItem Fill Font Gradient Morph Movie MovieClip PrebuiltClip Shape Sound Text TextField FontCharacter ButtonRecord BinaryData InitAction Matrix Blur Shadow FilterMatrix Filter CXform Sprite BrowserFont FontCollection Character);
 
