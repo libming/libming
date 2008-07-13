@@ -563,6 +563,8 @@ void SWFButtonRecord_skewY(SWFButtonRecord record, double skewY);
 void SWFButtonRecord_skewYTo(SWFButtonRecord record, double skewY);
 
 /****** SWFVideo ******/
+#define SWFVIDEOSTREAM_MODE_AUTO 0
+#define SWFVIDEOSTREAM_MODE_MANUAL 1
 
 SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
 SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
@@ -570,6 +572,8 @@ SWFVideoStream newSWFVideoStream(void);
 void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height);
 int SWFVideoStream_getNumFrames(SWFVideoStream stream);
 int SWFVideoStream_hasAudio(SWFVideoStream stream);
+int SWFVideoStream_setFrameMode(SWFVideoStream stream, int mode);
+int SWFVideoStream_nextFrame(SWFVideoStream stream);
 
 /***** SWFSprite *****/
 
@@ -622,6 +626,9 @@ double SWFPosition_getYSkew(SWFPosition position);
 void SWFPosition_getXYSkew(SWFPosition position, double* outXSkew, double* outYSkew);
 
 /***** SWFDisplayItem *****/
+SWFCharacter SWFDisplayItem_getCharacter(SWFDisplayItem item);
+void SWFDisplayItem_endMask(SWFDisplayItem item);
+
 void SWFDisplayItem_move(SWFDisplayItem item, double x, double y);
 void SWFDisplayItem_moveTo(SWFDisplayItem item, double x, double y);
 void SWFDisplayItem_rotate(SWFDisplayItem item, double degrees);

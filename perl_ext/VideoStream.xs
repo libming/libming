@@ -43,5 +43,10 @@ void SWFVideoStream_setDimension(stream, width, height)
 int SWFVideoStream_hasAudio(stream)
 	SWF::VideoStream stream
 		
+int SWFVideoStream_setFrameMode(stream, mode)
+	SWF::VideoStream stream
+	int mode
 
+int SWFVideoStream_nextFrame(stream)
+	SWF::VideoStream stream
 

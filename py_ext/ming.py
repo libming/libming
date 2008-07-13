@@ -1194,6 +1194,9 @@ class SWFButtonRecord(SWFBase):
     def addFilter(self, filter):
         mingc.SWFButtonRecord_addFilter(self.this, filter.this)
 
+SWFVIDEOSTREAM_MODE_AUTO = mingc.SWFVIDEOSTREAM_MODE_AUTO
+SWFVIDEOSTREAM_MODE_MANUAL = mingc.SWFVIDEOSTREAM_MODE_MANUAL
+
 class SWFVideoStream(SWFBase):
     def __init__(self):
         self.this = mingc.newSWFVideoStream()
@@ -1203,6 +1206,10 @@ class SWFVideoStream(SWFBase):
         return mingc.SWFVideoStream_getNumFrames(self.this)
     def hasAudio(self):
         return mingc.SWFVideoStream_hasAudio(self.this)
+    def setFrameMode(self, mode)
+        return mingc.SWFVideoStream_setFrameMode(self.this, mode)
+    def nextFrame(self)
+        return mingc.SWFVideoStream_nextFrame(self.this)
     def __del__(self):
         mingc.destroySWFVideoStream(self.this)
 

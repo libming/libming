@@ -8690,6 +8690,55 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFVideoStream_setFrameMode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFVideoStream arg1 = (SWFVideoStream) 0 ;
+  int arg2 ;
+  int result;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFVideoStream_setFrameMode",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFVideoStream_setFrameMode" "', argument " "1"" of type '" "SWFVideoStream""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFVideoStream_setFrameMode" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (int)SWFVideoStream_setFrameMode(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFVideoStream_nextFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFVideoStream arg1 = (SWFVideoStream) 0 ;
+  int result;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFVideoStream_nextFrame",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFVideoStream_nextFrame" "', argument " "1"" of type '" "SWFVideoStream""'"); 
+  }
+  result = (int)SWFVideoStream_nextFrame(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_newSWFSprite(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFSprite result;
@@ -14455,6 +14504,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFVideoStream_setDimension", _wrap_SWFVideoStream_setDimension, METH_VARARGS, NULL},
 	 { (char *)"SWFVideoStream_getNumFrames", _wrap_SWFVideoStream_getNumFrames, METH_VARARGS, NULL},
 	 { (char *)"SWFVideoStream_hasAudio", _wrap_SWFVideoStream_hasAudio, METH_VARARGS, NULL},
+	 { (char *)"SWFVideoStream_setFrameMode", _wrap_SWFVideoStream_setFrameMode, METH_VARARGS, NULL},
+	 { (char *)"SWFVideoStream_nextFrame", _wrap_SWFVideoStream_nextFrame, METH_VARARGS, NULL},
 	 { (char *)"newSWFSprite", _wrap_newSWFSprite, METH_VARARGS, NULL},
 	 { (char *)"destroySWFSprite", _wrap_destroySWFSprite, METH_VARARGS, NULL},
 	 { (char *)"SWFSprite_addBlock", _wrap_SWFSprite_addBlock, METH_VARARGS, NULL},
@@ -15359,6 +15410,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SWFBUTTON_MOUSEDOWN",SWIG_From_int((int)((1 << 2))));
   SWIG_Python_SetConstant(d, "SWFBUTTON_MOUSEOUT",SWIG_From_int((int)((1 << 1))));
   SWIG_Python_SetConstant(d, "SWFBUTTON_MOUSEOVER",SWIG_From_int((int)((1 << 0))));
+  SWIG_Python_SetConstant(d, "SWFVIDEOSTREAM_MODE_AUTO",SWIG_From_int((int)(0)));
+  SWIG_Python_SetConstant(d, "SWFVIDEOSTREAM_MODE_MANUAL",SWIG_From_int((int)(1)));
   SWIG_Python_SetConstant(d, "SWFACTION_ONLOAD",SWIG_From_int((int)((1 << 0))));
   SWIG_Python_SetConstant(d, "SWFACTION_ENTERFRAME",SWIG_From_int((int)((1 << 1))));
   SWIG_Python_SetConstant(d, "SWFACTION_UNLOAD",SWIG_From_int((int)((1 << 2))));
