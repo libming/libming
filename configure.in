@@ -364,6 +364,13 @@ AC_SUBST(MICRO_VERSION)
 AC_SUBST(MING_VERSION)
 
 AM_CONFIG_HEADER(src/ming_config.h)
+AH_TOP(
+#ifndef __MING_CONFIG_H
+#define __MING_CONFIG_H
+)
+AH_BOTTOM(
+#endif
+)
 
 dnl AC_OUTPUT(Makefile.config src/ming.h util/ming-config)
 AC_OUTPUT([
