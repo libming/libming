@@ -28,6 +28,11 @@
 #include <iostream>
 #include <string>
 #include <list>
+
+#ifdef _MSC_VER
+#define strcasecmp stricmp 
+#endif
+
 /* mask the c type names so that we can replace them with classes.
    weird, but it works.  (on gcc, anyway..) */
 
