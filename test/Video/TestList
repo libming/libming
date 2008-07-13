@@ -1,3 +1,4 @@
 test01:swf: Embedded video
 test02:swf: 2 empty videos
 test03:swf: streaming video test 
+test04:swf: Embedded video (manual frame mode)
