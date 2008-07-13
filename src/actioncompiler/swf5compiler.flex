@@ -92,7 +92,7 @@ void swf5ParseInit(const char *script, int debug, int version)
   swfVersion = version;
 }
 
-enum yytokentype read_int (const char *text, YYSTYPE *num)
+int read_int (const char *text, YYSTYPE *num)
 {
   unsigned long i;
 
@@ -100,10 +100,10 @@ enum yytokentype read_int (const char *text, YYSTYPE *num)
   if (i > 0x7FFFFFFF) {
     /* note: this catches ERANGE, too */
     num->doubleVal = atof(yytext);
-    return (enum yytokentype)DOUBLE;
+    return DOUBLE;
   }
   num->intVal = i;
-  return (enum yytokentype)INTEGER;
+  return INTEGER;
 }
 
 %}
