@@ -28,10 +28,7 @@ static int yy_new_state;
 
 #define YY_INPUT(buf,result,max_size) result=lexBufferInput(buf, max_size)
 #define YY_NO_UNISTD_H
-
-#ifdef _MSC_VER
 #define YY_USE_PROTOS
-#endif
 
 /* thanks to the prolific and brilliant Raff: */
 static int lexBufferInput(char *buf, int max_size)
