@@ -1804,6 +1804,12 @@ class SWFVideoStream : public SWFCharacter
   int hasAudio()
     { return SWFVideoStream_hasAudio(this->stream); }
 
+  int setFrameMode(int mode)
+    { return SWFVideoStream_setFrameMode(this->stream, mode); }
+
+  int nextFrame()
+    { return SWFVideoStream_nextFrame(this->stream); }
+
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->stream; }
 

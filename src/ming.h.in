@@ -682,6 +682,9 @@ void SWFButtonRecord_skewYTo(SWFButtonRecord record, double skewY);
 
 /****** SWFVideo ******/
 
+#define SWFVIDEOSTREAM_MODE_AUTO 	0
+#define SWFVIDEOSTREAM_MODE_MANUAL 	1
+
 void destroySWFVideoStream(SWFVideoStream stream);
 SWFVideoStream newSWFVideoStream_fromFile(FILE *f);
 SWFVideoStream newSWFVideoStream_fromInput(SWFInput input);
@@ -689,6 +692,8 @@ SWFVideoStream newSWFVideoStream(void);
 void SWFVideoStream_setDimension(SWFVideoStream stream, int width, int height);
 int SWFVideoStream_getNumFrames(SWFVideoStream stream);
 int SWFVideoStream_hasAudio(SWFVideoStream stream);
+int SWFVideoStream_setFrameMode(SWFVideoStream stream, int mode);
+int SWFVideoStream_nextFrame(SWFVideoStream stream);
 
 
 /***** SWFSprite *****/

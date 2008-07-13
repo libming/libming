@@ -52,6 +52,8 @@ struct SWFVideoStream_s
 	unsigned short embedded;
 	unsigned char codecId;
 	unsigned char smoothingFlag;
+	int mode;
+	int addFrame;
 };
 
 struct SWFVideoFrame_s
@@ -420,25 +422,79 @@ static int onFrame(SWFDisplayItem item, SWFBlockList blocklist)
 	if(item->flags != 0)
 		return 0;
 
-	stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);                
+	stream = (SWFVideoStream)SWFDisplayItem_getCharacter(item);
+	if(stream->mode == SWFVIDEOSTREAM_MODE_MANUAL &&
+		stream->addFrame == 0)
+		return 0;
+ 
 	video = SWFVideoStream_getVideoFrame(stream);
 	if(video != NULL)
 	{
-		/* well it isn't really clear why we need the place-block here
-	 	 * its not metioned in the flash-specs 
-	 	 * but its not working without */
+		/* change ratio value to display video frame */
 		frame = SWFVideoStream_getFrameNumber((SWFVideoFrame)video);
 		placeVideo = newSWFPlaceObject2Block(item->depth);
 		SWFPlaceObject2Block_setRatio(placeVideo, frame);
 		SWFPlaceObject2Block_setMove(placeVideo);
 		SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);               
-	 
+		
+		/* add video frame */ 
                 SWFBlockList_addBlock(blocklist, video);
+		stream->addFrame = 0;
 		return 2;
 	}
 	return 0;
 }
 
+/**
+ * Display next video frame
+ *
+ * Works only with embedded video streams. 
+ *
+ * @return -1 if an error happend.
+ */
+int SWFVideoStream_nextFrame(SWFVideoStream stream)
+{
+	if(stream == NULL || !stream->embedded)
+		return -1;
+
+	if(stream->mode != SWFVIDEOSTREAM_MODE_MANUAL)
+		return -1;
+
+	stream->addFrame = 1;
+	return 0;
+}
+
+/**
+ * switch video stream frame mode
+ * If the mode == SWFVIDEOSTREAM_MODE_AUTO (default) every swfmovie 
+ * frame a video frame is added.
+ * In SWFVIDEOSTREAM_MODE_MANUAL mode, the user needs to call 
+ * SWFVideoStream_nextFrame() to change the video's frame. 
+ *
+ * Works only with embedded video streams.
+ *
+ * @return the previous mode or -1 if an invalid mode was passed.
+ */
+int SWFVideoStream_setFrameMode(SWFVideoStream stream, int mode)
+{
+	int oldmode;
+	if(stream == NULL || !stream->embedded)
+		return -1;
+	
+	oldmode = stream->mode;
+	switch(mode)
+	{
+	case SWFVIDEOSTREAM_MODE_AUTO:
+		stream->mode = mode;
+		return oldmode;
+	case SWFVIDEOSTREAM_MODE_MANUAL:
+		stream->mode = mode;
+		return oldmode;
+	default:
+		SWF_warn("SWFVideoStream_setFrameMode: mode %i is unknown", mode);
+		return -1;	
+	}
+}
 
 /* 
  * create a new SWFVideoSteam object
@@ -478,7 +534,8 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	stream->lastTag = NULL;
 	stream->frame = 0;
 	stream->embedded = 1;
-	
+	stream->mode = SWFVIDEOSTREAM_MODE_AUTO;
+	stream->addFrame = 0;	
 	stream->width = VIDEO_DEF_WIDTH;
 	stream->height = VIDEO_DEF_HEIGHT;
 	if (setStreamProperties(stream) < 0)
