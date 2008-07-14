@@ -157,6 +157,7 @@ SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 			 block->type == SWF_SOUNDSTREAMHEAD ||
 			 block->type == SWF_SOUNDSTREAMHEAD2 ||
 			 block->type == SWF_SOUNDSTREAMBLOCK ||
+			 block->type == SWF_VIDEOFRAME ||
 			 block->type == SWF_END )
 	{
 		sprite->blocks =
@@ -165,7 +166,7 @@ SWFSprite_addBlock(SWFSprite sprite, SWFBlock block)
 		sprite->blocks[sprite->nBlocks++] = block;
 	}
 	else
-		; /* XXX - warn */
+		SWF_warn("SWFSprite: invalid block %i\n", block->type);
 }
 
 

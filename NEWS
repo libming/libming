@@ -3,6 +3,7 @@
 	* Autoconf perl version
 	* MSVC compile fixes
 	* removed src/test.c
+	* Embedded video in movie clips
 
 0.4.0.rc1 - 2008-07-05
 
