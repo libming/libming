@@ -1206,9 +1206,9 @@ class SWFVideoStream(SWFBase):
         return mingc.SWFVideoStream_getNumFrames(self.this)
     def hasAudio(self):
         return mingc.SWFVideoStream_hasAudio(self.this)
-    def setFrameMode(self, mode)
+    def setFrameMode(self, mode):
         return mingc.SWFVideoStream_setFrameMode(self.this, mode)
-    def nextFrame(self)
+    def nextFrame(self):
         return mingc.SWFVideoStream_nextFrame(self.this)
     def __del__(self):
         mingc.destroySWFVideoStream(self.this)
