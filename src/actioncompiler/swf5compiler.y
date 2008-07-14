@@ -751,7 +751,8 @@ iter_stmt
 		    bufferConcatSimple($10, $7);
 		  else if ($7)
 		    $10 = $7;
-
+		  else 
+		    $10 = newBuffer();
 		  if($5)
 		  {
                     bufferWriteOp($5, SWFACTION_LOGICALNOT);
