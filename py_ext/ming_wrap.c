@@ -8739,6 +8739,44 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFVideoStream_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFVideoStream arg1 = (SWFVideoStream) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int result;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:SWFVideoStream_seek",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFVideoStream_seek" "', argument " "1"" of type '" "SWFVideoStream""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFVideoStream_seek" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SWFVideoStream_seek" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  result = (int)SWFVideoStream_seek(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_newSWFSprite(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFSprite result;
@@ -14506,6 +14544,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFVideoStream_hasAudio", _wrap_SWFVideoStream_hasAudio, METH_VARARGS, NULL},
 	 { (char *)"SWFVideoStream_setFrameMode", _wrap_SWFVideoStream_setFrameMode, METH_VARARGS, NULL},
 	 { (char *)"SWFVideoStream_nextFrame", _wrap_SWFVideoStream_nextFrame, METH_VARARGS, NULL},
+	 { (char *)"SWFVideoStream_seek", _wrap_SWFVideoStream_seek, METH_VARARGS, NULL},
 	 { (char *)"newSWFSprite", _wrap_newSWFSprite, METH_VARARGS, NULL},
 	 { (char *)"destroySWFSprite", _wrap_destroySWFSprite, METH_VARARGS, NULL},
 	 { (char *)"SWFSprite_addBlock", _wrap_SWFSprite_addBlock, METH_VARARGS, NULL},

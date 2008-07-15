@@ -1210,6 +1210,8 @@ class SWFVideoStream(SWFBase):
         return mingc.SWFVideoStream_setFrameMode(self.this, mode)
     def nextFrame(self):
         return mingc.SWFVideoStream_nextFrame(self.this)
+    def seek(self, frame, whence):
+        return mingc.SWFVideoStream_seek(self.this, frame, whence)
     def __del__(self):
         mingc.destroySWFVideoStream(self.this)
 

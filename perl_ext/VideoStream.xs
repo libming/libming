@@ -50,3 +50,8 @@ int SWFVideoStream_setFrameMode(stream, mode)
 int SWFVideoStream_nextFrame(stream)
 	SWF::VideoStream stream
 
+int SWFVideoStream_seek(stream, frame, whence)
+	SWF::VideoStream stream
+	int frame
+	int whence
+

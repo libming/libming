@@ -3762,6 +3762,26 @@ PHP_METHOD(swfvideostream, setFrameMode)
 	RETURN_LONG(SWFVideoStream_setFrameMode(stream, Z_LVAL_PP(mode)));
 }
 /* }}} */
+
+/* {{{ proto swfvideostream::seek(frame, whence) */	
+PHP_METHOD(swfvideostream, seek)
+{
+	zval **frame, **whence;
+	SWFVideoStream stream = getVideoStream(getThis() TSRMLS_CC);
+	if(!stream)
+		 php_error(E_ERROR, "getVideoStream returned NULL");
+
+	if( ZEND_NUM_ARGS() != 2 || 
+		zend_get_parameters_ex(2, &frame, &whence) == FAILURE )
+		WRONG_PARAM_COUNT;
+
+	convert_to_long_ex(frame);
+	convert_to_long_ex(whence);
+
+	RETURN_LONG(SWFVideoStream_seek(stream, Z_LVAL_PP(frame), Z_LVAL_PP(whence)));
+}
+/* }}} */
+	
 	
 static zend_function_entry swfvideostream_functions[] = {
 	PHP_ME(swfvideostream, 	__construct,	NULL, 0)
@@ -3770,6 +3790,7 @@ static zend_function_entry swfvideostream_functions[] = {
 	PHP_ME(swfvideostream, hasaudio, NULL, 0)
 	PHP_ME(swfvideostream, setFrameMode, NULL, 0)
 	PHP_ME(swfvideostream, nextFrame, NULL, 0)
+	PHP_ME(swfvideostream, seek, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 

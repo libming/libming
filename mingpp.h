@@ -1810,6 +1810,9 @@ class SWFVideoStream : public SWFCharacter
   int nextFrame()
     { return SWFVideoStream_nextFrame(this->stream); }
 
+  int seek(int frame, int whence)
+    { return SWFVideoStream_seek(this->stream, frame, whence); }
+
   c_SWFBlock getBlock()
     { return (c_SWFBlock)this->stream; }
 

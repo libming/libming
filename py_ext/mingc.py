@@ -357,6 +357,7 @@ SWFVideoStream_getNumFrames = _mingc.SWFVideoStream_getNumFrames
 SWFVideoStream_hasAudio = _mingc.SWFVideoStream_hasAudio
 SWFVideoStream_setFrameMode = _mingc.SWFVideoStream_setFrameMode
 SWFVideoStream_nextFrame = _mingc.SWFVideoStream_nextFrame
+SWFVideoStream_seek = _mingc.SWFVideoStream_seek
 newSWFSprite = _mingc.newSWFSprite
 destroySWFSprite = _mingc.destroySWFSprite
 SWFSprite_addBlock = _mingc.SWFSprite_addBlock

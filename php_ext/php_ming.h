@@ -66,6 +66,7 @@ PHP_METHOD(swfvideostream, getnumframes);
 PHP_METHOD(swfvideostream, hasaudio);
 PHP_METHOD(swfvideostream, setFrameMode);
 PHP_METHOD(swfvideostream, nextFrame);
+PHP_METHOD(swfvideostream, seek);
 
 PHP_METHOD(swfprebuiltclip, init);
 
