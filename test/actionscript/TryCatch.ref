@@ -1,14 +1,14 @@
 File version: 6
-File size: 487
+File size: 646
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
 
 Offset: 20 (0x0014)
 Block type: 12 (SWF_DOACTION)
-Block length: 457
+Block length: 616
 
- 22 Actions
+ 29 Actions
     26:SWFACTION_CONSTANTPOOL
      [000] test1
      [001]  try
@@ -26,211 +26,281 @@ Block length: 457
      [013] /test4
      [014] test5
      [015] /test5
-    136:SWFACTION_DEFINEFUNCTION
+     [016] test6(
+     [017] dothrow
+     [018] )
+     [019] /test6
+     [020] test6
+    166:SWFACTION_DEFINEFUNCTION
     Name: test1
     NumParams: 0
     CodeSize: 49
     5 Action
-    149:SWFACTION_PUSH
+    179:SWFACTION_PUSH
      [000]   Constant: 0 "test1"
-    154:SWFACTION_TRACE
-    155:SWFACTION_TRY
-    Offset 155
+    184:SWFACTION_TRACE
+    185:SWFACTION_TRY
+    Offset 185
     CatchInRegisterFlag 0, FinallyBlockFlag 1, CatchBlockFlag 1
     TrySize 11
     CatchSize 6
     FinallySize 6
     CatchName err
   Try Actions: 3
-    169:SWFACTION_PUSH
+    199:SWFACTION_PUSH
      [000]   Constant: 1 " try"
-    174:SWFACTION_TRACE
-    175:SWFACTION_JUMP
-    BranchOffset: 6, TargetOffset: 186
+    204:SWFACTION_TRACE
+    205:SWFACTION_JUMP
+    BranchOffset: 6, TargetOffset: 216
 
   Catch Actions: 2
-    180:SWFACTION_PUSH
+    210:SWFACTION_PUSH
      [000]   Constant: 2 " catch"
-    185:SWFACTION_TRACE
+    215:SWFACTION_TRACE
 
   Finally Actions: 2
-    186:SWFACTION_PUSH
+    216:SWFACTION_PUSH
      [000]   Constant: 3 " finally"
-    191:SWFACTION_TRACE
+    221:SWFACTION_TRACE
   ## TRY END ##
 
-    192:SWFACTION_PUSH
+    222:SWFACTION_PUSH
      [000]   Constant: 4 "/test1"
-    197:SWFACTION_TRACE
-    198:SWFACTION_DEFINEFUNCTION
+    227:SWFACTION_TRACE
+    228:SWFACTION_DEFINEFUNCTION
     Name: test2
     NumParams: 0
     CodeSize: 65
     5 Action
-    211:SWFACTION_PUSH
+    241:SWFACTION_PUSH
      [000]   Constant: 5 "test2"
-    216:SWFACTION_TRACE
-    217:SWFACTION_TRY
-    Offset 217
+    246:SWFACTION_TRACE
+    247:SWFACTION_TRY
+    Offset 247
     CatchInRegisterFlag 0, FinallyBlockFlag 1, CatchBlockFlag 1
     TrySize 23
     CatchSize 10
     FinallySize 6
     CatchName err
   Try Actions: 6
-    231:SWFACTION_PUSH
+    261:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 6 "Error"
-    241:SWFACTION_NEWOBJECT
-    242:SWFACTION_THROW
-    243:SWFACTION_PUSH
+    271:SWFACTION_NEWOBJECT
+    272:SWFACTION_THROW
+    273:SWFACTION_PUSH
      [000]   Constant: 1 " try"
-    248:SWFACTION_TRACE
-    249:SWFACTION_JUMP
-    BranchOffset: 10, TargetOffset: 264
+    278:SWFACTION_TRACE
+    279:SWFACTION_JUMP
+    BranchOffset: 10, TargetOffset: 294
 
   Catch Actions: 4
-    254:SWFACTION_PUSH
+    284:SWFACTION_PUSH
      [000]   Constant: 7 " catch: "
      [001]   Constant: 8 "err"
-    261:SWFACTION_GETVARIABLE
-    262:SWFACTION_ADD2
-    263:SWFACTION_TRACE
+    291:SWFACTION_GETVARIABLE
+    292:SWFACTION_ADD2
+    293:SWFACTION_TRACE
 
   Finally Actions: 2
-    264:SWFACTION_PUSH
+    294:SWFACTION_PUSH
      [000]   Constant: 3 " finally"
-    269:SWFACTION_TRACE
+    299:SWFACTION_TRACE
   ## TRY END ##
 
-    270:SWFACTION_PUSH
+    300:SWFACTION_PUSH
      [000]   Constant: 9 "/test2"
-    275:SWFACTION_TRACE
-    276:SWFACTION_DEFINEFUNCTION
+    305:SWFACTION_TRACE
+    306:SWFACTION_DEFINEFUNCTION
     Name: test3
     NumParams: 0
     CodeSize: 43
     5 Action
-    289:SWFACTION_PUSH
+    319:SWFACTION_PUSH
      [000]   Constant: 10 "test3"
-    294:SWFACTION_TRACE
-    295:SWFACTION_TRY
-    Offset 295
+    324:SWFACTION_TRACE
+    325:SWFACTION_TRY
+    Offset 325
     CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 1
     TrySize 11
     CatchSize 6
     FinallySize 0
     CatchName err
   Try Actions: 3
-    309:SWFACTION_PUSH
+    339:SWFACTION_PUSH
      [000]   Constant: 1 " try"
-    314:SWFACTION_TRACE
-    315:SWFACTION_JUMP
-    BranchOffset: 6, TargetOffset: 326
+    344:SWFACTION_TRACE
+    345:SWFACTION_JUMP
+    BranchOffset: 6, TargetOffset: 356
 
   Catch Actions: 2
-    320:SWFACTION_PUSH
+    350:SWFACTION_PUSH
      [000]   Constant: 2 " catch"
-    325:SWFACTION_TRACE
+    355:SWFACTION_TRACE
 
   Finally Actions: 0
   ## TRY END ##
 
-    326:SWFACTION_PUSH
+    356:SWFACTION_PUSH
      [000]   Constant: 11 "/test3"
-    331:SWFACTION_TRACE
-    332:SWFACTION_DEFINEFUNCTION
+    361:SWFACTION_TRACE
+    362:SWFACTION_DEFINEFUNCTION
     Name: test4
     NumParams: 0
     CodeSize: 35
     5 Action
-    345:SWFACTION_PUSH
+    375:SWFACTION_PUSH
      [000]   Constant: 12 "test4"
-    350:SWFACTION_TRACE
-    351:SWFACTION_TRY
-    Offset 351
+    380:SWFACTION_TRACE
+    381:SWFACTION_TRY
+    Offset 381
     CatchInRegisterFlag 0, FinallyBlockFlag 1, CatchBlockFlag 0
     TrySize 6
     CatchSize 0
     FinallySize 6
     CatchName 
   Try Actions: 2
-    362:SWFACTION_PUSH
+    392:SWFACTION_PUSH
      [000]   Constant: 1 " try"
-    367:SWFACTION_TRACE
+    397:SWFACTION_TRACE
 
   Catch Actions: 0
 
   Finally Actions: 2
-    368:SWFACTION_PUSH
+    398:SWFACTION_PUSH
      [000]   Constant: 3 " finally"
-    373:SWFACTION_TRACE
+    403:SWFACTION_TRACE
   ## TRY END ##
 
-    374:SWFACTION_PUSH
+    404:SWFACTION_PUSH
      [000]   Constant: 13 "/test4"
-    379:SWFACTION_TRACE
-    380:SWFACTION_DEFINEFUNCTION
+    409:SWFACTION_TRACE
+    410:SWFACTION_DEFINEFUNCTION
     Name: test5
     NumParams: 0
     CodeSize: 29
     5 Action
-    393:SWFACTION_PUSH
+    423:SWFACTION_PUSH
      [000]   Constant: 14 "test5"
-    398:SWFACTION_TRACE
-    399:SWFACTION_TRY
-    Offset 399
+    428:SWFACTION_TRACE
+    429:SWFACTION_TRY
+    Offset 429
     CatchInRegisterFlag 0, FinallyBlockFlag 0, CatchBlockFlag 0
     TrySize 6
     CatchSize 0
     FinallySize 0
     CatchName 
   Try Actions: 2
-    410:SWFACTION_PUSH
+    440:SWFACTION_PUSH
      [000]   Constant: 1 " try"
-    415:SWFACTION_TRACE
+    445:SWFACTION_TRACE
 
   Catch Actions: 0
 
   Finally Actions: 0
   ## TRY END ##
 
-    416:SWFACTION_PUSH
+    446:SWFACTION_PUSH
      [000]   Constant: 15 "/test5"
-    421:SWFACTION_TRACE
-    422:SWFACTION_PUSH
+    451:SWFACTION_TRACE
+    452:SWFACTION_DEFINEFUNCTION
+    Name: test6
+    NumParams: 1
+     [00] dothrow
+    CodeSize: 80
+    9 Action
+    473:SWFACTION_PUSH
+     [000]   Constant: 16 "test6("
+     [001]   Constant: 17 "dothrow"
+    480:SWFACTION_GETVARIABLE
+    481:SWFACTION_ADD2
+    482:SWFACTION_PUSH
+     [000]   Constant: 18 ")"
+    487:SWFACTION_ADD2
+    488:SWFACTION_TRACE
+    489:SWFACTION_TRY
+    Offset 489
+    CatchInRegisterFlag 0, FinallyBlockFlag 1, CatchBlockFlag 1
+    TrySize 32
+    CatchSize 6
+    FinallySize 6
+    CatchName err
+  Try Actions: 7
+    503:SWFACTION_PUSH
+     [000]   Constant: 17 "dothrow"
+    508:SWFACTION_GETVARIABLE
+    509:SWFACTION_LOGICALNOT
+    510:SWFACTION_IF
+    BranchOffset: 9, TargetOffset: 524
+    2 Action
+    515:SWFACTION_PUSH
+     [000]   Integer: 0
+    523:SWFACTION_THROW
+    524:SWFACTION_PUSH
+     [000]   Constant: 1 " try"
+    529:SWFACTION_TRACE
+    530:SWFACTION_JUMP
+    BranchOffset: 6, TargetOffset: 541
+
+  Catch Actions: 2
+    535:SWFACTION_PUSH
+     [000]   Constant: 2 " catch"
+    540:SWFACTION_TRACE
+
+  Finally Actions: 2
+    541:SWFACTION_PUSH
+     [000]   Constant: 3 " finally"
+    546:SWFACTION_TRACE
+  ## TRY END ##
+
+    547:SWFACTION_PUSH
+     [000]   Constant: 19 "/test6"
+    552:SWFACTION_TRACE
+    553:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 0 "test1"
-    432:SWFACTION_CALLFUNCTION
-    433:SWFACTION_POP
-    434:SWFACTION_PUSH
+    563:SWFACTION_CALLFUNCTION
+    564:SWFACTION_POP
+    565:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 5 "test2"
-    444:SWFACTION_CALLFUNCTION
-    445:SWFACTION_POP
-    446:SWFACTION_PUSH
+    575:SWFACTION_CALLFUNCTION
+    576:SWFACTION_POP
+    577:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 10 "test3"
-    456:SWFACTION_CALLFUNCTION
-    457:SWFACTION_POP
-    458:SWFACTION_PUSH
+    587:SWFACTION_CALLFUNCTION
+    588:SWFACTION_POP
+    589:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 12 "test4"
-    468:SWFACTION_CALLFUNCTION
-    469:SWFACTION_POP
-    470:SWFACTION_PUSH
+    599:SWFACTION_CALLFUNCTION
+    600:SWFACTION_POP
+    601:SWFACTION_PUSH
      [000]   Integer: 0
      [001]   Constant: 14 "test5"
-    480:SWFACTION_CALLFUNCTION
-    481:SWFACTION_POP
-    482:SWFACTION_END
+    611:SWFACTION_CALLFUNCTION
+    612:SWFACTION_POP
+    613:SWFACTION_PUSH
+     [000]   Boolean: 0
+     [001]   Integer: 1
+     [002]   Constant: 20 "test6"
+    625:SWFACTION_CALLFUNCTION
+    626:SWFACTION_POP
+    627:SWFACTION_PUSH
+     [000]   Boolean: 1
+     [001]   Integer: 1
+     [002]   Constant: 20 "test6"
+    639:SWFACTION_CALLFUNCTION
+    640:SWFACTION_POP
+    641:SWFACTION_END
 
-Offset: 483 (0x01e3)
+Offset: 642 (0x0282)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 485 (0x01e5)
+Offset: 644 (0x0284)
 Block type: 0 (SWF_END)
 Block length: 0
 

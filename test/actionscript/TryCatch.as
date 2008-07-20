@@ -74,10 +74,31 @@ function test5()
 	trace("/test5");
 } 
 
+function test6(dothrow)
+{
+ 	trace('test6('+dothrow+')');
+	try
+	{
+		if ( dothrow ) throw 0;
+ 		trace(' try');
+	}
+	catch (err) // should be only executed if throwing
+	{
+		trace(' catch');
+	}
+	finally // should be executed
+	{
+		trace(" finally");
+	};
+	trace("/test6");
+} 
+
 test1();
 test2();
 test3();
 test4();
 test5();
+test6(false);
+test6(true);
 
 
