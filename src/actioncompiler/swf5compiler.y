@@ -319,47 +319,53 @@ throw_stmt
 try_catch_stmt
 	: TRY stmt					{ 	$$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, 8);
-									bufferWriteU8($$, 0);
-									bufferWriteS16($$, bufferLength($2));
-									bufferWriteS16($$, 0);
-									bufferWriteS16($$, 0);
-									bufferWriteU8($$, 0); /* catch name here? - empty string */
-									bufferConcat($$, $2);
+									bufferWriteS16($$, 8);                /* TRY tag length */
+									bufferWriteU8($$, 0);                 /* flags */
+									bufferWriteS16($$, bufferLength($2)); /* try block length */
+									bufferWriteS16($$, 0);                /* catch block length */
+									bufferWriteS16($$, 0);                /* finally block length */
+									bufferWriteU8($$, 0);                 /* catch name - empty string */
+									bufferConcat($$, $2);                 /* append TRY body */
 								 }
 	| TRY stmt CATCH '(' identifier ')' stmt		{ $$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, 8+strlen($5));
-									bufferWriteU8($$, 1);
-									bufferWriteS16($$, bufferLength($2));
-									bufferWriteS16($$, bufferLength($7));
-									bufferWriteS16($$, 0);
-									bufferWriteHardString($$, $5, strlen($5)+1);
-									bufferConcat($$, $2);
-									bufferConcat($$, $7);
+									bufferWriteS16($$, 8+strlen($5));       /* TRY tag length */
+									bufferWriteU8($$, 1);                   /* flags */
+									bufferWriteS16($$, bufferLength($2)+5); /* try block length + JUMP length */
+									bufferWriteS16($$, bufferLength($7));   /* catch block length */
+									bufferWriteS16($$, 0);                  /* finally block length */
+									bufferWriteHardString($$, $5, strlen($5)+1); /* catch name */
+									bufferConcat($$, $2);                   /* append TRY body */
+									bufferWriteOp($$, SWFACTION_JUMP);      /* jump after catch */
+									bufferWriteS16($$, 2);                  /* ... */
+									bufferWriteS16($$, bufferLength($7));   /* ... */
+									bufferConcat($$, $7);                   /* append CATCH body */
 								}
 	| TRY stmt FINALLY stmt		{	$$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, 8);
-									bufferWriteU8($$, 2);
-									bufferWriteS16($$, bufferLength($2));
-									bufferWriteS16($$, 0);
-									bufferWriteS16($$, bufferLength($4));
-									bufferWriteU8($$, 0); /* catch name here? - empty string */
-									bufferConcat($$, $2);
-									bufferConcat($$, $4);
+									bufferWriteS16($$, 8);                /* TRY tag length */
+									bufferWriteU8($$, 2);                 /* flags */
+									bufferWriteS16($$, bufferLength($2)); /* try block length */
+									bufferWriteS16($$, 0);                /* catch block length */
+									bufferWriteS16($$, bufferLength($4)); /* finally block length */
+									bufferWriteU8($$, 0);                 /* catch name - empty string */
+									bufferConcat($$, $2);                 /* append TRY body */
+									bufferConcat($$, $4);                 /* append FINALLY body */
 								 }
 	| TRY stmt CATCH '(' identifier ')' stmt FINALLY stmt	{ $$ = newBuffer();
 									bufferWriteOp($$, SWFACTION_TRY);
-									bufferWriteS16($$, 8+strlen($5));
-									bufferWriteU8($$, 3);
-									bufferWriteS16($$, bufferLength($2));
+									bufferWriteS16($$, 8+strlen($5));        /* TRY tag length */
+									bufferWriteU8($$, 3);                    /* flags */
+									bufferWriteS16($$, bufferLength($2)+5);  /* try block length + JUMP length */
+									bufferWriteS16($$, bufferLength($7));    /* catch block length */
+									bufferWriteS16($$, bufferLength($9));    /* finally block length */
+									bufferWriteHardString($$, $5, strlen($5)+1); /* catch name */
+									bufferConcat($$, $2);                    /* append TRY body */
+									bufferWriteOp($$, SWFACTION_JUMP);       /* jump after catch */
+									bufferWriteS16($$, 2); 
 									bufferWriteS16($$, bufferLength($7));
-									bufferWriteS16($$, bufferLength($9));
-									bufferWriteHardString($$, $5, strlen($5)+1);
-									bufferConcat($$, $2);
-									bufferConcat($$, $7);
-									bufferConcat($$, $9);
+									bufferConcat($$, $7);                    /* append CATCH body */
+									bufferConcat($$, $9);                    /* append FINALLY body */
 								}
 	;
 
