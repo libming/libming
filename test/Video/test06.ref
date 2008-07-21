@@ -1,5 +1,5 @@
 File version: 7
-File size: 91866
+File size: 77807
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 50
@@ -17,12 +17,12 @@ Block length: 10
 
 Offset: 32 (0x0020)
 Block type: 61 (SWF_VIDEOFRAME)
-Block length: 1053
+Block length: 6463
 
   StreamID 1
-  FrameNum 1
+  FrameNum 0
 
-Offset: 1091 (0x0443)
+Offset: 6501 (0x1965)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -39,12 +39,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 1099 (0x044b)
+Offset: 6509 (0x196d)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 1101 (0x044d)
+Offset: 6511 (0x196f)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -59,19 +59,19 @@ Block length: 5
  Depth 1
  Ratio: 1
 
-Offset: 1108 (0x0454)
+Offset: 6518 (0x1976)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1053
 
   StreamID 1
   FrameNum 1
 
-Offset: 2167 (0x0877)
+Offset: 7577 (0x1d99)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 2169 (0x0879)
+Offset: 7579 (0x1d9b)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -86,19 +86,19 @@ Block length: 5
  Depth 1
  Ratio: 2
 
-Offset: 2176 (0x0880)
+Offset: 7586 (0x1da2)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 854
 
   StreamID 1
   FrameNum 2
 
-Offset: 3036 (0x0bdc)
+Offset: 8446 (0x20fe)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 3038 (0x0bde)
+Offset: 8448 (0x2100)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -113,19 +113,19 @@ Block length: 5
  Depth 1
  Ratio: 3
 
-Offset: 3045 (0x0be5)
+Offset: 8455 (0x2107)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1645
 
   StreamID 1
   FrameNum 3
 
-Offset: 4696 (0x1258)
+Offset: 10106 (0x277a)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 4698 (0x125a)
+Offset: 10108 (0x277c)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -140,19 +140,19 @@ Block length: 5
  Depth 1
  Ratio: 4
 
-Offset: 4705 (0x1261)
+Offset: 10115 (0x2783)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1094
 
   StreamID 1
   FrameNum 4
 
-Offset: 5805 (0x16ad)
+Offset: 11215 (0x2bcf)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 5807 (0x16af)
+Offset: 11217 (0x2bd1)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -167,19 +167,19 @@ Block length: 5
  Depth 1
  Ratio: 5
 
-Offset: 5814 (0x16b6)
+Offset: 11224 (0x2bd8)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1365
 
   StreamID 1
   FrameNum 5
 
-Offset: 7185 (0x1c11)
+Offset: 12595 (0x3133)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 7187 (0x1c13)
+Offset: 12597 (0x3135)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -194,19 +194,19 @@ Block length: 5
  Depth 1
  Ratio: 6
 
-Offset: 7194 (0x1c1a)
+Offset: 12604 (0x313c)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1710
 
   StreamID 1
   FrameNum 6
 
-Offset: 8910 (0x22ce)
+Offset: 14320 (0x37f0)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 8912 (0x22d0)
+Offset: 14322 (0x37f2)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -221,19 +221,19 @@ Block length: 5
  Depth 1
  Ratio: 7
 
-Offset: 8919 (0x22d7)
+Offset: 14329 (0x37f9)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2259
 
   StreamID 1
   FrameNum 7
 
-Offset: 11184 (0x2bb0)
+Offset: 16594 (0x40d2)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 11186 (0x2bb2)
+Offset: 16596 (0x40d4)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -248,19 +248,19 @@ Block length: 5
  Depth 1
  Ratio: 8
 
-Offset: 11193 (0x2bb9)
+Offset: 16603 (0x40db)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2106
 
   StreamID 1
   FrameNum 8
 
-Offset: 13305 (0x33f9)
+Offset: 18715 (0x491b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 13307 (0x33fb)
+Offset: 18717 (0x491d)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -275,19 +275,19 @@ Block length: 5
  Depth 1
  Ratio: 9
 
-Offset: 13314 (0x3402)
+Offset: 18724 (0x4924)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1512
 
   StreamID 1
   FrameNum 9
 
-Offset: 14832 (0x39f0)
+Offset: 20242 (0x4f12)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 14834 (0x39f2)
+Offset: 20244 (0x4f14)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -302,19 +302,19 @@ Block length: 5
  Depth 1
  Ratio: 10
 
-Offset: 14841 (0x39f9)
+Offset: 20251 (0x4f1b)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2619
 
   StreamID 1
   FrameNum 10
 
-Offset: 17466 (0x443a)
+Offset: 22876 (0x595c)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 17468 (0x443c)
+Offset: 22878 (0x595e)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -329,19 +329,19 @@ Block length: 5
  Depth 1
  Ratio: 11
 
-Offset: 17475 (0x4443)
+Offset: 22885 (0x5965)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1745
 
   StreamID 1
   FrameNum 11
 
-Offset: 19226 (0x4b1a)
+Offset: 24636 (0x603c)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 19228 (0x4b1c)
+Offset: 24638 (0x603e)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -356,19 +356,19 @@ Block length: 5
  Depth 1
  Ratio: 12
 
-Offset: 19235 (0x4b23)
+Offset: 24645 (0x6045)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1781
 
   StreamID 1
   FrameNum 12
 
-Offset: 21022 (0x521e)
+Offset: 26432 (0x6740)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 21024 (0x5220)
+Offset: 26434 (0x6742)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -383,19 +383,19 @@ Block length: 5
  Depth 1
  Ratio: 13
 
-Offset: 21031 (0x5227)
+Offset: 26441 (0x6749)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1652
 
   StreamID 1
   FrameNum 13
 
-Offset: 22689 (0x58a1)
+Offset: 28099 (0x6dc3)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 22691 (0x58a3)
+Offset: 28101 (0x6dc5)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -410,19 +410,19 @@ Block length: 5
  Depth 1
  Ratio: 14
 
-Offset: 22698 (0x58aa)
+Offset: 28108 (0x6dcc)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1798
 
   StreamID 1
   FrameNum 14
 
-Offset: 24502 (0x5fb6)
+Offset: 29912 (0x74d8)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 24504 (0x5fb8)
+Offset: 29914 (0x74da)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -437,19 +437,19 @@ Block length: 5
  Depth 1
  Ratio: 15
 
-Offset: 24511 (0x5fbf)
+Offset: 29921 (0x74e1)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2200
 
   StreamID 1
   FrameNum 15
 
-Offset: 26717 (0x685d)
+Offset: 32127 (0x7d7f)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 26719 (0x685f)
+Offset: 32129 (0x7d81)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -464,19 +464,19 @@ Block length: 5
  Depth 1
  Ratio: 16
 
-Offset: 26726 (0x6866)
+Offset: 32136 (0x7d88)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1923
 
   StreamID 1
   FrameNum 16
 
-Offset: 28655 (0x6fef)
+Offset: 34065 (0x8511)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 28657 (0x6ff1)
+Offset: 34067 (0x8513)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -491,19 +491,19 @@ Block length: 5
  Depth 1
  Ratio: 17
 
-Offset: 28664 (0x6ff8)
+Offset: 34074 (0x851a)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1662
 
   StreamID 1
   FrameNum 17
 
-Offset: 30332 (0x767c)
+Offset: 35742 (0x8b9e)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 30334 (0x767e)
+Offset: 35744 (0x8ba0)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -518,19 +518,19 @@ Block length: 5
  Depth 1
  Ratio: 18
 
-Offset: 30341 (0x7685)
+Offset: 35751 (0x8ba7)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1926
 
   StreamID 1
   FrameNum 18
 
-Offset: 32273 (0x7e11)
+Offset: 37683 (0x9333)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 32275 (0x7e13)
+Offset: 37685 (0x9335)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -545,19 +545,19 @@ Block length: 5
  Depth 1
  Ratio: 19
 
-Offset: 32282 (0x7e1a)
+Offset: 37692 (0x933c)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1891
 
   StreamID 1
   FrameNum 19
 
-Offset: 34179 (0x8583)
+Offset: 39589 (0x9aa5)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 34181 (0x8585)
+Offset: 39591 (0x9aa7)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -572,19 +572,19 @@ Block length: 5
  Depth 1
  Ratio: 20
 
-Offset: 34188 (0x858c)
+Offset: 39598 (0x9aae)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1618
 
   StreamID 1
   FrameNum 20
 
-Offset: 35812 (0x8be4)
+Offset: 41222 (0xa106)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 35814 (0x8be6)
+Offset: 41224 (0xa108)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -599,19 +599,19 @@ Block length: 5
  Depth 1
  Ratio: 21
 
-Offset: 35821 (0x8bed)
+Offset: 41231 (0xa10f)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2200
 
   StreamID 1
   FrameNum 21
 
-Offset: 38027 (0x948b)
+Offset: 43437 (0xa9ad)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 38029 (0x948d)
+Offset: 43439 (0xa9af)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -626,19 +626,19 @@ Block length: 5
  Depth 1
  Ratio: 22
 
-Offset: 38036 (0x9494)
+Offset: 43446 (0xa9b6)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1695
 
   StreamID 1
   FrameNum 22
 
-Offset: 39737 (0x9b39)
+Offset: 45147 (0xb05b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 39739 (0x9b3b)
+Offset: 45149 (0xb05d)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -653,19 +653,19 @@ Block length: 5
  Depth 1
  Ratio: 23
 
-Offset: 39746 (0x9b42)
+Offset: 45156 (0xb064)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2217
 
   StreamID 1
   FrameNum 23
 
-Offset: 41969 (0xa3f1)
+Offset: 47379 (0xb913)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 41971 (0xa3f3)
+Offset: 47381 (0xb915)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -680,19 +680,19 @@ Block length: 5
  Depth 1
  Ratio: 24
 
-Offset: 41978 (0xa3fa)
+Offset: 47388 (0xb91c)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2063
 
   StreamID 1
   FrameNum 24
 
-Offset: 44047 (0xac0f)
+Offset: 49457 (0xc131)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 44049 (0xac11)
+Offset: 49459 (0xc133)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -707,19 +707,19 @@ Block length: 5
  Depth 1
  Ratio: 25
 
-Offset: 44056 (0xac18)
+Offset: 49466 (0xc13a)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1590
 
   StreamID 1
   FrameNum 25
 
-Offset: 45652 (0xb254)
+Offset: 51062 (0xc776)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 45654 (0xb256)
+Offset: 51064 (0xc778)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -734,19 +734,19 @@ Block length: 5
  Depth 1
  Ratio: 26
 
-Offset: 45661 (0xb25d)
+Offset: 51071 (0xc77f)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1724
 
   StreamID 1
   FrameNum 26
 
-Offset: 47391 (0xb91f)
+Offset: 52801 (0xce41)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 47393 (0xb921)
+Offset: 52803 (0xce43)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -761,19 +761,19 @@ Block length: 5
  Depth 1
  Ratio: 27
 
-Offset: 47400 (0xb928)
+Offset: 52810 (0xce4a)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1827
 
   StreamID 1
   FrameNum 27
 
-Offset: 49233 (0xc051)
+Offset: 54643 (0xd573)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 49235 (0xc053)
+Offset: 54645 (0xd575)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -788,19 +788,19 @@ Block length: 5
  Depth 1
  Ratio: 28
 
-Offset: 49242 (0xc05a)
+Offset: 54652 (0xd57c)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2149
 
   StreamID 1
   FrameNum 28
 
-Offset: 51397 (0xc8c5)
+Offset: 56807 (0xdde7)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 51399 (0xc8c7)
+Offset: 56809 (0xdde9)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -815,19 +815,19 @@ Block length: 5
  Depth 1
  Ratio: 29
 
-Offset: 51406 (0xc8ce)
+Offset: 56816 (0xddf0)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1799
 
   StreamID 1
   FrameNum 29
 
-Offset: 53211 (0xcfdb)
+Offset: 58621 (0xe4fd)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 53213 (0xcfdd)
+Offset: 58623 (0xe4ff)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -842,19 +842,19 @@ Block length: 5
  Depth 1
  Ratio: 50
 
-Offset: 53220 (0xcfe4)
+Offset: 58630 (0xe506)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2127
 
   StreamID 1
   FrameNum 50
 
-Offset: 55353 (0xd839)
+Offset: 60763 (0xed5b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 55355 (0xd83b)
+Offset: 60765 (0xed5d)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -869,19 +869,19 @@ Block length: 5
  Depth 1
  Ratio: 51
 
-Offset: 55362 (0xd842)
+Offset: 60772 (0xed64)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2090
 
   StreamID 1
   FrameNum 51
 
-Offset: 57458 (0xe072)
+Offset: 62868 (0xf594)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 57460 (0xe074)
+Offset: 62870 (0xf596)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -896,19 +896,19 @@ Block length: 5
  Depth 1
  Ratio: 52
 
-Offset: 57467 (0xe07b)
+Offset: 62877 (0xf59d)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2163
 
   StreamID 1
   FrameNum 52
 
-Offset: 59636 (0xe8f4)
+Offset: 65046 (0xfe16)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 59638 (0xe8f6)
+Offset: 65048 (0xfe18)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -923,19 +923,19 @@ Block length: 5
  Depth 1
  Ratio: 53
 
-Offset: 59645 (0xe8fd)
+Offset: 65055 (0xfe1f)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1355
 
   StreamID 1
   FrameNum 53
 
-Offset: 61006 (0xee4e)
+Offset: 66416 (0x10370)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 61008 (0xee50)
+Offset: 66418 (0x10372)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -950,19 +950,19 @@ Block length: 5
  Depth 1
  Ratio: 54
 
-Offset: 61015 (0xee57)
+Offset: 66425 (0x10379)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1730
 
   StreamID 1
   FrameNum 54
 
-Offset: 62751 (0xf51f)
+Offset: 68161 (0x10a41)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 62753 (0xf521)
+Offset: 68163 (0x10a43)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -977,19 +977,19 @@ Block length: 5
  Depth 1
  Ratio: 55
 
-Offset: 62760 (0xf528)
+Offset: 68170 (0x10a4a)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2141
 
   StreamID 1
   FrameNum 55
 
-Offset: 64907 (0xfd8b)
+Offset: 70317 (0x112ad)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 64909 (0xfd8d)
+Offset: 70319 (0x112af)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1004,19 +1004,19 @@ Block length: 5
  Depth 1
  Ratio: 56
 
-Offset: 64916 (0xfd94)
+Offset: 70326 (0x112b6)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2074
 
   StreamID 1
   FrameNum 56
 
-Offset: 66996 (0x105b4)
+Offset: 72406 (0x11ad6)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 66998 (0x105b6)
+Offset: 72408 (0x11ad8)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1031,19 +1031,19 @@ Block length: 5
  Depth 1
  Ratio: 57
 
-Offset: 67005 (0x105bd)
+Offset: 72415 (0x11adf)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 2214
 
   StreamID 1
   FrameNum 57
 
-Offset: 69225 (0x10e69)
+Offset: 74635 (0x1238b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 69227 (0x10e6b)
+Offset: 74637 (0x1238d)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1058,19 +1058,19 @@ Block length: 5
  Depth 1
  Ratio: 58
 
-Offset: 69234 (0x10e72)
+Offset: 74644 (0x12394)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1493
 
   StreamID 1
   FrameNum 58
 
-Offset: 70733 (0x1144d)
+Offset: 76143 (0x1296f)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 70735 (0x1144f)
+Offset: 76145 (0x12971)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1085,19 +1085,19 @@ Block length: 5
  Depth 1
  Ratio: 59
 
-Offset: 70742 (0x11456)
+Offset: 76152 (0x12978)
 Block type: 61 (SWF_VIDEOFRAME)
 Block length: 1555
 
   StreamID 1
   FrameNum 59
 
-Offset: 72303 (0x11a6f)
+Offset: 77713 (0x12f91)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 72305 (0x11a71)
+Offset: 77715 (0x12f93)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1112,19 +1112,12 @@ Block length: 5
  Depth 1
  Ratio: 29
 
-Offset: 72312 (0x11a78)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 1799
-
-  StreamID 1
-  FrameNum 29
-
-Offset: 74117 (0x12185)
+Offset: 77722 (0x12f9a)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 74119 (0x12187)
+Offset: 77724 (0x12f9c)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1139,19 +1132,12 @@ Block length: 5
  Depth 1
  Ratio: 30
 
-Offset: 74126 (0x1218e)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 1856
-
-  StreamID 1
-  FrameNum 30
-
-Offset: 75988 (0x128d4)
+Offset: 77731 (0x12fa3)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 75990 (0x128d6)
+Offset: 77733 (0x12fa5)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1166,19 +1152,12 @@ Block length: 5
  Depth 1
  Ratio: 31
 
-Offset: 75997 (0x128dd)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 1892
-
-  StreamID 1
-  FrameNum 31
-
-Offset: 77895 (0x13047)
+Offset: 77740 (0x12fac)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 77897 (0x13049)
+Offset: 77742 (0x12fae)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1193,19 +1172,12 @@ Block length: 5
  Depth 1
  Ratio: 32
 
-Offset: 77904 (0x13050)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 2076
-
-  StreamID 1
-  FrameNum 32
-
-Offset: 79986 (0x13872)
+Offset: 77749 (0x12fb5)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 79988 (0x13874)
+Offset: 77751 (0x12fb7)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1220,19 +1192,12 @@ Block length: 5
  Depth 1
  Ratio: 33
 
-Offset: 79995 (0x1387b)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 1567
-
-  StreamID 1
-  FrameNum 33
-
-Offset: 81568 (0x13ea0)
+Offset: 77758 (0x12fbe)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 81570 (0x13ea2)
+Offset: 77760 (0x12fc0)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1247,19 +1212,12 @@ Block length: 5
  Depth 1
  Ratio: 34
 
-Offset: 81577 (0x13ea9)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 2097
-
-  StreamID 1
-  FrameNum 34
-
-Offset: 83680 (0x146e0)
+Offset: 77767 (0x12fc7)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 83682 (0x146e2)
+Offset: 77769 (0x12fc9)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1274,19 +1232,12 @@ Block length: 5
  Depth 1
  Ratio: 35
 
-Offset: 83689 (0x146e9)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 2335
-
-  StreamID 1
-  FrameNum 35
-
-Offset: 86030 (0x1500e)
+Offset: 77776 (0x12fd0)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 86032 (0x15010)
+Offset: 77778 (0x12fd2)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1301,19 +1252,12 @@ Block length: 5
  Depth 1
  Ratio: 36
 
-Offset: 86039 (0x15017)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 2111
-
-  StreamID 1
-  FrameNum 36
-
-Offset: 88156 (0x1585c)
+Offset: 77785 (0x12fd9)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 88158 (0x1585e)
+Offset: 77787 (0x12fdb)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1328,19 +1272,12 @@ Block length: 5
  Depth 1
  Ratio: 37
 
-Offset: 88165 (0x15865)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 1553
-
-  StreamID 1
-  FrameNum 37
-
-Offset: 89724 (0x15e7c)
+Offset: 77794 (0x12fe2)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 89726 (0x15e7e)
+Offset: 77796 (0x12fe4)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 5
 
@@ -1355,19 +1292,12 @@ Block length: 5
  Depth 1
  Ratio: 38
 
-Offset: 89733 (0x15e85)
-Block type: 61 (SWF_VIDEOFRAME)
-Block length: 2123
-
-  StreamID 1
-  FrameNum 38
-
-Offset: 91862 (0x166d6)
+Offset: 77803 (0x12feb)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 91864 (0x166d8)
+Offset: 77805 (0x12fed)
 Block type: 0 (SWF_END)
 Block length: 0
 
