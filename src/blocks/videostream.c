@@ -55,6 +55,8 @@ struct SWFVideoStream_s
 	unsigned char smoothingFlag;
 	int mode;
 	int addFrame;
+	int framesLoaded;
+	int firstFrame;
 };
 
 struct SWFVideoFrame_s
@@ -128,7 +130,10 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream /* associated video stream */
 			stream->frame, stream->numFrames);
 		return NULL;
 	}
-	
+
+	if(stream->frame < stream->framesLoaded)
+		return NULL;
+
 	block = (SWFVideoFrame) malloc(sizeof(struct SWFVideoFrame_s));
 
 	/* If malloc failed, return NULL to signify this */
@@ -161,11 +166,14 @@ SWFVideoStream_getVideoFrame(SWFVideoStream stream /* associated video stream */
 		}
 		stream->lastTag = &block->tag;
 		if(block->tag.tagType == FLV_VIDEOTAG)
+		{
 			frame++;
+		}
 	} while (frame != stream->frame);
-
+	
 	block->frameNum = stream->frame;	
 	stream->lastFrame = stream->frame;	
+	stream->framesLoaded = stream->frame + 1;
 	return (SWFBlock)block;
 }
 
@@ -421,6 +429,7 @@ static int onPlace(SWFDisplayItem item, SWFBlockList blocklist)
 	if(video == NULL)
 		return 0;
         SWFBlockList_addBlock(blocklist, video);
+	stream->firstFrame = 0;
 	return 1;
 }
 
@@ -441,18 +450,21 @@ static int onFrame(SWFDisplayItem item, SWFBlockList blocklist)
 	
 	if(stream->mode != SWFVIDEOSTREAM_MODE_MANUAL)
 		stream->frame++;
-	
-	video = SWFVideoStream_getVideoFrame(stream);
-	if(video == NULL)
-		return 0;
+
+	if(stream->frame >= stream->framesLoaded)
+	{
+		video = SWFVideoStream_getVideoFrame(stream);
+		if(video == NULL)
+			return 0;
+	}
 	
 	placeVideo = newSWFPlaceObject2Block(item->depth);
 	SWFPlaceObject2Block_setRatio(placeVideo, stream->frame);
 	SWFPlaceObject2Block_setMove(placeVideo);
 	SWFBlockList_addBlock(blocklist, (SWFBlock)placeVideo);               
-		
-	/* add video frame */ 
-	SWFBlockList_addBlock(blocklist, video);
+	if(video != NULL)
+		SWFBlockList_addBlock(blocklist, video);
+	
 	stream->addFrame = 0;
 	return 2;
 }
@@ -517,7 +529,7 @@ int SWFVideoStream_nextFrame(SWFVideoStream stream)
 	if(stream->mode != SWFVIDEOSTREAM_MODE_MANUAL)
 		return -1;
 
-	if(stream->addFrame == 1)
+	if(stream->addFrame == 1 || stream->firstFrame == 1)
 		return 0;
 
 	stream->addFrame = 1;
@@ -598,6 +610,8 @@ newSWFVideoStream_fromInput(SWFInput input) {
 	stream->embedded = 1;
 	stream->mode = SWFVIDEOSTREAM_MODE_AUTO;
 	stream->addFrame = 0;
+	stream->framesLoaded = 0;
+	stream->firstFrame = 1;
 	stream->width = VIDEO_DEF_WIDTH;
 	stream->height = VIDEO_DEF_HEIGHT;
 	if (setStreamProperties(stream) < 0)
