@@ -12,5 +12,6 @@ EXTRA_DIST = 		\
 	nellymoser.flv	\
 	video01.flv	\
 	video02.flv	\
-	sound1.mp3
+	sound1.mp3	\
+	mpeg1.mp3
 
