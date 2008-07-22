@@ -160,7 +160,6 @@ int nextMP3Frame(SWFInput input)
 		SWF_error("invalid mp3 file\n");
 	if(mp3h.version == MP3_VERSION_1)
 	{
-		mp3h.padding <<= 2;
 		frameLen = 144 * mp3h.bitrate * 1000 
 				/ mp3h.samplingRate + mp3h.padding;
 	}
