@@ -1,0 +1,113 @@
+File version: 7
+File size: 8870
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 12
+
+Offset: 20 (0x0014)
+Block type: 45 (SWF_SOUNDSTREAMHEAD2)
+Block length: 6
+
+  PlaybackSoundRate 44 kHz
+  PlaybackSoundSize 16 bit
+  PlaybackSoundType mono
+  StreamSoundCompression MP3
+  StreamSoundRate 44 kHz
+  StreamSoundSize 16 bit
+  StreamSoundType mono
+  StreamSoundSampleCount 3675
+  LatencySeek 1663
+
+Offset: 28 (0x001c)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 2510
+
+  Mp3: SampleCount 4608
+  Mp3: SeekSamples 1663
+
+Offset: 2544 (0x09f0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 2546 (0x09f2)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1885
+
+  Mp3: SampleCount 3456
+  Mp3: SeekSamples 730
+
+Offset: 4437 (0x1155)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 4439 (0x1157)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 2512
+
+  Mp3: SampleCount 4608
+  Mp3: SeekSamples 949
+
+Offset: 6957 (0x1b2d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 6959 (0x1b2f)
+Block type: 19 (SWF_SOUNDSTREAMBLOCK)
+Block length: 1885
+
+  Mp3: SampleCount 3456
+  Mp3: SeekSamples 16
+
+Offset: 8850 (0x2292)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8852 (0x2294)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8854 (0x2296)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8856 (0x2298)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8858 (0x229a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8860 (0x229c)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8862 (0x229e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8864 (0x22a0)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8866 (0x22a2)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 8868 (0x22a4)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
