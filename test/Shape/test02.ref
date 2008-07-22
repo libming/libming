@@ -1,0 +1,74 @@
+File version: 8
+File size: 152
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
+
+Offset: 26 (0x001a)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 108
+
+ CharacterID: 1
+ RECT:  (2188,1398)x(4492,3702):14
+ FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 0
+ RGBA: (ff, 0, 0,ff)
+ LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 1
+  StateFillStyle0: 0 StateMoveTo: 1
+   FillStyle1: 1
+   MoveBits: 13  MoveDeltaX: 3340  MoveDeltaY: 1398
+ Curved EdgeRecord: 7 Control(234,0) Anchor(214,91)
+ Curved EdgeRecord: 7 Control(207,87) Anchor(160,160)
+ Curved EdgeRecord: 7 Control(159,159) Anchor(87,207)
+ Curved EdgeRecord: 7 Control(91,214) Anchor(0,234)
+ Curved EdgeRecord: 7 Control(0,234) Anchor(-91,214)
+ Curved EdgeRecord: 7 Control(-87,207) Anchor(-159,160)
+ Curved EdgeRecord: 7 Control(-160,159) Anchor(-207,87)
+ Curved EdgeRecord: 7 Control(-214,91) Anchor(-234,0)
+ Curved EdgeRecord: 7 Control(-234,0) Anchor(-214,-91)
+ Curved EdgeRecord: 7 Control(-207,-87) Anchor(-159,-159)
+ Curved EdgeRecord: 7 Control(-160,-160) Anchor(-87,-207)
+ Curved EdgeRecord: 7 Control(-91,-214) Anchor(0,-234)
+ Curved EdgeRecord: 7 Control(0,-234) Anchor(91,-214)
+ Curved EdgeRecord: 7 Control(87,-207) Anchor(160,-159)
+ Curved EdgeRecord: 7 Control(159,-160) Anchor(207,-87)
+ Curved EdgeRecord: 7 Control(214,-91) Anchor(234,0)
+  ENDSHAPE
+
+Offset: 140 (0x008c)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 148 (0x0094)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 150 (0x0096)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
