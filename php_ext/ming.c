@@ -5182,7 +5182,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 	SWFInput input = NULL;
 	SWFMovieClip mc = getSprite(getThis() TSRMLS_CC);
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &zfile, &rate, &skip) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd|d", &zfile, &rate, &skip) == FAILURE) {
 		return;
 	}
 
