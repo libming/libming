@@ -2595,7 +2595,7 @@ PHP_METHOD(swfblur, __construct)
 	SWFBlur blur;
 	int ret;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &blurX, &blurY, &passes) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &blurX, &blurY, &passes) == FAILURE) {
 		return;
 	}
 
