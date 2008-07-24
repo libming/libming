@@ -16,7 +16,7 @@
 # $(PERL)
 
 $VERBOSE=1;
-$TOP_SRCDIR=$ENV{'top_srcdir'};
+#$TOP_SRCDIR=$ENV{'top_srcdir'};
 $SRCDIR=$ENV{'srcdir'};
 $TOP_BUILDDIR=$ENV{'top_builddir'};
 $BUILDDIR=$ENV{'builddir'};
