@@ -15,4 +15,5 @@ int main()
 	SWFShape_drawCubicTo(s, 109.375040,95.703469,135.203469,69.875040,167.000000,69.875040);
 	SWFMovie_add(m, s);
 	SWFMovie_save(m, "test02.swf");
+	return 0;
 }
