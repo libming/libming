@@ -154,7 +154,7 @@ SWFShape_setLineStyle2filled(shape, width, fill, flags, miterLimit)
 	float miterLimit
 	CODE:
 	SWFShape_setLineStyle2filled(shape, width,
-		SWFFill_getLineStyle(fill), flags, miterLimit);
+		SWFFill_getFillStyle(fill), flags, miterLimit);
 
 SWF::Fill
 SWFShape_addFill(shape, ...)
