@@ -1328,10 +1328,10 @@ class SWFShape : public SWFCharacter
   SWFFill *addSolidFill(byte r, byte g, byte b, byte a=0xff)
     { return new SWFFill(SWFShape_addSolidFill(this->shape, r, g, b, a)); }
 
-  SWFFill *addGradientFill(SWFGradient *gradient, byte flags=0)
+  SWFFill *addGradientFill(SWFGradient *gradient, byte flags=0x10)
     { return new SWFFill(SWFShape_addGradientFill(this->shape, gradient->gradient, flags)); }
 
-  SWFFill *addBitmapFill(SWFBitmap *bitmap, byte flags=0)
+  SWFFill *addBitmapFill(SWFBitmap *bitmap, byte flags=0x40)
     { return new SWFFill(SWFShape_addBitmapFill(this->shape, bitmap->bitmap, flags)); }
 
   void setLeftFillStyle(SWFFillStyle *fill)
