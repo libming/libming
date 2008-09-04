@@ -138,8 +138,11 @@ destroySWFShape(SWFShape shape)
 	int i;
 	if(shape->fills != NULL)
 	{
+		// Fills have to be destroyed by users. 
+		/*
 		for ( i=0; i<shape->nFills; ++i )
 			destroySWFFillStyle(shape->fills[i]);
+		*/
 		free(shape->fills);
 	}
 	if(shape->records != NULL)
