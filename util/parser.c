@@ -2185,23 +2185,6 @@ parseSWF_DEFINESHAPE4 (FILE * f, int length)
   PAR_END;
 }
 
-SWF_Parserstruct *
-parseSWF_DEFINESOUND (FILE * f, int length)
-{
-  int end = fileOffset + length;
-  PAR_BEGIN (SWF_DEFINESOUND);
-
-  parserrec->SoundId = readUInt16 (f);
-  byteAlign ();
-  parserrec->SoundFormat = readBits (f, 4);
-  parserrec->SoundRate = readBits (f, 2);
-  parserrec->SoundSize = readBits (f, 1);
-  parserrec->SoundType = readBits (f, 1);
-  parserrec->SoundSampleCount = readUInt32 (f);
-  parserrec->SoundData = (UI8 *)readBytes (f, end-fileOffset);
-
-  PAR_END;
-}
 
 SWF_Parserstruct *
 parseSWF_DEFINESPRITE (FILE * f, int length)
@@ -2741,10 +2724,10 @@ parseSWF_SHOWFRAME (FILE * f, int length)
 }
 
 static inline void 
-parseMp3Stream(FILE *f, struct MP3STREAMSOUNDDATA *data)
+parseMp3Stream(FILE *f, struct MP3STREAMSOUNDDATA *data, int blockEnd)
 {
-  data->SampleCount = readSInt16(f);
   data->SeekSamples = readSInt16(f);
+  data->frames = (UI8 *)readBytes(f, blockEnd - fileOffset);
 }
 
 SWF_Parserstruct *
@@ -2752,12 +2735,11 @@ parseSWF_SOUNDSTREAMBLOCK (FILE * f, int length)
 {
   int end = fileOffset + length;
   PAR_BEGIN (SWF_SOUNDSTREAMBLOCK);
+  parserrec->SampleCount = readSInt16(f);
   switch(m.soundStreamFmt)
   {
     case 2:
-      parseMp3Stream(f, &parserrec->StreamData.mp3);
-      parserrec->StreamData.mp3.frames = 
-          (UI8 *)readBytes(f, end - fileOffset);
+      parseMp3Stream(f, &parserrec->StreamData.mp3, end);
       break;
     default:
       parserrec->StreamData.data = (UI8 *)readBytes(f, end - fileOffset);
@@ -2804,6 +2786,31 @@ parseSWF_SOUNDSTREAMHEAD2 (FILE * f, int length)
   if( parserrec->StreamSoundCompression == 2 /* MP3 */ )
     parserrec->LatencySeek = readUInt16 (f);
   m.soundStreamFmt = parserrec->StreamSoundCompression;
+  PAR_END;
+}
+
+SWF_Parserstruct *
+parseSWF_DEFINESOUND (FILE * f, int length)
+{
+  int end = fileOffset + length;
+  PAR_BEGIN (SWF_DEFINESOUND);
+
+  parserrec->SoundId = readUInt16 (f);
+  parserrec->SoundFormat = readBits (f, 4);
+  parserrec->SoundRate = readBits (f, 2);
+  parserrec->SoundSize = readBits (f, 1);
+  parserrec->SoundType = readBits (f, 1);
+  byteAlign ();
+  parserrec->SoundSampleCount = readUInt32 (f);
+  
+  switch(parserrec->SoundFormat)
+  {
+    case 2:
+      parseMp3Stream(f, &parserrec->SoundData.mp3, end);
+      break;
+    default:
+      parserrec->SoundData.data = (UI8 *)readBytes(f, end - fileOffset);
+  }
   PAR_END;
 }
 

@@ -1521,6 +1521,12 @@ outputSWF_DEFINESOUND (SWF_Parserstruct * pblock)
 	_iprintf(" SoundSize: %s\n", sblock->SoundSize?"16-bit":"8-bit");
 	_iprintf(" SoundType: %s\n", sblock->SoundType?"Stereo":"Mono");
 	_iprintf(" SoundSampleCount: %d\n", sblock->SoundSampleCount);
+
+	if(sblock->SoundFormat == 2)
+	{
+		_iprintf("  Mp3: SeekSamples %i\n", 
+			sblock->SoundData.mp3.SeekSamples);
+	}
 }
 
 void
@@ -1924,11 +1930,10 @@ outputSWF_SHOWFRAME (SWF_Parserstruct * pblock)
 void
 outputSWF_SOUNDSTREAMBLOCK (SWF_Parserstruct * pblock)
 {
+  OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
+  _iprintf("  SampleCount %i\n", sblock->SampleCount);
   if(m.soundStreamFmt == 2)
   {
-    OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
-    _iprintf("  Mp3: SampleCount %i\n", 
-           sblock->StreamData.mp3.SampleCount);
     _iprintf("  Mp3: SeekSamples %i\n", 
            sblock->StreamData.mp3.SeekSamples);
   }
@@ -2085,20 +2090,12 @@ outputSWF_SOUNDENVELOPE (SWF_SOUNDENVELOPE *env)
 void 
 outputSWF_SOUNDINFO (SWF_SOUNDINFO *info)
 {
-  _iprintf("  SoundInfo:");
+  _iprintf("  SoundInfo:\n");
+  _iprintf("    SyncStop: %s\n", info->SyncStop?"Yes":"No");
+  _iprintf("    SyncNoMultiple: %s\n", info->SyncNoMultiple?"Yes":"No");
+  _iprintf("    HasEnvelope: %s\n", info->HasEnvelope?"Yes":"No");
+  _iprintf("    Loops: %d\n", info->HasLoops?info->LoopCount:0);
   
-  if(info->SyncStop)
-    _iprintf(" SyncStop");
-
-  if(info->SyncNoMultiple)
-    _iprintf(" SyncNoMultiple");
-  
-  if(info->HasEnvelope)
-    _iprintf(" HasEnvelope");
-
-  if(info->HasLoops)
-    _iprintf(" Loops: %d", info->LoopCount);
-
   if(info->HasOutPoint)
     _iprintf(" HasOutPoint: %d", info->OutPoint);
 

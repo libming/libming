@@ -1373,17 +1373,6 @@ struct SWF_DEFINESHAPE4
   SWF_SHAPEWITHSTYLE Shapes;
 };
 
-struct SWF_DEFINESOUND
-{
-  UI16 SoundId;
-  UI8  SoundFormat:4;
-  UI8  SoundRate:2;
-  UI8  SoundSize:1;
-  UI8  SoundType:1;
-  UI32  SoundSampleCount;
-  UI8  *SoundData;
-};
-
 struct SWF_DEFINESPRITE
 {
   UI16 SpriteId;
@@ -1646,13 +1635,13 @@ struct SWF_SHOWFRAME
 
 struct MP3STREAMSOUNDDATA
 {
-  UI16 SampleCount;
   SI16 SeekSamples;
   UI8 *frames;
 };
 
 struct SWF_SOUNDSTREAMBLOCK
 {
+  UI16 SampleCount;
   union {
     struct MP3STREAMSOUNDDATA mp3;
     UI8 *data;
@@ -1685,6 +1674,20 @@ struct SWF_SOUNDSTREAMHEAD2
   UI16	StreamSoundType:1;
   UI16	StreamSoundSampleCount;
   UI16	LatencySeek;
+};
+
+struct SWF_DEFINESOUND
+{
+  UI16 SoundId;
+  UI8  SoundFormat:4;
+  UI8  SoundRate:2;
+  UI8  SoundSize:1;
+  UI8  SoundType:1;
+  UI32  SoundSampleCount;
+  union {
+    struct MP3STREAMSOUNDDATA mp3;
+    UI8 *data;
+  } SoundData;
 };
 
 struct SWF_STARTSOUND
