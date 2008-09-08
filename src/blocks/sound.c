@@ -48,12 +48,6 @@ struct SWFSound_s
 };
 
 
-int
-SWFSoundStream_getFlags(SWFSoundStream stream);
-
-int
-getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock);
-
 void
 writeSWFSoundWithSoundStreamToMethod(SWFSoundStream stream,
 	SWFByteOutputMethod method, void *data);
@@ -170,7 +164,7 @@ int
 completeDefineSWFSoundWithSoundStreamBlock(SWFBlock block)
 {
 	SWFSound sound = (SWFSound)block;
-	int len = getSWFSoundStreamLength(sound->soundStream, 0) + 9;
+	int len = SWFSoundStream_getLength(sound->soundStream, 0) + 9;
 	SWFSoundStream_rewind(sound->soundStream);
 	return len;
 }

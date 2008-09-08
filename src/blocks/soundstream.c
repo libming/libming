@@ -459,7 +459,6 @@ getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 	start = getMP3Flags(input, &flags);
 	if(start < 0)
 		return -1;
-
 	stream->source.mp3.start = start;
 	stream->sampleRate = SWFSound_getSampleRate(flags); 
 	stream->flags = flags; // XXX: fixme
@@ -476,12 +475,12 @@ getStreamFlag_flv(SWFSoundStream stream, float frameRate, float skip)
 	unsigned int skip_msec;
 		
 	while((ret = FLVStream_nextTag(stream->source.flv.stream, &tag, tag_p)) == 0)
-        {
-                if(tag.tagType == FLV_AUDIOTAG)
-                        break;
+	{
+		if(tag.tagType == FLV_AUDIOTAG)
+			break;
 
-                tag_p = &tag;
-        }
+		tag_p = &tag;
+	}
 
 	if(ret < 0)
 		return -1;
@@ -558,8 +557,7 @@ SWFSoundStream_getFlags(SWFSoundStream stream)
 }
 
 
-int
-getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock)
+int SWFSoundStream_getLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock)
 {
 	int source = stream->streamSource;
 	struct SWFSoundStreamBlock_s block;
@@ -573,10 +571,7 @@ getSWFSoundStreamLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock)
 	stream->delay = INT_MAX - stream->samplesPerFrame - 1;
 	if(source == STREAM_MP3) {
 		fillStreamBlock_mp3(stream, streamblock);
-		streamblock->length = SWFInput_length(stream->source.mp3.input);
 	} else if(source == STREAM_FLV) {
-		FLVTag *tag = &stream->source.flv.tag; 
-		FLVTag_getPayloadInput(tag);
 		fillStreamBlock_flv(stream, streamblock);
 	}
 	return streamblock->length;
@@ -590,10 +585,11 @@ writeSWFSoundWithSoundStreamToMethod(SWFSoundStream stream,
 	int source = stream->streamSource;
 	struct SWFSoundStreamBlock_s streamblock;
 
-	getSWFSoundStreamLength(stream, &streamblock);
+	// need to get the sample count && and rewind
+	SWFSoundStream_getLength(stream, &streamblock);
+	SWFSoundStream_rewind(stream);
 
 	methodWriteUInt32(streamblock.numSamples, method, data);
-
 	methodWriteUInt16(stream->initialDelay, method, data);
 	if(source == STREAM_MP3)
 		write_mp3(&streamblock, method, data);

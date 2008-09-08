@@ -39,4 +39,8 @@ SWFBlock SWFSoundStream_getStreamBlock(SWFSoundStream sound);
 
 void SWFSoundStream_rewind(SWFSoundStream sound);
 
+int SWFSoundStream_getLength(SWFSoundStream stream, SWFSoundStreamBlock streamblock);
+
+int
+SWFSoundStream_getFlags(SWFSoundStream stream);
 #endif /* SWF_SOUNDSTREAM_H_INCLUDED */
