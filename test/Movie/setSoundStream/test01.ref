@@ -22,7 +22,7 @@ Offset: 28 (0x001c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 1257
 
-  Mp3: SampleCount 3456
+  SampleCount 3456
   Mp3: SeekSamples 1663
 
 Offset: 1291 (0x050b)
@@ -34,7 +34,7 @@ Offset: 1293 (0x050d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 44
 
 Offset: 1930 (0x078a)
@@ -46,7 +46,7 @@ Offset: 1932 (0x078c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 153
 
 Offset: 2569 (0x0a09)
@@ -58,7 +58,7 @@ Offset: 2571 (0x0a0b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 262
 
 Offset: 3208 (0x0c88)
@@ -70,7 +70,7 @@ Offset: 3210 (0x0c8a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 371
 
 Offset: 3847 (0x0f07)
@@ -82,7 +82,7 @@ Offset: 3849 (0x0f09)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 480
 
 Offset: 4695 (0x1257)
@@ -94,7 +94,7 @@ Offset: 4697 (0x1259)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 13
 
 Offset: 5334 (0x14d6)
@@ -106,7 +106,7 @@ Offset: 5336 (0x14d8)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 122
 
 Offset: 5973 (0x1755)
@@ -118,7 +118,7 @@ Offset: 5975 (0x1757)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 231
 
 Offset: 6612 (0x19d4)
@@ -130,7 +130,7 @@ Offset: 6614 (0x19d6)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 340
 
 Offset: 7251 (0x1c53)
@@ -142,7 +142,7 @@ Offset: 7253 (0x1c55)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 449
 
 Offset: 7890 (0x1ed2)
@@ -154,7 +154,7 @@ Offset: 7892 (0x1ed4)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 558
 
 Offset: 8738 (0x2222)
@@ -166,7 +166,7 @@ Offset: 8740 (0x2224)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 91
 
 Offset: 9377 (0x24a1)
@@ -178,7 +178,7 @@ Offset: 9379 (0x24a3)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 200
 
 Offset: 10016 (0x2720)
@@ -190,7 +190,7 @@ Offset: 10018 (0x2722)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 309
 
 Offset: 10654 (0x299e)
@@ -202,7 +202,7 @@ Offset: 10656 (0x29a0)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 418
 
 Offset: 11293 (0x2c1d)
@@ -214,7 +214,7 @@ Offset: 11295 (0x2c1f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 527
 
 Offset: 12141 (0x2f6d)
@@ -226,7 +226,7 @@ Offset: 12143 (0x2f6f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 60
 
 Offset: 12780 (0x31ec)
@@ -238,7 +238,7 @@ Offset: 12782 (0x31ee)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 169
 
 Offset: 13419 (0x346b)
@@ -250,7 +250,7 @@ Offset: 13421 (0x346d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 278
 
 Offset: 14058 (0x36ea)
@@ -262,7 +262,7 @@ Offset: 14060 (0x36ec)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 387
 
 Offset: 14697 (0x3969)
@@ -274,7 +274,7 @@ Offset: 14699 (0x396b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 496
 
 Offset: 15545 (0x3cb9)
@@ -286,7 +286,7 @@ Offset: 15547 (0x3cbb)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 29
 
 Offset: 16184 (0x3f38)
@@ -298,7 +298,7 @@ Offset: 16186 (0x3f3a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 138
 
 Offset: 16823 (0x41b7)
@@ -310,7 +310,7 @@ Offset: 16825 (0x41b9)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 247
 
 Offset: 17462 (0x4436)
@@ -322,7 +322,7 @@ Offset: 17464 (0x4438)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 356
 
 Offset: 18101 (0x46b5)
@@ -334,7 +334,7 @@ Offset: 18103 (0x46b7)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 465
 
 Offset: 18740 (0x4934)
@@ -346,7 +346,7 @@ Offset: 18742 (0x4936)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 574
 
 Offset: 19588 (0x4c84)
@@ -358,7 +358,7 @@ Offset: 19590 (0x4c86)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 107
 
 Offset: 20227 (0x4f03)
@@ -370,7 +370,7 @@ Offset: 20229 (0x4f05)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 216
 
 Offset: 20866 (0x5182)
@@ -382,7 +382,7 @@ Offset: 20868 (0x5184)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 325
 
 Offset: 21504 (0x5400)
@@ -394,7 +394,7 @@ Offset: 21506 (0x5402)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 434
 
 Offset: 22143 (0x567f)
@@ -406,7 +406,7 @@ Offset: 22145 (0x5681)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 543
 
 Offset: 22991 (0x59cf)
@@ -418,7 +418,7 @@ Offset: 22993 (0x59d1)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 76
 
 Offset: 23630 (0x5c4e)
@@ -430,7 +430,7 @@ Offset: 23632 (0x5c50)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 185
 
 Offset: 24269 (0x5ecd)
@@ -442,7 +442,7 @@ Offset: 24271 (0x5ecf)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 294
 
 Offset: 24908 (0x614c)
@@ -454,7 +454,7 @@ Offset: 24910 (0x614e)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 403
 
 Offset: 25547 (0x63cb)
@@ -466,7 +466,7 @@ Offset: 25549 (0x63cd)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 512
 
 Offset: 26395 (0x671b)
@@ -478,7 +478,7 @@ Offset: 26397 (0x671d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 45
 
 Offset: 27034 (0x699a)
@@ -490,7 +490,7 @@ Offset: 27036 (0x699c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 154
 
 Offset: 27673 (0x6c19)
@@ -502,7 +502,7 @@ Offset: 27675 (0x6c1b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 263
 
 Offset: 28312 (0x6e98)
@@ -514,7 +514,7 @@ Offset: 28314 (0x6e9a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 372
 
 Offset: 28951 (0x7117)
@@ -526,7 +526,7 @@ Offset: 28953 (0x7119)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 481
 
 Offset: 29799 (0x7467)
@@ -538,7 +538,7 @@ Offset: 29801 (0x7469)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 14
 
 Offset: 30438 (0x76e6)
@@ -550,7 +550,7 @@ Offset: 30440 (0x76e8)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 123
 
 Offset: 31077 (0x7965)
@@ -562,7 +562,7 @@ Offset: 31079 (0x7967)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 232
 
 Offset: 31715 (0x7be3)
@@ -574,7 +574,7 @@ Offset: 31717 (0x7be5)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 341
 
 Offset: 32354 (0x7e62)
@@ -586,7 +586,7 @@ Offset: 32356 (0x7e64)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 450
 
 Offset: 32993 (0x80e1)
@@ -598,7 +598,7 @@ Offset: 32995 (0x80e3)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 559
 
 Offset: 33841 (0x8431)
@@ -610,7 +610,7 @@ Offset: 33843 (0x8433)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 92
 
 Offset: 34480 (0x86b0)
@@ -622,7 +622,7 @@ Offset: 34482 (0x86b2)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 201
 
 Offset: 35119 (0x892f)
@@ -634,7 +634,7 @@ Offset: 35121 (0x8931)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 310
 
 Offset: 35758 (0x8bae)
@@ -646,7 +646,7 @@ Offset: 35760 (0x8bb0)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 419
 
 Offset: 36397 (0x8e2d)
@@ -658,7 +658,7 @@ Offset: 36399 (0x8e2f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 528
 
 Offset: 37245 (0x917d)
@@ -670,7 +670,7 @@ Offset: 37247 (0x917f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 61
 
 Offset: 37884 (0x93fc)
@@ -682,7 +682,7 @@ Offset: 37886 (0x93fe)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 170
 
 Offset: 38523 (0x967b)
@@ -694,7 +694,7 @@ Offset: 38525 (0x967d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 279
 
 Offset: 39162 (0x98fa)
@@ -706,7 +706,7 @@ Offset: 39164 (0x98fc)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 388
 
 Offset: 39801 (0x9b79)
@@ -718,7 +718,7 @@ Offset: 39803 (0x9b7b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 497
 
 Offset: 40649 (0x9ec9)
@@ -730,7 +730,7 @@ Offset: 40651 (0x9ecb)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 30
 
 Offset: 41288 (0xa148)
@@ -742,7 +742,7 @@ Offset: 41290 (0xa14a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 139
 
 Offset: 41926 (0xa3c6)
@@ -754,7 +754,7 @@ Offset: 41928 (0xa3c8)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 248
 
 Offset: 42565 (0xa645)
@@ -766,7 +766,7 @@ Offset: 42567 (0xa647)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 357
 
 Offset: 43204 (0xa8c4)
@@ -778,7 +778,7 @@ Offset: 43206 (0xa8c6)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 466
 
 Offset: 43843 (0xab43)
@@ -790,7 +790,7 @@ Offset: 43845 (0xab45)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 575
 
 Offset: 44691 (0xae93)
@@ -802,7 +802,7 @@ Offset: 44693 (0xae95)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 108
 
 Offset: 45330 (0xb112)
@@ -814,7 +814,7 @@ Offset: 45332 (0xb114)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 217
 
 Offset: 45969 (0xb391)
@@ -826,7 +826,7 @@ Offset: 45971 (0xb393)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 326
 
 Offset: 46608 (0xb610)
@@ -838,7 +838,7 @@ Offset: 46610 (0xb612)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 435
 
 Offset: 47247 (0xb88f)
@@ -850,7 +850,7 @@ Offset: 47249 (0xb891)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 544
 
 Offset: 48095 (0xbbdf)
@@ -862,7 +862,7 @@ Offset: 48097 (0xbbe1)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 77
 
 Offset: 48734 (0xbe5e)
@@ -874,7 +874,7 @@ Offset: 48736 (0xbe60)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 186
 
 Offset: 49373 (0xc0dd)
@@ -886,7 +886,7 @@ Offset: 49375 (0xc0df)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 295
 
 Offset: 50012 (0xc35c)
@@ -898,7 +898,7 @@ Offset: 50014 (0xc35e)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 404
 
 Offset: 50651 (0xc5db)
@@ -910,7 +910,7 @@ Offset: 50653 (0xc5dd)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 513
 
 Offset: 51499 (0xc92b)
@@ -922,7 +922,7 @@ Offset: 51501 (0xc92d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 46
 
 Offset: 52138 (0xcbaa)
@@ -934,7 +934,7 @@ Offset: 52140 (0xcbac)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 155
 
 Offset: 52776 (0xce28)
@@ -946,7 +946,7 @@ Offset: 52778 (0xce2a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 264
 
 Offset: 53415 (0xd0a7)
@@ -958,7 +958,7 @@ Offset: 53417 (0xd0a9)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 373
 
 Offset: 54054 (0xd326)
@@ -970,7 +970,7 @@ Offset: 54056 (0xd328)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 482
 
 Offset: 54902 (0xd676)
@@ -982,7 +982,7 @@ Offset: 54904 (0xd678)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 15
 
 Offset: 55541 (0xd8f5)
@@ -994,7 +994,7 @@ Offset: 55543 (0xd8f7)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 124
 
 Offset: 56180 (0xdb74)
@@ -1006,7 +1006,7 @@ Offset: 56182 (0xdb76)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 233
 
 Offset: 56819 (0xddf3)
@@ -1018,7 +1018,7 @@ Offset: 56821 (0xddf5)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 342
 
 Offset: 57458 (0xe072)
@@ -1030,7 +1030,7 @@ Offset: 57460 (0xe074)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 451
 
 Offset: 58097 (0xe2f1)
@@ -1042,7 +1042,7 @@ Offset: 58099 (0xe2f3)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 560
 
 Offset: 58945 (0xe641)
@@ -1054,7 +1054,7 @@ Offset: 58947 (0xe643)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 93
 
 Offset: 59584 (0xe8c0)
@@ -1066,7 +1066,7 @@ Offset: 59586 (0xe8c2)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 202
 
 Offset: 60223 (0xeb3f)
@@ -1078,7 +1078,7 @@ Offset: 60225 (0xeb41)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 311
 
 Offset: 60862 (0xedbe)
@@ -1090,7 +1090,7 @@ Offset: 60864 (0xedc0)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 420
 
 Offset: 61501 (0xf03d)
@@ -1102,7 +1102,7 @@ Offset: 61503 (0xf03f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 529
 
 Offset: 62349 (0xf38d)
@@ -1114,7 +1114,7 @@ Offset: 62351 (0xf38f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 62
 
 Offset: 62987 (0xf60b)
@@ -1126,7 +1126,7 @@ Offset: 62989 (0xf60d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 171
 
 Offset: 63626 (0xf88a)
@@ -1138,7 +1138,7 @@ Offset: 63628 (0xf88c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 280
 
 Offset: 64265 (0xfb09)
@@ -1150,7 +1150,7 @@ Offset: 64267 (0xfb0b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 389
 
 Offset: 64904 (0xfd88)
@@ -1162,7 +1162,7 @@ Offset: 64906 (0xfd8a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 498
 
 Offset: 65752 (0x100d8)
@@ -1174,7 +1174,7 @@ Offset: 65754 (0x100da)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 31
 
 Offset: 66391 (0x10357)
@@ -1186,7 +1186,7 @@ Offset: 66393 (0x10359)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 140
 
 Offset: 67030 (0x105d6)
@@ -1198,7 +1198,7 @@ Offset: 67032 (0x105d8)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 249
 
 Offset: 67669 (0x10855)
@@ -1210,7 +1210,7 @@ Offset: 67671 (0x10857)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 358
 
 Offset: 68308 (0x10ad4)
@@ -1222,7 +1222,7 @@ Offset: 68310 (0x10ad6)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 467
 
 Offset: 68947 (0x10d53)
@@ -1234,7 +1234,7 @@ Offset: 68949 (0x10d55)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 576
 
 Offset: 69795 (0x110a3)
@@ -1246,7 +1246,7 @@ Offset: 69797 (0x110a5)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 109
 
 Offset: 70434 (0x11322)
@@ -1258,7 +1258,7 @@ Offset: 70436 (0x11324)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 218
 
 Offset: 71073 (0x115a1)
@@ -1270,7 +1270,7 @@ Offset: 71075 (0x115a3)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 327
 
 Offset: 71712 (0x11820)
@@ -1282,7 +1282,7 @@ Offset: 71714 (0x11822)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 436
 
 Offset: 72351 (0x11a9f)
@@ -1294,7 +1294,7 @@ Offset: 72353 (0x11aa1)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 839
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 545
 
 Offset: 73198 (0x11dee)
@@ -1306,7 +1306,7 @@ Offset: 73200 (0x11df0)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 78
 
 Offset: 73837 (0x1206d)
@@ -1318,7 +1318,7 @@ Offset: 73839 (0x1206f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 187
 
 Offset: 74476 (0x122ec)
@@ -1330,7 +1330,7 @@ Offset: 74478 (0x122ee)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 296
 
 Offset: 75115 (0x1256b)
@@ -1342,7 +1342,7 @@ Offset: 75117 (0x1256d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 405
 
 Offset: 75754 (0x127ea)
@@ -1354,7 +1354,7 @@ Offset: 75756 (0x127ec)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 514
 
 Offset: 76602 (0x12b3a)
@@ -1366,7 +1366,7 @@ Offset: 76604 (0x12b3c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 47
 
 Offset: 77241 (0x12db9)
@@ -1378,7 +1378,7 @@ Offset: 77243 (0x12dbb)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 156
 
 Offset: 77880 (0x13038)
@@ -1390,7 +1390,7 @@ Offset: 77882 (0x1303a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 265
 
 Offset: 78519 (0x132b7)
@@ -1402,7 +1402,7 @@ Offset: 78521 (0x132b9)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 374
 
 Offset: 79158 (0x13536)
@@ -1414,7 +1414,7 @@ Offset: 79160 (0x13538)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 483
 
 Offset: 80006 (0x13886)
@@ -1426,7 +1426,7 @@ Offset: 80008 (0x13888)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 16
 
 Offset: 80645 (0x13b05)
@@ -1438,7 +1438,7 @@ Offset: 80647 (0x13b07)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 125
 
 Offset: 81284 (0x13d84)
@@ -1450,7 +1450,7 @@ Offset: 81286 (0x13d86)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 234
 
 Offset: 81923 (0x14003)
@@ -1462,7 +1462,7 @@ Offset: 81925 (0x14005)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 343
 
 Offset: 82562 (0x14282)
@@ -1474,7 +1474,7 @@ Offset: 82564 (0x14284)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 452
 
 Offset: 83201 (0x14501)
@@ -1486,7 +1486,7 @@ Offset: 83203 (0x14503)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 839
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 561
 
 Offset: 84048 (0x14850)
@@ -1498,7 +1498,7 @@ Offset: 84050 (0x14852)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 94
 
 Offset: 84687 (0x14acf)
@@ -1510,7 +1510,7 @@ Offset: 84689 (0x14ad1)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 203
 
 Offset: 85326 (0x14d4e)
@@ -1522,7 +1522,7 @@ Offset: 85328 (0x14d50)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 312
 
 Offset: 85965 (0x14fcd)
@@ -1534,7 +1534,7 @@ Offset: 85967 (0x14fcf)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 421
 
 Offset: 86604 (0x1524c)
@@ -1546,7 +1546,7 @@ Offset: 86606 (0x1524e)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 530
 
 Offset: 87452 (0x1559c)
@@ -1558,7 +1558,7 @@ Offset: 87454 (0x1559e)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 63
 
 Offset: 88091 (0x1581b)
@@ -1570,7 +1570,7 @@ Offset: 88093 (0x1581d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 172
 
 Offset: 88730 (0x15a9a)
@@ -1582,7 +1582,7 @@ Offset: 88732 (0x15a9c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 281
 
 Offset: 89369 (0x15d19)
@@ -1594,7 +1594,7 @@ Offset: 89371 (0x15d1b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 390
 
 Offset: 90008 (0x15f98)
@@ -1606,7 +1606,7 @@ Offset: 90010 (0x15f9a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 499
 
 Offset: 90856 (0x162e8)
@@ -1618,7 +1618,7 @@ Offset: 90858 (0x162ea)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 32
 
 Offset: 91495 (0x16567)
@@ -1630,7 +1630,7 @@ Offset: 91497 (0x16569)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 141
 
 Offset: 92134 (0x167e6)
@@ -1642,7 +1642,7 @@ Offset: 92136 (0x167e8)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 250
 
 Offset: 92773 (0x16a65)
@@ -1654,7 +1654,7 @@ Offset: 92775 (0x16a67)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 359
 
 Offset: 93412 (0x16ce4)
@@ -1666,7 +1666,7 @@ Offset: 93414 (0x16ce6)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 839
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 468
 
 Offset: 94259 (0x17033)
@@ -1678,7 +1678,7 @@ Offset: 94261 (0x17035)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 1
 
 Offset: 94898 (0x172b2)
@@ -1690,7 +1690,7 @@ Offset: 94900 (0x172b4)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 110
 
 Offset: 95537 (0x17531)
@@ -1702,7 +1702,7 @@ Offset: 95539 (0x17533)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 219
 
 Offset: 96176 (0x177b0)
@@ -1714,7 +1714,7 @@ Offset: 96178 (0x177b2)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 328
 
 Offset: 96815 (0x17a2f)
@@ -1726,7 +1726,7 @@ Offset: 96817 (0x17a31)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 437
 
 Offset: 97454 (0x17cae)
@@ -1738,7 +1738,7 @@ Offset: 97456 (0x17cb0)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 546
 
 Offset: 98302 (0x17ffe)
@@ -1750,7 +1750,7 @@ Offset: 98304 (0x18000)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 79
 
 Offset: 98941 (0x1827d)
@@ -1762,7 +1762,7 @@ Offset: 98943 (0x1827f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 188
 
 Offset: 99580 (0x184fc)
@@ -1774,7 +1774,7 @@ Offset: 99582 (0x184fe)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 297
 
 Offset: 100219 (0x1877b)
@@ -1786,7 +1786,7 @@ Offset: 100221 (0x1877d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 406
 
 Offset: 100858 (0x189fa)
@@ -1798,7 +1798,7 @@ Offset: 100860 (0x189fc)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 515
 
 Offset: 101706 (0x18d4a)
@@ -1810,7 +1810,7 @@ Offset: 101708 (0x18d4c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 48
 
 Offset: 102345 (0x18fc9)
@@ -1822,7 +1822,7 @@ Offset: 102347 (0x18fcb)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 157
 
 Offset: 102984 (0x19248)
@@ -1834,7 +1834,7 @@ Offset: 102986 (0x1924a)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 266
 
 Offset: 103623 (0x194c7)
@@ -1846,7 +1846,7 @@ Offset: 103625 (0x194c9)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 375
 
 Offset: 104262 (0x19746)
@@ -1858,7 +1858,7 @@ Offset: 104264 (0x19748)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 839
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 484
 
 Offset: 105109 (0x19a95)
@@ -1870,7 +1870,7 @@ Offset: 105111 (0x19a97)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 17
 
 Offset: 105748 (0x19d14)
@@ -1882,7 +1882,7 @@ Offset: 105750 (0x19d16)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 126
 
 Offset: 106387 (0x19f93)
@@ -1894,7 +1894,7 @@ Offset: 106389 (0x19f95)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 235
 
 Offset: 107026 (0x1a212)
@@ -1906,7 +1906,7 @@ Offset: 107028 (0x1a214)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 344
 
 Offset: 107665 (0x1a491)
@@ -1918,7 +1918,7 @@ Offset: 107667 (0x1a493)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 453
 
 Offset: 108304 (0x1a710)
@@ -1930,7 +1930,7 @@ Offset: 108306 (0x1a712)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 562
 
 Offset: 109152 (0x1aa60)
@@ -1942,7 +1942,7 @@ Offset: 109154 (0x1aa62)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 95
 
 Offset: 109791 (0x1acdf)
@@ -1954,7 +1954,7 @@ Offset: 109793 (0x1ace1)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 204
 
 Offset: 110430 (0x1af5e)
@@ -1966,7 +1966,7 @@ Offset: 110432 (0x1af60)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 313
 
 Offset: 111069 (0x1b1dd)
@@ -1978,7 +1978,7 @@ Offset: 111071 (0x1b1df)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 422
 
 Offset: 111708 (0x1b45c)
@@ -1990,7 +1990,7 @@ Offset: 111710 (0x1b45e)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 531
 
 Offset: 112556 (0x1b7ac)
@@ -2002,7 +2002,7 @@ Offset: 112558 (0x1b7ae)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 64
 
 Offset: 113195 (0x1ba2b)
@@ -2014,7 +2014,7 @@ Offset: 113197 (0x1ba2d)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 173
 
 Offset: 113834 (0x1bcaa)
@@ -2026,7 +2026,7 @@ Offset: 113836 (0x1bcac)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 282
 
 Offset: 114473 (0x1bf29)
@@ -2038,7 +2038,7 @@ Offset: 114475 (0x1bf2b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 391
 
 Offset: 115111 (0x1c1a7)
@@ -2050,7 +2050,7 @@ Offset: 115113 (0x1c1a9)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 500
 
 Offset: 115959 (0x1c4f7)
@@ -2062,7 +2062,7 @@ Offset: 115961 (0x1c4f9)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 33
 
 Offset: 116598 (0x1c776)
@@ -2074,7 +2074,7 @@ Offset: 116600 (0x1c778)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 142
 
 Offset: 117237 (0x1c9f5)
@@ -2086,7 +2086,7 @@ Offset: 117239 (0x1c9f7)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 251
 
 Offset: 117876 (0x1cc74)
@@ -2098,7 +2098,7 @@ Offset: 117878 (0x1cc76)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 360
 
 Offset: 118515 (0x1cef3)
@@ -2110,7 +2110,7 @@ Offset: 118517 (0x1cef5)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 469
 
 Offset: 119363 (0x1d243)
@@ -2122,7 +2122,7 @@ Offset: 119365 (0x1d245)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 2
 
 Offset: 120002 (0x1d4c2)
@@ -2134,7 +2134,7 @@ Offset: 120004 (0x1d4c4)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 111
 
 Offset: 120641 (0x1d741)
@@ -2146,7 +2146,7 @@ Offset: 120643 (0x1d743)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 220
 
 Offset: 121280 (0x1d9c0)
@@ -2158,7 +2158,7 @@ Offset: 121282 (0x1d9c2)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 329
 
 Offset: 121919 (0x1dc3f)
@@ -2170,7 +2170,7 @@ Offset: 121921 (0x1dc41)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 438
 
 Offset: 122558 (0x1debe)
@@ -2182,7 +2182,7 @@ Offset: 122560 (0x1dec0)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 547
 
 Offset: 123406 (0x1e20e)
@@ -2194,7 +2194,7 @@ Offset: 123408 (0x1e210)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 80
 
 Offset: 124045 (0x1e48d)
@@ -2206,7 +2206,7 @@ Offset: 124047 (0x1e48f)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 189
 
 Offset: 124684 (0x1e70c)
@@ -2218,7 +2218,7 @@ Offset: 124686 (0x1e70e)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 298
 
 Offset: 125322 (0x1e98a)
@@ -2230,7 +2230,7 @@ Offset: 125324 (0x1e98c)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 407
 
 Offset: 125961 (0x1ec09)
@@ -2242,7 +2242,7 @@ Offset: 125963 (0x1ec0b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 516
 
 Offset: 126809 (0x1ef59)
@@ -2254,7 +2254,7 @@ Offset: 126811 (0x1ef5b)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 49
 
 Offset: 127448 (0x1f1d8)
@@ -2266,7 +2266,7 @@ Offset: 127450 (0x1f1da)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 158
 
 Offset: 128087 (0x1f457)
@@ -2278,7 +2278,7 @@ Offset: 128089 (0x1f459)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 267
 
 Offset: 128726 (0x1f6d6)
@@ -2290,7 +2290,7 @@ Offset: 128728 (0x1f6d8)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 376
 
 Offset: 129365 (0x1f955)
@@ -2302,7 +2302,7 @@ Offset: 129367 (0x1f957)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 485
 
 Offset: 130213 (0x1fca5)
@@ -2314,7 +2314,7 @@ Offset: 130215 (0x1fca7)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 18
 
 Offset: 130852 (0x1ff24)
@@ -2326,7 +2326,7 @@ Offset: 130854 (0x1ff26)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 127
 
 Offset: 131491 (0x201a3)
@@ -2338,7 +2338,7 @@ Offset: 131493 (0x201a5)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 236
 
 Offset: 132130 (0x20422)
@@ -2350,7 +2350,7 @@ Offset: 132132 (0x20424)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 345
 
 Offset: 132769 (0x206a1)
@@ -2362,7 +2362,7 @@ Offset: 132771 (0x206a3)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 454
 
 Offset: 133408 (0x20920)
@@ -2374,7 +2374,7 @@ Offset: 133410 (0x20922)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 840
 
-  Mp3: SampleCount 2304
+  SampleCount 2304
   Mp3: SeekSamples 563
 
 Offset: 134256 (0x20c70)
@@ -2386,7 +2386,7 @@ Offset: 134258 (0x20c72)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 96
 
 Offset: 134895 (0x20eef)
@@ -2398,7 +2398,7 @@ Offset: 134897 (0x20ef1)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 631
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 205
 
 Offset: 135534 (0x2116e)
@@ -2410,7 +2410,7 @@ Offset: 135536 (0x21170)
 Block type: 19 (SWF_SOUNDSTREAMBLOCK)
 Block length: 630
 
-  Mp3: SampleCount 1728
+  SampleCount 1728
   Mp3: SeekSamples 314
 
 Offset: 136172 (0x213ec)
