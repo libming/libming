@@ -30,7 +30,7 @@ Block length: 864
   Block type: 19 (SWF_SOUNDSTREAMBLOCK)
   Block length: 840
 
-    Mp3: SampleCount 4608
+    SampleCount 4608
     Mp3: SeekSamples 1663
 
   Offset: 884 (0x0374)
