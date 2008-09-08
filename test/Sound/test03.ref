@@ -14,6 +14,7 @@ Block length: 845
  SoundSize: 16-bit
  SoundType: Mono
  SoundSampleCount: 4608
+  Mp3: SeekSamples 1663
 
 Offset: 871 (0x0367)
 Block type: 15 (SWF_STARTSOUND)
@@ -21,6 +22,11 @@ Block length: 3
 
  SoundId 1
   SoundInfo:
+    SyncStop: No
+    SyncNoMultiple: No
+    HasEnvelope: No
+    Loops: 0
+
 
 Offset: 876 (0x036c)
 Block type: 1 (SWF_SHOWFRAME)

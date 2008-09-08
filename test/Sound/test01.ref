@@ -14,6 +14,7 @@ Block length: 695075
  SoundSize: 16-bit
  SoundType: Stereo
  SoundSampleCount: 1915776
+  Mp3: SeekSamples 1663
 
 Offset: 695101 (0xa9b3d)
 Block type: 15 (SWF_STARTSOUND)
@@ -21,6 +22,11 @@ Block length: 3
 
  SoundId 1
   SoundInfo:
+    SyncStop: No
+    SyncNoMultiple: No
+    HasEnvelope: No
+    Loops: 0
+
 
 Offset: 695106 (0xa9b42)
 Block type: 1 (SWF_SHOWFRAME)
