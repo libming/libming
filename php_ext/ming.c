@@ -2441,6 +2441,21 @@ PHP_METHOD(swffont, getLeading)
 }
 /* }}} */
 
+/* {{{ proto string swffont::getShape(code) 	 
+Returns the glyph shape of a char as a text string */ 	 
+PHP_METHOD(swffont, getShape) 	 
+{ 	 
+	int zcode; 	 
+	char *result; 	 
+	  	 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &zcode) == FAILURE) 
+		WRONG_PARAM_COUNT; 	 
+	 
+	result = SWFFont_getShape(getFont(getThis() TSRMLS_CC), zcode); 	 
+	RETURN_STRING(result, 1); 	 
+	free(result); 	 
+} 	 
+/* }}} */
 
 static zend_function_entry swffont_functions[] = {
 	PHP_ME(swffont, __construct,       NULL, 0)
@@ -2452,9 +2467,10 @@ static zend_function_entry swffont_functions[] = {
 	PHP_ME(swffont, getDescent,        NULL, 0)
 	PHP_ME(swffont, getLeading,        NULL, 0)
 #ifdef HAVE_NEW_MING
-        PHP_ME(swffont, getGlyphCount,    NULL, 0)
-        PHP_ME(swffont, getName,           NULL, 0)
+	PHP_ME(swffont, getGlyphCount,     NULL, 0)
+	PHP_ME(swffont, getName,           NULL, 0)
 #endif
+	 PHP_ME(swffont, getShape,	   NULL, 0)
 	{ NULL, NULL, NULL }
 };
 
@@ -4974,6 +4990,20 @@ PHP_METHOD(swfshape, setLine2Filled)
 }
 /* }}} */
 
+/* {{{ */
+PHP_METHOD(swfshape, dumpOutline)
+{
+	char *out;
+	if (ZEND_NUM_ARGS() != 0) {
+		WRONG_PARAM_COUNT;
+	}
+
+	out = SWFShape_dumpOutline(getShape(getThis() TSRMLS_CC));
+	RETURN_STRING(out, 1);
+	free(out);
+}
+/* }}} */
+
 static zend_function_entry swfshape_functions[] = {
 	PHP_ME(swfshape, __construct,        NULL, 0)
 	PHP_ME(swfshape, setLine,            NULL, 0)
@@ -5000,6 +5030,7 @@ static zend_function_entry swfshape_functions[] = {
 	PHP_ME(swfshape, drawCharacterBounds, NULL, 0)
 	PHP_ME(swfshape, setLine2,           NULL, 0)
 	PHP_ME(swfshape, setLine2Filled,     NULL, 0)	
+	PHP_ME(swfshape, dumpOutline,     NULL, 0)	
 	{ NULL, NULL, NULL }
 };
 

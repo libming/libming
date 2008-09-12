@@ -129,6 +129,7 @@ PHP_METHOD(swfshape, hideLine);
 PHP_METHOD(swfshape, drawCharacterBounds);
 PHP_METHOD(swfshape, setLine2);
 PHP_METHOD(swfshape, setLine2Filled);
+PHP_METHOD(swfshape, dumpOutline);
 
 /* SWFMovie */
 
@@ -186,6 +187,7 @@ PHP_METHOD(swffont, getUTF8Width);
 PHP_METHOD(swffont, getGlyphCount);
 PHP_METHOD(swffont, getName);
 #endif
+PHP_METHOD(swffont, getShape);
 
 /* SWFFontCollection */
 
