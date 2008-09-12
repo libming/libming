@@ -82,3 +82,13 @@ static inline int SWFMovie_replace(SWFMovie movie, SWFDisplayItem item, SWFBlock
 	return SWFMovie_replace_internal(movie, item, ublock);
 }
 #endif
+
+char *SWFFont_getShape(SWFFont font, unsigned short c)
+{
+	char *out = NULL;
+	SWFShape s = newSWFShape();
+	SWFShape_drawScaledGlyph(s, font, c, 1024.0);
+	out = SWFShape_dumpOutline(s);
+	destroySWFShape(s);
+	return out;
+}
