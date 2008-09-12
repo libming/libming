@@ -40,3 +40,4 @@ CXform.c
 BrowserFont.c
 FontCollection.c
 Character.c
+SWF.pm
