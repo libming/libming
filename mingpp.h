@@ -838,6 +838,9 @@ class SWFFont : public SWFBlock
 
   int getGlyphCount()
     { return SWFFont_getGlyphCount(this->font); }
+  
+  char *getShape(unsigned short c)
+    { return SWFFont_getShape(this->font, c); }
 
   SWF_DECLAREONLY(SWFFont);
 
@@ -1389,9 +1392,11 @@ class SWFShape : public SWFCharacter
   void hideLine()
     { SWFShape_hideLine(this->shape); }
 
-  // deprecated?
   void drawFontGlyph(SWFFont *font, unsigned short c)
     { SWFShape_drawGlyph(this->shape, font->font, c); }
+
+  char *dumpOutline()
+  { return SWFShape_dumpOutline(this->shape); }
 
   SWF_DECLAREONLY(SWFShape);
 };
