@@ -175,6 +175,12 @@ SWFGradientMatrix_update(SWFMatrix matrix, SWFRect bounds)
 	h = SWFRect_getHeight(bounds);
 	scaleX = w / GRADIENT_SIZE;
 	scaleY = h / GRADIENT_SIZE;
+
+	/* update matrix translation first, to be realtive to the gradient's 
+	 * coordinate system. */
+	SWFMatrix_moveTo(matrix, SWFMatrix_getTranslateX(matrix) / scaleX, 
+		SWFMatrix_getTranslateY(matrix) / scaleY);
+	
 	tmp = newSWFMatrix(scaleX, 0, 0, scaleY, bounds->minX + w/2,  bounds->minY + h/2);
 	/* temporary matrix scales gradient to given bounds and centers it. */
 	/* all transformations done by the user are "applied" on the tmp matrix */
