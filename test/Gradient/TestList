@@ -6,3 +6,4 @@ test05:swf: SWF8 supports spread and interpolation mode settings
 test06:swf: FocalGradient 
 test07:swf: RadialGradient 
 test08:swf: simple gradient fill (displaced) 
+test09:swf: simple gradient fill (SWFFill_moveTo()) 
