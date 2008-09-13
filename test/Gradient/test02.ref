@@ -1,5 +1,5 @@
 File version: 8
-File size: 116
+File size: 119
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -12,7 +12,7 @@ Block length: 4
 
 Offset: 26 (0x001a)
 Block type: 32 (SWF_DEFINESHAPE3)
-Block length: 72
+Block length: 75
 
  CharacterID: 1
  RECT:  (-10,-10)x(2010,2010):12
@@ -20,7 +20,7 @@ Block length: 72
  FillStyle:  FillStyleType: 10
   Matrix:
    ScaleX 0.061035 ScaleY 0.061035
-   TranslateX      0 TranslateY      0
+   TranslateX   1000 TranslateY   1000
  Gradient:  SpreadMode: 0
  InterpolationMode: 0
  NumGradients: 7
@@ -54,7 +54,7 @@ Block length: 72
  Straight EdgeRecord: (10) - (0, -2000)
   ENDSHAPE
 
-Offset: 104 (0x0068)
+Offset: 107 (0x006b)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -71,12 +71,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 112 (0x0070)
+Offset: 115 (0x0073)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 114 (0x0072)
+Offset: 117 (0x0075)
 Block type: 0 (SWF_END)
 Block length: 0
 

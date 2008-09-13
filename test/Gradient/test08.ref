@@ -1,5 +1,5 @@
 File version: 8
-File size: 139
+File size: 95
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -11,65 +11,41 @@ Block length: 4
  FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
 
 Offset: 26 (0x001a)
-Block type: 83 (SWF_DEFINESHAPE4)
-Block length: 95
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 55
 
  CharacterID: 1
- RECT:  (-10,-10)x(2010,2010):12
- RECT:  (0,0)x(2000,2000):12
-   UsesNonScalingStrokes: 0
-   UsesScalingStrokes: 0
+ RECT:  (990,990)x(3010,3010):13
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 10
   Matrix:
    ScaleX 0.061035 ScaleY 0.061035
-   TranslateX   1000 TranslateY   1000
- Gradient:  SpreadMode: 1
- InterpolationMode: 2
- NumGradients: 9
+   TranslateX   2000 TranslateY   2000
+ Gradient:  SpreadMode: 0
+ InterpolationMode: 0
+ NumGradients: 2
  Ratio: 0
- RGBA: ( 0, 0, 0,ff)
- Ratio: 51
- RGBA: ( 0, a, 0,ff)
- Ratio: 76
- RGBA: (6e, 0, a,ff)
- Ratio: 102
- RGBA: (14, 0, 0,ff)
- Ratio: 127
- RGBA: ( 0,14, 0,ff)
- Ratio: 153
- RGBA: ( 0, 0,14,ff)
- Ratio: 178
- RGBA: (1e, 0, 0,ff)
- Ratio: 204
- RGBA: ( 0,1e, 0,ff)
- Ratio: 229
- RGBA: ( 0, 0,1e,ff)
+ RGBA: (ff, 0, 0,ff)
+ Ratio: 255
+ RGBA: ( 0,ff,ff,ff)
  LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
- LineStyle2:  Width: 20
- StartCapStyle: 0
- JoinStyle: 0
- HasFillFlag: 0
- NoHScaleFlag: 0
- NoVScaleFlag: 0
- PixelHintingFlag 0
- NoClose 0
- EndCapStyle 0
+ LineStyle:  Width: 20
  RGBA: ( 0, 0, 0,ff)
  NumFillBits: 1
  NumLineBits: 1
  StyleChangeRecord:
   StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 1
-  StateFillStyle0: 0 StateMoveTo: 0
+  StateFillStyle0: 0 StateMoveTo: 1
    LineStyle: 1
    FillStyle1: 1
+   MoveBits: 11  MoveDeltaX: 1000  MoveDeltaY: 1000
  Straight EdgeRecord: (10) - (2000, 0)
  Straight EdgeRecord: (10) - (0, 2000)
  Straight EdgeRecord: (10) - (-2000, 0)
  Straight EdgeRecord: (10) - (0, -2000)
   ENDSHAPE
 
-Offset: 127 (0x007f)
+Offset: 83 (0x0053)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -86,12 +62,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 135 (0x0087)
+Offset: 91 (0x005b)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 137 (0x0089)
+Offset: 93 (0x005d)
 Block type: 0 (SWF_END)
 Block length: 0
 

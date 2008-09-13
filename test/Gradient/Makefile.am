@@ -16,7 +16,8 @@ C_PROGS =		\
 	test04		\
 	test05		\
 	test06		\
-	test07	
+	test07		\
+	test08	
 
 if USE_CXX
 CXX_PROGS =		\
@@ -26,7 +27,8 @@ CXX_PROGS =		\
 	test04-cxx	\
 	test05-cxx	\
 	test06-cxx	\
-	test07-cxx	
+	test07-cxx	\
+	test08-cxx
 
 test01_cxx_SOURCES = test01-cxx.C
 test02_cxx_SOURCES = test02-cxx.C
@@ -35,6 +37,7 @@ test04_cxx_SOURCES = test04-cxx.C
 test05_cxx_SOURCES = test05-cxx.C
 test06_cxx_SOURCES = test06-cxx.C
 test07_cxx_SOURCES = test07-cxx.C
+test08_cxx_SOURCES = test08-cxx.C
 endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
@@ -47,6 +50,7 @@ EXTRA_DIST = 		\
 	test05.ref	\
 	test06.ref	\
 	test07.ref	\
+	test08.ref	\
 	TestList
 
 check_PROGRAMS = \
@@ -59,6 +63,7 @@ CLEANFILES = dotests php.ini \
 	test04.swf \
 	test05.swf \
 	test06.swf \
-	test07.swf
+	test07.swf \
+	test08.swf
 
 include ../Makefile.inc
