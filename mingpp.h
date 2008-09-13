@@ -1196,6 +1196,13 @@ class SWFFill
  public:
   c_SWFFill fill;
 
+  SWFFill(SWFFillStyle *fs)
+  {
+	this->fill = newSWFFill(fs->fill);
+	if(this->fill == NULL)
+		throw SWFException("SWFFill");
+  }
+
     // shape destroys c_SWFFill object
   virtual ~SWFFill() 
 	{ destroySWFFill(this->fill); }
