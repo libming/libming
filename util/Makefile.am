@@ -11,9 +11,8 @@ gifprograms =
 endif
 
 if USE_PNG
-pngprograms = png2swf
 if USE_ZLIB
-pngprograms += png2dbl dbl2png
+pngprograms = png2dbl dbl2png
 endif
 else
 pngprograms =
@@ -36,6 +35,7 @@ bin_PROGRAMS = \
 	raw2adpcm \
 	listmp3 \
 	listmp3 \
+	img2swf \
 	$(pngprograms) \
 	$(gifprograms)
 
@@ -120,8 +120,8 @@ gif2mask_LDADD = $(top_builddir)/src/libming.la
 png2dbl_SOURCES = png2dbl.c
 png2dbl_LDADD = $(top_builddir)/src/libming.la
 
-png2swf_SOURCES = png2swf.c
-png2swf_LDADD = $(top_builddir)/src/libming.la
+img2swf_SOURCES = img2swf.c
+img2swf_LDADD = $(top_builddir)/src/libming.la
 
 dbl2png_SOURCES = dbl2png.c
 dbl2png_LDADD = $(top_builddir)/src/libming.la

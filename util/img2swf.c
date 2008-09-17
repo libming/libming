@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
 
   len = strlen(argv[1]);
 
-  if(strcmp(argv[1]+len-4, ".png") != 0)
-    usage();
+  // No more png-specific!
+  //if(strcmp(argv[1]+len-4, ".png") != 0) usage();
 
   if(argc == 2)
   {
