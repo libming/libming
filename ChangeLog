@@ -1,3 +1,359 @@
+2008-09-17 20:44  anderson
+
+	* configure.in: Update to 0.4.2 for the RC2 release
+
+2008-09-17 03:07  strk
+
+	* util/: Makefile.am, img2swf.c, png2swf.c: Renamed png2swf to
+	  img2swf. Drop check for .png extension as the core lib looks at
+	  magic numbers
+
+2008-09-13 11:36  krechert
+
+	* mingpp.h: add missing methods
+
+2008-09-13 11:33  krechert
+
+	* mingpp.h: C++ create SWFFill instance from SWFFillStyle
+
+2008-09-13 11:31  krechert
+
+	* test/Gradient/: .cvsignore, Makefile.am, TestList, test09-cxx.C,
+	  test09.c, test09.ref: move gradient fills
+
+2008-09-13 11:12  krechert
+
+	* src/blocks/gradient.c: fix SWFFill_move() on gradients
+
+2008-09-13 10:28  krechert
+
+	* test/Gradient/: .cvsignore, Makefile.am, TestList, test01.ref,
+	  test02.ref, test03.ref, test04.ref, test05.ref, test06.ref,
+	  test07.ref, test08-cxx.C, test08.c, test08.ref: add testcase with
+	  displaced gradient shape update refs
+
+2008-09-13 10:18  krechert
+
+	* src/blocks/gradient.c: fix gradient matrix closes
+	  http://bugs.libming.net/show_bug.cgi?id=66
+
+2008-09-12 09:05  krechert
+
+	* php_ext/Makefile.am: don't use $prefix, as php-config
+	  --extension-dir already provides the full path
+
+2008-09-12 09:03  krechert
+
+	* perl_ext/.cvsignore: SWF.pm is generated
+
+2008-09-12 05:14  krechert
+
+	* php_ext/: ming.c, php_ming.h: SWFShape_dumpOutline()
+	  SWFFont_getShape()
+
+2008-09-12 05:13  krechert
+
+	* src/: compat.c, ming.h.in, blocks/shape.c: SWFShape_dumpOutline()
+	  readd (deprecated) SWFFont_getShape()
+
+2008-09-08 06:20  krechert
+
+	* src/blocks/: sound.c, soundstream.c, soundstream.h: fix bug #64
+	  cleanup
+
+2008-09-08 06:16  krechert
+
+	* test/Button/test02.pl: Constants should work this way
+
+2008-09-08 06:13  krechert
+
+	* test/SoundStream/: test01.ref, test02.ref: update output
+
+2008-09-08 06:11  krechert
+
+	* test/Sound/: test01.ref, test02.ref, test03.ref: more verbose
+	  DEFINESOUND / STARTSOUND output
+
+2008-09-08 06:09  krechert
+
+	* test/Movie/setSoundStream/: test01.ref, test02.ref, test03.ref,
+	  test04.ref: update testcase ooutput (simple output txt string
+	  change)
+
+2008-09-08 05:02  krechert
+
+	* test/Button/test02.pl: add static module prefix to SWF constants
+
+2008-09-06 10:53  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: verbose SOUNDINFO
+	  output DEFINESOUND mp3 details
+
+2008-09-05 08:28  krechert
+
+	* test/PrebuiltClip/test01.php: php testcase
+
+2008-09-04 11:00  krechert
+
+	* src/blocks/shape.c: change memory management for SWFFillSyle
+	  objects. Fixes bug #65
+
+	  Now the user needs to destroy all SWFFillInstances, no matter how
+	  they have been created. This is not the best solution, but it
+	  does not crash if a pointer was freed twice.
+
+	  A long term solution needs refcounting, which also makes Fills
+	  reuseable.
+
+2008-09-04 10:22  krechert
+
+	* php_ext/ming.c: fix compile error
+
+2008-08-13 15:40  fmk_ca
+
+	* php_ext/ming.c: Sync with the PHP source tree 1) Fix ZTS builds
+	  2) Use int's instead of long's
+
+2008-08-06 12:01  krechert
+
+	* mingpp.h: usefull default fill values
+
+2008-07-24 16:40  krechert
+
+	* test/dotests.pl: unused variable
+
+2008-07-24 16:22  krechert
+
+	* perl_ext/Shape.xs: fix bogus function call
+
+2008-07-24 08:38  krechert
+
+	* php_ext/ming.c: fix warnings
+
+2008-07-24 07:25  krechert
+
+	* php_ext/ming.c: skip is an optional parameter
+
+2008-07-24 06:58  krechert
+
+	* test/Shape/test02.c: return 0: otherwise test fails
+
+2008-07-24 06:55  krechert
+
+	* php_ext/ming.c: fix parameter type
+
+2008-07-24 04:24  fmk_ca
+
+	* php_ext/ming.c: Remove deprecated zend_get_parameters_ex() and
+	  use the zend_parse_parameters() function.
+
+2008-07-22 17:38  krechert
+
+	* src/Makefile.am, php_ext/config.m4: remove non-portable hack
+
+2008-07-22 16:51  krechert
+
+	* test/Media/Makefile.am: mpeg1.mp3
+
+2008-07-22 16:49  krechert
+
+	* test/Media/mpeg1.mp3: mpeg1 file
+
+2008-07-22 16:48  krechert
+
+	* test/Movie/setSoundStream/: .cvsignore, Makefile.am, TestList,
+	  test04-cxx.C, test04.c, test04.ref: mpeg1 testcase
+
+2008-07-22 16:38  krechert
+
+	* src/blocks/mp3.c: bugfix: fix frame length calculation (by
+	  Aleksey Scherbakov)
+
+2008-07-22 04:47  krechert
+
+	* test/Shape/: .cvsignore, Makefile.am, TestList, test02-cxx.C,
+	  test02.c, test02.ref: draw cubic testcase
+
+2008-07-21 17:20  krechert
+
+	* test/Video/test06.ref: update
+
+2008-07-21 17:18  krechert
+
+	* src/blocks/videostream.c: fix frame labeling in manual mode don't
+	  duplicate frames
+
+2008-07-20 06:55  strk
+
+	* configure.in: Set release version to 0.4.1 so to avoid
+	  MING_VERSION_CODE decreasing.  Update interface revision, since
+	  -rc1 was gone public.  This versioning should be fine for final
+	  release.
+
+2008-07-20 06:54  strk
+
+	* test/dotests.pl: Fix PERL5LIB now that SWF.pm is in buildtree
+
+2008-07-20 06:27  strk
+
+	* test/actionscript/: TryCatch.as, TryCatch.ref: Add another test
+	  with a conditional throw
+
+2008-07-20 06:17  strk
+
+	* src/actioncompiler/swf5compiler.y, test/actionscript/TryCatch.as,
+	  test/actionscript/TryCatch.ref: Fix try/catch/finally (bug #57)
+
+2008-07-15 17:20  krechert
+
+	* perl_ext/VideoStream.xs, mingpp.h, ming.i, py_ext/ming.py,
+	  py_ext/ming_wrap.c, py_ext/mingc.py, php_ext/ming.c,
+	  php_ext/php_ming.h: SWFVideoStream_seek()
+
+2008-07-15 17:03  krechert
+
+	* NEWS: update
+
+2008-07-15 17:01  krechert
+
+	* test/Video/: .cvsignore, Makefile.am, TestList, test06-cxx.C,
+	  test06.c, test06.ref: video stream seek test
+
+2008-07-15 16:03  krechert
+
+	* src/: ming.h.in, blocks/videostream.c: seek in embedided video
+	  streams
+
+2008-07-14 16:11  krechert
+
+	* test/Video/: .cvsignore, Makefile.am, TestList, test05-cxx.C,
+	  test05.c, test05.ref: embedded video in movie clips
+
+2008-07-14 16:02  krechert
+
+	* NEWS, src/blocks/sprite.c: embedded video in movieclip
+
+2008-07-14 14:55  krechert
+
+	* py_ext/ming.py: fix syntax error
+
+2008-07-14 14:54  krechert
+
+	* src/actioncompiler/swf5compiler.y: fix crash in empty for-loops
+
+2008-07-14 14:52  krechert
+
+	* test/actionscript/: Makefile.am, for.as, for.ref: empty for loop
+
+2008-07-13 17:48  krechert
+
+	* NEWS: update
+
+2008-07-13 17:38  krechert
+
+	* php_ext/: ming.c, php_ming.h: setFrameMode / nextFrame
+
+2008-07-13 17:23  krechert
+
+	* ming.i, py_ext/ming.py, py_ext/ming_wrap.c, py_ext/mingc.py:
+	  setFrameMode / nextFrame
+
+2008-07-13 17:20  krechert
+
+	* perl_ext/: Constants.xs, VideoStream.xs: setFrameMode / nextFrame
+
+2008-07-13 16:57  krechert
+
+	* test/Video/: .cvsignore, Makefile.am, TestList, test04-cxx.C,
+	  test04.c, test04.ref: manual frame control testcase
+
+2008-07-13 16:55  krechert
+
+	* src/ming.h.in, src/blocks/videostream.c, mingpp.h: add manual
+	  frame control
+
+2008-07-13 16:14  krechert
+
+	* perl_ext/Makefile.PL: Fix Makefile.PL (SWF.pm is in BUIDLDIR now)
+	  Patch by Patrice Dumas
+
+2008-07-13 14:34  krechert
+
+	* src/test.c: test.c is obsolete now. we have a testsuite
+
+2008-07-13 14:19  krechert
+
+	* util/outputtxt.c: rename iprintf to _iprintf.  iprintf is defined
+	  in some stdio.h implementions (e.g. newlib)
+
+2008-07-13 14:06  krechert
+
+	* configure.in: prevent multiple inclusion of ming_config.h
+
+2008-07-13 10:19  krechert
+
+	* php_ext/Makefile.am: The php extension doesn't honor DESTDIR.
+	  Patch by Patrice Dumas
+
+2008-07-13 10:09  krechert
+
+	* src/actioncompiler/swf5compiler.flex: read_int still makes
+	  trouble on some systems. using int as return type now.
+
+2008-07-13 10:00  krechert
+
+	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: enable
+	  YY prototypes by default
+
+2008-07-13 09:49  krechert
+
+	* mingpp.h: MSVC fix (by Wolfgang Glunz)
+
+2008-07-13 09:46  krechert
+
+	* configure.in, perl_ext/Makefile.am, perl_ext/SWF.pm,
+	  perl_ext/SWF.pm.in: autoconf SWF.pm
+
+2008-07-13 09:34  krechert
+
+	* configure.in: have a clean version number (only numbers)
+
+2008-07-10 16:10  krechert
+
+	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: MSVC
+	  fix (by Wolfgang Glunz)
+
+2008-07-10 15:41  krechert
+
+	* src/actioncompiler/swf5compiler.y: MSVC fix (by Wolfgang Glunz)
+
+2008-07-10 15:40  krechert
+
+	* src/blocks/font.h: add missing prototype
+
+2008-07-10 15:33  krechert
+
+	* src/actioncompiler/swf5compiler.flex: MSVC compile fix (by
+	  Wolfgang Glunz)
+
+2008-07-10 15:27  krechert
+
+	* src/blocks/error.h: MSVC compile fix by Wolfgang Glunz
+
+2008-07-10 15:26  krechert
+
+	* src/actioncompiler/: swf4compiler.flex, swf5compiler.flex: MSVC
+	  compile fix (by Wolfgang Glunz)
+
+2008-07-06 21:44  anderson
+
+	* NEWS: Set the date for the rc1 release
+
+2008-07-06 16:50  krechert
+
+	* mingpp.h: bugfix: add missing return statement discoverd by Jay
+	  Koutavas.
+
 2008-07-05 14:04  anderson
 
 	* configure.in: Set the version to 0.4.0.rc1
