@@ -32,6 +32,16 @@
 #include "ming.h"
 #include "output.h"
 
+struct SWFMatrix_s
+{
+	/* these are the lame names given in the swf spec.	not my fault. */
+	double scaleX;
+	double rotate0;
+	double rotate1;
+	double scaleY;
+	int translateX;
+	int translateY;
+};
 
 SWFMatrix newSWFMatrix(double a, double b, double c, double d, int x, int y);
 

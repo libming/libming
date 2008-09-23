@@ -29,18 +29,6 @@
 #include "matrix.h"
 
 
-struct SWFMatrix_s
-{
-	/* these are the lame names given in the swf spec.	not my fault. */
-	double scaleX;
-	double rotate0;
-	double rotate1;
-	double scaleY;
-	int translateX;
-	int translateY;
-};
-
-
 /* scale is in FB format- i.e., lower 16 bits are on the right of the
 	 decimal point.. */
 
