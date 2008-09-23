@@ -182,8 +182,7 @@ SWFOutput_writeMatrix(SWFOutput out, SWFMatrix matrix)
 
 	SWFOutput_byteAlign(out);
 
-	if ( (matrix->scaleX == 0 && matrix->scaleY == 0) ||
-			 (matrix->scaleX == 1.0 && matrix->scaleY == 1.0) )
+	if (matrix->scaleX == 1.0 && matrix->scaleY == 1.0)
 	{
 		SWFOutput_writeBits(out, 0, 1);	 
 	}

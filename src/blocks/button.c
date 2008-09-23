@@ -148,7 +148,7 @@ void SWFButton_addShape(SWFButton button, SWFCharacter character, byte flags)
 	if ( SWFCharacter_isFinished((SWFCharacter)button) )
 		SWF_error("Can't alter a button after it's been added to another character");
 
-	m = newSWFMatrix(0, 0, 0, 0, 0, 0);
+	m = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
 
 	SWFCharacter_getDependencies((SWFCharacter)character,
 									 &CHARACTER(button)->dependencies,
@@ -190,7 +190,7 @@ SWFButton_addCharacter(SWFButton button /* button object */,
 	SWFCharacter_addDependency((SWFCharacter)button, character);
 	SWFCharacter_setFinished(character);
 	
-	m = newSWFMatrix(0, 0, 0, 0, 0, 0);
+	m = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
 	record = newSWFButtonRecord(state, character, 0, m);
 	SWFButton_addRecord(button, record);
 	return record;

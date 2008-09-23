@@ -93,7 +93,7 @@ writeSWFTextToMethod(SWFBlock block, SWFByteOutputMethod method, void *data)
 	SWFOutput out;
 
 	if ( text->matrix == NULL )
-		text->matrix = newSWFMatrix(0, 0, 0, 0, 0, 0);
+		text->matrix = newSWFMatrix(1.0, 0, 0, 1.0, 0, 0);
 
 	length += (SWFMatrix_numBits(text->matrix)+7)/8;
 	length += (SWFRect_numBits(CHARACTER(text)->bounds)+7)/8;

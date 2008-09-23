@@ -149,7 +149,7 @@ SWFDisplayList_add(SWFDisplayList list, SWFBlockList blocklist, SWFCharacter cha
 	item->next = NULL;
 	item->depth = ++list->depth;
 
-	item->matrix = newSWFMatrix(0, 0, 0, 0, 0, 0);
+	item->matrix = newSWFMatrix(1, 0, 0, 1, 0, 0);
 
 	/* If newSWFMatrix() failed, return NULL to signify this */
 	if (NULL == item->matrix)
