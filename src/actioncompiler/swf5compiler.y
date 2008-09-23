@@ -885,7 +885,7 @@ break_stmt
 		  $$ = newBuffer();
 		  if(context == CTX_FOR_IN || context == CTX_LOOP)
 		  {
-		  	if(CTX_FOR_IN)	/* break out of a for .. in */
+		  	if(context == CTX_FOR_IN)	/* break out of a for .. in */
 				bufferWriteOp($$, SWFACTION_POP);
 		  	bufferWriteOp($$, SWFACTION_JUMP);
 		  	bufferWriteS16($$, 2);
