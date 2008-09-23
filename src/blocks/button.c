@@ -304,6 +304,13 @@ SWFButtonRecord_skewYTo(SWFButtonRecord record, double skewY)
 	SWFPosition_skewYTo(record->position, skewY);
 }
 
+void
+SWFButtonRecord_setMatrix(SWFButtonRecord record,
+                          double a, double b, double c, double d, double x, double y)
+{
+	SWFPosition_setMatrix(record->position, a, b, c, d, x, y);
+}
+
 void SWFButton_setMenu(SWFButton button, int flag)
 {
 	button->menuflag = flag;

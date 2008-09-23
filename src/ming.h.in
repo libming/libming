@@ -681,6 +681,8 @@ void SWFButtonRecord_skewX(SWFButtonRecord record, double skewX);
 void SWFButtonRecord_skewXTo(SWFButtonRecord record, double skewX);
 void SWFButtonRecord_skewY(SWFButtonRecord record, double skewY);
 void SWFButtonRecord_skewYTo(SWFButtonRecord record, double skewY);
+void SWFButtonRecord_setMatrix(SWFButtonRecord record, double a, double b, double c, double d, double x, double y);
+
 
 /****** SWFVideo ******/
 
