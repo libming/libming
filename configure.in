@@ -1,11 +1,10 @@
-AC_INIT(ming, 0.4.2)
-
-dnl -- Release version 
-dnl To avoid colation problems, the 0.4 release shall be 0.4.1
-
+dnl -- Release version, to bump up right after official releases 
+dnl -- last release was 0.4.2
+dnl --
+AC_INIT(ming, 0.4.3)
 MAJOR_VERSION=0
 MINOR_VERSION=4
-MICRO_VERSION=2
+MICRO_VERSION=3
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
@@ -17,11 +16,12 @@ AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 AM_MAINTAINER_MODE
 
-dnl -- Version info for libtool
+dnl -- Version info for libtool, to bump right after official releases
+dnl -- last release was 5:4:1
+dnl --
 INTERFACE_CURRENT=5
 INTERFACE_AGE=4
-dnl -- Bump INTERFACE_REVISION when out of the "beta" loop 
-INTERFACE_REVISION=1
+INTERFACE_REVISION=2
 
 AC_SUBST(INTERFACE_CURRENT)
 AC_SUBST(INTERFACE_REVISION)
