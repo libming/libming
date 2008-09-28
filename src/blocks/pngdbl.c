@@ -1,6 +1,6 @@
 
-#include "ming_config.h"
 #include "libming.h"
+#include "ming_config.h"
 #include "error.h"
 
 #if !(USE_PNG) // {
@@ -23,8 +23,10 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromPngFile(const char * fileName)
 #include "dbl.h"
 #include "input.h"
 
-#include <png.h>
+
+#ifndef __C2MAN__
 #include <zlib.h>
+#include <png.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -344,4 +346,5 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromPngInput(SWFInput input)
 	return ret;
 }
 
+#endif  // C2MAN
 #endif // def USE_PNG }

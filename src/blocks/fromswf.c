@@ -29,8 +29,10 @@
 #include "output.h"
 #include "error.h"
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 #ifdef USE_ZLIB
 #include <zlib.h>

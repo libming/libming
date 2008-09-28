@@ -19,9 +19,11 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#endif
 
 #include "text.h"
 #include "rect.h"

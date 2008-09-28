@@ -4,10 +4,11 @@
 */
 
 /* $Id */
-
+#ifndef __C2MAN__
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 #include "utf8.h"
 

@@ -19,9 +19,11 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#endif
 
 #include "output.h"
 #include "error.h"

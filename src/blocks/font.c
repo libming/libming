@@ -19,10 +19,13 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#endif
+
 #include "font.h"
 #include "method.h"
 #include "utf8.h"

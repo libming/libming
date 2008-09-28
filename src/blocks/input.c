@@ -19,14 +19,16 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
+#endif
 
 #ifndef WIN32
-	#include <unistd.h>
+#include <unistd.h>
 #endif
 
 #include "libming.h"

@@ -21,8 +21,6 @@
 
 #include "ming_config.h"
 
-#include "ming.h"
-
 #include "movie.h"
 #include "shape_util.h"
 #include "blocklist.h"
@@ -32,7 +30,9 @@
  * If we move math.h include *after* block.h
  * compiler issues errors (?!)
  */
+#ifndef __C2MAN__
 #include <math.h>
+#endif
 
 #include "blocks/block.h"
 #include "blocks/method.h"
@@ -61,8 +61,10 @@
 # include <zlib.h>
 #endif
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 struct SWFMovie_s
 {

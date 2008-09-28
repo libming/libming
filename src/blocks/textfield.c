@@ -19,8 +19,10 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 #include "libming.h"
 #include "textfield.h"

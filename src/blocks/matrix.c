@@ -19,10 +19,12 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 #include <string.h>
+#endif
 
 #include "error.h"
 #include "libming.h"

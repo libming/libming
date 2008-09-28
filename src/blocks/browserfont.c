@@ -19,8 +19,11 @@
 
 /* $Id$ */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <string.h>
+#endif
+
 #include "browserfont.h"
 #include "font.h"
 #include "character.h"

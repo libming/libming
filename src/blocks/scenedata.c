@@ -17,8 +17,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef __C2MAN__
 #include <stdlib.h>
 #include <string.h>
+#endif
+
 #include "ming.h"
 #include "character.h"
 #include "output.h"

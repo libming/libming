@@ -1,5 +1,9 @@
+
+#ifndef __C2MAN__
 #include <string.h>
 #include <stdlib.h>
+#endif
+
 #include "font_util.h"
 #include "blocks/block.h"
 #include "libming.h"
