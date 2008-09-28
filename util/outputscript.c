@@ -334,7 +334,7 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *fname)
 #define TOLERANCE 0.02
 
   if (skew < -TOLERANCE || skew > TOLERANCE)
-    printf ("$%s->skewXTo(%f);\n", fname, skew);
+    printf ("%s(%f);\n", methodcall (fname, "skewXTo"), skew);
 
   if (matrix->HasScale)
   {
