@@ -281,16 +281,6 @@ newSWFSound_fromSoundStream(SWFSoundStream stream)
 	return sound;
 }
 
-
-void
-SWFSound_setData(SWFSound sound, byte flags, int numSamples, byte *data)
-{
-	sound->flags = flags;
-	sound->numSamples = numSamples;
-	sound->data = data;
-}
-
-
 /*
  * Local variables:
  * tab-width: 2
