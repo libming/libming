@@ -36,14 +36,10 @@ struct SWFSound_s
 	struct SWFCharacter_s character;
 
 	byte flags;
-	byte isFinished;
-	int numSamples;
 	int seekSamples;
-	int samplesPerFrame;
 	byte freeInput;
 
 	SWFInput input;
-	byte *data;
 	struct SWFSoundStream_s *soundStream;
 };
 
