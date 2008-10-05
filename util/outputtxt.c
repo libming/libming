@@ -1931,9 +1931,9 @@ void
 outputSWF_SOUNDSTREAMBLOCK (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
-  _iprintf("  SampleCount %i\n", sblock->SampleCount);
   if(m.soundStreamFmt == 2)
   {
+    _iprintf("  SampleCount %i\n", sblock->StreamData.mp3.SampleCount);
     _iprintf("  Mp3: SeekSamples %i\n", 
            sblock->StreamData.mp3.SeekSamples);
   }
