@@ -109,11 +109,18 @@ destroySWFGradient(SWFGradient gradient)
 }
 
 /*
- * add a control point
+ * add a gradient control point
  * The ratio defines the position of the control point 
  * and RGBA defines its color. 
  * SWF <= 7 allows up to 8 control points 
  * SWF >= 8 allows up to 15 control points
+ *
+ * The ration parameter is a float and must be in a range 
+ * between [0.0 ... 1.0].
+ *
+ * In order to use SWF8 gradient features you need to set 
+ * SWFShapes version to SWF_SHAPE4. Use SWFShape_useVersion()
+ * and friends.
  */
 void
 SWFGradient_addEntry(SWFGradient gradient,
