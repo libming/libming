@@ -1,6 +1,6 @@
-0.4.0
+0.5.0 - ??
 
-	*
+	* fixed SWFMatrix scaling if scale = 0.0
 
 0.4.0.rc2 - 2008-09-17
 
@@ -10,6 +10,8 @@
 	* removed src/test.c
 	* Embedded video in movie clips
 	* Seek in Embedded video streams
+	* Gradient / Fill fixes
+	* Sound / Soundstream fixes
 
 0.4.0.rc1 - 2008-07-05
 
