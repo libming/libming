@@ -536,7 +536,10 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	SWFOutput_writeUInt8(out, flags);
 	SWFOutput_writeUInt16(out, stream->samplesPerFrame);
 	if(((flags & 0xf0) >> 4) == 2)	// MP3 only
+	{
 		SWFOutput_writeUInt16(out, stream->initialDelay);
+		stream->delay = stream->initialDelay;
+	}
 	
 	return (SWFBlock)block;
 }
@@ -633,7 +636,7 @@ newSWFSoundStream_fromInput(SWFInput input)
 	}
 
 	stream->initialDelay = SWFSOUND_INITIAL_DELAY;
-	stream->delay = SWFSOUND_INITIAL_DELAY;
+	stream->delay = 0;
 	stream->isFinished = FALSE;
 	stream->samplesPerFrame = 0;
 	stream->sampleRate = 0;
