@@ -1,0 +1,93 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFShape_setLine2" 3 "31 May 2008" "c2man shape_util.c"
+.SH "NAME"
+SWFShape_setLine2 \- set Linestyle2 introduce with SWF 8.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFShape_setLine2
+.br
+(
+.br
+	SWFShape shape,
+.br
+	unsigned short width,
+.br
+	byte r,
+.br
+	byte g,
+.br
+	byte b,
+.br
+	byte a,
+.br
+	int flags,
+.br
+	float miterLimit
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFShape shape"
+Not Documented.
+.TP
+.B "unsigned short width"
+Not Documented.
+.TP
+.B "byte r"
+Not Documented.
+.TP
+.B "byte g"
+Not Documented.
+.TP
+.B "byte b"
+Not Documented.
+.TP
+.B "byte a"
+Not Documented.
+.TP
+.B "int flags"
+Not Documented.
+.TP
+.B "float miterLimit"
+Not Documented.
+.SH "DESCRIPTION"
+Set line width in pixel
+set color {r, g, b, a}.
+.SH "LINESTYLE2 EXTENDS LINESTYLE1 WITH SOME EXTRA FLAGS"
+Line cap style: select one of the following flags (default is round cap style)
+SWF_LINESTYLE_CAP_ROUND
+SWF_LINESTYLE_CAP_NONE
+SWF_LINESTYLE_CAP_SQUARE
+
+Line join style: select one of the following flags (default is round join style)
+SWF_LINESTYLE_JOIN_ROUND
+SWF_LINESTYLE_JOIN_BEVEL
+SWF_LINESTYLE_JOIN_MITER
+
+Scaling flags: disable horizontal / vertical scaling
+SWF_LINESTYLE_FLAG_NOHSCALE
+SWF_LINESTYLE_FLAG_NOVSCALE
+
+Enable pixel hinting to correct blurry vertical / horizontal lines
+.br
+-> All anchors will be aligned to full pixels
+SWF_LINESTYLE_FLAG_HINTING
+
+Disable stroke closure: if no-close flag is set caps will be applied
+instead of joins
+SWF_LINESTYLE_FLAG_NOCLOSE
+
+End-cap style: default round
+SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+SWF_LINESTYLE_FLAG_ENDCAP_NONE
+SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+
+If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor
+must be set. Miter max length is then calculated as:
+max miter len = miter limit * width.
+If join style is not miter, this value will be ignored.

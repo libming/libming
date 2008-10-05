@@ -1,0 +1,21 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFFont_fromFile" 3 "1 October 2008" "c2man font.c"
+.SH "NAME"
+newSWFFont_fromFile \- load a font from file
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFFont newSWFFont_fromFile(const char *filename);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "const char *filename"
+Filename for fontfile.
+.SH "DESCRIPTION"
+This function creates a new SWFFont object from a font file. It accepts
+and autodetects FDB and TTF fonts.
+.SH "RETURNS"
+A SWFFont object if a valid fontfile is found, NULL otherwise.

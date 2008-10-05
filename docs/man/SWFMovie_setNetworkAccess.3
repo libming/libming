@@ -1,0 +1,37 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_setNetworkAccess" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_setNetworkAccess \- sets SWF network / fileaccess policy
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_setNetworkAccess
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	int flag
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Not Documented.
+.TP
+.B "int flag"
+Not Documented.
+.SH "DESCRIPTION"
+If the flag is set to 0 a localy loaded movie will be unable to access the network
+but is allowed to access local files
+
+if the flag ist set to 1 a localy loaded movie will be unable to access local files
+but is allowed to access the network
+
+see also http://www.adobe.com/devnet/flash/articles/fplayer8_security.html
+
+For SWF >= 8: default is 0.

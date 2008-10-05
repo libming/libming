@@ -1,0 +1,38 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newGradientGlowFilter - creates a GardientGlowFilter</title>
+</header>
+<body>
+<h1>NAME</h1>
+newGradientGlowFilter - creates a GardientGlowFilter
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFFilter newGradientGlowFilter
+(
+	SWFGradient gradient,
+	SWFBlur blur,
+	SWFShadow shadow,
+	int flags
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFGradient gradient<dd>
+Gradient.
+<dt>
+SWFBlur blur<dd>
+Blur.
+<dt>
+SWFShadow shadow<dd>
+Shadow.
+<dt>
+int flags<dd>
+FILTER_MODE_INNER,  FILTER_MODE_KO, FILTER_MODE_ONTOP.
+</dl>
+<h1>DESCRIPTION</h1>
+This functions creates a gradient glow filter. Extends GlowFilter by
+using a gradient instead of a simple color.
+
+</body>

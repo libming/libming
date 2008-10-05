@@ -1,0 +1,34 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFTextField_setFont" 3 "1 October 2008" "c2man textfield.c"
+.SH "NAME"
+SWFTextField_setFont \- Not Described
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFTextField_setFont
+.br
+(
+.br
+	SWFTextField field,
+.br
+	SWFBlock font
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFTextField field"
+Not Documented.
+.TP
+.B "SWFBlock font"
+Not Documented.
+.SH "DESCRIPTION"
+Not Described.
+.SH "FONT MACHINERY"
+If a regular font (outlines in fdb) is used, it is added to the textfield
+as type Font and later converted to a FontChar
+while a Font, characters can be added (embedded)
+an Imported font stays as is, so does a BrowserFont.

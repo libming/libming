@@ -1,0 +1,39 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_addExport" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_addExport \- Assigns a name to a SWFBlock object.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_addExport
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	SWFBlock block,
+.br
+	const char *name
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Not Documented.
+.TP
+.B "SWFBlock block"
+Not Documented.
+.TP
+.B "const char *name"
+Not Documented.
+.SH "DESCRIPTION"
+Creates an exportlibrary with named symbols to be imported by other
+SWF movies.
+Call SWFMovie_writeExports() when you're done with the exports
+to actually write the tag. If you don't the tag will be added
+at the END of the SWF.
+See also SWFMovie_importCharacter, SWFMovie_importFont.

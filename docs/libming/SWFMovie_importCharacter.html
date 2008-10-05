@@ -1,0 +1,36 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFMovie_importCharacter - Import a character to the movie</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFMovie_importCharacter - Import a character to the movie
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFCharacter SWFMovie_importCharacter
+(
+	SWFMovie movie,
+	const char *filename,
+	const char *name
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFMovie movie<dd>
+Not Documented.
+<dt>
+const char *filename<dd>
+URL to movie.
+<dt>
+const char *name<dd>
+Idetifier of character.
+</dl>
+<h1>DESCRIPTION</h1>
+Imports characters from an other movie. Filename (URL) points to a SWF
+file with exported characters.
+<h1>RETURNS</h1>
+A SWFCharacter object.
+
+</body>

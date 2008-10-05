@@ -1,0 +1,41 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFButton_addShape" 3 "23 September 2008" "c2man button.c"
+.SH "NAME"
+SWFButton_addShape \- adds a shape character
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFButton_addShape
+.br
+(
+.br
+	SWFButton button,
+.br
+	SWFCharacter character,
+.br
+	byte flags
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFButton button"
+Not Documented.
+.TP
+.B "SWFCharacter character"
+Not Documented.
+.TP
+.B "byte flags"
+Not Documented.
+.SH "DESCRIPTION"
+Add a shape character to a button for given states
+possible states:
+SWFBUTTON_HIT
+SWFBUTTON_DOWN
+SWFBUTTON_OVER
+SWFBUTTON_UP
+states can be combined using the binary or operator
+deprecated! use SWFButton_addCharacter instead.

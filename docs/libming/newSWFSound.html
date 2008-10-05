@@ -1,0 +1,58 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newSWFSound - Creates a new EventSound object.</title>
+</header>
+<body>
+<h1>NAME</h1>
+newSWFSound - Creates a new EventSound object.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFSound newSWFSound
+(
+	FILE *f,
+	byte flags
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+FILE *f<dd>
+Not Documented.
+<dt>
+byte flags<dd>
+Not Documented.
+</dl>
+<h1>DESCRIPTION</h1>
+The sound to be played is contained in a file and specified with flags.
+<br>
+
+Flags must contain a sound format, sampling rate, size (in bits) and channels.
+If the file contains mp3 data it is not necessary to specify sampling rate,
+sound size and channels.
+<h1>POSSIBLE SOUND FORMATS ARE</h1>
+<br>
+- SWF_SOUND_NOT_COMPRESSED
+<br>
+- SWF_SOUND_ADPCM_COMPRESSED
+<br>
+- SWF_SOUND_MP3_COMPRESSED
+<br>
+- SWF_SOUND_NOT_COMPRESSED_LE
+<br>
+- SWF_SOUND_NELLY_COMPRESSED.
+<h1>SAMPLING RATE MUST BE ONE OF THE FOLLOWING VALUES</h1>
+<br>
+- SWF_SOUND_5KHZ
+<br>
+- SWF_SOUND_11KHZ
+<br>
+- SWF_SOUND_22KHZ
+<br>
+- SWF_SOUND_44KHZ
+<br>
+
+Sound size is either SWF_SOUND_8BITS or SWF_SOUND_16BITS
+Channels are either SWF_SOUND_MONO or SWF_SOUND_STEREO.
+
+</body>

@@ -1,0 +1,33 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "readMP3Header" 3 "2 October 2008" "c2man mp3.c"
+.SH "NAME"
+readMP3Header \- reads a MP3 header
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+int readMP3Header
+.br
+(
+.br
+	SWFInput input,
+.br
+	struct mp3_header *mp3h
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFInput input"
+Not Documented.
+.TP
+.B "struct mp3_header *mp3h"
+Not Documented.
+.SH "DESCRIPTION"
+Reads a MP3 header.
+.SH "RETURNS"
+0 if EOF
+-1 if invalid header; stream is unaltered
+1 on success.

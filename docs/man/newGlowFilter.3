@@ -1,0 +1,39 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newGlowFilter" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newGlowFilter \- creates a GlowFilter
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFFilter newGlowFilter
+.br
+(
+.br
+	SWFColor color,
+.br
+	SWFBlur blur,
+.br
+	float strength,
+.br
+	int flags
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFColor color"
+Color of shadow.
+.TP
+.B "SWFBlur blur"
+Blur.
+.TP
+.B "float strength"
+Strength.
+.TP
+.B "int flags"
+FILTER_MODE_INNER,  FILTER_MODE_KO.
+.SH "DESCRIPTION"
+This functions creates a glow filter.

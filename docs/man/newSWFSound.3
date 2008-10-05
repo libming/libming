@@ -1,0 +1,56 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFSound" 3 "1 October 2008" "c2man sound.c"
+.SH "NAME"
+newSWFSound \- Creates a new EventSound object.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFSound newSWFSound
+.br
+(
+.br
+	FILE *f,
+.br
+	byte flags
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "FILE *f"
+Not Documented.
+.TP
+.B "byte flags"
+Not Documented.
+.SH "DESCRIPTION"
+The sound to be played is contained in a file and specified with flags.
+
+Flags must contain a sound format, sampling rate, size (in bits) and channels.
+If the file contains mp3 data it is not necessary to specify sampling rate,
+sound size and channels.
+.SH "POSSIBLE SOUND FORMATS ARE"
+.br
+- SWF_SOUND_NOT_COMPRESSED
+.br
+- SWF_SOUND_ADPCM_COMPRESSED
+.br
+- SWF_SOUND_MP3_COMPRESSED
+.br
+- SWF_SOUND_NOT_COMPRESSED_LE
+.br
+- SWF_SOUND_NELLY_COMPRESSED.
+.SH "SAMPLING RATE MUST BE ONE OF THE FOLLOWING VALUES"
+.br
+- SWF_SOUND_5KHZ
+.br
+- SWF_SOUND_11KHZ
+.br
+- SWF_SOUND_22KHZ
+.br
+- SWF_SOUND_44KHZ
+
+Sound size is either SWF_SOUND_8BITS or SWF_SOUND_16BITS
+Channels are either SWF_SOUND_MONO or SWF_SOUND_STEREO.

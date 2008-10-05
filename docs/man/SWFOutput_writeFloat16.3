@@ -1,0 +1,31 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFOutput_writeFloat16" 3 "1 October 2008" "c2man output.c"
+.SH "NAME"
+SWFOutput_writeFloat16 \- half precision
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFOutput_writeFloat16
+.br
+(
+.br
+	SWFOutput out,
+.br
+	float f
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFOutput out"
+Not Documented.
+.TP
+.B "float f"
+Not Documented.
+.SH "DESCRIPTION"
+1 - bit sign
+5 - bit exp / bias = 16
+10 - bit mantissa.

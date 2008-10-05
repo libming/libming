@@ -1,0 +1,35 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_setScriptLimits" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_setScriptLimits \- modifies scruipt limits
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_setScriptLimits
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	int maxRecursion,
+.br
+	int timeout
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Not Documented.
+.TP
+.B "int maxRecursion"
+Max recursion.
+.TP
+.B "int timeout"
+Timeout in sec.
+.SH "DESCRIPTION"
+Default recursion depth is 265
+default timeout is 15-20 sec.

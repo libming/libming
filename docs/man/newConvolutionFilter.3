@@ -1,0 +1,44 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newConvolutionFilter" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newConvolutionFilter \- creates a new ConvolutionFilter
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFFilter newConvolutionFilter
+.br
+(
+.br
+	SWFFilterMatrix matrix,
+.br
+	float divisor,
+.br
+	float bias,
+.br
+	SWFColor color,
+.br
+	int flags
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFFilterMatrix matrix"
+Matrix.
+.TP
+.B "float divisor"
+Divisor applied to matrix.
+.TP
+.B "float bias"
+Matrix bias.
+.TP
+.B "SWFColor color"
+Default color.
+.TP
+.B "int flags"
+FILTER_FLAG_CLAMP , FILTER_FLAG_PRESERVE_ALPHA.
+.SH "DESCRIPTION"
+Creates a new ConvolutionFilter.

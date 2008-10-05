@@ -1,0 +1,38 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFVideoStream_seek" 3 "23 July 2008" "c2man videostream.c"
+.SH "NAME"
+SWFVideoStream_seek \- Seek within a video stream.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+int SWFVideoStream_seek
+.br
+(
+.br
+	SWFVideoStream stream,
+.br
+	int frame,
+.br
+	int whence
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFVideoStream stream"
+Not Documented.
+.TP
+.B "int frame"
+Not Documented.
+.TP
+.B "int whence"
+Not Documented.
+.SH "DESCRIPTION"
+This functions allows seeking in video stream. Semantics
+like SWFInput_seek();
+
+Works only with SWFVIDEOSTREAM_MODE_MANUAL!
+@return old video position (frame).

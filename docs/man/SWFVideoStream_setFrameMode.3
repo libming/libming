@@ -1,0 +1,36 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFVideoStream_setFrameMode" 3 "23 July 2008" "c2man videostream.c"
+.SH "NAME"
+SWFVideoStream_setFrameMode \- switch video stream frame mode
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+int SWFVideoStream_setFrameMode
+.br
+(
+.br
+	SWFVideoStream stream,
+.br
+	int mode
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFVideoStream stream"
+Not Documented.
+.TP
+.B "int mode"
+Not Documented.
+.SH "DESCRIPTION"
+If the mode == SWFVIDEOSTREAM_MODE_AUTO (default) every swfmovie
+frame a video frame is added.
+In SWFVIDEOSTREAM_MODE_MANUAL mode, the user needs to call
+SWFVideoStream_nextFrame() to change the video's frame.
+
+Works only with embedded video streams.
+
+@Return the previous mode or -1 if an invalid mode was passed.

@@ -1,0 +1,42 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFButton_addCharacter" 3 "23 September 2008" "c2man button.c"
+.SH "NAME"
+SWFButton_addCharacter \- adds a character
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFButtonRecord SWFButton_addCharacter
+.br
+(
+.br
+	SWFButton button,
+.br
+	SWFCharacter character,
+.br
+	byte state
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFButton button"
+Button object.
+.TP
+.B "SWFCharacter character"
+Character to be added.
+.TP
+.B "byte state"
+State description.
+.SH "DESCRIPTION"
+Add a character to a button for given states
+possible states:
+SWFBUTTON_HIT
+SWFBUTTON_DOWN
+SWFBUTTON_OVER
+SWFBUTTON_UP
+states can be combined using the binary or operator.
+.SH "RETURNS"
+A SWFButtonRecord object which can be further modified.

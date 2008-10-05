@@ -1,0 +1,37 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFAction_compile" 3 "1 October 2008" "c2man action.c"
+.SH "NAME"
+SWFAction_compile \- Compiles the current script stored in this SWFAction instance.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+int SWFAction_compile
+.br
+(
+.br
+	SWFAction action,
+.br
+	int swfVersion,
+.br
+	int *length
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFAction action"
+Not Documented.
+.TP
+.B "int swfVersion"
+Target SWF version.
+.TP
+.B "int *length"
+Output length.
+.SH "DESCRIPTION"
+Compiles the current script stored in this SWFAction instance.
+.SH "RETURNS"
+0 on success, -1 otherwise.
+The length of the compiled bytecode is storen in the length pointer (if not NULL).

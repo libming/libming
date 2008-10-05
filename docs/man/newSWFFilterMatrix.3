@@ -1,0 +1,35 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFFilterMatrix" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newSWFFilterMatrix \- create a new FilterMatrix (constructor)
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFFilterMatrix newSWFFilterMatrix
+.br
+(
+.br
+	int cols,
+.br
+	int rows,
+.br
+	float *vals
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "int cols"
+Number of cols.
+.TP
+.B "int rows"
+Number of rows.
+.TP
+.B "float *vals"
+Vals[cols * rows]. Will be copied .
+.SH "DESCRIPTION"
+This function creates a new SFWFilterMatrix. Only useful
+for creating SWFFilter objects.

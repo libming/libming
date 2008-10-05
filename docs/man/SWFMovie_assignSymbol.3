@@ -1,0 +1,38 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_assignSymbol" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_assignSymbol \- assigns a symbolic name for a SWFCharacter
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_assignSymbol
+.br
+(
+.br
+	SWFMovie m,
+.br
+	SWFCharacter character,
+.br
+	const char *name
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie m"
+Not Documented.
+.TP
+.B "SWFCharacter character"
+Target.
+.TP
+.B "const char *name"
+Symbol.
+.SH "DESCRIPTION"
+Such classes are available for usage in other SWF files
+and can be referenced from inside the current movie.
+
+To assign a symbol to the root movie use NULL as character
+value.

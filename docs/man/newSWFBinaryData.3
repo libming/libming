@@ -1,0 +1,34 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFBinaryData" 3 "25 February 2008" "c2man binary.c"
+.SH "NAME"
+newSWFBinaryData \- creates an SWFBlock with arbitrary binary data
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFBinaryData newSWFBinaryData
+.br
+(
+.br
+	unsigned char *blob,
+.br
+	int length
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "unsigned char *blob"
+Not Documented.
+.TP
+.B "int length"
+Not Documented.
+.SH "DESCRIPTION"
+This SWFBlock allows to embed arbitrary binary data to a SWF file.
+With SWFMovie_assignSymbol() this data can be used as a ByteArray in
+AS3 classes.
+.SH "RETURNS"
+A SWFBinaryData instance
+see also SWFMovie_assignSymbol, destroySWFBinaryData.

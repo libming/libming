@@ -1,0 +1,34 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newSWFFilterMatrix - create a new FilterMatrix (constructor)</title>
+</header>
+<body>
+<h1>NAME</h1>
+newSWFFilterMatrix - create a new FilterMatrix (constructor)
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFFilterMatrix newSWFFilterMatrix
+(
+	int cols,
+	int rows,
+	float *vals
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+int cols<dd>
+Number of cols.
+<dt>
+int rows<dd>
+Number of rows.
+<dt>
+float *vals<dd>
+Vals[cols * rows]. Will be copied .
+</dl>
+<h1>DESCRIPTION</h1>
+This function creates a new SFWFilterMatrix. Only useful
+for creating SWFFilter objects.
+
+</body>

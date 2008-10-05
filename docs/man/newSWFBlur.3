@@ -1,0 +1,35 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFBlur" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newSWFBlur \- create a new SWFBlur
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFBlur newSWFBlur
+.br
+(
+.br
+	float blurX,
+.br
+	float blurY,
+.br
+	int passes
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "float blurX"
+Horiz. Blur amount.
+.TP
+.B "float blurY"
+Vert. Blur amount.
+.TP
+.B "int passes"
+Number of passes. Shoub be <= 3.
+.SH "DESCRIPTION"
+This function creates a new SWFBlur object. Only useful for creating
+SWFFilter objects.

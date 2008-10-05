@@ -1,0 +1,41 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newConvolutionFilter - creates a new ConvolutionFilter</title>
+</header>
+<body>
+<h1>NAME</h1>
+newConvolutionFilter - creates a new ConvolutionFilter
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFFilter newConvolutionFilter
+(
+	SWFFilterMatrix matrix,
+	float divisor,
+	float bias,
+	SWFColor color,
+	int flags
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFFilterMatrix matrix<dd>
+Matrix.
+<dt>
+float divisor<dd>
+Divisor applied to matrix.
+<dt>
+float bias<dd>
+Matrix bias.
+<dt>
+SWFColor color<dd>
+Default color.
+<dt>
+int flags<dd>
+FILTER_FLAG_CLAMP , FILTER_FLAG_PRESERVE_ALPHA.
+</dl>
+<h1>DESCRIPTION</h1>
+Creates a new ConvolutionFilter.
+
+</body>

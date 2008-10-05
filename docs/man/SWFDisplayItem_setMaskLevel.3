@@ -1,0 +1,31 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFDisplayItem_setMaskLevel" 3 "23 September 2008" "c2man displaylist.c"
+.SH "NAME"
+SWFDisplayItem_setMaskLevel \- This function sets masklevel for the current display item
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFDisplayItem_setMaskLevel
+.br
+(
+.br
+	SWFDisplayItem item,
+.br
+	int masklevel
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFDisplayItem item"
+Not Documented.
+.TP
+.B "int masklevel"
+Not Documented.
+.SH "DESCRIPTION"
+This item masks other display items above it. If this items
+depth is 1 and its masklevel is set to 4, all items with depth
+>= 5 are masked.

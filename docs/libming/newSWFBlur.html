@@ -1,0 +1,34 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newSWFBlur - create a new SWFBlur</title>
+</header>
+<body>
+<h1>NAME</h1>
+newSWFBlur - create a new SWFBlur
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFBlur newSWFBlur
+(
+	float blurX,
+	float blurY,
+	int passes
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+float blurX<dd>
+Horiz. Blur amount.
+<dt>
+float blurY<dd>
+Vert. Blur amount.
+<dt>
+int passes<dd>
+Number of passes. Shoub be &lt;= 3.
+</dl>
+<h1>DESCRIPTION</h1>
+This function creates a new SWFBlur object. Only useful for creating
+SWFFilter objects.
+
+</body>

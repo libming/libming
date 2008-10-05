@@ -1,0 +1,57 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFGradient_addEntry - add a gradient control point</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFGradient_addEntry - add a gradient control point
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFGradient_addEntry
+(
+	SWFGradient gradient,
+	float ratio,
+	byte r,
+	byte g,
+	byte b,
+	byte a
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFGradient gradient<dd>
+Not Documented.
+<dt>
+float ratio<dd>
+Not Documented.
+<dt>
+byte r<dd>
+Not Documented.
+<dt>
+byte g<dd>
+Not Documented.
+<dt>
+byte b<dd>
+Not Documented.
+<dt>
+byte a<dd>
+Not Documented.
+</dl>
+<h1>DESCRIPTION</h1>
+The ratio defines the position of the control point
+and RGBA defines its color.
+SWF &lt;= 7 allows up to 8 control points
+SWF &gt;= 8 allows up to 15 control points
+<br>
+
+The ration parameter is a float and must be in a range
+between [0.0 ... 1.0].
+<br>
+
+In order to use SWF8 gradient features you need to set
+SWFShapes version to SWF_SHAPE4. Use SWFShape_useVersion()
+and friends.
+
+</body>

@@ -1,0 +1,23 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFDisplayItem_flush" 3 "23 September 2008" "c2man displaylist.c"
+.SH "NAME"
+SWFDisplayItem_flush \- This function writes the item object immediately to the blocklist.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFDisplayItem_flush(SWFDisplayItem item);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFDisplayItem item"
+Item to write.
+.SH "DESCRIPTION"
+Usually MING waits with writing a display item until a frame is closed
+through a nextFrame() call, because a display items state could be altered
+for the current frame. By using SWFDisplayItem_flush() MING does not wait
+and writes the frame immediately. Therefore a user can influence the
+swf tag oder. Changing a display items state after calling flush() takes
+effect in the next frame.

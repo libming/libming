@@ -1,0 +1,44 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovieClip_setSoundStreamAt" 3 "20 March 2008" "c2man movieclip.c"
+.SH "NAME"
+SWFMovieClip_setSoundStreamAt \- Includes streaming sound to a movie.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovieClip_setSoundStreamAt
+.br
+(
+.br
+	SWFMovieClip clip,
+.br
+	SWFSoundStream sound,
+.br
+	float rate,
+.br
+	float skip
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovieClip clip"
+Not Documented.
+.TP
+.B "SWFSoundStream sound"
+Soundstream object.
+.TP
+.B "float rate"
+Framerate.
+.TP
+.B "float skip"
+Skip in seconds.
+.SH "DESCRIPTION"
+Streaming (embedded) sound is played in sync with movie frames.
+The skip parameter describes the time in seconds (float) to be skiped.
+The rate parameter describes the parent movies framerate.
+
+See also SWFMovie_setSoundStream, SWFMovie_setSoundStreamAt, newSWFSoundStream,
+SWFMovieClip_setSoundStream.

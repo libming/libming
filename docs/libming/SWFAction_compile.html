@@ -1,0 +1,36 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFAction_compile - Compiles the current script stored in this SWFAction instance.</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFAction_compile - Compiles the current script stored in this SWFAction instance.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+int SWFAction_compile
+(
+	SWFAction action,
+	int swfVersion,
+	int *length
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFAction action<dd>
+Not Documented.
+<dt>
+int swfVersion<dd>
+Target SWF version.
+<dt>
+int *length<dd>
+Output length.
+</dl>
+<h1>DESCRIPTION</h1>
+Compiles the current script stored in this SWFAction instance.
+<h1>RETURNS</h1>
+0 on success, -1 otherwise.
+The length of the compiled bytecode is storen in the length pointer (if not NULL).
+
+</body>

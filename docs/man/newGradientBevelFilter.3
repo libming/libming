@@ -1,0 +1,40 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newGradientBevelFilter" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newGradientBevelFilter \- create a GradientBevelFilter
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFFilter newGradientBevelFilter
+.br
+(
+.br
+	SWFGradient gradient,
+.br
+	SWFBlur blur,
+.br
+	SWFShadow shadow,
+.br
+	int flags
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFGradient gradient"
+Gradient.
+.TP
+.B "SWFBlur blur"
+Blur.
+.TP
+.B "SWFShadow shadow"
+Shadow.
+.TP
+.B "int flags"
+FILTER_MODE_INNER,  FILTER_MODE_KO, FILTER_MODE_ONTOP.
+.SH "DESCRIPTION"
+This functions creates a gradient bevel filter. Extends BevelFilter by
+using a gradient instead of a simple color.

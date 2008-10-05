@@ -1,0 +1,59 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFGradient_addEntry" 3 "5 October 2008" "c2man gradient.c"
+.SH "NAME"
+SWFGradient_addEntry \- add a gradient control point
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFGradient_addEntry
+.br
+(
+.br
+	SWFGradient gradient,
+.br
+	float ratio,
+.br
+	byte r,
+.br
+	byte g,
+.br
+	byte b,
+.br
+	byte a
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFGradient gradient"
+Not Documented.
+.TP
+.B "float ratio"
+Not Documented.
+.TP
+.B "byte r"
+Not Documented.
+.TP
+.B "byte g"
+Not Documented.
+.TP
+.B "byte b"
+Not Documented.
+.TP
+.B "byte a"
+Not Documented.
+.SH "DESCRIPTION"
+The ratio defines the position of the control point
+and RGBA defines its color.
+SWF <= 7 allows up to 8 control points
+SWF >= 8 allows up to 15 control points
+
+The ration parameter is a float and must be in a range
+between [0.0 ... 1.0].
+
+In order to use SWF8 gradient features you need to set
+SWFShapes version to SWF_SHAPE4. Use SWFShape_useVersion()
+and friends.

@@ -1,0 +1,35 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFShadow" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newSWFShadow \- create a new SWFShadow (contructor)
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFShadow newSWFShadow
+.br
+(
+.br
+	float angle,
+.br
+	float distance,
+.br
+	float strength
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "float angle"
+Angle in radians.
+.TP
+.B "float distance"
+Distance in px.
+.TP
+.B "float strength"
+Strength.
+.SH "DESCRIPTION"
+This Function creates a new SWFShadow object. Only useful for creating
+SWFFilter objects.

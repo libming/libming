@@ -1,0 +1,29 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newSWFSoundFromFileno" 3 "1 October 2008" "c2man sound.c"
+.SH "NAME"
+newSWFSoundFromFileno \- added by David McNab <david@rebirthing.co.nz>
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFSound newSWFSoundFromFileno
+.br
+(
+.br
+	int fd,
+.br
+	byte flags
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "int fd"
+Not Documented.
+.TP
+.B "byte flags"
+Not Documented.
+.SH "DESCRIPTION"
+Required so that python can pass in file descriptors instead of FILE* streams .

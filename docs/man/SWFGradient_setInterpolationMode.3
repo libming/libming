@@ -1,0 +1,37 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFGradient_setInterpolationMode" 3 "5 October 2008" "c2man gradient.c"
+.SH "NAME"
+SWFGradient_setInterpolationMode \- set gradient interpolation mode
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFGradient_setInterpolationMode
+.br
+(
+.br
+	SWFGradient gradient,
+.br
+	GradientInterpolationMode mode
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFGradient gradient"
+Not Documented.
+.TP
+.B "GradientInterpolationMode mode"
+Possible values for a \fBGradientInterpolationMode\fR are as follows:
+.RS 0.75in
+.PD 0
+\fBSWF_GRADIENT_NORMAL\fR,
+\fBSWF_GRADIENT_LINEAR\fR
+.RE
+.PD
+.SH "DESCRIPTION"
+SWF8 allows to set different interpolation modes:
+SWF_GRADIENT_NORMAL (default)
+SWF_GRADIENT_LINEAR.

@@ -1,0 +1,32 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovieClip_setNumberOfFrames" 3 "20 March 2008" "c2man movieclip.c"
+.SH "NAME"
+SWFMovieClip_setNumberOfFrames \- set the frame count of a movie
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovieClip_setNumberOfFrames
+.br
+(
+.br
+	SWFMovieClip clip,
+.br
+	int totalFrames
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovieClip clip"
+Not Documented.
+.TP
+.B "int totalFrames"
+Not Documented.
+.SH "DESCRIPTION"
+This function sets the frame count for the movieclip. If the number of
+frames specified here exceeds the number of frame created when adding
+content to the movie, then blank frames will be added to the movieclip to
+pad it to the specified frame count.

@@ -1,0 +1,25 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>newSWFFont_fromFile - load a font from file</title>
+</header>
+<body>
+<h1>NAME</h1>
+newSWFFont_fromFile - load a font from file
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+SWFFont newSWFFont_fromFile(const char *filename);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+const char *filename<dd>
+Filename for fontfile.
+</dl>
+<h1>DESCRIPTION</h1>
+This function creates a new SWFFont object from a font file. It accepts
+and autodetects FDB and TTF fonts.
+<h1>RETURNS</h1>
+A SWFFont object if a valid fontfile is found, NULL otherwise.
+
+</body>

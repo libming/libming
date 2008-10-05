@@ -1,0 +1,32 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFGradient_setFocalPoint" 3 "5 October 2008" "c2man gradient.c"
+.SH "NAME"
+SWFGradient_setFocalPoint \- creates a radial gradient with focal point
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFGradient_setFocalPoint
+.br
+(
+.br
+	SWFGradient gradient,
+.br
+	float focalPoint
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFGradient gradient"
+Not Documented.
+.TP
+.B "float focalPoint"
+Not Documented.
+.SH "DESCRIPTION"
+Valid focalPoint value range is -1.0 ... 1.0
+where -1.0 means the focal point is close to the left border of
+the radial gradient circle; 0.0 is in the center and 1.0 is close
+to the right border.

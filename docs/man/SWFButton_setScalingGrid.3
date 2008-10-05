@@ -1,0 +1,53 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFButton_setScalingGrid" 3 "23 September 2008" "c2man button.c"
+.SH "NAME"
+SWFButton_setScalingGrid \- set a 9 slice scaling grid to this sprite / movieclip / button
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFButton_setScalingGrid
+.br
+(
+.br
+	SWFButton b,
+.br
+	int x,
+.br
+	int y,
+.br
+	int w,
+.br
+	int h
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFButton b"
+Not Documented.
+.TP
+.B "int x"
+Not Documented.
+.TP
+.B "int y"
+Not Documented.
+.TP
+.B "int w"
+Not Documented.
+.TP
+.B "int h"
+Not Documented.
+.SH "DESCRIPTION"
+This function sets a 9 slice scaling grid to buttons / sprites / movieclips
+
+1 2 3
+4 5 6
+7 8 9
+
+x, y, w and h define a rectangle, which is the dimension of the center slice (5)
+all other slices are determined out of the characters bounds and the defined rect.
+While slice 5 is scalde vertical and horizontal, slice 2 and 8 are only scale horizontal.
+Slice 4 and 6 only vertical. The 4 corner slices are not scaled (1, 3, 7, 9).

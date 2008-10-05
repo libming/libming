@@ -1,0 +1,22 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "newColorMatrixFilter" 3 "1 October 2008" "c2man filter.c"
+.SH "NAME"
+newColorMatrixFilter \- creates a new ColormatrixFilter
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFFilter newColorMatrixFilter(SWFFilterMatrix matrix);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFFilterMatrix matrix"
+Matrix.
+.SH "DESCRIPTION"
+Matrix has to be 5 x 4
+[r0 ... R4]
+[g0 ... G4]
+[b0 ... B4]
+[a0 ... A4].

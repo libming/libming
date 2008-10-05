@@ -1,0 +1,38 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFMovie_addExport - Assigns a name to a SWFBlock object.</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFMovie_addExport - Assigns a name to a SWFBlock object.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFMovie_addExport
+(
+	SWFMovie movie,
+	SWFBlock block,
+	const char *name
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFMovie movie<dd>
+Not Documented.
+<dt>
+SWFBlock block<dd>
+Not Documented.
+<dt>
+const char *name<dd>
+Not Documented.
+</dl>
+<h1>DESCRIPTION</h1>
+Creates an exportlibrary with named symbols to be imported by other
+SWF movies.
+Call SWFMovie_writeExports() when you're done with the exports
+to actually write the tag. If you don't the tag will be added
+at the END of the SWF.
+See also SWFMovie_importCharacter, SWFMovie_importFont.
+
+</body>

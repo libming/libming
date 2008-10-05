@@ -1,0 +1,32 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_add_internal" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_add_internal \- Adds a block to a movie.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFDisplayItem SWFMovie_add_internal
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	SWFMovieBlockType ublock
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Movie to which the block will be added.
+.TP
+.B "SWFMovieBlockType ublock"
+Block to add to the movie.
+.SH "DESCRIPTION"
+This function adds a block or character to a movie.
+Do not use this function. Use SWFMovie_add instead.
+.SH "RETURNS"
+A SWFDisplayItem.

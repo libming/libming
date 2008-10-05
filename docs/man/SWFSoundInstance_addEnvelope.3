@@ -1,0 +1,39 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFSoundInstance_addEnvelope" 3 "25 February 2008" "c2man soundinstance.c"
+.SH "NAME"
+SWFSoundInstance_addEnvelope \- adds a SoundEnvelope to event sound
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFSoundInstance_addEnvelope
+.br
+(
+.br
+	SWFSoundInstance inst,
+.br
+	unsigned int mark44,
+.br
+	short left,
+.br
+	short right
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFSoundInstance inst"
+Not Documented.
+.TP
+.B "unsigned int mark44"
+Position in 44khz samples.
+.TP
+.B "short left"
+Volume left channel.
+.TP
+.B "short right"
+Volume right channel.
+.SH "DESCRIPTION"
+Adds a SoundEnvelope to event sound.

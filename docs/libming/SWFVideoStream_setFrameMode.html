@@ -1,0 +1,38 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFVideoStream_setFrameMode - switch video stream frame mode</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFVideoStream_setFrameMode - switch video stream frame mode
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+int SWFVideoStream_setFrameMode
+(
+	SWFVideoStream stream,
+	int mode
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFVideoStream stream<dd>
+Not Documented.
+<dt>
+int mode<dd>
+Not Documented.
+</dl>
+<h1>DESCRIPTION</h1>
+If the mode == SWFVIDEOSTREAM_MODE_AUTO (default) every swfmovie
+frame a video frame is added.
+In SWFVIDEOSTREAM_MODE_MANUAL mode, the user needs to call
+SWFVideoStream_nextFrame() to change the video's frame.
+<br>
+
+Works only with embedded video streams.
+<br>
+
+@Return the previous mode or -1 if an invalid mode was passed.
+
+</body>

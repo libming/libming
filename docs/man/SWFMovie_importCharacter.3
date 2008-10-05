@@ -1,0 +1,37 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_importCharacter" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_importCharacter \- Import a character to the movie
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+SWFCharacter SWFMovie_importCharacter
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	const char *filename,
+.br
+	const char *name
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Not Documented.
+.TP
+.B "const char *filename"
+URL to movie.
+.TP
+.B "const char *name"
+Idetifier of character.
+.SH "DESCRIPTION"
+Imports characters from an other movie. Filename (URL) points to a SWF
+file with exported characters.
+.SH "RETURNS"
+A SWFCharacter object.

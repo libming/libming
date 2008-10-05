@@ -1,0 +1,25 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFSoundStream_getFrames" 3 "8 September 2008" "c2man soundstream.c"
+.SH "NAME"
+SWFSoundStream_getFrames \- DEPRECATED!
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+int SWFSoundStream_getFrames(SWFSoundStream stream);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFSoundStream stream"
+Not Documented.
+.SH "DESCRIPTION"
+DEPRECATED!.
+.SH "RETURNS"
+The number of movie frames for a given sound stream
+This function returns the number of movie frames necessary to
+play the full sound stream.
+Works only if the sound stream object was added to a movie and the stream
+source is a mp3 file.
+Use SWFSoundStream_getDuration() instead.

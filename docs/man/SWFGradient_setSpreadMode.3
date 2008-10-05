@@ -1,0 +1,39 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFGradient_setSpreadMode" 3 "5 October 2008" "c2man gradient.c"
+.SH "NAME"
+SWFGradient_setSpreadMode \- set gradient spread mode
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFGradient_setSpreadMode
+.br
+(
+.br
+	SWFGradient gradient,
+.br
+	GradientSpreadMode mode
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFGradient gradient"
+Not Documented.
+.TP
+.B "GradientSpreadMode mode"
+Possible values for a \fBGradientSpreadMode\fR are as follows:
+.RS 0.75in
+.PD 0
+\fBSWF_GRADIENT_PAD\fR,
+\fBSWF_GRADIENT_REFLECT\fR,
+\fBSWF_GRADIENT_REPEAT\fR
+.RE
+.PD
+.SH "DESCRIPTION"
+SWF8 allows to set different spread modes:
+SWF_GRADIENT_PAD (default)
+SWF_GRADIENT_REFLECT
+SWF_GRADIENT_REPEAT.

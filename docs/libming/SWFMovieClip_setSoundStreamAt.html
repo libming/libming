@@ -1,0 +1,43 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFMovieClip_setSoundStreamAt - Includes streaming sound to a movie.</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFMovieClip_setSoundStreamAt - Includes streaming sound to a movie.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+void SWFMovieClip_setSoundStreamAt
+(
+	SWFMovieClip clip,
+	SWFSoundStream sound,
+	float rate,
+	float skip
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFMovieClip clip<dd>
+Not Documented.
+<dt>
+SWFSoundStream sound<dd>
+Soundstream object.
+<dt>
+float rate<dd>
+Framerate.
+<dt>
+float skip<dd>
+Skip in seconds.
+</dl>
+<h1>DESCRIPTION</h1>
+Streaming (embedded) sound is played in sync with movie frames.
+The skip parameter describes the time in seconds (float) to be skiped.
+The rate parameter describes the parent movies framerate.
+<br>
+
+See also SWFMovie_setSoundStream, SWFMovie_setSoundStreamAt, newSWFSoundStream,
+SWFMovieClip_setSoundStream.
+
+</body>

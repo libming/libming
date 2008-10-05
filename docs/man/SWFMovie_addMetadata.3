@@ -1,0 +1,32 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_addMetadata" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_addMetadata \- adds Metadata to the movie
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_addMetadata
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	const char *xml
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Not Documented.
+.TP
+.B "const char *xml"
+Not Documented.
+.SH "DESCRIPTION"
+This function inserts a metadata-tag into the movie. Only one metadata-tag can
+be set to a movie.
+Metadata is specified as an XML string. For more details see:
+http://www.adobe.com/products/xmp.

@@ -1,0 +1,38 @@
+<!WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+<!DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+<header>
+<title>SWFVideoStream_seek - Seek within a video stream.</title>
+</header>
+<body>
+<h1>NAME</h1>
+SWFVideoStream_seek - Seek within a video stream.
+<h1>SYNOPSIS</h1>
+<pre>#include &lt;ming.h&gt;
+
+int SWFVideoStream_seek
+(
+	SWFVideoStream stream,
+	int frame,
+	int whence
+);
+</pre>
+<h1>PARAMETERS</h1>
+<dl><dt>
+SWFVideoStream stream<dd>
+Not Documented.
+<dt>
+int frame<dd>
+Not Documented.
+<dt>
+int whence<dd>
+Not Documented.
+</dl>
+<h1>DESCRIPTION</h1>
+This functions allows seeking in video stream. Semantics
+like SWFInput_seek();
+<br>
+
+Works only with SWFVIDEOSTREAM_MODE_MANUAL!
+@return old video position (frame).
+
+</body>

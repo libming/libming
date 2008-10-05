@@ -1,0 +1,83 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFShape_setLineStyle2filled_internal" 3 "12 September 2008" "c2man shape.c"
+.SH "NAME"
+SWFShape_setLineStyle2filled_internal \- set filled Linestyle2 introduce with SWF 8.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFShape_setLineStyle2filled_internal
+.br
+(
+.br
+	SWFShape shape,
+.br
+	unsigned short width,
+.br
+	SWFFillStyle fill,
+.br
+	int flags,
+.br
+	float miterLimit
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFShape shape"
+Not Documented.
+.TP
+.B "unsigned short width"
+Not Documented.
+.TP
+.B "SWFFillStyle fill"
+Not Documented.
+.TP
+.B "int flags"
+Not Documented.
+.TP
+.B "float miterLimit"
+Not Documented.
+.SH "DESCRIPTION"
+Set line width in TWIPS.
+.SH "WARNING"
+This is an internal interface
+external use is deprecated! use setLine2 instead
+
+Instead of providing a fill color, a FillStyle can be applied
+to a line.
+.SH "LINESTYLE2 ALSO EXTENDS LINESTYLE1 WITH SOME EXTRA FLAGS"
+Line cap style: select one of the following flags (default is round cap style)
+SWF_LINESTYLE_CAP_ROUND
+SWF_LINESTYLE_CAP_NONE
+SWF_LINESTYLE_CAP_SQUARE
+
+Line join style: select one of the following flags (default is round join style)
+SWF_LINESTYLE_JOIN_ROUND
+SWF_LINESTYLE_JOIN_BEVEL
+SWF_LINESTYLE_JOIN_MITER
+
+Scaling flags: disable horizontal / vertical scaling
+SWF_LINESTYLE_FLAG_NOHSCALE
+SWF_LINESTYLE_FLAG_NOVSCALE
+
+Enable pixel hinting to correct blurry vertical / horizontal lines
+.br
+-> All anchors will be aligned to full pixels
+SWF_LINESTYLE_FLAG_HINTING
+
+Disable stroke closure: if no-close flag is set caps will be applied
+instead of joins
+SWF_LINESTYLE_FLAG_NOCLOSE
+
+End-cap style: default round
+SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+SWF_LINESTYLE_FLAG_ENDCAP_NONE
+SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+
+If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor
+must be set. Miter max length is then calculated as:
+max miter len = miter limit * width.
+If join style is not miter, this value will be ignored.

@@ -1,0 +1,32 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFAction_getByteCode" 3 "1 October 2008" "c2man action.c"
+.SH "NAME"
+SWFAction_getByteCode \- Returns the compiled bytecode.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+byte *SWFAction_getByteCode
+.br
+(
+.br
+	SWFAction action,
+.br
+	int *length
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFAction action"
+Not Documented.
+.TP
+.B "int *length"
+Not Documented.
+.SH "DESCRIPTION"
+If not already compiled the script will compiled for SWF V7.
+.SH "RETURNS"
+NULL in case of an error. Length pointer stores the length of
+the compiled bytecode.

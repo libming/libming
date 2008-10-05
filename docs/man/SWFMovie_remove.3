@@ -1,0 +1,30 @@
+.\" WARNING! THIS FILE WAS GENERATED AUTOMATICALLY BY c2man!
+.\" DO NOT EDIT! CHANGES MADE TO THIS FILE WILL BE LOST!
+.TH "SWFMovie_remove" 3 "1 October 2008" "c2man movie.c"
+.SH "NAME"
+SWFMovie_remove \- Removes a SWFDisplayItem from the movie stage.
+.SH "SYNOPSIS"
+.ft B
+#include <ming.h>
+.br
+.sp
+void SWFMovie_remove
+.br
+(
+.br
+	SWFMovie movie,
+.br
+	SWFDisplayItem item
+.br
+);
+.ft R
+.SH "PARAMETERS"
+.TP
+.B "SWFMovie movie"
+Not Documented.
+.TP
+.B "SWFDisplayItem item"
+Not Documented.
+.SH "DESCRIPTION"
+A SWFDisplayItem stays on stage until it gets removed. This function
+removes the item. The item is displayed until the current frame.
