@@ -331,7 +331,7 @@ void
 outputSWFACTION_GETURL (SWF_ACTION *act)
 {
   OUT_BEGIN(SWF_ACTIONGETURL);
-  printf("   UrlSring: %s\n", sact->UrlString);
+  printf("   UrlString: %s\n", sact->UrlString);
   printf("   TargetString: %s\n", sact->TargetString);
 }
 
