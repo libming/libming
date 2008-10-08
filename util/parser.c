@@ -2806,7 +2806,8 @@ parseSWF_DEFINESOUND (FILE * f, int length)
   switch(parserrec->SoundFormat)
   {
     case 2:
-      parseMp3Stream(f, &parserrec->SoundData.mp3, end);
+      parserrec->SoundData.mp3.SeekSamples = readSInt16(f);
+      parserrec->SoundData.mp3.frames = (UI8 *)readBytes(f, end - fileOffset);
       break;
     default:
       parserrec->SoundData.data = (UI8 *)readBytes(f, end - fileOffset);
