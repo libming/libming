@@ -1,5 +1,5 @@
 File version: 7
-File size: 695110
+File size: 695128
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -29,11 +29,18 @@ Block length: 3
 
 
 Offset: 695106 (0xa9b42)
+Block type: 56 (SWF_EXPORTASSETS)
+Block length: 16
+
+ num assets: 1
+ Asset[001]: audio01.mp3
+
+Offset: 695124 (0xa9b54)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 695108 (0xa9b44)
+Offset: 695126 (0xa9b56)
 Block type: 0 (SWF_END)
 Block length: 0
 

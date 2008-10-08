@@ -1,5 +1,5 @@
 File version: 7
-File size: 880
+File size: 897
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -29,11 +29,18 @@ Block length: 3
 
 
 Offset: 876 (0x036c)
+Block type: 56 (SWF_EXPORTASSETS)
+Block length: 15
+
+ num assets: 1
+ Asset[001]: sound1.mp3
+
+Offset: 893 (0x037d)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 878 (0x036e)
+Offset: 895 (0x037f)
 Block type: 0 (SWF_END)
 Block length: 0
 

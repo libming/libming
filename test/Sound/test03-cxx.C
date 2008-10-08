@@ -15,6 +15,7 @@ int main()
 		}
 
 		sound = new SWFSound(file, SWF_SOUND_MP3_COMPRESSED);
+		m->addExport(sound, "sound1.mp3");
 		m->startSound(sound);
 
 		m->save("test03.swf");

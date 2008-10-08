@@ -27,6 +27,7 @@ int main() {
 		fprintf(stderr, "Could not create SWFSound\n");
 		return EXIT_FAILURE;
 	}
+	SWFMovie_addExport(m, sound, "audio01.mp3");
 	SWFMovie_startSound(m, sound);
 
 	ret = SWFMovie_save(m, "test01.swf");

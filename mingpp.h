@@ -732,7 +732,7 @@ class SWFSoundStream
 
 
 
-class SWFSound
+class SWFSound : public SWFBlock
 {
  public:
   c_SWFSound sound;
@@ -778,6 +778,9 @@ class SWFSound
 		fclose(filep); 
 	destroySWFSound(this->sound); 
   }
+
+  c_SWFBlock getBlock()
+    { return (c_SWFBlock)this->sound; }
  
  private:
     FILE *filep;
