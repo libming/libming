@@ -1,7 +1,6 @@
 SUBDIRS = 
 
 EXTRA_DIST = 		\
-	150bpm.wav	\
 	audio01.mp3	\
 	font01.fdb	\
 	image01.dbl	\
