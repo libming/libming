@@ -402,6 +402,7 @@ SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 			/*SWF_warn("Exporting a shape character is not ensured to work");*/
 		case SWF_DEFINESPRITE:
 		case SWF_DEFINEFONT2:
+		case SWF_DEFINESOUND:
 			movie->exports = (struct SWFExport_s*)realloc(movie->exports,
 					(movie->nExports+1) * sizeof(struct SWFExport_s));
 			movie->exports[movie->nExports].block = block;
