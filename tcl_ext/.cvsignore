@@ -1,3 +1,4 @@
 .deps
 Makefile
 Makefile.in
+ming_wrap.c
