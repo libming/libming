@@ -42,9 +42,10 @@ $si2->scaleTo(1);
 $mc2->nextFrame;
 
 my $b = new SWF::Button;
-my $br1 = $b->addCharacter($s, SWFBUTTON_HIT|SWFBUTTON_UP);
-my $br2 = $b->addCharacter($mc1, SWFBUTTON_OVER);
-my $br3 = $b->addCharacter($mc2, SWFBUTTON_DOWN);
+my $br1 = $b->addCharacter($s, 
+	SWF::Constants::SWFBUTTON_HIT|SWF::Constants::SWFBUTTON_UP);
+my $br2 = $b->addCharacter($mc1, SWF::Constants::SWFBUTTON_OVER);
+my $br3 = $b->addCharacter($mc2, SWF::Constants::SWFBUTTON_DOWN);
 
 my $d = $m->add($b);
 $d->moveTo(150, 100);

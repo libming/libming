@@ -25,13 +25,15 @@ $s->drawLine(0, 40);
 $s->drawLineTo(0, 0);
 
 my $b = new SWF::Button;
-my $br1 = $b->addCharacter($s, SWFBUTTON_HIT|SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
+my $br1 = $b->addCharacter($s, 
+	SWF::Constants::SWFBUTTON_HIT|SWF::Constants::SWFBUTTON_UP|SWF::Constants::SWFBUTTON_OVER|SWF::Constants::SWFBUTTON_DOWN);
 
-my $br2 = $b->addCharacter($s, SWFBUTTON_OVER|SWFBUTTON_DOWN);
+my $br2 = $b->addCharacter($s, 
+	SWF::Constants::SWFBUTTON_OVER|SWF::Constants::SWFBUTTON_DOWN);
 $br2->rotate(10);
 $br2->move(20,0);
 
-my $br3 = $b->addCharacter($s, SWFBUTTON_DOWN);
+my $br3 = $b->addCharacter($s, SWF::Constants::SWFBUTTON_DOWN);
 $br3->rotate(20);
 $br3->move(40,0);
 
