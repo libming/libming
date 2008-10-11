@@ -46,3 +46,5 @@ clean-local: Makefile.perl
 
 distclean-local:
 	rm -f t/config.pl
+
+check: all
