@@ -8,6 +8,9 @@ bail_out()
 	exit 1
 }
 
+echo "Running libtoolize -f -c"
+libtoolize -f -c -q || bail_out
+
 echo "Running aclocal -I macros"
 aclocal -I macros || bail_out
 
@@ -18,7 +21,7 @@ echo "Running autoheader -f"
 autoheader -f || bail_out
 
 echo "Running automake"
-automake || bail_out
+automake --add-missing -c  > /dev/null || bail_out
 
 echo "Running autoconf"
 autoconf || bail_out
