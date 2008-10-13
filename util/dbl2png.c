@@ -47,11 +47,15 @@ struct pngdata readDBL(FILE *fp)
   struct pngdata png;
   byte header[13],*data;
   unsigned long outsize,readsize=0,datsize;
-  int i;
+  int i, ret;
 
   if(!fp)
     error("Couldn't open file!\n");
-  fread(header, 1, 13, fp);
+  
+  ret = fread(header, 1, 13, fp);
+  if(ret != 13)
+    error("Couldn't read header\n");
+
   if (header[3]==2)
   {
    if(verbose) 

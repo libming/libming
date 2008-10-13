@@ -67,7 +67,7 @@ cws2fws(FILE *f, uLong outsize)
 {
 
 	struct stat statbuffer;
-	int insize;
+	int insize, ret;
 	int err,tmp_fd;
 	Byte *inbuffer,*outbuffer;
 
@@ -138,7 +138,9 @@ cws2fws(FILE *f, uLong outsize)
 	fputc('W',tempfile);
 	fputc('S',tempfile);
 	fputc(m.version,tempfile);
-	fwrite(&m.size,sizeof(int),1,tempfile);
+	ret = fwrite(&m.size,sizeof(int),1,tempfile);
+	if(ret != 1)
+		SWF_error("cws2fws: failed writing file size\n");
 
 	if ( outsize != fwrite(outbuffer, 1, outsize, tempfile) )
 	{

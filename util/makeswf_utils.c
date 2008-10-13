@@ -219,7 +219,12 @@ makeswf_readfile (const char *file)
       return NULL;
    }
    memset(ret, '\0', size+1);
-   fread(ret, 1, size, fd);
+   if(fread(ret, 1, size, fd) != size)
+   {
+	fprintf(stderr, "makeswf_readfile: failed\n");
+	fclose(fd);
+	return NULL;	
+   }
    fclose(fd);
 
    return ret;
@@ -254,6 +259,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.12  2008/10/13 21:57:19  krechert
+ * fix warning
+ *
  * Revision 1.11  2008/06/26 19:36:12  krechert
  * fix linker error and make enabling SWFAction's debug mode generic
  *

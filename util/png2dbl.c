@@ -51,6 +51,7 @@ struct pngdata readPNG(FILE *fp)
   unsigned char *p;
   byte alpha;
   byte r, g, b;
+  int ret;
 
   png_structp png_ptr;
   png_infop info_ptr, end_info;
@@ -61,7 +62,10 @@ struct pngdata readPNG(FILE *fp)
   if(!fp)
     error("Couldn't open file!\n");
 
-  fread(header, 1, 8, fp);
+  ret = fread(header, 1, 8, fp);
+  if(ret != 8)
+    error("failed read header\n");
+
   /*
   if(png_check_sig(header, 8))
     error("File doesn't appear to be a proper PNG file\n");
