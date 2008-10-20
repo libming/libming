@@ -9,7 +9,7 @@ bail_out()
 }
 
 echo "Running libtoolize -f -c"
-libtoolize -f -c -q || bail_out
+libtoolize -f -c || bail_out
 
 echo "Running aclocal -I macros"
 aclocal -I macros || bail_out
