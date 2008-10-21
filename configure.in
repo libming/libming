@@ -345,12 +345,7 @@ fi
 dnl -------------------------------------------
 dnl Byteorder check
 dnl -------------------------------------------
-AC_C_BIGENDIAN
-if test x"$WORDS_BIGENDIAN" != x; then
-	CFLAGS="$CFLAGS -DSWF_BIG_ENDIAN"
-else
-	CFLAGS="$CFLAGS -DSWF_LITTLE_ENDIAN"
-fi
+AC_C_BIGENDIAN(CFLAGS="$CFLAGS -DSWF_BIG_ENDIAN", CFLAGS="$CFLAGS -DSWF_LITTLE_ENDIAN")
 
 AC_SUBST(SHCFLAGS)
 AC_SUBST(GIFLIB)
