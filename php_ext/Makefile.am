@@ -9,4 +9,4 @@ clean-local:
 
 install: all
 	$(INSTALL) -d "$(DESTDIR)"/`php-config --extension-dir`
-	$(INSTALL) -m 755 tmp/modules/ming.so" "$(DESTDIR)"/`php-config --extension-dir`
+	$(INSTALL) -m 755 tmp/modules/ming.so "$(DESTDIR)"/`php-config --extension-dir`
