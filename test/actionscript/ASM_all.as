@@ -70,5 +70,7 @@ implements
 extends
 fscommand2
 new
+delete
+delete2
 };
 

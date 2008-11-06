@@ -55,7 +55,7 @@ static int classContext = 0;
 /* tokens etc. */
 
 %token BREAK CONTINUE FUNCTION ELSE SWITCH CASE DEFAULT FOR IN IF WHILE
-%token DO VAR NEW DELETE TARGETPATH RETURN END WITH ASM EVAL
+%token DO VAR NEW DELETE DELETE2 TARGETPATH RETURN END WITH ASM EVAL
 
 %token RANDOM GETTIMER LENGTH CONCAT SUBSTR TRACE INT ORD CHR GETURL
 %token GETURL1 NEXTFRAME PREVFRAME PLAY STOP TOGGLEQUALITY STOPSOUNDS
@@ -2057,6 +2057,8 @@ opcode
 						     SWFACTION_ENUMERATE); }
 	| DELETE		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_DELETE); }
+	| DELETE2		{ $$ = bufferWriteOp(asmBuffer, 
+						     SWFACTION_DELETE2); }
 	| NEW			{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_NEWOBJECT); }
 	| INITARRAY		{ $$ = bufferWriteOp(asmBuffer, 

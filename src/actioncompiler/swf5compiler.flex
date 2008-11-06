@@ -347,6 +347,8 @@ cast			{ count();	return CAST;		}
 r\:{DIGIT}+		{ count(); swf5lval.str = strdup(yytext+2);
 				return REGISTER; }
 trace			{ count();	return TRACE;	}
+delete			{ count();	return DELETE;		}
+delete2			{ count();	return DELETE2;		}
 }
 
   /* rules action in any state */
