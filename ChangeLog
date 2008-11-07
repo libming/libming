@@ -1,4 +1,413 @@
-2008-09-17 20:44  anderson
+2008-11-07 11:04  strk
+
+	* NEWS: add note about delete/delete2
+
+2008-11-06 19:20  strk
+
+	* src/actioncompiler/swf5compiler.flex,
+	  src/actioncompiler/swf5compiler.y, test/actionscript/ASM_all.as,
+	  test/actionscript/ASM_all.ref: Add support for 'delete' and
+	  'delete2' in asm blocks
+
+2008-11-02 14:10  krechert
+
+	* src/actioncompiler/swf5compiler.flex: bugfix: added missing
+	  length check
+
+2008-10-21 16:44  krechert
+
+	* configure.in: fixed endian check on some systems (e.g.
+	  sparc/solaris)
+
+2008-10-21 16:43  krechert
+
+	* php_ext/Makefile.am: removed unbalanced "
+
+2008-10-20 21:59  krechert
+
+	* autogen.sh: s not working on all versions
+
+2008-10-13 23:57  krechert
+
+	* util/: dbl2png.c, main.c, makeswf_utils.c, outputfdb.c,
+	  png2dbl.c: fix warning
+
+2008-10-13 23:54  krechert
+
+	* docs/Makefile.am: distribute man pages
+
+2008-10-13 23:28  krechert
+
+	* config/: config.guess, config.sub: update config.* files
+
+2008-10-13 23:17  krechert
+
+	* autogen.sh: get all necessary libtool / auto* files
+
+2008-10-13 23:13  krechert
+
+	* macros/libtool.m4: remove libtool. the build system should
+	  provide it.
+
+2008-10-13 15:56  krechert
+
+	* docs/Makefile.am: don't distribute CVS directories
+
+2008-10-12 16:00  krechert
+
+	* util/: Makefile.am, img2swf.c, old/img2swf.c: drop img2swf due
+	  name clashes and superior successor "makeswf"
+
+2008-10-11 17:28  krechert
+
+	* perl_ext/Makefile.am: make check should depend on all:
+
+2008-10-11 15:55  krechert
+
+	* tcl_ext/.cvsignore: ming_wrap.c is generated. ignore in CVS
+
+2008-10-11 15:53  krechert
+
+	* tcl_ext/Makefile.am: fix bug #72: make dist failed in tcl_ext
+
+2008-10-11 11:50  krechert
+
+	* test/Button/: test02.pl, test03.pl: add SWF::Constants:: prefix
+	  to button constants
+
+2008-10-08 12:41  strk
+
+	* test/Media/Makefile.am: 150bpm.wav isn't in the repository, and
+	  isn't needed either
+
+2008-10-08 11:59  strk
+
+	* mingpp.h, test/Sound/test01-cxx.C, test/Sound/test01.c,
+	  test/Sound/test01.ref, test/Sound/test02-cxx.C,
+	  test/Sound/test02.c, test/Sound/test02.ref,
+	  test/Sound/test03-cxx.C, test/Sound/test03.c,
+	  test/Sound/test03.ref: Add support for exporting event sounds in
+	  C++ interface, add tests for sound export
+
+2008-10-08 11:23  krechert
+
+	* util/parser.c: parsing mp3 sound data can't be shared between
+	  event and streaming sound
+
+2008-10-08 10:45  strk
+
+	* src/movie.c: Allow exporting event sounds (SWFSound). Tested
+	  within Gnash, needs Ming-specific test in test/Sound but that
+	  subdir currently fails as it is (see bugzilla bug #70)
+
+2008-10-06 15:38  strk
+
+	* util/action.c: typo: UrlSring -> UrlString
+
+2008-10-05 16:05  krechert
+
+	* test/Movie/setSoundStream/test03.ref: no sample count in non-MP3
+	  streams
+
+2008-10-05 15:47  krechert
+
+	* util/: outputtxt.c, parser.c, swftypes.h: SWFSoundStreamBlock:
+	  sample count is only available with MP3 sound
+
+2008-10-05 15:43  krechert
+
+	* src/blocks/soundstream.c: set initial delay only for MP3
+
+2008-10-05 15:35  krechert
+
+	* docs/: libming/SWFAction_compile.html,
+	  libming/SWFAction_getByteCode.html,
+	  libming/SWFAction_setDebug.html,
+	  libming/SWFBlockList_getLastBlock.html,
+	  libming/SWFBlock_isCharacter.html,
+	  libming/SWFCXform_setColorAdd.html,
+	  libming/SWFCXform_setColorMult.html,
+	  libming/SWFCharacter_getHeight.html,
+	  libming/SWFCharacter_getWidth.html,
+	  libming/SWFDisplayItem_flush.html,
+	  libming/SWFDisplayItem_setMaskLevel.html,
+	  libming/SWFDisplayItem_setName.html,
+	  libming/SWFFontCharacter_addAllChars.html,
+	  libming/SWFFontCharacter_addChars.html,
+	  libming/SWFFontCharacter_addUTF8Chars.html,
+	  libming/SWFFont_getScaledAscent.html,
+	  libming/SWFGradient_addEntry.html,
+	  libming/SWFGradient_setFocalPoint.html,
+	  libming/SWFGradient_setInterpolationMode.html,
+	  libming/SWFGradient_setSpreadMode.html,
+	  libming/SWFMatrix_leftMultiply.html,
+	  libming/SWFMatrix_multiply.html, libming/SWFMovieClip_add.html,
+	  libming/SWFMovieClip_addInitAction.html,
+	  libming/SWFMovieClip_labelFrame.html,
+	  libming/SWFMovieClip_nextFrame.html,
+	  libming/SWFMovieClip_remove.html,
+	  libming/SWFMovieClip_setNumberOfFrames.html,
+	  libming/SWFMovieClip_setSoundStream.html,
+	  libming/SWFMovieClip_setSoundStreamAt.html,
+	  libming/SWFMovieClip_startSound.html,
+	  libming/SWFMovieClip_stopSound.html,
+	  libming/SWFMovie_addExport.html, libming/SWFMovie_addFont.html,
+	  libming/SWFMovie_addMetadata.html, libming/SWFMovie_getRate.html,
+	  libming/SWFMovie_importCharacter.html,
+	  libming/SWFMovie_importFont.html,
+	  libming/SWFMovie_labelFrame.html,
+	  libming/SWFMovie_nextFrame.html, libming/SWFMovie_output.html,
+	  libming/SWFMovie_output_to_stream.html,
+	  libming/SWFMovie_protect.html, libming/SWFMovie_remove.html,
+	  libming/SWFMovie_save.html,
+	  libming/SWFMovie_setNetworkAccess.html,
+	  libming/SWFMovie_setSoundStream.html,
+	  libming/SWFMovie_setSoundStreamAt.html,
+	  libming/SWFMovie_startSound.html,
+	  libming/SWFMovie_stopSound.html,
+	  libming/SWFMovie_writeExports.html,
+	  libming/SWFOutput_checkSize.html,
+	  libming/SWFOutput_writeFloat16.html,
+	  libming/SWFPlaceObject2Block_addFilter.html,
+	  libming/SWFPlaceObject2Block_setBlendMode.html,
+	  libming/SWFPlaceObject2Block_setCacheFlag.html,
+	  libming/SWFRect_includePoint.html, libming/SWFShape_drawArc.html,
+	  libming/SWFShape_drawCubic.html, libming/SWFShape_movePenTo.html,
+	  libming/SWFShape_setLine.html,
+	  libming/SWFShape_setRenderHintingFlags.html,
+	  libming/SWFShape_useVersion.html,
+	  libming/SWFSoundInstance_addEnvelope.html,
+	  libming/SWFSoundInstance_setLoopCount.html,
+	  libming/SWFSoundInstance_setLoopInPoint.html,
+	  libming/SWFSoundInstance_setLoopOutPoint.html,
+	  libming/SWFSoundInstance_setNoMultiple.html,
+	  libming/SWFSoundStream_getDuration.html,
+	  libming/SWFSoundStream_getFrames.html,
+	  libming/SWFSoundStream_rewind.html,
+	  libming/SWFTextField_setFont.html,
+	  libming/SWFTextField_setFontCharacter.html,
+	  libming/SWFText_addWideString.html,
+	  libming/SWFText_resolveCodes.html,
+	  libming/SWFVideoStream_nextFrame.html,
+	  libming/SWFVideoStream_seek.html,
+	  libming/SWFVideoStream_setFrameMode.html,
+	  libming/destroySWFAction.html, libming/destroySWFBinaryData.html,
+	  libming/destroySWFBitmap.html,
+	  libming/destroySWFBrowserFont.html,
+	  libming/destroySWFCXform.html, libming/destroySWFMovieClip.html,
+	  libming/destroySWFPrebuiltClip.html,
+	  libming/destroySWFSoundInstance.html, libming/dumpJpegBlock.html,
+	  libming/getMP3Duration.html, libming/getMP3Flags.html,
+	  libming/newBevelFilter.html, libming/newBlurFilter.html,
+	  libming/newColorMatrixFilter.html,
+	  libming/newConvolutionFilter.html,
+	  libming/newDropShadowFilter.html, libming/newGlowFilter.html,
+	  libming/newGradientBevelFilter.html,
+	  libming/newGradientGlowFilter.html, libming/newSWFAction.html,
+	  libming/newSWFAction_fromFile.html, libming/newSWFAddCXform.html,
+	  libming/newSWFBinaryData.html, libming/newSWFBlur.html,
+	  libming/newSWFBrowserFont.html, libming/newSWFCXform.html,
+	  libming/newSWFFilterMatrix.html,
+	  libming/newSWFFontCollection_fromFile.html,
+	  libming/newSWFFont_fromFile.html, libming/newSWFInitAction.html,
+	  libming/newSWFInitAction_withId.html,
+	  libming/newSWFInput_allocedBuffer.html,
+	  libming/newSWFInput_bufferCopy.html,
+	  libming/newSWFJpegWithAlpha_fromInput.html,
+	  libming/newSWFLineStyle.html, libming/newSWFLineStyle2.html,
+	  libming/newSWFLineStyle2_filled.html, libming/newSWFMatrix.html,
+	  libming/newSWFMovieClip.html, libming/newSWFMultCXform.html,
+	  libming/newSWFPlaceObjectBlock.html, libming/newSWFPosition.html,
+	  libming/newSWFPrebuiltClip_fromFile.html,
+	  libming/newSWFPrebuiltClip_fromInput.html,
+	  libming/newSWFShadow.html, libming/newSWFSound.html,
+	  libming/newSWFSoundFromFileno.html,
+	  libming/newSWFSoundInstance.html,
+	  libming/newSWFSound_fromSoundStream.html,
+	  libming/newSWFText2.html, libming/newSizedSWFOutput.html,
+	  libming/readMP3Header.html, man/Ming_getScale.3, man/Ming_init.3,
+	  man/Ming_setCubicThreshold.3, man/Ming_setErrorFunction.3,
+	  man/Ming_setSWFCompression.3, man/Ming_setScale.3,
+	  man/Ming_setWarnFunction.3, man/Ming_useSWFVersion.3,
+	  man/SWFAction_compile.3, man/SWFAction_getByteCode.3,
+	  man/SWFAction_setDebug.3, man/SWFBlockList_getLastBlock.3,
+	  man/SWFBlock_isCharacter.3, man/SWFButtonRecord_addFilter.3,
+	  man/SWFButtonRecord_setBlendMode.3, man/SWFButton_addAction.3,
+	  man/SWFButton_addCharacter.3, man/SWFButton_addShape.3,
+	  man/SWFButton_removeScalingGrid.3,
+	  man/SWFButton_setScalingGrid.3, man/SWFCXform_setColorAdd.3,
+	  man/SWFCXform_setColorMult.3, man/SWFCharacter_getHeight.3,
+	  man/SWFCharacter_getWidth.3, man/SWFDisplayItem_addFilter.3,
+	  man/SWFDisplayItem_cacheAsBitmap.3, man/SWFDisplayItem_flush.3,
+	  man/SWFDisplayItem_setBlendMode.3,
+	  man/SWFDisplayItem_setMaskLevel.3, man/SWFDisplayItem_setName.3,
+	  man/SWFFontCharacter_addAllChars.3,
+	  man/SWFFontCharacter_addChars.3,
+	  man/SWFFontCharacter_addUTF8Chars.3,
+	  man/SWFFont_getScaledAscent.3, man/SWFGradient_addEntry.3,
+	  man/SWFGradient_setFocalPoint.3,
+	  man/SWFGradient_setInterpolationMode.3,
+	  man/SWFGradient_setSpreadMode.3, man/SWFMatrix_leftMultiply.3,
+	  man/SWFMatrix_multiply.3, man/SWFMovieClip_add.3,
+	  man/SWFMovieClip_addInitAction.3, man/SWFMovieClip_labelFrame.3,
+	  man/SWFMovieClip_nextFrame.3, man/SWFMovieClip_remove.3,
+	  man/SWFMovieClip_removeScalingGrid.3,
+	  man/SWFMovieClip_setNumberOfFrames.3,
+	  man/SWFMovieClip_setScalingGrid.3,
+	  man/SWFMovieClip_setSoundStream.3,
+	  man/SWFMovieClip_setSoundStreamAt.3,
+	  man/SWFMovieClip_startSound.3, man/SWFMovieClip_stopSound.3,
+	  man/SWFMovie_addExport.3, man/SWFMovie_addFont.3,
+	  man/SWFMovie_addMetadata.3, man/SWFMovie_add_internal.3,
+	  man/SWFMovie_assignSymbol.3, man/SWFMovie_defineScene.3,
+	  man/SWFMovie_getRate.3, man/SWFMovie_importCharacter.3,
+	  man/SWFMovie_importFont.3, man/SWFMovie_labelFrame.3,
+	  man/SWFMovie_namedAnchor.3, man/SWFMovie_nextFrame.3,
+	  man/SWFMovie_output.3, man/SWFMovie_output_to_stream.3,
+	  man/SWFMovie_protect.3, man/SWFMovie_remove.3,
+	  man/SWFMovie_replace_internal.3, man/SWFMovie_save.3,
+	  man/SWFMovie_setBackground.3, man/SWFMovie_setDimension.3,
+	  man/SWFMovie_setNetworkAccess.3,
+	  man/SWFMovie_setNumberOfFrames.3, man/SWFMovie_setRate.3,
+	  man/SWFMovie_setScriptLimits.3, man/SWFMovie_setSoundStream.3,
+	  man/SWFMovie_setSoundStreamAt.3, man/SWFMovie_setTabIndex.3,
+	  man/SWFMovie_startSound.3, man/SWFMovie_stopSound.3,
+	  man/SWFMovie_writeExports.3, man/SWFOutput_checkSize.3,
+	  man/SWFOutput_writeFloat16.3,
+	  man/SWFPlaceObject2Block_addFilter.3,
+	  man/SWFPlaceObject2Block_setBlendMode.3,
+	  man/SWFPlaceObject2Block_setCacheFlag.3,
+	  man/SWFRect_includePoint.3, man/SWFShape_drawArc.3,
+	  man/SWFShape_drawCubic.3, man/SWFShape_drawScaledLineTo.3,
+	  man/SWFShape_getVersion.3, man/SWFShape_movePenTo.3,
+	  man/SWFShape_moveScaledPenTo.3, man/SWFShape_setLine.3,
+	  man/SWFShape_setLine2.3, man/SWFShape_setLine2Filled.3,
+	  man/SWFShape_setLineStyle2_internal.3,
+	  man/SWFShape_setLineStyle2filled_internal.3,
+	  man/SWFShape_setLineStyle_internal.3,
+	  man/SWFShape_setRenderHintingFlags.3, man/SWFShape_useVersion.3,
+	  man/SWFSoundInstance_addEnvelope.3,
+	  man/SWFSoundInstance_setLoopCount.3,
+	  man/SWFSoundInstance_setLoopInPoint.3,
+	  man/SWFSoundInstance_setLoopOutPoint.3,
+	  man/SWFSoundInstance_setNoMultiple.3,
+	  man/SWFSoundStream_getDuration.3, man/SWFSoundStream_getFrames.3,
+	  man/SWFSoundStream_rewind.3, man/SWFTextField_setFont.3,
+	  man/SWFTextField_setFontCharacter.3, man/SWFText_addWideString.3,
+	  man/SWFText_resolveCodes.3, man/SWFVideoStream_getNumFrames.3,
+	  man/SWFVideoStream_getVideoFrame.3,
+	  man/SWFVideoStream_hasAudio.3, man/SWFVideoStream_nextFrame.3,
+	  man/SWFVideoStream_seek.3, man/SWFVideoStream_setDimension.3,
+	  man/SWFVideoStream_setFrameMode.3, man/destroySWFAction.3,
+	  man/destroySWFBinaryData.3, man/destroySWFBitmap.3,
+	  man/destroySWFBrowserFont.3, man/destroySWFCXform.3,
+	  man/destroySWFMovie.3, man/destroySWFMovieClip.3,
+	  man/destroySWFPrebuiltClip.3, man/destroySWFSoundInstance.3,
+	  man/dumpJpegBlock.3, man/getMP3Duration.3, man/getMP3Flags.3,
+	  man/newBevelFilter.3, man/newBlurFilter.3,
+	  man/newColorMatrixFilter.3, man/newConvolutionFilter.3,
+	  man/newDropShadowFilter.3, man/newGlowFilter.3,
+	  man/newGradientBevelFilter.3, man/newGradientGlowFilter.3,
+	  man/newSWFAction.3, man/newSWFAction_fromFile.3,
+	  man/newSWFAddCXform.3, man/newSWFBinaryData.3, man/newSWFBlur.3,
+	  man/newSWFBrowserFont.3, man/newSWFCXform.3,
+	  man/newSWFFilterMatrix.3, man/newSWFFontCollection_fromFile.3,
+	  man/newSWFFont_fromFile.3, man/newSWFInitAction.3,
+	  man/newSWFInitAction_withId.3, man/newSWFInput_allocedBuffer.3,
+	  man/newSWFInput_bufferCopy.3,
+	  man/newSWFJpegWithAlpha_fromInput.3, man/newSWFLineStyle.3,
+	  man/newSWFLineStyle2.3, man/newSWFLineStyle2_filled.3,
+	  man/newSWFMatrix.3, man/newSWFMovie.3, man/newSWFMovieClip.3,
+	  man/newSWFMovieWithVersion.3, man/newSWFMultCXform.3,
+	  man/newSWFPlaceObjectBlock.3, man/newSWFPosition.3,
+	  man/newSWFPrebuiltClip_fromFile.3,
+	  man/newSWFPrebuiltClip_fromInput.3, man/newSWFShadow.3,
+	  man/newSWFShapeFromBitmap.3, man/newSWFSound.3,
+	  man/newSWFSoundFromFileno.3, man/newSWFSoundInstance.3,
+	  man/newSWFSound_fromSoundStream.3, man/newSWFText2.3,
+	  man/newSWFVideoStream.3, man/newSWFVideoStream_fromFile.3,
+	  man/newSWFVideoStream_fromInput.3, man/newSizedSWFOutput.3,
+	  man/readMP3Header.3, man/writeSWFButtonSoundToMethod.3: update
+
+2008-10-05 15:26  krechert
+
+	* src/blocks/gradient.c: update documentation
+
+2008-10-05 15:23  krechert
+
+	* NEWS: update NEWS file
+
+2008-09-29 17:51  krechert
+
+	* src/blocks/sound.c: cleanup sound structure
+
+2008-09-29 17:24  krechert
+
+	* src/blocks/: sound.c, sound.h: remove dead code
+
+2008-09-28 18:53  krechert
+
+	* src/: font_util.c, gc.c, movie.c, shape_cubic.c, blocks/action.c,
+	  blocks/browserfont.c, blocks/filter.c, blocks/font.c,
+	  blocks/fromswf.c, blocks/imports.c, blocks/input.c,
+	  blocks/matrix.c, blocks/output.c, blocks/outputblock.c,
+	  blocks/placeobject.c, blocks/pngdbl.c, blocks/protect.c,
+	  blocks/scenedata.c, blocks/symbolclass.c, blocks/text.c,
+	  blocks/textfield.c, blocks/utf8.c: close
+	  http://bugs.libming.net/show_bug.cgi?id=39 do not include system
+	  header into c2man. c2man can not handle some __XXX declarations.
+
+2008-09-28 18:42  krechert
+
+	* src/blocks/filter.c: add missing LGPL header
+
+2008-09-28 17:12  krechert
+
+	* util/outputscript.c: closes bug
+	  http://bugs.libming.net/show_bug.cgi?id=68
+
+2008-09-25 17:08  strk
+
+	* configure.in: Bump release and lib versioning. Seems safe to do
+	  this always right after a release, so people runnign the CVS
+	  version will always be able to distinguish it from the actual
+	  latest release. The bump is by default only a minor (and lib
+	  revision) one, so we can have more chances to catch ABI breakers
+	  while developing. I left a comment about what numbers were
+	  associated with actual latest release, so when it is time to
+	  release again we can decide how to change it based on whether or
+	  not we broke the ABI the API or whatever.
+
+2008-09-25 15:38  krechert
+
+	* test/Media/150bpm.wav: removed this WAV file because of noise
+	  artefacts. makes debugging and testing of mings sounds
+	  functionality difficult.
+
+2008-09-23 20:19  krechert
+
+	* src/actioncompiler/swf5compiler.y: bugfix #2118651 "fix typo in
+	  swf5compiler.y" found by Furumoto-san
+
+2008-09-23 18:55  krechert
+
+	* src/: displaylist.c, blocks/button.c, blocks/matrix.c,
+	  blocks/text.c: don't omit scale if values are 0.0
+
+2008-09-23 18:08  krechert
+
+	* src/: ming.h.in, blocks/button.c: added SWFButtonRecord_setMatrix
+
+2008-09-23 17:56  krechert
+
+	* src/blocks/: matrix.c, matrix.h: move matrix struct definition to
+	  matrix.h. Allows the usage inside the lib.
+
+2008-09-20 18:07  anderson
+
+	* NEWS: Close out the rc2 section
+
+2008-09-18 02:44  anderson
 
 	* configure.in: Update to 0.4.2 for the RC2 release
 
