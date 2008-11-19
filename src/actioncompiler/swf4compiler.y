@@ -53,6 +53,7 @@
 %token GETURL
 %token GETURL1
 %token LOADMOVIE
+%token LOADMOVIENUM
 %token LOADVARIABLES
 %token POSTURL
 %token SUBSTR
@@ -146,6 +147,7 @@
 %type <action> assign_stmts_opt
 %type <action> expr
 %type <action> program
+%type <action> level
 
 %type <len> opcode opcode_list push_item push_list
 
@@ -414,6 +416,14 @@ urlmethod
 				    $$ = GETURL_METHOD_POST; }
 	;
 
+level
+	: expr
+		{ $$ = newBuffer();
+		  bufferWriteString($$, "_level", 7);
+		  bufferConcat($$, $1);
+		  bufferWriteOp($$, SWFACTION_STRINGCONCAT); }
+	;
+
 void_function_call
 	: STOPDRAG '(' ')' /* no args */
 		{ $$ = newBuffer();
@@ -471,6 +481,13 @@ void_function_call
 		  bufferWriteU8($$, SWFACTION_GETURL2);
 		  bufferWriteS16($$, 1);
 		  bufferWriteU8($$, $6 | GETURL_LOADMOVIE); }
+
+	| LOADMOVIENUM '(' expr ',' level urlmethod ')'
+		{ $$ = $3;
+		  bufferConcat($$, $5);
+		  bufferWriteOp($$, SWFACTION_GETURL2);
+		  bufferWriteS16($$, 1);
+		  bufferWriteU8($$, $6); }
 
 	| LOADVARIABLES '(' expr ',' expr urlmethod ')'
 		{ $$ = $3;

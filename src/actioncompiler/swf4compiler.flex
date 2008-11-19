@@ -146,6 +146,7 @@ callFrame	{ count();	return CALLFRAME;	}
 get[uU][rR][lL]		{ count();	return GETURL;	}
 get[uU][rR][lL]1	{ count();	return GETURL1;	}
 loadMovie	{ count();	return LOADMOVIE;	}
+loadMovieNum	{ count();	return LOADMOVIENUM;	}
 loadVariables	{ count();	return LOADVARIABLES;	}
 substr		{ count();	return SUBSTR;	}
 
