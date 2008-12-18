@@ -40,15 +40,15 @@ BINDINGS = "c $(CXXBINDINGS) $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 # committing them.
 #
 refs: $(C_PROGS)
-	for t in $(C_PROGS); do ./$$t; $(top_builddir)/util/listswf $$t.swf >$$t.ref; done
+	for t in $(C_PROGS); do ./$$t; $(top_builddir)/util/listswf $$t.swf > $(srcdir)/$$t.ref; done
 
 gen: refs $(SWFS) php.ini
 	for t in $(C_PROGS); do \
-	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c.^' >$$t.php ;\
-	$(top_builddir)/util/swftoperl $$t.swf $$t.swf >$$t.pl ;\
-	$(top_builddir)/util/swftopython $$t.swf $$t.swf >$$t.py ;\
-	$(top_builddir)/util/swftocxx $$t.swf $$t.swf >$$t-cxx.C ;\
-	$(top_builddir)/util/swftotcl $$t.swf $$t.swf >$$t.tcl ;\
+	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c.^' > $(srcdir)/$$t.php ;\
+	$(top_builddir)/util/swftoperl $$t.swf $$t.swf > $(srcdir)/$$t.pl ;\
+	$(top_builddir)/util/swftopython $$t.swf $$t.swf > $(srcdir)/$$t.py ;\
+	$(top_builddir)/util/swftocxx $$t.swf $$t.swf > $(srcdir)/$$t-cxx.C ;\
+	$(top_builddir)/util/swftotcl $$t.swf $$t.swf > $(srcdir)/$$t.tcl ;\
 	done
 
 .PHONY: dotests php.ini
