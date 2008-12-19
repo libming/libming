@@ -2,8 +2,10 @@
 
 <? 
 
+$srcdir = $argv[1];
+
 $m = new SWFMovie(7);
-$sound = new SWFSoundStream("../../Media/video02.flv");
+$sound = new SWFSoundStream($srcdir . "/../../Media/video02.flv");
 
 $m->setSoundStream($sound);
 

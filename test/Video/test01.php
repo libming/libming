@@ -1,8 +1,11 @@
 #!/usr/bin/php -c.
 <?php
+
+$srcdir = $argv[1];
+
 $m = new SWFMovie(7);
 
-$video = new SWFVideoStream("../Media/video01.flv");
+$video = new SWFVideoStream($srcdir . "/../Media/video01.flv");
 $video->setDimension(200, 200);
 $m->add($video);
 $frames = $video->getNumFrames();

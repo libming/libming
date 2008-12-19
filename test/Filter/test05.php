@@ -2,10 +2,12 @@
 
 <?
 
+$srcdir = $argv[1];
+
 $m = new SWFMovie(9);
 $m->setBackground(0xcc, 0xcc, 0xcc);
 $s = new SWFShape();
-$img = new SWFBitmap("../Media/image01.dbl");
+$img = new SWFBitmap($srcdir . "/../Media/image01.dbl");
 $fill = $s->addFill($img, SWFFILL_TILED_BITMAP);
 $s->setRightFill($fill);
 $w = $img->getWidth();
