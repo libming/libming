@@ -1,9 +1,12 @@
 #!/usr/bin/python
 from ming import *
+import sys
+
+srcdir=sys.argv[1]
 
 m =  SWFMovie();
 
-font = SWFFont("../Media/font01.fdb")
+font = SWFFont(srcdir + "/../Media/font01.fdb")
 text = SWFText(1)
 
 text.setFont(font)
