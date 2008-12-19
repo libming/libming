@@ -1,10 +1,13 @@
 #!/usr/bin/python
 from ming import *
+import sys
+
+srcdir=sys.argv[1]
 
 Ming_useSWFVersion(8);
 m =  SWFMovie();
 
-bitmap = SWFBitmap("../Media/image01.dbl")
+bitmap = SWFBitmap(srcdir + "/../Media/image01.dbl")
 shape = SWFShape()
 fill = shape.addFill(bitmap, SWFFILL_CLIPPED_BITMAP)
 shape.setRightFill(fill)

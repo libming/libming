@@ -1,9 +1,12 @@
 #!/usr/bin/python
 from ming import *
+import sys
+
+srcdir=sys.argv[1]
 
 m =  SWFMovie();
 
-font = SWFFont("../Media/test.ttf")
+font = SWFFont(srcdir + "/../Media/test.ttf")
 text = SWFText(1)
 
 w = font.getStringWidth("The quick brown fox jumps over the lazy dog. 1234567890")
