@@ -7,7 +7,7 @@ from distutils.core import setup, Extension
 
 import os
 
-srcdir = "@abs_srcdir@"
+srcdir = "@srcdir@"
 curdir = os.getcwd()
 
 mylibs = ['ming']

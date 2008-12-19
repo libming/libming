@@ -2,8 +2,13 @@ EXTRA_DIST = Zwiff/README.txt Zwiff/__init__.py Zwiff/setFlags.py \
 		INSTALL README TODO ming.py ming_wrap.c \
 		mingc.def mingc.py setup.py shape.py MANIFEST
 
-all:
+BUILT_SOURCES = ming_wrap.c
+
+all-local:
 	CFLAGS="$(CFLAGS) -fno-strict-aliasing" $(PYTHON) setup.py build
+
+ming_wrap.c: ../ming.i
+	swig -I$(srcdir)/.. -python ming.i
 
 clean-local:
 	rm -Rf test.swf build

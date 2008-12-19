@@ -17,4 +17,4 @@ CLEANFILES = test.swf
 EXTRA_DIST = test.tcl MANIFEST
 
 ming_wrap.c: ../ming.i
-	swig -I.. -tcl ming.i
+	swig -I$(srcdir)/.. -tcl ming.i
