@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
   unsigned char *data, *outdata;
   FILE *mask;
 
-  if(argc < 1)
+  if(argc < 2)
     usage();
 
   len = strlen(argv[1]);
