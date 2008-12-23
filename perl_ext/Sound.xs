@@ -47,6 +47,7 @@ SWFSound_new(package="SWF::Sound", arg, flags=0)
 			ST(0) = &sv_undef;
 		} else {
 			RETVAL = newSWFSound(f, flags);
+			ST(0) = sv_newmortal();	
 			sv_setref_pv(ST(0), package, (void*)RETVAL);
 		}
 	}

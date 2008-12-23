@@ -21,7 +21,7 @@ PROTOTYPES: ENABLE
 
 
 void
-SWFSoundInstance_DESTROY(inst)
+destroySWFSoundInstance(inst)
 	SWF::SoundInstance	inst
 	CODE:
         S_DEBUG(2, fprintf(stderr, "SoundInstance DESTROY CALLED\n"));
