@@ -592,6 +592,7 @@ void SWFSoundInstance_setLoopInPoint(SWFSoundInstance instance, unsigned int poi
 void SWFSoundInstance_setLoopOutPoint(SWFSoundInstance instance, unsigned int point);
 void SWFSoundInstance_setLoopCount(SWFSoundInstance instance, int count);
 void SWFSoundInstance_addEnvelope(SWFSoundInstance inst, unsigned int mark44, short left, short right);
+void destroySWFSoundInstance(SWFSoundInstance inst);
 
 /***** SWFCXform - Color transform *****/
 SWFCXform newSWFCXform(int rAdd, int gAdd, int bAdd, int aAdd,
