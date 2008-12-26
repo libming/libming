@@ -117,8 +117,8 @@ void export_cv(SV *class, SV *caller, char *sub)
     fprintf(stderr, "Here is the result: *%s::%s = \\&%s::%s\n", 
             SvPVX(caller), sub, SvPVX(class), sub); 
 #endif 
-    gv = gv_fetchpv(form("%_::%s", caller, sub), TRUE, SVt_PVCV); 
-    GvCV(gv) = perl_get_cv(form("%_::%s", class, sub), TRUE); 
+    gv = gv_fetchpv(form("%s::%s",SvPVX( caller), sub), TRUE, SVt_PVCV); 
+    GvCV(gv) = perl_get_cv(form("%s::%s", SvPVX(class), sub), TRUE); 
     GvIMPORTED_CV_on(gv); 
     GvMULTI_on(gv);
 } 
