@@ -5,13 +5,13 @@ use strict;
 
 $|=1;
 use SWF qw(Movie Font TextField);
-use SWF::Constants qw(SWFTEXTFIELD_DRAWBOX SWFTEXTFIELD_USEFONT);
+use SWF::Constants qw(SWFTEXTFIELD_DRAWBOX);
 # Add path to your *.fdb file
 my $filename = '../common/_sans.fdb';
 
 my $f= new SWF::Font($filename);
 
-my $tf= new SWF::TextField(SWFTEXTFIELD_DRAWBOX|SWFTEXTFIELD_USEFONT);
+my $tf= new SWF::TextField(SWFTEXTFIELD_DRAWBOX);
 $tf->setFont($f);
 $tf->setColor(0xff, 0x0, 0);
 $tf->setHeight(20);

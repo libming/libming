@@ -11,7 +11,7 @@ SWF::setScale(20);
 my $p = new SWF::Morph();
 
 my $s = $p->getShape1();
-$s->setLine();
+$s->setLine(18,0,0xFF,0);
 $s->setLeftFill(0xff, 0, 0);
 $s->drawLine(100,0);
 $s->drawLine(0,100);

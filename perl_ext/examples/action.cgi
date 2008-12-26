@@ -37,9 +37,17 @@ $i->setName("box");
 
 $m->add(new SWF::Action("x=-100;"));
 $m->nextFrame();
-$m->add(new SWF::Action("x+=3; /box.x=x;"));
+$m->add(new SWF::Action("x+=3; /box._x=x;"));
 $m->nextFrame();
 $m->add(new SWF::Action("gotoFrame(1); play();"));
 $m->nextFrame();
 
-$m->output();
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
