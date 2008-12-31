@@ -884,15 +884,9 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
 
   sprintf (tname, "character%d", sblock->CharacterID);
   printf ("%s(", newobj (tname, "TextField"));
-  if (sblock->HasText)
-    {
-      printf ("SWFTEXTFIELD_HASTEXT");
-      notFirst = 1;
-    }
+
   if (sblock->WordWrap)
     {
-      if (notFirst)
-	printf (" | ");
       printf ("SWFTEXTFIELD_WORDWRAP");
       notFirst = 1;
     }
@@ -957,13 +951,6 @@ if( sblock->HasLayout ) {
       if (notFirst)
 	printf (" | ");
       printf ("SWFTEXTFIELD_HTML");
-      notFirst = 1;
-    }
-  if (sblock->UseOutlines)
-    {
-      if (notFirst)
-	printf (" | ");
-      printf ("SWFTEXTFIELD_OUTLINES");
       notFirst = 1;
     }
   printf (");\n");
