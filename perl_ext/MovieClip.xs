@@ -26,6 +26,8 @@ SWFMovieClip_new(package="SWF::MovieClip")
         RETVAL = newSWFMovieClip();
         ST(0) = sv_newmortal();
         sv_setref_pv(ST(0), package, (void*)RETVAL);
+        if (!strcmp(package,"SWF::Sprite"))
+         warn("Using SWF::Sprite is deprecated. Use SWF::MovieClip instead!");
 
 
 SWF::DisplayItem
