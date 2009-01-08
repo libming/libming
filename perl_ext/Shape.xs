@@ -289,3 +289,15 @@ SWFShape_drawCharacterBounds(shape, character)
 	tmp = SvIV((SV*)SvRV(ST(1)));
 	character = INT2PTR(SWF__Character, tmp);
 	SWFShape_drawCharacterBounds(shape, character);
+
+SV *
+SWFShape_dumpOutline(shape)
+	SWF::Shape shape
+	PREINIT:
+      char *buf;
+	CODE:
+      buf=SWFShape_dumpOutline(shape);
+      RETVAL=newSVpv(buf,0);
+      free(buf);
+	OUTPUT:
+      RETVAL
