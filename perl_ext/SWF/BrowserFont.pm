@@ -15,3 +15,38 @@ $SWF::BrowserFont::VERSION = $SWF::VERSION;
 
 
 1;
+=head1 NAME
+
+SWF::BrowserFont - SWF BrowserFont class
+
+=head1 SYNOPSIS
+
+	use SWF::BrowserFont;
+	$font = new SWF::BrowserFont();
+
+=head1 DESCRIPTION
+
+Browser built-in font object for later usage in TextField objects.
+Not available for Text objects. Using BrowserFont objects will save
+memory in output file.
+
+=head1 METHODS 
+
+=over
+
+=item new SWF::BrowserFont($name)
+
+Creates a BrowserFont object, name selects a built-in font, like '_sans' .
+
+=back
+
+=head1 AUTHOR
+
+developers of ming
+ming.sourceforge.net
+
+=head1 SEE ALSO
+
+SWF, SWF::Font, SWF::Text, SWF::TextField
+
+=cut
