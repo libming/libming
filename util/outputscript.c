@@ -1081,8 +1081,15 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEFONT2);
 
   sprintf (fname, "f%d", sblock->FontID);
-  printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
-  saveFontInfo(sblock->FontID,sblock->NumGlyphs,sblock->CodeTable,NULL);
+  if (sblock->FontFlagsHasLayout || sblock->NumGlyphs)
+  {
+   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+   saveFontInfo(sblock->FontID,sblock->NumGlyphs,sblock->CodeTable,NULL);
+  }
+  else
+  {
+   printf ("%s(\"%s\" );\n", newobj (fname, "BrowserFont"), sblock->FontName);
+  }
 }
 
 void
