@@ -69,15 +69,15 @@ newBevelFilter(shadowColor, highlightColor, blur, shadow, flags)
 	SWFColor c1;
 	SWFColor c2;
 	INIT:
-	if(!SvROK(shadowColor) || av_len((AV *)SvRV(shadowColor)) < 3)
+	if(!SvROK(shadowColor) || av_len((AV *)SvRV(shadowColor)) < 2)
 		XSRETURN_UNDEF;
-	if(!SvROK(highlightColor) || av_len((AV *)SvRV(highlightColor)) < 3)
+	if(!SvROK(highlightColor) || av_len((AV *)SvRV(highlightColor)) < 2)
 		XSRETURN_UNDEF;
 	CODE:
 	c1.red = (char)SvNV(*av_fetch((AV *)SvRV(shadowColor), 0, 0));
 	c1.green = (char)SvNV(*av_fetch((AV *)SvRV(shadowColor), 1, 0));
 	c1.blue = (char)SvNV(*av_fetch((AV *)SvRV(shadowColor), 2, 0));
-	if(av_len((AV *)SvRV(shadowColor)) == 4)
+	if(av_len((AV *)SvRV(shadowColor)) == 3)
 		c1.alpha = (char)SvNV(*av_fetch((AV *)SvRV(shadowColor), 3, 0));
 	else
 		c1.alpha = 255;
@@ -85,7 +85,7 @@ newBevelFilter(shadowColor, highlightColor, blur, shadow, flags)
 	c2.red = (char)SvNV(*av_fetch((AV *)SvRV(highlightColor), 0, 0));
 	c2.green = (char)SvNV(*av_fetch((AV *)SvRV(highlightColor), 1, 0));
 	c2.blue = (char)SvNV(*av_fetch((AV *)SvRV(highlightColor), 2, 0));
-	if(av_len((AV *)SvRV(highlightColor)) == 4)
+	if(av_len((AV *)SvRV(highlightColor)) == 3)
 		c2.alpha = (char)SvNV(*av_fetch((AV *)SvRV(highlightColor), 3, 0));
 	else
 		c2.alpha = 255;
@@ -106,13 +106,13 @@ newConvolutionFilter(matrix, divisor, bias, color, flags)
 	PREINIT:
 	SWFColor c;
 	INIT:
-	if(!SvROK(color) || av_len((AV *)SvRV(color)) < 3)
+	if(!SvROK(color) || av_len((AV *)SvRV(color)) < 2)
 		XSRETURN_UNDEF;
 	CODE:
 	c.red = (char)SvNV(*av_fetch((AV *)SvRV(color), 0, 0));
 	c.green = (char)SvNV(*av_fetch((AV *)SvRV(color), 1, 0));
 	c.blue = (char)SvNV(*av_fetch((AV *)SvRV(color), 2, 0));
-	if(av_len((AV *)SvRV(color)) == 4)
+	if(av_len((AV *)SvRV(color)) == 3)
 		c.alpha = (char)SvNV(*av_fetch((AV *)SvRV(color), 3, 0));
 	else
 		c.alpha = 255;
@@ -129,13 +129,13 @@ newGlowFilter(color, blur, strength, flags)
 	PREINIT:
 	SWFColor c;
 	INIT:
-	if(!SvROK(color) || av_len((AV *)SvRV(color)) < 3)
+	if(!SvROK(color) || av_len((AV *)SvRV(color)) < 2)
 		XSRETURN_UNDEF;
 	CODE:
 	c.red = (char)SvNV(*av_fetch((AV *)SvRV(color), 0, 0));
 	c.green = (char)SvNV(*av_fetch((AV *)SvRV(color), 1, 0));
 	c.blue = (char)SvNV(*av_fetch((AV *)SvRV(color), 2, 0));
-	if(av_len((AV *)SvRV(color)) == 4)
+	if(av_len((AV *)SvRV(color)) == 3)
 		c.alpha = (char)SvNV(*av_fetch((AV *)SvRV(color), 3, 0));
 	else
 		c.alpha = 255;
@@ -152,13 +152,16 @@ newDropShadowFilter(color, blur, shadow, flags)
 	PREINIT:
 	SWFColor c;
 	INIT:
-	if(!SvROK(color) || av_len((AV *)SvRV(color)) < 3)
+	/* av_len returns the highest index in the array. */
+	/* The number of elements in the array is "av_len(av) + 1" */
+	/* see "man perlapi" or "man perlguts" */
+	if(!SvROK(color) || av_len((AV *)SvRV(color)) < 2)
 		XSRETURN_UNDEF;
 	CODE:
 	c.red = (char)SvNV(*av_fetch((AV *)SvRV(color), 0, 0));
 	c.green = (char)SvNV(*av_fetch((AV *)SvRV(color), 1, 0));
 	c.blue = (char)SvNV(*av_fetch((AV *)SvRV(color), 2, 0));
-	if(av_len((AV *)SvRV(color)) == 4)
+	if(av_len((AV *)SvRV(color)) == 3)
 		c.alpha = (char)SvNV(*av_fetch((AV *)SvRV(color), 3, 0));
 	else
 		c.alpha = 255;
