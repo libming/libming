@@ -16,7 +16,7 @@
 #include "SWF.h"
 #include "perl_swf.h"
 
-MODULE = SWF::Shadow	PACKAGE = SWF::Shadow		PREFIX = Shadow_
+MODULE = SWF::Shadow	PACKAGE = SWF::Shadow		PREFIX = SWFShadow_
 PROTOTYPES: ENABLE
 
 SWF::Shadow

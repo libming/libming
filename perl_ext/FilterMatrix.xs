@@ -16,7 +16,7 @@
 #include "SWF.h"
 #include "perl_swf.h"
 
-MODULE = SWF::FilterMatrix	PACKAGE = SWF::FilterMatrix		PREFIX = FilterNatrix_
+MODULE = SWF::FilterMatrix	PACKAGE = SWF::FilterMatrix		PREFIX = SWFFilterMatrix_
 PROTOTYPES: ENABLE
 
 SWF::FilterMatrix
