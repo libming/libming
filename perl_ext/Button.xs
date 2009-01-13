@@ -101,6 +101,10 @@ SWFButton_addCharacter(button, character, flags=0)
             case 4:
                RETVAL = SWFButton_addCharacter(button, character, SWFBUTTON_DOWN);
                break;
+            default:                              /* this should never be ... */
+               RETVAL = (void*)&PL_sv_undef;      /* ... but avoids a gcc 4.x warning:  ... */
+               croak("internal error Button.xs"); /* ... "RETVAL may be used uninitialized" */
+               break;
        }
        ST(0) = sv_newmortal();
        sv_setref_pv(ST(0), "SWF::ButtonRecord", (void*)RETVAL);
