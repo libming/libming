@@ -28,7 +28,7 @@ SWFFilterMatrix_new(package="SWF::FilterMatrix", cols, rows, vals)
 	INIT:
 	int i;
 	I32 count = cols * rows;
-	if(!SvROK(vals) || av_len((AV *)SvRV(vals)) != count)
+	if(!SvROK(vals) || (av_len((AV *)SvRV(vals)) + 1)  != count)
 		XSRETURN_UNDEF;
 	CODE:
 	float *f_vals = (float *)malloc(count * sizeof(float));
