@@ -86,6 +86,16 @@ static char *SWF_DisplayItem_tag[] = {
      NULL,
 };
 
+static char *SWF_Filter_tag[] = {
+     "SWF_FILTER_MODE_INNER",
+     "SWF_FILTER_MODE_KO",
+     "SWF_FILTER_MODE_COMPOSITE",
+     "SWF_FILTER_MODE_ONTOP",
+     "SWF_FILTER_CLAMP",
+     "SWF_FILTER_FLAG_PRESERVE_ALPHA",
+     NULL,
+};
+
 
 static char **export_tags(char *tag) {
    switch (*tag) {
@@ -98,7 +108,9 @@ static char **export_tags(char *tag) {
    case 'F':
      if(strEQ("Fill", tag))
        return SWF_Fill_tag;   
-	 case 'S':
+     if(strEQ("Filter", tag))
+       return SWF_Filter_tag;   
+   case 'S':
      if(strEQ("Sound", tag))
        return SWF_Sound_tag;
    case 'T':

@@ -123,18 +123,31 @@ This tag imports constants most commonly used by SWF::TextField.
     SWFTEXTFIELD_USEFONT
     SWFTEXTFIELD_AUTOSIZE
 
+=item Filter
+
+This tag imports constants most commonly used by SWF::Filter,
+all available since SWF8:
+
+    SWF_FILTER_MODE_INNER
+    SWF_FILTER_MODE_KO
+    SWF_FILTER_MODE_COMPOSITE
+    SWF_FILTER_MODE_ONTOP
+    SWF_FILTER_CLAMP
+    SWF_FILTER_FLAG_PRESERVE_ALPHA
+
 =back
 
 =head1 AUTHOR
 
 Soheil Seyfaie (soheil at users.sourceforge.net).
 Peter Liscovius
+Albrecht Kleine
 
 and see AUTHORS in ming lib distribution (ming.sf.net)
 
 =head1 SEE ALSO
 
 SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Fill, SWF::Gradient, SWF::Movie, SWF::MovieClip, SWF::Shape, 
-SWF::Sound, SWF::TextField
+SWF::Sound, SWF::TextField, SWF::Filter
 
 =cut
