@@ -37,9 +37,9 @@ SWF::Shadow is a helper class useful for SWF::Filter.
 
 =item new SWF::Shadow($angle, $distance, $strength)
 
-Creates a Shadow object. The object is controled by
-angle (in radians), distance (in px) and strength. Useful values 
-for strength are between 1 and 10.
+Creates a Shadow object. The object is controlled by
+angle (in radians), distance (in px) and strength.
+Useful values for strength are between 1 and 10. 
 Use the created object as parameter for construction of some of the 
 SWF::Filter objects.
 

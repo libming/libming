@@ -28,7 +28,7 @@ SWF::FilterMatrix - SWF FilterMatrix  class
 	                  0.5, 0.4, 0.3, 0, 0, 
 	                  0, 0, 0, 1, 0 ];
 	$filtermatrix = new SWF::FilterMatrix( 5, 4, $valueref );
-	my $filter    = SWF::Filter::newColorMatrixFilter( $filtermatrix );
+	$filter    = SWF::Filter::newColorMatrixFilter( $filtermatrix );
 
 =head1 DESCRIPTION
 

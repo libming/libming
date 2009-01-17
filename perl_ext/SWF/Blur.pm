@@ -37,7 +37,7 @@ SWF::Blur is a helper class useful for SWF::Filter.
 
 =item new SWF::Blur($blurX, $blurY, $passes)
 
-Creates a Blur object. The object is controled by the horizontal blur amount -blurX-, 
+Creates a Blur object. The object is controlled by the horizontal blur amount -blurX-, 
 the vertical blur amount -blurY- and the count of passes (use 1, 2 or 3).
 Use the created object as parameter for construction of some of the SWF::Filter objects.
 

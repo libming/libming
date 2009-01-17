@@ -149,6 +149,17 @@ Draws a circle with radious $r.
 
 =item $shape->drawArc($r, $startAngle, $endAngle)  - Don't use. Interface may change.
 
+Draws an arc with radious $r form start to end.
+
+=item $shape->dumpOutline();
+
+Returns a string describing shape's outline. After drawing in a shape 
+expect getting a multi-line string like:
+     moveto 368,5
+     curveto 348,5 327,1
+     curveto 307,-3 284,-15
+etc. etc.
+
 =back
 
 =head1 AUTHOR
@@ -157,7 +168,7 @@ Soheil Seyfaie (soheil at users.sourceforge.net).
 
 =head1 SEE ALSO
 
-SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::MovieClip,SWF::Shape, 
-SWF::Sound, SWF::TextField, SWF::Text
+SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::MovieClip,
+SWF::TextField, SWF::Text
 
 =cut

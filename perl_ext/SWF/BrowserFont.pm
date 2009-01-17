@@ -36,7 +36,8 @@ memory in output file.
 
 =item new SWF::BrowserFont($name)
 
-Creates a BrowserFont object, name selects a built-in font, like '_sans' .
+Creates a BrowserFont object, name selects a built-in font, like '_sans'
+or '_typewriter'.
 
 =back
 
