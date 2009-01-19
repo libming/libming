@@ -73,6 +73,7 @@ This tag imports constants most commonly used by SWF::Fill.
     SWFFILL_GRADIENT
     SWFFILL_LINEAR_GRADIENT
     SWFFILL_RADIAL_GRADIENT
+    SWFFILL_FOCAL_GRADIENT
     SWFFILL_BITMAP
     SWFFILL_TILED_BITMAP
     SWFFILL_CLIPPED_BITMAP
@@ -134,6 +135,17 @@ all available since SWF8:
     SWF_FILTER_MODE_ONTOP
     SWF_FILTER_CLAMP
     SWF_FILTER_FLAG_PRESERVE_ALPHA
+
+=item Gradient
+
+This tag imports constants most commonly used by SWF::Gradient,
+all available since SWF8:
+
+    SWF_GRADIENT_PAD
+    SWF_GRADIENT_REFLECT
+    SWF_GRADIENT_REPEAT
+    SWF_GRADIENT_NORMAL
+    SWF_GRADIENT_LINEAR
 
 =back
 

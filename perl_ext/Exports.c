@@ -14,6 +14,7 @@ static char *SWF_Fill_tag[] = {
      "SWFFILL_GRADIENT",
      "SWFFILL_LINEAR_GRADIENT",
      "SWFFILL_RADIAL_GRADIENT",
+     "SWFFILL_FOCAL_GRADIENT",
      "SWFFILL_BITMAP",
      "SWFFILL_TILED_BITMAP",
      "SWFFILL_CLIPPED_BITMAP",
@@ -96,6 +97,14 @@ static char *SWF_Filter_tag[] = {
      NULL,
 };
 
+static char *SWF_Gradient_tag[] = {
+     "SWF_GRADIENT_PAD",
+     "SWF_GRADIENT_REFLECT",
+     "SWF_GRADIENT_REPEAT",
+     "SWF_GRADIENT_NORMAL",
+     "SWF_GRADIENT_LINEAR",
+     NULL,
+};
 
 static char **export_tags(char *tag) {
    switch (*tag) {
@@ -107,9 +116,12 @@ static char **export_tags(char *tag) {
        return SWF_DisplayItem_tag;
    case 'F':
      if(strEQ("Fill", tag))
-       return SWF_Fill_tag;   
+       return SWF_Fill_tag;
      if(strEQ("Filter", tag))
-       return SWF_Filter_tag;   
+       return SWF_Filter_tag;
+   case 'G':
+     if(strEQ("Gradient", tag))
+       return SWF_Gradient_tag;       
    case 'S':
      if(strEQ("Sound", tag))
        return SWF_Sound_tag;
