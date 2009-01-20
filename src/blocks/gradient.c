@@ -208,8 +208,8 @@ SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient, SWFBlocktype shapeT
 		byte flags ;
 		nGrads = min(nGrads, 15);
 		flags = nGrads;
-		flags |= (0x3 & gradient->spreadMode) << 4;
-		flags |= (0x3 & gradient->interpolationMode) << 6;
+		flags |= (0x3 & gradient->interpolationMode) << 4;
+		flags |= (0x3 & gradient->spreadMode) << 6;
 		SWFOutput_writeUInt8(out, flags); /* only 1-15 allowed */
 	}
 	else 
