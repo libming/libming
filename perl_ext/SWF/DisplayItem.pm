@@ -1,5 +1,6 @@
 # ====================================================================
 # Copyright (c) 2000 by Soheil Seyfaie. All rights reserved.
+#           (c) 2009 by Albrecht Kleine
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 # ====================================================================
@@ -22,21 +23,20 @@ SWF::DisplayItem - SWF DisplayItem class
 
 =head1 SYNOPSIS
 
-
- use SWF::DisplayItem;
-
+	use SWF::DisplayItem;
+	$dispitem = $movie->add($shape);
+	$dispitem->rotate(45);
 
 =head1 DESCRIPTION
 
 When you place an SWF object (one of the types that can be seen with eyes by user) 
-in a frame of a SWF::Movie or SWF::movieClip, the return value will be
+in a frame of a SWF::Movie or SWF::MovieClip, the return value will be
 in a SWF::DisplayItem.
 
 You can now modify that item in current and every following frames of the clip where you added the SWF object.
 
 Further it is accessible by ActionScript too. 
 Just give the DisplayItem a name with method setName($name) after you added the SWF object to a SWF::Movie or SWF::MovieClip
-
 
 =head1 METHODS
 
@@ -52,11 +52,11 @@ Displace $displayItem by ($x, $y)
 
 =item $displayItem->scaleTo($x [,$y]);
 
-Set $displyItem scale to $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.
+Set $displayItem scale to $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.
 
 =item $displayItem->scale($x [,$y]);
 
-Multiply $displyItem scale by $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.
+Multiply $displayItem scale by $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.
 
 =item $displayItem->rotateTo($degrees);
 
@@ -72,7 +72,7 @@ Add $x to the current x-skew.
 
 =item $displayItem->skewXTo($x);
 
-Set x-skew to $x. 1.0 is 45-degree forward slant. More is more forwad while less is more backward.
+Set x-skew to $x. 1.0 is 45-degree forward slant. More is more forward while less is more backward.
 
 =item $displayItem->skewY($y);
 
@@ -82,6 +82,13 @@ Add $y to the current y-skew.
 
 Set y-skew to $y. 1.0 is 45-degree upward slant. More is more upward while less is more downward.
 
+=item $displayItem->setMatrix($a, $b, $c, $d, $e, $f)
+
+Do an operation of rotating/skewing (b,c), moving (e,f) and scaling (a,d) at once.
+The default initial values of an SWF::DisplayItem object's matrix are 1.0, 0, 0, 1.0, 0, 0 . 
+So calling setMatrix with these defaults (I<setMatrix(1.0, 0, 0, 1.0, 0, 0);>)
+will reset results of earlier calls of SWF::DisplayItem methods (like rotate(45) etc. etc.)
+
 =item $displayItem->setDepth($depth);
 
 Set Z-order of $displayItem to $depth.
@@ -90,9 +97,13 @@ Set Z-order of $displayItem to $depth.
 
 Useful for SWF::Morph. Sets $displayItem ratio to $ratio.
 
+=item $displayItem->setColorAdd($r, $g, $b [,$a]))
+
 =item $displayItem->addColor($r, $g, $b [,$a]);
 
 Add RGB color to the $displayItem's color transform. Default value of $a is 1.0
+
+=item $displayItem->setColorMult($r, $g, $b [,$a]))
 
 =item $displayItem->multColor($r, $g, $b [,$a]);
 
@@ -128,15 +139,71 @@ Returns Z-order of $displayItem.
 
 =item $displayItem->setMask($level);
 
+Sets a mask level: display items with lower or equal depth are masked, 
+any other display items are not masked. 
+Use setDepth() to control desired masking.
+
+=item $displayItem->endMask()
+
+End masking started by prior setMask() call.
+
+=item $displayItem->addAction( $action [,$flags] )
+
+Add $action, an object of SWF::Action class.
+[TODO: document optional flags parameter]
+
+=item $displayItem->setBlendMode($mode)
+
+Set an alternative blend mode instead of default alpha blend.
+Possible modes are SWFBLEND_MODE_NORMAL, SWFBLEND_MODE_LAYER etc.
+
+=item $displayItem->cacheAsBitmap($flag)
+
+Set a flag (value 0 or 1) showing the character can be cached as a bitmap. 
+This might improve rendering speed, if the object does no change often.
+This feature is available for SWF version >= 8 only.
+
+=item $displayItem->flush()
+
+Writes the SWF::DisplayItem object immediately to the blocklist.
+Usually MING waits with writing a display item until a frame is closed
+through a nextFrame() call, because a display items state could be altered 
+for the current frame. By using the flush() method MING does not wait 
+and writes the frame immediately. Therefore an user can influence the 
+swf tag order. Changing a display items state after calling flush() takes 
+effect in the next frame.
+
+=item $matrix = $displayItem->getMatrix()
+
+Returns an associated SWF::Matrix object.
+
+=item $character = $displayItem->getCharacter()
+
+Returns the associated SWF::Character object.
+
+=item $displayItem->addFilter( $filter )
+
+Process the DisplayItem object thru a prepared filter:
+an object of SWF::Filter class, e.g. BlurFilter or DropShadowFilter.
+Filters are available since player version 8.
+
+=item $displayItem->setCXform( $cxform )
+
+Process the DisplayItem object thru $cxform: a prepared color 
+transformation object of SWF::CXform class.
+
 =back
 
 =head1 AUTHOR
 
 Soheil Seyfaie (soheil AT users.sourceforge.net)
 Peter Liscovius
+Albrecht Kleine
 
 =head1 SEE ALSO
 
-SWF, SWF::Button, SWF::Movie, SWF::MovieClip, SWF::Shape, SWF::Text, SWF::TextField
+SWF, SWF::Button, SWF::Movie, SWF::MovieClip, SWF::Shape, SWF::Text, SWF::TextField,
+SWF::Filter, SWF::CXform, SWF::Matrix, SWF::Action, SWF::Morph, SWF::Character,
+SWF::Constants
 
 =cut

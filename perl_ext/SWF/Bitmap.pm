@@ -45,8 +45,10 @@ Creates a new SWF::Bitmap object using 'file'. The file extension
 has to be one of ".jpg",".jpeg" or ".dbl" (not case sensitive). 
 In all other cases use either newSWFDBLBitmap() or newSWFJpeg...()
 constructors. The alpha parameter represents a filename for opacity
-data ('alpha' channel), but only for JPG files. 
-[TODO: document alpha file details]
+data ('alpha' channel), but only for JPG files.  Alpha data files
+are produced by tool gif2mask. The original GIF used for gif2mask input
+file containing alpha information should have same dimensions (width x height)
+as the JPG file.
 
 =item newSWFDBLBitmap SWF::Bitmap($file)
 
@@ -65,16 +67,18 @@ but not with .jpg or .jpeg filename extension.
 Creates a new SWF::Bitmap object using JPG file similar newSWFJpegBitmap()
 with additional opacity information in 'alpha' file. Use this constructor
 if you have a file with JPG data, but not with .jpg or .jpeg filename extension
-and if there is opacity information available in file 'alpha'.  
-[TODO: document alpha file details]
+and if there is opacity information available in 'alpha' file.  
+Alpha data files are produced by gif2mask tool. The original GIF file
+containing alpha information used for gif2mask input should have same dimensions
+as the JPG file.
 
-=item $bitmap->getWidth();
+=item $width = $bitmap->getWidth();
 
-Return width of bitmap in pixels.
+Returns width of bitmap in pixels.
 
-=item $bitmap->getHeight();
+=item $height = $bitmap->getHeight();
 
-Return height of bitmap in pixels.
+Returns height of bitmap in pixels.
 
 =back
 
@@ -85,6 +89,6 @@ developers of ming.sourceforge.net
 
 =head1 SEE ALSO
 
-SWF, SWF::Fill, SWF::Shape, SWF::Button, SWF::Constants, png2dbl, gif2dbl
+SWF, SWF::Fill, SWF::Shape, SWF::Button, SWF::Constants, png2dbl, gif2dbl, gif2mask
 
 =cut
