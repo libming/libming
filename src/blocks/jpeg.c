@@ -49,6 +49,11 @@ struct SWFJpegWithAlpha_s
 	SWFInput input;	 /* leave these here so that we */
 	int length;			 /* can cast this to swfJpegBitmap */
 
+#if TRACK_ALLOCS
+	/* memory node for garbage collection */
+	mem_node *gcnode;
+#endif
+	/* ---insert additions here (for casting to swfJpegBitmap) --- */
 	SWFInput alpha;
 	int jpegLength;
 };
@@ -497,6 +502,9 @@ newSWFJpegWithAlpha_fromInput(SWFInput input, SWFInput alpha)
 		SWF_error("couldn't get alpha file length!");
 
 	jpeg->length = jpeg->jpegLength + alen + 6;
+#if TRACK_ALLOCS
+	jpeg->gcnode = ming_gc_add_node(jpeg, (dtorfunctype) destroySWFBitmap);
+#endif
 
 	return jpeg;
 }
