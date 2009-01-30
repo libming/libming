@@ -92,7 +92,11 @@ int main(int argc, char *argv[])
 
   /* zlib-compress the gif data */
   compress2(outdata, &outsize, data, size, 9);
-  outsize = size;
+  
+  /* outsize = size; */
+  /* Let's better use the compress2() result value         */
+  /* of compressed data size instead using original size   */
+  /* else we would waste some outdata file space  -- ak'09 */
 
   /* dump to outfile */
 
