@@ -42,4 +42,7 @@ SWFAction_compile(action, version)
 	PREINIT:
 	int len;
 	CODE:
-	RETVAL = SWFAction_compile(action, version, &len);
+	 RETVAL = SWFAction_compile(action, version, &len);
+	OUTPUT:
+	 RETVAL
+	
