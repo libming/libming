@@ -1,3 +1,207 @@
+2009-02-04 20:39  akleine
+
+	* perl_ext/SWF/PrebuiltClip.pm: added initial pod
+
+2009-02-03 20:01  akleine
+
+	* perl_ext/SWF/Matrix.pm: added initial pod
+
+2009-02-02 18:25  akleine
+
+	* perl_ext/: Action.xs, SWF/Action.pm: updated pod and added OUTPUT
+	  keyword fixing return value of compile() method, also removed
+	  warning: "unused variable `targ'"
+
+2009-01-30 17:22  akleine
+
+	* util/gif2mask.c: bug fix: was wrong compressed data file size
+
+2009-01-29 17:40  akleine
+
+	* src/blocks/jpeg.c: destructor crash in SWFJpegWithAlpha* -blocks
+	  fixed (gc stuff)
+
+2009-01-28 17:26  akleine
+
+	* perl_ext/SWF/: Bitmap.pm, DisplayItem.pm: update pod
+
+2009-01-22 18:24  akleine
+
+	* perl_ext/SWF/Bitmap.pm: pod update
+
+2009-01-21 18:36  akleine
+
+	* perl_ext/SWF/Fill.pm: added initial pod
+
+2009-01-20 21:14  akleine
+
+	* src/blocks/gradient.c: gradient flag bug fix
+
+2009-01-19 20:28  akleine
+
+	* perl_ext/SWF/Gradient.pm: added initial pod
+
+2009-01-19 17:49  akleine
+
+	* perl_ext/: Exports.c, SWF/Constants.pm: added more v8 constants
+
+2009-01-17 13:29  akleine
+
+	* perl_ext/SWF/: Blur.pm, BrowserFont.pm, CXform.pm, Filter.pm,
+	  FilterMatrix.pm, Shadow.pm, Shape.pm: updated pod / added new pod
+	  for SWF::CXform
+
+2009-01-16 19:44  akleine
+
+	* perl_ext/SWF/FilterMatrix.pm: added initial pod
+
+2009-01-15 17:53  akleine
+
+	* perl_ext/: Exports.c, SWF/Constants.pm: added Filter constants
+
+2009-01-14 19:57  akleine
+
+	* perl_ext/SWF/Filter.pm: added initial pod
+
+2009-01-14 19:28  akleine
+
+	* perl_ext/FilterMatrix.xs: fixed check of array length
+
+2009-01-13 18:59  akleine
+
+	* perl_ext/SWF/: Blur.pm, Shadow.pm: added initial pod
+
+2009-01-13 18:49  akleine
+
+	* perl_ext/Button.xs: avoid gcc 4.x compiler warning
+
+2009-01-12 18:02  akleine
+
+	* perl_ext/Filter.xs: Fixed array size bug: av_len returns the
+	  highest index in the array.  The number of elements in the array
+	  is "av_len(av) + 1".
+
+2009-01-12 17:34  akleine
+
+	* perl_ext/: FilterMatrix.xs, Shadow.xs: fixed typos in PREFIX
+	  keyword
+
+2009-01-11 11:58  akleine
+
+	* perl_ext/SWF/BrowserFont.pm: added initial pod
+
+2009-01-11 11:56  akleine
+
+	* util/outputscript.c: use BrowserFont conditional
+
+2009-01-09 17:57  akleine
+
+	* perl_ext/SWF/Font.pm: added initial pod
+
+2009-01-08 20:11  akleine
+
+	* perl_ext/Shape.xs: added missing function SWFShape_dumpOutline()
+	  for Perl
+
+2009-01-06 18:35  akleine
+
+	* perl_ext/SWF/TextField.pm: pod update
+
+2009-01-05 21:29  akleine
+
+	* perl_ext/SWF/Text.pm: Added initial pod for SWF::Text
+
+2009-01-04 15:44  akleine
+
+	* util/outputfdb.c: Changed "buf" memory allocation from stack to
+	  heap to prevent segmentation fault due too small stack size
+	  ('ulimit -s') as seen for some huge Asian Unicode font files.
+	  Also fixed file size message.
+
+2009-01-02 17:20  akleine
+
+	* perl_ext/MovieClip.xs: added deprecation warning for SWF::Sprite
+
+2008-12-31 12:24  akleine
+
+	* util/outputscript.c: removed useless TextField flags
+
+2008-12-26 17:01  akleine
+
+	* perl_ext/examples/: action.cgi, morph.cgi, textfield.cgi: made
+	  work again some of perl_ext/examples/*.cgi
+
+2008-12-26 10:49  akleine
+
+	* perl_ext/Exports.c: Fixed broken export of constants in the Perl
+	  interface.  This bug was first mentioned by Patrice Dumas,
+	  2008-04-02 on the ming mailing list. Also it makes some of the
+	  demo files in perl_ext/examples/*.cgi running again.
+
+2008-12-23 15:09  akleine
+
+	* perl_ext/: Sound.xs, SoundInstance.xs: This patch does fix a bug
+	  reported by Yung-chung Lin at 2008-08-09 on the 'ming-users'
+	  mailing list in using Sound objects via the Perl interface: 'new
+	  SWF::Sound(...);'
+
+2008-12-23 14:14  akleine
+
+	* src/ming.h.in: added missing prototype: destroySWFSoundInstance()
+
+2008-12-21 11:56  krechert
+
+	* util/gif2mask.c: bugfix:
+	  http://bugs.libming.org/show_bug.cgi?id=73
+
+2008-12-19 18:45  strk
+
+	* test/Font/: test01.py, test02.py: fix run of python tests out of
+	  source tree
+
+2008-12-19 18:39  strk
+
+	* test/: Filter/test05.php, Movie/setSoundStream/test01.php,
+	  Movie/setSoundStream/test02.php, Movie/setSoundStream/test03.php,
+	  SoundStream/test01.php, SoundStream/test02.php, Video/test01.php:
+	  Fix php tests run out of source tree
+
+2008-12-19 10:41  strk
+
+	* test/: FillStyle/test04.py, Font/test03.py: Add handling of
+	  srcdir arg passed to python tests. The test in Font fails for
+	  different reasons it seems.
+
+2008-12-19 10:18  strk
+
+	* py_ext/Makefile.am, py_ext/setup.py.in, tcl_ext/Makefile.am:
+	  Out-of-tree build for python extension. Contributed by Patrice
+	  Dumas.
+
+2008-12-18 16:49  strk
+
+	* test/Video/test05.pl: another test ported to perl
+
+2008-12-18 16:40  strk
+
+	* test/Video/test04.pl: Figured how to use constants
+
+2008-12-18 16:37  strk
+
+	* test/Video/: test01.pl, test02.pl, test03.pl: Add perl version of
+	  some Video tests. To proceed I need to figure how to specify
+	  constants (anyone?)
+
+2008-12-18 14:25  strk
+
+	* test/Makefile.inc: generate testing files in sourcedir, not
+	  builddir
+
+2008-11-19 21:57  strk
+
+	* src/actioncompiler/: swf4compiler.flex, swf4compiler.y: Add
+	  support for loadMovieNum in SWF4
+
 2008-11-07 11:04  strk
 
 	* NEWS: add note about delete/delete2

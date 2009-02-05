@@ -24,8 +24,8 @@ Block length: 95
   Matrix:
    ScaleX 0.061035 ScaleY 0.061035
    TranslateX   1000 TranslateY   1000
- Gradient:  SpreadMode: 1
- InterpolationMode: 2
+ Gradient:  SpreadMode: 2
+ InterpolationMode: 1
  NumGradients: 9
  Ratio: 0
  RGBA: ( 0, 0, 0,ff)
