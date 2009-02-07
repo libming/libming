@@ -35,9 +35,10 @@ SWFSound_new(package="SWF::Sound", arg, flags=0)
 
 	if(flags == 0 && sv_derived_from(ST(1), "SWF::SoundStream"))
 	{
-		stream = (SWF__SoundStream)SvPVX(ST(1));
+		stream = (SWF__SoundStream) SvIV((SV*)SvRV(ST(1)));
 		RETVAL = newSWFSound_fromSoundStream(stream);
-		ST(0) = sv_newmortal();	
+		ST(0) = sv_newmortal();
+		sv_setref_pv(ST(0), package, (void*)RETVAL);
 	}
 	else
 	{
