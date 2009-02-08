@@ -75,19 +75,19 @@ Returns Pen's (x,y) coordinates
 
 =item $shape->drawLineTo($x, $y);
 
-Draw a line (using current line style - see L<"setLine()"> method) from the current position to ($x, $y).
+Draw a line (using current line style - see "setLine()" method) from the current position to ($x, $y).
 
 =item $shape->drawLine($dx, $dy);
 
-Draw a line (using current line style - see L<"setLine()"> method) from the current position to displacement ($dx, $dy).
+Draw a line (using current line style - see "setLine()" method) from the current position to displacement ($dx, $dy).
 
 =item $shape->drawCurveTo($controlx, $controly, $anchorx, $anchory);
 
-Draw a quadratic curve (using current line style - see L<"setLine()"> method) from current pen position to ($anchorx, $anchory) using control point ($controlx, $controly).
+Draw a quadratic curve (using current line style - see "setLine()" method) from current pen position to ($anchorx, $anchory) using control point ($controlx, $controly).
 
 =item $shape->drawCurve($controldx, $controly, $anchorx, $anchory);
 
-Draw a quadratic curve (using current line style - see  L<"setLine()"> method) from current pen position to displacement ($anchordx, $anchordy) using displacement control point ($controldx, $controldy).
+Draw a quadratic curve (using current line style - see  "setLine()" method) from current pen position to displacement ($anchordx, $anchordy) using displacement control point ($controldx, $controldy).
 
 =item $shape->setLine($width, $r, $g, $b [,$a]);
 
@@ -95,11 +95,11 @@ Sets Shape's line width and color (RGB). To remove the Shape's line style call t
 
 =item $fill = $shape->addFill($r, $g, $b [,$a]);
 
-Adds a solid fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the  L<"setLine()"> method described below. The default value of $a is 0.
+Adds a solid fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the "setLine()" method described below. The default value of $a is 0.
 
 =item $fill = $shape->addFill($bitmap [,FLAG]);
 
-Adds a bitmap fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the L<"setLine()"> method described below. 
+Adds a bitmap fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the "setLine()" method described below. 
 
 $bitmap is an SWF::Bitmap object while FLAG arguemnt can be SWFFILL_TILED_BITMAP or SWFFILL_CLIPPED_BITMAP. Make sure to import these constants to your package before useing it, i.e. use the following statement:
 
@@ -110,7 +110,7 @@ The default value of FLAG is SWFFILL_TILED_BITMAP.
 
 =item $fill = $shape->addFill($gradient [,FLAG]);
 
-Adds a gradient fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the L<"setLine()"> method described below. 
+Adds a gradient fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the "setLine()" method described below. 
 
 $gradient is an SWF::Gradient object while FLAG arguemnt can be SWFFILL_LINEAR_GRADIENT or SWFFILL_RADIAL_GRADIENT.Make sure to import these constants to your package before useing it, i.e. use the following statement:
 
@@ -121,7 +121,7 @@ The default value of FLAG is SWFFILL_LINEAR_GRADIENT.
 
 =item $shape->setLeftFill($fill);
 
-Sets the fill on the left side of the edge. $fill is an SWF::Fill object returned from L<"addFill"> method.
+Sets the fill on the left side of the edge. $fill is an SWF::Fill object returned from "addFill" method.
 
 =item $shape->setLeftFill($r, $g, $b [,$a]);
 
@@ -133,7 +133,7 @@ This is another way of saying:
 
 =item $shape->setRightFill($fill);
 
-Sets the fill on the right side of the edge. $fill is an SWF::Fill object returned from L<"addFill"> method.
+Sets the fill on the right side of the edge. $fill is an SWF::Fill object returned from "addFill" method.
 
 =item $shape->setRightFill($r, $g, $b [,$a]);
 

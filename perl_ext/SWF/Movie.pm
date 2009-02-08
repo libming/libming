@@ -161,9 +161,10 @@ Set the playing speed in frames/second.
 A feature that prevents only flashnewbies from importing your movie into Macromedias Flash authoring tools. It cannot protect your content from being loaded by 
 other flashmovies, deleting of the protection with a hexeditor or disassembling with tools. 
 
-=item setSoundStream($soundstream)
+=item setSoundStream($soundstream, [$skip])
 
 Puts an SWF::SoundStream object as streaming sound into the main timeline.
+The optional skip parameter describes the time in seconds to be skiped.
 
 	$m->setSoundStream($soundstream);
 

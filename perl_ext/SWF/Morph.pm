@@ -17,9 +17,7 @@ sub getShapes{
     return ($self->getShape1(), $self->getShape2());
 }
 
-
 1;
-
 
 __END__
 
@@ -29,8 +27,8 @@ SWF::Morph - SWF Morph Class
 
 =head1 SYNOPSIS
 
- use SWF::Morph;
- my $morph = new SWF::Morph();
+	use SWF::Morph;
+	my $morph = new SWF::Morph();
 
 =head1 DESCRIPTION
 
@@ -46,7 +44,7 @@ Returns an SWF::Morph object.
 
 =item ($shape1, $shape2) = $morph->getShapes();
 
-Returns two SWF::Shape objects. The first one ($shape1) is the morph's starting shape while $shape2 is its final shape. You may also use L<"getShape1()"> and L<"getShape2()"> methods to get a handle of these shapes.
+Returns two SWF::Shape objects. The first one (shape1) is the morph's starting shape while shape2 is its final shape. You may also use "getShape1()" and "getShape2()" methods to get a handle of these shapes.
 
 =item $shape1 = $morph->getShape1();
 
@@ -64,6 +62,6 @@ Soheil Seyfaie (soheil@netcom.ca).
 
 =head1 SEE ALSO
 
-SWF, SWF::Button, SWF::DisplayItem, SWF::Shape,  SWF::Movie, SWF::MovieClip
+SWF, SWF::DisplayItem, SWF::Shape, SWF::Movie, SWF::MovieClip
 
 =cut

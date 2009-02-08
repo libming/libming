@@ -24,13 +24,15 @@ SWF::Sprite - Sprite (MovieClip) Class
 
 =head1 SYNOPSIS
 
- use SWF::Sprite;
- my $sprite = new SWF::Sprite();
+	use SWF::Sprite;
+	my $sprite = new SWF::Sprite();
 
 =head1 DESCRIPTION
 
-SWF::Sprite allows you to add animated objects to your Fash movies. You may use SWF::MovieClip instead of SWF::Sprite (i.e. SWF::Sprite inherits all it's methods from SWF::MovieClip).
-
+SWF::Sprite allows you to add animated objects to your Fash movies. 
+You may use SWF::MovieClip instead of SWF::Sprite (i.e. SWF::Sprite
+inherits all it's methods from SWF::MovieClip).
+In other words: SWF::Sprite is deprecated! Do NOT use anymore.
 
 =head1 METHODS
 
@@ -60,7 +62,6 @@ Sets total number of $sprite frames to $i
 
 Sets frame name to $name
 
-
 =back
 
 =head1 AUTHOR
@@ -69,7 +70,5 @@ Soheil Seyfaie (soheil@netcom.ca).
 
 =head1 SEE ALSO
 
-SWF, SWF::Button, SWF::DisplayItem, SWF::Shape, SWF::Sprite, SWF::Movie, .
-
+SWF, SWF::MovieClip, SWF::Button, SWF::DisplayItem, SWF::Shape, SWF::Sprite, SWF::Movie
 =cut
-
