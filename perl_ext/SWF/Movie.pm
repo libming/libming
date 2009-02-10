@@ -57,15 +57,15 @@ Notice: The version of your flashmovie can be set by the object SWF. See SWF for
 
 =over
 
-=item $m=new SWF::Movie()
+=item $m = new SWF::Movie()
 
 Creates a Movie object. 
 
-=item $m=newSWFMovieWithVersion(version)
+=item $m = newSWFMovieWithVersion(version)
 
 Creates a Movie object with version value (e.g. 8) set.
 
-=item $displayItem=add($SWFObject)
+=item $displayItem=$m->add($SWFObject)
 
 Add an instance of a SWF-object to your current frame. The returnvalue is a SWF::DisplayItem.
 
@@ -83,7 +83,7 @@ Add an instance of a SWF-object to your current frame. The returnvalue is a SWF:
 	$m->add($shape); # possible, but not more accessible for us
 	$shape_1 = m->add($shape); # good instance 
 
-=item addExport($block, $name)
+=item $m->addExport($block, $name)
 
 Prepare linkage to Action script code.
 
@@ -91,7 +91,7 @@ Prepare linkage to Action script code.
 	# and later inside action script....:
 	$ac = new SWF::Action("_root.attachMovie('mc','mc1',11);");
 
-=item writeExports()
+=item $m->writeExports()
 
 Export prepared names to Action script.
 
@@ -115,7 +115,7 @@ If you inserted more nextFrame() commands than you set with setFrames() the setF
 
 	$m->setFrames(100);
 
-=item setBackground($red,$green,$blue)
+=item $m->setBackground($red,$green,$blue)
 
 Set the background in red, green, blue values. Possible value are 0..255 or hexvalues 0x0..0xff.
 
@@ -125,11 +125,11 @@ Set the background in red, green, blue values. Possible value are 0..255 or hexv
 A transparency level isn't available I asume. (In Flash MX/F6?). A transparent background can be set in the HTML-code for Internet Explorer. Please 
 inform the Authors if that is available for nonIE-browsers.
 
-=item namedAnchor($label)
+=item $m->namedAnchor($label)
 
 This function adds a named anchor to the movie.
 
-=item setDimension(x,y)
+=item $m->setDimension(x,y)
 
 Set the dimension in pixel.
 
@@ -143,7 +143,7 @@ Set the dimension in pixel.
 	$m->setDimension(200,100);
 	$m->setDimension(123.45,67.89);
 
-=item setRate(int)
+=item $m->setRate(int)
 
 Set the playing speed in frames/second. 
 
@@ -156,19 +156,19 @@ Set the playing speed in frames/second.
 
 	$m->setRate(30);
 
-=item protect()
+=item $m->protect()
 
 A feature that prevents only flashnewbies from importing your movie into Macromedias Flash authoring tools. It cannot protect your content from being loaded by 
 other flashmovies, deleting of the protection with a hexeditor or disassembling with tools. 
 
-=item setSoundStream($soundstream, [$skip])
+=item $m->setSoundStream($soundstream, [$skip])
 
 Puts an SWF::SoundStream object as streaming sound into the main timeline.
 The optional skip parameter describes the time in seconds to be skiped.
 
 	$m->setSoundStream($soundstream);
 
-=item streamMp3($filename)
+=item $m->streamMp3($filename)
 
 Simplifies the setSoundStream(). You only need the filename. 
 
@@ -176,18 +176,18 @@ Simplifies the setSoundStream(). You only need the filename.
 
 Hint: If you want to reuse this sound/mp3 later in this movie, create a reusable SWF::SoundStream object and then put it into setSoundstream().
 
-=item startSound($sound)
+=item $soundinstance = $m->startSound($sound)
 
-Play a prepared SWF::Sound object into the main timeline. 
+Play a prepared SWF::Sound object into the main timeline. Returns an object of SWF::SoundInstance.
 
-	$sound=new SWF::Sound("loveyoutoo.mp3", SWF_SOUND_MP3_COMPRESSED );  
-	$m->startSound($sound);
+	$sound = new SWF::Sound("loveyoutoo.mp3", SWF_SOUND_MP3_COMPRESSED );  
+	$si = $m->startSound($sound);
 
-=item stopSound($sound)
+=item $m->stopSound($sound)
 
 Stop playing sound.
 
-=item labelFrame($string)
+=item $m->labelFrame($string)
 
 Gives the current frame a label that can be used by actionscript as anchor. Then you don't have to count your nextFrame() lines anymore. :-)
 
@@ -197,64 +197,64 @@ Gives the current frame a label that can be used by actionscript as anchor. Then
 	#What happen if we put there a big string?? 
 	#Which characters are allowed??
 
-=item setScriptLimits($maxRecursion, $timeout)
+=item $m->setScriptLimits($maxRecursion, $timeout)
 
 Set limits for resource usage, related to action script. Setting timeout will protect your computer from too long loops
 and stack overflow. So endless scripts like "while (1){};" will be interrupted after timeout seconds.  The default 
 recursion depth is 265, the default timeout is 15 seconds.
 
-=item defineScene($offset, $name)
+=item $m->defineScene($offset, $name)
 
 Define scenes for the movies' main timeline using integer value for frame offset and name of the scene.
 
-=item setNetworkAccess($flag)
+=item $m->setNetworkAccess($flag)
 
 Sets network / fileaccess policy. If the flag is set to 0 a localy loaded 
 movie will be unable to access the network but is allowed to access local files.
 If the flag ist set to 1 a localy loaded movie will be unable to access local files
 but is allowed to access the network. For SWF >= 8: default is 0,
 
-=item addMetadata($xml)
+=item $m->addMetadata($xml)
 
 Adds Metadata to the movie: this function inserts a metadata-tag
 into the movie. Only one metadata-tag can be set to a movie. 
 Metadata is specified as an XML string. 
 
-=item assignSymbol($character, $name)
+=item $m->assignSymbol($character, $name)
 
 Assigns a symbolic name for a SWF::Character object.
 Such classes are available for usage in other SWF files
 and can be referenced from inside the current movie.
 To assign a symbol to the root movie use NULL as character value.
 
-=item setTabIndex($depth, $index)
+=item $m->setTabIndex($depth, $index)
 
 Sets tab index for specified depth level.
 
-=item $fontchar = addFont($font)
+=item $fontchar = $m->addFont($font)
 
 Adds a font to a movie. An object of SWF::FontCharacter class returned.
 
 	$font = new SWF::Font('Arial.fdb');                                                                                                                                                                              
 	$fch  = $m->addFont($font);      
 
-=item $fontchar = importFont($file, $name)
+=item $fontchar = $m->importFont($file, $name)
 
 Imports a font from an other SWFFile. An object of SWF::FontCharacter class returned.
 
 	$fch = $m->importFont('textField.swf', 'Arial337a'); 
 
-=item importCharacter($url, $name)
+=item $m->importCharacter($url, $name)
 
 Not yet documented (ToDo!)
 
-=item replace($item, $block)
+=item $m->replace($item, $block)
 
 Not yet documented (ToDo!)
 
-=item xs_output([$compresslevel])
+=item $m->xs_output([$compresslevel])
 
-=item output([$compresslevel])
+=item $m->output([$compresslevel])
 
 Writes the SWF::Movie to stdout. This is normally used for webservers/cgi-scripts. 
 Don't forget to send the "Content-Type:"-lines before writing out the movie.
@@ -266,7 +266,7 @@ Notice: compression available since Flash MX(Flash 6). Ming does not check this 
 
 Unlike xs_output() the output() method prepared for using via webservers (but not limited to webservers).
 
-=item save($filename [, $compresslevel]) 
+=item $m->save($filename [, $compresslevel]) 
 
 Save the SWF::Movie to a file. 
 
