@@ -57,7 +57,7 @@
 
 #include "libming.h"
 
-#ifdef USE_ZLIB
+#if USE_ZLIB
 # include <zlib.h>
 #endif
 
