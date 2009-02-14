@@ -38,6 +38,10 @@
 extern "C" {
 #endif
 
+#ifdef _MSC_VER
+#define inline __inline
+#endif
+
 #include <stdio.h>
 
 #define MING_VERSION        @MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@
