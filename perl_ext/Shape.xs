@@ -133,6 +133,9 @@ SWFShape_setLineStyle(shape, width, r, g, b, a=0xff)
 	byte	g
 	byte	b
 	byte	a
+	CODE:
+	warn("Using setLineStyle() is deprecated. Use setLine() instead!");
+	SWFShape_setLineStyle(shape, width, r, g, b, a);
 
 void 
 SWFShape_setLineStyle2(shape, width, r, g, b, a, flags, miterLimit)
@@ -144,6 +147,9 @@ SWFShape_setLineStyle2(shape, width, r, g, b, a, flags, miterLimit)
 	byte a
 	int flags
 	float miterLimit
+	CODE:
+	warn("Using setLineStyle2() is deprecated. Use setLine2() instead!");
+	SWFShape_setLineStyle2(shape, width, r, g, b, a, flags, miterLimit);
 
 void 
 SWFShape_setLineStyle2filled(shape, width, fill, flags, miterLimit)
@@ -153,6 +159,7 @@ SWFShape_setLineStyle2filled(shape, width, fill, flags, miterLimit)
 	int flags
 	float miterLimit
 	CODE:
+	warn("Using setLineStyle2filled() is deprecated. Use setLine2Filled() instead!");
 	SWFShape_setLineStyle2filled(shape, width,
 		SWFFill_getFillStyle(fill), flags, miterLimit);
 
@@ -253,13 +260,36 @@ SWFShape_drawCircle(shape, r)
         SWF::Shape shape
         float r
 
-void SWFShape_setLine(shape, w, r, g, b, a=0xff)
+void
+SWFShape_setLine(shape, w, r, g, b, a=0xff)
 	SWF::Shape shape
 	int w
 	unsigned char r
 	unsigned char g
 	unsigned char b
 	unsigned char a
+
+void 
+SWFShape_setLine2(shape, width, r, g, b, a, flags, miterLimit)
+	SWF::Shape shape
+	unsigned short width
+	byte r
+	byte g
+	byte b
+	byte a
+	int flags
+	float miterLimit
+
+void
+SWFShape_setLine2Filled(shape, width, fill, flags, miterLimit)
+	SWF::Shape shape
+	unsigned short width
+	SWF::Fill fill
+	int flags
+	float miterLimit
+	CODE:
+	SWFShape_setLine2Filled(shape, width,
+		SWFFill_getFillStyle(fill), flags, miterLimit);
 
 void 
 SWFShape_useVersion(shape, version)

@@ -5,6 +5,7 @@
 # it under the same terms as Perl itself.
 # ====================================================================
 
+# $Author$
 # $Id$
 
 package SWF::Shape;
@@ -76,20 +77,20 @@ Returns Pen's (x,y) coordinates
 
 =item $shape->drawLineTo($x, $y)
 
-Draw a line (using current line style - see "setLine()" method) from the current position to ($x, $y).
+Draw a line (using current line style, set by one of the setLine...() methods) from the current position to ($x, $y).
 
 =item $shape->drawLine($dx, $dy)
 
-Draw a line (using current line style - see "setLine()" method) from the current position to displacement ($dx, $dy).
+Draw a line (using current line style set by one of the setLine...() methods) from the current position to displacement ($dx, $dy).
 
 =item $shape->drawCurveTo($controlx, $controly, $anchorx, $anchory)
 
-Draw a quadratic curve (using current line style - see "setLine()" method) 
+Draw a quadratic curve (using current line style, set by one of the setLine...() methods)
 from current pen position to ($anchorx, $anchory) using control point ($controlx, $controly).
 
 =item $shape->drawCurve($controldx, $controly, $anchorx, $anchory)
 
-Draw a quadratic curve (using current line style - see  "setLine()" method)
+Draw a quadratic curve (using current line style, set by one of the setLine...() methods)
 from current pen position to displacement ($anchordx, $anchordy) using displacement control point ($controldx, $controldy).
 
 =item $shape->drawCubicTo($bx,$by,$cx,$cx,$dx,$dy)
@@ -102,6 +103,68 @@ Draw a cubic curve (using current line style).
 =item $shape->setLine($width, $r, $g, $b [,$a])
 
 Sets Shape's line width and color (RGB). To remove the Shape's line style call $shape->hideLine().
+The used line width for drawing is a product of $width argument and scale value set, see SWF::setScale($scale).
+Arguments $r, $g, $b stand for red, green and blue color parts, optional $a for alpha value.
+
+=item $shape->setLineStyle($width, $r, $g, $b [,$a])
+
+This OLD deprecated method is documented here only for compatibility reason.
+The line width -in TWIPS units- is independent of Ming scale value (more bug than feature).
+
+=item $shape->setLine2($width, $r, $g, $b ,$a, $flags, $miterLimit)
+
+A new method available for SWF version >=8 setting shape's line width and color (RGBA) with additional
+control flags (see below) and miter limit. To remove the Shape's line style call $shape->hideLine().
+The used line width for drawing is a product of $width argument and scale value set, see SWF::setScale($scale).
+Arguments $r, $g, $b, $a stand for red, green, blue and alpha color parts. $a is not optional here.
+
+Available flags are:
+Line cap style: select one of the following flags (default is round cap style)
+
+	SWF_LINESTYLE_CAP_ROUND 
+	SWF_LINESTYLE_CAP_NONE
+	SWF_LINESTYLE_CAP_SQUARE 
+
+Line join style: select one of the following flags (default is round join style)
+
+	SWF_LINESTYLE_JOIN_ROUND
+	SWF_LINESTYLE_JOIN_BEVEL 
+	SWF_LINESTYLE_JOIN_MITER  
+
+Scaling flags: disable horizontal / vertical scaling
+
+	SWF_LINESTYLE_FLAG_NOHSCALE
+	SWF_LINESTYLE_FLAG_NOVSCALE 
+
+Enable pixel hinting to correct blurry vertical / horizontal lines:  all anchors will be aligned to full pixels
+
+	SWF_LINESTYLE_FLAG_HINTING  
+
+Disable stroke closure: if no-close flag is set caps will be applied instead of joins.
+
+	SWF_LINESTYLE_FLAG_NOCLOSE
+
+End-cap style: default round
+
+	SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+	SWF_LINESTYLE_FLAG_ENDCAP_NONE
+	SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
+
+If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor must be set. Miter max length is then calculated as:
+max miter len = miter limit * width. If join style is not miter, this value will be ignored.
+
+=item $shape->setLineStyle2($width, $r, $g, $b ,$a, $flags, $miterLimit)
+
+This OLD deprecated method is mentioned here only for compatibility reason, you'd better use setLine2().
+
+=item $shape->setLine2Filled($width, $fill, $flags, $miterLimit)
+
+A new method available for SWF version >=8 setting shape's line width and fill style, $fill is an object
+of SWF::Fill class. For other argument details see item $shape->setLine2().
+
+=item $shape->setLine2StyleFilled($width, $fill, $flags, $miterLimit)
+
+This OLD deprecated method is mentioned here only for compatibility reason, you'd better use setLine2Filled().
 
 =item $shape->hideLine()
 
