@@ -345,7 +345,8 @@ SWFLineStyle newSWFLineStyle2_filled(unsigned short width,
                                      float miterLimit);
 
 /***** SWFShape *****/
-
+#define SWF_SHAPE1 1
+#define SWF_SHAPE2 2
 #define SWF_SHAPE3 3
 #define SWF_SHAPE4 4
 
