@@ -473,12 +473,13 @@ newSWFInput_allocedBuffer(unsigned char *buffer, int length)
 SWFInput
 newSWFInput_bufferCopy(unsigned char *buffer, int length)
 {
+	SWFInput input;
 	unsigned char *data = (unsigned char *)malloc(length);
 	if(data == NULL)
 		return NULL;
 
 	memcpy(data, buffer, length);
-	SWFInput input = newSWFInput_buffer(data, length);
+	input = newSWFInput_buffer(data, length);
 	input->destroy = SWFInput_buffer_dtor;
 #if TRACK_ALLOCS
 	input->gcnode = ming_gc_add_node(input, (dtorfunctype) destroySWFInput);
@@ -644,12 +645,13 @@ SWFInput
 newSWFInput_stream(FILE* f)
 {
 	SWFInput input = (SWFInput)malloc(sizeof(struct SWFInput_s));
+	struct SWFInputStreamData *data;
 
 	/* If malloc failed, return NULL to signify this */
 	if (NULL == input)
 		return NULL;
 
-	struct SWFInputStreamData *data = (struct SWFInputStreamData *)malloc(sizeof(struct SWFInputStreamData));
+	data = (struct SWFInputStreamData *)malloc(sizeof(struct SWFInputStreamData));
 
 	/* If malloc failed, free memory allocated for input and return NULL to signify the failure */
 	if (NULL == data)
