@@ -71,6 +71,10 @@ struct SWFPlaceObject2Block_s
 
 	SWFFilterList filterList; 
 	int blendMode;
+
+#if TRACK_ALLOCS
+	mem_node *gcnode;
+#endif	
 }; 
 
 
@@ -207,6 +211,10 @@ destroySWFPlaceObject2Block(SWFPlaceObject2Block place)
 
 	if ( place->cXform != NULL )
 		destroySWFCXform(place->cXform);
+
+#if TRACK_ALLOCS
+	ming_gc_remove_node(place->gcnode);
+#endif
 
 	free(place);
 }
