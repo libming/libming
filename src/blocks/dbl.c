@@ -228,12 +228,13 @@ SWFDBLBitmap
 newSWFDBLBitmap(FILE* f)
 {
 	SWFInput input = newSWFInput_file(f);
+	SWFDBLBitmap dbl = NULL;
 
 	/* If newSWFInput_file() failed, return NULL to signify this */
 	if (NULL == input)
 		return NULL;
 
-	SWFDBLBitmap dbl = newSWFDBLBitmap_fromInput(input);
+	dbl = newSWFDBLBitmap_fromInput(input);
 
 	/* If newSWFDBLBitmap_fromInput() failed, return NULL to signify this */
 	if (NULL == dbl)
