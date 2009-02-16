@@ -235,12 +235,13 @@ SWFTextRecord
 SWFText_addTextRecord(SWFText text)
 {
 	SWFTextRecord textRecord = (SWFTextRecord)malloc(sizeof(struct SWFTextRecord_s));
+	SWFTextRecord current = NULL;
 
 	/* If malloc failed, return NULL to signify this */
 	if (NULL == text)
 		return NULL;
 
-	SWFTextRecord current = text->currentRecord;
+	current = text->currentRecord;
 
 	textRecord->flags = 0;
 	textRecord->string = NULL;
@@ -721,6 +722,8 @@ SWFText_resolveCodes(SWFText text)
 
 	while ( textRecord != NULL )
 	{
+		SWFFontCharacter fontchar = NULL;
+		SWFFont font = NULL;
 		oldRecord = textRecord;
 
 		if ( textRecord->string == NULL || textRecord->strlen == 0 )
@@ -777,8 +780,8 @@ SWFText_resolveCodes(SWFText text)
 
 		SWFOutput_writeUInt8(out, len);
 
-		SWFFontCharacter fontchar = textRecord->font.fontchar;
-		SWFFont font = SWFFontCharacter_getFont(fontchar);
+		fontchar = textRecord->font.fontchar;
+		font = SWFFontCharacter_getFont(fontchar);
 
 		if ( font == NULL )
 			SWF_error("Couldn't find font");
