@@ -34,7 +34,7 @@
 #include <string.h>
 #endif
 
-#ifdef USE_ZLIB
+#if USE_ZLIB
 #include <zlib.h>
 #endif
 
