@@ -361,8 +361,18 @@ SWFShape_end(SWFShape shape)
 		 as it should be */
 	if ( BLOCK(shape)->type > 0 )
 	{
-		if(shape->useVersion == SWF_SHAPE4)
-			BLOCK(shape)->type = SWF_DEFINESHAPE4;	
+		switch (shape->useVersion)
+		{
+		case SWF_SHAPE1:
+			BLOCK(shape)->type = SWF_DEFINESHAPE;
+			break;
+		case SWF_SHAPE2:
+			BLOCK(shape)->type = SWF_DEFINESHAPE2;
+			break;
+		case SWF_SHAPE4:
+			BLOCK(shape)->type = SWF_DEFINESHAPE4;
+			break;
+		}
 		SWFShape_addStyleHeader(shape);
 	}
 	free(shape->records);
@@ -1180,6 +1190,11 @@ SWFShape_setRightFillStyle(SWFShape shape, SWFFillStyle fill)
 			return;		
 		idx = getFillIdx(shape, fill);
 	}
+	else if (idx >= 255 && shape->useVersion == SWF_SHAPE1)
+	{
+		SWF_error("Too many fills for SWFShape V1.\n" 
+			  "Use a higher SWFShape version\n");
+	}
 				
 	record = addStyleRecord(shape);
 	record.record.stateChange->rightFill = idx;
@@ -1235,11 +1250,12 @@ void
 SWFShape_drawScaledGlyph(SWFShape shape,
                          SWFFont font, unsigned short c, int size)
 {
+	SWFShape glyph;
 	int i, vx, vy;
 	if(font == NULL)
 		return;
 	
-	SWFShape glyph = SWFFont_getGlyph(font, c);
+	glyph = SWFFont_getGlyph(font, c);
 	if(glyph == NULL)
 	{
 		SWF_warn("SWFShape_drawScaledGlyph: no glyph for code %i found \n", c);
