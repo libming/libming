@@ -34,7 +34,7 @@ SWF::SoundStream - SWF Sound Stream class
 
 =head1 DESCRIPTION
 
-SWF::SWF::SoundStream is a helper class useful for adding sound into SWF applications.
+SWF::SoundStream is a helper class useful for adding sound into SWF applications.
 
 =head1 METHODS
 
@@ -53,7 +53,7 @@ Works for streams of mp3, flv types only. On other cases it returns 0.
 
 =item $frames = $soundstream->getFrames()
 
-The number of movie frames for a given sound stream This function returns the
+The number of movie frames for a given sound stream. This function returns the
 number of movie frames necessary to play the full sound stream. For this reason
 it works only if the sound stream object was added to a movie.
 It works for streams of mp3 -files only.
@@ -66,6 +66,7 @@ It works for streams of mp3 -files only.
 
 =head1 SEE ALSO
 
-SWF, SWF:: Movie, SWF::MovieClip, SWF::Button, SWF::Sound, SWF::SoundInstance, SWF::Constants
+SWF, SWF:: Movie, SWF::MovieClip, SWF::Button, SWF::Sound, SWF::SoundInstance, SWF::Constants,
+SWF::Videostream
 
 =cut

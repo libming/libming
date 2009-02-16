@@ -147,10 +147,22 @@ Use setDepth() to control desired masking.
 
 End masking started by prior setMask() call.
 
-=item $displayItem->addAction( $action [,$flags] )
+=item $displayItem->addAction( $action, $flags )
 
 Add $action, an object of SWF::Action class.
-[TODO: document optional flags parameter]
+The flags are exported from SWF::Constants.
+
+	SWFACTION_ONLOAD
+	SWFACTION_ENTERFRAME
+	SWFACTION_UNLOAD
+	SWFACTION_MOUSEMOVE
+	SWFACTION_MOUSEDOWN
+	SWFACTION_MOUSEUP
+	SWFACTION_KEYDOWN
+	SWFACTION_KEYUP
+	SWFACTION_DATA
+
+Using this flags you have control at which events the action will run.
 
 =item $displayItem->setBlendMode($mode)
 
