@@ -4,25 +4,30 @@
 <head>
 <title>SWF::Sound - SWF Sound class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#synopsis">SYNOPSIS</a></li>
 	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -33,24 +38,46 @@
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
         use SWF::Sound;
-        $sound = new SWF::Sound(&quot;test.mp3&quot;);</pre>
+        $sound = new SWF::Sound(&quot;test.mp3&quot;);
+        # also via SWF::SoundStream:
+        $sstr  = new SWF::SoundStream(&quot;test.mp3&quot;); 
+        $sound = new SWF::Sound($sstr);
+        # 
+        $movie-&gt;startSound($sound);</pre>
 <p>
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
-<p></p>
+<p>SWF::Sound is a helper class useful for making noise of every kind...</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="sound" class="item">$sound = new SWF::Sound($filename, [$flags])</a></strong>
+
+<dt><strong>$sound = new SWF::Sound($soundstream)</strong>
+
+<dd>
+<p>Both types of constructor method are creating a Sound object. The first one uses 
+a filename (e.g. of mp3 file), the second one is operating on an already created SWF::SoundStream 
+object. The first constructor type also accepts flags for file description, SWF_SOUND_MP3_COMPRESSED
+is one of them. More flags are part of SWF::Constant class. The created object can be used for 
+example as parameter in SWF::Movie's <code>startSound()</code> method.</p>
+</dd>
+</li>
+</dl>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
 <pre>
-        developers of 
-        ming.sourceforge.net</pre>
+        developers of ming.sourceforge.net, Albrecht Kleine</pre>
 <p>
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::SoundInstance</p>
+<p>SWF, SWF:: Movie, SWF::MovieClip, SWF::Button, SWF::SoundInstance, SWF::SoundStream, SWF::Constants</p>
 
 </body>
 

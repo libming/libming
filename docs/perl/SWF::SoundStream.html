@@ -2,17 +2,94 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>SWF/SoundStream.pm</title>
+<title>SWF::SoundStream - SWF Sound Stream class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::SoundStream - SWF Sound Stream class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::SoundStream;
+        my $soundstream = new SWF::SoundStream(&quot;wau.mp3&quot;); 
+        print $soundstream-&gt;getDuration();
+        ##  print $soundstream-&gt;getFrames();    # won't work until it belongs to movie
+        $movie-&gt;setSoundStream($soundstream);
+        print $soundstream-&gt;getFrames();        # but _now_ it is okay</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::SoundStream is a helper class useful for adding sound into SWF applications.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="soundstream" class="item">$soundstream = new SWF::SoundStream($filename)</a></strong>
+
+<dd>
+<p>Creates a SWF::SoundStream object. If the file can't be opened the 
+constructor will return an undef value of course. The filename is
+the valid name of any mp3 or flv file.</p>
+</dd>
+</li>
+<dt><strong><a name="getduration" class="item">$dura = $soundstream-&gt;<code>getDuration()</code></a></strong>
+
+<dd>
+<p>This function returns the duration of a given stream in ms.
+Works for streams of mp3, flv types only. On other cases it returns 0.</p>
+</dd>
+</li>
+<dt><strong><a name="getframes" class="item">$frames = $soundstream-&gt;<code>getFrames()</code></a></strong>
+
+<dd>
+<p>The number of movie frames for a given sound stream. This function returns the
+number of movie frames necessary to play the full sound stream. For this reason
+it works only if the sound stream object was added to a movie.
+It works for streams of mp3 -files only.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<pre>
+        developers of ming.sourceforge.net, Albrecht Kleine</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF:: Movie, SWF::MovieClip, SWF::Button, SWF::Sound, SWF::SoundInstance, SWF::Constants,
+SWF::Videostream</p>
 
 </body>
 

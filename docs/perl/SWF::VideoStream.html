@@ -4,25 +4,30 @@
 <head>
 <title>SWF::VideoStream - SWF Video class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#synopsis">SYNOPSIS</a></li>
 	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -38,20 +43,107 @@
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::VideoStream is a helper class useful for playing videos via SWF applications,
+either via embedded video data, or controlled by ActionScript.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="videostream" class="item">$videostream = new SWF::VideoStream($filename)</a></strong>
+
+<dd>
+<p>Creates a SWF::VideoStream object. If the file can't be opened the 
+constructor will return an empty object. The filename is not limited
+to 'flv' extension.</p>
+</dd>
+</li>
+<dt><strong><a name="getnumframes" class="item">$frames = $videostream-&gt;<code>getNumFrames()</code></a></strong>
+
+<dd>
+<p>This method returns the number of video-frames of an object of SWF::VideoStream,
+this works only for embedded streams. In case of error you will get result of -1.</p>
+</dd>
+</li>
+<dt><strong><a name="setdimension" class="item">$videostream-&gt;setDimension(width, height)</a></strong>
+
+<dd>
+<p>This method sets width and height for streamed videos,
+this works only on streamed videos (progressive download or rtmp).</p>
+</dd>
+</li>
+<dt><strong><a name="hasaudio" class="item">$bool = $videostream-&gt;<code>hasAudio()</code></a></strong>
+
+<dd>
+<p>A test whether the embedded FLV stream also has audio data.</p>
+</dd>
+</li>
+<dt><strong><a name="setframemode" class="item">$videostream-&gt;<code>setFrameMode($mode)</code></a></strong>
+
+<dd>
+<p>If the mode == SWFVIDEOSTREAM_MODE_AUTO (default) on every SWF movie frame a video
+frame is added. In SWFVIDEOSTREAM_MODE_MANUAL mode, the user needs to call
+the <a href="#nextframe"><code>nextFrame()</code></a> method to change the video's frame. This works only with embedded video streams.
+Does return the previous mode or -1 if an invalid mode was passed.</p>
+</dd>
+</li>
+<dt><strong><a name="nextframe" class="item">$result = $videostream-&gt;<code>nextFrame()</code></a></strong>
+
+<dd>
+<p>Switch to next video frame. Works only with embedded video streams. Returns -1 if an error happend.
+Here follows some demo code how to use SWF::VideoStream objects (without ActionScript):</p>
+</dd>
+<dd>
 <pre>
-        XXX</pre>
+        use SWF qw(:ALL);                       # to be lazy
+        $movie = new SWF::Movie();
+        $movie-&gt;setRate( 25 );
+        # $movie-&gt;setRate( 5 );                 # e.g. 5 for slow motion 
+        # here movie set background etc. etc.
+        #
+        $video=new SWF::VideoStream('MyTestVideo.flv');
+        die if (-1 == $v-&gt;getNumFrames());      # abort if something went wrong
+        #
+        $video-&gt;setFrameMode(SWF::Constants::SWFVIDEOSTREAM_MODE_MANUAL);
+        $video-&gt;seek(1000, 0);                  # for example only
+        $displayitem = $movie-&gt;add($video);
+        #
+        # 250 for a 10 seconds movie part (at rate of 25 per minute)
+        for(my $n = 0; $n &lt; 250; ++$n)  
+        {
+         $video-&gt;nextFrame();
+         $movie-&gt;nextFrame();
+        }
+        $movie-&gt;save(&quot;MyTestVideo.swf&quot;,9);
+        # that's all, folks</pre>
+</dd>
+</li>
+<dt><strong><a name="seek" class="item">$result = $videostream-&gt;seek($frame, $whence)</a></strong>
+
+<dd>
+<p>This functions allows seeking $frame in video stream, returning the old video frame position.
+As value of $whence use one of the following:</p>
+</dd>
+<dd>
+<pre>
+        0 for seeking from beginning
+        1 for seeking from current position
+        2 for seeking from end of file</pre>
+</dd>
+</li>
+</dl>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
 <pre>
-        developers of 
+        developers of ming 
         ming.sourceforge.net</pre>
 <p>
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::Action, SWF::Movie, SWF::Sound, SWF::Sprite</p>
+<p>SWF, SWF::Action, SWF::Movie, SWF::MovieClip, SWF::Sound, SWF::SoundStream, SWF::Constants</p>
 
 </body>
 

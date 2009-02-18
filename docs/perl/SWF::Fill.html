@@ -2,17 +2,148 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>SWF/Fill.pm</title>
+<title>SWF::Fill - SWF fill class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#note">NOTE</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::Fill - SWF fill class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::Fill;
+        usw SWF::Shape;
+        $shape = new SWF::Shape();
+        $fill = $shape-&gt;addGradientFill($gradient,SWFFILL_LINEAR_GRADIENT);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>There is no object constructor because SWF::Fill objects are always returned by
+method calls of SWF::Shape objects, like</p>
+<pre>
+        $fill = $shape-&gt;addSolidFill($r, $g, $b, $a);
+        $fill = $shape-&gt;addGradientFill($gradient, flags);
+        $fill = $shape-&gt;addBitmapFill($bitmap, $flag);</pre>
+<p>You can now modify that SWF::Fill object using following methods.</p>
+<p>
+</p>
+<hr />
+<h1><a name="note">NOTE</a></h1>
+<p>None of the following methods is designed or useful for solid fill objects,
+because it does not make any sense to rotate or scale a solid fill.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="moveto" class="item">$fill-&gt;moveTo($x, $y)</a></strong>
+
+<dd>
+<p>Move $fill to ($x, $y) in global co-ordinates.</p>
+</dd>
+</li>
+<dt><strong><a name="scaleto" class="item">$fill-&gt;scaleTo($x [,$y])</a></strong>
+
+<dd>
+<p>Set $fill scale to $x in the x-direction and $y in the y-direction. 
+If $y is not specified, $y=$x is assumed.</p>
+</dd>
+</li>
+<dt><strong><a name="scale" class="item">$fill-&gt;scale($x [,$y])</a></strong>
+
+<dd>
+<p>Multiply $fill scale by $x in the x-direction and $y in the y-direction. 
+If $y is not specified, $y=$x is assumed.</p>
+</dd>
+</li>
+<dt><strong><a name="rotateto" class="item">$fill-&gt;<code>rotateTo($degrees)</code></a></strong>
+
+<dd>
+<p>Set $fill rotation to $degrees.</p>
+</dd>
+</li>
+<dt><strong><a name="rotate" class="item">$fill-&gt;<code>rotate($degrees)</code></a></strong>
+
+<dd>
+<p>Rotate $fill by $degrees.</p>
+</dd>
+</li>
+<dt><strong><a name="skewx" class="item">$fill-&gt;<code>skewX($x)</code></a></strong>
+
+<dd>
+<p>Add $x to the current x-skew.</p>
+</dd>
+</li>
+<dt><strong><a name="skewxto" class="item">$fill-&gt;<code>skewXTo($x)</code></a></strong>
+
+<dd>
+<p>Set x-skew to $x. 1.0 is 45-degree forward slant. 
+More is more forward while less is more backward.</p>
+</dd>
+</li>
+<dt><strong><a name="skewy" class="item">$fill-&gt;<code>skewY($y)</code></a></strong>
+
+<dd>
+<p>Add $y to the current y-skew.</p>
+</dd>
+</li>
+<dt><strong><a name="skewyto" class="item">$fill-&gt;<code>skewYTo($y)</code></a></strong>
+
+<dd>
+<p>Set y-skew to $y. 1.0 is 45-degree upward slant. 
+More is more upward while less is more downward.</p>
+</dd>
+</li>
+<dt><strong><a name="setmatrix" class="item">$fill-&gt;setMatrix($a, $b, $c, $d, $e, $f)</a></strong>
+
+<dd>
+<p>Do an operation of rotating/skewing (b,c), moving (e,f) and scaling (a,d) at once.
+The default initial values of an SWF::Fill object's matrix are 1.0, 0, 0, 1.0, 0, 0 . 
+So calling setMatrix with these defaults (<em>setMatrix(1.0, 0, 0, 1.0, 0, 0);</em>)
+will reset results of earlier calls of SWF::Fill methods (like rotate(45) etc. etc.)</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<pre>
+        developers of 
+        ming.sourceforge.net</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Shape, SWF::DisplayItem, SWF::Constants</p>
 
 </body>
 

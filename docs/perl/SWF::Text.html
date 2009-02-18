@@ -2,17 +2,161 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>SWF/Text.pm</title>
+<title>SWF::Text - SWF Text class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes_">NOTES:</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::Text - SWF Text class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::Text;
+        $text = new SWF::Text();</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Draw simple static texts.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes_">NOTES:</a></h1>
+<pre>
+    None.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="text" class="item">new SWF::Text()</a></strong>
+
+<dd>
+<p>Creates a Text object.</p>
+</dd>
+</li>
+<dt><strong><a name="addstring" class="item">$text-&gt;<code>addString($string)</code></a></strong>
+
+<dt><strong><a name="addutf8string" class="item">$text-&gt;addUTF8String($UTF8string)</a></strong>
+
+<dt><strong><a name="addwidestring" class="item">$text-&gt;<code>addWideString($widestring,$widestring_len)</code></a></strong>
+
+<dd>
+<p>Writes the given $string into this Text object at the current pen position,
+using the current font, height, spacing, and color:</p>
+</dd>
+<dd>
+<pre>
+        $t-&gt;addString(&quot;Thai&quot;);
+        $t-&gt;addUTF8String(&quot;\x{0E44}\x{0E17}\x{0E22}&quot;);
+        $t-&gt;addWideString(&quot;\x{44}\x{0E}\x{17}\x{0E}\x{22}\x{0E}&quot;,3);</pre>
+</dd>
+</li>
+<dt><strong><a name="setcolor" class="item">$text-&gt;setColor(red, green, blue [, alpha])</a></strong>
+
+<dd>
+<p>Set the color of the text. An 8 bit value for each parameter. You can use 
+he hex or decimal notation. Even mixed.</p>
+</dd>
+<dd>
+<pre>
+        $text-&gt;setColor(0xcc,0,0x33);
+        $text-&gt;setColor(204,0,51,255);</pre>
+</dd>
+</li>
+<dt><strong><a name="setfont" class="item">$text-&gt;<code>setFont($font)</code></a></strong>
+
+<dd>
+<p>Sets an SWF::Font object -$font- to be used in the Text.</p>
+</dd>
+</li>
+<dt><strong><a name="setheight" class="item">$text-&gt;<code>setHeight($height)</code></a></strong>
+
+<dd>
+<p>Sets this Text object's current height to given height.</p>
+</dd>
+</li>
+<dt><strong><a name="moveto" class="item">$text-&gt;moveTo($x, $y)</a></strong>
+
+<dd>
+<p>Move the Text's location to ($x, $y).</p>
+</dd>
+</li>
+<dt><strong><a name="setspacing" class="item">$text-&gt;<code>setSpacing($spacing)</code></a></strong>
+
+<dd>
+<p>Sets this Text object's current letterspacing to given spacing.</p>
+</dd>
+</li>
+<dt><strong><a name="getwidth" class="item">$text-&gt;<code>getWidth($string)</code></a></strong>
+
+<dt><strong><a name="getstringwidth" class="item">$text-&gt;<code>getStringWidth($string)</code></a></strong>
+
+<dt><strong><a name="getutf8stringwidth" class="item">$text-&gt;getUTF8StringWidth($UTF8string)</a></strong>
+
+<dt><strong><a name="getwidestringwidth" class="item">$text-&gt;<code>getWideStringWidth($widestring)</code></a></strong>
+
+<dd>
+<p>Returns width of given string in pixels.</p>
+</dd>
+</li>
+<dt><strong><a name="getascent" class="item">$text-&gt;<code>getAscent()</code></a></strong>
+
+<dd>
+<p>Returns the ascent of the current font at its current size, or 0 if not available.</p>
+</dd>
+</li>
+<dt><strong><a name="getdescent" class="item">$text-&gt;<code>getDescent()</code></a></strong>
+
+<dd>
+<p>Returns the descent of the current font at its current size, or 0 if not available.</p>
+</dd>
+</li>
+<dt><strong><a name="getleading" class="item">$text-&gt;<code>getLeading()</code></a></strong>
+
+<dd>
+<p>Returns the leading of the current font at its current size, or 0 if not available.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>developers of ming
+ming.sourceforge.net</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Font, SWF::TextField, ISO 10646 (Unicode)</p>
 
 </body>
 

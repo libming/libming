@@ -4,13 +4,15 @@
 <head>
 <title>SWF::TextField - SWF TextField class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
@@ -22,9 +24,11 @@
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -35,7 +39,7 @@
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
         use SWF::TextField;
-        $textfield = new SWF::TextField([flags]);</pre>
+        $textfield = new SWF::TextField([$flags]);</pre>
 <p>
 </p>
 <hr />
@@ -54,7 +58,7 @@
 <hr />
 <h1><a name="methods">METHODS</a></h1>
 <dl>
-<dt><strong><a name="item_textfield">new SWF::TextField([flags]);</a></strong>
+<dt><strong><a name="textfield" class="item">new SWF::TextField([$flags]);</a></strong>
 
 <dd>
 <p>Creates a TextField object whose behaviour is dictated by <code>flags</code> (see also SWF::Constants):</p>
@@ -84,13 +88,17 @@
     my $t = new SWF::TextField(SWFTEXTFIELD_MULTILINE | SWFTEXTFIELD_WORDWRAP);</pre>
 </dd>
 </li>
-<dt><strong><a name="item_addstring">$textfield-&gt;<code>addString($string)</code></a></strong>
+<dt><strong><a name="addstring" class="item">$textfield-&gt;<code>addString($string)</code></a></strong>
+
+<dt><strong><a name="addutf8string" class="item">$textfield-&gt;addUTF8String($UTF8string)</a></strong>
 
 <dd>
 <p>Add $string to TextField. Text is appended to the existing text.</p>
 </dd>
 </li>
-<dt><strong><a name="item_align">$textfield-&gt;<code>align(alignment)</code></a></strong>
+<dt><strong><a name="align" class="item">$textfield-&gt;<code>align($alignment)</code></a></strong>
+
+<dt><strong><a name="setalignment" class="item">$textfield-&gt;<code>setAlignment($alignment)</code></a></strong>
 
 <dd>
 <p>Set the alignment of the text in the textfield. Possible values are</p>
@@ -100,87 +108,116 @@
         SWFTEXTFIELD_ALIGN_LEFT
         SWFTEXTFIELD_ALIGN_RIGHT
         SWFTEXTFIELD_ALIGN_CENTER
-        SWFTEXTFIELD_ALIGN_JUSTIFY
-        
-By default a SWF::TextField ist left aligned.</pre>
+        SWFTEXTFIELD_ALIGN_JUSTIFY</pre>
+</dd>
+<dd>
+<p>By default a SWF::TextField ist left aligned.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setbounds">$textfield-&gt;setBounds(width, height)</a></strong>
+<dt><strong><a name="setbounds" class="item">$textfield-&gt;setBounds($width, $height)</a></strong>
 
 <dd>
 <p>Sets the width and height of the textfield.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setcolor">$textfield-&gt;setColor(red, green, blue [, alpha])</a></strong>
+<dt><strong><a name="setcolor" class="item">$textfield-&gt;setColor($red, $green, $blue [, $alpha])</a></strong>
 
 <dd>
 <p>Set the color of the text. An 8 bit value for each parameter. You can use 
-the hex or decimal notation. Even mixed.
-</p>
+the hex or decimal notation. Even mixed.</p>
 </dd>
 <dd>
 <pre>
-
         $tf-&gt;setColor(0xcc,0,0x33);
         $tf-&gt;setColor(204,0,51,255);</pre>
 </dd>
 </li>
-<dt><strong><a name="item_setfont">$textfield-&gt;<code>setFont($font)</code></a></strong>
+<dt><strong><a name="setfont" class="item">$textfield-&gt;<code>setFont($font)</code></a></strong>
 
 <dd>
 <p>Sets an SWF::Font object -$font- to be used in the TextField.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setpadding">$textfield-&gt;<code>setPadding(padding)</code></a></strong>
+<dt><strong><a name="setpadding" class="item">$textfield-&gt;<code>setPadding($padding)</code></a></strong>
 
 <dd>
 <p>Set TextField padding.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setheight">$textfield-&gt;<code>setHeight(height)</code></a></strong>
+<dt><strong><a name="setheight" class="item">$textfield-&gt;<code>setHeight($height)</code></a></strong>
 
 <dd>
 <p>Set the height of font in your textfield.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setindentation">$textfield-&gt;<code>setIndentation(indentation)</code></a></strong>
+<dt><strong><a name="setindentation" class="item">$textfield-&gt;<code>setIndentation($indentation)</code></a></strong>
 
 <dd>
 <p>Set the indentation of the first line of a paragraph.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setleftmargin">$textfield-&gt;<code>setLeftMargin(left)</code></a></strong>
+<dt><strong><a name="setleftmargin" class="item">$textfield-&gt;<code>setLeftMargin($left)</code></a></strong>
 
 <dd>
 <p>Sets the left margin of the textfield.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setrightmargin">$textfield-&gt;<code>setRightMargin(right)</code></a></strong>
+<dt><strong><a name="setrightmargin" class="item">$textfield-&gt;<code>setRightMargin($right)</code></a></strong>
 
 <dd>
 <p>Sets the right margin of the textfield.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setmargins">$textfield-&gt;setMargins(left, right)</a></strong>
+<dt><strong><a name="setmargins" class="item">$textfield-&gt;setMargins($left, $right)</a></strong>
 
 <dd>
 <p>Sets left and right margins of $textfield.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setlinespacing">$textfield-&gt;<code>setLineSpacing(linespacing)</code></a></strong>
+<dt><strong><a name="setlinespacing" class="item">$textfield-&gt;<code>setLineSpacing($linespacing)</code></a></strong>
 
 <dd>
 <p>Sets the space between lines.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setname">$textfield-&gt;<code>setName($name)</code></a></strong>
+<dt><strong><a name="setname" class="item">$textfield-&gt;<code>setName($name)</code></a></strong>
+
+<dt><strong><a name="setvariablename" class="item">$textfield-&gt;<code>setVariableName($name)</code></a></strong>
 
 <dd>
 <p>Assigns a name to the TextField which could be used to reference the TextField within ActionScript.</p>
 </dd>
 </li>
-<dt><strong><a name="item_addchars">$textfield-&gt;<code>addChars(string)</code></a></strong>
+<dt><strong><a name="addchars" class="item">$textfield-&gt;<code>addChars($string)</code></a></strong>
 
+<dt><strong><a name="addutf8chars" class="item">$textfield-&gt;addUTF8Chars($UTF8string)</a></strong>
+
+<dd>
+<p>Adds characters to a font that will be available within a textfield.</p>
+</dd>
+</li>
+<dt><strong><a name="setflags" class="item">$textfield-&gt;<code>setFlags($flags)</code></a></strong>
+
+<dd>
+<p>Set TextField behaviour by <code>flags</code> (see above new SWF::TextField) For example:</p>
+</dd>
+<dd>
+<pre>
+        $textfield-&gt;setFlags(SWFTEXTFIELD_PASSWORD);</pre>
+</dd>
+</li>
+<dt><strong><a name="setlength" class="item">$textfield-&gt;<code>setLength($length)</code></a></strong>
+
+<dd>
+<p>Sets limit for user input size to $length.</p>
+</dd>
+</li>
+<dt><strong><a name="setfieldheight" class="item">$textfield-&gt;<code>setFieldHeight($height)</code></a></strong>
+
+<dd>
+<p>Sets height limit for visible part of text field. If $height is set to 0, the height is calculated by used font, see <em>setHeight()</em> method.</p>
+</dd>
+</li>
 </dl>
 <p>
 </p>
@@ -191,7 +228,7 @@ the hex or decimal notation. Even mixed.
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text</p>
+<p>SWF, SWF::Action, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Font, SWF::Movie, SWF::MovieCip, SWF::Text</p>
 
 </body>
 

@@ -2,17 +2,122 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>SWF/Font.pm</title>
+<title>SWF::Font - SWF Font class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::Font - SWF Font class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::Font;
+        $font = new SWF::Font();</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Font object for later usage in Text and TextField objects.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Ming 0.3's old getShape($font, $code) has been removed from interface.
+For getting details of glyph information you could draw a character 
+into a shape and call <code>dumpOutline()</code> method, just like</p>
+<pre>
+        $sh=new SWF::Shape();
+        $sh-&gt;drawGlyph($font, $char_nr);
+        print $sh-&gt;dumpOutline();</pre>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="font" class="item">new SWF::Font($filename)</a></strong>
+
+<dd>
+<p>Creates a Font object. $filename selects either True-Type Font '(ttf')
+file or Font Definition Block ('fdb') file as written by makefdb tool.</p>
+</dd>
+</li>
+<dt><strong><a name="getstringwidth" class="item">$font-&gt;<code>getStringWidth($string)</code></a></strong>
+
+<dt><strong><a name="getutf8stringwidth" class="item">$font-&gt;getUTF8StringWidth($UTF8string)</a></strong>
+
+<dd>
+<p>Returns width of given string in pixels.</p>
+</dd>
+</li>
+<dt><strong><a name="getascent" class="item">$font-&gt;<code>getAscent()</code></a></strong>
+
+<dd>
+<p>Returns the ascent of the current font, or 0 if not available.</p>
+</dd>
+</li>
+<dt><strong><a name="getdescent" class="item">$font-&gt;<code>getDescent()</code></a></strong>
+
+<dd>
+<p>Returns the descent of the current font, or 0 if not available.</p>
+</dd>
+</li>
+<dt><strong><a name="getleading" class="item">$font-&gt;<code>getLeading()</code></a></strong>
+
+<dd>
+<p>Returns the leading of the current font, or 0 if not available.</p>
+</dd>
+</li>
+<dt><strong><a name="getname" class="item">$font-&gt;<code>getName()</code></a></strong>
+
+<dd>
+<p>Returns the name of the current font, do not confuse with font filename.</p>
+</dd>
+</li>
+<dt><strong><a name="getglyphcount" class="item">$font-&gt;<code>getGlyphCount()</code></a></strong>
+
+<dd>
+<p>Returns the glyph count of the current font.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>developers of ming
+ming.sourceforge.net</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::BrowserFont, SWF::Text, SWF::TextField, SWF::Shape, ISO 10646 (Unicode)</p>
 
 </body>
 

@@ -2,17 +2,130 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>SWF/Gradient.pm</title>
+<title>SWF::Gradient - SWF gradient class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::Gradient - SWF gradient class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::Gradient;
+        use SWF::Constants qw(:Gradient);
+        use SWF::Shape;
+        $g = new SWF::Gradient();
+        $g-&gt;addEntry(0.0,255,0,0,200);
+        $g-&gt;addEntry(0.16,255,255,0,200);
+        $g-&gt;addEntry(0.32,0,255,0,200);
+        $g-&gt;addEntry(0.5,0,255,255,200);
+        $g-&gt;addEntry(0.66,0,50,255,200);
+        $g-&gt;addEntry(0.83 ,255,0,255,200);
+        $g-&gt;addEntry(1.0,255,0,0,200);
+        # ..make some kind of rainbow..
+        $sh = new SWF::Shape();
+        $fill = $sh-&gt;addGradientFill($g,SWFFILL_LINEAR_GRADIENT);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::Gradient is a helper class most useful for filling shapes (i.e. SWF::Shape objects),
+and also for filtering via SWF::DisplayItem methods using GradientGlowFilter or GradientBevelFilter,
+both are SWF::Filter objects.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="gradient" class="item">new SWF::Gradient()</a></strong>
+
+<dd>
+<p>Creates and returns a gradient object. This object is an 'empty' gradient, to be filled
+with control point entries via up to 15 <a href="#addentry"><code>addEntry()</code></a> method calls. 
+(For SWF version 7 are only 8 control points possible.)
+For gradients used for filters also only 8 control points are possible.</p>
+</dd>
+</li>
+<dt><strong><a name="addentry" class="item">addEntry($ratio, $r, $g, $b [, $a])</a></strong>
+
+<dd>
+<p>Adds a gradient control point. The ratio parameter is a floating point value for 
+controlling the position of the following RGBA-color value (consiting of red, green, 
+blue and optional alpha parts) in an increasing row between 0.0 and 1.0 . 
+Adding more than 15 entries will be useless and ignored.</p>
+</dd>
+</li>
+<dt><strong><a name="setspreadmode" class="item"><code>setSpreadMode($mode)</code></a></strong>
+
+<dd>
+<p>For version &gt;= 8 only: set a gradient spread mode: one of 
+SWF_GRADIENT_PAD (default), SWF_GRADIENT_REPEAT, SWF_GRADIENT_REFLECT .</p>
+</dd>
+</li>
+<dt><strong><a name="setinterpolationmode" class="item"><code>setInterpolationMode($mode)</code></a></strong>
+
+<dd>
+<p>For version &gt;= 8 only: set a gradient interpolation mode: one of 
+SWF_GRADIENT_NORMAL (default), SWF_GRADIENT_LINEAR .</p>
+</dd>
+</li>
+<dt><strong><a name="setfocalpoint" class="item"><code>setFocalPoint($focalpoint)</code></a></strong>
+
+<dd>
+<p>Makes a focal gradient 'asymetric'. A focalpoint value of -1.0 means the focal point 
+is close to the left border, 0.0 is in the center and 1.0 is close to the right border.
+Also this feature is available for version &gt;= 8 only.  
+For best results use the SWFFILL_FOCAL_GRADIENT flag when adding to v4 shapes, i.e. like</p>
+</dd>
+<dd>
+<pre>
+        $g = new SWF::Gradient();
+        $g-&gt;setFocalPoint(-0.9);
+        $g-&gt;addEntry(0.000000,0xff,0x00,0x00,0xff);
+        $g-&gt;addEntry(1.000000,0x00,0xff,0x00,0xff);
+        $shape-&gt;useVersion(4);
+        $shape-&gt;addGradientFill($g,SWFFILL_FOCAL_GRADIENT);</pre>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<pre>
+        developers of 
+        ming.sourceforge.net</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Shape, SWF::Fill, SWF::Filter, SWF::Constants</p>
 
 </body>
 

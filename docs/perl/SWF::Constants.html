@@ -4,13 +4,15 @@
 <head>
 <title>SWF::Constants - Constants defined in ming</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
@@ -21,9 +23,11 @@
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -45,7 +49,7 @@
 <hr />
 <h1><a name="export_tags">EXPORT TAGS</a></h1>
 <dl>
-<dt><strong><a name="item_button">Button</a></strong>
+<dt><strong><a name="button" class="item">Button</a></strong>
 
 <dd>
 <p>This tag imports constants most commonly used by SWF::Button.</p>
@@ -67,7 +71,7 @@
     SWFBUTTON_ONKEYPRESS</pre>
 </dd>
 </li>
-<dt><strong><a name="item_displayitem">DisplayItem</a></strong>
+<dt><strong><a name="displayitem" class="item">DisplayItem</a></strong>
 
 <dd>
 <p>This tag imports constants most commonly used by SWF::DisplayItem.</p>
@@ -85,7 +89,7 @@
     SWFACTION_DATA</pre>
 </dd>
 </li>
-<dt><strong><a name="item_fill">Fill</a></strong>
+<dt><strong><a name="fill" class="item">Fill</a></strong>
 
 <dd>
 <p>This tag imports constants most commonly used by SWF::Fill.</p>
@@ -96,12 +100,22 @@
     SWFFILL_GRADIENT
     SWFFILL_LINEAR_GRADIENT
     SWFFILL_RADIAL_GRADIENT
+    SWFFILL_FOCAL_GRADIENT
     SWFFILL_BITMAP
     SWFFILL_TILED_BITMAP
     SWFFILL_CLIPPED_BITMAP</pre>
 </dd>
+<dd>
+<p>available since SWF8:</p>
+</dd>
+<dd>
+<pre>
+    SWFFILL_FOCAL_GRADIENT
+    SWFFILL_NONSMOOTHED_TILED_BITMAP
+    SWFFILL_NONSMOOTHED_CLIPPED_BITMAP</pre>
+</dd>
 </li>
-<dt><strong><a name="item_sound">Sound</a></strong>
+<dt><strong><a name="sound" class="item">Sound</a></strong>
 
 <dd>
 <p>This tag imports constants most commonly used by SWF::Sound.</p>
@@ -132,7 +146,7 @@
     SWF_SOUND_STEREO</pre>
 </dd>
 </li>
-<dt><strong><a name="item_text">Text</a></strong>
+<dt><strong><a name="text" class="item">Text</a></strong>
 
 <dd>
 <p>This tag imports constants most commonly used by SWF::TextField.</p>
@@ -155,17 +169,52 @@
     SWFTEXTFIELD_AUTOSIZE</pre>
 </dd>
 </li>
+<dt><strong><a name="filter" class="item">Filter</a></strong>
+
+<dd>
+<p>This tag imports constants most commonly used by SWF::Filter,
+all available since SWF8:</p>
+</dd>
+<dd>
+<pre>
+    SWF_FILTER_MODE_INNER
+    SWF_FILTER_MODE_KO
+    SWF_FILTER_MODE_COMPOSITE
+    SWF_FILTER_MODE_ONTOP
+    SWF_FILTER_CLAMP
+    SWF_FILTER_FLAG_PRESERVE_ALPHA</pre>
+</dd>
+</li>
+<dt><strong><a name="gradient" class="item">Gradient</a></strong>
+
+<dd>
+<p>This tag imports constants most commonly used by SWF::Gradient,
+all available since SWF8:</p>
+</dd>
+<dd>
+<pre>
+    SWF_GRADIENT_PAD
+    SWF_GRADIENT_REFLECT
+    SWF_GRADIENT_REPEAT
+    SWF_GRADIENT_NORMAL
+    SWF_GRADIENT_LINEAR</pre>
+</dd>
+</li>
 </dl>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
-<p>Soheil Seyfaie (soheil at users.sourceforge.net).</p>
+<p>Soheil Seyfaie (soheil at users.sourceforge.net).
+Peter Liscovius
+Albrecht Kleine</p>
+<p>and see AUTHORS in ming lib distribution (ming.sf.net)</p>
 <p>
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text</p>
+<p>SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Fill, SWF::Gradient, SWF::Movie, SWF::MovieClip, SWF::Shape, 
+SWF::Sound, SWF::TextField, SWF::Filter</p>
 
 </body>
 

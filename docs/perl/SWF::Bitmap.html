@@ -4,13 +4,15 @@
 <head>
 <title>SWF::Bitmap - Bitmap class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
@@ -21,9 +23,11 @@
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -33,34 +37,74 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
- use SWF::Bitmap;
- my $bitmap = new SWF::Bitmap('filename');</pre>
+        use SWF::Bitmap;
+        $bitmap = new SWF::Bitmap('filename');
+        $fill = $shape-&gt;addBitmapFill($bitmap);</pre>
 <p>
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
-<p>SWF::Bitmap enables you to add JPG and DBL files.</p>
+<p>SWF::Bitmap enables you to add JPG and DBL files.
+It is a helper class most useful for filling shapes 
+(i.e. SWF::Shape objects).
+DBL files ('Define Bitmap Lossless') are produced from
+PNG or GIF files by using png2dbl or gif2dbl tools.</p>
 <p>
 </p>
 <hr />
 <h1><a name="methods">METHODS</a></h1>
 <dl>
-<dt><strong><a name="item_bitmap">new SWF::Bitmap($file);</a></strong>
+<dt><strong><a name="bitmap" class="item">new SWF::Bitmap($file, [$alpha])</a></strong>
 
 <dd>
-<p>Creates a new Bitmap object using $file.</p>
+<p>Creates a new SWF::Bitmap object using 'file'. The file extension 
+has to be one of &quot;.jpg&quot;,&quot;.jpeg&quot; or &quot;.dbl&quot; (not case sensitive). 
+In all other cases use either <code>newSWFDBLBitmap()</code> or newSWFJpeg...()
+constructors. The alpha parameter represents a filename for opacity
+data ('alpha' channel), but only for JPG files.  Alpha data files
+are produced by tool gif2mask. The original GIF used for gif2mask input
+file containing alpha information should have same dimensions (width x height)
+as the JPG file.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getwidth">$bitmap-&gt;getWidth();</a></strong>
+<dt><strong>newSWFDBLBitmap SWF::Bitmap($file)</strong>
 
 <dd>
-<p>Return width of bitmap in pixels.</p>
+<p>Creates a new SWF::Bitmap object using DBL file. 
+Use this constructor if you have a file with DBL data, 
+but not with .dbl filename extension.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getheight">$bitmap-&gt;getHeight();</a></strong>
+<dt><strong>newSWFJpegBitmap SWF::Bitmap($file)</strong>
 
 <dd>
-<p>Return height of bitmap in pixels.</p>
+<p>Creates a new SWF::Bitmap object using JPG file. 
+Use this constructor if you have a file with JPG data, 
+but not with .jpg or .jpeg filename extension.</p>
+</dd>
+</li>
+<dt><strong>newSWFJpegWithAlpha SWF::Bitmap($file,$alpha)</strong>
+
+<dd>
+<p>Creates a new SWF::Bitmap object using JPG file similar <code>newSWFJpegBitmap()</code>
+with additional opacity information in 'alpha' file. Use this constructor
+if you have a file with JPG data, but not with .jpg or .jpeg filename extension
+and if there is opacity information available in 'alpha' file.  
+Alpha data files are produced by gif2mask tool. The original GIF file
+containing alpha information used for gif2mask input should have same dimensions
+as the JPG file.</p>
+</dd>
+</li>
+<dt><strong><a name="getwidth" class="item">$width = $bitmap-&gt;<code>getWidth()</code>;</a></strong>
+
+<dd>
+<p>Returns width of bitmap in pixels.</p>
+</dd>
+</li>
+<dt><strong><a name="getheight" class="item">$height = $bitmap-&gt;<code>getHeight()</code>;</a></strong>
+
+<dd>
+<p>Returns height of bitmap in pixels.</p>
 </dd>
 </li>
 </dl>
@@ -68,12 +112,13 @@
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
-<p>Soheil Seyfaie (<a href="mailto:soheil@netcom.ca">soheil@netcom.ca</a>)</p>
+<p>Soheil Seyfaie (<a href="mailto:soheil@netcom.ca">soheil@netcom.ca</a>) and
+developers of ming.sourceforge.net</p>
 <p>
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::Action, SWF::Button, SWF::Movie.</p>
+<p>SWF, SWF::Fill, SWF::Shape, SWF::Button, SWF::Constants, png2dbl, gif2dbl, gif2mask</p>
 
 </body>
 

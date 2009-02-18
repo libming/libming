@@ -4,13 +4,15 @@
 <head>
 <title>SWF::DisplayItem - SWF DisplayItem class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
@@ -21,9 +23,11 @@
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -33,156 +37,268 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
- use SWF::DisplayItem;</pre>
+        use SWF::DisplayItem;
+        $dispitem = $movie-&gt;add($shape);
+        $dispitem-&gt;rotate(45);</pre>
 <p>
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
-<p>SWF::DisplayItem is used for animation. To create an SWF::DisplayItem object, you may use either <a href="/SWF/Movie.html#add">add in the SWF::Movie manpage</a> or <a href="/SWF/Sprite.html#add">add in the SWF::Sprite manpage</a> method.</p>
+<p>When you place an SWF object (one of the types that can be seen with eyes by user) 
+in a frame of a SWF::Movie or SWF::MovieClip, the return value will be
+in a SWF::DisplayItem.</p>
+<p>You can now modify that item in current and every following frames of the clip where you added the SWF object.</p>
+<p>Further it is accessible by ActionScript too. 
+Just give the DisplayItem a name with method <a href="#setname"><code>setName($name)</code></a> after you added the SWF object to a SWF::Movie or SWF::MovieClip</p>
 <p>
 </p>
 <hr />
 <h1><a name="methods">METHODS</a></h1>
 <dl>
-<dt><strong><a name="item_moveto">$displayItem-&gt;moveTo($x, $y);</a></strong>
+<dt><strong><a name="moveto" class="item">$displayItem-&gt;moveTo($x, $y);</a></strong>
 
 <dd>
 <p>Move $displayItem to ($x, $y) in global co-ordinates.</p>
 </dd>
 </li>
-<dt><strong><a name="item_move">$displayItem-&gt;move($x, $y);</a></strong>
+<dt><strong><a name="move" class="item">$displayItem-&gt;move($x, $y);</a></strong>
 
 <dd>
 <p>Displace $displayItem by ($x, $y)</p>
 </dd>
 </li>
-<dt><strong><a name="item_scaleto">$displayItem-&gt;scaleTo($x [,$y]);</a></strong>
+<dt><strong><a name="scaleto" class="item">$displayItem-&gt;scaleTo($x [,$y]);</a></strong>
 
 <dd>
-<p>Set $displyItem scale to $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.</p>
+<p>Set $displayItem scale to $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.</p>
 </dd>
 </li>
-<dt><strong><a name="item_scale">$displayItem-&gt;scale($x [,$y]);</a></strong>
+<dt><strong><a name="scale" class="item">$displayItem-&gt;scale($x [,$y]);</a></strong>
 
 <dd>
-<p>Multiply $displyItem scale by $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.</p>
+<p>Multiply $displayItem scale by $x in the x-direction and $y in the y-direction. If $y is not specified, $y=$x is assumed.</p>
 </dd>
 </li>
-<dt><strong><a name="item_rotateto">$displayItem-&gt;rotateTo($degrees);</a></strong>
+<dt><strong><a name="rotateto" class="item">$displayItem-&gt;<code>rotateTo($degrees)</code>;</a></strong>
 
 <dd>
 <p>Set $displayItem rotation to $degrees.</p>
 </dd>
 </li>
-<dt><strong><a name="item_rotate">$displayItem-&gt;rotate($degrees);</a></strong>
+<dt><strong><a name="rotate" class="item">$displayItem-&gt;<code>rotate($degrees)</code>;</a></strong>
 
 <dd>
 <p>Rotate $displayItem by $degrees.</p>
 </dd>
 </li>
-<dt><strong><a name="item_skewx">$displayItem-&gt;skewX($x);</a></strong>
+<dt><strong><a name="skewx" class="item">$displayItem-&gt;<code>skewX($x)</code>;</a></strong>
 
 <dd>
 <p>Add $x to the current x-skew.</p>
 </dd>
 </li>
-<dt><strong><a name="item_skewxto">$displayItem-&gt;skewXTo($x);</a></strong>
+<dt><strong><a name="skewxto" class="item">$displayItem-&gt;<code>skewXTo($x)</code>;</a></strong>
 
 <dd>
-<p>Set x-skew to $x. 1.0 is 45-degree forward slant. More is more forwad while less is more backward.</p>
+<p>Set x-skew to $x. 1.0 is 45-degree forward slant. More is more forward while less is more backward.</p>
 </dd>
 </li>
-<dt><strong><a name="item_skewy">$displayItem-&gt;skewY($y);</a></strong>
+<dt><strong><a name="skewy" class="item">$displayItem-&gt;<code>skewY($y)</code>;</a></strong>
 
 <dd>
 <p>Add $y to the current y-skew.</p>
 </dd>
 </li>
-<dt><strong><a name="item_skewyto">$displayItem-&gt;skewYTo($y);</a></strong>
+<dt><strong><a name="skewyto" class="item">$displayItem-&gt;<code>skewYTo($y)</code>;</a></strong>
 
 <dd>
 <p>Set y-skew to $y. 1.0 is 45-degree upward slant. More is more upward while less is more downward.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setdepth">$displayItem-&gt;setDepth($depth);</a></strong>
+<dt><strong><a name="setmatrix" class="item">$displayItem-&gt;setMatrix($a, $b, $c, $d, $e, $f)</a></strong>
+
+<dd>
+<p>Do an operation of rotating/skewing (b,c), moving (e,f) and scaling (a,d) at once.
+The default initial values of an SWF::DisplayItem object's matrix are 1.0, 0, 0, 1.0, 0, 0 . 
+So calling setMatrix with these defaults (<em>setMatrix(1.0, 0, 0, 1.0, 0, 0);</em>)
+will reset results of earlier calls of SWF::DisplayItem methods (like rotate(45) etc. etc.)</p>
+</dd>
+</li>
+<dt><strong><a name="setdepth" class="item">$displayItem-&gt;<code>setDepth($depth)</code>;</a></strong>
 
 <dd>
 <p>Set Z-order of $displayItem to $depth.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setratio">$displayItem-&gt;setRatio($ratio);</a></strong>
+<dt><strong><a name="setratio" class="item">$displayItem-&gt;<code>setRatio($ratio)</code>;</a></strong>
 
 <dd>
 <p>Useful for SWF::Morph. Sets $displayItem ratio to $ratio.</p>
 </dd>
 </li>
-<dt><strong><a name="item_addcolor">$displayItem-&gt;addColor($r, $g, $b [,$a]);</a></strong>
+<dt><strong><a name="setcoloradd" class="item">$displayItem-&gt;setColorAdd($r, $g, $b [,$a]))</a></strong>
+
+<dt><strong><a name="addcolor" class="item">$displayItem-&gt;addColor($r, $g, $b [,$a]);</a></strong>
 
 <dd>
 <p>Add RGB color to the $displayItem's color transform. Default value of $a is 1.0</p>
 </dd>
 </li>
-<dt><strong><a name="item_multcolor">$displayItem-&gt;multColor($r, $g, $b [,$a]);</a></strong>
+<dt><strong><a name="setcolormult" class="item">$displayItem-&gt;setColorMult($r, $g, $b [,$a]))</a></strong>
+
+<dt><strong><a name="multcolor" class="item">$displayItem-&gt;multColor($r, $g, $b [,$a]);</a></strong>
 
 <dd>
 <p>Multiplies the $displayItem's color transform by the given values. Default value of $a is 1.0</p>
 </dd>
 </li>
-<dt><strong><a name="item_setname">$displayItem-&gt;setName($name);</a></strong>
+<dt><strong><a name="setname" class="item">$displayItem-&gt;<code>setName($name)</code>;</a></strong>
 
 <dd>
 <p>Set $displayItem's name to $name (used for targetting with SWF::Action).</p>
 </dd>
 </li>
-<dt><strong><a name="item_remove">$displayItem-&gt;remove();</a></strong>
+<dt><strong><a name="remove" class="item">$displayItem-&gt;<code>remove()</code>;</a></strong>
 
 <dd>
 <p>Remove $displayItem from the movie display list.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getposition">($x, $y) = $displayItem-&gt;getPosition(();</a></strong>
+<dt><strong><a name="getposition" class="item">($x, $y) = $displayItem-&gt;getPosition(();</a></strong>
 
 <dd>
 <p>Returns displace coordinates of $displayitem.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getrotation">$degrees = $displayItem-&gt;getRotation();</a></strong>
+<dt><strong><a name="getrotation" class="item">$degrees = $displayItem-&gt;<code>getRotation()</code>;</a></strong>
 
 <dd>
 <p>Returns rotation of $displayItem.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getscale">($x, $y) = $displayItem-&gt;getScale();</a></strong>
+<dt><strong><a name="getscale" class="item">($x, $y) = $displayItem-&gt;<code>getScale()</code>;</a></strong>
 
 <dd>
 <p>Returns scale of $displayItem in x- and y-direction.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getskew">($x, $y) = $displayItem-&gt;getSkew();</a></strong>
+<dt><strong><a name="getskew" class="item">($x, $y) = $displayItem-&gt;<code>getSkew()</code>;</a></strong>
 
 <dd>
 <p>Returns x- and y-skew of $displayItem.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getdepth">$depth = $displayItem-&gt;getDepth();</a></strong>
+<dt><strong><a name="getdepth" class="item">$depth = $displayItem-&gt;<code>getDepth()</code>;</a></strong>
 
 <dd>
 <p>Returns Z-order of $displayItem.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setmask">$displayItem-&gt;setMask($level);</a></strong>
+<dt><strong><a name="setmask" class="item">$displayItem-&gt;<code>setMask($level)</code>;</a></strong>
 
+<dd>
+<p>Sets a mask level: display items with lower or equal depth are masked, 
+any other display items are not masked. 
+Use <a href="#setdepth"><code>setDepth()</code></a> to control desired masking.</p>
+</dd>
+</li>
+<dt><strong><a name="endmask" class="item">$displayItem-&gt;<code>endMask()</code></a></strong>
+
+<dd>
+<p>End masking started by prior <a href="#setmask"><code>setMask()</code></a> call.</p>
+</dd>
+</li>
+<dt><strong><a name="addaction" class="item">$displayItem-&gt;addAction( $action, $flags )</a></strong>
+
+<dd>
+<p>Add $action, an object of SWF::Action class.
+The flags are exported from SWF::Constants.</p>
+</dd>
+<dd>
+<pre>
+        SWFACTION_ONLOAD
+        SWFACTION_ENTERFRAME
+        SWFACTION_UNLOAD
+        SWFACTION_MOUSEMOVE
+        SWFACTION_MOUSEDOWN
+        SWFACTION_MOUSEUP
+        SWFACTION_KEYDOWN
+        SWFACTION_KEYUP
+        SWFACTION_DATA</pre>
+</dd>
+<dd>
+<p>Using this flags you have control at which events the action will run.</p>
+</dd>
+</li>
+<dt><strong><a name="setblendmode" class="item">$displayItem-&gt;<code>setBlendMode($mode)</code></a></strong>
+
+<dd>
+<p>Set an alternative blend mode instead of default alpha blend.
+Possible modes are SWFBLEND_MODE_NORMAL, SWFBLEND_MODE_LAYER etc.</p>
+</dd>
+</li>
+<dt><strong><a name="cacheasbitmap" class="item">$displayItem-&gt;<code>cacheAsBitmap($flag)</code></a></strong>
+
+<dd>
+<p>Set a flag (value 0 or 1) showing the character can be cached as a bitmap. 
+This might improve rendering speed, if the object does no change often.
+This feature is available for SWF version &gt;= 8 only.</p>
+</dd>
+</li>
+<dt><strong><a name="flush" class="item">$displayItem-&gt;<code>flush()</code></a></strong>
+
+<dd>
+<p>Writes the SWF::DisplayItem object immediately to the blocklist.
+Usually MING waits with writing a display item until a frame is closed
+through a <code>nextFrame()</code> call, because a display items state could be altered 
+for the current frame. By using the <a href="#flush"><code>flush()</code></a> method MING does not wait 
+and writes the frame immediately. Therefore an user can influence the 
+swf tag order. Changing a display items state after calling <a href="#flush"><code>flush()</code></a> takes 
+effect in the next frame.</p>
+</dd>
+</li>
+<dt><strong><a name="getmatrix" class="item">$matrix = $displayItem-&gt;<code>getMatrix()</code></a></strong>
+
+<dd>
+<p>Returns an associated SWF::Matrix object.</p>
+</dd>
+</li>
+<dt><strong><a name="getcharacter" class="item">$character = $displayItem-&gt;<code>getCharacter()</code></a></strong>
+
+<dd>
+<p>Returns the associated SWF::Character object.</p>
+</dd>
+</li>
+<dt><strong><a name="addfilter" class="item">$displayItem-&gt;addFilter( $filter )</a></strong>
+
+<dd>
+<p>Process the DisplayItem object thru a prepared filter:
+an object of SWF::Filter class, e.g. BlurFilter or DropShadowFilter.
+Filters are available since player version 8.</p>
+</dd>
+</li>
+<dt><strong><a name="setcxform" class="item">$displayItem-&gt;setCXform( $cxform )</a></strong>
+
+<dd>
+<p>Process the DisplayItem object thru $cxform: a prepared color 
+transformation object of SWF::CXform class.</p>
+</dd>
+</li>
 </dl>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
-<p>Soheil Seyfaie (soheil AT users.sourceforge.net).</p>
+<p>Soheil Seyfaie (soheil AT users.sourceforge.net)
+Peter Liscovius
+Albrecht Kleine</p>
 <p>
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::Button, SWF::Shape, SWF::Movie, .</p>
+<p>SWF, SWF::Button, SWF::Movie, SWF::MovieClip, SWF::Shape, SWF::Text, SWF::TextField,
+SWF::Filter, SWF::CXform, SWF::Matrix, SWF::Action, SWF::Morph, SWF::Character,
+SWF::Constants</p>
 
 </body>
 

@@ -2,17 +2,116 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>SWF/SoundInstance.pm</title>
+<title>SWF::SoundInstance - SWF Sound Instance class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::SoundInstance - SWF Sound Instance class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::Sound;
+        use SWF::SoundInstance;
+        $sound = new SWF::Sound(&quot;test.mp3&quot;);
+        $snd_instance = $movie-&gt;startSound($sound);
+        $snd_instance-&gt;loopInPoint(4000);
+        $snd_instance-&gt;loopOutPoint(8000);
+        $snd_instance-&gt;loopCount(2);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::SoundStream is a helper class useful for setting information
+about a sound instance. There is no constructor method,
+SWF::SoundStream objects are available only thru:</p>
+<dl>
+<dt><strong><a name="startsound" class="item"><code>startSound()</code> method of SWF::Movie,</a></strong>
+
+<dt><strong><code>startSound()</code> method of SWF::MovieClip,</strong>
+
+<dt><strong><a name="addsound" class="item"><code>addSound()</code>   method of SWF::Button.</a></strong>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="nomultiple" class="item">$snd_instance-&gt;<code>noMultiple()</code></a></strong>
+
+<dd>
+<p>Prohibits starting sound if sound is already playing.</p>
+</dd>
+</li>
+<dt><strong><a name="loopinpoint" class="item">$snd_instance-&gt;<code>loopInPoint($point)</code></a></strong>
+
+<dd>
+<p>Sets the loop start $point counted in samples.</p>
+</dd>
+</li>
+<dt><strong><a name="loopoutpoint" class="item">$snd_instance-&gt;<code>loopOutPoint($point)</code></a></strong>
+
+<dd>
+<p>Sets the loop's last sample to play.</p>
+</dd>
+</li>
+<dt><strong><a name="loopcount" class="item">$snd_instance-&gt;<code>loopCount($count)</code></a></strong>
+
+<dd>
+<p>Sets loop count. The default value is 1 loop.</p>
+</dd>
+</li>
+<dt><strong><a name="addenvelope" class="item">$snd_instance-&gt;addEnvelope($mark44, $left, $right)</a></strong>
+
+<dd>
+<p>Adds a SoundEnvelope to event sound. Parameters are $mark44, the  Position in 44khz samples,
+and volumes both for left and right stereo channel.
+Next example will mute the right channel:</p>
+</dd>
+<dd>
+<pre>
+        $snd_instance-&gt;addEnvelope(0,10000,0);</pre>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>developers of ming.sourceforge.net, Albrecht Kleine</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF:: Movie, SWF::MovieClip, SWF::Button, SWF::Sound, SWF::SoundStream, SWF::Constants
+=cut</p>
 
 </body>
 

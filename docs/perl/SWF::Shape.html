@@ -4,13 +4,15 @@
 <head>
 <title>SWF::Shape - Shape class</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:feedback@suse.de" />
 </head>
 
 <body style="background-color: white">
 
-<p><a name="__index__"></a></p>
+
 <!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
 
 <ul>
 
@@ -21,9 +23,11 @@
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 </ul>
+
+<hr name="index" />
+</div>
 <!-- INDEX END -->
 
-<hr />
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
@@ -33,8 +37,9 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
- use SWF::Shape;
- my $shape = new SWF::Shape();</pre>
+        use SWF::Shape;
+        $shape = new SWF::Shape();
+        $dispitem = $movie-&gt;add($shape);</pre>
 <p>
 </p>
 <hr />
@@ -45,85 +50,197 @@
 <hr />
 <h1><a name="methods">METHODS</a></h1>
 <dl>
-<dt><strong><a name="item_shape">new SWF::Shape();</a></strong>
+<dt><strong><a name="shape" class="item">new SWF::Shape()</a></strong>
 
 <dd>
 <p>Creates a new Shape object.</p>
 </dd>
 </li>
-<dt><strong><a name="item_moveto">$shape-&gt;moveTo($x, $y); or $shape-&gt;movePenTo($x, $y);</a></strong>
+<dt><strong><a name="movepento" class="item">$shape-&gt;movePenTo($x, $y)</a></strong>
 
 <dd>
 <p>Move the Shape's (imaginary) pen location to ($x, $y) in the Shape's coordinate space.</p>
 </dd>
 </li>
-<dt><strong><a name="item_movetorelative">$shape-&gt;moveToRelative($dx, $dy); or $shape-&gt;movePen($dx, $dy);</a></strong>
+<dt><strong><a name="movepen" class="item">$shape-&gt;movePen($dx, $dy)</a></strong>
 
 <dd>
 <p>Add ($dx, $dy) to the Shape's pen current location.</p>
 </dd>
 </li>
-<dt><strong><a name="item_getpenx">$x = $shape-&gt;getPenX();</a></strong>
+<dt><strong><a name="getpenx" class="item">$x = $shape-&gt;<code>getPenX()</code></a></strong>
 
 <dd>
 <p>Returns Pen's x-coordinates</p>
 </dd>
 </li>
-<dt><strong><a name="item_getpeny">$y = $shape-&gt;getPenY();</a></strong>
+<dt><strong><a name="getpeny" class="item">$y = $shape-&gt;<code>getPenY()</code></a></strong>
 
 <dd>
 <p>Returns Pen's y-coordinates</p>
 </dd>
 </li>
-<dt><strong><a name="item_getpen">($x, $y) = $shape-&gt;getPen();</a></strong>
+<dt><strong><a name="getpen" class="item">($x, $y) = $shape-&gt;<code>getPen()</code></a></strong>
 
 <dd>
 <p>Returns Pen's (x,y) coordinates</p>
 </dd>
 </li>
-<dt><strong><a name="item_drawlineto">$shape-&gt;drawLineTo($x, $y);</a></strong>
+<dt><strong><a name="drawlineto" class="item">$shape-&gt;drawLineTo($x, $y)</a></strong>
 
 <dd>
-<p>Draw a line (using current line style - see <a href="#item_setline">setLine()</a> method) from the current position to ($x, $y).</p>
+<p>Draw a line (using current line style, set by one of the setLine...() methods) from the current position to ($x, $y).</p>
 </dd>
 </li>
-<dt><strong><a name="item_drawline">$shape-&gt;drawLine($dx, $dy);</a></strong>
+<dt><strong><a name="drawline" class="item">$shape-&gt;drawLine($dx, $dy)</a></strong>
 
 <dd>
-<p>Draw a line (using current line style - see <a href="#item_setline">setLine()</a> method) from the current position to displacement ($dx, $dy).</p>
+<p>Draw a line (using current line style set by one of the setLine...() methods) from the current position to displacement ($dx, $dy).</p>
 </dd>
 </li>
-<dt><strong><a name="item_drawcurveto">$shape-&gt;drawCurveTo($controlx, $controly, $anchorx, $anchory);</a></strong>
+<dt><strong><a name="drawcurveto" class="item">$shape-&gt;drawCurveTo($controlx, $controly, $anchorx, $anchory)</a></strong>
 
 <dd>
-<p>Draw a quadratic curve (using current line style - see <a href="#item_setline">setLine()</a> method) from current pen position to ($anchorx, $anchory) using control point ($controlx, $controly).</p>
+<p>Draw a quadratic curve (using current line style, set by one of the setLine...() methods)
+from current pen position to ($anchorx, $anchory) using control point ($controlx, $controly).</p>
 </dd>
 </li>
-<dt><strong><a name="item_drawcurve">$shape-&gt;drawCurve($controldx, $controly, $anchorx, $anchory);</a></strong>
+<dt><strong><a name="drawcurve" class="item">$shape-&gt;drawCurve($controldx, $controly, $anchorx, $anchory)</a></strong>
 
 <dd>
-<p>Draw a quadratic curve (using current line style - see  <a href="#item_setline">setLine()</a> method) from current pen position to displacement ($anchordx, $anchordy) using displacement control point ($controldx, $controldy).</p>
+<p>Draw a quadratic curve (using current line style, set by one of the setLine...() methods)
+from current pen position to displacement ($anchordx, $anchordy) using displacement control point ($controldx, $controldy).</p>
 </dd>
 </li>
-<dt><strong><a name="item_setline">$shape-&gt;setLine($width, $r, $g, $b [,$a]);</a></strong>
+<dt><strong><a name="drawcubicto" class="item">$shape-&gt;<code>drawCubicTo($bx,$by,$cx,$cx,$dx,$dy)</code></a></strong>
+
+<dt><strong><a name="drawcubic" class="item">$shape-&gt;<code>drawCubic($bx,$by,$cx,$cx,$dx,$dy)</code></a></strong>
 
 <dd>
-<p>Sets Shape's line width and color (RGB). To remove the Shape's line style call this method without any arguments, i.e. $shape-&gt;setLine().</p>
+<p>Draw a cubic curve (using current line style).
+[ToDo: Add some more details and demo code]</p>
 </dd>
 </li>
-<dt><strong><a name="item_addfill">$fill = $shape-&gt;addFill($r, $g, $b [,$a]);</a></strong>
+<dt><strong><a name="setline" class="item">$shape-&gt;setLine($width, $r, $g, $b [,$a])</a></strong>
 
 <dd>
-<p>Adds a solid fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the  <a href="#item_setline">setLine()</a> method described below. The default value of $a is 0.</p>
+<p>Sets Shape's line width and color (RGB). To remove the Shape's line style call $shape-&gt;<a href="#hideline"><code>hideLine()</code></a>.
+The used line width for drawing is a product of $width argument and scale value set, see SWF::setScale($scale).
+Arguments $r, $g, $b stand for red, green and blue color parts, optional $a for alpha value.</p>
 </dd>
 </li>
-<dt><strong>$fill = $shape-&gt;addFill($bitmap [,FLAG]);</strong>
+<dt><strong><a name="setlinestyle" class="item">$shape-&gt;setLineStyle($width, $r, $g, $b [,$a])</a></strong>
 
 <dd>
-<p>Adds a bitmap fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the <a href="#item_setline">setLine()</a> method described below.</p>
+<p>This OLD deprecated method is documented here only for compatibility reason.
+The line width -in TWIPS units- is independent of Ming scale value (more bug than feature).</p>
+</dd>
+</li>
+<dt><strong><a name="setline2" class="item">$shape-&gt;setLine2($width, $r, $g, $b ,$a, $flags, $miterLimit)</a></strong>
+
+<dd>
+<p>A new method available for SWF version &gt;=8 setting shape's line width and color (RGBA) with additional
+control flags (see below) and miter limit. To remove the Shape's line style call $shape-&gt;<a href="#hideline"><code>hideLine()</code></a>.
+The used line width for drawing is a product of $width argument and scale value set, see SWF::setScale($scale).
+Arguments $r, $g, $b, $a stand for red, green, blue and alpha color parts. $a is not optional here.</p>
 </dd>
 <dd>
-<p>$bitmap is an SWF::Bitmap object while FLAG arguemnt can be SWFFILL_TILED_BITMAP or SWFFILL_CLIPPED_BITMAP. Make sure to import these constants to your package before useing it, i.e. use the following statement:</p>
+<p>Available flags are:
+Line cap style: select one of the following flags (default is round cap style)</p>
+</dd>
+<dd>
+<pre>
+        SWF_LINESTYLE_CAP_ROUND 
+        SWF_LINESTYLE_CAP_NONE
+        SWF_LINESTYLE_CAP_SQUARE</pre>
+</dd>
+<dd>
+<p>Line join style: select one of the following flags (default is round join style)</p>
+</dd>
+<dd>
+<pre>
+        SWF_LINESTYLE_JOIN_ROUND
+        SWF_LINESTYLE_JOIN_BEVEL 
+        SWF_LINESTYLE_JOIN_MITER</pre>
+</dd>
+<dd>
+<p>Scaling flags: disable horizontal / vertical scaling</p>
+</dd>
+<dd>
+<pre>
+        SWF_LINESTYLE_FLAG_NOHSCALE
+        SWF_LINESTYLE_FLAG_NOVSCALE</pre>
+</dd>
+<dd>
+<p>Enable pixel hinting to correct blurry vertical / horizontal lines:  all anchors will be aligned to full pixels</p>
+</dd>
+<dd>
+<pre>
+        SWF_LINESTYLE_FLAG_HINTING</pre>
+</dd>
+<dd>
+<p>Disable stroke closure: if no-close flag is set caps will be applied instead of joins.</p>
+</dd>
+<dd>
+<pre>
+        SWF_LINESTYLE_FLAG_NOCLOSE</pre>
+</dd>
+<dd>
+<p>End-cap style: default round</p>
+</dd>
+<dd>
+<pre>
+        SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+        SWF_LINESTYLE_FLAG_ENDCAP_NONE
+        SWF_LINESTYLE_FLAG_ENDCAP_SQUARE</pre>
+</dd>
+<dd>
+<p>If join style is SWF_LINESTYLE_JOIN_MITER a miter limit factor must be set. Miter max length is then calculated as:
+max miter len = miter limit * width. If join style is not miter, this value will be ignored.</p>
+</dd>
+</li>
+<dt><strong><a name="setlinestyle2" class="item">$shape-&gt;setLineStyle2($width, $r, $g, $b ,$a, $flags, $miterLimit)</a></strong>
+
+<dd>
+<p>This OLD deprecated method is mentioned here only for compatibility reason, you'd better use setLine2().</p>
+</dd>
+</li>
+<dt><strong><a name="setline2filled" class="item">$shape-&gt;setLine2Filled($width, $fill, $flags, $miterLimit)</a></strong>
+
+<dd>
+<p>A new method available for SWF version &gt;=8 setting shape's line width and fill style, $fill is an object
+of SWF::Fill class. For other argument details see item $shape-&gt;setLine2().</p>
+</dd>
+</li>
+<dt><strong><a name="setline2stylefilled" class="item">$shape-&gt;setLine2StyleFilled($width, $fill, $flags, $miterLimit)</a></strong>
+
+<dd>
+<p>This OLD deprecated method is mentioned here only for compatibility reason, you'd better use setLine2Filled().</p>
+</dd>
+</li>
+<dt><strong><a name="hideline" class="item">$shape-&gt;<code>hideLine()</code></a></strong>
+
+<dd>
+<p>Remove the Shape's line, i.e. make lines painted after this method call invisible.</p>
+</dd>
+</li>
+<dt><strong><a name="addsolidfill" class="item">$fill = $shape-&gt;addSolidFill($r, $g, $b [,$a])</a></strong>
+
+<dt><strong><a name="addfill" class="item">$fill = $shape-&gt;addFill($r, $g, $b [,$a])</a></strong>
+
+<dd>
+<p>Adds a solid fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the &quot;setLine()&quot; method described below. The default value of $a is 0.</p>
+</dd>
+</li>
+<dt><strong><a name="addbitmapfill" class="item">$fill = $shape-&gt;addBitmapFill($bitmap [,FLAG])</a></strong>
+
+<dt><strong>$fill = $shape-&gt;addFill($bitmap [,FLAG])</strong>
+
+<dd>
+<p>Adds a bitmap fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the &quot;setLine()&quot; method described below.</p>
+</dd>
+<dd>
+<p>$bitmap is an SWF::Bitmap object while FLAG argument can be SWFFILL_TILED_BITMAP or SWFFILL_CLIPPED_BITMAP. Make sure to import these constants to your package before useing it, i.e. use the following statement:</p>
 </dd>
 <dd>
 <pre>
@@ -133,13 +250,16 @@
 <p>The default value of FLAG is SWFFILL_TILED_BITMAP.</p>
 </dd>
 </li>
-<dt><strong>$fill = $shape-&gt;addFill($gradient [,FLAG]);</strong>
+<dt><strong><a name="addgradientfill" class="item">$fill = $shape-&gt;addGradientFill($gradient [,FLAG])</a></strong>
+
+<dt><strong>$fill = $shape-&gt;addFill($gradient [,FLAG])</strong>
 
 <dd>
-<p>Adds a gradient fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the <a href="#item_setline">setLine()</a> method described below.</p>
+<p>Adds a gradient fill to $shape list of fill styles and returns an SWF::Fill object. This object is used with the &quot;setLine()&quot; method described below.</p>
 </dd>
 <dd>
-<p>$gradient is an SWF::Gradient object while FLAG arguemnt can be SWFFILL_LINEAR_GRADIENT or SWFFILL_RADIAL_GRADIENT.Make sure to import these constants to your package before useing it, i.e. use the following statement:</p>
+<p>$gradient is an SWF::Gradient object while FLAG argument can be SWFFILL_LINEAR_GRADIENT or SWFFILL_RADIAL_GRADIENT, plus SWFFILL_FOCAL_GRADIENT for V8.
+Make sure to import these constants to your package before useing it, i.e. use the following statement:</p>
 </dd>
 <dd>
 <pre>
@@ -149,13 +269,15 @@
 <p>The default value of FLAG is SWFFILL_LINEAR_GRADIENT.</p>
 </dd>
 </li>
-<dt><strong><a name="item_setleftfill">$shape-&gt;setLeftFill($fill);</a></strong>
+<dt><strong><a name="xs_setleftfill" class="item">$shape-&gt;<code>xs_setLeftFill($fill)</code></a></strong>
+
+<dt><strong><a name="setleftfill" class="item">$shape-&gt;<code>setLeftFill($fill)</code></a></strong>
 
 <dd>
-<p>Sets the fill on the left side of the edge. $fill is an SWF::Fill object returned from <a href="#item_addfill">addFill</a> method.</p>
+<p>Sets the fill on the left side of the edge. $fill is an SWF::Fill object returned from &quot;addFill&quot; method.</p>
 </dd>
 </li>
-<dt><strong>$shape-&gt;setLeftFill($r, $g, $b [,$a]);</strong>
+<dt><strong>$shape-&gt;setLeftFill($r, $g, $b [,$a])</strong>
 
 <dd>
 <p>This is another way of saying:</p>
@@ -166,13 +288,15 @@
      $shape-&gt;setLeftFill($fill);</pre>
 </dd>
 </li>
-<dt><strong><a name="item_setrightfill">$shape-&gt;setRightFill($fill);</a></strong>
+<dt><strong><a name="xs_setrightfill" class="item">$shape-&gt;<code>xs_setRightFill($fill)</code></a></strong>
+
+<dt><strong><a name="setrightfill" class="item">$shape-&gt;<code>setRightFill($fill)</code></a></strong>
 
 <dd>
-<p>Sets the fill on the right side of the edge. $fill is an SWF::Fill object returned from <a href="#item_addfill">addFill</a> method.</p>
+<p>Sets the fill on the right side of the edge. $fill is an SWF::Fill object returned from &quot;addFill&quot; method.</p>
 </dd>
 </li>
-<dt><strong>$shape-&gt;setRightFill($r, $g, $b [,$a]);</strong>
+<dt><strong>$shape-&gt;setRightFill($r, $g, $b [,$a])</strong>
 
 <dd>
 <p>This is another way of saying:</p>
@@ -183,25 +307,112 @@
      $shape-&gt;setRightFill($fill);</pre>
 </dd>
 </li>
-<dt><strong><a name="item_drawcircle">$shape-&gt;<code>drawCircle($r)</code> - Don't use. Interface may change.</a></strong>
+<dt><strong><a name="drawcircle" class="item">$shape-&gt;<code>drawCircle($r)</code></a></strong>
 
 <dd>
-<p>Draws a circle with radious $r.</p>
+<p>Draws a circle with radious $r, also changes current position.</p>
 </dd>
 </li>
-<dt><strong><a name="item_drawarc">$shape-&gt;drawArc($r, $startAngle, $endAngle)  - Don't use. Interface may change.</a></strong>
+<dt><strong><a name="drawarc" class="item">$shape-&gt;drawArc($r, $startAngle, $endAngle)</a></strong>
 
+<dd>
+<p>Draws an arc with radious $r form start to end.</p>
+</dd>
+</li>
+<dt><strong><a name="useversion" class="item">$shape-&gt;useVersion(version)</a></strong>
+
+<dd>
+<p>This function allows to set the shapes version information. The version is only
+a hint. If necessary the version is upgraded. Valid values: are 3 and 4.
+Value of 3 is default, but 4 if linestyle2 is used. 
+Some shape features are available only for shape version 4 and 
+SWF file version&gt;=8. One example is the usage of focal gradients:</p>
+</dd>
+<dd>
+<pre>
+        $g = new SWF::Gradient();
+        $g-&gt;setFocalPoint(-0.9);
+        $g-&gt;addEntry(0.000000,0xff,0x00,0x00,0xff);
+        $g-&gt;addEntry(1.000000,0x00,0xff,0x00,0xff);
+        $shape-&gt;useVersion(4);
+        $shape-&gt;addGradientFill($g,SWFFILL_FOCAL_GRADIENT);</pre>
+</dd>
+</li>
+<dt><strong><a name="getversion" class="item">$version = $shape-&gt;<code>getVersion()</code></a></strong>
+
+<dd>
+<p>Gets the current shape object version.</p>
+</dd>
+</li>
+<dt><strong><a name="dumpoutline" class="item">$shape-&gt;<code>dumpOutline()</code></a></strong>
+
+<dd>
+<p>Returns a string describing shape's outline. After drawing in a shape 
+expect getting a multi-line string like:</p>
+</dd>
+<dd>
+<pre>
+        moveto 368,5
+        curveto 348,5 327,1
+        curveto 307,-3 284,-15
+etc. etc.</pre>
+</dd>
+</li>
+<dt><strong><a name="end" class="item">$shape-&gt;<code>end()</code></a></strong>
+
+<dd>
+<p>Stops drawing on this shape and make the shape complete.
+Further method calls won't produce any lines, circles etc. 
+By using this demo code later no circle is painted:</p>
+</dd>
+<dd>
+<pre>
+        $shape-&gt;drawLineTo(300,300);
+        $shape-&gt;end();
+        $shape-&gt;drawCircle(200);</pre>
+</dd>
+</li>
+<dt><strong><a name="drawglyph" class="item">$shape-&gt;drawGlyph($font, $cnumber [, $size])</a></strong>
+
+<dd>
+<p>Draws character of $cnumber of $font. Also Unicode fonts are possible, if the font does provide that, just like next example:</p>
+</dd>
+<dd>
+<pre>
+        $font=new SWF::Font(&quot;Thai-Bold.fdb&quot;);
+        $sh-&gt;drawGlyph($font, 0x0E44, 44);</pre>
+</dd>
+</li>
+<dt><strong><a name="drawcharacterbounds" class="item">$shape-&gt;<code>drawCharacterBounds($character)</code></a></strong>
+
+<dd>
+<p>Draws an outer rectangle fitting for $character, an object of SWF::Character.</p>
+</dd>
+</li>
+<dt><strong><a name="setrenderhintingflags" class="item">$shape-&gt;setRenderHintingFlags(flags)</a></strong>
+
+<dd>
+<p><table cellspacing="0" cellpadding="0"><tr><td>Set render hinting flags. Possible values are 
+<tr><td><td>SWF::Constants::SWF_SHAPE_USESCALINGSTROKES and
+<tr><td><td>SWF::Constants::SWF_SHAPE_USENONSCALINGSTROKES</table></p>
+</dd>
+<dd>
+<p>This method also will set version of this SWF::Shape object to 4.</p>
+</dd>
+</li>
 </dl>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
-<p>Soheil Seyfaie (soheil at users.sourceforge.net).</p>
+<p>Soheil Seyfaie (soheil at users.sourceforge.net), Albrecht Kleine</p>
 <p>
 </p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
-<p>SWF, SWF::Action, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::Shape, SWF::Sound, SWF::Sprite, SWF::TextField, SWF::Text</p>
+<p>SWF, SWF::Bitmap, SWF::Button, SWF::Constants, SWF::DisplayItem, 
+SWF::Fill, SWF::Font, SWF::Gradient, SWF::Morph, SWF::Movie, SWF::MovieClip,
+SWF::TextField, SWF::Text, SWF::Character</p>
 
 </body>
 
