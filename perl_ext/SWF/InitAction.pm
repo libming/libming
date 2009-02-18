@@ -21,21 +21,32 @@ SWF::InitAction - SWF init action class
 
 =head1 SYNOPSIS
 
+	use SWF::InitAction;
+	$initaction = new SWF::InitAction( $action );
+
 =head1 DESCRIPTION
 
+SWF::InitAction is an action helper class.
 
 =head1 METHODS
 
-=over 4
+=over
 
+=item new SWF::InitAction( $action )
+
+This method creates an InitAction object and defines an empty 
+MovieClip which is not placed. Parameter $action is an object 
+of SWF::Action class.  [ToDo: add demo code here!]
 
 =back
 
 =head1 AUTHOR
 
+	developers of 
+	ming.sourceforge.net
 
 =head1 SEE ALSO
 
-SWF, SWF::Button, SWF::Shape, SWF::Movie, .
+SWF, SWF::Action, SWF::MovieClip
 
 =cut

@@ -14,7 +14,11 @@ in a way that the ming-perl extension can be built on cpan automatically.
 
 =head1 Documentation
 
-write pod documentation for the SWF modules
+Update pod documentation for the SWF modules where neccesary.
+Please prevent 'podchecker *.pm' finding any errors.
+
+In early 2009:  now every method has its own documentation.
+In some very few cases there is only a stub, marked with "ToDo".
 
 =head2 Tests
 
