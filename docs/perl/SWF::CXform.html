@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::CXform - SWF CXform class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:feedback@suse.de" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::CXform - SWF CXform class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::CXform;
+        $cxf = new SWF::CXform();
+        $cxf-&gt;setColorAdd(100, 200, 30.5 , -50);
+        $dispitem-&gt;setCXform($cxf);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::CXform is a helper class useful for color transformations
+on SWF::DisplayItem objects.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="cxform" class="item">new SWF::CXform( [ $rAdd ], [ $gAdd ], [ $bAdd ], [ $aAdd ], [ $rMult ], [ $gMult ], [ $bMult ], [$aMult] )</a></strong>
+
+<dd>
+<p>Creates a CXform object. The object is controlled by a parameter list of RGBA values
+both for addition and multiplication. All of them are optional, but could be set later
+via <a href="#setcoloradd"><code>setColorAdd()</code></a> and <a href="#setcolormult"><code>setColorMult()</code></a> methods. Default values for the xAdd parameters are 0,
+and for xMult defaults are 1. Use the created object as parameter for transformations on 
+SWF::DisplayItem objects.</p>
+</dd>
+</li>
+<dt><strong><a name="setcoloradd" class="item">setColorAdd($rAdd, $gAdd, $bAdd, $aAdd)</a></strong>
+
+<dd>
+<p>Set addition values of a CXform object.</p>
+</dd>
+</li>
+<dt><strong><a name="setcolormult" class="item">setColorMult($rMult, $gMult, $bMult, $aMult)</a></strong>
+
+<dd>
+<p>Set multiplication values of a CXform object.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<pre>
+        developers of
+        ming.sourceforge.net</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::DisplayItem, SWF::Filter</p>
+
+</body>
+
+</html>

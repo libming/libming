@@ -1,0 +1,180 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::MovieClip - MovieClip Class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:feedback@suse.de" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::MovieClip - MovieClip Class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::MovieClip;
+        my $movieclip = new SWF::MovieClip();</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SWF::MovieClip allows you to add animated objects to your Flash movies.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="movieclip" class="item">$mc= new SWF::MovieClip()</a></strong>
+
+<dd>
+<p>Returns an SWF::MovieClip object.</p>
+</dd>
+</li>
+<dt><strong><a name="add" class="item">$item = $mc-&gt;<code>add($swfobject)</code></a></strong>
+
+<dd>
+<p>When you add following types of objects to the $mc they will return a SWF::DisplayItem:</p>
+</dd>
+<dl>
+<dt><strong><a name="swf_button" class="item">SWF::Button</a></strong>
+
+<dt><strong><a name="prebuiltclip" class="item">SWF::PrebuiltClip (a whole external swf file)</a></strong>
+
+<dt><strong>SWF::MovieClip (you can nest them like a tree)</strong>
+
+<dt><strong><a name="swf_shape" class="item">SWF::Shape</a></strong>
+
+<dt><strong><a name="swf_text" class="item">SWF::Text</a></strong>
+
+<dt><strong><a name="swf_textfield" class="item">SWF::TextField</a></strong>
+
+<dt><strong><a name="swf_videostream" class="item">SWF::VideoStream</a></strong>
+
+</dl>
+<p>[ToDo: to be verified: 
+When you add a SWF::Sound the return value is a SWF::SoundInstance:
+$si = $mc-&gt;<a href="#add"><code>add($sound)</code></a>; ]</p>
+<dt><strong><a name="startsound" class="item">$si = $mc-&gt;<code>startSound($sound)</code></a></strong>
+
+<dd>
+<p>Starts making noise and returns an object of SWF::SoundInstance class.</p>
+</dd>
+</li>
+<dt><strong><a name="stopsound" class="item">$mc-&gt;<code>stopSound($sound)</code></a></strong>
+
+<dd>
+<p>Stops sound started by <a href="#startsound"><code>startSound()</code></a> method.</p>
+</dd>
+</li>
+<dt><strong><a name="remove" class="item">$mc-&gt;<code>remove($di)</code></a></strong>
+
+<dd>
+<p>Removes SWF::DisplayItem $di from the display list.</p>
+</dd>
+</li>
+<dt><strong><a name="nextframe" class="item">$mc-&gt;<code>nextFrame()</code></a></strong>
+
+<dd>
+<p>Move to the next frame in the timeline of SWF::MovieClip $mc</p>
+</dd>
+</li>
+<dt><strong><a name="setnumberofframes" class="item">$mc-&gt;<code>setNumberOfFrames($i)</code></a></strong>
+
+<dt><strong><a name="setframes" class="item">$mc-&gt;<code>setFrames($i)</code></a></strong>
+
+<dd>
+<p>Sets total number of $mc frames to $i
+This is an optional autofiller, e.g. when you want to be sure that 2 different movieclips
+have 100 frames when playing, but the number of <a href="#nextframe"><code>nextFrame()</code></a> calls in these 2 movieclips is unknown or
+dynamic (dependent on data from databases, whatever). By default a movieclip the number of frames
+in the timeline is how often you called $mc-&gt;nextFrame for this clip.</p>
+</dd>
+</li>
+<dt><strong><a name="labelframe" class="item">$mc-&gt;<code>labelFrame($name)</code></a></strong>
+
+<dd>
+<p>Sets frame name to $name.
+You are then able to access this frame by name in ActionScript, not just by frame number.</p>
+</dd>
+</li>
+<dt><strong><a name="setscalinggrid" class="item">$mc-&gt;setScalingGrid($x, $y, $w, $h)</a></strong>
+
+<dd>
+<p>This function (available from SWF&gt;=8) sets a 9 slice scaling grid:
+1 2 3 
+4 5 6 
+7 8 9
+X, y, w and h define a rectangle, which is the dimension of the center slice
+(5). All other slices are determined out of the characters bounds and the
+defined rect. While slice 5 is scaled vertical and horizontal, slice 2 and 8
+are only scaled horizontal. Slice 4 and 6 only vertical. The 4 corner slices
+are not scaled (1, 3, 7, 9).
+[ToDo: to be verified]</p>
+</dd>
+</li>
+<dt><strong><a name="removescalinggrid" class="item">$mc-&gt;<code>removeScalingGrid()</code></a></strong>
+
+<dd>
+<p>Removes scaling grid rectangles.</p>
+</dd>
+</li>
+<dt><strong><a name="addinitaction" class="item">$mc-&gt;<code>addInitAction($action)</code></a></strong>
+
+<dd>
+<p>Adds an initial ActionScript block to MovieClip $mc.
+These actions are executed before the MovieClip is available
+as a script object.
+[ToDo: to be verified]</p>
+</dd>
+</li>
+<dt><strong><a name="setsoundstream" class="item">$mc-&gt;setSoundStream($sound, $rate, [$skip])</a></strong>
+
+<dd>
+<p>Includes streaming sound to a movie. 
+[ToDo: add more doc and a demo here.]</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Soheil Seyfaie (<a href="mailto:soheil@netcom.ca">soheil@netcom.ca</a>)
+Peter Liscovius</p>
+<p>see AUTHORS of ming distribution (ming.sf.net)</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF::DisplayItem for how you can modify the instances in a SWF::MovieClip or SWF::Movie
+SWF, SWF::Action, SWF::InitAction, SWF::Button, SWF::Movie, 
+SWF::Shape, SWF::Sound, SWF::SoundStream, SWF::Text, SWF::TextField, SWF::VideoStream</p>
+
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SWF::ButtonRecord - SWF Button Helper Class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:feedback@suse.de" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SWF::ButtonRecord - SWF Button Helper Class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use SWF::ButtonRecord;
+        use SWF::Button;
+        use SWF::Constants qw(:Button);
+        # create button and a shape here..
+        # and then:
+        $buttonrecord = $button-&gt;addCharacter($my_shape, SWFBUTTON_DOWN);
+        $buttonrecord-&gt;scale(0.5,0.5);
+        $buttonrecord-&gt;move(50,50);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Adding a character shape to an object of SWF::Button class will give you
+access to an SWF::ButtonRecord object. This is useful for further changes
+by using the declared methods below. So SWF::ButtonRecord objects are
+a comparable counterpart to SWF::Displayitem objects. Just like them
+there is no constructor method available.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="moveto" class="item">$buttonRecord-&gt;moveTo($x, $y)</a></strong>
+
+<dd>
+<p>Move ButtonRecord to ($x, $y).</p>
+</dd>
+</li>
+<dt><strong><a name="move" class="item">$buttonRecord-&gt;move($x, $y)</a></strong>
+
+<dd>
+<p>Displace ButtonRecord by ($x, $y).</p>
+</dd>
+</li>
+<dt><strong><a name="scaleto" class="item">$buttonRecord-&gt;scaleTo($x ,$y)</a></strong>
+
+<dd>
+<p>Set ButtonRecord scale to $x in the x-direction and $y in the y-direction.</p>
+</dd>
+</li>
+<dt><strong><a name="scale" class="item">$buttonRecord-&gt;scale($x ,$y)</a></strong>
+
+<dd>
+<p>Multiply ButtonRecord scale by $x in the x-direction and $y in the y-direction.</p>
+</dd>
+</li>
+<dt><strong><a name="rotateto" class="item">$buttonRecord-&gt;<code>rotateTo($degrees)</code></a></strong>
+
+<dd>
+<p>Set ButtonRecord rotation to $degrees.</p>
+</dd>
+</li>
+<dt><strong><a name="rotate" class="item">$buttonRecord-&gt;<code>rotate($degrees)</code></a></strong>
+
+<dd>
+<p>Rotate ButtonRecord by $degrees.</p>
+</dd>
+</li>
+<dt><strong><a name="skewx" class="item">$buttonRecord-&gt;<code>skewX($x)</code></a></strong>
+
+<dd>
+<p>Add $x to the current x-skew.</p>
+</dd>
+</li>
+<dt><strong><a name="skewxto" class="item">$buttonRecord-&gt;<code>skewXTo($x)</code></a></strong>
+
+<dd>
+<p>Set x-skew to $x. 1.0 is 45-degree forward slant. More is more forward while less is more backward.</p>
+</dd>
+</li>
+<dt><strong><a name="skewy" class="item">$buttonRecord-&gt;<code>skewY($y)</code></a></strong>
+
+<dd>
+<p>Add $y to the current y-skew.</p>
+</dd>
+</li>
+<dt><strong><a name="skewyto" class="item">$buttonRecord-&gt;<code>skewYTo($y)</code></a></strong>
+
+<dd>
+<p>Set y-skew to $y. 1.0 is 45-degree upward slant. More is more upward while less is more downward.</p>
+</dd>
+</li>
+<dt><strong><a name="setdepth" class="item">$buttonRecord-&gt;<code>setDepth($depth)</code></a></strong>
+
+<dd>
+<p>Set Z-order of ButtonRecord to $depth.</p>
+</dd>
+</li>
+<dt><strong><a name="setblendmode" class="item">$buttonRecord-&gt;<code>setBlendMode($mode)</code></a></strong>
+
+<dd>
+<p>Set an alternative blend mode instead of default alpha blend.
+Possible modes are SWFBLEND_MODE_NORMAL, SWFBLEND_MODE_LAYER etc.</p>
+</dd>
+</li>
+<dt><strong><a name="addfilter" class="item">$buttonRecord-&gt;<code>addFilter($filter)</code></a></strong>
+
+<dd>
+<p>Process the ButtonRecord object thru a prepared filter:
+an object of SWF::Filter class, e.g. BlurFilter or DropShadowFilter.
+Filters are available since player version 8.</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>developers of ming 
+ming.sourceforge.net,
+Albrecht Kleine</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>SWF, SWF::Button, SWF::DisplayItem, SWF::Filter, SWF::Movie, SWF::MovieClip</p>
+
+</body>
+
+</html>
