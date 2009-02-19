@@ -1,4 +1,4 @@
-B# ====================================================================
+# ====================================================================
 # Copyright (c) 2002 by Klaus Rechert. All rights reserved.
 #           (c) 2009 Albrecht Kleine
 # This program is free software; you can redistribute it and/or modify
