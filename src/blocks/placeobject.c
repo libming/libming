@@ -277,6 +277,9 @@ newSWFPlaceObject2Block(int depth)
 	place->hasBlendFlag = 0;
 	place->hasFilterFlag = 0;
 	place->filterList = NULL;
+#if TRACK_ALLOCS
+	place->gcnode = ming_gc_add_node(place, (dtorfunctype) destroySWFPlaceObject2Block);
+#endif
 	return place;
 }
 
