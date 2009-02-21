@@ -84,6 +84,21 @@ static char *SWF_DisplayItem_tag[] = {
      "SWFACTION_KEYDOWN",
      "SWFACTION_KEYUP",
      "SWFACTION_DATA",
+     "SWFBLEND_MODE_NULL",
+     "SWFBLEND_MODE_NORMAL",
+     "SWFBLEND_MODE_LAYER",
+     "SWFBLEND_MODE_MULT",
+     "SWFBLEND_MODE_SCREEN",
+     "SWFBLEND_MODE_DARKEN",
+     "SWFBLEND_MODE_LIGHTEN",
+     "SWFBLEND_MODE_ADD",
+     "SWFBLEND_MODE_SUB",
+     "SWFBLEND_MODE_DIFF",
+     "SWFBLEND_MODE_INV",
+     "SWFBLEND_MODE_ALPHA",
+     "SWFBLEND_MODE_ERASE",
+     "SWFBLEND_MODE_OVERLAY",
+     "SWFBLEND_MODE_HARDLIGHT",
      NULL,
 };
 
@@ -105,6 +120,8 @@ static char *SWF_Gradient_tag[] = {
      "SWF_GRADIENT_LINEAR",
      NULL,
 };
+
+
 
 static char **export_tags(char *tag) {
    switch (*tag) {

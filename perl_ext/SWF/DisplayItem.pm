@@ -167,7 +167,48 @@ Using this flags you have control at which events the action will run.
 =item $displayItem->setBlendMode($mode)
 
 Set an alternative blend mode instead of default alpha blend.
-Possible modes are SWFBLEND_MODE_NORMAL, SWFBLEND_MODE_LAYER etc.
+Possible modes are:
+
+	SWFBLEND_MODE_NULL
+	SWFBLEND_MODE_NORMAL
+	SWFBLEND_MODE_LAYER
+	SWFBLEND_MODE_MULT
+	SWFBLEND_MODE_SCREEN
+	SWFBLEND_MODE_DARKEN
+	SWFBLEND_MODE_LIGHTEN
+	SWFBLEND_MODE_ADD
+	SWFBLEND_MODE_SUB
+	SWFBLEND_MODE_DIFF
+	SWFBLEND_MODE_INV
+	SWFBLEND_MODE_ALPHA
+	SWFBLEND_MODE_ERASE
+	SWFBLEND_MODE_OVERLAY
+	SWFBLEND_MODE_HARDLIGHT
+
+Here comes some demonstration code: 
+
+	use SWF::Constants qw(:DisplayItem); 
+	# ....
+	$sh=new SWF::Shape();
+	$fill = $sh->addFill(255, 0, 0, 255);  				# red
+	$sh->setRightFill($fill);
+	$sh->drawLine(440, 0);
+	$sh->drawLine(0, 380);
+	$sh->drawLine(-440, 0);
+	$sh->drawLine(0, -380);
+	#
+	$sh2=new SWF::Shape();
+	$fill2 = $sh2->addFill(0, 255, 0, 255);  			# green
+	$sh2->setRightFill($fill2);
+	$sh2->drawLine(240, 0);
+	$sh2->drawLine(0, 280);
+	$sh2->drawLine(-240, 0);
+	$sh2->drawLine(0, -280);
+
+	$di=$m->add($sh);
+	$di2=$m->add($sh2);
+	#  $di2->setBlendMode( SWFBLEND_MODE_NORMAL);			# would be green  ( as you have expected )
+	$di2->setBlendMode(  SWFBLEND_MODE_ADD);			# y e l l o w  ( surprising, a litle bit )
 
 =item $displayItem->cacheAsBitmap($flag)
 
