@@ -2,12 +2,12 @@
 use strict;
 
 use SWF qw(:ALL);
-SWF::setScale(1.0);
+SWF::setScale(20.0);
 
 print "Content-type: application/x-shockwave-flash\n\n";
 
 my $s = new SWF::Shape();
-my $b = new SWF::Bitmap('/home/soheil/src/ming-0.0.9/examples/common/backyard.jpg');
+my $b = new SWF::Bitmap('../common/flowers.jpg');
 
 my $f = $s->addFill($b);
 $s->setRightFill($f);
@@ -20,4 +20,12 @@ $s->drawLine(0, -480);
 my $m = new SWF::Movie();
 $m->setDimension(640, 480);
 $m->add($s);
-$m->output();
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
