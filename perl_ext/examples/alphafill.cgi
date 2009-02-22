@@ -2,14 +2,17 @@
 use strict;
 
 use SWF qw(:ALL);
+SWF::setScale(20.0);
 
-my $dir = '/home/soheil/src/ming-0.0.9/examples/common/';
+my $dir = '../common/';
 
 
 print "Content-type: application/x-shockwave-flash\n\n";
 
 my $s = new SWF::Shape();
-my $alpha = new SWF::Bitmap($dir."alphafill.jpg", $dir."alphafill.msk");
+my $alpha = new SWF::Bitmap($dir."flowers.jpg", $dir."flowers.msk");
+
+
 
 my $f = $s->addFill($alpha);
 $s->setRightFill($f);
@@ -47,4 +50,12 @@ for($y=0; $y<480; $y+=40){
 }
 
 $m->add($s);
-$m->output();
+# decide if its called from commandline or as cgiscript
+if (exists $ENV{"REQUEST_URI"}){
+	print "Content-type: application/x-shockwave-flash\n\n";
+	$m->output();
+}
+else {
+	$m->save("$0.swf");
+	print "Generated file written to $0.swf\n";
+}
