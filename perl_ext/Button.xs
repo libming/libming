@@ -1,5 +1,6 @@
 /* ====================================================================
  * Copyright (c) 2000-2001 by Soheil Seyfaie. All rights reserved.
+ *           (c) 2009 Albrecht Kleine
  * This program is free software; you can redistribute it and/or modify
  * it under the same terms as Perl itself.
  * ====================================================================
@@ -45,31 +46,16 @@ SWFButton_addShape(button, character, flags=0)
 	SWF::Button	button
 	SWF::Character	character = NO_INIT
 	byte	flags
-        ALIAS:
-        SWF::Button::setOver   = 1
-        SWF::Button::setHit    = 2
-        SWF::Button::setUp     = 3
-        SWF::Button::setDown   = 4
+	# /* ALIAS:                               */
+	# /* SWF::Button::setOver .....           */
+	# /* 4 ALIASes removed by akleine (2009)  */
+	# /* because all of them were used twice, */
+	# /* only these in addCharacter() remain. */
+	# /* See next function declaration below. */
         CODE:
         character = (SWF__Character) SvIV((SV*)SvRV(ST(1)));
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
-        switch((ix = XSANY.any_i32)) {
-            case 0:
-               SWFButton_addCharacter(button, character, flags);
-               break;
-            case 1:
-               SWFButton_addCharacter(button, character, SWFBUTTON_OVER);
-               break;
-            case 2:
-               SWFButton_addCharacter(button, character, SWFBUTTON_HIT);
-               break;
-            case 3:
-               SWFButton_addCharacter(button, character, SWFBUTTON_UP);
-               break;
-            case 4:
-               SWFButton_addCharacter(button, character, SWFBUTTON_DOWN);
-               break;
-       }
+        SWFButton_addCharacter(button, character, flags);
 
 
 SWF::ButtonRecord
