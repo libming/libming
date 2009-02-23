@@ -1,5 +1,6 @@
 # ====================================================================
 # Copyright (c) 2000-2003 by Soheil Seyfaie. All rights reserved.
+#           (c) 2009 Albrecht Kleine
 # This program is free software; you can redistribute it and/or modify
 # it under the same terms as Perl itself.
 # ====================================================================
@@ -63,7 +64,21 @@ This tag imports constants most commonly used by SWF::DisplayItem.
     SWFACTION_KEYDOWN
     SWFACTION_KEYUP
     SWFACTION_DATA
-
+    SWFBLEND_MODE_NULL
+    SWFBLEND_MODE_NORMAL
+    SWFBLEND_MODE_LAYER
+    SWFBLEND_MODE_MULT
+    SWFBLEND_MODE_SCREEN
+    SWFBLEND_MODE_DARKEN
+    SWFBLEND_MODE_LIGHTEN
+    SWFBLEND_MODE_ADD
+    SWFBLEND_MODE_SUB
+    SWFBLEND_MODE_DIFF
+    SWFBLEND_MODE_INV
+    SWFBLEND_MODE_ALPHA
+    SWFBLEND_MODE_ERASE
+    SWFBLEND_MODE_OVERLAY
+    SWFBLEND_MODE_HARDLIGHT
 
 =item Fill
 
@@ -105,6 +120,11 @@ This tag imports constants most commonly used by SWF::Sound.
     SWF_SOUND_MONO
     SWF_SOUND_STEREO
 
+This tag imports constants most commonly used by SWF::Video.
+
+    SWFVIDEOSTREAM_MODE_AUTO
+    SWFVIDEOSTREAM_MODE_MANUAL
+
 =item Text
 
 This tag imports constants most commonly used by SWF::TextField.
@@ -123,6 +143,26 @@ This tag imports constants most commonly used by SWF::TextField.
     SWFTEXTFIELD_HASLENGTH
     SWFTEXTFIELD_USEFONT
     SWFTEXTFIELD_AUTOSIZE
+
+= item Shape
+
+This tag imports constants most commonly used by SWF::Shape.
+
+    SWF_SHAPE_USESCALINGSTROKES
+    SWF_SHAPE_USENONSCALINGSTROKES
+    SWF_LINESTYLE_CAP_ROUND
+    SWF_LINESTYLE_CAP_NONE
+    SWF_LINESTYLE_CAP_SQUARE
+    SWF_LINESTYLE_JOIN_ROUND
+    SWF_LINESTYLE_JOIN_BEVEL
+    SWF_LINESTYLE_JOIN_MITER
+    SWF_LINESTYLE_FLAG_NOHSCALE
+    SWF_LINESTYLE_FLAG_NOVSCALE
+    SWF_LINESTYLE_FLAG_HINTING
+    SWF_LINESTYLE_FLAG_NOCLOSE
+    SWF_LINESTYLE_FLAG_ENDCAP_ROUND
+    SWF_LINESTYLE_FLAG_ENDCAP_NONE
+    SWF_LINESTYLE_FLAG_ENDCAP_SQUARE
 
 =item Filter
 

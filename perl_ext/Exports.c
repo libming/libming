@@ -121,6 +121,30 @@ static char *SWF_Gradient_tag[] = {
      NULL,
 };
 
+static char *SWF_Shape_tag[] = {
+     "SWF_SHAPE_USESCALINGSTROKES",
+     "SWF_SHAPE_USENONSCALINGSTROKES",
+     "SWF_LINESTYLE_CAP_ROUND",
+     "SWF_LINESTYLE_CAP_NONE",
+     "SWF_LINESTYLE_CAP_SQUARE",
+     "SWF_LINESTYLE_JOIN_ROUND",
+     "SWF_LINESTYLE_JOIN_BEVEL",
+     "SWF_LINESTYLE_JOIN_MITER",
+     "SWF_LINESTYLE_FLAG_NOHSCALE",
+     "SWF_LINESTYLE_FLAG_NOVSCALE",
+     "SWF_LINESTYLE_FLAG_HINTING",
+     "SWF_LINESTYLE_FLAG_NOCLOSE",
+     "SWF_LINESTYLE_FLAG_ENDCAP_ROUND",
+     "SWF_LINESTYLE_FLAG_ENDCAP_NONE",
+     "SWF_LINESTYLE_FLAG_ENDCAP_SQUARE",
+     NULL,
+};
+
+static char *SWF_Video_tag[] = {
+     "SWFVIDEOSTREAM_MODE_AUTO",
+     "SWFVIDEOSTREAM_MODE_MANUAL",
+     NULL,
+};
 
 
 static char **export_tags(char *tag) {
@@ -142,9 +166,14 @@ static char **export_tags(char *tag) {
    case 'S':
      if(strEQ("Sound", tag))
        return SWF_Sound_tag;
+     if(strEQ("Shape", tag))
+       return SWF_Shape_tag;
    case 'T':
      if(strEQ("Text", tag))
        return SWF_TextField_tag;
+   case 'V':
+     if(strEQ("Video", tag))
+       return SWF_Video_tag;
    default:
      croak("unknown tag `%s'", tag);
    }
