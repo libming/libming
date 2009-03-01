@@ -170,8 +170,7 @@ SWFLineStyle newSWFLineStyle2_filled(unsigned short width, SWFFillStyle fill,
 	line->flags = SWF_LINESTYLE_FLAG_FILL | flags;
 	line->miterLimit = miterLimit;
 	line->fill = fill;
-
-	return 0;
+	return line;
 }
 
 byte SWFLineStyle_equals(SWFLineStyle line, unsigned short width,
