@@ -110,6 +110,7 @@ SWFMovie_save(movie, filename, compresslevel=-1)
 	CODE:
 	if (!(f = fopen(filename, "wb"))) {
 		fprintf(stderr, "Unable to open %s\n", filename);
+		RETVAL=0;	/* to avoid a warning  ("...may be used uninitialized..") */
 		ST(0) = &sv_undef;
 	}else{
 		if(compresslevel >= -1)
