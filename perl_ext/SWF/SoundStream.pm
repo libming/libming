@@ -30,7 +30,7 @@ SWF::SoundStream - SWF Sound Stream class
 	print $soundstream->getDuration();
 	##  print $soundstream->getFrames();	# won't work until it belongs to movie
 	$movie->setSoundStream($soundstream);
-	print $soundstream->getFrames();	# but _now_ it is okay
+	print $soundstream->getFrames();	# but _now_ it is okay (but anyway deprecated)
 
 =head1 DESCRIPTION
 
@@ -53,10 +53,10 @@ Works for streams of mp3, flv types only. On other cases it returns 0.
 
 =item $frames = $soundstream->getFrames()
 
-The number of movie frames for a given sound stream. This function returns the
+Using getFrames() is deprecated, better use getDuration(). getFrames() returns the
 number of movie frames necessary to play the full sound stream. For this reason
-it works only if the sound stream object was added to a movie.
-It works for streams of mp3 -files only.
+it works only if the sound stream object was added to a movie, and also only for 
+streams of mp3 -files.
 
 =back
 

@@ -43,6 +43,11 @@ unsigned int SWFSoundStream_getDuration(sound)
 
 int SWFSoundStream_getFrames(sound)
 	SWF::SoundStream	sound
+	CODE:
+	 warn("Using getFrames() is deprecated. Use getDuration() instead!");
+	 RETVAL=SWFSoundStream_getFrames(sound);
+	OUTPUT:
+	 RETVAL
 
 
 void
