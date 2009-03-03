@@ -99,6 +99,9 @@ SWFMovie_xs_output(movie, compresslevel=-1)
 	if(compresslevel >= -1)
 		Ming_setSWFCompression(compresslevel);
 	RETVAL = SWFMovie_output(movie, fileOutputMethod, stdout);
+	OUTPUT:
+	 RETVAL
+	
 
 int 
 SWFMovie_save(movie, filename, compresslevel=-1)
@@ -250,4 +253,6 @@ SWFMovie_replace(movie, item, block)
 	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
 	ublock.block = block;
 	RETVAL = SWFMovie_replace_internal(movie, item, ublock);
-	
+	OUTPUT:
+	 RETVAL
+

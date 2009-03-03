@@ -250,29 +250,29 @@ Not yet documented (ToDo!)
 
 =item $m->replace($item, $block)
 
-Not yet documented (ToDo!)
+This method replaces a displayable character with a new one.
+Returns 0 on success , -1 else.
 
-=item $m->xs_output([$compresslevel])
+=item $written = $m->xs_output([$compresslevel])
 
-=item $m->output([$compresslevel])
+=item $written = $m->output([$compresslevel])
 
 Writes the SWF::Movie to stdout. This is normally used for webservers/cgi-scripts. 
 Don't forget to send the "Content-Type:"-lines before writing out the movie.
 
 The parameter compresslevel is optional. compresslevel between 0 and 9. Higher values will be interpreted as 9. Values smaller 0
 mean no compression. By default the SWF::Movie will be send without compression. 
-
 Notice: compression available since Flash MX(Flash 6). Ming does not check this for you if you write flash4 or flash5 movies.
 
 Unlike xs_output() the output() method prepared for using via webservers (but not limited to webservers).
 
-=item $m->save($filename [, $compresslevel]) 
+Both methods return number of bytes written.
 
-Save the SWF::Movie to a file. 
+=item $written = $m->save($filename [, $compresslevel]) 
 
+Method saves the SWF::Movie to a file and returns the number of bytes written.
 The parameter compresslevel is optional. compresslevel between 0 and 9. Higher values will be interpreted as 9. Values smaller 0 
 mean no compression. By default the SWF::Movie will be saved without compression. 
-
 Notice: compression available since Flash MX(Flash 6). Ming does not check this for you if you write flash4 or flash5 movies.
 
 =back
