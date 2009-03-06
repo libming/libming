@@ -1970,7 +1970,7 @@ opcode_list
 
 with
 	: WITH
-				{ $$ = bufferWriteOp(asmBuffer,
+				{ $<len>$ = bufferWriteOp(asmBuffer,
 						     SWFACTION_WITH); }
 	  opcode_list END	{ $$ = $<len>2 + $3;
 				  bufferPatchLength(asmBuffer, $3); }
@@ -2007,8 +2007,8 @@ push_list
 	;
 
 opcode
-	: PUSH 			{ $$ = bufferWritePushOp(asmBuffer);
-				  $$ += bufferWriteS16(asmBuffer, 0); }
+	: PUSH 			{ $<len>$ = bufferWritePushOp(asmBuffer);
+				  $<len>$ += bufferWriteS16(asmBuffer, 0); }
 	  push_list		{ $$ = $<len>2 + $3;
 				  bufferPatchLength(asmBuffer, $3); }
 

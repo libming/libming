@@ -1086,8 +1086,8 @@ opcode_list
 	;
 
 opcode
-	: ASMPUSH 		{ $$ = bufferWritePushOp(asmBuffer);
-				  $$ += bufferWriteS16(asmBuffer, 0); }
+	: ASMPUSH 		{ $<len>$ = bufferWritePushOp(asmBuffer);
+				  $<len>$ += bufferWriteS16(asmBuffer, 0); }
 	  push_list		{ $$ = $<len>2 + $3;
 			
 				  bufferPatchLength(asmBuffer, $3); }
