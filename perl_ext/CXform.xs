@@ -55,5 +55,9 @@ void
 SWFCXform_DESTROY(cx)
 	SWF::CXform cx
 	CODE:
-	destroySWFCXform(cx);
+/*	destroySWFCXform(cx);					*/
+/*	removed March 07th, 2009				*/
+/*	because could be destroyed twice (and segfaults later)  */
+/*	see destroySWFPlaceObject2Block() in placeobject.c 	*/
 	S_DEBUG(2, fprintf(stderr, "CXform DESTROY CALLED\n"));
+	swf_stash_refcnt_dec((SV*)SvRV(ST(0)));

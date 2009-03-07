@@ -25,6 +25,8 @@ SWFMatrix_DESTROY(m)
 	SWF::Matrix	m
 	CODE:
         S_DEBUG(2, fprintf(stderr, "Matrix DESTROY CALLED\n"));
+        /* currently no destroy(m) call here,
+        see destroySWFPlaceObject2Block() in placeobject.c */
 
 double
 SWFMatrix_getScaleX(m)
