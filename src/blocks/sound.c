@@ -270,6 +270,7 @@ newSWFSound_fromSoundStream(SWFSoundStream stream)
 	block->complete = completeDefineSWFSoundWithSoundStreamBlock;
 	block->dtor = (destroySWFBlockMethod) destroySWFSound;
 
+	sound->freeInput = FALSE;
 	sound->input = 0;
 	sound->flags = SWFSoundStream_getFlags(stream);
 	sound->soundStream = stream;
