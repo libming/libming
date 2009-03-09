@@ -246,11 +246,11 @@ int
 SWFMovie_replace(movie, item, block)
 	SWF::Movie movie
 	SWF::DisplayItem item
-	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(1)));
+	SWF::Block block = (SWF__Block) SvIV((SV*)SvRV(ST(2)));
 	PREINIT:
 	SWFMovieBlockType ublock;
 	CODE:	
-	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(1)));
+	swf_stash_refcnt_inc((SV*)SvRV(ST(0)), (SV*)SvRV(ST(2)));
 	ublock.block = block;
 	RETVAL = SWFMovie_replace_internal(movie, item, ublock);
 	OUTPUT:

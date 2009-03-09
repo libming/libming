@@ -248,10 +248,15 @@ Imports a font from an other SWFFile. An object of SWF::FontCharacter class retu
 
 Not yet documented (ToDo!)
 
-=item $m->replace($item, $block)
+=item $result = $m->replace($item, $block)
 
 This method replaces a displayable character with a new one.
 Returns 0 on success , -1 else.
+
+	$dispitem = $movie->add($shape1);
+	$movie->nextFrame();
+	print $movie->replace($dispitem, $shape2);
+	$movie->nextFrame();
 
 =item $written = $m->xs_output([$compresslevel])
 
