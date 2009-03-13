@@ -36,7 +36,7 @@ Block length: 13
   PlaceDepth: 1
   Matrix:
    TranslateX      0 TranslateY      0
-  ColorTransForm:
+  ColorTransform:
 
 Offset: 62 (0x003e)
 Block type: 70 (SWF_PLACEOBJECT3)

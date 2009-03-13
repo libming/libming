@@ -188,15 +188,15 @@ outputSWF_MATRIX (SWF_MATRIX * matrix, char *name)
 
 void
 outputSWF_CXFORM(SWF_CXFORM * cxform){
-	_iprintf("  ColorTransForm:\n");
+	_iprintf("  ColorTransform:\n");
 	if (cxform->HasMultTerms){
 		_iprintf("   Mult:");
-		_iprintf("%2x,", cxform->RedMultTerm);
-		_iprintf("%2x,", cxform->GreenMultTerm);
-		_iprintf("%2x,", cxform->BlueMultTerm);
+		_iprintf("%ld,", cxform->RedMultTerm);
+		_iprintf("%ld,", cxform->GreenMultTerm);
+		_iprintf("%ld,", cxform->BlueMultTerm);
 		/*
 		if (cxform->hasAlpha){
-			_iprintf("%2x", cxform->AlphaMultTerm);	
+			_iprintf("%ld", cxform->AlphaMultTerm);	
 		}
 		*/
 		_iprintf("\n");
@@ -204,12 +204,12 @@ outputSWF_CXFORM(SWF_CXFORM * cxform){
 	
 	if (cxform->HasAddTerms){
 		_iprintf("   Add:");	
-		_iprintf("%2x,", cxform->RedAddTerm);
-		_iprintf("%2x,", cxform->GreenAddTerm);
-		_iprintf("%2x,", cxform->BlueAddTerm);
+		_iprintf("%ld,", cxform->RedAddTerm);
+		_iprintf("%ld,", cxform->GreenAddTerm);
+		_iprintf("%ld,", cxform->BlueAddTerm);
 		/*
 		if (cxform->hasAlpha){
-			_iprintf("%2x", cxform->AlphaAddTerm);	
+			_iprintf("%ld", cxform->AlphaAddTerm);	
 		}
 		*/
 		_iprintf("\n");
@@ -225,21 +225,21 @@ outputSWF_CXFORM(SWF_CXFORM * cxform){
 */
 void
 outputSWF_CXFORMWITHALPHA(SWF_CXFORMWITHALPHA * cxform, char *name){
-	_iprintf("  ColorTransForm:\n");
+	_iprintf("  ColorTransform:\n");
 	if (cxform->HasMultTerms){
 		_iprintf("   Mult:");
-		_iprintf("%2x,", cxform->RedMultTerm);
-		_iprintf("%2x,", cxform->GreenMultTerm);
-		_iprintf("%2x,", cxform->BlueMultTerm);
-		_iprintf("%2x",  cxform->AlphaMultTerm);
+		_iprintf("%ld,", cxform->RedMultTerm);
+		_iprintf("%ld,", cxform->GreenMultTerm);
+		_iprintf("%ld,", cxform->BlueMultTerm);
+		_iprintf("%ld",  cxform->AlphaMultTerm);
 		_iprintf("\n");
 	}
 	if (cxform->HasAddTerms){
 		_iprintf("   Add:");
-		_iprintf("%2x,", cxform->RedAddTerm);
-		_iprintf("%2x,", cxform->GreenAddTerm);
-		_iprintf("%2x,", cxform->BlueAddTerm);
-		_iprintf("%2x",  cxform->AlphaAddTerm);
+		_iprintf("%ld,", cxform->RedAddTerm);
+		_iprintf("%ld,", cxform->GreenAddTerm);
+		_iprintf("%ld,", cxform->BlueAddTerm);
+		_iprintf("%ld",  cxform->AlphaAddTerm);
 		_iprintf("\n");
 	}	
 }
@@ -1786,10 +1786,8 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
 	  _iprintf( " CharacterID: %d\n", sblock->CharacterId );
   if( sblock->PlaceFlagHasMatrix )
 	outputSWF_MATRIX (&(sblock->Matrix), "");
-/*
   if( sblock->PlaceFlagHasColorTransform )
 	outputSWF_CXFORMWITHALPHA (&(sblock->ColorTransform), "");
-*/
   if( sblock->PlaceFlagHasRatio )
 	  _iprintf( " Ratio: %d\n", sblock->Ratio );
   if( sblock->PlaceFlagHasName )
@@ -1829,10 +1827,8 @@ outputSWF_PLACEOBJECT3 (SWF_Parserstruct * pblock)
 	  _iprintf( " CharacterID: %d\n", sblock->CharacterId );
   if( sblock->PlaceFlagHasMatrix )
 	outputSWF_MATRIX (&(sblock->Matrix), "");
-/*
   if( sblock->PlaceFlagHasColorTransform )
 	outputSWF_CXFORMWITHALPHA (&(sblock->ColorTransform), "");
-*/
   if( sblock->PlaceFlagHasRatio )
 	  _iprintf( " Ratio: %d\n", sblock->Ratio );
   if( sblock->PlaceFlagHasName )
