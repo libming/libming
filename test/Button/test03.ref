@@ -288,19 +288,19 @@ Block length: 27
   PlaceDepth: 1
   Matrix:
    TranslateX      0 TranslateY      0
-  ColorTransForm:
+  ColorTransform:
  BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 0   ButtonStateDown: 0   ButtonStateOver: 1   ButtonStateUp: 0
   CharacterID: 2
   PlaceDepth: 2
   Matrix:
    TranslateX      0 TranslateY      0
-  ColorTransForm:
+  ColorTransform:
  BUTTONRECORD:   ButtonHasBlendMode 0   ButtonHasFilterList 0   ButtonStateHitTest: 0   ButtonStateDown: 1   ButtonStateOver: 0   ButtonStateUp: 0
   CharacterID: 3
   PlaceDepth: 3
   Matrix:
    TranslateX      0 TranslateY      0
-  ColorTransForm:
+  ColorTransform:
 
 Offset: 233 (0x00e9)
 Block type: 26 (SWF_PLACEOBJECT2)

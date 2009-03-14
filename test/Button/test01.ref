@@ -61,7 +61,7 @@ Block length: 64
   PlaceDepth: 1
   Matrix:
    TranslateX      0 TranslateY      0
-  ColorTransForm:
+  ColorTransform:
  BUTTONCONDACTION:   CondActionSize: 0
   CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 1   CondOverUpToOverDown: 0   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
  6 Actions
@@ -118,7 +118,7 @@ Block length: 64
   PlaceDepth: 1
   Matrix:
    TranslateX      0 TranslateY      0
-  ColorTransForm:
+  ColorTransform:
  BUTTONCONDACTION:   CondActionSize: 0
   CondIdleToOverDown: 0   CondOutDownToIdle: 0   CondOutDownToOverDown: 0   CondOverDownToOutDown: 0   CondOverDownToOverUp: 0   CondOverUpToOverDown: 1   CondOverUpToIdle: 0   CondIdleToOverUp: 0   CondKeyPress: 0   CondOverDownToIdle: 0 
  6 Actions
