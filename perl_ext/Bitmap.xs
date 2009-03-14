@@ -31,6 +31,8 @@ SWFBitmap_new(package="SWF::Bitmap", filename, alpha=NULL)
         char   *my_sub;
 	CODE:
         filename = (char *) SvPV(ST(1), len);
+	my_sub = "SWF::Bitmap::newSWFBitmap";
+#if 0
         if( strncasecmp(filename+len-4, ".jpg", 4) == 0 ||
             strncasecmp(filename+len-5, ".jpeg", 5) == 0)
             my_sub = alpha ? "SWF::Bitmap::newSWFJpegWithAlpha" : "SWF::Bitmap::newSWFJpegBitmap";
@@ -38,7 +40,7 @@ SWFBitmap_new(package="SWF::Bitmap", filename, alpha=NULL)
             my_sub = "SWF::Bitmap::newSWFDBLBitmap";
         else
             croak("argument to SWF::Bitmap::New must be a JPG or dbl filename");
-
+#endif
         PUSHMARK(mark);
         cv = GvCV(gv_fetchpv(my_sub, FALSE, SVt_PVCV));
 #ifdef PERL_OBJECT
@@ -65,6 +67,31 @@ newSWFDBLBitmap(package="SWF::Bitmap", filename)
          }
 
 SWF::Bitmap
+newSWFBitmap(package="SWF::Bitmap", filename)
+         char    *package
+         char    *filename
+         PREINIT: 
+         FILE    *f;
+         SWFInput in;
+         CODE:
+         if ( !(f = fopen(filename, "rb")) ){
+             fprintf(stderr, "Unable to open %s\n", filename);
+             ST(0) = &sv_undef;
+         }else{
+             in = newSWFInput_file(f);
+             if ( ! in ) {
+                 fprintf(stderr, "Unable to create SWFInput from %s\n",
+                        filename);
+                 ST(0) = &sv_undef;
+             }else{
+                 RETVAL = (SWFBitmap)newSWFBitmap_fromInput(in);
+                 ST(0) = sv_newmortal();
+                 sv_setref_pv(ST(0), package, (void*)RETVAL);
+             }
+         }
+
+# obsoleted, not used anymore
+SWF::Bitmap
 newSWFJpegWithAlpha(package="SWF::Bitmap", filename, mask)
         char    *package
         char    *filename
@@ -89,6 +116,7 @@ newSWFJpegWithAlpha(package="SWF::Bitmap", filename, mask)
            }
         }
 
+# obsoleted, not used anymore
 SWF::Bitmap
 newSWFJpegBitmap(package="SWF::Bitmap", filename)
         char    *package
