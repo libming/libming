@@ -27,19 +27,19 @@ Bitmap or SWF content will be stored in a MovieClip named after the correspondin
 path and extension removed. This allows easy referencing of the content by ActionScript code.
 .SH OPTIONS
 .TP
-\fB\-o\fR <output>
+\fB\-o --output\fR <output>
 Write SWF file to <output>. Default is ``out.swf''.
 .TP
-\fB\-s\fR <width>x<height>
+\fB\-s --size\fR <width>x<height>
 Set output frame size.
 .TP
-\fB\-r\fR <frame_rate>
+\fB\-r --frame-rate\fR <frame_rate>
 Set output frame rate (defaults to 12).
 .TP
-\fB\-v\fR <swfversion>
+\fB\-v --swfversion\fR <swfversion>
 Set output SWF version (defaults to 6).
 .TP
-\fB\-c\fR <compression_level>
+\fB\-c --compression\fR <compression_level>
 Set output compression level (0 to 9). Defaults to 9.
 Use -1 to disable.
 .TP
@@ -55,7 +55,7 @@ The option is passed to the C preprocessor.
 Define <macro>.
 The option is passed to the C preprocessor.
 .TP
-\fB\-i\fR <library.swf>:<sym>[,<sym>]>
+\fB\-i --import\fR <library.swf>:<sym>[,<sym>]>
 Import named symbols from the given SWF file and store them into a
 .TP
 \fB\-a --init-action\fR <source.as>[:<frameno>]
@@ -69,10 +69,10 @@ for SWF8+ and to provide the optional tag for SWF8-.
 The tag basically determine the resources sandbox to use when the movie is loaded
 from the filesystem, in an exclusive manner.
 .TP
-\fB\-h\fR 
+\fB\-h --help\fR 
 Print quick help.
 .TP
-\fB\-V\fR 
+\fB\-V --version\fR 
 Print version and copyright info.
 .SH PREPROCESSOR
 .B makeswf
