@@ -469,6 +469,7 @@ outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF
 {
   char fname[64];
   char gname[64];
+  const char* fillTypeName = NULL;
 
   sprintf (fname, "%s_f%d", parentname, i);
 
@@ -502,19 +503,27 @@ outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF
         prepareSWF_MATRIX(&fillstyle->GradientMatrix, shapeBounds);
       outputSWF_MATRIX (&fillstyle->GradientMatrix, fname);
       break;
+
     case 0x40:			/* Repeating Bitmap Fill */
+             fillTypeName = "SWFFILL_TILED_BITMAP";
     case 0x41:			/* Clipped Bitmap Fill */
+      if ( ! fillTypeName )
+             fillTypeName = "SWFFILL_CLIPPED_BITMAP";
     case 0x42:			/* Non-smoothed Repeating Bitmap Fill */
+      if ( ! fillTypeName )
+             fillTypeName = "SWFFILL_NONSMOOTHED_TILED_BITMAP";
     case 0x43:			/* Non-smoothed Clipped Bitmap Fill */
+      if ( ! fillTypeName )
+             fillTypeName = "SWFFILL_NONSMOOTHED_CLIPPED_BITMAP";
       /*
        * TODO:
-       *  - use SWFFILL_TILED_BITMAP or SWFFILL_CLIPPED_BITMAP where appropriate
        *  - specially handle a CharacterID of 65535 (it occurs!)
        */
       printf (COMMSTART " BitmapID: %d " COMMEND "\n", fillstyle->BitmapId);
       sprintf (gname, "character%d", fillstyle->BitmapId);
-      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_BITMAP);\n",
-	      fname, methodcall (parentname, "addBitmapFill"), gname);
+      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,%s);\n",
+	      fname, methodcall (parentname, "addBitmapFill"),
+              gname, fillTypeName);
       outputSWF_MATRIX (&fillstyle->BitmapMatrix, fname);
       break;
     }
