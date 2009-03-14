@@ -717,9 +717,9 @@ outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
   /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
 
   OUT_BEGIN (SWF_DEFINEBITS);
-  printf ("\n\t" COMMSTART "  Bits %d (bits, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  printf ("\n" COMMSTART " Bitmap %d (bits, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Bitmap"));
+  printf ("%s('%s.img');\n", newobj (name, "Bitmap"), name);
 
 }
 
@@ -731,9 +731,9 @@ outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
   /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
 
   OUT_BEGIN (SWF_DEFINEBITSJPEG2);
-  printf ("\n\t" COMMSTART "  Bitmap %d (jpeg2, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  printf ("\n" COMMSTART " Bitmap %d (jpeg2, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Bitmap"));
+  printf ("%s('%s.img');\n", newobj (name, "Bitmap"), name);
 
 }
 
@@ -745,9 +745,9 @@ outputSWF_DEFINEBITSJPEG3 (SWF_Parserstruct * pblock)
   /* TODO: use JPEGData and JPEGDataSize to actually include content. dump to a file maybe */
 
   OUT_BEGIN (SWF_DEFINEBITSJPEG3);
-  printf ("\n\t" COMMSTART "  Bitmap %d (jpeg3, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  printf ("\n" COMMSTART " Bitmap %d (jpeg3, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Bitmap"));
+  printf ("%s('%s.img');\n", newobj (name, "Bitmap"), name);
 }
 
 void
@@ -1130,9 +1130,9 @@ outputSWF_DEFINELOSSLESS (SWF_Parserstruct * pblock)
 
   OUT_BEGIN (SWF_DEFINELOSSLESS);
 
-  printf ("\n\t" COMMSTART "  Bitmap %d (lossless, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  printf ("\n" COMMSTART " Bitmap %d (lossless, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Bitmap"));
+  printf ("%s('%s.img');\n", newobj (name, "Bitmap"), name);
 
 }
 
@@ -1143,9 +1143,9 @@ outputSWF_DEFINELOSSLESS2 (SWF_Parserstruct * pblock)
 
   OUT_BEGIN (SWF_DEFINELOSSLESS2);
 
-  printf ("\n\t" COMMSTART "  Bitmap %d (lossless2, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
+  printf ("\n" COMMSTART " Bitmap %d (lossless2, actual definition not implemented yet)" COMMEND "\n", sblock->CharacterID);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Bitmap"));
+  printf ("%s('%s.img');\n", newobj (name, "Bitmap"), name);
 }
 
 void
