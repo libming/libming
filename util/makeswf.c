@@ -137,6 +137,8 @@ static int numimport_specs = 0;
 static int swfversion = DEFSWFVERSION;
 static const char *RCSID = "$Id$";
 static SWFMovie mo;
+static int useBgColor=0;
+static long int bgcolor=0;
 char *outputfile="out.swf";
 
 typedef struct {
@@ -159,6 +161,7 @@ usage (char *me, int ex)
 	fprintf(stderr, " -r <frame_rate>\n");
 	fprintf(stderr, " -v <output_version>\n");
 	fprintf(stderr, " -c <compression_level>\n");
+	fprintf(stderr, " -b <background_color>\n");
 	fprintf(stderr, " -I <includedir>\n");
 	fprintf(stderr, " -D <macro>[=<def>]>\n");
 	fprintf(stderr, " -i <library.swf>:<sym>[,<sym>]>\n");
@@ -239,6 +242,7 @@ main (int argc, char **argv)
 		{"dont-preprocess", 0, 0, 'p'},
 		{"frame-rate", 1, 0, 'r'},
 		{"swfversion", 1, 0, 'v'},
+		{"bgcolor", 1, 0, 'b'},
 		{"compression", 1, 0, 'c'},
 		{"includepath", 1, 0, 'I'},
 		{"define", 1, 0, 'D'},
@@ -269,7 +273,7 @@ main (int argc, char **argv)
 #define BUFSIZE 1024
 		char buf [BUFSIZE];
 
-		const char *optstring = "Vhpds:r:D:I:v:c:i:o:a:n:";
+		const char *optstring = "Vhpds:r:D:I:v:c:b:i:o:a:n:";
 #ifdef HAVE_GETOPT_LONG
 		c = getopt_long (argc, argv, optstring, opts, &opts_idx);
 #else
@@ -311,6 +315,13 @@ main (int argc, char **argv)
 					usage(argv[0], EXIT_FAILURE);
 				}
 				makeswf_set_swfversion(swfversion);
+				break;
+			case 'b':
+				if ( sscanf(optarg, "%lx", &bgcolor) != 1 )
+				{
+					usage(argv[0], EXIT_FAILURE);
+				}
+				useBgColor=1;
 				break;
 			case 'c':
 				if ( sscanf(optarg, "%d", &swfcompression) != 1 )
@@ -388,6 +399,14 @@ main (int argc, char **argv)
 	if ( networkAccess >= 0 ) SWFMovie_setNetworkAccess(mo, networkAccess);
 	SWFMovie_setDimension(mo, (float)width, (float)height);
 	SWFMovie_setRate(mo, framerate);
+
+	if ( useBgColor )
+	{
+		SWFMovie_setBackground(mo,
+			bgcolor >> 16,
+			(bgcolor&0x00FF00) >> 8,
+			(bgcolor&0x0000FF));
+	}
 
 	printf("Output file name: %s\n", outputfile);
 	printf("Output compression level: %d\n", swfcompression);
@@ -709,6 +728,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.48  2009/03/14 09:45:10  strk
+ * Add -b --bgcolor switch to makeswf
+ *
  * Revision 1.47  2008/06/26 19:36:12  krechert
  * fix linker error and make enabling SWFAction's debug mode generic
  *
