@@ -1485,6 +1485,10 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
     {
      printf ("" DECLOBJ(DisplayItem) "%s%d = %s(" VAR "%s)"STMNTEND"\n", "i" , sblock->Depth,
 	methodcall (spritenum?spritename:"m", "add"),     cname);
+
+        sprintf(cname, "i%d", sblock->Depth );
+        printf("%s(%d)"STMNTEND"\n", methodcall(cname, "setDepth"),
+            sblock->Depth);
     }
     else
      printf(COMMSTART " PlaceFlagHasCharacter and Depth == 0! " COMMEND "\n");
