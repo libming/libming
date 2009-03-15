@@ -29,10 +29,10 @@ SWF::Bitmap - Bitmap class
 
 =head1 DESCRIPTION
 
-SWF::Bitmap enables you to add JPG and DBL files.
+SWF::Bitmap enables you to add JPG, PNG, GIF and DBL files.
 It is a helper class most useful for filling shapes 
 (i.e. SWF::Shape objects).
-DBL files ('Define Bitmap Lossless') are produced from
+DBL files ('Define Bitmap Lossless') may be produced from
 PNG or GIF files by using png2dbl or gif2dbl tools.
 
 =head1 METHODS
@@ -41,10 +41,8 @@ PNG or GIF files by using png2dbl or gif2dbl tools.
 
 =item $bitmap = new SWF::Bitmap($filename, [$alpha])
 
-Creates a new SWF::Bitmap object using 'filename'. The file extension 
-has to be one of ".jpg",".jpeg" or ".dbl" (not case sensitive). 
-In all other cases use either newSWFDBLBitmap() or newSWFJpeg...()
-constructors. The alpha parameter represents a filename for opacity
+Creates a new SWF::Bitmap object using 'filename'. 
+The alpha parameter represents a filename for opacity
 data ('alpha' channel), but only for JPG files.  Alpha data files
 are produced by tool gif2mask. The original GIF used for gif2mask input
 file containing alpha information should have same dimensions (width x height)

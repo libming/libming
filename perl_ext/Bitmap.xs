@@ -31,9 +31,10 @@ SWFBitmap_new(package="SWF::Bitmap", filename, alpha=NULL)
         CV      *cv;
         STRLEN  len;
         char   *my_sub;
-	CODE:
+        CODE:
         filename = (char *) SvPV(ST(1), len);
-	my_sub = "SWF::Bitmap::newSWFBitmap";
+	my_sub = alpha ? "SWF::Bitmap::newSWFJpegWithAlpha"
+                       : "SWF::Bitmap::newSWFBitmap";
 #if 0
         if( strncasecmp(filename+len-4, ".jpg", 4) == 0 ||
             strncasecmp(filename+len-5, ".jpeg", 5) == 0)
@@ -102,7 +103,6 @@ newSWFBitmap(package="SWF::Bitmap", filename)
              }
          }
 
-# obsoleted, not used anymore
 SWF::Bitmap
 newSWFJpegWithAlpha(package="SWF::Bitmap", filename, mask)
         char    *package
