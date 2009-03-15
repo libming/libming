@@ -20,6 +20,8 @@
 MODULE = SWF::Bitmap		PACKAGE = SWF::Bitmap		PREFIX = SWFBitmap_
 PROTOTYPES: ENABLE
 
+
+# ** ToDo: also handle  alpha file **
 SWF::Bitmap
 SWFBitmap_new(package="SWF::Bitmap", filename, alpha=NULL)
 	char    *package
@@ -48,6 +50,16 @@ SWFBitmap_new(package="SWF::Bitmap", filename, alpha=NULL)
 #else
         (void)(*CvXSUB(cv))(aTHXo_ cv);
 #endif
+
+
+SWF::Bitmap
+newBitmapFromFileHandle(package="SWF::Bitmap", fh)
+        char *package
+        FILE *fh
+	CODE:
+	 RETVAL = newSWFBitmap_fromInput(newSWFInput_file(fh));
+	 ST(0) = sv_newmortal();
+         sv_setref_pv(ST(0), package, (void*)RETVAL);
 
 
 SWF::Bitmap

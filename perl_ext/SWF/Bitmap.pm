@@ -39,9 +39,9 @@ PNG or GIF files by using png2dbl or gif2dbl tools.
 
 =over 4
 
-=item new SWF::Bitmap($file, [$alpha])
+=item $bitmap = new SWF::Bitmap($filename, [$alpha])
 
-Creates a new SWF::Bitmap object using 'file'. The file extension 
+Creates a new SWF::Bitmap object using 'filename'. The file extension 
 has to be one of ".jpg",".jpeg" or ".dbl" (not case sensitive). 
 In all other cases use either newSWFDBLBitmap() or newSWFJpeg...()
 constructors. The alpha parameter represents a filename for opacity
@@ -50,24 +50,37 @@ are produced by tool gif2mask. The original GIF used for gif2mask input
 file containing alpha information should have same dimensions (width x height)
 as the JPG file.
 
-=item newSWFDBLBitmap SWF::Bitmap($file)
+=item $bitmap = newBitmapFromFileHandle($filehandle)
+
+Creates a new SWF::Bitmap object using an open file handle $filehandle .
+This way you could use STDIN, piped data etc. etc. for input.
+A simple example:
+
+	open (PICT,'flowers.jpg') or die;
+	$bmp = newBitmapFromFileHandle SWF::Bitmap(PICT);
+	# .....
+	$m->save("my_flowers.swf");
+	close (PICT);
+	# Please note: do not close the PICT file too early.
+
+=item $bitmap = newSWFDBLBitmap SWF::Bitmap($filename)
 
 Creates a new SWF::Bitmap object using DBL file. 
 Use this constructor if you have a file with DBL data, 
 but not with .dbl filename extension.
 
-=item newSWFJpegBitmap SWF::Bitmap($file)
+=item $bitmap = newSWFJpegBitmap SWF::Bitmap($filename)
 
 Creates a new SWF::Bitmap object using JPG file. 
 Use this constructor if you have a file with JPG data, 
 but not with .jpg or .jpeg filename extension.
 
-=item newSWFJpegWithAlpha SWF::Bitmap($file,$alpha)
+=item $bitmap = newSWFJpegWithAlpha SWF::Bitmap($filename,$alpha_filename)
 
 Creates a new SWF::Bitmap object using JPG file similar newSWFJpegBitmap()
 with additional opacity information in 'alpha' file. Use this constructor
 if you have a file with JPG data, but not with .jpg or .jpeg filename extension
-and if there is opacity information available in 'alpha' file.  
+and if there is opacity information available in 'alpha_filename' file.  
 Alpha data files are produced by gif2mask tool. The original GIF file
 containing alpha information used for gif2mask input should have same dimensions
 as the JPG file.
@@ -84,8 +97,7 @@ Returns height of bitmap in pixels.
 
 =head1 AUTHOR
 
-Soheil Seyfaie (soheil@netcom.ca) and
-developers of ming.sourceforge.net
+Soheil Seyfaie (soheil@netcom.ca), Albrecht Kleine and developers of ming.sourceforge.net
 
 =head1 SEE ALSO
 
