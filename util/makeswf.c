@@ -210,6 +210,7 @@ FileType getFileType(char* filename)
 
 	if ( ! strcasecmp(ext, ".swf") ) return SWF;
 	if ( ! strcasecmp(ext, ".png") ) return BITMAP;
+	if ( ! strcasecmp(ext, ".dbl") ) return BITMAP;
 	if ( ! strcasecmp(ext, ".jpg") ) return BITMAP;
 	if ( ! strcasecmp(ext, ".jpeg") ) return BITMAP;
 
@@ -728,6 +729,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.49  2009/03/15 21:38:10  strk
+ * Allow using .dbl files as frame content
+ *
  * Revision 1.48  2009/03/14 09:45:10  strk
  * Add -b --bgcolor switch to makeswf
  *
