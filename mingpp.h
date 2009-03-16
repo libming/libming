@@ -1182,7 +1182,7 @@ class SWFFillStyle
     { return new SWFFillStyle(newSWFGradientFillStyle(gradient->gradient, flags)); }
 
   static SWFFillStyle *BitmapFillStyle(SWFBitmap *bitmap, byte flags)
-    { return new SWFFillStyle(newSWFBitmapFillStyle(bitmap->bitmap, flags)); }
+    { return new SWFFillStyle(newSWFBitmapFillStyle(bitmap ? bitmap->bitmap : 0, flags)); }
 
  private:
   SWFFillStyle(c_SWFFillStyle fill)
@@ -1345,7 +1345,7 @@ class SWFShape : public SWFCharacter
     { return new SWFFill(SWFShape_addGradientFill(this->shape, gradient->gradient, flags)); }
 
   SWFFill *addBitmapFill(SWFBitmap *bitmap, byte flags=0x40)
-    { return new SWFFill(SWFShape_addBitmapFill(this->shape, bitmap->bitmap, flags)); }
+    { return new SWFFill(SWFShape_addBitmapFill(this->shape, bitmap ? bitmap->bitmap : 0, flags)); }
 
   void setLeftFillStyle(SWFFillStyle *fill)
     { SWFShape_setLeftFillStyle(this->shape, fill->fill); }

@@ -60,7 +60,7 @@ void destroySWFFillStyle(SWFFillStyle fill)
 
 void SWFFillStyle_addDependency(SWFFillStyle fill, SWFCharacter c)
 {
-	if(fill->type & SWFFILL_BITMAP)
+	if( (fill->type & SWFFILL_BITMAP) && fill->data.bitmap)
 		SWFCharacter_addDependency(c, (SWFCharacter)fill->data.bitmap);
 }
 
@@ -210,7 +210,9 @@ SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle fill,
 	}
 	else if ( type & SWFFILL_BITMAP )
 	{
-		SWFOutput_writeUInt16(out, CHARACTERID(fill->data.bitmap));
+		SWFOutput_writeUInt16(out, fill->data.bitmap ?
+					   CHARACTERID(fill->data.bitmap) :
+					   65535); /* magic number */
 		SWFOutput_writeMatrix(out, fill->matrix);
 	}
 	else
