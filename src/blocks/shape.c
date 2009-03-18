@@ -275,7 +275,10 @@ newSWFShapeFromBitmap(SWFBitmap bitmap, int flag)
 	SWFFillStyle fill;
 	int width, height;
 
-	if ( flag != SWFFILL_TILED_BITMAP && flag != SWFFILL_CLIPPED_BITMAP)
+	if ( flag != SWFFILL_TILED_BITMAP &&
+	     flag != SWFFILL_CLIPPED_BITMAP &&
+	     flag != SWFFILL_NONSMOOTHED_TILED_BITMAP &&
+	     flag != SWFFILL_NONSMOOTHED_CLIPPED_BITMAP)
 	{
 		SWF_error("Invalid bitmap fill flag");
 	}
@@ -1122,8 +1125,7 @@ SWFFillStyle
 SWFShape_addBitmapFillStyle(SWFShape shape, SWFBitmap bitmap, byte flags)
 {
 	SWFFillStyle fill;
-	if ( bitmap ) 
-		SWFCharacter_addDependency((SWFCharacter)shape, (SWFCharacter)bitmap);
+	SWFCharacter_addDependency((SWFCharacter)shape, (SWFCharacter)bitmap);
 	fill = newSWFBitmapFillStyle(bitmap, flags);
 	if(addFillStyle(shape, fill) < 0)
 	{
