@@ -1143,8 +1143,8 @@ struct SWF_DEFINEFONT
 
 struct SWF_KERNINGRECORD
 {
-  UI8 FontKerningCode1;
-  UI8 FontKerningCode2;
+  UI16 FontKerningCode1;
+  UI16 FontKerningCode2;
   SI16 FontKerningAdjustment;
 };
 
