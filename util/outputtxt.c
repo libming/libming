@@ -1188,7 +1188,7 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
 	_iprintf (" FontAdvanceTable[%3.3d]: %x\n", i,
 		  sblock->FontAdvanceTable[i]);
       }
-    _iprintf (" FontBoundsable: (not used)\n");
+    _iprintf (" FontBoundsTable: (not used)\n");
     for (i = 0; i < sblock->NumGlyphs; i++)
       {
 	outputSWF_RECT (&(sblock->FontBoundsTable[i]));
@@ -1276,7 +1276,7 @@ outputSWF_DEFINEFONT3 (SWF_Parserstruct * pblock)
 	_iprintf (" FontAdvanceTable[%3.3d]: %x\n", i,
 		  sblock->FontAdvanceTable[i]);
       }
-    _iprintf (" FontBoundsable: (not used)\n");
+    _iprintf (" FontBoundsTable: (not used)\n");
     for (i = 0; i < sblock->NumGlyphs; i++)
       {
 	outputSWF_RECT (&(sblock->FontBoundsTable[i]));
