@@ -1728,7 +1728,7 @@ outputSWF_SYMBOLCLASS (SWF_Parserstruct * pblock)
     struct AS_SYMBOL* sym = &(sblock->SymbolList[i]);
     sprintf(cname, "character%d", sym->SymbolId );
 
-    printf("%s(%s, \"%s\")"STMNTEND"\n", methodcall("m", "assignSymbol"),
+    printf("%s(" VAR "%s, \"%s\")"STMNTEND"\n", methodcall("m", "assignSymbol"),
       cname, sym->SymbolName);
   }
 
