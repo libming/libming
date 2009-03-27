@@ -200,6 +200,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SETTABINDEX, outputSWF_SETTABINDEX},
   {SWF_SCRIPTLIMITS, outputSWF_SCRIPTLIMITS},
   {SWF_SYMBOLCLASS, outputSWF_SYMBOLCLASS},
+  {SWF_DEFINESCENEANDFRAMEDATA, outputSWF_DEFINESCENEANDFRAMEDATA},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1753,6 +1754,32 @@ outputSWF_SYMBOLCLASS (SWF_Parserstruct * pblock)
 
 }
 
+
+void
+outputSWF_DEFINESCENEANDFRAMEDATA (SWF_Parserstruct * pblock)
+{
+  int i;
+
+  OUT_BEGIN (SWF_DEFINESCENEANDFRAMEDATA);
+
+  for(i = 0; i < sblock->SceneCount; ++i)
+  {
+    struct SCENE_DATA* sc = &(sblock->Scenes[i]);
+	// SWFMovie_defineScene(m, 0, "test0");
+
+    printf("%s(%lu, \"%s\")"STMNTEND"\n", methodcall("m", "defineScene"),
+      sc->Offset, sc->Name);
+  }
+
+  for(i = 0; i < sblock->FrameLabelCount; ++i)
+  {
+    /* TODO: output a method for this! */
+    struct FRAME_DATA* fd = &(sblock->Frames[i]);
+    printf (COMMSTART " Label for frame %lu : %s " COMMEND "\n",
+	  fd->FrameNum, fd->FrameLabel);
+  }
+
+}
 
 void
 outputHeader (struct Movie *m)
