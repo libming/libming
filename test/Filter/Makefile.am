@@ -36,10 +36,16 @@ TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
 	test01.ref	\
+	test01.php	\
+	test01.pl	\
 	test02.ref	\
+	test02.php	\
 	test03.ref	\
+	test03.php	\
 	test04.ref	\
+	test04.php	\
 	test05.ref	\
+	test05.php	\
 	TestList
 
 check_PROGRAMS = \
