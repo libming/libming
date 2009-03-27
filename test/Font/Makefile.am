@@ -30,13 +30,16 @@ TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
 	test01.ref	\
-	test02.ref	\
-	test03.ref	\
+	test01.php	\
 	test01.pl	\
-	test02.pl	\
-	test03.pl	\
 	test01.py	\
+	test02.ref	\
+	test02.php	\
+	test02.pl	\
 	test02.py	\
+	test03.ref	\
+	test03.php	\
+	test03.pl	\
 	test03.py	\
 	TestList
 
