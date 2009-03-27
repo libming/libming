@@ -3819,6 +3819,7 @@ PHP_METHOD(swfmovie, add)
 	SWFBlock block;
 	SWFDisplayItem item;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
+	SWFMovieBlockType ublock;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zchar) == FAILURE) {
 		return;
@@ -3835,7 +3836,8 @@ PHP_METHOD(swfmovie, add)
 		block = (SWFBlock) getCharacter(zchar TSRMLS_CC);
 	}
 
-	item = SWFMovie_add_internal(movie, (SWFMovieBlockType)block);
+	ublock.block = block;
+	item = SWFMovie_add_internal(movie, ublock);
 	if (item != NULL) {
 		/* try and create a displayitem object */
 		ret = zend_list_insert(item, le_swfdisplayitemp);
