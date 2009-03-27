@@ -133,7 +133,7 @@ Block length: 370
  FontAdvanceTable[000]: 273
  FontAdvanceTable[001]: 28a
  FontAdvanceTable[002]: 233
- FontBoundsable: (not used)
+ FontBoundsTable: (not used)
  RECT:  (61,-573)x(534,14):11
  RECT:  (93,-778)x(594,14):11
  RECT:  (56,-573)x(499,14):11

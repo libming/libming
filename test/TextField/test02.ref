@@ -8461,7 +8461,7 @@ Block length: 22917
  FontAdvanceTable[253]: 1fa
  FontAdvanceTable[254]: 285
  FontAdvanceTable[255]: 285
- FontBoundsable: (not used)
+ FontBoundsTable: (not used)
  RECT:  (0,0)x(0,0):1
  RECT:  (154,-746)x(256,0):11
  RECT:  (98,-746)x(372,-469):11

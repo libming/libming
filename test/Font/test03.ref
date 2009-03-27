@@ -40,7 +40,7 @@ Block length: 68
  FontDecent: 241
  FontLeading: 0
  FontAdvanceTable[000]: 159
- FontBoundsable: (not used)
+ FontBoundsTable: (not used)
  RECT:  (130,-782)x(215,241):11
  KerningCount: 0
 
