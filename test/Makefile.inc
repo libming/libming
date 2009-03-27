@@ -42,14 +42,32 @@ BINDINGS = "c $(CXXBINDINGS) $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 refs: $(C_PROGS)
 	for t in $(C_PROGS); do ./$$t; $(top_builddir)/util/listswf $$t.swf > $(srcdir)/$$t.ref; done
 
-gen: refs $(SWFS) php.ini
+gen-php: $(SWFS) php.ini
 	for t in $(C_PROGS); do \
 	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c.^' > $(srcdir)/$$t.php ;\
+	done
+
+gen-pl: $(SWFS) 
+	for t in $(C_PROGS); do \
 	$(top_builddir)/util/swftoperl $$t.swf $$t.swf > $(srcdir)/$$t.pl ;\
+	done
+
+gen-py: $(SWFS) 
+	for t in $(C_PROGS); do \
 	$(top_builddir)/util/swftopython $$t.swf $$t.swf > $(srcdir)/$$t.py ;\
+	done
+
+gen-cxx: $(SWFS) 
+	for t in $(C_PROGS); do \
 	$(top_builddir)/util/swftocxx $$t.swf $$t.swf > $(srcdir)/$$t-cxx.C ;\
+	done
+
+gen-tcl: $(SWFS) 
+	for t in $(C_PROGS); do \
 	$(top_builddir)/util/swftotcl $$t.swf $$t.swf > $(srcdir)/$$t.tcl ;\
 	done
+
+gen: refs $(SWFS) gen-php gen-pl gen-py gen-cxx gen-tcl
 
 .PHONY: dotests php.ini
 dotests: $(top_srcdir)/test/dotests.pl php.ini
