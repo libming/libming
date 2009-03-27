@@ -233,8 +233,12 @@ SWFMovie_importCharacter(movie, url, name)
 void
 SWFMovie_assignSymbol(movie, character, name)
 	SWF::Movie movie
-	SWF::Character character
+	SWF::Character character = NO_INIT
 	const char *name
+        CODE:
+        character = (SWF__Character) SvIV((SV*)SvRV(ST(1)));
+	SWFMovie_assignSymbol(movie, character, name);
+
 
 void 
 SWFMovie_defineScene(movie, offset, name)
