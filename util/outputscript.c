@@ -1319,7 +1319,7 @@ outputSWF_DEFINETEXT (SWF_Parserstruct * pblock)
   char buffer[64];   
   OUT_BEGIN (SWF_DEFINETEXT);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Text"));
+  printf ("%s(1);\n", newobj (name, "Text"));
   for(i=0;i<sblock->numTextRecords;i++) 
   {
    if (!id && sblock->TextRecords[i].FontID)
@@ -1341,7 +1341,7 @@ outputSWF_DEFINETEXT2 (SWF_Parserstruct * pblock)
   char buffer[64];
   OUT_BEGIN (SWF_DEFINETEXT2);
   sprintf (name, "character%d", sblock->CharacterID);
-  printf ("%s();\n", newobj (name, "Text"));
+  printf ("%s(2);\n", newobj (name, "Text"));
   for(i=0;i<sblock->numTextRecords;i++) 
   {
    if (!id && sblock->TextRecords[i].FontID)
