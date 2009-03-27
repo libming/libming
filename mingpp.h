@@ -1514,7 +1514,7 @@ class SWFText : public SWFCharacter
  public:
   c_SWFText text;
 
-  SWFText(int version = 2)
+  SWFText(int version = 1)
   { 
       if(version == 2)
         this->text = newSWFText2();

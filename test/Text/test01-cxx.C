@@ -8,7 +8,7 @@ int main()
 	
 	try {
 		SWFMovie *m = new SWFMovie();
-		SWFText *text = new SWFText();
+		SWFText *text = new SWFText(2);
 	
 		fontfile = fopen(MEDIADIR "/font01.fdb", "rb");
 		if(fontfile == NULL)
