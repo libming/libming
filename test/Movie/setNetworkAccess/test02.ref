@@ -1,0 +1,22 @@
+File version: 8
+File size: 30
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 1, HasAS3 0
+
+Offset: 26 (0x001a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 28 (0x001c)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
