@@ -197,6 +197,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
   {SWF_METADATA, outputSWF_METADATA},
   {SWF_SETTABINDEX, outputSWF_SETTABINDEX},
+  {SWF_SCRIPTLIMITS, outputSWF_SCRIPTLIMITS},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1700,6 +1701,16 @@ outputSWF_SETTABINDEX (SWF_Parserstruct * pblock)
 
   printf("%s(%d, %d)"STMNTEND"\n", methodcall("m", "setTabIndex"),
     sblock->Depth, sblock->TabIndex);
+
+}
+
+void
+outputSWF_SCRIPTLIMITS (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_SCRIPTLIMITS);
+
+  printf("%s(%d, %d)"STMNTEND"\n", methodcall("m", "setScriptLimits"),
+    sblock->MaxRecursionDepth, sblock->ScriptTimeoutSeconds);
 
 }
 
