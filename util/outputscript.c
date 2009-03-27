@@ -198,6 +198,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_METADATA, outputSWF_METADATA},
   {SWF_SETTABINDEX, outputSWF_SETTABINDEX},
   {SWF_SCRIPTLIMITS, outputSWF_SCRIPTLIMITS},
+  {SWF_SYMBOLCLASS, outputSWF_SYMBOLCLASS},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1711,6 +1712,25 @@ outputSWF_SCRIPTLIMITS (SWF_Parserstruct * pblock)
 
   printf("%s(%d, %d)"STMNTEND"\n", methodcall("m", "setScriptLimits"),
     sblock->MaxRecursionDepth, sblock->ScriptTimeoutSeconds);
+
+}
+
+void
+outputSWF_SYMBOLCLASS (SWF_Parserstruct * pblock)
+{
+  char cname[64];
+  int i;
+
+  OUT_BEGIN (SWF_SYMBOLCLASS);
+
+  for(i = 0; i < sblock->SymbolCount; ++i)
+  {
+    struct AS_SYMBOL* sym = &(sblock->SymbolList[i]);
+    sprintf(cname, "character%d", sym->SymbolId );
+
+    printf("%s(%s, \"%s\")"STMNTEND"\n", methodcall("m", "assignSymbol"),
+      cname, sym->SymbolName);
+  }
 
 }
 
