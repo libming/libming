@@ -38,7 +38,7 @@ Block length: 75
  RGBA: ( 0, 0,14,ff)
  Ratio: 178
  RGBA: (1e, 0, 0,ff)
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle:  Width: 20
  RGBA: ( 0, 0, 0,ff)
  NumFillBits: 1

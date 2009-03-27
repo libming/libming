@@ -13,7 +13,7 @@ Block length: 34
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 0
  RGBA: (ff,ff, 0,ff)
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle:  Width: 20
  RGBA: (ff, 0, 0,ff)
  NumFillBits: 1

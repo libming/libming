@@ -156,6 +156,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINESHAPE, outputSWF_DEFINESHAPE},
   {SWF_DEFINESHAPE2, outputSWF_DEFINESHAPE2},
   {SWF_DEFINESHAPE3, outputSWF_DEFINESHAPE3},
+  {SWF_DEFINESHAPE4, outputSWF_DEFINESHAPE4},
   {SWF_DEFINESOUND, outputSWF_DEFINESOUND},
   {SWF_DEFINESPRITE, outputSWF_DEFINESPRITE},
   {SWF_DEFINETEXT, outputSWF_DEFINETEXT},
@@ -572,8 +573,7 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray,
 {
   int i, count;
 
-  count = (linestylearray->LineStyleCount != 0xff) ?
-    linestylearray->LineStyleCount : linestylearray->LineStyleCountExtended;
+  count = linestylearray->LineStyleCount;
 
   printf ("" COMMSTART "%d linestyles(s)" COMMEND "\n", count);
   for (i = 0; i < count; i++)
@@ -1229,6 +1229,25 @@ outputSWF_DEFINESHAPE3 (SWF_Parserstruct * pblock)
    outputSWF_RECT(&sblock->ShapeBounds);
    */
   outputSWF_SHAPEWITHSTYLE_new (&sblock->Shapes, 3, name, &sblock->ShapeBounds);
+
+}
+
+void
+outputSWF_DEFINESHAPE4 (SWF_Parserstruct * pblock)
+{
+  char name[32];
+  OUT_BEGIN (SWF_DEFINESHAPE4);
+  sprintf (name, "character%d", sblock->ShapeID);
+
+  printf ("\n" COMMSTART " Shape %d (TYPE=4, RECT=%d,%d %d,%d)" COMMEND "\n", sblock->ShapeID,
+   (int)sblock->ShapeBounds.Xmin,(int)sblock->ShapeBounds.Xmax,(int)sblock->ShapeBounds.Ymin,(int)sblock->ShapeBounds.Ymax);
+  printf ("%s();\n", newobj (name, "Shape"));
+  /* There doesn't seem to be a way to use this in the API 
+   * it is calculated internal to teh shape object, but I'm not
+   * sure it will come up with the same answer.
+   outputSWF_RECT(&sblock->ShapeBounds);
+   */
+  outputSWF_SHAPEWITHSTYLE_new (&sblock->Shapes, 4, name, &sblock->ShapeBounds);
 
 }
 

@@ -45,7 +45,7 @@ Block length: 95
  RGBA: ( 0,1e, 0,ff)
  Ratio: 229
  RGBA: ( 0, 0,1e,ff)
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle2:  Width: 20
  StartCapStyle: 0
  JoinStyle: 0

@@ -20,7 +20,7 @@ Block length: 36
    UsesNonScalingStrokes: 0
    UsesScalingStrokes: 0
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle2:  Width: 20
  StartCapStyle: 0
  JoinStyle: 0
@@ -73,7 +73,7 @@ Block length: 39
    UsesNonScalingStrokes: 0
    UsesScalingStrokes: 0
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle2:  Width: 20
  StartCapStyle: 0
  JoinStyle: 0

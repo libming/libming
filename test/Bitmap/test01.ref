@@ -30,7 +30,7 @@ Block length: 32
   Matrix:
    ScaleX 20.000000 ScaleY 20.000000
    TranslateX      0 TranslateY      0
- LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 0
  NumFillBits: 1
  NumLineBits: 0
  StyleChangeRecord:

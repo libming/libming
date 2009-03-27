@@ -17,7 +17,7 @@ Block length: 8
  CharacterID: 1
  RECT:  (0,0)x(0,0):1
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
- LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 0
  NumFillBits: 0
  NumLineBits: 0
   ENDSHAPE
@@ -49,7 +49,7 @@ Block length: 11
    UsesNonScalingStrokes: 0
    UsesScalingStrokes: 0
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
- LineStyleArray:  LineStyleCount:      0  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 0
  NumFillBits: 0
  NumLineBits: 0
   ENDSHAPE

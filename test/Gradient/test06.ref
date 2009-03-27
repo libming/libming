@@ -49,7 +49,7 @@ Block length: 97
  BitmapID: 0
   Matrix:
    TranslateX      0 TranslateY      0
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle2:  Width: 20
  StartCapStyle: 0
  JoinStyle: 0

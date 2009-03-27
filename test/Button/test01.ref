@@ -11,7 +11,7 @@ Block length: 64
  CharacterID: 2
  RECT:  (-423,-420)x(417,420):10
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle:  Width: 40
  RGBA: (ff, 0, 0,ff)
  NumFillBits: 0

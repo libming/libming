@@ -28,7 +28,7 @@ Block length: 40
   Matrix:
    ScaleX 20.000000 ScaleY 20.000000
    TranslateX      0 TranslateY      0
- LineStyleArray:  LineStyleCount:      1  LineStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
  LineStyle:  Width: 20
  RGBA: ( 0, 0, 0,ff)
  NumFillBits: 1

@@ -639,13 +639,13 @@ parseSWF_LINESTYLEARRAY (FILE * f, SWF_LINESTYLEARRAY * linestyle, int level)
 {
   int count, i;
 
-  linestyle->LineStyleCount = readUInt8 (f);
-  count = linestyle->LineStyleCount;
-  if (linestyle->LineStyleCount == 0xff)
+  count = readUInt8 (f);
+  if (count == 0xff)
     {
-      linestyle->LineStyleCountExtended = readUInt16 (f);
-      count = linestyle->LineStyleCountExtended;
+      count = readUInt16(f);
     }
+  linestyle->LineStyleCount = count;
+
   if(level == 4)
   {
     linestyle->LineStyles = NULL;

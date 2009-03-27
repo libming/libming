@@ -566,14 +566,11 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray, char *name)
 
   int count, i;
 
+  count = linestylearray->LineStyleCount;
+
   _iprintf (" LineStyleArray: ");
-  _iprintf (" LineStyleCount: %6d ", linestylearray->LineStyleCount);
-  _iprintf (" LineStyleCountExtended: %6d\n",
-	  linestylearray->LineStyleCountExtended);
-  count =
-    (linestylearray->LineStyleCount !=
-     0xff) ? linestylearray->LineStyleCount : linestylearray->
-    LineStyleCountExtended;
+  _iprintf (" LineStyleCount: %d\n", count);
+
   for (i = 0; i < count; i++)
   {
     if(linestylearray->LineStyles != NULL)   

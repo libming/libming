@@ -831,8 +831,7 @@ typedef struct SWF_LINESTYLE2 {
 } SWF_LINESTYLE2;
 
 typedef struct SWF_LINESTYLEARRAY {
-	UI8	LineStyleCount;
-	UI16	LineStyleCountExtended;
+	UI16	LineStyleCount;
 	SWF_LINESTYLE	*LineStyles;
 	SWF_LINESTYLE2	*LineStyles2;
 } SWF_LINESTYLEARRAY;
