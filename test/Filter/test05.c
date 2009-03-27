@@ -46,7 +46,7 @@ int main(void)
 	filter = newColorMatrixFilter(cmf);
 	
 	b = newSWFButton();
-	SWFButton_addCharacter(b, shape, SWFBUTTON_UP | SWFBUTTON_HIT | SWFBUTTON_OVER | SWFBUTTON_DOWN);
+	SWFButton_addCharacter(b, (SWFCharacter)shape, SWFBUTTON_UP | SWFBUTTON_HIT | SWFBUTTON_OVER | SWFBUTTON_DOWN);
 	item = SWFMovie_add(m, b);
 	SWFDisplayItem_addFilter(item, filter);
 

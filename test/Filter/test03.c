@@ -32,7 +32,7 @@ int main()
 	f = newGlowFilter(c, blur, 1.0, FILTER_MODE_INNER | FILTER_MODE_KO);	
 
 	b = newSWFButton();
-	SWFButton_addShape(b, (SWFCharacter)shape,
+	SWFButton_addCharacter(b, (SWFCharacter)shape,
 		SWFBUTTON_UP | SWFBUTTON_HIT | SWFBUTTON_OVER | SWFBUTTON_DOWN);
 	item = SWFMovie_add(m, (SWFBlock)b);
 	
