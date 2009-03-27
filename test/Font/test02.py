@@ -6,7 +6,7 @@ srcdir=sys.argv[1]
 
 m =  SWFMovie();
 
-font = SWFFont(srcdir + "../Media/test.ttf")
+font = SWFFont(srcdir + "/../Media/test.ttf")
 text = SWFText(1)
 
 text.setFont(font)
