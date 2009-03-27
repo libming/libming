@@ -195,6 +195,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_SYNCFRAME, outputSWF_SYNCFRAME},
   {SWF_INITACTION, outputSWF_INITACTION},
   {SWF_VIDEOFRAME, outputSWF_VIDEOFRAME},
+  {SWF_METADATA, outputSWF_METADATA},
 };
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
@@ -1678,6 +1679,17 @@ outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN_EMPTY (SWF_VIDEOFRAME);
 
+}
+
+void
+outputSWF_METADATA (SWF_Parserstruct * pblock)
+{
+  OUT_BEGIN (SWF_METADATA);
+
+  /* TODO: escape Metadata string (might contain quotes!) */
+  printf ("%s(\"%s\");\n",
+          methodcall (spritenum?spritename:"m", "addMetadata"),
+          sblock->Metadata);
 }
 
 
