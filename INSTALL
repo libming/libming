@@ -35,6 +35,9 @@ Last updated 14 January 2008.
       The ming.so file should be in `php-config --extension-dir`
       which is taken care of by the 'make install' step.
 
+      Note that apache will need a reload when changing the php.ini
+      used by it's php module.
+
    The alternative way is to build Ming into the PHP source:
 
       $ mkdir <phpdir>/ext/ming
