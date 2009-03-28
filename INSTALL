@@ -30,13 +30,10 @@ Last updated 14 January 2008.
    3. Configure PHP to load Ming.  You need to adjust your
       php.ini file, normally by adding:
 
-      extension=php_ming.so
+      extension=ming.so
 
-      to the extension section, and also making sure the
-      "extension_dir" parameter in the php.ini file is pointing
-      to the correct directory.  A common default of the php.ini
-      file is to be pointing to "./", which may need adjusting.
-
+      The ming.so file should be in `php-config --extension-dir`
+      which is taken care of by the 'make install' step.
 
    The alternative way is to build Ming into the PHP source:
 
