@@ -18,21 +18,16 @@ Last updated 14 January 2008.
 
   The preferred method is to build Ming as a PHP module (.so file):
 
-   1. Compile the main Ming library
+   1. Compile the main Ming library with its php extension
 
-      $ ./configure
+      $ ./configure --enable-php
       $ make
 
-   2. Compile the PHP module
-
-      $ cd php_ext
-      $ make
-
-   3. Install the PHP module
+   2. Install everything (includes install of the PHP module)
 
       $ make install
 
-   4. Configure PHP to load Ming.  You need to adjust your
+   3. Configure PHP to load Ming.  You need to adjust your
       php.ini file, normally by adding:
 
       extension=php_ming.so
