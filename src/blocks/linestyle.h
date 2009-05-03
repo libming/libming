@@ -32,6 +32,7 @@
 #include "ming.h"
 #include "output.h"
 #include "blocktypes.h"
+#include "rect.h"
 
 
 /* okay, this is kinda lame.. */
@@ -46,7 +47,8 @@ unsigned short SWFLineStyle_getWidth(SWFLineStyle line);
 
 void SWFOutput_writeLineStyles(SWFOutput out,
 			       SWFLineStyle *lines, int nLines,
-			       SWFBlocktype shapeType);
+			       SWFBlocktype shapeType,
+			       SWFRect bounds);
 
 void SWFOutput_writeMorphLineStyles(SWFOutput out,
 				    SWFLineStyle *lines1, int nLines1,

@@ -428,7 +428,8 @@ SWFShape_addStyleHeader(SWFShape shape)
 	
 	SWFOutput_writeFillStyles(out, shape->fills, shape->nFills, 
 		BLOCK(shape)->type, shape->edgeBounds);
-	SWFOutput_writeLineStyles(out, shape->lines, shape->nLines, BLOCK(shape)->type);
+	SWFOutput_writeLineStyles(out, shape->lines, shape->nLines, 
+		BLOCK(shape)->type, shape->edgeBounds);
 	
 	/* prepend shape->out w/ shape header */
 	SWFOutput_setNext(out, shape->out);
@@ -801,6 +802,7 @@ SWFShape_addLineStyle2filled(SWFShape shape, unsigned short width,
 {
 	growLineArray(shape);
 	SWFShape_useVersion(shape, SWF_SHAPE4);
+	SWFFillStyle_addDependency(fill, (SWFCharacter)shape);
 	shape->lines[shape->nLines] = newSWFLineStyle2_filled(width, fill, flags, miterLimit);
 	return ++shape->nLines;
 }

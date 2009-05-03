@@ -222,7 +222,7 @@ static inline void writeLineStyle1(SWFOutput out, SWFLineStyle line, int shapeTy
 		SWFOutput_writeUInt8(out, line->a);
 }
 
-static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, SWFBlocktype shapeType)
+static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, SWFBlocktype shapeType, SWFRect bounds)
 {
 	SWFOutput_writeUInt16(out, line->width);
 	SWFOutput_writeUInt8(out, (line->flags >> 8));
@@ -230,7 +230,7 @@ static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, SWFBlocktyp
 	if(line->flags & SWF_LINESTYLE_JOIN_MITER)
 		SWFOutput_writeFixed8(out, line->miterLimit);
 	if(line->flags & SWF_LINESTYLE_FLAG_FILL)
-		SWFOutput_writeFillStyle(out, line->fill, shapeType, NULL);
+		SWFOutput_writeFillStyle(out, line->fill, shapeType, bounds);
 	else
 	{
 		SWFOutput_writeUInt8(out, line->r);
@@ -242,7 +242,8 @@ static inline void writeLineStyle2(SWFOutput out, SWFLineStyle line, SWFBlocktyp
 
 void SWFOutput_writeLineStyles(SWFOutput out,
                                SWFLineStyle *lines, int nLines,
-                               SWFBlocktype shapeType)
+                               SWFBlocktype shapeType,
+                               SWFRect bounds)
 {
 	SWFLineStyle line;
 	int i;
@@ -259,7 +260,7 @@ void SWFOutput_writeLineStyles(SWFOutput out,
 	{
 		line = lines[i];
 		if(shapeType == SWF_DEFINESHAPE4)
-			writeLineStyle2(out, line, shapeType);
+			writeLineStyle2(out, line, shapeType, bounds);
 		else
 			writeLineStyle1(out, line, shapeType);
 	}
