@@ -1,0 +1,147 @@
+File version: 8
+File size: 321
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
+
+Offset: 26 (0x001a)
+Block type: 20 (SWF_DEFINELOSSLESS)
+Block length: 141
+
+ CharacterID: 3
+ Bitmap format 5
+ Bitmap width 20 x height 20
+
+Offset: 173 (0x00ad)
+Block type: 83 (SWF_DEFINESHAPE4)
+Block length: 46
+
+ CharacterID: 1
+ RECT:  (100,100)x(2400,2400):13
+ RECT:  (100,100)x(2000,2000):12
+   UsesNonScalingStrokes: 0
+   UsesScalingStrokes: 0
+ FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
+ LineStyle2:  Width: 800
+ StartCapStyle: 0
+ JoinStyle: 1
+ HasFillFlag: 1
+ NoHScaleFlag: 0
+ NoVScaleFlag: 0
+ PixelHintingFlag 1
+ NoClose 0
+ EndCapStyle 2
+ FillStyle:  FillStyleType: 40
+ BitmapID: 3
+  Matrix:
+   ScaleX 20.000000 ScaleY 20.000000
+   TranslateX      0 TranslateY      0
+ NumFillBits: 0
+ NumLineBits: 1
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   LineStyle: 1
+   MoveBits: 8  MoveDeltaX: 100  MoveDeltaY: 100
+ Straight EdgeRecord: (10) - (900, 1900)
+ Straight EdgeRecord: (9) - (1000, 0)
+  ENDSHAPE
+
+Offset: 221 (0x00dd)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 229 (0x00e5)
+Block type: 83 (SWF_DEFINESHAPE4)
+Block length: 74
+
+ CharacterID: 2
+ RECT:  (2500,1900)x(5100,4100):14
+ RECT:  (2500,2000)x(5000,4000):14
+   UsesNonScalingStrokes: 0
+   UsesScalingStrokes: 0
+ FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
+ LineStyleArray:  LineStyleCount: 1
+ LineStyle2:  Width: 200
+ StartCapStyle: 0
+ JoinStyle: 0
+ HasFillFlag: 1
+ NoHScaleFlag: 0
+ NoVScaleFlag: 0
+ PixelHintingFlag 1
+ NoClose 0
+ EndCapStyle 0
+ FillStyle:  FillStyleType: 10
+  Matrix:
+   ScaleX 0.076294 ScaleY 0.061035
+   TranslateX   3750 TranslateY   3000
+ Gradient:  SpreadMode: 0
+ InterpolationMode: 0
+ NumGradients: 4
+ Ratio: 0
+ RGBA: (ff,ff, 0,88)
+ Ratio: 76
+ RGBA: ( 0,ff, 0,33)
+ Ratio: 178
+ RGBA: ( 0, 0,ff,33)
+ Ratio: 255
+ RGBA: (ff, 0, 0,88)
+ NumFillBits: 0
+ NumLineBits: 1
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 1  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   LineStyle: 1
+   MoveBits: 13  MoveDeltaX: 2500  MoveDeltaY: 2500
+ Straight EdgeRecord: (8) - (500, -500)
+ Straight EdgeRecord: (10) - (1000, 2000)
+ Straight EdgeRecord: (10) - (1000, -2000)
+  ENDSHAPE
+
+Offset: 309 (0x0135)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 2
+ CharacterID: 2
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 317 (0x013d)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 319 (0x013f)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
