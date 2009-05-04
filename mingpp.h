@@ -1368,7 +1368,7 @@ class SWFShape : public SWFCharacter
   void setLineStyle(unsigned short width, byte r, byte g, byte b, byte a=0xff) // alias for setline
 	{ setLine(width, r, g, b, a); }
 
-  void setLine2(unsigned short width, SWFFillStyle *fill, int flags, float miterLimit)
+  void setLine2Filled(unsigned short width, SWFFillStyle *fill, int flags, float miterLimit)
     {  SWFShape_setLine2Filled(this->shape, width, fill->fill, flags, miterLimit); }
   
   void setLine2(unsigned short width, byte r, byte g, byte b, byte a, int flags, float miterLimit)
