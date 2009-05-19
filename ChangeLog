@@ -1,3 +1,25 @@
+2009-05-11 15:29  strk
+
+	* src/: gc.c (1.7), gc.h (1.4): Add missing copyright header
+
+2009-05-04 23:48  strk
+
+	* test/LineStyle/: .cvsignore (1.2), Makefile.am (1.4), TestList
+	  (1.2), test03-cxx.C (1.1), test03.c (1.1), test03.ref (1.1): Add
+	  tests for filled line style provided by Pawel Karwowski
+
+2009-05-04 23:32  strk
+
+	* mingpp.h (1.109): C++ interface typo for setLine2Filled (thanks
+	  to Pawel Karwowski)
+
+2009-05-03 21:35  strk
+
+	* ChangeLog (1.98), src/blocks/linestyle.c (1.17),
+	  src/blocks/linestyle.h (1.9), src/blocks/shape.c (1.60): Complete
+	  filled line style implementation. Patch by Philip de Nier (bug
+	  #84 on libming.org)
+
 2009-03-28 12:34  strk
 
 	* INSTALL (1.12): Add note about possible requirement to restart
