@@ -23,6 +23,7 @@ newequals
 inc
 dec
 enumerate
+enumerate2
 initobject
 initarray
 getmember

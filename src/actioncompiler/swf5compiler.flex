@@ -297,6 +297,7 @@ newequals		{ count();	return EQUALS; }
 inc			{ count();	return INC; }
 dec			{ count();	return DEC; }
 enumerate		{ count();	return ENUMERATE; }
+enumerate2		{ count();	return ENUMERATE2; }
 initobject		{ count();	return INITOBJECT; }
 initarray		{ count();	return INITARRAY; }
 getmember		{ count();	return GETMEMBER; }
