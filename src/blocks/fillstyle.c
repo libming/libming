@@ -199,7 +199,7 @@ SWFOutput_writeFillStyle(SWFOutput out, SWFFillStyle fill,
 		SWFOutput_writeUInt8(out, fill->data.solid.g);
 		SWFOutput_writeUInt8(out, fill->data.solid.b);
 
-		if ( shapeType == SWF_DEFINESHAPE3 )
+		if ( shapeType >= SWF_DEFINESHAPE3 )
 			SWFOutput_writeUInt8(out, fill->data.solid.a);
 	}
 	else if ( type & SWFFILL_GRADIENT )

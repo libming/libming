@@ -399,6 +399,7 @@ SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 		case SWF_DEFINESHAPE:
 		case SWF_DEFINESHAPE2:
 		case SWF_DEFINESHAPE3:
+		case SWF_DEFINESHAPE4:
 			/*SWF_warn("Exporting a shape character is not ensured to work");*/
 		case SWF_DEFINESPRITE:
 		case SWF_DEFINEFONT2:

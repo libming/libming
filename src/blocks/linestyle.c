@@ -218,7 +218,7 @@ static inline void writeLineStyle1(SWFOutput out, SWFLineStyle line, int shapeTy
 	SWFOutput_writeUInt8(out, line->g);
 	SWFOutput_writeUInt8(out, line->b);
 
-	if(shapeType == SWF_DEFINESHAPE3)
+	if(shapeType >= SWF_DEFINESHAPE3)
 		SWFOutput_writeUInt8(out, line->a);
 }
 

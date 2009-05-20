@@ -157,7 +157,8 @@ SWFBlock_isCharacter(SWFBlock block)
 
 	if ( type == SWF_DEFINETEXT		 || type == SWF_DEFINETEXT2			 ||
 			 type == SWF_DEFINESHAPE	 || type == SWF_DEFINESHAPE2		 ||
-			 type == SWF_DEFINESHAPE3	 || type == SWF_DEFINEMORPHSHAPE ||
+			 type == SWF_DEFINESHAPE3	 || type == SWF_DEFINESHAPE4 ||
+			 type == SWF_DEFINEMORPHSHAPE ||
 			 type == SWF_DEFINESPRITE	 || type == SWF_DEFINEBUTTON		 ||
 			 type == SWF_DEFINEBUTTON2 || type == SWF_DEFINETEXT2			 ||
 			 type == SWF_DEFINEBITS ||

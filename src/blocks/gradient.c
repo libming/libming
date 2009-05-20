@@ -225,7 +225,7 @@ SWFOutput_writeGradient(SWFOutput out, SWFGradient gradient, SWFBlocktype shapeT
 		SWFOutput_writeUInt8(out, gradient->entries[i].g);
 		SWFOutput_writeUInt8(out, gradient->entries[i].b);
 
-		if ( shapeType == SWF_DEFINESHAPE3 || shapeType == SWF_DEFINESHAPE4 )
+		if ( shapeType >= SWF_DEFINESHAPE3 )
 			SWFOutput_writeUInt8(out, gradient->entries[i].a);
 	}
 
