@@ -220,33 +220,46 @@ void SWFShape_drawCircle(SWFShape shape, double r)
 
 void SWFShape_drawArc(SWFShape shape, double r, double startAngle, double endAngle)
 {
-	int i;
+	int i, nSegs;
 	double controlx, controly, anchorx, anchory, x, y;
+	double angle, subangle, controlRadius;
+
+	// Normalize the angles
+	double delta = endAngle - startAngle;
+	if ( abs(delta) >= 360)
+		delta = 360;
+	else if (delta < 0)
+		delta += 360;
+	else if (delta == 0)
+		return;
+	startAngle = fmod(startAngle, 360);
 
 	/* first determine number of segments, 8 at most */
-	int nSegs = (int)(1 + floor(7*(endAngle-startAngle)/360));
+	nSegs = 1 + (int)rint(7 * (delta / 360));
 
 	/* subangle is half the angle of each segment */
-	double subangle = M_PI*(endAngle-startAngle)/nSegs/360;
+	subangle = M_PI * delta / nSegs / 360;
 
-	double angle = M_PI*startAngle/180;
+	angle = M_PI * startAngle / 180;
 
-	x = rint(r*sin(angle));
-	y = -rint(r*cos(angle));
+	x = r * sin(angle);
+	y = -r * cos(angle);
 
 	SWFShape_movePen(shape, x, y);
+
+	controlRadius = r / cos(subangle);
 
 	for ( i=0; i<nSegs; ++i )
 	{
 		angle += subangle;
-		controlx = (r*sin(angle)/cos(subangle));
-		controly = (-r*cos(angle)/cos(subangle));
+		controlx = controlRadius * sin(angle);
+		controly = -controlRadius * cos(angle);
 		angle += subangle;
 		anchorx = (r*sin(angle));
 		anchory = (-r*cos(angle));
 
-		SWFShape_drawCurve(shape, rint(controlx)-x, rint(controly)-y,
-		                   rint(anchorx-controlx), rint(anchory-controly));
+		SWFShape_drawCurve(shape, controlx-x, controly-y,
+		                   anchorx-controlx, anchory-controly);
 
 		x = anchorx;
 		y = anchory;

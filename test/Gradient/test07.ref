@@ -1,5 +1,5 @@
 File version: 8
-File size: 135
+File size: 134
 Frame size: (0,10000)x(0,9000)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -18,15 +18,15 @@ Block length: 3
 
 Offset: 32 (0x0020)
 Block type: 32 (SWF_DEFINESHAPE3)
-Block length: 82
+Block length: 81
 
  CharacterID: 1
- RECT:  (-1098,-1100)x(1102,1100):12
+ RECT:  (-1100,-1100)x(1100,1100):12
  FillStyleArray:  FillStyleCount:      1  FillStyleCountExtended:      0
  FillStyle:  FillStyleType: 12
   Matrix:
    ScaleX 0.067139 ScaleY 0.067139
-   TranslateX      2 TranslateY      0
+   TranslateX      0 TranslateY      0
  Gradient:  SpreadMode: 0
  InterpolationMode: 0
  NumGradients: 2
@@ -42,17 +42,17 @@ Block length: 82
   StateFillStyle0: 0 StateMoveTo: 1
    FillStyle1: 1
    MoveBits: 12  MoveDeltaX: 0  MoveDeltaY: -1100
- Curved EdgeRecord: 8 Control(460,0) Anchor(320,320)
- Curved EdgeRecord: 8 Control(322,318) Anchor(0,460)
- Curved EdgeRecord: 8 Control(0,460) Anchor(-320,320)
- Curved EdgeRecord: 8 Control(-318,322) Anchor(-460,0)
- Curved EdgeRecord: 8 Control(-460,0) Anchor(-320,-320)
- Curved EdgeRecord: 8 Control(-322,-318) Anchor(0,-460)
- Curved EdgeRecord: 8 Control(0,-460) Anchor(320,-320)
- Curved EdgeRecord: 8 Control(318,-322) Anchor(460,0)
+ Curved EdgeRecord: 8 Control(456,0) Anchor(322,322)
+ Curved EdgeRecord: 8 Control(322,322) Anchor(0,456)
+ Curved EdgeRecord: 8 Control(0,456) Anchor(-322,322)
+ Curved EdgeRecord: 8 Control(-322,322) Anchor(-456,0)
+ Curved EdgeRecord: 8 Control(-456,0) Anchor(-322,-322)
+ Curved EdgeRecord: 8 Control(-322,-322) Anchor(0,-456)
+ Curved EdgeRecord: 8 Control(0,-456) Anchor(322,-322)
+ Curved EdgeRecord: 8 Control(322,-322) Anchor(456,0)
   ENDSHAPE
 
-Offset: 120 (0x0078)
+Offset: 119 (0x0077)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 9
 
@@ -69,12 +69,12 @@ Block length: 9
   Matrix:
    TranslateX   2000 TranslateY   2000
 
-Offset: 131 (0x0083)
+Offset: 130 (0x0082)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 133 (0x0085)
+Offset: 132 (0x0084)
 Block type: 0 (SWF_END)
 Block length: 0
 

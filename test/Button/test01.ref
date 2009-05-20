@@ -9,7 +9,7 @@ Block type: 32 (SWF_DEFINESHAPE3)
 Block length: 64
 
  CharacterID: 2
- RECT:  (-423,-420)x(417,420):10
+ RECT:  (-420,-420)x(420,420):10
  FillStyleArray:  FillStyleCount:      0  FillStyleCountExtended:      0
  LineStyleArray:  LineStyleCount: 1
  LineStyle:  Width: 40
@@ -21,14 +21,14 @@ Block length: 64
   StateFillStyle0: 0 StateMoveTo: 1
    LineStyle: 1
    MoveBits: 10  MoveDeltaX: 0  MoveDeltaY: -400
- Curved EdgeRecord: 7 Control(160,0) Anchor(120,120)
- Curved EdgeRecord: 7 Control(117,123) Anchor(0,160)
- Curved EdgeRecord: 7 Control(0,160) Anchor(-120,120)
- Curved EdgeRecord: 7 Control(-123,117) Anchor(-160,0)
- Curved EdgeRecord: 7 Control(-160,0) Anchor(-120,-120)
- Curved EdgeRecord: 7 Control(-117,-123) Anchor(0,-160)
- Curved EdgeRecord: 7 Control(0,-160) Anchor(120,-120)
- Curved EdgeRecord: 7 Control(123,-117) Anchor(160,0)
+ Curved EdgeRecord: 7 Control(166,0) Anchor(117,117)
+ Curved EdgeRecord: 7 Control(117,117) Anchor(0,166)
+ Curved EdgeRecord: 7 Control(0,166) Anchor(-117,117)
+ Curved EdgeRecord: 7 Control(-117,117) Anchor(-166,0)
+ Curved EdgeRecord: 7 Control(-166,0) Anchor(-117,-117)
+ Curved EdgeRecord: 7 Control(-117,-117) Anchor(0,-166)
+ Curved EdgeRecord: 7 Control(0,-166) Anchor(117,-117)
+ Curved EdgeRecord: 7 Control(117,-117) Anchor(166,0)
   ENDSHAPE
 
 Offset: 90 (0x005a)
