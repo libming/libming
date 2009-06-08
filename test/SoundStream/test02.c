@@ -13,7 +13,7 @@ int main()
 	file = fopen(MEDIADIR "/audio01.mp3", "rb");
 	if(!file)
 	{
-		perror(MEDIADIR "/sound1.mp3");
+		perror(MEDIADIR "/audio01.mp3");
 		return EXIT_FAILURE;
 	}
 
