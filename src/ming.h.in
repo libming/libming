@@ -554,7 +554,7 @@ SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 int SWFSoundStream_getFrames(SWFSoundStream sound) __deprecated;
 void destroySWFSoundStream(SWFSoundStream soundStream);
 unsigned int SWFSoundStream_getDuration(SWFSoundStream);
-void SWFSoundStream_setInitialMp3Delay(SWFSoundStream);
+void SWFSoundStream_setInitialMp3Delay(SWFSoundStream, int);
 
 
 /***** SWFSound *****/
