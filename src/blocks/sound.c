@@ -165,6 +165,21 @@ completeDefineSWFSoundWithSoundStreamBlock(SWFBlock block)
 	return len;
 }
 
+/*
+ * Set number of samples to seek forward or delay (works with MP3 only)
+ *
+ * If this value is positive, the player seeks this
+ * number of samples into the sound block before the
+ * sound is played.
+ * If this value is negative the player plays this
+ * number of silent samples before playing the sound block
+ */
+void
+SWFSound_delaySeek(SWFSound sound, int delaySeek)
+{
+	sound->seekSamples = delaySeek;
+}
+
 
 void
 destroySWFSound(SWFSound sound)

@@ -563,6 +563,7 @@ SWFSound newSWFSound(FILE *file, byte flags);
 SWFSound newSWFSoundFromFileno(int fd, byte flags);
 SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
 SWFSound newSWFSound_fromSoundStream(SWFSoundStream stream);
+void SWFSound_delaySeek(SWFSound sound, int delaySeek);
 void destroySWFSound(SWFSound sound);
 
 #define SWF_SOUND_COMPRESSION       0xf0
