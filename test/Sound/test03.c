@@ -29,7 +29,7 @@ int main() {
 		fprintf(stderr, "Could not create SWFSound\n");
 		return EXIT_FAILURE;
 	}
-	SWFSound_delaySeek(sound2, 2048);
+	SWFSound_setInitialMp3Delay(sound2, 2048);
 	SWFMovie_addExport(m, sound2, "delaySeeked");
 
 	ret = SWFMovie_save(m, "test03.swf");

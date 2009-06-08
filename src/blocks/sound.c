@@ -175,7 +175,7 @@ completeDefineSWFSoundWithSoundStreamBlock(SWFBlock block)
  * number of silent samples before playing the sound block
  */
 void
-SWFSound_delaySeek(SWFSound sound, int delaySeek)
+SWFSound_setInitialMp3Delay(SWFSound sound, int delaySeek)
 {
 	sound->seekSamples = delaySeek;
 }

@@ -544,6 +544,17 @@ SWFSoundStream_getStreamHead(SWFSoundStream stream, float frameRate, float skip)
 	return (SWFBlock)block;
 }
 
+/*
+ * Set number of samples to seek forward (or delay?) 
+ *
+ * Works with MP3 only
+ *
+ * If this value is positive, the player seeks this
+ * number of samples into the sound block before the
+ * sound is played.
+ * (If this value is negative the player plays this
+ * number of silent samples before playing the sound block)
+ */
 void SWFSoundStream_setInitialMp3Delay(SWFSoundStream stream, int delay)
 {
 	stream->initialDelay = delay;

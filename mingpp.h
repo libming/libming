@@ -774,7 +774,7 @@ class SWFSound : public SWFBlock
 
   void delaySeek(int delaySeek)
   {
-	SWFSound_delaySeek(this->sound, delaySeek);
+	SWFSound_setInitialMp3Delay(this->sound, delaySeek);
   }
 
   virtual ~SWFSound()

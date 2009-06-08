@@ -554,6 +554,7 @@ SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 int SWFSoundStream_getFrames(SWFSoundStream sound) __deprecated;
 void destroySWFSoundStream(SWFSoundStream soundStream);
 unsigned int SWFSoundStream_getDuration(SWFSoundStream);
+void SWFSoundStream_setInitialMp3Delay(SWFSoundStream);
 
 
 /***** SWFSound *****/
@@ -563,7 +564,7 @@ SWFSound newSWFSound(FILE *file, byte flags);
 SWFSound newSWFSoundFromFileno(int fd, byte flags);
 SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
 SWFSound newSWFSound_fromSoundStream(SWFSoundStream stream);
-void SWFSound_delaySeek(SWFSound sound, int delaySeek);
+void SWFSound_setInitialMp3Delay(SWFSound sound, int delaySeek);
 void destroySWFSound(SWFSound sound);
 
 #define SWF_SOUND_COMPRESSION       0xf0
