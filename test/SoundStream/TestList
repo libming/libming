@@ -1,2 +1,3 @@
-test01:swf: mp3 stream sound
+test01:swf: mp3 stream sound (MC)
 test02:swf: mp3 stream sound (MC) 
+test03:swf: mp3 stream sound (MC) with custom initial delay

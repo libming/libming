@@ -723,6 +723,11 @@ class SWFSoundStream
     return SWFSoundStream_getDuration(this->sound);
   }
 
+  void setInitialMp3Delay(int delaySeek)
+  {
+    SWFSoundStream_setInitialMp3Delay(this->sound, delaySeek);
+  }
+
   virtual ~SWFSoundStream()
     { destroySWFSoundStream(this->sound); }
   SWF_DECLAREONLY(SWFSoundStream);
