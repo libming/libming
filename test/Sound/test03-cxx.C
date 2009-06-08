@@ -5,7 +5,7 @@ int main()
 {
 	try {
 		SWFMovie *m = new SWFMovie(7);
-		SWFSound *sound;
+		SWFSound *sound, *sound2;
 		int i;
 		FILE *file;
 
@@ -17,6 +17,10 @@ int main()
 		sound = new SWFSound(file, SWF_SOUND_MP3_COMPRESSED);
 		m->addExport(sound, "sound1.mp3");
 		m->startSound(sound);
+
+		sound2 = new SWFSound(file, SWF_SOUND_MP3_COMPRESSED);
+		sound2->delaySeek(2048);
+		m->addExport(sound2, "delaySeeked");
 
 		m->save("test03.swf");
 	}

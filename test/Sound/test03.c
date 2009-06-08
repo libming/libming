@@ -4,6 +4,7 @@
 int main() {
 	SWFMovie m = newSWFMovieWithVersion(7);
 	SWFSound sound;
+	SWFSound sound2;
 	FILE *file;
 	int ret;
 
@@ -21,6 +22,15 @@ int main() {
 	}
 	SWFMovie_addExport(m, sound, "sound1.mp3");
 	SWFMovie_startSound(m, sound);
+
+	sound2 = newSWFSound(file, SWF_SOUND_MP3_COMPRESSED);
+	if(!sound2)
+	{
+		fprintf(stderr, "Could not create SWFSound\n");
+		return EXIT_FAILURE;
+	}
+	SWFSound_delaySeek(sound2, 2048);
+	SWFMovie_addExport(m, sound2, "delaySeeked");
 
 	ret = SWFMovie_save(m, "test03.swf");
 	if ( ret == -1 )

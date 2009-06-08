@@ -1,5 +1,5 @@
 File version: 7
-File size: 897
+File size: 1762
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -29,18 +29,31 @@ Block length: 3
 
 
 Offset: 876 (0x036c)
+Block type: 14 (SWF_DEFINESOUND)
+Block length: 845
+
+ CharacterID: 2
+ SoundFormat: MP3
+ SoundRate: 22 KHz
+ SoundSize: 16-bit
+ SoundType: Mono
+ SoundSampleCount: 4608
+  Mp3: SeekSamples 2048
+
+Offset: 1727 (0x06bf)
 Block type: 56 (SWF_EXPORTASSETS)
-Block length: 15
+Block length: 29
 
- num assets: 1
+ num assets: 2
  Asset[001]: sound1.mp3
+ Asset[002]: delaySeeked
 
-Offset: 893 (0x037d)
+Offset: 1758 (0x06de)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 895 (0x037f)
+Offset: 1760 (0x06e0)
 Block type: 0 (SWF_END)
 Block length: 0
 

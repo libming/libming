@@ -772,6 +772,11 @@ class SWFSound : public SWFBlock
 		throw SWFException("SWFSound(SWFSoundStream *stream)");
   }
 
+  void delaySeek(int delaySeek)
+  {
+	SWFSound_delaySeek(this->sound, delaySeek);
+  }
+
   virtual ~SWFSound()
   {
 	if(filep)
