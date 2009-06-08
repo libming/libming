@@ -4,6 +4,7 @@
 	* added delete and delete2 support in asm blocks
 	* a lot of updates and improvements in the Perl interface
 	* a lot of documentation (pod) was added to Perl files
+	* Support for manually specifying MP3 delaySeek
 
 0.4.0.rc2 - 2008-09-17
 
