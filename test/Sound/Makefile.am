@@ -32,6 +32,9 @@ EXTRA_DIST =	\
 	test01.ref \
 	test02.ref \
 	test03.ref \
+	test01.pl \
+	test02.pl \
+	test03.pl \
 	TestList
 
 check_PROGRAMS = \
