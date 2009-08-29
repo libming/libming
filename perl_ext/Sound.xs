@@ -52,6 +52,11 @@ SWFSound_new(package="SWF::Sound", arg, flags=0)
 			sv_setref_pv(ST(0), package, (void*)RETVAL);
 		}
 	}
+
+void
+SWFSound_setInitialMp3Delay(sound, delay)
+	SWF::Sound	sound
+	int delay
 	
 
 void
