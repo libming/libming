@@ -73,6 +73,24 @@ yes
     dnl FIXME: This is now unconditional..better check coming later.
   ])
 
+  dnl Check if SWFVideoStream_setFrameMode() is available
+  AC_TRY_COMPILE([
+#include <ming.h>
+  ], [
+int main(void) { SWFVideoStream_setFrameMode(0, 0); return 0; }
+  ], [
+    AC_DEFINE(HAVE_SWFVIDEOSTREAM_SETFRAMEMODE, 1, [Have SWFVideoStream_setFrameMode(SWFVideoStream, int)])
+  ], [])
+
+  dnl Check if SWFVideoStream_nextFrame() is available
+  AC_TRY_COMPILE([
+#include <ming.h>
+  ], [
+int main(void) { SWFVideoStream_nextFrame(0); return 0; }
+  ], [
+    AC_DEFINE(HAVE_SWFVIDEOSTREAM_NEXTFRAME, 1, [Have SWFVideoStream_nextFrame(SWFVideoStream)])
+  ], [])
+
   dnl Check if SWFMovie_output() accepts the 4th parameter
   AC_TRY_COMPILE([
 #include <ming.h>
