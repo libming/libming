@@ -41,6 +41,12 @@ EXTRA_DIST = 		\
 	test01.php	\
 	test02.php	\
 	test03.php	\
+	test01.pl	\
+	test02.pl	\
+	test03.pl	\
+	test04.pl	\
+	test05.pl	\
+	test06.ref	\
 	test01.ref	\
 	test02.ref	\
 	test03.ref	\
