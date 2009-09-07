@@ -91,6 +91,16 @@ int main(void) { SWFVideoStream_nextFrame(0); return 0; }
     AC_DEFINE(HAVE_SWFVIDEOSTREAM_NEXTFRAME, 1, [Have SWFVideoStream_nextFrame(SWFVideoStream)])
   ], [])
 
+  dnl Check if SWFVideoStream_seek() is available
+  AC_TRY_COMPILE([
+#include <ming.h>
+  ], [
+int main(void) { SWFVideoStream_seek(0); return 0; }
+  ], [
+    AC_DEFINE(HAVE_SWFVIDEOSTREAM_SEEK, 1, [Have SWFVideoStream_seek(SWFVideoStream, int frame, int whence)])
+  ], [])
+
+
   dnl Check if SWFMovie_output() accepts the 4th parameter
   AC_TRY_COMPILE([
 #include <ming.h>
