@@ -43,6 +43,7 @@ EXTRA_DIST = 		\
 	test03.php	\
 	test04.php	\
 	test05.php	\
+	test06.php	\
 	test01.pl	\
 	test02.pl	\
 	test03.pl	\
