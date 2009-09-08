@@ -95,7 +95,7 @@ int main(void) { SWFVideoStream_nextFrame(0); return 0; }
   AC_TRY_COMPILE([
 #include <ming.h>
   ], [
-int main(void) { SWFVideoStream_seek(0); return 0; }
+int main(void) { SWFVideoStream_seek(0, 0, 0); return 0; }
   ], [
     AC_DEFINE(HAVE_SWFVIDEOSTREAM_SEEK, 1, [Have SWFVideoStream_seek(SWFVideoStream, int frame, int whence)])
   ], [])
