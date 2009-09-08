@@ -575,6 +575,7 @@ int SWFVideoStream_hasAudio(SWFVideoStream stream);
 int SWFVideoStream_setFrameMode(SWFVideoStream stream, int mode);
 int SWFVideoStream_nextFrame(SWFVideoStream stream);
 int SWFVideoStream_seek(SWFVideoStream stream, int frame, int whence);
+void destroySWFVideoStream(SWFVideoStream stream);
 
 /***** SWFSprite *****/
 
