@@ -50,6 +50,8 @@ EXTRA_DIST = 		\
 	test04.pl	\
 	test05.pl	\
 	test06.pl	\
+	test01.py	\
+	test02.py	\
 	test01.ref	\
 	test02.ref	\
 	test03.ref	\
