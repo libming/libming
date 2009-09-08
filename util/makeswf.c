@@ -2,7 +2,7 @@
  *
  *  makeswf - a command line actionscript compiler
  *
- *  Copyright (C) 2003 2004 2005 2006 "Sandro Santilli" <strk@keybit.net>
+ *  Copyright (C) 2003-2009 "Sandro Santilli" <strk@keybit.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  ****************************************************************************
  * 
@@ -729,6 +729,9 @@ embed_swf(SWFMovie movie, char* filename)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.50  2009/09/08 22:26:16  strk
+ * Update copyright notice (and FSF address)
+ *
  * Revision 1.49  2009/03/15 21:38:10  strk
  * Allow using .dbl files as frame content
  *
