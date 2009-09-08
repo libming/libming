@@ -10,8 +10,6 @@ $stream = new SWFVideoStream($srcdir . "/../Media/video01.flv");
 $stream->setFrameMode(SWF_VIDEOSTREAM_MODE_MANUAL);
 $stream->setDimension(200, 200);
 
-$frames = $stream->getNumFrames();
-
 $m->add($stream);
 
 $off = 0;

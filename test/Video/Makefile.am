@@ -49,7 +49,7 @@ EXTRA_DIST = 		\
 	test03.pl	\
 	test04.pl	\
 	test05.pl	\
-	test06.ref	\
+	test06.pl	\
 	test01.ref	\
 	test02.ref	\
 	test03.ref	\
