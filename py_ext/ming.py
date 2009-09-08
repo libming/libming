@@ -1198,8 +1198,13 @@ SWFVIDEOSTREAM_MODE_AUTO = mingc.SWFVIDEOSTREAM_MODE_AUTO
 SWFVIDEOSTREAM_MODE_MANUAL = mingc.SWFVIDEOSTREAM_MODE_MANUAL
 
 class SWFVideoStream(SWFBase):
-    def __init__(self):
-        self.this = mingc.newSWFVideoStream()
+    def __init__(self, filename=None):
+	if filename is None:
+		self.file = 0;
+        	self.this = mingc.newSWFVideoStream()
+	else:
+		self.file = open(filename, "rb");
+        	self.this = mingc.newSWFVideoStream_fromFile(self.file)
     def setDimension(self, w, h):
         return mingc.SWFVideoStream_setDimension(self.this, w, h)
     def getNumFrames(self):
