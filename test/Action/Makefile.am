@@ -25,6 +25,8 @@ endif
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
+	test01.pl	\
+	test02.pl	\
 	test01.ref	\
 	test02.ref	\
 	TestList
