@@ -17,8 +17,8 @@ $m->add($stream);
 
 for ($i=0; $i<50; $i++)
 {
-	if ($i == 30) { $off = $stream->seek(50, $SEEK_SET); }
-	if ($i == 40) { $stream->seek($off, $SEEK_SET); }
+	if ($i == 30) { $off = $stream->seek(50, SEEK_SET); }
+	if ($i == 40) { $stream->seek($off, SEEK_SET); }
 	$stream->nextFrame();
 	$m->nextFrame();
 }
