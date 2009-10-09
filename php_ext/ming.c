@@ -708,12 +708,17 @@ PHP_METHOD(swfinitaction, __construct)
 	SWFInitAction init;
 	zval *zaction;
 	int ret;
+	long id = -1;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zaction) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &zaction, &ret) == FAILURE) {
 		return;
 	}
 	
-	init = newSWFInitAction(getAction(zaction TSRMLS_CC));
+	if (id==-1) { 
+		init = newSWFInitAction(getAction(zaction TSRMLS_CC));
+	} else {
+		init = newSWFInitAction_withId(getAction(zaction TSRMLS_CC), id);
+	}
 
 	ret = zend_list_insert(init, le_swfinitactionp);
 	object_init_ex(getThis(), initaction_class_entry_ptr);
