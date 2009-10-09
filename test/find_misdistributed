@@ -1,0 +1,10 @@
+#!/bin/sh
+
+BASEDIR=$PWD
+find . -name '*.php' -o -name '*.pl' -o -name '*.py' | while read f; do
+	b=`basename $f`
+	d=`dirname $f`
+	cd $d
+	if grep -q "$b" Makefile.am; then :; else echo "$d" misses "$b"; fi
+	cd $BASEDIR
+done;
