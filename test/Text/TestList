@@ -1,2 +1,3 @@
 test01:swf: SWFText version 2  
 test02:swf,freetype: SWFText version 2 mixing font styles 
+test03:swf: SWFText version 2 with moveTo
