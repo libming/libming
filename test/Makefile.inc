@@ -44,7 +44,7 @@ refs: $(C_PROGS)
 
 gen-php: $(SWFS) php.ini
 	for t in $(C_PROGS); do \
-	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c.^' > $(srcdir)/$$t.php ;\
+	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c php.ini^' > $(srcdir)/$$t.php ;\
 	done
 
 gen-pl: $(SWFS) 
