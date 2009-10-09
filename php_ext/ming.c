@@ -5624,7 +5624,7 @@ PHP_METHOD(swftextfield, __construct)
 	add_property_resource(getThis(), "textfield", ret);
 	zend_list_addref(ret);
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flags) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
 		return;
 	}
 
