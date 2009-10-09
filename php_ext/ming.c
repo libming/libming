@@ -710,7 +710,7 @@ PHP_METHOD(swfinitaction, __construct)
 	int ret;
 	long id = -1;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &zaction, &ret) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &zaction, &id) == FAILURE) {
 		return;
 	}
 	
@@ -3833,6 +3833,9 @@ PHP_METHOD(swfmovie, add)
 	/* XXX - SWFMovie_add deals w/ all block types.  Probably will need to add that.. */
 	if (Z_OBJCE_P(zchar) == action_class_entry_ptr) {
 		block = (SWFBlock) getAction(zchar TSRMLS_CC);
+	} 
+	else if (Z_OBJCE_P(zchar) == initaction_class_entry_ptr) {
+		block = (SWFBlock) getInitAction(zchar TSRMLS_CC);
 	} 
 	else if(Z_OBJCE_P(zchar) == character_class_entry_ptr) {
 		block = (SWFBlock) getCharacterClass(zchar TSRMLS_CC);
