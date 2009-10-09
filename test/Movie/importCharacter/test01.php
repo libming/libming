@@ -1,4 +1,4 @@
-#!/usr/bin/php -c.
+#!/usr/bin/php -c php.ini
 <?php
 	$m = new SWFMovie();
 	$import = $m->importChar("test.swf", "test");
