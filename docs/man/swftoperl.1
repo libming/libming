@@ -1,0 +1,24 @@
+.TH swftoperl 1 "25 Nov 2009" "" "Ming utils"
+.\" $Id$
+.SH NAME
+swftoperl - decompile a swf file into Perl code
+.SH SYNOPSIS
+.B swftoperl <file.swf>
+.SH DESCRIPTION
+.B swftoperl
+is a command line tool for decompiling swf format files. It produces Perl code that
+can be used to recreate the original file.
+H OPTIONS
+.TP
+\fB\-v\fR
+Enable verbose output while processing the file.
+.TP
+\fB<file.swf>\fR
+Name of swf format file to use as input.
+.SH BUGS
+The decompilation is not 100% complete, but it at least provides a useful starting point,
+and in many cases will produce a complete program.
+.SH AUTHOR
+Written by Stuart R. Anderson <anderson@netsweng.com>
+.SH COPYRIGHT
+Code is released under the GNU GPL license.

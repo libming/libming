@@ -1,5 +1,19 @@
 dist_man1_MANS = \
-	makeswf.1
+	dbl2png.1 \
+	gif2dbl.1 \
+	gif2mask.1 \
+	listfdb.1 \
+	listjpeg.1 \
+	listmp3.1 \
+	makefdb.1 \
+	makeswf.1 \
+	png2dbl.1 \
+	raw2adpcm.1 \
+	swftocxx.1 \
+	swftoperl.1 \
+	swftophp.1 \
+	swftopython.1 \
+	swftotcl.1
 
 dist_man3_MANS =			\
 	destroySWFMovie.3		\
