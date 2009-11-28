@@ -13,7 +13,8 @@ TESTS = dotests
 C_PROGS =		\
 	test01		\
 	test02		\
-	test03	
+	test03		\
+	test04	
 
 if USE_CXX
 CXX_PROGS =		\
@@ -49,6 +50,7 @@ check_PROGRAMS = \
 CLEANFILES = dotests php.ini \
 	test01.swf \
 	test02.swf \
-	test03.swf
+	test03.swf \
+	test04.swf
 
 include ../Makefile.inc
