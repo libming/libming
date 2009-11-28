@@ -1,5 +1,5 @@
 File version: 9
-File size: 3429
+File size: 3422
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -1218,79 +1218,79 @@ Block length: 3228
 
 Offset: 3260 (0x0cbc)
 Block type: 11 (SWF_DEFINETEXT)
-Block length: 138
+Block length: 131
 
  CharacterID: 1
- RECT:  (0,0)x(13749,2083):15
+ RECT:  (0,0)x(6067,2041):14
   Matrix:
    TranslateX      0 TranslateY      0
  GlyphBits: 6
- AdvanceBits: 10
+ AdvanceBits: 9
  TextRecords: 2
  TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 1   StyleFlagHasColor: 1   StyleFlagHasYOffset: 1   StyleFlagHasXOffset: 1
   FontID: 2
  RGBA: ( 0, 0, 0,ff)
-  XOffset: 2000   YOffset: 2000
-  TextHeight: 400
+  XOffset: 200   YOffset: 2000
+  TextHeight: 200
   GlyphCount: 55
-   GlyphIndex[0] = 000c    GlyphAdvance[0] = 00f4
-   GlyphIndex[0] = 0014    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0011    GlyphAdvance[0] = 00f6
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 001d    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0021    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0015    GlyphAdvance[0] = 006e
-   GlyphIndex[0] = 000f    GlyphAdvance[0] = 00db
-   GlyphIndex[0] = 0017    GlyphAdvance[0] = 00e7
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 000e    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 001e    GlyphAdvance[0] = 00a4
-   GlyphIndex[0] = 001b    GlyphAdvance[0] = 00f4
-   GlyphIndex[0] = 0023    GlyphAdvance[0] = 0146
-   GlyphIndex[0] = 001a    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0012    GlyphAdvance[0] = 008c
-   GlyphIndex[0] = 001b    GlyphAdvance[0] = 00f4
-   GlyphIndex[0] = 0024    GlyphAdvance[0] = 00ec
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0016    GlyphAdvance[0] = 006e
-   GlyphIndex[0] = 0021    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0019    GlyphAdvance[0] = 0185
-   GlyphIndex[0] = 001c    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 001f    GlyphAdvance[0] = 00d0
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 001b    GlyphAdvance[0] = 00f4
-   GlyphIndex[0] = 0022    GlyphAdvance[0] = 00ec
-   GlyphIndex[0] = 0011    GlyphAdvance[0] = 00f6
-   GlyphIndex[0] = 001e    GlyphAdvance[0] = 00a4
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0020    GlyphAdvance[0] = 009c
-   GlyphIndex[0] = 0014    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0011    GlyphAdvance[0] = 00f6
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0018    GlyphAdvance[0] = 006e
-   GlyphIndex[0] = 000d    GlyphAdvance[0] = 00f4
-   GlyphIndex[0] = 0026    GlyphAdvance[0] = 00d1
-   GlyphIndex[0] = 0025    GlyphAdvance[0] = 00ec
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0010    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 001b    GlyphAdvance[0] = 00f4
-   GlyphIndex[0] = 0013    GlyphAdvance[0] = 00fd
-   GlyphIndex[0] = 0001    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
-   GlyphIndex[0] = 0003    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0004    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0005    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0006    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0007    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0008    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0009    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 000a    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 000b    GlyphAdvance[0] = 00fe
-   GlyphIndex[0] = 0002    GlyphAdvance[0] = 00fe
+   GlyphIndex[0] = 000c    GlyphAdvance[0] = 007a
+   GlyphIndex[0] = 0014    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0011    GlyphAdvance[0] = 007b
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 001d    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0021    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0015    GlyphAdvance[0] = 0037
+   GlyphIndex[0] = 000f    GlyphAdvance[0] = 006d
+   GlyphIndex[0] = 0017    GlyphAdvance[0] = 0073
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 000e    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 001e    GlyphAdvance[0] = 0052
+   GlyphIndex[0] = 001b    GlyphAdvance[0] = 007a
+   GlyphIndex[0] = 0023    GlyphAdvance[0] = 00a3
+   GlyphIndex[0] = 001a    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0012    GlyphAdvance[0] = 0046
+   GlyphIndex[0] = 001b    GlyphAdvance[0] = 007a
+   GlyphIndex[0] = 0024    GlyphAdvance[0] = 0076
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0016    GlyphAdvance[0] = 0037
+   GlyphIndex[0] = 0021    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0019    GlyphAdvance[0] = 00c2
+   GlyphIndex[0] = 001c    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 001f    GlyphAdvance[0] = 0068
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 001b    GlyphAdvance[0] = 007a
+   GlyphIndex[0] = 0022    GlyphAdvance[0] = 0076
+   GlyphIndex[0] = 0011    GlyphAdvance[0] = 007b
+   GlyphIndex[0] = 001e    GlyphAdvance[0] = 0052
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0020    GlyphAdvance[0] = 004e
+   GlyphIndex[0] = 0014    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0011    GlyphAdvance[0] = 007b
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0018    GlyphAdvance[0] = 0037
+   GlyphIndex[0] = 000d    GlyphAdvance[0] = 007a
+   GlyphIndex[0] = 0026    GlyphAdvance[0] = 0068
+   GlyphIndex[0] = 0025    GlyphAdvance[0] = 0076
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0010    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 001b    GlyphAdvance[0] = 007a
+   GlyphIndex[0] = 0013    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0001    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 003f
+   GlyphIndex[0] = 0003    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0004    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0005    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0006    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0007    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0008    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0009    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 000a    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 000b    GlyphAdvance[0] = 007f
+   GlyphIndex[0] = 0002    GlyphAdvance[0] = 007f
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 3404 (0x0d4c)
+Offset: 3397 (0x0d45)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -1307,19 +1307,19 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 3412 (0x0d54)
+Offset: 3405 (0x0d4d)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 3414 (0x0d56)
+Offset: 3407 (0x0d4f)
 Block type: 76 (SWF_SYMBOLCLASS)
 Block length: 11
 
 SymbolCount 1
  Id: 1, Name: mytext
 
-Offset: 3427 (0x0d63)
+Offset: 3420 (0x0d5c)
 Block type: 0 (SWF_END)
 Block length: 0
 
