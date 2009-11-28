@@ -18,7 +18,7 @@ int main()
 	SWFText_setFont(text, font);
 	SWFText_setColor(text, 0, 0, 0, 0xff);
 	SWFText_setHeight(text, 10);
-	SWFText_moveTo(text, 0, 100);
+	SWFText_moveTo(text, 10, 100);
 	SWFText_addString(text, "The quick brown fox jumps over the lazy dog. 1234567890", NULL);
 	
 	SWFMovie_add(m, text);

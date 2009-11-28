@@ -12,7 +12,7 @@ $f = new SWF::Font($mediadir."/font01.fdb");
 $t->setFont($f);
 $t->setColor(0,0,0,0xff);
 $t->setHeight(10);
-$t->moveTo(0,100);
+$t->moveTo(10, 100);
 $t->addString("The quick brown fox jumps over the lazy dog. 1234567890");
 
 $m->add($t);
