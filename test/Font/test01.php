@@ -14,9 +14,9 @@ $f2 = new SWFFont($mediadir . "/font01.fdb");
 /* SWF_DEFINETEXT */
 $character1 = new SWFText(1);
 $character1->setFont($f2);
-$character1->setHeight(20);
+$character1->setHeight(10);
 $character1->setColor(0x00, 0x00, 0x00);
-$character1->moveTo(100, 100);
+$character1->moveTo(0, 100);
 $character1->addString("The quick brown fox jumps over the lazy dog. 1234567890");
 
 /* SWF_PLACEOBJECT2 */
