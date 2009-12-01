@@ -45,6 +45,7 @@ EXTRA_DIST = 		\
 	test04.ref	\
 	test04.php	\
 	test04.pl	\
+	test04.py	\
 	TestList
 
 check_PROGRAMS = \
