@@ -43,6 +43,7 @@ EXTRA_DIST = 		\
 	test03.pl	\
 	test03.py	\
 	test04.ref	\
+	test04.php	\
 	test04.pl	\
 	TestList
 
