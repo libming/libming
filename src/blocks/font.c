@@ -141,7 +141,8 @@ completeSWFFontCharacter(SWFBlock block)
 	buffer = newSWFOutput();
 	for (i = 0; i < inst->nGlyphs; ++i)
 	{
-		SWFShape shape = font->shapes[inst->codeTable[i]];
+		int glyph = SWFFont_findGlyphCode(font,inst->codeTable[i]);
+		SWFShape shape = font->shapes[glyph];
 		offset = SWFOutput_getLength(buffer) + tablen;
 		SWFOutput_writeGlyphShape(buffer, shape);
 		if(inst->flags & SWF_FONT_WIDEOFFSETS)
@@ -161,7 +162,7 @@ completeSWFFontCharacter(SWFBlock block)
 	
 	for (i = 0; i < inst->nGlyphs; ++i)
 	{
-		unsigned short code = font->glyphToCode[inst->codeTable[i]];
+		unsigned short code = inst->codeTable[i];
 		if (inst->flags & SWF_FONT_WIDECODES)
 			SWFOutput_writeUInt16(buffer, code);
 		else
@@ -173,12 +174,13 @@ completeSWFFontCharacter(SWFBlock block)
 	{	SWFOutput_writeUInt16(buffer, font->ascent);
 		SWFOutput_writeUInt16(buffer, font->descent);
 		SWFOutput_writeUInt16(buffer, font->leading);
-		for (i = 0; i < inst->nGlyphs; ++i)
-			SWFOutput_writeSInt16(buffer,
-				font->advances[inst->codeTable[i]]);
-	
-		for (i = 0; i < inst->nGlyphs; ++i)
-		{	SWFOutput_writeRect(buffer, SWFFont_getGlyphBounds(font, inst->codeTable[i]));
+		for (i = 0; i < inst->nGlyphs; ++i) {
+			int glyph = SWFFont_findGlyphCode(font,inst->codeTable[i]);
+			SWFOutput_writeSInt16(buffer,font->advances[glyph]);
+		}
+		for (i = 0; i < inst->nGlyphs; ++i) {
+			int glyph = SWFFont_findGlyphCode(font,inst->codeTable[i]);
+			SWFOutput_writeRect(buffer, SWFFont_getGlyphBounds(font, glyph));
 			SWFOutput_byteAlign(buffer);
 		}
 		SWFOutput_writeUInt16(buffer, 0); /* no kerning */
@@ -464,7 +466,7 @@ newSWFDummyFontCharacter()
 	return ret;
 }
 	
-static int
+int
 SWFFont_findGlyphCode(SWFFont font, unsigned short c)
 {
 	if ( font->flags & SWF_FONT_WIDECODES )
@@ -609,8 +611,8 @@ SWFFontCharacter_exportCharacterRange(SWFFontCharacter font,
 }
 
 
-static int
-SWFFontCharacter_findCharCode(SWFFontCharacter font, unsigned short c)
+int
+SWFFontCharacter_findGlyphCode(SWFFontCharacter font, unsigned short c)
 {
 	// return the index in font->codeTable for the given character
 
@@ -632,10 +634,6 @@ SWFFontCharacter_dumpTable(SWFFontCharacter fc)
 		unsigned short charcode = font->glyphToCode[i];
 		SWFFontCharacter_addCharToTable(fc, charcode);
 	}
-
-	for (i = 0; i < fc->nGlyphs; ++i)
-		fc->codeTable[i] = 
-			SWFFont_findGlyphCode(font, fc->codeTable[i]);
 }
 
 static void
@@ -657,28 +655,7 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 		text = text->next;
 	}
 
-	// translate text records' strings into lists of font char codes
-
-	text = font->textList;
-
-	while ( text != NULL )
-	{
-		len = SWFTextRecord_getString(text->text, &string);
-
-		for ( i=0; i<len; ++i )
-		{
-			int code = SWFFontCharacter_findCharCode(font, string[i]);
-
-			if ( code >= 0 )
-				string[i] = (unsigned short)code;
-
-			// XXX - else?
-		}
-
-		text = text->next;
-	}
-
-	// translate codeTable's char codes into glyph codes
+	// check availability of a font glyph for each fontchar codetable entry
 
 	for ( i=0; i<font->nGlyphs; ++i )
 	{
@@ -692,7 +669,6 @@ SWFFontCharacter_resolveTextCodes(SWFFontCharacter font)
 			SWF_warn("or the used font does not provide all characters (unlikely)\n");
 			SWF_error("Stopped\n");
 		}
-		font->codeTable[i] = code;
 	}
 }
 
@@ -840,9 +816,20 @@ SWFFont_getScaledLeading(SWFFont font)
 
 
 unsigned short
-SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short c)
+SWFFontCharacter_getGlyphCode(SWFFontCharacter font, unsigned short glyphcode)
 {
-	return font->codeTable[c];
+	if ( glyphcode >= font->nGlyphs )
+        	SWF_error("SWFFontCharacter_getGlyphCode: No such row in codeTable");
+	return font->codeTable[glyphcode];
+}
+
+unsigned short
+SWFFont_getGlyphCode(SWFFont font, unsigned short glyphcode)
+{
+	if ( glyphcode >= font->nGlyphs )
+        SWF_error("SWFFont_getGlyphCode: glyphcode >= nGlyphs");
+
+	return font->glyphToCode[glyphcode];
 }
 
 

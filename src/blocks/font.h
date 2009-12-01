@@ -159,8 +159,18 @@ int SWFFontCharacter_getNGlyphs(SWFFontCharacter font);
 
 void SWFFontCharacter_addTextToList(SWFFontCharacter font, SWFTextRecord text);
 
+/* swf codetable: glyph --> char */
 unsigned short SWFFontCharacter_getGlyphCode(SWFFontCharacter font, 
 					     unsigned short c);
+
+/* swf codetable: char --> glyph */
+int SWFFontCharacter_findGlyphCode(SWFFontCharacter font, unsigned short c);
+
+/* source font: glyph --> char */
+unsigned short SWFFont_getGlyphCode(SWFFont font, unsigned short c);
+
+/* source font: char --> glyph */
+int SWFFont_findGlyphCode(SWFFont font, unsigned short c);
 
 void SWFFont_buildReverseMapping(SWFFont font);
 

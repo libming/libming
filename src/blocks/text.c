@@ -660,7 +660,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 		memset(textRecord->advance, 0, sizeof(int) * len);
 	}
 
-	glyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[0]);
+	glyph = SWFFont_findGlyphCode(font, widestring[0]);
 
 	for ( i=0; i<len; ++i )
 	{
@@ -673,7 +673,7 @@ SWFTextRecord_computeAdvances(SWFTextRecord textRecord)
 		/* get kerning from font's kern table */
 
 		if ( i < len-1 )
-		{	nextglyph = SWFFontCharacter_getGlyphCode(fontchar, widestring[i+1]);
+		{	nextglyph = SWFFont_findGlyphCode(font, widestring[i+1]);
 			adv += SWFFont_getCharacterKern(font, glyph, nextglyph);
 			glyph = nextglyph;
 		}
@@ -791,13 +791,17 @@ SWFText_resolveCodes(SWFText text)
 			SWFRect glyphBounds;
 			int minX, maxX, minY, maxY;
 
-			unsigned short code =
-				SWFFontCharacter_getGlyphCode(fontchar, textRecord->string[i]);
-
-			glyphBounds = SWFFont_getGlyphBounds(font, code);
+			unsigned short font_glyphcode =
+				SWFFont_findGlyphCode(font, textRecord->string[i]);
+			glyphBounds = SWFFont_getGlyphBounds(font,font_glyphcode);
 			SWFRect_getBounds(glyphBounds, &minX, &maxX, &minY, &maxY);
 
-			SWFOutput_writeBits(out, textRecord->string[i],	nGlyphBits);
+			int fontchar_glyphcode =
+				SWFFontCharacter_findGlyphCode(fontchar, textRecord->string[i]);
+			if (fontchar_glyphcode < 0) {
+				SWF_error("SWFText_resolveCodes: no suitable glyph available (in dumped font)");
+			}
+			SWFOutput_writeBits(out, (unsigned short) fontchar_glyphcode,	nGlyphBits);
 			SWFOutput_writeBits(out, textRecord->advance[i], text->nAdvanceBits);
 
 			if ( CHARACTER(text)->bounds )
