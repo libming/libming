@@ -1,0 +1,581 @@
+File version: 5
+File size: 1385
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 48 (SWF_DEFINEFONT2)
+Block length: 1246
+
+ FontID: 3
+ FontFlagsHasLayout: 1
+ FontFlagsShiftJis: 0
+ FontFlagsSmallText: 0
+ FontFlagsFlagANSI: 1
+ FontFlagsWideOffsets: 0
+ FontFlagsWideCodes: 0
+ FontFlagsFlagsItalics: 0
+ FontFlagsFlagsBold: 0
+ LanguageCode: 0
+ FontNameLen: 19
+ FontName: Bitstream Vera Sans
+ NumGlyphs: 16
+ OffsetTable[000]: 22
+ OffsetTable[001]: 24
+ OffsetTable[002]: 7f
+ OffsetTable[003]: fc
+ OffsetTable[004]: 114
+ OffsetTable[005]: 18a
+ OffsetTable[006]: 1de
+ OffsetTable[007]: 23e
+ OffsetTable[008]: 29d
+ OffsetTable[009]: 2d2
+ OffsetTable[010]: 2ed
+ OffsetTable[011]: 2fc
+ OffsetTable[012]: 338
+ OffsetTable[013]: 390
+ OffsetTable[014]: 3c6
+ OffsetTable[015]: 3ee
+ CodeTableOffset: 421
+ Shape[000]
+ NumFillBits: 1
+ NumLineBits: 0
+ Shape[001]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 10  MoveDeltaX: 454  MoveDeltaY: -350
+ Curved EdgeRecord: 5 Control(33,11) Anchor(30,36)
+ Curved EdgeRecord: 5 Control(31,36) Anchor(31,63)
+ Straight EdgeRecord: (7) - (103, 204)
+ Straight EdgeRecord: (6) - (-109, 0)
+ Straight EdgeRecord: (7) - (-95, -191)
+ Curved EdgeRecord: 6 Control(-37,-75) Anchor(-35,-25)
+ Curved EdgeRecord: 5 Control(-35,-24) Anchor(-60,0)
+ Straight EdgeRecord: (6) - (-110, 0)
+ Straight EdgeRecord: (8) - (0, 315)
+ Straight EdgeRecord: (6) - (-101, 0)
+ Straight EdgeRecord: (9) - (0, -746)
+ Straight EdgeRecord: (7) - (228, 0)
+ Curved EdgeRecord: 7 Control(128,0) Anchor(63,53)
+ Curved EdgeRecord: 6 Control(63,54) Anchor(0,108)
+ Curved EdgeRecord: 6 Control(0,70) Anchor(-33,47)
+ Curved EdgeRecord: 5 Control(-32,46) Anchor(-63,18)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 11  MoveDeltaX: 201  MoveDeltaY: -663
+ Straight EdgeRecord: (8) - (0, 265)
+ Straight EdgeRecord: (6) - (127, 0)
+ Curved EdgeRecord: 6 Control(73,0) Anchor(37,-34)
+ Curved EdgeRecord: 6 Control(38,-34) Anchor(0,-65)
+ Curved EdgeRecord: 6 Control(0,-66) Anchor(-38,-33)
+ Curved EdgeRecord: 6 Control(-37,-33) Anchor(-73,0)
+ Straight EdgeRecord: (6) - (-127, 0)
+ Shape[002]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 548  MoveDeltaY: -722
+ Straight EdgeRecord: (6) - (0, 99)
+ Curved EdgeRecord: 5 Control(-58,-28) Anchor(-51,-13)
+ Curved EdgeRecord: 5 Control(-51,-14) Anchor(-47,0)
+ Curved EdgeRecord: 6 Control(-83,0) Anchor(-45,32)
+ Curved EdgeRecord: 5 Control(-44,32) Anchor(0,59)
+ Curved EdgeRecord: 5 Control(0,50) Anchor(29,25)
+ Curved EdgeRecord: 6 Control(30,25) Anchor(83,16)
+ Straight EdgeRecord: (5) - (61, 12)
+ Curved EdgeRecord: 6 Control(113,22) Anchor(54,54)
+ Curved EdgeRecord: 6 Control(54,54) Anchor(0,91)
+ Curved EdgeRecord: 6 Control(0,109) Anchor(-73,56)
+ Curved EdgeRecord: 7 Control(-73,55) Anchor(-140,0)
+ Curved EdgeRecord: 5 Control(-53,0) Anchor(-60,-12)
+ Curved EdgeRecord: 6 Control(-60,-11) Anchor(-64,-24)
+ Straight EdgeRecord: (6) - (0, -104)
+ Curved EdgeRecord: 5 Control(62,35) Anchor(59,17)
+ Curved EdgeRecord: 5 Control(59,18) Anchor(57,0)
+ Curved EdgeRecord: 6 Control(86,0) Anchor(47,-34)
+ Curved EdgeRecord: 5 Control(47,-34) Anchor(0,-63)
+ Curved EdgeRecord: 5 Control(0,-55) Anchor(-34,-31)
+ Curved EdgeRecord: 6 Control(-33,-31) Anchor(-77,-16)
+ Straight EdgeRecord: (5) - (-62, -12)
+ Curved EdgeRecord: 6 Control(-113,-22) Anchor(-50,-48)
+ Curved EdgeRecord: 6 Control(-51,-48) Anchor(0,-86)
+ Curved EdgeRecord: 6 Control(0,-99) Anchor(70,-57)
+ Curved EdgeRecord: 6 Control(70,-57) Anchor(122,0)
+ Curved EdgeRecord: 5 Control(53,0) Anchor(54,10)
+ Curved EdgeRecord: 5 Control(55,9) Anchor(57,19)
+ Shape[003]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: -3  MoveDeltaY: -746
+ Straight EdgeRecord: (9) - (631, 0)
+ Straight EdgeRecord: (6) - (0, 85)
+ Straight EdgeRecord: (8) - (-265, 0)
+ Straight EdgeRecord: (9) - (0, 661)
+ Straight EdgeRecord: (6) - (-101, 0)
+ Straight EdgeRecord: (9) - (0, -661)
+ Straight EdgeRecord: (8) - (-265, 0)
+ Straight EdgeRecord: (6) - (0, -85)
+ Shape[004]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 10  MoveDeltaX: 351  MoveDeltaY: -281
+ Curved EdgeRecord: 6 Control(-112,0) Anchor(-43,25)
+ Curved EdgeRecord: 5 Control(-43,26) Anchor(0,61)
+ Curved EdgeRecord: 5 Control(0,49) Anchor(32,29)
+ Curved EdgeRecord: 5 Control(33,29) Anchor(55,0)
+ Curved EdgeRecord: 6 Control(77,0) Anchor(46,-54)
+ Curved EdgeRecord: 6 Control(46,-55) Anchor(0,-90)
+ Straight EdgeRecord: (4) - (0, -20)
+ Straight EdgeRecord: (6) - (-91, 0)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 11  MoveDeltaX: 534  MoveDeltaY: -319
+ Straight EdgeRecord: (8) - (0, 319)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (6) - (0, -85)
+ Curved EdgeRecord: 5 Control(-31,51) Anchor(-47,25)
+ Curved EdgeRecord: 6 Control(-47,23) Anchor(-68,0)
+ Curved EdgeRecord: 6 Control(-86,0) Anchor(-51,-47)
+ Curved EdgeRecord: 6 Control(-51,-49) Anchor(0,-81)
+ Curved EdgeRecord: 6 Control(0,-94) Anchor(63,-48)
+ Curved EdgeRecord: 6 Control(64,-48) Anchor(125,0)
+ Straight EdgeRecord: (7) - (129, 0)
+ Straight EdgeRecord: (3) - (0, -9)
+ Curved EdgeRecord: 6 Control(0,-64) Anchor(-42,-34)
+ Curved EdgeRecord: 6 Control(-41,-35) Anchor(-76,0)
+ Curved EdgeRecord: 5 Control(-48,0) Anchor(-45,11)
+ Curved EdgeRecord: 5 Control(-46,12) Anchor(-42,23)
+ Straight EdgeRecord: (6) - (0, -85)
+ Curved EdgeRecord: 5 Control(51,-20) Anchor(47,-9)
+ Curved EdgeRecord: 5 Control(48,-10) Anchor(45,0)
+ Curved EdgeRecord: 6 Control(121,0) Anchor(60,63)
+ Curved EdgeRecord: 7 Control(60,63) Anchor(0,128)
+ Shape[005]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 499  MoveDeltaY: -538
+ Straight EdgeRecord: (6) - (0, 86)
+ Curved EdgeRecord: 5 Control(-39,-22) Anchor(-39,-10)
+ Curved EdgeRecord: 5 Control(-39,-11) Anchor(-40,0)
+ Curved EdgeRecord: 6 Control(-90,0) Anchor(-49,57)
+ Curved EdgeRecord: 6 Control(-50,56) Anchor(0,103)
+ Curved EdgeRecord: 6 Control(0,102) Anchor(50,57)
+ Curved EdgeRecord: 6 Control(49,57) Anchor(90,0)
+ Curved EdgeRecord: 5 Control(40,0) Anchor(39,-11)
+ Curved EdgeRecord: 5 Control(39,-11) Anchor(39,-21)
+ Straight EdgeRecord: (6) - (0, 85)
+ Curved EdgeRecord: 5 Control(-38,18) Anchor(-42,8)
+ Curved EdgeRecord: 5 Control(-41,9) Anchor(-46,0)
+ Curved EdgeRecord: 6 Control(-127,0) Anchor(-74,-79)
+ Curved EdgeRecord: 7 Control(-75,-79) Anchor(0,-135)
+ Curved EdgeRecord: 7 Control(0,-137) Anchor(75,-79)
+ Curved EdgeRecord: 7 Control(76,-78) Anchor(131,0)
+ Curved EdgeRecord: 5 Control(42,0) Anchor(41,9)
+ Curved EdgeRecord: 5 Control(40,8) Anchor(38,18)
+ Shape[006]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 10  MoveDeltaX: 465  MoveDeltaY: -475
+ Straight EdgeRecord: (8) - (0, -303)
+ Straight EdgeRecord: (6) - (92, 0)
+ Straight EdgeRecord: (9) - (0, 778)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (6) - (0, -84)
+ Curved EdgeRecord: 5 Control(-29,50) Anchor(-45,25)
+ Curved EdgeRecord: 5 Control(-44,23) Anchor(-62,0)
+ Curved EdgeRecord: 6 Control(-101,0) Anchor(-64,-80)
+ Curved EdgeRecord: 7 Control(-64,-81) Anchor(0,-132)
+ Curved EdgeRecord: 7 Control(0,-132) Anchor(64,-81)
+ Curved EdgeRecord: 6 Control(64,-81) Anchor(101,0)
+ Curved EdgeRecord: 5 Control(62,0) Anchor(44,24)
+ Curved EdgeRecord: 5 Control(45,24) Anchor(29,50)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 10  MoveDeltaX: 151  MoveDeltaY: -279
+ Curved EdgeRecord: 6 Control(0,101) Anchor(42,58)
+ Curved EdgeRecord: 6 Control(42,58) Anchor(73,0)
+ Curved EdgeRecord: 6 Control(73,0) Anchor(42,-58)
+ Curved EdgeRecord: 6 Control(42,-58) Anchor(0,-101)
+ Curved EdgeRecord: 6 Control(0,-102) Anchor(-42,-57)
+ Curved EdgeRecord: 6 Control(-42,-58) Anchor(-73,0)
+ Curved EdgeRecord: 6 Control(-73,0) Anchor(-42,58)
+ Curved EdgeRecord: 6 Control(-42,57) Anchor(0,102)
+ Shape[007]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 575  MoveDeltaY: -303
+ Straight EdgeRecord: (5) - (0, 45)
+ Straight EdgeRecord: (8) - (-423, 0)
+ Curved EdgeRecord: 6 Control(6,95) Anchor(51,50)
+ Curved EdgeRecord: 6 Control(52,50) Anchor(91,0)
+ Curved EdgeRecord: 5 Control(53,0) Anchor(50,-13)
+ Curved EdgeRecord: 5 Control(50,-13) Anchor(49,-26)
+ Straight EdgeRecord: (6) - (0, 87)
+ Curved EdgeRecord: 5 Control(-50,21) Anchor(-52,10)
+ Curved EdgeRecord: 5 Control(-52,11) Anchor(-53,0)
+ Curved EdgeRecord: 7 Control(-134,0) Anchor(-79,-77)
+ Curved EdgeRecord: 7 Control(-78,-78) Anchor(0,-133)
+ Curved EdgeRecord: 7 Control(0,-138) Anchor(74,-80)
+ Curved EdgeRecord: 6 Control(75,-81) Anchor(126,0)
+ Curved EdgeRecord: 6 Control(113,0) Anchor(65,73)
+ Curved EdgeRecord: 6 Control(66,72) Anchor(0,125)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 10  MoveDeltaX: 483  MoveDeltaY: -330
+ Curved EdgeRecord: 6 Control(-1,-75) Anchor(-41,-45)
+ Curved EdgeRecord: 6 Control(-41,-45) Anchor(-68,0)
+ Curved EdgeRecord: 6 Control(-77,0) Anchor(-47,43)
+ Curved EdgeRecord: 6 Control(-46,44) Anchor(-7,79)
+ Straight EdgeRecord: (8) - (328, -1)
+ Shape[008]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 380  MoveDeltaY: -778
+ Straight EdgeRecord: (6) - (0, 77)
+ Straight EdgeRecord: (6) - (-88, 0)
+ Curved EdgeRecord: 5 Control(-50,0) Anchor(-19,20)
+ Curved EdgeRecord: 5 Control(-19,20) Anchor(0,52)
+ Straight EdgeRecord: (5) - (0, 49)
+ Straight EdgeRecord: (7) - (151, 0)
+ Straight EdgeRecord: (6) - (0, 72)
+ Straight EdgeRecord: (7) - (-151, 0)
+ Straight EdgeRecord: (8) - (0, 488)
+ Straight EdgeRecord: (6) - (-93, 0)
+ Straight EdgeRecord: (8) - (0, -488)
+ Straight EdgeRecord: (6) - (-88, 0)
+ Straight EdgeRecord: (6) - (0, -72)
+ Straight EdgeRecord: (6) - (88, 0)
+ Straight EdgeRecord: (5) - (0, -39)
+ Curved EdgeRecord: 6 Control(0,-93) Anchor(44,-43)
+ Curved EdgeRecord: 6 Control(43,-43) Anchor(95,0)
+ Straight EdgeRecord: (6) - (87, 0)
+ Shape[009]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 96  MoveDeltaY: -560
+ Straight EdgeRecord: (6) - (92, 0)
+ Straight EdgeRecord: (9) - (0, 560)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (9) - (0, -560)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 11  MoveDeltaX: 96  MoveDeltaY: -778
+ Straight EdgeRecord: (6) - (92, 0)
+ Straight EdgeRecord: (6) - (0, 117)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (6) - (0, -117)
+ Shape[010]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 96  MoveDeltaY: -778
+ Straight EdgeRecord: (6) - (92, 0)
+ Straight EdgeRecord: (9) - (0, 778)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (9) - (0, -778)
+ Shape[011]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 562  MoveDeltaY: -338
+ Straight EdgeRecord: (8) - (0, 338)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (8) - (0, -335)
+ Curved EdgeRecord: 6 Control(0,-79) Anchor(-31,-40)
+ Curved EdgeRecord: 5 Control(-31,-39) Anchor(-62,0)
+ Curved EdgeRecord: 6 Control(-75,0) Anchor(-43,47)
+ Curved EdgeRecord: 6 Control(-43,48) Anchor(0,82)
+ Straight EdgeRecord: (8) - (0, 316)
+ Straight EdgeRecord: (6) - (-92, 0)
+ Straight EdgeRecord: (9) - (0, -560)
+ Straight EdgeRecord: (6) - (92, 0)
+ Straight EdgeRecord: (6) - (0, 87)
+ Curved EdgeRecord: 5 Control(33,-50) Anchor(45,-25)
+ Curved EdgeRecord: 5 Control(45,-25) Anchor(58,0)
+ Curved EdgeRecord: 6 Control(97,0) Anchor(49,60)
+ Curved EdgeRecord: 6 Control(50,59) Anchor(0,116)
+ Shape[012]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 10  MoveDeltaX: 313  MoveDeltaY: -495
+ Curved EdgeRecord: 6 Control(-74,0) Anchor(-43,58)
+ Curved EdgeRecord: 6 Control(-43,57) Anchor(0,101)
+ Curved EdgeRecord: 6 Control(0,100) Anchor(43,58)
+ Curved EdgeRecord: 6 Control(43,58) Anchor(74,0)
+ Curved EdgeRecord: 6 Control(74,0) Anchor(43,-58)
+ Curved EdgeRecord: 6 Control(43,-58) Anchor(0,-100)
+ Curved EdgeRecord: 6 Control(0,-100) Anchor(-43,-58)
+ Curved EdgeRecord: 6 Control(-43,-58) Anchor(-74,0)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 11  MoveDeltaX: 313  MoveDeltaY: -573
+ Curved EdgeRecord: 6 Control(120,0) Anchor(69,78)
+ Curved EdgeRecord: 7 Control(68,78) Anchor(0,138)
+ Curved EdgeRecord: 7 Control(0,137) Anchor(-68,79)
+ Curved EdgeRecord: 6 Control(-69,77) Anchor(-120,0)
+ Curved EdgeRecord: 6 Control(-120,0) Anchor(-69,-77)
+ Curved EdgeRecord: 7 Control(-68,-79) Anchor(0,-137)
+ Curved EdgeRecord: 7 Control(0,-138) Anchor(68,-78)
+ Curved EdgeRecord: 6 Control(69,-78) Anchor(120,0)
+ Shape[013]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 187  MoveDeltaY: -719
+ Straight EdgeRecord: (7) - (0, 159)
+ Straight EdgeRecord: (7) - (190, 0)
+ Straight EdgeRecord: (6) - (0, 72)
+ Straight EdgeRecord: (7) - (-190, 0)
+ Straight EdgeRecord: (8) - (0, 304)
+ Curved EdgeRecord: 6 Control(0,68) Anchor(19,20)
+ Curved EdgeRecord: 5 Control(19,19) Anchor(57,0)
+ Straight EdgeRecord: (6) - (95, 0)
+ Straight EdgeRecord: (6) - (0, 77)
+ Straight EdgeRecord: (6) - (-95, 0)
+ Curved EdgeRecord: 6 Control(-106,0) Anchor(-41,-39)
+ Curved EdgeRecord: 6 Control(-40,-40) Anchor(0,-105)
+ Straight EdgeRecord: (8) - (0, -304)
+ Straight EdgeRecord: (6) - (-68, 0)
+ Straight EdgeRecord: (6) - (0, -72)
+ Straight EdgeRecord: (6) - (68, 0)
+ Straight EdgeRecord: (7) - (0, -159)
+ Straight EdgeRecord: (6) - (92, 0)
+ Shape[014]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 562  MoveDeltaY: -560
+ Straight EdgeRecord: (8) - (-203, 273)
+ Straight EdgeRecord: (8) - (213, 287)
+ Straight EdgeRecord: (6) - (-108, 0)
+ Straight EdgeRecord: (7) - (-163, -220)
+ Straight EdgeRecord: (7) - (-163, 220)
+ Straight EdgeRecord: (6) - (-109, 0)
+ Straight EdgeRecord: (8) - (218, -293)
+ Straight EdgeRecord: (8) - (-199, -267)
+ Straight EdgeRecord: (6) - (108, 0)
+ Straight EdgeRecord: (7) - (149, 200)
+ Straight EdgeRecord: (7) - (148, -200)
+ Straight EdgeRecord: (6) - (109, 0)
+ Shape[015]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 10  MoveDeltaX: 329  MoveDeltaY: 52
+ Curved EdgeRecord: 6 Control(-39,100) Anchor(-37,30)
+ Curved EdgeRecord: 5 Control(-37,31) Anchor(-62,0)
+ Straight EdgeRecord: (6) - (-73, 0)
+ Straight EdgeRecord: (6) - (0, -77)
+ Straight EdgeRecord: (5) - (54, 0)
+ Curved EdgeRecord: 5 Control(38,0) Anchor(21,-18)
+ Curved EdgeRecord: 6 Control(21,-18) Anchor(25,-67)
+ Straight EdgeRecord: (5) - (17, -42)
+ Straight EdgeRecord: (9) - (-227, -551)
+ Straight EdgeRecord: (6) - (98, 0)
+ Straight EdgeRecord: (8) - (175, 438)
+ Straight EdgeRecord: (8) - (175, -438)
+ Straight EdgeRecord: (6) - (97, 0)
+ Straight EdgeRecord: (9) - (-246, 612)
+ CodeTable[000]: 20
+ CodeTable[001]: 52
+ CodeTable[002]: 53
+ CodeTable[003]: 54
+ CodeTable[004]: 61
+ CodeTable[005]: 63
+ CodeTable[006]: 64
+ CodeTable[007]: 65
+ CodeTable[008]: 66
+ CodeTable[009]: 69
+ CodeTable[010]: 6c
+ CodeTable[011]: 6e
+ CodeTable[012]: 6f
+ CodeTable[013]: 74
+ CodeTable[014]: 78
+ CodeTable[015]: 79
+ FontAscent: 950
+ FontDecent: 241
+ FontLeading: 0
+ FontAdvanceTable[000]: 145
+ FontAdvanceTable[001]: 2c7
+ FontAdvanceTable[002]: 28a
+ FontAdvanceTable[003]: 271
+ FontAdvanceTable[004]: 273
+ FontAdvanceTable[005]: 233
+ FontAdvanceTable[006]: 28a
+ FontAdvanceTable[007]: 276
+ FontAdvanceTable[008]: 168
+ FontAdvanceTable[009]: 11c
+ FontAdvanceTable[010]: 11c
+ FontAdvanceTable[011]: 289
+ FontAdvanceTable[012]: 272
+ FontAdvanceTable[013]: 191
+ FontAdvanceTable[014]: 25e
+ FontAdvanceTable[015]: 25e
+ FontBoundsTable: (not used)
+ RECT:  (0,0)x(0,0):1
+ RECT:  (100,-746)x(682,0):11
+ RECT:  (67,-760)x(593,14):11
+ RECT:  (-3,-746)x(628,0):11
+ RECT:  (61,-573)x(534,14):11
+ RECT:  (56,-573)x(499,14):11
+ RECT:  (56,-778)x(557,14):11
+ RECT:  (56,-573)x(575,14):11
+ RECT:  (23,-778)x(380,0):11
+ RECT:  (96,-778)x(188,0):11
+ RECT:  (96,-778)x(188,0):11
+ RECT:  (93,-573)x(562,0):11
+ RECT:  (56,-573)x(570,14):11
+ RECT:  (27,-719)x(377,0):11
+ RECT:  (29,-560)x(572,0):11
+ RECT:  (30,-560)x(575,213):11
+ KerningCount: 0
+
+Offset: 1272 (0x04f8)
+Block type: 11 (SWF_DEFINETEXT)
+Block length: 45
+
+ CharacterID: 1
+ RECT:  (0,0)x(4137,2005):14
+  Matrix:
+   TranslateX      0 TranslateY      0
+ GlyphBits: 4
+ AdvanceBits: 9
+ TextRecords: 2
+ TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 1   StyleFlagHasColor: 1   StyleFlagHasYOffset: 1   StyleFlagHasXOffset: 1
+  FontID: 3
+ RGBA: ( 0, 0,ff,ff)
+  XOffset: 2000   YOffset: 2000
+  TextHeight: 400
+  GlyphCount: 11
+   GlyphIndex[0] = 0002    GlyphAdvance[0] = 00fd
+   GlyphIndex[0] = 000d    GlyphAdvance[0] = 009c
+   GlyphIndex[0] = 0004    GlyphAdvance[0] = 00f4
+   GlyphIndex[0] = 000d    GlyphAdvance[0] = 009c
+   GlyphIndex[0] = 0009    GlyphAdvance[0] = 006e
+   GlyphIndex[0] = 0005    GlyphAdvance[0] = 00db
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 007e
+   GlyphIndex[0] = 0003    GlyphAdvance[0] = 00f4
+   GlyphIndex[0] = 0007    GlyphAdvance[0] = 00f6
+   GlyphIndex[0] = 000e    GlyphAdvance[0] = 00ec
+   GlyphIndex[0] = 000d    GlyphAdvance[0] = 009c
+ TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
+
+Offset: 1319 (0x0527)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 1327 (0x052f)
+Block type: 37 (SWF_DEFINEEDITTEXT)
+Block length: 40
+
+ CharacterID: 2
+ RECT:  (-40,-40)x(7240,440):14
+ Flags:  HasText: 1  WordWrap: 0  Multiline: 0  Password: 0  ReadOnly: 1
+         HasTextColor: 1  HasMaxLength: 0  HasFont: 1  HasFontClass: 0  AutoSize: 0  HasLayout: 0
+         NoSelect: 0  Border: 0  WasStatic: 0  HTML: 0  UseOutlines: 1
+ Font:  FontID: 3  FontHeight: 400
+ RGBA: (ff, 0, 0,ff)
+ VariableName: 
+ InitialText: Readonly Textfield
+
+Offset: 1369 (0x0559)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 10
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 2
+ CharacterID: 2
+  Matrix:
+   TranslateX   2000 TranslateY   2400
+
+Offset: 1381 (0x0565)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 1383 (0x0567)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

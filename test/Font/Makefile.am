@@ -14,19 +14,22 @@ C_PROGS =		\
 	test01		\
 	test02		\
 	test03		\
-	test04	
+	test04		\
+	test05	
 
 if USE_CXX
 CXX_PROGS =		\
 	test01-cxx	\
 	test02-cxx	\
 	test03-cxx	\
-	test04-cxx
+	test04-cxx	\
+	test05-cxx
 
 test01_cxx_SOURCES = test01-cxx.C
 test02_cxx_SOURCES = test02-cxx.C
 test03_cxx_SOURCES = test03-cxx.C
 test04_cxx_SOURCES = test04-cxx.C
+test05_cxx_SOURCES = test05-cxx.C
 endif
 
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
@@ -48,6 +51,8 @@ EXTRA_DIST = 		\
 	test04.php	\
 	test04.pl	\
 	test04.py	\
+	test05.ref	\
+	test05.pl	\
 	TestList
 
 check_PROGRAMS = \
@@ -57,6 +62,7 @@ CLEANFILES = dotests php.ini \
 	test01.swf \
 	test02.swf \
 	test03.swf \
-	test04.swf
+	test04.swf \
+	test05.swf
 
 include ../Makefile.inc
