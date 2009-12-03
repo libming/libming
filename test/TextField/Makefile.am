@@ -27,7 +27,9 @@ TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
 	test01.ref	\
+	test01.pl	\
 	test02.ref	\
+	test02.pl	\
 	TestList
 
 check_PROGRAMS = \
