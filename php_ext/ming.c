@@ -5711,6 +5711,21 @@ PHP_METHOD(swftextfield, setBounds)
 }
 /* }}} */
 
+/* {{{ proto void swftextfield::setFlags(int flags)
+   Sets the flags for this textfield */
+PHP_METHOD(swftextfield, setFlags)
+{
+	long flags;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
+		return;
+	}
+
+	SWFTextField_setFlags(getTextField(getThis() TSRMLS_CC), flags);
+
+}
+/* }}} */
+
 /* {{{ proto void swftextfield::align(int alignment)
    Sets the alignment of this textfield */
 PHP_METHOD(swftextfield, align)
@@ -5933,6 +5948,7 @@ static zend_function_entry swftextfield_functions[] = {
 	PHP_ME(swftextfield, __construct,     NULL, 0)
 	PHP_ME(swftextfield, setFont,         NULL, 0)
 	PHP_ME(swftextfield, setBounds,       NULL, 0)
+	PHP_ME(swftextfield, setFlags,        NULL, 0)
 	PHP_ME(swftextfield, align,           NULL, 0)
 	PHP_ME(swftextfield, setHeight,       NULL, 0)
 	PHP_ME(swftextfield, setLeftMargin,   NULL, 0)
