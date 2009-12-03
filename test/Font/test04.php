@@ -16,7 +16,7 @@ $t->setColor(0x00, 0x00, 0xff);
 $t->moveTo(100, 100);
 $t->addString("1234567890");
 
-$tf = new SWFTextField(1);
+$tf = new SWFTextField();
 $tf->setFont($f);
 $tf->setHeight(20);
 $tf->setColor(0xff, 0x00, 0x00);
