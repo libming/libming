@@ -1,0 +1,24 @@
+#!/usr/bin/php -c php.ini
+
+<?php
+
+$srcdir = $argv[1];
+$mediadir = $srcdir . "/../Media";
+
+$m = new SWFMovie();
+
+$f2 = new SWFFont($mediadir . "/font01.fdb");
+$f3 = new SWFFont($mediadir . "/test.ttf");
+
+$t = new SWFText(2);
+$t->setFont($f2);
+$t->setHeight(20);
+$t->setColor(0x00, 0x00, 0x00, 0xff);
+$t->moveTo(10, 20); 
+$t->addString("abc");
+
+$m->add($t);
+$m->nextFrame(); 
+
+$m->save("test03.swf");
+?>
