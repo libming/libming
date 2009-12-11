@@ -1,11 +1,13 @@
-0.5.0 - ??
+0.4.3 - ??
 
-	* fixed SWFMatrix scaling if scale = 0.0
-	* added delete and delete2 support in asm blocks
-	* a lot of updates and improvements in the Perl interface
-	* a lot of documentation (pod) was added to Perl files
+	* Fixed SWFMatrix scaling if scale = 0.0
+	* Added delete and delete2 support in asm blocks
+	* A lot of updates and improvements in the Perl interface
+	* A lot of documentation (pod) was added to Perl files
 	* Support for manually specifying MP3 delaySeek for SWFSound
-	  and SWFSoundStream
+	  and SWFSoundStream 
+    * Fix sharing of fonts between static and dynamic texts 
+    * Fix support for movie-bound init actions 
 
 0.4.0.rc2 - 2008-09-17
 
