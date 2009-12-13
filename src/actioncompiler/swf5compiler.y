@@ -1175,7 +1175,7 @@ function_call
 		  bufferConcat($$, $5);
 		  bufferWriteOp($$, SWFACTION_STRINGCONCAT); }
 
-	| SUBSTRING '(' expr ',' expr ',' expr ')'
+	| SUBSTR '(' expr ',' expr ',' expr ')'
 		{ $$ = $3;
 		  bufferConcat($$, $5);
 		  bufferConcat($$, $7);
