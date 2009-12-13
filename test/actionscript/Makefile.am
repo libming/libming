@@ -34,6 +34,7 @@ AS_TESTS = \
 	With.as:6		\
 	switch.as:6		\
 	getURL2.as:6		\
+	substr.as:6		\
 	for.as:6
 
 AS_TEST_FILES = \
@@ -94,6 +95,7 @@ EXTRA_DIST = 		\
 	switch.ref	\
 	getURL2.ref	\
 	for.ref		\
+	substr.ref	\
 	$(AS_TEST_FILES)
 
 CLEANFILES = *.pp *.swf

@@ -1,0 +1,78 @@
+File version: 6
+File size: 185
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 155
+
+ 28 Actions
+    26:SWFACTION_CONSTANTPOOL
+     [000] a
+     [001] a string
+     [002] b1
+     [003] b2
+     [004] substr
+     [005] b3
+     [006] substring
+    68:SWFACTION_PUSH
+     [000]   Constant: 0 "a"
+     [001]   Constant: 1 "a string"
+    75:SWFACTION_SETVARIABLE
+    76:SWFACTION_PUSH
+     [000]   Constant: 2 "b1"
+     [001]   Constant: 0 "a"
+    83:SWFACTION_GETVARIABLE
+    84:SWFACTION_PUSH
+     [000]   Integer: 0
+     [001]   Integer: 1
+    97:SWFACTION_SUBSTRING
+    98:SWFACTION_SETVARIABLE
+    99:SWFACTION_PUSH
+     [000]   Constant: 3 "b2"
+     [001]   Integer: 1
+     [002]   Integer: 0
+     [003]   Integer: 2
+     [004]   Constant: 0 "a"
+    121:SWFACTION_GETVARIABLE
+    122:SWFACTION_PUSH
+     [000]   Constant: 4 "substr"
+    127:SWFACTION_CALLMETHOD
+    128:SWFACTION_SETVARIABLE
+    129:SWFACTION_PUSH
+     [000]   Constant: 5 "b3"
+     [001]   Integer: 1
+     [002]   Integer: 0
+     [003]   Integer: 2
+     [004]   Constant: 0 "a"
+    151:SWFACTION_GETVARIABLE
+    152:SWFACTION_PUSH
+     [000]   Constant: 6 "substring"
+    157:SWFACTION_CALLMETHOD
+    158:SWFACTION_SETVARIABLE
+    159:SWFACTION_PUSH
+     [000]   Constant: 2 "b1"
+    164:SWFACTION_GETVARIABLE
+    165:SWFACTION_TRACE
+    166:SWFACTION_PUSH
+     [000]   Constant: 3 "b2"
+    171:SWFACTION_GETVARIABLE
+    172:SWFACTION_TRACE
+    173:SWFACTION_PUSH
+     [000]   Constant: 5 "b3"
+    178:SWFACTION_GETVARIABLE
+    179:SWFACTION_TRACE
+    180:SWFACTION_END
+
+Offset: 181 (0x00b5)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 183 (0x00b7)
+Block type: 0 (SWF_END)
+Block length: 0
+
+
