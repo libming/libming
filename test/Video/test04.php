@@ -1,4 +1,4 @@
-#!/usr/bin/php -c php.ini
+#!/usr/bin/php -c.
 <?php
 
 $srcdir = $argv[1];
