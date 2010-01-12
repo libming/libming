@@ -29,11 +29,11 @@ sub usage()
 	exit(1);
 }
 
-if ( ! $SRCDIR )
+if ( ! $SRCDIR || ! $TOP_BUILDDIR || ! $BUILDDIR )
 {
 	print STDERR "This script is intended for use by automake.\n";
-	print STDERR "You must export the 'srcdir' variable in order\n";
-	print STDERR "to run it manually.\n";
+	print STDERR "You must export the 'srcdir', 'builddir' and 'top_builddir' variables\n";
+	print STDERR "in order to run it manually.\n";
 	exit(1);
 }
 
