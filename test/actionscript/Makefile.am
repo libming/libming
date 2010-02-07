@@ -64,6 +64,7 @@ AS_TEST_FILES = \
 	With.as		\
 	switch.as	\
 	getURL2.as	\
+	substr.as	\
 	for.as	
 	
 
