@@ -338,9 +338,23 @@ fi
 
 CFLAGS="$CFLAGS -Wall"
 MACHINE=`uname -m`
-if test "$MACHINE" = "x86_64"; then
+case "$MACHINE" in
+"x86_64")
 	CFLAGS="$CFLAGS -fPIC"
-fi
+	;;
+"alpha")
+	CFLAGS="$CFLAGS -fPIC"
+	;;
+"ia64")
+	CFLAGS="$CFLAGS -fPIC"
+	;;
+"hppa")
+	CFLAGS="$CFLAGS -fPIC"
+	;;
+*)
+	;;
+esac
+	
 
 dnl -------------------------------------------
 dnl Byteorder check
