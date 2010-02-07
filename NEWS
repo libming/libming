@@ -1,4 +1,6 @@
-0.4.3 - ??
+0.4.4 - ???
+
+0.4.3 - 2010-02-06
 
 	* Fixed SWFMatrix scaling if scale = 0.0
 	* Added delete and delete2 support in asm blocks

@@ -1,7 +1,55 @@
-2009-12-03 19:55  strk
+2010-01-12 09:23  strk
 
-	* test/TextField/: Makefile.am, test01.php, test02.php: Add PHP
-	  version of all tests in TextField suite
+	* test/: Action/test01.php, Action/test02.php, Bitmap/test01.php,
+	  BrowserFont/test01.php, Button/test02.php, Filter/test01.php,
+	  Filter/test02.php, Filter/test03.php, Filter/test04.php,
+	  Filter/test05.php, Font/test01.php, Font/test02.php,
+	  Font/test03.php, Font/test04.php, Font/test05.php,
+	  Morph/test01.php, Morph/test02.php, Movie/Background/test01.php,
+	  Movie/Background/test02.php, Movie/Background/test03.php,
+	  Movie/Dimension/test01.php, Movie/FrameLabel/test01.php,
+	  Movie/FrameLabel/test02.php, Movie/NumFrames/test01.php,
+	  Movie/Protect/test01.php, Movie/Protect/test02.php,
+	  Movie/Rate/test01.php, Movie/add/test01.php,
+	  Movie/add/test02.php, Movie/addMetadata/test01.php,
+	  Movie/assignSymbol/test01.php, Movie/defineScene/test01.php,
+	  Movie/importCharacter/test01.php,
+	  Movie/importCharacter/test02.php, Movie/new/test01.php,
+	  Movie/new/test02.php, Movie/new/test03.php, Movie/new/test04.php,
+	  Movie/new/test05.php, Movie/new/test06.php, Movie/new/test07.php,
+	  Movie/nextFrame/test01.php, Movie/nextFrame/test02.php,
+	  Movie/replace/test01.php, Movie/replace/test02.php,
+	  Movie/setNetworkAccess/test01.php,
+	  Movie/setNetworkAccess/test02.php,
+	  Movie/setScriptLimits/test01.php,
+	  Movie/setSoundStream/test01.php, Movie/setSoundStream/test02.php,
+	  Movie/setSoundStream/test03.php, Movie/setSoundStream/test04.php,
+	  Movie/setTabIndex/test01.php, PrebuiltClip/test01.php,
+	  Shape/test01.php, Shape/test02.php, SoundStream/test01.php,
+	  SoundStream/test02.php, Text/test01.php, Text/test02.php,
+	  Text/test03.php, TextField/test01.php, TextField/test02.php,
+	  Video/test01.php, Video/test02.php, Video/test03.php,
+	  Video/test04.php, Video/test05.php, Video/test06.php: Pass a
+	  single argument in shebang magic as two are not supported on some
+	  systems
+
+2010-01-12 08:37  strk
+
+	* test/dotests.pl: Add more runtime sanity checks
+
+2009-12-13 14:07  strk
+
+	* test/actionscript/: Makefile.am, substr.as, substr.ref: Add
+	  automated testcase for using ACTION_SUBSTRING from AS code
+
+2009-12-13 14:01  strk
+
+	* src/actioncompiler/swf5compiler.y: Fix typo breaking use of
+	  'substr' as a way to use the legacy substring
+
+2009-12-11 09:24  strk
+
+	* NEWS: Updated
 
 2009-12-03 19:53  strk
 
