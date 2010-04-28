@@ -1037,7 +1037,7 @@ static int bufferWriteClassMethods(Buffer out, ASClass clazz)
 		if(!func || !func->name)
 			continue;
 	
-		if(strcmp(func->name, clazz->name) != 0)
+		if(strcmp(func->name, clazz->name) == 0)
 		{
 			SWF_error("only one class constructor allowed\n");
 		}

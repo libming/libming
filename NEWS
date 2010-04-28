@@ -1,5 +1,8 @@
 0.4.4 - ???
 
+	* Fix bug in 'makeswf' failing to catch some compile errors (bugzilla #94)
+	* Fix bug in action compiler dealing with class methods (bugzilla #94)
+
 0.4.3 - 2010-02-06
 
 	* Fixed SWFMatrix scaling if scale = 0.0
@@ -8,8 +11,8 @@
 	* A lot of documentation (pod) was added to Perl files
 	* Support for manually specifying MP3 delaySeek for SWFSound
 	  and SWFSoundStream 
-    * Fix sharing of fonts between static and dynamic texts 
-    * Fix support for movie-bound init actions 
+	* Fix sharing of fonts between static and dynamic texts 
+	* Fix support for movie-bound init actions 
 
 0.4.0.rc2 - 2008-09-17
 
