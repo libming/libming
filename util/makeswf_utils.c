@@ -63,6 +63,7 @@ static void printCompileMessage(SWFMsgFunc);
 
 /* data */
 static char lastcompilemessage[MAXERRORMSG];
+static int lastcompilefailed = 0;
 static int swfversion = DEFSWFVERSION;
 
 #define MAXCPPARGS 1024
@@ -127,7 +128,7 @@ makeswf_compile_source(const char* filename, const char* ppfile, int debug)
 	printf("Compiling `%s'... ", filename);
 	ac = newSWFAction(code);
 	SWFAction_setDebug(ac, debug);
-	if (SWFAction_compile(ac, swfversion, &length))
+	if (SWFAction_compile(ac, swfversion, &length) || lastcompilefailed)
 	{
 		printf("failed:\n"); 
 		printCompileMessage(old_error_func);
@@ -174,6 +175,8 @@ compileError(const char *fmt, ...)
 	size_t msglen;
 
 	va_start (ap, fmt);
+
+	lastcompilefailed++;
 
 	/*
 	 * This is a GNU extension.
@@ -259,6 +262,9 @@ makeswf_preprocess (const char *file, const char *out)
 /**************************************************************
  *
  * $Log$
+ * Revision 1.14  2010/04/28 12:09:58  strk
+ * Don't trust SWFAction_compile return code to be the only sign of failure.
+ *
  * Revision 1.13  2009/09/08 22:26:17  strk
  * Update copyright notice (and FSF address)
  *
