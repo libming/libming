@@ -51,7 +51,7 @@ static png_structp openPngFromFile(FILE *fp)
 
 	if(fread(header, 1, 8, fp) != 8)
 		return NULL;
-	if(!png_check_sig(header, 8))
+	if(png_sig_cmp(header, 0, 8))
 		return NULL;
 	result = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if(!result)
@@ -71,7 +71,7 @@ png_structp openPngFromInput(SWFInput input)
 	
 	if(SWFInput_read(input, header, 8) != 8)
 		return NULL;
-	if(!png_check_sig(header, 8))
+	if(png_sig_cmp(header, 0, 8))
 		return NULL;
 	result = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if(!result)
