@@ -103,9 +103,9 @@ if ( $VERBOSE ) {
 
 $failures=0;
 
-sub doswftest($$$)
+sub doswftest($$$$)
 {
-	local($testswf,$testref,$testbuilder)=@_;
+	local($testswf,$testref,$testbuilder,$binding)=@_;
 
 	#$testswf = "$test.swf";
 	#$testref = "$test.ref";
@@ -177,17 +177,17 @@ sub doswftest($$$)
 
 
 	if( ! -r $testswf ) {
-		printf  STDERR "$test failed. $testswf not created\n";
+		printf  STDERR "$test failed ($binding). $testswf not created\n";
 		++$failures;
 		return 0;
 	}
 	if( ! -r $testref ) {
-		printf  STDERR "$test failed. $testref does not exist\n";
+		printf  STDERR "$test failed ($binding). $testref does not exist\n";
 		++$failures;
 		return 0;
 	}
 	if( system("$TOP_BUILDDIR/util/listswf $testswf | diff - $testref") ) {
-		printf  STDERR "$test failed. problem comparing against $testref\n";
+		printf  STDERR "$test failed ($binding). Problem comparing against $testref\n";
 		++$failures;
 		return 0;
 	}
@@ -222,27 +222,32 @@ sub dotestset($$$)
 			if ( $do_test_c ) {
 				$testbuilder = $test;
 				#print "TESTBUILDER: $testbuilder\n";
-				doswftest($testswf, $testref, $testbuilder);
+				doswftest($testswf, $testref, $testbuilder,
+					'c');
 			}
 
 			if ( $do_test_cxx ) {
 				$testbuilder = $test."-cxx";
-				doswftest($testswf, $testref, $testbuilder);
+				doswftest($testswf, $testref, $testbuilder,
+					'c++');
 			}
 
 			if ( $do_test_php ) {
 				$testbuilder = $srcdir."/".$test.".php";
-				doswftest($testswf, $testref, $testbuilder);
+				doswftest($testswf, $testref, $testbuilder,
+					'php');
 			}
 
 			if ( $do_test_perl ) {
 				$testbuilder = $srcdir."/".$test.".pl";
-				doswftest($testswf, $testref, $testbuilder);
+				doswftest($testswf, $testref, $testbuilder,
+					'perl');
 			}
 
 			if ( $do_test_python ) {
 				$testbuilder = $srcdir."/".$test.".py";
-				doswftest($testswf, $testref, $testbuilder);
+				doswftest($testswf, $testref, $testbuilder,
+					'python');
 			}
 		} elsif ( $test[1] eq "dir" ) {
 			$subdir=$test[0];
