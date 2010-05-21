@@ -2,6 +2,7 @@
 
 	* Fix bug in 'makeswf' failing to catch some compile errors (bugzilla #94)
 	* Fix bug in action compiler dealing with class methods (bugzilla #94)
+    * Add support for libpng > 1.4 (bugzilla #96)
 
 0.4.3 - 2010-02-06
 
