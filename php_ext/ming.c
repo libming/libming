@@ -5624,7 +5624,7 @@ static zend_function_entry swftext_functions[] = {
    Creates a new SWFTextField object */
 PHP_METHOD(swftextfield, __construct)
 {
-	long flags;
+	long flags = 0;
 	SWFTextField field = newSWFTextField();
 	int ret = zend_list_insert(field, le_swftextfieldp);
 
