@@ -1,0 +1,196 @@
+File version: 5
+File size: 418
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 48 (SWF_DEFINEFONT2)
+Block length: 347
+
+ FontID: 2
+ FontFlagsHasLayout: 1
+ FontFlagsShiftJis: 0
+ FontFlagsSmallText: 1
+ FontFlagsFlagANSI: 0
+ FontFlagsWideOffsets: 0
+ FontFlagsWideCodes: 1
+ FontFlagsFlagsItalics: 0
+ FontFlagsFlagsBold: 0
+ LanguageCode: 0
+ FontNameLen: 20
+ FontName: Bitstream Vera Serif
+ NumGlyphs: 3
+ OffsetTable[000]: 8
+ OffsetTable[001]: 3f
+ OffsetTable[002]: b4
+ CodeTableOffset: 117
+ Shape[000]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 10  MoveDeltaX: 205  MoveDeltaY: -270
+ Straight EdgeRecord: (8) - (274, 0)
+ Straight EdgeRecord: (8) - (-137, -355)
+ Straight EdgeRecord: (8) - (-137, 355)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 4  MoveDeltaX: -6  MoveDeltaY: 0
+ Straight EdgeRecord: (5) - (0, -53)
+ Straight EdgeRecord: (6) - (65, 0)
+ Straight EdgeRecord: (9) - (266, -693)
+ Straight EdgeRecord: (6) - (84, 0)
+ Straight EdgeRecord: (9) - (267, 693)
+ Straight EdgeRecord: (6) - (73, 0)
+ Straight EdgeRecord: (5) - (0, 53)
+ Straight EdgeRecord: (8) - (-271, 0)
+ Straight EdgeRecord: (5) - (0, -53)
+ Straight EdgeRecord: (6) - (83, 0)
+ Straight EdgeRecord: (7) - (-63, -164)
+ Straight EdgeRecord: (8) - (-314, 0)
+ Straight EdgeRecord: (7) - (-62, 164)
+ Straight EdgeRecord: (6) - (82, 0)
+ Straight EdgeRecord: (5) - (0, 53)
+ Straight EdgeRecord: (7) - (-210, 0)
+ Shape[001]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 9  MoveDeltaX: 253  MoveDeltaY: -53
+ Straight EdgeRecord: (7) - (149, 0)
+ Curved EdgeRecord: 6 Control(90,0) Anchor(42,-39)
+ Curved EdgeRecord: 6 Control(41,-39) Anchor(0,-85)
+ Curved EdgeRecord: 6 Control(0,-84) Anchor(-41,-39)
+ Curved EdgeRecord: 6 Control(-41,-39) Anchor(-91,0)
+ Straight EdgeRecord: (7) - (-149, 0)
+ Straight EdgeRecord: (8) - (0, 325)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 10  MoveDeltaX: 253  MoveDeltaY: -431
+ Straight EdgeRecord: (6) - (127, 0)
+ Curved EdgeRecord: 6 Control(82,0) Anchor(37,-31)
+ Curved EdgeRecord: 6 Control(38,-32) Anchor(0,-68)
+ Curved EdgeRecord: 6 Control(0,-68) Anchor(-38,-31)
+ Curved EdgeRecord: 6 Control(-37,-32) Anchor(-82,0)
+ Straight EdgeRecord: (6) - (-127, 0)
+ Straight EdgeRecord: (8) - (0, 262)
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 0 StateMoveTo: 1
+   MoveBits: 7  MoveDeltaX: 56  MoveDeltaY: 0
+ Straight EdgeRecord: (5) - (0, -53)
+ Straight EdgeRecord: (6) - (95, 0)
+ Straight EdgeRecord: (9) - (0, -640)
+ Straight EdgeRecord: (6) - (-95, 0)
+ Straight EdgeRecord: (5) - (0, -53)
+ Straight EdgeRecord: (8) - (369, 0)
+ Curved EdgeRecord: 6 Control(113,0) Anchor(57,46)
+ Curved EdgeRecord: 6 Control(57,46) Anchor(0,92)
+ Curved EdgeRecord: 6 Control(0,67) Anchor(-40,39)
+ Curved EdgeRecord: 6 Control(-39,40) Anchor(-77,9)
+ Curved EdgeRecord: 6 Control(95,12) Anchor(49,49)
+ Curved EdgeRecord: 6 Control(50,48) Anchor(0,82)
+ Curved EdgeRecord: 6 Control(0,111) Anchor(-70,53)
+ Curved EdgeRecord: 7 Control(-70,52) Anchor(-149,0)
+ Straight EdgeRecord: (8) - (-345, 0)
+ Shape[002]
+ NumFillBits: 1
+ NumLineBits: 0
+ StyleChangeRecord:
+  StateNewStyles: 0 StateLineStyle: 0  StateFillStyle1: 0
+  StateFillStyle0: 1 StateMoveTo: 1
+   FillStyle0: 1
+   MoveBits: 11  MoveDeltaX: 722  MoveDeltaY: -197
+ Curved EdgeRecord: 6 Control(-33,104) Anchor(-78,54)
+ Curved EdgeRecord: 6 Control(-78,53) Anchor(-119,0)
+ Curved EdgeRecord: 6 Control(-73,0) Anchor(-62,-24)
+ Curved EdgeRecord: 5 Control(-63,-25) Anchor(-48,-49)
+ Curved EdgeRecord: 6 Control(-56,-56) Anchor(-28,-71)
+ Curved EdgeRecord: 6 Control(-27,-71) Anchor(0,-90)
+ Curved EdgeRecord: 7 Control(0,-174) Anchor(101,-107)
+ Curved EdgeRecord: 7 Control(100,-107) Anchor(165,0)
+ Curved EdgeRecord: 6 Control(61,0) Anchor(69,16)
+ Curved EdgeRecord: 6 Control(69,16) Anchor(79,33)
+ Straight EdgeRecord: (7) - (0, 172)
+ Straight EdgeRecord: (5) - (-56, 0)
+ Curved EdgeRecord: 6 Control(-19,-94) Anchor(-56,-45)
+ Curved EdgeRecord: 6 Control(-55,-44) Anchor(-101,0)
+ Curved EdgeRecord: 6 Control(-119,0) Anchor(-62,85)
+ Curved EdgeRecord: 7 Control(-61,84) Anchor(0,165)
+ Curved EdgeRecord: 7 Control(0,164) Anchor(61,85)
+ Curved EdgeRecord: 6 Control(62,84) Anchor(119,0)
+ Curved EdgeRecord: 6 Control(84,0) Anchor(54,-39)
+ Curved EdgeRecord: 6 Control(54,-40) Anchor(24,-79)
+ Straight EdgeRecord: (6) - (92, 0)
+ CodeTable[000]: 0041
+ CodeTable[001]: 0042
+ CodeTable[002]: 0043
+ FontAscent: 950
+ FontDecent: 241
+ FontLeading: 179
+ FontAdvanceTable[000]: 2e3
+ FontAdvanceTable[001]: 2f0
+ FontAdvanceTable[002]: 30f
+ FontBoundsTable: (not used)
+ RECT:  (-6,-746)x(749,0):11
+ RECT:  (56,-746)x(690,0):11
+ RECT:  (57,-760)x(722,14):11
+ KerningCount: 0
+
+Offset: 373 (0x0175)
+Block type: 11 (SWF_DEFINETEXT)
+Block length: 31
+
+ CharacterID: 1
+ RECT:  (0,0)x(631,2002):12
+  Matrix:
+   TranslateX      0 TranslateY      0
+ GlyphBits: 2
+ AdvanceBits: 9
+ TextRecords: 2
+ TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 1   StyleFlagHasColor: 1   StyleFlagHasYOffset: 1   StyleFlagHasXOffset: 1
+  FontID: 2
+ RGBA: ( 0, 0, 0,ff)
+  XOffset: 200   YOffset: 2000
+  TextHeight: 200
+  GlyphCount: 3
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 00f4
+   GlyphIndex[0] = 0001    GlyphAdvance[0] = 002e
+   GlyphIndex[0] = 0002    GlyphAdvance[0] = 0098
+ TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
+
+Offset: 406 (0x0196)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 414 (0x019e)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 416 (0x01a0)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

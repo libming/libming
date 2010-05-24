@@ -183,7 +183,7 @@ completeSWFFontCharacter(SWFBlock block)
 			SWFOutput_writeRect(buffer, SWFFont_getGlyphBounds(font, glyph));
 			SWFOutput_byteAlign(buffer);
 		}
-		SWFOutput_writeUInt16(buffer, 0); /* no kerning */
+		SWFOutput_writeUInt16(buffer, 0); /* no kerning FIXME ! */
 	}
 	return SWFOutput_getLength(inst->out);
 }
@@ -293,6 +293,7 @@ newSWFFont()
 
 	font->kernCount = 0;
 	font->kernTable.k = NULL;
+	font->kernTable.w = NULL;
 
 	font->shapes = NULL;
 
@@ -708,14 +709,13 @@ SWFFontCharacter_getNGlyphs(SWFFontCharacter font)
 
 
 int
-SWFFont_getScaledWideStringWidth(SWFFont font,
-														 const unsigned short* string, int len)
+SWFFont_getScaledWideStringWidth(SWFFont font,const unsigned short* string, int len)
 {
 	/* return length of given string in whatever units these are we're using */
 
-	int i, j;
+	int i;
 	int width = 0;
-	int glyph, glyph2;
+	int glyph;
 
 	for ( i=0; i<len; ++i )
 	{
@@ -728,37 +728,9 @@ SWFFont_getScaledWideStringWidth(SWFFont font,
 			width += font->advances[glyph];
 
 		// looking in kernTable
-		// XXX - kernTable should be sorted to make this faster
 
-		if ( i < len-1 && font->kernTable.k )
-		{
-			glyph2 = SWFFont_findGlyphCode(font, string[i+1]);
-
-			if ( glyph2 == -1 )
-				continue; // XXX - ???
-
-			j = font->kernCount;
-
-			if(font->flags & SWF_FONT_WIDECODES)
-				while ( --j >= 0 )
-				{
-					if ( glyph == font->kernTable.w[j].code1 &&
-							 glyph2 == font->kernTable.w[j].code2 )
-					{
-						width += font->kernTable.w[j].adjustment;
-						break;
-					}
-				}
-			else
-				while ( --j >= 0 )
-				{
-					if ( glyph == font->kernTable.k[j].code1 &&
-							 glyph2 == font->kernTable.k[j].code2 )
-					{
-						width += font->kernTable.k[j].adjustment;
-						break;
-					}
-				}
+		if ( i < len-1 ) {
+			width += SWFFont_getCharacterKern(font, string[i], string[i+1]);
 		}
 	}
 
@@ -860,20 +832,16 @@ SWFFont_getCharacterAdvance(SWFFont font, unsigned short glyphcode)
 
 
 int
-SWFFont_getCharacterKern(SWFFont font,
-												 unsigned short code1, unsigned short code2)
+SWFFont_getCharacterKern(SWFFont font, unsigned short code1, unsigned short code2)
 {
 	int j = font->kernCount;
 
-	if( !font->kernTable.k )
-		return 0;
-
-	if ( code1 >= font->nGlyphs || code2 >= font->nGlyphs )
-		SWF_error("SWFFont_getCharacterKern: glyphcode >= nGlyphs");
-
 	// XXX - kernTable should be sorted to make this faster
 
-	if(font->flags & SWF_FONT_WIDECODES)
+	if(font->flags & SWF_FONT_WIDECODES) {
+		if( !font->kernTable.w ) {
+			return 0;
+		}
 		while ( --j >= 0 )
 		{
 			if ( code1 == font->kernTable.w[j].code1 &&
@@ -882,7 +850,10 @@ SWFFont_getCharacterKern(SWFFont font,
 				return font->kernTable.w[j].adjustment;
 			}
 		}
-	else
+	} else {
+		if( !font->kernTable.k ) {
+			return 0;
+		}
 		while ( --j >= 0 )
 		{
 			if ( code1 == font->kernTable.k[j].code1 &&
@@ -891,7 +862,7 @@ SWFFont_getCharacterKern(SWFFont font,
 				return font->kernTable.k[j].adjustment;
 			}
 		}
-
+	}
 	return 0;
 }
 
