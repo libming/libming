@@ -1445,7 +1445,11 @@ struct SWF_ENABLEDEBUGGER2
 };
 
 struct SWF_END
-{ /* empty tag */ };
+{
+#if defined(__SUNPRO_C)
+int empty; // See http://bugs.libming.org/show_bug.cgi?id=103
+#endif
+};
 
 struct SWF_EXPORTASSETS
 {
@@ -1820,7 +1824,9 @@ struct ABC_RTQNAME
 
 struct ABC_RTQNAME_L
 {
-	// empty
+#if defined(__SUNPRO_C)
+int empty; // See http://bugs.libming.org/show_bug.cgi?id=103
+#endif
 };
 
 struct ABC_MULTINAME
