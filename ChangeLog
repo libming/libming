@@ -1,468 +1,598 @@
-2010-01-12 09:23  strk
+2010-06-04 15:27  strk
 
-	* test/: Action/test01.php, Action/test02.php, Bitmap/test01.php,
-	  BrowserFont/test01.php, Button/test02.php, Filter/test01.php,
-	  Filter/test02.php, Filter/test03.php, Filter/test04.php,
-	  Filter/test05.php, Font/test01.php, Font/test02.php,
-	  Font/test03.php, Font/test04.php, Font/test05.php,
-	  Morph/test01.php, Morph/test02.php, Movie/Background/test01.php,
-	  Movie/Background/test02.php, Movie/Background/test03.php,
-	  Movie/Dimension/test01.php, Movie/FrameLabel/test01.php,
-	  Movie/FrameLabel/test02.php, Movie/NumFrames/test01.php,
-	  Movie/Protect/test01.php, Movie/Protect/test02.php,
-	  Movie/Rate/test01.php, Movie/add/test01.php,
-	  Movie/add/test02.php, Movie/addMetadata/test01.php,
-	  Movie/assignSymbol/test01.php, Movie/defineScene/test01.php,
-	  Movie/importCharacter/test01.php,
-	  Movie/importCharacter/test02.php, Movie/new/test01.php,
-	  Movie/new/test02.php, Movie/new/test03.php, Movie/new/test04.php,
-	  Movie/new/test05.php, Movie/new/test06.php, Movie/new/test07.php,
-	  Movie/nextFrame/test01.php, Movie/nextFrame/test02.php,
-	  Movie/replace/test01.php, Movie/replace/test02.php,
-	  Movie/setNetworkAccess/test01.php,
-	  Movie/setNetworkAccess/test02.php,
-	  Movie/setScriptLimits/test01.php,
-	  Movie/setSoundStream/test01.php, Movie/setSoundStream/test02.php,
-	  Movie/setSoundStream/test03.php, Movie/setSoundStream/test04.php,
-	  Movie/setTabIndex/test01.php, PrebuiltClip/test01.php,
-	  Shape/test01.php, Shape/test02.php, SoundStream/test01.php,
-	  SoundStream/test02.php, Text/test01.php, Text/test02.php,
-	  Text/test03.php, TextField/test01.php, TextField/test02.php,
-	  Video/test01.php, Video/test02.php, Video/test03.php,
-	  Video/test04.php, Video/test05.php, Video/test06.php: Pass a
-	  single argument in shebang magic as two are not supported on some
-	  systems
+	* src/movie.c (1.88): Allow exporting BUTTON and BUTTON2
+	  characters, thanks to Benjamin Wolsey for the patch. Will need a
+	  test in test/Button
 
-2010-01-12 08:37  strk
+2010-05-29 17:23  strk
 
-	* test/dotests.pl: Add more runtime sanity checks
+	* NEWS (1.71): indent
 
-2009-12-13 14:07  strk
+2010-05-24 18:40  strk
 
-	* test/actionscript/: Makefile.am, substr.as, substr.ref: Add
-	  automated testcase for using ACTION_SUBSTRING from AS code
+	* src/blocks/font.c (1.61), src/blocks/text.c (1.44),
+	  test/Font/.cvsignore (1.7), test/Font/Makefile.am (1.18),
+	  test/Font/TestList (1.7), test/Font/test06-cxx.C (1.1),
+	  test/Font/test06.c (1.1), test/Font/test06.ref (1.1),
+	  test/Media/font-kerntest.fdb (1.1): Use font kerning in static
+	  Text advance. Patch by Nick Lewis, see
+	  http://bugs.libming.org/show_bug.cgi?id=95
 
-2009-12-13 14:01  strk
+2010-05-23 23:47  strk
 
-	* src/actioncompiler/swf5compiler.y: Fix typo breaking use of
-	  'substr' as a way to use the legacy substring
+	* php_ext/ming.c (1.126): Properly initialize SWFTextField flags.
+	  Fixes bug #100.
 
-2009-12-11 09:24  strk
+2010-05-22 01:34  strk
 
-	* NEWS: Updated
+	* NEWS (1.70): Add libpng change
+
+2010-05-20 23:50  strk
+
+	* test/dotests.pl (1.21): More informations about failures
+
+2010-05-20 22:22  strk
+
+	* src/blocks/pngdbl.c (1.17): Drop use of deprecated libpng
+	  interface. Patch by Vikram J. Gurjar. See bug #96
+
+2010-05-20 21:38  strk
+
+	* config/.cvsignore (1.1), macros/.cvsignore (1.2): Some ignore
+	  files
+
+2010-05-20 21:35  strk
+
+	* test/LineStyle/TestList (1.3): Fix 'make check' for builds w/out
+	  png enabled
+
+2010-04-28 14:33  strk
+
+	* NEWS (1.69), src/actioncompiler/compile.c (1.55): Fix compiling
+	  class methods, patch by Benjamin Wolsey
+	  (http://bugs.libming.org/show_bug.cgi?id=94)
+
+2010-04-28 14:09  strk
+
+	* util/makeswf_utils.c (1.14): Don't trust SWFAction_compile return
+	  code to be the only sign of failure.
+
+2010-03-31 04:17  vapour
+
+	* .cvsignore (1.8): Added a meta data file created by Eclipse.
+
+2010-02-07 05:47  anderson
+
+	* configure.in (1.126.2.1), test/actionscript/Makefile.am
+	  (1.32.2.1): Pull a couple of fixes over to the 0.4 branch
+
+2010-02-07 05:36  anderson
+
+	* test/actionscript/Makefile.am (1.33): Need to includ substr.as in
+	  the distribution
+
+2010-02-07 05:08  anderson
+
+	* configure.in (1.127): Apply a fix from the Debian package to
+	  correctly set PIC for a wider variety of architectures.
+
+2010-02-07 01:14  anderson
+
+	* ChangeLog (1.101), NEWS (1.68): Release 0.4.3
+
+2010-01-12 15:23  strk
+
+	* test/: Action/test01.php (1.3), Action/test02.php (1.3),
+	  Bitmap/test01.php (1.3), BrowserFont/test01.php (1.4),
+	  Button/test02.php (1.3), Filter/test01.php (1.3),
+	  Filter/test02.php (1.3), Filter/test03.php (1.3),
+	  Filter/test04.php (1.3), Filter/test05.php (1.4), Font/test01.php
+	  (1.5), Font/test02.php (1.3), Font/test03.php (1.3),
+	  Font/test04.php (1.3), Font/test05.php (1.2), Morph/test01.php
+	  (1.2), Morph/test02.php (1.2), Movie/Background/test01.php (1.5),
+	  Movie/Background/test02.php (1.5), Movie/Background/test03.php
+	  (1.5), Movie/Dimension/test01.php (1.7),
+	  Movie/FrameLabel/test01.php (1.5), Movie/FrameLabel/test02.php
+	  (1.5), Movie/NumFrames/test01.php (1.7), Movie/Protect/test01.php
+	  (1.6), Movie/Protect/test02.php (1.5), Movie/Rate/test01.php
+	  (1.7), Movie/add/test01.php (1.5), Movie/add/test02.php (1.7),
+	  Movie/addMetadata/test01.php (1.3), Movie/assignSymbol/test01.php
+	  (1.4), Movie/defineScene/test01.php (1.3),
+	  Movie/importCharacter/test01.php (1.3),
+	  Movie/importCharacter/test02.php (1.3), Movie/new/test01.php
+	  (1.7), Movie/new/test02.php (1.7), Movie/new/test03.php (1.7),
+	  Movie/new/test04.php (1.7), Movie/new/test05.php (1.7),
+	  Movie/new/test06.php (1.3), Movie/new/test07.php (1.3),
+	  Movie/nextFrame/test01.php (1.6), Movie/nextFrame/test02.php
+	  (1.4), Movie/replace/test01.php (1.2), Movie/replace/test02.php
+	  (1.2), Movie/setNetworkAccess/test01.php (1.3),
+	  Movie/setNetworkAccess/test02.php (1.3),
+	  Movie/setScriptLimits/test01.php (1.3),
+	  Movie/setSoundStream/test01.php (1.5),
+	  Movie/setSoundStream/test02.php (1.4),
+	  Movie/setSoundStream/test03.php (1.4),
+	  Movie/setSoundStream/test04.php (1.3),
+	  Movie/setTabIndex/test01.php (1.3), PrebuiltClip/test01.php
+	  (1.3), Shape/test01.php (1.2), Shape/test02.php (1.2),
+	  SoundStream/test01.php (1.4), SoundStream/test02.php (1.4),
+	  Text/test01.php (1.3), Text/test02.php (1.3), Text/test03.php
+	  (1.2), TextField/test01.php (1.2), TextField/test02.php (1.2),
+	  Video/test01.php (1.5), Video/test02.php (1.3), Video/test03.php
+	  (1.3), Video/test04.php (1.3), Video/test05.php (1.3),
+	  Video/test06.php (1.4): Pass a single argument in shebang magic
+	  as two are not supported on some systems
+
+2010-01-12 14:37  strk
+
+	* test/dotests.pl (1.20): Add more runtime sanity checks
+
+2009-12-13 20:07  strk
+
+	* test/actionscript/: Makefile.am (1.32), substr.as (1.1),
+	  substr.ref (1.1): Add automated testcase for using
+	  ACTION_SUBSTRING from AS code
+
+2009-12-13 20:01  strk
+
+	* src/actioncompiler/swf5compiler.y (1.108): Fix typo breaking use
+	  of 'substr' as a way to use the legacy substring
+
+2009-12-11 15:24  strk
+
+	* ChangeLog (1.100), NEWS (1.67): Updated
+
+2009-12-03 19:55  strk
+
+	* test/TextField/: Makefile.am (1.5), test01.php (1.1), test02.php
+	  (1.1): Add PHP version of all tests in TextField suite
 
 2009-12-03 19:53  strk
 
-	* php_ext/ming.c: Add TextField.setFlags, to make compliant with
-	  other bindings and thus support decompiler better
+	* php_ext/ming.c (1.125): Add TextField.setFlags, to make compliant
+	  with other bindings and thus support decompiler better
 
 2009-12-03 19:45  strk
 
-	* test/Text/: Makefile.am, test03.php: Add PHP version of test03
+	* test/Text/: Makefile.am (1.9), test03.php (1.1): Add PHP version
+	  of test03
 
 2009-12-03 19:23  strk
 
-	* test/Text/: Makefile.am, test03.pl: Add missing perl test for
-	  Text
+	* test/Text/: Makefile.am (1.8), test03.pl (1.1): Add missing perl
+	  test for Text
 
 2009-12-03 19:20  strk
 
-	* test/TextField/: Makefile.am, test01.pl, test02.pl: While I was
-	  at it.. added perl version of tests for TextField too
+	* test/TextField/: Makefile.am (1.4), test01.pl (1.1), test02.pl
+	  (1.1): While I was at it.. added perl version of tests for
+	  TextField too
 
 2009-12-03 19:01  strk
 
-	* test/Font/: Makefile.am, test05.py: Python version of test05
+	* test/Font/: Makefile.am (1.17), test05.py (1.1): Python version
+	  of test05
 
 2009-12-03 18:57  strk
 
-	* test/Font/test04.php: Drop confusing argument passed to TextField
-	  constructor
+	* test/Font/test04.php (1.2): Drop confusing argument passed to
+	  TextField constructor
 
 2009-12-03 18:56  strk
 
-	* test/Font/: Makefile.am, test05.php: Add PHP version of test05
+	* test/Font/: Makefile.am (1.16), test05.php (1.1): Add PHP version
+	  of test05
 
 2009-12-02 23:44  strk
 
-	* test/Font/: .cvsignore, Makefile.am, TestList, test05-cxx.C,
-	  test05.c, test05.pl, test05.ref: C, C++ and perl versions of a
-	  test with mixed Text and readonly TextField (thanks Nick Lewis
-	  for providing the perl version)
+	* test/Font/: .cvsignore (1.6), Makefile.am (1.15), TestList (1.6),
+	  test05-cxx.C (1.1), test05.c (1.1), test05.pl (1.1), test05.ref
+	  (1.1): C, C++ and perl versions of a test with mixed Text and
+	  readonly TextField (thanks Nick Lewis for providing the perl
+	  version)
 
 2009-12-01 22:15  strk
 
-	* test/Font/: .cvsignore, Makefile.am, test04-cxx.C: C++ version of
-	  shared text/textfield font test
+	* test/Font/: .cvsignore (1.5), Makefile.am (1.14), test04-cxx.C
+	  (1.1): C++ version of shared text/textfield font test
 
 2009-12-01 22:05  strk
 
-	* test/Font/: Makefile.am, test04.py: Python version of shared
-	  text/textfield font test
+	* test/Font/: Makefile.am (1.13), test04.py (1.1): Python version
+	  of shared text/textfield font test
 
 2009-12-01 22:02  strk
 
-	* test/Font/test04.php: Ehm.. forgot to add the actual test
+	* test/Font/test04.php (1.1): Ehm.. forgot to add the actual test
 
 2009-12-01 22:01  strk
 
-	* test/Font/Makefile.am: PHP version of shared text/textfield font
-	  test
+	* test/Font/Makefile.am (1.12): PHP version of shared
+	  text/textfield font test
 
 2009-12-01 21:56  strk
 
-	* test/Font/: Makefile.am, test04.pl: Perl version of shared
-	  text/textfield font test
+	* test/Font/: Makefile.am (1.11), test04.pl (1.1): Perl version of
+	  shared text/textfield font test
 
 2009-12-01 21:09  strk
 
-	* src/blocks/font.c, src/blocks/font.h, src/blocks/text.c,
-	  test/Font/Makefile.am, test/Font/TestList, test/Font/test04.ref:
-	  Commit patch by "Nick Lewis" <Nick.Lewis@atltelecom.com> to fix
-	  use of the same font in a text and a textfield. Also add a C
-	  version of a testcase for this (bindings versions to be done)
+	* src/blocks/font.c (1.60), src/blocks/font.h (1.30),
+	  src/blocks/text.c (1.43), test/Font/Makefile.am (1.10),
+	  test/Font/TestList (1.5), test/Font/test04.ref (1.1): Commit
+	  patch by "Nick Lewis" <Nick.Lewis@atltelecom.com> to fix use of
+	  the same font in a text and a textfield. Also add a C version of
+	  a testcase for this (bindings versions to be done)
 
 2009-11-28 19:10  strk
 
-	* test/Movie/assignSymbol/: test01-cxx.C, test01.c, test01.php,
-	  test01.pl, test01.ref: Slighly modify the test so that the text
-	  is all visible in the stage
+	* test/Movie/assignSymbol/: test01-cxx.C (1.5), test01.c (1.5),
+	  test01.php (1.3), test01.pl (1.2), test01.ref (1.7): Slighly
+	  modify the test so that the text is all visible in the stage
 
 2009-11-28 18:56  strk
 
-	* test/Font/: test01-cxx.C, test01.c, test01.php, test01.pl,
-	  test01.py, test01.ref: Modify again to re-introduce X shift of
-	  the text (or we would have been testing less things..)
+	* test/Font/: test01-cxx.C (1.8), test01.c (1.7), test01.php (1.4),
+	  test01.pl (1.4), test01.py (1.4), test01.ref (1.9): Modify again
+	  to re-introduce X shift of the text (or we would have been
+	  testing less things..)
 
 2009-11-28 18:55  strk
 
-	* test/Font/: test01-cxx.C, test01.c, test01.php, test01.pl,
-	  test01.py, test01.ref: Slightly modify the test so the full text
-	  is shown in the created window
+	* test/Font/: test01-cxx.C (1.7), test01.c (1.6), test01.php (1.3),
+	  test01.pl (1.3), test01.py (1.3), test01.ref (1.8): Slightly
+	  modify the test so the full text is shown in the created window
 
 2009-11-28 18:33  strk
 
-	* test/Font/: .cvsignore, Makefile.am, test04.c: Add testcase for
-	  http://bugs.libming.org/show_bug.cgi?id=89. This is not run atm
-	  because it really gives bogus results.
+	* test/Font/: .cvsignore (1.4), Makefile.am (1.9), test04.c (1.1):
+	  Add testcase for http://bugs.libming.org/show_bug.cgi?id=89. This
+	  is not run atm because it really gives bogus results.
 
 2009-11-26 04:28  anderson
 
-	* docs/man/: Makefile.am, dbl2png.1, gif2dbl.1, gif2mask.1,
-	  listfdb.1, listjpeg.1, listmp3.1, makefdb.1, png2dbl.1,
-	  raw2adpcm.1, swftocxx.1, swftoperl.1, swftophp.1, swftopython.1,
-	  swftotcl.1: While preparing Debians 0.4.2 package, I had to
-	  provide a number of missing man pages. Here they are, so I won't
-	  have to do it again 8-).
+	* docs/man/: Makefile.am (1.6), dbl2png.1 (1.1), gif2dbl.1 (1.1),
+	  gif2mask.1 (1.1), listfdb.1 (1.1), listjpeg.1 (1.1), listmp3.1
+	  (1.1), makefdb.1 (1.1), png2dbl.1 (1.1), raw2adpcm.1 (1.1),
+	  swftocxx.1 (1.1), swftoperl.1 (1.1), swftophp.1 (1.1),
+	  swftopython.1 (1.1), swftotcl.1 (1.1): While preparing Debians
+	  0.4.2 package, I had to provide a number of missing man pages.
+	  Here they are, so I won't have to do it again 8-).
 
 2009-10-09 23:35  strk
 
-	* test/Shape/: Makefile.am, test01.pl, test02.pl: Perl version of
-	  shape tests
+	* test/Shape/: Makefile.am (1.6), test01.pl (1.1), test02.pl (1.1):
+	  Perl version of shape tests
 
 2009-10-09 23:28  strk
 
-	* test/Shape/: Makefile.am, test01.php, test02.php: PHP version of
-	  Shape tests
+	* test/Shape/: Makefile.am (1.5), test01.php (1.1), test02.php
+	  (1.1): PHP version of Shape tests
 
 2009-10-09 23:11  strk
 
-	* test/Morph/: Makefile.am, test01.pl, test02.pl: Perl version of
-	  Morph tests
+	* test/Morph/: Makefile.am (1.5), test01.pl (1.1), test02.pl (1.1):
+	  Perl version of Morph tests
 
 2009-10-09 23:06  strk
 
-	* test/Morph/: Makefile.am, test01.php, test02.php: PHP version of
-	  morph tests
+	* test/Morph/: Makefile.am (1.4), test01.php (1.1), test02.php
+	  (1.1): PHP version of morph tests
 
 2009-10-09 20:45  strk
 
-	* test/Movie/replace/: Makefile.am, test01.pl, test02.pl: Perl
-	  version of the replace tests (perl args order for setLine2
-	  matches the C version)
+	* test/Movie/replace/: Makefile.am (1.5), test01.pl (1.1),
+	  test02.pl (1.1): Perl version of the replace tests (perl args
+	  order for setLine2 matches the C version)
 
 2009-10-09 20:34  strk
 
-	* test/Movie/replace/: Makefile.am, test02.php: Second php test
+	* test/Movie/replace/: Makefile.am (1.4), test02.php (1.1): Second
+	  php test
 
 2009-10-09 20:32  strk
 
-	* test/Movie/replace/: Makefile.am, test01.php: Add PHP version of
-	  test 1 for Movie.replace (I wonder why such a complex shape is
-	  used in this test, which in turn makes me wonder why arguments in
-	  PHP binding are in different order than in C for
+	* test/Movie/replace/: Makefile.am (1.3), test01.php (1.1): Add PHP
+	  version of test 1 for Movie.replace (I wonder why such a complex
+	  shape is used in this test, which in turn makes me wonder why
+	  arguments in PHP binding are in different order than in C for
 	  SWFShape.setLine2)
 
 2009-10-09 20:20  strk
 
-	* test/Makefile.inc: Encode the new -c switch in php test generator
-	  rule
+	* test/Makefile.inc (1.16): Encode the new -c switch in php test
+	  generator rule
 
 2009-10-09 19:22  strk
 
-	* test/Text/: .cvsignore, Makefile.am, TestList, test03-cxx.C,
-	  test03.c, test03.ref: Add test for SWFText_moveTo (C and C++)
+	* test/Text/: .cvsignore (1.3), Makefile.am (1.7), TestList (1.4),
+	  test03-cxx.C (1.1), test03.c (1.1), test03.ref (1.1): Add test
+	  for SWFText_moveTo (C and C++)
 
 2009-10-09 19:00  strk
 
-	* test/: Action/test01.php, Action/test02.php, Bitmap/test01.php,
-	  BrowserFont/test01.php, Button/test02.php, Filter/test01.php,
-	  Filter/test02.php, Filter/test03.php, Filter/test04.php,
-	  Filter/test05.php, Font/test01.php, Font/test02.php,
-	  Font/test03.php, Movie/Background/test01.php,
-	  Movie/Background/test02.php, Movie/Background/test03.php,
-	  Movie/Dimension/test01.php, Movie/FrameLabel/test01.php,
-	  Movie/FrameLabel/test02.php, Movie/NumFrames/test01.php,
-	  Movie/Protect/test01.php, Movie/Protect/test02.php,
-	  Movie/Rate/test01.php, Movie/add/test01.php,
-	  Movie/add/test02.php, Movie/addMetadata/test01.php,
-	  Movie/assignSymbol/test01.php, Movie/defineScene/test01.php,
-	  Movie/importCharacter/test01.php,
-	  Movie/importCharacter/test02.php, Movie/new/test01.php,
-	  Movie/new/test02.php, Movie/new/test03.php, Movie/new/test04.php,
-	  Movie/new/test05.php, Movie/new/test06.php, Movie/new/test07.php,
-	  Movie/nextFrame/test01.php, Movie/nextFrame/test02.php,
-	  Movie/setNetworkAccess/test01.php,
-	  Movie/setNetworkAccess/test02.php,
-	  Movie/setScriptLimits/test01.php,
-	  Movie/setSoundStream/test01.php, Movie/setSoundStream/test02.php,
-	  Movie/setSoundStream/test03.php, Movie/setSoundStream/test04.php,
-	  Movie/setTabIndex/test01.php, PrebuiltClip/test01.php,
-	  SoundStream/test01.php, SoundStream/test02.php, Text/test01.php,
-	  Text/test02.php, Video/test01.php, Video/test02.php,
-	  Video/test03.php, Video/test04.php, Video/test05.php,
-	  Video/test06.php: Change all PHP based tests to read '-c php.ini'
-	  rather than '-c .'. This fixes a WARNING when systemwide php.ini
-	  already loads the ming module.
+	* test/: Action/test01.php (1.2), Action/test02.php (1.2),
+	  Bitmap/test01.php (1.2), BrowserFont/test01.php (1.3),
+	  Button/test02.php (1.2), Filter/test01.php (1.2),
+	  Filter/test02.php (1.2), Filter/test03.php (1.2),
+	  Filter/test04.php (1.2), Filter/test05.php (1.3), Font/test01.php
+	  (1.2), Font/test02.php (1.2), Font/test03.php (1.2),
+	  Movie/Background/test01.php (1.4), Movie/Background/test02.php
+	  (1.4), Movie/Background/test03.php (1.4),
+	  Movie/Dimension/test01.php (1.6), Movie/FrameLabel/test01.php
+	  (1.4), Movie/FrameLabel/test02.php (1.4),
+	  Movie/NumFrames/test01.php (1.6), Movie/Protect/test01.php (1.5),
+	  Movie/Protect/test02.php (1.4), Movie/Rate/test01.php (1.6),
+	  Movie/add/test01.php (1.4), Movie/add/test02.php (1.6),
+	  Movie/addMetadata/test01.php (1.2), Movie/assignSymbol/test01.php
+	  (1.2), Movie/defineScene/test01.php (1.2),
+	  Movie/importCharacter/test01.php (1.2),
+	  Movie/importCharacter/test02.php (1.2), Movie/new/test01.php
+	  (1.6), Movie/new/test02.php (1.6), Movie/new/test03.php (1.6),
+	  Movie/new/test04.php (1.6), Movie/new/test05.php (1.6),
+	  Movie/new/test06.php (1.2), Movie/new/test07.php (1.2),
+	  Movie/nextFrame/test01.php (1.5), Movie/nextFrame/test02.php
+	  (1.3), Movie/setNetworkAccess/test01.php (1.2),
+	  Movie/setNetworkAccess/test02.php (1.2),
+	  Movie/setScriptLimits/test01.php (1.2),
+	  Movie/setSoundStream/test01.php (1.4),
+	  Movie/setSoundStream/test02.php (1.3),
+	  Movie/setSoundStream/test03.php (1.3),
+	  Movie/setSoundStream/test04.php (1.2),
+	  Movie/setTabIndex/test01.php (1.2), PrebuiltClip/test01.php
+	  (1.2), SoundStream/test01.php (1.3), SoundStream/test02.php
+	  (1.3), Text/test01.php (1.2), Text/test02.php (1.2),
+	  Video/test01.php (1.4), Video/test02.php (1.2), Video/test03.php
+	  (1.2), Video/test04.php (1.2), Video/test05.php (1.2),
+	  Video/test06.php (1.3): Change all PHP based tests to read '-c
+	  php.ini' rather than '-c .'. This fixes a WARNING when systemwide
+	  php.ini already loads the ming module.
 
 2009-10-09 16:03  strk
 
-	* test/find_misdistributed: Quick script to find binding tests
-	  which are not being distributed
+	* test/find_misdistributed (1.1): Quick script to find binding
+	  tests which are not being distributed
 
 2009-10-09 15:59  strk
 
-	* test/PrebuiltClip/Makefile.am: Distribute PrebuiltClip php test
+	* test/PrebuiltClip/Makefile.am (1.3): Distribute PrebuiltClip php
+	  test
 
 2009-10-09 15:42  strk
 
-	* test/Movie/setNetworkAccess/.cvsignore: updated
+	* test/Movie/setNetworkAccess/.cvsignore (1.2): updated
 
 2009-10-09 15:40  strk
 
-	* test/Action/: Makefile.am, test01.php, test02.php: Add php
-	  versions of Action tests
+	* test/Action/: Makefile.am (1.4), test01.php (1.1), test02.php
+	  (1.1): Add php versions of Action tests
 
 2009-10-09 15:38  strk
 
-	* php_ext/ming.c: Fix handling of init-action id, allow adding init
-	  actions to movie
+	* php_ext/ming.c (1.124): Fix handling of init-action id, allow
+	  adding init actions to movie
 
 2009-10-09 15:28  strk
 
-	* php_ext/ming.c: Allow constructing SWFInitAction with an id
-	  specifier
+	* php_ext/ming.c (1.123): Allow constructing SWFInitAction with an
+	  id specifier
 
 2009-10-09 15:11  strk
 
-	* test/BrowserFont/: Makefile.am, test01.pl: Add perl version of
-	  BrowserFont test 1 (also distribute php version which was
-	  available but not distributed)
+	* test/BrowserFont/: Makefile.am (1.5), test01.pl (1.1): Add perl
+	  version of BrowserFont test 1 (also distribute php version which
+	  was available but not distributed)
 
 2009-10-09 15:01  strk
 
-	* php_ext/ming.c: Make argument to SWFTextField (flags) optional
-	  with php binding
+	* php_ext/ming.c (1.122): Make argument to SWFTextField (flags)
+	  optional with php binding
 
 2009-09-10 12:05  strk
 
-	* test/Video/test06.pl: SEEK_SET is a constant, not a variable
+	* test/Video/test06.pl (1.2): SEEK_SET is a constant, not a
+	  variable
 
 2009-09-09 08:57  strk
 
-	* test/Action/: Makefile.am, test01.pl, test02.pl: Perl version of
-	  Action tests
+	* test/Action/: Makefile.am (1.3), test01.pl (1.1), test02.pl
+	  (1.1): Perl version of Action tests
 
 2009-09-09 08:54  strk
 
-	* perl_ext/InitAction.xs: Accept character id argument in
+	* perl_ext/InitAction.xs (1.2): Accept character id argument in
 	  InitAction constructor (perl interface)
 
 2009-09-09 00:26  strk
 
-	* util/: makeswf.c, makeswf.h, makeswf_utils.c: Update copyright
-	  notice (and FSF address)
+	* util/: makeswf.c (1.50), makeswf.h (1.8), makeswf_utils.c (1.13):
+	  Update copyright notice (and FSF address)
 
 2009-09-08 23:46  strk
 
-	* test/Video/: Makefile.am, test06.py: Python version of
-	  VideoStream test 6 (all done here)
+	* test/Video/: Makefile.am (1.20), test06.py (1.1): Python version
+	  of VideoStream test 6 (all done here)
 
 2009-09-08 23:42  strk
 
-	* test/Video/: Makefile.am, test05.py: Python version of
-	  VideoStream test 5
+	* test/Video/: Makefile.am (1.19), test05.py (1.1): Python version
+	  of VideoStream test 5
 
 2009-09-08 23:39  strk
 
-	* test/Video/: Makefile.am, test04.py: Python version of
-	  VideoStream test 4
+	* test/Video/: Makefile.am (1.18), test04.py (1.1): Python version
+	  of VideoStream test 4
 
 2009-09-08 23:36  strk
 
-	* test/Video/: Makefile.am, test03.py: Python version of Video test
-	  3 (how do you enter text in a more elegant way with python?)
+	* test/Video/: Makefile.am (1.17), test03.py (1.1): Python version
+	  of Video test 3 (how do you enter text in a more elegant way with
+	  python?)
 
 2009-09-08 23:31  strk
 
-	* py_ext/: ming_wrap.c, mingc.py: Regenerated files after SWIG
-	  input change (not sure why these are in the repository)
+	* py_ext/: ming_wrap.c (1.31), mingc.py (1.25): Regenerated files
+	  after SWIG input change (not sure why these are in the
+	  repository)
 
 2009-09-08 23:30  strk
 
-	* test/Video/: Makefile.am, test01.py, test02.py: Python versions
-	  of VideoStream tests 1 and 2
+	* test/Video/: Makefile.am (1.16), test01.py (1.1), test02.py
+	  (1.1): Python versions of VideoStream tests 1 and 2
 
 2009-09-08 23:30  strk
 
-	* py_ext/ming.py: Allow passing a filename argument to python's
-	  SWFVideoStream constructor
+	* py_ext/ming.py (1.57): Allow passing a filename argument to
+	  python's SWFVideoStream constructor
 
 2009-09-08 20:03  strk
 
-	* ming.i: Add destroySWFVideoStream to swig interface
+	* ming.i (1.38): Add destroySWFVideoStream to swig interface
 
 2009-09-08 10:27  strk
 
-	* test/Video/: Makefile.am, test06.php, test06.pl: Perl version of
-	  Video test 6, drop unused variable in the php version..
+	* test/Video/: Makefile.am (1.15), test06.php (1.2), test06.pl
+	  (1.1): Perl version of Video test 6, drop unused variable in the
+	  php version..
 
 2009-09-08 10:18  strk
 
-	* test/Video/: Makefile.am, test06.php: PHP version of Video test 6
+	* test/Video/: Makefile.am (1.14), test06.php (1.1): PHP version of
+	  Video test 6
 
 2009-09-08 10:17  strk
 
-	* php_ext/config.m4: Fix SWFVideoStream_seek detection code
+	* php_ext/config.m4 (1.15): Fix SWFVideoStream_seek detection code
 
 2009-09-07 21:33  strk
 
-	* php_ext/config.m4: Check for SWFVideoStream_seek availability
+	* php_ext/config.m4 (1.14): Check for SWFVideoStream_seek
+	  availability
 
 2009-09-07 21:28  strk
 
-	* test/Video/: Makefile.am, test05.php: Fifth video test ported to
-	  php
+	* test/Video/: Makefile.am (1.13), test05.php (1.1): Fifth video
+	  test ported to php
 
 2009-09-07 12:37  strk
 
-	* php_ext/config.m4: Properly set HAVE_SWFVIDEOSTREAM_SETFRAMEMODE
-	  and HAVE_SWFVIDEOSTREAM_NEXTFRAME
+	* php_ext/config.m4 (1.13): Properly set
+	  HAVE_SWFVIDEOSTREAM_SETFRAMEMODE and
+	  HAVE_SWFVIDEOSTREAM_NEXTFRAME
 
 2009-09-07 12:36  strk
 
-	* test/Video/: Makefile.am, test04.php: PHP version for manual
-	  video frame control
+	* test/Video/: Makefile.am (1.12), test04.php (1.1): PHP version
+	  for manual video frame control
 
 2009-09-07 08:46  strk
 
-	* test/Video/Makefile.am: Distribute perl tests
+	* test/Video/Makefile.am (1.11): Distribute perl tests
 
 2009-09-07 08:43  strk
 
-	* test/Video/: Makefile.am, test02.php, test03.php: Some php tests
-	  for Video (unfinished)
+	* test/Video/: Makefile.am (1.10), test02.php (1.1), test03.php
+	  (1.1): Some php tests for Video (unfinished)
 
 2009-09-07 08:42  strk
 
-	* php_ext/ming.c: Add constants for use in SWFVideo->setFrameMode
+	* php_ext/ming.c (1.121): Add constants for use in
+	  SWFVideo->setFrameMode
 
 2009-08-29 16:20  strk
 
-	* test/Sound/: Makefile.am, test01.pl, test02.pl, test03.pl: Add
-	  perl version of Sound tests
+	* test/Sound/: Makefile.am (1.4), test01.pl (1.1), test02.pl (1.1),
+	  test03.pl (1.1): Add perl version of Sound tests
 
 2009-08-29 16:19  strk
 
-	* perl_ext/Sound.xs: Add setInitialMp3Delay interface to perl
+	* perl_ext/Sound.xs (1.6): Add setInitialMp3Delay interface to perl
 	  binding
 
 2009-06-08 15:51  strk
 
-	* test/SoundStream/test02.c: fix typo in error message
+	* test/SoundStream/test02.c (1.2): fix typo in error message
 
 2009-06-08 15:35  strk
 
-	* mingpp.h, test/SoundStream/.cvsignore,
-	  test/SoundStream/Makefile.am, test/SoundStream/TestList,
-	  test/SoundStream/test03-cxx.C, test/SoundStream/test03.c,
-	  test/SoundStream/test03.ref: Add setInitialMp3Delay interface to
-	  C++ SWFSoundStream, add test for it
+	* mingpp.h (1.112), test/SoundStream/.cvsignore (1.2),
+	  test/SoundStream/Makefile.am (1.3), test/SoundStream/TestList
+	  (1.3), test/SoundStream/test03-cxx.C (1.1),
+	  test/SoundStream/test03.c (1.1), test/SoundStream/test03.ref
+	  (1.1): Add setInitialMp3Delay interface to C++ SWFSoundStream,
+	  add test for it
 
 2009-06-08 11:22  strk
 
-	* NEWS: Add note about SWFSoundStream delaySeek control
+	* NEWS (1.66): Add note about SWFSoundStream delaySeek control
 
 2009-06-08 10:49  strk
 
-	* src/ming.h.in: typo in SWFSoundStream_setInitialMp3Delay
+	* src/ming.h.in (1.107): typo in SWFSoundStream_setInitialMp3Delay
 	  signature
 
 2009-06-08 10:45  strk
 
-	* mingpp.h, src/ming.h.in, src/blocks/sound.c,
-	  src/blocks/soundstream.c, test/Sound/test03.c: Renamed
-	  SWFSound_delaySeek to SWFSound_setInitialMp3Delay, for
-	  consistency with existing SWFSoundStream_setInitialMp3Delay which
-	  also gets in the public header with this commit (was missing)
+	* mingpp.h (1.111), src/ming.h.in (1.106), src/blocks/sound.c
+	  (1.27), src/blocks/soundstream.c (1.43), test/Sound/test03.c
+	  (1.5): Renamed SWFSound_delaySeek to SWFSound_setInitialMp3Delay,
+	  for consistency with existing SWFSoundStream_setInitialMp3Delay
+	  which also gets in the public header with this commit (was
+	  missing)
 
 2009-06-08 09:43  strk
 
-	* NEWS: Note the MP3 delaySeek change
+	* NEWS (1.65): Note the MP3 delaySeek change
 
 2009-06-08 03:27  strk
 
-	* mingpp.h, test/Sound/test03-cxx.C, test/Sound/test03.c,
-	  test/Sound/test03.ref: Add C++ interface for SWFSound delaySeek
-	  and test it
+	* mingpp.h (1.110), test/Sound/test03-cxx.C (1.3),
+	  test/Sound/test03.c (1.4), test/Sound/test03.ref (1.4): Add C++
+	  interface for SWFSound delaySeek and test it
 
 2009-06-08 02:15  strk
 
-	* src/: ming.h.in, blocks/sound.c: Add SWFSound_delaySeek function
-	  to allow explicitly setting seek samples for sounds
+	* src/: ming.h.in (1.105), blocks/sound.c (1.26): Add
+	  SWFSound_delaySeek function to allow explicitly setting seek
+	  samples for sounds
 
 2009-05-20 15:15  strk
 
-	* src/shape_util.c, test/Button/test01.ref,
-	  test/Gradient/test07.ref: Improve arcs and circles accuracy.
-	  Patch by Brad Fisher in bug #77.
+	* src/shape_util.c (1.27), test/Button/test01.ref (1.9),
+	  test/Gradient/test07.ref (1.4): Improve arcs and circles
+	  accuracy. Patch by Brad Fisher in bug #77.
 
 2009-05-20 12:19  strk
 
-	* test/Bitmap/: Makefile.am, test01.php: Add missing php test for
-	  Bitmap fill
+	* test/Bitmap/: Makefile.am (1.5), test01.php (1.1): Add missing
+	  php test for Bitmap fill
 
 2009-05-20 12:05  strk
 
-	* src/: movie.c, blocks/character.c, blocks/fillstyle.c,
-	  blocks/gradient.c, blocks/linestyle.c: Add defineshape4
-	  references where missing. Patch by Philip de Nier. CLoses bug #78
+	* src/: movie.c (1.87), blocks/character.c (1.22),
+	  blocks/fillstyle.c (1.26), blocks/gradient.c (1.23),
+	  blocks/linestyle.c (1.18): Add defineshape4 references where
+	  missing. Patch by Philip de Nier. CLoses bug #78
 
 2009-05-20 11:46  strk
 
-	* macros/Makefile.am: Don't distribute libtool.m4, should be
+	* macros/Makefile.am (1.5): Don't distribute libtool.m4, should be
 	  provided by system of anyone willing to regenerate makefiles
 
 2009-05-20 11:34  strk
 
-	* src/actioncompiler/swf5compiler.flex,
-	  src/actioncompiler/swf5compiler.y, test/actionscript/ASM_all.as,
-	  test/actionscript/ASM_all.ref: Add support for enumerate2 in asm
-	  block. Thanks to Benjamin Wolsey.
+	* src/actioncompiler/swf5compiler.flex (1.74),
+	  src/actioncompiler/swf5compiler.y (1.107),
+	  test/actionscript/ASM_all.as (1.6), test/actionscript/ASM_all.ref
+	  (1.9): Add support for enumerate2 in asm block. Thanks to
+	  Benjamin Wolsey.
+
+2009-05-19 21:45  strk
+
+	* ChangeLog (1.99): Update ChangeLog
 
 2009-05-11 15:29  strk
 
-	* src/: gc.c, gc.h: Add missing copyright header
+	* src/: gc.c (1.7), gc.h (1.4): Add missing copyright header
 
 2009-05-04 23:48  strk
 
