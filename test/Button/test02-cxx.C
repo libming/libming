@@ -28,6 +28,9 @@ int main()
 
 		SWFDisplayItem *d = m->add(b);
 		d->moveTo(50, 100);
+
+		m->addExport(b, "ButtonExport");
+		m->writeExports();
 	
 		m->nextFrame();
 		m->save("test02.swf");

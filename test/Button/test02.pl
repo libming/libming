@@ -40,5 +40,8 @@ $br3->move(40,0);
 my $d = $m->add($b);
 $d->moveTo(50, 100);
 
+$m->addExport($b, "ButtonExport");
+$m->writeExports();
+
 $m->nextFrame;
 $m->save("test02.swf");

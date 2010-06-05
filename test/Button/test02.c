@@ -31,6 +31,9 @@ int main()
 	d = SWFMovie_add(m, b);
 	SWFDisplayItem_moveTo(d, 50, 100);
 
+	SWFMovie_addExport(m, (SWFBlock)b, "ButtonExport");
+	SWFMovie_writeExports(m);
+
 	SWFMovie_nextFrame(m);
 	SWFMovie_save(m, "test02.swf");
 	

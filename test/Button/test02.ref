@@ -1,5 +1,5 @@
 File version: 5
-File size: 125
+File size: 144
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -59,6 +59,13 @@ Block length: 52
   ColorTransform:
 
 Offset: 110 (0x006e)
+Block type: 56 (SWF_EXPORTASSETS)
+Block length: 17
+
+ num assets: 1
+ Asset[002]: ButtonExport
+
+Offset: 129 (0x0081)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 9
 
@@ -75,12 +82,12 @@ Block length: 9
   Matrix:
    TranslateX   1000 TranslateY   2000
 
-Offset: 121 (0x0079)
+Offset: 140 (0x008c)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 123 (0x007b)
+Offset: 142 (0x008e)
 Block type: 0 (SWF_END)
 Block length: 0
 
