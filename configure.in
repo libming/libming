@@ -1,10 +1,10 @@
 dnl -- Release version, to bump up right after official releases 
-dnl -- last release was 0.4.2
+dnl -- last release was 0.4.3
 dnl --
-AC_INIT(ming, 0.4.3)
+AC_INIT(ming, 0.4.4)
 MAJOR_VERSION=0
 MINOR_VERSION=4
-MICRO_VERSION=3
+MICRO_VERSION=4
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
@@ -17,11 +17,11 @@ AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_MAINTAINER_MODE
 
 dnl -- Version info for libtool, to bump right after official releases
-dnl -- last release was 5:4:1
+dnl -- last release was 5:4:2
 dnl --
 INTERFACE_CURRENT=5
 INTERFACE_AGE=4
-INTERFACE_REVISION=2
+INTERFACE_REVISION=3
 
 AC_SUBST(INTERFACE_CURRENT)
 AC_SUBST(INTERFACE_REVISION)
