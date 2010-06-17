@@ -140,7 +140,7 @@ sub doswftest($$$$)
 	{
 		$ENV{'LD_LIBRARY_PATH'}=$TOP_BUILDDIR."/src/.libs";
 
-		if($do_test_python)
+		if($binding eq 'python')
 		{
 			# Find the proper PYTHONPATH
 			$ENV{'PYTHONPATH'} = "";
@@ -151,8 +151,18 @@ sub doswftest($$$$)
 			}
 		}
 
-		# Set the proper PERL5LIB (BUILDDIR contains both SWF.pm and SWF.so)
-		$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/arch/auto/SWF/:".$TOP_BUILDDIR."/perl_ext/blib/lib";
+		elsif($binding eq 'php')
+		{
+			# TODO: have the .phpx file passed instead !
+			$testbuilder = "php -n -d extension_dir=$TOP_BUILDDIR/php_ext/.libs -d extension=ming.so $testbuilder";
+		}
+
+		elsif($binding eq 'perl')
+		{
+			# Set the proper PERL5LIB
+			# (BUILDDIR contains both SWF.pm and SWF.so)
+			$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/arch/auto/SWF/:".$TOP_BUILDDIR."/perl_ext/blib/lib";
+		}
 	}
 	else
 	{
@@ -221,7 +231,6 @@ sub dotestset($$$)
 
 			if ( $do_test_c ) {
 				$testbuilder = $test;
-				#print "TESTBUILDER: $testbuilder\n";
 				doswftest($testswf, $testref, $testbuilder,
 					'c');
 			}

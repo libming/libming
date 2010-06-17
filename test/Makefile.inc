@@ -42,9 +42,9 @@ BINDINGS = "c $(CXXBINDINGS) $(PERLBINDINGS) $(PYTHONBINDINGS) $(PHPBINDINGS)"
 refs: $(C_PROGS)
 	for t in $(C_PROGS); do ./$$t; $(top_builddir)/util/listswf $$t.swf > $(srcdir)/$$t.ref; done
 
-gen-php: $(SWFS) php.ini
+gen-php: $(SWFS)
 	for t in $(C_PROGS); do \
-	$(top_builddir)/util/swftophp $$t.swf $$t.swf | sed -e 's^/usr/bin/php^/usr/bin/php -c php.ini^' > $(srcdir)/$$t.php ;\
+	$(top_builddir)/util/swftophp $$t.swf $$t.swf > $(srcdir)/$$t.php ;\
 	done
 
 gen-pl: $(SWFS) 
@@ -69,11 +69,14 @@ gen-tcl: $(SWFS)
 
 gen: refs $(SWFS) gen-php gen-pl gen-py gen-cxx gen-tcl
 
-.PHONY: dotests php.ini
-dotests: $(top_srcdir)/test/dotests.pl php.ini
+.PHONY: dotests 
+dotests: $(top_srcdir)/test/dotests.pl
 	echo "top_builddir=$(top_builddir) builddir=$(PWD) top_srcdir=$(top_srcdir) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' BUILD_OPTIONS='$(BUILD_OPTIONS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
 	chmod +x $@
 
-php.ini: 
-	echo "extension_dir=$(top_builddir)/php_ext/tmp/modules" >php.ini
-	echo "extension=ming.so" >>php.ini
+.php.phpx:
+	echo "#!/bin/sh" > $@
+	echo "$(PHP) -n -d extension_dir=$(top_builddir)/php_ext/.libs -d extension=ming.so $< $(srcdir) && echo Done || echo Failed" >> $@
+	chmod +x $@
+
+CLEANFILES += *.phpx
