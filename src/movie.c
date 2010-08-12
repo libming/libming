@@ -405,6 +405,10 @@ SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 		case SWF_DEFINESPRITE:
 		case SWF_DEFINEFONT2:
 		case SWF_DEFINESOUND:
+		case SWF_DEFINELOSSLESS:
+		case SWF_DEFINEBITS:
+		case SWF_DEFINEBITSJPEG2:
+		case SWF_DEFINEBITSJPEG3:
 			movie->exports = (struct SWFExport_s*)realloc(movie->exports,
 					(movie->nExports+1) * sizeof(struct SWFExport_s));
 			movie->exports[movie->nExports].block = block;

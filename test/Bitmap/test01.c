@@ -7,8 +7,10 @@ int main()
 	SWFDBLBitmapData img = newSWFDBLBitmapData_fromPngFile(MEDIADIR "/image01.png");
 	if(img == NULL)
 		return EXIT_FAILURE;
+
+	SWFMovie_addExport(m, (SWFBlock)img, "BitmapExport");
+	SWFMovie_writeExports(m);
 	
-	SWFMovie_add(m, (SWFBlock)img);
 	SWFMovie_save(m, "test01.swf");
 	return 0;
 

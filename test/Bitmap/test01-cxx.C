@@ -7,7 +7,9 @@ int main()
 		SWFMovie *m = new SWFMovie(8);
 		SWFBitmap *bmp = new SWFBitmap(MEDIADIR "/image01.png");
 
-		m->add(bmp);
+		m->addExport(bmp, "BitmapExport");
+		m->writeExports();
+
 		m->save("test01.swf");
 	}
 	catch (SWFException &e)
