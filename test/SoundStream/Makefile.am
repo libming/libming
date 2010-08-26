@@ -34,6 +34,7 @@ EXTRA_DIST =	\
 	test03.ref \
 	test01.php \
 	test02.php \
+	test03.php \
 	TestList
 
 check_PROGRAMS = \

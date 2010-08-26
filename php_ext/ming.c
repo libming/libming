@@ -243,7 +243,7 @@ static void *SWFgetProperty(zval *id, char *name, int namelen, int proptype TSRM
 
 	if (id) {
 		if (zend_hash_find(Z_OBJPROP_P(id), name, namelen+1, (void **)&tmp) == FAILURE) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unable to find property %s", name);
+			/* php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unable to find property %s", name); */
 			return NULL;
 		}
 		id_to_find = Z_LVAL_PP(tmp);
@@ -365,6 +365,15 @@ static SWFInput getInput_fromFileResource(zval *zfile TSRMLS_DC)
 	zend_list_addref(Z_LVAL_P(zfile));
 	zend_list_addref(zend_list_insert(input, le_swfinputp));
 	return input;
+}
+/* }}} */
+
+/* {{{ internal function isInput */
+static int isInput(zval *id TSRMLS_DC)
+{
+	void *in = SWFgetProperty(id, "input", strlen("input"), le_swfinputp TSRMLS_CC);
+
+	return (in != 0);
 }
 /* }}} */
 
@@ -3239,10 +3248,26 @@ PHP_METHOD(swfsoundstream, getDuration)
 }
 /* }}} */
 
+/* {{{ set initial mp3 delay seek */
+PHP_METHOD(swfsoundstream, setInitialMp3Delay) 
+{
+	long delay;
+	SWFSoundStream stream = getSoundStream(getThis() TSRMLS_CC);
+
+	if ( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &delay) == FAILURE )
+	{
+		return;
+	}
+
+	SWFSoundStream_setInitialMp3Delay(stream, delay);
+}
+/* }}} */
+
 
 static zend_function_entry swfsoundstream_functions[] = {
 	PHP_ME(swfsoundstream, __construct, NULL, 0)
 	PHP_ME(swfsoundstream, getDuration, NULL, 0)
+	PHP_ME(swfsoundstream, setInitialMp3Delay, NULL, 0)
 	{ NULL, NULL, NULL }
 };
 /* }}} */
@@ -5217,7 +5242,7 @@ PHP_METHOD(swfsprite, setSoundStream)
 {
 	zval *zfile;
 	double rate, skip = 0;
-	SWFSoundStream sound;
+	SWFSoundStream sound = NULL;
 	SWFInput input = NULL;
 	SWFMovieClip mc = getSprite(getThis() TSRMLS_CC);
 
@@ -5231,7 +5256,14 @@ PHP_METHOD(swfsprite, setSoundStream)
 		input = getInput_fromFileResource(zfile TSRMLS_CC);
 		break;
 	case IS_OBJECT:
-		input = getInput(zfile TSRMLS_CC);
+		if ( isInput(zfile TSRMLS_CC) )
+		{
+			input = getInput(zfile TSRMLS_CC);
+		}
+		else
+		{
+			sound = getSoundStream(zfile TSRMLS_CC);
+		}
 		break;	
 	case IS_STRING:
 		input = newSWFInput_filename(Z_STRVAL_P(zfile));
@@ -5240,11 +5272,16 @@ PHP_METHOD(swfsprite, setSoundStream)
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
 		break;
 
-	default:
-		php_error(E_ERROR, "swfmovieclip::setSoundStream: need either a filename, "
-		                   "a file ressource or SWFInput buffer.");
 	}
-	sound = newSWFSoundStream_fromInput(input);
+
+	if ( input ) {
+		sound = newSWFSoundStream_fromInput(input);
+	} else if ( ! sound ) {
+		php_error(E_ERROR, "swfmovieclip::setSoundStream: "
+			"need either a filename, "
+			"a file ressource, "
+			"an SWFInput buffer or an SWFSoundStream");
+	}
 	SWFMovieClip_setSoundStreamAt(mc, sound, rate, skip);
 	RETURN_LONG(SWFSoundStream_getDuration(sound) / rate);
 }
