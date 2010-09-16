@@ -852,7 +852,7 @@ class SWFFont : public SWFBlock
   int getGlyphCount()
     { return SWFFont_getGlyphCount(this->font); }
   
-  char *getShape(unsigned short c)
+  char *getShape(unsigned short c) __deprecated
     { return SWFFont_getShape(this->font, c); }
 
   SWF_DECLAREONLY(SWFFont);
