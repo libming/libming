@@ -57,7 +57,7 @@ endif
 COPYING: LICENSE
 	ln -fs $(srcdir)/LICENSE COPYING
 
-.PHONY: rpm
+.PHONY: rpm ChangeLog
 rpm: dist
 	rpmbuild -ta ming-@VERSION@.tar.gz
 
@@ -65,5 +65,5 @@ EXTRA_DIST = ming.spec ming.spec.in ming.i COPYING LICENSE LICENSE_GPL2 \
 	autogen.sh HISTORY
 DISTCLEANFILES = ming-@VERSION@* ming.spec COPYING
 
-Changelog:
+ChangeLog Changelog:
 	cd $(srcdir) && git2cl > ChangeLog 
