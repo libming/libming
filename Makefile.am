@@ -66,4 +66,4 @@ EXTRA_DIST = ming.spec ming.spec.in ming.i COPYING LICENSE LICENSE_GPL2 \
 DISTCLEANFILES = ming-@VERSION@* ming.spec COPYING
 
 Changelog:
-	cd $(srcdir) && cvs2cl --accum -I ChangeLog 
+	cd $(srcdir) && git2cl > ChangeLog 
