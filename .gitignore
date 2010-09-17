@@ -19,3 +19,4 @@ libming.so
 libtool
 configure
 .project
+.deps
