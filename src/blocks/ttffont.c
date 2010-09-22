@@ -145,9 +145,11 @@ static void readGlyphs(SWFFont font, FT_Face face)
 	FT_ULong charcode;
 	double ratio_EM = 1024.0 / face->units_per_EM;
 
-	font->shapes = (SWFShape *)malloc(sizeof(SWFShape) * face->num_glyphs);
-	font->advances = (short *)malloc(sizeof(short) * face->num_glyphs);
-	font->glyphToCode = (unsigned short *)malloc(sizeof(unsigned short) * face->num_glyphs);
+	int msize = face->num_glyphs + 20; /* +20 to avoid realloc in most cases */
+	font->shapes = (SWFShape *)malloc(sizeof(SWFShape) * msize);
+	font->advances = (short *)malloc(sizeof(short) * msize);
+	font->glyphToCode = (unsigned short *)malloc(sizeof(unsigned short) * msize);
+
 	charcode = FT_Get_First_Char(face, &gindex );
 	while ( gindex != 0 ) 
 	{
@@ -168,6 +170,19 @@ static void readGlyphs(SWFFont font, FT_Face face)
 			destroySWFShape(data.shape);
 			charcode = FT_Get_Next_Char(face, charcode, &gindex);
 			continue;
+		}
+
+		/*
+		 * reallocate the arrays to make space for reused glyphs
+		 * TODO: avoid the duplication of glyphs instead!
+		 */
+		if ( glyphCount >= msize )
+		{
+			msize += 128;
+			font->shapes = (SWFShape *)realloc(font->shapes, sizeof(SWFShape) * msize);
+			font->advances = (short *)realloc(font->advances, sizeof(short) * msize);
+			font->glyphToCode = (unsigned short *)realloc(font->glyphToCode,
+				sizeof(unsigned short) * msize);
 		}
 		font->shapes[glyphCount] = data.shape;
 		font->glyphToCode[glyphCount] = charcode;
