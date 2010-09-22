@@ -1,4 +1,5 @@
 CVS
+*.o
 Makefile.in
 Makefile
 .AppleDouble
@@ -19,4 +20,3 @@ libming.so
 libtool
 configure
 .project
-.deps
