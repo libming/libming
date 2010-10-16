@@ -2,7 +2,7 @@
 
 static char *test = "test03";
 
-main()
+int main()
 {
 SWFMovie m;
 
