@@ -538,13 +538,13 @@ SWFText_scaledMoveTo(SWFText text, int x, int y)
 	if (NULL == textRecord)
 		return;
 
-	if ( x != 0 )
+	if ( x != 0 || (text->initialRecord && text->initialRecord->string))
 	{
 		textRecord->flags |= SWF_TEXT_HAS_X;
 		textRecord->x = x;
 	}
 
-	if ( y != 0 )
+	if ( y != 0 || (text->initialRecord && text->initialRecord->string))
 	{
 		textRecord->flags |= SWF_TEXT_HAS_Y;
 		textRecord->y = y;
