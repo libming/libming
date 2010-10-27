@@ -17,6 +17,10 @@ int main()
 		text->setHeight( 20);
 		text->moveTo(10, 20);
 		text->addString( "abc", NULL);
+		text->moveTo(0, 40);
+		text->addString( "bca", NULL);
+		text->moveTo(60, 0);
+		text->addString( "cab", NULL);
 		m->add(text);
 		m->nextFrame();
 		m->save("test03.swf");
