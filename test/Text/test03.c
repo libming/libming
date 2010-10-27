@@ -29,6 +29,10 @@ int main()
 	SWFText_setHeight(text, 20);
 	SWFText_moveTo(text, 10, 20);
 	SWFText_addString(text, "abc", NULL);
+	SWFText_moveTo(text, 0, 40);
+	SWFText_addString(text, "bca", NULL);
+	SWFText_moveTo(text, 60, 0);
+	SWFText_addString(text, "cab", NULL);
 
 	SWFMovie_add(m, text);
 	SWFMovie_nextFrame(m);

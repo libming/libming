@@ -1,5 +1,5 @@
 File version: 5
-File size: 442
+File size: 464
 Frame size: (0,6400)x(0,4800)
 Frame rate: 12.000000 / sec.
 Total frames: 1
@@ -141,15 +141,15 @@ Block length: 370
 
 Offset: 396 (0x018c)
 Block type: 33 (SWF_DEFINETEXT2)
-Block length: 32
+Block length: 54
 
  CharacterID: 1
- RECT:  (0,0)x(891,405):11
+ RECT:  (0,-303)x(1895,805):12
   Matrix:
    TranslateX      0 TranslateY      0
  GlyphBits: 2
  AdvanceBits: 9
- TextRecords: 2
+ TextRecords: 4
  TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 1   StyleFlagHasColor: 1   StyleFlagHasYOffset: 1   StyleFlagHasXOffset: 1
   FontID: 2
  RGBA: ( 0, 0, 0,ff)
@@ -159,9 +159,21 @@ Block length: 32
    GlyphIndex[0] = 0000    GlyphAdvance[0] = 00f4
    GlyphIndex[0] = 0001    GlyphAdvance[0] = 00fd
    GlyphIndex[0] = 0002    GlyphAdvance[0] = 00db
+ TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 1   StyleFlagHasXOffset: 1
+  XOffset: 0   YOffset: 800
+  GlyphCount: 3
+   GlyphIndex[0] = 0001    GlyphAdvance[0] = 00fd
+   GlyphIndex[0] = 0002    GlyphAdvance[0] = 00db
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 00f4
+ TEXTRECORD:   TextRecordType: 1   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 1   StyleFlagHasXOffset: 1
+  XOffset: 1200   YOffset: 0
+  GlyphCount: 3
+   GlyphIndex[0] = 0002    GlyphAdvance[0] = 00db
+   GlyphIndex[0] = 0000    GlyphAdvance[0] = 00f4
+   GlyphIndex[0] = 0001    GlyphAdvance[0] = 00fd
  TEXTRECORD:   TextRecordType: 0   StyleFlagsReserved: 0   StyleFlagHasFont: 0   StyleFlagHasColor: 0   StyleFlagHasYOffset: 0   StyleFlagHasXOffset: 0
 
-Offset: 430 (0x01ae)
+Offset: 452 (0x01c4)
 Block type: 26 (SWF_PLACEOBJECT2)
 Block length: 6
 
@@ -178,12 +190,12 @@ Block length: 6
   Matrix:
    TranslateX      0 TranslateY      0
 
-Offset: 438 (0x01b6)
+Offset: 460 (0x01cc)
 Block type: 1 (SWF_SHOWFRAME)
 Block length: 0
 
 
-Offset: 440 (0x01b8)
+Offset: 462 (0x01ce)
 Block type: 0 (SWF_END)
 Block length: 0
 
