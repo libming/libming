@@ -114,16 +114,16 @@ makefdb_LDADD = libutil.la $(top_builddir)/src/libming.la
 makefdb_CFLAGS = -DMAKE_FDB
 
 gif2mask_SOURCES = gif2mask.c
-gif2mask_LDADD = $(top_builddir)/src/libming.la
+gif2mask_LDADD = $(top_builddir)/src/libming.la $(MATHLIB) $(ZLIB) $(GIFLIB)
 
 png2dbl_SOURCES = png2dbl.c
-png2dbl_LDADD = $(top_builddir)/src/libming.la
+png2dbl_LDADD = $(top_builddir)/src/libming.la $(MATHLIB) $(ZLIB) $(PNGLIB)
 
 dbl2png_SOURCES = dbl2png.c
-dbl2png_LDADD = $(top_builddir)/src/libming.la
+dbl2png_LDADD = $(top_builddir)/src/libming.la $(ZLIB) $(PNGLIB)
 
 gif2dbl_SOURCES = gif2dbl.c
-gif2dbl_LDADD = $(top_builddir)/src/libming.la
+gif2dbl_LDADD = $(top_builddir)/src/libming.la $(MATHLIB) $(ZLIB) $(GIFLIB)
 
 makeswf_SOURCES = makeswf.c makeswf_utils.c
 makeswf_LDADD = $(top_builddir)/src/libming.la
