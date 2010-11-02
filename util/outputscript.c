@@ -1312,7 +1312,7 @@ outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,
     id=trec->FontID;
    if (fi->fontcodeID==id)
    {
-    for(i=0;i<trec->GlyphCount && i<bsize ;i++)
+    for(i=0;i<trec->GlyphCount && i<bsize-2 ;i++)	/* byte n-1 will be terminator '\0' */
     {
      int off=(&(trec->GlyphEntries[i]))->GlyphIndex[0];
      if (off<fi->fontcodearrsize)
