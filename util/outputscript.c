@@ -126,7 +126,7 @@ struct FONTINFO {		/* a linked list for all our font code info: */
  struct FONTINFO *next;
 };
 static struct FONTINFO *fip; 	/* start point of list */
-
+static struct FONTINFO *fip_current; 
 #define OUT_BEGIN(block) \
 	struct block *sblock = (struct block *)pblock; \
 	printf( "\n" COMMSTART " " #block " " COMMEND "\n");
@@ -1075,7 +1075,7 @@ static void saveFontInfo(int id,int numglyph,int *codetable,UI16 *ct16)
   struct FONTINFO *fi=fip;
 
   if (!fi) 
-    fi=fip=calloc(1,sizeof(struct FONTINFO));
+    fi=fip=fip_current=calloc(1,sizeof(struct FONTINFO));
   else
   {  
    while (fi->next)
@@ -1305,13 +1305,20 @@ outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,
   {
     printf ("%s(%d, %d);\n", methodcall (tname, "moveTo"),trec->XOffset,trec->YOffset);
   }
-
+  if (trec->FontID) 
+  {
+    id=trec->FontID;
+  }
+  if (!trec->StyleFlagHasFont)				/* always check flag before use data */
+  {
+   fi = fip_current;					/* so cont w current font */
+   id = fi->fontcodeID;					/* trigger next if */
+  }
   while (fi)
   {
-   if (trec->FontID) 
-    id=trec->FontID;
    if (fi->fontcodeID==id)
    {
+    fip_current=fi;					/* set current font */
     for(i=0;i<trec->GlyphCount && i<bsize-2 ;i++)	/* byte n-1 will be terminator '\0' */
     {
      int off=(&(trec->GlyphEntries[i]))->GlyphIndex[0];
