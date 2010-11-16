@@ -226,6 +226,7 @@ makeswf_readfile (const char *file)
    {
 	fprintf(stderr, "makeswf_readfile: failed\n");
 	fclose(fd);
+	free(ret);
 	return NULL;	
    }
    fclose(fd);
