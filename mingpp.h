@@ -815,7 +815,7 @@ class SWFFont : public SWFBlock
 		throw SWFException("SWFFont(FILE *file)");
   }
 
-  SWFFont(char *path)
+  SWFFont(const char *path)
   { 
     this->font = newSWFFont_fromFile(path); 
     if(this->font == NULL)
