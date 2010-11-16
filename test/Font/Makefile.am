@@ -16,7 +16,8 @@ C_PROGS =		\
 	test03		\
 	test04		\
 	test05		\
-	test06
+	test06		\
+	test07
 
 if USE_CXX
 CXX_PROGS =		\

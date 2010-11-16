@@ -4,3 +4,4 @@ test03:swf,freetype: font string width
 test04:swf: fdb font shared between text and textfield (see http://bugs.libming.org/show_bug.cgi?id=89)
 test05:swf: fdb font shared between text and readonly textfield (see http://bugs.libming.org/show_bug.cgi?id=89)
 test06:swf: modified fdb font with exaggerated kerning (see http://bugs.libming.org/show_bug.cgi?id=95)
+test07:swf: use of UTF8 string in text and textfield (see http://bugs.libming.org/show_bug.cgi?id=98)
