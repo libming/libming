@@ -1319,7 +1319,7 @@ outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,
    if (fi->fontcodeID==id)
    {
     fip_current=fi;					/* set current font */
-    for(i=0;i<trec->GlyphCount && i<bsize-2 ;i++)	/* byte n-1 will be terminator '\0' */
+    for(i=0;i<trec->GlyphCount && i<bsize-1 ;i++)	/* byte n-1 will be terminator '\0' */
     {
      int off=(&(trec->GlyphEntries[i]))->GlyphIndex[0];
      if (off<fi->fontcodearrsize)
@@ -1328,7 +1328,7 @@ outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,
       buffer[i]='?';		/* fallback to dummy A */
      /* printf ( COMMSTART "GlyphIndex[0] = %d  char = %d " COMMEND"\n",off,fi->fontcodeptr[off] ); */
     } 
-    buffer[i+1]='\0'; 
+    buffer[i]='\0'; 
     return;
    }
    else
