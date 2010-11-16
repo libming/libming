@@ -36,6 +36,7 @@ int main()
 	SWFMovie_add(m, text);
 
         SWFTextField_setFont(textfield, font);
+        SWFTextField_setFlags(textfield, SWFTEXTFIELD_NOEDIT);
         SWFTextField_setColor(textfield, 0xff, 0, 0, 0xff);
         SWFTextField_setHeight(textfield, 10);
         SWFTextField_addUTF8String(textfield, string);
