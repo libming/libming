@@ -576,10 +576,13 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray,
 
   count = linestylearray->LineStyleCount;
 
+  SWF_LINESTYLE* styles = linestylearray->LineStyles ?
+  	linestylearray->LineStyles : linestylearray->LineStyles2;
+
   printf ("" COMMSTART "%d linestyles(s)" COMMEND "\n", count);
   for (i = 0; i < count; i++)
     {
-      outputSWF_LINESTYLE (&(linestylearray->LineStyles[i]), parentname, i);
+      outputSWF_LINESTYLE (&(styles[i]), parentname, i);
     }
 }
 
