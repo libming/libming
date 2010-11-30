@@ -99,7 +99,12 @@ SWFFont_buildReverseMapping(SWFFont font)
 		memset(font->codeToGlyph.charMap, 0, 256 * sizeof(char));
 
 		for ( i=0; i<font->nGlyphs; ++i )
+		{
+		 if (font->glyphToCode[i]<256)
 			font->codeToGlyph.charMap[font->glyphToCode[i]] = i;
+		 else
+		 	SWF_warn("No such glyph %d in map\n",i);
+		}
 	}
 }
 
