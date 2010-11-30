@@ -221,13 +221,14 @@ makeswf_readfile (const char *file)
       perror("readfile");
       return NULL;
    }
-   memset(ret, '\0', size+1);
    if(fread(ret, 1, size, fd) != size)
    {
 	fprintf(stderr, "makeswf_readfile: failed\n");
 	fclose(fd);
+	free(ret);
 	return NULL;	
    }
+   ret[size] = '\0';
    fclose(fd);
 
    return ret;

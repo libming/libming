@@ -5,7 +5,6 @@
 
 /*
  * Testcase for bug http://bugs.libming.org/show_bug.cgi?id=89
- *
  */
 
 
