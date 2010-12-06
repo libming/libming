@@ -47,7 +47,7 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* f)
 		skipBytes += 4;
 
 	fseek(f, offset + skipBytes, SEEK_SET); /* skip FontId (UI16) */
-	length -= skipBytes;
+	length -= 2;				/* sub FontId (UI16) only */
 	
 	printf("Writing font '%s' to file '%s' (%i bytes)... ",
 		blockp->block.SWF_DEFINEFONT2.FontName, name, length+4); /* +4 for 'fdb0' header */
