@@ -61,7 +61,7 @@ static png_structp openPngFromFile(FILE *fp)
 }
 
 static int pngReadFunc(png_structp png, unsigned char *buf, int len)
-{	SWFInput input = (SWFInput) png->io_ptr;
+{	SWFInput input = (SWFInput) png_get_io_ptr(png);
 	return SWFInput_read(input, buf, len);
 }
 
@@ -127,7 +127,7 @@ static int readPNG(png_structp png_ptr, dblData result)
 		return 0;
 	}
 
-	if(setjmp(png_ptr->jmpbuf))
+	if(setjmp(png_jmpbuf(png_ptr)))
 	{
 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     	return 0;

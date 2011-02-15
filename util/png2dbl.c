@@ -91,7 +91,7 @@ struct pngdata readPNG(FILE *fp)
     error("Couldn't create end_info\n");
   }
 
-  if(setjmp(png_ptr->jmpbuf))
+  if(setjmp(png_jmpbuf(png_ptr)))
   {
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     fclose(fp);
