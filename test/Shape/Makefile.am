@@ -27,6 +27,7 @@ TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 EXTRA_DIST = 		\
 	test01.pl	\
 	test01.php	\
+	test01.py	\
 	test01.ref	\
 	test02.pl	\
 	test02.php	\
