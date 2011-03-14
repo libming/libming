@@ -1837,7 +1837,7 @@ outputHeader (struct Movie *m)
   if( m->version != 5 ) 
 	printf ("Ming_useSWFVersion(%d);\n\n", m->version);
   printf ("%s();\n\n", newobj ("m", "Movie"));
-  printf (COMMSTART "add setscale here" COMMEND "\n");
+  printf ("Ming_setScale(1.0);\n");
 #endif
 #ifdef SWFPLUSPLUS
   printf ("#include <mingpp.h>\n");

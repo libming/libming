@@ -6,7 +6,6 @@ Ming_useSWFVersion(8);
 m =  SWFMovie();
 
 Ming_setScale(1.0);
-#add setscale here
 #Unknown block type 69
 
 # SWF_DEFINESHAPE3 
