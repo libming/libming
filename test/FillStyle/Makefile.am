@@ -46,18 +46,22 @@ EXTRA_DIST = 		\
 	test01.py	\
 	test01.ref	\
 	test02.php	\
+	test02.pl	\
 	test02.py	\
 	test02.ref	\
 	test03.php	\
-	test04.py	\
+	test03.pl	\
+	test03.py	\
 	test03.ref	\
 	test04.php	\
 	test04.py	\
 	test04.ref	\
 	test05.php	\
+	test05.pl	\
 	test05.py	\
 	test05.ref	\
 	test06.php	\
+	test06.pl	\
 	test06.py	\
 	test06.ref	\
 	test07.ref	\
