@@ -47,6 +47,7 @@ EXTRA_DIST = 		\
 	test01.py	\
 	test02.php	\
 	test02.ref	\
+	test03.php	\
 	test03.ref	\
 	test04.py	\
 	test04.ref	\
