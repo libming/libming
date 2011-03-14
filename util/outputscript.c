@@ -729,7 +729,7 @@ outputSWF_DEFINEBITS (SWF_Parserstruct * pblock)
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("\n" COMMSTART " Bitmap %d (bits). To extract:" COMMEND "\n",
     sblock->CharacterID);
-  printf ("\n" COMMSTART " swfextract -j %d -o %s.jpg $swf" COMMEND "\n",
+  printf (COMMSTART " swfextract -j %d -o %s.jpg $swf" COMMEND "\n",
     sblock->CharacterID, name);
   printf ("%s('%s.jpg');\n", newobj (name, "Bitmap"), name);
 
@@ -747,7 +747,7 @@ outputSWF_DEFINEBITSJPEG2 (SWF_Parserstruct * pblock)
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("\n" COMMSTART " Bitmap %d (jpeg2). To extract:" COMMEND "\n",
     sblock->CharacterID);
-  printf ("\n" COMMSTART " swfextract -j %d -o %s.jpg $swf" COMMEND "\n",
+  printf (COMMSTART " swfextract -j %d -o %s.jpg $swf" COMMEND "\n",
     sblock->CharacterID, name);
   printf ("%s('%s.jpg');\n", newobj (name, "Bitmap"), name);
 
@@ -765,7 +765,7 @@ outputSWF_DEFINEBITSJPEG3 (SWF_Parserstruct * pblock)
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("\n" COMMSTART " Bitmap %d (jpeg3). To extract:" COMMEND "\n",
     sblock->CharacterID);
-  printf ("\n" COMMSTART " swfextract -j %d -o %s.jpg $swf" COMMEND "\n",
+  printf (COMMSTART " swfextract -j %d -o %s.jpg $swf" COMMEND "\n",
     sblock->CharacterID, name);
   printf ("%s('%s.jpg');\n", newobj (name, "Bitmap"), name);
 }
@@ -1153,7 +1153,7 @@ outputSWF_DEFINELOSSLESS (SWF_Parserstruct * pblock)
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("\n" COMMSTART " Bitmap %d (lossless). To extract:" COMMEND "\n",
     sblock->CharacterID);
-  printf ("\n" COMMSTART " swfextract -p %d -o %s.png $swf" COMMEND "\n",
+  printf (COMMSTART " swfextract -p %d -o %s.png $swf" COMMEND "\n",
     sblock->CharacterID, name);
   printf ("%s('%s.png');\n", newobj (name, "Bitmap"), name);
 
@@ -1169,7 +1169,7 @@ outputSWF_DEFINELOSSLESS2 (SWF_Parserstruct * pblock)
   sprintf (name, "character%d", sblock->CharacterID);
   printf ("\n" COMMSTART " Bitmap %d (lossless2). To extract:" COMMEND "\n",
     sblock->CharacterID);
-  printf ("\n" COMMSTART " swfextract -p %d -o %s.png $swf" COMMEND "\n",
+  printf (COMMSTART " swfextract -p %d -o %s.png $swf" COMMEND "\n",
     sblock->CharacterID, name);
   printf ("%s('%s.png');\n", newobj (name, "Bitmap"), name);
 }
