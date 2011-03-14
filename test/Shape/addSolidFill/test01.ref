@@ -1,0 +1,55 @@
+File version: 8
+File size: 58
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 69 (SWF_FILEATTRIBUTES)
+Block length: 4
+
+ FileAttributes: HasMetaData 0, UseNetwork 0, HasAS3 0
+
+Offset: 26 (0x001a)
+Block type: 32 (SWF_DEFINESHAPE3)
+Block length: 18
+
+ CharacterID: 1
+ RECT:  (0,0)x(0,0):1
+ FillStyleArray:  FillStyleCount:      2  FillStyleCountExtended:      0
+ FillStyle:  FillStyleType: 0
+ RGBA: (20,40,80,df)
+ FillStyle:  FillStyleType: 0
+ RGBA: (40,80,20,18)
+ LineStyleArray:  LineStyleCount: 0
+ NumFillBits: 2
+ NumLineBits: 0
+  ENDSHAPE
+
+Offset: 46 (0x002e)
+Block type: 26 (SWF_PLACEOBJECT2)
+Block length: 6
+
+ PlaceFlagHasClipActions 0
+ PlaceFlagHasClipDepth 0
+ PlaceFlagHasName 0
+ PlaceFlagHasRatio 0
+ PlaceFlagHasColorTransform 0
+ PlaceFlagHasMatrix 1
+ PlaceFlagHasCharacter 1
+ PlaceFlagMove 0
+ Depth 1
+ CharacterID: 1
+  Matrix:
+   TranslateX      0 TranslateY      0
+
+Offset: 54 (0x0036)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 56 (0x0038)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

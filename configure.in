@@ -424,6 +424,7 @@ AC_OUTPUT([
 	test/Video/Makefile
 	test/actionscript/Makefile
 	test/Shape/Makefile
+	test/Shape/addSolidFill/Makefile
 	test/LineStyle/Makefile
 	test/MovieClip/Makefile
 	test/Gradient/Makefile
