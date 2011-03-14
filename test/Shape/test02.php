@@ -5,7 +5,7 @@ $m = new SWFMovie(8);
 
 $s = new SWFShape();
 
-$f = $s->addFill(255,0,0,255);
+$f = $s->addSolidFill(255,0,0);
 $s->setRightFill($f);
 
 Ming_setCubicThreshold(10);

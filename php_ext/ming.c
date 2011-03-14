@@ -4543,6 +4543,38 @@ PHP_METHOD(swfshape, setLine)
 }
 /* }}} */
 
+/* {{{ proto object swfshape::addSolidFill(int r, int g, int b, [int alpha])
+   Returns a solid fill object, for use with swfshape_setleftfill and swfshape_setrightfill. */
+PHP_METHOD(swfshape, addSolidFill)
+{
+	SWFFill fill=NULL;
+	int ret;
+
+	if (ZEND_NUM_ARGS() == 3 || ZEND_NUM_ARGS() == 4) {
+		/* it's a solid fill */
+		long r, g, b, a = 0xff;
+
+		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &r, &g, &b, &a) == FAILURE) {
+			return;
+		}
+
+		fill = SWFShape_addSolidFill(getShape(getThis() TSRMLS_CC), (byte)r, (byte)g, (byte)b, (byte)a);
+	} else {
+		WRONG_PARAM_COUNT;
+	}
+	
+	if (!fill) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding fill to shape");
+	}
+
+	/* return an SWFFill object */
+	ret = zend_list_insert(fill, le_swffillp);
+	object_init_ex(return_value, fill_class_entry_ptr);
+	add_property_resource(return_value, "fill", ret);
+	zend_list_addref(ret);
+}
+/* }}} */
+
 /* {{{ proto object swfshape::addfill(mixed arg1, int arg2, [int b [, int a]])
    Returns a fill object, for use with swfshape_setleftfill and swfshape_setrightfill. If 1 or 2 parameter(s) is (are) passed first should be object (from gradient class) and the second int (flags). Gradient fill is performed. If 3 or 4 parameters are passed : r, g, b [, a]. Solid fill is performed. */
 PHP_METHOD(swfshape, addFill)
@@ -5043,6 +5075,7 @@ static zend_function_entry swfshape_functions[] = {
 	PHP_ME(swfshape, __construct,        NULL, 0)
 	PHP_ME(swfshape, setLine,            NULL, 0)
 	PHP_ME(swfshape, addFill,            NULL, 0)
+	PHP_ME(swfshape, addSolidFill,       NULL, 0)
 	PHP_ME(swfshape, setLeftFill,        NULL, 0)
 	PHP_ME(swfshape, setRightFill,       NULL, 0)
 	PHP_ME(swfshape, movePenTo,          NULL, 0)
