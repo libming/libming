@@ -41,20 +41,24 @@ endif
 TEST_PROGS = $(C_PROGS) $(CXX_PROGS)
 
 EXTRA_DIST = 		\
-	test01.ref	\
 	test01.php	\
 	test01.pl	\
 	test01.py	\
+	test01.ref	\
 	test02.php	\
+	test02.py	\
 	test02.ref	\
 	test03.php	\
+	test04.py	\
 	test03.ref	\
 	test04.php	\
 	test04.py	\
 	test04.ref	\
 	test05.php	\
+	test05.py	\
 	test05.ref	\
 	test06.php	\
+	test06.py	\
 	test06.ref	\
 	test07.ref	\
 	TestList
