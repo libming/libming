@@ -49,9 +49,12 @@ EXTRA_DIST = 		\
 	test02.ref	\
 	test03.php	\
 	test03.ref	\
+	test04.php	\
 	test04.py	\
 	test04.ref	\
+	test05.php	\
 	test05.ref	\
+	test06.php	\
 	test06.ref	\
 	test07.ref	\
 	TestList
