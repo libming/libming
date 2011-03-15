@@ -710,8 +710,8 @@ static zend_function_entry swfmatrix_functions[] = {
 
 /* {{{ SWFInitAction
 */
-/* {{{ proto void swfinitaction::__construct(action)
-   Creates a new SWFInitAction object */
+/* {{{ proto void swfinitaction::__construct(action,[id])
+   Creates a new SWFInitAction object. */
 PHP_METHOD(swfinitaction, __construct)
 {
 	SWFInitAction init;
