@@ -49,6 +49,10 @@ int SWFSoundStream_getFrames(sound)
 	OUTPUT:
 	 RETVAL
 
+void
+SWFSoundStream_setInitialMp3Delay(sound, delay)
+	SWF::SoundStream	sound
+	int delay
 
 void
 destroySWFSoundStream(sound)

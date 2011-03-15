@@ -32,12 +32,15 @@ EXTRA_DIST =	\
 	test01.ref \
 	test01.php \
 	test01.py  \
+	test01.pl  \
 	test02.ref \
 	test02.php \
 	test02.py \
+	test02.pl  \
 	test03.ref \
 	test03.php \
 	test03.py \
+	test03.pl \
 	TestList
 
 check_PROGRAMS = \
