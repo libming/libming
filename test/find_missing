@@ -1,0 +1,18 @@
+#!/bin/sh
+
+BASEDIR=$PWD
+find * -name 'test*.c' | while read f; do
+	b=$(basename "${f}" .c)
+	d=$(dirname "${f}")
+	cd $d || { echo "Could not enter directory ${d}" >&2; exit 1; }
+	cmd=""
+	for p in "${b}"*; do
+		cmd="${cmd}s/${p} //;"
+	done
+	cmd="${cmd}s/  */ /;"
+	missing=$(echo "${b}.pl ${b}.py ${b}.php ${b}-cxx.C " | sed -e "${cmd}")
+	if test -n "${missing}"; then
+		echo "Missing in ${d}: ${missing}"
+	fi
+	cd $BASEDIR
+done;
