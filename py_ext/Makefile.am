@@ -14,7 +14,7 @@ clean-local:
 	rm -Rf test.swf build
 
 install:
-	$(PYTHON) setup.py install --prefix $(prefix) --root "$(DESTDIR)"
+	$(PYTHON) setup.py install --prefix $(prefix) --root "$(DESTDIR)$(prefix)"
 
 test.swf:
 	$(PYTHON) shape.py
