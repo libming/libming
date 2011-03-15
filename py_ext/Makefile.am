@@ -4,6 +4,10 @@ EXTRA_DIST = Zwiff/README.txt Zwiff/__init__.py Zwiff/setFlags.py \
 
 BUILT_SOURCES = ming_wrap.c
 
+SWIG_GENERATED = ming_wrap.c mingc.py
+
+MAINTAINER_CLEAN = $(SWIG_GENERATED)
+
 all-local:
 	CFLAGS="$(CFLAGS) -fno-strict-aliasing" $(PYTHON) setup.py build
 
