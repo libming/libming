@@ -1021,6 +1021,9 @@ class SWFSoundStream(SWFBase):
     def getDuration(self):
         return mingc.SWFSoundStream_getDuration(self.this)
 
+    def setInitialMp3Delay(self, delay):
+        return mingc.SWFSoundStream_setInitialMp3Delay(self.this, delay)
+
 class SWFSound(SWFBase):
 
     def __init__(self, arg, flags=0):

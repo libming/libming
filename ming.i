@@ -425,6 +425,7 @@ SWFSoundStream newSWFSoundStreamFromFileno(int fd);
 SWFSoundStream newSWFSoundStream_fromInput(SWFInput input);
 void destroySWFSoundStream(SWFSoundStream soundStream);
 unsigned int SWFSoundStream_getDuration(SWFSoundStream);
+void SWFSoundStream_setInitialMp3Delay(SWFSoundStream soundStream, int delay);
 
 /***** SWFSound *****/
 
