@@ -1703,8 +1703,23 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 {
   OUT_BEGIN (SWF_INITACTION);
 
-  printf ("%s(%s(\"\n%s\") );\n", methodcall (spritenum?spritename:"m", "add"),
-	  newobj (NULL, "Action"), decompile5Action(sblock->numActions,sblock->Actions,0));
+  printf (COMMSTART
+    " Might be more appropriate to use addInitAction here" COMMEND "\n");
+
+  /* NOTE: the printf must be split in two cause newobj uses
+   *       a static buffer so can't be used twice to return
+   *       different strings
+   */
+
+  printf ("%s(%s(",
+          methodcall (spritenum?spritename:"m", "add"),
+          newobj (NULL, "InitAction"));
+
+  /* TODO: add SpriteID ? */
+
+  printf ("%s(\"%s\")));\n",
+          newobj (NULL, "Action"),
+          decompile5Action(sblock->numActions,sblock->Actions,0));
 }
 
 void
