@@ -1022,7 +1022,7 @@ class SWFSoundStream(SWFBase):
         return mingc.SWFSoundStream_getDuration(self.this)
 
     def setInitialMp3Delay(self, delay):
-        return mingc.SWFSoundStream_setInitialMp3Delay(self.this, delay)
+        mingc.SWFSoundStream_setInitialMp3Delay(self.this, delay)
 
 class SWFSound(SWFBase):
 
@@ -1033,6 +1033,9 @@ class SWFSound(SWFBase):
         else:
             self.file = open(arg, "rb")
             self.this = mingc.newSWFSound(self.file, flags)
+
+    def setInitialMp3Delay(self, delay):
+        mingc.SWFSound_setInitialMp3Delay(self.this, delay)
 
     # display list destroys this..
 

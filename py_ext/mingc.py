@@ -743,6 +743,10 @@ newSWFSound_fromSoundStream = _mingc.newSWFSound_fromSoundStream
 def destroySWFSound(*args):
   return _mingc.destroySWFSound(*args)
 destroySWFSound = _mingc.destroySWFSound
+
+def SWFSound_setInitialMp3Delay(*args):
+  return _mingc.SWFSound_setInitialMp3Delay(*args)
+SWFSound_setInitialMp3Delay = _mingc.SWFSound_setInitialMp3Delay
 SWF_SOUND_COMPRESSION = _mingc.SWF_SOUND_COMPRESSION
 SWF_SOUND_NOT_COMPRESSED = _mingc.SWF_SOUND_NOT_COMPRESSED
 SWF_SOUND_ADPCM_COMPRESSED = _mingc.SWF_SOUND_ADPCM_COMPRESSED

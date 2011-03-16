@@ -7517,6 +7517,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFSound_setInitialMp3Delay(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFSound arg1 = (SWFSound) 0 ;
+  int arg2 ;
+  int res1 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFSound_setInitialMp3Delay",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFSound_setInitialMp3Delay" "', argument " "1"" of type '" "SWFSound""'"); 
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SWFSound_setInitialMp3Delay" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  SWFSound_setInitialMp3Delay(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFSoundInstance_setLoopInPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFSoundInstance arg1 ;
@@ -14776,6 +14804,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"newSWFSound_fromInput", _wrap_newSWFSound_fromInput, METH_VARARGS, NULL},
 	 { (char *)"newSWFSound_fromSoundStream", _wrap_newSWFSound_fromSoundStream, METH_VARARGS, NULL},
 	 { (char *)"destroySWFSound", _wrap_destroySWFSound, METH_VARARGS, NULL},
+	 { (char *)"SWFSound_setInitialMp3Delay", _wrap_SWFSound_setInitialMp3Delay, METH_VARARGS, NULL},
 	 { (char *)"SWFSoundInstance_setLoopInPoint", _wrap_SWFSoundInstance_setLoopInPoint, METH_VARARGS, NULL},
 	 { (char *)"SWFSoundInstance_setLoopOutPoint", _wrap_SWFSoundInstance_setLoopOutPoint, METH_VARARGS, NULL},
 	 { (char *)"SWFSoundInstance_setLoopCount", _wrap_SWFSoundInstance_setLoopCount, METH_VARARGS, NULL},

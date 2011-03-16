@@ -435,6 +435,7 @@ SWFSound newSWFSoundFromFileno(int fd, byte flags);
 SWFSound newSWFSound_fromInput(SWFInput input, byte flags);
 SWFSound newSWFSound_fromSoundStream(SWFSoundStream stream);
 void destroySWFSound(SWFSound sound);
+void SWFSound_setInitialMp3Delay(SWFSound sound, int delay);
 
 #define SWF_SOUND_COMPRESSION       0xf0
 #define SWF_SOUND_NOT_COMPRESSED    (0<<4)
