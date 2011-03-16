@@ -35,6 +35,8 @@ EXTRA_DIST =	\
 	test01.pl \
 	test02.pl \
 	test03.pl \
+	test01.py \
+	test02.py \
 	TestList
 
 check_PROGRAMS = \
