@@ -1001,10 +1001,14 @@ if( sblock->HasLayout ) {
         printf ("%s(" SQ , methodcall (tname, "addChars"));
         for(i=0;i<fi->fontcodearrsize;i++)
         {
-         #ifdef SWFPERL
+#ifdef SWFPERL
          if (fi->fontcodeptr[i]=='\'' || fi->fontcodeptr[i]=='\\' || fi->fontcodeptr[i]=='@' || fi->fontcodeptr[i]=='%' )
           printf ("\\");
-         #endif
+#endif
+#if defined(SWFPHP) || defined(SWFPYTHON)
+         if (fi->fontcodeptr[i]=='\'' || fi->fontcodeptr[i]=='\\')
+          printf ("\\");
+#endif
          if (fi->fontcodeptr[i]<256)
           printf ("%c",fi->fontcodeptr[i]);
         } 
