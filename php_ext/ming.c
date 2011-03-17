@@ -2351,9 +2351,9 @@ PHP_METHOD(swffont, __construct)
 
 	if(font == NULL)
 	{
-		php_error(E_ERROR, "Loading font failed! "
-		                   "Please use new SWFBrowserFont(string:fontname) "
-		                   "for player/browser fonts.");
+		php_error(E_ERROR, "Loading font \"%s\" failed! "
+		                   "Please use new SWFBrowserFont(\"%s\") "
+		                   "for player/browser fonts.", file, file);
 	
 	}
 	
