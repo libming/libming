@@ -148,6 +148,7 @@ static struct SWFBlockOutput outputs[] = {
   {SWF_DEFINEEDITTEXT, outputSWF_DEFINEEDITTEXT},
   {SWF_DEFINEFONT, outputSWF_DEFINEFONT},
   {SWF_DEFINEFONT2, outputSWF_DEFINEFONT2},
+  {SWF_DEFINEFONT3, outputSWF_DEFINEFONT3},
   {SWF_DEFINEFONTINFO, outputSWF_DEFINEFONTINFO},
   {SWF_DEFINEFONTINFO2, outputSWF_DEFINEFONTINFO2},
   {SWF_DEFINELOSSLESS, outputSWF_DEFINELOSSLESS},
@@ -1068,8 +1069,14 @@ if( sblock->HasLayout ) {
 void
 outputSWF_DEFINEFONT (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEFONT);
+  char fname[64];
+  OUT_BEGIN (SWF_DEFINEFONT);
 
+  sprintf (fname, "f%d", sblock->FontID);
+
+  printf ("\n" COMMSTART " Font %d (%d glyps)." COMMEND "\n",
+    sblock->FontID, sblock->NumGlyphs);
+  printf ("%s(\"font%d.fdb\" );\n", newobj (fname, "Font"), sblock->FontID);
 }
 
 /* save important part for later usage in outputSWF_DEFINETEXT(), outputSWF_DEFINETEXT2() */
@@ -1114,6 +1121,25 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   {
    printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
    saveFontInfo(sblock->FontID,sblock->NumGlyphs,sblock->CodeTable,NULL);
+  }
+  else
+  {
+   printf ("%s(\"%s\" );\n", newobj (fname, "BrowserFont"), sblock->FontName);
+  }
+}
+
+void
+outputSWF_DEFINEFONT3 (SWF_Parserstruct * pblock)
+{
+  char fname[64];
+  OUT_BEGIN (SWF_DEFINEFONT3);
+
+  sprintf (fname, "f%d", sblock->FontID);
+
+  if (sblock->FontFlagsHasLayout || sblock->NumGlyphs)
+  {
+   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+   saveFontInfo(sblock->FontID,sblock->NumGlyphs,NULL,sblock->CodeTable);
   }
   else
   {
