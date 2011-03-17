@@ -17,7 +17,6 @@ outputTrailer (struct Movie *m)
 void
 outputBlock (int type, SWF_Parserstruct * blockp, FILE* f)
 {
-	static int fontnum=0;
 	FILE *out;
 	char name[256];
 	int skipBytes, ret;
@@ -25,9 +24,16 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* f)
 	int length = blockp->length;
 	char *buf;
 
-	if ( type != SWF_DEFINEFONT2 ) return;
+	switch ( type ) {
+		case SWF_DEFINEFONT:
+		case SWF_DEFINEFONT2:
+		case SWF_DEFINEFONT3:
+			break;
+		default:
+			return;
+	}
 
-	sprintf(name, "font%i.fdb", fontnum++);
+	sprintf(name, "font%i.fdb", blockp->block.SWF_DEFINEFONT2.FontID);
 
 
   	out=fopen(name,"wb");
