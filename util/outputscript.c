@@ -1123,7 +1123,8 @@ outputSWF_DEFINEFONT2 (SWF_Parserstruct * pblock)
   sprintf (fname, "f%d", sblock->FontID);
   if (sblock->FontFlagsHasLayout || sblock->NumGlyphs)
   {
-   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+   printf (COMMSTART " font name: %s" COMMEND "\n", sblock->FontName);
+   printf ("%s(\"font%d.fdb\" );\n", newobj (fname, "Font"), sblock->FontID);
    saveFontInfo(sblock->FontID,sblock->NumGlyphs,sblock->CodeTable,NULL);
   }
   else
@@ -1142,7 +1143,8 @@ outputSWF_DEFINEFONT3 (SWF_Parserstruct * pblock)
 
   if (sblock->FontFlagsHasLayout || sblock->NumGlyphs)
   {
-   printf ("%s(\"%s.fdb\" );\n", newobj (fname, "Font"), sblock->FontName);
+   printf (COMMSTART " font name: %s" COMMEND "\n", sblock->FontName);
+   printf ("%s(\"font%d.fdb\" );\n", newobj (fname, "Font"), sblock->FontID);
    saveFontInfo(sblock->FontID,sblock->NumGlyphs,NULL,sblock->CodeTable);
   }
   else
