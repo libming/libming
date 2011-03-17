@@ -81,13 +81,13 @@ static inline void checkShapeStyle(SWFInput input, char style,
 {
 	if ( style & 1 )
 		if ( SWFInput_readBits(input, numFillBits) != 0 ) /* fill0 = 0 */
-			SWF_error("SWFFont_getShape: bad file format (was expecting fill0 = 0)");
+			SWF_warn("SWFFont_getShape: bad file format (was expecting fill0 = 0)\n");
 	if ( style & 2 )
 		if ( SWFInput_readBits(input, numFillBits) != 1 ) /* fill1 = 1 */
-			SWF_error("SWFFont_getShape: bad file format (was expecting fill1 = 1)");
+			SWF_warn("SWFFont_getShape: bad file format (was expecting fill1 = 1)\n");
 	if ( style & 4 )
 		if ( SWFInput_readBits(input, numLineBits) != 0 ) /* line = 1 */
-			SWF_error("SWFFont_getShape: bad file format (was expecting line = 0)");
+			SWF_warn("SWFFont_getShape: bad file format (was expecting line = 0)\n");
 }
 
 static int translateShapeRecord(SWFInput input, SWFShape shape)
