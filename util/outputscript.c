@@ -390,13 +390,13 @@ outputSWF_CXFORMWITHALPHA(SWF_CXFORMWITHALPHA * cxform, char *name)
  if (cxform->HasMultTerms)
  {
   printf("%s" ARGSTART "%0.2f" ARGSEP "%0.2f" ARGSEP "%0.2f" ARGSEP "%0.2f" ARGEND STMNTEND "\n",
-    methodcall (name, "setColorMult"), cxform->RedMultTerm/256.0,
+    methodcall (name, "multColor"), cxform->RedMultTerm/256.0,
     cxform->GreenMultTerm/256.0, cxform->BlueMultTerm/256.0, cxform->AlphaMultTerm/256.0);
  }
  if (cxform->HasAddTerms)
  {
   printf("%s" ARGSTART "%ld" ARGSEP "%ld" ARGSEP "%ld" ARGSEP "%ld" ARGEND STMNTEND "\n",
-    methodcall (name, "setColorAdd"),  cxform->RedAddTerm,
+    methodcall (name, "addColor"),  cxform->RedAddTerm,
     cxform->GreenAddTerm, cxform->BlueAddTerm, cxform->AlphaAddTerm);
  }	
 }
