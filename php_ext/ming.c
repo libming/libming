@@ -4576,7 +4576,7 @@ PHP_METHOD(swfshape, addSolidFill)
 /* }}} */
 
 /* {{{ proto object swfshape::addbitmapfill(bitmap, [flags])
-   Returns a fill object, for use with swfshape_setleftfill and swfshape_setrightfill. If 1 or 2 parameter(s) is (are) passed first should be object (from gradient class) and the second int (flags). */
+   Returns a bitmap fill object, for use with swfshape_setleftfill and swfshape_setrightfill. */
 PHP_METHOD(swfshape, addBitmapFill)
 {
 	SWFFill fill=NULL;
@@ -4608,6 +4608,52 @@ PHP_METHOD(swfshape, addBitmapFill)
 	
 	if (!fill) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding bitmap fill to shape");
+	}
+
+	/* return an SWFFill object */
+	ret = zend_list_insert(fill, le_swffillp);
+	object_init_ex(return_value, fill_class_entry_ptr);
+	add_property_resource(return_value, "fill", ret);
+	zend_list_addref(ret);
+}
+/* }}} */
+
+/* {{{ proto object swfshape::addGradientFill(gradient, [flags])
+   Returns a gradient fill object, for use with swfshape_setleftfill and swfshape_setrightfill. */
+PHP_METHOD(swfshape, addGradientFill)
+{
+	SWFFill fill=NULL;
+	int ret;
+
+	if (ZEND_NUM_ARGS() == 1 || ZEND_NUM_ARGS() == 2) {
+		/* it's a gradient or bitmap */
+		zval *arg1;
+		long flags = 0;
+
+		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &arg1, &flags) == FAILURE) {
+			return;
+		}
+
+		if (Z_OBJCE_P(arg1) == gradient_class_entry_ptr) {
+			if (flags == 0) {
+				flags = SWFFILL_LINEAR_GRADIENT;
+			}
+			fill = SWFShape_addGradientFill(getShape(getThis() TSRMLS_CC), getGradient(arg1 TSRMLS_CC), flags);
+		} else if (Z_OBJCE_P(arg1) == bitmap_class_entry_ptr) {
+			if (flags == 0) {
+				flags = SWFFILL_TILED_BITMAP;
+			}
+			fill = SWFShape_addBitmapFill(getShape(getThis() TSRMLS_CC), getBitmap(arg1 TSRMLS_CC), flags);
+		} else {
+			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Argument is not a bitmap nor a gradient");
+		}
+
+	} else {
+		WRONG_PARAM_COUNT;
+	}
+	
+	if (!fill) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding fill to shape");
 	}
 
 	/* return an SWFFill object */
@@ -5120,6 +5166,7 @@ static zend_function_entry swfshape_functions[] = {
 	PHP_ME(swfshape, addFill,            NULL, 0)
 	PHP_ME(swfshape, addSolidFill,       NULL, 0)
 	PHP_ME(swfshape, addBitmapFill,      NULL, 0)
+	PHP_ME(swfshape, addGradientFill,    NULL, 0)
 	PHP_ME(swfshape, setLeftFill,        NULL, 0)
 	PHP_ME(swfshape, setRightFill,       NULL, 0)
 	PHP_ME(swfshape, movePenTo,          NULL, 0)
