@@ -913,8 +913,9 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_DEFINEEDITTEXT);
 
   sprintf (tname, "character%d", sblock->CharacterID);
-  printf ("%s(", newobj (tname, "TextField"));
+  printf ("%s();\n", newobj (tname, "TextField"));
 
+  printf ("%s(", methodcall (tname, "setFlags"));
   if (sblock->WordWrap)
     {
       printf ("SWFTEXTFIELD_WORDWRAP");
@@ -941,6 +942,7 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
       printf ("SWFTEXTFIELD_NOEDIT");
       notFirst = 1;
     }
+/* handled by setLength later on
   if (sblock->HasMaxLength)
     {
       if (notFirst)
@@ -948,6 +950,7 @@ outputSWF_DEFINEEDITTEXT (SWF_Parserstruct * pblock)
       printf ("SWFTEXTFIELD_HASLENGTH");
       notFirst = 1;
     }
+*/
   if (sblock->AutoSize)
     {
       if (notFirst)
