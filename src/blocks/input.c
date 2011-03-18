@@ -354,7 +354,8 @@ newSWFInput_filename(const char *filename)
 	file = fopen(filename, "rb");
 	if(file == NULL)
 	{
-		SWF_warn("newSWFInput_filename: fopen failed\n");
+		SWF_warn("newSWFInput_filename: %s: %s\n",
+			filename, strerror(errno));
 		return NULL;
 	}
 
