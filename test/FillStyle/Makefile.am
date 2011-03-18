@@ -64,6 +64,7 @@ EXTRA_DIST = 		\
 	test06.pl	\
 	test06.py	\
 	test06.ref	\
+	test07.php	\
 	test07.ref	\
 	TestList
 
