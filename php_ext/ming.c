@@ -4587,18 +4587,20 @@ PHP_METHOD(swfshape, addBitmapFill)
 		zval *arg1;
 		long flags = 0;
 
-		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &arg1, &flags) == FAILURE) {
+		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o!|l", &arg1, &flags) == FAILURE) {
 			return;
 		}
 
-		if (Z_OBJCE_P(arg1) == bitmap_class_entry_ptr) {
-			if (flags == 0) {
-				flags = SWFFILL_TILED_BITMAP;
-			}
-			fill = SWFShape_addBitmapFill(getShape(getThis() TSRMLS_CC), getBitmap(arg1 TSRMLS_CC), flags);
-		} else {
+		if ( arg1 && Z_OBJCE_P(arg1) != bitmap_class_entry_ptr) {
+		
 			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Argument is not a bitmap");
 		}
+
+		if (flags == 0) {
+			flags = SWFFILL_TILED_BITMAP;
+		}
+		fill = SWFShape_addBitmapFill(getShape(getThis() TSRMLS_CC),
+			arg1 ? getBitmap(arg1 TSRMLS_CC) : 0, flags);
 
 	} else {
 		WRONG_PARAM_COUNT;
