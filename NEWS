@@ -1,5 +1,9 @@
 0.4.4 - ???
 
+	* Generally improve swftoscript and decompiler
+	* Change makefdb to name output files by font ID, to play nicer
+	  with swftoscript.
+	* Add support for 'class A extends B' syntax in actioncompiler
 	* Fix bug in 'makeswf' failing to catch some compile errors
 	  (bugzilla #94)
 	* Fix bug in action compiler dealing with class methods (bugzilla #94)
