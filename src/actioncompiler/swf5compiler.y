@@ -275,7 +275,12 @@ class_body
 class_decl 
 	: class_init identifier class_body
 	{ 
-		$$ = newASClass($2, $3);
+		$$ = newASClass($2, NULL, $3);
+		classContext = 0;
+	}
+	| class_init identifier EXTENDS identifier class_body
+	{ 
+		$$ = newASClass($2, $4, $5);
 		classContext = 0;
 	}
 	;

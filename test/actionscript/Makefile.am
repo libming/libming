@@ -29,6 +29,7 @@ AS_TESTS = \
 	class_empty.as:6	\
 	class_method.as:6 	\
 	class_member.as:6	\
+	class_extends.as:6	\
 	ASM_V4.as:4		\
 	condition.as:6		\
 	With.as:6		\
@@ -59,6 +60,7 @@ AS_TEST_FILES = \
 	class_empty.as	\
 	class_method.as \
 	class_member.as \
+	class_extends.as \
 	ASM_V4.as	\
 	condition.as	\
 	With.as		\
@@ -90,6 +92,7 @@ EXTRA_DIST = 		\
 	class_empty.ref	\
 	class_method.ref \
 	class_member.ref \
+	class_extends.ref \
 	ASM_V4.ref	\
 	condition.ref	\
 	With.ref	\

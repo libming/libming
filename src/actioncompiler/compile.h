@@ -157,6 +157,7 @@ typedef struct class_member_s *ASClassMember;
 struct class_s
 {
 	char *name;
+	char *extends;
 	ASClassMember members;
 };
 typedef struct class_s *ASClass;
@@ -248,7 +249,7 @@ int bufferWriteClass(Buffer out, ASClass clazz);
 
 ASFunction newASFunction();
 ASVariable newASVariable(char *, Buffer);
-ASClass newASClass(char *name, ASClassMember members);
+ASClass newASClass(char *name, char *extends, ASClassMember members);
 
 ASClassMember newASClassMember_function(ASFunction func);
 ASClassMember newASClassMember_function(ASFunction func);

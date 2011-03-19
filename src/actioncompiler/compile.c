@@ -958,6 +958,8 @@ void destroyASClass(ASClass clazz)
 	ASClassMember member;
 	if(clazz->name)
 		free(clazz->name);
+	if(clazz->extends)
+		free(clazz->extends);
 	
 	member = clazz->members;
 	while(member)
@@ -1011,6 +1013,15 @@ static int bufferWriteClassConstructor(Buffer out, ASClass clazz)
 	len += bufferWriteFunction(out, func, 1);
 	len += bufferWriteSetRegister(out, 1);
 	len += bufferWriteOp(out, SWFACTION_SETMEMBER);
+
+	if(clazz->extends)
+	{
+		len += bufferWriteRegister(out, 1);
+		len += bufferWriteString(out, clazz->extends,
+		                         strlen(clazz->extends) + 1);
+		len += bufferWriteOp(out, SWFACTION_GETVARIABLE);
+		len += bufferWriteOp(out, SWFACTION_EXTENDS);
+	}
 	
 	len += bufferWriteRegister(out, 1);
 	len += bufferWriteString(out, "prototype", strlen("prototype") + 1);
@@ -1124,11 +1135,12 @@ void ASClassMember_append(ASClassMember m0, ASClassMember end)
 	mb->next = end;
 }
 
-ASClass newASClass(char *name, ASClassMember members)
+ASClass newASClass(char *name, char *extends, ASClassMember members)
 {
 	ASClass clazz;
 	clazz = (ASClass) malloc(sizeof(struct class_s));
 	clazz->name = name;
+	clazz->extends = extends;
 	clazz->members = members;
 	return clazz;	
 }

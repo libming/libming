@@ -1,0 +1,122 @@
+File version: 6
+File size: 268
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 238
+
+ 46 Actions
+    26:SWFACTION_CONSTANTPOOL
+     [000] A
+     [001] _global
+     [002] prototype
+     [003] ASSetPropFlags
+     [004] super
+     [005] B
+     [006] x
+    76:SWFACTION_PUSH
+     [000]   Constant: 1 "_global"
+    81:SWFACTION_GETVARIABLE
+    82:SWFACTION_PUSH
+     [000]   Constant: 0 "A"
+    87:SWFACTION_DEFINEFUNCTION
+    Name: 
+    NumParams: 0
+    CodeSize: 6
+    2 Action
+    95:SWFACTION_PUSH
+     [000]   Constant: 0 "A"
+    100:SWFACTION_TRACE
+    101:SWFACTION_STOREREGISTER
+    Register: 1
+    105:SWFACTION_SETMEMBER
+    106:SWFACTION_PUSH
+     [000]   Register: 1
+     [001]   Constant: 2 "prototype"
+    113:SWFACTION_GETMEMBER
+    114:SWFACTION_STOREREGISTER
+    Register: 2
+    118:SWFACTION_POP
+    119:SWFACTION_PUSH
+     [000]   Integer: 1
+     [001]   NULL: 
+     [002]   Constant: 1 "_global"
+    130:SWFACTION_GETVARIABLE
+    131:SWFACTION_PUSH
+     [000]   Constant: 0 "A"
+    136:SWFACTION_GETMEMBER
+    137:SWFACTION_PUSH
+     [000]   Constant: 2 "prototype"
+    142:SWFACTION_GETMEMBER
+    143:SWFACTION_PUSH
+     [000]   Integer: 3
+     [001]   Constant: 3 "ASSetPropFlags"
+    153:SWFACTION_CALLFUNCTION
+    154:SWFACTION_POP
+    155:SWFACTION_PUSH
+     [000]   Constant: 1 "_global"
+    160:SWFACTION_GETVARIABLE
+    161:SWFACTION_PUSH
+     [000]   Constant: 5 "B"
+    166:SWFACTION_DEFINEFUNCTION
+    Name: 
+    NumParams: 0
+    CodeSize: 12
+    3 Action
+    174:SWFACTION_PUSH
+     [000]   Integer: 0
+     [001]   Constant: 4 "super"
+    184:SWFACTION_CALLFUNCTION
+    185:SWFACTION_POP
+    186:SWFACTION_STOREREGISTER
+    Register: 1
+    190:SWFACTION_SETMEMBER
+    191:SWFACTION_PUSH
+     [000]   Register: 1
+     [001]   Constant: 0 "A"
+    198:SWFACTION_GETVARIABLE
+    199:SWFACTION_EXTENDS
+    200:SWFACTION_PUSH
+     [000]   Register: 1
+     [001]   Constant: 2 "prototype"
+    207:SWFACTION_GETMEMBER
+    208:SWFACTION_STOREREGISTER
+    Register: 2
+    212:SWFACTION_POP
+    213:SWFACTION_PUSH
+     [000]   Integer: 1
+     [001]   NULL: 
+     [002]   Constant: 1 "_global"
+    224:SWFACTION_GETVARIABLE
+    225:SWFACTION_PUSH
+     [000]   Constant: 5 "B"
+    230:SWFACTION_GETMEMBER
+    231:SWFACTION_PUSH
+     [000]   Constant: 2 "prototype"
+    236:SWFACTION_GETMEMBER
+    237:SWFACTION_PUSH
+     [000]   Integer: 3
+     [001]   Constant: 3 "ASSetPropFlags"
+    247:SWFACTION_CALLFUNCTION
+    248:SWFACTION_POP
+    249:SWFACTION_PUSH
+     [000]   Constant: 6 "x"
+     [001]   Integer: 0
+     [002]   Constant: 5 "B"
+    261:SWFACTION_NEWOBJECT
+    262:SWFACTION_SETVARIABLE
+    263:SWFACTION_END
+
+Offset: 264 (0x0108)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 266 (0x010a)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

@@ -201,6 +201,7 @@ eval			{ count();	return EVAL;		}
 instance[oO]f		{ count();	return INSTANCEOF; }
 trace			{ count();	return TRACE;	}
 class			{ count();	return CLASS; }
+extends			{ count();	return EXTENDS; }
 public 			{ count();	return PUBLIC; }
 private			{ count();	return PRIVATE; }
 
