@@ -1690,6 +1690,7 @@ decompileSETMEMBER(int n, SWF_ACTION *actions, int maxn)
 	val = pop();
 	var = pop();
 	obj = pop();
+
 #ifdef DEBUG
 	printf("*SETMember* varName %s (type=%d)  objName=%s (type=%d)\n",getName(var),var->Type, getName(obj),obj->Type);
 #endif
@@ -1729,10 +1730,20 @@ decompileSETMEMBER(int n, SWF_ACTION *actions, int maxn)
 		puts("]");
 	}
 	printf(" = " );
-	if (val->Type != PUSH_VARIABLE)			// later it will be a switch{}
+
+
+	if ( OpCode(actions, n-1, maxn) == SWFACTION_STOREREGISTER ) {
+		struct SWF_ACTIONSTOREREGISTER *sr =
+			(struct SWF_ACTIONSTOREREGISTER*)&actions[n-1];
+		printf("R%d", sr->Register);
+	}
+	else if (val->Type != PUSH_VARIABLE) {
+		/* later it will be a switch{} */
 		decompilePUSHPARAM(val,1);
-	else
+	}
+	else {
 		decompilePUSHPARAM(val,0);
+	}
 	println(";");
 	return 0;
 }
