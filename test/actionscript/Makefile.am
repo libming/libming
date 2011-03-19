@@ -70,37 +70,9 @@ AS_TEST_FILES = \
 	for.as	
 	
 
-EXTRA_DIST = 		\
-	Function.ref	\
-	ASM1.ref	\
-	ASM0.ref	\
-	ASM_all.ref	\
-	ASM_extend.ref	\
-	ASM_push.ref	\
-	ASM_targetPath.ref \
-	delete.ref	\
-	logor.ref	\
-	GotoFrame.ref	\
-	targetPath.ref  \
-	FunctionInLoop.ref \
-	newline_comment.ref \
-	newline_crlf.ref \
-	TryCatch.ref \
-	forin.ref \
-	legacy_functions.ref \
-	drag.ref	\
-	class_empty.ref	\
-	class_method.ref \
-	class_member.ref \
-	class_extends.ref \
-	ASM_V4.ref	\
-	condition.ref	\
-	With.ref	\
-	switch.ref	\
-	getURL2.ref	\
-	for.ref		\
-	substr.ref	\
-	$(AS_TEST_FILES)
+EXTRA_DIST = \
+	$(AS_TEST_FILES) \
+	$(AS_TEST_FILES:.as=.ref)
 
 CLEANFILES = *.pp *.swf
 
@@ -111,3 +83,4 @@ ActionScriptTest_SOURCES = ActionScriptTest.c ../run_test.c ../../util/makeswf_u
 ActionScriptTest_LDADD = $(top_builddir)/src/libming.la
 ActionScriptTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"' -I$(top_srcdir)/util/ -DAS_TESTS='"$(AS_TESTS)"'
 
+include ../Makefile.inc
