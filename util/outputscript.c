@@ -1437,7 +1437,29 @@ outputSWF_DEFINEVIDEO (SWF_Parserstruct * pblock)
 void
 outputSWF_DEFINEVIDEOSTREAM (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_DEFINEVIDEOSTREAM);
+  char name[32];
+
+  OUT_BEGIN (SWF_DEFINEVIDEOSTREAM);
+
+  sprintf (name, "character%d", sblock->CharacterID);
+
+  /* NOTE: Ming sets NumFrames = 65535 for empty movies.. */
+  if ( sblock->NumFrames && sblock->NumFrames != 65535 ) {
+    printf (COMMSTART " You'll need to extract video%d.flv " COMMEND "\n",
+            sblock->CharacterID);
+    printf ("%s('video%d.flv');", newobj (name, "VideoStream"),
+            sblock->CharacterID);
+  } else {
+    printf ("%s(); ", newobj (name, "VideoStream"));
+  }
+  printf (COMMSTART " %d frames advertised " COMMEND "\n", sblock->NumFrames);
+
+  printf ("%s(%d, %d);\n", methodcall (name, "setDimension"),
+    sblock->Width, sblock->Height);
+
+  /* We go manual and have SWF_VIDEOFRAME trigger a nextFrame */
+  printf ("%s(SWF_VIDEOSTREAM_MODE_MANUAL);\n",
+    methodcall (name, "setFrameMode"));
 
 }
 
@@ -1760,8 +1782,15 @@ outputSWF_INITACTION (SWF_Parserstruct * pblock)
 void
 outputSWF_VIDEOFRAME (SWF_Parserstruct * pblock)
 {
-  OUT_BEGIN_EMPTY (SWF_VIDEOFRAME);
+  char name[32];
 
+  OUT_BEGIN (SWF_VIDEOFRAME);
+
+  sprintf (name, "character%d", sblock->StreamID);
+
+  printf (COMMSTART " Frame %d of stream %d " COMMEND "\n",
+    sblock->FrameNum, sblock->StreamID);
+  printf ("%s();\n", methodcall (name, "nextFrame"));
 }
 
 void
