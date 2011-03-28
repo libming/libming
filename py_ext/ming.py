@@ -888,7 +888,7 @@ class SWFText(SWFBase):
         mingc.SWFText_addString(self.this, s, advance)
 
     def addUTF8String(self, s, advance=None):
-        mingc.SWFText_addUTF8String(self.this, s.encode("uft-8"), advance)
+        mingc.SWFText_addUTF8String(self.this, s.encode("utf-8"), advance)
 
     def setSpacing(self, spacing):
         mingc.SWFText_setSpacing(self.this, spacing)
@@ -906,7 +906,7 @@ class SWFText(SWFBase):
         return mingc.SWFText_getStringWidth(self.this, string)
 
     def getUTF8Width(self, s):
-        return mingc.SWFText_getUTF8StringWidth(self.this, s.encode("uft-8")) 
+        return mingc.SWFText_getUTF8StringWidth(self.this, s.encode("utf-8")) 
 
     # deprecated:
     def setXY(self, x, y):
