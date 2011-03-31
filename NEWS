@@ -10,6 +10,7 @@
 	* Add support for libpng > 1.4 (bugzilla #96)
 	* Add font kernings support (bugzilla #95)
 	* Add button characters export capabilities 
+	* Add support for 'swfAction <code>' syntax in asm blocks
 
 0.4.3 - 2010-02-06
 
