@@ -1,0 +1,26 @@
+File version: 5
+File size: 30
+Frame size: (0,6400)x(0,4800)
+Frame rate: 12.000000 / sec.
+Total frames: 1
+
+Offset: 20 (0x0014)
+Block type: 12 (SWF_DOACTION)
+Block length: 4
+
+ 4 Actions
+    22:SWFACTION_INCREMENT
+    23:SWFACTION_END
+    24:SWFACTION_DECREMENT
+    25:SWFACTION_END
+
+Offset: 26 (0x001a)
+Block type: 1 (SWF_SHOWFRAME)
+Block length: 0
+
+
+Offset: 28 (0x001c)
+Block type: 0 (SWF_END)
+Block length: 0
+
+

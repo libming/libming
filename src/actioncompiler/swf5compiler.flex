@@ -351,6 +351,7 @@ r\:{DIGIT}+		{ count(); swf5lval.str = strdup(yytext+2);
 trace			{ count();	return TRACE;	}
 delete			{ count();	return DELETE;		}
 delete2			{ count();	return DELETE2;		}
+swfAction		{ count();	return SWFACTION;	}
 }
 
   /* rules action in any state */

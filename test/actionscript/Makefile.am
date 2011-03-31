@@ -15,6 +15,7 @@ AS_TESTS = \
 	ASM_extend.as:6		\
 	ASM_push.as:6		\
 	ASM_targetPath.as:6 	\
+	ASM_swfAction.as:5	\
 	delete.as:6		\
 	GotoFrame.as:6		\
 	logor.as:6 		\
@@ -46,6 +47,7 @@ AS_TEST_FILES = \
 	ASM_extend.as	\
 	ASM_push.as	\
 	ASM_targetPath.as \
+	ASM_swfAction.as \
 	delete.as	\
 	GotoFrame.as	\
 	logor.as 	\
@@ -69,6 +71,8 @@ AS_TEST_FILES = \
 	substr.as	\
 	for.as	
 	
+# The following is to support gen and refs rules
+C_PROGS = $(AS_TEST_FILES:.as=)
 
 EXTRA_DIST = \
 	$(AS_TEST_FILES) \

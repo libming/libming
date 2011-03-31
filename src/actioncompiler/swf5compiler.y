@@ -56,6 +56,7 @@ static int classContext = 0;
 
 %token BREAK CONTINUE FUNCTION ELSE SWITCH CASE DEFAULT FOR IN IF WHILE
 %token DO VAR NEW DELETE DELETE2 TARGETPATH RETURN END WITH ASM EVAL
+%token SWFACTION
 
 %token RANDOM GETTIMER LENGTH CONCAT SUBSTR TRACE INT ORD CHR GETURL
 %token GETURL1 NEXTFRAME PREVFRAME PLAY STOP TOGGLEQUALITY STOPSOUNDS
@@ -591,6 +592,7 @@ identifier
 	| GETPROPERTY	{ $$ = strdup("getProperty"); }
 	| SETPROPERTY	{ $$ = strdup("setProperty"); }
 	| CAST		{ $$ = strdup("cast"); }
+	| SWFACTION	{ $$ = strdup("swfAction"); }
 	/* temp hack to keep things working */
 	| THIS		{ $$ = strdup("this"); }
 	
@@ -2089,6 +2091,11 @@ opcode
 						     SWFACTION_EXTENDS); }
 	| TARGETPATH		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_TARGETPATH); }
+
+	/* TODO: improve this to accept arguments */
+	| SWFACTION INTEGER	{ $$ = bufferWriteOp(asmBuffer,
+						     (char)$2); }
+
 	| IMPLEMENTS		{ $$ = bufferWriteOp(asmBuffer, 
 						     SWFACTION_IMPLEMENTSOP); }
 	| FSCOMMAND2		{ $$ = bufferWriteOp(asmBuffer, 
