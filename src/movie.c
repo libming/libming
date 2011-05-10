@@ -406,6 +406,7 @@ SWFMovie_addExport(SWFMovie movie, SWFBlock block, const char *name)
 		case SWF_DEFINEFONT2:
 		case SWF_DEFINESOUND:
 		case SWF_DEFINELOSSLESS:
+		case SWF_DEFINELOSSLESS2:
 		case SWF_DEFINEBITS:
 		case SWF_DEFINEBITSJPEG2:
 		case SWF_DEFINEBITSJPEG3:
