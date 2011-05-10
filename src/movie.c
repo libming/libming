@@ -741,32 +741,39 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 	SWFBlock lastBlock;
 	unsigned long compresslength;
 
-	if ( movie->nExports > 0 )
-		SWFMovie_writeExports(movie);
-
-	if ( movie->metadata != NULL)
-	{
-		SWFMovie_addBlock(movie, (SWFBlock)movie->metadata);
-		movie->metadata = NULL; // do not destroy with movie if added as block
-	}
-
-	/* Add a terminating SHOWFRAME tag if not already there */
 	lastBlock = SWFBlockList_getLastBlock(movie->blockList);
-	if ( ! lastBlock || SWFBlock_getType(lastBlock) != SWF_SHOWFRAME )
+	if ( ! lastBlock || SWFBlock_getType(lastBlock) != SWF_END )
 	{
-		SWFMovie_nextFrame(movie);
+
+		if ( movie->nExports > 0 )
+			SWFMovie_writeExports(movie);
+
+		if ( movie->metadata != NULL)
+		{
+			SWFMovie_addBlock(movie, (SWFBlock)movie->metadata);
+			// do not destroy with movie if added as block
+			movie->metadata = NULL;
+		}
+
+
+		/* Add a final SHOWFRAME tag if not already there */
+		if ( ! lastBlock
+			|| SWFBlock_getType(lastBlock) != SWF_SHOWFRAME )
+		{
+			SWFMovie_nextFrame(movie);
+		}
+
+		while ( movie->nFrames < movie->totalFrames )
+			SWFMovie_nextFrame(movie);
+
+		if(movie->symbolClass)
+			SWFMovie_addBlock(movie, (SWFBlock)movie->symbolClass);
+
+		if(movie->sceneData)
+			SWFMovie_addBlock(movie, (SWFBlock)movie->sceneData);
+
+		SWFMovie_addBlock(movie, newSWFEndBlock());
 	}
-
-	while ( movie->nFrames < movie->totalFrames )
-		SWFMovie_nextFrame(movie);
-
-	if(movie->symbolClass)
-		SWFMovie_addBlock(movie, (SWFBlock)movie->symbolClass);
-
-	if(movie->sceneData)
-		SWFMovie_addBlock(movie, (SWFBlock)movie->sceneData);
-
-	SWFMovie_addBlock(movie, newSWFEndBlock());
 
 	// add five for the setbackground block..
 	swflength = SWFBlockList_completeBlocks(movie->blockList, movie->version);
