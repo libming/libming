@@ -219,6 +219,13 @@ int getMP3Flags(SWFInput input, byte *flags)
 	return start;	
 }
 
+/*
+ * Read at most the wanted number of samples from the input mp3 stream
+ * The stream read pointer is advanced.
+ * The actual number of samples read is written in *wanted and their
+ * total length is returned.
+ * If *wanted is < 0 read all there is in the stream.
+ */
 int getMP3Samples(SWFInput input, int flags, int *wanted)
 {
 	int frameSize, length;
@@ -243,10 +250,11 @@ int getMP3Samples(SWFInput input, int flags, int *wanted)
 	{
 		length = nextMP3Frame(input);
 		if(length <= 0)
-			break;	
+			break; /* EOF */
 		totalLength += length;
 		numSamples += frameSize;
 	}
+
 	*wanted = numSamples;			
 	return totalLength;
 }
