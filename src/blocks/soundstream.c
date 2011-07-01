@@ -269,6 +269,10 @@ fillBlock_flv_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 			delay -= frameSize;
 		}
 	}
+	static const int maxSC = 65535; 
+	if ( block->numSamples > maxSC ) {
+		SWF_warn("fillBlock_flv_mp3: number of samples in block (%d) exceed max allowed value of %d\n", block->numSamples, maxSC);
+	}
 	stream->source.flv.tag = *tag;
 	stream->source.flv.tagOffset = SWFInput_tell(input);
 	stream->delay = delay;
@@ -358,6 +362,10 @@ fillStreamBlock_mp3(SWFSoundStream stream, SWFSoundStreamBlock block)
 	wanted = delay;
 	block->length = getMP3Samples(stream->source.mp3.input, stream->flags, &delay);
 	block->numSamples = delay;
+	static const int maxSC = 65535; 
+	if ( block->numSamples > maxSC ) {
+		SWF_warn("fillStreamBlock_mp3: number of samples in block (%d) exceed max allowed value of %d\n", block->numSamples, maxSC);
+	}
 	if(block->length <= 0)
 	{
 		stream->isFinished = TRUE;
@@ -463,6 +471,10 @@ getStreamFlag_mp3File(SWFSoundStream stream, float frameRate, float skip)
 	stream->sampleRate = SWFSound_getSampleRate(flags); 
 	stream->flags = flags; // XXX: fixme
 	stream->samplesPerFrame = (int)floor(stream->sampleRate / frameRate);
+	static const int maxSPF = 65535; 
+	if ( stream->samplesPerFrame > maxSPF ) {
+		SWF_warn("getStreamFlag_mp3File: computed number of samples per frame (%d) exceed max allowed value of %d\n", stream->samplesPerFrame, maxSPF);
+	}
 	skipMP3(stream, skip);
 	return flags;
 }
