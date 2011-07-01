@@ -1926,7 +1926,7 @@ outputSWF_SOUNDSTREAMBLOCK (SWF_Parserstruct * pblock)
   OUT_BEGIN (SWF_SOUNDSTREAMBLOCK);
   if(m.soundStreamFmt == 2)
   {
-    _iprintf("  SampleCount %i\n", sblock->StreamData.mp3.SampleCount);
+    _iprintf("  SampleCount %u\n", sblock->StreamData.mp3.SampleCount);
     _iprintf("  Mp3: SeekSamples %i\n", 
            sblock->StreamData.mp3.SeekSamples);
   }
@@ -1995,7 +1995,7 @@ outputSWF_SOUNDSTREAMHEAD (SWF_Parserstruct * pblock)
     default: tmp = "error";
   }
   _iprintf("  StreamSoundType %s\n", tmp);
-  _iprintf("  StreamSoundSampleCount %i\n", sblock->StreamSoundSampleCount);
+  _iprintf("  StreamSoundSampleCount %u\n", sblock->StreamSoundSampleCount);
   if(sblock->StreamSoundCompression == 2)
     _iprintf("  LatencySeek %i\n", sblock->LatencySeek);  
 }
@@ -2067,7 +2067,7 @@ outputSWF_SOUNDSTREAMHEAD2 (SWF_Parserstruct * pblock)
     default: tmp = "error";
   }
   _iprintf("  StreamSoundType %s\n", tmp);
-  _iprintf("  StreamSoundSampleCount %i\n", sblock->StreamSoundSampleCount);
+  _iprintf("  StreamSoundSampleCount %u\n", sblock->StreamSoundSampleCount);
   if(sblock->StreamSoundCompression == 2)
     _iprintf("  LatencySeek %i\n", sblock->LatencySeek);
 }

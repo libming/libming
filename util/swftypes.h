@@ -1638,7 +1638,7 @@ struct SWF_SHOWFRAME
 
 struct MP3STREAMSOUNDDATA
 {
-  SI16 SampleCount;
+  UI16 SampleCount;
   SI16 SeekSamples;
   UI8 *frames;
 };

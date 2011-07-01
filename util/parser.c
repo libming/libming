@@ -2726,7 +2726,7 @@ parseSWF_SHOWFRAME (FILE * f, int length)
 static inline void 
 parseMp3Stream(FILE *f, struct MP3STREAMSOUNDDATA *data, int blockEnd)
 {
-  data->SampleCount = readSInt16(f);
+  data->SampleCount = readUInt16(f);
   data->SeekSamples = readSInt16(f);
   data->frames = (UI8 *)readBytes(f, blockEnd - fileOffset);
 }
