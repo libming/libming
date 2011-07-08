@@ -25,7 +25,7 @@ extern int verbose;
 
 typedef void (*outputfunc) (SWF_ACTION *act);
 
-static STRING *pool = NULL;
+static struct SWF_ACTIONCONSTANTPOOL *pool = NULL;
 
 struct SWFActionName
 {
@@ -51,7 +51,7 @@ outputSWFACTION_CONSTANTPOOL (SWF_ACTION *act)
       INDENT;
       printf ("Length: %d\n", sact->Length);
   }
-  pool=sact->ConstantPool;
+  pool=sact;
   for(i=0;i<sact->Count;i++)
   {
 	  INDENT;
@@ -268,6 +268,12 @@ outputSWFACTION_DEFINEFUNCTION2 (SWF_ACTION *act)
   }
 }
 
+const char* 
+getConstant(unsigned int n)
+{
+	if ( ! pool || n >= pool->Count ) return NULL;
+	return pool->ConstantPool[n];
+}
 
 void
 outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
@@ -300,11 +306,21 @@ outputSWFACTION_PUSHPARAM (struct SWF_ACTIONPUSHPARAM *act)
   		printf ("  Integer: %ld\n", act->p.Integer);
 		break;
 	  case 8: /* CONSTANT8 */
-  		printf ("  Constant: %d \"%s\"\n", act->p.Constant8, pool[act->p.Constant8]);
+	  {
+	        const char* v = getConstant(act->p.Constant8);
+  		printf ("  Constant: %d", act->p.Constant8);
+  		if ( v ) printf (" \"%s\"", v);
+		putchar('\n');
 		break;
+	  }
 	  case 9: /* CONSTANT16 */
-  		printf ("  Constant: %d \"%s\"\n", act->p.Constant16, pool[act->p.Constant16]);
+	  {
+	        const char* v = getConstant(act->p.Constant16);
+  		printf ("  Constant: %d", act->p.Constant16);
+  		if ( v ) printf (" \"%s\"", v);
+		putchar('\n');
 		break;
+	  }
 	  default: 
   		printf ("  Unknown type: %d\n", act->Type);
 		break;
