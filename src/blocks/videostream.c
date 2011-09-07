@@ -276,7 +276,11 @@ static int setScreenStreamDimension(SWFVideoStream stream, FLVTag *tag)
 	if(input == NULL)
 		return -1;
 	
-	/* special case: skip 1 byte */ 
+	/* Skip 1 byte.
+	 * The first nibble in that byte is frame type,
+	 * which could be either 1 for keyframe or 2 for inter frame,
+	 * the next nibble (lower 4 bits) is codec id which should
+	 * always be 3 for screen video. */
 	ic  = SWFInput_getChar(input);
 	
 	ic = SWFInput_getChar(input);
