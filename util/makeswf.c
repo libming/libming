@@ -715,9 +715,26 @@ embed_swf(SWFMovie movie, char* filename)
 	SWFPrebuiltClip builtclip;
 	SWFDisplayItem it;
 	char *name;
+	SWFInput in;
+	FILE *swf;
 
-	builtclip = newSWFPrebuiltClip_fromFile(filename);
-	if ( ! builtclip ) exit (1);
+        if (!(swf = fopen (filename, "rb")))
+        {
+                fprintf (stdout, "%s: %s\n", filename, strerror (errno));
+		exit(1);
+        }
+
+        if (!(in = newSWFInput_file(swf)))
+        {
+                fprintf (stdout, "Can't create SWFInput from file\n");
+		exit(1);
+        }
+
+	builtclip = newSWFPrebuiltClip_fromInput(in);
+	if ( ! builtclip ) {
+                fprintf (stdout, "Error creating prebuilt clip\n");
+		exit(1);
+	}
 
 	it = SWFMovie_add(mo, (SWFBlock)builtclip);
 

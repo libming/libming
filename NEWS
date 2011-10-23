@@ -5,7 +5,7 @@
 	  with swftoscript.
 	* Add support for 'class A extends B' syntax in actioncompiler
 	* Fix bug in 'makeswf' failing to catch some compile errors
-	  (bugzilla #94)
+	  (bugzilla #94) and being too silent in swf embedding errors
 	* Fix bug in action compiler dealing with class methods (bugzilla #94)
 	* Add support for libpng > 1.4 (bugzilla #96)
 	* Add font kernings support (bugzilla #95)
