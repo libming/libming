@@ -1,4 +1,4 @@
-0.4.4 - ???
+0.4.4 - 2011-10-26
 
 	* Generally improve swftoscript and decompiler
 	* Change makefdb to name output files by font ID, to play nicer
