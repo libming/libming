@@ -1,5 +1,7 @@
 0.4.5 - ????-??-??
 
+	* Include test file missing in 0.4.4 (Oops)
+
 0.4.4 - 2011-10-26
 
 	* Generally improve swftoscript and decompiler
