@@ -1,3 +1,24 @@
+/****************************************************************************
+ *
+ *  Copyright (C) 2011      Sandro Santilli <strk@keybit.net>
+ *  Copyright (C) 2005-2006 Stuart R. Anderson <anderson@netsweng.com>
+ *  Copyright (C) 2001      Raffaele Sena
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ ****************************************************************************/
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -120,30 +141,55 @@ unsigned long readUInt32(FILE *f)
 
 double readDouble(FILE *f)
 {
-  char data[8];
+  union {
+    char c[8];
+    double d;
+  } data;
 
-  data[4] = readUInt8(f);
-  data[5] = readUInt8(f);
-  data[6] = readUInt8(f);
-  data[7] = readUInt8(f);
-  data[0] = readUInt8(f);
-  data[1] = readUInt8(f);
-  data[2] = readUInt8(f);
-  data[3] = readUInt8(f);
+#ifdef SWF_LITTLE_ENDIAN
+  data.c[4] = readUInt8(f);
+  data.c[5] = readUInt8(f);
+  data.c[6] = readUInt8(f);
+  data.c[7] = readUInt8(f);
+  data.c[0] = readUInt8(f);
+  data.c[1] = readUInt8(f);
+  data.c[2] = readUInt8(f);
+  data.c[3] = readUInt8(f);
+#else
+  data.c[3] = readUInt8(f);
+  data.c[2] = readUInt8(f);
+  data.c[1] = readUInt8(f);
+  data.c[0] = readUInt8(f);
+  data.c[7] = readUInt8(f);
+  data.c[6] = readUInt8(f);
+  data.c[5] = readUInt8(f);
+  data.c[4] = readUInt8(f);
+#endif
 
-  return *((double *)data);
+
+  return data.d;
 }
 
 float readFloat(FILE *f)
 {
-  char data[4];
+  union {
+    char c[4];
+    float f;
+  } data;
 
-  data[0] = readUInt8(f);
-  data[1] = readUInt8(f);
-  data[2] = readUInt8(f);
-  data[3] = readUInt8(f);
+#ifdef SWF_LITTLE_ENDIAN
+  data.c[0] = readUInt8(f);
+  data.c[1] = readUInt8(f);
+  data.c[2] = readUInt8(f);
+  data.c[3] = readUInt8(f);
+#else
+  data.c[3] = readUInt8(f);
+  data.c[2] = readUInt8(f);
+  data.c[1] = readUInt8(f);
+  data.c[0] = readUInt8(f);
+#endif
 
-  return *((float *)data);
+  return data.f;
 }
 
 
@@ -374,8 +420,6 @@ void peekBytes(FILE *f, int length)
 {
 	_dumpBytes(f, length, 1 );
 }
-
-  int j=0, i, k, l=0;
 
 void dumpBuffer(unsigned char *buf, int length)
 {
