@@ -159,10 +159,8 @@ sub doswftest($$$$)
 
 		elsif($binding eq 'perl')
 		{
-			# Set the proper PERL5LIB
-			# (BUILDDIR contains both SWF.pm and SWF.so)
-			$ENV{'PERL5LIB'}=$TOP_BUILDDIR."/perl_ext/blib/arch/auto/SWF/:".$TOP_BUILDDIR."/perl_ext/blib/lib";
-			$testbuilder = "$ENV{'PERL'} $testbuilder";
+			# Set the proper blib path
+			$testbuilder = "$ENV{'PERL'} -w -Mblib='${TOP_BUILDDIR}/perl_ext/blib' $testbuilder";
 		}
 	}
 	else
