@@ -71,7 +71,7 @@ gen: refs $(SWFS) gen-php gen-pl gen-py gen-cxx gen-tcl
 
 .PHONY: dotests 
 dotests: $(top_srcdir)/test/dotests.pl
-	echo "top_builddir=$(top_builddir) builddir=$(PWD) top_srcdir=$(top_srcdir) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' BUILD_OPTIONS='$(BUILD_OPTIONS)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
+	echo "top_builddir=$(top_builddir) builddir=$(PWD) top_srcdir=$(top_srcdir) srcdir=$(srcdir) BINDINGS='$(BINDINGS)' BUILD_OPTIONS='$(BUILD_OPTIONS)' PERL='$(PERL)' PYTHON='$(PYTHON)' PHP='$(PHP)' $(PERL) -w $(top_srcdir)/test/dotests.pl" > $@
 	chmod +x $@
 
 .php.phpx:
