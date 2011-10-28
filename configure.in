@@ -150,6 +150,8 @@ if test x"$tcl_ext" = xyes; then
 		AC_MSG_ERROR([Can't build tcl extension, as tcl executable could not be found])
 	fi
 
+tclbindir=`dirname $TCL`
+
 tcllibdirs_default="\
 $prefix/lib/itcl \
 $prefix/lib \
@@ -157,7 +159,8 @@ $HOME/local/lib \
 $HOME/lib \
 /usr/local/lib \
 /usr/lib64 \
-/usr/lib"
+/usr/lib \
+`dirname $tclbindir`/lib"
 
 	for i in $tcllibdirs_default; do
 	  for suf in 8.3 8.4 ""; do
@@ -193,7 +196,8 @@ $HOME/local/include \
 $HOME/include \
 /usr/local/include \
 /usr/include/tcl \
-/usr/include"
+/usr/include \
+`dirname $tclbindir`/include"
 
 	for i in $tclincdirs_default; do
 	   if test -f $i/tcl.h; then
