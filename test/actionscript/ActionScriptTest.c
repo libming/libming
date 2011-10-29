@@ -40,6 +40,7 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <makeswf.h>
+#include <vasprintf.h>
 
 static SWFMovie
 compile(const char* filename, const char* ppfile, int version)

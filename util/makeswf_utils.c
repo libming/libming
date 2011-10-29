@@ -41,6 +41,7 @@
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
 #endif
+#include "vasprintf.h"
 
 // Cheating, but it works (not sure why the above ifdef for getopt isn't)
 #ifdef _WIN32

@@ -45,7 +45,8 @@ libutil_la_SOURCES =	\
 	blocktypes.c	\
 	decompile.c	\
 	parser.c	\
-	read.c 
+	read.c 		\
+	vasprintf.c
 
 libutil_la_LIBADD = $(MATHLIB) $(ZLIB)
 
@@ -60,7 +61,8 @@ noinst_HEADERS = \
 	parser.h	\
 	read.h		\
 	swfoutput.h	\
-	swftypes.h
+	swftypes.h	\
+	vasprintf.c
 
 listswf_SOURCES = outputtxt.c main.c	
 listswf_LDADD = libutil.la $(top_builddir)/src/libming.la

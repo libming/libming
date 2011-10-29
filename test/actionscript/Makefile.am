@@ -83,7 +83,7 @@ CLEANFILES = *.pp *.swf
 check_PROGRAMS = \
 	ActionScriptTest
 
-ActionScriptTest_SOURCES = ActionScriptTest.c ../run_test.c ../../util/makeswf_utils.c
+ActionScriptTest_SOURCES = ActionScriptTest.c ../run_test.c ../../util/makeswf_utils.c ../../util/vasprintf.c
 ActionScriptTest_LDADD = $(top_builddir)/src/libming.la
 ActionScriptTest_CFLAGS = -DTOP_BUILDDIR='"$(top_builddir)"' -DTOP_SOURCEDIR='"$(srcdir)"' -I$(top_srcdir)/util/ -DAS_TESTS='"$(AS_TESTS)"'
 
