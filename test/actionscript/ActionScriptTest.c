@@ -30,6 +30,7 @@
 
 #include <libming.h>
 #include <run_test.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -82,19 +83,18 @@ do_tests()
 	char vstr[2];
 	const char *from, *to, *end;
 	char *ptr;
-	int version;
+	size_t len = strlen(all_tests);
 
 	from = all_tests;
-	end = from+strlen(all_tests);
+	end = from+len;
 	do
 	{
-		while (*from && *from == ' ') ++from;
+		while (*from && isspace(*from)) ++from;
 		if ( ! *from ) break;
 
-		to=strchr(from, ' ');
-		if ( ! to ) to = end;
+		to = from + strcspn(from, " \t");
 
-		size_t len = to-from;
+		len = to-from;
 		if ( len+1 >= PATH_MAX )
 		{
 			fprintf(stderr,

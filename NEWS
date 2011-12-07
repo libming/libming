@@ -5,6 +5,7 @@
 	* Allow running testsuite with interpreters in custom paths
 	* Improve detection of TCL files
 	* Fix testsuite runs on systems w/out GNU vasprintf
+	* Fix run of ActionScriptTests with BSD make
 
 0.4.4 - 2011-10-26
 
