@@ -6,6 +6,7 @@
 	* Improve detection of TCL files
 	* Fix testsuite runs on systems w/out GNU vasprintf
 	* Fix run of ActionScriptTests with BSD make
+	* Fix short allocation parsing empty glyph record
 
 0.4.4 - 2011-10-26
 
