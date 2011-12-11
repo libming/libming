@@ -241,7 +241,8 @@ parseSWF_GLYPHENTRY (FILE * f, SWF_GLYPHENTRY *gerec, int glyphbits, int advance
 {
   int i;
 
-  gerec->GlyphIndex = malloc((glyphbits+31)/32 * sizeof(UI32) );
+  size_t nmalloc = ( glyphbits < 1 ? 1 : ((glyphbits+31)/32) ) * sizeof(UI32);
+  gerec->GlyphIndex = malloc(nmalloc);
   gerec->GlyphIndex[0] = 0; /* for glyphbits == 0 */
   for( i=0; glyphbits; i++ ) {
 	  if( glyphbits > 32 ) {
@@ -253,7 +254,7 @@ parseSWF_GLYPHENTRY (FILE * f, SWF_GLYPHENTRY *gerec, int glyphbits, int advance
   	}
   }
 
-  gerec->GlyphAdvance = malloc((advancebits+31)/32 * sizeof(UI32) );
+  gerec->GlyphAdvance = malloc(nmalloc);
   gerec->GlyphAdvance[0] = 0; /* for advancebits == 0 */
   for( i=0; advancebits; i++ ) {
 	  if( advancebits > 32 ) {
