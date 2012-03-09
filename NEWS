@@ -1,6 +1,6 @@
 0.4.5 - ????-??-??
 
-	* Fix build with SunStudio compiler (bugzilla #103)
+	* Fix build with SunStudio compiler (bugzilla #103, #118)
 	* Include test file missing in 0.4.4 (Oops)
 	* Ensure perl tests use uninstalled package
 	* Allow running testsuite with interpreters in custom paths
