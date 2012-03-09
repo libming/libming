@@ -341,22 +341,24 @@ if test -n "${PNGLIB}"; then
  	AC_DEFINE(USE_PNG, [1], [Use png library])
 fi
 
-CFLAGS="$CFLAGS -Wall"
 MACHINE=`uname -m`
 case "$MACHINE" in
 "x86_64")
-	CFLAGS="$CFLAGS -fPIC"
+	CFLAGS="$CFLAGS -Wall -fPIC"
 	;;
 "alpha")
-	CFLAGS="$CFLAGS -fPIC"
+	CFLAGS="$CFLAGS -Wall -fPIC"
 	;;
 "ia64")
-	CFLAGS="$CFLAGS -fPIC"
+	CFLAGS="$CFLAGS -Wall -fPIC"
 	;;
 "hppa")
-	CFLAGS="$CFLAGS -fPIC"
+	CFLAGS="$CFLAGS -Wall -fPIC"
 	;;
+"sun4u")
+	CFLAGS="$CFLAGS -fPIC -features=extensions"
 *)
+	CFLAGS="$CFLAGS -Wall"
 	;;
 esac
 	
