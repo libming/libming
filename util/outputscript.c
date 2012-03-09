@@ -1997,7 +1997,8 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 
 	for (i = 0; i < numOutputs; i++){
 		if (outputs[i].type == type){
-			return outputs[i].output (blockp);
+			outputs[i].output (blockp);
+			return;
 		}
 	}
 	printf( COMMSTART "Unknown block type %d" COMMEND "\n", type );
