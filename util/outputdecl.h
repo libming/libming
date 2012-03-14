@@ -27,6 +27,7 @@ extern OUTPUTRET outputSWF_GRADIENT(SWF_GRADIENT *gradient, char *gname);
 extern OUTPUTRET outputSWF_FILLSTYLE(SWF_FILLSTYLE *fillstyle, char *parentname, int i);
 extern OUTPUTRET outputSWF_FILLSTYLEARRAY(SWF_FILLSTYLEARRAY *fillstylearray, char *parentname);
 extern OUTPUTRET outputSWF_LINESTYLE(SWF_LINESTYLE *linestyle, char *parentname, int i);
+extern OUTPUTRET outputSWF_LINESTYLE2(SWF_LINESTYLE2 *linestyle, char *parentname, int i);
 extern OUTPUTRET outputSWF_LINESTYLEARRAY(SWF_LINESTYLEARRAY *linestylearray, char *parentname);
 extern OUTPUTRET outputSWF_SHAPERECORD(SWF_SHAPERECORD *shaperec, char *parentname);
 extern OUTPUTRET outputSWF_SHAPE(SWF_SHAPE *shape, char *name);

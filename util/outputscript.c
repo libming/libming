@@ -570,6 +570,24 @@ outputSWF_LINESTYLE (SWF_LINESTYLE * linestyle, char *parentname, int i)
 }
 
 void
+outputSWF_LINESTYLE2 (SWF_LINESTYLE2 * linestyle, char *parentname, int i)
+{
+  char lname[64];
+  sprintf (lname, "%s_l%d", parentname, i);
+#ifdef SWFPLUSPLUS
+  printf ("int %s_width = %d;\n", lname, linestyle->Width);
+#else
+  printf ("" VAR "%s_width = %d;\n", lname, linestyle->Width);
+#endif
+
+  /* TODO: use also all the other fields (styles) */
+  printf (COMMSTART "Style information not output" COMMEND "\n");
+
+  outputSWF_RGBA (&linestyle->Color, lname);
+
+}
+
+void
 outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray,
 			  char *parentname)
 {
@@ -577,14 +595,16 @@ outputSWF_LINESTYLEARRAY (SWF_LINESTYLEARRAY * linestylearray,
 
   count = linestylearray->LineStyleCount;
 
-  SWF_LINESTYLE* styles = linestylearray->LineStyles ?
-  	linestylearray->LineStyles : linestylearray->LineStyles2;
-
   printf ("" COMMSTART "%d linestyles(s)" COMMEND "\n", count);
   for (i = 0; i < count; i++)
-    {
-      outputSWF_LINESTYLE (&(styles[i]), parentname, i);
-    }
+  {
+    if(linestylearray->LineStyles != NULL)   
+      outputSWF_LINESTYLE (&(linestylearray->LineStyles[i]), parentname, i);
+    else if(linestylearray->LineStyles2 != NULL)
+      outputSWF_LINESTYLE2 (&(linestylearray->LineStyles2[i]), parentname, i);
+    else
+      printf ("" COMMSTART "Unknown linestyle %d (parser error?)" COMMEND "\n", i);
+  }
 }
 
 void
