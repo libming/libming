@@ -46,8 +46,9 @@ void methodWriteUInt32(int i, SWFByteOutputMethod method, void *data)
 
 void fileOutputMethod(byte b, void *data)
 {
-	FILE *f = (FILE *)data;
-	fputc(b, f);
+    if(!data) return;
+    FILE *f = (FILE *)data;
+    fputc(b, f);
 }
 
 
