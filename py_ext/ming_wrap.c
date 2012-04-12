@@ -13346,6 +13346,59 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SWFMovie_output_to_stream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  FILE *arg2 = (FILE *) 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int res1 ;
+  int res2 ;
+  int result;
+
+  if (!PyArg_ParseTuple(args,(char *)"OO:SWFMovie_output_to_stream",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_output_to_stream" "', argument " "1"" of type '" "SWFMovie""'");
+  }
+  res2 = PyFile_Check(obj1);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SWFMovie_output_to_stream" "', argument " "2"" of type '" "File""'");
+  }
+  arg2 = PyFile_AsFile(obj1);
+  result = (int)SWFMovie_output_to_stream(arg1, (FILE *)arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SWFMovie_output_as_buffer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SWFMovie arg1 = (SWFMovie) 0 ;
+  int res1 ;
+  PyObject * obj0 = 0 ;
+  byte *buffer = NULL;
+  int result;
+
+  if (!PyArg_ParseTuple(args,(char *)"O:SWFMovie_output_as_buffer",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0,SWIG_as_voidptrptr(&arg1), 0, 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SWFMovie_output" "', argument " "1"" of type '" "SWFMovie""'"); 
+  }
+  result = (int)SWFMovie_output_as_buffer(arg1, NULL);
+  if (result == 0) return NULL;
+  buffer = (byte *)malloc(result);
+  result = (int)SWFMovie_output_as_buffer(arg1, buffer);
+  resultobj = SWIG_FromCharPtrAndSize((char *)buffer, result);
+  if (buffer) free(buffer);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SWFMovie_save(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SWFMovie arg1 = (SWFMovie) 0 ;
@@ -14980,6 +15033,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWFMovie_nextFrame", _wrap_SWFMovie_nextFrame, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_labelFrame", _wrap_SWFMovie_labelFrame, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_output", _wrap_SWFMovie_output, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_output_to_stream", _wrap_SWFMovie_output_to_stream, METH_VARARGS, NULL},
+	 { (char *)"SWFMovie_output_as_buffer", _wrap_SWFMovie_output_as_buffer, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_save", _wrap_SWFMovie_save, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_protect", _wrap_SWFMovie_protect, METH_VARARGS, NULL},
 	 { (char *)"SWFMovie_setNetworkAccess", _wrap_SWFMovie_setNetworkAccess, METH_VARARGS, NULL},
