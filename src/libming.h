@@ -29,6 +29,7 @@
 #ifndef SWF_LIBMING_H_INCLUDED
 #define SWF_LIBMING_H_INCLUDED
 
+#include <stdio.h>
 #include <math.h>
 
 
@@ -36,6 +37,7 @@
 #include "ming_config.h"
 
 #include "gc.h"
+#include "libming.h"
 
 extern int Ming_cubicThreshold;
 extern int SWF_versionNum;
@@ -72,6 +74,14 @@ typedef unsigned char BOOL;
 
 #ifndef WIN32
   #include <unistd.h>
+#endif
+
+#if GIFLIB_GIFERRORSTRING
+static void
+PrintGifError(void)
+{
+	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
+}
 #endif
 
 #endif /* SWF_LIBMING_H_INCLUDED */

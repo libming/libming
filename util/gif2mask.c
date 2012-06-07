@@ -9,6 +9,8 @@
 #include <gif_lib.h>
 #include <zlib.h>
 
+#include "libming.h"
+
 #define max(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
 
 void error(char *msg)

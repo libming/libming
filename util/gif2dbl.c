@@ -17,6 +17,8 @@
 #include <gif_lib.h>
 #include <zlib.h>
 
+#include "libming.h"
+
 void error(char *msg)
 {
   printf("%s:\n\n", msg);

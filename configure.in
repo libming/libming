@@ -279,12 +279,20 @@ if test "$freetype_support" = "yes"; then
 	AC_SUBST(FREETYPE_CFLAGS)
 fi
 
-dnl Check for the gif or ungif libraries
-AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", GIFLIB="")
+dnl Check for the ungif or gif (new or old) libraries
+AC_CHECK_LIB(gif, GifErrorString, GIFLIB="-lgif", GIFLIB="")
+AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif")
+if test x"${GIFLIB}" = x; then
+AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif")
+fi
 dnl MinGW check for libungif
 AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
 dnl Solaris needs -lX11 on the linker line for ungif to work
+AC_CHECK_LIB(gif, GifErrorString, GIFLIB="-lgif",, "-lX11")
+AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif",, "-lX11")
+if test x"${GIFLIB}" = x; then
 AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
+fi
 AC_CHECK_HEADERS([gif_lib.h], GIFINC="true", GIFINC="")
 
 dnl Check for the png library
@@ -331,9 +339,13 @@ if test -n "${ft_config}"; then
 	AC_DEFINE(USE_FREETYPE, [1], [Use freetype library])
 fi
 
-AM_CONDITIONAL(USE_GIF, test x${GIFLIB} != x -a x${GIFINC} != x)
-if test -n "${GIFLIB}" -a -n "${GIFINC}"; then
-	AC_DEFINE(USE_GIF, [1], [Use gif library])
+AM_CONDITIONAL(GIFLIB_GIFERRORSTRING, test x"$ac_cv_lib_gif_GifErrorString" = xyes)
+if test x"$ac_cv_lib_gif_GifErrorString" = xyes; then
+	AC_DEFINE(GIFLIB_GIFERRORSTRING, [1], [Use giflib with GifErrorString, introduced 4.2.0])
+fi
+AM_CONDITIONAL(USE_GIF, test x"${GIFINC}" != x -a x"${GIFLIB}" != x)
+if test x"${GIFINC}" != x -a x"${GIFLIB}" != x; then
+	AC_DEFINE(USE_GIF, [1], [Use a gif library])
 fi
 
 AM_CONDITIONAL(USE_PNG, test x${PNGLIB} != x)
