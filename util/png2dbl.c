@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/socket.h>
 
 #include <ming_config.h>
 

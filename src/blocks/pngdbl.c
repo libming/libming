@@ -1,3 +1,7 @@
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/socket.h>
 
 #include "libming.h"
 #include "ming_config.h"

@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
 
 #include <ming_config.h>
 
