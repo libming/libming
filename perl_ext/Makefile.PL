@@ -146,11 +146,10 @@ WriteMakefile(
     clean   => {
         FILES   => "@do_clean",
     },
-    'MYEXTLIB'     => $MING_TOP_BUILDDIR . '/src/.libs/libming.a',
     'OBJECT'       => "$XS_OBJECTS",
     'LDFROM'       => "$LD_OBJECTS",
     'INC'          => "-I$MING_TOP_SRCDIR/src -I$BUILDDIR -I$MING_TOP_BUILDDIR/src -I$SRCDIR",
-    'LIBS'         => [ $libs ],
+    'LIBS'         => [ '-L'.$MING_TOP_BUILDDIR . '/src/.libs -lming '.$libs ],
     'PM'	   => $PM_HASH,
     'MAN3PODS'	   => $MAN3_HASH,
     'TYPEMAPS'     => ["$SRCDIR/typemap"],
