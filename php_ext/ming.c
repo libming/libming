@@ -87,10 +87,17 @@ static SWFCXform getCXform(zval *id TSRMLS_DC);
 static SWFMatrix getMatrix(zval *id TSRMLS_DC);
 #endif
 
+#if PHP_API_VERSION < 20100412
 #define PHP_MING_FILE_CHK(file) \
 	if ((PG(safe_mode) && !php_checkuid((file), NULL, CHECKUID_CHECK_FILE_AND_DIR)) || php_check_open_basedir((file) TSRMLS_CC)) {	\
 		RETURN_FALSE;	\
-	}	\
+	}
+#else
+#define PHP_MING_FILE_CHK(file) \
+	if (php_check_open_basedir((file) TSRMLS_CC)) { \
+		RETURN_FALSE;   \
+	}
+#endif
 
 /* {{{ proto void ming_setcubicthreshold (int threshold)
    Set cubic threshold (?) */
