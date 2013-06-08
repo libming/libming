@@ -6206,12 +6206,19 @@ static void php_ming_error(const char *msg, ...) /* {{{ */
 
 PHP_RINIT_FUNCTION(ming) /* {{{ */
 {
-	/* XXX - this didn't work so well last I tried.. */
+	/* guard against repeated calls to Ming_init() */
+	static int guard = 0;
+	if ( guard ) {
+		/* repeat previous success */
+		return SUCCESS;
+	}
 
 	if (Ming_init() != 0) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error initializing Ming module");
 		return FAILURE;
 	}
+	/* guard against repeated calls to Ming_init() */
+	guard = 1;
 	return SUCCESS;
 }
 /* }}} */
