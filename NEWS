@@ -1,5 +1,10 @@
-0.4.5 - ????-??-??
+0.4.5 - 2013-06-08
 
+	* Fix a build problem with perl module and Perl 5.13.10 (Debian package patch 07)
+	* Fix an issue with a shared lib version of the perl module (Debian package patch 05)
+	* Fix a runtime warnign in the PHP module (Issue #6)
+	* Fix build probem with PHP 5.4 (Issue #9, Debian Bug #662620)
+	* Took in some build warning fixes found by openSUSE
 	* Add support for giflib 4.2.0+ (bugzilla #119)
 	* Fix build with SunStudio compiler (bugzilla #103, #118)
 	* Include test file missing in 0.4.4 (Oops)
