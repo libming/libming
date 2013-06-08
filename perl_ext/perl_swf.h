@@ -58,6 +58,10 @@ typedef SWFFontCollection  SWF__FontCollection;
 #define aTHXo_
 #endif
 
+#ifndef GvCV_set
+# define GvCV_set(G, C) (GvCV(G) = (C))
+#endif
+
 #ifndef S_DEBUG
 #define swf_debug 0   /* Should we get this from, say, $SWF::debug? */
 #define S_DEBUG(level,code)  if (swf_debug >= level) { code; }
