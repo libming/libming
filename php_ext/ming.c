@@ -87,10 +87,17 @@ static SWFCXform getCXform(zval *id TSRMLS_DC);
 static SWFMatrix getMatrix(zval *id TSRMLS_DC);
 #endif
 
+#if PHP_API_VERSION < 20100412
 #define PHP_MING_FILE_CHK(file) \
 	if ((PG(safe_mode) && !php_checkuid((file), NULL, CHECKUID_CHECK_FILE_AND_DIR)) || php_check_open_basedir((file) TSRMLS_CC)) {	\
 		RETURN_FALSE;	\
-	}	\
+	}
+#else
+#define PHP_MING_FILE_CHK(file) \
+	if (php_check_open_basedir((file) TSRMLS_CC)) { \
+		RETURN_FALSE;   \
+	}
+#endif
 
 /* {{{ proto void ming_setcubicthreshold (int threshold)
    Set cubic threshold (?) */
@@ -6199,12 +6206,19 @@ static void php_ming_error(const char *msg, ...) /* {{{ */
 
 PHP_RINIT_FUNCTION(ming) /* {{{ */
 {
-	/* XXX - this didn't work so well last I tried.. */
+	/* guard against repeated calls to Ming_init() */
+	static int guard = 0;
+	if ( guard ) {
+		/* repeat previous success */
+		return SUCCESS;
+	}
 
 	if (Ming_init() != 0) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error initializing Ming module");
 		return FAILURE;
 	}
+	/* guard against repeated calls to Ming_init() */
+	guard = 1;
 	return SUCCESS;
 }
 /* }}} */
