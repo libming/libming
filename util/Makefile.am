@@ -62,7 +62,7 @@ noinst_HEADERS = \
 	read.h		\
 	swfoutput.h	\
 	swftypes.h	\
-	vasprintf.c
+	vasprintf.h
 
 listswf_SOURCES = outputtxt.c main.c	
 listswf_LDADD = libutil.la $(top_builddir)/src/libming.la
