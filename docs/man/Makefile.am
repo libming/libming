@@ -16,7 +16,18 @@ dist_man1_MANS = \
 	swftotcl.1
 
 dist_man3_MANS =			\
+	destroySWFAction.3		\
+	destroySWFBinaryData.3		\
+	destroySWFBitmap.3		\
+	destroySWFBrowserFont.3		\
+	destroySWFCXform.3		\
 	destroySWFMovie.3		\
+	destroySWFMovieClip.3		\
+	destroySWFPrebuiltClip.3	\
+	destroySWFSoundInstance.3	\
+	dumpJpegBlock.3			\
+	getMP3Duration.3		\
+	getMP3Flags.3			\
 	Ming_getScale.3			\
 	Ming_init.3			\
 	Ming_setCubicThreshold.3	\
@@ -25,30 +36,166 @@ dist_man3_MANS =			\
 	Ming_setSWFCompression.3	\
 	Ming_setWarnFunction.3		\
 	Ming_useSWFVersion.3		\
+	newBevelFilter.3		\
+	newBlurFilter.3			\
+	newColorMatrixFilter.3		\
+	newConvolutionFilter.3		\
+	newDropShadowFilter.3		\
+	newGlowFilter.3			\
+	newGradientBevelFilter.3	\
+	newGradientGlowFilter.3		\
+	newSizedSWFOutput.3		\
+	newSWFAction.3			\
+	newSWFAction_fromFile.3		\
+	newSWFAddCXform.3		\
+	newSWFBinaryData.3		\
+	newSWFBlur.3			\
+	newSWFBrowserFont.3		\
+	newSWFCXform.3			\
+	newSWFFilterMatrix.3		\
+	newSWFFontCollection_fromFile.3	\
+	newSWFFont_fromFile.3		\
+	newSWFInitAction.3		\
+	newSWFInitAction_withId.3	\
+	newSWFInput_allocedBuffer.3	\
+	newSWFInput_bufferCopy.3	\
+	newSWFJpegWithAlpha_fromInput.3	\
+	newSWFLineStyle2.3		\
+	newSWFLineStyle2_filled.3	\
+	newSWFLineStyle.3		\
+	newSWFMatrix.3			\
 	newSWFMovie.3			\
+	newSWFMovieClip.3		\
 	newSWFMovieWithVersion.3	\
+	newSWFMultCXform.3		\
+	newSWFPlaceObjectBlock.3	\
+	newSWFPosition.3		\
+	newSWFPrebuiltClip_fromFile.3	\
+	newSWFPrebuiltClip_fromInput.3	\
+	newSWFShadow.3			\
 	newSWFShapeFromBitmap.3		\
+	newSWFSound.3			\
+	newSWFSoundFromFileno.3		\
+	newSWFSound_fromSoundStream.3	\
+	newSWFSoundInstance.3		\
+	newSWFText2.3			\
 	newSWFVideoStream.3		\
 	newSWFVideoStream_fromFile.3	\
 	newSWFVideoStream_fromInput.3	\
-	SWFMovie_add.3			\
-	SWFMovie_labelFrame.3		\
-	SWFMovie_namedAnchor.3		\
-	SWFMovie_protect.3		\
-	SWFMovie_setDimension.3		\
-	SWFMovie_setNumberOfFrames.3	\
-	SWFMovie_setBackground.3	\
-	SWFMovie_setRate.3		\
+	readMP3Header.3			\
+	SWFAction_compile.3		\
+	SWFAction_getByteCode.3		\
+	SWFAction_setDebug.3		\
+	SWFBlock_isCharacter.3		\
+	SWFBlockList_getLastBlock.3	\
+	SWFButton_addAction.3		\
+	SWFButton_addCharacter.3	\
+	SWFButton_addShape.3		\
+	SWFButtonRecord_addFilter.3	\
+	SWFButtonRecord_setBlendMode.3	\
+	SWFButton_removeScalingGrid.3	\
+	SWFButton_setScalingGrid.3	\
+	SWFCharacter_getHeight.3	\
+	SWFCharacter_getWidth.3		\
+	SWFCXform_setColorAdd.3		\
+	SWFCXform_setColorMult.3	\
 	SWFDisplayItem_addFilter.3	\
 	SWFDisplayItem_cacheAsBitmap.3	\
+	SWFDisplayItem_flush.3		\
 	SWFDisplayItem_get_x.3		\
 	SWFDisplayItem_setBlendMode.3	\
+	SWFDisplayItem_setMaskLevel.3	\
+	SWFDisplayItem_setName.3	\
+	SWFFontCharacter_addAllChars.3	\
+	SWFFontCharacter_addChars.3	\
+	SWFFontCharacter_addUTF8Chars.3	\
+	SWFFont_getScaledAscent.3	\
+	SWFGradient_addEntry.3		\
+	SWFGradient_setFocalPoint.3	\
+	SWFGradient_setInterpolationMode.3	\
+	SWFGradient_setSpreadMode.3	\
+	SWFMatrix_leftMultiply.3	\
+	SWFMatrix_multiply.3		\
+	SWFMovie_add.3			\
+	SWFMovie_addExport.3		\
+	SWFMovie_addFont.3		\
+	SWFMovie_add_internal.3		\
+	SWFMovie_addMetadata.3		\
+	SWFMovie_assignSymbol.3		\
+	SWFMovieClip_add.3		\
+	SWFMovieClip_addInitAction.3	\
+	SWFMovieClip_labelFrame.3	\
+	SWFMovieClip_nextFrame.3	\
+	SWFMovieClip_remove.3		\
+	SWFMovieClip_removeScalingGrid.3\
+	SWFMovieClip_setNumberOfFrames.3\
+	SWFMovieClip_setScalingGrid.3	\
+	SWFMovieClip_setSoundStream.3	\
+	SWFMovieClip_setSoundStreamAt.3	\
+	SWFMovieClip_startSound.3	\
+	SWFMovieClip_stopSound.3	\
+	SWFMovie_defineScene.3		\
+	SWFMovie_getRate.3		\
+	SWFMovie_importCharacter.3	\
+	SWFMovie_importFont.3		\
+	SWFMovie_labelFrame.3		\
+	SWFMovie_namedAnchor.3		\
+	SWFMovie_nextFrame.3		\
+	SWFMovie_output.3		\
+	SWFMovie_output_to_stream.3	\
+	SWFMovie_protect.3		\
+	SWFMovie_remove.3		\
+	SWFMovie_replace_internal.3	\
+	SWFMovie_save.3			\
+	SWFMovie_setBackground.3	\
+	SWFMovie_setDimension.3		\
+	SWFMovie_setNetworkAccess.3	\
+	SWFMovie_setNumberOfFrames.3	\
+	SWFMovie_setRate.3		\
+	SWFMovie_setScriptLimits.3	\
+	SWFMovie_setSoundStream.3	\
+	SWFMovie_setSoundStreamAt.3	\
+	SWFMovie_setTabIndex.3		\
+	SWFMovie_startSound.3		\
+	SWFMovie_stopSound.3		\
+	SWFMovie_writeExports.3		\
+	SWFOutput_checkSize.3		\
+	SWFOutput_writeFloat16.3	\
+	SWFPlaceObject2Block_addFilter.3	\
+	SWFPlaceObject2Block_setBlendMode.3	\
+	SWFPlaceObject2Block_setCacheFlag.3	\
+	SWFRect_includePoint.3		\
 	SWFShape_drawArc.3		\
 	SWFShape_drawCubic.3		\
 	SWFShape_drawScaledLineTo.3	\
+	SWFShape_getVersion.3		\
 	SWFShape_movePenTo.3		\
 	SWFShape_moveScaledPenTo.3	\
+	SWFShape_setLine2.3		\
+	SWFShape_setLine2Filled.3	\
+	SWFShape_setLine.3		\
+	SWFShape_setLineStyle2filled_internal.3	\
+	SWFShape_setLineStyle2_internal.3	\
+	SWFShape_setLineStyle_internal.3	\
+	SWFShape_setRenderHintingFlags.3	\
+	SWFShape_useVersion.3		\
+	SWFSoundInstance_addEnvelope.3	\
+	SWFSoundInstance_setLoopCount.3	\
+	SWFSoundInstance_setLoopInPoint.3	\
+	SWFSoundInstance_setLoopOutPoint.3	\
+	SWFSoundInstance_setNoMultiple.3\
+	SWFSoundStream_getDuration.3	\
+	SWFSoundStream_getFrames.3	\
+	SWFSoundStream_rewind.3		\
+	SWFText_addWideString.3		\
+	SWFTextField_setFont.3		\
+	SWFTextField_setFontCharacter.3	\
+	SWFText_resolveCodes.3		\
 	SWFVideoStream_getNumFrames.3	\
 	SWFVideoStream_getVideoFrame.3	\
 	SWFVideoStream_hasAudio.3	\
-	SWFVideoStream_setDimension.3	
+	SWFVideoStream_nextFrame.3	\
+	SWFVideoStream_seek.3		\
+	SWFVideoStream_setDimension.3	\
+	SWFVideoStream_setFrameMode.3	\
+	writeSWFButtonSoundToMethod.3	
