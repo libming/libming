@@ -76,12 +76,4 @@ typedef unsigned char BOOL;
   #include <unistd.h>
 #endif
 
-#if GIFLIB_GIFERRORSTRING
-static void
-PrintGifError(void)
-{
-	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
-}
-#endif
-
 #endif /* SWF_LIBMING_H_INCLUDED */

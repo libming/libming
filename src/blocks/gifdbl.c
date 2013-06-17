@@ -33,12 +33,20 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(const char * fileName)
 #include <zlib.h>
 
 
-/*void error(char *msg)
+#if GIFLIB_GIFERRORSTRING
+static void
+PrintGifError(void)
+{
+	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
+}
+
+static void error(char *msg)
 {
   printf("%s:\n\n", msg);
   PrintGifError();
   exit(-1);
-}*/
+}
+#endif
 
 /**
  * Get transparency color from graphic extension block
