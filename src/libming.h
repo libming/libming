@@ -32,7 +32,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 #include "ming.h"
 #include "ming_config.h"
 
@@ -77,6 +76,7 @@ typedef unsigned char BOOL;
 #endif
 
 #if GIFLIB_GIFERRORSTRING
+#include <gif_lib.h>
 static void
 PrintGifError(void)
 {
