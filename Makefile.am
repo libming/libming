@@ -67,3 +67,6 @@ DISTCLEANFILES = ming-@VERSION@* ming.spec COPYING
 
 ChangeLog Changelog:
 	cd $(srcdir) && git2cl > ChangeLog 
+
+# alias to make travis config easier
+test: check
