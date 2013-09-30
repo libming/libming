@@ -1,1 +1,4 @@
+before_install:
+  - ./autogen.sh
+
 language: c
