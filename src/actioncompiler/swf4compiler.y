@@ -2,6 +2,10 @@
 
 %start program
 
+%code requires {
+#define YYPARSE_PARAM buffer
+}
+
 %{
 
 #include <time.h>
@@ -11,7 +15,6 @@
 #include "actiontypes.h"
 #include "assembler.h"
 
-#define YYPARSE_PARAM buffer
 #define YYERROR_VERBOSE 1
 
 %}

@@ -2,6 +2,10 @@
 
 %start program
 
+%code requires {
+#define YYPARSE_PARAM buffer
+}
+
 %{
 
 #include <time.h>
@@ -12,7 +16,6 @@
 #include "assembler.h"
 
 #define YYERROR_VERBOSE 1
-#define YYPARSE_PARAM buffer
 //#define DEBUG 1
 
 #ifdef _MSC_VER 
