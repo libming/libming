@@ -4,7 +4,7 @@ MING THE MODULE
 [![Build Status](http://travis-ci.org/libming/libming.png)]
 (http://travis-ci.org/libming/libming)
 
-Last updated 14th January 2008.
+Last updated 09th January 2014.
 
 Ming is a Flash (SWF) output library.  It can be used from PHP, Perl,
 Ruby, Python, C, C++, Java, and probably more on the way.
