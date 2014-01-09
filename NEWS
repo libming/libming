@@ -1,3 +1,7 @@
+0.4.6 - 2014-MM-DD
+
+  * Fix support for bison 2.6+ (github issue #38).
+
 0.4.5 - 2013-06-08
 
 	* Fix a build problem with perl module and Perl 5.13.10 (Debian package patch 07)
