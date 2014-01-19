@@ -2,10 +2,6 @@
 
 %start program
 
-%code requires {
-#define YYPARSE_PARAM buffer
-}
-
 %{
 
 #include <time.h>
@@ -27,6 +23,8 @@ Buffer bf, bc;
 static int classContext = 0;
 
 %}
+
+%parse-param {void *buffer}
 
 %union
 {
@@ -264,7 +262,7 @@ class_init
 	{
 		if(classContext)
 		{
-			swf5error("Nested classes are not allowed\n");
+			swf5error(NULL, "Nested classes are not allowed\n");
 			YYABORT;
 		}
 		classContext = 1;
@@ -394,7 +392,7 @@ return_stmt
 		{ int tmp = chkctx(CTX_FUNCTION);
 		  if(tmp < 0) 
 		  {
-			swf5error("return outside function");
+			swf5error(NULL, "return outside function");
 			YYABORT;
 		  }
 		  $$ = newBuffer();
@@ -407,7 +405,7 @@ return_stmt
 		{ int tmp = chkctx(CTX_FUNCTION);
 		  if(tmp < 0)
 		  {
-			swf5error("return outside function");
+			swf5error(NULL, "return outside function");
 			YYABORT;
 		  }
 		  $$ = newBuffer();
@@ -880,7 +878,7 @@ cont_stmt
 		{ 
 		  if(chkctx(CTX_CONTINUE) < 0)
 		  {
-			swf5error("continue outside loop");
+			swf5error(NULL, "continue outside loop");
 			YYABORT;
 		  }
 		  $$ = newBuffer();
@@ -908,7 +906,7 @@ break_stmt
 		  }
 		  else
 		  {
-			swf5error("break outside switch / loop");
+			swf5error(NULL, "break outside switch / loop");
 			YYABORT;
 		  }
 		}
@@ -1606,7 +1604,7 @@ primary
 		{
 			if($1->name != NULL)
 			{
-				swf5error("anonymous decl only. identifier not allowed");
+				swf5error(NULL, "anonymous decl only. identifier not allowed");
 				YYABORT;
 			}
 			$$ = newBuffer();
