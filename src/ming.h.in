@@ -47,6 +47,10 @@ extern "C" {
 #define MING_VERSION        @MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@
 #define MING_VERSION_TEXT  "@MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@"
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
 /***** Type definitions - avoid cyclic dependencies ****/
 
 typedef unsigned char byte;
