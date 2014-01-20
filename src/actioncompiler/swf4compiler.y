@@ -2,10 +2,6 @@
 
 %start program
 
-%code requires {
-#define YYPARSE_PARAM buffer
-}
-
 %{
 
 #include <time.h>
@@ -18,6 +14,8 @@
 #define YYERROR_VERBOSE 1
 
 %}
+
+%parse-param {void *buffer}
 
 %union {
   Buffer action;

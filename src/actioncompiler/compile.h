@@ -17,7 +17,7 @@ extern int swfVersion;
 typedef struct _buffer *Buffer;
 
 /* shut up bison.simple */
-void yyerror(char *msg);
+void yyerror(void *buffer, char *msg);
 int yylex();
 
 #ifndef max

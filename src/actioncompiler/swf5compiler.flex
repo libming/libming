@@ -9,7 +9,7 @@
 #include "blocks/error.h"
 #include "swf5compiler.tab.h" /* defines token types */
 
-extern int swf5debug;
+int swf5debug;
 
 static const char *lexBuffer = NULL;
 static int lexBufferLen = 0;
