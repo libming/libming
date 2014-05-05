@@ -445,12 +445,12 @@ add_import_spec(char *spec)
 {
 	if ( numimport_specs == 0 )
 	{
-		import_specs = (char **)malloc(1);
+		import_specs = (char **)malloc(sizeof(char*));
 	}
 	else
 	{
 		import_specs = (char **)realloc(import_specs,
-				numimport_specs+1);
+				(numimport_specs+1)*sizeof(char*));
 	}
 	import_specs[numimport_specs] = spec;
 	numimport_specs++;
