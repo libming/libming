@@ -19,3 +19,7 @@ libming.so
 libtool
 configure
 .project
+config/test-driver
+*.log
+*.trs
+*~
