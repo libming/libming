@@ -19,7 +19,7 @@ if "@PNGLIB@":
 	mylibs.append('png')
 
 if "@GIFLIB@":
-	mylibs.append("ungif")
+	mylibs.append("@GIFLIB@".replace('-l',''))
 
 
 setup(name = "mingc", version = "@MING_VERSION@",
