@@ -2,8 +2,9 @@
 
 	* Fix support for bison 2.6+ (Issue #38, PR #40).
 	* Fix build on GNU/Hurd (PR #39).
-  * Fix possible buffer overflow in makeswf
-  * Change php bindings license from PHP to LGPL-2.1+ (Issue #42)
+	* Fix possible buffer overflow in makeswf
+	* Change php bindings license from PHP to LGPL-2.1+ (Issue #42)
+	* Fix build of python binding with libgif (rather than libungif)
 
 0.4.5 - 2013-06-08
 
