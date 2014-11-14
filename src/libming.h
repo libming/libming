@@ -75,12 +75,20 @@ typedef unsigned char BOOL;
   #include <unistd.h>
 #endif
 
-#if GIFLIB_GIFERRORSTRING
+#ifdef HAVE_GIF_LIB_H
 #include <gif_lib.h>
 static void
 PrintGifError(void)
 {
-	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
+#if GIFLIB_GIFERRORSTRING
+#if GIFLIB_MAJOR < 5
+       fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
+#else
+       fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString(0));
+#endif
+#else
+       fprintf(stderr, "\nGIF-LIB error but no GifErrorString support.\n");
+#endif
 }
 #endif
 
