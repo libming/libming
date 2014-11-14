@@ -16,7 +16,9 @@
 void error(char *msg)
 {
   printf("%s:\n\n", msg);
+#if GIFLIB_MAJOR < 5
   PrintGifError();
+#endif
   exit(-1);
 }
 
@@ -28,8 +30,15 @@ unsigned char *readGif(char *fileName, int *length)
   unsigned char *data;
   int i, nColors, size;
 
+#if GIFLIB_MAJOR < 5
   if((file = DGifOpenFileName(fileName)) == NULL)
     error("Error opening file");
+#else
+  int errorCode = 0;
+
+  if((file = DGifOpenFileName(fileName, &errorCode)) == NULL)
+    error(GifErrorString(errorCode));
+#endif
 
   if(DGifSlurp(file) != GIF_OK)
     error("Error slurping file");

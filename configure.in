@@ -289,7 +289,7 @@ dnl MinGW check for libungif
 AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
 dnl Solaris needs -lX11 on the linker line for ungif to work
 AC_CHECK_LIB(gif, GifErrorString, GIFLIB="-lgif",, "-lX11")
-AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif",, "-lX11")
+AC_CHECK_LIB(gif, DGifOpen, GIFLIB="-lgif", GIFLIB="")
 if test x"${GIFLIB}" = x; then
 AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
 fi
