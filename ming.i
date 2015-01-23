@@ -12,11 +12,19 @@
 %}
 
 %typemap(python,in) FILE * {
+%#if PY_MAJOR_VERSION >= 3
+  /*if (!PyObject_TypeCheck($input, &PyFileIO_Type)) {
+    PyErr_SetString(PyExc_TypeError, "Need a file!");
+    return NULL;
+  }*/
+  $1 = (FILE *)PyObject_AsFileDescriptor($input);
+%#else
   if (!PyFile_Check($input)) {
     PyErr_SetString(PyExc_TypeError, "Need a file!");
     return NULL;
   }
   $1 = PyFile_AsFile($input);
+%#endif
 }
 
 %typemap(python,in) char * {
