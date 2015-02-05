@@ -19,10 +19,10 @@
 
 #include "libming.h"
 
-void error(char *msg)
+void error(char *msg, int errorCode)
 {
   printf("%s:\n\n", msg);
-  PrintGifError();
+  PrintGifError(errorCode);
   exit(-1);
 }
 
@@ -59,11 +59,22 @@ unsigned char *readGif(char *fileName, int *length, int *bytesPerColor)
   unsigned char *p;
   int i, nColors, size, alpha, bgColor, alignedWidth;
 
+#if GIFLIB_MAJOR < 5
   if((file = DGifOpenFileName(fileName)) == NULL)
     error("Error opening file");
+#else
+  int errorCode = 0;
+
+  if((file = DGifOpenFileName(fileName, &errorCode)) == NULL)
+    error("Error opening file", errorCode);
+#endif
 
   if(DGifSlurp(file) != GIF_OK)
-    error("Error slurping file");
+#if GIFLIB_MAJOR < 5
+    error("Error slurping file", 0);
+#else
+    error("Error slurping file", file->Error);
+#endif
 
   /* data should now be available */
 
@@ -190,7 +201,12 @@ unsigned char *readGif(char *fileName, int *length, int *bytesPerColor)
   }
 
 	/* Done! */
+#if GIFLIB_MAJOR >= 5 && GIFLIB_MINOR >= 1
+  if (DGifCloseFile(file, &errorCode) != GIF_OK)
+    error("Error closing file", errorCode);
+#else
   DGifCloseFile(file);
+#endif
 
   *length = size;
   return data;

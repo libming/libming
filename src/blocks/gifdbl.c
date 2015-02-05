@@ -203,7 +203,12 @@ readGif(GifFileType *file, dblData result)
 	}
 
 	/* Done! */
+#if GIFLIB_MAJOR >= 5 && GIFLIB_MINOR >= 1
+	if (DGifCloseFile(file, NULL) != GIF_OK)
+	    return 0;
+#else
 	DGifCloseFile(file);
+#endif
 
 	result->data = malloc(outsize = (int)floor(size*1.01+12));
 
@@ -227,7 +232,11 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromGifFile(const char *fileName)
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;
 
+#if GIFLIB_MAJOR >= 5
+	if((file = DGifOpenFileName(fileName, NULL)) == NULL)
+#else
 	if((file = DGifOpenFileName(fileName)) == NULL)
+#endif
 		return NULL;
 	if(!readGif(file, &gifdata))
 		return NULL;
@@ -246,7 +255,11 @@ SWFDBLBitmapData newSWFDBLBitmapData_fromGifInput(SWFInput input)
 	SWFDBLBitmapData ret;
 	struct dbl_data gifdata;
 
+#if GIFLIB_MAJOR >= 5
+	if((file = DGifOpen(input, (InputFunc) gifReadFunc, NULL)) == NULL)
+#else
 	if((file = DGifOpen(input, (InputFunc) gifReadFunc)) == NULL)
+#endif
 		return NULL;
 	if(!readGif(file, &gifdata))
 		return NULL;
