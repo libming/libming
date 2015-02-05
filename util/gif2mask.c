@@ -13,10 +13,10 @@
 
 #define max(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
 
-void error(char *msg)
+void error(char *msg, int errorCode)
 {
   printf("%s:\n\n", msg);
-  PrintGifError();
+  PrintGifError(errorCode);
   exit(-1);
 }
 
@@ -28,11 +28,22 @@ unsigned char *readGif(char *fileName, int *length)
   unsigned char *data;
   int i, nColors, size;
 
+#if GIFLIB_MAJOR < 5
   if((file = DGifOpenFileName(fileName)) == NULL)
-    error("Error opening file");
+    error("Error opening file", 0);
+#else
+  int errorCode = 0;
+
+  if((file = DGifOpenFileName(fileName, &errorCode)) == NULL)
+    error("Error opening file", errorCode);
+#endif
 
   if(DGifSlurp(file) != GIF_OK)
-    error("Error slurping file");
+#if GIFLIB_MAJOR < 5
+    error("Error slurping file", 0);
+#else
+    error("Error slurping file", file->Error);
+#endif
 
   /* data should now be available */
 
