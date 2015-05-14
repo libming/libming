@@ -95,18 +95,18 @@ typedef unsigned char BOOL;
 #define GIFLIB5_ONLY(x) x
 #endif
 
+#if GIFLIB_GIFERRORSTRING
 static void
 PrintGifError(int GIFLIB5_ONLY(errorCode))
 {
-#if GIFLIB_GIFERRORSTRING
 #if GIFLIB_MAJOR < 5
 	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
 #else
 	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString(errorCode));
 #endif
-#else
-	fprintf(stderr, "\nGIF-LIB error but no GifErrorString support.\n");
-#endif
 }
+#else
+#define PrintGifError(x) PrintGifError()
+#endif
 
 #endif /* SWF_LIBMING_H_INCLUDED */

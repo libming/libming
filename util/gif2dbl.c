@@ -59,12 +59,12 @@ unsigned char *readGif(char *fileName, int *length, int *bytesPerColor)
   unsigned char *p;
   int i, nColors, size, alpha, bgColor, alignedWidth;
 
-#if GIFLIB_MAJOR < 5
-  if((file = DGifOpenFileName(fileName)) == NULL)
-    error("Error opening file");
-#else
   int errorCode = 0;
 
+#if GIFLIB_MAJOR < 5
+  if((file = DGifOpenFileName(fileName)) == NULL)
+    error("Error opening file", errorCode);
+#else
   if((file = DGifOpenFileName(fileName, &errorCode)) == NULL)
     error("Error opening file", errorCode);
 #endif
