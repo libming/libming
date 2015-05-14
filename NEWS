@@ -1,4 +1,4 @@
-0.4.6 - 2014-MM-DD
+0.4.6 - 2015-05-14
 
 	* Add support for building against giflib 5.1.1+ (PR #47).
 	* Fix support for bison 2.6+ (Issue #38, PR #40).
