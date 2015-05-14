@@ -1,4 +1,6 @@
-0.4.7 - 2125-MM-DD
+0.4.7 - 2015-05-DD
+
+	* Restore support for giflib 4.1.x
 
 0.4.6 - 2015-05-14
 

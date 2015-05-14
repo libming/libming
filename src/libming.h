@@ -75,38 +75,14 @@ typedef unsigned char BOOL;
   #include <unistd.h>
 #endif
 
-#ifdef HAVE_GIF_LIB_H
-#include <gif_lib.h>
-#endif
-
-#ifndef __has_attribute
-#define __has_attribute(x) 0
-#endif
-
-#if (defined(__GNUC__)) || __has_attribute(unused)
-#define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
-#else
-#define UNUSED(x) UNUSED_ ## x
-#endif
-
-#if GIFLIB_MAJOR < 5
-#define GIFLIB5_ONLY(x) UNUSED(x)
-#else
-#define GIFLIB5_ONLY(x) x
-#endif
-
 #if GIFLIB_GIFERRORSTRING
-static void
-PrintGifError(int GIFLIB5_ONLY(errorCode))
-{
-#if GIFLIB_MAJOR < 5
-	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
+# if GIFLIB_MAJOR < 5
+#  define PrintGifError(x) fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString())
+# else
+#  define PrintGifError(x) fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString(x))
+# endif
 #else
-	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString(errorCode));
-#endif
-}
-#else
-#define PrintGifError(x) PrintGifError()
+# define PrintGifError(x) PrintGifError()
 #endif
 
 #endif /* SWF_LIBMING_H_INCLUDED */
