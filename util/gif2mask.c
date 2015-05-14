@@ -11,7 +11,7 @@
 
 #include "libming.h"
 
-#define max(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
+#define max3(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
 
 void error(char *msg, int errorCode)
 {
@@ -53,7 +53,7 @@ unsigned char *readGif(char *fileName, int *length)
   {
     GifColorType c = file->SColorMap->Colors[i];
 
-    colorMap[i] = max(c.Blue, c.Red, c.Green);
+    colorMap[i] = max3(c.Blue, c.Red, c.Green);
   }
 
   bits = file->SavedImages[0].RasterBits;
