@@ -622,7 +622,7 @@ embed_image(SWFMovie movie, char *f)
 	SWFBitmap bm;
 	SWFShape shape;
 	SWFMovieClip clip;
-	SWFDisplayItem it, it2;
+	SWFDisplayItem it;
 	FILE *raster;
 	SWFInput in;
 	int height, width;
@@ -662,7 +662,7 @@ embed_image(SWFMovie movie, char *f)
 	SWFShape_drawLineTo(shape, 0, 0);
 
 	clip = newSWFMovieClip();
-	it2 = SWFMovieClip_add(clip, (SWFBlock)shape);
+	it = SWFMovieClip_add(clip, (SWFBlock)shape);
 	SWFMovieClip_nextFrame(clip);
 
 	it = SWFMovie_add(mo, (SWFBlock)clip);
