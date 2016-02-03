@@ -347,6 +347,11 @@ main (int argc, char **argv)
 		// should warn about overriding (-f ?)
 	}
 
+	if ( swfversion < 6 && swfcompression > -1 )
+	{
+		fprintf(stderr, "WARNING: SWF compression was unsupported until version 6, use -c -1 to disable.\n");
+	}
+
 	if ( Ming_init() )
 	{
 		fprintf(stderr, "Ming initialization error\n");
