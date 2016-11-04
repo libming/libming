@@ -206,6 +206,30 @@ static struct SWFBlockOutput outputs[] = {
 
 static int numOutputs = sizeof (outputs) / sizeof (struct SWFBlockOutput);
 
+#if defined(SWFPLUSPLUS)
+static char **g_varlist;
+static int g_nvars;
+
+static void add_var(const char *var)
+{
+    g_nvars++;
+    g_varlist = (char **)realloc(g_varlist, g_nvars*sizeof(void*));
+    g_varlist[g_nvars - 1] = strdup(var);
+}
+
+static int search_var(const char *var)
+{
+    int i;
+    for (i = 0; i < g_nvars; i++)
+        if (0 == strcmp(g_varlist[i], var))
+            return 1;
+    add_var(var);
+    return 0;
+}
+#else
+#define search_var(n) 0
+#endif
+
 /* Handle language syntax differnces with these function */
 
 static void
@@ -259,7 +283,6 @@ printf("%s", ARGEND);
 va_end(ap);
 }
 
-
 char *
 newobj (char *varname, char *obj)
 {
@@ -270,7 +293,10 @@ newobj (char *varname, char *obj)
 #if defined(SWFPLUSPLUS)
     // might be worth storing the newly created object in a std::auto_ptr here
     // as I dubt we're outputting nested scopes anyway..
-    sprintf (buf, OBJPREF "%s* %s = " NEWOP " " OBJPREF "%s", obj, varname, obj);
+    if (!search_var(varname))
+        sprintf (buf, OBJPREF "%s* %s = " NEWOP " " OBJPREF "%s", obj, varname, obj);
+    else
+        sprintf (buf, "%s = " NEWOP " " OBJPREF "%s", varname, obj);
 #elif defined(SWFTCL)
     sprintf (buf, "set %s [" NEWOP OBJPREF "%s]", varname, obj);
 #else
@@ -289,10 +315,21 @@ void
 outputSWF_RGBA (SWF_RGBA * color, char *pname)
 {
 #ifdef SWFPLUSPLUS
-  printf ("int %s_red   = 0x%2.2x;\n", pname, color->red);
-  printf ("int %s_green = 0x%2.2x;\n", pname, color->green);
-  printf ("int %s_blue  = 0x%2.2x;\n", pname, color->blue);
-  printf ("int %s_alpha = 0x%2.2x;\n", pname, color->alpha);
+  char varname[256];
+  sprintf(varname, "%s_red", pname);
+  if (!search_var(varname))
+  {
+    printf ("int %s_red   = 0x%2.2x;\n", pname, color->red);
+    printf ("int %s_green = 0x%2.2x;\n", pname, color->green);
+    printf ("int %s_blue  = 0x%2.2x;\n", pname, color->blue);
+    printf ("int %s_alpha = 0x%2.2x;\n", pname, color->alpha);
+  } else
+  {
+    printf ("%s_red   = 0x%2.2x;\n", pname, color->red);
+    printf ("%s_green = 0x%2.2x;\n", pname, color->green);
+    printf ("%s_blue  = 0x%2.2x;\n", pname, color->blue);
+    printf ("%s_alpha = 0x%2.2x;\n", pname, color->alpha);
+  }
 #else
   printf ("" VAR "%s_red   = 0x%2.2x;\n", pname, color->red);
   printf ("" VAR "%s_green = 0x%2.2x;\n", pname, color->green);
@@ -477,14 +514,18 @@ outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF
   char fname[64];
   char gname[64];
   const char* fillTypeName = NULL;
+  int do_declare;
 
   sprintf (fname, "%s_f%d", parentname, i);
+  do_declare = !search_var(fname);
 
   switch (fillstyle->FillStyleType)
     {
     case 0x00:			/* Solid Fill */
       outputSWF_RGBA (&fillstyle->Color, fname);
-      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s_red, "
+      if (do_declare)
+        printf ("" DECLOBJ(Fill) " ");
+      printf ("%s = %s(" VAR "%s_red, "
 	      VAR "%s_green, "
 	      VAR "%s_blue, "
 	      VAR "%s_alpha "
@@ -495,7 +536,9 @@ outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF
     case 0x10:			/* Linear Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
+      if (do_declare)
+        printf ("" DECLOBJ(Fill) " ");
+      printf ("%s = %s(" VAR "%s,SWFFILL_LINEAR_GRADIENT);\n",
 	      fname, methodcall (parentname, "addGradientFill"), gname);
       if (shapeBounds)
         prepareSWF_MATRIX(&fillstyle->GradientMatrix, shapeBounds);
@@ -504,7 +547,9 @@ outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF
     case 0x12:			/* Radial Gradient Fill */
       sprintf (gname, "%s_g%d", parentname, i);
       outputSWF_GRADIENT (&fillstyle->Gradient, gname);
-      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
+      if (do_declare)
+        printf ("" DECLOBJ(Fill) " ");
+      printf ("%s = %s(" VAR "%s,SWFFILL_RADIAL_GRADIENT);\n",
 	      fname, methodcall (parentname, "addGradientFill"), gname);
       if (shapeBounds)
         prepareSWF_MATRIX(&fillstyle->GradientMatrix, shapeBounds);
@@ -528,13 +573,14 @@ outputSWF_FILLSTYLE_new (SWF_FILLSTYLE * fillstyle, char *parentname, int i, SWF
        */
       printf (COMMSTART " BitmapID: %d " COMMEND "\n", fillstyle->BitmapId);
       sprintf (gname, "character%d", fillstyle->BitmapId);
-      printf ("" DECLOBJ(Fill) "%s = %s(" VAR "%s,%s);\n",
+      if (do_declare)
+        printf ("" DECLOBJ(Fill) " ");
+      printf ("%s = %s(" VAR "%s,%s);\n",
 	      fname, methodcall (parentname, "addBitmapFill"),
               gname, fillTypeName);
       outputSWF_MATRIX (&fillstyle->BitmapMatrix, fname);
       break;
-    }
-
+  }
 }
 
 void
@@ -557,12 +603,16 @@ outputSWF_FILLSTYLEARRAY_new (SWF_FILLSTYLEARRAY * fillstylearray,
 void
 outputSWF_LINESTYLE (SWF_LINESTYLE * linestyle, char *parentname, int i)
 {
-  char lname[64];
+  char lname[64], varname[256];
   sprintf (lname, "%s_l%d", parentname, i);
+  sprintf (varname, "%s_l%d_width", parentname, i);
 #ifdef SWFPLUSPLUS
-  printf ("int %s_width = %d;\n", lname, linestyle->Width);
+  if (!search_var(varname))
+    printf ("int %s = %d;\n", varname, linestyle->Width);
+  else
+    printf ("%s = %d;\n", varname, linestyle->Width);
 #else
-  printf ("" VAR "%s_width = %d;\n", lname, linestyle->Width);
+  printf ("" VAR "%s = %d;\n", varname, linestyle->Width);
 #endif
 
   outputSWF_RGBA (&linestyle->Color, lname);
@@ -572,12 +622,16 @@ outputSWF_LINESTYLE (SWF_LINESTYLE * linestyle, char *parentname, int i)
 void
 outputSWF_LINESTYLE2 (SWF_LINESTYLE2 * linestyle, char *parentname, int i)
 {
-  char lname[64];
+  char lname[64], varname[256];
   sprintf (lname, "%s_l%d", parentname, i);
+  sprintf (varname, "%s_l%d_width", parentname, i);
 #ifdef SWFPLUSPLUS
-  printf ("int %s_width = %d;\n", lname, linestyle->Width);
+  if (!search_var(varname))
+    printf ("int %s = %d;\n", varname, linestyle->Width);
+  else
+    printf ("%s = %d;\n", varname, linestyle->Width);
 #else
-  printf ("" VAR "%s_width = %d;\n", lname, linestyle->Width);
+  printf ("" VAR "%s = %d;\n", varname, linestyle->Width);
 #endif
 
   /* TODO: use also all the other fields (styles) */
@@ -680,7 +734,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 		      parentname, shaperec->StyleChange.LineStyle - 1);
 	    }
 	}
-      if (shaperec->StyleChange.StateFillStyle1)
+      if (shaperec->StyleChange.StateFillStyle1 && shaperec->StyleChange.FillStyle1)
 	{
 	  printf ("%s(", methodcall (parentname, "setRightFill"));
 	  if (shaperec->StyleChange.FillStyle1)
@@ -689,7 +743,7 @@ outputSWF_SHAPERECORD (SWF_SHAPERECORD * shaperec, char *parentname)
 	    }
 	  printf (");\n");
 	}
-      if (shaperec->StyleChange.StateFillStyle0)
+      if (shaperec->StyleChange.StateFillStyle0 && shaperec->StyleChange.FillStyle0)
 	{
 	  printf ("%s(", methodcall (parentname, "setLeftFill"));
 	  if (shaperec->StyleChange.FillStyle0)
@@ -813,7 +867,9 @@ outputSWF_BUTTONRECORD( SWF_BUTTONRECORD *brec, char *bname)
   sprintf(brname, "%sbr%d", bname, brec->PlaceDepth);
 
   //printf ("%s(" VAR "%s,", methodcall(bname, "addCharacter"), cname);
-  printf ( DECLOBJ(ButtonRecord) "%s = %s(" VAR "%s,",
+  if (!search_var(brname))
+    printf (DECLOBJ(ButtonRecord) " ");
+  printf ("%s = %s(" VAR "%s,",
         brname, methodcall(bname, "addCharacter"), cname);
 
   if (brec->ButtonStateHitTest)
@@ -1612,32 +1668,35 @@ outputSWF_PLACEOBJECT2 (SWF_Parserstruct * pblock)
     sprintf(cname, "character%d", sblock->CharacterId );
     if(sblock->Depth) 
     {
-     printf ("" DECLOBJ(DisplayItem) "%s%d = %s(" VAR "%s)"STMNTEND"\n", "i" , sblock->Depth,
-	methodcall (spritenum?spritename:"m", "add"),     cname);
+      char varname[64];
+      sprintf(varname, "%s%d", "i" , sblock->Depth);
+      if (!search_var(varname))
+        printf ("" DECLOBJ(DisplayItem) " ");
+      printf ("%s = %s(" VAR "%s)"STMNTEND"\n", varname,
+        methodcall (spritenum?spritename:"m", "add"),     cname);
 
-        sprintf(cname, "i%d", sblock->Depth );
-        printf("%s(%d)"STMNTEND"\n", methodcall(cname, "setDepth"),
-            sblock->Depth);
+      sprintf(cname, "i%d", sblock->Depth );
+      printf("%s(%d)"STMNTEND"\n", methodcall(cname, "setDepth"), sblock->Depth);
     }
     else
-     printf(COMMSTART " PlaceFlagHasCharacter and Depth == 0! " COMMEND "\n");
+      printf(COMMSTART " PlaceFlagHasCharacter and Depth == 0! " COMMEND "\n");
   }
   if( sblock->PlaceFlagHasMatrix ) {
-      printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
-      sprintf(cname, "i%d", sblock->Depth );
-      if (!spritenum)				/* coordinate translation on main movie */
-      {
-       sblock->Matrix.TranslateX-=offsetX;
-       sblock->Matrix.TranslateY-=offsetY;
-      }
-      outputSWF_MATRIX (&sblock->Matrix, cname);
+    printf(COMMSTART " PlaceFlagHasMatrix " COMMEND "\n");
+    sprintf(cname, "i%d", sblock->Depth );
+    if (!spritenum)				/* coordinate translation on main movie */
+    {
+      sblock->Matrix.TranslateX-=offsetX;
+      sblock->Matrix.TranslateY-=offsetY;
+    }
+    outputSWF_MATRIX (&sblock->Matrix, cname);
   }
   if( sblock->PlaceFlagHasColorTransform ) {
     sprintf(cname, "i%d", sblock->Depth);
     outputSWF_CXFORMWITHALPHA(&sblock->ColorTransform, cname);
   }
   if( sblock->PlaceFlagHasRatio ) {
-      printf(COMMSTART " PlaceFlagHasRatio " COMMEND "\n");
+    printf(COMMSTART " PlaceFlagHasRatio " COMMEND "\n");
   }
   if( sblock->PlaceFlagHasName ) {
     sprintf(cname, "i%d", sblock->Depth );
