@@ -1,6 +1,6 @@
 #!/usr/bin/php -c.
 
-<?
+<?php
 
 $m = new SWFMovie(7);
 $s = new SWFShape();
