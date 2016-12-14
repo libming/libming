@@ -1,6 +1,6 @@
 #!/usr/bin/php -c.
 
-<?
+<?php
 
 $m = new SWFMovie(7);
 $s = new SWFShape();
@@ -26,4 +26,4 @@ $bu->addShape($s, SWFBUTTON_UP | SWFBUTTON_HIT | SWFBUTTON_OVER | SWFBUTTON_DOWN
 $item = $m->add($bu);
 $item->addFilter($f);
 $m->save("test02.swf");
-?>
+
