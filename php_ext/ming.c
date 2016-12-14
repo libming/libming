@@ -101,11 +101,19 @@ static SWFMatrix getMatrix(zval *id TSRMLS_DC);
 	}
 #endif
 
+#if PHP_VERSION_ID >= 70000
+typedef size_t zend_strlen;
+#else
+typedef int zend_strlen;
+typedef long zend_long;
+#endif
+
+
 /* {{{ proto void ming_setcubicthreshold (int threshold)
    Set cubic threshold (?) */
 PHP_FUNCTION(ming_setCubicThreshold)
 {
-	long num;
+	zend_long num;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &num) == FAILURE) {
 		return;
@@ -128,10 +136,10 @@ PHP_FUNCTION(ming_setScale)
 /* }}} */
 
 /* {{{ proto void ming_useswfversion(int version)
-   Use SWF version (?) */ 
+   Use SWF version (?) */
 PHP_FUNCTION(ming_useSWFVersion)
 {
-	long num;
+	zend_long num;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &num) == FAILURE) {
 		return;
@@ -142,10 +150,10 @@ PHP_FUNCTION(ming_useSWFVersion)
 
 #ifdef HAVE_NEW_MING
 /* {{{ proto void ming_useconstants(int use)
-	Use constant pool (?) */ 
+	Use constant pool (?) */
 PHP_FUNCTION(ming_useConstants)
 {
-	long num;
+	zend_long num;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &num) == FAILURE) {
 		return;
@@ -156,8 +164,8 @@ PHP_FUNCTION(ming_useConstants)
 
 /* {{{ set output compression */
 PHP_FUNCTION(ming_setSWFCompression)
-{  
-	long num;
+{
+	zend_long num;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &num) == FAILURE) {
 		return;
@@ -243,41 +251,64 @@ static zend_class_entry *character_class_entry_ptr;
 
 /* {{{ internal function SWFgetProperty
 */
+#if PHP_VERSION_ID >= 70000
+static void *SWFgetProperty(zval *id, char *name, int namelen, int proptype)
+{
+	zval *tmp;
+#else
 static void *SWFgetProperty(zval *id, char *name, int namelen, int proptype TSRMLS_DC)
 {
 	zval **tmp;
 	int id_to_find;
 	void *property;
 	int type;
+#endif
 
 	if (id) {
+#if PHP_VERSION_ID >= 70000
+		if ((tmp = zend_hash_str_find(Z_OBJPROP_P(id), name, namelen)) != NULL) {
+			return zend_fetch_resource_ex(tmp, name, proptype);
+		} else {
+			 /* php_error_docref(NULL, E_WARNING, "Unable to find property %s", name); */
+			return NULL;
+		}
+#else
 		if (zend_hash_find(Z_OBJPROP_P(id), name, namelen+1, (void **)&tmp) == FAILURE) {
 			/* php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unable to find property %s", name); */
 			return NULL;
 		}
 		id_to_find = Z_LVAL_PP(tmp);
+		property = zend_list_find(id_to_find, &type);
+
+		if (!property || type != proptype) {
+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unable to find identifier (%d)", id_to_find);
+			return NULL;
+		}
+		return property;
+#endif
 	} else {
 		return NULL;
 	}
-
-	property = zend_list_find(id_to_find, &type);
-
-	if (!property || type != proptype) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unable to find identifier (%d)", id_to_find);
-		return NULL;
-	}
-
-	return property;
 }
 /* }}} */
 
-/* {{{ SWFCharacter 
+/* {{{ SWFCharacter
 */
 
 /* {{{ internal function SWFCharacter getCharacter(zval *id)
    Returns the SWFCharacter contained in zval *id */
 static SWFCharacter getCharacter(zval *id TSRMLS_DC)
 {
+	if (ZVAL_IS_NULL(id)) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Parameter is null");
+		return NULL;
+	}
+
+	if (Z_TYPE_P(id) != IS_OBJECT) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Parameter is not an object");
+		return NULL;
+	}
+
 	if (Z_OBJCE_P(id) == shape_class_entry_ptr)
 		return (SWFCharacter)getShape(id TSRMLS_CC);
 	else if (Z_OBJCE_P(id) == font_class_entry_ptr)
@@ -348,7 +379,11 @@ static zend_function_entry swfcharacter_functions[] = {
 
 /* }}} */
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFInput_resource(zend_resource *resource)
+#else
 static void destroy_SWFInput_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFInput((SWFInput)resource->ptr);
 }
@@ -360,7 +395,11 @@ static SWFInput getInput_fromFileResource(zval *zfile TSRMLS_DC)
 	php_stream *stream;
 	SWFInput input;
 
+#if PHP_VERSION_ID >= 70000
+	php_stream_from_zval_no_verify(stream, zfile);
+#else
 	php_stream_from_zval_no_verify(stream, &zfile);
+#endif
 
 	if (stream == NULL) {
 		return NULL;
@@ -371,8 +410,13 @@ static SWFInput getInput_fromFileResource(zval *zfile TSRMLS_DC)
 	}
 
 	input = newSWFInput_file(file);
+#if PHP_VERSION_ID >= 70000
+	Z_ADDREF_P(zfile);
+	zend_register_resource(input, le_swfinputp);
+#else
 	zend_list_addref(Z_LVAL_P(zfile));
 	zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 	return input;
 }
 /* }}} */
@@ -403,8 +447,12 @@ PHP_METHOD(swfinput, __construct)
 {
 	SWFInput input;
 	char *data;
-	int data_len;
+	zend_strlen data_len;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &data, &data_len) == FAILURE) {
 		return;
@@ -412,10 +460,15 @@ PHP_METHOD(swfinput, __construct)
 
 	input = newSWFInput_bufferCopy((unsigned char *)data, data_len);
 
-	ret = zend_list_insert(input, le_swfinputp);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(input, le_swfinputp);
+	add_property_resource(getThis(), "input", ret);
+#else
 	object_init_ex(getThis(), input_class_entry_ptr);
+	ret = zend_list_insert(input, le_swfinputp);
 	add_property_resource(getThis(), "input", ret);
 	zend_list_addref(ret);
+#endif
 }
 
 static zend_function_entry swfinput_functions[] = {
@@ -427,11 +480,11 @@ static zend_function_entry swfinput_functions[] = {
 /* {{{ SWFFontCollection */
 static SWFFontCollection getFontCollection(zval *id TSRMLS_DC)
 {
-	void *fc = SWFgetProperty(id, "fontcollection", strlen("fontcollection"), 
+	void *fc = SWFgetProperty(id, "fontcollection", strlen("fontcollection"),
 			le_swffontcollectionp TSRMLS_CC);
 
 	if (!fc) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, 
+		php_error_docref(NULL TSRMLS_CC, E_ERROR,
 			"Called object is not an SWFFontCollection");
 	}
 	return (SWFFontCollection)fc;
@@ -441,8 +494,12 @@ static SWFFontCollection getFontCollection(zval *id TSRMLS_DC)
 PHP_METHOD(swffontcollection, __construct)
 {
 	char *filename;
-	int filename_len;
+	zend_strlen filename_len;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFFontCollection fc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
@@ -451,10 +508,15 @@ PHP_METHOD(swffontcollection, __construct)
 
 	fc = newSWFFontCollection_fromFile(filename);
 	if(fc) 	{
-		ret = zend_list_insert(fc, le_swffontcollectionp);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(fc, le_swffontcollectionp);
+		add_property_resource(getThis(), "fontcollection", ret);
+#else
 		object_init_ex(getThis(), fontcollection_class_entry_ptr);
+		ret = zend_list_insert(fc, le_swffontcollectionp);
 		add_property_resource(getThis(), "fontcollection", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -470,10 +532,14 @@ PHP_METHOD(swffontcollection, getFontCount)
 /* {{{ proto SWFFont swffontcollection::getFont(int index) */
 PHP_METHOD(swffontcollection, getFont)
 {
-	long index;
+	zend_long index;
+#if PHP_VERSION_ID >= 70000
+	zend_resource * ret;
+#else
 	int ret;
+#endif
 	SWFFont font;
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
 		return;
 	}
@@ -481,15 +547,25 @@ PHP_METHOD(swffontcollection, getFont)
 	font = SWFFontCollection_getFont(getFontCollection(getThis() TSRMLS_CC), index);
 
 	if(font != NULL) {
-		ret = zend_list_insert(font, le_swffontp);
 		object_init_ex(return_value, font_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(font, le_swffontp);
+		add_property_resource(return_value, "font", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(font, le_swffontp);
 		add_property_resource(return_value, "font", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFFontCollection_resource(zend_resource *resource)
+#else
 static void destroy_SWFFontCollection_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFFontCollection((SWFFontCollection)resource->ptr);
 }
@@ -519,8 +595,12 @@ static SWFBrowserFont getBrowserFont(zval *id TSRMLS_DC)
 PHP_METHOD(swfbrowserfont, __construct)
 {
 	char *name;
-	int name_len;
+	zend_strlen name_len;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFBrowserFont font;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
@@ -529,15 +609,24 @@ PHP_METHOD(swfbrowserfont, __construct)
 
 	font = newSWFBrowserFont(name);
 	if(font) {
-		ret = zend_list_insert(font, le_swfbrowserfontp);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(font, le_swfbrowserfontp);
+		add_property_resource(getThis(), "browserfont", ret);
+#else
 		object_init_ex(getThis(), browserfont_class_entry_ptr);
+		ret = zend_list_insert(font, le_swfbrowserfontp);
 		add_property_resource(getThis(), "browserfont", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFBrowserFont_resource(zend_resource *resource)
+#else
 static void destroy_SWFBrowserFont_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFBrowserFont((SWFBrowserFont)resource->ptr);
 }
@@ -554,9 +643,13 @@ static zend_function_entry swfbrowserfont_functions[] = {
 PHP_METHOD(swfcxform, __construct)
 {
 	SWFCXform cx;
-	long rAdd, gAdd, bAdd, aAdd;
+	zend_long rAdd, gAdd, bAdd, aAdd;
 	double rMult, gMult, bMult, aMult;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	switch(ZEND_NUM_ARGS())
 	{
@@ -575,18 +668,23 @@ PHP_METHOD(swfcxform, __construct)
 		WRONG_PARAM_COUNT;
 	}
 
-	ret = zend_list_insert(cx, le_swfcxformp);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(cx, le_swfcxformp);
+	add_property_resource(getThis(), "cx", ret);
+#else
 	object_init_ex(getThis(), cxform_class_entry_ptr);
+	ret = zend_list_insert(cx, le_swfcxformp);
 	add_property_resource(getThis(), "cx", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
 /* {{{ proto void setColorAdd(r, g, b, a) */
 PHP_METHOD(swfcxform, setColorAdd)
 {
-	long rAdd, gAdd, bAdd, aAdd;
-	
+	zend_long rAdd, gAdd, bAdd, aAdd;
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &rAdd, &gAdd, &bAdd, &aAdd) == FAILURE) {
 		return;
 	}
@@ -608,7 +706,11 @@ PHP_METHOD(swfcxform, setColorMult)
 }
 /* }}} */
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFCXform_resource(zend_resource *resource)
+#else
 static void destroy_SWFCXform_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFCXform((SWFCXform)resource->ptr);
 }
@@ -725,14 +827,30 @@ PHP_METHOD(swfinitaction, __construct)
 {
 	SWFInitAction init;
 	zval *zaction;
+	zend_long id = -1;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "o|l", &zaction, &id) == FAILURE) {
+		return;
+	}
+
+	if (id==-1) {
+		init = newSWFInitAction(getAction(zaction));
+	} else {
+		init = newSWFInitAction_withId(getAction(zaction), id);
+	}
+
+	ret = zend_register_resource(init, le_swfinitactionp);
+	add_property_resource(getThis(), "initaction", ret);
+#else
 	int ret;
-	long id = -1;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &zaction, &id) == FAILURE) {
 		return;
 	}
-	
-	if (id==-1) { 
+
+	if (id==-1) {
 		init = newSWFInitAction(getAction(zaction TSRMLS_CC));
 	} else {
 		init = newSWFInitAction_withId(getAction(zaction TSRMLS_CC), id);
@@ -742,6 +860,7 @@ PHP_METHOD(swfinitaction, __construct)
 	object_init_ex(getThis(), initaction_class_entry_ptr);
 	add_property_resource(getThis(), "initaction", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* no destructor for SWFInitAction, it's not a character */
 /* }}} */
@@ -774,24 +893,33 @@ PHP_METHOD(swfaction, __construct)
 {
 	SWFAction action;
 	char *script;
-	int script_len;
+	zend_strlen script_len;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &script, &script_len) == FAILURE) {
 		return;
 	}
-	
+
 	action = newSWFAction(script);
 
 	if (!action) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Couldn't compile actionscript");
 	}
-	
+
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(action, le_swfactionp);
+	add_property_resource(getThis(), "action", ret);
+#else
 	ret = zend_list_insert(action, le_swfactionp);
 
 	object_init_ex(getThis(), action_class_entry_ptr);
 	add_property_resource(getThis(), "action", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* no destructor for SWFAction, it's not a character */
 /* }}} */
@@ -799,13 +927,13 @@ PHP_METHOD(swfaction, __construct)
 /* {{{ proto long swfaction::compile(version) */
 PHP_METHOD(swfaction, compile)
 {
-	long version;
+	zend_long version;
 	int len, ret;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &version) == FAILURE) {
 		return;
 	}
-	
+
 	ret = SWFAction_compile(getAction(getThis() TSRMLS_CC), version, &len);
 
 	if (ret != 0) {
@@ -837,7 +965,7 @@ static zend_function_entry swfaction_functions[] = {
 };
 /* }}} */
 
-/* {{{ SWFBitmap 
+/* {{{ SWFBitmap
 */
 /* {{{ proto void swfbitmap::__construct(filename or SWFInput [, maskfilename / SWFInput])
    Creates a new SWFBitmap object from jpg (with optional mask) or dbl file */
@@ -847,7 +975,11 @@ PHP_METHOD(swfbitmap, __construct)
 	SWFBitmap bitmap;
 	SWFJpegWithAlpha bitmap_alpha;
 	SWFInput input = NULL, maskinput = NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|z", &zfile, &zmask) == FAILURE) {
 		return;
@@ -860,12 +992,16 @@ PHP_METHOD(swfbitmap, __construct)
 		break;
 	case IS_OBJECT:
 		input = getInput(zfile TSRMLS_CC);
-		break;	
+		break;
 	case IS_STRING:
 		input = newSWFInput_filename(Z_STRVAL_P(zfile));
 		if(input == NULL)
 			php_error(E_ERROR, "opening bitmap file failed");
+#if PHP_VERSION_ID >= 70000
+		zend_register_resource(input, le_swfinputp);
+#else
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 		break;
 
 	default:
@@ -881,12 +1017,16 @@ PHP_METHOD(swfbitmap, __construct)
 			break;
 		case IS_OBJECT:
 			maskinput = getInput(zmask TSRMLS_CC);
-			break;	
+			break;
 		case IS_STRING:
 			maskinput = newSWFInput_filename(Z_STRVAL_P(zmask));
 			if(maskinput == NULL)
 				php_error(E_ERROR, "opening mask file failed");
+#if PHP_VERSION_ID >= 70000
+			zend_register_resource(maskinput, le_swfinputp);
+#else
 			zend_list_addref(zend_list_insert(maskinput, le_swfinputp));
+#endif
 			break;
 
 		default:
@@ -894,26 +1034,40 @@ PHP_METHOD(swfbitmap, __construct)
 			                   "a file ressource or SWFInput buffer.");
 		}
 
-		/* XXX: this is very optimistic! is it really a JPEG ?!? */
+		/* XX: this is very optimistic! is it really a JPEG ?!? */
 		bitmap_alpha = newSWFJpegWithAlpha_fromInput(input, maskinput);
 		if(bitmap_alpha) {
-			ret = zend_list_insert(bitmap_alpha, le_swfbitmapp);
+#if PHP_VERSION_ID >= 70000
+			ret = zend_register_resource(bitmap_alpha, le_swfbitmapp);
+			add_property_resource(getThis(), "bitmap", ret);
+#else
 			object_init_ex(getThis(), bitmap_class_entry_ptr);
+			ret = zend_list_insert(bitmap_alpha, le_swfbitmapp);
 			add_property_resource(getThis(), "bitmap", ret);
 			zend_list_addref(ret);
+#endif
 		}
 	} else {
 		bitmap = newSWFBitmap_fromInput(input);
 		if(bitmap) {
-			ret = zend_list_insert(bitmap, le_swfbitmapp);
+#if PHP_VERSION_ID >= 70000
+			ret = zend_register_resource(bitmap, le_swfbitmapp);
+			add_property_resource(getThis(), "bitmap", ret);
+#else
 			object_init_ex(getThis(), bitmap_class_entry_ptr);
+			ret = zend_list_insert(bitmap, le_swfbitmapp);
 			add_property_resource(getThis(), "bitmap", ret);
 			zend_list_addref(ret);
+#endif
 		}
 	}
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFBitmap_resource(zend_resource *resource)
+#else
 static void destroy_SWFBitmap_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFBitmap((SWFBitmap)resource->ptr);
 }
@@ -981,7 +1135,7 @@ SWFButtonRecord getButtonRecord(zval *id TSRMLS_DC)
    sets a button characters depth */
 PHP_METHOD(swfbuttonrecord, setDepth)
 {
-	long depth;
+	zend_long depth;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &depth) == FAILURE) {
 		return;
@@ -994,7 +1148,7 @@ PHP_METHOD(swfbuttonrecord, setDepth)
    assigns a blend mode to a button's character */
 PHP_METHOD(swfbuttonrecord, setBlendMode)
 {
-	long mode;
+	zend_long mode;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &mode) == FAILURE) {
 		return;
@@ -1166,14 +1320,23 @@ static zend_function_entry swfbuttonrecord_functions[] = {
 PHP_METHOD(swfbutton, __construct)
 {
 	SWFButton button = newSWFButton();
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+	ret = zend_register_resource(button, le_swfbuttonp);
+	add_property_resource(getThis(), "button", ret);
+#else
 	int ret = zend_list_insert(button, le_swfbuttonp);
-
 	object_init_ex(getThis(), button_class_entry_ptr);
 	add_property_resource(getThis(), "button", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFButton_resource(zend_resource *resource)
+#else
 static void destroy_SWFButton_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFButton((SWFButton)resource->ptr);
 }
@@ -1220,7 +1383,7 @@ PHP_METHOD(swfbutton, setOver)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zchar) == FAILURE) {
 		return;
 	}
-	
+
 	character = getCharacter(zchar TSRMLS_CC);
 	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_OVERSTATE);
 }
@@ -1237,7 +1400,7 @@ PHP_METHOD(swfbutton, setUp)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zchar) == FAILURE) {
 		return;
 	}
-	
+
 	character = getCharacter(zchar TSRMLS_CC);
 	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_UPSTATE);
 }
@@ -1254,7 +1417,7 @@ PHP_METHOD(swfbutton, setDown)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zchar) == FAILURE) {
 		return;
 	}
-	
+
 	character = getCharacter(zchar TSRMLS_CC);
 	SWFButton_addCharacter(button, character, SWFBUTTONRECORD_DOWNSTATE);
 }
@@ -1265,14 +1428,14 @@ PHP_METHOD(swfbutton, setDown)
 PHP_METHOD(swfbutton, addShape)
 {
 	zval *zchar;
-	long flags;
+	zend_long flags;
 	SWFButton button = getButton(getThis() TSRMLS_CC);
 	SWFCharacter character;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ol", &zchar, &flags) == FAILURE) {
 		return;
 	}
-	
+
 	character = getCharacter(zchar TSRMLS_CC);
 	SWFButton_addCharacter(button, character, flags);
 }
@@ -1284,25 +1447,35 @@ PHP_METHOD(swfbutton, addShape)
 PHP_METHOD(swfbutton, addCharacter)
 {
 	zval *zchar;
-	long flags;
+	zend_long flags;
 	SWFButtonRecord record;
 	SWFButton button = getButton(getThis() TSRMLS_CC);
 	SWFCharacter character;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ol", &zchar, &flags) == FAILURE) {
 		return;
 	}
-	
+
 	character = getCharacter(zchar TSRMLS_CC);
 	record = SWFButton_addCharacter(button, character, flags);
 
 	if(record != NULL)
 	{
-		ret = zend_list_insert(record, le_swfbuttonrecordp);
 		object_init_ex(return_value, buttonrecord_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(record, le_swfbuttonrecordp);
+		add_property_resource(return_value, "buttonrecord", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(record, le_swfbuttonrecordp);
 		add_property_resource(return_value, "buttonrecord", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -1311,7 +1484,7 @@ PHP_METHOD(swfbutton, addCharacter)
 	enable track as menu button behaviour */
 PHP_METHOD(swfbutton, setMenu)
 {
-	long flag;
+	zend_long flag;
 	SWFButton button = getButton(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flag) == FAILURE) {
@@ -1324,7 +1497,7 @@ PHP_METHOD(swfbutton, setMenu)
 /* {{{ proto void swfbutton::setScalingGrid(int x, int y, int w, int h) */
 PHP_METHOD(swfbutton, setScalingGrid)
 {
-	long x, y, w, h;
+	zend_long x, y, w, h;
 	SWFButton button = getButton(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x, &y, &w, &h) == FAILURE) {
@@ -1357,7 +1530,7 @@ PHP_METHOD(swfbutton, setAction)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zaction) == FAILURE) {
 		return;
 	}
-	
+
 	action = getAction(zaction TSRMLS_CC);
 	SWFButton_addAction(button, action, SWFBUTTON_OVERDOWNTOOVERUP);
 }
@@ -1371,11 +1544,15 @@ PHP_METHOD(swfbutton, setAction)
 PHP_METHOD(swfbutton, addSound)
 {
 	zval *zsound;
-	long flags;
+	zend_long flags;
 	SWFButton button = getButton(getThis() TSRMLS_CC);
 	SWFSound sound;
 	SWFSoundInstance item;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ol", &zsound, &flags) == FAILURE) {
 		return;
@@ -1386,10 +1563,16 @@ PHP_METHOD(swfbutton, addSound)
 
 	if(item != NULL) {
 		/* try and create a soundinstance object */
-		ret = zend_list_insert(item, le_swfsoundinstancep);
 		object_init_ex(return_value, soundinstance_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(item, le_swfsoundinstancep);
+		add_property_resource(return_value, "soundinstance", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(item, le_swfsoundinstancep);
 		add_property_resource(return_value, "soundinstance", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -1400,14 +1583,14 @@ PHP_METHOD(swfbutton, addSound)
 PHP_METHOD(swfbutton, addAction)
 {
 	zval *zaction;
-	long flags;
+	zend_long flags;
 	SWFButton button = getButton(getThis() TSRMLS_CC);
 	SWFAction action;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ol", &zaction, &flags) == FAILURE) {
 		return;
 	}
-	
+
 	action = getAction(zaction TSRMLS_CC);
 	SWFButton_addAction(button, action, flags);
 }
@@ -1418,7 +1601,7 @@ PHP_METHOD(swfbutton, addAction)
 PHP_FUNCTION(ming_keypress)
 {
 	char *key;
-	int key_len;
+	zend_strlen key_len;
 	char c;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
@@ -1428,7 +1611,7 @@ PHP_FUNCTION(ming_keypress)
 	if (key_len > 1) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Only one character expected");
 	}
-	
+
 	c = key[0];
 	RETURN_LONG((c&0x7f)<<9);
 }
@@ -1555,7 +1738,7 @@ PHP_METHOD(swfdisplayitem, rotate)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees) == FAILURE) {
 		return;
 	}
-	
+
 	SWFDisplayItem_rotate(getDisplayItem(getThis() TSRMLS_CC), degrees);
 }
 /* }}} */
@@ -1583,7 +1766,7 @@ PHP_METHOD(swfdisplayitem, skewX)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &x) == FAILURE) {
 		return;
 	}
-	
+
 	SWFDisplayItem_skewX(getDisplayItem(getThis() TSRMLS_CC), x);
 }
 /* }}} */
@@ -1597,7 +1780,7 @@ PHP_METHOD(swfdisplayitem, skewYTo)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &y) == FAILURE) {
 		return;
 	}
-	
+
 	SWFDisplayItem_skewYTo(getDisplayItem(getThis() TSRMLS_CC), y);
 }
 /* }}} */
@@ -1611,7 +1794,7 @@ PHP_METHOD(swfdisplayitem, skewY)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &y) == FAILURE) {
 		return;
 	}
-	
+
 	SWFDisplayItem_skewY(getDisplayItem(getThis() TSRMLS_CC), y);
 }
 /* }}} */
@@ -1634,12 +1817,12 @@ PHP_METHOD(swfdisplayitem, setMatrix)
    Sets this SWFDisplayItem's z-depth to depth.  Items with higher depth values are drawn on top of those with lower values */
 PHP_METHOD(swfdisplayitem, setDepth)
 {
-	long depth;
+	zend_long depth;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &depth) == FAILURE) {
 		return;
 	}
-	
+
 	SWFDisplayItem_setDepth(getDisplayItem(getThis() TSRMLS_CC), depth);
 }
 /* }}} */
@@ -1662,7 +1845,7 @@ PHP_METHOD(swfdisplayitem, setRatio)
    Sets the add color part of this SWFDisplayItem's CXform to (r, g, b [, a]), a defaults to 0 */
 PHP_METHOD(swfdisplayitem, addColor)
 {
-	long r, g, b, a = 0;
+	zend_long r, g, b, a = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &r, &g, &b, &a) == FAILURE) {
 		return;
@@ -1691,13 +1874,14 @@ PHP_METHOD(swfdisplayitem, multColor)
 PHP_METHOD(swfdisplayitem, setName)
 {
 	char *name;
-	int name_len;
+	zend_strlen name_len;
+
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
 		return;
 	}
-	
+
 	SWFDisplayItem_setName(item, name);
 }
 /* }}} */
@@ -1707,7 +1891,7 @@ PHP_METHOD(swfdisplayitem, setName)
 PHP_METHOD(swfdisplayitem, addAction)
 {
 	zval *zaction;
-	long flags;
+	zend_long flags;
 	SWFAction action;
 	SWFDisplayItem item = getDisplayItem(getThis() TSRMLS_CC);
 
@@ -1740,7 +1924,7 @@ PHP_METHOD(swfdisplayitem, remove)
 
 PHP_METHOD(swfdisplayitem, setMaskLevel)
 {
-	long level;
+	zend_long level;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &level) == FAILURE) {
 		return;
@@ -1882,7 +2066,7 @@ PHP_METHOD(swfdisplayitem, getRot)
 
 PHP_METHOD(swfdisplayitem, cacheAsBitmap)
 {
-	long flag;
+	zend_long flag;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flag) == FAILURE) {
 		return;
@@ -1897,7 +2081,7 @@ PHP_METHOD(swfdisplayitem, cacheAsBitmap)
    adds blending to item */
 PHP_METHOD(swfdisplayitem, setBlendMode)
 {
-	long mode;
+	zend_long mode;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &mode) == FAILURE) {
 		return;
@@ -1942,7 +2126,7 @@ PHP_METHOD(swfdisplayitem, addFilter)
 		return;
 	}
 
-	SWFDisplayItem_addFilter(getDisplayItem(getThis() TSRMLS_CC), getFilter(filter TSRMLS_CC)); 
+	SWFDisplayItem_addFilter(getDisplayItem(getThis() TSRMLS_CC), getFilter(filter TSRMLS_CC));
 
 }
 /* }}} */
@@ -1964,7 +2148,11 @@ PHP_METHOD(swfdisplayitem, setCXform)
 PHP_METHOD(swfdisplayitem, getMatrix)
 {
 	SWFMatrix m;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
@@ -1973,10 +2161,16 @@ PHP_METHOD(swfdisplayitem, getMatrix)
 	m = SWFDisplayItem_getMatrix(getDisplayItem(getThis() TSRMLS_CC));
 	if(m != NULL)
 	{
-		ret = zend_list_insert(m, le_swfmatrixp);
 		object_init_ex(return_value, matrix_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(m, le_swfmatrixp);
+		add_property_resource(return_value, "matrix", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(m, le_swfmatrixp);
 		add_property_resource(return_value, "matrix", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -1985,7 +2179,11 @@ PHP_METHOD(swfdisplayitem, getMatrix)
 PHP_METHOD(swfdisplayitem, getCharacter)
 {
 	SWFCharacter c;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
@@ -1994,10 +2192,16 @@ PHP_METHOD(swfdisplayitem, getCharacter)
 	c = SWFDisplayItem_getCharacter(getDisplayItem(getThis() TSRMLS_CC));
 	if(c != NULL)
 	{
-		ret = zend_list_insert(c, le_swfcharacterp);
 		object_init_ex(return_value, character_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(c, le_swfcharacterp);
+		add_property_resource(return_value, "character", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(c, le_swfcharacterp);
 		add_property_resource(return_value, "character", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -2055,7 +2259,11 @@ PHP_METHOD(swffill, __construct)
   php_error_docref(NULL TSRMLS_CC, E_ERROR, "Instantiating SWFFill won't do any good- use SWFShape::addFill() instead");
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFFill_resource(zend_resource *resource)
+#else
 static void destroy_SWFFill_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	/* this only destroys the shallow wrapper for SWFFillStyle,
 	   which SWFShape destroys.  So everything's okay.  I hope. */
@@ -2086,7 +2294,7 @@ PHP_METHOD(swffill, moveTo)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 		return;
 	}
-	
+
 	SWFFill_moveTo(getFill(getThis() TSRMLS_CC), x, y);
 }
 /* }}} */
@@ -2100,7 +2308,7 @@ PHP_METHOD(swffill, move)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 		return;
 	}
-	
+
 	SWFFill_move(getFill(getThis() TSRMLS_CC), x, y);
 }
 /* }}} */
@@ -2118,7 +2326,7 @@ PHP_METHOD(swffill, scaleTo)
 
 	if (ZEND_NUM_ARGS() == 1) {
 		y = x;
-	} 
+	}
 	SWFFill_scaleXYTo(getFill(getThis() TSRMLS_CC), x, y);
 }
 /* }}} */
@@ -2280,7 +2488,7 @@ SWFFontCharacter getFontCharacter(zval *id TSRMLS_DC)
 PHP_METHOD(swffontchar, addChars)
 {
 	char *string;
-	int string_len;
+	zend_strlen string_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
 		return;
@@ -2296,7 +2504,7 @@ PHP_METHOD(swffontchar, addChars)
 PHP_METHOD(swffontchar, addUTF8Chars)
 {
 	char *string;
-	int string_len;
+	zend_strlen string_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
 		return;
@@ -2347,9 +2555,13 @@ static SWFFont getFont(zval *id TSRMLS_DC)
 PHP_METHOD(swffont, __construct)
 {
 	char *file;
-	int file_len;
+	zend_strlen file_len;
 	SWFFont font;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE) {
 		return;
@@ -2363,19 +2575,28 @@ PHP_METHOD(swffont, __construct)
 		php_error(E_ERROR, "Loading font \"%s\" failed! "
 		                   "Please use new SWFBrowserFont(\"%s\") "
 		                   "for player/browser fonts.", file, file);
-	
+
 	}
-	
+
 	if(font)
 	{
-		ret = zend_list_insert(font, le_swffontp);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(font, le_swffontp);
+		add_property_resource(getThis(), "font", ret);
+#else
 		object_init_ex(getThis(), font_class_entry_ptr);
+		ret = zend_list_insert(font, le_swffontp);
 		add_property_resource(getThis(), "font", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFFont_resource(zend_resource *resource)
+#else
 static void destroy_SWFFont_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFBlock((SWFBlock)resource->ptr);
 }
@@ -2386,7 +2607,7 @@ static void destroy_SWFFont_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
 PHP_METHOD(swffont, getWidth)
 {
 	char *string;
-	int string_len;
+	zend_strlen string_len;
 	float width;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
@@ -2405,7 +2626,7 @@ PHP_METHOD(swffont, getWidth)
 PHP_METHOD(swffont, getUTF8Width)
 {
 	char *string;
-	int string_len;
+	zend_strlen string_len;
 	float width;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
@@ -2426,7 +2647,13 @@ PHP_METHOD(swffont, getGlyphCount)
 /* {{{ proto string swffont::getname() */
 PHP_METHOD(swffont, getName)
 {
+#if PHP_VERSION_ID >= 70000
+        char *name = SWFFont_getName(getFont(getThis() TSRMLS_CC));
+	RETURN_STRING(name);
+	efree(name);
+#else
         RETURN_STRING(SWFFont_getName(getFont(getThis() TSRMLS_CC)), 0);
+#endif
 }
 /* }}} */
 #endif
@@ -2464,20 +2691,24 @@ PHP_METHOD(swffont, getLeading)
 }
 /* }}} */
 
-/* {{{ proto string swffont::getShape(code) 	 
-Returns the glyph shape of a char as a text string */ 	 
-PHP_METHOD(swffont, getShape) 	 
-{ 	 
-	int zcode; 	 
-	char *result; 	 
-	  	 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &zcode) == FAILURE) 
-		WRONG_PARAM_COUNT; 	 
-	 
-	result = SWFFont_getShape(getFont(getThis() TSRMLS_CC), zcode); 	 
-	RETURN_STRING(result, 1); 	 
-	free(result); 	 
-} 	 
+/* {{{ proto string swffont::getShape(code)
+Returns the glyph shape of a char as a text string */
+PHP_METHOD(swffont, getShape)
+{
+	zend_long zcode;
+	char *result;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &zcode) == FAILURE)
+		WRONG_PARAM_COUNT;
+
+	result = SWFFont_getShape(getFont(getThis() TSRMLS_CC), zcode);
+#if PHP_VERSION_ID >= 70000
+	RETURN_STRING(result);
+#else
+	RETURN_STRING(result, 1);
+#endif
+	free(result);
+}
 /* }}} */
 
 static zend_function_entry swffont_functions[] = {
@@ -2505,13 +2736,19 @@ static zend_function_entry swffont_functions[] = {
    Creates a new SWFFilterMatrix object */
 PHP_METHOD(swffiltermatrix, __construct)
 {
-	long cols, rows; 
-	zval *vals, **data;
+	zend_long cols, rows;
 	SWFFilterMatrix matrix;
 	HashTable *arr_hash;
+#if PHP_VERSION_ID >= 70000
+	zval *vals, *data;
+	zend_resource *ret;
+	int items, i;
+#else
+	zval *vals, **data;
 	int ret, items, i;
-	float *values;
 	HashPosition pointer;
+#endif
+	float *values;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lla", &cols, &rows, &vals) == FAILURE) {
 		return;
@@ -2522,30 +2759,53 @@ PHP_METHOD(swffiltermatrix, __construct)
 	if(items != cols * rows)
 	{
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Can't create FilterMatrix."
-		"Not enough / too many items it array");
+		"Not enough / too many items in array");
 	}
 	values = (float *)malloc(items * sizeof(float));
+#if PHP_VERSION_ID >= 70000
+	i=0;
+	ZEND_HASH_FOREACH_VAL(arr_hash, data)
+#else
 	for(i = 0, zend_hash_internal_pointer_reset_ex(arr_hash, &pointer); 
 	    zend_hash_get_current_data_ex(arr_hash, (void**) &data, &pointer) == SUCCESS; 
 	    zend_hash_move_forward_ex(arr_hash, &pointer), i++) 
+#endif
 	{
 		zval temp;
+#if PHP_VERSION_ID >= 70000
+		temp = *data;
+#else
 		temp = **data;
+#endif
 		zval_copy_ctor(&temp);
 		convert_to_double(&temp);
 		values[i] = Z_DVAL(temp);
 		zval_dtor(&temp);
+#if PHP_VERSION_ID >= 70000
+		i++;
+	} ZEND_HASH_FOREACH_END();
+#else
 	}
-	
+#endif
+
 	matrix = newSWFFilterMatrix(cols, rows, values);
 	free(values); /* array is copied by libming */
-	ret = zend_list_insert(matrix, le_swffiltermatrixp);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(matrix, le_swffiltermatrixp);
+	add_property_resource(getThis(), "filtermatrix", ret);
+#else
 	object_init_ex(getThis(), filtermatrix_class_entry_ptr);
+	ret = zend_list_insert(matrix, le_swffiltermatrixp);
 	add_property_resource(getThis(), "filtermatrix", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFFilterMatrix_resource(zend_resource *resource)
+#else
 static void destroy_SWFFilterMatrix_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFFilterMatrix((SWFFilterMatrix)resource->ptr);
 }
@@ -2577,20 +2837,33 @@ PHP_METHOD(swfshadow, __construct)
 {
 	double angle, distance, strength;
 	SWFShadow shadow;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &angle, &distance, &strength) == FAILURE) {
 		return;
 	}
 
 	shadow = newSWFShadow(angle, distance, strength);
-	ret = zend_list_insert(shadow, le_swfshadowp);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(shadow, le_swfshadowp);
+	add_property_resource(getThis(), "shadow", ret);
+#else
 	object_init_ex(getThis(), shadow_class_entry_ptr);
+	ret = zend_list_insert(shadow, le_swfshadowp);
 	add_property_resource(getThis(), "shadow", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFShadow_resource(zend_resource *resource)
+#else
 static void destroy_SWFShadow_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFShadow((SWFShadow)resource->ptr);
 }
@@ -2621,22 +2894,35 @@ static zend_function_entry swfshadow_functions[] = {
 PHP_METHOD(swfblur, __construct)
 {
 	double blurX, blurY;
-	long passes;
+	zend_long passes;
 	SWFBlur blur;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &blurX, &blurY, &passes) == FAILURE) {
 		return;
 	}
 
 	blur = newSWFBlur(blurX, blurY, passes);
-	ret = zend_list_insert(blur, le_swfblurp);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(blur, le_swfblurp);
+	add_property_resource(getThis(), "blur", ret);
+#else
 	object_init_ex(getThis(), blur_class_entry_ptr);
+	ret = zend_list_insert(blur, le_swfblurp);
 	add_property_resource(getThis(), "blur", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFBlur_resource(zend_resource *resource)
+#else
 static void destroy_SWFBlur_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFBlur((SWFBlur)resource->ptr);
 }
@@ -2667,14 +2953,22 @@ static zend_function_entry swfblur_functions[] = {
 PHP_METHOD(swfgradient, __construct)
 {
 	SWFGradient gradient = newSWFGradient();
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret = zend_register_resource(gradient, le_swfgradientp);
+	add_property_resource(getThis(), "gradient", ret);
+#else
 	int ret = zend_list_insert(gradient, le_swfgradientp);
-
 	object_init_ex(getThis(), gradient_class_entry_ptr);
 	add_property_resource(getThis(), "gradient", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFGradient_resource(zend_resource *resource)
+#else
 static void destroy_SWFGradient_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFGradient((SWFGradient)resource->ptr);
 }
@@ -2698,7 +2992,7 @@ static SWFGradient getGradient(zval *id TSRMLS_DC)
 PHP_METHOD(swfgradient, addEntry)
 {
 	double ratio;
-	long r, g, b, a = 0xff;
+	zend_long r, g, b, a = 0xff;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dlll|l", &ratio, &r, &g, &b, &a) == FAILURE) {
 		return;
@@ -2716,7 +3010,7 @@ PHP_METHOD(swfgradient, addEntry)
 */
 PHP_METHOD(swfgradient, setSpreadMode)
 {
-	long val;
+	zend_long val;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &val) == FAILURE) {
 		return;
@@ -2733,7 +3027,7 @@ PHP_METHOD(swfgradient, setSpreadMode)
 */
 PHP_METHOD(swfgradient, setInterpolationMode)
 {
-	long val;
+	zend_long val;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &val) == FAILURE) {
 		return;
@@ -2746,7 +3040,7 @@ PHP_METHOD(swfgradient, setInterpolationMode)
 /* {{{ proto void swfgradient::setFocalPoint(mode) */
 PHP_METHOD(swfgradient, setFocalPoint)
 {
-	long val;
+	zend_long val;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &val) == FAILURE) {
 		return;
@@ -2770,10 +3064,18 @@ static zend_function_entry swfgradient_functions[] = {
 */
 
 /* helper functions */
+#if PHP_VERSION_ID >= 70000
+static SWFColor hashToColor(zval *colorHash TSRMLS_DC)
+{
+	zval *temp;
+	zend_string *keyZ;
+	unsigned long index;
+#else
 static SWFColor hashToColor(zval **colorHash TSRMLS_DC)
 {
 	zval **data;
 	HashPosition pointer;
+#endif
 	HashTable *arr_hash;
 	SWFColor c;
 
@@ -2781,20 +3083,44 @@ static SWFColor hashToColor(zval **colorHash TSRMLS_DC)
 	c.red = 0;
 	c.green = 0;
 	c.blue = 0;
-	
+
+#if PHP_VERSION_ID >= 70000
+	arr_hash = Z_ARRVAL_P(colorHash);
+#else
 	arr_hash = Z_ARRVAL_PP(colorHash);
+#endif
 	if(zend_hash_num_elements(arr_hash) < 3 || zend_hash_num_elements(arr_hash) > 4)
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "not a valid colorHash\n");
 
+#if PHP_VERSION_ID >= 70000
+        ZEND_HASH_FOREACH_KEY_VAL(arr_hash, index, keyZ, temp)
+	{
+		char *key;
+		if (keyZ)
+		{
+			key = keyZ->val;
+			if(strcmp(key, "red") == 0)
+				c.red = zval_get_long(temp);
+			else if (strcmp(key, "green") == 0)
+				c.green = zval_get_long(temp);
+			else if (strcmp(key, "blue") == 0)
+				c.blue = zval_get_long(temp);
+			else if (strcmp(key, "alpha") == 0)
+				c.alpha = zval_get_long(temp);
+			else
+				php_error_docref(NULL TSRMLS_CC, E_ERROR, "not a valid colorHash\n");
+		}
+	} ZEND_HASH_FOREACH_END();
+#else
 	for(zend_hash_internal_pointer_reset_ex(arr_hash, &pointer); 
 	    zend_hash_get_current_data_ex(arr_hash, (void**) &data, &pointer) == SUCCESS; 
-	    zend_hash_move_forward_ex(arr_hash, &pointer)) 
+	    zend_hash_move_forward_ex(arr_hash, &pointer))
 	{
 		zval temp;
 		char *key;
 		unsigned int key_len;
 		unsigned long index;
-		
+
 		temp = **data;
 		if (zend_hash_get_current_key_ex(arr_hash, &key, &key_len, &index, 0, &pointer) 
 			== HASH_KEY_IS_STRING)
@@ -2815,55 +3141,86 @@ static SWFColor hashToColor(zval **colorHash TSRMLS_DC)
 			zval_dtor(&temp);
 		}
 	}
+#endif
 	return c;
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createDropShadowFilter(zval *colorHash, zval *blur,
+	 zval *shadow, zval *flags)
+{
+	convert_to_array_ex(colorHash);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
+	return newDropShadowFilter(hashToColor(colorHash), getBlur(blur), getShadow(shadow),
+		 Z_LVAL_P(flags));
+#else
 static SWFFilter createDropShadowFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **colorHash, **blur, **shadow, **flags;
 	SWFColor c;
-	
+
 	if(argc != 5)
 		return NULL;
 
 	colorHash = argv[1];
 	convert_to_array_ex(colorHash);
 	c = hashToColor(colorHash TSRMLS_CC);
-		
+
 	blur = argv[2];
 	convert_to_object_ex(blur);
-	
+
 	shadow = argv[3];
 	convert_to_object_ex(shadow);
 
-	flags = argv[4]; 
+	flags = argv[4];
 	convert_to_long_ex(flags);
 
-	return newDropShadowFilter(c, getBlur(*blur TSRMLS_CC), 
+	return newDropShadowFilter(c, getBlur(*blur TSRMLS_CC),
 		getShadow(*shadow TSRMLS_CC), Z_LVAL_PP(flags));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createBlurFilter(zval *blur)
+{
+	convert_to_object_ex(blur);
+	return newBlurFilter(getBlur(blur));
+#else
 static SWFFilter createBlurFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **blur;
-	
+
 	if(argc != 2)
 		return NULL;
 
 	blur = argv[1];
+
 	convert_to_object_ex(blur);
-	
 	return newBlurFilter(getBlur(*blur TSRMLS_CC));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createGlowFilter(zval *color, zval *blur, zval *strength,
+	zval *flags)
+{
+	convert_to_array_ex(color);
+	convert_to_object_ex(blur);
+	convert_to_double_ex(strength);
+	convert_to_long_ex(flags);
+	return newGlowFilter(hashToColor(color), getBlur(blur),
+		Z_DVAL_P(strength), Z_LVAL_P(flags));
+#else
 static SWFFilter createGlowFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **color, **blur, **strength, **flags;
 	SWFColor c;
-	
+
 	if(argc != 5)
 		return NULL;
-	
+
 	color = argv[1];
 	convert_to_array_ex(color);
 	c = hashToColor(color TSRMLS_CC);
@@ -2873,14 +3230,26 @@ static SWFFilter createGlowFilter(int argc, zval **argv[] TSRMLS_DC)
 
 	strength = argv[3];
 	convert_to_double_ex(strength);
-	
-	flags = argv[4]; 
+
+	flags = argv[4];
 	convert_to_long_ex(flags);
 
-	return newGlowFilter(c, getBlur(*blur TSRMLS_CC), 
+	return newGlowFilter(c, getBlur(*blur TSRMLS_CC),
 		Z_DVAL_PP(strength), Z_LVAL_PP(flags));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createBevelFilter(zval *sColor, zval *hColor, zval *blur, zval *shadow, zval *flags)
+{
+	convert_to_array_ex(sColor);
+	convert_to_array_ex(hColor);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
+	return newBevelFilter(hashToColor(sColor), hashToColor(hColor), getBlur(blur),
+		getShadow(shadow), Z_LVAL_P(flags));
+#else
 static SWFFilter createBevelFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **sColor, **hColor, **blur, **shadow, **flags;
@@ -2903,37 +3272,60 @@ static SWFFilter createBevelFilter(int argc, zval **argv[] TSRMLS_DC)
 	shadow = argv[4];
 	convert_to_object_ex(shadow);
 
-	flags = argv[5]; 
+	flags = argv[5];
 	convert_to_long_ex(flags);
 
 	return newBevelFilter(sc, hc, getBlur(*blur TSRMLS_CC),
 		getShadow(*shadow TSRMLS_CC), Z_LVAL_PP(flags));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createGradientGlowFilter(zval *gradient, zval *blur, zval *shadow, zval *flags)
+{
+	convert_to_object_ex(gradient);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
+	return newGradientGlowFilter(getGradient(gradient),
+		getBlur(blur), getShadow(shadow), Z_LVAL_P(flags));
+#else
 static SWFFilter createGradientGlowFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **gradient, **blur, **shadow, **flags;
 
 	if(argc != 5)
-		return NULL;		
+		return NULL;
 
 	gradient = argv[1];
 	convert_to_object_ex(gradient);
 
 	blur = argv[2];
 	convert_to_object_ex(blur);
-	
+
 	shadow = argv[3];
 	convert_to_object_ex(shadow);
 
-	flags = argv[4]; 
+	flags = argv[4];
 	convert_to_long_ex(flags);
 
-	return newGradientGlowFilter(getGradient(*gradient TSRMLS_CC), 
-		getBlur(*blur TSRMLS_CC), getShadow(*shadow TSRMLS_CC), 
+	return newGradientGlowFilter(getGradient(*gradient TSRMLS_CC),
+		getBlur(*blur TSRMLS_CC), getShadow(*shadow TSRMLS_CC),
 		Z_LVAL_PP(flags));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createConvolutionFilter(zval *matrix, zval *div, zval *bias, zval *color, zval *flags)
+{
+	convert_to_object_ex(matrix);
+	convert_to_double_ex(div);
+	convert_to_double_ex(bias);
+	convert_to_array_ex(color);
+	convert_to_long_ex(flags);
+	return newConvolutionFilter(getFilterMatrix(matrix), Z_DVAL_P(div),
+		Z_DVAL_P(bias), hashToColor(color), Z_LVAL_P(flags));
+#else
 static SWFFilter createConvolutionFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **matrix, **div, **bias, **color, **flags;
@@ -2957,11 +3349,18 @@ static SWFFilter createConvolutionFilter(int argc, zval **argv[] TSRMLS_DC)
 
 	flags = argv[5];
 	convert_to_long_ex(flags);
-	
+
 	return newConvolutionFilter(getFilterMatrix(*matrix TSRMLS_CC), Z_DVAL_PP(div),
-		Z_DVAL_PP(bias), c, Z_LVAL_PP(flags));	
+		Z_DVAL_PP(bias), c, Z_LVAL_PP(flags));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createColorMatrixFilter(zval *matrix)
+{
+	convert_to_object_ex(matrix);
+	return newColorMatrixFilter(getFilterMatrix(matrix));
+#else
 static SWFFilter createColorMatrixFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **matrix;
@@ -2973,35 +3372,48 @@ static SWFFilter createColorMatrixFilter(int argc, zval **argv[] TSRMLS_DC)
 	convert_to_object_ex(matrix);
 
 	return newColorMatrixFilter(getFilterMatrix(*matrix TSRMLS_CC));
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static SWFFilter createGradientBevelFilter(zval *gradient, zval *blur, zval *shadow, zval *flags)
+{
+	convert_to_object_ex(gradient);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
+	return newGradientBevelFilter(getGradient(gradient),
+		getBlur(blur), getShadow(shadow),
+		Z_LVAL_P(flags));
+#else
 static SWFFilter createGradientBevelFilter(int argc, zval **argv[] TSRMLS_DC)
 {
 	zval **gradient, **blur, **shadow, **flags;
 
 	if(argc != 5)
-		return NULL;		
+		return NULL;
 
 	gradient = argv[1];
 	convert_to_object_ex(gradient);
 
 	blur = argv[2];
 	convert_to_object_ex(blur);
-	
+
 	shadow = argv[3];
 	convert_to_object_ex(shadow);
 
-	flags = argv[4]; 
+	flags = argv[4];
 	convert_to_long_ex(flags);
 
-	return newGradientBevelFilter(getGradient(*gradient TSRMLS_CC), 
-		getBlur(*blur TSRMLS_CC), getShadow(*shadow TSRMLS_CC), 
+	return newGradientBevelFilter(getGradient(*gradient TSRMLS_CC),
+		getBlur(*blur TSRMLS_CC), getShadow(*shadow TSRMLS_CC),
 		Z_LVAL_PP(flags));
+#endif
 }
 
 /* {{{ proto void swffilter::__construct(type, ...)
    Creates a new SWFFilter object:
-   
+
    Supported filter types:
    * SWFFILTER_TYPE_DROPSHADOW
      new SWFFilter(SWFFILTER_TYPE_DROPSHADOW, colorHash, blur, shadow, flags);
@@ -3027,21 +3439,78 @@ static SWFFilter createGradientBevelFilter(int argc, zval **argv[] TSRMLS_DC)
    * SWFFILTER_MODE_KO
 
    A colorHash must have the following entries:
-   'red'   => 0...255, 
+   'red'   => 0...255,
    'green' =>  0...255,
    'blue'  => 0...255,
    'alpha' => 0...255 (optional)
 */
 PHP_METHOD(swffilter, __construct)
 {
+	SWFFilter filter = NULL;
+#if PHP_VERSION_ID >= 70000
+	zval *argv;
+	int argc;
+	int type;
+	zend_resource *ret;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "*", &argv, &argc) == FAILURE || argc > 6 || argc < 2)
+		WRONG_PARAM_COUNT
+	type = zval_get_long(&argv[0]);
+	switch(type)
+	{
+	case SWFFILTER_TYPE_DROPSHADOW:
+		if (argc != 5)
+			WRONG_PARAM_COUNT
+		filter = createDropShadowFilter(&argv[1], &argv[2], &argv[3], &argv[4]);
+		break;
+	case SWFFILTER_TYPE_BLUR:
+		if (argc != 2)
+			WRONG_PARAM_COUNT
+		filter = createBlurFilter(&argv[1]);
+		break;
+	case SWFFILTER_TYPE_GLOW:
+		if (argc != 5)
+			WRONG_PARAM_COUNT
+		filter = createGlowFilter(&argv[1], &argv[2], &argv[3], &argv[4]);
+		break;
+	case SWFFILTER_TYPE_BEVEL:
+		if (argc != 6)
+			WRONG_PARAM_COUNT
+		filter = createBevelFilter(&argv[1], &argv[2], &argv[3], &argv[4], &argv[5]);
+		break;
+	case SWFFILTER_TYPE_GRADIENTGLOW:
+		if (argc != 5)
+			WRONG_PARAM_COUNT
+		filter = createGradientGlowFilter(&argv[1], &argv[2], &argv[3], &argv[4]);
+		break;
+	case SWFFILTER_TYPE_CONVOLUTION:
+		if (argc != 6)
+			WRONG_PARAM_COUNT
+		filter = createConvolutionFilter(&argv[1], &argv[2], &argv[3], &argv[4], &argv[5]);
+		break;
+	case SWFFILTER_TYPE_COLORMATRIX:
+		if (argc != 2)
+			WRONG_PARAM_COUNT
+		filter  = createColorMatrixFilter(&argv[1]);
+		break;
+	case SWFFILTER_TYPE_GRADIENTBEVEL:
+		if (argc != 5)
+			WRONG_PARAM_COUNT
+		filter = createGradientBevelFilter(&argv[1], &argv[2], &argv[3], &argv[4]);
+		break;
+	default:
+		php_error_docref(NULL, E_ERROR, "new SWFFilter: unknown type");
+	}
+	if(filter == NULL)
+		WRONG_PARAM_COUNT;
+	ret = zend_register_resource(filter, le_swffilterp);
+	add_property_resource(getThis(), "filter", ret);
+#else
 	zval **argv[6];
 	int argc = ZEND_NUM_ARGS();
 	int type, ret;
-	SWFFilter filter = NULL;
-	
-	if (argc > 6 || argc < 2 || zend_get_parameters_array_ex(argc, argv) == FAILURE) 
+	if (argc > 6 || argc < 2 || zend_get_parameters_array_ex(argc, argv) == FAILURE)
 		WRONG_PARAM_COUNT;
-	
 
 	convert_to_long_ex(argv[0]);
 	type = Z_LVAL_PP(argv[0]);
@@ -3069,19 +3538,16 @@ PHP_METHOD(swffilter, __construct)
 		filter  = createColorMatrixFilter(argc, argv TSRMLS_CC);
 		break;
 	case SWFFILTER_TYPE_GRADIENTBEVEL:
-		filter = createGradientBevelFilter(argc, argv TSRMLS_CC);
+		filter = createGradientBevelFilter(argc, &argv TSRMLS_CC);
 		break;
 	default:
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "new SWFFilter: unknown type");	
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "new SWFFilter: unknown type");
 	}
-	
-	if(filter == NULL)
-		WRONG_PARAM_COUNT;
-
-	ret = zend_list_insert(filter, le_swffilterp);
 	object_init_ex(getThis(), filter_class_entry_ptr);
+	ret = zend_list_insert(filter, le_swffilterp);
 	add_property_resource(getThis(), "filter", ret);
-	zend_list_addref(ret);	
+	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -3089,7 +3555,7 @@ PHP_METHOD(swffilter, __construct)
    Returns the SWFFilter object contained in zval *id */
 static SWFFilter getFilter(zval *id TSRMLS_DC)
 {
-	void *filter = SWFgetProperty(id, "filter", 
+	void *filter = SWFgetProperty(id, "filter",
 		strlen("filter"), le_swffilterp TSRMLS_CC);
 
 	if (!filter) {
@@ -3099,7 +3565,11 @@ static SWFFilter getFilter(zval *id TSRMLS_DC)
 }
 /* }}} */
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFFilter_resource(zend_resource *resource)
+#else
 static void destroy_SWFFilter_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFFilter((SWFFilter)resource->ptr);
 }
@@ -3110,21 +3580,29 @@ static zend_function_entry swffilter_functions[] = {
 };
 /* }}} */
 
-/* {{{ SWFMorph 
+/* {{{ SWFMorph
 */
 /* {{{ proto void swfmorph::__construct()
    Creates a new SWFMorph object */
 PHP_METHOD(swfmorph, __construct)
 {
 	SWFMorph morph = newSWFMorphShape();
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret = zend_register_resource(morph, le_swfmorphp);
+	add_property_resource(getThis(), "morph", ret);
+#else
 	int ret = zend_list_insert(morph, le_swfmorphp);
-
 	object_init_ex(getThis(), morph_class_entry_ptr);
 	add_property_resource(getThis(), "morph", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFMorph_resource(zend_resource *resource)
+#else
 static void destroy_SWFMorph_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFMorph((SWFMorph)resource->ptr);
 }
@@ -3147,13 +3625,21 @@ static SWFMorph getMorph(zval *id TSRMLS_DC)
    Return's this SWFMorph's start shape object */
 PHP_METHOD(swfmorph, getShape1)
 {
+#if PHP_VERSION_ID >= 70000
+	SWFMorph morph = getMorph(getThis());
+	SWFShape shape = SWFMorph_getShape1(morph);
+	zend_resource *ret = zend_register_resource(shape, le_swfshapep);
+	object_init_ex(return_value, shape_class_entry_ptr);
+	add_property_resource(return_value, "shape", ret);
+	ret->gc.refcount++;
+#else
 	SWFMorph morph = getMorph(getThis() TSRMLS_CC);
 	SWFShape shape = SWFMorph_getShape1(morph);
 	int ret = zend_list_insert(shape, le_swfshapep);
-
 	object_init_ex(return_value, shape_class_entry_ptr);
 	add_property_resource(return_value, "shape", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -3161,13 +3647,21 @@ PHP_METHOD(swfmorph, getShape1)
    Return's this SWFMorph's start shape object */
 PHP_METHOD(swfmorph, getShape2)
 {
+#if PHP_VERSION_ID >= 70000
+	SWFMorph morph = getMorph(getThis());
+	SWFShape shape = SWFMorph_getShape2(morph);
+	zend_resource *ret = zend_register_resource(shape, le_swfshapep);
+	object_init_ex(return_value, shape_class_entry_ptr);
+	add_property_resource(return_value, "shape", ret);
+	ret->gc.refcount++;
+#else
 	SWFMorph morph = getMorph(getThis() TSRMLS_CC);
 	SWFShape shape = SWFMorph_getShape2(morph);
 	int ret = zend_list_insert(shape, le_swfshapep);
-
 	object_init_ex(return_value, shape_class_entry_ptr);
 	add_property_resource(return_value, "shape", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -3189,12 +3683,16 @@ PHP_METHOD(swfsoundstream, __construct)
 	zval *zfile;
 	SWFSoundStream sound = NULL;
 	SWFInput input = NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &zfile) == FAILURE) {
 		return;
 	}
-	
+
 	switch(Z_TYPE_P(zfile))
 	{
 	case IS_RESOURCE:
@@ -3202,26 +3700,35 @@ PHP_METHOD(swfsoundstream, __construct)
 		break;
 	case IS_OBJECT:
 		input = getInput(zfile TSRMLS_CC);
-		break;	
+		break;
 	case IS_STRING:
 		input = newSWFInput_filename(Z_STRVAL_P(zfile));
 		if(input == NULL)
 			php_error(E_ERROR, "opening sound file failed");
+#if PHP_VERSION_ID >= 70000
+		zend_register_resource(input, le_swfinputp);
+#else
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 		break;
 
 	default:
 		php_error(E_ERROR, "soundstream::init: need either a filename, "
 		                   "a file ressource or SWFInput buffer.");
 	}
-		
+
 	sound = newSWFSoundStream_fromInput(input);
-	
+
 	if(sound) {
-		ret = zend_list_insert(sound, le_swfsoundstreamp);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(sound, le_swfsoundstreamp);
+		add_property_resource(getThis(), "soundstream", ret);
+#else
 		object_init_ex(getThis(), soundstream_class_entry_ptr);
+		ret = zend_list_insert(sound, le_swfsoundstreamp);
 		add_property_resource(getThis(), "soundstream", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -3230,7 +3737,7 @@ PHP_METHOD(swfsoundstream, __construct)
    Returns the SWFSoundStream object contained in zval *id */
 static SWFSoundStream getSoundStream(zval *id TSRMLS_DC)
 {
-	void *sound = SWFgetProperty(id, "soundstream", strlen("soundstream"), 
+	void *sound = SWFgetProperty(id, "soundstream", strlen("soundstream"),
 	                             le_swfsoundstreamp TSRMLS_CC);
 	if(!sound)
 		php_error(E_ERROR, "called object is not an SWFSoundStream!");
@@ -3239,7 +3746,11 @@ static SWFSoundStream getSoundStream(zval *id TSRMLS_DC)
 /* }}} */
 
 /* {{{ internal function destroy_SWFSoundStream */
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFSoundStream_resource(zend_resource *resource)
+#else
 static void destroy_SWFSoundStream_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFSoundStream((SWFSoundStream)resource->ptr);
 }
@@ -3260,7 +3771,7 @@ PHP_METHOD(swfsoundstream, getDuration)
 /* {{{ set initial mp3 delay seek */
 PHP_METHOD(swfsoundstream, setInitialMp3Delay) 
 {
-	long delay;
+	zend_long delay;
 	SWFSoundStream stream = getSoundStream(getThis() TSRMLS_CC);
 
 	if ( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &delay) == FAILURE )
@@ -3304,16 +3815,20 @@ SWFSound getSound(zval *id TSRMLS_DC)
 PHP_METHOD(swfsound, __construct)
 {
 	zval *zfile;
-	long flags;
+	zend_long flags;
 	SWFSound sound = NULL;
 	SWFInput input = NULL;
 	SWFSoundStream stream;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|l", &zfile, &flags) == FAILURE) {
 		return;
 	}
-	
+
 	if(ZEND_NUM_ARGS() == 1)
 	{
 		stream = getSoundStream(zfile TSRMLS_CC);
@@ -3328,12 +3843,16 @@ PHP_METHOD(swfsound, __construct)
 			break;
 		case IS_OBJECT:
 			input = getInput(zfile TSRMLS_CC);
-			break;	
+			break;
 		case IS_STRING:
 			input = newSWFInput_filename(Z_STRVAL_P(zfile));
 			if(input == NULL)
 				php_error(E_ERROR, "opening sound file failed");
+#if PHP_VERSION_ID >= 70000
+			zend_register_resource(input, le_swfinputp);
+#else
 			zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 			break;
 
 		default:
@@ -3344,15 +3863,24 @@ PHP_METHOD(swfsound, __construct)
 	}
 
 	if(sound != NULL)
-	{	
-		ret = zend_list_insert(sound, le_swfsoundp);
+	{
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(sound, le_swfsoundp);
+		add_property_resource(getThis(), "sound", ret);
+#else
 		object_init_ex(getThis(), sound_class_entry_ptr);
+		ret = zend_list_insert(sound, le_swfsoundp);
 		add_property_resource(getThis(), "sound", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFSound_resource(zend_resource *resource)
+#else
 static void destroy_SWFSound_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFBlock((SWFBlock)resource->ptr);
 }
@@ -3399,7 +3927,7 @@ PHP_METHOD(swfsoundinstance, noMultiple)
 
 PHP_METHOD(swfsoundinstance, loopInPoint)
 {
-	long point;
+	zend_long point;
 
 	SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
 
@@ -3416,7 +3944,7 @@ PHP_METHOD(swfsoundinstance, loopInPoint)
 
 PHP_METHOD(swfsoundinstance, loopOutPoint)
 {
-	long point;
+	zend_long point;
 
 	SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
 
@@ -3432,7 +3960,7 @@ PHP_METHOD(swfsoundinstance, loopOutPoint)
 
 PHP_METHOD(swfsoundinstance, loopCount)
 {
-	long count;
+	zend_long count;
 	SWFSoundInstance inst = getSoundInstance(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &count) == FAILURE) {
@@ -3460,15 +3988,19 @@ PHP_METHOD(swfvideostream, __construct)
 	zval *zfile = NULL;
 	SWFVideoStream stream;
 	SWFInput input = NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|z", &zfile) == FAILURE) {
 		return;
 	}
-	switch(ZEND_NUM_ARGS()) 
+	switch(ZEND_NUM_ARGS())
 	{
 	case 1:
-	
+
 		switch(Z_TYPE_P(zfile))
 		{
 		case IS_RESOURCE:
@@ -3476,12 +4008,16 @@ PHP_METHOD(swfvideostream, __construct)
 			break;
 		case IS_OBJECT:
 			input = getInput(zfile TSRMLS_CC);
-			break;	
+			break;
 		case IS_STRING:
 			input = newSWFInput_filename(Z_STRVAL_P(zfile));
 			if(input == NULL)
 				php_error(E_ERROR, "opening sound video failed");
+#if PHP_VERSION_ID >= 70000
+			zend_register_resource(input, le_swfinputp);
+#else
 			zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 			break;
 
 		default:
@@ -3496,16 +4032,25 @@ PHP_METHOD(swfvideostream, __construct)
 	default: /* warn */
 		return;
 	}
-	
+
 	if(stream) {
-		ret = zend_list_insert(stream, le_swfvideostreamp);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(stream, le_swfvideostreamp);
+		add_property_resource(getThis(), "videostream", ret);
+#else
 		object_init_ex(getThis(), videostream_class_entry_ptr);
+		ret = zend_list_insert(stream, le_swfvideostreamp);
 		add_property_resource(getThis(), "videostream", ret);
 		zend_list_addref(ret);
+#endif
 	}
-}	
+}
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFVideoStream_resource(zend_resource *resource)
+#else
 static void destroy_SWFVideoStream_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFVideoStream((SWFVideoStream)resource->ptr);
 }
@@ -3527,7 +4072,7 @@ static SWFVideoStream getVideoStream(zval *id TSRMLS_DC)
 
 PHP_METHOD(swfvideostream, setdimension)
 {
-	long x, y;
+	zend_long x, y;
 	SWFVideoStream stream = getVideoStream(getThis() TSRMLS_CC);
 	if(!stream)
 		 php_error(E_ERROR, "getVideoStream returned NULL");
@@ -3576,10 +4121,10 @@ PHP_METHOD(swfvideostream, nextFrame)
 #endif
 
 #if HAVE_SWFVIDEOSTREAM_SETFRAMEMODE
-/* {{{ proto swfvideostream::setFrameMode */	
+/* {{{ proto swfvideostream::setFrameMode */
 PHP_METHOD(swfvideostream, setFrameMode)
 {
-	long mode;
+	zend_long mode;
 	SWFVideoStream stream = getVideoStream(getThis() TSRMLS_CC);
 	if(!stream)
 		 php_error(E_ERROR, "getVideoStream returned NULL");
@@ -3594,10 +4139,10 @@ PHP_METHOD(swfvideostream, setFrameMode)
 #endif
 
 #if HAVE_SWFVIDEOSTREAM_SEEK
-/* {{{ proto swfvideostream::seek(frame, whence) */	
+/* {{{ proto swfvideostream::seek(frame, whence) */
 PHP_METHOD(swfvideostream, seek)
 {
-	long frame, whence;
+	zend_long frame, whence;
 	SWFVideoStream stream = getVideoStream(getThis() TSRMLS_CC);
 	if(!stream)
 		 php_error(E_ERROR, "getVideoStream returned NULL");
@@ -3638,20 +4183,29 @@ static zend_function_entry swfvideostream_functions[] = {
 PHP_METHOD(swfbinarydata, __construct)
 {
 	char *data;
-	int data_len;
+	zend_strlen data_len;
 	SWFBinaryData bd = NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &data, &data_len) == FAILURE) {
 		return;
 	}
 	bd = newSWFBinaryData((unsigned char *)data, data_len);
-	
+
 	if(bd) {
-		ret = zend_list_insert(bd, le_swfbinarydatap);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(bd, le_swfbinarydatap);
+		add_property_resource(getThis(), "binarydata", ret);
+#else
 		object_init_ex(getThis(), binarydata_class_entry_ptr);
+		ret = zend_list_insert(bd, le_swfbinarydatap);
 		add_property_resource(getThis(), "binarydata", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -3668,7 +4222,11 @@ static inline SWFBinaryData getBinaryData(zval *id TSRMLS_DC)
 /* }}} */
 
 /* {{{ internal function destroy_SWFBinaryData */
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFBinaryData_resource(zend_resource *resource)
+#else
 static void destroy_SWFBinaryData_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFBinaryData((SWFBinaryData)resource->ptr);
 }
@@ -3688,12 +4246,16 @@ PHP_METHOD(swfprebuiltclip, __construct)
 	zval *zfile = NULL;
 	SWFPrebuiltClip clip;
 	SWFInput input = NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &zfile) == FAILURE) {
 		return;
 	}
-	
+
 	switch(Z_TYPE_P(zfile))
 	{
 	case IS_RESOURCE:
@@ -3701,32 +4263,45 @@ PHP_METHOD(swfprebuiltclip, __construct)
 		break;
 	case IS_OBJECT:
 		input = getInput(zfile TSRMLS_CC);
-		break;	
+		break;
 	case IS_STRING:
 		input = newSWFInput_filename(Z_STRVAL_P(zfile));
 		if(input == NULL)
 			php_error(E_ERROR, "opening prebuilt clip file failed");
+#if PHP_VERSION_ID >= 70000
+		zend_register_resource(input, le_swfinputp);
+#else
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 		break;
 
 	default:
 		php_error(E_ERROR, "swfprebuiltclip_init: need either a filename, "
 		                   "a file ressource or SWFInput buffer.");
 	}
-		
+
 	clip = newSWFPrebuiltClip_fromInput(input);
-	
+
 	if(clip) {
-		ret = zend_list_insert(clip, le_swfprebuiltclipp);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(clip, le_swfprebuiltclipp);
+		add_property_resource(getThis(), "prebuiltclip", ret);
+#else
 		object_init_ex(getThis(), prebuiltclip_class_entry_ptr);
+		ret = zend_list_insert(clip, le_swfprebuiltclipp);
 		add_property_resource(getThis(), "prebuiltclip", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
 
 /* {{{ internal function destroy_SWFPrebuiltClip */
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFPrebuiltClip_resource(zend_resource *resource)
+#else
 static void destroy_SWFPrebuiltClip_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFPrebuiltClip((SWFPrebuiltClip)resource->ptr);
 }
@@ -3757,9 +4332,13 @@ static zend_function_entry swfprebuiltclip_functions[] = {
   Creates swfmovie object according to the passed version */
 PHP_METHOD(swfmovie, __construct)
 {
-	long version;
+	zend_long version;
 	SWFMovie movie;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() == 1) {
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &version) == FAILURE) {
@@ -3769,15 +4348,24 @@ PHP_METHOD(swfmovie, __construct)
 	} else {
 		movie = newSWFMovie(); /* default version 4 */
 	}
-	
-	ret = zend_list_insert(movie, le_swfmoviep);
-	
+
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(movie, le_swfmoviep);
+	add_property_resource(getThis(), "movie", ret);
+#else
 	object_init_ex(getThis(), movie_class_entry_ptr);
+	ret = zend_list_insert(movie, le_swfmoviep);
+
 	add_property_resource(getThis(), "movie", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFMovie_resource(zend_resource *resource)
+#else
 static void destroy_SWFMovie_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFMovie((SWFMovie)resource->ptr);
 }
@@ -3809,7 +4397,7 @@ PHP_METHOD(swfmovie, nextFrame)
 PHP_METHOD(swfmovie, labelFrame)
 {
 	char *label;
-	int label_len;
+	zend_strlen label_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &label, &label_len) == FAILURE) {
 		return;
@@ -3824,7 +4412,7 @@ PHP_METHOD(swfmovie, labelFrame)
 PHP_METHOD(swfmovie, namedAnchor)
 {
 	char *label;
-	int label_len;
+	zend_strlen label_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &label, &label_len) == FAILURE) {
 		return;
@@ -3839,7 +4427,7 @@ PHP_METHOD(swfmovie, namedAnchor)
 PHP_METHOD(swfmovie, protect)
 {
 	char *passwd = NULL;
-	int passwd_len;
+	zend_strlen passwd_len;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &passwd, &passwd_len) == FAILURE) {
@@ -3854,7 +4442,11 @@ PHP_METHOD(swfmovie, protect)
 PHP_METHOD(swfmovie, add)
 {
 	zval *zchar;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFBlock block;
 	SWFDisplayItem item;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
@@ -3867,10 +4459,10 @@ PHP_METHOD(swfmovie, add)
 	/* XXX - SWFMovie_add deals w/ all block types.  Probably will need to add that.. */
 	if (Z_OBJCE_P(zchar) == action_class_entry_ptr) {
 		block = (SWFBlock) getAction(zchar TSRMLS_CC);
-	} 
+	}
 	else if (Z_OBJCE_P(zchar) == initaction_class_entry_ptr) {
 		block = (SWFBlock) getInitAction(zchar TSRMLS_CC);
-	} 
+	}
 	else if(Z_OBJCE_P(zchar) == character_class_entry_ptr) {
 		block = (SWFBlock) getCharacterClass(zchar TSRMLS_CC);
 	}
@@ -3882,10 +4474,16 @@ PHP_METHOD(swfmovie, add)
 	item = SWFMovie_add_internal(movie, ublock);
 	if (item != NULL) {
 		/* try and create a displayitem object */
-		ret = zend_list_insert(item, le_swfdisplayitemp);
 		object_init_ex(return_value, displayitem_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(item, le_swfdisplayitemp);
+		add_property_resource(return_value, "displayitem", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(item, le_swfdisplayitemp);
 		add_property_resource(return_value, "displayitem", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -3919,20 +4517,20 @@ PHP_METHOD(swfmovie, output)
 {
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 #if !defined(HAVE_NEW_MING)
-	long limit = -1;
+	zend_long limit = -1;
 	int oldval = INT_MIN;
 	long out; 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &limit) == FAILURE) {
 		return;
 	}
-	oldval = Ming_setSWFCompression(limit);			
+	oldval = Ming_setSWFCompression(limit);
 	out = SWFMovie_output(movie, &phpByteOutputMethod, NULL);
 	Ming_setSWFCompression(oldval);
-		
+
 	RETURN_LONG(out);
 #elif defined(HAVE_NEW_MING) && defined(HAVE_MING_MOVIE_LEVEL)
-	long limit = -1;
+	zend_long limit = -1;
 	int argc = ZEND_NUM_ARGS();
 
 	if(argc) {
@@ -3969,12 +4567,12 @@ static void phpStreamOutputMethod(byte b, void * data)
 PHP_METHOD(swfmovie, saveToFile)
 {
 	zval *x;
-	long limit = -1;
+	zend_long limit = -1;
 #if !defined(HAVE_NEW_MING)
 	int oldval = INT_MIN;
 #endif
 	long out;
-	
+
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 	php_stream *what;
 
@@ -3990,7 +4588,14 @@ PHP_METHOD(swfmovie, saveToFile)
 		oldval = Ming_setSWFCompression(limit);
 #endif
 
+#if PHP_VERSION_ID >= 70000
+	if ((what = (php_stream*)zend_fetch_resource2_ex(x,
+				"File-Handle", php_file_le_stream(), php_file_le_pstream())) == NULL) {
+		RETURN_FALSE;
+	}
+#else
 	ZEND_FETCH_RESOURCE(what, php_stream *, &x, -1,"File-Handle",php_file_le_stream());
+#endif
 #if !defined(HAVE_NEW_MING)
 	out = SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpStreamOutputMethod, what);
 	Ming_setSWFCompression(oldval);
@@ -4012,7 +4617,7 @@ PHP_METHOD(swfmovie, save)
 #if !defined(HAVE_NEW_MING)
 	int oldval = INT_MIN;
 #endif
-	long retval;
+	zend_long retval;
 	php_stream *stream;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|l", &x, &limit) == FAILURE) {
@@ -4022,9 +4627,16 @@ PHP_METHOD(swfmovie, save)
 #if !defined(HAVE_NEW_MING)
 		oldval = Ming_setSWFCompression(limit);
 #endif
-		  
+
 	if (Z_TYPE_P(x) == IS_RESOURCE) {
+#if PHP_VERSION_ID >= 70000
+		if ((stream = (php_stream*)zend_fetch_resource2_ex(x,
+				"File-Handle", php_file_le_stream(), php_file_le_pstream())) == NULL) {
+			RETURN_FALSE;
+		}
+#else
 		ZEND_FETCH_RESOURCE(stream, php_stream *, &x, -1,"File-Handle",php_file_le_stream());
+#endif
 #if defined(HAVE_NEW_MING) && defined(HAVE_MING_MOVIE_LEVEL)
 		RETURN_LONG(SWFMovie_output(getMovie(getThis() TSRMLS_CC), &phpStreamOutputMethod, stream, limit));
 #else
@@ -4037,7 +4649,11 @@ PHP_METHOD(swfmovie, save)
 	}
 
 	convert_to_string(x);
+#if PHP_VERSION_ID >= 70000
+	stream = php_stream_open_wrapper(Z_STRVAL_P(x), "wb", REPORT_ERRORS, NULL);
+#else
 	stream = php_stream_open_wrapper(Z_STRVAL_P(x), "wb", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
+#endif
 
 	if (stream == NULL) {
 		RETURN_FALSE;
@@ -4061,7 +4677,7 @@ PHP_METHOD(swfmovie, save)
    Sets background color (r,g,b) */
 PHP_METHOD(swfmovie, setBackground)
 {
-	long r, g, b;
+	zend_long r, g, b;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &r, &g, &b) == FAILURE) {
@@ -4106,7 +4722,7 @@ PHP_METHOD(swfmovie, setDimension)
    Sets number of frames */
 PHP_METHOD(swfmovie, setFrames)
 {
-	long frames;
+	zend_long frames;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &frames) == FAILURE) {
@@ -4121,12 +4737,12 @@ PHP_METHOD(swfmovie, setFrames)
 /* {{{ proto void swfmovie::addMetadata(string xml)
  * */
 PHP_METHOD(swfmovie, addMetadata)
-{ 
+{
 	char *xml;
-	int xml_len;
-	
+	zend_strlen xml_len;
+
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-  
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &xml, &xml_len) == FAILURE) {
 		return;
 	}
@@ -4139,14 +4755,14 @@ PHP_METHOD(swfmovie, addMetadata)
 */
 PHP_METHOD(swfmovie, setScriptLimits)
 {
-	long maxRecursion, timeout;
+	zend_long maxRecursion, timeout;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &maxRecursion, &timeout) == FAILURE) {
 		return;
 	}
 
-	SWFMovie_setScriptLimits(movie, maxRecursion, timeout);  
+	SWFMovie_setScriptLimits(movie, maxRecursion, timeout);
 }
 /* }}} */
 
@@ -4154,9 +4770,9 @@ PHP_METHOD(swfmovie, setScriptLimits)
  * */
 PHP_METHOD(swfmovie, setTabIndex)
 {
-	long depth, index;
+	zend_long depth, index;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &depth, &index) == FAILURE) {
 		return;
 	}
@@ -4171,7 +4787,7 @@ PHP_METHOD(swfmovie, assignSymbol)
 {
 	zval *zchar;
 	char *name;
-	int name_len;
+	zend_strlen name_len;
 	SWFCharacter character;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
@@ -4188,11 +4804,11 @@ PHP_METHOD(swfmovie, assignSymbol)
  * */
 PHP_METHOD(swfmovie, defineScene)
 {
-	long offset;
+	zend_long offset;
 	char *name;
-	int name_len;
+	zend_strlen name_len;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &offset, &name, &name_len) == FAILURE) {
 		return;
 	}
@@ -4202,18 +4818,18 @@ PHP_METHOD(swfmovie, defineScene)
 /* }}} */
 
 /* {{{ proto void swfmovie::setNetworkAccess(int flag)
- * */  
+ * */
 PHP_METHOD(swfmovie, setNetworkAccess)
-{   
-	long flag;
+{
+	zend_long flag;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flag) == FAILURE) {
 		return;
 	}
 
 	SWFMovie_setNetworkAccess(movie, flag);
-} 
+}
 /* }}} */
 
 /* {{{ proto long swfmovie::streamMP3(mixed filename / SWFInput [, double skip])
@@ -4237,14 +4853,18 @@ PHP_METHOD(swfmovie, streamMP3)
 		break;
 	case IS_OBJECT:
 		input = getInput(zfile TSRMLS_CC);
-		break;	
+		break;
 	case IS_STRING:
 		input = newSWFInput_filename(Z_STRVAL_P(zfile));
 		if (input == NULL) {
 			php_error(E_ERROR, "opening mp3 file failed");
 		}
 
+#if PHP_VERSION_ID >= 70000
+		zend_register_resource(input, le_swfinputp);
+#else
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 		break;
 
 	default:
@@ -4271,7 +4891,7 @@ PHP_METHOD(swfmovie, setSoundStream)
 		return;
 	}
 
-	sound = getSoundStream(zstream TSRMLS_CC);	
+	sound = getSoundStream(zstream TSRMLS_CC);
 	SWFMovie_setSoundStreamAt(movie, sound, skip);
 	RETURN_LONG(SWFSoundStream_getDuration(sound) / SWFMovie_getRate(movie));
 }
@@ -4283,7 +4903,7 @@ PHP_METHOD(swfmovie, addExport)
 {
 	zval *zchar;
 	char *name;
-	int name_len;
+	zend_strlen name_len;
 	SWFBlock block;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
 
@@ -4299,7 +4919,6 @@ PHP_METHOD(swfmovie, addExport)
 /* }}} */
 
 /* {{{ swfmovie_writeexports */
-			
 PHP_METHOD(swfmovie, writeExports)
 {
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
@@ -4313,7 +4932,11 @@ PHP_METHOD(swfmovie, writeExports)
 PHP_METHOD(swfmovie, startSound)
 {
 	zval *zsound;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFSound sound;
 	SWFSoundInstance item;
 	SWFMovie movie = getMovie(getThis() TSRMLS_CC);
@@ -4329,10 +4952,16 @@ PHP_METHOD(swfmovie, startSound)
 	if(item != NULL)
 	{
 		/* try and create a soundinstance object */
-		ret = zend_list_insert(item, le_swfsoundinstancep);
 		object_init_ex(return_value, soundinstance_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(item, le_swfsoundinstancep);
+		add_property_resource(return_value, "soundinstance", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(item, le_swfsoundinstancep);
 		add_property_resource(return_value, "soundinstance", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -4359,9 +4988,13 @@ PHP_METHOD(swfmovie, importChar)
 {
 	SWFMovie movie;
 	SWFCharacter character;
-	int ret;
 	char *libswf, *name;
-	int libswf_len, name_len;
+	zend_strlen libswf_len, name_len;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
+	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &libswf, &libswf_len, &name, &name_len) == FAILURE) {
 		return;
@@ -4371,10 +5004,16 @@ PHP_METHOD(swfmovie, importChar)
 	character = SWFMovie_importCharacter(movie, libswf, name);
 	if(character != NULL)
 	{
-		ret = zend_list_insert(character, le_swfcharacterp);
 		object_init_ex(return_value, character_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(character, le_swfcharacterp);
+		add_property_resource(return_value, "character", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(character, le_swfcharacterp);
 		add_property_resource(return_value, "character", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -4384,9 +5023,13 @@ PHP_METHOD(swfmovie, importFont)
 {
 	SWFMovie movie;
 	SWFFontCharacter res;
-	int ret;
 	char *libswf, *name;
-	int libswf_len, name_len;
+	zend_strlen libswf_len, name_len;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
+	int ret;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &libswf, &libswf_len, &name, &name_len) == FAILURE) {
 		return;
@@ -4399,11 +5042,17 @@ PHP_METHOD(swfmovie, importFont)
 	if(res != NULL)
 	{
 		/* try and create a fontchar object */
-		ret = zend_list_insert(res, le_swffontcharp);
 		object_init_ex(return_value, fontchar_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(res, le_swffontcharp);
+		add_property_resource(return_value, "fontcharacter", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(res, le_swffontcharp);
 		add_property_resource(return_value, "fontcharacter", ret);
 		zend_list_addref(ret);
-	}	
+#endif
+	}
 }
 /* }}} */
 
@@ -4412,7 +5061,11 @@ PHP_METHOD(swfmovie, addFont)
 {
 	SWFMovie movie;
 	SWFFontCharacter res;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFFont font;
 	zval *zfont;
 
@@ -4426,11 +5079,17 @@ PHP_METHOD(swfmovie, addFont)
 	if(res != NULL)
 	{
 		/* try and create a fontchar object */
-		ret = zend_list_insert(res, le_swffontcharp);
 		object_init_ex(return_value, fontchar_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(res, le_swffontcharp);
+		add_property_resource(return_value, "fontcharacter", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(res, le_swffontcharp);
 		add_property_resource(return_value, "fontcharacter", ret);
 		zend_list_addref(ret);
-	}	
+#endif
+	}
 }
 /* }}} */
 
@@ -4511,14 +5170,22 @@ static zend_function_entry swfmovie_functions[] = {
 PHP_METHOD(swfshape, __construct)
 {
 	SWFShape shape = newSWFShape();
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret = zend_register_resource(shape, le_swfshapep);
+	add_property_resource(getThis(), "shape", ret);
+#else
 	int ret = zend_list_insert(shape, le_swfshapep);
-
 	object_init_ex(getThis(), shape_class_entry_ptr);
 	add_property_resource(getThis(), "shape", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFShape_resource(zend_resource *resource)
+#else
 static void destroy_SWFShape_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFShape((SWFShape)resource->ptr);
 }
@@ -4542,7 +5209,7 @@ static SWFShape getShape(zval *id TSRMLS_DC)
    Sets the current line style for this SWFShape */
 PHP_METHOD(swfshape, setLine)
 {
-	long w, r, g, b, a = 0xff;
+	zend_long w, r, g, b, a = 0xff;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll|l", &w, &r, &g, &b, &a) == FAILURE) {
 		return;
@@ -4557,11 +5224,15 @@ PHP_METHOD(swfshape, setLine)
 PHP_METHOD(swfshape, addSolidFill)
 {
 	SWFFill fill=NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() == 3 || ZEND_NUM_ARGS() == 4) {
 		/* it's a solid fill */
-		long r, g, b, a = 0xff;
+		zend_long r, g, b, a = 0xff;
 
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &r, &g, &b, &a) == FAILURE) {
 			return;
@@ -4571,16 +5242,22 @@ PHP_METHOD(swfshape, addSolidFill)
 	} else {
 		WRONG_PARAM_COUNT;
 	}
-	
+
 	if (!fill) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding fill to shape");
 	}
 
 	/* return an SWFFill object */
-	ret = zend_list_insert(fill, le_swffillp);
 	object_init_ex(return_value, fill_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(fill, le_swffillp);
+	add_property_resource(return_value, "fill", ret);
+	ret->gc.refcount++;
+#else
+	ret = zend_list_insert(fill, le_swffillp);
 	add_property_resource(return_value, "fill", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -4589,19 +5266,23 @@ PHP_METHOD(swfshape, addSolidFill)
 PHP_METHOD(swfshape, addBitmapFill)
 {
 	SWFFill fill=NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() == 1 || ZEND_NUM_ARGS() == 2) {
 		/* it's a gradient or bitmap */
 		zval *arg1;
-		long flags = 0;
+		zend_long flags = 0;
 
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o!|l", &arg1, &flags) == FAILURE) {
 			return;
 		}
 
 		if ( arg1 && Z_OBJCE_P(arg1) != bitmap_class_entry_ptr) {
-		
+
 			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Argument is not a bitmap");
 		}
 
@@ -4614,16 +5295,22 @@ PHP_METHOD(swfshape, addBitmapFill)
 	} else {
 		WRONG_PARAM_COUNT;
 	}
-	
+
 	if (!fill) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding bitmap fill to shape");
 	}
 
 	/* return an SWFFill object */
-	ret = zend_list_insert(fill, le_swffillp);
 	object_init_ex(return_value, fill_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(fill, le_swffillp);
+	add_property_resource(return_value, "fill", ret);
+	ret->gc.refcount++;
+#else
+	ret = zend_list_insert(fill, le_swffillp);
 	add_property_resource(return_value, "fill", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -4632,12 +5319,16 @@ PHP_METHOD(swfshape, addBitmapFill)
 PHP_METHOD(swfshape, addGradientFill)
 {
 	SWFFill fill=NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() == 1 || ZEND_NUM_ARGS() == 2) {
 		/* it's a gradient or bitmap */
 		zval *arg1;
-		long flags = 0;
+		zend_long flags = 0;
 
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &arg1, &flags) == FAILURE) {
 			return;
@@ -4660,16 +5351,22 @@ PHP_METHOD(swfshape, addGradientFill)
 	} else {
 		WRONG_PARAM_COUNT;
 	}
-	
+
 	if (!fill) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding fill to shape");
 	}
 
 	/* return an SWFFill object */
-	ret = zend_list_insert(fill, le_swffillp);
 	object_init_ex(return_value, fill_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(fill, le_swffillp);
+	add_property_resource(return_value, "fill", ret);
+	ret->gc.refcount++;
+#else
+	ret = zend_list_insert(fill, le_swffillp);
 	add_property_resource(return_value, "fill", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -4678,12 +5375,16 @@ PHP_METHOD(swfshape, addGradientFill)
 PHP_METHOD(swfshape, addFill)
 {
 	SWFFill fill=NULL;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 
 	if (ZEND_NUM_ARGS() == 1 || ZEND_NUM_ARGS() == 2) {
 		/* it's a gradient or bitmap */
 		zval *arg1;
-		long flags = 0;
+		zend_long flags = 0;
 
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|l", &arg1, &flags) == FAILURE) {
 			return;
@@ -4705,7 +5406,7 @@ PHP_METHOD(swfshape, addFill)
 
 	} else if (ZEND_NUM_ARGS() == 3 || ZEND_NUM_ARGS() == 4) {
 		/* it's a solid fill */
-		long r, g, b, a = 0xff;
+		zend_long r, g, b, a = 0xff;
 
 		if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &r, &g, &b, &a) == FAILURE) {
 			return;
@@ -4715,16 +5416,22 @@ PHP_METHOD(swfshape, addFill)
 	} else {
 		WRONG_PARAM_COUNT;
 	}
-	
+
 	if (!fill) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Error adding fill to shape");
 	}
 
 	/* return an SWFFill object */
-	ret = zend_list_insert(fill, le_swffillp);
 	object_init_ex(return_value, fill_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+	ret = zend_register_resource(fill, le_swffillp);
+	add_property_resource(return_value, "fill", ret);
+	ret->gc.refcount++;
+#else
+	ret = zend_list_insert(fill, le_swffillp);
 	add_property_resource(return_value, "fill", ret);
 	zend_list_addref(ret);
+#endif
 }
 /* }}} */
 
@@ -4733,7 +5440,7 @@ PHP_METHOD(swfshape, addFill)
 PHP_METHOD(swfshape, setLeftFill)
 {
 	zval *zfill;
-	long r, g, b, a = 0xff;
+	zend_long r, g, b, a = 0xff;
 	SWFFill fill;
 
 	if (ZEND_NUM_ARGS() == 1) {
@@ -4758,7 +5465,7 @@ PHP_METHOD(swfshape, setLeftFill)
 PHP_METHOD(swfshape, setRightFill)
 {
 	zval *zfill;
-	long r, g, b, a = 0xff;
+	zend_long r, g, b, a = 0xff;
 	SWFFill fill;
 
 	if (ZEND_NUM_ARGS() == 1) {
@@ -4773,7 +5480,7 @@ PHP_METHOD(swfshape, setRightFill)
 		}
 		fill = SWFShape_addSolidFill(getShape(getThis() TSRMLS_CC), (byte)r, (byte)g, (byte)b, (byte)a);
 	}
-	
+
 	SWFShape_setRightFill(getShape(getThis() TSRMLS_CC), fill);
 }
 /* }}} */
@@ -4845,7 +5552,7 @@ PHP_METHOD(swfshape, drawCurveTo)
 			return;
 		}
 
-		SWFShape_drawCurveTo(getShape(getThis() TSRMLS_CC), cx, cy, ax, ay);	
+		SWFShape_drawCurveTo(getShape(getThis() TSRMLS_CC), cx, cy, ax, ay);
 	} else if (ZEND_NUM_ARGS() == 6) {
 		double bx, by, cx, cy, dx, dy;
 
@@ -4892,8 +5599,8 @@ PHP_METHOD(swfshape, drawGlyph)
 {
 	zval *font;
 	char *c;
-	int c_len;
-	long size = (long)(1024.0f/Ming_getScale());
+	zend_strlen c_len;
+	zend_long size = (long)(1024.0f/Ming_getScale());
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "os|l", &font, &c, &c_len, &size) == FAILURE) {
 		return;
@@ -4976,7 +5683,7 @@ PHP_METHOD(swfshape, end)
  */
 PHP_METHOD(swfshape, useVersion)
 {
-	long ver;
+	zend_long ver;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &ver) == FAILURE) {
 		return;
@@ -4992,7 +5699,7 @@ PHP_METHOD(swfshape, getVersion)
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
 	}
-	
+
 	RETURN_LONG(SWFShape_getVersion(getShape(getThis() TSRMLS_CC)));
 }
 /* }}} */
@@ -5003,7 +5710,7 @@ PHP_METHOD(swfshape, getVersion)
  */
 PHP_METHOD(swfshape, setRenderHintingFlags)
 {
-	long flags;
+	zend_long flags;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flags) == FAILURE) {
 		return;
@@ -5095,9 +5802,9 @@ PHP_METHOD(swfshape, drawCharacterBounds)
  * */
 PHP_METHOD(swfshape, setLine2)
 {
-	long width, flags, r, g, b, a = 0xff;
+	zend_long width, flags, r, g, b, a = 0xff;
 	double limit;
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lldlll|l", &width, &flags, &limit, &r, &g, &b, &a) == FAILURE) {
 		return;
 	}
@@ -5141,7 +5848,7 @@ PHP_METHOD(swfshape, setLine2)
  */
 PHP_METHOD(swfshape, setLine2Filled)
 {
-	long width, flags;
+	zend_long width, flags;
 	zval *fill;
 	double limit;
 	SWFFill xfill;
@@ -5164,7 +5871,11 @@ PHP_METHOD(swfshape, dumpOutline)
 	}
 
 	out = SWFShape_dumpOutline(getShape(getThis() TSRMLS_CC));
+#if PHP_VERSION_ID >= 70000
+	RETURN_STRING(out);
+#else
 	RETURN_STRING(out, 1);
+#endif
 	free(out);
 }
 /* }}} */
@@ -5211,14 +5922,24 @@ static zend_function_entry swfshape_functions[] = {
 PHP_METHOD(swfsprite, __construct)
 {
 	SWFMovieClip sprite = newSWFMovieClip();
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret = zend_register_resource(sprite, le_swfspritep);
+
+	add_property_resource(getThis(), "sprite", ret);
+#else
 	int ret = zend_list_insert(sprite, le_swfspritep);
 
 	object_init_ex(getThis(), sprite_class_entry_ptr);
 	add_property_resource(getThis(), "sprite", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFSprite_resource(zend_resource *resource)
+#else
 static void destroy_SWFSprite_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFMovieClip((SWFMovieClip)resource->ptr);
 }
@@ -5242,7 +5963,11 @@ static SWFMovieClip getSprite(zval *id TSRMLS_DC)
 PHP_METHOD(swfsprite, add)
 {
 	zval *zchar;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFBlock block;
 	SWFDisplayItem item;
 	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
@@ -5261,10 +5986,16 @@ PHP_METHOD(swfsprite, add)
 
 	if (item != NULL) {
 		/* try and create a displayitem object */
-		ret = zend_list_insert(item, le_swfdisplayitemp);
 		object_init_ex(return_value, displayitem_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(item, le_swfdisplayitemp);
+		add_property_resource(return_value, "displayitem", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(item, le_swfdisplayitemp);
 		add_property_resource(return_value, "displayitem", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 /* }}} */
@@ -5299,7 +6030,7 @@ PHP_METHOD(swfsprite, nextFrame)
 PHP_METHOD(swfsprite, labelFrame)
 {
 	char *label;
-	int label_len;
+	zend_strlen label_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &label, &label_len) == FAILURE) {
 		return;
@@ -5313,7 +6044,7 @@ PHP_METHOD(swfsprite, labelFrame)
    Sets the number of frames in this SWFSprite */
 PHP_METHOD(swfsprite, setFrames)
 {
-	long frames;
+	zend_long frames;
 	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &frames) == FAILURE) {
@@ -5330,7 +6061,11 @@ PHP_METHOD(swfsprite, setFrames)
 PHP_METHOD(swfsprite, startSound)
 {
 	zval *zsound;
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret;
+#else
 	int ret;
+#endif
 	SWFSound sound;
 	SWFSoundInstance item;
 	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
@@ -5344,10 +6079,16 @@ PHP_METHOD(swfsprite, startSound)
 
 	if(item != NULL) {
 		/* try and create a displayitem object */
-		ret = zend_list_insert(item, le_swfsoundinstancep);
 		object_init_ex(return_value, soundinstance_class_entry_ptr);
+#if PHP_VERSION_ID >= 70000
+		ret = zend_register_resource(item, le_swfsoundinstancep);
+		add_property_resource(return_value, "soundinstance", ret);
+		ret->gc.refcount++;
+#else
+		ret = zend_list_insert(item, le_swfsoundinstancep);
 		add_property_resource(return_value, "soundinstance", ret);
 		zend_list_addref(ret);
+#endif
 	}
 }
 
@@ -5397,12 +6138,16 @@ PHP_METHOD(swfsprite, setSoundStream)
 		{
 			sound = getSoundStream(zfile TSRMLS_CC);
 		}
-		break;	
+		break;
 	case IS_STRING:
 		input = newSWFInput_filename(Z_STRVAL_P(zfile));
 		if(input == NULL)
 			php_error(E_ERROR, "opening sound file failed");
+#if PHP_VERSION_ID >= 70000
+		zend_register_resource(input, le_swfinputp);
+#else
 		zend_list_addref(zend_list_insert(input, le_swfinputp));
+#endif
 		break;
 
 	}
@@ -5424,13 +6169,13 @@ PHP_METHOD(swfsprite, setSoundStream)
 /* {{{ proto void swfsprite::setScalingGrid(int x, int y, int w, int h) */
 PHP_METHOD(swfsprite, setScalingGrid)
 {
-	long zx, zy, zw, zh;
+	zend_long zx, zy, zw, zh;
 	SWFMovieClip sprite = getSprite(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &zx, &zy, &zw, &zh) == FAILURE) {
 		return;
 	}
-	
+
 	SWFMovieClip_setScalingGrid(sprite, zx, zy, zw, zh);
 }
 /* }}} */
@@ -5510,7 +6255,7 @@ static zend_function_entry swfsprite_functions[] = {
    Creates new SWFText object */
 PHP_METHOD(swftext, __construct)
 {
-	long version = 0;
+	zend_long version = 0;
 	SWFText text;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &version) == FAILURE) {
@@ -5523,13 +6268,22 @@ PHP_METHOD(swftext, __construct)
 		text = newSWFText2();
 	}
 
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret = zend_register_resource(text, le_swftextp);
+	add_property_resource(getThis(), "text", ret);
+#else
 	int ret = zend_list_insert(text, le_swftextp);
 	object_init_ex(getThis(), text_class_entry_ptr);
 	add_property_resource(getThis(), "text", ret);
 	zend_list_addref(ret);
+#endif
 }
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFText_resource(zend_resource *resource)
+#else
 static void destroy_SWFText_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFText((SWFText)resource->ptr);
 }
@@ -5599,7 +6353,7 @@ PHP_METHOD(swftext, setSpacing)
    Sets this SWFText object's current color to the given color */
 PHP_METHOD(swftext, setColor)
 {
-	long r, g, b, a = 0xff;
+	zend_long r, g, b, a = 0xff;
 	SWFText text = getText(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &r, &g, &b, &a) == FAILURE) {
@@ -5630,7 +6384,7 @@ PHP_METHOD(swftext, moveTo)
 PHP_METHOD(swftext, addString)
 {
 	char *s;
-	int s_len;
+	zend_strlen s_len;
 	SWFText text = getText(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &s, &s_len) == FAILURE) {
@@ -5649,7 +6403,7 @@ PHP_METHOD(swftext, addString)
 PHP_METHOD(swftext, addUTF8String)
 {
 	char *s;
-	int s_len;
+	zend_strlen s_len;
 	SWFText text = getText(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &s, &s_len) == FAILURE) {
@@ -5667,7 +6421,7 @@ PHP_METHOD(swftext, addUTF8String)
 PHP_METHOD(swftext, addWideString)
 {
 	char *s;
-	int s_len;
+	zend_strlen s_len;
 	SWFText text = getText(getThis() TSRMLS_CC);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &s, &s_len) == FAILURE) {
@@ -5685,7 +6439,7 @@ PHP_METHOD(swftext, addWideString)
 PHP_METHOD(swftext, getWidth)
 {
 	char *string;
-	int string_len;
+	zend_strlen string_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
 		return;
@@ -5702,8 +6456,8 @@ PHP_METHOD(swftext, getWidth)
 PHP_METHOD(swftext, getUTF8Width)
 {
 	char *string;
-	int string_len;
-	
+	zend_strlen string_len;
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
 		return;
 	}
@@ -5718,12 +6472,12 @@ PHP_METHOD(swftext, getUTF8Width)
 PHP_METHOD(swftext, getWideWidth)
 {
 	char *string;
-	int string_len;
-	
+	zend_strlen string_len;
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
 		return;
 	}
-	
+
 	RETURN_DOUBLE(SWFText_getWideStringWidth(getText(getThis() TSRMLS_CC), string));
 }
 */
@@ -5794,13 +6548,19 @@ static zend_function_entry swftext_functions[] = {
    Creates a new SWFTextField object */
 PHP_METHOD(swftextfield, __construct)
 {
-	long flags = 0;
+	zend_long flags = 0;
 	SWFTextField field = newSWFTextField();
+#if PHP_VERSION_ID >= 70000
+	zend_resource *ret = zend_register_resource(field, le_swftextfieldp);
+
+	add_property_resource(getThis(), "textfield", ret);
+#else
 	int ret = zend_list_insert(field, le_swftextfieldp);
 
 	object_init_ex(getThis(), textfield_class_entry_ptr);
 	add_property_resource(getThis(), "textfield", ret);
 	zend_list_addref(ret);
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
 		return;
@@ -5810,7 +6570,11 @@ PHP_METHOD(swftextfield, __construct)
 }
 /* }}} */
 
+#if PHP_VERSION_ID >= 70000
+static void destroy_SWFTextField_resource(zend_resource *resource)
+#else
 static void destroy_SWFTextField_resource(zend_rsrc_list_entry *resource TSRMLS_DC)
+#endif
 {
 	destroySWFTextField((SWFTextField)resource->ptr);
 }
@@ -5885,7 +6649,7 @@ PHP_METHOD(swftextfield, setBounds)
    Sets the flags for this textfield */
 PHP_METHOD(swftextfield, setFlags)
 {
-	long flags;
+	zend_long flags;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
 		return;
@@ -5900,7 +6664,7 @@ PHP_METHOD(swftextfield, setFlags)
    Sets the alignment of this textfield */
 PHP_METHOD(swftextfield, align)
 {
-	long align;
+	zend_long align;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &align) == FAILURE) {
 		return;
@@ -6000,7 +6764,7 @@ PHP_METHOD(swftextfield, setLineSpacing)
    Sets the color of this textfield */
 PHP_METHOD(swftextfield, setColor)
 {
-	long r, g, b, a = 0xff;
+	zend_long r, g, b, a = 0xff;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &r, &g, &b, &a) == FAILURE) {
 		return;
@@ -6014,7 +6778,7 @@ PHP_METHOD(swftextfield, setColor)
 PHP_METHOD(swftextfield, setName)
 {
 	char *name;
-	int name_len;
+	zend_strlen name_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
 		return;
@@ -6029,7 +6793,7 @@ PHP_METHOD(swftextfield, setName)
 PHP_METHOD(swftextfield, addString)
 {
 	char *str;
-	int str_len;
+	zend_strlen str_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &str, &str_len) == FAILURE) {
 		return;
@@ -6044,7 +6808,7 @@ PHP_METHOD(swftextfield, addString)
 PHP_METHOD(swftextfield, addUTF8String)
 {
 	char *str;
-	int str_len;
+	zend_strlen str_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &str, &str_len) == FAILURE) {
 		return;
@@ -6075,7 +6839,7 @@ PHP_METHOD(swftextfield, setPadding)
 PHP_METHOD(swftextfield, addChars)
 {
 	char *str;
-	int str_len;
+	zend_strlen str_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &str, &str_len) == FAILURE) {
 		return;
@@ -6089,7 +6853,7 @@ PHP_METHOD(swftextfield, addChars)
 /* {{{ proto void swftextfield::setLength(int len) */
 PHP_METHOD(swftextfield, setLength)
 {
-	long len;
+	zend_long len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &len) == FAILURE) {
 		return;
@@ -6102,7 +6866,7 @@ PHP_METHOD(swftextfield, setLength)
 /* {{{ proto void swftextfield::setLength(len) */
 PHP_METHOD(swftextfield, setFieldHeight)
 {
-	long h;
+	zend_long h;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &h) == FAILURE) {
 		return;
