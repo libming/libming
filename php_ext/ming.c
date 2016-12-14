@@ -3149,8 +3149,11 @@ static SWFColor hashToColor(zval **colorHash TSRMLS_DC)
 static SWFFilter createDropShadowFilter(zval *colorHash, zval *blur,
 	 zval *shadow, zval *flags)
 {
-	SWFColor c = hashToColor(colorHash);
-	return newDropShadowFilter(c, getBlur(blur), getShadow(shadow),
+	convert_to_array_ex(colorHash);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
+	return newDropShadowFilter(hashToColor(colorHash), getBlur(blur), getShadow(shadow),
 		 Z_LVAL_P(flags));
 #else
 static SWFFilter createDropShadowFilter(int argc, zval **argv[] TSRMLS_DC)
@@ -3182,6 +3185,7 @@ static SWFFilter createDropShadowFilter(int argc, zval **argv[] TSRMLS_DC)
 #if PHP_VERSION_ID >= 70000
 static SWFFilter createBlurFilter(zval *blur)
 {
+	convert_to_object_ex(blur);
 	return newBlurFilter(getBlur(blur));
 #else
 static SWFFilter createBlurFilter(int argc, zval **argv[] TSRMLS_DC)
@@ -3202,6 +3206,10 @@ static SWFFilter createBlurFilter(int argc, zval **argv[] TSRMLS_DC)
 static SWFFilter createGlowFilter(zval *color, zval *blur, zval *strength,
 	zval *flags)
 {
+	convert_to_array_ex(color);
+	convert_to_object_ex(blur);
+	convert_to_double_ex(strength);
+	convert_to_long_ex(flags);
 	return newGlowFilter(hashToColor(color), getBlur(blur),
 		Z_DVAL_P(strength), Z_LVAL_P(flags));
 #else
@@ -3234,6 +3242,11 @@ static SWFFilter createGlowFilter(int argc, zval **argv[] TSRMLS_DC)
 #if PHP_VERSION_ID >= 70000
 static SWFFilter createBevelFilter(zval *sColor, zval *hColor, zval *blur, zval *shadow, zval *flags)
 {
+	convert_to_array_ex(sColor);
+	convert_to_array_ex(hColor);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
 	return newBevelFilter(hashToColor(sColor), hashToColor(hColor), getBlur(blur),
 		getShadow(shadow), Z_LVAL_P(flags));
 #else
@@ -3270,6 +3283,10 @@ static SWFFilter createBevelFilter(int argc, zval **argv[] TSRMLS_DC)
 #if PHP_VERSION_ID >= 70000
 static SWFFilter createGradientGlowFilter(zval *gradient, zval *blur, zval *shadow, zval *flags)
 {
+	convert_to_object_ex(gradient);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
 	return newGradientGlowFilter(getGradient(gradient),
 		getBlur(blur), getShadow(shadow), Z_LVAL_P(flags));
 #else
@@ -3301,6 +3318,11 @@ static SWFFilter createGradientGlowFilter(int argc, zval **argv[] TSRMLS_DC)
 #if PHP_VERSION_ID >= 70000
 static SWFFilter createConvolutionFilter(zval *matrix, zval *div, zval *bias, zval *color, zval *flags)
 {
+	convert_to_object_ex(matrix);
+	convert_to_double_ex(div);
+	convert_to_double_ex(bias);
+	convert_to_array_ex(color);
+	convert_to_long_ex(flags);
 	return newConvolutionFilter(getFilterMatrix(matrix), Z_DVAL_P(div),
 		Z_DVAL_P(bias), hashToColor(color), Z_LVAL_P(flags));
 #else
@@ -3336,6 +3358,7 @@ static SWFFilter createConvolutionFilter(int argc, zval **argv[] TSRMLS_DC)
 #if PHP_VERSION_ID >= 70000
 static SWFFilter createColorMatrixFilter(zval *matrix)
 {
+	convert_to_object_ex(matrix);
 	return newColorMatrixFilter(getFilterMatrix(matrix));
 #else
 static SWFFilter createColorMatrixFilter(int argc, zval **argv[] TSRMLS_DC)
@@ -3355,6 +3378,10 @@ static SWFFilter createColorMatrixFilter(int argc, zval **argv[] TSRMLS_DC)
 #if PHP_VERSION_ID >= 70000
 static SWFFilter createGradientBevelFilter(zval *gradient, zval *blur, zval *shadow, zval *flags)
 {
+	convert_to_object_ex(gradient);
+	convert_to_object_ex(blur);
+	convert_to_object_ex(shadow);
+	convert_to_long_ex(flags);
 	return newGradientBevelFilter(getGradient(gradient),
 		getBlur(blur), getShadow(shadow),
 		Z_LVAL_P(flags));
