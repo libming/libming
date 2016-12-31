@@ -74,6 +74,8 @@ void printMP3Headers(FILE *f)
 
   for(;;)
   {
+    int flags_char;
+    int i;
     /* get 4-byte header, bigendian */
     if((flags = fgetc(f)) == EOF)
       break;
@@ -92,9 +94,17 @@ void printMP3Headers(FILE *f)
       break;
 
     flags <<= 24;
-    flags += fgetc(f) << 16;
-    flags += fgetc(f) << 8;
-    flags += fgetc(f);
+    for (i = 2; i >= 0; --i)
+    {
+      if ((flags_char = fgetc(f)) == EOF)
+      {
+        error("truncated file");
+      }
+      else
+      {
+        flags += flags_char << (i * 8);
+      }
+    }
 
     if((flags & MP3_FRAME_SYNC) != MP3_FRAME_SYNC)
       break;
