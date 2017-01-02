@@ -44,6 +44,7 @@ void byteAlign()
 int readBits(FILE *f, int number)
 {
   int ret = buffer;
+  int tmp_char;
 
   if(number == bufbits)
   {
@@ -58,14 +59,30 @@ int readBits(FILE *f, int number)
 
     while(number>8)
     {
+      tmp_char = fgetc(f);
+      if (tmp_char == EOF)
+      {
+        // exit here instead of crashing elswhere
+        fprintf(stderr, "truncated file\n");
+        exit(-1);
+      }
+
       ret <<= 8;
-      ret += fgetc(f);
+      ret += tmp_char;
       ++fileOffset;
       number -= 8;
     }
 
     ++fileOffset;
-    buffer = fgetc(f);
+    tmp_char = fgetc(f);
+    if (tmp_char == EOF)
+    {
+      // exit here instead of crashing elswhere
+      fprintf(stderr, "truncated file\n");
+      exit(-1);
+    }
+
+    buffer = tmp_char;
 
     if(number>0)
     {
@@ -109,9 +126,18 @@ void readRect(FILE *f, struct Rect *s)
 
 int readUInt8(FILE *f)
 {
+  int tmp_char = fgetc(f);
+  // the rest of the code does not handle errors and use EOF as a valid unsigned char value
+  if (tmp_char == EOF)
+  {
+    // exit here instead of crashing elswhere
+    fprintf(stderr, "truncated file\n");
+    exit(-1);
+  }
+
   bufbits = 0;
   ++fileOffset;
-  return fgetc(f);
+  return tmp_char;
 }
 
 int readSInt8(FILE *f)
