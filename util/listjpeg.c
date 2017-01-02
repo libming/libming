@@ -52,11 +52,14 @@ void printJpegStream(FILE *f)
 
     if(c != JPEG_SOI && c != JPEG_EOI)
     {
-      l = (fgetc(f)<<8) + fgetc(f);
-      printf("%i bytes\n", l);
+      int tmp_char = fgetc(f);
+      if (!feof(f)) {
+        l = (tmp_char << 8) + fgetc(f);
+        printf("%i bytes\n", l);
 
-      for(l-=2; l>0; --l)
-	fgetc(f);
+        for(l-=2; l>0; --l)
+          fgetc(f);
+      }
     }
   }
 }

@@ -1649,6 +1649,11 @@ void printMP3Headers(FILE *f, int length)
     flags += fgetc(f) << 16;
     flags += fgetc(f) << 8;
     flags += fgetc(f);
+    if (feof(f))
+    {
+      fprintf(stderr, "truncated file\n");
+      exit(-1);
+    }
 
     fileOffset += 4;
 
