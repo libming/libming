@@ -89,13 +89,14 @@ double readDouble(Buffer f)
 
 char *readString(Buffer f)
 {
-  int len = 0, buflen = 256;
-  char c, *buf, *p;
+  int len = 0, buflen = 256, tmp_char;
+  char *buf, *p;
 
   buf = (char *)malloc(sizeof(char)*256);
   p = buf;
 
-  while((c=(char)readUInt8(f)) != '\0')
+  tmp_char = readUInt8(f);
+  while(tmp_char != EOF && tmp_char != '\0')
   {
     if(len==buflen)
     {
@@ -104,8 +105,9 @@ char *readString(Buffer f)
       p = buf+len;
     }
 
-    *(p++) = c;
+    *(p++) = (char)tmp_char;
     ++len;
+    tmp_char = readUInt8(f);
   }
 
   *p = 0;
