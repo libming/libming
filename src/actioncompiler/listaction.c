@@ -30,6 +30,10 @@ int fileOffset = 0;
 
 int readUInt8(Buffer f)
 {
+  if (f->buffersize <= fileOffset)
+  {
+    return EOF;
+  }
   return f->buffer[fileOffset++];
 }
 
@@ -45,6 +49,10 @@ int readSInt16(Buffer f)
 
 int readUInt16(Buffer f)
 {
+  if(f->buffersize <= fileOffset + 1)
+  {
+    return EOF;
+  }
   return readUInt8(f) + (readUInt8(f)<<8);
 }
 
@@ -55,6 +63,10 @@ long readSInt32(Buffer f)
 
 unsigned long readUInt32(Buffer f)
 {
+  if(f->buffersize <= fileOffset + 3)
+  {
+    return EOF;
+  }
   return (unsigned long)(readUInt8(f) + (readUInt8(f)<<8) + (readUInt8(f)<<16) + (readUInt8(f)<<24));
 }
 
