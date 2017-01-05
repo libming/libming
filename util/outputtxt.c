@@ -2934,6 +2934,6 @@ outputBlock (int type, SWF_Parserstruct * blockp, FILE* stream)
 	  return;
 	}
     }
-  outputSWF_UNKNOWNBLOCK(blockp);
+  SWF_error("printing type:  %d (%s) is not implemented", type, blockName(type));
   return;
 }
