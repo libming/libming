@@ -2752,7 +2752,7 @@ parseSWF_PROTECT (FILE * f, int length)
   PAR_BEGIN (SWF_PROTECT);
 
   if( length != 0 ) {
-  	parserrec->Password = readBytes (f, length);
+  	parserrec->Password = readString (f);
   } else {
   	parserrec->Password = NULL;
   }
