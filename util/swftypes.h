@@ -1135,7 +1135,7 @@ struct SWF_DEFINEEDITTEXT
 struct SWF_DEFINEFONT
 {
   UI16 FontID;
-  int NumGlyphs;
+  UI16 NumGlyphs;
   UI16 *OffsetTable;
   SWF_SHAPE *GlyphShapeTable;
 };
