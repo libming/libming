@@ -182,6 +182,9 @@ void printMP3Headers(FILE *f)
     skipBytes(f, frameLen-4);
   }
 
+  if (numFrames == 0)
+    error("no valid frame found");
+
   putchar('\n');
 
   length = numFrames*(samplerate > 3200 ? 1152 : 576)/samplerate;
