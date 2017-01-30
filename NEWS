@@ -1,6 +1,15 @@
-0.4.8 - 2015-MM-DD
+0.4.8 - 2017-MM-DD
 
-	*
+  * Avoid division by zero in listmp3 when no valid frame was found
+  * Don't try printing unknown block.
+  * Parse Protect tag's Password as string
+  * Check values before deriving malloc parameters from them in parser.c
+  * Make readString() stop reading string past buffer's end
+  * Return EOF when reading unsigned values hits end of memory backed buffer
+  * Exit immediately when unexpected EOF is by fgetc() in utility programs
+  * Fix using EOF marker -1 value as a valid flag byte
+  * Fix division by zero sample rate due to global buffer overflow.
+
 
 0.4.7 - 2015-05-15
 
