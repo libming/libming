@@ -75,3 +75,6 @@ Stuart Anderson <anderson@netsweng.com>
 Albrecht Kleine
     util section code: dbl2png.c and de-compiler enhancements.
     Perl interface updates and bug fixes
+
+Balint Reczey <balint@balintreczey.hu>
+     Security fixes for CVEs of 2017
