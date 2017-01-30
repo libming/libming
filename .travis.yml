@@ -1,4 +1,14 @@
 before_install:
+  #- sudo apt-get update && sudo apt-cache search php
+  - sudo apt-get update && sudo apt-get install php5-dev php5-cli
+  - sudo dpkg -L php5-cli
   - ./autogen.sh
 
 language: c
+
+script:
+  - sudo ln -s `which phpize5` /usr/local/bin/phpize
+  - sudo ln -s `which php5` /usr/local/bin/php
+  - ./configure --enable-php
+  - make
+  - make check
