@@ -1,5 +1,6 @@
 0.4.8 - 2017-MM-DD
 
+  * Fix heap overflows in parser.c
   * Avoid division by zero in listmp3 when no valid frame was found
   * Don't try printing unknown block.
   * Parse Protect tag's Password as string

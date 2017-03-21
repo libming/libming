@@ -439,6 +439,7 @@ parseSWF_FOCALGRADIENT (FILE * f, struct SWF_FOCALGRADIENT *gradient, int level)
   gradient->NumGradients = readBits (f, 4);
   if(gradient->NumGradients > 15) {
 	  fprintf(stderr, "%d gradients in SWF_FOCALGRADIENT, expected a max of 15\n", gradient->NumGradients );
+	  gradient->NumGradients = 15;
 	  /*exit(1);*/
   }
 
@@ -457,7 +458,7 @@ parseSWF_GRADIENT (FILE * f, struct SWF_GRADIENT *gradient, int level)
   gradient->NumGradients = readBits (f, 4);
   if((gradient->NumGradients > 8  && level < 4) || (gradient->NumGradients > 15  && level == 4)) {
 	  fprintf(stderr, "%d gradients in SWF_GRADiENT, expected a max of %d\n", gradient->NumGradients, level<4 ? 8 : 15 );
-	  /*exit(1);*/
+	  gradient->NumGradients = 8;
   }
 
   for (i = 0; i < gradient->NumGradients; i++)
@@ -780,7 +781,7 @@ parseSWF_MORPHGRADIENT (FILE * f, struct SWF_MORPHGRADIENT *gradient)
   gradient->NumGradients = readUInt8 (f);
   if( gradient->NumGradients > 8 ) {
 	  fprintf(stderr, "%d gradients in SWF_MORPHGRADiENT, expected a max of 8", gradient->NumGradients);
-	  /*exit(1);*/
+	  gradient->NumGradients = 8;
   }
   for (i = 0; i < gradient->NumGradients; i++)
     parseSWF_MORPHGRADIENTRECORD (f, &(gradient->GradientRecords[i]));
