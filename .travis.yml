@@ -3,3 +3,8 @@ before_install:
   - ./autogen.sh
 
 language: c
+
+script:
+  - ./configure --enable-php
+  - make
+  - make check
