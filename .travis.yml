@@ -1,6 +1,7 @@
 before_install:
   - sudo apt-get update && sudo apt-cache search phpize
   - sudo apt-get update && sudo apt-get install php5-dev
+  - sudo dpkg -L php5-dev
   - ./autogen.sh
 
 language: c
