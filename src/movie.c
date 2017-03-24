@@ -857,7 +857,7 @@ SWFMovie_toOutput(SWFMovie movie, int level)
 }
 
 /*
- * Oputput a movie with SWFByteOutputMethod
+ * Output a movie with SWFByteOutputMethod
  * returns the number of bytes written.
  */
 int
@@ -877,6 +877,30 @@ SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data)
 		method(*buffer++, data);
 	destroySWFOutput(swfbuffer);
 	return swflength;
+}
+
+/*
+ * Output a movie as bytes
+ * returns the number of bytes written.
+ */
+int
+SWFMovie_output_as_buffer(SWFMovie movie, byte *buffer)
+{
+    SWFOutput swfbuffer;
+    int swflength;
+    int n;
+    int level = SWF_compression;
+
+    swfbuffer = SWFMovie_toOutput(movie, level);
+    swflength = SWFOutput_getLength(swfbuffer);
+    if (!buffer) {
+        destroySWFOutput(swfbuffer);
+        return swflength;
+    }
+    memcpy(buffer, SWFOutput_getBuffer(swfbuffer), swflength);
+
+    destroySWFOutput(swfbuffer);
+    return swflength;
 }
 
 /*

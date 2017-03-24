@@ -1515,6 +1515,14 @@ def SWFMovie_output(*args):
   return _mingc.SWFMovie_output(*args)
 SWFMovie_output = _mingc.SWFMovie_output
 
+def SWFMovie_output_to_stream(*args):
+  return _mingc.SWFMovie_output_to_stream(*args)
+SWFMovie_output_to_stream = _mingc.SWFMovie_output_to_stream
+
+def SWFMovie_output_as_buffer(*args):
+  return _mingc.SWFMovie_output_as_buffer(*args)
+SWFMovie_output_as_buffer = _mingc.SWFMovie_output_as_buffer
+
 def SWFMovie_save(*args):
   return _mingc.SWFMovie_save(*args)
 SWFMovie_save = _mingc.SWFMovie_save

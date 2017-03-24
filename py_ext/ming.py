@@ -618,14 +618,20 @@ class SWFMovie(SWFBase):
         self.blocks.append(sound)
         mingc.SWFMovie_setSoundStreamAt(self.this, sound.this, skip);
 
-    def output(self):
-        return mingc.SWFMovie_simpleOutput(self.this)
+    def output(self, callback, data):
+        return mingc.SWFMovie_output(self.this, callback, data)
 
     def save(self, filename):
         mingc.SWFMovie_save(self.this, filename)
 
-    def saveToFile(self, file):
-        mingc.SWFMovie_saveToFileNo(self.this, file.fileno())
+    def output_to_stream(self, fd):
+        return mingc.SWFMovie_output_to_stream(self.this, fd)
+
+    def saveToFile(self, fd):
+        return mingc.SWFMovie_output_to_stream(self.this, fd)
+
+    def as_buffer(self):
+        return mingc.SWFMovie_output_as_buffer(self.this)
 
     def labelFrame(self, label):
         mingc.SWFMovie_labelFrame(self.this, label)
@@ -644,8 +650,8 @@ class SWFMovie(SWFBase):
         mingc.SWFMovie_writeExports(self.this)
 
     def assignSymbol(self, character, name):
-	mingc.SWFMovie_assignSymbol(self.this, character.this, name)
-	
+        mingc.SWFMovie_assignSymbol(self.this, character.this, name)
+
     def setNetworkAccess(self, flag):
         mingc.SWFMovie_setNetworkAccess(self.this, flag)
 

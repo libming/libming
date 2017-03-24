@@ -1069,6 +1069,7 @@ void SWFMovie_namedAnchor(SWFMovie movie, const char *label);
 int SWFMovie_output(SWFMovie movie, SWFByteOutputMethod method, void *data);
 int SWFMovie_save(SWFMovie movie, const char *filename);
 int SWFMovie_output_to_stream(SWFMovie movie, FILE *fp);
+int SWFMovie_output_as_buffer(SWFMovie movie, byte *buffer);
 void SWFMovie_protect(SWFMovie movie, const char *password);
 void SWFMovie_setNetworkAccess(SWFMovie movie, int flag);
 void SWFMovie_addMetadata(SWFMovie movie, const char *xml);
