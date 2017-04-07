@@ -1,5 +1,6 @@
 0.4.8 - 2017-04-07
 
+  * Add PHP7 compatibility
   * Fix C++ output of disassembler
   * Fix heap overflows in parser.c (CVE-2017-7578)
   * Avoid division by zero in listmp3 when no valid frame was found
