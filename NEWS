@@ -1,4 +1,4 @@
-0.4.8 - 2017-MM-DD
+0.4.8 - 2017-04-07
 
   * Fix C++ output of disassembler
   * Fix heap overflows in parser.c (CVE-2017-7578)
