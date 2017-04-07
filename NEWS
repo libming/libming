@@ -1,6 +1,7 @@
 0.4.8 - 2017-MM-DD
 
-  * Fix heap overflows in parser.c
+  * Fix C++ output of disassembler
+  * Fix heap overflows in parser.c (CVE-2017-7578)
   * Avoid division by zero in listmp3 when no valid frame was found
   * Don't try printing unknown block.
   * Parse Protect tag's Password as string
