@@ -11,8 +11,8 @@ MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
 AC_CONFIG_AUX_DIR(config)
-
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AC_CONFIG_MACRO_DIRS([macros])
+AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AM_MAINTAINER_MODE
@@ -392,7 +392,7 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(MING_VERSION)
 
-AM_CONFIG_HEADER(src/ming_config.h)
+AC_CONFIG_HEADER(src/ming_config.h)
 AH_TOP(
 #ifndef __MING_CONFIG_H
 #define __MING_CONFIG_H
