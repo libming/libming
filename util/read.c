@@ -247,6 +247,11 @@ char *readString(FILE *f)
     if(len >= buflen-2)
     {
       buf = (char *)realloc(buf, sizeof(char)*(buflen+256));
+      if ( ! buf )
+      {
+        fprintf(stderr, "failed reallocating %d bytes\n", buflen+256);
+        exit(-1);
+      }
       buflen += 256;
       p = buf+len;
     }
@@ -350,6 +355,11 @@ char *readSizedString(FILE *f,int size)
     if(len >= buflen-2)
     {
       buf = (char *)realloc(buf, sizeof(char)*(buflen+256));
+      if ( ! buf )
+      {
+        fprintf(stderr, "failed reallocating %d bytes\n", buflen+256);
+        exit(-1);
+      }
       buflen += 256;
       p = buf+len;
     }
