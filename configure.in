@@ -1,10 +1,10 @@
 dnl -- Release version, to bump up right after official releases 
-dnl -- last release was 0.4.7
+dnl -- last release was 0.4.8
 dnl --
-AC_INIT(ming, 0.4.8)
+AC_INIT(ming, 0.4.9)
 MAJOR_VERSION=0
 MINOR_VERSION=4
-MICRO_VERSION=8
+MICRO_VERSION=9-dev
 
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
@@ -18,11 +18,11 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_MAINTAINER_MODE
 
 dnl -- Version info for libtool, to bump right after official releases
-dnl -- last release was 5:4:6
+dnl -- last release was 5:4:7
 dnl --
 INTERFACE_CURRENT=5
 INTERFACE_AGE=4
-INTERFACE_REVISION=7
+INTERFACE_REVISION=8
 
 AC_SUBST(INTERFACE_CURRENT)
 AC_SUBST(INTERFACE_REVISION)
