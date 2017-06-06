@@ -112,57 +112,57 @@ class SWFFilter(SWFBase):
         if type == SWFFILTER_TYPE_DROPSHADOW:
             #color, blur, shadow, flags
             if not isinstance(arg2, SWFBlur):
-                raise AttributeError, "3. parameter has to be SWFBlur"
+                raise AttributeError("3. parameter has to be SWFBlur")
             if not isinstance(arg3, SWFShadow):
-                raise AttributeError, "4. parameter has to be SWFShadow"
+                raise AttributeError("4. parameter has to be SWFShadow")
             self.this = mingc.newDropShadowFilter(arg1, arg2.this, arg3.this, arg4)
         elif type == SWFFILTER_TYPE_BLUR:
             #blur
             if not isinstance(arg1, SWFBlur):
-                raise AttributeError, "2. parameter has to be SWFBlur"
+                raise AttributeError("2. parameter has to be SWFBlur")
             self.this = mingc.newBlurFilter(arg1.this)
         elif type == SWFFILTER_TYPE_GLOW:
             #color, blur, strength, flags
             if not isinstance(arg2, SWFBlur):
-                raise AttributeError, "3. parameter has to be SWFBlur"
+                raise AttributeError("3. parameter has to be SWFBlur")
             self.this = mingc.newGlowFilter(arg1, arg2.this, arg3, arg4)
         elif type == SWFFILTER_TYPE_BEVEL:
             #shadowColor, highlightColor, blur, shadow, flags
             if not isinstance(arg3, SWFBlur):
-                raise AttributeError, "4. parameter has to be SWFBlur"
+                raise AttributeError("4. parameter has to be SWFBlur")
             if not isinstance(arg4, SWFShadow):
-                raise AttributeError, "5. parameter has to be SWFShadow"
+                raise AttributeError("5. parameter has to be SWFShadow")
             self.this = mingc.newBevelFilte(arg1, arg2, arg3.this, arg4.this, arg5)
         elif type == SWFFILTER_TYPE_GRADIENTGLOW:
             #gradient, blur, shadow, flags
             if not isinstance(arg1, SWFGradient):
-                raise AttributeError, "2. parameter has to be SWFGradient"
+                raise AttributeError("2. parameter has to be SWFGradient")
             if not isinstance(arg2, SWFBlur):
-                raise AttributeError, "3. parameter has to be SWFBlur"
+                raise AttributeError("3. parameter has to be SWFBlur")
             if not isinstance(arg3, SWFShadow):
-                raise AttributeError, "4. parameter has to be SWFShadow"
+                raise AttributeError("4. parameter has to be SWFShadow")
             self.this = mingc.newGradienGlowFilter(arg1.this, arg2.this, arg3.this, arg4)
         elif type == SWFFILTER_TYPE_COLORMATRIX:
             #colormatrix
             if not isinstance(arg1, SWFFilterMatrix):
-                raise AttributeError, "2. parameter has to be SWFFilterMatrix"
+                raise AttributeError("2. parameter has to be SWFFilterMatrix")
             self.this = mingc.newColorMatrixFilter(arg1.this)
         elif type == SWFFILTER_TYPE_CONVOLUTION:
             #colormatrix, divisor, bias, color, flags
             if not isinstance(arg1, SWFFilterMatrix):
-                raise AttributeError, "2. parameter has to be SWFFilterMatrix"
+                raise AttributeError("2. parameter has to be SWFFilterMatrix")
             self.this = mingc.newConvolutionFilter(arg1.this, arg2, arg3, arg4, arg5)
         elif type == SWFFILTER_TYPE_GRADIENTBEVEL:
             #gradient, blur, shadow, flags
             if not isinstance(arg1, SWFGradient):
-                raise AttributeError, "2. parameter has to be SWFGradient"
+                raise AttributeError("2. parameter has to be SWFGradient")
             if not isinstance(arg2, SWFBlur):
-                raise AttributeError, "3. parameter has to be SWFBlur"
+                raise AttributeError("3. parameter has to be SWFBlur")
             if not isinstance(arg3, SWFShadow):
-                raise AttributeError, "4. parameter has to be SWFShadow"
+                raise AttributeError("4. parameter has to be SWFShadow")
             self.this = mingc.newGradientBevelFilter(arg1.this, arg2.this, arg3.this, arg4)
         else:
-            raise AttributeError, "bad filter type to SWFFilter::new"
+            raise AttributeError("bad filter type to SWFFilter::new")
 
 class SWFMatrix(SWFBase):
     
@@ -230,7 +230,7 @@ class SWFShape(SWFBase):
             return SWFFill(mingc.SWFShape_addBitmapFill(self.this, arg1.this, arg2))
 
         else:
-            raise AttributeError, "bad argument to SWFShape::addFill"
+            raise AttributeError("bad argument to SWFShape::addFill")
 
     def setLeftFill(self, fill):
         mingc.SWFShape_setLeftFill(self.this, fill)
