@@ -1,7 +1,7 @@
 /*
   Ming, an SWF output library
 
-  Copyright (C) 2004-2011 Sandro Santilli <strk@keybit.net>
+  Copyright (C) 2004-2011 Sandro Santilli <strk@kbt.io>
   Copyright (C) 2006-2013 Stuart R. Anderson <anderson@netsweng.com>
   Copyright (C) 2004-2008 Klaus Rechert <klaus@rechert.de>
   Copyright (C) 2008      Frank M. Kromann <fmk@php.net>

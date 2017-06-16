@@ -1,7 +1,7 @@
 /*
     Ming, an SWF output library
 
-    Copyright (C) 2005-2009  Sandro Santilli <strk@keybit.net>
+    Copyright (C) 2005-2009  Sandro Santilli <strk@kbt.io>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public

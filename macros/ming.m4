@@ -17,7 +17,7 @@ dnl
 dnl
 
 # Configure paths for Ming
-# Author: Sandro Santilli <strk@keybit.net>
+# Author: Sandro Santilli <strk@kbt.io>
 #
 # This macro uses ming-config, which was
 # not available as of Ming 0.3beta1

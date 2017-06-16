@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *  Copyright (C) 2011      Sandro Santilli <strk@keybit.net>
+ *  Copyright (C) 2011      Sandro Santilli <strk@kbt.io>
  *  Copyright (C) 2005-2006 Stuart R. Anderson <anderson@netsweng.com>
  *  Copyright (C) 2001      Raffaele Sena
  *

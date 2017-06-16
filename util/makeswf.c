@@ -2,7 +2,7 @@
  *
  *  makeswf - a command line actionscript compiler
  *
- *  Copyright (C) 2003-2009 "Sandro Santilli" <strk@keybit.net>
+ *  Copyright (C) 2003-2009 "Sandro Santilli" <strk@kbt.io>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -327,7 +327,7 @@ main (int argc, char **argv)
 				break;
 			case 'V':
 				printf("%s\n", RCSID);
-				printf("Copyright (C) 2001-2006 \"Sandro Santilli\" <strk@keybit.net>.\n");
+				printf("Copyright (C) 2001-2006 \"Sandro Santilli\" <strk@kbt.io>.\n");
 				printf("Released under the GNU General Public License.\n");
 				exit(EXIT_SUCCESS);
 			case 'h':

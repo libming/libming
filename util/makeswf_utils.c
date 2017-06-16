@@ -2,7 +2,7 @@
  *
  *  makeswf - a command line actionscript compiler
  *
- *  Copyright (C) 2003-2009 "Sandro Santilli" <strk@keybit.net>
+ *  Copyright (C) 2003-2009 "Sandro Santilli" <strk@kbt.io>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
