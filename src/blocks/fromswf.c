@@ -752,21 +752,29 @@ static void fillstyle(TAG tp, int lev)
 	cod = tp->readc(tp);
 	switch(cod)
 	{	case 0:
-			if(verbose) printf("solid fill:\n"); break;
+			if(verbose) printf("solid fill:\n");
+			break;
 		case 0x10:
-			if(verbose) printf("linear gradient fill\n"); break;
+			if(verbose) printf("linear gradient fill\n");
+			break;
 		case 0x12:
-			if(verbose) printf("radial gradient fill:\n"); break;
+			if(verbose) printf("radial gradient fill:\n");
+			break;
 		case 0x13:
-			if(verbose) printf("focal gradient fill:\n"); break;
+			if(verbose) printf("focal gradient fill:\n");
+			break;
 		case 0x40:
-			if(verbose) printf("tiled bitmap fill:\n"); break;
+			if(verbose) printf("tiled bitmap fill:\n");
+			break;
 		case 0x41:
-			if(verbose) printf("clipped bitmap fill\n"); break;
+			if(verbose) printf("clipped bitmap fill\n");
+			break;
 		case 0x42:
-			if(verbose) printf("tilled bitmap fill with hard edges\n"); break;
+			if(verbose) printf("tilled bitmap fill with hard edges\n");
+			break;
 		case 0x43:
-			if(verbose) printf("clipped bitmap fill with hard edges\n"); break;
+			if(verbose) printf("clipped bitmap fill with hard edges\n");
+			break;
 	}
 	if(cod == 0)
 		if(lev >= 3) rgba((BITS) tp); else rgb((BITS) tp);
@@ -809,21 +817,29 @@ static void morphfillstyle(TAG tp)
 	cod = tp->readc(tp);
 	switch(cod)
 	{	case 0:
-			if(verbose) printf("solid fill:\n"); break;
+			if(verbose) printf("solid fill:\n");
+			break;
 		case 0x10:
-			if(verbose) printf("linear gradient fill\n"); break;
+			if(verbose) printf("linear gradient fill\n");
+			break;
 		case 0x12:
-			if(verbose) printf("radial gradient fill:\n"); break;
+			if(verbose) printf("radial gradient fill:\n");
+			break;
 		case 0x13:
-			if(verbose) printf("focal gradient fill:\n"); break;
+			if(verbose) printf("focal gradient fill:\n");
+			break;
 		case 0x40:
-			if(verbose) printf("tiled bitmap fill:\n"); break;
+			if(verbose) printf("tiled bitmap fill:\n");
+			break;
 		case 0x41:
-			if(verbose) printf("clipped bitmap fill\n"); break;
+			if(verbose) printf("clipped bitmap fill\n");
+			break;
 		case 0x42:
-			if(verbose) printf("tilled bitmap fill with hard edges\n"); break;
+			if(verbose) printf("tilled bitmap fill with hard edges\n");
+			break;
 		case 0x43:
-			if(verbose) printf("clipped bitmap fill with hard edges\n"); break;
+			if(verbose) printf("clipped bitmap fill with hard edges\n");
+			break;
 	}
 	if(cod == 0)
 	{	rgba((BITS) tp);
