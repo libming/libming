@@ -1,20 +1,4 @@
-LICENSE
---------
-
-This software is copyright 2001 E-Publishing Group Inc.  Permission is granted
-to use the code and/or make changes to the code provided that the original
-copyright and author attribution is included in each file. 
-
-The license does not make any warranty of liability, merchantability, or
-fitness for any specific purpose.
-
-Please contact the author <jshore@e-shuppan.com> if you have any questions
-about the license or the software.
-
-
-BUILDING
---------
-
+# Building 
 Build the java library and the native library, running make in the java 
 directory (the current directory) and "native" directory respectively.
 
@@ -24,23 +8,20 @@ placed anywhere (I typically put it in the same installation directory as
 my jar files).
 
 
-USING IT
---------
-
+# Using It
 To compile or run against this library should do the following (csh):
 
+```sh
    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:<directory-with-.so-files>
 
    java or javac -classpath <old-path>:<jar dir>/jswf.jar
-
+```
 
 Make sure you also include libming.so in the directory with your libjswf.so.
 Alternatively, add the ming library to your LD_LIBRARY_PATH.
 
 
-NOTES
------
-
+# Notes
 The Java class heirarchy and methods closely mirror the PHP and python
 interfaces. I've added some additional convenience functions and new
 functionality.
@@ -50,33 +31,16 @@ makes browsing the API easier and also allows for other implementations.
 Methods that result SWF objects will return SWF interfaces rather than the 
 explicit objects.  For example:
 
+```Java
 	SWFMovie movie = new SWFMovie();
 	...
 	SWFDisplayItemI item = movie.add (shape);
 	item.moveTo (23,30);
-
-The add method returns SWFDisplayItemI rather than SWFDisplayItem.  No big
+```
+	
+The add method returns ```SWFDisplayItemI``` rather than ```SWFDisplayItem```.  No big
 deal.  Just be aware that interfaces (identified with an "I" suffix) are
 used most of the time.
 
-
-EXTENDED API
-------------
-
-If you are interested in more advanced functionality, we have a not-yet 
-publicly available high-level API built on top of this.  Currently includes
-the following:
-
-  - supports wide variety of image formats (ming only supports jpeg and dbl)
-  - timeline & animation classes
-  - text and object align to arbitrary paths (and path animation)
-  - movie (mpeg, qt, avi, etc) to flash (in progress)
-  - others
-
-Please contact me if you would like more information about this.
-
-
-CONTACT
--------
-
-Jonathan Shore <jshore@e-shuppan.com>
+# Contact
+Jonathan Shore <jonathan.shore@gmail.com>
