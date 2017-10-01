@@ -253,7 +253,16 @@ static void readMovie(FILE *f)
 		{
 			if(filelen_check_fails(4))
 				break;
-			length = readUInt32 (f);
+			unsigned long real_length = readUInt32 (f);
+
+                        if (real_length > INT_MAX) {
+		            SWF_warn(" Could not process long block with length %lu:"
+                                     " blocks with length > %d not supported on this system\n",
+                                     real_length, INT_MAX);
+                            continue;
+                        } else {
+                            length = (int) real_length;
+                        }
 		}
 		
 		//      printf ("Found Block: %s (%i), %i bytes\n", blockName (type), type, length);

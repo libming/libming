@@ -163,7 +163,11 @@ long readSInt32(FILE *f)
 
 unsigned long readUInt32(FILE *f)
 {
-  return (unsigned long)(readUInt8(f) + (readUInt8(f)<<8) + (readUInt8(f)<<16) + (readUInt8(f)<<24));
+  int part1 = readUInt8(f);
+  int part2 = readUInt8(f) << 8;
+  int part3 = readUInt8(f) << 16;
+  unsigned long part4 = ((unsigned long)readUInt8(f)) << 24;
+  return part1 + part2 + part3 + part4;
 }
 
 double readDouble(FILE *f)

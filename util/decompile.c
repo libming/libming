@@ -2197,6 +2197,11 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 	int j,i=0;
 	struct strbufinfo origbuf;
 	OUT_BEGIN2(SWF_ACTIONIF);
+
+        if (sact->numActions < 1) {
+            return 0;
+        }
+
 	/*
 	* IF is used in various way to implement different types
 	* of loops. We try to detect these different types of loops
