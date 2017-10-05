@@ -1,6 +1,7 @@
 0.4.9-dev - YYYY-MM-DD
 
   * Fix potential DOS in decompilers (CVS-2017-8782, issue #70)
+  * Fix various overflows in util/ (CVE-2017-11704)
 
 0.4.8 - 2017-04-07
 
