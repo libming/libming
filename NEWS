@@ -2,8 +2,9 @@
 
   * Fix potential DOS in decompilers (CVS-2017-8782, issue #70)
   * Fix various overflows in util/ (CVE-2017-11704)
-  * Fix various overflows in OpCode and readBytes (CVE-2017-11728, CVE-2017-11729,
-    CVE-2017-11730 and CVE-2017-11731).
+  * Fix various overflows in OpCode and readBytes (CVE-2017-11728,
+    CVE-2017-11729, CVE-2017-11730 and CVE-2017-11731, issues #79,
+    #81, #81 and #84).
 
 0.4.8 - 2017-04-07
 
