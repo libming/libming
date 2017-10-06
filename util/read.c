@@ -226,6 +226,14 @@ float readFloat(FILE *f)
 
 char *readBytes(FILE *f,int size)
 {
+
+  if (size < 1) {
+#if DEBUG
+    SWF_warn("readBytes: want to read %i < 1 bytes: Handling a 0\n", size);
+#endif
+    size = 0;
+  }
+
   int i;
   char *buf;
 
