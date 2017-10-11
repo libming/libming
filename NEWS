@@ -7,6 +7,8 @@
     #81, #81 and #84).
   * Fix heap buffer overflow in decompileCALLFUNCTION (CVE-2017-11734,
     issue #83).
+  * Add checks to avoid null pointer dereference in util/parser.c
+    (CVE-2017-9988, issue #85)
 
 0.4.8 - 2017-04-07
 
