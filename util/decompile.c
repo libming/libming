@@ -2873,7 +2873,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions, int maxn)
 	struct SWF_ACTIONPUSHPARAM *meth, *nparam;
 
 	SanityCheck(SWF_CALLMETHOD,
-		actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
+		n > 0 && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
 		"CALLMETHOD not preceeded by PUSH")
 
 	meth=pop();

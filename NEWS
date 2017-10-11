@@ -5,6 +5,8 @@
   * Fix various overflows in OpCode and readBytes (CVE-2017-11728,
     CVE-2017-11729, CVE-2017-11730 and CVE-2017-11731, issues #79,
     #81, #81 and #84).
+  * Fix heap buffer overflow in decompileCALLFUNCTION (CVE-2017-11734,
+    issue #83).
 
 0.4.8 - 2017-04-07
 
