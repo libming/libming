@@ -9,6 +9,8 @@
     issue #83).
   * Add checks to avoid null pointer dereference in util/parser.c
     (CVE-2017-9988, issue #85)
+  * Change type of size variable in readBytes (int->unsigned long) to
+    avoid overflow when passing U30 integers (CVE-2017-9989, issue #86).
 
 0.4.8 - 2017-04-07
 

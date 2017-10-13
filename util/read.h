@@ -20,7 +20,7 @@ long readSInt32(FILE *f);
 unsigned long readEncUInt32(FILE *f);
 unsigned long readEncUInt30(FILE *f);
 long readEncSInt32(FILE *f);
-char *readBytes(FILE *f,int size);
+char *readBytes(FILE *f,unsigned long size);
 char *readString(FILE *f);
 char *readSizedString(FILE *f,int size);
 double readDouble(FILE *f);
