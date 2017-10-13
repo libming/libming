@@ -239,6 +239,11 @@ char *readBytes(FILE *f, unsigned long size)
 
   buf = (char *)malloc(sizeof(char)*size);
 
+  if (buf == NULL) {
+    fprintf(stderr, "readBytes: Failed to allocate %lu bytes", sizeof(char) * size);
+    exit(-1);
+  }
+
   for(i=0;i<size;i++)
   {
     buf[i]=(char)readUInt8(f);
