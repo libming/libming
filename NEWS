@@ -16,6 +16,8 @@
   * Rewrite readSInt16, readUInt16 and readSInt32 (util/read.h) to avoid
     undefined behavior (order of evaluation is not guaranteed in the C
     standard).
+  * Un-define DEBUGSTACK in util/decompile.c (return cleanly when stack
+    is NULL).
 
 0.4.8 - 2017-04-07
 

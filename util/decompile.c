@@ -20,7 +20,7 @@
 
 #define _GNU_SOURCE 1
 
-#define DEBUGSTACK
+//#define DEBUGSTACK
 #define DECOMP_SWITCH
 // #define DEBUGSWITCH
 
