@@ -148,26 +148,38 @@ int readSInt8(FILE *f)
 
 int readSInt16(FILE *f)
 {
-  return readUInt8(f) + readSInt8(f)*256;
+  int result = 0;
+  result |= readUInt8(f);
+  result |= readSInt8(f) << 8;
+  return result;
 }
 
-int readUInt16(FILE *f)
+unsigned int readUInt16(FILE *f)
 {
-  return readUInt8(f) + (readUInt8(f)<<8);
+  unsigned int result = 0u;
+  result |= readUInt8(f);
+  result |= readUInt8(f) << 8;
+  return result;
 }
 
 long readSInt32(FILE *f)
 {
-  return (long)readUInt8(f) + (readUInt8(f)<<8) + (readUInt8(f)<<16) + (readUInt8(f)<<24);
+  long result = 0;
+  result |= readUInt8(f);
+  result |= readUInt8(f) << 8;
+  result |= readUInt8(f) << 16;
+  result |= readUInt8(f) << 24;
+  return result;
 }
 
 unsigned long readUInt32(FILE *f)
 {
-  int part1 = readUInt8(f);
-  int part2 = readUInt8(f) << 8;
-  int part3 = readUInt8(f) << 16;
-  unsigned long part4 = ((unsigned long)readUInt8(f)) << 24;
-  return part1 + part2 + part3 + part4;
+  unsigned long result = 0u;
+  result |= readUInt8(f);
+  result |= readUInt8(f) << 8;
+  result |= readUInt8(f) << 16;
+  result |= readUInt8(f) << 24;
+  return result;
 }
 
 double readDouble(FILE *f)
