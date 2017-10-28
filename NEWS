@@ -11,6 +11,13 @@
     (CVE-2017-9988, issue #85)
   * Change type of size variable in readBytes (int->unsigned long) to
     avoid overflow when passing U30 integers (CVE-2017-9989, issue #86).
+  * Add checks to avoid processing stackswap when stack only contains
+    one element (CVE-2017-11733, issue #78).
+  * Rewrite readSInt16, readUInt16 and readSInt32 (util/read.h) to avoid
+    undefined behavior (order of evaluation is not guaranteed in the C
+    standard).
+  * Un-define DEBUGSTACK in util/decompile.c (return cleanly when stack
+    is NULL).
 
 0.4.8 - 2017-04-07
 
