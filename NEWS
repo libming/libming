@@ -18,6 +18,8 @@
     standard).
   * Un-define DEBUGSTACK in util/decompile.c (return cleanly when stack
     is NULL).
+  * Fix NULL pointer dereference in outputSWF_TEXT_RECORD (CVE-2017-16883,
+    issue #94)
 
 0.4.8 - 2017-04-07
 

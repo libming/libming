@@ -1426,7 +1426,11 @@ outputSWF_TEXT_RECORD (SWF_TEXTRECORD *trec, int level,char *tname,char *buffer,
   if (!trec->StyleFlagHasFont)				/* always check flag before use data */
   {
    fi = fip_current;					/* so cont w current font */
-   id = fi->fontcodeID;					/* trigger next if */
+
+   if (!fi)
+      SWF_warn("outputSWF_TEXT_RECORD: can't process text record: fonts information list is NULL\n");
+   else
+      id = fi->fontcodeID;					/* trigger next if */
   }
   while (fi)
   {
