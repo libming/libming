@@ -20,6 +20,8 @@
     is NULL).
   * Fix NULL pointer dereference in outputSWF_TEXT_RECORD (CVE-2017-16883,
     issue #94)
+  * Fix heap buffer overflow in dcputs (global buffer missing \0 character)
+    (CVE-2017-11732, issue #80)
 
 0.4.8 - 2017-04-07
 
