@@ -22,6 +22,8 @@
     issue #94)
   * Fix heap buffer overflow in dcputs (global buffer missing \0 character)
     (CVE-2017-11732, issue #80)
+  * Fix global buffer overflow in printMP3Headers (invalid bitrate 15 not
+    detected) (CVE-2017-16898, issue #75).
 
 0.4.8 - 2017-04-07
 
