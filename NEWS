@@ -24,6 +24,8 @@
     (CVE-2017-11732, issue #80)
   * Fix global buffer overflow in printMP3Headers (invalid bitrate 15 not
     detected) (CVE-2017-16898, issue #75).
+  * Fix integer overflow vulnerability in util/read.c (out-of-range left
+    shift in readUInt32) (CVE-2018-5251, issue #98)
 
 0.4.8 - 2017-04-07
 
