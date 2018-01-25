@@ -28,6 +28,7 @@
     shift in readUInt32) (CVE-2018-5251, issue #98)
   * Fix left shift of a negative value in util/read.c (left shift of a
     negative value in readSBits) (CVE-2018-5294, issue #97)
+  * Fix buffer overflow in outputSWF_TEXT_RECORD (CVE-2018-6315, issue #101)
 
 0.4.8 - 2017-04-07
 
