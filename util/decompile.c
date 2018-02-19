@@ -1196,7 +1196,7 @@ decompileArithmeticOp(int n, SWF_ACTION *actions, int maxn)
 		}
 	default:
 		printf("Unhandled Arithmetic/Logic OP %x\n",
-			actions[n].SWF_ACTIONRECORD.ActionCode);
+			OpCode(actions, n, maxn));
 	}
 	return 0;
 }
@@ -1232,7 +1232,7 @@ isLogicalOp(int n, SWF_ACTION *actions, int maxn)
 static int 
 isLogicalOp2(int n, SWF_ACTION *actions,int maxn)
 {
-	switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+	switch(OpCode(actions, n, maxn))
 	{
 	case SWFACTION_LOGICALNOT:
 	case SWFACTION_PUSHDUP:
@@ -2098,7 +2098,7 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 #ifdef DEBUGSWITCH
 				println("in ccsize: ccsize=%d  off=%d %s",
 				        ccsize,actions[ccsize+start].SWF_ACTIONRECORD.Offset,
-				        actionName(actions[ccsize+start].SWF_ACTIONRECORD.ActionCode));
+				        actionName(OpCode(actions, ccsize+start, maxn)));
 #endif
 				if (OpCode(actions, ccsize+start, maxn) == SWFACTION_JUMP)
 				{
@@ -2125,7 +2125,7 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 			}
 			pend=start;
 #endif
-			if (actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP)
+			if (OpCode(actions, i, maxn) == SWFACTION_JUMP)
 			{
 				if (ccsize<=1)
 					break;	// ready
@@ -2164,23 +2164,23 @@ decompile_SWITCH(int n, SWF_ACTION *actions, int maxn, int off1end)
 			tmp=switchToOrigString(origbuf);
 #endif
 
-			if (actions[i].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP)		// after "default:"
+			if (OpCode(actions, i, maxn) == SWFACTION_JUMP)		// after "default:"
 			{
 				break;     							// ready
 			}
 			else
 			{
-				if (actions[i+1].SWF_ACTIONRECORD.ActionCode!=SWFACTION_JUMP) 	// not before "default:" or end
+				if (OpCode(actions, i+1, maxn) != SWFACTION_JUMP) 	// not before "default:" or end
 				{
 					i++; // the 'if' itself
 					cvsize=0;
 					while (i+cvsize < n_firstactions 
-					       && actions[i+cvsize].SWF_ACTIONRECORD.ActionCode!=SWFACTION_STRICTEQUALS)
+					       && OpCode(actions, i+cvsize, maxn) != SWFACTION_STRICTEQUALS)
 					{
 #ifdef DEBUGSWITCH
 						println("in  cvsize=%d  %d %s",
 						        cvsize, actions[i+cvsize].SWF_ACTIONRECORD.Offset,
-						        actionName(actions[i+cvsize].SWF_ACTIONRECORD.ActionCode));
+						        actionName(OpCode(actions, i+cvsize, maxn)));
 #endif
 							cvsize++;	// count "case X:" code size
 					}
@@ -2357,7 +2357,7 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 		/* if on a level >0 we can check for any outer loop 
 		   To do: get the level on a better way than using gIndent */
 		if (gIndent	
-		    && actions[maxn-1].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP
+		    && OpCode(actions, maxn-1, maxn) == SWFACTION_JUMP
 	  	    && actions[maxn-1].SWF_ACTIONJUMP.Offset+actions[maxn].SWF_ACTIONJUMP.BranchOffset==
 	               sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.Offset+sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset)
 		{      
@@ -2404,7 +2404,7 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 			    else_action_cnt++)
 			{
 #if SOME_IF_DEBUG
-				println("/* ELSE OP 0x%x at %d*/",actions[n+1+else_action_cnt].SWF_ACTIONRECORD.ActionCode,
+				println("/* ELSE OP 0x%x at %d*/", OpCode(actions, n+1+else_action_cnt, maxn),
 				actions[n+1+else_action_cnt].SWF_ACTIONRECORD.Offset)
 #endif
 				;
@@ -2427,7 +2427,7 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 			}
 			for (j=0;j<else_action_cnt;j++)
 			{
-				if (actions[n+j].SWF_ACTIONRECORD.ActionCode==SWFACTION_JUMP) // perhaps more ops
+				if (OpCode(actions, n+j, maxn) == SWFACTION_JUMP) // perhaps more ops
 				{
 					sbe=i=has_else_or_break=0;
 					break;
@@ -2533,7 +2533,7 @@ decompileIF(int n, SWF_ACTION *actions, int maxn)
 			int limit=actions[n+1].SWF_ACTIONRECORD.Offset + sact->Actions[sact->numActions-1].SWF_ACTIONJUMP.BranchOffset;
 			// limit == dest of jmp == offset next op after 'if' + jumpdist at end of 'if'
 			int lastopsize=actions[maxn-1].SWF_ACTIONRECORD.Length;
-			if (actions[maxn-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_IF)
+			if (OpCode(actions, maxn-1, maxn) == SWFACTION_IF)
 				lastopsize+=actions[maxn-1].SWF_ACTIONIF.BranchOffset + 3; /* +3 see parser.c: "Action + Length bytes not included in the length" */
 			
 			if (offseoloop 
@@ -2880,8 +2880,7 @@ decompileCALLFUNCTION(int n, SWF_ACTION *actions, int maxn)
 {
 	struct SWF_ACTIONPUSHPARAM *meth, *nparam;
 
-	SanityCheck(SWF_CALLMETHOD,
-		n > 0 && actions[n-1].SWF_ACTIONRECORD.ActionCode == SWFACTION_PUSH,
+	SanityCheck(SWF_CALLMETHOD, OpCode(actions, n-1, maxn) == SWFACTION_PUSH,
 		"CALLMETHOD not preceeded by PUSH")
 
 	meth=pop();
