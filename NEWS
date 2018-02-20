@@ -29,6 +29,10 @@
   * Fix left shift of a negative value in util/read.c (left shift of a
     negative value in readSBits) (CVE-2018-5294, issue #97)
   * Fix buffer overflow in outputSWF_TEXT_RECORD (CVE-2018-6315, issue #101)
+  * Fix heap-use-after-free in decompileIF (CVE-2018-6359, issue #105)
+  * Use OpCode function instead of directly accessing actions array without
+    checks in util/decompile.c. This is potentially avoiding numerous
+    issues similar to #105 or #83.
 
 0.4.8 - 2017-04-07
 
