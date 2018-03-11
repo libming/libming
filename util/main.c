@@ -234,14 +234,10 @@ static int readMovieHeader(FILE *f, int *compressed)
 
 static void readMovie(FILE *f)
 {
-	int block, type, blockstart, blockoffset, length, nextFrame=0;
+	int block, type, length, nextFrame=0;
 	SWF_Parserstruct *blockp;
 	for (;;)
 	{
-		blockoffset = fileOffset;
-
-		// printf ("Block offset: %d %d\n", fileOffset, m.size);
-
 		if(filelen_check_fails(2))
 			break;
 		block = readUInt16 (f);
@@ -266,7 +262,6 @@ static void readMovie(FILE *f)
 		}
 		
 		//      printf ("Found Block: %s (%i), %i bytes\n", blockName (type), type, length);
-		blockstart = fileOffset;
 		nextFrame = fileOffset+length;
 		
 		if(filelen_check_fails(length))

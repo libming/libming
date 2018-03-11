@@ -168,7 +168,6 @@ int printShapeRec(FILE *f, int *lineBits, int *fillBits, int shapeType)
 void printDefineFont2(FILE *f)
 {
   int flags, nGlyphs, namelen, off, i, fillBits, lineBits;
-  int here = fileOffset;
   unsigned int *offset;
 
   flags = readUInt8(f);
@@ -191,8 +190,6 @@ void printDefineFont2(FILE *f)
 
   /* offset table */
 
-  here = fileOffset;
-
   for(i=0; i<nGlyphs; ++i)
   {
     if(flags & FONTINFO2_WIDEOFFSETS)
@@ -203,8 +200,6 @@ void printDefineFont2(FILE *f)
     offset[i] = off-nGlyphs*4-4;
     printf("%sOffset%i: %i\n", indent(), i, offset[i]);
   }
-
-  here = fileOffset;
 
   /* shape table */
   for(i=0; i<nGlyphs; ++i)
