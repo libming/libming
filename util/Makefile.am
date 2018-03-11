@@ -100,7 +100,7 @@ listaction_d_LDADD = libutil.la $(top_builddir)/src/libming.la
 listaction_d_CFLAGS = -DACTIONONLY 
 
 listfdb_SOURCES = listfdb.c
-listfdb_LDADD = $(top_builddir)/src/libming.la
+listfdb_LDADD = libutil.la $(top_builddir)/src/libming.la
 
 raw2adpcm_SOURCES = raw2adpcm.c
 raw2adpcm_LDADD = $(top_builddir)/src/libming.la
