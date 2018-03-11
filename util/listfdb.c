@@ -394,7 +394,7 @@ void printDefineFont2(FILE *f)
 
   here = fileOffset;
 
-  for(i=0; i<=nGlyphs; ++i)
+  for(i=0; i<nGlyphs; ++i)
   {
     if(flags & FONTINFO2_WIDEOFFSETS)
       off = readUInt32(f);

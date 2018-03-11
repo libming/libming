@@ -33,6 +33,7 @@
   * Use OpCode function instead of directly accessing actions array without
     checks in util/decompile.c. This is potentially avoiding numerous
     issues similar to #105 or #83.
+  * Fix heap buffer overflow in listfdb.c (issue #104).
 
 0.4.8 - 2017-04-07
 
