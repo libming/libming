@@ -311,6 +311,11 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
 	switch( act->Type ) 
 	{
 	case PUSH_STRING: 
+		if (!act->p.String) /* Not a NULL string */
+		{
+		        SWF_warn("WARNING: Call to getString with NULL string.\n");
+		        break;
+		}
 		t=malloc(strlen(act->p.String)+3); /* 2 "'"s and a NULL */
 		strcpy(t,"'");
 		strcat(t,act->p.String);
@@ -392,17 +397,24 @@ getName(struct SWF_ACTIONPUSHPARAM *act)
 	switch( act->Type ) 	
 	{
 	case PUSH_STRING: /* STRING */
-		t=malloc(strlen(act->p.String)+3); 
-		/*
-		strcpy(t,"\"");
-		strcat(t,act->p.String);
-		strcat(t,"\"");
-		*/
-		strcpy(t,act->p.String);
-		if(strlen(t)) /* Not a zero length string */
-			return t;
+		if (!act->p.String) /* Not a NULL string */
+		{
+		        SWF_warn("WARNING: Call to getName with NULL string.\n");
+		        break;
+		}
+		else if (strlen(act->p.String)) /* Not a zero length string */
+		{
+		        t=malloc(strlen(act->p.String)+3);
+		        strcpyext(t,act->p.String);
+		        return t;
+		}
 		else
-			return "this";
+		{
+		        char *return_string = "this";
+	                t=malloc(strlen(return_string)+1); /* string length + \0 */
+	                strcpyext(t,return_string);
+			return t;
+		}
 #if 0
 	  case 4: /* REGISTER */
                 t=malloc(4); /* Rdd */
