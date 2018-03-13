@@ -36,6 +36,9 @@
   * Fix heap buffer overflow in listfdb.c (issue #104).
   * Fix code duplication issue in listfdb (issues #106 and #107).
   * Fix various compiler warnings.
+  * Fix heap buffer overflows happening when accessing the constant pool in
+    decompile.c (CVE-2018-7875, CVE-2018-7871, CVE-2018-7870, CVE-2018-7872,
+    CVE-2018-7868, issues #112, #113, #114, #117, #120, #122 and #123).
 
 0.4.8 - 2017-04-07
 
