@@ -78,3 +78,7 @@ Albrecht Kleine
 
 Balint Reczey <balint@balintreczey.hu>
      Security fixes for CVEs of 2017
+
+Hugo Lefeuvre <hle@owl.eu.com>
+    Lots of security fixes for CVEs of 2017/2018 in
+    decompiler.
