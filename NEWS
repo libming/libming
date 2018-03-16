@@ -41,6 +41,7 @@
     CVE-2018-7868, issues #112, #113, #114, #117, #120, #122 and #123).
   * Fix NULL pointer dereference happening when calling getName and getString
     with empty acts (NULL act->p.String) (issue #121).
+  * Fix heap-buffer-overflow in getString (CVE-2018-7867, issue #116).
 
 0.4.8 - 2017-04-07
 
