@@ -618,7 +618,19 @@ pushdup()
 	}
 	t = calloc(1,sizeof(*Stack));
 	t->type = Stack->type;
-	t->val =  Stack->val;
+
+	// If element is a string, perform deep copy of Stack->val->p
+	if (Stack->val->Type == PUSH_STRING) {
+		t->val = calloc(1, sizeof(struct SWF_ACTIONPUSHPARAM));
+		*t->val = *Stack->val;
+
+		int len = strlen(Stack->val->p.String) + 1; // NULL terminated
+		t->val->p.String = calloc(len, sizeof(char));
+		strcpy(t->val->p.String, Stack->val->p.String);
+	} else {
+		t->val =  Stack->val;
+	}
+
 	t->next = Stack;
 	Stack = t;
 }
