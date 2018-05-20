@@ -213,11 +213,11 @@ EOF
 	}
 }
 
-## Find Ming version inside the configure.in found in the directory
+## Find Ming version inside the configure.ac found in the directory
 ## given as first argument
 sub get_ming_version{
 	my $d = shift;
-	my $filename = shift || "configure.in";
+	my $filename = shift || "configure.ac";
 
 	my $file = "$d/$filename";
 	print "Checking $file\n";
