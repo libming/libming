@@ -43,6 +43,7 @@
     with empty acts (NULL act->p.String). Perform deep copy in pushdup,
     instead of shallow copy (issue #121).
   * Fix heap-buffer-overflow in getString (CVE-2018-7867, issue #116).
+  * Fix null pointer dereference in getInt (CVE-2018-9132, issue #133).
 
 0.4.8 - 2017-04-07
 
