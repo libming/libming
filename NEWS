@@ -44,6 +44,7 @@
     instead of shallow copy (issue #121).
   * Fix heap-buffer-overflow in getString (CVE-2018-7867, issue #116).
   * Fix null pointer dereference in getInt (CVE-2018-9132, issue #133).
+  * Fix heap-use-after-free in decompileJUMP (CVE-2018-9009, issue #131).
 
 0.4.8 - 2017-04-07
 
