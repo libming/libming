@@ -47,6 +47,7 @@
   * Fix heap-use-after-free in decompileJUMP (CVE-2018-9009, issue #131).
   * Fix memory exhaustion in parseSWF_ACTIONRECORD (CVE-2018-7876, #109).
   * Fix heap-buffer-overflow in function getString (CVE-2018-7873, #111).
+  * Fix null pointer dereference in newVar3 (CVE-2018-7866, #118).
 
 0.4.8 - 2017-04-07
 
