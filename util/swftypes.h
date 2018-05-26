@@ -363,7 +363,7 @@ struct SWF_ACTIONDEFINEFUNCTION {
 	UI16	Length;
 	UI32	Offset;
 	STRING	FunctionName;
-	WORD	NumParams;
+	UI16    NumParams;
 	STRING	*Params;
 	WORD	CodeSize;
 	int	numActions;
