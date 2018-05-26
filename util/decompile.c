@@ -481,7 +481,15 @@ getInt(struct SWF_ACTIONPUSHPARAM *act)
 	case PUSH_NULL: /* NULL */
 		return 0;
 	case PUSH_REGISTER: /* REGISTER */
-		return getInt(regs[act->p.RegisterNumber]);
+		if (regs[act->p.RegisterNumber])
+		{
+			return getInt(regs[act->p.RegisterNumber]);
+		}
+		else
+		{
+			SWF_warn("WARNING: retrieving undefined register values.\n");
+			break;
+		}
 	case PUSH_DOUBLE: /* DOUBLE */
 		return (int)act->p.Double;
 	case PUSH_INT: /* INTEGER */
