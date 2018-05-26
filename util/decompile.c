@@ -358,9 +358,19 @@ getString(struct SWF_ACTIONPUSHPARAM *act)
 		return t;
 	}
 	case PUSH_INT: /* INTEGER */
-		t=malloc(10); /* 32-bit decimal */
-		sprintf(t,"%ld", act->p.Integer );
+	{
+		char length_finder[1];
+		int needed_length = snprintf(length_finder, 1, "%ld", act->p.Integer) + 1;
+		if (needed_length <= 0)
+		{
+		        SWF_warn("WARNING: could not evaluate size of buffer (memory issue ?).\n");
+		        break;
+		}
+
+		t = malloc(needed_length);
+		sprintf(t, "%ld", act->p.Integer );
 		return t;
+	}
 	case PUSH_CONSTANT: /* CONSTANT8 */
 		if (act->p.Constant8 > poolcounter)
 		{
