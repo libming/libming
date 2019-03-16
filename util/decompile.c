@@ -3202,7 +3202,6 @@ decompileCAST(int n, SWF_ACTION *actions, int maxn)
 int
 decompileAction(int n, SWF_ACTION *actions, int maxn)
 {
-	if( n > maxn ) SWF_error("Action overflow!!");
 
 #ifdef DEBUG
 	fprintf(stderr,"%d:\tACTION[%3.3d]: %s\n",
@@ -3210,7 +3209,7 @@ decompileAction(int n, SWF_ACTION *actions, int maxn)
 	        actionName(actions[n].SWF_ACTIONRECORD.ActionCode));
 #endif
 
-	switch(actions[n].SWF_ACTIONRECORD.ActionCode)
+	switch(OpCode(actions, n, maxn))
 	{
 	case SWFACTION_END:
 		return 0;
