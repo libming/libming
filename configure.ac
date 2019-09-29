@@ -160,10 +160,13 @@ $HOME/lib \
 /usr/local/lib \
 /usr/lib64 \
 /usr/lib \
+/usr/lib/x86_64-linux-gnu \
+/usr/lib/i386-linux-gnu \
+/usr/lib/ia64-linux-gnu \
 `dirname $tclbindir`/lib"
 
 	for i in $tcllibdirs_default; do
-	  for suf in 8.3 8.4 ""; do
+	  for suf in 8.3 8.4 8.6 ""; do
 	    if test -f $i/libtcl$suf.so || test -f $i/libtcl$suf.a; then
 	     TCL_LIB_DIR=$i
 	     break
