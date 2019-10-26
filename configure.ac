@@ -32,6 +32,8 @@ AC_SUBST(INTERFACE_AGE)
 dnl GNU recommended way to determine host variables (OS, etc)
 AC_CANONICAL_HOST
 
+PYTHON_NOVERSIONCHECK="YES"
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
