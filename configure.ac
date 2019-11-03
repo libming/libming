@@ -166,10 +166,16 @@ $HOME/lib \
 `dirname $tclbindir`/lib"
 
 	for i in $tcllibdirs_default; do
-	  for suf in 8.3 8.4 ""; do
-	    if test -f $i/libtcl$suf.so || test -f $i/libtcl$suf.a; then
-	     TCL_LIB_DIR=$i
-	     break
+	  	for suf in "" 8.6 8.5 8.4 8.3; do
+	    j="`find $i -name libtcl${suf}.so -print -quit 2>/dev/null`"
+        if test -z "$j"; then
+            j="`find $i -name libtcl${suf}.a -print -quit 2>/dev/null`"
+        fi
+	    if test -n "$j"; then
+            if test -f "$j"; then
+	            TCL_LIB_DIR=`dirname $j`
+	            break
+            fi
 	    fi
 	  done
 	done
