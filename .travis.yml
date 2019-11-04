@@ -1,7 +1,7 @@
 dist: xenial
 
 before_install:
-  - sudo apt-get update && sudo apt-get install php5-dev php5-cli
+  - sudo apt-get update && sudo apt-get install php7-dev php7-cli
   - ./autogen.sh
 
 language: c
