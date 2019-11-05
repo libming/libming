@@ -11,6 +11,7 @@ before_install:
   - sudo apt-get -fmy install php-dev
   - sudo apt-get -fmy install tcl
   - sudo apt-get -fmy install tcllib*
+  - sudo apt-get -fmy install swig
   - ./autogen.sh
 
 language: c
