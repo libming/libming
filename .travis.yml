@@ -2,15 +2,15 @@ dist: xenial
 
 before_install:
   - sudo apt-get update
-  - apt-get -fmy install php
-  - apt-get -fmy install php-all-dev
-  - apt-get -fmy install php-cgi
-  - apt-get -fmy install php-cli
-  - apt-get -fmy install php-common
-  - apt-get -fmy install php-curl
-  - apt-get -fmy install php-dev
-  - apt-get -fmy install tcl
-  - apt-get -fmy install tcllib*
+  - sudo apt-get -fmy install php
+  - sudo apt-get -fmy install php-all-dev
+  - sudo apt-get -fmy install php-cgi
+  - sudo apt-get -fmy install php-cli
+  - sudo apt-get -fmy install php-common
+  - sudo apt-get -fmy install php-curl
+  - sudo apt-get -fmy install php-dev
+  - sudo apt-get -fmy install tcl
+  - sudo apt-get -fmy install tcllib*
   - ./autogen.sh
 
 language: c
