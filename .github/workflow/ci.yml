@@ -1,0 +1,28 @@
+on: [ push, pull_request ]
+
+jobs:
+
+  test:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: [ ubuntu-18.04 ]
+
+    env:
+      # Make apt non-interactive by default, and not showing progress
+      APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo ${APT} -qq update
+        sudo ${APT} install php5-dev php5-cli
+    - name: Build
+      run: |
+        ./autogen.sh
+        ./configure --enable-php
+        make
+    - name: Check
+      run: |
+        make check
