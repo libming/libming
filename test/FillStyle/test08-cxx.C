@@ -1,7 +1,7 @@
 #include <mingpp.h>
 #include <cstdlib>
 
-main(){
+int main(){
 
 	try {
 		SWFMovie* m = new SWFMovie(8);

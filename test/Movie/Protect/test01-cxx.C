@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 
-main(){
+int main(){
 try {
 SWFMovie* m = new SWFMovie();
 
