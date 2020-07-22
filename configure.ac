@@ -6,13 +6,16 @@ MAJOR_VERSION=0
 MINOR_VERSION=4
 MICRO_VERSION=9-dev
 
+AC_CONFIG_MACRO_DIRS([macros])
+
 MING_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
 AC_CONFIG_AUX_DIR(config)
 
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE
+
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AM_MAINTAINER_MODE
@@ -163,12 +166,18 @@ $HOME/lib \
 `dirname $tclbindir`/lib"
 
 	for i in $tcllibdirs_default; do
-	  for suf in 8.3 8.4 ""; do
-	    if test -f $i/libtcl$suf.so || test -f $i/libtcl$suf.a; then
-	     TCL_LIB_DIR=$i
-	     break
-	    fi
-	  done
+	    for suf in "" 8.6 8.5 8.4 8.3; do
+	        j="`find $i -name libtcl${suf}.so -print -quit 2>/dev/null`"
+            if test -z "$j"; then
+                j="`find $i -name libtcl${suf}.a -print -quit 2>/dev/null`"
+            fi
+	        if test -n "$j"; then
+                if test -f "$j"; then
+	                TCL_LIB_DIR=`dirname $j`
+	                break
+                fi
+	        fi
+	    done
 	done
 
 	if test -z "$TCL_LIB_DIR"; then

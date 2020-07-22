@@ -1,6 +1,6 @@
 
 
-INCLUDES = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src
 
 if USE_GIF
 if USE_ZLIB
