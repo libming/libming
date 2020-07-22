@@ -2003,7 +2003,7 @@ outputHeader (struct Movie *m)
 #endif
 #ifdef SWFPLUSPLUS
   printf ("#include <mingpp.h>\n");
-  printf ("\n\nmain(){\n");
+  printf ("\n\nint main(){\n");
   if( m->version == 5 ) 
   	printf ("%s();\n\n", newobj ("m", "Movie"));
   else
