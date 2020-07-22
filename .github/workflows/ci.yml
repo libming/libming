@@ -19,7 +19,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo ${APT} -qq update
-        sudo ${APT} install php5-dev php5-cli
+        sudo ${APT} install \
+          php-dev \
+          php-cli
     - name: Build
       run: |
         ./autogen.sh
