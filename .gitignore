@@ -19,6 +19,9 @@ libming.so
 libtool
 configure
 .project
+config/compile
+config/depcomp
+config/missing
 config/test-driver
 *.log
 *.trs
