@@ -1,9 +1,9 @@
 
 MING THE MODULE
 
-[![Build Status](http://travis-ci.org/libming/libming.png)](http://travis-ci.org/libming/libming)
+![CI](https://github.com/libming/libming/workflows/CI/badge.svg)
 
-Last updated 09th January 2014.
+Last updated 22nd July 2020.
 
 Ming is a Flash (SWF) output library.  It can be used from PHP, Perl,
 Ruby, Python, C, C++, Java, and probably more on the way.
@@ -29,11 +29,11 @@ welcome.
 The C++ wrapper is just one big header file.  But it seems to work pretty
 well.  Check the examples directory.
 
-Ming is released under the LGPL. See file LICENSE for the gory details.
-The command-line actionscript compiler is released under the GPL. See
-file LICENSE_GPL2 for details.
+Ming is released under the `LGPL`. See file `LICENSE` for the gory details.
+The command-line actionscript compiler is released under the `GPL`. See
+file `LICENSE_GPL2` for details.
 
-For installation instructions, see the INSTALL text file.
+For installation instructions, see the `INSTALL` text file.
 
 The Ming Development Team
 http://www.libming.org
