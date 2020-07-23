@@ -73,8 +73,6 @@ if test x"$python_ext" = xyes; then
 	if test x"$PYTHON" = x; then
 		AC_MSG_ERROR([Can't build python extension, as python executable could not be found])
 	fi
-	
-	AC_PYTHON_DEVEL
 fi
 
 AM_CONDITIONAL(BUILD_PYTHON_EXTENSION, test x"$python_ext" = xyes)
