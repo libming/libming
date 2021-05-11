@@ -8,14 +8,17 @@ bail_out()
 	exit 1
 }
 
-echo "Running libtoolize -f -c"
-libtoolize -f -c || bail_out
+LIBTOOLIZE=libtoolize
+command -v $LIBTOOLIZE >/dev/null 2>&1 || LIBTOOLIZE=glibtoolize
+
+echo "Running $LIBTOOLIZE -f -c"
+$LIBTOOLIZE -f -c || bail_out
 
 echo "Running aclocal -I macros"
 aclocal -I macros || bail_out
 
-echo "Running libtoolize --automake"
-libtoolize --automake || bail_out
+echo "Running $LIBTOOLIZE --automake"
+$LIBTOOLIZE --automake || bail_out
 
 echo "Running autoheader -f"
 autoheader -f || bail_out
