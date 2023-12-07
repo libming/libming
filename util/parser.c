@@ -31,6 +31,9 @@
 #include "read.h"
 #include "blocks/error.h"
 
+/*This will be used for checking memory leakages*/
+#include <sys/mman.h>
+
 extern struct Movie m;
 extern SWF_Parserstruct *blockParse (FILE *f, int length, SWFBlocktype header);
 const char *blockName (SWFBlocktype header);
@@ -244,6 +247,13 @@ parseSWF_GLYPHENTRY (FILE * f, SWF_GLYPHENTRY *gerec, int glyphbits, int advance
   unsigned int i;
 
   size_t nmalloc = ( glyphbits < 1 ? 1 : ((glyphbits+31)/32) ) * sizeof(UI32);
+
+  /* Check memory access */
+  if (mprotect(gerec, nmalloc, PROT_READ | PROT_WRITE) != 0) {
+    printf("Inaccessible Memory Address");
+    exit(-1);
+  }
+
   gerec->GlyphIndex = malloc(nmalloc);
   gerec->GlyphIndex[0] = 0; /* for glyphbits == 0 */
   for( i=0; glyphbits; i++ ) {
