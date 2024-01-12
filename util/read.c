@@ -273,7 +273,7 @@ char *readString(FILE *f)
   if ( ! buf )
   {
     fprintf(stderr, "failed allocating %d bytes\n", buflen);
-    exit(-1);
+    goto error;
   }
   p = buf;
 
@@ -284,14 +284,14 @@ char *readString(FILE *f)
       if ( buflen >= UINT_MAX - 256 )
       {
         fprintf(stderr, "string null-termination missing after reading %d bytes, giving up\n", buflen);
-        exit(-1);
+        goto error;
       }
       buflen += 256;
       buf = (char *)realloc(buf, sizeof(char)*(buflen));
       if ( ! buf )
       {
         fprintf(stderr, "failed allocating %d bytes\n", buflen);
-        exit(-1);
+        goto error;
       }
       p = buf+len;
     }
@@ -312,8 +312,12 @@ char *readString(FILE *f)
   }
 
   *p = 0;
-
+  free(buf);
   return buf;
+
+error:
+  free(buf);
+  exit(-1);
 }
 
 #define ENC_BITSPERBYTE 	7
