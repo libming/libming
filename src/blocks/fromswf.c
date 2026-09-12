@@ -225,7 +225,8 @@ readint4(BITS bp)
 	res = bp->readc(bp);
 	res |= bp->readc(bp) << 8;
 	res |= bp->readc(bp) << 16;
-	res |= bp->readc(bp) << 24;
+	/*  Shift as unsigned: 0xFF << 24 would overflow a signed int.  */
+	res |= (int) ((unsigned int) bp->readc(bp) << 24);
 	return res;
 }
 static void putint2(unsigned char *p, int val)
@@ -307,6 +308,9 @@ static struct swfile *openswf(SWFInput input)
 	return res;
 }
 
+/*  Upper bound for a tag body, to reject absurd lengths from malformed input.  */
+#define MAX_TAG_SIZE (64 * 1024 * 1024)
+
 /* tag */
 struct swftag
 {	char lastch;
@@ -343,11 +347,20 @@ static TAG readtag_common(BITS bp)
 }
 static TAG readtag_file(struct swfile *sp)
 {	TAG res = (TAG) readtag_common((BITS) sp);
-	if(res->size)
+	/*  The tag length is taken verbatim from the (untrusted) input.  Reading a
+	    long-tag header past the end of the stream yields 0xFFFFFFFF, i.e. a
+	    negative int that sign-extends to a huge size_t when passed to
+	    malloc().  Only allocate for a positive length within a sane bound and
+	    stop parsing when the length is bogus.  */
+	if(res->size > 0 && res->size <= MAX_TAG_SIZE)
 	{	res->datbuf = res->datptr = (unsigned char *)malloc(res->size);
 		res->datend = res->datbuf + res->size;
 		SWFInput_read(sp->input, res->datbuf, res->size);
 		res->alloced = 1;
+	}
+	else
+	{	res->size = 0;
+		res->type = SWF_END;
 	}
 	return res;
 }
