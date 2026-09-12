@@ -261,7 +261,15 @@ static unsigned char freadc(struct swfile *sp)
 {	return SWFInput_getChar(sp->input);
 }
 static unsigned char r_readc(struct swfile *sp)
-{	return sp->rect[sp->rectlen++] = freadc(sp);
+{	/*  The RECT is consumed bit by bit through getbits(); the raw bytes are
+	    kept here only for reference and are never read back, but a RECT with a
+	    large nbits (up to 31, i.e. ~17 bytes) or a truncated stream driving
+	    getbits() past the end would otherwise overrun the 9-byte rect[].  */
+	unsigned char c = freadc(sp);
+	if(sp->rectlen < sizeof(sp->rect))
+		sp->rect[sp->rectlen] = c;
+	sp->rectlen++;
+	return c;
 }
 static void swfseek(struct swfile *sp, int delta)
 {	SWFInput_seek(sp->input, delta, 1);
